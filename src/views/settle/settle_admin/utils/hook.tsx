@@ -1,11 +1,9 @@
 import { message } from "@/utils/message";
 import type { PaginationProps } from "@pureadmin/table";
-import { ElMessageBox } from "element-plus";
 import { removeEmptyStringKeys } from "@/utils/utilFn";
 import { $t, transformI18n } from "@/plugins/i18n";
 import { usePublicHooks } from "@/hooks";
 import dayjs from "dayjs";
-import { FormProps } from "./type";
 
 export function useLeague() {
   const form = reactive({
@@ -139,28 +137,46 @@ export function useLeague() {
 
   const childColumns: TableColumnList = [
     {
-      label: "进球",
-      slot: 'a',
-      minWidth: 100,
+      label: "主队事件数量",
+      slot: 't1',
+      width: 120
+    },
+    {
+      label: "客队事件数量",
+      slot: 't2',
+      width: 120
+    },
+    {
+      label: "事件编码",
+      slot: 'eventCode',
     },
     {
       label: "进球时间",
       slot: 'eventTime',
-      minWidth: 200,
+    },
+    {
+      label: "体育ID",
+      slot: 'sportId',
+      width: 150
     },
     {
       label: "比赛阶段",
       slot: 'matchPeriodId',
-      minWidth: 200,
+      width: 150
     },
     {
-      label: "主/客",
+      label: "主/客队",
       slot: 'homeAway',
-      minWidth: 200,
+      width: 150
     },
     {
-      label: "t1",
-      slot: 't1'
+      label: "1号球员名称",
+      slot: 'player1Name',
+      width: 150
+    },
+    {
+      label: "事件是否被取消",
+      slot: 'addMatchEvent',
     },
     {
       label: "操作",
@@ -183,7 +199,6 @@ export function useLeague() {
       formatter: ({ }) => '-'
     }
   ];
-
 
   function handleSizeChange(val: number) {
     console.log(`${val} items per page`);
@@ -230,38 +245,69 @@ export function useLeague() {
 
   const dataVendorsChange = () => { }
 
-  const childTemp = {
-    a: 1,
-    eventTime: '',
-    matchPeriodId: '',
-    t1: '',
-    t2: '',
-  }
-
   const getChildRenData = async (row) => {
     const res = await API.getMatchEvents({
       matchId: row.matchId
     })
-    row.childrenData = [];
-    row.push(...res.data)
     childloading.value = false;
+    res.data.forEach(_ => {
+      _.isEdit = false
+      _.matchId = row.matchId;
+    });
+    row.childrenData.push(...res.data)
   }
 
-  const addChildRow = (row: SaleDataAPI.PreSaleList, index: number) => {
+  const addChildRow = (row: SaleDataAPI.PreSaleList, parentIndex: number) => {
     if (!row.childrenData.length) {
-      row.childrenData.push(childTemp);
+      row.childrenData.push({
+        matchId: dataList[parentIndex].matchId
+      });
     } else {
-      if (!Object.values(row.childrenData[(index ?? 1) - 1]).every(_ => _)) return message('请先完成上一个编辑', { type: "error" });
+      console.log('hook.tsx文件 266==============行打印=', row.childrenData, parentIndex)
+      if (!Object.values(row.childrenData[(parentIndex ?? 1) - 1]).every(_ => _)) {
+        return message('请先完成上一个编辑', { type: "error" });
+      }
+      row.childrenData.push({
+        matchId: dataList[parentIndex].matchId
+      });
     }
   }
 
-  const editChild = (row: SaleDataAPI.PreSaleList, index: number) => {
+  const editChild = (row: SattleDataAPI.MatchEventsList, index: number) => {
+    row.isEdit = true;
+  }
+
+  const onHomeAwaySelectChange = (row, childIndex) => {
 
   }
 
-  onMounted(() => {
-    onSearch();
-  });
+  const saveData = async (row: SattleDataAPI.MatchEventsList) => {
+    if (!Object.values(row).every(_ => _)) return message('数据不能为空', { type: "error" })
+    row.isEdit = true;
+    const params = {
+      addMatchEvent: 0,
+      eventCode: row.eventCode,
+      eventTime: row.eventTime as Date,
+      homeAway: row.homeAway,
+      matchId: row.matchId,
+      matchPeriodId: +row.matchPeriodId,
+      player1Name: row.player1Name,
+      remark: '',
+      sourceType: 1,
+      sportId: row.sportId,
+      t1: +row.t1,
+      t2: +row.t2,
+    }
+    childloading.value = true;
+    const res = await API.addMatchEvent(params)
+    childloading.value = false;
+    if (res.code) return;
+
+  }
+
+
+
+  
   return {
     form,
     loading,
@@ -280,6 +326,8 @@ export function useLeague() {
     childColumns,
     getChildRenData,
     addChildRow,
-    editChild
+    editChild,
+    onHomeAwaySelectChange,
+    saveData
   };
 }

@@ -169,3 +169,15 @@
     box-shadow: 0 -1px 0 0 #e0e3e8, 0 -3px 6px 0 rgb(69 98 155 / 12%);
   }
 }
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}

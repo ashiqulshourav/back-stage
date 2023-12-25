@@ -30,7 +30,7 @@
           @page-current-change="handleCurrentChange"
         >
           <template #sn="{ index }">{{ index + 1 }}</template>
-          <template #expand="{ row, childIndex }">
+          <template #expand="{ row, index: parentIndex }">
             <div class="m-4">
               <div class="flex mb-2">
                 <el-button
@@ -58,47 +58,94 @@
                 }"
                 :cell-style="{ textAlign: 'center' }"
               >
-                <template #a="{ row }"> {{ row.a }} </template>
+                <template #t1="{ row }">
+                  <el-input
+                    v-model="row.t1"
+                    type="number"
+                    :disabled="!row.isEdit"
+                  />
+                </template>
+                <template #t2="{ row }">
+                  <el-input
+                    v-model="row.t2"
+                    type="number"
+                    :disabled="!row.isEdit"
+                  />
+                </template>
+
+                <template #eventCode="{ row }">
+                  <el-select
+                    :disabled="!row.isEdit"
+                    v-model="row.eventCode"
+                    :placeholder="t('common.select')"
+                  >
+                    <el-option label="足球进球" value="goal" />
+                  </el-select>
+                </template>
+
+                <template #sportId="{ row }">
+                  <el-select
+                    :disabled="!row.isEdit"
+                    v-model="row.sportId"
+                    :placeholder="t('common.select')"
+                  >
+                    <el-option label="足球" :value="1" />
+                    <el-option label="篮球" :value="2" />
+                    <el-option label="网球" :value="3" />
+                  </el-select>
+                </template>
+
                 <template #eventTime="{ row }">
                   <el-date-picker
                     v-model="row.eventTime"
                     type="datetime"
                     placeholder="请选择时间"
-                    :disabled="true"
+                    :disabled="!row.isEdit"
+                    value-format="x"
                     format="YYYY-MM-DD HH:mm:ss"
                   />
                 </template>
                 <template #matchPeriodId="{ row }">
                   <el-select
-                    :disabled="true"
+                    :disabled="!row.isEdit"
                     v-model="row.matchPeriodId"
                     :placeholder="t('common.select')"
                   >
-                    <el-option label="上半场" :value="0" />
-                    <el-option label="下半场" :value="1" />
+                    <el-option label="上半场" :value="1" />
+                    <el-option label="下半场" :value="2" />
                   </el-select>
                 </template>
-                <template #homeAway="{ row }">
+                <template #homeAway="{ row, parentIndex: childIndex }">
                   <div>
                     <el-select
-                      :disabled="true"
-                      v-model="row.matchPeriodId"
+                      :disabled="!row.isEdit"
+                      v-model="row.homeAway"
                       :placeholder="t('common.select')"
+                      @change="onHomeAwaySelectChange(row, childIndex)"
                     >
-                      <el-option label="主场" :value="0" />
-                      <el-option label="客场" :value="1" />
+                      <el-option label="主场" value="home" />
+                      <el-option label="客场" value="away" />
                     </el-select>
                   </div>
                 </template>
-                <template #t1="{ row }">
-                  <div
-                    class="flex items-center w-[100px] justify-center m-auto"
-                  >
-                    <span>{{ row.t1 }}</span>
-                    <span class="mr-0.5 ml-0.5">-</span>
-                    <span>{{ row.t2 }}</span>
-                  </div>
+
+                <template #player1Name="{ row }">
+                  <el-input
+                    v-model="row.player1Name"
+                    type="number"
+                    :disabled="!row.isEdit"
+                  />
                 </template>
+
+                <template #addMatchEvent="{ row }">
+                  <el-switch
+                    v-model="row.addMatchEvent"
+                    inline-prompt
+                    :disabled="!row.isEdit"
+                    class="pure-datatheme"
+                  />
+                </template>
+
                 <template #operation="{ row }">
                   <div class="flex items-center justify-center">
                     <el-button
@@ -108,20 +155,25 @@
                     >
                       <div class="w-[14px] h-[14px] align-middle">A</div>
                     </el-button>
-                    <el-button circle type="primary">
+                    <el-button
+                      circle
+                      type="primary"
+                      @click="row.isEdit = false"
+                    >
                       <div class="w-[14px] h-[14px] align-middle">B</div>
                     </el-button>
-                    <el-button circle type="primary">
+                    <el-button circle type="primary" @click="saveData(row)">
                       <div class="w-[14px] h-[14px] align-middle">C</div>
                     </el-button>
                   </div>
                 </template>
               </pure-table>
+
               <div class="mt-2 cursor-pointer">
                 <IconifyIconOffline
                   width="25px"
                   :icon="icon_circle_fill"
-                  @click="addChildRow(row, childIndex)"
+                  @click="addChildRow(row, parentIndex)"
                 />
               </div>
             </div>
@@ -153,7 +205,7 @@ import { useLeague } from "./utils/hook";
 import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
 import SearchForm from "./component/SearchForm.vue";
 const { t } = useTranslationLang();
-defineOptions({ name: "League" });
+defineOptions({ name: "settle_admin" });
 
 const {
   loading,
@@ -168,8 +220,14 @@ const {
   childColumns,
   getChildRenData,
   addChildRow,
-  editChild
+  editChild,
+  onHomeAwaySelectChange,
+  saveData
 } = useLeague();
+
+onMounted(() => {
+  onSearch();
+});
 </script>
 
 <style scoped lang="scss">

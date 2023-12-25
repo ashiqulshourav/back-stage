@@ -3,12 +3,12 @@ declare namespace SattleDataAPI {
     canceled?: number;
     dataSourceCode?: string;
     eventCode?: string;
-    eventTime?: number;
+    eventTime?: number | string | Date;
     extraInfo?: string;
     homeAway?: string;
     id?: number;
     matchId?: number;
-    matchPeriodId?: number;
+    matchPeriodId?: number | string;
     matchType?: number;
     player1Id?: number;
     player1Name?: string;
@@ -17,9 +17,10 @@ declare namespace SattleDataAPI {
     player2Id?: number;
     sourceType?: number;
     sportId?: number;
-    t1?: number;
-    t2?: number;
-
+    t1?: number | string;
+    t2?: number | string;
+    isEdit?: boolean;
+    [key: string]: any;
   }
 
   type getMatchEventsRes = {
