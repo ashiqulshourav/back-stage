@@ -29,4 +29,19 @@ declare namespace SattleDataAPI {
     data: MatchEventsList[];
   }
 
+  type MatchEventParams = {
+    addMatchEvent: number;
+    eventCode: string;
+    eventTime: Date;
+    homeAway: string;
+    matchId: number;
+    matchPeriodId: number;
+    player1Name: string;
+    remark: string;
+    sourceType: number;
+    sportId: number;
+    t1: number;
+    t2: number;
+  }
+
 }

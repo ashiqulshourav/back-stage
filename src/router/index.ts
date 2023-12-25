@@ -185,7 +185,6 @@ router.beforeEach((to: ToRouteType, _from, next) => {
       toCorrectRoute();
     }
   } else {
-    console.log('index.ts文件 187==============行打印=', to.path)
     if (to.path !== "/login") {
       if (whiteList.indexOf(to.path) !== -1) {
         next();
