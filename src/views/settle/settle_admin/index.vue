@@ -65,6 +65,7 @@
                     :disabled="!row.isEdit"
                   />
                 </template>
+
                 <template #t2="{ row }">
                   <el-input
                     v-model="row.t2"
@@ -105,6 +106,7 @@
                     format="YYYY-MM-DD HH:mm:ss"
                   />
                 </template>
+
                 <template #matchPeriodId="{ row }">
                   <el-select
                     :disabled="!row.isEdit"
@@ -115,6 +117,7 @@
                     <el-option label="下半场" :value="2" />
                   </el-select>
                 </template>
+
                 <template #homeAway="{ row, parentIndex: childIndex }">
                   <div>
                     <el-select
@@ -148,11 +151,7 @@
 
                 <template #operation="{ row }">
                   <div class="flex items-center justify-center">
-                    <el-button
-                      circle
-                      type="primary"
-                      @click="editChild(row, childIndex)"
-                    >
+                    <el-button circle type="primary" @click="editChild(row)">
                       <div class="w-[14px] h-[14px] align-middle">A</div>
                     </el-button>
                     <el-button
@@ -162,7 +161,11 @@
                     >
                       <div class="w-[14px] h-[14px] align-middle">B</div>
                     </el-button>
-                    <el-button circle type="primary" @click="saveData(row)">
+                    <el-button
+                      circle
+                      type="primary"
+                      @click="saveData(row, parentIndex)"
+                    >
                       <div class="w-[14px] h-[14px] align-middle">C</div>
                     </el-button>
                   </div>
@@ -173,7 +176,7 @@
                 <IconifyIconOffline
                   width="25px"
                   :icon="icon_circle_fill"
-                  @click="addChildRow(row, parentIndex)"
+                  @click="addChildRow(row)"
                 />
               </div>
             </div>

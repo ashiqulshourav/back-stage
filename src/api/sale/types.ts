@@ -2,7 +2,7 @@ declare namespace SaleDataAPI {
   type PreSaleList = {
     matchId: number;
     countryId: number;
-    sportId: number;
+    sportId: number | string;
     leagueId: number;
     matchName: string;
     homeTeamId: number;

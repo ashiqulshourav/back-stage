@@ -257,23 +257,27 @@ export function useLeague() {
     row.childrenData.push(...res.data)
   }
 
-  const addChildRow = (row: SaleDataAPI.PreSaleList, parentIndex: number) => {
+  const addChildRow = (row: SaleDataAPI.PreSaleList) => {
+    const tempList = {
+      eventTime: '',
+      homeAway: '',
+      matchPeriodId: '',
+      player1Name: '',
+      t1: '',
+      t2: '',
+    }
     if (!row.childrenData.length) {
-      row.childrenData.push({
-        matchId: dataList[parentIndex].matchId
-      });
+      row.childrenData.push(tempList);
     } else {
-      console.log('hook.tsx文件 266==============行打印=', row.childrenData, parentIndex)
-      if (!Object.values(row.childrenData[(parentIndex ?? 1) - 1]).every(_ => _)) {
+      const d = Object.values(row.childrenData[row.childrenData.length - 1]);
+      if (!d.every(_ => _)) {
         return message('请先完成上一个编辑', { type: "error" });
       }
-      row.childrenData.push({
-        matchId: dataList[parentIndex].matchId
-      });
+      row.childrenData.push(tempList);
     }
   }
 
-  const editChild = (row: SattleDataAPI.MatchEventsList, index: number) => {
+  const editChild = (row: SattleDataAPI.MatchEventsList,) => {
     row.isEdit = true;
   }
 
@@ -281,7 +285,7 @@ export function useLeague() {
 
   }
 
-  const saveData = async (row: SattleDataAPI.MatchEventsList) => {
+  const saveData = async (row: SattleDataAPI.MatchEventsList, parentIndex) => {
     if (!Object.values(row).every(_ => _)) return message('数据不能为空', { type: "error" })
     row.isEdit = true;
     const params = {
@@ -289,7 +293,7 @@ export function useLeague() {
       eventCode: row.eventCode,
       eventTime: row.eventTime as Date,
       homeAway: row.homeAway,
-      matchId: row.matchId,
+      matchId: dataList[parentIndex].matchId,
       matchPeriodId: +row.matchPeriodId,
       player1Name: row.player1Name,
       remark: '',
@@ -305,9 +309,6 @@ export function useLeague() {
 
   }
 
-
-
-  
   return {
     form,
     loading,
