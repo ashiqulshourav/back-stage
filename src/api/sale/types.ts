@@ -1,5 +1,5 @@
 declare namespace SaleDataAPI {
-  type PreSaleList = {
+  type Sale = {
     matchId: number;
     countryId: number;
     sportId: number | string;
@@ -23,73 +23,13 @@ declare namespace SaleDataAPI {
     matchId188bet: number;
     childrenData: SattleDataAPI.MatchEventsList[];
   }
-
-  type PreSaleListData = {
-    total: number;
-    list: PreSaleList[];
-    pageNum: number;
-    pageSize: number;
-    size: number;
-    startRow: number;
-    endRow: number;
-    pages: number;
-    prePage: number;
-    nextPage: number;
-    isFirstPage: boolean;
-    isLastPage: boolean;
-    hasPreviousPage: boolean;
-    hasNextPage: boolean;
-    navigatePages: number;
-    navigatepageNums: number[];
-    navigateFirstPage: number;
-    navigateLastPage: number;
+  type SaleListFetchProps = COMMON.ListFetchProps & {
+    matchId?: number;
+    matchName?: number;
+    isSale?: number;
+    beginTime?: string;
   }
+  type SaleListData = COMMON.ListData<Sale>
+  type SaleListRes = COMMON.ListRes<SaleListData>
 
-  type PreSaleListRes = {
-    code: number;
-    msg: string;
-    data: PreSaleListData;
-  }
-
-
-  type TeamList = {
-    teamId: number;
-    countryId: number;
-    sportId: number;
-    leagueId: number;
-    teamNameCn: string;
-    teamNameEn: string;
-    teamLogo: string;
-    level: number;
-    isCountryTeam?: number;
-    [key: string]: any;
-  }
-
-  /*   type TeamListData = Omit<LeagueListData, 'list'> & { list: TeamList[] }
-    type TeamListRes = {
-      code: number;
-      msg: string;
-      data: TeamListData;
-    }
-  
-    type PlayerList = {
-      birthday: string;
-      countryId: number;
-      gender: string;
-      height: number;
-      isCountryPlayer: number;
-      nickName: string;
-      pageNum: number;
-      pageSize: number;
-      picture: string;
-      playerId: number;
-      playerNameCn: string;
-      teamId: number;
-    }
-    type PlayerListData = Omit<LeagueListData, 'list'> & { list: PlayerList[] }
-    type PlayerListRes = {
-      code: number;
-      msg: string;
-      data: PlayerListData;
-    } */
 }

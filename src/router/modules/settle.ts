@@ -6,7 +6,7 @@ export default {
   meta: {
     title: $t('settle.settlementBackend'),
     icon: 'folderFill',
-    rank: 3
+    rank: 5
   },
   children: [
     {

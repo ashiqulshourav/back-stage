@@ -31,7 +31,11 @@ common:
   startDate: 开始日期
   woman: 女
   'yes': 是
+  cancel: 取消
+  continue: 继续
 commonTable:
+  actions: 操作
+  add: 新增
   delete: 删除
   edit: 编辑
   editMatch: 编辑联赛
@@ -67,6 +71,10 @@ menus:
   sale: 开售管理
   saleLive: 滚球赛事
   team: 球队管理
+  esports: 电子竞技
+  virtual: 虚拟体育
+  teamData: 球队库
+  matchData: 联赛库
 metadata:
   add: 新增联赛
   belongingTeam: 所属球队
@@ -160,3 +168,65 @@ team:
   teamLogo: 球队Logo
   teamNameCn: 球队中文名称
   teamNameEn: 球队英文名称
+vMatch:
+  title: 虚拟体育 - 联赛库
+  leagueId: 联赛ID
+  leagueNameCn: 中文简体
+  leagueNameCnMsg: 必须输入中文简体名字
+  leagueNameEn: 英文名称
+  leagueNameEnMsg: 必须输入英文名称
+  leagueName: 简称
+  leagueNameMsg: 必须输入简称
+  dataSource: 英文名（数据商）
+  dataSourceMsg: 必须输入英文名（数据商）
+  dataSourceName: 数据商
+  dataSourceNameMsg: 必须输入数据商
+  sort: 联赛排序
+  titleEdit: 编辑联赛
+  titleNew: 新增联赛
+vTeam:
+  title: 虚拟体育 - 球队库
+  teamId: 球队ID
+  teamNameCn: 中文简体
+  teamNameCnMsg: 必须输入中文简体名字
+  teamNameEn: 英文名称
+  teamNameEnMsg: 必须输入英文名称
+  teamName: 简称
+  teamNameMsg: 必须输入简称
+  dataSource: 英文名（数据商）
+  dataSourceMsg: 必须输入英文名（数据商）
+  dataSourceName: 数据商
+  dataSourceNameMsg: 必须输入数据商
+  titleEdit: 编辑球队
+  titleNew: 新增球队
+eMatch:
+  title: 电子竞技- 联赛库
+  leagueId: 联赛ID
+  leagueNameCn: 中文简体
+  leagueNameCnMsg: 必须输入中文简体名字
+  leagueNameEn: 英文名称
+  leagueNameEnMsg: 必须输入英文名称
+  leagueName: 简称
+  leagueNameMsg: 必须输入简称
+  dataSource: 英文名（数据商）
+  dataSourceMsg: 必须输入英文名（数据商）
+  dataSourceName: 数据商
+  dataSourceNameMsg: 必须输入数据商
+  sort: 联赛排序
+  titleEdit: 编辑联赛
+  titleNew: 新增联赛
+eTeam:
+  title: 电子竞技- 球队库
+  teamId: 球队ID
+  teamNameCn: 中文简体
+  teamNameCnMsg: 必须输入中文简体名字
+  teamNameEn: 英文名称
+  teamNameEnMsg: 必须输入英文名称
+  teamName: 简称
+  teamNameMsg: 必须输入简称
+  dataSource: 英文名（数据商）
+  dataSourceMsg: 必须输入英文名（数据商）
+  dataSourceName: 数据商
+  dataSourceNameMsg: 必须输入数据商
+  titleEdit: 编辑球队
+  titleNew: 新增球队
