@@ -1,9 +1,9 @@
 <template>
   <div class="main">
-    <SearchForm />
+    <SearchForm :loading="loading" />
 
     <PureTableBar
-      title="结算管理"
+      :title="t('settle.settlementManagement')"
       :columns="columns"
       @refresh="onSearch('reload')"
     >
@@ -37,12 +37,24 @@
                   link
                   type="primary"
                   :icon="useRenderIcon(icon_money)"
+                  @click="settlementFunction(row.matchId, 'half')"
+                  :loading="balanceLoading['half']"
                 >
                   {{ t("settle.firstHalfSettlement") }}
                 </el-button>
-                <el-button link type="danger" :icon="useRenderIcon(icon_money)">
+                <el-button
+                  link
+                  type="danger"
+                  :loading="balanceLoading['all']"
+                  :icon="useRenderIcon(icon_money)"
+                  @click="settlementFunction(row.matchId, 'all')"
+                >
                   {{ t("settle.secondHalfSettlement") }}
                 </el-button>
+                <span class="mr-4 ml-4">注:</span>
+                <span class="mr-4">A: 编辑</span>
+                <span class="mr-4">B: 确认修改</span>
+                <span class="mr-4">C: 确认新增</span>
               </div>
               <pure-table
                 :data="row.childrenData"
@@ -61,7 +73,8 @@
                 <template #t1="{ row }">
                   <el-input
                     v-model="row.t1"
-                    type="number"
+                    :maxlength="4"
+                    oninput="value=value.replace(/[^\d.]/g,'')"
                     :disabled="!row.isEdit"
                   />
                 </template>
@@ -69,7 +82,8 @@
                 <template #t2="{ row }">
                   <el-input
                     v-model="row.t2"
-                    type="number"
+                    :maxlength="4"
+                    oninput="value=value.replace(/[^\d.]/g,'')"
                     :disabled="!row.isEdit"
                   />
                 </template>
@@ -80,7 +94,7 @@
                     v-model="row.eventCode"
                     :placeholder="t('common.select')"
                   >
-                    <el-option label="足球进球" value="goal" />
+                    <el-option :label="t('settle.footballGoal')" value="goal" />
                   </el-select>
                 </template>
 
@@ -90,9 +104,12 @@
                     v-model="row.sportId"
                     :placeholder="t('common.select')"
                   >
-                    <el-option label="足球" :value="1" />
-                    <el-option label="篮球" :value="2" />
-                    <el-option label="网球" :value="3" />
+                    <el-option
+                      :label="item.label"
+                      :value="item.value"
+                      v-for="item in sportIds"
+                      :key="item.value"
+                    />
                   </el-select>
                 </template>
 
@@ -100,7 +117,7 @@
                   <el-date-picker
                     v-model="row.eventTime"
                     type="datetime"
-                    placeholder="请选择时间"
+                    :placeholder="$t('common.pleaseSelectATime')"
                     :disabled="!row.isEdit"
                     value-format="x"
                     format="YYYY-MM-DD HH:mm:ss"
@@ -113,8 +130,8 @@
                     v-model="row.matchPeriodId"
                     :placeholder="t('common.select')"
                   >
-                    <el-option label="上半场" :value="1" />
-                    <el-option label="下半场" :value="2" />
+                    <el-option :label="t('common.firstHalf')" :value="1" />
+                    <el-option :label="t('common.secondHalf')" :value="2" />
                   </el-select>
                 </template>
 
@@ -124,47 +141,54 @@
                       :disabled="!row.isEdit"
                       v-model="row.homeAway"
                       :placeholder="t('common.select')"
-                      @change="onHomeAwaySelectChange(row, childIndex)"
                     >
-                      <el-option label="主场" value="home" />
-                      <el-option label="客场" value="away" />
+                      <el-option :label="t('common.home')" value="home" />
+                      <el-option :label="t('common.away')" value="away" />
                     </el-select>
                   </div>
                 </template>
 
                 <template #player1Name="{ row }">
-                  <el-input
-                    v-model="row.player1Name"
-                    type="number"
-                    :disabled="!row.isEdit"
-                  />
+                  <el-input v-model="row.player1Name" :disabled="!row.isEdit" />
                 </template>
 
-                <template #addMatchEvent="{ row }">
+                <template
+                  #addMatchEvent="{
+                    row
+                  }: {
+                    row: SattleDataAPI.MatchEventsList
+                  }"
+                >
                   <el-switch
+                    v-if="row.isBackEndReturnData"
                     v-model="row.addMatchEvent"
                     inline-prompt
                     :disabled="!row.isEdit"
                     class="pure-datatheme"
                   />
+                  <span>-</span>
                 </template>
 
-                <template #operation="{ row }">
+                <template
+                  #operation="{ row }: { row: SattleDataAPI.MatchEventsList }"
+                >
                   <div class="flex items-center justify-center">
                     <el-button circle type="primary" @click="editChild(row)">
                       <div class="w-[14px] h-[14px] align-middle">A</div>
                     </el-button>
                     <el-button
                       circle
+                      v-if="row.isBackEndReturnData"
                       type="primary"
-                      @click="row.isEdit = false"
+                      @click="handleChildrenData(row, parentIndex, 'edit')"
                     >
                       <div class="w-[14px] h-[14px] align-middle">B</div>
                     </el-button>
                     <el-button
+                      v-else
                       circle
                       type="primary"
-                      @click="saveData(row, parentIndex)"
+                      @click="handleChildrenData(row, parentIndex, 'add')"
                     >
                       <div class="w-[14px] h-[14px] align-middle">C</div>
                     </el-button>
@@ -207,6 +231,7 @@ import icon_circle_fill from "@iconify-icons/ri/add-circle-fill";
 import { useLeague } from "./utils/hook";
 import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
 import SearchForm from "./component/SearchForm.vue";
+import { sportIds } from "./utils/map";
 const { t } = useTranslationLang();
 defineOptions({ name: "settle_admin" });
 
@@ -224,8 +249,9 @@ const {
   getChildRenData,
   addChildRow,
   editChild,
-  onHomeAwaySelectChange,
-  saveData
+  balanceLoading,
+  settlementFunction,
+  handleChildrenData
 } = useLeague();
 
 onMounted(() => {

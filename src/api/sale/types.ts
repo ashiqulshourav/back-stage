@@ -52,6 +52,13 @@ declare namespace SaleDataAPI {
   }
 
 
+  type allSettlementRes = {
+    code: number;
+    msg: string;
+    data: any;
+  }
+
+
   type TeamList = {
     teamId: number;
     countryId: number;
@@ -65,31 +72,5 @@ declare namespace SaleDataAPI {
     [key: string]: any;
   }
 
-  /*   type TeamListData = Omit<LeagueListData, 'list'> & { list: TeamList[] }
-    type TeamListRes = {
-      code: number;
-      msg: string;
-      data: TeamListData;
-    }
-  
-    type PlayerList = {
-      birthday: string;
-      countryId: number;
-      gender: string;
-      height: number;
-      isCountryPlayer: number;
-      nickName: string;
-      pageNum: number;
-      pageSize: number;
-      picture: string;
-      playerId: number;
-      playerNameCn: string;
-      teamId: number;
-    }
-    type PlayerListData = Omit<LeagueListData, 'list'> & { list: PlayerList[] }
-    type PlayerListRes = {
-      code: number;
-      msg: string;
-      data: PlayerListData;
-    } */
+
 }

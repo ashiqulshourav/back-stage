@@ -88,7 +88,9 @@ import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
 const formRef = ref();
 const { t } = useTranslationLang();
 
-const { form, loading, dataVendorsChange, onSearch, resetForm } = useLeague();
+defineProps<{ loading: boolean }>();
+
+const { form, dataVendorsChange, onSearch, resetForm } = useLeague();
 </script>
 
 <style scoped></style>

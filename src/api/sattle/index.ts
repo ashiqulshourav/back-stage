@@ -11,9 +11,9 @@ export const sattleData = {
 
   firstHalfSettlement: (data: {
     matchId: number;
-  }) => http.request<SaleDataAPI.PreSaleListRes>("post", "/event/v1/firstHalfSettlement", { data }),
+  }) => http.request<SaleDataAPI.allSettlementRes>("post", "/event/v1/firstHalfSettlement", { data }),
 
   allSettlement: (data: {
     matchId: number;
-  }) => http.request<SaleDataAPI.PreSaleListRes>("post", "/event/v1/allSettlement", { data }),
+  }) => http.request<SaleDataAPI.allSettlementRes>("post", "/event/v1/allSettlement", { data }),
 };

@@ -4,7 +4,6 @@ import { removeEmptyStringKeys } from "@/utils/utilFn";
 import { $t, transformI18n } from "@/plugins/i18n";
 import { usePublicHooks } from "@/hooks";
 import dayjs from "dayjs";
-
 export function useLeague() {
   const form = reactive({
     date: '',
@@ -17,6 +16,10 @@ export function useLeague() {
   const loading = ref(true);
   const childloading = ref(true);
   const switchLoadMap = ref({});
+
+  const balanceLoading = reactive<{ half: boolean, all: boolean }>({
+    half: false, all: false
+  });
   const { switchStyle } = usePublicHooks();
   const pagination = reactive<PaginationProps>({
     total: 0,
@@ -231,7 +234,6 @@ export function useLeague() {
       pagination.total = res.data.total;
       pagination.pageSize = res.data.pageSize;
       pagination.currentPage = res.data.pageNum;
-      loading.value = false
     } catch (error) {
       loading.value = false
     }
@@ -245,50 +247,42 @@ export function useLeague() {
 
   const dataVendorsChange = () => { }
 
-  const getChildRenData = async (row) => {
-    const res = await API.getMatchEvents({
-      matchId: row.matchId
-    })
-    childloading.value = false;
-    res.data.forEach(_ => {
-      _.isEdit = false
-      _.matchId = row.matchId;
-    });
-    row.childrenData.push(...res.data)
-  }
-
   const addChildRow = (row: SaleDataAPI.PreSaleList) => {
     const tempList = {
       eventTime: '',
       homeAway: '',
       matchPeriodId: '',
       player1Name: '',
+      isBackEndReturnData: false,
       t1: '',
       t2: '',
     }
-    if (!row.childrenData.length) {
-      row.childrenData.push(tempList);
-    } else {
-      const d = Object.values(row.childrenData[row.childrenData.length - 1]);
-      if (!d.every(_ => _)) {
-        return message('请先完成上一个编辑', { type: "error" });
-      }
-      row.childrenData.push(tempList);
-    }
+    row.childrenData.push(tempList);
   }
 
   const editChild = (row: SattleDataAPI.MatchEventsList,) => {
     row.isEdit = true;
   }
 
-  const onHomeAwaySelectChange = (row, childIndex) => {
-
+  const getChildRenData = async (row) => {
+    const res = await API.getMatchEvents({ matchId: row.matchId })
+    childloading.value = false;
+    res.data.forEach(_ => {
+      _.isEdit = false
+      _.matchId = row.matchId;
+      _.isBackEndReturnData = true;
+    });
+    row.childrenData.length = 0;
+    row.childrenData.push(...res.data);
   }
 
-  const saveData = async (row: SattleDataAPI.MatchEventsList, parentIndex) => {
-    if (!Object.values(row).every(_ => _)) return message('数据不能为空', { type: "error" })
+  const handleChildrenData = async (row: SattleDataAPI.MatchEventsList, parentIndex: number, type: 'add' | 'edit') => {
+    row.isBackEndReturnData = true;
+    if (!Object.values(row).every(_ => _)) return message('请输入完整的内容', { type: "error" })
+    childloading.value = true;
     row.isEdit = true;
-    const params = {
+
+    const params: SattleDataAPI.MatchEventParams = {
       addMatchEvent: 0,
       eventCode: row.eventCode,
       eventTime: row.eventTime as Date,
@@ -302,11 +296,31 @@ export function useLeague() {
       t1: +row.t1,
       t2: +row.t2,
     }
-    childloading.value = true;
-    const res = await API.addMatchEvent(params)
-    childloading.value = false;
-    if (res.code) return;
 
+    let res;
+    if (type === 'add') {
+      res = await API.addMatchEvent(params)
+    } else {
+      params.id = row.id;
+      params.addMatchEvent = Number(!row.canceled);
+      res = await API.updateMatchEvent(params)
+    }
+    message(res.msg, { type: "success" });
+    if (res.code) return;
+    getChildRenData(dataList[parentIndex]);
+  }
+
+  const settlementFunction = async (matchId: number, type: 'half' | 'all') => {
+    try {
+      balanceLoading[type] = true;
+      let res;
+      if (type === 'half') res = await API.firstHalfSettlement({ matchId })
+      else res = await API.allSettlement({ matchId })
+      message(res.msg, { type: res.code ? 'error' : 'success' })
+      balanceLoading[type] = false;
+    } catch (error) {
+      balanceLoading[type] = false;
+    }
   }
 
   return {
@@ -328,7 +342,8 @@ export function useLeague() {
     getChildRenData,
     addChildRow,
     editChild,
-    onHomeAwaySelectChange,
-    saveData
+    balanceLoading,
+    settlementFunction,
+    handleChildrenData
   };
 }

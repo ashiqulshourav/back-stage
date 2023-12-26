@@ -20,6 +20,7 @@ declare namespace SattleDataAPI {
     t1?: number | string;
     t2?: number | string;
     isEdit?: boolean;
+    isBackEndReturnData: boolean;
     [key: string]: any;
   }
 
@@ -42,6 +43,7 @@ declare namespace SattleDataAPI {
     sportId: number;
     t1: number;
     t2: number;
+    id?: number;
   }
 
 }
