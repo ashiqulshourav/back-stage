@@ -54,6 +54,9 @@ login:
   userFormat: Please enter a username in email format
   username: Enter your username
   usernameReg: Please enter username
+main:
+  leftMode: left mode
+  theme: theme
 menus:
   early: Early game
   hsFive: '500'

@@ -27,6 +27,8 @@ import { useAppStoreHook } from "@/store/app";
 import { toggleTheme } from "@pureadmin/theme/dist/browser-utils";
 import { useMultiTagsStoreHook } from "@/store/multiTags";
 import { useDataThemeChange } from "@/layout/hooks/useDataThemeChange";
+import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
+const { t } = useTranslationLang();
 
 import dayIcon from "@/assets/svg/day.svg?component";
 import darkIcon from "@/assets/svg/dark.svg?component";
@@ -231,7 +233,7 @@ onBeforeMount(() => {
 
 <template>
   <panel>
-    <el-divider>主题</el-divider>
+    <el-divider>{{ t("main.theme") }}</el-divider>
     <el-switch
       v-model="dataTheme"
       inline-prompt
@@ -246,7 +248,7 @@ onBeforeMount(() => {
       <el-tooltip
         :effect="tooltipEffect"
         class="item"
-        content="左侧模式"
+        :content="t('main.leftMode')"
         placement="bottom"
         popper-class="pure-tooltip"
       >

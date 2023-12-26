@@ -179,7 +179,7 @@ export function useLeague() {
     },
     {
       label: "事件是否被取消",
-      slot: 'addMatchEvent',
+      slot: 'canceled',
     },
     {
       label: "操作",
@@ -271,25 +271,38 @@ export function useLeague() {
       _.isEdit = false
       _.matchId = row.matchId;
       _.isBackEndReturnData = true;
+      _.canceled = Boolean(_.canceled);
     });
     row.childrenData.length = 0;
     row.childrenData.push(...res.data);
   }
 
   const handleChildrenData = async (row: SattleDataAPI.MatchEventsList, parentIndex: number, type: 'add' | 'edit') => {
+    if (!row.isEdit) return;
     row.isBackEndReturnData = true;
-    if (!Object.values(row).every(_ => _)) return message('请输入完整的内容', { type: "error" })
+    const requireDdata = {
+      t1: row.t1,
+      t2: row.t2,
+      eventCode: row.eventCode,
+      eventTime: row.eventTime,
+      sportId: row.sportId,
+      matchPeriodId: row.matchPeriodId,
+      homeAway: row.homeAway,
+      player1Name: row.player1Name,
+    }
+    if (!Object.values(requireDdata).every(_ => _)) return message('请输入完整的内容', { type: "error" })
     childloading.value = true;
     row.isEdit = true;
 
     const params: SattleDataAPI.MatchEventParams = {
-      addMatchEvent: 0,
+      canceled: 0,
       eventCode: row.eventCode,
       eventTime: row.eventTime as Date,
       homeAway: row.homeAway,
       matchId: dataList[parentIndex].matchId,
       matchPeriodId: +row.matchPeriodId,
       player1Name: row.player1Name,
+      dataSourceCode: "SK",
       remark: '',
       sourceType: 1,
       sportId: row.sportId,
@@ -302,12 +315,18 @@ export function useLeague() {
       res = await API.addMatchEvent(params)
     } else {
       params.id = row.id;
-      params.addMatchEvent = Number(!row.canceled);
+      params.canceled = Number(row.canceled);
       res = await API.updateMatchEvent(params)
     }
-    message(res.msg, { type: "success" });
+    childloading.value = false;
+    message(res.msg, { type: res.code ? 'error' : "success" });
     if (res.code) return;
-    getChildRenData(dataList[parentIndex]);
+    row.isEdit = false;
+
+    const r = await API.getMatchEvents({ matchId: dataList[parentIndex].matchId });
+    const d = row.id ? r.data.find(_ => _.id === row.id) : r.data.pop();
+    Object.assign(row, d);
+    row.canceled = Boolean(row.canceled);
   }
 
   const settlementFunction = async (matchId: number, type: 'half' | 'all') => {

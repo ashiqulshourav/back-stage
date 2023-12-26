@@ -54,6 +54,9 @@ login:
   userFormat: Veuillez entrer un nom d'utilisateur au format e-mail
   username: Entrez votre nom d'utilisateur
   usernameReg: Veuillez saisir votre nom d'utilisateur
+main:
+  leftMode: mode gauche
+  theme: thème
 menus:
   early: Événements tôt
   hsFive: '500'

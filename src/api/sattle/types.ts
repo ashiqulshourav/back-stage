@@ -1,6 +1,6 @@
 declare namespace SattleDataAPI {
   type MatchEventsList = {
-    canceled?: number;
+    canceled?: number | boolean;
     dataSourceCode?: string;
     eventCode?: string;
     eventTime?: number | string | Date;
@@ -31,7 +31,7 @@ declare namespace SattleDataAPI {
   }
 
   type MatchEventParams = {
-    addMatchEvent: number;
+    canceled: number;
     eventCode: string;
     eventTime: Date;
     homeAway: string;
@@ -41,6 +41,7 @@ declare namespace SattleDataAPI {
     remark: string;
     sourceType: number;
     sportId: number;
+    dataSourceCode?: string;
     t1: number;
     t2: number;
     id?: number;

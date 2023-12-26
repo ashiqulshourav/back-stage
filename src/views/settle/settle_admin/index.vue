@@ -135,7 +135,7 @@
                   </el-select>
                 </template>
 
-                <template #homeAway="{ row, parentIndex: childIndex }">
+                <template #homeAway="{ row }">
                   <div>
                     <el-select
                       :disabled="!row.isEdit"
@@ -149,24 +149,24 @@
                 </template>
 
                 <template #player1Name="{ row }">
-                  <el-input v-model="row.player1Name" :disabled="!row.isEdit" />
+                  <el-input
+                    v-model="row.player1Name"
+                    :disabled="!row.isEdit"
+                    maxLength="20"
+                  />
                 </template>
 
                 <template
-                  #addMatchEvent="{
-                    row
-                  }: {
-                    row: SattleDataAPI.MatchEventsList
-                  }"
+                  #canceled="{ row }: { row: SattleDataAPI.MatchEventsList }"
                 >
                   <el-switch
                     v-if="row.isBackEndReturnData"
-                    v-model="row.addMatchEvent"
+                    v-model="row.canceled"
                     inline-prompt
                     :disabled="!row.isEdit"
                     class="pure-datatheme"
                   />
-                  <span>-</span>
+                  <span v-else>-</span>
                 </template>
 
                 <template

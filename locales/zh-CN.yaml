@@ -54,6 +54,9 @@ login:
   userFormat: 请输入电子邮件格式的用户名
   username: 输入您的用户名
   usernameReg: 请输入用户名
+main:
+  leftMode: 左侧模式
+  theme: 主题
 menus:
   early: 早盘赛事
   hsFive: '500'
