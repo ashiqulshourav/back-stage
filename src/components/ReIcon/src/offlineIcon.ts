@@ -11,6 +11,8 @@ import Lollipop from "@iconify-icons/ep/lollipop";
 import Crown from "@iconify-icons/ri/vip-crown-2-line";
 import StoreFill from "@iconify-icons/ri/store-2-fill";
 import FolderFill from "@iconify-icons/ri/folder-2-fill";
+import Monitor from "@iconify-icons/ep/monitor";
+import Files from "@iconify-icons/ep/files";
 
 addIcon("homeFilled", HomeFilled);
 addIcon("informationLine", InformationLine);
@@ -18,3 +20,5 @@ addIcon("lollipop", Lollipop);
 addIcon("crown", Crown);
 addIcon("storeFill", StoreFill);
 addIcon("folderFill", FolderFill);
+addIcon("monitor", Monitor);
+addIcon("files", Files);
