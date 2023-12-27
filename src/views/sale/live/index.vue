@@ -31,11 +31,12 @@
       </el-form-item>
 
       <el-form-item :label="`${t('sell.beginTime')}:`" prop="sportId">
-        <el-input
+        <el-date-picker
           v-model="form.beginTime"
-          :placeholder="t('sell.beginTime')"
-          clearable
-          class="!w-[150px]"
+          type="datetime"
+          :placeholder="$t('sell.beginTime')"
+          value-format="x"
+          format="YYYY-MM-DD HH:mm:ss"
         />
       </el-form-item>
 

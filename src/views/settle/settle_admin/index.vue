@@ -107,7 +107,7 @@
                     <el-option
                       :label="item.label"
                       :value="item.value"
-                      v-for="item in sportIds"
+                      v-for="item in sportIdsMap"
                       :key="item.value"
                     />
                   </el-select>
@@ -231,7 +231,7 @@ import icon_circle_fill from "@iconify-icons/ri/add-circle-fill";
 import { useLeague } from "./utils/hook";
 import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
 import SearchForm from "./component/SearchForm.vue";
-import { sportIds } from "./utils/map";
+import { sportIdsMap } from "@/utils/maps/sports_map";
 const { t } = useTranslationLang();
 defineOptions({ name: "settle_admin" });
 
@@ -269,3 +269,4 @@ onMounted(() => {
   }
 }
 </style>
+../../../utils/map

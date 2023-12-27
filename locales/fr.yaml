@@ -36,7 +36,7 @@ common:
   sport: éducation physique
   startDate: 开始日期
   woman: femelle
-  'yes': 是
+  'yes': Oui
 commonTable:
   delete: supprimer
   edit: modifier
@@ -80,7 +80,7 @@ metadata:
   add: 新增联赛
   belongingTeam: 所属球队
   country: 国家ID
-  countryId: Identifiant du pays
+  countryId: Numéro d'identification du pays
   currentScore: Score actuel
   dataSourceLeagueCupId: 数据源联赛杯ID
   enterEventLevel: Entrez le niveau de l'événement
@@ -91,12 +91,14 @@ metadata:
   leagueId: Identifiant de la Coupe de la Ligue
   leagueId188Bet: 188 source de données ID de la Coupe de la Ligue
   leagueLogo: Logo de la Coupe de la Ligue
+  leagueManagementList: Liste de gestion de la ligue
   leagueNameCn: Nom de la Coupe de la Ligue
   leagueNameEn: Nom anglais de la Coupe de la Ligue
   level: 赛事等级
   operation: fonctionner
   raceId: 赛种ID
   sportId: ID de course
+  sportType: espèce de course
   teamId: 所属球队
 player:
   add: Ajouter un nouveau joueur

@@ -6,10 +6,13 @@ import type { PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h } from "vue";
 import { removeEmptyStringKeys } from "@/utils/utilFn";
 import { $t, transformI18n } from "@/plugins/i18n";
+import { sportIdsMap } from "@/utils/maps/sports_map";
+
 
 export function useLeague() {
   const form = reactive({
     leagueNameCn: "",
+    leagueNameEn: "",
     level: "",
     countryId: "",
     leagueId: "",
@@ -63,16 +66,17 @@ export function useLeague() {
       minWidth: 150
     },
     {
-      label: transformI18n($t('metadata.sportId')),
+      label: transformI18n($t('metadata.sportType')),
       prop: "sportId",
+      formatter: ({ sportId }): string => sportIdsMap.find(_ => _.value === sportId).label,
       minWidth: 150
     },
-    {
+    /* {
       label: transformI18n($t('metadata.operation')),
       fixed: "right",
       width: 240,
       slot: "operation"
-    }
+    } */
   ];
   // const buttonClass = computed(() => {
   //   return [

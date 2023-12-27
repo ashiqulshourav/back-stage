@@ -24,6 +24,8 @@ buttons:
   hswholeFullScreen: FullScreen
 common:
   away: away
+  cancel: 取消
+  continue: 继续
   endDate: 结束日期
   firstHalf: first half
   home: home
@@ -36,18 +38,47 @@ common:
   sport: physical education
   startDate: 开始日期
   woman: female
-  'yes': 是
-  cancel: 取消
-  continue: 继续
+  'yes': 'yes'
 commonTable:
   actions: Actions
-  delete: delete
   add: Add
+  delete: delete
   edit: edit
   editMatch: 编辑联赛
   loadPage: 正在加载第${val}页...
   reset: 重置
   search: 筛选
+eMatch:
+  dataSource: English Name (Data Vendor)
+  dataSourceMsg: English name (Data Vendor) is required
+  dataSourceName: Data Vendor
+  dataSourceNameMsg: Data Vendor is required
+  leagueId: League ID
+  leagueName: Abbreviation
+  leagueNameCn: Simplified Chinese
+  leagueNameCnMsg: Simplified Chinese name is required
+  leagueNameEn: English Name
+  leagueNameEnMsg: English name is required
+  leagueNameMsg: Abbreviation is required
+  sort: League Order
+  title: League Database
+  titleEdit: Edit League
+  titleNew: Add League
+eTeam:
+  dataSource: English Name (Data Vendor)
+  dataSourceMsg: English name (Data Vendor) is required
+  dataSourceName: Data Vendor
+  dataSourceNameMsg: Data Vendor is required
+  teamId: Team ID
+  teamName: Abbreviation
+  teamNameCn: Simplified Chinese
+  teamNameCnMsg: Simplified Chinese name is required
+  teamNameEn: English Name
+  teamNameEnMsg: English name is required
+  teamNameMsg: Abbreviation is required
+  title: Team Database
+  titleEdit: Edit Team
+  titleNew: Add Team
 login:
   login: Login
   loginOut: Are you sure you want to log out?
@@ -63,6 +94,7 @@ main:
   theme: theme
 menus:
   early: Early game
+  esports: E-Sports
   hsFive: '500'
   hsabnormal: Abnormal Page
   hsfourZeroFour: '404'
@@ -71,6 +103,7 @@ menus:
   hslogin: Login
   hstestPage: test Page
   league: League Management
+  matchData: Leagues
   metadata: Schedule Management
   permission: Permission Manage
   permissionButton: Button Permission
@@ -80,10 +113,8 @@ menus:
   sale: Sales management
   saleLive: Live
   team: Team Management
-  esports: E-Sports
-  virtual: Virtual Sports
   teamData: Teams
-  matchData: Leagues
+  virtual: Virtual Sports
 metadata:
   add: 新增联赛
   belongingTeam: 所属球队
@@ -99,12 +130,14 @@ metadata:
   leagueId: League Cup ID
   leagueId188Bet: 188 data source League Cup ID
   leagueLogo: League Cup Logo
+  leagueManagementList: League management list
   leagueNameCn: League Cup name
   leagueNameEn: League Cup English name
   level: 赛事等级
   operation: operate
   raceId: 赛种ID
   sportId: Race ID
+  sportType: race species
   team:
     homeName: 主场名称
     isCountryTeam: 是否国家队
@@ -192,64 +225,33 @@ team:
   teamId: Team ID
   teamLogo: Team Logo
 vMatch:
-  title: League Database
-  leagueId: League ID
-  leagueNameCn: Simplified Chinese
-  leagueNameCnMsg: Simplified Chinese name is required
-  leagueNameEn: English Name
-  leagueNameEnMsg: English name is required
-  leagueName: Abbreviation
-  leagueNameMsg: Abbreviation is required
   dataSource: English Name (Data Vendor)
   dataSourceMsg: English name (Data Vendor) is required
   dataSourceName: Data Vendor
   dataSourceNameMsg: Data Vendor is required
+  leagueId: League ID
+  leagueName: Abbreviation
+  leagueNameCn: Simplified Chinese
+  leagueNameCnMsg: Simplified Chinese name is required
+  leagueNameEn: English Name
+  leagueNameEnMsg: English name is required
+  leagueNameMsg: Abbreviation is required
   sort: League Order
+  title: League Database
   titleEdit: Edit League
   titleNew: Add League
 vTeam:
-  title: Team Database
+  dataSource: English Name (Data Vendor)
+  dataSourceMsg: English name (Data Vendor) is required
+  dataSourceName: Data Vendor
+  dataSourceNameMsg: Data Vendor is required
   teamId: Team ID
+  teamName: Abbreviation
   teamNameCn: Simplified Chinese
   teamNameCnMsg: Simplified Chinese name is required
   teamNameEn: English Name
   teamNameEnMsg: English name is required
-  teamName: Abbreviation
   teamNameMsg: Abbreviation is required
-  dataSource: English Name (Data Vendor)
-  dataSourceMsg: English name (Data Vendor) is required
-  dataSourceName: Data Vendor
-  dataSourceNameMsg: Data Vendor is required
-  titleEdit: Edit Team
-  titleNew: Add Team
-eMatch:
-  title: League Database
-  leagueId: League ID
-  leagueNameCn: Simplified Chinese
-  leagueNameCnMsg: Simplified Chinese name is required
-  leagueNameEn: English Name
-  leagueNameEnMsg: English name is required
-  leagueName: Abbreviation
-  leagueNameMsg: Abbreviation is required
-  dataSource: English Name (Data Vendor)
-  dataSourceMsg: English name (Data Vendor) is required
-  dataSourceName: Data Vendor
-  dataSourceNameMsg: Data Vendor is required
-  sort: League Order
-  titleEdit: Edit League
-  titleNew: Add League
-eTeam:
   title: Team Database
-  teamId: Team ID
-  teamNameCn: Simplified Chinese
-  teamNameCnMsg: Simplified Chinese name is required
-  teamNameEn: English Name
-  teamNameEnMsg: English name is required
-  teamName: Abbreviation
-  teamNameMsg: Abbreviation is required
-  dataSource: English Name (Data Vendor)
-  dataSourceMsg: English name (Data Vendor) is required
-  dataSourceName: Data Vendor
-  dataSourceNameMsg: Data Vendor is required
   titleEdit: Edit Team
   titleNew: Add Team
