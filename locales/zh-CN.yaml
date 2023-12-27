@@ -84,6 +84,12 @@ menus:
   virtual: 虚拟体育
   teamData: 球队库
   matchData: 联赛库
+
+  # hydra - start
+  history: 赛程历史
+  operationLog: 操作日志
+  # hydra - end
+
 metadata:
   add: 新增联赛
   belongingTeam: 所属球队
@@ -250,3 +256,39 @@ eTeam:
   dataSourceNameMsg: 必须输入数据商
   titleEdit: 编辑球队
   titleNew: 新增球队
+
+# hydra - start
+history:
+  title: 赛程历史表
+  historyId: 序号
+  league: 联赛
+  leagueLevel: 联赛等级
+  dateAndStatus: 今日
+  homeTeam: 主队名称
+  score: 比分
+  awayTeam: 客队名称
+  neutral: 中立场
+  businessDataSource: 商业数据源
+  competitionDataSource: 竞品数据源
+  settlementReview: 结算审核
+  live: 滚球
+  saleStatus: 开售状态
+  earlyDataSource: 早盘主数据源
+  earlyGamePlay: 早盘开售玩法
+  liveDataSource: 滚球主数据源
+operationLog:
+  title: 操作日志表
+  today: 今日
+  yesterday: 昨日
+  operationLogId: 序号
+  operationAccount: 操作账号
+  resourceName: 资源名称
+  operationDateTime: 操作时间
+  successOrNot: 是否成功
+  operationType: 操作类型
+  uniqueId: 唯一ID
+  leagueId: 赛事ID
+  beforeOperation: 操作之前
+  afterOperation: 操作之后
+  extra: 备注
+# hydra - end

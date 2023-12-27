@@ -16,7 +16,7 @@ export function useLeague() {
     countryId: "",
     leagueId: "",
     leagueId188Bet: "",
-    sportId: "",
+    sportId: ""
   });
   const formRef = ref();
   const dataList = reactive<MetadataAPI.LeagueList[]>([]);
@@ -35,43 +35,43 @@ export function useLeague() {
       minWidth: 100
     },
     {
-      label: transformI18n($t('metadata.leagueLogo')),
+      label: transformI18n($t("metadata.leagueLogo")),
       prop: "leagueLogo",
       slot: "leagueLogo",
       minWidth: 120
     },
     {
-      label: transformI18n($t('metadata.countryId')),
+      label: transformI18n($t("metadata.countryId")),
       prop: "countryId",
       minWidth: 150
     },
     {
-      label: transformI18n($t('metadata.leagueId188Bet')),
+      label: transformI18n($t("metadata.leagueId188Bet")),
       prop: "leagueId188Bet",
       minWidth: 150
     },
     {
-      label: transformI18n($t('metadata.leagueNameCn')),
+      label: transformI18n($t("metadata.leagueNameCn")),
       prop: "leagueNameCn",
       minWidth: 150
     },
     {
-      label: transformI18n($t('metadata.leagueNameEn')),
+      label: transformI18n($t("metadata.leagueNameEn")),
       prop: "leagueNameEn",
       minWidth: 150
     },
     {
-      label: transformI18n($t('metadata.level')),
+      label: transformI18n($t("metadata.level")),
       prop: "level",
       minWidth: 150
     },
     {
-      label: transformI18n($t('metadata.sportId')),
+      label: transformI18n($t("metadata.sportId")),
       prop: "sportId",
       minWidth: 150
     },
     {
-      label: transformI18n($t('metadata.operation')),
+      label: transformI18n($t("metadata.operation")),
       fixed: "right",
       width: 240,
       slot: "operation"
@@ -87,7 +87,6 @@ export function useLeague() {
   //   ];
   // });
 
-
   function handleDelete(row) {
     message(`您删除了角色名称为${row.name}的这条数据`, { type: "success" });
     onSearch();
@@ -99,7 +98,7 @@ export function useLeague() {
 
   function handleCurrentChange(val: number) {
     pagination.currentPage = val;
-    onSearch()
+    onSearch();
   }
 
   function handleSelectionChange(val) {
@@ -107,7 +106,7 @@ export function useLeague() {
   }
 
   async function onSearch(type?: string) {
-    if (type === 'reload') {
+    if (type === "reload") {
       pagination.currentPage = 1;
     }
     loading.value = true;
@@ -123,7 +122,7 @@ export function useLeague() {
     pagination.total = res.data.total;
     pagination.pageSize = res.data.pageSize;
     pagination.currentPage = res.data.pageNum;
-    setTimeout(() => loading.value = false, 500);
+    setTimeout(() => (loading.value = false), 500);
   }
 
   const resetForm = formEl => {
@@ -137,14 +136,14 @@ export function useLeague() {
       title,
       props: {
         formInline: {
-          leagueNameCn: row?.leagueNameCn ?? '',
-          leagueNameEn: row?.leagueNameEn ?? '',
-          leagueId188Bet: row?.leagueId188Bet ?? '',
-          leagueLogo: row?.leagueLogo ?? '',
-          level: row?.level ?? '',
-          countryId: row?.countryId ?? '',
-          leagueId: row?.leagueId ?? '',
-          sportId: row?.sportId ?? '',
+          leagueNameCn: row?.leagueNameCn ?? "",
+          leagueNameEn: row?.leagueNameEn ?? "",
+          leagueId188Bet: row?.leagueId188Bet ?? "",
+          leagueLogo: row?.leagueLogo ?? "",
+          level: row?.level ?? "",
+          countryId: row?.countryId ?? "",
+          leagueId: row?.leagueId ?? "",
+          sportId: row?.sportId ?? ""
         }
       },
       width: "40%",
