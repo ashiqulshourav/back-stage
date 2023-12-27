@@ -129,7 +129,6 @@ export function useHistory() {
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage
     });
-    console.log(res);
     if (res.code) return message(res.msg, { type: "error" });
     dataList.length = 0;
     dataList.push(...res.data.list);
