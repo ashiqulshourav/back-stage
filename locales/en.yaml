@@ -37,8 +37,12 @@ common:
   startDate: 开始日期
   woman: female
   'yes': 是
+  cancel: 取消
+  continue: 继续
 commonTable:
+  actions: Actions
   delete: delete
+  add: Add
   edit: edit
   editMatch: 编辑联赛
   loadPage: 正在加载第${val}页...
@@ -76,6 +80,10 @@ menus:
   sale: Sales management
   saleLive: Live
   team: Team Management
+  esports: E-Sports
+  virtual: Virtual Sports
+  teamData: Teams
+  matchData: Leagues
 metadata:
   add: 新增联赛
   belongingTeam: 所属球队
@@ -181,5 +189,67 @@ status:
   hsLoad: Loading...
 team:
   add: Add new team
-  teamId: 球队ID
+  teamId: Team ID
   teamLogo: Team Logo
+vMatch:
+  title: League Database
+  leagueId: League ID
+  leagueNameCn: Simplified Chinese
+  leagueNameCnMsg: Simplified Chinese name is required
+  leagueNameEn: English Name
+  leagueNameEnMsg: English name is required
+  leagueName: Abbreviation
+  leagueNameMsg: Abbreviation is required
+  dataSource: English Name (Data Vendor)
+  dataSourceMsg: English name (Data Vendor) is required
+  dataSourceName: Data Vendor
+  dataSourceNameMsg: Data Vendor is required
+  sort: League Order
+  titleEdit: Edit League
+  titleNew: Add League
+vTeam:
+  title: Team Database
+  teamId: Team ID
+  teamNameCn: Simplified Chinese
+  teamNameCnMsg: Simplified Chinese name is required
+  teamNameEn: English Name
+  teamNameEnMsg: English name is required
+  teamName: Abbreviation
+  teamNameMsg: Abbreviation is required
+  dataSource: English Name (Data Vendor)
+  dataSourceMsg: English name (Data Vendor) is required
+  dataSourceName: Data Vendor
+  dataSourceNameMsg: Data Vendor is required
+  titleEdit: Edit Team
+  titleNew: Add Team
+eMatch:
+  title: League Database
+  leagueId: League ID
+  leagueNameCn: Simplified Chinese
+  leagueNameCnMsg: Simplified Chinese name is required
+  leagueNameEn: English Name
+  leagueNameEnMsg: English name is required
+  leagueName: Abbreviation
+  leagueNameMsg: Abbreviation is required
+  dataSource: English Name (Data Vendor)
+  dataSourceMsg: English name (Data Vendor) is required
+  dataSourceName: Data Vendor
+  dataSourceNameMsg: Data Vendor is required
+  sort: League Order
+  titleEdit: Edit League
+  titleNew: Add League
+eTeam:
+  title: Team Database
+  teamId: Team ID
+  teamNameCn: Simplified Chinese
+  teamNameCnMsg: Simplified Chinese name is required
+  teamNameEn: English Name
+  teamNameEnMsg: English name is required
+  teamName: Abbreviation
+  teamNameMsg: Abbreviation is required
+  dataSource: English Name (Data Vendor)
+  dataSourceMsg: English name (Data Vendor) is required
+  dataSourceName: Data Vendor
+  dataSourceNameMsg: Data Vendor is required
+  titleEdit: Edit Team
+  titleNew: Add Team

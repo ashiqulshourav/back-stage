@@ -1,5 +1,5 @@
 declare namespace SaleDataAPI {
-  type PreSaleList = {
+  type Sale = {
     matchId: number;
     countryId: number;
     sportId: number | string;
@@ -23,32 +23,19 @@ declare namespace SaleDataAPI {
     matchId188bet: number;
     childrenData: SattleDataAPI.MatchEventsList[];
   }
-
-  type PreSaleListData = {
-    total: number;
-    list: PreSaleList[];
-    pageNum: number;
-    pageSize: number;
-    size: number;
-    startRow: number;
-    endRow: number;
-    pages: number;
-    prePage: number;
-    nextPage: number;
-    isFirstPage: boolean;
-    isLastPage: boolean;
-    hasPreviousPage: boolean;
-    hasNextPage: boolean;
-    navigatePages: number;
-    navigatepageNums: number[];
-    navigateFirstPage: number;
-    navigateLastPage: number;
+  type SaleListFetchProps = COMMON.ListFetchProps & {
+    matchId?: number;
+    matchName?: number;
+    isSale?: number;
+    beginTime?: string;
   }
+  type SaleListData = COMMON.ListData<Sale>
+  type SaleListRes = COMMON.ListRes<SaleListData>
 
   type PreSaleListRes = {
     code: number;
     msg: string;
-    data: PreSaleListData;
+    data: SaleListData;
   }
 
 
