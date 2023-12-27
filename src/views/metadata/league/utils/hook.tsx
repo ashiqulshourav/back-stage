@@ -1,13 +1,11 @@
 import editForm from "../form.vue";
 import { message } from "@/utils/message";
-import { ElMessageBox } from "element-plus";
+import { FormItemProps } from "element-plus";
 import { addDialog } from "@/components/ReDialog";
 import type { PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h } from "vue";
-import { usePublicHooks } from "@/hooks";
 import { removeEmptyStringKeys } from "@/utils/utilFn";
 import { $t, transformI18n } from "@/plugins/i18n";
-import { delay } from "@pureadmin/utils";
 
 export function useLeague() {
   const form = reactive({
@@ -21,7 +19,6 @@ export function useLeague() {
   const formRef = ref();
   const dataList = reactive<MetadataAPI.LeagueList[]>([]);
   const loading = ref(true);
-  const switchLoadMap = ref({});
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,

@@ -2,7 +2,6 @@ import { App } from "vue";
 import axios from "axios";
 
 let config: object = {};
-const { VITE_PUBLIC_PATH } = import.meta.env;
 
 const setConfig = (cfg?: unknown) => {
   config = Object.assign(config, cfg);
@@ -44,7 +43,7 @@ export const getServerConfig = async (app: App): Promise<undefined> => {
       }
       return $config;
     })
-    .catch((e) => {
+    .catch((_e) => {
       throw "please add the server config json configuration file in the public folder";
     });
 };
