@@ -18,7 +18,6 @@
         <el-input
           v-model="form.countryId"
           :placeholder="t('metadata.countryId')"
-          
           class="!w-[200px]"
         />
       </el-form-item>

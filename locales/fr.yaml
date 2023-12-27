@@ -146,8 +146,8 @@ settle:
   footballGoal: but de football
   halfTime: 半场
   homeTeam: 主队
-  league: 联赛
-  level: 级别
+  league: Nom de l'événement
+  level: Niveau de l'événement
   operation: 操作
   peddingReview: 待审核
   rugby: rugby

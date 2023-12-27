@@ -164,7 +164,7 @@ sell:
   leagueId: 联赛杯赛ID
   level: 联赛等级
   matchId: 赛事ID
-  matchName: 联赛
+  matchName: 赛事名称
   neutral: 中立
   nonNeutral: 非中立
   open: 开售
@@ -185,8 +185,8 @@ settle:
   footballGoal: 足球进球
   halfTime: 半场
   homeTeam: 主队
-  league: 联赛
-  level: 级别
+  league: 赛事名称
+  level: 赛事等级
   operation: 操作
   peddingReview: 待审核
   rugby: 橄榄球

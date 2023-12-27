@@ -5,7 +5,7 @@ import { removeEmptyStringKeys } from "@/utils/utilFn";
 import { $t, transformI18n } from "@/plugins/i18n";
 import { usePublicHooks } from "@/hooks";
 import dayjs from "dayjs";
-import { sportIdsMap } from "@/utils/maps/sports_map";
+import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
 
 export function useLeague() {
   const form = reactive({
@@ -66,7 +66,7 @@ export function useLeague() {
     {
       label: transformI18n($t('metadata.sportType')),
       prop: "sportId",
-      formatter: ({ sportId }): string => sportIdsMap.find(_ => _.value === sportId).label,
+      formatter: ({ sportId }): string => SPORT_ID_MAP.find(_ => _.value === sportId).label,
       minWidth: 150
     },
     {
@@ -113,7 +113,8 @@ export function useLeague() {
   }
 
   function handleSizeChange(val: number) {
-    console.log(`${val} items per page`);
+    pagination.pageSize = val;
+    onSearch()
   }
 
   function handleCurrentChange(val: number) {

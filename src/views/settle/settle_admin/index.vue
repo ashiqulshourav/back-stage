@@ -57,6 +57,7 @@
                 <span class="mr-4">C: 确认新增</span>
               </div>
               <pure-table
+                row-key="id"
                 :data="row.childrenData"
                 :loading="childloading"
                 :columns="childColumns"
@@ -98,7 +99,7 @@
                   </el-select>
                 </template>
 
-                <template #sportId="{ row }">
+                <!-- <template #sportId="{ row }">
                   <el-select
                     :disabled="!row.isEdit"
                     v-model="row.sportId"
@@ -107,11 +108,11 @@
                     <el-option
                       :label="item.label"
                       :value="item.value"
-                      v-for="item in sportIdsMap"
+                      v-for="item in SPORT_ID_MAP"
                       :key="item.value"
                     />
                   </el-select>
-                </template>
+                </template> -->
 
                 <template #eventTime="{ row }">
                   <el-date-picker
@@ -231,7 +232,7 @@ import icon_circle_fill from "@iconify-icons/ri/add-circle-fill";
 import { useLeague } from "./utils/hook";
 import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
 import SearchForm from "./component/SearchForm.vue";
-import { sportIdsMap } from "@/utils/maps/sports_map";
+// import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
 const { t } = useTranslationLang();
 defineOptions({ name: "settle_admin" });
 
@@ -269,4 +270,3 @@ onMounted(() => {
   }
 }
 </style>
-../../../utils/map

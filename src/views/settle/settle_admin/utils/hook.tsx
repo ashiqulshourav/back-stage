@@ -9,6 +9,7 @@ export function useLeague() {
     date: '',
     matchId: '',
     matchType: '',
+    matchName: '',
     settleStatus: '',
     dataVendors: ''
   });
@@ -45,6 +46,7 @@ export function useLeague() {
       prop: "matchName",
       width: 280,
       fixed: true,
+      align: 'left',
     },
     {
       label: transformI18n($t("settle.eventID")),
@@ -130,12 +132,12 @@ export function useLeague() {
       prop: "settleStatus",
       formatter: ({ settleStatus }) => settleStatus || '-'
     },
-    {
+    /* {
       label: transformI18n($t("settle.operation")),
       prop: "operation",
       slot: 'operation',
       fixed: "right",
-    },
+    }, */
   ];
 
   const childColumns: TableColumnList = [
@@ -203,8 +205,9 @@ export function useLeague() {
     }
   ];
 
-  function handleSizeChange(val: number) {
-    console.log(`${val} items per page`);
+  function handleSizeChange(pageSize: number) {
+    pagination.pageSize = pageSize;
+    onSearch();
   }
 
   function handleCurrentChange(val: number) {
@@ -264,8 +267,9 @@ export function useLeague() {
     row.isEdit = true;
   }
 
-  const getChildRenData = async (row, rowList) => {
-    if (!rowList.some(r => r.matchId === row.matchId)) return;
+  const getChildRenData = async (row) => {
+    if (row.childrenData.length) return;
+    childloading.value = true;
     const res = await API.getMatchEvents({ matchId: row.matchId })
     childloading.value = false;
     res.data.forEach(_ => {
@@ -274,7 +278,6 @@ export function useLeague() {
       _.isBackEndReturnData = true;
       _.canceled = Boolean(_.canceled);
     });
-    row.childrenData.length = 0;
     row.childrenData.push(...res.data);
   }
 
@@ -286,7 +289,7 @@ export function useLeague() {
       t2: row.t2,
       eventCode: row.eventCode,
       eventTime: row.eventTime,
-      sportId: row.sportId,
+      sportId: 1,// row.sportId,
       matchPeriodId: row.matchPeriodId,
       homeAway: row.homeAway,
       player1Name: row.player1Name,
@@ -306,7 +309,7 @@ export function useLeague() {
       dataSourceCode: "SK",
       remark: '',
       sourceType: 1,
-      sportId: row.sportId,
+      sportId: 1, // row.sportId,
       t1: +row.t1,
       t2: +row.t2,
     }

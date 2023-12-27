@@ -28,15 +28,12 @@
     </el-form-item>
 
     <el-form-item :label="`${t('settle.league')}:`" prop="matchName">
-      <el-select
-        v-model="form.matchType"
-        :placeholder="t('common.select')"
-        class="!w-[100px]"
-      >
-        <el-option label="英格兰" :value="0" />
-        <el-option label="英格兰" :value="1" />
-        <el-option label="英格兰" :value="2" />
-      </el-select>
+      <el-input
+        v-model="form.matchName"
+        :placeholder="t('settle.league')"
+        clearable
+        class="!w-[150px]"
+      />
     </el-form-item>
 
     <el-form-item :label="`${t('settle.settlementStatus')}:`" prop="isSale">
