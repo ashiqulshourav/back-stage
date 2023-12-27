@@ -64,21 +64,21 @@ eMatch:
   title: 电子竞技- 联赛库
   titleEdit: 编辑联赛
   titleNew: 新增联赛
-eTeam:
-  dataSource: 英文名（数据商）
-  dataSourceMsg: 必须输入英文名（数据商）
-  dataSourceName: 数据商
-  dataSourceNameMsg: 必须输入数据商
-  teamId: 球队ID
-  teamName: 简称
-  teamNameCn: 中文简体
-  teamNameCnMsg: 必须输入中文简体名字
-  teamNameEn: 英文名称
-  teamNameEnMsg: 必须输入英文名称
-  teamNameMsg: 必须输入简称
-  title: 电子竞技- 球队库
-  titleEdit: 编辑球队
-  titleNew: 新增球队
+# eTeam:
+#   dataSource: 英文名（数据商）
+#   dataSourceMsg: 必须输入英文名（数据商）
+#   dataSourceName: 数据商
+#   dataSourceNameMsg: 必须输入数据商
+#   teamId: 球队ID
+#   teamName: 简称
+#   teamNameCn: 中文简体
+#   teamNameCnMsg: 必须输入中文简体名字
+#   teamNameEn: 英文名称
+#   teamNameEnMsg: 必须输入英文名称
+#   teamNameMsg: 必须输入简称
+#   title: 电子竞技- 球队库
+#   titleEdit: 编辑球队
+#   titleNew: 新增球队
 login:
   login: 登录
   loginOut: 您确定要退出么?
@@ -114,10 +114,7 @@ menus:
   saleLive: 滚球赛事
   team: 球队管理
   teamData: 球队库
-  matchData: 联赛库
   virtual: 虚拟体育
-
-
   # hydra - start
   history: 赛程历史
   operationLog: 操作日志
@@ -262,23 +259,22 @@ vTeam:
   title: 虚拟体育 - 球队库
   titleEdit: 编辑球队
   titleNew: 新增球队
-<<<<<<< HEAD
-eMatch:
-  title: 电子竞技- 联赛库
-  leagueId: 联赛ID
-  leagueNameCn: 中文简体
-  leagueNameCnMsg: 必须输入中文简体名字
-  leagueNameEn: 英文名称
-  leagueNameEnMsg: 必须输入英文名称
-  leagueName: 简称
-  leagueNameMsg: 必须输入简称
-  dataSource: 英文名（数据商）
-  dataSourceMsg: 必须输入英文名（数据商）
-  dataSourceName: 数据商
-  dataSourceNameMsg: 必须输入数据商
-  sort: 联赛排序
-  titleEdit: 编辑联赛
-  titleNew: 新增联赛
+# eMatch:
+#   title: 电子竞技- 联赛库
+#   leagueId: 联赛ID
+#   leagueNameCn: 中文简体
+#   leagueNameCnMsg: 必须输入中文简体名字
+#   leagueNameEn: 英文名称
+#   leagueNameEnMsg: 必须输入英文名称
+#   leagueName: 简称
+#   leagueNameMsg: 必须输入简称
+#   dataSource: 英文名（数据商）
+#   dataSourceMsg: 必须输入英文名（数据商）
+#   dataSourceName: 数据商
+#   dataSourceNameMsg: 必须输入数据商
+#   sort: 联赛排序
+#   titleEdit: 编辑联赛
+#   titleNew: 新增联赛
 eTeam:
   title: 电子竞技- 球队库
   teamId: 球队ID
@@ -330,5 +326,3 @@ operationLog:
   afterOperation: 操作之后
   extra: 备注
 # hydra - end
-=======
->>>>>>> 53c6e0482c91133fa2c6a12c2cf33f825def3432

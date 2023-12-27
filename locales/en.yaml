@@ -115,7 +115,7 @@ menus:
   team: Team Management
   teamData: Teams
   virtual: Virtual Sports
-  matchData: Leagues
+  # matchData: Leagues
 
   # hydra - start
   history: Schedule History
