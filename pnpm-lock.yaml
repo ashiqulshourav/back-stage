@@ -91,6 +91,9 @@ devDependencies:
   '@iconify-icons/ep':
     specifier: ^1.2.12
     version: 1.2.12
+  '@iconify-icons/icon-park-outline':
+    specifier: ^1.2.11
+    version: 1.2.11
   '@iconify-icons/ri':
     specifier: ^1.2.9
     version: 1.2.9
@@ -1289,6 +1292,12 @@ packages:
 
   /@iconify-icons/ep@1.2.12:
     resolution: {integrity: sha512-8EJULn048sQq3fvytpQ5j40omnVOdBKpo+sXdYM35NRrqCe1BihxBesMcCOLWaocqkWia6uTQ3cnRHff4ZA11w==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
+  /@iconify-icons/icon-park-outline@1.2.11:
+    resolution: {integrity: sha512-YfdXTQJNqHsmtwrYCRHQu3TfyB7ybT27rZj668ZLjRxWBW3QEVDnvIGkNWgCiMYVOxlZJHOidke33MvfFmcNhw==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: true

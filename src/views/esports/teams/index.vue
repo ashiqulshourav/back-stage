@@ -1,5 +1,6 @@
 <template>
-  <div class="main">    <PureTableBar
+  <div class="main">
+    <PureTableBar
       title="预开售管理"
       :columns="columns"
       @refresh="onSearch('reload')"
