@@ -1,17 +1,18 @@
 import editForm from "../form.vue";
 import { message } from "@/utils/message";
-import { ElMessageBox } from "element-plus";
+import { FormItemProps } from "element-plus";
 import { addDialog } from "@/components/ReDialog";
 import type { PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h } from "vue";
-import { usePublicHooks } from "@/hooks";
 import { removeEmptyStringKeys } from "@/utils/utilFn";
 import { $t, transformI18n } from "@/plugins/i18n";
-import { delay } from "@pureadmin/utils";
+import { sportIdsMap } from "@/utils/maps/sports_map";
+
 
 export function useLeague() {
   const form = reactive({
     leagueNameCn: "",
+    leagueNameEn: "",
     level: "",
     countryId: "",
     leagueId: "",
@@ -21,7 +22,6 @@ export function useLeague() {
   const formRef = ref();
   const dataList = reactive<MetadataAPI.LeagueList[]>([]);
   const loading = ref(true);
-  const switchLoadMap = ref({});
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -66,16 +66,17 @@ export function useLeague() {
       minWidth: 150
     },
     {
-      label: transformI18n($t("metadata.sportId")),
+      label: transformI18n($t('metadata.sportType')),
       prop: "sportId",
+      formatter: ({ sportId }): string => sportIdsMap.find(_ => _.value === sportId).label,
       minWidth: 150
     },
-    {
-      label: transformI18n($t("metadata.operation")),
+    /* {
+      label: transformI18n($t('metadata.operation')),
       fixed: "right",
       width: 240,
       slot: "operation"
-    }
+    } */
   ];
   // const buttonClass = computed(() => {
   //   return [

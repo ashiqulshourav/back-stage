@@ -46,19 +46,19 @@ export const useUserStore = defineStore('USERSTATE', {
       router.push("/login");
     },
     /** 刷新`token` */
-    async handRefreshToken(data) {
-      return new Promise<RefreshTokenResult>((resolve, reject) => {
-        refreshTokenApi(data)
-          .then(data => {
-            if (data) {
-              // setToken(data.data);
-              resolve(data);
-            }
-          })
-          .catch(error => {
-            reject(error);
-          });
-      });
+    async handRefreshToken(_) {
+      // return new Promise<RefreshTokenResult>((resolve, reject) => {
+      //   refreshTokenApi(data)
+      //     .then(data => {
+      //       if (data) {
+      //         // setToken(data.data);
+      //         resolve(data);
+      //       }
+      //     })
+      //     .catch(error => {
+      //       reject(error);
+      //     });
+      // });
     },
     setUserInfo(_: UserAPI.Login_Data) {
       this.userInfo = Object.assign(this.userInfo, _.user)

@@ -1,6 +1,6 @@
 import { $t, transformI18n } from "@/plugins/i18n";
 
-export const sportIds = [
+export const sportIdsMap = [
   { label: transformI18n($t('settle.football')), value: 1 },
   { label: transformI18n($t('settle.basketball')), value: 2 },
   { label: transformI18n($t('settle.tennis')), value: 3 },

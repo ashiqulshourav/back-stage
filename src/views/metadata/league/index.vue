@@ -22,6 +22,17 @@
           class="!w-[200px]"
         />
       </el-form-item>
+      <el-form-item
+        :label="`${t('metadata.leagueNameEn')}:`"
+        prop="leagueNameEn"
+      >
+        <el-input
+          v-model="form.leagueNameEn"
+          :placeholder="t('metadata.leagueNameEn')"
+          clearable
+          class="!w-[200px]"
+        />
+      </el-form-item>
       <el-form-item :label="`${t('metadata.country')}:`" prop="countryId">
         <el-input
           v-model="form.countryId"
@@ -65,11 +76,11 @@
     </el-form>
 
     <PureTableBar
-      title="联赛管理列表"
+      :title="t('metadata.leagueManagementList')"
       :columns="columns"
       @refresh="onSearch('reload')"
     >
-      <template #buttons>
+      <!-- <template #buttons>
         <el-button
           type="primary"
           :icon="useRenderIcon(AddFill)"
@@ -77,7 +88,7 @@
         >
           {{ t("metadata.add") }}
         </el-button>
-      </template>
+      </template> -->
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"
@@ -109,7 +120,7 @@
               class="w-[80px] h-[30px]"
             />
           </template>
-          <template #operation="{ row }">
+          <!-- <template #operation="{ row }">
             <el-button
               class="reset-margin"
               link
@@ -136,7 +147,7 @@
                 </el-button>
               </template>
             </el-popconfirm>
-          </template>
+          </template> -->
         </pure-table>
       </template>
     </PureTableBar>
@@ -147,15 +158,15 @@
 import { ref } from "vue";
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-
-import Delete from "@iconify-icons/ep/delete";
-import EditPen from "@iconify-icons/ep/edit-pen";
+// import Delete from "@iconify-icons/ep/delete";
+// import EditPen from "@iconify-icons/ep/edit-pen";
 import Search from "@iconify-icons/ep/search";
 import Refresh from "@iconify-icons/ep/refresh";
-import AddFill from "@iconify-icons/ri/add-circle-line";
+// import AddFill from "@iconify-icons/ri/add-circle-line";
 import { useLeague } from "./utils/hook";
 import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
 const { t } = useTranslationLang();
+
 defineOptions({ name: "League" });
 
 const formRef = ref();
@@ -167,8 +178,8 @@ const {
   pagination,
   onSearch,
   resetForm,
-  openDialog,
-  handleDelete,
+  // openDialog,
+  // handleDelete,
   handleSizeChange,
   handleCurrentChange,
   handleSelectionChange

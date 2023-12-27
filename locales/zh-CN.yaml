@@ -24,6 +24,8 @@ buttons:
   hswholeFullScreen: 全屏
 common:
   away: 客场
+  cancel: 取消
+  continue: 继续
   endDate: 结束日期
   firstHalf: 上半场
   home: 主场
@@ -37,8 +39,6 @@ common:
   startDate: 开始日期
   woman: 女
   'yes': 是
-  cancel: 取消
-  continue: 继续
 commonTable:
   actions: 操作
   add: 新增
@@ -48,6 +48,37 @@ commonTable:
   loadPage: 正在加载第${val}页...
   reset: 重置
   search: 筛选
+eMatch:
+  dataSource: 英文名（数据商）
+  dataSourceMsg: 必须输入英文名（数据商）
+  dataSourceName: 数据商
+  dataSourceNameMsg: 必须输入数据商
+  leagueId: 联赛ID
+  leagueName: 简称
+  leagueNameCn: 中文简体
+  leagueNameCnMsg: 必须输入中文简体名字
+  leagueNameEn: 英文名称
+  leagueNameEnMsg: 必须输入英文名称
+  leagueNameMsg: 必须输入简称
+  sort: 联赛排序
+  title: 电子竞技- 联赛库
+  titleEdit: 编辑联赛
+  titleNew: 新增联赛
+eTeam:
+  dataSource: 英文名（数据商）
+  dataSourceMsg: 必须输入英文名（数据商）
+  dataSourceName: 数据商
+  dataSourceNameMsg: 必须输入数据商
+  teamId: 球队ID
+  teamName: 简称
+  teamNameCn: 中文简体
+  teamNameCnMsg: 必须输入中文简体名字
+  teamNameEn: 英文名称
+  teamNameEnMsg: 必须输入英文名称
+  teamNameMsg: 必须输入简称
+  title: 电子竞技- 球队库
+  titleEdit: 编辑球队
+  titleNew: 新增球队
 login:
   login: 登录
   loginOut: 您确定要退出么?
@@ -63,14 +94,16 @@ main:
   theme: 主题
 menus:
   early: 早盘赛事
+  esports: 电子竞技
   hsFive: '500'
-  hsabnormal: Abnormal Page
+  hsabnormal: 异常页面
   hsfourZeroFour: '404'
   hsfourZeroOne: '403'
   hshome: Home
   hslogin: Login
   hstestPage: test Page
   league: 联赛管理
+  matchData: 联赛库
   metadata: 赛程管理
   permission: 权限管理
   permissionButton: 按钮权限
@@ -80,16 +113,18 @@ menus:
   sale: 开售管理
   saleLive: 滚球赛事
   team: 球队管理
-  esports: 电子竞技
-  virtual: 虚拟体育
   teamData: 球队库
   matchData: 联赛库
+  virtual: 虚拟体育
+
 
   # hydra - start
   history: 赛程历史
   operationLog: 操作日志
   # hydra - end
 
+
+  
 metadata:
   add: 新增联赛
   belongingTeam: 所属球队
@@ -105,12 +140,14 @@ metadata:
   leagueId: 联赛杯赛ID
   leagueId188Bet: 188数据源联赛杯赛ID
   leagueLogo: 联赛杯赛Logo
+  leagueManagementList: 联赛管理列表
   leagueNameCn: 联赛杯ID
   leagueNameEn: 联赛杯赛英文名称
   level: 赛事等级
   operation: 操作
   raceId: 赛种ID
   sportId: 赛种ID
+  sportType: 赛种
   teamId: 所属球队
 player:
   add: 新增球员
@@ -127,7 +164,7 @@ player:
   updatedAt: 更新时间
 sell:
   awayTeamId: 客队ID
-  beginTime: 日期
+  beginTime: 比赛时间
   close: 关闭
   countryId: 国家地区ID
   currentScore: 当前比分
@@ -136,7 +173,7 @@ sell:
   isSale: 开售状态
   leagueId: 联赛杯赛ID
   level: 联赛等级
-  matchId: 序号
+  matchId: 赛事ID
   matchName: 联赛
   neutral: 中立
   nonNeutral: 非中立
@@ -195,36 +232,37 @@ team:
   teamNameCn: 球队中文名称
   teamNameEn: 球队英文名称
 vMatch:
-  title: 虚拟体育 - 联赛库
+  dataSource: 英文名（数据商）
+  dataSourceMsg: 必须输入英文名（数据商）
+  dataSourceName: 数据商
+  dataSourceNameMsg: 必须输入数据商
   leagueId: 联赛ID
+  leagueName: 简称
   leagueNameCn: 中文简体
   leagueNameCnMsg: 必须输入中文简体名字
   leagueNameEn: 英文名称
   leagueNameEnMsg: 必须输入英文名称
-  leagueName: 简称
   leagueNameMsg: 必须输入简称
+  sort: 联赛排序
+  title: 虚拟体育 - 联赛库
+  titleEdit: 编辑联赛
+  titleNew: 新增联赛
+vTeam:
   dataSource: 英文名（数据商）
   dataSourceMsg: 必须输入英文名（数据商）
   dataSourceName: 数据商
   dataSourceNameMsg: 必须输入数据商
-  sort: 联赛排序
-  titleEdit: 编辑联赛
-  titleNew: 新增联赛
-vTeam:
-  title: 虚拟体育 - 球队库
   teamId: 球队ID
+  teamName: 简称
   teamNameCn: 中文简体
   teamNameCnMsg: 必须输入中文简体名字
   teamNameEn: 英文名称
   teamNameEnMsg: 必须输入英文名称
-  teamName: 简称
   teamNameMsg: 必须输入简称
-  dataSource: 英文名（数据商）
-  dataSourceMsg: 必须输入英文名（数据商）
-  dataSourceName: 数据商
-  dataSourceNameMsg: 必须输入数据商
+  title: 虚拟体育 - 球队库
   titleEdit: 编辑球队
   titleNew: 新增球队
+<<<<<<< HEAD
 eMatch:
   title: 电子竞技- 联赛库
   leagueId: 联赛ID
@@ -292,3 +330,5 @@ operationLog:
   afterOperation: 操作之后
   extra: 备注
 # hydra - end
+=======
+>>>>>>> 53c6e0482c91133fa2c6a12c2cf33f825def3432

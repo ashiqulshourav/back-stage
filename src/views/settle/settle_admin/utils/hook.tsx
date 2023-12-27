@@ -264,7 +264,8 @@ export function useLeague() {
     row.isEdit = true;
   }
 
-  const getChildRenData = async (row) => {
+  const getChildRenData = async (row, rowList) => {
+    if (!rowList.some(r => r.matchId === row.matchId)) return;
     const res = await API.getMatchEvents({ matchId: row.matchId })
     childloading.value = false;
     res.data.forEach(_ => {
