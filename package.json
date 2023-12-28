@@ -18,7 +18,10 @@
     "lint:stylelint": "stylelint \"**/*.{html,vue,css,scss}\" --fix --cache --cache-location node_modules/.cache/stylelint/",
     "lint": "pnpm lint:eslint && pnpm lint:prettier && pnpm lint:stylelint",
     "preinstall": "npx only-allow pnpm",
-    "tsc": "tsc --noEmit"
+    "tsc": "tsc --noEmit",
+    "scan": "i18next-scanner --config src/i18n/i18next-scaner.config.js",
+    "i2e": "node src/i18n/json2Excel.js",
+    "e2j": "node src/i18n/excel2Json.js"
   },
   "browserslist": [
     "> 1%",
