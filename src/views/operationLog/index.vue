@@ -9,7 +9,7 @@
         <el-button
           type="primary"
           :icon="useRenderIcon(AddFill)"
-          @click="openDialog(t('commonTable.add'))"
+          @click="openDialog(t('新增'))"
         >
           {{ t("新增联赛") }}
         </el-button>

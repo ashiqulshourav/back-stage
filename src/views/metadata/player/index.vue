@@ -64,10 +64,10 @@
         />
       </el-form-item>
 
-      <el-form-item :label="`${t('player.简称')}:`" prop="sportId">
+      <el-form-item :label="`${t('简称')}:`" prop="sportId">
         <el-input
           v-model="form.简称"
-          :placeholder="t('player.简称')"
+          :placeholder="t('简称')"
           clearable
           class="!w-[130px]"
         />
@@ -173,7 +173,7 @@
               type="primary"
               :size="size"
               :icon="useRenderIcon(EditPen)"
-              @click="openDialog(t('commonTable.editMatch'), row)"
+              @click="openDialog(t('编辑赛事'), row)"
             >
               {{ t("编辑") }}
             </el-button>

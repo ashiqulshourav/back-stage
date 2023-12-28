@@ -7,6 +7,6 @@ export const formRules = reactive(<FormRules>{
   leagueNameCn: [{ required: true, message: t("必须输入中文简体名字"), trigger: "blur" }],
   leagueNameEn: [{ required: true, message: t("必须输入英文名称"), trigger: "blur" }],
   leagueName: [{ required: true, message: t("必须输入简称"), trigger: "blur" }],
-  dataSource: [{ required: true, message: t("英文名（数据商）Msg"), trigger: "blur" }],
-  dataSourceName: [{ required: true, message: t("vMatch.必须输入数据商"), trigger: "blur" }],
+  dataSource: [{ required: true, message: t("英文名（数据商）"), trigger: "blur" }],
+  dataSourceName: [{ required: true, message: t("必须输入数据商"), trigger: "blur" }],
 });

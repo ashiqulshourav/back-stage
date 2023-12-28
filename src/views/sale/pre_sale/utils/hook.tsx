@@ -142,7 +142,8 @@ export function useLeague() {
     pagination.total = res.data.total;
     pagination.pageSize = res.data.pageSize;
     pagination.currentPage = res.data.pageNum;
-    setTimeout(() => loading.value = false, 500);
+    loading.value = false;
+    setTimeout(() => 500);
   }
 
   const resetForm = formEl => {

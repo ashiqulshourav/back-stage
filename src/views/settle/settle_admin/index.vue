@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <SearchForm :loading="loading" />
+    <SearchForm :loading="loading" @onSearch="onSearch" />
 
     <PureTableBar
       :title="t('结算管理')"
@@ -14,8 +14,8 @@
           table-layout="auto"
           :loading="loading"
           :size="size"
-          adaptive
           row-key="matchId"
+          adaptive
           :fit="true"
           :data="dataList"
           :columns="dynamicColumns"

@@ -9,7 +9,7 @@ export default {
   redirect: "/welcome",
   meta: {
     icon: "homeFilled",
-    title: t("Home"),
+    title: t("主页"),
     rank: 0,
   },
   children: [

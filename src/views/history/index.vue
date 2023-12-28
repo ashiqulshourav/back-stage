@@ -9,7 +9,7 @@
         <el-button
           type="primary"
           :icon="useRenderIcon(AddFill)"
-          @click="openDialog(t('commonTable.add'))"
+          @click="openDialog(t('新增'))"
         >
           {{ t("新增联赛") }}
         </el-button>
@@ -52,7 +52,7 @@
               type="primary"
               :size="size"
               :icon="useRenderIcon(EditPen)"
-              @click="openDialog(t('commonTable.editMatch'), row)"
+              @click="openDialog(t('编辑赛事'), row)"
             >
               {{ t("编辑") }}
             </el-button>

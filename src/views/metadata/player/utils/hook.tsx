@@ -69,7 +69,7 @@ export function useLeague() {
       minWidth: 150
     },
     {
-      label: t(t('player.简称')),
+      label: t(t('简称')),
       prop: "简称",
       minWidth: 150
     },

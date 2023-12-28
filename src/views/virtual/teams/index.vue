@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <PureTableBar
-      :title="t('vTeam.title')"
+      :title="t('虚拟体育 - 球队库')"
       :columns="columns"
       @refresh="onSearch('reload')"
     >
@@ -9,9 +9,9 @@
         <el-button
           type="primary"
           :icon="useRenderIcon(AddFill)"
-          @click="openDialog(t('commonTable.add'))"
+          @click="openDialog(t('新增'))"
         >
-          {{ t("vTeam.titleNew") }}
+          {{ t("新增球队") }}
         </el-button>
       </template>
       <template v-slot="{ size, dynamicColumns }">
@@ -40,7 +40,7 @@
               type="primary"
               :size="size"
               :icon="useRenderIcon(EditPen)"
-              @click="openDialog(t('vTeam.editTitle'), row)"
+              @click="openDialog(t('编辑球队'), row)"
             >
               {{ t("编辑") }}
             </el-button>

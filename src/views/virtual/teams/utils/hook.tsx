@@ -19,36 +19,36 @@ export function useTeam() {
   });
   const columns: TableColumnList = [
     {
-      label: t(t("vTeam.teamId")),
+      label: t("球队ID"),
       prop: "teamId",
     },
     {
-      label: t(t('vTeam.teamNameCn')),
+      label: t('球队中文名'),
       prop: "teamNameCn",
       minWidth: 200
     },
     {
-      label: t(t('vTeam.teamNameEn')),
+      label: t('球队英文名'),
       prop: "teamNameEn",
       minWidth: 200
     },
     {
-      label: t(t('vTeam.teamName')),
+      label: t('简称'),
       prop: "teamName",
       minWidth: 200
     },
     {
-      label: t(t('vTeam.dataSource')),
+      label: t('英文名（数据商）'),
       prop: "dataSource",
       minWidth: 150
     },
     {
-      label: t(t('vTeam.dataSourceName')),
+      label: t('数据商'),
       prop: "dataSourceName",
       minWidth: 100
     },
     {
-      label: t(t('操作')),
+      label: t('操作'),
       width: 240,
       slot: "operation",
       align: 'right'

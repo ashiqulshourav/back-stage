@@ -9,9 +9,9 @@
         <el-button
           type="primary"
           :icon="useRenderIcon(AddFill)"
-          @click="openDialog(t('commonTable.add'))"
+          @click="openDialog(t('新增'))"
         >
-          {{ t("eTeam.titleNew") }}
+          {{ t("新增球队") }}
         </el-button>
       </template>
       <template v-slot="{ size, dynamicColumns }">
@@ -40,7 +40,7 @@
               type="primary"
               :size="size"
               :icon="useRenderIcon(EditPen)"
-              @click="openDialog(t('eTeam.editTitle'), row)"
+              @click="openDialog(t('编辑球队'), row)"
             >
               {{ t("编辑") }}
             </el-button>

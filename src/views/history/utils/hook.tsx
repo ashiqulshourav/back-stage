@@ -32,7 +32,7 @@ export function useHistory() {
       fixed: true
     },
     {
-      label: t(t("联赛Level")),
+      label: t(t("联赛")),
       prop: "leagueLevel",
       minWidth: 150
     },
@@ -100,7 +100,7 @@ export function useHistory() {
       minWidth: 150
     },
     {
-      label: t(t("滚球DataSource")),
+      label: t(t("滚球")),
       prop: "liveDataSource",
       minWidth: 150
     }

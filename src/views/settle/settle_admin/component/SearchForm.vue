@@ -61,7 +61,7 @@
         type="primary"
         :icon="useRenderIcon(icon_serch)"
         :loading="loading"
-        @click="onSearch('reload')"
+        @click="searchVal('reload')"
       >
         {{ t("筛选") }}
       </el-button>
@@ -79,14 +79,24 @@
 import icon_serch from "@iconify-icons/ep/search";
 import icon_refresh from "@iconify-icons/ep/refresh";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-import { useLeague } from "../utils/hook";
+// import { useLeague } from "../utils/hook";
 
 const formRef = ref();
 import { t } from "@/plugins/i18n";
 
 defineProps<{ loading: boolean }>();
+const emit = defineEmits(["onSearch"]);
 
-const { form, /* dataVendorsChange, */ onSearch, resetForm } = useLeague();
+// defineProps<{
+//   form;
+//   resetForm;
+// }>();
+
+const searchVal = () => {
+  emit("onSearch", "reload");
+};
+
+const { form, /* dataVendorsChange, */ resetForm } = useLeague();
 </script>
 
 <style scoped></style>

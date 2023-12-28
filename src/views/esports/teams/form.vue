@@ -6,57 +6,54 @@
     label-width="150px"
   >
     <el-form-item
-      :label="`${t('eTeam.teamId')}:`"
+      :label="`${t('所属球队')}:`"
       prop="teamId"
       v-if="newFormInline.teamId"
     >
       <el-input
         v-model="newFormInline.teamId"
         disabled
-        :placeholder="t('eTeam.teamId')"
+        :placeholder="t('所属球队')"
       />
     </el-form-item>
 
-    <el-form-item :label="`${t('eTeam.teamNameCn')}:`" prop="teamNameCn">
+    <el-form-item :label="`${t('中文简体')}:`" prop="teamNameCn">
       <el-input
         v-model="newFormInline.teamNameCn"
         clearable
-        :placeholder="t('eTeam.teamNameCn')"
+        :placeholder="t('中文简体')"
       />
     </el-form-item>
 
-    <el-form-item :label="`${t('eTeam.teamNameEn')}:`" prop="teamNameEn">
+    <el-form-item :label="`${t('英文名称')}:`" prop="teamNameEn">
       <el-input
         v-model="newFormInline.teamNameEn"
         clearable
-        :placeholder="t('eTeam.teamNameEn')"
+        :placeholder="t('英文名称')"
       />
     </el-form-item>
 
-    <el-form-item :label="`${t('eTeam.teamName')}:`" prop="teamName">
+    <el-form-item :label="`${t('球队名称')}:`" prop="teamName">
       <el-input
         v-model="newFormInline.teamName"
         clearable
-        :placeholder="t('eTeam.teamName')"
+        :placeholder="t('球队名称')"
       />
     </el-form-item>
 
-    <el-form-item :label="`${t('eTeam.dataSource')}:`" prop="dataSource">
+    <el-form-item :label="`${t('英文名（数据商）')}:`" prop="dataSource">
       <el-input
         v-model="newFormInline.dataSource"
         clearable
-        :placeholder="t('eTeam.dataSource')"
+        :placeholder="t('英文名（数据商）')"
       />
     </el-form-item>
 
-    <el-form-item
-      :label="`${t('eTeam.dataSourceName')}:`"
-      prop="dataSourceName"
-    >
+    <el-form-item :label="`${t('数据商')}:`" prop="dataSourceName">
       <el-input
         v-model="newFormInline.dataSourceName"
         clearable
-        :placeholder="t('eTeam.dataSourceName')"
+        :placeholder="t('数据商')"
       />
     </el-form-item>
   </el-form>

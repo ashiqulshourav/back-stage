@@ -26,7 +26,6 @@ export function useLeague() {
     total: 0,
     pageSize: 10,
     currentPage: 1,
-    background: true
   });
 
   const columns: TableColumnList = [
