@@ -6,7 +6,7 @@ import { routeMetaType } from "../types";
 import userAvatar from "@/assets/user.jpg";
 import { getTopMenu } from "@/router/utils";
 import { useGlobal } from "@pureadmin/utils";
-import { $t, transformI18n } from "@/plugins/i18n";
+import { t } from "@/plugins/i18n";
 import { router, remainingPaths } from "@/router";
 import { computed, type CSSProperties } from "vue";
 import { useAppStoreHook } from "@/store/app";
@@ -71,13 +71,14 @@ export function useNav() {
   /** 动态title */
   function changeTitle(meta: routeMetaType) {
     const Title = getConfig().Title;
-    if (Title) document.title = `${transformI18n(meta.title)} | ${Title}`;
-    else document.title = transformI18n(meta.title);
+    if (Title) document.title = `${t(meta.title)
+      } | ${Title} `;
+    else document.title = t(meta.title);
   }
 
   /** log out and log in */
   function logout() {
-    ElMessageBox.confirm(`${transformI18n($t("login.loginOut"))}`, { type: 'warning' }).then(() => {
+    ElMessageBox.confirm(`${t(t("您确定要退出么?"))} `, { type: 'warning' }).then(() => {
       useUserStore().logOut();
     })
   }

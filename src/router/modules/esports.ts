@@ -1,9 +1,9 @@
-import { $t } from "@/plugins/i18n";
+import { t } from "@/plugins/i18n";
 
 export default {
   path: "/esports",
   meta: {
-    title: $t('menus.esports'),
+    title: t('电子竞技'),
     icon: 'monitor',
     rank: 4
   },
@@ -13,7 +13,7 @@ export default {
       name: "eMatch",
       component: () => import("@/views/esports/match/index.vue"),
       meta: {
-        title: $t('menus.matchData'),
+        title: t('联赛库'),
         showParent: true,
       }
     },
@@ -22,7 +22,7 @@ export default {
       name: "eTeams",
       component: () => import("@/views/esports/teams/index.vue"),
       meta: {
-        title: $t('menus.teamData'),
+        title: t('球队库'),
         showParent: true,
       }
     }

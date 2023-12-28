@@ -6,7 +6,8 @@ import type { PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h } from "vue";
 // import { usePublicHooks } from "@/hooks";
 import { removeEmptyStringKeys } from "@/utils/utilFn";
-import { $t, transformI18n } from "@/plugins/i18n";
+import { t } from "@/plugins/i18n";
+import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
 
 export function useLeague() {
   const form = reactive({
@@ -32,56 +33,57 @@ export function useLeague() {
   });
   const columns: TableColumnList = [
     {
-      label: transformI18n($t("team.teamId")),
+      label: t(t("球队ID")),
       prop: "teamId",
       minWidth: 100
     },
     {
-      label: transformI18n($t('team.teamLogo')),
+      label: t(t('球队Logo')),
       prop: "teamLogo",
       slot: "teamLogo",
       minWidth: 120
     },
     {
-      label: transformI18n($t('metadata.countryId')),
+      label: t(t('国家地区ID')),
       prop: "countryId",
     },
     {
-      label: transformI18n($t('team.isCountryTeam')),
+      label: t(t('是否国家队')),
       prop: "isCountryTeam",
       slot: "isCountryTeam"
     },
     {
-      label: transformI18n($t('team.leagueId')),
+      label: t(t('联赛ID')),
       prop: "leagueId",
     },
     {
-      label: transformI18n($t('metadata.level')),
+      label: t(t('赛事等级')),
       prop: "level",
     },
     {
-      label: transformI18n($t('team.raceId')),
+      label: t(t('赛种')),
       prop: "sportId",
+      formatter: ({ sportId }): string => SPORT_ID_MAP.find(_ => _.value === sportId).label,
       minWidth: 150
     },
     {
-      label: transformI18n($t('team.homeName')),
+      label: t(t('主场名称')),
       prop: "stadiumName",
       slot: 'stadiumName',
       minWidth: 150
     },
     {
-      label: transformI18n($t('team.teamNameCn')),
+      label: t(t('球队中文名称')),
       prop: "teamNameCn",
       minWidth: 150
     },
     {
-      label: transformI18n($t('team.teamNameEn')),
+      label: t(t('球队英文名称')),
       prop: "teamNameEn",
       minWidth: 150
     },
     {
-      label: transformI18n($t('metadata.operation')),
+      label: t(t('操作')),
       fixed: "right",
       width: 240,
       slot: "operation"

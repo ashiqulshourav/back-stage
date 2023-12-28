@@ -6,98 +6,95 @@
       :model="form"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
-      <el-form-item :label="`${t('player.playerId')}:`" prop="playerId">
+      <el-form-item :label="`${t('球员ID')}:`" prop="playerId">
         <el-input
           v-model="form.teamId"
-          :placeholder="t('player.playerId')"
+          :placeholder="t('球员ID')"
           clearable
           class="!w-[130px]"
         />
       </el-form-item>
-      <el-form-item :label="`${t('metadata.belongingTeam')}:`" prop="level">
+      <el-form-item :label="`${t('所属球队')}:`" prop="level">
         <el-input
           v-model="form.countryId"
-          :placeholder="t('metadata.belongingTeam')"
+          :placeholder="t('所属球队')"
           clearable
           class="!w-[130px]"
         />
       </el-form-item>
 
-      <el-form-item :label="`${t('player.countryId')}:`" prop="countryId">
+      <el-form-item :label="`${t('国籍')}:`" prop="countryId">
         <el-input
           v-model="form.countryId"
-          :placeholder="t('player.countryId')"
+          :placeholder="t('国籍')"
           clearable
           class="!w-[130px]"
         />
       </el-form-item>
 
-      <el-form-item :label="`${t('player.isCountryPlayer')}:`" prop="countryId">
-        <el-select
-          v-model="form.isCountryPlayer"
-          :placeholder="t('common.select')"
-        >
-          <el-option :label="t('common.yes')" :value="0" />
-          <el-option :label="t('common.no')" :value="1" />
+      <el-form-item :label="`${t('是否国家队队员')}:`" prop="countryId">
+        <el-select v-model="form.isCountryPlayer" :placeholder="t('请选择')">
+          <el-option :label="t('是')" :value="0" />
+          <el-option :label="t('否')" :value="1" />
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="`${t('metadata.height')}:`" prop="level">
+      <el-form-item :label="`${t('身高')}:`" prop="level">
         <el-input
           v-model="form.height"
-          :placeholder="t('metadata.height')"
+          :placeholder="t('身高')"
           clearable
           class="!w-[130px]"
         />
       </el-form-item>
 
-      <el-form-item :label="`${t('player.gender')}:`" prop="countryId">
-        <el-select v-model="form.gender" :placeholder="t('common.select')">
-          <el-option :label="t('common.man')" :value="0" />
-          <el-option :label="t('common.woman')" :value="1" />
+      <el-form-item :label="`${t('性别')}:`" prop="countryId">
+        <el-select v-model="form.gender" :placeholder="t('请选择')">
+          <el-option :label="t('男')" :value="0" />
+          <el-option :label="t('女')" :value="1" />
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="`${t('player.birthday')}:`" prop="sportId">
+      <el-form-item :label="`${t('生日')}:`" prop="sportId">
         <el-input
           v-model="form.birthday"
-          :placeholder="t('player.birthday')"
+          :placeholder="t('生日')"
           clearable
           class="!w-[150px]"
         />
       </el-form-item>
 
-      <el-form-item :label="`${t('player.nickName')}:`" prop="sportId">
+      <el-form-item :label="`${t('player.简称')}:`" prop="sportId">
         <el-input
-          v-model="form.nickName"
-          :placeholder="t('player.nickName')"
+          v-model="form.简称"
+          :placeholder="t('player.简称')"
           clearable
           class="!w-[130px]"
         />
       </el-form-item>
 
-      <el-form-item :label="`${t('player.playerNameCn')}:`" prop="sportId">
+      <el-form-item :label="`${t('球员中文名')}:`" prop="sportId">
         <el-input
           v-model="form.playerNameCn"
-          :placeholder="t('player.playerNameCn')"
+          :placeholder="t('球员中文名')"
           clearable
           class="!w-[130px]"
         />
       </el-form-item>
 
-      <el-form-item :label="`${t('player.createdAt')}:`" prop="sportId">
+      <el-form-item :label="`${t('创建时间')}:`" prop="sportId">
         <el-input
           v-model="form.createdAt"
-          :placeholder="t('player.createdAt')"
+          :placeholder="t('创建时间')"
           clearable
           class="!w-[130px]"
         />
       </el-form-item>
 
-      <el-form-item :label="`${t('player.updatedAt')}:`" prop="sportId">
+      <el-form-item :label="`${t('更新时间')}:`" prop="sportId">
         <el-input
           v-model="form.updatedAt"
-          :placeholder="t('player.updatedAt')"
+          :placeholder="t('更新时间')"
           clearable
           class="!w-[130px]"
         />
@@ -110,10 +107,10 @@
           :loading="loading"
           @click="onSearch('reload')"
         >
-          {{ t("commonTable.search") }}
+          {{ t("筛选") }}
         </el-button>
         <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
-          {{ t("commonTable.reset") }}
+          {{ t("重置") }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -127,9 +124,9 @@
         <el-button
           type="primary"
           :icon="useRenderIcon(AddFill)"
-          @click="openDialog(t('player.add'))"
+          @click="openDialog(t('新增球员'))"
         >
-          {{ t("player.add") }}
+          {{ t("新增球员") }}
         </el-button>
       </template>
       <template v-slot="{ size, dynamicColumns }">
@@ -178,7 +175,7 @@
               :icon="useRenderIcon(EditPen)"
               @click="openDialog(t('commonTable.editMatch'), row)"
             >
-              {{ t("commonTable.edit") }}
+              {{ t("编辑") }}
             </el-button>
             <el-popconfirm
               :title="`是否确认删除角色名称为${row.name}的这条数据`"
@@ -192,7 +189,7 @@
                   :size="size"
                   :icon="useRenderIcon(Delete)"
                 >
-                  {{ t("commonTable.delete") }}
+                  {{ t("删除") }}
                 </el-button>
               </template>
             </el-popconfirm>
@@ -214,8 +211,8 @@ import Search from "@iconify-icons/ep/search";
 import Refresh from "@iconify-icons/ep/refresh";
 import AddFill from "@iconify-icons/ri/add-circle-line";
 import { useLeague } from "./utils/hook";
-import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
-const { t } = useTranslationLang();
+
+import { t } from "@/plugins/i18n";
 defineOptions({ name: "League" });
 
 const formRef = ref();

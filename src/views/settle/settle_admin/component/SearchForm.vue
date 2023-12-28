@@ -6,41 +6,41 @@
     class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
   >
     <el-form-item>
-      <el-button>{{ t("common.sport") }}</el-button>
+      <el-button>{{ t("体育") }}</el-button>
     </el-form-item>
 
-    <el-form-item :label="`${t('settle.settlementTime')}:`">
+    <el-form-item :label="`${t('结算时间')}:`">
       <el-date-picker
         v-model="form.date"
         type="datetimerange"
-        :start-placeholder="t('common.startDate')"
-        :end-placeholder="t('common.endDate')"
+        :start-placeholder="t('开始日期')"
+        :end-placeholder="t('结束日期')"
       />
     </el-form-item>
 
-    <el-form-item :label="`${t('sell.matchId')}:`" prop="matchId">
+    <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
       <el-input
         v-model="form.matchId"
-        :placeholder="t('sell.matchId')"
+        :placeholder="t('赛事ID')"
         clearable
         class="!w-[150px]"
       />
     </el-form-item>
 
-    <el-form-item :label="`${t('settle.league')}:`" prop="matchName">
+    <el-form-item :label="`${t('赛事名称')}:`" prop="matchName">
       <el-input
         v-model="form.matchName"
-        :placeholder="t('settle.league')"
+        :placeholder="t('赛事名称')"
         clearable
         class="!w-[150px]"
       />
     </el-form-item>
 
-    <el-form-item :label="`${t('settle.settlementStatus')}:`" prop="isSale">
+    <el-form-item :label="`${t('结算状态')}:`" prop="isSale">
       <el-select
         class="!w-[100px]"
         v-model="form.settleStatus"
-        :placeholder="t('common.select')"
+        :placeholder="t('请选择')"
       >
         <el-option label="已结算" :value="0" />
         <el-option label="未结算" :value="1" />
@@ -63,13 +63,13 @@
         :loading="loading"
         @click="onSearch('reload')"
       >
-        {{ t("commonTable.search") }}
+        {{ t("筛选") }}
       </el-button>
       <el-button
         :icon="useRenderIcon(icon_refresh)"
         @click="resetForm(formRef)"
       >
-        {{ t("commonTable.reset") }}
+        {{ t("重置") }}
       </el-button>
     </el-form-item>
   </el-form>
@@ -80,10 +80,9 @@ import icon_serch from "@iconify-icons/ep/search";
 import icon_refresh from "@iconify-icons/ep/refresh";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import { useLeague } from "../utils/hook";
-import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
 
 const formRef = ref();
-const { t } = useTranslationLang();
+import { t } from "@/plugins/i18n";
 
 defineProps<{ loading: boolean }>();
 

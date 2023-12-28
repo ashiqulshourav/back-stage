@@ -8,11 +8,12 @@ import { responsiveStorageNameSpace } from "@/config";
 import enLocale from "element-plus/lib/locale/lang/en";
 import zhLocale from "element-plus/lib/locale/lang/zh-cn";
 import frLocale from "element-plus/lib/locale/lang/fr";
+import { CRC32 as crc32 } from 'crc_32_ts';
 
 function siphonI18n(prefix = "zh-CN") {
   return Object.fromEntries(
     Object.entries(
-      import.meta.glob("../../locales/*.y(a)?ml", { eager: true })
+      import.meta.glob("../../locales/json/*.json", { eager: true })
     ).map(([key, value]: any) => {
       const matched = key.match(/([A-Za-z0-9-_]+)\./i)[1];
       return [matched, value.default];
@@ -40,31 +41,12 @@ export const localesConfigs = {
  * @param message message
  * @returns 转化后的message
  */
-export function transformI18n(message: any = "", params: any = {}) {
-  if (!message) {
-    return "";
-  }
-
-  // 处理存储动态路由的title,格式 {zh:"",en:""}
-  if (typeof message === "object") {
-    const locale: string | WritableComputedRef<string> | any =
-      i18n.global.locale;
-    return message[locale?.value];
-  }
-
-  const key = message.match(/(\S*)\./)?.[1];
-  if (key && Object.keys(siphonI18n("zh-CN")).includes(key)) {
-    return i18n.global.t.call(i18n.global.locale, message, params);
-  } else if (!key && Object.keys(siphonI18n("zh-CN")).includes(message)) {
-    // 兼容非嵌套形式的国际化写法
-    return i18n.global.t.call(i18n.global.locale, message, params);
-  } else {
-    return message;
-  }
+export function t(message: any = "", params: any = {}) {
+  if (!message) return "";
+  message = `k${crc32.str(message).toString(16)}`;
+  const words = i18n.global.t.call(i18n.global.locale, message, params);
+  return words;
 }
-
-/** 此函数只是配合i18n Ally插件来进行国际化智能提示，并无实际意义（只对提示起作用），如果不需要国际化可删除 */
-export const $t = (key: string) => key;
 
 export const i18n: I18n = createI18n({
   legacy: false,

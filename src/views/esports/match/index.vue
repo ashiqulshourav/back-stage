@@ -1,8 +1,7 @@
 <template>
   <div class="main">
-
     <PureTableBar
-      :title="t('eMatch.title')"
+      :title="t('电子竞技- 联赛库')"
       :columns="columns"
       @refresh="onSearch('reload')"
     >
@@ -12,7 +11,7 @@
           :icon="useRenderIcon(AddFill)"
           @click="openDialog(t('commonTable.add'))"
         >
-          {{ t("eMatch.titleNew") }}
+          {{ t("新增联赛") }}
         </el-button>
       </template>
       <template v-slot="{ size, dynamicColumns }">
@@ -43,7 +42,7 @@
               :icon="useRenderIcon(EditPen)"
               @click="openDialog(t('commonTable.editMatch'), row)"
             >
-              {{ t("commonTable.edit") }}
+              {{ t("编辑") }}
             </el-button>
           </template>
         </pure-table>
@@ -60,8 +59,8 @@ import Refresh from "@iconify-icons/ep/refresh";
 import EditPen from "@iconify-icons/ep/edit-pen";
 import AddFill from "@iconify-icons/ri/add-circle-line";
 import { useLeague } from "./utils/hook";
-import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
-const { t } = useTranslationLang();
+
+import { t } from "@/plugins/i18n";
 defineOptions({ name: "League" });
 
 const formRef = ref();

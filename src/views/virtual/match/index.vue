@@ -1,8 +1,7 @@
 <template>
   <div class="main">
-
     <PureTableBar
-      :title="t('vMatch.title')"
+      :title="t('虚拟体育 - 联赛库')"
       :columns="columns"
       @refresh="onSearch('reload')"
     >
@@ -43,7 +42,7 @@
               :icon="useRenderIcon(EditPen)"
               @click="openDialog(t('commonTable.editMatch'), row)"
             >
-              {{ t("commonTable.edit") }}
+              {{ t("编辑") }}
             </el-button>
           </template>
         </pure-table>
@@ -55,30 +54,30 @@
 <script setup lang="ts">
 import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-import Search from "@iconify-icons/ep/search";
-import Refresh from "@iconify-icons/ep/refresh";
+// import Search from "@iconify-icons/ep/search";
+// import Refresh from "@iconify-icons/ep/refresh";
 import EditPen from "@iconify-icons/ep/edit-pen";
 import AddFill from "@iconify-icons/ri/add-circle-line";
 import { useLeague } from "./utils/hook";
-import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
-const { t } = useTranslationLang();
+
+import { t } from "@/plugins/i18n";
 defineOptions({ name: "League" });
 
-const formRef = ref();
+// const formRef = ref();
 const {
-  form,
+  // form,
   loading,
   columns,
   dataList,
-  switchStyle,
+  // switchStyle,
   pagination,
   onSearch,
-  resetForm,
+  // resetForm,
   handleSizeChange,
   handleCurrentChange,
-  switchLoadMap,
-  openDialog,
-  changeSwitch
+  // switchLoadMap,
+  openDialog
+  // changeSwitch
 } = useLeague();
 </script>
 

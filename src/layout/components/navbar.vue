@@ -30,14 +30,14 @@
                 :icon="LogoutCircleRLine"
                 style="margin: 5px"
               />
-              {{ t("buttons.hsLoginOut") }}
+              {{ t("退出系统") }}
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
       <span
         class="set-icon navbar-bg-hover"
-        :title="t('buttons.hssystemSet')"
+        :title="t('打开项目配置')"
         @click="onPanel"
       >
         <IconifyIconOffline :icon="Setting" />
@@ -53,10 +53,10 @@ import mixNav from "./sidebar/mixNav.vue";
 import { useNav } from "@/layout/hooks/useNav";
 import Breadcrumb from "./sidebar/breadCrumb.vue";
 import topCollapse from "./sidebar/topCollapse.vue";
-import { useTranslationLang } from "../hooks/useTranslationLang";
 import LogoutCircleRLine from "@iconify-icons/ri/logout-circle-r-line";
 import Setting from "@iconify-icons/ri/settings-3-line";
 import LanguageNav from "@/components/LanguageNav/index.vue";
+import { t } from "@/plugins/i18n";
 
 const {
   layout,
@@ -67,8 +67,6 @@ const {
   userAvatar,
   toggleSideBar
 } = useNav();
-
-const { t } = useTranslationLang();
 </script>
 
 <style lang="scss" scoped>

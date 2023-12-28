@@ -1,14 +1,14 @@
-import { $t, transformI18n } from "@/plugins/i18n";
+import { t } from "@/plugins/i18n";
 
 export const SPORT_ID_MAP = [
-  { label: transformI18n($t('settle.football')), value: 1 },
-  { label: transformI18n($t('settle.basketball')), value: 2 },
-  { label: transformI18n($t('settle.tennis')), value: 3 },
-  { label: transformI18n($t('settle.eSports')), value: 4 },
-  { label: transformI18n($t('settle.snookerBilliards')), value: 5 },
-  { label: transformI18n($t('settle.volleyball')), value: 6 },
-  { label: transformI18n($t('settle.specialProjects')), value: 7 },
-  { label: transformI18n($t('settle.darts')), value: 8 },
-  { label: transformI18n($t('settle.rugby')), value: 9 },
-  { label: transformI18n($t('settle.boxingFighting')), value: 10 },
+  { label: t(t('足球')), value: 1 },
+  { label: t(t('篮球')), value: 2 },
+  { label: t(t('网球')), value: 3 },
+  { label: t(t('电子竞技')), value: 4 },
+  { label: t(t('斯诺克/台球')), value: 5 },
+  { label: t(t('排球')), value: 6 },
+  { label: t(t('特别项目')), value: 7 },
+  { label: t(t('飞镖')), value: 8 },
+  { label: t(t('橄榄球')), value: 9 },
+  { label: t(t('拳击/格斗')), value: 10 },
 ]

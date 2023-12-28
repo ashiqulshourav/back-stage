@@ -61,7 +61,7 @@ declare namespace MetadataAPI {
     gender: string;
     height: number;
     isCountryPlayer: number;
-    nickName: string;
+    简称: string;
     pageNum: number;
     pageSize: number;
     picture: string;

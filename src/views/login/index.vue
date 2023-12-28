@@ -33,7 +33,7 @@
                 <el-input
                   clearable
                   v-model="ruleForm.username"
-                  :placeholder="t('login.username')"
+                  :placeholder="t('输入您的用户名')"
                   :prefix-icon="useRenderIcon(User)"
                 />
               </el-form-item>
@@ -45,7 +45,7 @@
                   clearable
                   show-password
                   v-model="ruleForm.password"
-                  :placeholder="t('login.password')"
+                  :placeholder="t('输入密码')"
                   :prefix-icon="useRenderIcon(Lock)"
                 />
               </el-form-item>
@@ -59,7 +59,7 @@
                 :loading="loading"
                 @click="onLogin(ruleFormRef)"
               >
-                {{ t("login.login") }}
+                {{ t("登录") }}
               </el-button>
             </Motion>
           </el-form>
@@ -90,7 +90,7 @@ import { addPathMatch } from "@/router/utils";
 import { usePermissionStoreHook } from "@/store/permission";
 import LanguageNav from "@/components/LanguageNav/index.vue";
 import { useUserStore } from "@/store/user";
-import { transformI18n, $t } from "@/plugins/i18n";
+import { t } from "@/plugins/i18n";
 
 defineOptions({ name: "Login" });
 const router = useRouter();
@@ -132,7 +132,7 @@ const _loginRequest = async () => {
   if (res.code) return message(res.msg, { type: "error" });
   userStore.setUserInfo(res.data);
   router.push(getTopMenu(true).path);
-  message(transformI18n($t("login.success")), { type: "success" });
+  message(t(t("登录成功")), { type: "success" });
 };
 </script>
 

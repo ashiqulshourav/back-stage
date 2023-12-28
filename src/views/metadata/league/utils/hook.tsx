@@ -5,7 +5,7 @@ import { addDialog } from "@/components/ReDialog";
 import type { PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h } from "vue";
 import { removeEmptyStringKeys } from "@/utils/utilFn";
-import { $t, transformI18n } from "@/plugins/i18n";
+import { t } from "@/plugins/i18n";
 import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
 
 
@@ -30,49 +30,49 @@ export function useLeague() {
   });
   const columns: TableColumnList = [
     {
-      label: transformI18n($t("metadata.leagueID")),
+      label: t(t("联赛杯赛ID")),
       prop: "leagueId",
       minWidth: 100
     },
     {
-      label: transformI18n($t("metadata.leagueLogo")),
+      label: t(t("联赛杯赛Logo")),
       prop: "leagueLogo",
       slot: "leagueLogo",
       minWidth: 120
     },
     {
-      label: transformI18n($t("metadata.countryId")),
+      label: t(t("国家地区ID")),
       prop: "countryId",
       minWidth: 150
     },
     {
-      label: transformI18n($t("metadata.leagueId188Bet")),
+      label: t(t("188数据源联赛杯赛ID")),
       prop: "leagueId188Bet",
       minWidth: 150
     },
     {
-      label: transformI18n($t("metadata.leagueNameCn")),
+      label: t(t("联赛杯ID")),
       prop: "leagueNameCn",
       minWidth: 150
     },
     {
-      label: transformI18n($t("metadata.leagueNameEn")),
+      label: t(t("联赛杯赛英文名称")),
       prop: "leagueNameEn",
       minWidth: 150
     },
     {
-      label: transformI18n($t("metadata.level")),
+      label: t(t("赛事等级")),
       prop: "level",
       minWidth: 150
     },
     {
-      label: transformI18n($t('metadata.sportType')),
+      label: t(t('赛种')),
       prop: "sportId",
       formatter: ({ sportId }): string => SPORT_ID_MAP.find(_ => _.value === sportId).label,
       minWidth: 150
     },
     /* {
-      label: transformI18n($t('metadata.operation')),
+      label: t(t('操作')),
       fixed: "right",
       width: 240,
       slot: "operation"

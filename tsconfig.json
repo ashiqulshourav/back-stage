@@ -45,7 +45,8 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "types/*.d.ts",
-    "vite.config.ts"
+    "vite.config.ts",
+    "src/plugins/i18n.ts"
   ],
   "exclude": [
     "dist",

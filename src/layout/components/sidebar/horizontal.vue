@@ -108,14 +108,14 @@ nextTick(() => {
                 :icon="LogoutCircleRLine"
                 style="margin: 5px"
               />
-              {{ t("buttons.hsLoginOut") }}
+              {{ t("退出系统") }}
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
       <span
         class="set-icon navbar-bg-hover"
-        :title="t('buttons.hssystemSet')"
+        :title="t('打开项目配置')"
         @click="onPanel"
       >
         <IconifyIconOffline :icon="Setting" />

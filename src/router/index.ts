@@ -1,7 +1,7 @@
 // import "@/utils/sso";
 import { getConfig } from "@/config";
 import NProgress from "@/utils/progress";
-import { transformI18n } from "@/plugins/i18n";
+import { t } from "@/plugins/i18n";
 import { sessionKey, type DataInfo } from "@/utils/auth";
 import { useMultiTagsStoreHook } from "@/store/multiTags";
 import { usePermissionStoreHook } from "@/store/permission";
@@ -119,8 +119,9 @@ router.beforeEach((to: ToRouteType, _from, next) => {
       if (!item.meta.title) return "";
       const Title = getConfig().Title;
       if (Title)
-        document.title = `${transformI18n(item.meta.title)} | ${Title}`;
-      else document.title = transformI18n(item.meta.title);
+        document.title = `${t(item.meta.title)
+          } | ${Title} `;
+      else document.title = t(item.meta.title);
     });
   }
   /** 如果已经登录并存在登录信息后不能跳转到路由白名单，而是继续保持在当前页面 */

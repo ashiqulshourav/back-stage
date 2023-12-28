@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { $t } from "@/plugins/i18n";
 import { emitter } from "@/utils/mitt";
 import { RouteConfigs } from "../../types";
 import { useTags } from "../../hooks/useTag";
@@ -10,7 +9,6 @@ import { useResizeObserver, useFullscreen } from "@vueuse/core";
 import { isEqual, isAllEmpty, debounce } from "@pureadmin/utils";
 import { useMultiTagsStoreHook } from "@/store/multiTags";
 import { ref, watch, unref, toRaw, nextTick, onBeforeUnmount } from "vue";
-
 import ExitFullscreen from "@iconify-icons/ri/fullscreen-exit-fill";
 import Fullscreen from "@iconify-icons/ri/fullscreen-fill";
 import ArrowDown from "@iconify-icons/ri/arrow-down-s-line";
@@ -42,7 +40,7 @@ const {
   onMounted,
   onMouseenter,
   onMouseleave,
-  transformI18n,
+  t,
   onContentFullScreen
 } = useTags();
 
@@ -295,23 +293,23 @@ function onClickDrop(key, item, selectRoute?: RouteConfigs) {
       setTimeout(() => {
         if (isFullscreen.value) {
           tagsViews[6].icon = ExitFullscreen;
-          tagsViews[6].text = $t("buttons.hswholeExitFullScreen");
+          tagsViews[6].text = t("内容区域全屏");
         } else {
           tagsViews[6].icon = Fullscreen;
-          tagsViews[6].text = $t("buttons.hswholeFullScreen");
+          tagsViews[6].text = t("全屏");
         }
       }, 100);
       break;
     case 7:
-      // 内容区全屏
+      // 内容区域全屏
       onContentFullScreen();
       setTimeout(() => {
         if (pureSetting.hiddenSideBar) {
           tagsViews[7].icon = ExitFullscreen;
-          tagsViews[7].text = $t("buttons.hscontentExitFullScreen");
+          tagsViews[7].text = t("buttons.hscontentExitFullScreen");
         } else {
           tagsViews[7].icon = Fullscreen;
-          tagsViews[7].text = $t("buttons.hscontentFullScreen");
+          tagsViews[7].text = t("buttons.hscontentFullScreen");
         }
       }, 100);
       break;
@@ -469,7 +467,7 @@ watch(route, () => {
 
 watch(isFullscreen, () => {
   tagsViews[6].icon = Fullscreen;
-  tagsViews[6].text = $t("buttons.hswholeFullScreen");
+  tagsViews[6].text = t("全屏");
 });
 
 onMounted(() => {
@@ -538,7 +536,7 @@ onBeforeUnmount(() => {
             :to="item.path"
             class="dark:!text-text_color_primary dark:hover:!text-primary"
           >
-            {{ transformI18n(item.meta.title) }}
+            {{ t(item.meta.title) }}
           </router-link>
           <span
             v-if="
@@ -576,7 +574,7 @@ onBeforeUnmount(() => {
         >
           <li v-if="item.show" @click="selectTag(key, item)">
             <IconifyIconOffline :icon="item.icon" />
-            {{ transformI18n(item.text) }}
+            {{ t(item.text) }}
           </li>
         </div>
       </ul>
@@ -600,7 +598,7 @@ onBeforeUnmount(() => {
             :disabled="item.disabled"
           >
             <IconifyIconOffline :icon="item.icon" />
-            {{ transformI18n(item.text) }}
+            {{ t(item.text) }}
           </el-dropdown-item>
         </el-dropdown-menu>
       </template>

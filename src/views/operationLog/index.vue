@@ -11,7 +11,7 @@
           :icon="useRenderIcon(AddFill)"
           @click="openDialog(t('commonTable.add'))"
         >
-          {{ t("eMatch.titleNew") }}
+          {{ t("新增联赛") }}
         </el-button>
       </template> -->
 
@@ -48,8 +48,8 @@ import Refresh from "@iconify-icons/ep/refresh";
 import EditPen from "@iconify-icons/ep/edit-pen";
 import AddFill from "@iconify-icons/ri/add-circle-line";
 import { useOperationLog } from "./utils/hook";
-import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
-const { t } = useTranslationLang();
+
+import { t } from "@/plugins/i18n";
 defineOptions({ name: "History" });
 
 // const formRef = ref();

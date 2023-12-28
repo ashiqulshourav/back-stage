@@ -2,7 +2,7 @@ import { message } from "@/utils/message";
 // import editForm from "../form.vue";
 import type { PaginationProps } from "@pureadmin/table";
 // import { addDialog } from "@/components/ReDialog";
-import { $t, transformI18n } from "@/plugins/i18n";
+import { t } from "@/plugins/i18n";
 import { usePublicHooks } from "@/hooks";
 import dayjs from "dayjs";
 
@@ -20,87 +20,87 @@ export function useHistory() {
   });
   const columns: TableColumnList = [
     {
-      label: transformI18n($t("history.historyId")),
+      label: t(t("history.historyId")),
       prop: "historyId",
       minWidth: 150,
       fixed: true
     },
     {
-      label: transformI18n($t("history.league")),
+      label: t(t("history.league")),
       prop: "league",
       minWidth: 150,
       fixed: true
     },
     {
-      label: transformI18n($t("history.leagueLevel")),
+      label: t(t("history.leagueLevel")),
       prop: "leagueLevel",
       minWidth: 150
     },
     {
-      label: transformI18n($t("history.dateAndStatus")),
+      label: t(t("history.dateAndStatus")),
       prop: "dateAndStatus",
       minWidth: 250,
       formatter: ({ date, status }) =>
         `${dayjs(date).format("YYYY-MM-DD HH:mm:ss")} : ${status}`
     },
     {
-      label: transformI18n($t("history.homeTeam")),
+      label: t(t("history.homeTeam")),
       prop: "homeTeam",
       minWidth: 150
     },
     {
-      label: transformI18n($t("history.score")),
+      label: t(t("history.score")),
       prop: "score",
       minWidth: 150
     },
     {
-      label: transformI18n($t("history.awayTeam")),
+      label: t(t("history.awayTeam")),
       prop: "awayTeam",
       minWidth: 150
     },
     {
-      label: transformI18n($t("history.neutral")),
+      label: t(t("history.neutral")),
       prop: "neutral",
       minWidth: 150
     },
     {
-      label: transformI18n($t("history.businessDataSource")),
+      label: t(t("history.businessDataSource")),
       prop: "businessDataSource",
       minWidth: 150
     },
     {
-      label: transformI18n($t("history.competitionDataSource")),
+      label: t(t("history.competitionDataSource")),
       prop: "competitionDataSource",
       minWidth: 150
     },
     {
-      label: transformI18n($t("history.settlementReview")),
+      label: t(t("history.settlementReview")),
       prop: "settlementReview",
       slot: "settlementReview",
       minWidth: 150
     },
     {
-      label: transformI18n($t("history.live")),
+      label: t(t("history.live")),
       prop: "live",
       minWidth: 150
     },
     {
-      label: transformI18n($t("history.saleStatus")),
+      label: t(t("history.saleStatus")),
       prop: "saleStatus",
       minWidth: 150
     },
     {
-      label: transformI18n($t("history.earlyDataSource")),
+      label: t(t("history.earlyDataSource")),
       prop: "earlyDataSource",
       minWidth: 150
     },
     {
-      label: transformI18n($t("history.earlyGamePlay")),
+      label: t(t("history.earlyGamePlay")),
       prop: "earlyGamePlay",
       minWidth: 150
     },
     {
-      label: transformI18n($t("history.liveDataSource")),
+      label: t(t("history.liveDataSource")),
       prop: "liveDataSource",
       minWidth: 150
     }

@@ -5,7 +5,7 @@ import { useRouter } from "vue-router";
 import SearchResult from "./SearchResult.vue";
 import SearchFooter from "./SearchFooter.vue";
 import { useNav } from "@/layout/hooks/useNav";
-import { transformI18n } from "@/plugins/i18n";
+import { t } from "@/plugins/i18n";
 import { ref, computed, shallowRef } from "vue";
 import { cloneDeep, isAllEmpty } from "@pureadmin/utils";
 import { useDebounceFn, onKeyStroke } from "@vueuse/core";
@@ -67,13 +67,13 @@ function search() {
   const flatMenusData = flatTree(menusData.value);
   resultOptions.value = flatMenusData.filter(menu =>
     keyword.value
-      ? transformI18n(menu.meta?.title)
+      ? t(menu.meta?.title)
           .toLocaleLowerCase()
           .includes(keyword.value.toLocaleLowerCase().trim()) ||
         (locale.value === "zh" &&
           !isAllEmpty(
             match(
-              transformI18n(menu.meta?.title).toLocaleLowerCase(),
+              t(menu.meta?.title).toLocaleLowerCase(),
               keyword.value.toLocaleLowerCase().trim()
             )
           ))

@@ -1,9 +1,9 @@
-import { $t } from "@/plugins/i18n";
+import { t } from "@/plugins/i18n";
 
 export default {
   path: "/virtual",
   meta: {
-    title: $t('menus.virtual'),
+    title: t('虚拟体育'),
     icon: 'files',
     rank: 3
   },
@@ -13,7 +13,7 @@ export default {
       name: "vMatch",
       component: () => import("@/views/virtual/match/index.vue"),
       meta: {
-        title: $t('menus.matchData'),
+        title: t('联赛库'),
         showParent: true,
       }
     },
@@ -22,7 +22,7 @@ export default {
       name: "vTeams",
       component: () => import("@/views/virtual/teams/index.vue"),
       meta: {
-        title: $t('menus.teamData'),
+        title: t('球队库'),
         showParent: true,
       }
     }

@@ -4,7 +4,7 @@ import Search from "../search/index.vue";
 import Notice from "../notice/index.vue";
 import { isAllEmpty } from "@pureadmin/utils";
 import { useNav } from "@/layout/hooks/useNav";
-import { transformI18n } from "@/plugins/i18n";
+import { t } from "@/plugins/i18n";
 import { ref, toRaw, watch, onMounted, nextTick } from "vue";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import { getParentPaths, findRouteByPath } from "@/router/utils";
@@ -18,7 +18,7 @@ import Check from "@iconify-icons/ep/check";
 const menuRef = ref();
 const defaultActive = ref(null);
 
-const { t, route, locale, translationCh, translationEn } =
+const { route, locale, translationCh, translationEn } =
   useTranslationLang(menuRef);
 const {
   device,
@@ -87,7 +87,7 @@ watch(
           </div>
           <div :style="getDivStyle">
             <span class="select-none">
-              {{ transformI18n(route.meta.title) }}
+              {{ t(route.meta.title) }}
             </span>
             <extraIcon :extraIcon="route.meta.extraIcon" />
           </div>
@@ -142,14 +142,14 @@ watch(
                 :icon="LogoutCircleRLine"
                 style="margin: 5px"
               />
-              {{ t("buttons.hsLoginOut") }}
+              {{ t("退出系统") }}
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
       <span
         class="set-icon navbar-bg-hover"
-        :title="t('buttons.hssystemSet')"
+        :title="t('打开项目配置')"
         @click="onPanel"
       >
         <IconifyIconOffline :icon="Setting" />

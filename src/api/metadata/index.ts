@@ -35,7 +35,7 @@ export const metaData = {
     gender?: number;
     height?: number;
     isCountryPlayer?: number;
-    nickName?: number;
+    简称?: number;
     picture?: number;
     pageNum?: number;
     pageSize?: number;

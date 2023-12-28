@@ -3,7 +3,7 @@
     <SearchForm :loading="loading" />
 
     <PureTableBar
-      :title="t('settle.settlementManagement')"
+      :title="t('结算管理')"
       :columns="columns"
       @refresh="onSearch('reload')"
     >
@@ -40,7 +40,7 @@
                   @click="settlementFunction(row.matchId, 'half')"
                   :loading="balanceLoading['half']"
                 >
-                  {{ t("settle.firstHalfSettlement") }}
+                  {{ t("上半场结算") }}
                 </el-button>
                 <el-button
                   link
@@ -49,7 +49,7 @@
                   :icon="useRenderIcon(icon_money)"
                   @click="settlementFunction(row.matchId, 'all')"
                 >
-                  {{ t("settle.secondHalfSettlement") }}
+                  {{ t("全场结算") }}
                 </el-button>
                 <span class="mr-4 ml-4">注:</span>
                 <span class="mr-4">A: 编辑</span>
@@ -93,9 +93,9 @@
                   <el-select
                     :disabled="!row.isEdit"
                     v-model="row.eventCode"
-                    :placeholder="t('common.select')"
+                    :placeholder="t('请选择')"
                   >
-                    <el-option :label="t('settle.footballGoal')" value="goal" />
+                    <el-option :label="t('足球进球')" value="goal" />
                   </el-select>
                 </template>
 
@@ -103,7 +103,7 @@
                   <el-select
                     :disabled="!row.isEdit"
                     v-model="row.sportId"
-                    :placeholder="t('common.select')"
+                    :placeholder="t('请选择')"
                   >
                     <el-option
                       :label="item.label"
@@ -118,7 +118,7 @@
                   <el-date-picker
                     v-model="row.eventTime"
                     type="datetime"
-                    :placeholder="$t('common.pleaseSelectATime')"
+                    :placeholder="t('请选择时间')"
                     :disabled="!row.isEdit"
                     value-format="x"
                     format="YYYY-MM-DD HH:mm:ss"
@@ -129,10 +129,10 @@
                   <el-select
                     :disabled="!row.isEdit"
                     v-model="row.matchPeriodId"
-                    :placeholder="t('common.select')"
+                    :placeholder="t('请选择')"
                   >
-                    <el-option :label="t('common.firstHalf')" :value="1" />
-                    <el-option :label="t('common.secondHalf')" :value="2" />
+                    <el-option :label="t('上半场')" :value="1" />
+                    <el-option :label="t('下半场')" :value="2" />
                   </el-select>
                 </template>
 
@@ -141,10 +141,10 @@
                     <el-select
                       :disabled="!row.isEdit"
                       v-model="row.homeAway"
-                      :placeholder="t('common.select')"
+                      :placeholder="t('请选择')"
                     >
-                      <el-option :label="t('common.home')" value="home" />
-                      <el-option :label="t('common.away')" value="away" />
+                      <el-option :label="t('主场')" value="home" />
+                      <el-option :label="t('客场')" value="away" />
                     </el-select>
                   </div>
                 </template>
@@ -215,7 +215,7 @@
               size="small"
               :icon="useRenderIcon(icon_money)"
             >
-              {{ t("commonTable.edit") }}
+              {{ t("编辑") }}
             </el-button>
           </template>
         </pure-table>
@@ -230,10 +230,10 @@ import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import icon_money from "@iconify-icons/ri/money-cny-box-fill";
 import icon_circle_fill from "@iconify-icons/ri/add-circle-fill";
 import { useLeague } from "./utils/hook";
-import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
+
 import SearchForm from "./component/SearchForm.vue";
 // import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
-const { t } = useTranslationLang();
+import { t } from "@/plugins/i18n";
 defineOptions({ name: "settle_admin" });
 
 const {

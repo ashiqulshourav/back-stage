@@ -6,7 +6,7 @@ import type { PaginationProps } from "@pureadmin/table";
 import { reactive, ref, onMounted, h } from "vue";
 // import { usePublicHooks } from "@/hooks";
 import { removeEmptyStringKeys } from "@/utils/utilFn";
-import { $t, transformI18n } from "@/plugins/i18n";
+import { t } from "@/plugins/i18n";
 
 export function useLeague() {
   const form = reactive({
@@ -17,7 +17,7 @@ export function useLeague() {
     gender: '',
     birthday: '',
     picture: '',
-    nickName: '',
+    简称: '',
     playerNameCn: '',
     createdAt: '',
     updatedAt: '',
@@ -33,62 +33,62 @@ export function useLeague() {
   });
   const columns: TableColumnList = [
     {
-      label: transformI18n($t("player.playerId")),
+      label: t(t("球员ID")),
       prop: "playerId",
     },
     {
-      label: transformI18n($t('player.picture')),
+      label: t(t('照片地址')),
       prop: "picture",
       slot: "picture",
       minWidth: 120
     },
     {
-      label: transformI18n($t('metadata.teamId')),
+      label: t(t('所属球队')),
       prop: "teamId",
     },
     {
-      label: transformI18n($t('player.countryId')),
+      label: t(t('国籍')),
       prop: "countryId",
     },
     {
-      label: transformI18n($t('player.isCountryPlayer')),
+      label: t(t('是否国家队队员')),
       prop: "isCountryPlayer",
     },
     {
-      label: transformI18n($t('metadata.height')),
+      label: t(t('身高')),
       prop: "height",
     },
     {
-      label: transformI18n($t('player.gender')),
+      label: t(t('性别')),
       prop: "gender",
       minWidth: 150
     },
     {
-      label: transformI18n($t('player.birthday')),
+      label: t(t('生日')),
       prop: "birthday",
       minWidth: 150
     },
     {
-      label: transformI18n($t('player.nickName')),
-      prop: "nickName",
+      label: t(t('player.简称')),
+      prop: "简称",
       minWidth: 150
     },
     {
-      label: transformI18n($t('player.playerNameCn')),
+      label: t(t('球员中文名')),
       prop: "teamNameEn",
     },
     {
-      label: transformI18n($t('player.createdAt')),
+      label: t(t('创建时间')),
       prop: "createdAt",
       minWidth: 150
     },
     {
-      label: transformI18n($t('player.updatedAt')),
+      label: t(t('更新时间')),
       prop: "updatedAt",
       minWidth: 150
     },
     {
-      label: transformI18n($t('metadata.operation')),
+      label: t(t('操作')),
       fixed: "right",
       width: 240,
       slot: "operation"

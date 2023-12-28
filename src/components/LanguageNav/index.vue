@@ -26,9 +26,10 @@
 
 <script setup lang="ts">
 import { useNav } from "@/layout/hooks/useNav";
-import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
+
 import Check from "@iconify-icons/ep/check";
 import globalization from "@/assets/svg/globalization.svg?component";
+import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
 
 const { getDropdownItemStyle, getDropdownItemClass } = useNav();
 const { locale, translationCh, translationEn, translationFr } =

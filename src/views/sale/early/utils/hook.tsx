@@ -2,7 +2,7 @@ import { message } from "@/utils/message";
 import type { PaginationProps } from "@pureadmin/table";
 import { ElMessageBox } from "element-plus";
 import { removeEmptyStringKeys } from "@/utils/utilFn";
-import { $t, transformI18n } from "@/plugins/i18n";
+import { t } from "@/plugins/i18n";
 import { usePublicHooks } from "@/hooks";
 import dayjs from "dayjs";
 import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
@@ -26,61 +26,61 @@ export function useLeague() {
   });
   const columns: TableColumnList = [
     {
-      label: transformI18n($t("sell.matchId")),
+      label: t(t("赛事ID")),
       prop: "matchId",
     },
     {
-      label: transformI18n($t('sell.matchName')),
+      label: t(t('赛事名称')),
       prop: "matchName",
       minWidth: 200
     },
     {
-      label: transformI18n($t('sell.level')),
+      label: t(t('联赛等级')),
       prop: "level",
     },
     {
-      label: transformI18n($t('sell.beginTime')),
+      label: t(t('比赛时间')),
       prop: "beginTimeLong",
       minWidth: 150,
       formatter: ({ beginTimeLong }) => dayjs(beginTimeLong).format('YYYY-MM-DD HH:mm:ss')
     },
     {
-      label: transformI18n($t('sell.homeTeamId')),
+      label: t(t('主队ID')),
       prop: "homeTeamId",
     },
     {
-      label: transformI18n($t('sell.currentScore')),
+      label: t(t('当前比分')),
       prop: "currentScore",
       formatter: ({ currentScore }) => currentScore.replace(/H(\d+)A(\d+)/, '$1 - $2')
     },
     {
-      label: transformI18n($t('sell.awayTeamId')),
+      label: t(t('客队ID')),
       prop: "awayTeamId",
       minWidth: 150
     },
     {
-      label: transformI18n($t('sell.countryId')),
+      label: t(t('国家地区ID')),
       prop: "countryId",
       minWidth: 150
     },
     {
-      label: transformI18n($t('metadata.sportType')),
+      label: t(t('赛种')),
       prop: "sportId",
       formatter: ({ sportId }): string => SPORT_ID_MAP.find(_ => _.value === sportId).label,
       minWidth: 150
     },
     {
-      label: transformI18n($t('sell.isNeutral')),
+      label: t(t('是否中立场地')),
       slot: 'isNeutral',
       minWidth: 150
     },
     {
-      label: transformI18n($t('sell.isSale')),
+      label: t(t('开售状态')),
       minWidth: 150,
       slot: 'isSale',
     },
     {
-      label: transformI18n($t('sell.leagueId')),
+      label: t(t('联赛杯赛ID')),
       prop: "leagueId",
       minWidth: 150
     },

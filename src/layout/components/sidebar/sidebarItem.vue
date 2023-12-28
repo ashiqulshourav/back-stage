@@ -4,7 +4,7 @@ import { getConfig } from "@/config";
 import { menuType } from "../../types";
 import extraIcon from "./extraIcon.vue";
 import { useNav } from "@/layout/hooks/useNav";
-import { transformI18n } from "@/plugins/i18n";
+import { t } from "@/plugins/i18n";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import { ref, toRaw, PropType, nextTick, computed, CSSProperties } from "vue";
 
@@ -214,7 +214,7 @@ function resolvePath(routePath) {
       "
       :style="getSpanStyle"
     >
-      {{ overflowSlice(transformI18n(onlyOneChild.meta.title)) }}
+      {{ overflowSlice(t(onlyOneChild.meta.title)) }}
     </span>
     <span
       v-if="
@@ -225,12 +225,12 @@ function resolvePath(routePath) {
       "
       :style="getSpanStyle"
     >
-      {{ overflowSlice(transformI18n(onlyOneChild.meta.title)) }}
+      {{ overflowSlice(t(onlyOneChild.meta.title)) }}
     </span>
     <template #title>
       <div :style="getDivStyle">
         <span v-if="layout === 'horizontal'">
-          {{ transformI18n(onlyOneChild.meta.title) }}
+          {{ t(onlyOneChild.meta.title) }}
         </span>
         <el-tooltip
           v-else
@@ -240,14 +240,14 @@ function resolvePath(routePath) {
           :disabled="!onlyOneChild.showTooltip"
         >
           <template #content>
-            {{ transformI18n(onlyOneChild.meta.title) }}
+            {{ t(onlyOneChild.meta.title) }}
           </template>
           <span
             ref="menuTextRef"
             :style="getMenuTextStyle"
             @mouseover="hoverMenu(onlyOneChild)"
           >
-            {{ transformI18n(onlyOneChild.meta.title) }}
+            {{ t(onlyOneChild.meta.title) }}
           </span>
         </el-tooltip>
         <extraIcon :extraIcon="onlyOneChild.meta.extraIcon" />
@@ -272,7 +272,7 @@ function resolvePath(routePath) {
         />
       </div>
       <span v-if="layout === 'horizontal'">
-        {{ transformI18n(props.item.meta.title) }}
+        {{ t(props.item.meta.title) }}
       </span>
       <div
         :style="getSubMenuDivStyle(props.item)"
@@ -292,16 +292,14 @@ function resolvePath(routePath) {
           :disabled="!props.item.showTooltip"
         >
           <template #content>
-            {{ transformI18n(props.item.meta.title) }}
+            {{ t(props.item.meta.title) }}
           </template>
           <span
             ref="menuTextRef"
             :style="getSubTextStyle"
             @mouseover="hoverMenu(props.item)"
           >
-            {{
-              overflowSlice(transformI18n(props.item.meta.title), props.item)
-            }}
+            {{ overflowSlice(t(props.item.meta.title), props.item) }}
           </span>
         </el-tooltip>
         <extraIcon v-if="!isCollapse" :extraIcon="props.item.meta.extraIcon" />

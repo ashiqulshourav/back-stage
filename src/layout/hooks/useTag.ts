@@ -11,7 +11,7 @@ import {
 import { tagsViewsType } from "../types";
 import { useEventListener } from "@vueuse/core";
 import { useRoute, useRouter } from "vue-router";
-import { transformI18n, $t } from "@/plugins/i18n";
+import { t } from "@/plugins/i18n";
 import { responsiveStorageNameSpace } from "@/config";
 import { useSettingStoreHook } from "@/store/settings";
 import { useMultiTagsStoreHook } from "@/store/multiTags";
@@ -65,56 +65,56 @@ export function useTags() {
   const tagsViews = reactive<Array<tagsViewsType>>([
     {
       icon: RefreshRight,
-      text: $t("buttons.hsreload"),
+      text: t("重新加载"),
       divided: false,
       disabled: false,
       show: true
     },
     {
       icon: Close,
-      text: $t("buttons.hscloseCurrentTab"),
+      text: t("关闭当前标签页"),
       divided: false,
       disabled: multiTags.value.length > 1 ? false : true,
       show: true
     },
     {
       icon: CloseLeftTags,
-      text: $t("buttons.hscloseLeftTabs"),
+      text: t("关闭左侧标签页"),
       divided: true,
       disabled: multiTags.value.length > 1 ? false : true,
       show: true
     },
     {
       icon: CloseRightTags,
-      text: $t("buttons.hscloseRightTabs"),
+      text: t("关闭右侧标签页"),
       divided: false,
       disabled: multiTags.value.length > 1 ? false : true,
       show: true
     },
     {
       icon: CloseOtherTags,
-      text: $t("buttons.hscloseOtherTabs"),
+      text: t("关闭其他标签页"),
       divided: true,
       disabled: multiTags.value.length > 2 ? false : true,
       show: true
     },
     {
       icon: CloseAllTags,
-      text: $t("buttons.hscloseAllTabs"),
+      text: t("关闭全部标签页"),
       divided: false,
       disabled: multiTags.value.length > 1 ? false : true,
       show: true
     },
     {
       icon: Fullscreen,
-      text: $t("buttons.hswholeFullScreen"),
+      text: t("全屏"),
       divided: true,
       disabled: false,
       show: true
     },
     {
       icon: Fullscreen,
-      text: $t("buttons.hscontentFullScreen"),
+      text: t("内容区域全屏"),
       divided: false,
       disabled: false,
       show: true
@@ -242,12 +242,11 @@ export function useTags() {
     currentSelect,
     scheduleIsActive,
     getContextMenuStyle,
-    $t,
+    t,
     closeMenu,
     onMounted,
     onMouseenter,
     onMouseleave,
-    transformI18n,
     onContentFullScreen
   };
 }

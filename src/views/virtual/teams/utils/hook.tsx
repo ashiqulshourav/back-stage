@@ -2,7 +2,7 @@ import { message } from "@/utils/message";
 import editForm from "../form.vue";
 import type { PaginationProps } from "@pureadmin/table";
 import { addDialog } from "@/components/ReDialog";
-import { $t, transformI18n } from "@/plugins/i18n";
+import { t } from "@/plugins/i18n";
 import { usePublicHooks } from "@/hooks";
 
 export function useTeam() {
@@ -19,36 +19,36 @@ export function useTeam() {
   });
   const columns: TableColumnList = [
     {
-      label: transformI18n($t("vTeam.teamId")),
+      label: t(t("vTeam.teamId")),
       prop: "teamId",
     },
     {
-      label: transformI18n($t('vTeam.teamNameCn')),
+      label: t(t('vTeam.teamNameCn')),
       prop: "teamNameCn",
       minWidth: 200
     },
     {
-      label: transformI18n($t('vTeam.teamNameEn')),
+      label: t(t('vTeam.teamNameEn')),
       prop: "teamNameEn",
       minWidth: 200
     },
     {
-      label: transformI18n($t('vTeam.teamName')),
+      label: t(t('vTeam.teamName')),
       prop: "teamName",
       minWidth: 200
     },
     {
-      label: transformI18n($t('vTeam.dataSource')),
+      label: t(t('vTeam.dataSource')),
       prop: "dataSource",
       minWidth: 150
     },
     {
-      label: transformI18n($t('vTeam.dataSourceName')),
+      label: t(t('vTeam.dataSourceName')),
       prop: "dataSourceName",
       minWidth: 100
     },
     {
-      label: transformI18n($t('commonTable.actions')),
+      label: t(t('操作')),
       width: 240,
       slot: "operation",
       align: 'right'

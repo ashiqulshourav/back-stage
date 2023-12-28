@@ -5,7 +5,7 @@
     :rules="formRules"
     label-width="150px"
   >
-    <el-form-item :label="`${t('team.teamLogo')}:`" prop="teamLogo">
+    <el-form-item :label="`${t('球队Logo')}:`" prop="teamLogo">
       <!-- action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" -->
       <el-upload
         class="avatar-uploader"
@@ -28,18 +28,15 @@
       />
     </el-form-item>
 
-    <el-form-item :label="`${t('team.isCountryTeam')}:`" prop="leagueId">
+    <el-form-item :label="`${t('是否国家队')}:`" prop="leagueId">
       <el-select v-model="newFormInline.isCountryTeam" placeholder="Select">
-        <el-option :label="t('common.yes')" :value="0" />
-        <el-option :label="t('common.no')" :value="1" />
+        <el-option :label="t('是')" :value="0" />
+        <el-option :label="t('否')" :value="1" />
       </el-select>
     </el-form-item>
 
-    <el-form-item :label="`${t('team.leagueId')}:`">
-      <el-input
-        v-model="newFormInline.leagueId"
-        :placeholder="t('team.leagueId')"
-      />
+    <el-form-item :label="`${t('联赛ID')}:`">
+      <el-input v-model="newFormInline.leagueId" :placeholder="t('联赛ID')" />
     </el-form-item>
 
     <el-form-item label="赛事等级">
@@ -50,24 +47,24 @@
       <el-input v-model="newFormInline.sportId" placeholder="赛种ID" />
     </el-form-item>
 
-    <el-form-item :label="`${t('team.homeName')}:`">
+    <el-form-item :label="`${t('主场名称')}:`">
       <el-input
         v-model="newFormInline.leagueId188Bet"
-        :placeholder="t('team.homeName')"
+        :placeholder="t('主场名称')"
       />
     </el-form-item>
 
-    <el-form-item :label="`${t('team.teamNameCn')}:`">
+    <el-form-item :label="`${t('球队中文名称')}:`">
       <el-input
         v-model="newFormInline.teamNameCn"
-        :placeholder="t('team.teamNameCn')"
+        :placeholder="t('球队中文名称')"
       />
     </el-form-item>
 
-    <el-form-item :label="`${t('team.teamNameEn')}:`">
+    <el-form-item :label="`${t('球队英文名称')}:`">
       <el-input
         v-model="newFormInline.teamNameEn"
-        :placeholder="t('team.teamNameEn')"
+        :placeholder="t('球队英文名称')"
       />
     </el-form-item>
   </el-form>
@@ -79,8 +76,8 @@ import { formRules } from "./utils/rule";
 import { TeamFormProps } from "./utils/types";
 import type { UploadProps } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
-import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
-const { t } = useTranslationLang();
+
+import { t } from "@/plugins/i18n";
 
 const props = withDefaults(defineProps<TeamFormProps>(), {
   formInline: () => ({

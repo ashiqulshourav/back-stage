@@ -31,14 +31,14 @@ common:
   home: home
   homeCourt: home
   man: male
-  'no': 否
+  "no": 否
   pleaseSelectATime: Please select a time
   secondHalf: second half
   select: please choose
   sport: physical education
   startDate: 开始日期
   woman: female
-  'yes': 'yes'
+  "yes": "yes"
 commonTable:
   actions: Actions
   add: Add
@@ -52,7 +52,7 @@ eMatch:
   dataSource: English Name (Data Vendor)
   dataSourceMsg: English name (Data Vendor) is required
   dataSourceName: Data Vendor
-  dataSourceNameMsg: Data Vendor is required
+  必须输入数据商: Data Vendor is required
   leagueId: League ID
   leagueName: Abbreviation
   leagueNameCn: Simplified Chinese
@@ -68,7 +68,7 @@ eTeam:
   dataSource: English Name (Data Vendor)
   dataSourceMsg: English name (Data Vendor) is required
   dataSourceName: Data Vendor
-  dataSourceNameMsg: Data Vendor is required
+  必须输入数据商: Data Vendor is required
   teamId: Team ID
   teamName: Abbreviation
   teamNameCn: Simplified Chinese
@@ -95,10 +95,10 @@ main:
 menus:
   early: Early game
   esports: E-Sports
-  hsFive: '500'
+  hsFive: "500"
   hsabnormal: Abnormal Page
-  hsfourZeroFour: '404'
-  hsfourZeroOne: '403'
+  hsfourZeroFour: "404"
+  hsfourZeroOne: "403"
   hshome: Home
   hslogin: Login
   hstestPage: test Page
@@ -165,7 +165,7 @@ player:
   gender: gender
   isCountryPlayer: Is he a member of the national team?
   matchId: Event name
-  nickName: abbreviation
+  简称: abbreviation
   picture: Player photos
   playerId: Player ID
   playerNameCn: Player Chinese name
@@ -235,7 +235,7 @@ vMatch:
   dataSource: English Name (Data Vendor)
   dataSourceMsg: English name (Data Vendor) is required
   dataSourceName: Data Vendor
-  dataSourceNameMsg: Data Vendor is required
+  必须输入数据商: Data Vendor is required
   leagueId: League ID
   leagueName: Abbreviation
   leagueNameCn: Simplified Chinese
@@ -251,7 +251,7 @@ vTeam:
   dataSource: English Name (Data Vendor)
   dataSourceMsg: English name (Data Vendor) is required
   dataSourceName: Data Vendor
-  dataSourceNameMsg: Data Vendor is required
+  必须输入数据商: Data Vendor is required
   teamId: Team ID
   teamName: Abbreviation
   teamNameCn: Simplified Chinese
@@ -297,4 +297,3 @@ operationLog:
   afterOperation: 操作之后
   extra: 备注
 # hydra - end
-

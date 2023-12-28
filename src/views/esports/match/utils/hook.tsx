@@ -2,7 +2,7 @@ import { message } from "@/utils/message";
 import editForm from "../form.vue";
 import type { PaginationProps } from "@pureadmin/table";
 import { addDialog } from "@/components/ReDialog";
-import { $t, transformI18n } from "@/plugins/i18n";
+import { t } from "@/plugins/i18n";
 import { usePublicHooks } from "@/hooks";
 
 export function useLeague() {
@@ -19,41 +19,41 @@ export function useLeague() {
   });
   const columns: TableColumnList = [
     {
-      label: transformI18n($t("eMatch.leagueId")),
+      label: t(t("联赛ID")),
       prop: "leagueId",
     },
     {
-      label: transformI18n($t('eMatch.leagueNameCn')),
+      label: t(t('中文简体')),
       prop: "leagueNameCn",
       minWidth: 200
     },
     {
-      label: transformI18n($t('eMatch.leagueNameEn')),
+      label: t(t('英文名称')),
       prop: "leagueNameEn",
       minWidth: 200
     },
     {
-      label: transformI18n($t('eMatch.leagueName')),
+      label: t(t('简称')),
       prop: "leagueName",
       minWidth: 200
     },
     {
-      label: transformI18n($t('eMatch.dataSource')),
+      label: t(t('英文名（数据商）')),
       prop: "dataSource",
       minWidth: 150
     },
     {
-      label: transformI18n($t('eMatch.dataSourceName')),
+      label: t(t('数据商')),
       prop: "dataSourceName",
       minWidth: 100
     },
     {
-      label: transformI18n($t('eMatch.sort')),
+      label: t(t('联赛排序')),
       prop: "sort",
       minWidth: 80
     },
     {
-      label: transformI18n($t('commonTable.actions')),
+      label: t(t('操作')),
       width: 240,
       slot: "operation",
       align: 'right'

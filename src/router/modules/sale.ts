@@ -1,9 +1,9 @@
-import { $t } from "@/plugins/i18n";
+import { t } from "@/plugins/i18n";
 
 export default {
   path: "/sale",
   meta: {
-    title: $t('menus.sale'),
+    title: t('开售管理'),
     icon: 'storeFill',
     rank: 2
   },
@@ -13,7 +13,7 @@ export default {
       name: "pre_sale",
       component: () => import("@/views/sale/pre_sale/index.vue"),
       meta: {
-        title: $t('menus.preSale'),
+        title: t('预开售管理'),
         showParent: true,
       }
     },
@@ -22,7 +22,7 @@ export default {
       name: "early",
       component: () => import("@/views/sale/early/index.vue"),
       meta: {
-        title: $t('menus.early'),
+        title: t('早盘赛事'),
         showParent: true,
       }
     },
@@ -31,7 +31,7 @@ export default {
       name: "live",
       component: () => import("@/views/sale/live/index.vue"),
       meta: {
-        title: $t('menus.saleLive'),
+        title: t('滚球赛事'),
         showParent: true,
       }
     }

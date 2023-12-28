@@ -29,14 +29,14 @@ common:
   home: maison
   homeCourt: terrain de jeu
   man: mâle
-  'no': 否
+  "no": 否
   pleaseSelectATime: Veuillez sélectionner une heure
   secondHalf: Deuxième partie
   select: Choisissez s'il vous plaît
   sport: éducation physique
   startDate: 开始日期
   woman: femelle
-  'yes': Oui
+  "yes": Oui
 commonTable:
   delete: supprimer
   edit: modifier
@@ -59,10 +59,10 @@ main:
   theme: thème
 menus:
   early: Événements tôt
-  hsFive: '500'
+  hsFive: "500"
   hsabnormal: Abnormal Page
-  hsfourZeroFour: '404'
-  hsfourZeroOne: '403'
+  hsfourZeroFour: "404"
+  hsfourZeroOne: "403"
   hshome: Home
   hslogin: Login
   hstestPage: test Page
@@ -108,7 +108,7 @@ player:
   gender: genre
   isCountryPlayer: Est-il membre de l'équipe nationale ?
   matchId: Nom de l'événement
-  nickName: abréviation
+  简称: abréviation
   picture: Photos des joueurs
   playerId: Identifiant du joueur
   playerNameCn: Nom chinois du joueur

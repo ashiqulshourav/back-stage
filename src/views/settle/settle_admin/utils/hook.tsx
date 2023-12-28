@@ -1,7 +1,7 @@
 import { message } from "@/utils/message";
 import type { PaginationProps } from "@pureadmin/table";
 import { removeEmptyStringKeys } from "@/utils/utilFn";
-import { $t, transformI18n } from "@/plugins/i18n";
+import { t } from "@/plugins/i18n";
 import { usePublicHooks } from "@/hooks";
 import dayjs from "dayjs";
 export function useLeague() {
@@ -36,61 +36,61 @@ export function useLeague() {
       fixed: true
     },
     {
-      label: transformI18n($t("settle.sn")),
+      label: t(t("序号")),
       slot: "sn",
       width: 80,
       fixed: true,
     },
     {
-      label: transformI18n($t("settle.league")),
+      label: t(t("赛事名称")),
       prop: "matchName",
       width: 280,
       fixed: true,
       align: 'left',
     },
     {
-      label: transformI18n($t("settle.eventID")),
+      label: t(t("赛事ID")),
       prop: "matchId",
     },
     {
-      label: transformI18n($t("settle.level")),
+      label: t(t("赛事等级")),
       prop: "level",
     },
     {
-      label: transformI18n($t("settle.time")),
+      label: t(t("比赛时间")),
       prop: "beginTimeLong",
       minWidth: 200,
       formatter: ({ beginTimeLong }) => dayjs(beginTimeLong).format('YYYY-MM-DD HH:mm:ss')
     },
 
     {
-      label: transformI18n($t("settle.homeTeam")),
+      label: t(t("主队")),
       prop: "homeTeamId"
     },
     {
-      label: transformI18n($t("settle.halfTime")),
+      label: t(t("半场")),
       prop: "halfTime"
     },
     {
-      label: transformI18n($t("settle.wholeTime")),
+      label: t(t("全场")),
       prop: "wholeTime"
     },
     {
-      label: transformI18n($t("settle.awayTeam")),
+      label: t(t("客队")),
       prop: "awayTeamId"
     },
     {
-      label: transformI18n($t("settle.auditor")),
+      label: t(t("审核员")),
       prop: "auditor",
       formatter: ({ auditor }) => auditor || '-'
     },
     {
-      label: transformI18n($t("settle.trader")),
+      label: t(t("操盘手")),
       prop: "trader",
       formatter: ({ trader }) => trader || '-'
     },
     {
-      label: transformI18n($t("settle.status")),
+      label: t(t("比赛状态")),
       prop: "status",
       formatter: () => {
         return '-'
@@ -98,42 +98,42 @@ export function useLeague() {
       }
     },
     {
-      label: transformI18n($t("settle.peddingReview")),
+      label: t(t("待审核")),
       prop: "peddingReview",
       formatter: ({ peddingReview }) => peddingReview || '-'
     },
     {
-      label: transformI18n($t("settle.eventDataSource")),
+      label: t(t("赛事数据源")),
       prop: "eventDataSource",
       formatter: ({ eventDataSource }) => eventDataSource || '-'
     },
     {
-      label: transformI18n($t("settle.confirming")),
+      label: t(t("确认中")),
       prop: "confirming",
       formatter: ({ confirming }) => confirming || '-'
     },
     {
-      label: transformI18n($t("settle.unSettle")),
+      label: t(t("未结算")),
       prop: "unSettle",
       formatter: ({ unSettle }) => unSettle || '-'
     },
     {
-      label: transformI18n($t("settle.abnormal")),
+      label: t(t("异常")),
       prop: "abnormal",
       formatter: ({ abnormal }) => abnormal || '-'
     },
     {
-      label: transformI18n($t("settle.secondSettle")),
+      label: t(t("二次结算")),
       prop: "secondSettle",
       formatter: ({ secondSettle }) => secondSettle || '-'
     },
     {
-      label: transformI18n($t("settle.settleStatus")),
+      label: t(t("结算状态")),
       prop: "settleStatus",
       formatter: ({ settleStatus }) => settleStatus || '-'
     },
     /* {
-      label: transformI18n($t("settle.operation")),
+      label: t(t("操作")),
       prop: "operation",
       slot: 'operation',
       fixed: "right",

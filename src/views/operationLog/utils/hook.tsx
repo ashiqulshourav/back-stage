@@ -2,7 +2,7 @@ import { message } from "@/utils/message";
 // import editForm from "../form.vue";
 import type { PaginationProps } from "@pureadmin/table";
 // import { addDialog } from "@/components/ReDialog";
-import { $t, transformI18n } from "@/plugins/i18n";
+import { t } from "@/plugins/i18n";
 import { usePublicHooks } from "@/hooks";
 import dayjs from "dayjs";
 
@@ -20,61 +20,61 @@ export function useOperationLog() {
   });
   const columns: TableColumnList = [
     {
-      label: transformI18n($t("operationLog.operationLogId")),
+      label: t(t("operationLog.operationLogId")),
       prop: "operationLogId",
       minWidth: 150,
       fixed: true
     },
     {
-      label: transformI18n($t("operationLog.operationAccount")),
+      label: t(t("operationLog.operationAccount")),
       prop: "operationAccount",
       minWidth: 150,
       fixed: true
     },
     {
-      label: transformI18n($t("operationLog.resourceName")),
+      label: t(t("operationLog.resourceName")),
       prop: "resourceName",
       minWidth: 150
     },
     {
-      label: transformI18n($t("operationLog.operationDateTime")),
+      label: t(t("operationLog.operationDateTime")),
       prop: "operationDateTime",
       minWidth: 250,
       formatter: ({ operationDateTime }) =>
         `${dayjs(operationDateTime).format("YYYY-MM-DD HH:mm:ss")}`
     },
     {
-      label: transformI18n($t("operationLog.successOrNot")),
+      label: t(t("operationLog.successOrNot")),
       prop: "successOrNot",
       minWidth: 150
     },
     {
-      label: transformI18n($t("operationLog.operationType")),
+      label: t(t("operationLog.operationType")),
       prop: "operationType",
       minWidth: 150
     },
     {
-      label: transformI18n($t("operationLog.uniqueId")),
+      label: t(t("operationLog.uniqueId")),
       prop: "uniqueId",
       minWidth: 150
     },
     {
-      label: transformI18n($t("operationLog.leagueId")),
+      label: t(t("operationLog.leagueId")),
       prop: "leagueId",
       minWidth: 150
     },
     {
-      label: transformI18n($t("operationLog.beforeOperation")),
+      label: t(t("operationLog.beforeOperation")),
       prop: "beforeOperation",
       minWidth: 350
     },
     {
-      label: transformI18n($t("operationLog.afterOperation")),
+      label: t(t("operationLog.afterOperation")),
       prop: "afterOperation",
       minWidth: 350
     },
     {
-      label: transformI18n($t("operationLog.extra")),
+      label: t(t("operationLog.extra")),
       prop: "extra",
       minWidth: 150
     }

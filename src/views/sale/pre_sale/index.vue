@@ -6,35 +6,35 @@
       :model="form"
       class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
     >
-      <el-form-item :label="`${t('sell.matchId')}:`" prop="matchId">
+      <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
         <el-input
           v-model="form.matchId"
-          :placeholder="t('sell.matchId')"
+          :placeholder="t('赛事ID')"
           clearable
           class="!w-[150px]"
         />
       </el-form-item>
-      <el-form-item :label="`${t('sell.matchName')}:`" prop="matchName">
+      <el-form-item :label="`${t('赛事名称')}:`" prop="matchName">
         <el-input
           v-model="form.matchName"
-          :placeholder="t('sell.matchName')"
+          :placeholder="t('赛事名称')"
           clearable
           class="!w-[150px]"
         />
       </el-form-item>
 
-      <el-form-item :label="`${t('sell.isSale')}:`" prop="isSale">
-        <el-select v-model="form.isSale" :placeholder="t('common.select')">
-          <el-option :label="t('sell.close')" :value="0" />
-          <el-option :label="t('sell.open')" :value="1" />
+      <el-form-item :label="`${t('开售状态')}:`" prop="isSale">
+        <el-select v-model="form.isSale" :placeholder="t('请选择')">
+          <el-option :label="t('关闭')" :value="0" />
+          <el-option :label="t('开售')" :value="1" />
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="`${t('sell.beginTime')}:`" prop="sportId">
+      <el-form-item :label="`${t('比赛时间')}:`" prop="sportId">
         <el-date-picker
           v-model="form.beginTime"
           type="datetime"
-          :placeholder="$t('sell.beginTime')"
+          :placeholder="t('比赛时间')"
           value-format="x"
           format="YYYY-MM-DD HH:mm:ss"
         />
@@ -47,10 +47,10 @@
           :loading="loading"
           @click="onSearch('reload')"
         >
-          {{ t("commonTable.search") }}
+          {{ t("筛选") }}
         </el-button>
         <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
-          {{ t("commonTable.reset") }}
+          {{ t("重置") }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -87,15 +87,15 @@
               v-model="row.isSale"
               :active-value="1"
               :inactive-value="0"
-              :active-text="t('sell.close')"
-              :inactive-text="t('sell.open')"
+              :active-text="t('关闭')"
+              :inactive-text="t('开售')"
               inline-prompt
               :style="switchStyle"
               @change="changeSwitch({ row, index })"
             />
           </template>
           <template #isNeutral="{ row }">
-            {{ row.isNeutral === 0 ? t("sell.neutral") : t("sell.nonNeutral") }}
+            {{ row.isNeutral === 0 ? t("中立") : t("非中立") }}
           </template>
         </pure-table>
       </template>
@@ -109,8 +109,8 @@ import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import Search from "@iconify-icons/ep/search";
 import Refresh from "@iconify-icons/ep/refresh";
 import { useLeague } from "./utils/hook";
-import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
-const { t } = useTranslationLang();
+
+import { t } from "@/plugins/i18n";
 defineOptions({ name: "League" });
 
 const formRef = ref();

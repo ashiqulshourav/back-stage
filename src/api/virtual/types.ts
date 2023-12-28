@@ -1,7 +1,7 @@
 declare namespace VirtualAPI {
   type League = {
     key?: number;
-    leagueId: number;
+    leagueId: number | string;
     leagueNameCn: string;
     leagueNameEn: string;
     leagueName: string;
@@ -17,7 +17,7 @@ declare namespace VirtualAPI {
 
   type Team = {
     key?: number;
-    teamId: number;
+    teamId: number | string;
     teamNameCn: string;
     teamNameEn: string;
     teamName: string;

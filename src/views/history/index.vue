@@ -11,7 +11,7 @@
           :icon="useRenderIcon(AddFill)"
           @click="openDialog(t('commonTable.add'))"
         >
-          {{ t("eMatch.titleNew") }}
+          {{ t("新增联赛") }}
         </el-button>
       </template> -->
 
@@ -42,7 +42,7 @@
               :size="size"
               @click="handleSettlementReview(row)"
             >
-              {{ $t("history.settlementReview") }}
+              {{ t("history.settlementReview") }}
             </el-button>
           </template>
           <!-- <template #operation="{ row }">
@@ -54,7 +54,7 @@
               :icon="useRenderIcon(EditPen)"
               @click="openDialog(t('commonTable.editMatch'), row)"
             >
-              {{ t("commonTable.edit") }}
+              {{ t("编辑") }}
             </el-button>
           </template> -->
         </pure-table>
@@ -71,8 +71,8 @@ import Refresh from "@iconify-icons/ep/refresh";
 import EditPen from "@iconify-icons/ep/edit-pen";
 import AddFill from "@iconify-icons/ri/add-circle-line";
 import { useHistory } from "./utils/hook";
-import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
-const { t } = useTranslationLang();
+
+import { t } from "@/plugins/i18n";
 defineOptions({ name: "History" });
 
 // const formRef = ref();
