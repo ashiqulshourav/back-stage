@@ -7,7 +7,7 @@
         :key="item.path"
       >
         <a @click.prevent="handleLink(item)">
-          {{ t(item.meta.title) }}
+          {{ item.meta.title }}
         </a>
       </el-breadcrumb-item>
     </transition-group>
@@ -16,7 +16,6 @@
 
 <script setup lang="ts">
 import { isEqual } from "@pureadmin/utils";
-import { t } from "@/plugins/i18n";
 import { ref, watch, onMounted, toRaw } from "vue";
 import { getParentPaths, findRouteByPath } from "@/router/utils";
 import { useMultiTagsStoreHook } from "@/store/multiTags";
@@ -81,13 +80,6 @@ const getBreadcrumb = (): void => {
 };
 
 const handleLink = (item: RouteLocationMatched): void => {
-  console.log(
-    "breadCrumb.vue文件 84==============行打印=",
-    item.redirect,
-    item.path,
-    item
-  );
-  return;
   const { redirect, path } = item;
   if (redirect) {
     router.push(redirect as any);

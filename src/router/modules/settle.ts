@@ -4,9 +4,10 @@ import { t } from "@/plugins/i18n";
 export default {
   path: "/settle",
   meta: {
-    title: t('结算后台'),
+    title: t('结算平台'),
     icon: 'folderFill',
-    rank: 5
+    rank: 5,
+    redirect: '/settle/settle_admin'
   },
   children: [
     {

@@ -43,8 +43,9 @@ export const localesConfigs = {
  */
 export function t(message: any = "", params: any = {}) {
   if (!message) return "";
-  message = `k${crc32.str(message).toString(16)}`;
-  const words = i18n.global.t.call(i18n.global.locale, message, params);
+  const hashKey = `k${crc32.str(message).toString(16)}`;
+  let words = i18n.global.t.call(i18n.global.locale, hashKey, params);
+  if (words === hashKey) words = message;
   return words;
 }
 
