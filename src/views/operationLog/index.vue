@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <PureTableBar
-      :title="t('operationLog.title')"
+      :title="t('操作日志表')"
       :columns="columns"
       @refresh="onSearch('reload')"
     >

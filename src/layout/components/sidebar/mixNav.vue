@@ -148,8 +148,8 @@ watch(
         </template>
       </el-dropdown>
       <span
-        class="set-icon navbar-bg-hover"
         :title="t('打开项目配置')"
+        class="set-icon navbar-bg-hover"
         @click="onPanel"
       >
         <IconifyIconOffline :icon="Setting" />

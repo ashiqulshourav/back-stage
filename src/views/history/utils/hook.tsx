@@ -20,87 +20,87 @@ export function useHistory() {
   });
   const columns: TableColumnList = [
     {
-      label: t(t("history.historyId")),
+      label: t(t("序号")),
       prop: "historyId",
       minWidth: 150,
       fixed: true
     },
     {
-      label: t(t("history.league")),
+      label: t(t("联赛")),
       prop: "league",
       minWidth: 150,
       fixed: true
     },
     {
-      label: t(t("history.leagueLevel")),
+      label: t(t("联赛Level")),
       prop: "leagueLevel",
       minWidth: 150
     },
     {
-      label: t(t("history.dateAndStatus")),
+      label: t(t("今日")),
       prop: "dateAndStatus",
       minWidth: 250,
       formatter: ({ date, status }) =>
         `${dayjs(date).format("YYYY-MM-DD HH:mm:ss")} : ${status}`
     },
     {
-      label: t(t("history.homeTeam")),
+      label: t(t("主队名称")),
       prop: "homeTeam",
       minWidth: 150
     },
     {
-      label: t(t("history.score")),
+      label: t(t("比分")),
       prop: "score",
       minWidth: 150
     },
     {
-      label: t(t("history.awayTeam")),
+      label: t(t("客队名称")),
       prop: "awayTeam",
       minWidth: 150
     },
     {
-      label: t(t("history.neutral")),
+      label: t(t("中立场")),
       prop: "neutral",
       minWidth: 150
     },
     {
-      label: t(t("history.businessDataSource")),
+      label: t(t("商业数据源")),
       prop: "businessDataSource",
       minWidth: 150
     },
     {
-      label: t(t("history.competitionDataSource")),
+      label: t(t("竞品数据源")),
       prop: "competitionDataSource",
       minWidth: 150
     },
     {
-      label: t(t("history.settlementReview")),
+      label: t(t("结算审核")),
       prop: "settlementReview",
       slot: "settlementReview",
       minWidth: 150
     },
     {
-      label: t(t("history.live")),
+      label: t(t("滚球")),
       prop: "live",
       minWidth: 150
     },
     {
-      label: t(t("history.saleStatus")),
+      label: t(t("开售状态")),
       prop: "saleStatus",
       minWidth: 150
     },
     {
-      label: t(t("history.earlyDataSource")),
+      label: t(t("早盘主数据源")),
       prop: "earlyDataSource",
       minWidth: 150
     },
     {
-      label: t(t("history.earlyGamePlay")),
+      label: t(t("早盘开售玩法")),
       prop: "earlyGamePlay",
       minWidth: 150
     },
     {
-      label: t(t("history.liveDataSource")),
+      label: t(t("滚球DataSource")),
       prop: "liveDataSource",
       minWidth: 150
     }

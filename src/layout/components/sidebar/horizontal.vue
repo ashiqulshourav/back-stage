@@ -11,10 +11,11 @@ import globalization from "@/assets/svg/globalization.svg?component";
 import LogoutCircleRLine from "@iconify-icons/ri/logout-circle-r-line";
 import Setting from "@iconify-icons/ri/settings-3-line";
 import Check from "@iconify-icons/ep/check";
+import { t } from "@/plugins/i18n";
 
 const menuRef = ref();
 
-const { t, route, locale, translationCh, translationEn } =
+const { route, locale, translationCh, translationEn } =
   useTranslationLang(menuRef);
 const {
   title,
@@ -113,10 +114,11 @@ nextTick(() => {
           </el-dropdown-menu>
         </template>
       </el-dropdown>
+
       <span
         class="set-icon navbar-bg-hover"
-        :title="t('打开项目配置')"
         @click="onPanel"
+        :title="t('打开项目配置')"
       >
         <IconifyIconOffline :icon="Setting" />
       </span>

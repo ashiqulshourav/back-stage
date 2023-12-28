@@ -20,61 +20,61 @@ export function useOperationLog() {
   });
   const columns: TableColumnList = [
     {
-      label: t(t("operationLog.operationLogId")),
+      label: t(t("序号")),
       prop: "operationLogId",
       minWidth: 150,
       fixed: true
     },
     {
-      label: t(t("operationLog.operationAccount")),
+      label: t(t("操作账号")),
       prop: "operationAccount",
       minWidth: 150,
       fixed: true
     },
     {
-      label: t(t("operationLog.resourceName")),
+      label: t(t("资源名称")),
       prop: "resourceName",
       minWidth: 150
     },
     {
-      label: t(t("operationLog.operationDateTime")),
+      label: t(t("操作时间")),
       prop: "operationDateTime",
       minWidth: 250,
       formatter: ({ operationDateTime }) =>
         `${dayjs(operationDateTime).format("YYYY-MM-DD HH:mm:ss")}`
     },
     {
-      label: t(t("operationLog.successOrNot")),
+      label: t(t("是否成功")),
       prop: "successOrNot",
       minWidth: 150
     },
     {
-      label: t(t("operationLog.operationType")),
+      label: t(t("操作类型")),
       prop: "operationType",
       minWidth: 150
     },
     {
-      label: t(t("operationLog.uniqueId")),
+      label: t(t("唯一ID")),
       prop: "uniqueId",
       minWidth: 150
     },
     {
-      label: t(t("operationLog.leagueId")),
+      label: t(t("赛事ID")),
       prop: "leagueId",
       minWidth: 150
     },
     {
-      label: t(t("operationLog.beforeOperation")),
+      label: t(t("操作之前")),
       prop: "beforeOperation",
       minWidth: 350
     },
     {
-      label: t(t("operationLog.afterOperation")),
+      label: t(t("操作之后")),
       prop: "afterOperation",
       minWidth: 350
     },
     {
-      label: t(t("operationLog.extra")),
+      label: t(t("备注")),
       prop: "extra",
       minWidth: 150
     }

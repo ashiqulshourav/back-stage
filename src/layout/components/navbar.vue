@@ -37,8 +37,8 @@
       </el-dropdown>
       <span
         class="set-icon navbar-bg-hover"
-        :title="t('打开项目配置')"
         @click="onPanel"
+        :title="t('打开项目配置')"
       >
         <IconifyIconOffline :icon="Setting" />
       </span>

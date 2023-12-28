@@ -5,11 +5,11 @@
     :model="form"
     class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
   >
-    <el-form-item>
+    <!-- <el-form-item>
       <el-button>{{ t("体育") }}</el-button>
-    </el-form-item>
+    </el-form-item> -->
 
-    <el-form-item :label="`${t('结算时间')}:`">
+    <!--  <el-form-item :label="`${t('结算时间')}:`">
       <el-date-picker
         v-model="form.date"
         type="datetimerange"
@@ -17,7 +17,7 @@
         :end-placeholder="t('结束日期')"
       />
     </el-form-item>
-
+ -->
     <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
       <el-input
         v-model="form.matchId"
@@ -47,14 +47,14 @@
       </el-select>
     </el-form-item>
 
-    <el-form-item label="数据商">
+    <!--  <el-form-item label="数据商">
       <el-switch
         v-model="form.dataVendors"
         inline-prompt
         class="pure-datatheme"
         @change="dataVendorsChange"
       />
-    </el-form-item>
+    </el-form-item> -->
 
     <el-form-item>
       <el-button
@@ -86,7 +86,7 @@ import { t } from "@/plugins/i18n";
 
 defineProps<{ loading: boolean }>();
 
-const { form, dataVendorsChange, onSearch, resetForm } = useLeague();
+const { form, /* dataVendorsChange, */ onSearch, resetForm } = useLeague();
 </script>
 
 <style scoped></style>

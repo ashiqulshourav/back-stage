@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <PureTableBar
-      :title="t('history.title')"
+      :title="t('赛程历史表')"
       :columns="columns"
       @refresh="onSearch('reload')"
     >
@@ -42,7 +42,7 @@
               :size="size"
               @click="handleSettlementReview(row)"
             >
-              {{ t("history.settlementReview") }}
+              {{ t("结算审核") }}
             </el-button>
           </template>
           <!-- <template #operation="{ row }">
