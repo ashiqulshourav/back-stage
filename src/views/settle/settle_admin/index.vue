@@ -16,6 +16,7 @@
           :size="size"
           adaptive
           row-key="matchId"
+          :fit="true"
           :data="dataList"
           :columns="dynamicColumns"
           :pagination="pagination"
@@ -30,13 +31,22 @@
           @page-current-change="handleCurrentChange"
         >
           <template #sn="{ index }">{{ index + 1 }}</template>
-          <template #expand="{ row, index: parentIndex }">
+          <template
+            #expand="{
+              row,
+              index: parentIndex
+            }: {
+              row: SaleDataAPI.PreSaleList,
+              index: number
+            }"
+          >
             <div class="m-4">
               <div class="flex mb-2">
                 <el-button
                   link
                   type="primary"
                   :icon="useRenderIcon(icon_money)"
+                  :disabled="!!row.halfSettlementStatus"
                   @click="settlementFunction(row.matchId, 'half')"
                   :loading="balanceLoading['half']"
                 >
@@ -45,6 +55,7 @@
                 <el-button
                   link
                   type="danger"
+                  :disabled="!!row.fullSettlementStatus"
                   :loading="balanceLoading['all']"
                   :icon="useRenderIcon(icon_money)"
                   @click="settlementFunction(row.matchId, 'all')"

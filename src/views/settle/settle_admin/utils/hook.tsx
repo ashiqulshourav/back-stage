@@ -36,102 +36,107 @@ export function useLeague() {
       fixed: true
     },
     {
-      label: t(t("序号")),
+      label: t("序号"),
       slot: "sn",
       width: 80,
       fixed: true,
     },
     {
-      label: t(t("赛事名称")),
+      label: t("赛事名称"),
       prop: "matchName",
       width: 280,
       fixed: true,
       align: 'left',
     },
     {
-      label: t(t("赛事ID")),
+      label: t("赛事ID"),
       prop: "matchId",
     },
     {
-      label: t(t("赛事等级")),
+      label: t("赛事等级"),
+      minWidth: 150,
       prop: "level",
     },
     {
-      label: t(t("比赛时间")),
+      label: t("比赛时间"),
       prop: "beginTimeLong",
       minWidth: 200,
       formatter: ({ beginTimeLong }) => dayjs(beginTimeLong).format('YYYY-MM-DD HH:mm:ss')
     },
 
     {
-      label: t(t("主队")),
-      prop: "homeTeamId"
+      label: t("主队"),
+      prop: "homeTeamNameCn",
+      formatter: ({ homeTeanNameCn }) => homeTeanNameCn ?? '-'
     },
     {
-      label: t(t("半场")),
-      prop: "halfTime"
+      label: t("半场"),
+      prop: "halfTime",
+      formatter: ({ halfTime }) => halfTime ?? '-'
     },
     {
-      label: t(t("全场")),
-      prop: "wholeTime"
+      label: t("全场"),
+      prop: "wholeTime",
+      formatter: ({ wholeTime }) => wholeTime ?? '-'
     },
     {
-      label: t(t("客队")),
-      prop: "awayTeamId"
+      label: t("客队"),
+      prop: "awayTeamNameCn",
+      align: 'left',
     },
     {
-      label: t(t("审核员")),
+      label: t("审核员"),
       prop: "auditor",
       formatter: ({ auditor }) => auditor || '-'
     },
     {
-      label: t(t("操盘手")),
+      label: t("操盘手"),
       prop: "trader",
       formatter: ({ trader }) => trader || '-'
     },
     {
-      label: t(t("比赛状态")),
+      label: t("比赛状态"),
       prop: "status",
-      formatter: () => {
-        return '-'
-        // return JSON.parse(status ?? "").toString() || '-'
-      }
+      minWidth: 100,
+      formatter: ({ status }) => status ?? '-'
     },
     {
-      label: t(t("待审核")),
+      label: t("待审核"),
       prop: "peddingReview",
       formatter: ({ peddingReview }) => peddingReview || '-'
     },
     {
-      label: t(t("赛事数据源")),
+      label: t("赛事数据源"),
       prop: "eventDataSource",
-      formatter: ({ eventDataSource }) => eventDataSource || '-'
+      formatter: ({ eventDataSource }) => eventDataSource || '-',
+      minWidth: 150,
     },
     {
-      label: t(t("确认中")),
+      label: t("确认中"),
       prop: "confirming",
       formatter: ({ confirming }) => confirming || '-'
     },
     {
-      label: t(t("未结算")),
-      prop: "unSettle",
-      formatter: ({ unSettle }) => unSettle || '-'
+      label: t("上半场结算"),
+      prop: "halfSettlementStatus",
+      formatter: ({ halfSettlementStatus }) => halfSettlementStatus === 0 ? t('未结算') : t('已结算')
+    },
+
+    {
+      label: t("全场结算"),
+      prop: "fullSettlementStatus",
+      formatter: ({ fullSettlementStatus }) => fullSettlementStatus === 0 ? t('未结算') : t('已结算')
     },
     {
-      label: t(t("异常")),
+      label: t("异常"),
       prop: "abnormal",
       formatter: ({ abnormal }) => abnormal || '-'
     },
-    {
-      label: t(t("二次结算")),
-      prop: "secondSettle",
-      formatter: ({ secondSettle }) => secondSettle || '-'
-    },
-    {
-      label: t(t("结算状态")),
-      prop: "settleStatus",
-      formatter: ({ settleStatus }) => settleStatus || '-'
-    },
+    // {
+    //   label: t("结算状态"),
+    //   prop: "settleStatus",
+    //   formatter: ({ settleStatus }) => settleStatus || '-'
+    // },
     /* {
       label: t(t("操作")),
       prop: "operation",
@@ -142,65 +147,70 @@ export function useLeague() {
 
   const childColumns: TableColumnList = [
     {
-      label: "主队事件数量",
+      label: t("主队事件数量"),
       slot: 't1',
       width: 120
     },
     {
-      label: "客队事件数量",
+      label: t("客队事件数量"),
       slot: 't2',
       width: 120
     },
     {
-      label: "事件编码",
+      label: t("事件编码"),
       slot: 'eventCode',
+      width: 120
+
     },
     {
-      label: "进球时间",
+      label: t("进球时间"),
       slot: 'eventTime',
-    },
-    {
-      label: "体育ID",
-      slot: 'sportId',
       width: 150
     },
+    /*  {
+       label: t("体育ID"),
+       slot: 'sportId',
+       width: 150
+     }, */
     {
-      label: "比赛阶段",
+      label: t("比赛阶段"),
       slot: 'matchPeriodId',
       width: 150
     },
     {
-      label: "主/客队",
+      label: t("主/客队"),
       slot: 'homeAway',
       width: 150
     },
     {
-      label: "1号球员名称",
+      label: t("1号球员名称"),
       slot: 'player1Name',
       width: 150
     },
     {
-      label: "事件是否被取消",
+      label: t("事件是否被取消"),
       slot: 'canceled',
+      width: 120
     },
     {
-      label: "操作",
+      label: t("操作"),
       slot: "operation",
+      width: 150
     },
     {
-      label: "结算次数",
+      label: t("结算次数"),
+      formatter: ({ }) => '-'
+    },
+    /* {
+      label: t("未结算"),
       formatter: ({ }) => '-'
     },
     {
-      label: "未结算",
+      label: t("已结算"),
       formatter: ({ }) => '-'
-    },
+    }, */
     {
-      label: "已结算",
-      formatter: ({ }) => '-'
-    },
-    {
-      label: "数据商事件",
+      label: t("数据商事件"),
       formatter: ({ }) => '-'
     }
   ];

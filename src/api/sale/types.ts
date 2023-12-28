@@ -21,6 +21,10 @@ declare namespace SaleDataAPI {
     pandaResult: number;
     pandaMatchId: number;
     matchId188bet: number;
+    awayTeamNameCn: string;
+    homeTeamNameCn: string;
+    halfSettlementStatus: number;
+    fullSettlementStatus: number;
     childrenData: SattleDataAPI.MatchEventsList[];
   }
 
