@@ -230,10 +230,9 @@ import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import icon_money from "@iconify-icons/ri/money-cny-box-fill";
 import icon_circle_fill from "@iconify-icons/ri/add-circle-fill";
 import { useLeague } from "./utils/hook";
-
 import SearchForm from "./component/SearchForm.vue";
-// import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
 import { t } from "@/plugins/i18n";
+// import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
 defineOptions({ name: "settle_admin" });
 
 const {

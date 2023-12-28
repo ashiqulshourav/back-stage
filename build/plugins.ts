@@ -30,7 +30,7 @@ export function getPluginsList(
     }),
     AutoImport({
       imports: ['vue', 'vue-router', 'pinia'],
-      dirs: ['src/api'],
+      dirs: ['src/api', 'src/plugins'],
       dts: 'src/auto-imports.d.ts',
     }),
     vueJsx(),

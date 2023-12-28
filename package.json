@@ -19,9 +19,9 @@
     "lint": "pnpm lint:eslint && pnpm lint:prettier && pnpm lint:stylelint",
     "preinstall": "npx only-allow pnpm",
     "tsc": "tsc --noEmit",
-    "scan": "i18next-scanner --config locales/i18next-scaner.config.js",
-    "i2e": "node src/i18n/json2Excel.js",
-    "e2j": "node src/i18n/excel2Json.js"
+    "scan": "i18next-scanner --config locales/i18next-scaner.config.ts",
+    "i2e": "node locales/json2Excel.js",
+    "e2j": "node locales/excel2Json.js"
   },
   "browserslist": [
     "> 1%",
@@ -78,11 +78,13 @@
     "@vue/eslint-config-typescript": "^11.0.3",
     "autoprefixer": "^10.4.14",
     "cloc": "^2.11.0",
+    "crc_32_ts": "^1.0.13",
     "cssnano": "^6.0.1",
     "eslint": "^8.43.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^9.15.1",
     "husky": "^8.0.3",
+    "json2xls": "^0.1.2",
     "lint-staged": "^13.2.2",
     "picocolors": "^1.0.0",
     "postcss": "^8.4.24",

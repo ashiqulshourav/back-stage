@@ -24,7 +24,7 @@ module.exports = {
       suffix: '}}',
     },
   },
-  transform: function customTransform (file, enc, done) {
+  transform: function customTransform(file, enc, done) {
     const parser = this.parser;
     const content = fs.readFileSync(file.path, enc);
     parser.parseFuncFromString(content, { list: ['t', 't'] }, (key, options) => {
