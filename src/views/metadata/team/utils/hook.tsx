@@ -82,12 +82,12 @@ export function useLeague() {
       prop: "teamNameEn",
       minWidth: 150
     },
-    {
-      label: t('操作'),
-      fixed: "right",
-      width: 240,
-      slot: "operation"
-    }
+    // {
+    //   label: t('操作'),
+    //   fixed: "right",
+    //   width: 240,
+    //   slot: "operation"
+    // }
   ];
   // const buttonClass = computed(() => {
   //   return [
@@ -105,7 +105,7 @@ export function useLeague() {
     onSearch();
   }
 
-  function handleSizeChange(val: number) {
+  function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
     onSearch()
   }
@@ -205,7 +205,7 @@ export function useLeague() {
     openDialog,
     handleDelete,
     // handleDatabase,
-    handleSizeChange,
+    handleTableWidthChange,
     handleCurrentChange,
     handleSelectionChange
   };

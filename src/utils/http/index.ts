@@ -16,7 +16,7 @@ import { storageSession } from "@pureadmin/utils";
 import { useUserStore } from "@/store/user";
 
 const defaultConfig: AxiosRequestConfig = {
-  baseURL: import.meta.env.MODE === 'development' ? '/api' : '',
+  baseURL: '/match',
   timeout: 10000,
   headers: {
     Accept: "application/json, text/plain, */*",

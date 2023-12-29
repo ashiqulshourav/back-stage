@@ -112,7 +112,7 @@ export function useLeague() {
       .catch(() => row.isSale = row.isSale === 0 ? 1 : 0);
   }
 
-  function handleSizeChange(val: number) {
+  function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
     onSearch()
   }
@@ -161,7 +161,7 @@ export function useLeague() {
     pagination,
     onSearch,
     resetForm,
-    handleSizeChange,
+    handleTableWidthChange,
     switchLoadMap,
     handleCurrentChange,
     handleSelectionChange,

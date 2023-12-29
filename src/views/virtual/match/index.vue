@@ -30,7 +30,7 @@
             background: 'var(--el-fill-color-light)',
             color: 'var(--el-text-color-primary)'
           }"
-          @page-size-change="handleSizeChange"
+          @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
           <template #operation="{ row }">
@@ -73,7 +73,7 @@ const {
   pagination,
   onSearch,
   // resetForm,
-  handleSizeChange,
+  handleTableWidthChange,
   handleCurrentChange,
   // switchLoadMap,
   openDialog

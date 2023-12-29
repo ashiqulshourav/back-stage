@@ -32,12 +32,11 @@ import globalization from "@/assets/svg/globalization.svg?component";
 import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
 
 const { getDropdownItemStyle, getDropdownItemClass } = useNav();
-const { locale, translationCh, translationEn, translationFr } =
-  useTranslationLang();
+const { locale, translationLanguage } = useTranslationLang();
 const langNavList = reactive<{ code: string; label: string; fn: Function }[]>([
-  { code: "zh", fn: translationCh, label: "简体中文" },
-  { code: "en", fn: translationEn, label: "English" },
-  { code: "fr", fn: translationFr, label: "French" }
+  { code: "zh", fn: () => translationLanguage("zh"), label: "简体中文" },
+  { code: "en", fn: () => translationLanguage("en"), label: "English" },
+  { code: "fr", fn: () => translationLanguage("fr"), label: "French" }
 ]);
 </script>
 

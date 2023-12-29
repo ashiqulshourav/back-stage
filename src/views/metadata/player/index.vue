@@ -120,7 +120,7 @@
       :columns="columns"
       @refresh="onSearch('reload')"
     >
-      <template #buttons>
+      <!-- <template #buttons>
         <el-button
           type="primary"
           :icon="useRenderIcon(AddFill)"
@@ -128,7 +128,7 @@
         >
           {{ t("新增球员") }}
         </el-button>
-      </template>
+      </template> -->
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"
@@ -146,7 +146,7 @@
             color: 'var(--el-text-color-primary)'
           }"
           @selection-change="handleSelectionChange"
-          @page-size-change="handleSizeChange"
+          @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
           <template #isCountryTeam="row">
@@ -209,7 +209,7 @@ import Delete from "@iconify-icons/ep/delete";
 import EditPen from "@iconify-icons/ep/edit-pen";
 import Search from "@iconify-icons/ep/search";
 import Refresh from "@iconify-icons/ep/refresh";
-import AddFill from "@iconify-icons/ri/add-circle-line";
+// import AddFill from "@iconify-icons/ri/add-circle-line";
 import { useLeague } from "./utils/hook";
 
 import { t } from "@/plugins/i18n";
@@ -226,7 +226,7 @@ const {
   resetForm,
   openDialog,
   handleDelete,
-  handleSizeChange,
+  handleTableWidthChange,
   handleCurrentChange,
   handleSelectionChange
 } = useLeague();

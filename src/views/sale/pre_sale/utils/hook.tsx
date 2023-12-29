@@ -5,7 +5,7 @@ import { removeEmptyStringKeys } from "@/utils/utilFn";
 import { t } from "@/plugins/i18n";
 import { usePublicHooks } from "@/hooks";
 import dayjs from "dayjs";
-import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
+import { handleTableWidth } from "@/utils/getTableWidth";
 
 export function useLeague() {
   const form = reactive({
@@ -28,40 +28,44 @@ export function useLeague() {
     {
       label: t("赛事ID"),
       prop: "matchId",
+      headerRenderer: (d) => handleTableWidth(d, t('赛事ID'), 'auto')
     },
     {
       label: t('赛事名称'),
       prop: "matchName",
-      minWidth: 200
+      headerRenderer: (d) => handleTableWidth(d, t('赛事名称'), 'auto')
     },
     {
       label: t('联赛等级'),
       prop: "level",
+      headerRenderer: (d) => handleTableWidth(d, t('联赛等级'), 'auto')
     },
     {
       label: t('比赛时间'),
       prop: "beginTimeLong",
-      minWidth: 150,
-      formatter: ({ beginTimeLong }) => dayjs(beginTimeLong).format('YYYY-MM-DD HH:mm:ss')
+      formatter: ({ beginTimeLong }) => dayjs(beginTimeLong).format('YYYY-MM-DD HH:mm:ss'),
+      headerRenderer: (d) => handleTableWidth(d, t('比赛时间'), 'auto')
     },
     {
-      label: t('主队ID'),
-      prop: "homeTeamId",
+      label: t('主队'),
+      prop: "homeTeamNameCn",
+      headerRenderer: (d) => handleTableWidth(d, t('比赛时间'), 'auto')
     },
     {
       label: t('当前比分'),
       prop: "currentScore",
-      formatter: ({ currentScore }) => currentScore.replace(/H(\d+)A(\d+)/, '$1 - $2')
+      formatter: ({ currentScore }) => currentScore.replace(/H(\d+)A(\d+)/, '$1 - $2'),
+      headerRenderer: (d) => handleTableWidth(d, t('当前比分'), 'auto')
     },
     {
-      label: t('客队ID'),
-      prop: "awayTeamId",
-      minWidth: 150
+      label: t('客队'),
+      prop: "awayTeamNameCn",
+      headerRenderer: (d) => handleTableWidth(d, t('客队'), 'auto')
     },
     {
       label: t('国家地区ID'),
       prop: "countryId",
-      minWidth: 150
+      headerRenderer: (d) => handleTableWidth(d, t('国家地区ID'), 'auto')
     },
     /*  {
        label: t('赛种'),
@@ -72,25 +76,23 @@ export function useLeague() {
     {
       label: t('是否中立场地'),
       slot: 'isNeutral',
-      minWidth: 150
+      headerRenderer: (d) => handleTableWidth(d, t('是否中立场地'), 'auto')
     },
     {
       label: t('开售状态'),
-      minWidth: 150,
       slot: 'isSale',
+      headerRenderer: (d) => handleTableWidth(d, t('开售状态'), 'auto')
     },
     {
       label: t('联赛杯赛ID'),
       prop: "leagueId",
-      minWidth: 150
+      headerRenderer: (d) => handleTableWidth(d, t('联赛杯赛ID'), 'auto')
     },
   ];
 
   function changeSwitch({ row }: { row: SaleDataAPI.PreSaleList; index: number }) {
     ElMessageBox.confirm(
-      `确认要${row.isSale === 0 ? "停用" : "启用"
-      }<strong style='color:var(--el-color-primary)'>${row.matchName
-      }</strong>开售状态吗?`,
+      `确认要调整开售状态吗?`,
       "系统提示",
       {
         confirmButtonText: "确定",
@@ -112,7 +114,7 @@ export function useLeague() {
       .catch(() => row.isSale = row.isSale === 0 ? 1 : 0);
   }
 
-  function handleSizeChange(pageSize: number) {
+  function handleTableWidthChange(pageSize: number) {
     pagination.pageSize = pageSize;
     pagination.currentPage = 1;
     onSearch();
@@ -163,7 +165,7 @@ export function useLeague() {
     pagination,
     onSearch,
     resetForm,
-    handleSizeChange,
+    handleTableWidthChange,
     switchLoadMap,
     handleCurrentChange,
     handleSelectionChange,

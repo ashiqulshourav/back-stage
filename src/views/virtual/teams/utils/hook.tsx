@@ -55,7 +55,7 @@ export function useTeam() {
     }
   ];
 
-  function handleSizeChange(val: number) {
+  function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
     onSearch()
   }
@@ -141,7 +141,7 @@ export function useTeam() {
     pagination,
     onSearch,
     resetForm,
-    handleSizeChange,
+    handleTableWidthChange,
     switchLoadMap,
     handleCurrentChange,
     openDialog,

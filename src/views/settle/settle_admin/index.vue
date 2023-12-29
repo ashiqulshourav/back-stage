@@ -31,7 +31,7 @@
           }"
           @expand-change="getChildRenData"
           @selection-change="handleSelectionChange"
-          @page-size-change="handleSizeChange"
+          @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
           <template #sn="{ index }">{{ index + 1 }}</template>
@@ -50,7 +50,9 @@
                   link
                   type="primary"
                   :icon="useRenderIcon(icon_money)"
-                  :disabled="!!row.halfSettlementStatus"
+                  :disabled="
+                    !!row.halfSettlementStatus || !row.childrenData.length
+                  "
                   @click="settlementFunction(row.matchId, 'half')"
                   :loading="balanceLoading['half']"
                 >
@@ -59,7 +61,9 @@
                 <el-button
                   link
                   type="danger"
-                  :disabled="!!row.fullSettlementStatus"
+                  :disabled="
+                    !!row.fullSettlementStatus || !row.childrenData.length
+                  "
                   :loading="balanceLoading['all']"
                   :icon="useRenderIcon(icon_money)"
                   @click="settlementFunction(row.matchId, 'all')"
@@ -106,7 +110,7 @@
 
                 <template #eventCode="{ row }">
                   <el-select
-                    class="w-[120px]"
+                    class="w-[150px]"
                     :disabled="!row.isEdit"
                     v-model="row.eventCode"
                     :placeholder="t('请选择')"
@@ -252,7 +256,7 @@ import { t } from "@/plugins/i18n";
 defineOptions({ name: "settle_admin" });
 
 const editScore = (val, row, type) => {
-  row[type] = val.replace(/[^\d.]/g, "");
+  row[type] = val.replace(/[^\d.]/g, "").replace(/^0+|0+$/g, "");
   if (type == "t1") {
     if (parseInt(row.t1) > 0) row.t2 = 0;
   } else {
@@ -267,7 +271,7 @@ const {
   dataList,
   pagination,
   onSearch,
-  handleSizeChange,
+  handleTableWidthChange,
   handleCurrentChange,
   handleSelectionChange,
   childColumns,

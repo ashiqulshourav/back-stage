@@ -5,7 +5,7 @@
       :columns="columns"
       @refresh="onSearch('reload')"
     >
-      <template #buttons>
+      <!-- <template #buttons>
         <el-button
           type="primary"
           :icon="useRenderIcon(AddFill)"
@@ -13,7 +13,7 @@
         >
           {{ t("新增球队") }}
         </el-button>
-      </template>
+      </template> -->
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"
@@ -30,7 +30,7 @@
             background: 'var(--el-fill-color-light)',
             color: 'var(--el-text-color-primary)'
           }"
-          @page-size-change="handleSizeChange"
+          @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
           <template #operation="{ row }">
@@ -72,7 +72,7 @@ const {
   pagination,
   onSearch,
   // resetForm,
-  handleSizeChange,
+  handleTableWidthChange,
   handleCurrentChange,
   // switchLoadMap,
   openDialog

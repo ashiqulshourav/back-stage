@@ -56,7 +56,7 @@
     </el-form>
 
     <PureTableBar
-      title="预开售管理"
+      :title="t('预开售管理')"
       :columns="columns"
       @refresh="onSearch('reload')"
     >
@@ -77,7 +77,7 @@
             color: 'var(--el-text-color-primary)'
           }"
           @selection-change="handleSelectionChange"
-          @page-size-change="handleSizeChange"
+          @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
           <template #isSale="{ row, index, props }">
@@ -109,7 +109,6 @@ import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import Search from "@iconify-icons/ep/search";
 import Refresh from "@iconify-icons/ep/refresh";
 import { useLeague } from "./utils/hook";
-
 import { t } from "@/plugins/i18n";
 defineOptions({ name: "League" });
 
@@ -123,7 +122,7 @@ const {
   pagination,
   onSearch,
   resetForm,
-  handleSizeChange,
+  handleTableWidthChange,
   handleCurrentChange,
   handleSelectionChange,
   switchLoadMap,

@@ -77,7 +77,7 @@
             color: 'var(--el-text-color-primary)'
           }"
           @selection-change="handleSelectionChange"
-          @page-size-change="handleSizeChange"
+          @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
           <template #isSale="{ row, index, props }">
@@ -123,7 +123,7 @@ const {
   pagination,
   onSearch,
   resetForm,
-  handleSizeChange,
+  handleTableWidthChange,
   handleCurrentChange,
   handleSelectionChange,
   switchLoadMap,

@@ -102,7 +102,7 @@
             color: 'var(--el-text-color-primary)'
           }"
           @selection-change="handleSelectionChange"
-          @page-size-change="handleSizeChange"
+          @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
           <template #leagueLogo="{ row, index }">
@@ -178,7 +178,7 @@ const {
   resetForm,
   openDialog,
   handleDelete,
-  handleSizeChange,
+  handleTableWidthChange,
   handleCurrentChange,
   handleSelectionChange
 } = useLeague();

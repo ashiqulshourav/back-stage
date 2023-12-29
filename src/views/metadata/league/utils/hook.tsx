@@ -93,7 +93,7 @@ export function useLeague() {
     onSearch();
   }
 
-  function handleSizeChange(val: number) {
+  function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
     onSearch()
   }
@@ -201,7 +201,7 @@ export function useLeague() {
     openDialog,
     handleDelete,
     // handleDatabase,
-    handleSizeChange,
+    handleTableWidthChange,
     handleCurrentChange,
     handleSelectionChange
   };

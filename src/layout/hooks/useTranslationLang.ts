@@ -8,27 +8,13 @@ export function useTranslationLang(ref?: Ref) {
   const { locale } = useI18n();
   const route = useRoute();
 
-  function translationCh() {
-    $storage.locale = { locale: "zh" };
-    locale.value = "zh";
+  function translationLanguage(type: string) {
+    if (locale.value === type) return
+    $storage.locale = { locale: type };
+    locale.value = type;
     ref && handleResize(ref.value);
     window.location.reload()
   }
-
-  function translationEn() {
-    $storage.locale = { locale: "en" };
-    locale.value = "en";
-    ref && handleResize(ref.value);
-    window.location.reload()
-  }
-
-  function translationFr() {
-    $storage.locale = { locale: "fr" };
-    locale.value = "fr";
-    ref && handleResize(ref.value);
-    window.location.reload()
-  }
-
   watch(
     () => locale.value,
     () => {
@@ -43,8 +29,6 @@ export function useTranslationLang(ref?: Ref) {
   return {
     route,
     locale,
-    translationCh,
-    translationEn,
-    translationFr,
+    translationLanguage,
   };
 }

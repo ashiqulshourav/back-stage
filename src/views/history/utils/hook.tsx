@@ -110,7 +110,7 @@ export function useHistory() {
     console.log(row);
   }
 
-  function handleSizeChange(val: number) {
+  function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
     onSearch();
   }
@@ -196,7 +196,7 @@ export function useHistory() {
     dataList,
     pagination,
     onSearch,
-    handleSizeChange,
+    handleTableWidthChange,
     switchLoadMap,
     handleCurrentChange,
     handleSettlementReview,

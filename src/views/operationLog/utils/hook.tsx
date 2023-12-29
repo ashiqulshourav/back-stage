@@ -80,7 +80,7 @@ export function useOperationLog() {
     }
   ];
 
-  function handleSizeChange(val: number) {
+  function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
     onSearch();
   }
@@ -118,7 +118,7 @@ export function useOperationLog() {
     dataList,
     pagination,
     onSearch,
-    handleSizeChange,
+    handleTableWidthChange,
     switchLoadMap,
     handleCurrentChange,
     switchStyle

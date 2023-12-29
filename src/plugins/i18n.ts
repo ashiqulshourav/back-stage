@@ -1,8 +1,6 @@
 // 多组件库的国际化和本地项目国际化兼容
 import { App } from "vue";
-import { storageLocal } from "@pureadmin/utils";
 import { type I18n, createI18n } from "vue-i18n";
-import { responsiveStorageNameSpace } from "@/config";
 
 // element-plus国际化
 import enLocale from "element-plus/lib/locale/lang/en";
@@ -51,10 +49,7 @@ export function t(message: any = "", params: any = {}) {
 
 export const i18n: I18n = createI18n({
   legacy: false,
-  locale:
-    storageLocal().getItem<StorageConfigs>(
-      `${responsiveStorageNameSpace()}locale`
-    )?.locale ?? "zh",
+  locale: JSON.parse(localStorage.getItem('responsive-locale') ?? "").locale ?? 'zh',
   fallbackLocale: "en",
   messages: localesConfigs
 });
