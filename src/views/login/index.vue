@@ -70,7 +70,6 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
 import Motion from "./utils/motion";
 import { message } from "@/utils/message";
 import { loginRules } from "./utils/rule";
@@ -98,7 +97,6 @@ const loading = ref(false);
 const ruleFormRef = ref<FormInstance>();
 const { initStorage } = useLayout();
 initStorage();
-const { t } = useI18n();
 const { dataTheme, dataThemeChange } = useDataThemeChange();
 dataThemeChange();
 const { title } = useNav();
@@ -132,7 +130,7 @@ const _loginRequest = async () => {
   if (res.code) return message(res.msg, { type: "error" });
   userStore.setUserInfo(res.data);
   router.push(getTopMenu(true).path);
-  message(t(t("登录成功")), { type: "success" });
+  message(t("登录成功"), { type: "success" });
 };
 </script>
 

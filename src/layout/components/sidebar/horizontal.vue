@@ -7,27 +7,15 @@ import { ref, nextTick, computed } from "vue";
 import { useNav } from "@/layout/hooks/useNav";
 import { useTranslationLang } from "../../hooks/useTranslationLang";
 import { usePermissionStoreHook } from "@/store/permission";
-import globalization from "@/assets/svg/globalization.svg?component";
 import LogoutCircleRLine from "@iconify-icons/ri/logout-circle-r-line";
 import Setting from "@iconify-icons/ri/settings-3-line";
-import Check from "@iconify-icons/ep/check";
+import LanguageNav from "@/components/LanguageNav/index.vue";
 import { t } from "@/plugins/i18n";
 
 const menuRef = ref();
 
-const { route, locale, translationCh, translationEn } =
-  useTranslationLang(menuRef);
-const {
-  title,
-  logout,
-  backTopMenu,
-  onPanel,
-  username,
-  userAvatar,
-  avatarsStyle,
-  getDropdownItemStyle,
-  getDropdownItemClass
-} = useNav();
+const { route } = useTranslationLang(menuRef);
+const { title, logout, backTopMenu, onPanel, userAvatar } = useNav();
 
 const defaultActive = computed(() =>
   !isAllEmpty(route.meta?.activePath) ? route.meta.activePath : route.path
@@ -67,40 +55,11 @@ nextTick(() => {
       <!-- 通知 -->
       <Notice id="header-notice" />
       <!-- 国际化 -->
-      <el-dropdown id="header-translation" trigger="click">
-        <globalization
-          class="navbar-bg-hover w-[40px] h-[48px] p-[11px] cursor-pointer outline-none"
-        />
-        <template #dropdown>
-          <el-dropdown-menu class="translation">
-            <el-dropdown-item
-              :style="getDropdownItemStyle(locale, 'zh')"
-              :class="['dark:!text-white', getDropdownItemClass(locale, 'zh')]"
-              @click="translationCh"
-            >
-              <span class="check-zh" v-show="locale === 'zh'">
-                <IconifyIconOffline :icon="Check" />
-              </span>
-              简体中文
-            </el-dropdown-item>
-            <el-dropdown-item
-              :style="getDropdownItemStyle(locale, 'en')"
-              :class="['dark:!text-white', getDropdownItemClass(locale, 'en')]"
-              @click="translationEn"
-            >
-              <span class="check-en" v-show="locale === 'en'">
-                <IconifyIconOffline :icon="Check" />
-              </span>
-              English
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
+      <LanguageNav />
       <!-- 退出登录 -->
       <el-dropdown trigger="click">
         <span class="el-dropdown-link navbar-bg-hover">
-          <img :src="userAvatar" :style="avatarsStyle" />
-          <p v-if="username" class="dark:text-white">{{ username }}</p>
+          <img :src="userAvatar" />
         </span>
         <template #dropdown>
           <el-dropdown-menu class="logout">

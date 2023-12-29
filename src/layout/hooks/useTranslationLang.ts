@@ -5,25 +5,28 @@ import { watch, onBeforeMount, type Ref } from "vue";
 
 export function useTranslationLang(ref?: Ref) {
   const { $storage, changeTitle, handleResize } = useNav();
-  const { locale, t } = useI18n();
+  const { locale } = useI18n();
   const route = useRoute();
 
   function translationCh() {
     $storage.locale = { locale: "zh" };
     locale.value = "zh";
     ref && handleResize(ref.value);
+    window.location.reload()
   }
 
   function translationEn() {
     $storage.locale = { locale: "en" };
     locale.value = "en";
     ref && handleResize(ref.value);
+    window.location.reload()
   }
 
   function translationFr() {
     $storage.locale = { locale: "fr" };
     locale.value = "fr";
     ref && handleResize(ref.value);
+    window.location.reload()
   }
 
   watch(
@@ -38,7 +41,6 @@ export function useTranslationLang(ref?: Ref) {
   });
 
   return {
-    t,
     route,
     locale,
     translationCh,

@@ -36,14 +36,28 @@
       />
     </el-form-item>
 
-    <el-form-item :label="`${t('结算状态')}:`" prop="isSale">
+    <el-form-item
+      :label="`${t('上半场结算状态')}:`"
+      prop="halfSettlementStatus"
+    >
       <el-select
         class="!w-[100px]"
-        v-model="form.settleStatus"
+        v-model="form.halfSettlementStatus"
         :placeholder="t('请选择')"
       >
-        <el-option label="已结算" :value="0" />
-        <el-option label="未结算" :value="1" />
+        <el-option label="已结算" :value="1" />
+        <el-option label="未结算" :value="0" />
+      </el-select>
+    </el-form-item>
+
+    <el-form-item :label="`${t('全场结算状态')}:`" prop="halfSettlementStatus">
+      <el-select
+        class="!w-[100px]"
+        v-model="form.fullSettlementStatus"
+        :placeholder="t('请选择')"
+      >
+        <el-option label="已结算" :value="1" />
+        <el-option label="未结算" :value="0" />
       </el-select>
     </el-form-item>
 
@@ -61,7 +75,7 @@
         type="primary"
         :icon="useRenderIcon(icon_serch)"
         :loading="loading"
-        @click="searchVal('reload')"
+        @click="searchVal"
       >
         {{ t("筛选") }}
       </el-button>
@@ -79,24 +93,24 @@
 import icon_serch from "@iconify-icons/ep/search";
 import icon_refresh from "@iconify-icons/ep/refresh";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-// import { useLeague } from "../utils/hook";
-
-const formRef = ref();
 import { t } from "@/plugins/i18n";
+import { FormProps } from "../utils/type";
+// import { useLeague } from "../utils/hook";
+const formRef = ref();
+const emit = defineEmits(["onSearch", "resetForm"]);
 
-defineProps<{ loading: boolean }>();
-const emit = defineEmits(["onSearch"]);
-
-// defineProps<{
-//   form;
-//   resetForm;
-// }>();
+defineProps<{
+  form: FormProps;
+  loading: boolean;
+}>();
 
 const searchVal = () => {
   emit("onSearch", "reload");
 };
 
-const { form, /* dataVendorsChange, */ resetForm } = useLeague();
+const resetForm = formRef => {
+  emit("resetForm", formRef);
+};
 </script>
 
 <style scoped></style>

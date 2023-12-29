@@ -4,13 +4,17 @@ import { removeEmptyStringKeys } from "@/utils/utilFn";
 import { t } from "@/plugins/i18n";
 import { usePublicHooks } from "@/hooks";
 import dayjs from "dayjs";
-export function useLeague() {
+import { getColumnWidth } from "@/utils/getTableWidth";
+
+export function useSettle() {
   const form = reactive({
     date: '',
     matchId: '',
     matchType: '',
     matchName: '',
     settleStatus: '',
+    halfSettlementStatus: '',
+    fullSettlementStatus: '',
     dataVendors: ''
   });
   const dataList = reactive<SaleDataAPI.PreSaleList[]>([]);
@@ -28,6 +32,11 @@ export function useLeague() {
     currentPage: 1,
   });
 
+  const handleSize = (d, label: string) => {
+    if (d.column.width) return label;
+    d.column.width = getColumnWidth(d.column.label);
+  }
+
   const columns: TableColumnList = [
     {
       type: "expand",
@@ -35,101 +44,113 @@ export function useLeague() {
       fixed: true
     },
     {
-      label: t("序号"),
-      slot: "sn",
-      width: 80,
+      label: t('序号'),
       fixed: true,
+      slot: "sn",
+      headerRenderer: (d) => handleSize(d, t('序号'))
     },
     {
-      label: t("赛事名称"),
       prop: "matchName",
-      width: 280,
+      label: t('赛事名称'),
       fixed: true,
       align: 'left',
+      headerRenderer: (d) => handleSize(d, t('赛事名称'))
     },
     {
       label: t("赛事ID"),
       prop: "matchId",
+      headerRenderer: (d) => handleSize(d, t('赛事ID'))
     },
     {
       label: t("赛事等级"),
-      minWidth: 150,
       prop: "level",
+      headerRenderer: (d) => handleSize(d, t('赛事等级'))
     },
     {
       label: t("比赛时间"),
       prop: "beginTimeLong",
-      minWidth: 200,
-      formatter: ({ beginTimeLong }) => dayjs(beginTimeLong).format('YYYY-MM-DD HH:mm:ss')
+      formatter: ({ beginTimeLong }) => dayjs(beginTimeLong).format('YYYY-MM-DD HH:mm:ss'),
+      headerRenderer: (d) => handleSize(d, t('比赛时间'))
     },
 
     {
       label: t("主队"),
       prop: "homeTeamNameCn",
-      formatter: ({ homeTeanNameCn }) => homeTeanNameCn ?? '-'
+      formatter: ({ homeTeamNameCn }) => homeTeamNameCn ?? '-',
+      headerRenderer: (d) => handleSize(d, t('主队'))
     },
     {
       label: t("半场"),
       prop: "halfTime",
-      formatter: ({ halfTime }) => halfTime ?? '-'
+      formatter: ({ halfTime }) => halfTime ?? '-',
+      headerRenderer: (d) => handleSize(d, t('半场'))
     },
     {
       label: t("全场"),
       prop: "wholeTime",
-      formatter: ({ wholeTime }) => wholeTime ?? '-'
+      formatter: ({ wholeTime }) => wholeTime ?? '-',
+      headerRenderer: (d) => handleSize(d, t('全场'))
     },
     {
       label: t("客队"),
       prop: "awayTeamNameCn",
       align: 'left',
+      headerRenderer: (d) => handleSize(d, t('客队'))
     },
     {
       label: t("审核员"),
       prop: "auditor",
-      formatter: ({ auditor }) => auditor || '-'
+      formatter: ({ auditor }) => auditor || '-',
+      headerRenderer: (d) => handleSize(d, t('审核员'))
     },
     {
       label: t("操盘手"),
       prop: "trader",
-      formatter: ({ trader }) => trader || '-'
+      formatter: ({ trader }) => trader || '-',
+      headerRenderer: (d) => handleSize(d, t('操盘手'))
     },
     {
       label: t("比赛状态"),
       prop: "status",
-      minWidth: 100,
-      formatter: ({ status }) => status ?? '-'
+      formatter: ({ status }) => status ?? '-',
+      headerRenderer: (d) => handleSize(d, t('比赛状态'))
     },
     {
       label: t("待审核"),
       prop: "peddingReview",
-      formatter: ({ peddingReview }) => peddingReview || '-'
+      formatter: ({ peddingReview }) => peddingReview || '-',
+      headerRenderer: (d) => handleSize(d, t('待审核'))
     },
     {
       label: t("赛事数据源"),
       prop: "eventDataSource",
       formatter: ({ eventDataSource }) => eventDataSource || '-',
-      minWidth: 150,
+      headerRenderer: (d) => handleSize(d, t('赛事数据源'))
     },
     {
       label: t("确认中"),
       prop: "confirming",
-      formatter: ({ confirming }) => confirming || '-'
+      formatter: ({ confirming }) => confirming || '-',
+      headerRenderer: (d) => handleSize(d, t('确认中'))
     },
     {
       label: t("上半场结算"),
       prop: "halfSettlementStatus",
-      formatter: ({ halfSettlementStatus }) => halfSettlementStatus === 0 ? t('未结算') : t('已结算')
+      formatter: ({ halfSettlementStatus }) => halfSettlementStatus === 0 ? t('未结算') : <el-text type="danger">{t('已结算')}</el-text>,
+      headerRenderer: (d) => handleSize(d, t('上半场结算'))
     },
 
     {
       label: t("全场结算"),
       prop: "fullSettlementStatus",
-      formatter: ({ fullSettlementStatus }) => fullSettlementStatus === 0 ? t('未结算') : t('已结算')
+      formatter: ({ fullSettlementStatus }) => fullSettlementStatus === 0 ? t('未结算') : <el-text type="danger">{t('已结算')}</el-text>,
+      headerRenderer: (d) => handleSize(d, t('全场结算'))
     },
     {
       label: t("异常"),
       prop: "abnormal",
-      formatter: ({ abnormal }) => abnormal || '-'
+      formatter: ({ abnormal }) => abnormal || '-',
+      headerRenderer: (d) => handleSize(d, t('异常'))
     },
     // {
     //   label: t("结算状态"),
@@ -137,7 +158,7 @@ export function useLeague() {
     //   formatter: ({ settleStatus }) => settleStatus || '-'
     // },
     /* {
-      label: t(t("操作")),
+      label: t("操作"),
       prop: "operation",
       slot: 'operation',
       fixed: "right",
@@ -148,23 +169,22 @@ export function useLeague() {
     {
       label: t("主队事件数量"),
       slot: 't1',
-      width: 120
+      headerRenderer: (d) => handleSize(d, t('主队事件数量')),
     },
     {
       label: t("客队事件数量"),
       slot: 't2',
-      width: 120
+      headerRenderer: (d) => handleSize(d, t('客队事件数量'))
     },
     {
       label: t("事件编码"),
       slot: 'eventCode',
-      width: 120
-
+      headerRenderer: (d) => handleSize(d, t('事件编码'))
     },
     {
       label: t("进球时间"),
       slot: 'eventTime',
-      width: 150
+      headerRenderer: (d) => handleSize(d, t('进球时间'))
     },
     /*  {
        label: t("体育ID"),
@@ -174,31 +194,32 @@ export function useLeague() {
     {
       label: t("比赛阶段"),
       slot: 'matchPeriodId',
-      width: 150
+      headerRenderer: (d) => handleSize(d, t('比赛阶段'))
     },
     {
       label: t("主/客队"),
       slot: 'homeAway',
-      width: 150
+      headerRenderer: (d) => handleSize(d, t('主/客队'))
     },
     {
       label: t("1号球员名称"),
       slot: 'player1Name',
-      width: 150
+      headerRenderer: (d) => handleSize(d, t('1号球员名称'))
     },
     {
       label: t("事件是否被取消"),
       slot: 'canceled',
-      width: 120
+      headerRenderer: (d) => handleSize(d, t('事件是否被取消'))
     },
     {
       label: t("操作"),
       slot: "operation",
-      width: 150
+      headerRenderer: (d) => handleSize(d, t('操作'))
     },
     {
       label: t("结算次数"),
-      formatter: ({ }) => '-'
+      formatter: ({ }) => '-',
+      headerRenderer: (d) => handleSize(d, t('结算次数'))
     },
     /* {
       label: t("未结算"),
@@ -210,7 +231,8 @@ export function useLeague() {
     }, */
     {
       label: t("数据商事件"),
-      formatter: ({ }) => '-'
+      formatter: ({ }) => '-',
+      headerRenderer: (d) => handleSize(d, t('数据商事件'))
     }
   ];
 
@@ -254,20 +276,19 @@ export function useLeague() {
   const resetForm = formEl => {
     if (!formEl) return;
     formEl.resetFields();
-    onSearch();
+    onSearch('reload');
   };
 
-  const dataVendorsChange = () => { }
 
   const addChildRow = (row: SaleDataAPI.PreSaleList) => {
     const tempList = {
-      eventTime: '',
-      homeAway: '',
-      matchPeriodId: '',
-      player1Name: '',
+      eventTime: null,
+      homeAway: null,
+      matchPeriodId: null,
+      player1Name: null,
       isBackEndReturnData: false,
-      t1: '',
-      t2: '',
+      t1: null,
+      t2: null,
     }
     row.childrenData.push(tempList);
   }
@@ -292,7 +313,6 @@ export function useLeague() {
 
   const handleChildrenData = async (row: SattleDataAPI.MatchEventsList, parentIndex: number, type: 'add' | 'edit') => {
     if (!row.isEdit) return;
-    row.isBackEndReturnData = true;
     const requireDdata = {
       t1: row.t1,
       t2: row.t2,
@@ -303,7 +323,14 @@ export function useLeague() {
       homeAway: row.homeAway,
       player1Name: row.player1Name,
     }
-    if (!Object.values(requireDdata).every(_ => _)) return message('请输入完整的内容', { type: "error" })
+    if (!Object.keys(requireDdata).every(key => {
+      if (key === 't1' || key === 't2') {
+        return parseInt(requireDdata[key]) >= 0
+      } else {
+        return requireDdata[key]
+      }
+    })) return message('请输入完整的内容', { type: "error" })
+
     childloading.value = true;
     row.isEdit = true;
 
@@ -340,6 +367,7 @@ export function useLeague() {
     const d = row.id ? r.data.find(_ => _.id === row.id) : r.data.pop();
     Object.assign(row, d);
     row.canceled = Boolean(row.canceled);
+    row.isBackEndReturnData = true;
   }
 
   const settlementFunction = async (matchId: number, type: 'half' | 'all') => {
@@ -369,13 +397,12 @@ export function useLeague() {
     handleCurrentChange,
     handleSelectionChange,
     switchStyle,
-    dataVendorsChange,
     childColumns,
     getChildRenData,
     addChildRow,
     editChild,
     balanceLoading,
     settlementFunction,
-    handleChildrenData
+    handleChildrenData,
   };
 }

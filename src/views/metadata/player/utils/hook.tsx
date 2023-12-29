@@ -33,62 +33,62 @@ export function useLeague() {
   });
   const columns: TableColumnList = [
     {
-      label: t(t("球员ID")),
+      label: t("球员ID"),
       prop: "playerId",
     },
     {
-      label: t(t('照片地址')),
+      label: t('照片地址'),
       prop: "picture",
       slot: "picture",
       minWidth: 120
     },
     {
-      label: t(t('所属球队')),
+      label: t('所属球队'),
       prop: "teamId",
     },
     {
-      label: t(t('国籍')),
+      label: t('国籍'),
       prop: "countryId",
     },
     {
-      label: t(t('是否国家队队员')),
+      label: t('是否国家队队员'),
       prop: "isCountryPlayer",
     },
     {
-      label: t(t('身高')),
+      label: t('身高'),
       prop: "height",
     },
     {
-      label: t(t('性别')),
+      label: t('性别'),
       prop: "gender",
       minWidth: 150
     },
     {
-      label: t(t('生日')),
+      label: t('生日'),
       prop: "birthday",
       minWidth: 150
     },
     {
-      label: t(t('简称')),
+      label: t('简称'),
       prop: "简称",
       minWidth: 150
     },
     {
-      label: t(t('球员中文名')),
+      label: t('球员中文名'),
       prop: "teamNameEn",
     },
     {
-      label: t(t('创建时间')),
+      label: t('创建时间'),
       prop: "createdAt",
       minWidth: 150
     },
     {
-      label: t(t('更新时间')),
+      label: t('更新时间'),
       prop: "updatedAt",
       minWidth: 150
     },
     {
-      label: t(t('操作')),
+      label: t('操作'),
       fixed: "right",
       width: 240,
       slot: "operation"

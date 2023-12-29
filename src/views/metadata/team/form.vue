@@ -76,7 +76,6 @@ import { formRules } from "./utils/rule";
 import { TeamFormProps } from "./utils/types";
 import type { UploadProps } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
-
 import { t } from "@/plugins/i18n";
 
 const props = withDefaults(defineProps<TeamFormProps>(), {

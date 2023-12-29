@@ -22,19 +22,8 @@ export const useUserStore = defineStore('USERSTATE', {
       this.roles = roles;
     },
     /** 登入 */
-    async loginByUsername(data) {
-      return new Promise<UserResult>((resolve, reject) => {
-        getLogin(data)
-          .then(data => {
-            if (data) {
-              // setToken(data.data);
-              resolve(data);
-            }
-          })
-          .catch(error => {
-            reject(error);
-          });
-      });
+    async loginByUsername(_data) {
+
     },
     /** 前端登出（不调用接口） */
     logOut() {
@@ -71,6 +60,7 @@ export const useUserStore = defineStore('USERSTATE', {
         const res = await API.me()
         this.userInfo = Object.assign(this.userInfo, res);
       } catch (error) {
+        message(error.message, { type: 'error' });
         console.log('user.ts文件 73==============行打印=', error)
       }
     }

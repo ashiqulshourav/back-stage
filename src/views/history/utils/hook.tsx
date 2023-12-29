@@ -20,87 +20,87 @@ export function useHistory() {
   });
   const columns: TableColumnList = [
     {
-      label: t(t("序号")),
+      label: t("序号"),
       prop: "historyId",
       minWidth: 150,
       fixed: true
     },
     {
-      label: t(t("联赛")),
+      label: t("联赛"),
       prop: "league",
       minWidth: 150,
       fixed: true
     },
     {
-      label: t(t("联赛")),
+      label: t("联赛"),
       prop: "leagueLevel",
       minWidth: 150
     },
     {
-      label: t(t("今日")),
+      label: t("今日"),
       prop: "dateAndStatus",
       minWidth: 250,
       formatter: ({ date, status }) =>
         `${dayjs(date).format("YYYY-MM-DD HH:mm:ss")} : ${status}`
     },
     {
-      label: t(t("主队名称")),
+      label: t("主队名称"),
       prop: "homeTeam",
       minWidth: 150
     },
     {
-      label: t(t("比分")),
+      label: t("比分"),
       prop: "score",
       minWidth: 150
     },
     {
-      label: t(t("客队名称")),
+      label: t("客队名称"),
       prop: "awayTeam",
       minWidth: 150
     },
     {
-      label: t(t("中立场")),
+      label: t("中立场"),
       prop: "neutral",
       minWidth: 150
     },
     {
-      label: t(t("商业数据源")),
+      label: t("商业数据源"),
       prop: "businessDataSource",
       minWidth: 150
     },
     {
-      label: t(t("竞品数据源")),
+      label: t("竞品数据源"),
       prop: "competitionDataSource",
       minWidth: 150
     },
     {
-      label: t(t("结算审核")),
+      label: t("结算审核"),
       prop: "settlementReview",
       slot: "settlementReview",
       minWidth: 150
     },
     {
-      label: t(t("滚球")),
+      label: t("滚球"),
       prop: "live",
       minWidth: 150
     },
     {
-      label: t(t("开售状态")),
+      label: t("开售状态"),
       prop: "saleStatus",
       minWidth: 150
     },
     {
-      label: t(t("早盘主数据源")),
+      label: t("早盘主数据源"),
       prop: "earlyDataSource",
       minWidth: 150
     },
     {
-      label: t(t("早盘开售玩法")),
+      label: t("早盘开售玩法"),
       prop: "earlyGamePlay",
       minWidth: 150
     },
     {
-      label: t(t("滚球")),
+      label: t("滚球"),
       prop: "liveDataSource",
       minWidth: 150
     }

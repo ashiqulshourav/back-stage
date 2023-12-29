@@ -30,49 +30,49 @@ export function useLeague() {
   });
   const columns: TableColumnList = [
     {
-      label: t(t("联赛杯赛ID")),
+      label: t("联赛杯赛ID"),
       prop: "leagueId",
       minWidth: 100
     },
     {
-      label: t(t("联赛杯赛Logo")),
+      label: t("联赛杯赛Logo"),
       prop: "leagueLogo",
       slot: "leagueLogo",
       minWidth: 120
     },
     {
-      label: t(t("国家地区ID")),
+      label: t("国家地区ID"),
       prop: "countryId",
       minWidth: 150
     },
     {
-      label: t(t("188数据源联赛杯赛ID")),
+      label: t("188数据源联赛杯赛ID"),
       prop: "leagueId188Bet",
       minWidth: 150
     },
     {
-      label: t(t("联赛杯ID")),
+      label: t("联赛杯ID"),
       prop: "leagueNameCn",
       minWidth: 150
     },
     {
-      label: t(t("联赛杯赛英文名称")),
+      label: t("联赛杯赛英文名称"),
       prop: "leagueNameEn",
       minWidth: 150
     },
     {
-      label: t(t("赛事等级")),
+      label: t("赛事等级"),
       prop: "level",
       minWidth: 150
     },
     {
-      label: t(t('赛种')),
+      label: t('赛种'),
       prop: "sportId",
       formatter: ({ sportId }): string => SPORT_ID_MAP.find(_ => _.value === sportId).label,
       minWidth: 150
     },
     /* {
-      label: t(t('操作')),
+      label: t('操作'),
       fixed: "right",
       width: 240,
       slot: "operation"
@@ -111,20 +111,25 @@ export function useLeague() {
     if (type === "reload") {
       pagination.currentPage = 1;
     }
-    loading.value = true;
-    const data = removeEmptyStringKeys(form);
-    const res: MetadataAPI.LeagueListRes = await API.getLeagueList({
-      ...data,
-      pageSize: pagination.pageSize,
-      pageNum: pagination.currentPage
-    });
-    if (res.code) return;
-    dataList.length = 0;
-    dataList.push(...res.data.list);
-    pagination.total = res.data.total;
-    pagination.pageSize = res.data.pageSize;
-    pagination.currentPage = res.data.pageNum;
-    setTimeout(() => (loading.value = false), 500);
+    try {
+      loading.value = true;
+      const data = removeEmptyStringKeys(form);
+      const res: MetadataAPI.LeagueListRes = await API.getLeagueList({
+        ...data,
+        pageSize: pagination.pageSize,
+        pageNum: pagination.currentPage
+      });
+      if (res.code) return;
+      dataList.length = 0;
+      dataList.push(...res.data.list);
+      pagination.total = res.data.total;
+      pagination.pageSize = res.data.pageSize;
+      pagination.currentPage = res.data.pageNum;
+      loading.value = false
+    } catch (error) {
+      loading.value = false
+    }
+
   }
 
   const resetForm = formEl => {

@@ -19,43 +19,43 @@ export function useLeague() {
   });
   const columns: TableColumnList = [
     {
-      label: t(t("联赛ID")),
+      label: t("联赛ID"),
       prop: "leagueId",
       fixed: 'left'
     },
     {
-      label: t(t('中文简体')),
+      label: t('中文简体'),
       prop: "leagueNameCn",
       minWidth: 200,
       fixed: 'left'
     },
     {
-      label: t(t('英文名称')),
+      label: t('英文名称'),
       prop: "leagueNameEn",
       minWidth: 200
     },
     {
-      label: t(t('简称')),
+      label: t('简称'),
       prop: "leagueName",
       minWidth: 200
     },
     {
-      label: t(t('英文名（数据商）')),
+      label: t('英文名（数据商）'),
       prop: "dataSource",
       minWidth: 150
     },
     {
-      label: t(t('英文名（数据商）Name')),
+      label: t('英文名（数据商）Name'),
       prop: "dataSourceName",
       minWidth: 100
     },
     {
-      label: t(t('联赛排序')),
+      label: t('联赛排序'),
       prop: "sort",
       minWidth: 80
     },
     {
-      label: t(t('操作')),
+      label: t('操作'),
       width: 240,
       slot: "operation",
       align: 'right'

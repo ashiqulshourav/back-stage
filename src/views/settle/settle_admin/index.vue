@@ -1,6 +1,11 @@
 <template>
   <div class="main">
-    <SearchForm :loading="loading" @onSearch="onSearch" />
+    <SearchForm
+      :form="form"
+      @resetForm="resetForm"
+      :loading="loading"
+      @onSearch="onSearch"
+    />
 
     <PureTableBar
       :title="t('结算管理')"
@@ -11,16 +16,15 @@
         <pure-table
           align-whole="center"
           showOverflowTooltip
-          table-layout="auto"
           :loading="loading"
           :size="size"
           row-key="matchId"
           adaptive
-          :fit="true"
           :data="dataList"
           :columns="dynamicColumns"
           :pagination="pagination"
           :paginationSmall="size === 'small' ? true : false"
+          :expand-row-keys="[]"
           :header-cell-style="{
             background: 'var(--el-fill-color-light)',
             color: 'var(--el-text-color-primary)'
@@ -62,10 +66,10 @@
                 >
                   {{ t("全场结算") }}
                 </el-button>
-                <span class="mr-4 ml-4">注:</span>
-                <span class="mr-4">A: 编辑</span>
-                <span class="mr-4">B: 确认修改</span>
-                <span class="mr-4">C: 确认新增</span>
+                <span class="mr-4 ml-4">{{ t("注") }}:</span>
+                <span class="mr-4">A: {{ t("编辑") }}</span>
+                <span class="mr-4">B: {{ t("确认修改") }}</span>
+                <span class="mr-4">C: {{ t("确认新增") }}</span>
               </div>
               <pure-table
                 row-key="id"
@@ -86,7 +90,7 @@
                   <el-input
                     v-model="row.t1"
                     :maxlength="4"
-                    oninput="value=value.replace(/[^\d.]/g,'')"
+                    @input="editScore($event, row, 't1')"
                     :disabled="!row.isEdit"
                   />
                 </template>
@@ -95,13 +99,14 @@
                   <el-input
                     v-model="row.t2"
                     :maxlength="4"
-                    oninput="value=value.replace(/[^\d.]/g,'')"
+                    @input="editScore($event, row, 't2')"
                     :disabled="!row.isEdit"
                   />
                 </template>
 
                 <template #eventCode="{ row }">
                   <el-select
+                    class="w-[120px]"
                     :disabled="!row.isEdit"
                     v-model="row.eventCode"
                     :placeholder="t('请选择')"
@@ -240,11 +245,20 @@ import { PureTableBar } from "@/components/RePureTableBar";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import icon_money from "@iconify-icons/ri/money-cny-box-fill";
 import icon_circle_fill from "@iconify-icons/ri/add-circle-fill";
-import { useLeague } from "./utils/hook";
+import { useSettle } from "./utils/hook";
 import SearchForm from "./component/SearchForm.vue";
 import { t } from "@/plugins/i18n";
 // import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
 defineOptions({ name: "settle_admin" });
+
+const editScore = (val, row, type) => {
+  row[type] = val.replace(/[^\d.]/g, "");
+  if (type == "t1") {
+    if (parseInt(row.t1) > 0) row.t2 = 0;
+  } else {
+    if (parseInt(row.t2) > 0) row.t1 = 0;
+  }
+};
 
 const {
   loading,
@@ -260,10 +274,12 @@ const {
   getChildRenData,
   addChildRow,
   editChild,
+  form,
+  resetForm,
   balanceLoading,
   settlementFunction,
   handleChildrenData
-} = useLeague();
+} = useSettle();
 
 onMounted(() => {
   onSearch();

@@ -20,61 +20,61 @@ export function useOperationLog() {
   });
   const columns: TableColumnList = [
     {
-      label: t(t("序号")),
+      label: t("序号"),
       prop: "operationLogId",
       minWidth: 150,
       fixed: true
     },
     {
-      label: t(t("操作账号")),
+      label: t("操作账号"),
       prop: "operationAccount",
       minWidth: 150,
       fixed: true
     },
     {
-      label: t(t("资源名称")),
+      label: t("资源名称"),
       prop: "resourceName",
       minWidth: 150
     },
     {
-      label: t(t("操作时间")),
+      label: t("操作时间"),
       prop: "operationDateTime",
       minWidth: 250,
       formatter: ({ operationDateTime }) =>
         `${dayjs(operationDateTime).format("YYYY-MM-DD HH:mm:ss")}`
     },
     {
-      label: t(t("是否成功")),
+      label: t("是否成功"),
       prop: "successOrNot",
       minWidth: 150
     },
     {
-      label: t(t("操作类型")),
+      label: t("操作类型"),
       prop: "operationType",
       minWidth: 150
     },
     {
-      label: t(t("唯一ID")),
+      label: t("唯一ID"),
       prop: "uniqueId",
       minWidth: 150
     },
     {
-      label: t(t("赛事ID")),
+      label: t("赛事ID"),
       prop: "leagueId",
       minWidth: 150
     },
     {
-      label: t(t("操作之前")),
+      label: t("操作之前"),
       prop: "beforeOperation",
       minWidth: 350
     },
     {
-      label: t(t("操作之后")),
+      label: t("操作之后"),
       prop: "afterOperation",
       minWidth: 350
     },
     {
-      label: t(t("备注")),
+      label: t("备注"),
       prop: "extra",
       minWidth: 150
     }

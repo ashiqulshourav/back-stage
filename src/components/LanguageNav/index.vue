@@ -35,7 +35,7 @@ const { getDropdownItemStyle, getDropdownItemClass } = useNav();
 const { locale, translationCh, translationEn, translationFr } =
   useTranslationLang();
 const langNavList = reactive<{ code: string; label: string; fn: Function }[]>([
-  { code: "zh", fn: translationCh, label: "中文" },
+  { code: "zh", fn: translationCh, label: "简体中文" },
   { code: "en", fn: translationEn, label: "English" },
   { code: "fr", fn: translationFr, label: "French" }
 ]);
