@@ -64,36 +64,35 @@ export function useSettle() {
     {
       label: t("比赛时间"),
       prop: "beginTimeLong",
+      minWidth: 200,
       formatter: ({ beginTimeLong }) => dayjs(beginTimeLong).format('YYYY-MM-DD HH:mm:ss'),
-      headerRenderer: (d) => handleTableWidth(d, t('比赛时间'))
+      headerRenderer: (d) => handleTableWidth(d, t('比赛时间'), 'auto')
     },
 
     {
       label: t("主队"),
       prop: "homeTeamNameCn",
-      align: 'left',
-      minWidth: 200,
+      minWidth: 150,
       formatter: ({ homeTeamNameCn }) => homeTeamNameCn ?? '-',
-      headerRenderer: (d) => handleTableWidth(d, t('主队'))
+      headerRenderer: (d) => handleTableWidth(d, t('主队'), 'auto')
     },
     {
       label: t("半场"),
       prop: "halfTime",
       formatter: ({ halfTime }) => halfTime ?? '-',
-      headerRenderer: (d) => handleTableWidth(d, t('半场'))
+      headerRenderer: (d) => handleTableWidth(d, t('半场'), 'auto')
     },
     {
       label: t("全场"),
       prop: "wholeTime",
       formatter: ({ wholeTime }) => wholeTime ?? '-',
-      headerRenderer: (d) => handleTableWidth(d, t('全场'))
+      headerRenderer: (d) => handleTableWidth(d, t('全场'), 'auto')
     },
     {
       label: t("客队"),
       prop: "awayTeamNameCn",
-      minWidth: 200,
-      align: 'left',
-      headerRenderer: (d) => handleTableWidth(d, t('客队'))
+      minWidth: 150,
+      headerRenderer: (d) => handleTableWidth(d, t('客队'), 'auto')
     },
     {
       label: t("审核员"),
@@ -167,17 +166,14 @@ export function useSettle() {
     {
       label: t("主队事件数量"),
       slot: 't1',
-      headerRenderer: (d) => handleTableWidth(d, t('主队事件数量')),
     },
     {
       label: t("客队事件数量"),
       slot: 't2',
-      headerRenderer: (d) => handleTableWidth(d, t('客队事件数量'))
     },
     {
       label: t("事件编码"),
       slot: 'eventCode',
-      headerRenderer: (d) => handleTableWidth(d, t('事件编码'))
     },
     {
       label: t("进球时间"),
@@ -192,32 +188,26 @@ export function useSettle() {
     {
       label: t("比赛阶段"),
       slot: 'matchPeriodId',
-      headerRenderer: (d) => handleTableWidth(d, t('比赛阶段'))
     },
     {
       label: t("主/客队"),
       slot: 'homeAway',
-      headerRenderer: (d) => handleTableWidth(d, t('主/客队'))
     },
     {
       label: t("1号球员名称"),
       slot: 'player1Name',
-      headerRenderer: (d) => handleTableWidth(d, t('1号球员名称'))
     },
     {
       label: t("事件是否被取消"),
       slot: 'canceled',
-      headerRenderer: (d) => handleTableWidth(d, t('事件是否被取消'))
     },
     {
       label: t("操作"),
       slot: "operation",
-      headerRenderer: (d) => handleTableWidth(d, t('操作'))
     },
     {
       label: t("结算次数"),
       formatter: ({ }) => '-',
-      headerRenderer: (d) => handleTableWidth(d, t('结算次数'))
     },
     /* {
       label: t("未结算"),
@@ -230,7 +220,7 @@ export function useSettle() {
     {
       label: t("数据商事件"),
       formatter: ({ }) => '-',
-      headerRenderer: (d) => handleTableWidth(d, t('数据商事件'))
+      // headerRenderer: (d) => handleTableWidth(d, t('数据商事件'))
     }
   ];
 

@@ -34,11 +34,11 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
-          <template #sn="{ index }">{{ index + 1 }}</template>
+          <template #sn="{ index: parIndex }">{{ parIndex + 1 }}</template>
           <template
             #expand="{
-              row,
-              index: parentIndex
+              row: parentRow,
+              index: parIndex
             }: {
               row: SaleDataAPI.PreSaleList,
               index: number
@@ -51,9 +51,10 @@
                   type="primary"
                   :icon="useRenderIcon(icon_money)"
                   :disabled="
-                    !!row.halfSettlementStatus || !row.childrenData.length
+                    !!parentRow.halfSettlementStatus ||
+                    !parentRow.childrenData.length
                   "
-                  @click="settlementFunction(row.matchId, 'half')"
+                  @click="settlementFunction(parentRow.matchId, 'half')"
                   :loading="balanceLoading['half']"
                 >
                   {{ t("上半场结算") }}
@@ -62,11 +63,12 @@
                   link
                   type="danger"
                   :disabled="
-                    !!row.fullSettlementStatus || !row.childrenData.length
+                    !!parentRow.fullSettlementStatus ||
+                    !parentRow.childrenData.length
                   "
                   :loading="balanceLoading['all']"
                   :icon="useRenderIcon(icon_money)"
-                  @click="settlementFunction(row.matchId, 'all')"
+                  @click="settlementFunction(parentRow.matchId, 'all')"
                 >
                   {{ t("全场结算") }}
                 </el-button>
@@ -77,7 +79,7 @@
               </div>
               <pure-table
                 row-key="id"
-                :data="row.childrenData"
+                :data="parentRow.childrenData"
                 :loading="childloading"
                 :columns="childColumns"
                 size="small"
@@ -90,20 +92,36 @@
                 }"
                 :cell-style="{ textAlign: 'center' }"
               >
-                <template #t1="{ row }">
+                <template #t1="{ row, index: childIndex }">
                   <el-input
                     v-model="row.t1"
                     :maxlength="4"
-                    @input="editScore($event, row, 't1')"
+                    @input="
+                      editScore(
+                        $event,
+                        row,
+                        't1',
+                        childIndex,
+                        parentRow.childrenData
+                      )
+                    "
                     :disabled="!row.isEdit"
                   />
                 </template>
 
-                <template #t2="{ row }">
+                <template #t2="{ row, index: childIndex }">
                   <el-input
                     v-model="row.t2"
                     :maxlength="4"
-                    @input="editScore($event, row, 't2')"
+                    @input="
+                      editScore(
+                        $event,
+                        row,
+                        't2',
+                        childIndex,
+                        parentRow.childrenData
+                      )
+                    "
                     :disabled="!row.isEdit"
                   />
                 </template>
@@ -151,8 +169,8 @@
                     v-model="row.matchPeriodId"
                     :placeholder="t('请选择')"
                   >
-                    <el-option :label="t('上半场')" :value="1" />
-                    <el-option :label="t('下半场')" :value="2" />
+                    <el-option :label="t('上半场')" :value="31" />
+                    <el-option :label="t('下半场')" :value="100" />
                   </el-select>
                 </template>
 
@@ -201,7 +219,7 @@
                       circle
                       v-if="row.isBackEndReturnData"
                       type="primary"
-                      @click="handleChildrenData(row, parentIndex, 'edit')"
+                      @click="handleChildrenData(row, parIndex, 'edit')"
                     >
                       <div class="w-[14px] h-[14px] align-middle">B</div>
                     </el-button>
@@ -209,7 +227,7 @@
                       v-else
                       circle
                       type="primary"
-                      @click="handleChildrenData(row, parentIndex, 'add')"
+                      @click="handleChildrenData(row, parIndex, 'add')"
                     >
                       <div class="w-[14px] h-[14px] align-middle">C</div>
                     </el-button>
@@ -221,7 +239,7 @@
                 <IconifyIconOffline
                   width="25px"
                   :icon="icon_circle_fill"
-                  @click="addChildRow(row)"
+                  @click="addChildRow(parentRow)"
                 />
               </div>
             </div>
@@ -252,15 +270,33 @@ import icon_circle_fill from "@iconify-icons/ri/add-circle-fill";
 import { useSettle } from "./utils/hook";
 import SearchForm from "./component/SearchForm.vue";
 import { t } from "@/plugins/i18n";
+import { message } from "@/utils/message";
 // import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
 defineOptions({ name: "settle_admin" });
 
-const editScore = (val, row, type) => {
-  row[type] = val.replace(/[^\d.]/g, "").replace(/^0+|0+$/g, "");
-  if (type == "t1") {
-    if (parseInt(row.t1) > 0) row.t2 = 0;
-  } else {
-    if (parseInt(row.t2) > 0) row.t1 = 0;
+const editScore = (
+  val: string,
+  row: SattleDataAPI.MatchEventsList,
+  type: "t1" | "t2",
+  childIndex: number,
+  prevData: SattleDataAPI.MatchEventsList[]
+) => {
+  row[type] = val.replace(/[^\d.]/g, "").replace(/^0+(?!$)/, "");
+  if (childIndex !== 0) {
+    if (+row[type] <= +prevData[childIndex - 1][type] && row[type] != "") {
+      row[type] = "";
+      message(t("请输入正确的事件数量"), { type: "error" });
+    } else {
+      if (prevData[childIndex + 1] && !row.isBackEndReturnData) {
+        prevData[childIndex + 1].t1 = "";
+        prevData[childIndex + 1].t2 = "";
+      }
+      if (type === "t1") {
+        row.t2 = prevData[childIndex - 1].t2;
+      } else {
+        row.t1 = prevData[childIndex - 1].t1;
+      }
+    }
   }
 };
 
