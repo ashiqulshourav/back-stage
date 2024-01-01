@@ -12,3 +12,9 @@ export const SPORT_ID_MAP = [
   { label: t('橄榄球'), value: 9 },
   { label: t('拳击/格斗'), value: 10 },
 ]
+
+export const MATCH_EVENT_CODE = {
+  goal: t('足球进球'),
+  yellow_red_card: t('红牌/黄牌'),
+  corner: t('角球'),
+}

@@ -122,15 +122,20 @@ const onLogin = async (formEl: FormInstance | undefined) => {
 const _loginRequest = async () => {
   usePermissionStoreHook().handleWholeMenus([]);
   addPathMatch();
-  const res: UserAPI.Login = await API.login({
-    email: ruleForm.username,
-    password: ruleForm.password
-  });
-  loading.value = false;
-  if (res.code) return message(res.msg, { type: "error" });
-  userStore.setUserInfo(res.data);
-  router.push(getTopMenu(true).path);
-  message(t("登录成功"), { type: "success" });
+  try {
+    const res: UserAPI.Login = await API.login({
+      email: ruleForm.username,
+      password: ruleForm.password
+    });
+    loading.value = false;
+    if (res.code) return message(res.msg, { type: "error" });
+    userStore.setUserInfo(res.data);
+    router.push(getTopMenu(true).path);
+    message(t("登录成功"), { type: "success" });
+  } catch (error) {
+    message(error.message, { type: "error" });
+    loading.value = false;
+  }
 };
 </script>
 

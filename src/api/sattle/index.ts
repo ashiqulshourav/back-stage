@@ -9,6 +9,8 @@ export const sattleData = {
 
   updateMatchEvent: (data: SattleDataAPI.MatchEventParams) => http.request<SaleDataAPI.PreSaleListRes>("post", "/event/v1/updateMatchEvent", { data }),
 
+  deleteMatchEvent: (data: { id: number }) => http.request<SaleDataAPI.deleteMatchEventRes>("post", "/event/v1/deleteMatchEvent", { data }),
+
   firstHalfSettlement: (data: {
     matchId: number;
   }) => http.request<SaleDataAPI.allSettlementRes>("post", "/event/v1/firstHalfSettlement", { data }),

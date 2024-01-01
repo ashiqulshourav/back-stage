@@ -21,7 +21,6 @@ declare namespace SattleDataAPI {
     t2?: number | string;
     isEdit?: boolean;
     isBackEndReturnData: boolean;
-    [key: string]: any;
   }
 
   type getMatchEventsRes = {

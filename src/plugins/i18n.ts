@@ -49,7 +49,7 @@ export function t(message: any = "", params: any = {}) {
 
 export const i18n: I18n = createI18n({
   legacy: false,
-  locale: JSON.parse(localStorage.getItem('responsive-locale') ?? "").locale ?? 'zh',
+  locale: JSON.parse(localStorage.getItem('responsive-locale') ?? "{}").locale ?? 'zh',
   fallbackLocale: "en",
   messages: localesConfigs
 });

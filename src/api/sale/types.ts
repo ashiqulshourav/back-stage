@@ -25,8 +25,14 @@ declare namespace SaleDataAPI {
     homeTeamNameCn: string;
     halfSettlementStatus: number;
     fullSettlementStatus: number;
-    childrenData: SattleDataAPI.MatchEventsList[];
+    childrenData: ChildrenDataList[];
   }
+
+  type ChildrenDataList = {
+    type: string;
+    key: string;
+    tableList: SattleDataAPI.MatchEventsList[]
+  };
 
   type PreSaleListData = {
     total: number;
@@ -53,6 +59,12 @@ declare namespace SaleDataAPI {
     code: number;
     msg: string;
     data: PreSaleListData;
+  }
+
+  type deleteMatchEventRes = {
+    code: number;
+    msg: string;
+    data: any;
   }
 
 

@@ -7,6 +7,7 @@ export const saleData = {
     isSale?: number;
     beginTime?: string;
     pageNum?: number;
+    sportId: number;
     pageSize?: number;
   }) => http.request<SaleDataAPI.PreSaleListRes>("post", "/match/v1/getPreSaleList", { data }),
 

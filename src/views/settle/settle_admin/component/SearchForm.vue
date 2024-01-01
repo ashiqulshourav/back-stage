@@ -27,12 +27,22 @@
       />
     </el-form-item>
 
+    <el-form-item :label="`${t('赛事分类')}:`" prop="sportId">
+      <el-select v-model="form.sportId" :placeholder="t('请选择')">
+        <el-option
+          :label="item.label"
+          :value="item.value"
+          v-for="item in SPORT_ID_MAP"
+          :key="item.value"
+        />
+      </el-select>
+    </el-form-item>
+
     <el-form-item :label="`${t('赛事名称')}:`" prop="matchName">
       <el-input
         v-model="form.matchName"
         :placeholder="t('赛事名称')"
         clearable
-        class="!w-[150px]"
       />
     </el-form-item>
 
@@ -40,35 +50,18 @@
       :label="`${t('上半场结算状态')}:`"
       prop="halfSettlementStatus"
     >
-      <el-select
-        class="!w-[100px]"
-        v-model="form.halfSettlementStatus"
-        :placeholder="t('请选择')"
-      >
-        <el-option label="已结算" :value="1" />
-        <el-option label="未结算" :value="0" />
+      <el-select v-model="form.halfSettlementStatus" :placeholder="t('请选择')">
+        <el-option :label="t('已结算')" :value="1" />
+        <el-option :label="t('未结算')" :value="0" />
       </el-select>
     </el-form-item>
 
     <el-form-item :label="`${t('全场结算状态')}:`" prop="halfSettlementStatus">
-      <el-select
-        class="!w-[100px]"
-        v-model="form.fullSettlementStatus"
-        :placeholder="t('请选择')"
-      >
-        <el-option label="已结算" :value="1" />
-        <el-option label="未结算" :value="0" />
+      <el-select v-model="form.fullSettlementStatus" :placeholder="t('请选择')">
+        <el-option :label="t('已结算')" :value="1" />
+        <el-option :label="t('未结算')" :value="0" />
       </el-select>
     </el-form-item>
-
-    <!--  <el-form-item label="数据商">
-      <el-switch
-        v-model="form.dataVendors"
-        inline-prompt
-        class="pure-datatheme"
-        @change="dataVendorsChange"
-      />
-    </el-form-item> -->
 
     <el-form-item>
       <el-button
@@ -98,6 +91,7 @@ import { FormProps } from "../utils/type";
 // import { useLeague } from "../utils/hook";
 const formRef = ref();
 const emit = defineEmits(["onSearch", "resetForm"]);
+import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
 
 defineProps<{
   form: FormProps;

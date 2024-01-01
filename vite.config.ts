@@ -38,10 +38,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
   return {
     base: VITE_PUBLIC_PATH,
     root,
-    resolve: {
-      alias
-    },
-    // 服务端渲染
+    resolve: { alias },
     server: {
       https: false,
       port: VITE_PORT,

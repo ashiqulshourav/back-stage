@@ -3,8 +3,7 @@ import type { PaginationProps } from "@pureadmin/table";
 import { removeEmptyStringKeys } from "@/utils/utilFn";
 import { t } from "@/plugins/i18n";
 import { usePublicHooks } from "@/hooks";
-import dayjs from "dayjs";
-import { handleTableWidth } from "@/utils/getTableWidth";
+import { childColumns, columns } from './tableColumnList'
 
 export function useSettle() {
   const form = reactive({
@@ -21,6 +20,9 @@ export function useSettle() {
   const loading = ref(true);
   const childloading = ref(true);
   const switchLoadMap = ref({});
+  const currentSportId = ref(1);
+  const redOrYellow = ref(2);
+  const childDataTotal = ref(0);
 
   const balanceLoading = reactive<{ half: boolean, all: boolean }>({
     half: false, all: false
@@ -32,197 +34,6 @@ export function useSettle() {
     currentPage: 1,
   });
 
-  const columns: TableColumnList = [
-    {
-      type: "expand",
-      slot: "expand",
-      fixed: true
-    },
-    {
-      label: t('序号'),
-      fixed: true,
-      slot: "sn",
-      headerRenderer: (d) => handleTableWidth(d, t('序号'))
-    },
-    {
-      prop: "matchName",
-      label: t('赛事名称'),
-      fixed: true,
-      align: 'left',
-      headerRenderer: (d) => handleTableWidth(d, t('赛事名称'))
-    },
-    {
-      label: t("赛事ID"),
-      prop: "matchId",
-      headerRenderer: (d) => handleTableWidth(d, t('赛事ID'))
-    },
-    {
-      label: t("赛事等级"),
-      prop: "level",
-      headerRenderer: (d) => handleTableWidth(d, t('赛事等级'))
-    },
-    {
-      label: t("比赛时间"),
-      prop: "beginTimeLong",
-      minWidth: 200,
-      formatter: ({ beginTimeLong }) => dayjs(beginTimeLong).format('YYYY-MM-DD HH:mm:ss'),
-      headerRenderer: (d) => handleTableWidth(d, t('比赛时间'), 'auto')
-    },
-
-    {
-      label: t("主队"),
-      prop: "homeTeamNameCn",
-      minWidth: 150,
-      formatter: ({ homeTeamNameCn }) => homeTeamNameCn ?? '-',
-      headerRenderer: (d) => handleTableWidth(d, t('主队'), 'auto')
-    },
-    {
-      label: t("半场"),
-      prop: "halfTime",
-      formatter: ({ halfTime }) => halfTime ?? '-',
-      headerRenderer: (d) => handleTableWidth(d, t('半场'), 'auto')
-    },
-    {
-      label: t("全场"),
-      prop: "wholeTime",
-      formatter: ({ wholeTime }) => wholeTime ?? '-',
-      headerRenderer: (d) => handleTableWidth(d, t('全场'), 'auto')
-    },
-    {
-      label: t("客队"),
-      prop: "awayTeamNameCn",
-      minWidth: 150,
-      headerRenderer: (d) => handleTableWidth(d, t('客队'), 'auto')
-    },
-    {
-      label: t("审核员"),
-      prop: "auditor",
-      formatter: ({ auditor }) => auditor || '-',
-      headerRenderer: (d) => handleTableWidth(d, t('审核员'))
-    },
-    {
-      label: t("操盘手"),
-      prop: "trader",
-      formatter: ({ trader }) => trader || '-',
-      headerRenderer: (d) => handleTableWidth(d, t('操盘手'))
-    },
-    {
-      label: t("比赛状态"),
-      prop: "status",
-      formatter: ({ status }) => status ?? '-',
-      headerRenderer: (d) => handleTableWidth(d, t('比赛状态'))
-    },
-    {
-      label: t("待审核"),
-      prop: "peddingReview",
-      formatter: ({ peddingReview }) => peddingReview || '-',
-      headerRenderer: (d) => handleTableWidth(d, t('待审核'))
-    },
-    {
-      label: t("赛事数据源"),
-      prop: "eventDataSource",
-      formatter: ({ eventDataSource }) => eventDataSource || '-',
-      headerRenderer: (d) => handleTableWidth(d, t('赛事数据源'))
-    },
-    {
-      label: t("确认中"),
-      prop: "confirming",
-      formatter: ({ confirming }) => confirming || '-',
-      headerRenderer: (d) => handleTableWidth(d, t('确认中'))
-    },
-    {
-      label: t("上半场结算"),
-      prop: "halfSettlementStatus",
-      formatter: ({ halfSettlementStatus }) => halfSettlementStatus === 0 ? t('未结算') : <el-text type="danger">{t('已结算')}</el-text>,
-      headerRenderer: (d) => handleTableWidth(d, t('上半场结算'))
-    },
-
-    {
-      label: t("全场结算"),
-      prop: "fullSettlementStatus",
-      formatter: ({ fullSettlementStatus }) => fullSettlementStatus === 0 ? t('未结算') : <el-text type="danger">{t('已结算')}</el-text>,
-      headerRenderer: (d) => handleTableWidth(d, t('全场结算'))
-    },
-    {
-      label: t("异常"),
-      prop: "abnormal",
-      formatter: ({ abnormal }) => abnormal || '-',
-      headerRenderer: (d) => handleTableWidth(d, t('异常'))
-    },
-    // {
-    //   label: t("结算状态"),
-    //   prop: "settleStatus",
-    //   formatter: ({ settleStatus }) => settleStatus || '-'
-    // },
-    /* {
-      label: t("操作"),
-      prop: "operation",
-      slot: 'operation',
-      fixed: "right",
-    }, */
-  ];
-
-  const childColumns: TableColumnList = [
-    {
-      label: t("主队事件数量"),
-      slot: 't1',
-    },
-    {
-      label: t("客队事件数量"),
-      slot: 't2',
-    },
-    {
-      label: t("事件编码"),
-      slot: 'eventCode',
-    },
-    {
-      label: t("进球时间"),
-      slot: 'eventTime',
-      headerRenderer: (d) => handleTableWidth(d, t('进球时间'))
-    },
-    /*  {
-       label: t("体育ID"),
-       slot: 'sportId',
-       width: 150
-     }, */
-    {
-      label: t("比赛阶段"),
-      slot: 'matchPeriodId',
-    },
-    {
-      label: t("主/客队"),
-      slot: 'homeAway',
-    },
-    {
-      label: t("1号球员名称"),
-      slot: 'player1Name',
-    },
-    {
-      label: t("事件是否被取消"),
-      slot: 'canceled',
-    },
-    {
-      label: t("操作"),
-      slot: "operation",
-    },
-    {
-      label: t("结算次数"),
-      formatter: ({ }) => '-',
-    },
-    /* {
-      label: t("未结算"),
-      formatter: ({ }) => '-'
-    },
-    {
-      label: t("已结算"),
-      formatter: ({ }) => '-'
-    }, */
-    {
-      label: t("数据商事件"),
-      formatter: ({ }) => '-',
-      // headerRenderer: (d) => handleTableWidth(d, t('数据商事件'))
-    }
-  ];
 
   const handleTableWidthChange = (pageSize: number) => {
     pagination.pageSize = pageSize;
@@ -238,21 +49,28 @@ export function useSettle() {
     console.log("handleSelectionChange", val);
   }
 
-  const onSearch = async (type?: string) => {
+  const onSearch = async (type?: string, spoprtId?: number) => {
     try {
+      if (spoprtId) currentSportId.value = spoprtId;
       if (type === 'reload') pagination.currentPage = 1;
       loading.value = true;
       const data = removeEmptyStringKeys(form);
       const res: SaleDataAPI.PreSaleListRes = await API.getPreSaleList({
         ...data,
         pageSize: pagination.pageSize,
-        pageNum: pagination.currentPage
+        pageNum: pagination.currentPage,
+        sportId: currentSportId.value
       });
       loading.value = false;
       if (res.code) return message(res.msg, { type: "error" });
       dataList.length = 0;
       dataList.push(...res.data.list);
-      dataList.forEach(_ => _.childrenData = []);
+      dataList.forEach(_ => _.childrenData = [
+        { type: 'goal', key: 'matchScoreRecordList', tableList: [] },
+        { type: 'yellow_red_card', key: 'penaltyCardRecordList', tableList: [] },
+        { type: 'corner', key: 'cornerRecordList', tableList: [] },
+        // { type: 'yellow_card', value: '其他事件记录列表', key: 'allOtherList', tableList: [] },
+      ]);
       pagination.total = res.data.total;
       pagination.pageSize = res.data.pageSize;
       pagination.currentPage = res.data.pageNum;
@@ -267,38 +85,68 @@ export function useSettle() {
     onSearch('reload');
   };
 
-  const addChildRow = (row: SaleDataAPI.PreSaleList) => {
-    const tempList = {
-      eventTime: null,
-      homeAway: null,
-      matchPeriodId: null,
-      player1Name: null,
-      isBackEndReturnData: false,
-      t1: null,
-      t2: null,
+  const addChildRow = (tableList, type) => {
+    if (tableList.length !== 0 && !tableList[tableList.length - 1].player1Name) {
+      message('请先完成上一个事件添加', { type: 'error' })
+    } else {
+      const tempList = {
+        eventTime: null,
+        homeAway: null,
+        matchPeriodId: null,
+        player1Name: null,
+        isBackEndReturnData: false,
+        t1: null,
+        t2: null,
+        eventCode: type
+      }
+      tableList.push(tempList);
     }
-    row.childrenData.push(tempList);
   }
 
   const editChild = (row: SattleDataAPI.MatchEventsList,) => {
     row.isEdit = true;
   }
 
+  const expandChange = (row, d) => {
+    if (!d.some(item => item.matchId === row.matchId)) return;
+    getChildRenData(row);
+  }
+
   const getChildRenData = async (row) => {
-    if (row.childrenData.length) return;
     childloading.value = true;
     const res = await API.getMatchEvents({ matchId: row.matchId })
     childloading.value = false;
-    res.data.forEach(_ => {
-      _.isEdit = false
-      _.matchId = row.matchId;
-      _.isBackEndReturnData = true;
-      _.canceled = Boolean(_.canceled);
-    });
-    row.childrenData.push(...res.data);
+    if (res.code) return message(res.msg, { type: 'error' })
+    childDataTotal.value = 0;
+    row.childrenData.forEach((item: SaleDataAPI.ChildrenDataList) => {
+      item.tableList = res.data[item.key]
+      childDataTotal.value += item.tableList.length;
+      if (item.tableList.length) {
+        item.tableList.forEach(_ => {
+          _.isEdit = false
+          _.matchId = row.matchId;
+          _.isBackEndReturnData = true;
+          _.canceled = Boolean(_.canceled);
+        })
+      }
+    })
   }
 
-  const handleChildrenData = async (row: SattleDataAPI.MatchEventsList, parentIndex: number, type: 'add' | 'edit') => {
+  const removeItem = async (id: number, parentIndex: number, tableList: SattleDataAPI.MatchEventsList[]) => {
+    if (!id) {
+      tableList.pop()
+    } else {
+      const res = await API.deleteMatchEvent({ id })
+      message(res.msg, { type: res.code ? 'error' : 'success' })
+      if (res.code) return
+      getChildRenData(dataList[parentIndex]);
+    }
+  }
+
+  const handleChildrenData = async (row: SattleDataAPI.MatchEventsList, parentIndex: number, type: 'add' | 'edit' | 'delete', parentRow, tableList?) => {
+    if (type === 'delete') {
+      return removeItem(row.id, parentIndex, tableList);
+    }
     if (!row.isEdit) return;
     const requireDdata = {
       t1: row.t1,
@@ -332,7 +180,7 @@ export function useSettle() {
       dataSourceCode: "SK",
       remark: '',
       sourceType: 1,
-      sportId: 1, // row.sportId,
+      sportId: row.sportId,
       t1: +row.t1,
       t2: +row.t2,
     }
@@ -349,14 +197,10 @@ export function useSettle() {
     message(res.msg, { type: res.code ? 'error' : "success" });
     if (res.code) return;
     row.isEdit = false;
-
-    const r = await API.getMatchEvents({ matchId: dataList[parentIndex].matchId });
-    const d = row.id ? r.data.find(_ => _.id === row.id) : r.data.pop();
-    Object.assign(row, d);
-    row.canceled = Boolean(row.canceled);
-    row.isBackEndReturnData = true;
+    getChildRenData(parentRow)
   }
 
+  // 结算
   const settlementFunction = async (matchId: number, type: 'half' | 'all') => {
     try {
       balanceLoading[type] = true;
@@ -382,6 +226,7 @@ export function useSettle() {
     resetForm,
     handleTableWidthChange,
     switchLoadMap,
+    expandChange,
     handleCurrentChange,
     handleSelectionChange,
     switchStyle,
@@ -389,8 +234,11 @@ export function useSettle() {
     getChildRenData,
     addChildRow,
     editChild,
+    currentSportId,
     balanceLoading,
     settlementFunction,
     handleChildrenData,
+    redOrYellow,
+    childDataTotal
   };
 }

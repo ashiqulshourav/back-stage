@@ -67,7 +67,7 @@ export const router: Router = createRouter({
   history: getHistoryMode(import.meta.env.VITE_ROUTER_HISTORY),
   routes: constantRoutes.concat(...(remainingRouter as any)),
   strict: true,
-  scrollBehavior(to, from, savedPosition) {
+  scrollBehavior(_to, from, savedPosition) {
     return new Promise(resolve => {
       if (savedPosition) {
         return savedPosition;
