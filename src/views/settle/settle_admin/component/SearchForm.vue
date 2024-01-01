@@ -56,7 +56,7 @@
       </el-select>
     </el-form-item>
 
-    <el-form-item :label="`${t('全场结算状态')}:`" prop="halfSettlementStatus">
+    <el-form-item :label="`${t('全场结算状态')}:`" prop="fullSettlementStatus">
       <el-select v-model="form.fullSettlementStatus" :placeholder="t('请选择')">
         <el-option :label="t('已结算')" :value="1" />
         <el-option :label="t('未结算')" :value="0" />

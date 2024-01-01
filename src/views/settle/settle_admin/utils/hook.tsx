@@ -214,7 +214,7 @@ export function useSettle() {
       balanceLoading[type] = false;
     }
   }
-
+  onMounted(() => onSearch());
   return {
     form,
     loading,

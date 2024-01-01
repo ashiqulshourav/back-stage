@@ -205,10 +205,7 @@
                       <CustomButton
                         :circle="true"
                         @click="editChild(row)"
-                        v-if="
-                          row.isBackEndReturnData &&
-                          item.tableList.length - 1 === childIndex
-                        "
+                        v-if="item.tableList.length - 1 === childIndex"
                       >
                         <div class="w-[14px] h-[14px] align-middle">A</div>
                       </CustomButton>
@@ -355,10 +352,6 @@ const {
   redOrYellow,
   childDataTotal
 } = useSettle();
-
-onMounted(() => {
-  onSearch();
-});
 </script>
 
 <style scoped lang="scss">

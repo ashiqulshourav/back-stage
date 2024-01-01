@@ -39,7 +39,7 @@ withDefaults(
     disabled?: boolean;
     loading?: boolean | null;
     btnText?: string;
-    circle: boolean | null;
+    circle?: boolean | null;
   }>(),
   {
     icon: null,
