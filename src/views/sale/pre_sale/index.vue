@@ -25,8 +25,8 @@
 
       <el-form-item :label="`${t('开售状态')}:`" prop="isSale">
         <el-select v-model="form.isSale" :placeholder="t('请选择')">
-          <el-option :label="t('关闭')" :value="0" />
-          <el-option :label="t('开售')" :value="1" />
+          <el-option :label="t('关闭')" :value="1" />
+          <el-option :label="t('开售')" :value="0" />
         </el-select>
       </el-form-item>
 

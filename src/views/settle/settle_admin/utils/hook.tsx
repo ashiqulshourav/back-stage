@@ -4,6 +4,7 @@ import { removeEmptyStringKeys } from "@/utils/utilFn";
 import { t } from "@/plugins/i18n";
 import { usePublicHooks } from "@/hooks";
 import { childColumns, columns } from './tableColumnList'
+import { TempListType } from "./type";
 
 export function useSettle() {
   const form = reactive({
@@ -21,7 +22,6 @@ export function useSettle() {
   const childloading = ref(true);
   const switchLoadMap = ref({});
   const currentSportId = ref(1);
-  const redOrYellow = ref(2);
   const childDataTotal = ref(0);
 
   const balanceLoading = reactive<{ half: boolean, all: boolean }>({
@@ -69,7 +69,6 @@ export function useSettle() {
         { type: 'goal', key: 'matchScoreRecordList', tableList: [] },
         { type: 'yellow_red_card', key: 'penaltyCardRecordList', tableList: [] },
         { type: 'corner', key: 'cornerRecordList', tableList: [] },
-        // { type: 'yellow_card', value: '其他事件记录列表', key: 'allOtherList', tableList: [] },
       ]);
       pagination.total = res.data.total;
       pagination.pageSize = res.data.pageSize;
@@ -89,7 +88,7 @@ export function useSettle() {
     if (tableList.length !== 0 && !tableList[tableList.length - 1].player1Name) {
       message('请先完成上一个事件添加', { type: 'error' })
     } else {
-      const tempList = {
+      const tempList: TempListType = {
         eventTime: null,
         homeAway: null,
         matchPeriodId: null,
@@ -99,6 +98,7 @@ export function useSettle() {
         t2: null,
         eventCode: type
       }
+      type === 'yellow_red_card' && (tempList.redOrYellow = 2);
       tableList.push(tempList);
     }
   }
@@ -127,7 +127,9 @@ export function useSettle() {
           _.matchId = row.matchId;
           _.isBackEndReturnData = true;
           _.canceled = Boolean(_.canceled);
+          item.type === 'yellow_red_card' && (_.redOrYellow = '红/黄牌');
         })
+        console.log('hook.tsx文件 132==============行打印=', item.tableList)
       }
     })
   }
@@ -153,11 +155,12 @@ export function useSettle() {
       t2: row.t2,
       eventCode: row.eventCode,
       eventTime: row.eventTime,
-      sportId: 1,// row.sportId,
+      sportId: currentSportId.value,
       matchPeriodId: row.matchPeriodId,
       homeAway: row.homeAway,
       player1Name: row.player1Name,
     }
+    delete row.isBackEndReturnData;
     if (!Object.keys(requireDdata).every(key => {
       if (key === 't1' || key === 't2') {
         return parseInt(requireDdata[key]) >= 0
@@ -180,7 +183,7 @@ export function useSettle() {
       dataSourceCode: "SK",
       remark: '',
       sourceType: 1,
-      sportId: row.sportId,
+      sportId: currentSportId.value,
       t1: +row.t1,
       t2: +row.t2,
     }
@@ -238,7 +241,6 @@ export function useSettle() {
     balanceLoading,
     settlementFunction,
     handleChildrenData,
-    redOrYellow,
     childDataTotal
   };
 }

@@ -20,6 +20,7 @@ declare namespace SattleDataAPI {
     t1?: number | string;
     t2?: number | string;
     isEdit?: boolean;
+    redOrYellow?: number | string;
     isBackEndReturnData: boolean;
   }
 

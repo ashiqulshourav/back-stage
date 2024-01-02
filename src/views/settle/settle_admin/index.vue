@@ -4,18 +4,10 @@
       :form="form"
       @resetForm="resetForm"
       :loading="loading"
-      @onSearch="onSearch"
+      @onSearch="arg => onSearch(...arg)"
     />
 
-    <div class="flex mt-4">
-      <CustomButton
-        v-for="item in SPORT_ID_MAP"
-        :key="item.value"
-        :type="item.value === currentSportId ? 'success' : ''"
-        :btnText="item.label"
-        @click="onSearch('reload', item.value)"
-      />
-    </div>
+    <SportTypeNav :currentSportId="currentSportId" />
 
     <PureTableBar
       :title="t('结算管理')"
@@ -101,7 +93,7 @@
                   <template #eventCode="{ row, index: childIndex }">
                     <el-select
                       :disabled="!row.isEdit"
-                      v-model="redOrYellow"
+                      v-model="row.redOrYellow"
                       :placeholder="t('请选择')"
                       v-if="item.type === 'yellow_red_card'"
                       @change="
@@ -283,8 +275,8 @@ import SearchForm from "./component/SearchForm.vue";
 import { t } from "@/plugins/i18n";
 import { message } from "@/utils/message";
 import { MATCH_EVENT_CODE } from "@/utils/maps/sports_map";
-import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
 import CustomButton from "@/components/Form/CustomButton.vue";
+import SportTypeNav from "./component/SportTypeNav.vue";
 defineOptions({ name: "settle_admin" });
 
 const changeEventTime = (
@@ -308,24 +300,25 @@ const teamChangeEvent = (
   if (!row.homeAway) return;
   if (childIndex === 0) {
     if (row.homeAway === "home") {
-      row.t1 = type === "yellow_red_card" ? redOrYellow.value : 1;
+      row.t1 = type === "yellow_red_card" ? row.redOrYellow : 1;
       row.t2 = 0;
     } else {
       row.t1 = 0;
-      row.t2 = type === "yellow_red_card" ? redOrYellow.value : 1;
+      row.t2 = type === "yellow_red_card" ? row.redOrYellow : 1;
     }
   } else {
     if (row.homeAway === "home") {
       row.t1 =
         +childrenData[childIndex - 1].t1 +
-        (type === "yellow_red_card" ? redOrYellow.value : 1);
+        (type === "yellow_red_card" ? (row.redOrYellow as number) : 1);
       row.t2 = childrenData[childIndex - 1].t2;
     } else {
       row.t2 =
         +childrenData[childIndex - 1].t2 +
-        (type === "yellow_red_card" ? redOrYellow.value : 1);
+        (type === "yellow_red_card" ? (row.redOrYellow as number) : 1);
       row.t1 = childrenData[childIndex - 1].t1;
     }
+    3;
   }
 };
 
@@ -349,7 +342,6 @@ const {
   settlementFunction,
   currentSportId,
   handleChildrenData,
-  redOrYellow,
   childDataTotal
 } = useSettle();
 </script>
