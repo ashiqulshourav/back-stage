@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import extraIcon from "./extraIcon.vue";
-import Search from "../search/index.vue";
-import Notice from "../notice/index.vue";
-import { isAllEmpty } from "@pureadmin/utils";
-import { useNav } from "@/layout/hooks/useNav";
-import { t } from "@/plugins/i18n";
-import { ref, toRaw, watch, onMounted, nextTick } from "vue";
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-import { getParentPaths, findRouteByPath } from "@/router/utils";
-import { useTranslationLang } from "../../hooks/useTranslationLang";
-import { usePermissionStoreHook } from "@/store/permission";
-import globalization from "@/assets/svg/globalization.svg?component";
-import LogoutCircleRLine from "@iconify-icons/ri/logout-circle-r-line";
-import Setting from "@iconify-icons/ri/settings-3-line";
-import Check from "@iconify-icons/ep/check";
+import extraIcon from './extraIcon.vue';
+import Search from '../search/index.vue';
+import Notice from '../notice/index.vue';
+import { isAllEmpty } from '@pureadmin/utils';
+import { useNav } from '@/layout/hooks/useNav';
+import { t } from '@/plugins/i18n';
+import { ref, toRaw, watch, onMounted, nextTick } from 'vue';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import { getParentPaths, findRouteByPath } from '@/router/utils';
+import { useTranslationLang } from '../../hooks/useTranslationLang';
+import { usePermissionStoreHook } from '@/store/permission';
+import globalization from '@/assets/svg/globalization.svg?component';
+import LogoutCircleRLine from '@iconify-icons/ri/logout-circle-r-line';
+import Setting from '@iconify-icons/ri/settings-3-line';
+import Check from '@iconify-icons/ep/check';
 
 const menuRef = ref();
 const defaultActive = ref(null);
@@ -87,7 +87,7 @@ watch(
           </div>
           <div :style="getDivStyle">
             <span class="select-none">
-              {{ t(route.meta.title) }}
+              {{ route.meta.title }}
             </span>
             <extraIcon :extraIcon="route.meta.extraIcon" />
           </div>
@@ -142,7 +142,7 @@ watch(
                 :icon="LogoutCircleRLine"
                 style="margin: 5px"
               />
-              {{ t("退出系统") }}
+              {{ t('退出系统') }}
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>

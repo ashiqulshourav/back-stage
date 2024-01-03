@@ -9,7 +9,7 @@ export default {
   redirect: "/metadata/league",
   meta: {
     icon: "homeFilled",
-    title: t("主页"),
+    title: "主页",
     rank: 0,
   },
   children: [

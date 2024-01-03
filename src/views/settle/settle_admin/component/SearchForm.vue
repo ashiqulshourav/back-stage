@@ -23,11 +23,12 @@
         v-model="form.matchId"
         :placeholder="t('赛事ID')"
         clearable
+        @keyup.enter="searchVal"
         class="!w-[150px]"
       />
     </el-form-item>
 
-    <el-form-item :label="`${t('赛事分类')}:`" prop="sportId">
+    <!-- <el-form-item :label="`${t('赛事分类')}:`" prop="sportId">
       <el-select v-model="form.sportId" :placeholder="t('请选择')">
         <el-option
           :label="item.label"
@@ -36,12 +37,13 @@
           :key="item.value"
         />
       </el-select>
-    </el-form-item>
+    </el-form-item> -->
 
     <el-form-item :label="`${t('赛事名称')}:`" prop="matchName">
       <el-input
         v-model="form.matchName"
         :placeholder="t('赛事名称')"
+         @keyup.enter="searchVal"
         clearable
       />
     </el-form-item>
@@ -91,7 +93,7 @@ import { FormProps } from "../utils/type";
 // import { useLeague } from "../utils/hook";
 const formRef = ref();
 const emit = defineEmits(["onSearch", "resetForm"]);
-import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
+// import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
 
 defineProps<{
   form: FormProps;

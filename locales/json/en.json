@@ -171,7 +171,6 @@
   "k4c34a2b": "Home Team Event Count",
   "k60a8e2ff": "Away Team Event Count",
   "k-1dd30c58": "Event Code",
-  "k71cc176a": "Sport ID",
   "k4a4b9227": "Match Stage",
   "k-724ec424": "Home/Away Team",
   "k2ac07c61": "Player 1 Name",
@@ -202,5 +201,6 @@
   "k37c6cc40": "Corner Kick",
   "k-2de511f1": "删除当前记录",
   "k-5a8b9e72": "红牌",
-  "k2747d9ac": "黄牌"
+  "k2747d9ac": "黄牌",
+  "k-40fe3e01": "是否确认删除数据么"
 }

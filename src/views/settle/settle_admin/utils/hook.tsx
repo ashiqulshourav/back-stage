@@ -1,10 +1,10 @@
-import { message } from "@/utils/message";
-import type { PaginationProps } from "@pureadmin/table";
-import { removeEmptyStringKeys } from "@/utils/utilFn";
-import { t } from "@/plugins/i18n";
-import { usePublicHooks } from "@/hooks";
-import { childColumns, columns } from './tableColumnList'
-import { TempListType } from "./type";
+import { message } from '@/utils/message';
+import type { PaginationProps } from '@pureadmin/table';
+import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { t } from '@/plugins/i18n';
+import { usePublicHooks } from '@/hooks';
+import { childColumns, columns } from './tableColumnList';
+import { MatchEventType, TempListType } from './type';
 
 export function useSettle() {
   const form = reactive({
@@ -23,33 +23,34 @@ export function useSettle() {
   const switchLoadMap = ref({});
   const currentSportId = ref(1);
   const childDataTotal = ref(0);
+  const expandMatchList = reactive<number[]>([]);
 
-  const balanceLoading = reactive<{ half: boolean, all: boolean }>({
-    half: false, all: false
+  const balanceLoading = reactive<{ half: boolean; all: boolean }>({
+    half: false,
+    all: false
   });
   const { switchStyle } = usePublicHooks();
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
-    currentPage: 1,
+    currentPage: 1
   });
-
 
   const handleTableWidthChange = (pageSize: number) => {
     pagination.pageSize = pageSize;
     onSearch();
-  }
+  };
 
   const handleCurrentChange = (val: number) => {
     pagination.currentPage = val;
-    onSearch()
-  }
+    onSearch();
+  };
 
-  const handleSelectionChange = (val) => {
-    console.log("handleSelectionChange", val);
-  }
+  const handleSelectionChange = val => {
+    console.log('handleSelectionChange', val);
+  };
 
-  const onSearch = async (type?: string, spoprtId?: number) => {
+  const onSearch = async (type?: 'reload', spoprtId?: number) => {
     try {
       if (spoprtId) currentSportId.value = spoprtId;
       if (type === 'reload') pagination.currentPage = 1;
@@ -62,21 +63,36 @@ export function useSettle() {
         sportId: currentSportId.value
       });
       loading.value = false;
-      if (res.code) return message(res.msg, { type: "error" });
+      if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
       dataList.push(...res.data.list);
-      dataList.forEach(_ => _.childrenData = [
-        { type: 'goal', key: 'matchScoreRecordList', tableList: [] },
-        { type: 'yellow_red_card', key: 'penaltyCardRecordList', tableList: [] },
-        { type: 'corner', key: 'cornerRecordList', tableList: [] },
-      ]);
+      dataList.forEach(
+        _ =>
+          (_.childrenData = [
+            {
+              type: MatchEventType.Goal,
+              key: 'matchScoreRecordList',
+              tableList: []
+            },
+            {
+              type: MatchEventType.YellowRedCard,
+              key: 'penaltyCardRecordList',
+              tableList: []
+            },
+            {
+              type: MatchEventType.Corner,
+              key: 'cornerRecordList',
+              tableList: []
+            }
+          ])
+      );
       pagination.total = res.data.total;
       pagination.pageSize = res.data.pageSize;
       pagination.currentPage = res.data.pageNum;
     } catch (error) {
-      loading.value = false
+      loading.value = false;
     }
-  }
+  };
 
   const resetForm = formEl => {
     if (!formEl) return;
@@ -85,8 +101,11 @@ export function useSettle() {
   };
 
   const addChildRow = (tableList, type) => {
-    if (tableList.length !== 0 && !tableList[tableList.length - 1].player1Name) {
-      message('请先完成上一个事件添加', { type: 'error' })
+    if (
+      tableList.length !== 0 &&
+      !tableList[tableList.length - 1].player1Name
+    ) {
+      message('请先完成上一个事件添加', { type: 'error' });
     } else {
       const tempList: TempListType = {
         eventTime: null,
@@ -97,55 +116,69 @@ export function useSettle() {
         t1: null,
         t2: null,
         eventCode: type
-      }
+      };
       type === 'yellow_red_card' && (tempList.redOrYellow = 2);
       tableList.push(tempList);
     }
-  }
+  };
 
-  const editChild = (row: SattleDataAPI.MatchEventsList,) => {
+  const editChild = (row: SattleDataAPI.MatchEventsList) => {
     row.isEdit = true;
-  }
+  };
 
-  const expandChange = (row, d) => {
+  const expandChange = (
+    row: SaleDataAPI.PreSaleList,
+    d: SaleDataAPI.PreSaleList[]
+  ) => {
+    expandMatchList.length = 0;
+    expandMatchList.push(...d.map(_ => _.matchId));
     if (!d.some(item => item.matchId === row.matchId)) return;
     getChildRenData(row);
-  }
+  };
 
-  const getChildRenData = async (row) => {
+  const getChildRenData = async row => {
     childloading.value = true;
-    const res = await API.getMatchEvents({ matchId: row.matchId })
+    const res = await API.getMatchEvents({ matchId: row.matchId });
     childloading.value = false;
-    if (res.code) return message(res.msg, { type: 'error' })
+    if (res.code) return message(res.msg, { type: 'error' });
     childDataTotal.value = 0;
     row.childrenData.forEach((item: SaleDataAPI.ChildrenDataList) => {
-      item.tableList = res.data[item.key]
+      item.tableList = res.data[item.key];
       childDataTotal.value += item.tableList.length;
       if (item.tableList.length) {
         item.tableList.forEach(_ => {
-          _.isEdit = false
+          _.isEdit = false;
           _.matchId = row.matchId;
           _.isBackEndReturnData = true;
           _.canceled = Boolean(_.canceled);
           item.type === 'yellow_red_card' && (_.redOrYellow = '红/黄牌');
-        })
-        console.log('hook.tsx文件 132==============行打印=', item.tableList)
+        });
       }
-    })
-  }
+    });
+  };
 
-  const removeItem = async (id: number, parentIndex: number, tableList: SattleDataAPI.MatchEventsList[]) => {
+  const removeItem = async (
+    id: number,
+    parentIndex: number,
+    tableList: SattleDataAPI.MatchEventsList[]
+  ) => {
     if (!id) {
-      tableList.pop()
+      tableList.pop();
     } else {
-      const res = await API.deleteMatchEvent({ id })
-      message(res.msg, { type: res.code ? 'error' : 'success' })
-      if (res.code) return
+      const res = await API.deleteMatchEvent({ id });
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if (res.code) return;
       getChildRenData(dataList[parentIndex]);
     }
-  }
+  };
 
-  const handleChildrenData = async (row: SattleDataAPI.MatchEventsList, parentIndex: number, type: 'add' | 'edit' | 'delete', parentRow, tableList?) => {
+  const handleChildrenData = async (
+    row: SattleDataAPI.MatchEventsList,
+    parentIndex: number,
+    type: 'add' | 'edit' | 'delete',
+    parentRow,
+    tableList?
+  ) => {
     if (type === 'delete') {
       return removeItem(row.id, parentIndex, tableList);
     }
@@ -158,16 +191,19 @@ export function useSettle() {
       sportId: currentSportId.value,
       matchPeriodId: row.matchPeriodId,
       homeAway: row.homeAway,
-      player1Name: row.player1Name,
-    }
+      player1Name: row.player1Name
+    };
     delete row.isBackEndReturnData;
-    if (!Object.keys(requireDdata).every(key => {
-      if (key === 't1' || key === 't2') {
-        return parseInt(requireDdata[key]) >= 0
-      } else {
-        return requireDdata[key]
-      }
-    })) return message(t('请输入完整的内容'), { type: "error" })
+    if (
+      !Object.keys(requireDdata).every(key => {
+        if (key === 't1' || key === 't2') {
+          return parseInt(requireDdata[key]) >= 0;
+        } else {
+          return requireDdata[key];
+        }
+      })
+    )
+      return message(t('请输入完整的内容'), { type: 'error' });
 
     childloading.value = true;
     row.isEdit = true;
@@ -180,43 +216,46 @@ export function useSettle() {
       matchId: dataList[parentIndex].matchId,
       matchPeriodId: +row.matchPeriodId,
       player1Name: row.player1Name,
-      dataSourceCode: "SK",
+      dataSourceCode: 'SK',
       remark: '',
       sourceType: 1,
       sportId: currentSportId.value,
       t1: +row.t1,
-      t2: +row.t2,
-    }
+      t2: +row.t2
+    };
 
     let res;
     if (type === 'add') {
-      res = await API.addMatchEvent(params)
+      res = await API.addMatchEvent(params);
     } else {
       params.id = row.id;
       params.canceled = Number(row.canceled);
-      res = await API.updateMatchEvent(params)
+      res = await API.updateMatchEvent(params);
     }
     childloading.value = false;
-    message(res.msg, { type: res.code ? 'error' : "success" });
+    message(res.msg, { type: res.code ? 'error' : 'success' });
     if (res.code) return;
     row.isEdit = false;
-    getChildRenData(parentRow)
-  }
+    getChildRenData(parentRow);
+  };
 
   // 结算
   const settlementFunction = async (matchId: number, type: 'half' | 'all') => {
     try {
       balanceLoading[type] = true;
-      let res;
-      if (type === 'half') res = await API.firstHalfSettlement({ matchId })
-      else res = await API.allSettlement({ matchId })
-      message(res.msg, { type: res.code ? 'error' : 'success' })
+      const res = await API[
+        type === 'half' ? 'firstHalfSettlement' : 'allSettlement'
+      ]({ matchId });
+      
+      message(res.msg, { type: res.code ? 'error' : 'success' });
       balanceLoading[type] = false;
-      onSearch();
+      await onSearch();
+      const row = dataList.find(_ => _.matchId === matchId);
+      getChildRenData(row);
     } catch (error) {
       balanceLoading[type] = false;
     }
-  }
+  };
   onMounted(() => onSearch());
   return {
     form,
@@ -241,6 +280,7 @@ export function useSettle() {
     balanceLoading,
     settlementFunction,
     handleChildrenData,
-    childDataTotal
+    childDataTotal,
+    expandMatchList
   };
 }

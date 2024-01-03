@@ -37,13 +37,16 @@ export const localesConfigs = {
 /**
  * 国际化转换工具函数（自动读取根目录locales文件夹下文件进行国际化匹配）
  * @param message message
- * @returns 转化后的message
  */
+
 export function t(message: any = "", params: any = {}) {
   if (!message) return "";
   const hashKey = `k${crc32.str(message).toString(16)}`;
   let words = i18n.global.t.call(i18n.global.locale, hashKey, params);
-  if (words === hashKey) words = message;
+  if (words === hashKey) {
+    console.log(message, "-未翻译", words, hashKey);
+    words = message;
+  };
   return words;
 }
 

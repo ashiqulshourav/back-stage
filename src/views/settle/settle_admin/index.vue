@@ -14,7 +14,7 @@
       :columns="columns"
       @refresh="onSearch('reload')"
     >
-      <template v-slot="{ size, dynamicColumns }">
+      <template v-slot="{size, dynamicColumns}">
         <pure-table
           align-whole="center"
           showOverflowTooltip
@@ -26,7 +26,7 @@
           :columns="dynamicColumns"
           :pagination="pagination"
           :paginationSmall="size === 'small' ? true : false"
-          :expand-row-keys="[]"
+          :expand-row-keys="expandMatchList"
           :header-cell-style="{
             background: 'var(--el-fill-color-light)',
             color: 'var(--el-text-color-primary)'
@@ -36,7 +36,7 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
-          <template #sn="{ index: parIndex }">{{ parIndex + 1 }}</template>
+          <template #sn="{index: parIndex}">{{ parIndex + 1 }}</template>
           <template
             #expand="{
               row: parentRow,
@@ -64,11 +64,11 @@
                   settlementFunction(parentRow.matchId, key as 'half' | 'all')
                 "
               />
-              <span class="mr-4 ml-4">{{ t("注") }}:</span>
-              <span class="mr-4">A: {{ t("编辑") }}</span>
-              <span class="mr-4">B: {{ t("确认修改") }}</span>
-              <span class="mr-4">C: {{ t("确认新增") }}</span>
-              <span class="mr-4">D: {{ t("删除当前记录") }}</span>
+              <span class="mr-4 ml-4">{{ t('注') }}:</span>
+              <span class="mr-4">A: {{ t('编辑') }}</span>
+              <span class="mr-4">B: {{ t('确认修改') }}</span>
+              <span class="mr-4">C: {{ t('确认新增') }}</span>
+              <span class="mr-4">D: {{ t('删除当前记录') }}</span>
             </div>
             <div class="m-4">
               <div v-for="item in parentRow.childrenData" :key="item.type">
@@ -88,9 +88,9 @@
                     color: 'var(--el-text-color-primary)',
                     textAlign: 'center'
                   }"
-                  :cell-style="{ textAlign: 'center' }"
+                  :cell-style="{textAlign: 'center'}"
                 >
-                  <template #eventCode="{ row, index: childIndex }">
+                  <template #eventCode="{row, index: childIndex}">
                     <el-select
                       :disabled="!row.isEdit"
                       v-model="row.redOrYellow"
@@ -111,7 +111,7 @@
                     <span v-else>{{ MATCH_EVENT_CODE[row.eventCode] }}</span>
                   </template>
 
-                  <template #eventTime="{ row, index: childIndex }">
+                  <template #eventTime="{row, index: childIndex}">
                     <el-date-picker
                       v-model="row.eventTime"
                       type="datetime"
@@ -122,7 +122,7 @@
                       format="YYYY-MM-DD HH:mm:ss"
                     />
                   </template>
-                  <template #matchPeriodId="{ row }">
+                  <template #matchPeriodId="{row}">
                     <el-select
                       :disabled="!row.isEdit"
                       v-model="row.matchPeriodId"
@@ -133,7 +133,7 @@
                     </el-select>
                   </template>
 
-                  <template #homeAway="{ row, index: childIndex }">
+                  <template #homeAway="{row, index: childIndex}">
                     <div>
                       <el-select
                         :disabled="!row.isEdit"
@@ -154,7 +154,7 @@
                     </div>
                   </template>
 
-                  <template #player1Name="{ row }">
+                  <template #player1Name="{row}">
                     <el-input
                       v-model="row.player1Name"
                       :disabled="!row.isEdit"
@@ -229,7 +229,7 @@
 
                       <el-popconfirm
                         v-if="item.tableList.length - 1 === childIndex"
-                        :title="`是否确认删除数据么`"
+                        :title="t('是否确认删除数据么')"
                         @confirm="
                           handleChildrenData(
                             row,
@@ -266,18 +266,19 @@
 </template>
 
 <script setup lang="ts">
-import { PureTableBar } from "@/components/RePureTableBar";
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-import icon_money from "@iconify-icons/ri/money-cny-box-fill";
-import icon_circle_fill from "@iconify-icons/ri/add-circle-fill";
-import { useSettle } from "./utils/hook";
-import SearchForm from "./component/SearchForm.vue";
-import { t } from "@/plugins/i18n";
-import { message } from "@/utils/message";
-import { MATCH_EVENT_CODE } from "@/utils/maps/sports_map";
-import CustomButton from "@/components/Form/CustomButton.vue";
-import SportTypeNav from "./component/SportTypeNav.vue";
-defineOptions({ name: "settle_admin" });
+import {PureTableBar} from '@/components/RePureTableBar';
+import {useRenderIcon} from '@/components/ReIcon/src/hooks';
+import icon_money from '@iconify-icons/ri/money-cny-box-fill';
+import icon_circle_fill from '@iconify-icons/ri/add-circle-fill';
+import {useSettle} from './utils/hook';
+import SearchForm from './component/SearchForm.vue';
+import {t} from '@/plugins/i18n';
+import {message} from '@/utils/message';
+import {MATCH_EVENT_CODE} from '@/utils/maps/sports_map';
+import CustomButton from '@/components/Form/CustomButton.vue';
+import SportTypeNav from './component/SportTypeNav.vue';
+import {MatchEventType} from './utils/type';
+defineOptions({name: 'settle_admin'});
 
 const changeEventTime = (
   row: SattleDataAPI.MatchEventsList,
@@ -286,8 +287,8 @@ const changeEventTime = (
 ) => {
   if (childIndex === 0) return;
   if (row.eventTime <= childrenData[childIndex - 1].eventTime) {
-    message("时间不能小于前一个事件发生时间", { type: "error" });
-    row.eventTime = "";
+    message('时间不能小于前一个事件发生时间', {type: 'error'});
+    row.eventTime = '';
   }
 };
 
@@ -298,27 +299,26 @@ const teamChangeEvent = (
   type: string
 ) => {
   if (!row.homeAway) return;
+  const isHome = row.homeAway === 'home';
+  const isYellowRedCard = type === MatchEventType.YellowRedCard;
   if (childIndex === 0) {
-    if (row.homeAway === "home") {
-      row.t1 = type === "yellow_red_card" ? row.redOrYellow : 1;
-      row.t2 = 0;
-    } else {
-      row.t1 = 0;
-      row.t2 = type === "yellow_red_card" ? row.redOrYellow : 1;
-    }
+    row.t1 = isHome ? (isYellowRedCard ? row.redOrYellow : 1) : 0;
+    row.t2 = isHome ? 0 : isYellowRedCard ? row.redOrYellow : 1;
   } else {
-    if (row.homeAway === "home") {
-      row.t1 =
-        +childrenData[childIndex - 1].t1 +
-        (type === "yellow_red_card" ? (row.redOrYellow as number) : 1);
-      row.t2 = childrenData[childIndex - 1].t2;
-    } else {
-      row.t2 =
-        +childrenData[childIndex - 1].t2 +
-        (type === "yellow_red_card" ? (row.redOrYellow as number) : 1);
-      row.t1 = childrenData[childIndex - 1].t1;
-    }
-    3;
+    const prevRow = childrenData[childIndex - 1];
+    const t1Increment = isHome
+      ? isYellowRedCard
+        ? (row.redOrYellow as number)
+        : 1
+      : 0;
+    const t2Increment = isHome
+      ? 0
+      : isYellowRedCard
+      ? (row.redOrYellow as number)
+      : 1;
+
+    row.t1 = +prevRow.t1 + t1Increment;
+    row.t2 = +prevRow.t2 + t2Increment;
   }
 };
 
@@ -342,7 +342,8 @@ const {
   settlementFunction,
   currentSportId,
   handleChildrenData,
-  childDataTotal
+  childDataTotal,
+  expandMatchList
 } = useSettle();
 </script>
 
@@ -350,6 +351,7 @@ const {
 :deep(.el-dropdown-menu__item i) {
   margin: 0;
 }
+
 .search-form {
   :deep(.el-form-item) {
     margin-bottom: 12px;

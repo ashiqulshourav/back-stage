@@ -20,3 +20,9 @@ export type TempListType = {
   eventCode: 'goal' | 'yellow_red_card' | 'corner'
   redOrYellow?: number;
 }
+
+export enum MatchEventType {
+  Goal = 'goal',
+  YellowRedCard = 'yellow_red_card',
+  Corner = 'corner',
+}
