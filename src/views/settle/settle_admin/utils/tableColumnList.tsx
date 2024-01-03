@@ -42,6 +42,7 @@ export const columns: TableColumnList = [
     label: t("主队"),
     prop: "homeTeamNameCn",
     minWidth: 150,
+    align: 'left',
     formatter: ({ homeTeamNameCn }) => homeTeamNameCn ?? '-',
     headerRenderer: (d) => handleTableWidth(d, t('主队'), 'auto')
   },
@@ -60,6 +61,7 @@ export const columns: TableColumnList = [
   {
     label: t("客队"),
     prop: "awayTeamNameCn",
+    align: 'left',
     minWidth: 150,
     headerRenderer: (d) => handleTableWidth(d, t('客队'), 'auto')
   },

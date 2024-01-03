@@ -4,10 +4,10 @@
       :form="form"
       @resetForm="resetForm"
       :loading="loading"
-      @onSearch="arg => onSearch(...arg)"
+      @onSearch="onSearch"
     />
 
-    <SportTypeNav :currentSportId="currentSportId" />
+    <SportTypeNav :currentSportId="currentSportId" @onSearch="onSearch" />
 
     <PureTableBar
       :title="t('结算管理')"
