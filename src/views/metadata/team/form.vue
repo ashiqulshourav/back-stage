@@ -6,7 +6,6 @@
     label-width="150px"
   >
     <el-form-item :label="`${t('球队Logo')}:`" prop="teamLogo">
-      <!-- action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" -->
       <el-upload
         class="avatar-uploader"
         :show-file-list="false"
@@ -20,7 +19,7 @@
       </el-upload>
     </el-form-item>
 
-    <el-form-item label="国家地区ID" prop="countryId">
+    <el-form-item :label="t('国家地区ID')" prop="countryId">
       <el-input
         v-model="newFormInline.countryId"
         clearable
@@ -39,13 +38,13 @@
       <el-input v-model="newFormInline.leagueId" :placeholder="t('联赛ID')" />
     </el-form-item>
 
-    <el-form-item label="赛事等级">
-      <el-input v-model="newFormInline.level" placeholder="赛事等级" />
+    <el-form-item :label="t('球队等级')">
+      <el-input v-model="newFormInline.level" :placeholder="t('球队等级')" />
     </el-form-item>
 
-    <el-form-item label="赛种ID">
+    <!-- <el-form-item label="赛种ID">
       <el-input v-model="newFormInline.sportId" placeholder="赛种ID" />
-    </el-form-item>
+    </el-form-item> -->
 
     <el-form-item :label="`${t('主场名称')}:`">
       <el-input
@@ -71,12 +70,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { formRules } from "./utils/rule";
-import { TeamFormProps } from "./utils/types";
-import type { UploadProps } from "element-plus";
-import { Plus } from "@element-plus/icons-vue";
-import { t } from "@/plugins/i18n";
+import { ref } from 'vue';
+import { formRules } from './utils/rule';
+import { TeamFormProps } from './utils/types';
+import type { UploadProps } from 'element-plus';
+import { Plus } from '@element-plus/icons-vue';
+import { t } from '@/plugins/i18n';
 
 const props = withDefaults(defineProps<TeamFormProps>(), {
   formInline: () => ({
@@ -84,15 +83,15 @@ const props = withDefaults(defineProps<TeamFormProps>(), {
     countryId: 0,
     sportId: 0,
     leagueId: 0,
-    teamNameCn: "",
-    teamNameEn: "",
-    teamLogo: "",
+    teamNameCn: '',
+    teamNameEn: '',
+    teamLogo: '',
     isCountryTeam: 0,
     level: 0
   })
 });
 
-const beforeAvatarUpload: UploadProps["beforeUpload"] = _rawFile => {
+const beforeAvatarUpload: UploadProps['beforeUpload'] = _rawFile => {
   // if (rawFile.type !== "image/jpeg") {
   //   console.log("Avatar picture must be JPG format!");
   //   return false;
@@ -103,14 +102,14 @@ const beforeAvatarUpload: UploadProps["beforeUpload"] = _rawFile => {
   return true;
 };
 
-const handleAvatarSuccess: UploadProps["onSuccess"] = (
+const handleAvatarSuccess: UploadProps['onSuccess'] = (
   _response,
   _uploadFile
 ) => {};
 
 const onImgChange = respose => {
   imageUrl.value = URL.createObjectURL(respose.raw);
-  console.log("form.vue文件 87==============行打印=", imageUrl.value);
+  console.log('form.vue文件 87==============行打印=', imageUrl.value);
 };
 
 const ruleFormRef = ref();

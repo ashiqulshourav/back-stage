@@ -1,19 +1,21 @@
 <template>
   <div class="main">
+    <SerachForm :loading="loading" @onSearch="onSearch" />
+
     <PureTableBar
-      :title="t('电子竞技- 联赛库')"
+      :title="t('联赛库')"
       :columns="columns"
       @refresh="onSearch('reload')"
     >
-      <template #buttons>
+      <!-- <template #buttons>
         <el-button
           type="primary"
           :icon="useRenderIcon(AddFill)"
           @click="openDialog(t('新增'))"
         >
-          {{ t("新增联赛") }}
+          {{ t('新增联赛') }}
         </el-button>
-      </template>
+      </template> -->
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"
@@ -33,7 +35,7 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
-          <template #operation="{ row }">
+          <!--  <template #operation="{ row }">
             <el-button
               class="reset-margin"
               link
@@ -42,9 +44,9 @@
               :icon="useRenderIcon(EditPen)"
               @click="openDialog(t('编辑赛事'), row)"
             >
-              {{ t("编辑") }}
+              {{ t('编辑') }}
             </el-button>
-          </template>
+          </template> -->
         </pure-table>
       </template>
     </PureTableBar>
@@ -52,32 +54,25 @@
 </template>
 
 <script setup lang="ts">
-import { PureTableBar } from "@/components/RePureTableBar";
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-import Search from "@iconify-icons/ep/search";
-import Refresh from "@iconify-icons/ep/refresh";
-import EditPen from "@iconify-icons/ep/edit-pen";
-import AddFill from "@iconify-icons/ri/add-circle-line";
-import { useLeague } from "./utils/hook";
+import { PureTableBar } from '@/components/RePureTableBar';
+// import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+// import EditPen from '@iconify-icons/ep/edit-pen';
+// import AddFill from '@iconify-icons/ri/add-circle-line';
+import { useLeague } from './utils/hook';
+import SerachForm from './component/SerchForm.vue';
 
-import { t } from "@/plugins/i18n";
-defineOptions({ name: "League" });
+import { t } from '@/plugins/i18n';
+defineOptions({ name: 'League' });
 
-const formRef = ref();
 const {
   loading,
   columns,
   dataList,
-  switchStyle,
   pagination,
   onSearch,
-  resetForm,
   handleTableWidthChange,
-  handleCurrentChange,
-  handleSelectionChange,
-  switchLoadMap,
-  openDialog,
-  changeSwitch
+  handleCurrentChange
+  // openDialog
 } = useLeague();
 </script>
 

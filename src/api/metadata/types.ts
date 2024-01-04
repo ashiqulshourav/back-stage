@@ -1,4 +1,17 @@
 declare namespace MetadataAPI {
+  type LeagueListParams = {
+    pageNum: number
+    pageSize: number;
+    countryId?: number;
+    leagueId?: number;
+    leagueId188Bet?: number;
+    leagueLogo?: string;
+    leagueNameCn?: string;
+    leagueNameEn?: string;
+    level?: number;
+    sportId?: number;
+  }
+
   type LeagueList = {
     leagueId: number | string;
     sportId: number | string;
@@ -61,7 +74,7 @@ declare namespace MetadataAPI {
     gender: string;
     height: number;
     isCountryPlayer: number;
-    简称: string;
+    nickName: string;
     pageNum: number;
     pageSize: number;
     picture: string;
@@ -69,10 +82,26 @@ declare namespace MetadataAPI {
     playerNameCn: string;
     teamId: number;
   }
+
   type PlayerListData = Omit<LeagueListData, 'list'> & { list: PlayerList[] }
   type PlayerListRes = {
     code: number;
     msg: string;
     data: PlayerListData;
+  }
+
+  type TeamListParamsType = {
+    pageNum: number;
+    pageSize: number;
+    countryId?: number;
+    isCountryTeam?: number;
+    leagueId?: number;
+    level?: number;
+    sportId?: number;
+    stadiumName?: string;
+    teamId?: number;
+    teamLogo?: string;
+    teamNameCn?: string;
+    teamNameEn?: string;
   }
 }

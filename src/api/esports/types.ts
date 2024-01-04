@@ -1,32 +1,83 @@
 declare namespace ESportsAPI {
-  type League = {
-    key?: number;
+
+  type ESportsLeagueListParams = Partial<MetadataAPI.LeagueListParams>;
+  type ESportsTeamListParams = Partial<MetadataAPI.TeamListParamsType>;
+
+  type ESportsLeagueListArrType = {
     leagueId: number;
+    sportId: number;
+    countryId: number;
     leagueNameCn: string;
     leagueNameEn: string;
-    leagueName: string;
-    dataSource: string;
-    dataSourceName: string;
-    sort: number;
+    leagueLogo: string;
+    leagueId188Bet: number;
+    level: number;
   }
-  type LeagueListFetchProps = COMMON.ListFetchProps & {
-    leagueId?: number;
-  }
-  type LeagueListData = COMMON.ListData<League>
-  type LeagueListRes = COMMON.ListRes<LeagueListData>
 
-  type Team = {
-    key?: number;
+  type ESportsLeagueListDataType = {
+    total: number;
+    list: ESportsLeagueListArrType[];
+    pageNum: number;
+    pageSize: number;
+    size: number;
+    startRow: number;
+    endRow: number;
+    pages: number;
+    prePage: number;
+    nextPage: number;
+    isFirstPage: boolean;
+    isLastPage: boolean;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
+    navigatePages: number;
+    navigatepageNums: number[];
+    navigateFirstPage: number;
+    navigateLastPage: number;
+  }
+
+  type ESportsLeagueListType = {
+    code: number;
+    ts: number;
+    msg: string;
+    data: ESportsLeagueListDataType;
+  }
+
+  type ESportsTeamListType = {
     teamId: number;
+    countryId: number;
+    sportId: number;
+    leagueId: number;
     teamNameCn: string;
     teamNameEn: string;
-    teamName: string;
-    dataSource: string;
-    dataSourceName: string;
+    teamLogo: string;
+    level: number;
   }
-  type TeamListFetchProps = COMMON.ListFetchProps & {
-    teamId?: number;
+
+  type ESportsTeamListDataType = {
+    total: number;
+    list: ESportsTeamListType[];
+    pageNum: number;
+    pageSize: number;
+    size: number;
+    startRow: number;
+    endRow: number;
+    pages: number;
+    prePage: number;
+    nextPage: number;
+    isFirstPage: boolean;
+    isLastPage: boolean;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
+    navigatePages: number;
+    navigatepageNums: number[];
+    navigateFirstPage: number;
+    navigateLastPage: number;
   }
-  type TeamListData = COMMON.ListData<Team>
-  type TeamListRes = COMMON.ListRes<TeamListData>
+
+  type ESportsTeamListResType = {
+    code: number;
+    ts: number;
+    msg: string;
+    data: ESportsTeamListDataType;
+  }
 }

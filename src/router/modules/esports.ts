@@ -18,9 +18,9 @@ export default {
       }
     },
     {
-      path: "/esports/teams",
-      name: "eTeams",
-      component: () => import("@/views/esports/teams/index.vue"),
+      path: "/esports/team",
+      name: "eTeam",
+      component: () => import("@/views/esports/team/index.vue"),
       meta: {
         title: t('球队库'),
         showParent: true,

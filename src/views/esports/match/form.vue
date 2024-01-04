@@ -68,20 +68,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { formRules } from "./utils/rule";
-import { FormProps } from "./utils/types";
+import { ref } from 'vue';
+import { formRules } from './utils/rule';
+import { FormProps } from './utils/types';
 
-import { t } from "@/plugins/i18n";
+import { t } from '@/plugins/i18n';
 
 const props = withDefaults(defineProps<FormProps>(), {
   formInline: () => ({
-    leagueId: "",
-    leagueNameCn: "",
-    leagueNameEn: "",
-    leagueName: "",
-    dataSource: "",
-    dataSourceName: "",
+    leagueId: '',
+    leagueNameCn: '',
+    leagueNameEn: '',
+    leagueName: '',
+    dataSource: '',
+    dataSourceName: '',
     sort: -1
   })
 });

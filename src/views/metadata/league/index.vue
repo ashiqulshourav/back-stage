@@ -63,10 +63,10 @@
           :loading="loading"
           @click="onSearch('reload')"
         >
-          {{ t("筛选") }}
+          {{ t('筛选') }}
         </el-button>
         <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
-          {{ t("重置") }}
+          {{ t('重置') }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -82,7 +82,7 @@
           :icon="useRenderIcon(AddFill)"
           @click="openDialog(t('新增联赛'))"
         >
-          {{ t("新增联赛") }}
+          {{ t('新增联赛') }}
         </el-button>
       </template>
       <template v-slot="{ size, dynamicColumns }">
@@ -125,7 +125,7 @@
               :icon="useRenderIcon(EditPen)"
               @click="openDialog(t('编辑赛事'), row)"
             >
-              {{ t("编辑") }}
+              {{ t('编辑') }}
             </el-button>
             <el-popconfirm
               :title="`是否确认删除${row.name}的这条数据`"
@@ -139,7 +139,7 @@
                   :size="size"
                   :icon="useRenderIcon(Delete)"
                 >
-                  {{ t("删除") }}
+                  {{ t('删除') }}
                 </el-button>
               </template>
             </el-popconfirm>
@@ -151,21 +151,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { PureTableBar } from "@/components/RePureTableBar";
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-import Delete from "@iconify-icons/ep/delete";
-import EditPen from "@iconify-icons/ep/edit-pen";
-import Search from "@iconify-icons/ep/search";
-import Refresh from "@iconify-icons/ep/refresh";
-import AddFill from "@iconify-icons/ri/add-circle-line";
-import { useLeague } from "./utils/hook";
+import { ref } from 'vue';
+import { PureTableBar } from '@/components/RePureTableBar';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import Delete from '@iconify-icons/ep/delete';
+import EditPen from '@iconify-icons/ep/edit-pen';
+import Search from '@iconify-icons/ep/search';
+import Refresh from '@iconify-icons/ep/refresh';
+import AddFill from '@iconify-icons/ri/add-circle-line';
+import { useLeague } from './utils/hook';
+import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
-import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
+import { t } from '@/plugins/i18n';
 
-import { t } from "@/plugins/i18n";
-
-defineOptions({ name: "League" });
+defineOptions({ name: 'League' });
 
 const formRef = ref();
 const {

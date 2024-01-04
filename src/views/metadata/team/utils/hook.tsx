@@ -1,13 +1,12 @@
-import editForm from "../form.vue";
-import { message } from "@/utils/message";
+import editForm from '../form.vue';
+import { message } from '@/utils/message';
 // import { ElMessageBox } from "element-plus";
-import { addDialog } from "@/components/ReDialog";
-import type { PaginationProps } from "@pureadmin/table";
-import { reactive, ref, onMounted, h } from "vue";
+import { addDialog } from '@/components/ReDialog';
+import type { PaginationProps } from '@pureadmin/table';
+import { reactive, ref, onMounted, h } from 'vue';
 // import { usePublicHooks } from "@/hooks";
-import { removeEmptyStringKeys } from "@/utils/utilFn";
-import { t } from "@/plugins/i18n";
-import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
+import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { columns } from '../component/TableColumnList';
 
 export function useLeague() {
   const form = reactive({
@@ -20,7 +19,7 @@ export function useLeague() {
     stadiumName: '',
     teamLogo: '',
     teamNameCn: '',
-    teamNameEn: '',
+    teamNameEn: ''
   });
   const formRef = ref();
   const dataList = reactive<MetadataAPI.TeamList[]>([]);
@@ -31,64 +30,7 @@ export function useLeague() {
     currentPage: 1,
     background: true
   });
-  const columns: TableColumnList = [
-    {
-      label: t("球队ID"),
-      prop: "teamId",
-      minWidth: 100
-    },
-    {
-      label: t('球队Logo'),
-      prop: "teamLogo",
-      slot: "teamLogo",
-      minWidth: 120
-    },
-    {
-      label: t('国家地区ID'),
-      prop: "countryId",
-    },
-    {
-      label: t('是否国家队'),
-      prop: "isCountryTeam",
-      slot: "isCountryTeam"
-    },
-    {
-      label: t('联赛ID'),
-      prop: "leagueId",
-    },
-    {
-      label: t('赛事等级'),
-      prop: "level",
-    },
-    {
-      label: t('赛种'),
-      prop: "sportId",
-      formatter: ({ sportId }): string => SPORT_ID_MAP.find(_ => _.value === sportId).label,
-      minWidth: 150
-    },
-    {
-      label: t('主场名称'),
-      prop: "stadiumName",
-      slot: 'stadiumName',
-      minWidth: 150
-    },
-    {
-      label: t('球队中文名称'),
-      prop: "teamNameCn",
-      minWidth: 150
-    },
-    {
-      label: t('球队英文名称'),
-      prop: "teamNameEn",
-      minWidth: 150
-    },
-    // {
-    //   label: t('操作'),
-    //   fixed: "right",
-    //   width: 240,
-    //   slot: "operation"
-    // }
-  ];
+
   // const buttonClass = computed(() => {
   //   return [
   //     "!h-[20px]",
@@ -99,24 +41,23 @@ export function useLeague() {
   //   ];
   // });
 
-
   function handleDelete(row) {
-    message(`您删除了角色名称为${row.name}的这条数据`, { type: "success" });
+    message(`您删除了角色名称为${row.name}的这条数据`, { type: 'success' });
     onSearch();
   }
 
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
-    onSearch()
+    onSearch();
   }
 
   function handleCurrentChange(val: number) {
     pagination.currentPage = val;
-    onSearch()
+    onSearch();
   }
 
   function handleSelectionChange(val) {
-    console.log("handleSelectionChange", val);
+    console.log('handleSelectionChange', val);
   }
 
   async function onSearch(type?: string) {
@@ -128,13 +69,13 @@ export function useLeague() {
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage
     });
-    if (res.code) return message(res.msg, { type: "error" });
+    if (res.code) return message(res.msg, { type: 'error' });
     dataList.length = 0;
     dataList.push(...res.data.list);
     pagination.total = res.data.total;
     pagination.pageSize = res.data.pageSize;
     pagination.currentPage = res.data.pageNum;
-    setTimeout(() => loading.value = false, 500);
+    setTimeout(() => (loading.value = false), 500);
   }
 
   const resetForm = formEl => {
@@ -155,10 +96,10 @@ export function useLeague() {
           level: row?.level ?? '',
           countryId: row?.countryId ?? '',
           leagueId: row?.leagueId ?? '',
-          sportId: row?.sportId ?? '',
+          sportId: row?.sportId ?? ''
         }
       },
-      width: "40%",
+      width: '40%',
       draggable: true,
       fullscreenIcon: true,
       closeOnClickModal: false,
@@ -166,7 +107,7 @@ export function useLeague() {
       beforeSure: (done, { options }) => {
         const FormRef = formRef.value.getRef();
         function chores() {
-          console.log('hook.tsx文件 167==============行打印=', options)
+          console.log('hook.tsx文件 167==============行打印=', options);
           // message(`您${title}了角色名称为${curData.name}的这条数据`, {
           //   type: "success"
           // });
@@ -176,7 +117,7 @@ export function useLeague() {
         FormRef.validate(valid => {
           if (valid) {
             // 表单规则校验通过
-            if (title === "新增") {
+            if (title === '新增') {
               // 实际开发先调用新增接口，再进行下面操作
               chores();
             } else {

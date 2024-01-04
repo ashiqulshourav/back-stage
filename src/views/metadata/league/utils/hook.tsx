@@ -1,23 +1,22 @@
-import editForm from "../form.vue";
-import { message } from "@/utils/message";
-import { FormItemProps } from "element-plus";
-import { addDialog } from "@/components/ReDialog";
-import type { PaginationProps } from "@pureadmin/table";
-import { reactive, ref, onMounted, h } from "vue";
-import { removeEmptyStringKeys } from "@/utils/utilFn";
-import { t } from "@/plugins/i18n";
-import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
-
+import editForm from '../form.vue';
+import { message } from '@/utils/message';
+import { FormItemProps } from 'element-plus';
+import { addDialog } from '@/components/ReDialog';
+import type { PaginationProps } from '@pureadmin/table';
+import { reactive, ref, onMounted, h } from 'vue';
+import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { t } from '@/plugins/i18n';
+import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
 export function useLeague() {
   const form = reactive({
-    leagueNameCn: "",
-    leagueNameEn: "",
-    level: "",
-    countryId: "",
-    leagueId: "",
-    leagueId188Bet: "",
-    sportId: ""
+    leagueNameCn: '',
+    leagueNameEn: '',
+    level: '',
+    countryId: '',
+    leagueId: '',
+    leagueId188Bet: '',
+    sportId: ''
   });
   const formRef = ref();
   const dataList = reactive<MetadataAPI.LeagueList[]>([]);
@@ -30,47 +29,48 @@ export function useLeague() {
   });
   const columns: TableColumnList = [
     {
-      label: t("联赛杯赛ID"),
-      prop: "leagueId",
+      label: t('联赛杯赛ID'),
+      prop: 'leagueId',
       minWidth: 100
     },
     {
-      label: t("联赛杯赛Logo"),
-      prop: "leagueLogo",
-      slot: "leagueLogo",
+      label: t('联赛杯赛Logo'),
+      prop: 'leagueLogo',
+      slot: 'leagueLogo',
       minWidth: 120
     },
     {
-      label: t("国家地区ID"),
-      prop: "countryId",
+      label: t('国家地区ID'),
+      prop: 'countryId',
       minWidth: 150
     },
     {
-      label: t("188数据源联赛杯赛ID"),
-      prop: "leagueId188Bet",
+      label: t('188数据源联赛杯赛ID'),
+      prop: 'leagueId188Bet',
       minWidth: 150
     },
     {
-      label: t("联赛杯ID"),
-      prop: "leagueNameCn",
+      label: t('联赛杯ID'),
+      prop: 'leagueNameCn',
       minWidth: 150
     },
     {
-      label: t("联赛杯赛英文名称"),
-      prop: "leagueNameEn",
+      label: t('联赛杯赛英文名称'),
+      prop: 'leagueNameEn',
       minWidth: 150
     },
     {
-      label: t("赛事等级"),
-      prop: "level",
+      label: t('赛事等级'),
+      prop: 'level',
       minWidth: 150
     },
     {
       label: t('赛种'),
-      prop: "sportId",
-      formatter: ({ sportId }): string => SPORT_ID_MAP.find(_ => _.value === sportId).label,
+      prop: 'sportId',
+      formatter: ({ sportId }): string =>
+        SPORT_ID_MAP.find(_ => _.value === sportId).label,
       minWidth: 150
-    },
+    }
     /* {
       label: t('操作'),
       fixed: "right",
@@ -89,13 +89,13 @@ export function useLeague() {
   // });
 
   function handleDelete(row) {
-    message(`您删除了角色名称为${row.name}的这条数据`, { type: "success" });
+    message(`您删除了角色名称为${row.name}的这条数据`, { type: 'success' });
     onSearch();
   }
 
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
-    onSearch()
+    onSearch();
   }
 
   function handleCurrentChange(val: number) {
@@ -104,11 +104,11 @@ export function useLeague() {
   }
 
   function handleSelectionChange(val) {
-    console.log("handleSelectionChange", val);
+    console.log('handleSelectionChange', val);
   }
 
   async function onSearch(type?: string) {
-    if (type === "reload") {
+    if (type === 'reload') {
       pagination.currentPage = 1;
     }
     try {
@@ -125,11 +125,10 @@ export function useLeague() {
       pagination.total = res.data.total;
       pagination.pageSize = res.data.pageSize;
       pagination.currentPage = res.data.pageNum;
-      loading.value = false
+      loading.value = false;
     } catch (error) {
-      loading.value = false
+      loading.value = false;
     }
-
   }
 
   const resetForm = formEl => {
@@ -143,17 +142,17 @@ export function useLeague() {
       title,
       props: {
         formInline: {
-          leagueNameCn: row?.leagueNameCn ?? "",
-          leagueNameEn: row?.leagueNameEn ?? "",
-          leagueId188Bet: row?.leagueId188Bet ?? "",
-          leagueLogo: row?.leagueLogo ?? "",
-          level: row?.level ?? "",
-          countryId: row?.countryId ?? "",
-          leagueId: row?.leagueId ?? "",
-          sportId: row?.sportId ?? ""
+          leagueNameCn: row?.leagueNameCn ?? '',
+          leagueNameEn: row?.leagueNameEn ?? '',
+          leagueId188Bet: row?.leagueId188Bet ?? '',
+          leagueLogo: row?.leagueLogo ?? '',
+          level: row?.level ?? '',
+          countryId: row?.countryId ?? '',
+          leagueId: row?.leagueId ?? '',
+          sportId: row?.sportId ?? ''
         }
       },
-      width: "40%",
+      width: '40%',
       draggable: true,
       fullscreenIcon: true,
       closeOnClickModal: false,
@@ -170,9 +169,9 @@ export function useLeague() {
         }
         FormRef.validate(valid => {
           if (valid) {
-            console.log("curData", curData);
+            console.log('curData', curData);
             // 表单规则校验通过
-            if (title === "新增") {
+            if (title === '新增') {
               // 实际开发先调用新增接口，再进行下面操作
               chores();
             } else {

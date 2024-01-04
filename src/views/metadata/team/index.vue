@@ -11,6 +11,7 @@
           v-model="form.teamId"
           :placeholder="t('球队ID')"
           clearable
+          v-enter="() => onSearch('reload')"
           class="!w-[200px]"
         />
       </el-form-item>
@@ -18,6 +19,7 @@
         <el-input
           v-model="form.countryId"
           :placeholder="t('国家地区ID')"
+          v-enter="() => onSearch('reload')"
           class="!w-[200px]"
         />
       </el-form-item>
@@ -32,14 +34,16 @@
           v-model="form.leagueId"
           :placeholder="t('联赛ID')"
           clearable
+          v-enter="() => onSearch('reload')"
           class="!w-[200px]"
         />
       </el-form-item>
-      <el-form-item :label="`${t('赛事等级')}:`" prop="level">
+      <el-form-item :label="`${t('球队等级')}:`" prop="level">
         <el-input
           v-model="form.level"
-          :placeholder="t('赛事等级')"
+          :placeholder="t('球队等级')"
           clearable
+          v-enter="() => onSearch('reload')"
           class="!w-[200px]"
         />
       </el-form-item>
@@ -58,6 +62,7 @@
           v-model="form.teamNameCn"
           :placeholder="t('球队中文名称')"
           clearable
+          v-enter="() => onSearch('reload')"
           class="!w-[200px]"
         />
       </el-form-item>
@@ -66,6 +71,7 @@
           v-model="form.teamNameEn"
           :placeholder="t('球队英文名称')"
           clearable
+          v-enter="() => onSearch('reload')"
           class="!w-[200px]"
         />
       </el-form-item>
@@ -76,10 +82,10 @@
           :loading="loading"
           @click="onSearch('reload')"
         >
-          {{ t("筛选") }}
+          {{ t('筛选') }}
         </el-button>
         <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
-          {{ t("重置") }}
+          {{ t('重置') }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -119,10 +125,10 @@
           @page-current-change="handleCurrentChange"
         >
           <template #isCountryTeam="row">
-            {{ row.isCountryTeam ?? "-" }}
+            {{ row.isCountryTeam ?? '-' }}
           </template>
           <template #stadiumName="row">
-            {{ row.stadiumName ?? "-" }}
+            {{ row.stadiumName ?? '-' }}
           </template>
           <template #teamLogo="{ row, index }">
             <el-image
@@ -144,7 +150,7 @@
               :icon="useRenderIcon(EditPen)"
               @click="openDialog(t('编辑赛事'), row)"
             >
-              {{ t("编辑") }}
+              {{ t('编辑') }}
             </el-button>
             <el-popconfirm
               :title="`是否确认删除角色名称为${row.name}的这条数据`"
@@ -158,7 +164,7 @@
                   :size="size"
                   :icon="useRenderIcon(Delete)"
                 >
-                  {{ t("删除") }}
+                  {{ t('删除') }}
                 </el-button>
               </template>
             </el-popconfirm>
@@ -170,21 +176,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { PureTableBar } from "@/components/RePureTableBar";
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
+import { ref } from 'vue';
+import { PureTableBar } from '@/components/RePureTableBar';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 
-import Delete from "@iconify-icons/ep/delete";
-import EditPen from "@iconify-icons/ep/edit-pen";
-import Search from "@iconify-icons/ep/search";
-import Refresh from "@iconify-icons/ep/refresh";
-import AddFill from "@iconify-icons/ri/add-circle-line";
-import { useLeague } from "./utils/hook";
+import Delete from '@iconify-icons/ep/delete';
+import EditPen from '@iconify-icons/ep/edit-pen';
+import Search from '@iconify-icons/ep/search';
+import Refresh from '@iconify-icons/ep/refresh';
+// import AddFill from '@iconify-icons/ri/add-circle-line';
+import { useLeague } from './utils/hook';
 
-import { t } from "@/plugins/i18n";
-import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
+import { t } from '@/plugins/i18n';
+import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
-defineOptions({ name: "League" });
+defineOptions({ name: 'League' });
 
 const formRef = ref();
 const {
