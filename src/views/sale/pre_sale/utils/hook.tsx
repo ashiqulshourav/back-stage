@@ -3,21 +3,32 @@ import editForm from '../form.vue';
 import type { PaginationProps } from '@pureadmin/table';
 import { ElMessageBox } from 'element-plus';
 import { FormItemProps } from 'element-plus';
-import { usePublicHooks } from '@/hooks';
 import { addDialog } from '@/components/ReDialog';
+import { SearchFormType } from './types';
+import { usePublicHooks } from '@/hooks';
+import { removeEmptyStringKeys } from '@/utils/utilFn';
 
 export function usePreSale() {
   const formRef = ref();
   const dataList = reactive<SaleDataAPI.PreSaleList[]>([]);
   const loading = ref(true);
   const switchLoadMap = ref({});
-  const { switchStyle } = usePublicHooks();
   const allSaleSatatus = ref(0);
+  const { switchStyle } = usePublicHooks();
+  const isLockAll = ref(true);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
     currentPage: 1,
     background: true
+  });
+  const searchForm = reactive<SearchFormType>({
+    matchId: '',
+    matchName: '',
+    isSale: '',
+    sportId: '',
+    beginTime: '',
+    leagueNameCn: ''
   });
 
   function changeSwitch({
@@ -56,8 +67,9 @@ export function usePreSale() {
     onSearch();
   }
 
-  function handleSelectionChange(val) {
-    console.log('handleSelectionChange', val);
+  function handleSelectionChange(slectList) {
+    console.log('handleSelectionChange', slectList);
+    isLockAll.value = slectList.length !== dataList.length;
   }
 
   const openDialog = (title: string, row?: SaleDataAPI.PreSaleList) => {
@@ -97,11 +109,11 @@ export function usePreSale() {
     });
   };
 
-  async function onSearch(type?: string, params?) {
+  async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     loading.value = true;
     const res: SaleDataAPI.PreSaleListRes = await API.getPreSaleList({
-      ...params,
+      ...removeEmptyStringKeys(searchForm),
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage
     });
@@ -162,10 +174,12 @@ export function usePreSale() {
     switchLoadMap,
     handleCurrentChange,
     handleSelectionChange,
-    switchStyle,
     openDialog,
     changeSwitch,
     changeAllSaleStatus,
-    allSaleSatatus
+    allSaleSatatus,
+    searchForm,
+    isLockAll,
+    switchStyle
   };
 }

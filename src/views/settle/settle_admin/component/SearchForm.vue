@@ -43,7 +43,7 @@
       <el-input
         v-model="form.matchName"
         :placeholder="t('赛事名称')"
-         @keyup.enter="searchVal"
+        @keyup.enter="searchVal"
         clearable
       />
     </el-form-item>
@@ -72,27 +72,27 @@
         :loading="loading"
         @click="searchVal"
       >
-        {{ t("筛选") }}
+        {{ t('筛选') }}
       </el-button>
       <el-button
         :icon="useRenderIcon(icon_refresh)"
         @click="resetForm(formRef)"
       >
-        {{ t("重置") }}
+        {{ t('重置') }}
       </el-button>
     </el-form-item>
   </el-form>
 </template>
 
 <script setup lang="ts">
-import icon_serch from "@iconify-icons/ep/search";
-import icon_refresh from "@iconify-icons/ep/refresh";
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-import { t } from "@/plugins/i18n";
-import { FormProps } from "../utils/type";
+import icon_serch from '@iconify-icons/ep/search';
+import icon_refresh from '@iconify-icons/ep/refresh';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import { t } from '@/plugins/i18n';
+import { FormProps } from '../utils/type';
 // import { useLeague } from "../utils/hook";
 const formRef = ref();
-const emit = defineEmits(["onSearch", "resetForm"]);
+const emit = defineEmits(['onSearch', 'resetForm']);
 // import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
 
 defineProps<{
@@ -101,11 +101,11 @@ defineProps<{
 }>();
 
 const searchVal = () => {
-  emit("onSearch", "reload");
+  emit('onSearch', 'reload');
 };
 
 const resetForm = formRef => {
-  emit("resetForm", formRef);
+  emit('resetForm', formRef);
 };
 </script>
 

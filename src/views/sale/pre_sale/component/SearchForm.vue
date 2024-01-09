@@ -31,7 +31,7 @@
       />
     </el-form-item>
 
-    <el-form-item :label="`${t('比赛时间')}:`" prop="sportId">
+    <el-form-item :label="`${t('比赛时间')}:`" prop="beginTime">
       <el-button
         v-for="(item, index) in nextDayArr"
         :key="index"
@@ -46,6 +46,8 @@
         :placeholder="t('其他日期')"
         value-format="x"
         format="YYYY-MM-DD HH:mm:ss"
+        :disabled-date="disableDate"
+        @change="dateChange"
       />
     </el-form-item>
 
@@ -82,34 +84,34 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import Search from '@iconify-icons/ep/search';
 import Refresh from '@iconify-icons/ep/refresh';
 import type { FormInstance } from 'element-plus';
-import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { SearchFormType } from '../utils/types';
 import dayjs from 'dayjs';
+import { disableDate } from '@/utils/formmatDate';
 
 defineProps<{
   loading: boolean;
+  form: SearchFormType;
 }>();
 const formRef = ref();
-const form = reactive({
-  matchId: '',
-  matchName: '',
-  isSale: '',
-  sportId: '',
-  beginTime: '',
-  leagueNameCn: ''
-});
 const emits = defineEmits(['onSearch']);
 const selectIndex = ref(-1);
-const resetForm = (formEl: FormInstance | undefined) => {
-  formEl.resetFields();
-  search();
-};
 
 onMounted(() => {
   getLeagueList();
 });
 
+const dateChange = t => {
+  const d = dayjs(t).format('YYYY-MM-DD');
+  selectIndex.value = nextDayArr.value.findIndex(_ => _ === d);
+};
+
+const resetForm = (formEl: FormInstance | undefined) => {
+  formEl.resetFields();
+  search();
+};
+
 const search = () => {
-  emits('onSearch', ...['reload', removeEmptyStringKeys(form)]);
+  emits('onSearch', ...['reload']);
 };
 
 const nextDayArr = computed(() => {

@@ -1,7 +1,6 @@
 <template>
   <div class="main">
-    <SerachForm :loading="loading" @onSearch="onSearch" />
-
+    <SearchForm :loading="loading" @onSearch="onSearch" :form="form" />
     <PureTableBar
       title="球队管理列表"
       :columns="columns"
@@ -94,7 +93,7 @@ import { PureTableBar } from '@/components/RePureTableBar';
 
 // import AddFill from '@iconify-icons/ri/add-circle-line';
 import { useLeague } from './utils/hook';
-import SerachForm from './component/SerachForm.vue';
+import SearchForm from './component/SearchForm.vue';
 
 // import { t } from '@/plugins/i18n';
 
@@ -110,7 +109,8 @@ const {
   // handleDelete,
   handleTableWidthChange,
   handleCurrentChange,
-  handleSelectionChange
+  handleSelectionChange,
+  form
 } = useLeague();
 </script>
 

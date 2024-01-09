@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <SearchForm :loading="loading" @on-search="onSearch" />
+    <SearchForm :loading="loading" @on-search="onSearch" :form="searchForm" />
     <PureTableBar
       :title="t('球队管理列表')"
       :columns="columns"
@@ -91,7 +91,7 @@ import { PureTableBar } from '@/components/RePureTableBar';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 // import Delete from '@iconify-icons/ep/delete';
 import EditPen from '@iconify-icons/ep/edit-pen';
-import { useLeague } from './utils/hook';
+import { useTeam } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
 import { t } from '@/plugins/i18n';
 
@@ -107,6 +107,7 @@ const {
   // handleDelete,
   handleTableWidthChange,
   handleCurrentChange,
-  handleSelectionChange
-} = useLeague();
+  handleSelectionChange,
+  searchForm
+} = useTeam();
 </script>

@@ -46,7 +46,7 @@
         class="!w-[200px]"
       />
     </el-form-item>
-    
+
     <el-form-item :label="`${t('赛种')}:`" prop="sportId">
       <el-select v-model="form.sportId" :placeholder="t('赛种')">
         <el-option
@@ -97,25 +97,15 @@ import SearchIcon from '@iconify-icons/ep/search';
 import RefreshIcon from '@iconify-icons/ep/refresh';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import type { FormInstance } from 'element-plus';
-import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { t } from '@/plugins/i18n';
+import { SearchFormType } from '../utils/types';
+
 defineProps<{
   loading: boolean;
+  form: SearchFormType;
 }>();
 
-const form = reactive({
-  teamId: '',
-  countryId: '',
-  isCountryTeam: '',
-  leagueId: '',
-  level: '',
-  sportId: '',
-  stadiumName: '',
-  teamLogo: '',
-  teamNameCn: '',
-  teamNameEn: ''
-});
 const emits = defineEmits(['onSearch']);
 const formRef = ref();
 const resetForm = (formEl: FormInstance | undefined) => {
@@ -124,7 +114,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
 };
 
 const search = () => {
-  emits('onSearch', ...['reload', removeEmptyStringKeys(form)]);
+  emits('onSearch', ...['reload']);
 };
 </script>
 

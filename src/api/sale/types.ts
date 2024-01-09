@@ -25,6 +25,7 @@ declare namespace SaleDataAPI {
     homeTeamNameCn: string;
     halfSettlementStatus: number;
     fullSettlementStatus: number;
+    showPopover?: boolean;
     childrenData: ChildrenDataList[];
   }
 
@@ -54,6 +55,7 @@ declare namespace SaleDataAPI {
     navigatepageNums: number[];
     navigateFirstPage: number;
     navigateLastPage: number;
+
   }
 
   type PreSaleListRes = COMMON.BASE_RES_TYPE<PreSaleListData>;

@@ -4,6 +4,7 @@ import type { PaginationProps } from '@pureadmin/table';
 // import { addDialog } from "@/components/ReDialog";
 import { usePublicHooks } from '@/hooks';
 import { columns } from '../component/TableColumnList';
+import { removeEmptyStringKeys } from '@/utils/utilFn';
 
 export function useOperationLog() {
   const dataList = reactive<OperationLogDataAPI.OperationLogListFetchList[]>(
@@ -22,6 +23,12 @@ export function useOperationLog() {
     currentPage: 1,
     background: true
   });
+  const form = reactive({
+    operateType: '',
+    operateMenu: [],
+    operateLog: '',
+    userName: ''
+  });
 
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -33,13 +40,15 @@ export function useOperationLog() {
     onSearch();
   }
 
-  async function onSearch(type?: string, params?) {
+  async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     loading.value = true;
+    const o = JSON.parse(JSON.stringify(removeEmptyStringKeys(form)));
+    if (o.operateMenu) o.operateMenu = o.operateMenu.join('-');
     try {
       const res: OperationLogDataAPI.OperationLogListFetchRes =
         await API.getOperateLogList({
-          ...params,
+          ...o,
           pageSize: pagination.pageSize,
           pageNum: pagination.currentPage
         });
@@ -103,6 +112,7 @@ export function useOperationLog() {
     handleCurrentChange,
     switchStyle,
     operationTypeList,
-    searchMenuList
+    searchMenuList,
+    form
   };
 }

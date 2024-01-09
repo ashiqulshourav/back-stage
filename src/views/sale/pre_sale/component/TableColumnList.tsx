@@ -10,10 +10,13 @@ export const columns: TableColumnList = [
   },
   {
     label: t('锁盘'),
-    slot: 'locking',
     headerRenderer: d => handleTableWidth(d, t('锁盘'), 'auto'),
     formatter: ({ locking }) => {
-      return <IconifyIconOffline icon="lockUnlockFill" />;
+      return (
+        <div class="flex justify-center">
+          <IconifyIconOffline icon="lockUnlockFill" />
+        </div>
+      );
     }
   },
   {
@@ -79,15 +82,19 @@ export const columns: TableColumnList = [
     minWidth: 150
   }, */
   {
-    label: t('开售状态'),
+    label: t('开售控制'),
     slot: 'isSale',
-
-    headerRenderer: d => handleTableWidth(d, t('开售状态'), 'auto')
+    headerRenderer: d => handleTableWidth(d, t('开售控制'), 'auto')
   },
   {
-    label: t('开售盘口'),
+    label: t('开售状态'),
+    headerRenderer: d => handleTableWidth(d, t('开售状态'), 'auto'),
+    formatter: ({ isSale }) => (isSale ? '已开售' : '未开售')
+  },
+  {
+    label: t('开售盘口/总盘口数'),
     slot: 'num',
-    headerRenderer: d => handleTableWidth(d, t('开售盘口'), 'auto')
+    headerRenderer: d => handleTableWidth(d, t('开售盘口/总盘口数'), 'auto')
   },
 
   {

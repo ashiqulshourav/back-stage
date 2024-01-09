@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <SerachForm :loading="loading" @onSearch="onSearch" />
+    <SearchForm :loading="loading" @onSearch="onSearch" :form="form" />
 
     <PureTableBar
       :title="t('联赛库')"
@@ -59,7 +59,7 @@ import { PureTableBar } from '@/components/RePureTableBar';
 // import EditPen from '@iconify-icons/ep/edit-pen';
 // import AddFill from '@iconify-icons/ri/add-circle-line';
 import { useLeague } from './utils/hook';
-import SerachForm from './component/SerchForm.vue';
+import SearchForm from './component/SerchForm.vue';
 
 import { t } from '@/plugins/i18n';
 defineOptions({ name: 'League' });
@@ -71,7 +71,8 @@ const {
   pagination,
   onSearch,
   handleTableWidthChange,
-  handleCurrentChange
+  handleCurrentChange,
+  form
   // openDialog
 } = useLeague();
 </script>
