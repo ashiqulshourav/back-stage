@@ -1,0 +1,53 @@
+import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+
+export const columns: TableColumnList = [
+  {
+    label: t('联赛杯赛ID'),
+    prop: 'leagueId',
+    minWidth: 100
+  },
+  {
+    label: t('联赛杯赛Logo'),
+    prop: 'leagueLogo',
+    slot: 'leagueLogo',
+    minWidth: 120
+  },
+  {
+    label: t('国家地区ID'),
+    prop: 'countryId',
+    minWidth: 150
+  },
+  {
+    label: t('188数据源联赛杯赛ID'),
+    prop: 'leagueId188Bet',
+    minWidth: 150
+  },
+  {
+    label: t('联赛杯ID'),
+    prop: 'leagueNameCn',
+    minWidth: 150
+  },
+  {
+    label: t('联赛杯赛英文名称'),
+    prop: 'leagueNameEn',
+    minWidth: 150
+  },
+  {
+    label: t('联赛等级'),
+    prop: 'level',
+    minWidth: 150
+  },
+  {
+    label: t('赛种'),
+    prop: 'sportId',
+    formatter: ({ sportId }): string =>
+      SPORT_ID_MAP.find(_ => _.value === sportId).label,
+    minWidth: 150
+  },
+  {
+    label: t('操作'),
+    fixed: 'right',
+    width: 240,
+    slot: 'operation'
+  }
+];

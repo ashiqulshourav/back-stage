@@ -11,3 +11,13 @@ export const enter: Directive = {
     });
   },
 };
+
+export const number: Directive = {
+  mounted(el: HTMLInputElement, binding: DirectiveBinding) {
+    const maxLen = binding.value;
+    useEventListener(el, 'input', (e) => {
+      if (+(e.target as HTMLInputElement).value == 0) return;
+      (e.target as HTMLInputElement).value = (e.target as HTMLInputElement).value.replace(/\D/g, '').replace(/^0{1,}/g, '').slice(0, maxLen);
+    });
+  },
+};

@@ -1,20 +1,16 @@
 <template>
   <div class="main">
+    <SerachForm
+      :loading="loading"
+      :operationTypeList="operationTypeList"
+      :searchMenuList="searchMenuList"
+      @on-search="onSearch"
+    />
     <PureTableBar
       :title="t('操作日志表')"
       :columns="columns"
       @refresh="onSearch('reload')"
     >
-      <!-- <template #buttons>
-        <el-button
-          type="primary"
-          :icon="useRenderIcon(AddFill)"
-          @click="openDialog(t('新增'))"
-        >
-          {{ t("新增联赛") }}
-        </el-button>
-      </template> -->
-
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"
@@ -41,32 +37,25 @@
 </template>
 
 <script setup lang="ts">
-import { PureTableBar } from "@/components/RePureTableBar";
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-import Search from "@iconify-icons/ep/search";
-import Refresh from "@iconify-icons/ep/refresh";
-import EditPen from "@iconify-icons/ep/edit-pen";
-import AddFill from "@iconify-icons/ri/add-circle-line";
-import { useOperationLog } from "./utils/hook";
+import { PureTableBar } from '@/components/RePureTableBar';
+// import AddFill from '@iconify-icons/ri/add-circle-line';
+import { useOperationLog } from './utils/hook';
+import SerachForm from './component/SerchForm.vue';
 
-import { t } from "@/plugins/i18n";
-defineOptions({ name: "History" });
+import { t } from '@/plugins/i18n';
+defineOptions({ name: 'History' });
 
 // const formRef = ref();
 const {
   loading,
   columns,
   dataList,
-  switchStyle,
   pagination,
   onSearch,
-  // resetForm,
   handleTableWidthChange,
   handleCurrentChange,
-  handleSelectionChange,
-  switchLoadMap,
-  // openDialog,
-  changeSwitch
+  operationTypeList,
+  searchMenuList
 } = useOperationLog();
 </script>
 

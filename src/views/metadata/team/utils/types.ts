@@ -7,8 +7,6 @@ interface TeamFormProps {
   formInline: MetadataAPI.TeamList;
 }
 
-
-
 export type {
   FormProps,
   TeamFormProps

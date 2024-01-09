@@ -4,20 +4,8 @@ import { FormItemProps } from 'element-plus';
 import { addDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted, h } from 'vue';
-import { removeEmptyStringKeys } from '@/utils/utilFn';
-import { t } from '@/plugins/i18n';
-import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
 export function useLeague() {
-  const form = reactive({
-    leagueNameCn: '',
-    leagueNameEn: '',
-    level: '',
-    countryId: '',
-    leagueId: '',
-    leagueId188Bet: '',
-    sportId: ''
-  });
   const formRef = ref();
   const dataList = reactive<MetadataAPI.LeagueList[]>([]);
   const loading = ref(true);
@@ -27,71 +15,6 @@ export function useLeague() {
     currentPage: 1,
     background: true
   });
-  const columns: TableColumnList = [
-    {
-      label: t('联赛杯赛ID'),
-      prop: 'leagueId',
-      minWidth: 100
-    },
-    {
-      label: t('联赛杯赛Logo'),
-      prop: 'leagueLogo',
-      slot: 'leagueLogo',
-      minWidth: 120
-    },
-    {
-      label: t('国家地区ID'),
-      prop: 'countryId',
-      minWidth: 150
-    },
-    {
-      label: t('188数据源联赛杯赛ID'),
-      prop: 'leagueId188Bet',
-      minWidth: 150
-    },
-    {
-      label: t('联赛杯ID'),
-      prop: 'leagueNameCn',
-      minWidth: 150
-    },
-    {
-      label: t('联赛杯赛英文名称'),
-      prop: 'leagueNameEn',
-      minWidth: 150
-    },
-    {
-      label: t('赛事等级'),
-      prop: 'level',
-      minWidth: 150
-    },
-    {
-      label: t('赛种'),
-      prop: 'sportId',
-      formatter: ({ sportId }): string =>
-        SPORT_ID_MAP.find(_ => _.value === sportId).label,
-      minWidth: 150
-    }
-    /* {
-      label: t('操作'),
-      fixed: "right",
-      width: 240,
-      slot: "operation"
-    } */
-  ];
-  // const buttonClass = computed(() => {
-  //   return [
-  //     "!h-[20px]",
-  //     "reset-margin",
-  //     "!text-gray-500",
-  //     "dark:!text-white",
-  //     "dark:hover:!text-primary"
-  //   ];
-  // });
-
-  function handleDelete(row) {
-    message(`您删除了角色名称为${row.name}的这条数据`, { type: 'success' });
-    onSearch();
-  }
 
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -107,15 +30,12 @@ export function useLeague() {
     console.log('handleSelectionChange', val);
   }
 
-  async function onSearch(type?: string) {
-    if (type === 'reload') {
-      pagination.currentPage = 1;
-    }
+  async function onSearch(type?: string, params?) {
+    if (type === 'reload') pagination.currentPage = 1;
     try {
       loading.value = true;
-      const data = removeEmptyStringKeys(form);
       const res: MetadataAPI.LeagueListRes = await API.getLeagueList({
-        ...data,
+        ...params,
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
@@ -142,13 +62,13 @@ export function useLeague() {
       title,
       props: {
         formInline: {
+          leagueLogo: row?.leagueLogo ?? '',
+          leagueId: row?.leagueId ?? '',
+          countryId: row?.countryId ?? '',
+          leagueId188Bet: row?.leagueId188Bet ?? '',
           leagueNameCn: row?.leagueNameCn ?? '',
           leagueNameEn: row?.leagueNameEn ?? '',
-          leagueId188Bet: row?.leagueId188Bet ?? '',
-          leagueLogo: row?.leagueLogo ?? '',
           level: row?.level ?? '',
-          countryId: row?.countryId ?? '',
-          leagueId: row?.leagueId ?? '',
           sportId: row?.sportId ?? ''
         }
       },
@@ -167,16 +87,13 @@ export function useLeague() {
           done(); // 关闭弹框
           onSearch(); // 刷新表格数据
         }
-        FormRef.validate(valid => {
+        FormRef.validate(async valid => {
           if (valid) {
-            console.log('curData', curData);
-            // 表单规则校验通过
-            if (title === '新增') {
-              // 实际开发先调用新增接口，再进行下面操作
-              chores();
+            if (row) {
+              updateLeague(curData, () => chores());
             } else {
               // 实际开发先调用编辑接口，再进行下面操作
-              chores();
+              // chores();
             }
           }
         });
@@ -184,21 +101,24 @@ export function useLeague() {
     });
   }
 
+  const updateLeague = async (curData, cb) => {
+    const res = await API.updateLeague(curData);
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    if (!res.code) cb();
+  };
+
   onMounted(() => {
     onSearch();
   });
 
   return {
-    form,
     loading,
-    columns,
     dataList,
     pagination,
     // buttonClass,
     onSearch,
     resetForm,
     openDialog,
-    handleDelete,
     // handleDatabase,
     handleTableWidthChange,
     handleCurrentChange,

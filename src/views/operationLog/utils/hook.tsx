@@ -1,84 +1,27 @@
-import { message } from "@/utils/message";
+import { message } from '@/utils/message';
 // import editForm from "../form.vue";
-import type { PaginationProps } from "@pureadmin/table";
+import type { PaginationProps } from '@pureadmin/table';
 // import { addDialog } from "@/components/ReDialog";
-import { t } from "@/plugins/i18n";
-import { usePublicHooks } from "@/hooks";
-import dayjs from "dayjs";
+import { usePublicHooks } from '@/hooks';
+import { columns } from '../component/TableColumnList';
 
 export function useOperationLog() {
-  const dataList = reactive<OperationLogDataAPI.OperationLog[]>([]);
+  const dataList = reactive<OperationLogDataAPI.OperationLogListFetchList[]>(
+    []
+  );
   const loading = ref(true);
   const switchLoadMap = ref({});
-  // const formRef = ref();
   const { switchStyle } = usePublicHooks();
+  const operationTypeList = reactive<string[]>([]);
+  const searchMenuList = reactive<
+    OperationLogDataAPI.OperationMenuTypeChildren[]
+  >([]);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
     currentPage: 1,
     background: true
   });
-  const columns: TableColumnList = [
-    {
-      label: t("序号"),
-      prop: "operationLogId",
-      minWidth: 150,
-      fixed: true
-    },
-    {
-      label: t("操作账号"),
-      prop: "operationAccount",
-      minWidth: 150,
-      fixed: true
-    },
-    {
-      label: t("资源名称"),
-      prop: "resourceName",
-      minWidth: 150
-    },
-    {
-      label: t("操作时间"),
-      prop: "operationDateTime",
-      minWidth: 250,
-      formatter: ({ operationDateTime }) =>
-        `${dayjs(operationDateTime).format("YYYY-MM-DD HH:mm:ss")}`
-    },
-    {
-      label: t("是否成功"),
-      prop: "successOrNot",
-      minWidth: 150
-    },
-    {
-      label: t("操作类型"),
-      prop: "operationType",
-      minWidth: 150
-    },
-    {
-      label: t("唯一ID"),
-      prop: "uniqueId",
-      minWidth: 150
-    },
-    {
-      label: t("赛事ID"),
-      prop: "leagueId",
-      minWidth: 150
-    },
-    {
-      label: t("操作之前"),
-      prop: "beforeOperation",
-      minWidth: 350
-    },
-    {
-      label: t("操作之后"),
-      prop: "afterOperation",
-      minWidth: 350
-    },
-    {
-      label: t("备注"),
-      prop: "extra",
-      minWidth: 150
-    }
-  ];
 
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -90,27 +33,64 @@ export function useOperationLog() {
     onSearch();
   }
 
-  async function onSearch(type?: string) {
-    if (type === "reload") pagination.currentPage = 1;
+  async function onSearch(type?: string, params?) {
+    if (type === 'reload') pagination.currentPage = 1;
     loading.value = true;
-    // const data = removeEmptyStringKeys(form);
-    const res: OperationLogDataAPI.OperationLogListRes =
-      await API.getOperationLogList({
-        // ...data,
-        pageSize: pagination.pageSize,
-        pageNum: pagination.currentPage
-      });
-    if (res.code) return message(res.msg, { type: "error" });
-    dataList.length = 0;
-    dataList.push(...res.data.list);
-    pagination.total = res.data.total;
-    pagination.pageSize = res.data.pageSize;
-    pagination.currentPage = res.data.pageNum;
-    setTimeout(() => (loading.value = false), 500);
+    try {
+      const res: OperationLogDataAPI.OperationLogListFetchRes =
+        await API.getOperateLogList({
+          ...params,
+          pageSize: pagination.pageSize,
+          pageNum: pagination.currentPage
+        });
+      loading.value = false;
+      if (res.code) return message(res.msg, { type: 'error' });
+      dataList.length = 0;
+      dataList.push(...res.data.list);
+      pagination.total = res.data.total;
+      pagination.pageSize = res.data.pageSize;
+      pagination.currentPage = res.data.pageNum;
+    } catch (error) {
+      loading.value = false;
+    }
   }
+
+  const initTypeList = async () => {
+    const res: OperationLogDataAPI.OperationLogTypeRes =
+      await API.getOperateType();
+    if (res.code) return message(res.msg, { type: 'error' });
+    operationTypeList.length = 0;
+    operationTypeList.push(...res.data);
+  };
+
+  const initMenuList = async () => {
+    const res: OperationLogDataAPI.OperationMenuTypeRes =
+      await API.getOperateMenus();
+    if (res.code) return message(res.msg, { type: 'error' });
+    res.data = recursiveTransform(res.data);
+    searchMenuList.length = 0;
+    searchMenuList.push(...res.data);
+  };
+
+  const recursiveTransform = data => {
+    return data.map(item => {
+      const transformedItem = {
+        ...item,
+        // value: item.id,
+        value: item.menuName,
+        label: item.menuName
+      };
+      if (item.children && item.children.length > 0) {
+        transformedItem.children = recursiveTransform(item.children);
+      }
+      return transformedItem;
+    });
+  };
 
   onMounted(() => {
     onSearch();
+    initTypeList();
+    initMenuList();
   });
   return {
     loading,
@@ -121,6 +101,8 @@ export function useOperationLog() {
     handleTableWidthChange,
     switchLoadMap,
     handleCurrentChange,
-    switchStyle
+    switchStyle,
+    operationTypeList,
+    searchMenuList
   };
 }

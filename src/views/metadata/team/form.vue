@@ -27,40 +27,54 @@
       />
     </el-form-item>
 
-    <el-form-item :label="`${t('是否国家队')}:`" prop="leagueId">
-      <el-select v-model="newFormInline.isCountryTeam" placeholder="Select">
+    <el-form-item :label="`${t('是否国家队')}:`" prop="isCountryTeam">
+      <el-select
+        v-model="newFormInline.isCountryTeam"
+        :placeholder="t('请选择')"
+      >
         <el-option :label="t('是')" :value="0" />
         <el-option :label="t('否')" :value="1" />
       </el-select>
     </el-form-item>
 
-    <el-form-item :label="`${t('联赛ID')}:`">
+    <el-form-item :label="`${t('联赛ID')}:`" prop="leagueId">
       <el-input v-model="newFormInline.leagueId" :placeholder="t('联赛ID')" />
     </el-form-item>
 
-    <el-form-item :label="t('球队等级')">
-      <el-input v-model="newFormInline.level" :placeholder="t('球队等级')" />
+    <el-form-item :label="t('球队等级')" prop="level">
+      <el-input
+        v-model="newFormInline.level"
+        :placeholder="t('球队等级')"
+        type="number"
+      />
     </el-form-item>
 
-    <!-- <el-form-item label="赛种ID">
-      <el-input v-model="newFormInline.sportId" placeholder="赛种ID" />
-    </el-form-item> -->
+    <el-form-item label="赛种" prop="sportId">
+      <el-select v-model="newFormInline.sportId" :placeholder="t('赛种')">
+        <el-option
+          :label="item.label"
+          :value="item.value"
+          v-for="item in SPORT_ID_MAP"
+          :key="item.value"
+        />
+      </el-select>
+    </el-form-item>
 
-    <el-form-item :label="`${t('主场名称')}:`">
+    <el-form-item :label="`${t('主场名称')}:`" prop="stadiumName">
       <el-input
-        v-model="newFormInline.leagueId188Bet"
+        v-model="newFormInline.stadiumName"
         :placeholder="t('主场名称')"
       />
     </el-form-item>
 
-    <el-form-item :label="`${t('球队中文名称')}:`">
+    <el-form-item :label="`${t('球队中文名称')}:`" prop="teamNameCn">
       <el-input
         v-model="newFormInline.teamNameCn"
         :placeholder="t('球队中文名称')"
       />
     </el-form-item>
 
-    <el-form-item :label="`${t('球队英文名称')}:`">
+    <el-form-item :label="`${t('球队英文名称')}:`" prop="teamNameEn">
       <el-input
         v-model="newFormInline.teamNameEn"
         :placeholder="t('球队英文名称')"
@@ -76,6 +90,7 @@ import { TeamFormProps } from './utils/types';
 import type { UploadProps } from 'element-plus';
 import { Plus } from '@element-plus/icons-vue';
 import { t } from '@/plugins/i18n';
+import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
 const props = withDefaults(defineProps<TeamFormProps>(), {
   formInline: () => ({
@@ -109,13 +124,12 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (
 
 const onImgChange = respose => {
   imageUrl.value = URL.createObjectURL(respose.raw);
-  console.log('form.vue文件 87==============行打印=', imageUrl.value);
 };
 
 const ruleFormRef = ref();
 const newFormInline = ref(props.formInline);
 
-const imageUrl = ref<string>(newFormInline.value.leagueLogo);
+const imageUrl = ref<string>(newFormInline.value.teamLogo);
 
 function getRef() {
   return ruleFormRef.value;

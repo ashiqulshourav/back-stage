@@ -55,25 +55,10 @@ declare namespace SaleDataAPI {
     navigateLastPage: number;
   }
 
-  type PreSaleListRes = {
-    code: number;
-    msg: string;
-    data: PreSaleListData;
-  }
-
-  type deleteMatchEventRes = {
-    code: number;
-    msg: string;
-    data: any;
-  }
-
-
-  type allSettlementRes = {
-    code: number;
-    msg: string;
-    data: any;
-  }
-
+  type PreSaleListRes = COMMON.BASE_RES_TYPE<PreSaleListData>;
+  type deleteMatchEventRes = COMMON.BASE_RES_TYPE<any>;
+  type allSettlementRes = COMMON.BASE_RES_TYPE<any>;
+  type UpdateMatchResType = COMMON.BASE_RES_TYPE<any>;
 
   type TeamList = {
     teamId: number;
@@ -86,5 +71,13 @@ declare namespace SaleDataAPI {
     level: number;
     isCountryTeam?: number;
     [key: string]: any;
+  }
+
+  type UpdateMatchParamsType = {
+    beginTime: string;
+    level: number;
+    matchId: number;
+    matchName: string;
+    sportId: string;
   }
 }

@@ -1,60 +1,6 @@
 <template>
   <div class="main">
-    <el-form
-      ref="formRef"
-      :inline="true"
-      :model="form"
-      class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
-    >
-      <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
-        <el-input
-          v-model="form.matchId"
-          :placeholder="t('赛事ID')"
-          clearable
-          class="!w-[150px]"
-        />
-      </el-form-item>
-      <el-form-item :label="`${t('赛事名称')}:`" prop="matchName">
-        <el-input
-          v-model="form.matchName"
-          :placeholder="t('赛事名称')"
-          clearable
-          class="!w-[150px]"
-        />
-      </el-form-item>
-
-      <el-form-item :label="`${t('开售状态')}:`" prop="isSale">
-        <el-select v-model="form.isSale" :placeholder="t('请选择')">
-          <el-option :label="t('关闭')" :value="1" />
-          <el-option :label="t('开售')" :value="0" />
-        </el-select>
-      </el-form-item>
-
-      <el-form-item :label="`${t('比赛时间')}:`" prop="sportId">
-        <el-date-picker
-          v-model="form.beginTime"
-          type="datetime"
-          :placeholder="t('比赛时间')"
-          value-format="x"
-          format="YYYY-MM-DD HH:mm:ss"
-        />
-      </el-form-item>
-
-      <el-form-item>
-        <el-button
-          type="primary"
-          :icon="useRenderIcon(Search)"
-          :loading="loading"
-          @click="onSearch('reload')"
-        >
-          {{ t("筛选") }}
-        </el-button>
-        <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
-          {{ t("重置") }}
-        </el-button>
-      </el-form-item>
-    </el-form>
-
+    <SearchForm :loading="loading" />
     <PureTableBar
       :title="t('预开售管理')"
       :columns="columns"
@@ -95,7 +41,19 @@
             />
           </template>
           <template #isNeutral="{ row }">
-            {{ row.isNeutral === 0 ? t("中立") : t("非中立") }}
+            {{ row.isNeutral === 0 ? t('中立') : t('非中立') }}
+          </template>
+          <template #operation="{ row }">
+            <el-button
+              class="reset-margin"
+              link
+              type="primary"
+              :size="size"
+              :icon="useRenderIcon(EditPen)"
+              @click="openDialog(t('开售编辑'), row)"
+            >
+              {{ t('编辑') }}
+            </el-button>
           </template>
         </pure-table>
       </template>
@@ -104,39 +62,26 @@
 </template>
 
 <script setup lang="ts">
-import { PureTableBar } from "@/components/RePureTableBar";
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-import Search from "@iconify-icons/ep/search";
-import Refresh from "@iconify-icons/ep/refresh";
-import { useLeague } from "./utils/hook";
-import { t } from "@/plugins/i18n";
-defineOptions({ name: "League" });
+import { PureTableBar } from '@/components/RePureTableBar';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import EditPen from '@iconify-icons/ep/edit-pen';
+import { useLeague } from './utils/hook';
+import { t } from '@/plugins/i18n';
+defineOptions({ name: 'League' });
+import { columns } from './component/TableColumnList';
+import SearchForm from './component/SearchForm.vue';
 
-const formRef = ref();
 const {
-  form,
   loading,
-  columns,
   dataList,
   switchStyle,
   pagination,
   onSearch,
-  resetForm,
   handleTableWidthChange,
   handleCurrentChange,
   handleSelectionChange,
   switchLoadMap,
-  changeSwitch
+  changeSwitch,
+  openDialog
 } = useLeague();
 </script>
-
-<style scoped lang="scss">
-:deep(.el-dropdown-menu__item i) {
-  margin: 0;
-}
-.search-form {
-  :deep(.el-form-item) {
-    margin-bottom: 12px;
-  }
-}
-</style>

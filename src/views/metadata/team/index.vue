@@ -1,97 +1,8 @@
 <template>
   <div class="main">
-    <el-form
-      ref="formRef"
-      :inline="true"
-      :model="form"
-      class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
-    >
-      <el-form-item :label="`${t('球队ID')}:`" prop="teamId">
-        <el-input
-          v-model="form.teamId"
-          :placeholder="t('球队ID')"
-          clearable
-          v-enter="() => onSearch('reload')"
-          class="!w-[200px]"
-        />
-      </el-form-item>
-      <el-form-item :label="`${t('国家地区ID')}:`" prop="level">
-        <el-input
-          v-model="form.countryId"
-          :placeholder="t('国家地区ID')"
-          v-enter="() => onSearch('reload')"
-          class="!w-[200px]"
-        />
-      </el-form-item>
-      <el-form-item :label="`${t('是否国家队')}:`" prop="countryId">
-        <el-select v-model="form.isCountryTeam" placeholder="Select">
-          <el-option :label="t('是')" :value="0" />
-          <el-option :label="t('否')" :value="1" />
-        </el-select>
-      </el-form-item>
-      <el-form-item :label="`${t('联赛ID')}:`" prop="leagueId">
-        <el-input
-          v-model="form.leagueId"
-          :placeholder="t('联赛ID')"
-          clearable
-          v-enter="() => onSearch('reload')"
-          class="!w-[200px]"
-        />
-      </el-form-item>
-      <el-form-item :label="`${t('球队等级')}:`" prop="level">
-        <el-input
-          v-model="form.level"
-          :placeholder="t('球队等级')"
-          clearable
-          v-enter="() => onSearch('reload')"
-          class="!w-[200px]"
-        />
-      </el-form-item>
-      <el-form-item :label="`${t('赛种')}:`" prop="sportId">
-        <el-select v-model="form.sportId" :placeholder="t('赛种')">
-          <el-option
-            :label="item.label"
-            :value="item.value"
-            v-for="item in SPORT_ID_MAP"
-            :key="item.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item :label="`${t('球队中文名称')}:`" prop="sportId">
-        <el-input
-          v-model="form.teamNameCn"
-          :placeholder="t('球队中文名称')"
-          clearable
-          v-enter="() => onSearch('reload')"
-          class="!w-[200px]"
-        />
-      </el-form-item>
-      <el-form-item :label="`${t('球队英文名称')}:`" prop="sportId">
-        <el-input
-          v-model="form.teamNameEn"
-          :placeholder="t('球队英文名称')"
-          clearable
-          v-enter="() => onSearch('reload')"
-          class="!w-[200px]"
-        />
-      </el-form-item>
-      <el-form-item>
-        <el-button
-          type="primary"
-          :icon="useRenderIcon(Search)"
-          :loading="loading"
-          @click="onSearch('reload')"
-        >
-          {{ t('筛选') }}
-        </el-button>
-        <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
-          {{ t('重置') }}
-        </el-button>
-      </el-form-item>
-    </el-form>
-
+    <SearchForm :loading="loading" @on-search="onSearch" />
     <PureTableBar
-      title="球队管理列表"
+      :title="t('球队管理列表')"
       :columns="columns"
       @refresh="onSearch('reload')"
     >
@@ -108,7 +19,7 @@
         <pure-table
           align-whole="center"
           showOverflowTooltip
-          table-layout="auto"
+          table-layout="fixed"
           :loading="loading"
           :size="size"
           adaptive
@@ -148,11 +59,11 @@
               type="primary"
               :size="size"
               :icon="useRenderIcon(EditPen)"
-              @click="openDialog(t('编辑赛事'), row)"
+              @click="openDialog(t('编辑球队'), row)"
             >
               {{ t('编辑') }}
             </el-button>
-            <el-popconfirm
+            <!-- <el-popconfirm
               :title="`是否确认删除角色名称为${row.name}的这条数据`"
               @confirm="handleDelete(row)"
             >
@@ -167,7 +78,7 @@
                   {{ t('删除') }}
                 </el-button>
               </template>
-            </el-popconfirm>
+            </el-popconfirm> -->
           </template>
         </pure-table>
       </template>
@@ -176,46 +87,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-
-import Delete from '@iconify-icons/ep/delete';
+// import Delete from '@iconify-icons/ep/delete';
 import EditPen from '@iconify-icons/ep/edit-pen';
-import Search from '@iconify-icons/ep/search';
-import Refresh from '@iconify-icons/ep/refresh';
-// import AddFill from '@iconify-icons/ri/add-circle-line';
 import { useLeague } from './utils/hook';
-
+import SearchForm from './component/SearchForm.vue';
 import { t } from '@/plugins/i18n';
-import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
-defineOptions({ name: 'League' });
+defineOptions({ name: 'team' });
 
-const formRef = ref();
 const {
-  form,
   loading,
   columns,
   dataList,
   pagination,
   onSearch,
-  resetForm,
   openDialog,
-  handleDelete,
+  // handleDelete,
   handleTableWidthChange,
   handleCurrentChange,
   handleSelectionChange
 } = useLeague();
 </script>
-
-<style scoped lang="scss">
-:deep(.el-dropdown-menu__item i) {
-  margin: 0;
-}
-.search-form {
-  :deep(.el-form-item) {
-    margin-bottom: 12px;
-  }
-}
-</style>

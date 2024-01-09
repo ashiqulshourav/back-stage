@@ -11,6 +11,16 @@ declare namespace MetadataAPI {
     level?: number;
     sportId?: number;
   }
+  type updateLeagueParamsType = {
+    leagueLogo: string;
+    leagueId: number;
+    countryId: number;
+    leagueId188Bet: number;
+    leagueNameCn: string;
+    leagueNameEn: string;
+    level: number;
+    sportId: number;
+  }
 
   type LeagueList = {
     leagueId: number | string;
@@ -42,12 +52,9 @@ declare namespace MetadataAPI {
     navigateFirstPage: number;
     navigateLastPage: number;
   }
-  type LeagueListRes = {
-    code: number;
-    msg: string;
-    data: LeagueListData;
-  }
 
+  type LeagueListRes = COMMON.BASE_RES_TYPE<LeagueListData>;
+  type updateLeagueResType = COMMON.BASE_RES_TYPE<null>;
 
   type TeamList = {
     teamId: number;
@@ -55,11 +62,11 @@ declare namespace MetadataAPI {
     sportId: number;
     leagueId: number;
     teamNameCn: string;
+    stadiumName?: string;
     teamNameEn: string;
     teamLogo: string;
     level: number;
     isCountryTeam?: number;
-    [key: string]: any;
   }
   type TeamListData = Omit<LeagueListData, 'list'> & { list: TeamList[] }
   type TeamListRes = {
@@ -104,4 +111,6 @@ declare namespace MetadataAPI {
     teamNameCn?: string;
     teamNameEn?: string;
   }
+
+  type UpdateTeamParamsType = Partial<TeamListParamsType>
 }

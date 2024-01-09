@@ -2,16 +2,16 @@ import { http } from "@/utils/http";
 
 export const metaData = {
   getLeagueList: (data: MetadataAPI.LeagueListParams) => http.request<MetadataAPI.LeagueListRes>("post", "/league/v1/getLeagueList", { data }),
-
+  updateLeague: (data: MetadataAPI.updateLeagueParamsType) => http.request<MetadataAPI.updateLeagueResType>("post", "/league/v1/updateLeague", { data }),
   getTeamList: (data: MetadataAPI.TeamListParamsType) => http.request<MetadataAPI.TeamListRes>("post", "/team/v1/getTeamList", { data }),
-
+  updateTeam: (data: MetadataAPI.UpdateTeamParamsType) => http.request<MetadataAPI.TeamListRes>("post", "/team/v1/updateTeam", { data }),
   getPlayerList: (data: {
     birthday?: number;
     countryId?: number;
     gender?: number;
     height?: number;
     isCountryPlayer?: number;
-    简称?: number;
+    nickName?: number;
     picture?: number;
     pageNum?: number;
     pageSize?: number;

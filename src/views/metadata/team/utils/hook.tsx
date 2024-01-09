@@ -5,22 +5,10 @@ import { addDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted, h } from 'vue';
 // import { usePublicHooks } from "@/hooks";
-import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { FormItemProps } from 'element-plus';
 import { columns } from '../component/TableColumnList';
 
 export function useLeague() {
-  const form = reactive({
-    teamId: '',
-    countryId: '',
-    isCountryTeam: '',
-    leagueId: '',
-    level: '',
-    sportId: '',
-    stadiumName: '',
-    teamLogo: '',
-    teamNameCn: '',
-    teamNameEn: ''
-  });
   const formRef = ref();
   const dataList = reactive<MetadataAPI.TeamList[]>([]);
   const loading = ref(true);
@@ -60,12 +48,11 @@ export function useLeague() {
     console.log('handleSelectionChange', val);
   }
 
-  async function onSearch(type?: string) {
+  async function onSearch(type?: string, params?) {
     if (type === 'reload') pagination.currentPage = 1;
     loading.value = true;
-    const data = removeEmptyStringKeys(form);
     const res: MetadataAPI.TeamListRes = await API.getTeamList({
-      ...data,
+      ...params,
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage
     });
@@ -84,19 +71,21 @@ export function useLeague() {
     onSearch();
   };
 
-  function openDialog(title: string, row?: MetadataAPI.LeagueList) {
+  function openDialog(title: string, row?: MetadataAPI.TeamList) {
     addDialog({
       title,
       props: {
         formInline: {
-          leagueNameCn: row?.leagueNameCn ?? '',
-          leagueNameEn: row?.leagueNameEn ?? '',
-          leagueId188Bet: row?.leagueId188Bet ?? '',
-          leagueLogo: row?.leagueLogo ?? '',
-          level: row?.level ?? '',
           countryId: row?.countryId ?? '',
+          isCountryTeam: row?.isCountryTeam ?? '',
           leagueId: row?.leagueId ?? '',
-          sportId: row?.sportId ?? ''
+          level: row?.level ?? '',
+          sportId: row?.sportId ?? '',
+          teamId: row?.teamId ?? '',
+          stadiumName: row?.stadiumName ?? '',
+          teamNameCn: row?.teamNameCn ?? '',
+          teamNameEn: row?.teamNameEn ?? '',
+          teamLogo: row?.teamLogo ?? ''
         }
       },
       width: '40%',
@@ -106,20 +95,16 @@ export function useLeague() {
       contentRenderer: () => h(editForm, { ref: formRef }),
       beforeSure: (done, { options }) => {
         const FormRef = formRef.value.getRef();
+        const curData = options.props.formInline as FormItemProps;
         function chores() {
-          console.log('hook.tsx文件 167==============行打印=', options);
-          // message(`您${title}了角色名称为${curData.name}的这条数据`, {
-          //   type: "success"
-          // });
           done(); // 关闭弹框
           onSearch(); // 刷新表格数据
         }
         FormRef.validate(valid => {
           if (valid) {
-            // 表单规则校验通过
-            if (title === '新增') {
+            if (row) {
+              updateTeam(curData, () => chores());
               // 实际开发先调用新增接口，再进行下面操作
-              chores();
             } else {
               // 实际开发先调用编辑接口，再进行下面操作
               chores();
@@ -130,12 +115,17 @@ export function useLeague() {
     });
   }
 
+  const updateTeam = async (curData, cb) => {
+    const res = await API.updateTeam(curData);
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    if (!res.code) cb();
+  };
+
   onMounted(() => {
     onSearch();
   });
 
   return {
-    form,
     loading,
     columns,
     dataList,

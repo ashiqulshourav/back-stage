@@ -5,7 +5,7 @@
     :rules="formRules"
     label-width="150px"
   >
-    <el-form-item label="联赛杯Logo:">
+    <el-form-item :label="t('联赛杯Logo')">
       <!-- action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" -->
       <el-upload
         class="avatar-uploader"
@@ -19,69 +19,82 @@
         <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
       </el-upload>
     </el-form-item>
-    <el-form-item label="联赛杯赛ID:" prop="leagueId">
+    <el-form-item :label="t('联赛杯赛ID')" prop="leagueId">
       <el-input
         v-model="newFormInline.leagueId"
         clearable
-        placeholder="联赛杯赛ID"
+        :placeholder="t('联赛杯赛ID')"
       />
     </el-form-item>
 
-    <el-form-item label="国家地区ID" prop="countryId">
+    <el-form-item :label="t('国家地区ID')" prop="countryId">
       <el-input
         v-model="newFormInline.countryId"
         clearable
-        placeholder="国家地区ID"
+        :placeholder="t('国家地区ID')"
       />
     </el-form-item>
-    <el-form-item label="188数据源联赛杯赛">
+    <el-form-item :label="t('188数据源联赛杯赛')" prop="leagueId188Bet">
       <el-input
         v-model="newFormInline.leagueId188Bet"
-        placeholder="188数据源联赛杯赛"
+        :placeholder="t('188数据源联赛杯赛')"
       />
     </el-form-item>
-    <el-form-item label="联赛杯赛名称">
+    <el-form-item :label="t('联赛杯赛中文名')" prop="leagueNameCn">
       <el-input
-        v-model="newFormInline.leagueId188Bet"
-        placeholder="联赛杯赛名称"
+        v-model="newFormInline.leagueNameCn"
+        :placeholder="t('联赛杯赛中文名')"
       />
     </el-form-item>
-    <el-form-item label="联赛杯赛英文名称">
+    <el-form-item :label="t('联赛杯英文名称')" prop="leagueNameEn">
       <el-input
         v-model="newFormInline.leagueNameEn"
-        placeholder="联赛杯赛英文名称"
+        :placeholder="t('联赛杯英文名称')"
       />
     </el-form-item>
-    <el-form-item label="赛事等级">
-      <el-input v-model="newFormInline.level" placeholder="赛事等级" />
+    <el-form-item :label="t('联赛等级')" prop="level">
+      <el-input
+        v-model="newFormInline.level"
+        v-number="5"
+        :placeholder="t('联赛等级')"
+      />
     </el-form-item>
-    <el-form-item label="赛种ID">
-      <el-input v-model="newFormInline.sportId" placeholder="赛种ID" />
+    <el-form-item label="赛种" prop="sportId">
+      <el-select v-model="newFormInline.sportId" :placeholder="t('赛种')">
+        <el-option
+          :label="item.label"
+          :value="item.value"
+          v-for="item in SPORT_ID_MAP"
+          :key="item.value"
+        />
+      </el-select>
     </el-form-item>
   </el-form>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { formRules } from "./utils/rule";
-import { FormProps } from "./utils/types";
-import type { UploadProps } from "element-plus";
-import { Plus } from "@element-plus/icons-vue";
+import { ref } from 'vue';
+import { formRules } from './utils/rule';
+import { FormProps } from './utils/types';
+import type { UploadProps } from 'element-plus';
+import { Plus } from '@element-plus/icons-vue';
+import { t } from '@/plugins/i18n';
+import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
 const props = withDefaults(defineProps<FormProps>(), {
   formInline: () => ({
-    leagueNameCn: "",
-    level: "",
-    countryId: "",
-    leagueNameEn: "",
-    leagueId: "",
-    leagueLogo: "",
-    leagueId188Bet: "",
-    sportId: ""
+    leagueNameCn: '',
+    level: '',
+    countryId: '',
+    leagueNameEn: '',
+    leagueId: '',
+    leagueLogo: '',
+    leagueId188Bet: '',
+    sportId: ''
   })
 });
 
-const beforeAvatarUpload: UploadProps["beforeUpload"] = _rawFile => {
+const beforeAvatarUpload: UploadProps['beforeUpload'] = _rawFile => {
   // if (rawFile.type !== "image/jpeg") {
   //   console.log("Avatar picture must be JPG format!");
   //   return false;
@@ -92,14 +105,13 @@ const beforeAvatarUpload: UploadProps["beforeUpload"] = _rawFile => {
   return true;
 };
 
-const handleAvatarSuccess: UploadProps["onSuccess"] = (
+const handleAvatarSuccess: UploadProps['onSuccess'] = (
   _response,
   _uploadFile
 ) => {};
 
 const onImgChange = respose => {
   imageUrl.value = URL.createObjectURL(respose.raw);
-  console.log("form.vue文件 87==============行打印=", imageUrl.value);
 };
 
 const ruleFormRef = ref();

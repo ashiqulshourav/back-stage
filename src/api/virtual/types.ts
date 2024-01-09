@@ -13,7 +13,7 @@ declare namespace VirtualAPI {
     leagueId?: number;
   }
   type LeagueListData = COMMON.ListData<League>
-  type LeagueListRes = COMMON.ListRes<LeagueListData>
+  type LeagueListRes = COMMON.BASE_RES_TYPE<LeagueListData>
 
   type Team = {
     key?: number;
@@ -28,5 +28,5 @@ declare namespace VirtualAPI {
     teamId?: number;
   }
   type TeamListData = COMMON.ListData<Team>
-  type TeamListRes = COMMON.ListRes<TeamListData>
+  type TeamListRes = COMMON.BASE_RES_TYPE<TeamListData>
 }

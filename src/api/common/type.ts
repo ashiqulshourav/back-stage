@@ -20,9 +20,10 @@ declare namespace COMMON {
     navigateLastPage?: number;
   };
 
-  type ListRes<T = ListData> = {
+  type BASE_RES_TYPE<T = ListData> = {
     code: number;
     msg: string;
+    ts?: number;
     data: T;
   }
 
@@ -30,6 +31,8 @@ declare namespace COMMON {
     pageSize: number;
     pageNum: number;
   }
+
+ 
 
   type FormProps<T = any> = {
     formInline: T;

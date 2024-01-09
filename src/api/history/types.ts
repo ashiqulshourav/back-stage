@@ -22,5 +22,5 @@ declare namespace HistoryDataAPI {
     historyId?: number;
   };
   type HistoryListData = COMMON.ListData<History>;
-  type HistoryListRes = COMMON.ListRes<HistoryListData>;
+  type HistoryListRes = COMMON.BASE_RES_TYPE<HistoryListData>;
 }
