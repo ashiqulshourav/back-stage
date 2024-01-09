@@ -50,6 +50,7 @@ declare namespace SaleDataAPI {
     hasPreviousPage: boolean;
     hasNextPage: boolean;
     navigatePages: number;
+    leagueNameCn: string;
     navigatepageNums: number[];
     navigateFirstPage: number;
     navigateLastPage: number;

@@ -6,12 +6,13 @@ import { FormItemProps } from 'element-plus';
 import { usePublicHooks } from '@/hooks';
 import { addDialog } from '@/components/ReDialog';
 
-export function useLeague() {
+export function usePreSale() {
   const formRef = ref();
   const dataList = reactive<SaleDataAPI.PreSaleList[]>([]);
   const loading = ref(true);
   const switchLoadMap = ref({});
   const { switchStyle } = usePublicHooks();
+  const allSaleSatatus = ref(0);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -104,14 +105,13 @@ export function useLeague() {
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage
     });
+    loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
     dataList.length = 0;
     dataList.push(...res.data.list);
     pagination.total = res.data.total;
     pagination.pageSize = res.data.pageSize;
     pagination.currentPage = res.data.pageNum;
-    loading.value = false;
-    setTimeout(() => 500);
   }
 
   const resetForm = formEl => {
@@ -127,9 +127,31 @@ export function useLeague() {
     cb();
   };
 
+  const changeAllSaleStatus = () => {
+    console.log('hook.tsx文件 131==============行打印=', allSaleSatatus.value);
+    ElMessageBox.confirm(t('确认要调整开售状态吗?'), t('系统提示'), {
+      confirmButtonText: t('确定'),
+      cancelButtonText: t('取消'),
+      type: 'warning',
+      dangerouslyUseHTMLString: true,
+      draggable: true
+    })
+      .then(async () => {
+        // const res = await API.updateSaleStatus({
+        //   isSale: row.isSale,
+        //   matchId: row.matchId
+        // });
+        // if (res.code) return message(res.msg, { type: 'error' });
+        // message(res.msg, { type: 'success' });
+        // onSearch();
+      })
+      .catch(() => (allSaleSatatus.value = 0));
+  };
+
   onMounted(() => {
     onSearch();
   });
+
   return {
     loading,
     dataList,
@@ -142,6 +164,8 @@ export function useLeague() {
     handleSelectionChange,
     switchStyle,
     openDialog,
-    changeSwitch
+    changeSwitch,
+    changeAllSaleStatus,
+    allSaleSatatus
   };
 }

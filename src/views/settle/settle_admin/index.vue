@@ -14,7 +14,7 @@
       :columns="columns"
       @refresh="onSearch('reload')"
     >
-      <template v-slot="{size, dynamicColumns}">
+      <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"
           showOverflowTooltip
@@ -36,7 +36,7 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
-          <template #sn="{index: parIndex}">{{ parIndex + 1 }}</template>
+          <template #sn="{ index: parIndex }">{{ parIndex + 1 }}</template>
           <template
             #expand="{
               row: parentRow,
@@ -88,9 +88,9 @@
                     color: 'var(--el-text-color-primary)',
                     textAlign: 'center'
                   }"
-                  :cell-style="{textAlign: 'center'}"
+                  :cell-style="{ textAlign: 'center' }"
                 >
-                  <template #eventCode="{row, index: childIndex}">
+                  <template #eventCode="{ row, index: childIndex }">
                     <el-select
                       :disabled="!row.isEdit"
                       v-model="row.redOrYellow"
@@ -111,7 +111,7 @@
                     <span v-else>{{ MATCH_EVENT_CODE[row.eventCode] }}</span>
                   </template>
 
-                  <template #eventTime="{row, index: childIndex}">
+                  <template #eventTime="{ row, index: childIndex }">
                     <el-date-picker
                       v-model="row.eventTime"
                       type="datetime"
@@ -122,7 +122,7 @@
                       format="YYYY-MM-DD HH:mm:ss"
                     />
                   </template>
-                  <template #matchPeriodId="{row}">
+                  <template #matchPeriodId="{ row }">
                     <el-select
                       :disabled="!row.isEdit"
                       v-model="row.matchPeriodId"
@@ -133,7 +133,7 @@
                     </el-select>
                   </template>
 
-                  <template #homeAway="{row, index: childIndex}">
+                  <template #homeAway="{ row, index: childIndex }">
                     <div>
                       <el-select
                         :disabled="!row.isEdit"
@@ -154,7 +154,7 @@
                     </div>
                   </template>
 
-                  <template #player1Name="{row}">
+                  <template #player1Name="{ row }">
                     <el-input
                       v-model="row.player1Name"
                       :disabled="!row.isEdit"
@@ -266,19 +266,19 @@
 </template>
 
 <script setup lang="ts">
-import {PureTableBar} from '@/components/RePureTableBar';
-import {useRenderIcon} from '@/components/ReIcon/src/hooks';
+import { PureTableBar } from '@/components/RePureTableBar';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import icon_money from '@iconify-icons/ri/money-cny-box-fill';
 import icon_circle_fill from '@iconify-icons/ri/add-circle-fill';
-import {useSettle} from './utils/hook';
+import { useSettle } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
-import {t} from '@/plugins/i18n';
-import {message} from '@/utils/message';
-import {MATCH_EVENT_CODE} from '@/utils/maps/sports_map';
+import { t } from '@/plugins/i18n';
+import { message } from '@/utils/message';
+import { MATCH_EVENT_CODE } from '@/utils/maps/sports_map';
 import CustomButton from '@/components/Form/CustomButton.vue';
 import SportTypeNav from './component/SportTypeNav.vue';
-import {MatchEventType} from './utils/type';
-defineOptions({name: 'settle_admin'});
+import { MatchEventType } from './utils/type';
+defineOptions({ name: 'settle_admin' });
 
 const changeEventTime = (
   row: SattleDataAPI.MatchEventsList,
@@ -287,7 +287,7 @@ const changeEventTime = (
 ) => {
   if (childIndex === 0) return;
   if (row.eventTime <= childrenData[childIndex - 1].eventTime) {
-    message('时间不能小于前一个事件发生时间', {type: 'error'});
+    message('时间不能小于前一个事件发生时间', { type: 'error' });
     row.eventTime = '';
   }
 };

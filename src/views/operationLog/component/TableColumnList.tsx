@@ -12,7 +12,7 @@ export const columns: TableColumnList = [
     prop: 'createdAt',
     formatter: ({ createdAt }) =>
       `${dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss')}`,
-    headerRenderer: d => handleTableWidth(d, t('创建时间'), 'aut'),
+    headerRenderer: d => handleTableWidth(d, t('创建时间'), 'auto'),
     minWidth: 160
   },
   {

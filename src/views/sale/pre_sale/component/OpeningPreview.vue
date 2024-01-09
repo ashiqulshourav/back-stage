@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  <div>开售盘口</div>
 </template>
 
 <script setup lang="ts"></script>

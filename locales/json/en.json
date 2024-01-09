@@ -62,10 +62,8 @@
   "k50d471b2": "Reset",
   "k-69c3d8aa": "League List",
   "k-13428bb7": "Delete",
-  "k-2736f36a": "League Cup Logo",
   "k-40cb0f7e": "Country Region ID",
   "k-3ee15ea6": "188 Data Source Cup ID",
-  "k57865ace": "Cup ID",
   "k-18ce204": "Action",
   "k70369363": "Team Logo",
   "k3b7e7613": "Is National Team",
@@ -231,5 +229,11 @@
   "k6dc1a51b": "Event Name cannot be empty",
   "k-70ab99c1": "Event Level cannot be empty",
   "k-7fd48510": "Match Time cannot be empty",
-  "k-3795af1b": "Sale Edit"
+  "k-3795af1b": "Sale Edit",
+  "k-5bc2e28e": "联赛Logo",
+  "k-4208788c": "国家/地区",
+  "k-19515602": "请选择联赛",
+  "k-78b97ba3": "其他日期",
+  "k-489dcbfd": "联赛名称",
+  "k255d1c9a": "开赛时间"
 }

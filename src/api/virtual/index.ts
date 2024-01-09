@@ -8,12 +8,12 @@ export const virtualData = {
   },
 
   createVMatch: (props: VirtualAPI.League) => {
-  // return http.request<VirtualAPI.TeamListRes>("post", "/team/v1/getTeamList", { data })
+    // return http.request<VirtualAPI.TeamListRes>("post", "/team/v1/getTeamList", { data })
     return virtualMockAPI.createVMatch(props);
   },
 
   updateVMatch: (props: VirtualAPI.League) => {
-  // return http.request<VirtualAPI.TeamListRes>("post", "/team/v1/getTeamList", { data })
+    // return http.request<VirtualAPI.TeamListRes>("post", "/team/v1/getTeamList", { data })
     return virtualMockAPI.updateVMatch(props);
   },
 
@@ -23,12 +23,12 @@ export const virtualData = {
   },
 
   createVTeam: (props: VirtualAPI.Team) => {
-  // return http.request<VirtualAPI.TeamListRes>("post", "/team/v1/getTeamList", { data })
+    // return http.request<VirtualAPI.TeamListRes>("post", "/team/v1/getTeamList", { data })
     return virtualMockAPI.createVTeam(props);
   },
 
   updateVTeam: (props: VirtualAPI.Team) => {
-  // return http.request<VirtualAPI.TeamListRes>("post", "/team/v1/getTeamList", { data })
+    // return http.request<VirtualAPI.TeamListRes>("post", "/team/v1/getTeamList", { data })
     return virtualMockAPI.updateVTeam(props);
   }
 

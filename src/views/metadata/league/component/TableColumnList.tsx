@@ -2,12 +2,12 @@ import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
 export const columns: TableColumnList = [
   {
-    label: t('联赛杯赛ID'),
+    label: t('联赛ID'),
     prop: 'leagueId',
     minWidth: 100
   },
   {
-    label: t('联赛杯赛Logo'),
+    label: t('联赛Logo'),
     prop: 'leagueLogo',
     slot: 'leagueLogo',
     minWidth: 120
@@ -23,12 +23,12 @@ export const columns: TableColumnList = [
     minWidth: 150
   },
   {
-    label: t('联赛杯ID'),
+    label: t('联赛中文名'),
     prop: 'leagueNameCn',
     minWidth: 150
   },
   {
-    label: t('联赛杯赛英文名称'),
+    label: t('联赛英文名'),
     prop: 'leagueNameEn',
     minWidth: 150
   },
