@@ -6,6 +6,7 @@ import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted, h } from 'vue';
 // import { usePublicHooks } from "@/hooks";
 import { columns } from '../component/TableColumnList';
+import { removeEmptyStringKeys } from '@/utils/utilFn';
 
 export function useLeague() {
   const formRef = ref();
@@ -18,15 +19,18 @@ export function useLeague() {
     background: true
   });
 
-  // const buttonClass = computed(() => {
-  //   return [
-  //     "!h-[20px]",
-  //     "reset-margin",
-  //     "!text-gray-500",
-  //     "dark:!text-white",
-  //     "dark:hover:!text-primary"
-  //   ];
-  // });
+  const form = reactive({
+    teamId: '',
+    countryId: '',
+    isCountryTeam: '',
+    leagueId: '',
+    level: '',
+    sportId: '',
+    stadiumName: '',
+    teamLogo: '',
+    teamNameCn: '',
+    teamNameEn: ''
+  });
 
   function handleDelete(row) {
     message(`您删除了角色名称为${row.name}的这条数据`, { type: 'success' });
@@ -47,12 +51,12 @@ export function useLeague() {
     console.log('handleSelectionChange', val);
   }
 
-  async function onSearch(type?: string, params?) {
+  async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     loading.value = true;
     const res: ESportsAPI.ESportsTeamListResType = await API.getESportsTeamList(
       {
-        ...params,
+        ...removeEmptyStringKeys(form),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       }
@@ -135,6 +139,7 @@ export function useLeague() {
     // handleDatabase,
     handleTableWidthChange,
     handleCurrentChange,
-    handleSelectionChange
+    handleSelectionChange,
+    form
   };
 }

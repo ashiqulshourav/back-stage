@@ -80,22 +80,15 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import Refresh from '@iconify-icons/ep/refresh';
 import Search from '@iconify-icons/ep/search';
 import type { FormInstance } from 'element-plus';
-import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { SearchFormType } from '../utils/types';
 
 defineProps<{
   loading: boolean;
+  form: SearchFormType;
 }>();
 
 const formRef = ref<FormInstance>();
-const form = reactive({
-  leagueNameCn: '',
-  leagueNameEn: '',
-  level: '',
-  countryId: '',
-  leagueId: '',
-  leagueId188Bet: '',
-  sportId: ''
-});
+
 const emits = defineEmits(['onSearch']);
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
@@ -103,7 +96,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
 };
 
 const search = () => {
-  emits('onSearch', ...['reload', removeEmptyStringKeys(form)]);
+  emits('onSearch', ...['reload']);
 };
 </script>
 

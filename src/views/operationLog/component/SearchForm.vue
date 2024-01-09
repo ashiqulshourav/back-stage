@@ -68,21 +68,17 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import Refresh from '@iconify-icons/ep/refresh';
 import Search from '@iconify-icons/ep/search';
 import type { FormInstance } from 'element-plus';
-import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { SearchFormType } from '../utils/types';
 
 defineProps<{
   loading: boolean;
   operationTypeList: string[];
   searchMenuList: OperationLogDataAPI.OperationMenuTypeChildren[];
+  form: SearchFormType;
 }>();
 
 const formRef = ref<FormInstance>();
-const form = reactive({
-  operateType: '',
-  operateMenu: [],
-  operateLog: '',
-  userName: ''
-});
+
 const emits = defineEmits(['onSearch']);
 
 const resetForm = (formEl: FormInstance | undefined) => {
@@ -91,9 +87,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
 };
 
 const search = () => {
-  const o = JSON.parse(JSON.stringify(removeEmptyStringKeys(form)));
-  if (o.operateMenu) o.operateMenu = o.operateMenu.join('-');
-  emits('onSearch', ...['reload', o]);
+  emits('onSearch', ...['reload']);
 };
 </script>
 

@@ -1,10 +1,11 @@
 <template>
   <div class="main">
-    <SerachForm
+    <SearchForm
       :loading="loading"
       :operationTypeList="operationTypeList"
       :searchMenuList="searchMenuList"
       @on-search="onSearch"
+      :form="form"
     />
     <PureTableBar
       :title="t('操作日志表')"
@@ -40,7 +41,7 @@
 import { PureTableBar } from '@/components/RePureTableBar';
 // import AddFill from '@iconify-icons/ri/add-circle-line';
 import { useOperationLog } from './utils/hook';
-import SerachForm from './component/SerchForm.vue';
+import SearchForm from './component/SerchForm.vue';
 
 import { t } from '@/plugins/i18n';
 defineOptions({ name: 'History' });
@@ -55,7 +56,8 @@ const {
   handleTableWidthChange,
   handleCurrentChange,
   operationTypeList,
-  searchMenuList
+  searchMenuList,
+  form
 } = useOperationLog();
 </script>
 

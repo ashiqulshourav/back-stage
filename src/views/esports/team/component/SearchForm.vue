@@ -96,26 +96,15 @@ import RefreshIcon from '@iconify-icons/ep/refresh';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import { t } from '@/plugins/i18n';
 import type { FormInstance } from 'element-plus';
-// import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
-import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { SearchFormType } from '../utils/types';
 
 defineProps<{
   loading: boolean;
+  form: SearchFormType;
 }>();
 
 const formRef = ref<FormInstance>();
-const form = reactive({
-  teamId: '',
-  countryId: '',
-  isCountryTeam: '',
-  leagueId: '',
-  level: '',
-  sportId: '',
-  stadiumName: '',
-  teamLogo: '',
-  teamNameCn: '',
-  teamNameEn: ''
-});
+
 const emits = defineEmits(['onSearch']);
 
 const resetForm = (formEl: FormInstance | undefined) => {
@@ -124,7 +113,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
 };
 
 const search = () => {
-  emits('onSearch', ...['reload', removeEmptyStringKeys(form)]);
+  emits('onSearch', ...['reload']);
 };
 </script>
 

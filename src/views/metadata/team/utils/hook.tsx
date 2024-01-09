@@ -7,8 +7,10 @@ import { reactive, ref, onMounted, h } from 'vue';
 // import { usePublicHooks } from "@/hooks";
 import { FormItemProps } from 'element-plus';
 import { columns } from '../component/TableColumnList';
+import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { SearchFormType } from './types';
 
-export function useLeague() {
+export function useTeam() {
   const formRef = ref();
   const dataList = reactive<MetadataAPI.TeamList[]>([]);
   const loading = ref(true);
@@ -17,6 +19,18 @@ export function useLeague() {
     pageSize: 10,
     currentPage: 1,
     background: true
+  });
+  const searchForm = reactive<SearchFormType>({
+    teamId: '',
+    countryId: '',
+    isCountryTeam: '',
+    leagueId: '',
+    level: '',
+    sportId: '',
+    stadiumName: '',
+    teamLogo: '',
+    teamNameCn: '',
+    teamNameEn: ''
   });
 
   // const buttonClass = computed(() => {
@@ -48,11 +62,11 @@ export function useLeague() {
     console.log('handleSelectionChange', val);
   }
 
-  async function onSearch(type?: string, params?) {
+  async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     loading.value = true;
     const res: MetadataAPI.TeamListRes = await API.getTeamList({
-      ...params,
+      ...removeEmptyStringKeys(searchForm),
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage
     });
@@ -138,6 +152,7 @@ export function useLeague() {
     // handleDatabase,
     handleTableWidthChange,
     handleCurrentChange,
-    handleSelectionChange
+    handleSelectionChange,
+    searchForm
   };
 }

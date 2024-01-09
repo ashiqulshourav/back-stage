@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <SearchForm :loading="loading" />
+    <SearchForm :loading="loading" @on-search="onSearch" :form="searchForm" />
     <PureTableBar
       :title="t('预开售管理')"
       :columns="columns"
@@ -82,6 +82,7 @@ const {
   handleSelectionChange,
   switchLoadMap,
   changeSwitch,
-  openDialog
+  openDialog,
+  searchForm
 } = useLeague();
 </script>

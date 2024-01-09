@@ -5,6 +5,8 @@ import { ElMessageBox } from 'element-plus';
 import { FormItemProps } from 'element-plus';
 import { usePublicHooks } from '@/hooks';
 import { addDialog } from '@/components/ReDialog';
+import { SearchFormType } from './types';
+import { removeEmptyStringKeys } from '@/utils/utilFn';
 
 export function useLeague() {
   const formRef = ref();
@@ -17,6 +19,13 @@ export function useLeague() {
     pageSize: 10,
     currentPage: 1,
     background: true
+  });
+  const searchForm = reactive<SearchFormType>({
+    matchId: '',
+    matchName: '',
+    isSale: '',
+    sportId: '',
+    beginTime: ''
   });
 
   function changeSwitch({
@@ -96,11 +105,11 @@ export function useLeague() {
     });
   };
 
-  async function onSearch(type?: string, params?) {
+  async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     loading.value = true;
     const res: SaleDataAPI.PreSaleListRes = await API.getPreSaleList({
-      ...params,
+      ...removeEmptyStringKeys(searchForm),
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage
     });
@@ -142,6 +151,7 @@ export function useLeague() {
     handleSelectionChange,
     switchStyle,
     openDialog,
-    changeSwitch
+    changeSwitch,
+    searchForm
   };
 }

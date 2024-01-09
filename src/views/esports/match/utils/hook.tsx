@@ -5,18 +5,27 @@ import type { PaginationProps } from '@pureadmin/table';
 // import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 import { columns } from '../component/TableColumnList';
+import { removeEmptyStringKeys } from '@/utils/utilFn';
 
 export function useLeague() {
   const dataList = reactive<ESportsAPI.ESportsLeagueListArrType[]>([]);
   const loading = ref(true);
   const switchLoadMap = ref({});
-  // const formRef = ref();
   const { switchStyle } = usePublicHooks();
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
     currentPage: 1,
     background: true
+  });
+  const form = reactive({
+    leagueNameCn: '',
+    leagueNameEn: '',
+    level: '',
+    countryId: '',
+    leagueId: '',
+    leagueId188Bet: '',
+    sportId: ''
   });
 
   function handleTableWidthChange(val: number) {
@@ -29,12 +38,12 @@ export function useLeague() {
     onSearch();
   }
 
-  async function onSearch(type?: string, params?) {
+  async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     loading.value = true;
     const res: ESportsAPI.ESportsLeagueListType =
       await API.getESportsLeagueList({
-        ...params,
+        ...removeEmptyStringKeys(form),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
@@ -103,6 +112,7 @@ export function useLeague() {
     switchLoadMap,
     handleCurrentChange,
     // openDialog,
-    switchStyle
+    switchStyle,
+    form
   };
 }

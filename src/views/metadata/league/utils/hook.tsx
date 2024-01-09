@@ -4,6 +4,8 @@ import { FormItemProps } from 'element-plus';
 import { addDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted, h } from 'vue';
+import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { searchFormType } from './types';
 
 export function useLeague() {
   const formRef = ref();
@@ -14,6 +16,15 @@ export function useLeague() {
     pageSize: 10,
     currentPage: 1,
     background: true
+  });
+  const form = reactive<searchFormType>({
+    leagueNameCn: '',
+    leagueNameEn: '',
+    level: '',
+    countryId: '',
+    leagueId: '',
+    leagueId188Bet: '',
+    sportId: ''
   });
 
   function handleTableWidthChange(val: number) {
@@ -30,12 +41,12 @@ export function useLeague() {
     console.log('handleSelectionChange', val);
   }
 
-  async function onSearch(type?: string, params?) {
+  async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       loading.value = true;
       const res: MetadataAPI.LeagueListRes = await API.getLeagueList({
-        ...params,
+        ...removeEmptyStringKeys(form),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
@@ -119,6 +130,7 @@ export function useLeague() {
     onSearch,
     resetForm,
     openDialog,
+    form,
     // handleDatabase,
     handleTableWidthChange,
     handleCurrentChange,
