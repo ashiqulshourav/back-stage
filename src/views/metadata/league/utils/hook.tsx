@@ -50,13 +50,13 @@ export function useLeague() {
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
-      if (res.code) return;
+      loading.value = false;
+      if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
       dataList.push(...res.data.list);
       pagination.total = res.data.total;
       pagination.pageSize = res.data.pageSize;
       pagination.currentPage = res.data.pageNum;
-      loading.value = false;
     } catch (error) {
       loading.value = false;
     }

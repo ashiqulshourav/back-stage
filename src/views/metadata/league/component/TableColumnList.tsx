@@ -25,12 +25,14 @@ export const columns: TableColumnList = [
   {
     label: t('联赛中文名'),
     prop: 'leagueNameCn',
-    minWidth: 150
+    minWidth: 150,
+    align: 'left'
   },
   {
     label: t('联赛英文名'),
     prop: 'leagueNameEn',
-    minWidth: 150
+    minWidth: 150,
+    align: 'left'
   },
   {
     label: t('联赛等级'),
