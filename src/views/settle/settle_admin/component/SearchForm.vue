@@ -39,10 +39,10 @@
       </el-select>
     </el-form-item> -->
 
-    <el-form-item :label="`${t('赛事名称')}:`" prop="matchName">
+    <el-form-item :label="`${t('联赛ID')}:`" prop="leagueId">
       <el-input
-        v-model="form.matchName"
-        :placeholder="t('赛事名称')"
+        v-model="form.leagueId"
+        :placeholder="t('联赛ID')"
         @keyup.enter="searchVal"
         clearable
       />
@@ -62,6 +62,14 @@
       <el-select v-model="form.fullSettlementStatus" :placeholder="t('请选择')">
         <el-option :label="t('已结算')" :value="1" />
         <el-option :label="t('未结算')" :value="0" />
+      </el-select>
+    </el-form-item>
+
+    <el-form-item :label="`${t('比赛状态')}:`" prop="status">
+      <el-select v-model="form.status" :placeholder="t('请选择')">
+        <el-option :label="t('滚球')" value="nover" />
+        <el-option :label="t('比赛结束')" value="over" />
+        <el-option :label="t('未开始')" value="nobegin" />
       </el-select>
     </el-form-item>
 

@@ -20,7 +20,7 @@ export const MATCH_EVENT_CODE = {
 }
 
 export const MATCH_STATUS = {
-  nover: t('滚球中'),
+  nover: t('滚球'),
   over: t('比赛结束'),
   nobegin: t('未开始'),
 }

@@ -16,10 +16,10 @@ export const columns: TableColumnList = [
   },
   {
     prop: 'leagueNameCn',
-    label: t('赛事名称'),
+    label: t('联赛名称'),
     fixed: true,
     align: 'left',
-    headerRenderer: d => handleTableWidth(d, t('赛事名称'))
+    headerRenderer: d => handleTableWidth(d, t('联赛名称'))
   },
   {
     label: t('赛事ID'),
