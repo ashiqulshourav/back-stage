@@ -41,7 +41,7 @@
 import { PureTableBar } from '@/components/RePureTableBar';
 // import AddFill from '@iconify-icons/ri/add-circle-line';
 import { useOperationLog } from './utils/hook';
-import SearchForm from './component/SerchForm.vue';
+import SearchForm from './component/SearchForm.vue';
 
 import { t } from '@/plugins/i18n';
 defineOptions({ name: 'History' });

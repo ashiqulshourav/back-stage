@@ -5,7 +5,7 @@
     :rules="formRules"
     label-width="150px"
   >
-    <el-form-item :label="`${t('球队Logo')}:`" prop="teamLogo">
+    <!-- <el-form-item :label="`${t('球队Logo')}:`" prop="teamLogo">
       <el-upload
         class="avatar-uploader"
         :show-file-list="false"
@@ -17,7 +17,7 @@
         <img v-if="imageUrl" :src="imageUrl" class="w-[200px]" />
         <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
       </el-upload>
-    </el-form-item>
+    </el-form-item> -->
 
     <el-form-item :label="t('国家地区ID')" prop="countryId">
       <el-input
@@ -87,8 +87,8 @@
 import { ref } from 'vue';
 import { formRules } from './utils/rule';
 import { TeamFormProps } from './utils/types';
-import type { UploadProps } from 'element-plus';
-import { Plus } from '@element-plus/icons-vue';
+// import type { UploadProps } from 'element-plus';
+// import { Plus } from '@element-plus/icons-vue';
 import { t } from '@/plugins/i18n';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
@@ -106,30 +106,30 @@ const props = withDefaults(defineProps<TeamFormProps>(), {
   })
 });
 
-const beforeAvatarUpload: UploadProps['beforeUpload'] = _rawFile => {
-  // if (rawFile.type !== "image/jpeg") {
-  //   console.log("Avatar picture must be JPG format!");
-  //   return false;
-  // } else if (rawFile.size / 1024 / 1024 > 2) {
-  //   console.log("Avatar picture size can not exceed 2MB!");
-  //   return false;
-  // }
+/* const beforeAvatarUpload: UploadProps['beforeUpload'] = _rawFile => {
+  if (rawFile.type !== 'image/jpeg') {
+    console.log('Avatar picture must be JPG format!');
+    return false;
+  } else if (rawFile.size / 1024 / 1024 > 2) {
+    console.log('Avatar picture size can not exceed 2MB!');
+    return false;
+  }
   return true;
-};
+}; */
 
-const handleAvatarSuccess: UploadProps['onSuccess'] = (
+/* const handleAvatarSuccess: UploadProps['onSuccess'] = (
   _response,
   _uploadFile
-) => {};
+) => {}; */
 
-const onImgChange = respose => {
+/* const onImgChange = respose => {
   imageUrl.value = URL.createObjectURL(respose.raw);
-};
+}; */
 
 const ruleFormRef = ref();
 const newFormInline = ref(props.formInline);
 
-const imageUrl = ref<string>(newFormInline.value.teamLogo);
+// const imageUrl = ref<string>(newFormInline.value.teamLogo);
 
 function getRef() {
   return ruleFormRef.value;

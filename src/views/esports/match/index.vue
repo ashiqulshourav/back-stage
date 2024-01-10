@@ -59,7 +59,7 @@ import { PureTableBar } from '@/components/RePureTableBar';
 // import EditPen from '@iconify-icons/ep/edit-pen';
 // import AddFill from '@iconify-icons/ri/add-circle-line';
 import { useLeague } from './utils/hook';
-import SearchForm from './component/SerchForm.vue';
+import SearchForm from './component/SearchForm.vue';
 
 import { t } from '@/plugins/i18n';
 defineOptions({ name: 'League' });

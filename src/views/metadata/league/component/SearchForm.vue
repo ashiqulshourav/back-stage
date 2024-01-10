@@ -5,10 +5,10 @@
     :model="form"
     class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
   >
-    <el-form-item :label="`${t('联赛杯赛ID')}:`" prop="leagueId">
+    <el-form-item :label="`${t('联赛ID')}:`" prop="leagueId">
       <el-input
         v-model="form.leagueId"
-        :placeholder="t('联赛杯赛ID')"
+        :placeholder="t('联赛ID')"
         clearable
         v-enter="search"
         class="!w-[200px]"
@@ -24,10 +24,19 @@
         class="!w-[200px]"
       />
     </el-form-item>
-    <el-form-item :label="`${t('联赛杯赛英文名称')}:`" prop="leagueNameEn">
+    <el-form-item :label="`${t('联赛中文名')}:`" prop="leagueNameEn">
+      <el-input
+        v-model="form.leagueNameCn"
+        :placeholder="t('联赛中文名')"
+        clearable
+        v-enter="search"
+        class="!w-[200px]"
+      />
+    </el-form-item>
+    <el-form-item :label="`${t('联赛英文名')}:`" prop="leagueNameEn">
       <el-input
         v-model="form.leagueNameEn"
-        :placeholder="t('联赛杯赛英文名称')"
+        :placeholder="t('联赛英文名')"
         clearable
         v-enter="search"
         class="!w-[200px]"

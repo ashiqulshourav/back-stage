@@ -1,25 +1,25 @@
-import { useEpThemeStoreHook } from "@/store/epTheme";
-import { defineComponent, ref, computed, type PropType, nextTick } from "vue";
+import { useEpThemeStoreHook } from '@/store/epTheme';
+import { defineComponent, ref, computed, type PropType, nextTick } from 'vue';
 import {
   delay,
   cloneDeep,
   isBoolean,
   isFunction,
   getKeyList
-} from "@pureadmin/utils";
+} from '@pureadmin/utils';
 
-import Sortable from "sortablejs";
-import DragIcon from "./svg/drag.svg?component";
-import ExpandIcon from "./svg/expand.svg?component";
-import RefreshIcon from "./svg/refresh.svg?component";
-import SettingIcon from "./svg/settings.svg?component";
-import CollapseIcon from "./svg/collapse.svg?component";
+import Sortable from 'sortablejs';
+import DragIcon from './svg/drag.svg?component';
+import ExpandIcon from './svg/expand.svg?component';
+import RefreshIcon from './svg/refresh.svg?component';
+import SettingIcon from './svg/settings.svg?component';
+import CollapseIcon from './svg/collapse.svg?component';
 
 const props = {
   /** 头部最左边的标题 */
   title: {
     type: String,
-    default: "列表"
+    default: '列表'
   },
   /** 对于树形表格，如果想启用展开和折叠功能，传入当前表格的ref即可 */
   tableRef: {
@@ -33,12 +33,12 @@ const props = {
 };
 
 export default defineComponent({
-  name: "PureTableBar",
+  name: 'PureTableBar',
   props,
-  emits: ["refresh"],
+  emits: ['refresh'],
   setup(props, { emit, slots, attrs }) {
     const buttonRef = ref();
-    const size = ref("default");
+    const size = ref('default');
     const isExpandAll = ref(true);
     const loading = ref(false);
     const checkAll = ref(true);
@@ -48,47 +48,47 @@ export default defineComponent({
         ? !column.hide
         : !(isFunction(column?.hide) && column?.hide())
     );
-    let checkColumnList = getKeyList(cloneDeep(props?.columns), "label");
-    const checkedColumns = ref(getKeyList(cloneDeep(filterColumns), "label"));
+    let checkColumnList = getKeyList(cloneDeep(props?.columns), 'label');
+    const checkedColumns = ref(getKeyList(cloneDeep(filterColumns), 'label'));
     const dynamicColumns = ref(cloneDeep(props?.columns));
 
     const getDropdownItemStyle = computed(() => {
       return s => {
         return {
           background:
-            s === size.value ? useEpThemeStoreHook().epThemeColor : "",
-          color: s === size.value ? "#fff" : "var(--el-text-color-primary)"
+            s === size.value ? useEpThemeStoreHook().epThemeColor : '',
+          color: s === size.value ? '#fff' : 'var(--el-text-color-primary)'
         };
       };
     });
 
     const iconClass = computed(() => {
       return [
-        "text-black",
-        "dark:text-white",
-        "duration-100",
-        "hover:!text-primary",
-        "cursor-pointer",
-        "outline-none"
+        'text-black',
+        'dark:text-white',
+        'duration-100',
+        'hover:!text-primary',
+        'cursor-pointer',
+        'outline-none'
       ];
     });
 
     const topClass = computed(() => {
       return [
-        "flex",
-        "justify-between",
-        "pt-[3px]",
-        "px-[11px]",
-        "border-b-[1px]",
-        "border-solid",
-        "border-[#dcdfe6]",
-        "dark:border-[#303030]"
+        'flex',
+        'justify-between',
+        'pt-[3px]',
+        'px-[11px]',
+        'border-b-[1px]',
+        'border-solid',
+        'border-[#dcdfe6]',
+        'dark:border-[#303030]'
       ];
     });
 
     function onReFresh() {
       loading.value = true;
-      emit("refresh");
+      emit('refresh');
       delay(500).then(() => (loading.value = false));
     }
 
@@ -130,28 +130,28 @@ export default defineComponent({
       isIndeterminate.value = false;
       dynamicColumns.value = cloneDeep(props?.columns);
       checkColumnList = [];
-      checkColumnList = await getKeyList(cloneDeep(props?.columns), "label");
-      checkedColumns.value = getKeyList(cloneDeep(filterColumns), "label");
+      checkColumnList = await getKeyList(cloneDeep(props?.columns), 'label');
+      checkedColumns.value = getKeyList(cloneDeep(filterColumns), 'label');
     }
 
     const dropdown = {
       dropdown: () => (
         <el-dropdown-menu class="translation">
           <el-dropdown-item
-            style={getDropdownItemStyle.value("large")}
-            onClick={() => (size.value = "large")}
+            style={getDropdownItemStyle.value('large')}
+            onClick={() => (size.value = 'large')}
           >
             宽松
           </el-dropdown-item>
           <el-dropdown-item
-            style={getDropdownItemStyle.value("default")}
-            onClick={() => (size.value = "default")}
+            style={getDropdownItemStyle.value('default')}
+            onClick={() => (size.value = 'default')}
           >
             默认
           </el-dropdown-item>
           <el-dropdown-item
-            style={getDropdownItemStyle.value("small")}
-            onClick={() => (size.value = "small")}
+            style={getDropdownItemStyle.value('small')}
+            onClick={() => (size.value = 'small')}
           >
             紧凑
           </el-dropdown-item>
@@ -164,11 +164,11 @@ export default defineComponent({
       event.preventDefault();
       nextTick(() => {
         const wrapper: HTMLElement = document.querySelector(
-          ".el-checkbox-group>div"
+          '.el-checkbox-group>div'
         );
         Sortable.create(wrapper, {
           animation: 300,
-          handle: ".drag-btn",
+          handle: '.drag-btn',
           onEnd: ({ newIndex, oldIndex, item }) => {
             const targetThElem = item;
             const wrapperElem = targetThElem.parentNode as HTMLElement;
@@ -203,7 +203,7 @@ export default defineComponent({
     const reference = {
       reference: () => (
         <SettingIcon
-          class={["w-[16px]", iconClass.value]}
+          class={['w-[16px]', iconClass.value]}
           onMouseover={e => (buttonRef.value = e.currentTarget)}
         />
       )
@@ -226,13 +226,13 @@ export default defineComponent({
                 <>
                   <el-tooltip
                     effect="dark"
-                    content={isExpandAll.value ? "折叠" : "展开"}
+                    content={isExpandAll.value ? '折叠' : '展开'}
                     placement="top"
                   >
                     <ExpandIcon
-                      class={["w-[16px]", iconClass.value]}
+                      class={['w-[16px]', iconClass.value]}
                       style={{
-                        transform: isExpandAll.value ? "none" : "rotate(-90deg)"
+                        transform: isExpandAll.value ? 'none' : 'rotate(-90deg)'
                       }}
                       onClick={() => onExpand()}
                     />
@@ -243,9 +243,9 @@ export default defineComponent({
               <el-tooltip effect="dark" content="刷新" placement="top">
                 <RefreshIcon
                   class={[
-                    "w-[16px]",
+                    'w-[16px]',
                     iconClass.value,
-                    loading.value ? "animate-spin" : ""
+                    loading.value ? 'animate-spin' : ''
                   ]}
                   onClick={() => onReFresh()}
                 />
@@ -253,7 +253,7 @@ export default defineComponent({
               <el-divider direction="vertical" />
               <el-tooltip effect="dark" content="密度" placement="top">
                 <el-dropdown v-slots={dropdown} trigger="click">
-                  <CollapseIcon class={["w-[16px]", iconClass.value]} />
+                  <CollapseIcon class={['w-[16px]', iconClass.value]} />
                 </el-dropdown>
               </el-tooltip>
               <el-divider direction="vertical" />
@@ -293,10 +293,10 @@ export default defineComponent({
                           <div class="flex items-center">
                             <DragIcon
                               class={[
-                                "drag-btn w-[16px] mr-2",
+                                'drag-btn w-[16px] mr-2',
                                 isFixedColumn(item)
-                                  ? "!cursor-no-drop"
-                                  : "!cursor-grab"
+                                  ? '!cursor-no-drop'
+                                  : '!cursor-grab'
                               ]}
                               onMouseenter={(event: {
                                 preventDefault: () => void;
@@ -329,7 +329,7 @@ export default defineComponent({
               popper-options={{
                 modifiers: [
                   {
-                    name: "computeStyles",
+                    name: 'computeStyles',
                     options: {
                       adaptive: false,
                       enabled: false

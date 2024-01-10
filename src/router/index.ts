@@ -1,7 +1,6 @@
 // import "@/utils/sso";
 import { getConfig } from "@/config";
 import NProgress from "@/utils/progress";
-import { t } from "@/plugins/i18n";
 import { sessionKey, type DataInfo } from "@/utils/auth";
 import { useMultiTagsStoreHook } from "@/store/multiTags";
 import { usePermissionStoreHook } from "@/store/permission";
@@ -15,7 +14,6 @@ import {
 import {
   ascending,
   getTopMenu,
-  initRouter,
   isOneOfArray,
   getHistoryMode,
   findRouteByPath,
@@ -146,7 +144,6 @@ router.beforeEach((to: ToRouteType, _from, next) => {
         toCorrectRoute();
       }
     } else {
-      // 刷新
       if (
         usePermissionStoreHook().wholeMenus.length === 0 &&
         to.path !== "/login"

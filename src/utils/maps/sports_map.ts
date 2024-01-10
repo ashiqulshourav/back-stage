@@ -18,3 +18,9 @@ export const MATCH_EVENT_CODE = {
   yellow_red_card: t('红牌/黄牌'),
   corner: t('角球'),
 }
+
+export const MATCH_STATUS = {
+  nover: t('滚球中'),
+  over: t('比赛结束'),
+  nobegin: t('未开始'),
+}

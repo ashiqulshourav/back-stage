@@ -9,8 +9,8 @@ export const columns: TableColumnList = [
   {
     label: t('联赛Logo'),
     prop: 'leagueLogo',
-    slot: 'leagueLogo',
-    minWidth: 120
+    minWidth: 120,
+    formatter: ({ leagueLogo }) => (leagueLogo ? leagueLogo : '-')
   },
   {
     label: t('国家地区ID'),

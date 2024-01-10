@@ -28,7 +28,8 @@ export function usePreSale() {
     isSale: '',
     sportId: '',
     beginTime: '',
-    leagueNameCn: ''
+    leagueNameCn: '',
+    leagueId: ''
   });
 
   function changeSwitch({

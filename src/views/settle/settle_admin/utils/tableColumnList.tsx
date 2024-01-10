@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { handleTableWidth } from '@/utils/getTableWidth';
+import { MATCH_STATUS } from '@/utils/maps/sports_map';
 
 export const columns: TableColumnList = [
   {
@@ -14,7 +15,7 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('序号'))
   },
   {
-    prop: 'matchName',
+    prop: 'leagueNameCn',
     label: t('赛事名称'),
     fixed: true,
     align: 'left',
@@ -80,7 +81,7 @@ export const columns: TableColumnList = [
   {
     label: t('比赛状态'),
     prop: 'status',
-    formatter: ({ status }) => status ?? '-',
+    formatter: ({ status }) => MATCH_STATUS[status] ?? '-',
     headerRenderer: d => handleTableWidth(d, t('比赛状态'))
   },
   {

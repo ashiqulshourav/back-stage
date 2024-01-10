@@ -7,7 +7,7 @@
   >
     <el-form-item :label="`${t('联赛')}:`" prop="leagueNameCn">
       <el-select
-        v-model="form.leagueNameCn"
+        v-model="form.leagueId"
         filterable
         class="w-[280px]"
         :placeholder="t('请选择联赛')"
@@ -16,7 +16,7 @@
           v-for="item in leagueList"
           :key="item.leagueId"
           :label="item.leagueNameCn"
-          :value="item.leagueNameCn"
+          :value="item.leagueId"
         />
       </el-select>
     </el-form-item>
@@ -36,7 +36,7 @@
         v-for="(item, index) in nextDayArr"
         :key="index"
         :type="selectIndex === index ? 'primary' : ''"
-        @click="selectIndex = index"
+        @click="changeSelectDate(index)"
         >{{ item }}</el-button
       >
       <el-date-picker
@@ -47,7 +47,7 @@
         value-format="x"
         format="YYYY-MM-DD HH:mm:ss"
         :disabled-date="disableDate"
-        @change="dateChange"
+        @change="changeDate"
       />
     </el-form-item>
 
@@ -57,8 +57,8 @@
         :placeholder="t('请选择')"
         @change="search"
       >
-        <el-option :label="t('关闭')" :value="1" />
-        <el-option :label="t('开售')" :value="0" />
+        <el-option :label="t('开售')" :value="1" />
+        <el-option :label="t('关闭')" :value="0" />
       </el-select>
     </el-form-item>
 
@@ -88,32 +88,36 @@ import { SearchFormType } from '../utils/types';
 import dayjs from 'dayjs';
 import { disableDate } from '@/utils/formmatDate';
 
-defineProps<{
-  loading: boolean;
-  form: SearchFormType;
-}>();
 const formRef = ref();
 const emits = defineEmits(['onSearch']);
 const selectIndex = ref(-1);
+const props = withDefaults(
+  defineProps<{
+    loading: boolean;
+    form: SearchFormType;
+  }>(),
+  {}
+);
 
 onMounted(() => {
   getLeagueList();
 });
-
-const dateChange = t => {
+const changeDate = t => {
   const d = dayjs(t).format('YYYY-MM-DD');
   selectIndex.value = nextDayArr.value.findIndex(_ => _ === d);
 };
-
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
+  selectIndex.value = -1;
   search();
 };
-
+const changeSelectDate = (_: number) => {
+  selectIndex.value = _;
+  props.form.beginTime = new Date(`${nextDayArr.value[_]} 00:00:00`).getTime();
+};
 const search = () => {
   emits('onSearch', ...['reload']);
 };
-
 const nextDayArr = computed(() => {
   const nextDayList = [];
   for (let i = 0; i < 5; i++) {
@@ -121,7 +125,6 @@ const nextDayArr = computed(() => {
   }
   return nextDayList;
 });
-
 const leagueList = reactive<MetadataAPI.LeagueList[]>([]);
 const getLeagueList = async () => {
   const res: MetadataAPI.LeagueListRes = await API.getLeagueList({

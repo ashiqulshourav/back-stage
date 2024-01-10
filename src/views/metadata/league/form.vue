@@ -5,9 +5,9 @@
     :rules="formRules"
     label-width="150px"
   >
-    <el-form-item :label="t('联赛杯Logo')">
-      <!-- action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15" -->
+    <!-- <el-form-item :label="t('联赛杯Logo')">
       <el-upload
+        action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
         class="avatar-uploader"
         :show-file-list="false"
         :on-success="handleAvatarSuccess"
@@ -18,12 +18,12 @@
         <img v-if="imageUrl" :src="imageUrl" class="w-[200px]" />
         <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
       </el-upload>
-    </el-form-item>
-    <el-form-item :label="t('联赛杯赛ID')" prop="leagueId">
+    </el-form-item> -->
+    <el-form-item :label="t('联赛ID')" prop="leagueId">
       <el-input
         v-model="newFormInline.leagueId"
         clearable
-        :placeholder="t('联赛杯赛ID')"
+        :placeholder="t('联赛ID')"
       />
     </el-form-item>
 
@@ -76,8 +76,8 @@
 import { ref } from 'vue';
 import { formRules } from './utils/rule';
 import { FormProps } from './utils/types';
-import type { UploadProps } from 'element-plus';
-import { Plus } from '@element-plus/icons-vue';
+// import type { UploadProps } from 'element-plus';
+// import { Plus } from '@element-plus/icons-vue';
 import { t } from '@/plugins/i18n';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
@@ -94,30 +94,30 @@ const props = withDefaults(defineProps<FormProps>(), {
   })
 });
 
-const beforeAvatarUpload: UploadProps['beforeUpload'] = _rawFile => {
-  // if (rawFile.type !== "image/jpeg") {
-  //   console.log("Avatar picture must be JPG format!");
-  //   return false;
-  // } else if (rawFile.size / 1024 / 1024 > 2) {
-  //   console.log("Avatar picture size can not exceed 2MB!");
-  //   return false;
-  // }
+/* const beforeAvatarUpload: UploadProps['beforeUpload'] = _rawFile => {
+  if (rawFile.type !== "image/jpeg") {
+    console.log("Avatar picture must be JPG format!");
+    return false;
+  } else if (rawFile.size / 1024 / 1024 > 2) {
+    console.log("Avatar picture size can not exceed 2MB!");
+    return false;
+  }
   return true;
-};
+}; */
 
-const handleAvatarSuccess: UploadProps['onSuccess'] = (
+/* const handleAvatarSuccess: UploadProps['onSuccess'] = (
   _response,
   _uploadFile
-) => {};
+) => {}; */
 
-const onImgChange = respose => {
+/* const onImgChange = respose => {
   imageUrl.value = URL.createObjectURL(respose.raw);
-};
+}; */
 
 const ruleFormRef = ref();
 const newFormInline = ref(props.formInline);
 
-const imageUrl = ref<string>(newFormInline.value.leagueLogo);
+// const imageUrl = ref<string>(newFormInline.value.leagueLogo);
 
 function getRef() {
   return ruleFormRef.value;

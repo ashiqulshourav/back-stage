@@ -12,7 +12,8 @@ export type SearchFormType = {
   matchName: string;
   isSale: string;
   sportId: string;
-  beginTime: string;
+  beginTime: number | string;
+  leagueId: string;
   leagueNameCn: string;
 }
 

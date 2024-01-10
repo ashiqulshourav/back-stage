@@ -54,7 +54,6 @@
   "k-45a07fe1": "The password format should be a combination of 8-18 digits",
   "k-dd1ef0c": "Cup ID",
   "k61b489d6": "Event Level",
-  "k1a82909d": "Cup English Name",
   "k39d003ff": "Country ID",
   "kb157b67": "188 Data Source League Cup ID",
   "k2751ca1b": "Event Type",
@@ -241,5 +240,8 @@
   "k-6232b87a": "Opening Odds/Total Odds:",
   "k-4b71bfd1": "Opening Control",
   "k105a5999": "Opening Odds/Total Odds",
-  "k1f280fd0": "Odds Preview"
+  "k1f280fd0": "Odds Preview",
+  "k603a992a": "滚球中",
+  "k4e1c5569": "比赛结束",
+  "k7e337a83": "未开始"
 }
