@@ -25,24 +25,24 @@
 </template>
 
 <script setup lang="ts">
-import { useNav } from "@/layout/hooks/useNav";
+import { useNav } from '@/layout/hooks/useNav';
 
-import Check from "@iconify-icons/ep/check";
-import globalization from "@/assets/svg/globalization.svg?component";
-import { useTranslationLang } from "@/layout/hooks/useTranslationLang";
+import Check from '@iconify-icons/ep/check';
+import globalization from '@/assets/svg/globalization.svg?component';
+import { useTranslationLang } from '@/layout/hooks/useTranslationLang';
 
 const { getDropdownItemStyle, getDropdownItemClass } = useNav();
 const { locale, translationLanguage } = useTranslationLang();
 const langNavList = reactive<{ code: string; label: string; fn: Function }[]>([
-  { code: "zh", fn: () => translationLanguage("zh"), label: "简体中文" },
-  { code: "en", fn: () => translationLanguage("en"), label: "English" },
-  { code: "fr", fn: () => translationLanguage("fr"), label: "French" }
+  { code: 'zh', fn: () => translationLanguage('zh'), label: '简体中文' },
+  { code: 'en', fn: () => translationLanguage('en'), label: 'English' },
+  { code: 'fr', fn: () => translationLanguage('fr'), label: 'French' }
 ]);
 </script>
 
 <style scoped lang="scss">
 .translation {
-  ::v-deep(.el-dropdown-menu__item) {
+  :deep(.el-dropdown-menu__item) {
     padding: 5px 40px;
   }
   .check-zh {

@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { handleTableWidth } from '@/utils/getTableWidth';
-import { MATCH_STATUS } from '@/utils/maps/sports_map';
+import { MATCH_STATUS, PANDA_MATCH_STATUS } from '@/utils/maps/sports_map';
 
 export const columns: TableColumnList = [
   {
@@ -11,7 +11,8 @@ export const columns: TableColumnList = [
   {
     label: t('序号'),
     fixed: true,
-    slot: 'sn',
+    type: 'index',
+    width: 100,
     headerRenderer: d => handleTableWidth(d, t('序号'))
   },
   {
@@ -48,18 +49,6 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('主队'), 'auto')
   },
   {
-    label: t('半场'),
-    prop: 'halfTime',
-    formatter: ({ halfTime }) => halfTime ?? '-',
-    headerRenderer: d => handleTableWidth(d, t('半场'), 'auto')
-  },
-  {
-    label: t('全场'),
-    prop: 'wholeTime',
-    formatter: ({ wholeTime }) => wholeTime ?? '-',
-    headerRenderer: d => handleTableWidth(d, t('全场'), 'auto')
-  },
-  {
     label: t('客队'),
     prop: 'awayTeamNameCn',
     align: 'left',
@@ -67,16 +56,16 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('客队'), 'auto')
   },
   {
-    label: t('审核员'),
-    prop: 'auditor',
-    formatter: ({ auditor }) => auditor || '-',
-    headerRenderer: d => handleTableWidth(d, t('审核员'))
-  },
-  {
-    label: t('操盘手'),
-    prop: 'trader',
-    formatter: ({ trader }) => trader || '-',
-    headerRenderer: d => handleTableWidth(d, t('操盘手'))
+    label: t('当前比分'),
+    prop: 'currentScore',
+    minWidth: 150,
+    headerRenderer: d => handleTableWidth(d, t('当前比分'), 'auto'),
+    formatter: ({ currentScore }) => {
+      let r = currentScore.split('');
+      r.shift();
+      r = r.join('').split('A');
+      return currentScore ? `${r[0]} : ${r[1]}` : '-';
+    }
   },
   {
     label: t('比赛状态'),
@@ -85,22 +74,16 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('比赛状态'))
   },
   {
-    label: t('待审核'),
-    prop: 'peddingReview',
-    formatter: ({ peddingReview }) => peddingReview || '-',
-    headerRenderer: d => handleTableWidth(d, t('待审核'))
+    label: t('熊猫匹配结果'),
+    prop: 'pandaResult',
+    formatter: ({ pandaResult }) => PANDA_MATCH_STATUS[pandaResult],
+    headerRenderer: d => handleTableWidth(d, t('熊猫匹配结果'))
   },
   {
-    label: t('赛事数据源'),
-    prop: 'eventDataSource',
-    formatter: ({ eventDataSource }) => eventDataSource || '-',
-    headerRenderer: d => handleTableWidth(d, t('赛事数据源'))
-  },
-  {
-    label: t('确认中'),
-    prop: 'confirming',
-    formatter: ({ confirming }) => confirming || '-',
-    headerRenderer: d => handleTableWidth(d, t('确认中'))
+    label: t('是否中立场地'),
+    prop: 'isNeutral',
+    formatter: ({ isNeutral }) => (isNeutral ? t('是') : t('否')),
+    headerRenderer: d => handleTableWidth(d, t('是否中立场地'))
   },
   {
     label: t('上半场结算'),
@@ -124,24 +107,7 @@ export const columns: TableColumnList = [
         <el-text type="danger">{t('已结算')}</el-text>
       ),
     headerRenderer: d => handleTableWidth(d, t('全场结算'))
-  },
-  {
-    label: t('异常'),
-    prop: 'abnormal',
-    formatter: ({ abnormal }) => abnormal || '-',
-    headerRenderer: d => handleTableWidth(d, t('异常'))
   }
-  // {
-  //   label: t("结算状态"),
-  //   prop: "settleStatus",
-  //   formatter: ({ settleStatus }) => settleStatus || '-'
-  // },
-  /* {
-    label: t("操作"),
-    prop: "operation",
-    slot: 'operation',
-    fixed: "right",
-  }, */
 ];
 
 export const childColumns: TableColumnList = [

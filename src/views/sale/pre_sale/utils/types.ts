@@ -12,9 +12,10 @@ export type SearchFormType = {
   matchName: string;
   isSale: string;
   sportId: string;
-  beginTime: number | string;
+  startTime: number | string;
   leagueId: string;
   leagueNameCn: string;
+  endTime: string;
 }
 
 export type {

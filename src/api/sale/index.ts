@@ -9,6 +9,9 @@ export const saleData = {
     pageNum?: number;
     sportId?: number;
     pageSize?: number;
+    matchCondition?: number;
+    startTime?: string;
+    endTime?: string;
   }) => http.request<SaleDataAPI.PreSaleListRes>("post", "/match/v1/getPreSaleList", { data }),
 
   updateSaleStatus: (data: {

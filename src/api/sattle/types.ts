@@ -47,4 +47,71 @@ declare namespace SattleDataAPI {
     id?: number;
   }
 
+
+  type getSettlementDataList = {
+    matchId: number;
+    countryId: number;
+    sportId: number;
+    leagueId: number;
+    leagueNameCn: string;
+    matchName: string;
+    homeTeamId: number;
+    homeTeamNameCn: string;
+    awayTeamId: number;
+    awayTeamNameCn: string;
+    beginTime: string;
+    beginTimeLong: number;
+    playingField: string;
+    isNeutral: number;
+    level: number;
+    isSale: number;
+    videoUrl: string;
+    status: string;
+    currentScore: string;
+    currentTime: string;
+    currentPc: string;
+    pandaResult: number;
+    pandaVideoId: string;
+    pandaMatchId: number;
+    pandaLinkId: string;
+    pandaOppositeStatus: number;
+    halfSettlementStatus: number;
+    fullSettlementStatus: number;
+    matchCondition?: any;
+    startTime?: any;
+    endTime?: any;
+    pageSize: number;
+    pageNum: number;
+    childrenData: ChildrenDataList[]
+  }
+
+  type ChildrenDataList = {
+    type: string;
+    key: string;
+    tableList: MatchEventsList[]
+  };
+
+  type getSettlementDataListRes = {
+    total: number;
+    list: getSettlementDataList[];
+    pageNum: number;
+    pageSize: number;
+    size: number;
+    startRow: number;
+    endRow: number;
+    pages: number;
+    prePage: number;
+    nextPage: number;
+    isFirstPage: boolean;
+    isLastPage: boolean;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
+    navigatePages: number;
+    navigatepageNums: number[];
+    navigateFirstPage: number;
+    navigateLastPage: number;
+  }
+
+  type getSettlementListRes = COMMON.BASE_RES_TYPE<getSettlementDataListRes>
+
 }

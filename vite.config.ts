@@ -92,7 +92,9 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
           entryFileNames: "static/js/[name]-[hash].js",
           assetFileNames: "static/[ext]/[name]-[hash].[ext]"
         }
-      }
+      },
+      // outDir: 'dist/kmg-back',
+      assetsDir: 'static',
     },
     define: {
       __INTLIFY_PROD_DEVTOOLS__: false,

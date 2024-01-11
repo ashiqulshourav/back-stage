@@ -1,6 +1,15 @@
 import { http } from "@/utils/http";
 
 export const sattleData = {
+  getSettlementList: (data: {
+    isSale?: number;
+    leagueId?: number;
+    pageNum: number;
+    pageSize: number;
+    sportId?: number;
+    startTime?: number;
+    endTime?: number;
+  }) => http.request<SattleDataAPI.getSettlementListRes>("post", "/match/v1/getSettlementList", { data }),
   getMatchEvents: (data: {
     matchId: number;
   }) => http.request<SattleDataAPI.getMatchEventsRes>("post", "/event/v1/getMatchEvents", { data }),

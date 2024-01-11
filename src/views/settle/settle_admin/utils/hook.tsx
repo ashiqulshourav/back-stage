@@ -2,34 +2,31 @@ import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { t } from '@/plugins/i18n';
-import { usePublicHooks } from '@/hooks';
 import { childColumns, columns } from './tableColumnList';
-import { MatchEventType, TempListType } from './type';
+import { MatchEventType, SearchFormType, TempListType } from './type';
 
 export function useSettle() {
-  const form = reactive({
-    date: '',
+  const form = reactive<SearchFormType>({
+    leagueId: '',
     matchId: '',
-    matchType: '',
-    matchName: '',
-    settleStatus: '',
-    halfSettlementStatus: '',
-    fullSettlementStatus: '',
-    dataVendors: ''
+    status: '',
+    startTime: '',
+    endTime: ''
   });
-  const dataList = reactive<SaleDataAPI.PreSaleList[]>([]);
+  const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const loading = ref(true);
   const childloading = ref(true);
   const switchLoadMap = ref({});
   const currentSportId = ref(1);
   const childDataTotal = ref(0);
   const expandMatchList = reactive<number[]>([]);
+  const expandRowList = reactive<SaleDataAPI.PreSaleList[]>([]);
 
   const balanceLoading = reactive<{ half: boolean; all: boolean }>({
     half: false,
     all: false
   });
-  const { switchStyle } = usePublicHooks();
+
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -50,18 +47,20 @@ export function useSettle() {
     console.log('handleSelectionChange', val);
   };
 
+  /** 搜索 */
   const onSearch = async (type?: 'reload', spoprtId?: number) => {
     try {
       if (spoprtId) currentSportId.value = spoprtId;
       if (type === 'reload') pagination.currentPage = 1;
       loading.value = true;
       const data = removeEmptyStringKeys(form);
-      const res: SaleDataAPI.PreSaleListRes = await API.getPreSaleList({
-        ...data,
-        pageSize: pagination.pageSize,
-        pageNum: pagination.currentPage,
-        sportId: currentSportId.value
-      });
+      const res: SattleDataAPI.getSettlementListRes =
+        await API.getSettlementList({
+          ...data,
+          pageSize: pagination.pageSize,
+          pageNum: pagination.currentPage,
+          sportId: currentSportId.value
+        });
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
@@ -102,8 +101,9 @@ export function useSettle() {
 
   const addChildRow = (tableList, type) => {
     if (
-      tableList.length !== 0 &&
-      !tableList[tableList.length - 1].player1Name
+      (tableList.length !== 0 &&
+        !tableList[tableList.length - 1].player1Name) ||
+      tableList[tableList.length - 1].isEdit
     ) {
       message('请先完成上一个事件添加', { type: 'error' });
     } else {
@@ -122,21 +122,21 @@ export function useSettle() {
     }
   };
 
-  const editChild = (row: SattleDataAPI.MatchEventsList) => {
-    row.isEdit = true;
-  };
+  const editChild = (row: SattleDataAPI.MatchEventsList) => (row.isEdit = true);
 
   const expandChange = (
     row: SaleDataAPI.PreSaleList,
     d: SaleDataAPI.PreSaleList[]
   ) => {
     expandMatchList.length = 0;
+    expandRowList.length = 0;
     expandMatchList.push(...d.map(_ => _.matchId));
+    expandRowList.push(...d);
     if (!d.some(item => item.matchId === row.matchId)) return;
-    getChildRenData(row);
+    getChildrenData(row);
   };
 
-  const getChildRenData = async row => {
+  const getChildrenData = async row => {
     childloading.value = true;
     const res = await API.getMatchEvents({ matchId: row.matchId });
     childloading.value = false;
@@ -168,7 +168,7 @@ export function useSettle() {
       const res = await API.deleteMatchEvent({ id });
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if (res.code) return;
-      getChildRenData(dataList[parentIndex]);
+      getChildrenData(dataList[parentIndex]);
     }
   };
 
@@ -236,7 +236,7 @@ export function useSettle() {
     message(res.msg, { type: res.code ? 'error' : 'success' });
     if (res.code) return;
     row.isEdit = false;
-    getChildRenData(parentRow);
+    getChildrenData(parentRow);
   };
 
   // 结算
@@ -246,17 +246,29 @@ export function useSettle() {
       const res = await API[
         type === 'half' ? 'firstHalfSettlement' : 'allSettlement'
       ]({ matchId });
-      
+
       message(res.msg, { type: res.code ? 'error' : 'success' });
       balanceLoading[type] = false;
       await onSearch();
       const row = dataList.find(_ => _.matchId === matchId);
-      getChildRenData(row);
+      getChildrenData(row);
     } catch (error) {
       balanceLoading[type] = false;
     }
   };
+
   onMounted(() => onSearch());
+
+  const reloadTable = async () => {
+    await onSearch('reload');
+    expandRowList.forEach(async row => {
+      await getChildrenData(row);
+      dataList.forEach(d => {
+        if (d.matchId === row.matchId) d.childrenData = row.childrenData;
+      });
+    });
+  };
+
   return {
     form,
     loading,
@@ -271,9 +283,8 @@ export function useSettle() {
     expandChange,
     handleCurrentChange,
     handleSelectionChange,
-    switchStyle,
     childColumns,
-    getChildRenData,
+    getChildrenData,
     addChildRow,
     editChild,
     currentSportId,
@@ -281,6 +292,7 @@ export function useSettle() {
     settlementFunction,
     handleChildrenData,
     childDataTotal,
-    expandMatchList
+    expandMatchList,
+    reloadTable
   };
 }

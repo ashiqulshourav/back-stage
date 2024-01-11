@@ -42,3 +42,8 @@ export type userType = {
   token: string;
   userInfo: UserAPI.Login_User
 };
+
+
+export type MatchType = {
+  leagueList: MetadataAPI.LeagueList[]
+};

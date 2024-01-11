@@ -1,6 +1,5 @@
 import { handleTableWidth } from '@/utils/getTableWidth';
 import dayjs from 'dayjs';
-import { t } from '@/plugins/i18n';
 import { IconifyIconOffline } from '@/components/ReIcon';
 
 export const columns: TableColumnList = [
@@ -23,6 +22,7 @@ export const columns: TableColumnList = [
     label: t('联赛名称'),
     prop: 'leagueNameCn',
     headerRenderer: d => handleTableWidth(d, t('联赛名称'), 'auto'),
+    formatter: ({ leagueNameCn }) => leagueNameCn || '-',
     align: 'left'
   },
   {

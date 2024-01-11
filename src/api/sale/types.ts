@@ -55,7 +55,6 @@ declare namespace SaleDataAPI {
     navigatepageNums: number[];
     navigateFirstPage: number;
     navigateLastPage: number;
-
   }
 
   type PreSaleListRes = COMMON.BASE_RES_TYPE<PreSaleListData>;

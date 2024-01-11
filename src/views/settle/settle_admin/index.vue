@@ -12,7 +12,7 @@
     <PureTableBar
       :title="t('结算管理')"
       :columns="columns"
-      @refresh="onSearch('reload')"
+      @refresh="reloadTable"
     >
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
@@ -36,7 +36,6 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
-          <template #sn="{ index: parIndex }">{{ parIndex + 1 }}</template>
           <template
             #expand="{
               row: parentRow,
@@ -287,7 +286,7 @@ const changeEventTime = (
 ) => {
   if (childIndex === 0) return;
   if (row.eventTime <= childrenData[childIndex - 1].eventTime) {
-    message('时间不能小于前一个事件发生时间', { type: 'error' });
+    message(t('时间不能小于前一个事件发生时间'), { type: 'error' });
     row.eventTime = '';
   }
 };
@@ -316,13 +315,13 @@ const teamChangeEvent = (
       : isYellowRedCard
       ? (row.redOrYellow as number)
       : 1;
-
     row.t1 = +prevRow.t1 + t1Increment;
     row.t2 = +prevRow.t2 + t2Increment;
   }
 };
 
 const {
+  form,
   loading,
   childloading,
   columns,
@@ -336,14 +335,14 @@ const {
   expandChange,
   addChildRow,
   editChild,
-  form,
   resetForm,
   balanceLoading,
   settlementFunction,
   currentSportId,
   handleChildrenData,
   childDataTotal,
-  expandMatchList
+  expandMatchList,
+  reloadTable
 } = useSettle();
 </script>
 

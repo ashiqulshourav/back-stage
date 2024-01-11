@@ -1,6 +1,12 @@
 <template>
   <div class="main">
-    <SearchForm :loading="loading" @on-search="onSearch" :form="searchForm" />
+    <SearchForm
+      :loading="loading"
+      @on-search="onSearch"
+      :form="searchForm"
+      :matchCondition="matchCondition"
+      @changeMatchCondition="changeMatchCondition"
+    />
     <PureTableBar :columns="columns" @refresh="onSearch('reload')">
       <template #title>
         <div class="flex items-center justify-between">
@@ -106,6 +112,8 @@ const {
   openDialog,
   searchForm,
   switchStyle,
-  isLockAll
+  isLockAll,
+  matchCondition,
+  changeMatchCondition
 } = usePreSale();
 </script>

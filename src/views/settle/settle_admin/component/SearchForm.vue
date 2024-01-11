@@ -5,64 +5,30 @@
     :model="form"
     class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
   >
-    <!-- <el-form-item>
-      <el-button>{{ t("体育") }}</el-button>
-    </el-form-item> -->
-
-    <!--  <el-form-item :label="`${t('结算时间')}:`">
-      <el-date-picker
-        v-model="form.date"
-        type="datetimerange"
-        :start-placeholder="t('开始日期')"
-        :end-placeholder="t('结束日期')"
-      />
+    <el-form-item :label="`${t('联赛')}:`" prop="leagueId">
+      <el-select
+        v-model="form.leagueId"
+        filterable
+        class="w-[280px]"
+        :placeholder="t('请选择联赛')"
+      >
+        <el-option
+          v-for="item in matchStore.leagueList"
+          :key="item.leagueId"
+          :label="item.leagueNameCn"
+          :value="item.leagueId"
+        />
+      </el-select>
     </el-form-item>
- -->
+
     <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
       <el-input
         v-model="form.matchId"
         :placeholder="t('赛事ID')"
+        v-enter="searchVal"
         clearable
-        @keyup.enter="searchVal"
         class="!w-[150px]"
       />
-    </el-form-item>
-
-    <!-- <el-form-item :label="`${t('赛事分类')}:`" prop="sportId">
-      <el-select v-model="form.sportId" :placeholder="t('请选择')">
-        <el-option
-          :label="item.label"
-          :value="item.value"
-          v-for="item in SPORT_ID_MAP"
-          :key="item.value"
-        />
-      </el-select>
-    </el-form-item> -->
-
-    <el-form-item :label="`${t('联赛ID')}:`" prop="leagueId">
-      <el-input
-        v-model="form.leagueId"
-        :placeholder="t('联赛ID')"
-        @keyup.enter="searchVal"
-        clearable
-      />
-    </el-form-item>
-
-    <el-form-item
-      :label="`${t('上半场结算状态')}:`"
-      prop="halfSettlementStatus"
-    >
-      <el-select v-model="form.halfSettlementStatus" :placeholder="t('请选择')">
-        <el-option :label="t('已结算')" :value="1" />
-        <el-option :label="t('未结算')" :value="0" />
-      </el-select>
-    </el-form-item>
-
-    <el-form-item :label="`${t('全场结算状态')}:`" prop="fullSettlementStatus">
-      <el-select v-model="form.fullSettlementStatus" :placeholder="t('请选择')">
-        <el-option :label="t('已结算')" :value="1" />
-        <el-option :label="t('未结算')" :value="0" />
-      </el-select>
     </el-form-item>
 
     <el-form-item :label="`${t('比赛状态')}:`" prop="status">
@@ -71,6 +37,29 @@
         <el-option :label="t('比赛结束')" value="over" />
         <el-option :label="t('未开始')" value="nobegin" />
       </el-select>
+    </el-form-item>
+
+    <el-form-item :label="`${t('比赛时间')}:`" prop="startTime">
+      <el-date-picker
+        class="ml-4"
+        v-model="form.startTime"
+        type="date"
+        :placeholder="t('其他日期')"
+        value-format="x"
+        format="YYYY-MM-DD"
+        @change="changeDate"
+      />
+    </el-form-item>
+
+    <el-form-item prop="endTime" class="!hidden">
+      <el-date-picker
+        class="ml-4"
+        v-model="form.endTime"
+        type="date"
+        :placeholder="t('其他日期')"
+        value-format="x"
+        format="YYYY-MM-DD"
+      />
     </el-form-item>
 
     <el-form-item>
@@ -97,23 +86,43 @@ import icon_serch from '@iconify-icons/ep/search';
 import icon_refresh from '@iconify-icons/ep/refresh';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import { t } from '@/plugins/i18n';
-import { FormProps } from '../utils/type';
+import { SearchFormType } from '../utils/type';
+import { useMatchStore } from '@/store/match';
+import dayjs from 'dayjs';
 // import { useLeague } from "../utils/hook";
 const formRef = ref();
-const emit = defineEmits(['onSearch', 'resetForm']);
+const matchStore = useMatchStore();
+
 // import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
 
-defineProps<{
-  form: FormProps;
-  loading: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    loading: boolean;
+    form: SearchFormType;
+  }>(),
+  {}
+);
+
+onMounted(() => {
+  matchStore.set_lagueList();
+});
+
+const changeDate = t => {
+  const d = dayjs(t).format('YYYY-MM-DD');
+  props.form.startTime = dayjs(t).format('YYYY-MM-DD HH:mm:ss');
+  const endTime = new Date(`${d} 23:59:59`);
+  props.form.endTime = dayjs(endTime).format('YYYY-MM-DD HH:mm:ss');
+  emits('onSearch', ...['reload']);
+};
+
+const emits = defineEmits(['onSearch', 'resetForm', 'changeMatchCondition']);
 
 const searchVal = () => {
-  emit('onSearch', 'reload');
+  emits('onSearch', 'reload');
 };
 
 const resetForm = formRef => {
-  emit('resetForm', formRef);
+  emits('resetForm', formRef);
 };
 </script>
 

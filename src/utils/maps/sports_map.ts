@@ -24,3 +24,9 @@ export const MATCH_STATUS = {
   over: t('比赛结束'),
   nobegin: t('未开始'),
 }
+
+export const PANDA_MATCH_STATUS = {
+  0: t('未匹配'),
+  1: t('成功匹配'),
+  2: t('匹配失败'),
+}

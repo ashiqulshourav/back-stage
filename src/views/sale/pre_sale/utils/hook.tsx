@@ -16,6 +16,7 @@ export function usePreSale() {
   const allSaleSatatus = ref(0);
   const { switchStyle } = usePublicHooks();
   const isLockAll = ref(true);
+  const matchCondition = ref(1);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -27,7 +28,8 @@ export function usePreSale() {
     matchName: '',
     isSale: '',
     sportId: '',
-    beginTime: '',
+    startTime: '',
+    endTime: '',
     leagueNameCn: '',
     leagueId: ''
   });
@@ -38,13 +40,17 @@ export function usePreSale() {
     row: SaleDataAPI.PreSaleList;
     index: number;
   }) {
-    ElMessageBox.confirm(t('确认要调整开售状态吗?'), t('系统提示'), {
-      confirmButtonText: t('确定'),
-      cancelButtonText: t('取消'),
-      type: 'warning',
-      dangerouslyUseHTMLString: true,
-      draggable: true
-    })
+    ElMessageBox.confirm(
+      row.isSale ? t(`确认要开售吗?`) : t('确认要下架吗？'),
+      t('系统提示'),
+      {
+        confirmButtonText: t('确定'),
+        cancelButtonText: t('取消'),
+        type: 'warning',
+        dangerouslyUseHTMLString: true,
+        draggable: true
+      }
+    )
       .then(async () => {
         const res = await API.updateSaleStatus({
           isSale: row.isSale,
@@ -116,7 +122,8 @@ export function usePreSale() {
     const res: SaleDataAPI.PreSaleListRes = await API.getPreSaleList({
       ...removeEmptyStringKeys(searchForm),
       pageSize: pagination.pageSize,
-      pageNum: pagination.currentPage
+      pageNum: pagination.currentPage,
+      matchCondition: matchCondition.value
     });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
@@ -141,7 +148,6 @@ export function usePreSale() {
   };
 
   const changeAllSaleStatus = () => {
-    console.log('hook.tsx文件 131==============行打印=', allSaleSatatus.value);
     ElMessageBox.confirm(t('确认要调整开售状态吗?'), t('系统提示'), {
       confirmButtonText: t('确定'),
       cancelButtonText: t('取消'),
@@ -159,6 +165,11 @@ export function usePreSale() {
         // onSearch();
       })
       .catch(() => (allSaleSatatus.value = 0));
+  };
+
+  const changeMatchCondition = (n: number) => {
+    matchCondition.value = n;
+    onSearch('reload');
   };
 
   onMounted(() => {
@@ -181,6 +192,8 @@ export function usePreSale() {
     allSaleSatatus,
     searchForm,
     isLockAll,
-    switchStyle
+    switchStyle,
+    matchCondition,
+    changeMatchCondition
   };
 }
