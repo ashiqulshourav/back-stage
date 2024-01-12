@@ -98,6 +98,7 @@ declare global {
     MenuArrowIconNoTransition?: boolean;
     CachingAsyncRoutes?: boolean;
     TooltipEffect?: Effect;
+    maxNumLen?: number;
     ResponsiveStorageNameSpace?: string;
   }
 

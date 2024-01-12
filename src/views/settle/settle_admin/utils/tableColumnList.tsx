@@ -134,14 +134,14 @@ export const childColumns: TableColumnList = [
     label: t('主/客队'),
     slot: 'homeAway'
   },
-  {
-    label: t('1号球员名称'),
-    slot: 'player1Name'
-  },
-  {
-    label: t('事件是否被取消'),
-    slot: 'canceled'
-  },
+  // {
+  //   label: t('1号球员名称'),
+  //   slot: 'player1Name'
+  // },
+  // {
+  //   label: t('事件是否被取消'),
+  //   slot: 'canceled'
+  // },
   {
     label: t('操作'),
     slot: 'operation'

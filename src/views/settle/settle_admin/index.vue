@@ -63,11 +63,6 @@
                   settlementFunction(parentRow.matchId, key as 'half' | 'all')
                 "
               />
-              <span class="mr-4 ml-4">{{ t('注') }}:</span>
-              <span class="mr-4">A: {{ t('编辑') }}</span>
-              <span class="mr-4">B: {{ t('确认修改') }}</span>
-              <span class="mr-4">C: {{ t('确认新增') }}</span>
-              <span class="mr-4">D: {{ t('删除当前记录') }}</span>
             </div>
             <div class="m-4">
               <div v-for="item in parentRow.childrenData" :key="item.type">
@@ -193,40 +188,53 @@
                     }"
                   >
                     <div class="flex items-center justify-center">
-                      <CustomButton
-                        :circle="true"
-                        @click="editChild(row)"
+                      <el-button
+                        class="reset-margin"
+                        link
+                        type="primary"
+                        :size="size"
                         v-if="item.tableList.length - 1 === childIndex"
+                        :icon="useRenderIcon(EditPen)"
+                        @click="editChild(row)"
                       >
-                        <div class="w-[14px] h-[14px] align-middle">A</div>
-                      </CustomButton>
-                      <CustomButton
-                        :circle="true"
-                        @click="
-                          handleChildrenData(row, parIndex, 'edit', parentRow)
-                        "
-                        v-if="
-                          row.isBackEndReturnData &&
-                          item.tableList.length - 1 === childIndex
-                        "
-                      >
-                        <div class="w-[14px] h-[14px] align-middle">B</div>
-                      </CustomButton>
+                        {{ t('编辑') }}
+                      </el-button>
 
-                      <CustomButton
-                        :circle="true"
-                        @click="
-                          handleChildrenData(row, parIndex, 'add', parentRow)
-                        "
+                      <el-button
+                        class="reset-margin"
+                        link
+                        type="primary"
+                        :size="size"
                         v-if="
                           !row.isBackEndReturnData &&
                           item.tableList.length - 1 === childIndex
                         "
+                        :icon="useRenderIcon(saveIcon)"
+                        @click="
+                          handleChildrenData(row, parIndex, 'edit', parentRow)
+                        "
                       >
-                        <div class="w-[14px] h-[14px] align-middle">C</div>
-                      </CustomButton>
+                        {{ t('保存') }}
+                      </el-button>
 
-                      <el-popconfirm
+                      <el-button
+                        class="reset-margin"
+                        link
+                        type="primary"
+                        :size="size"
+                        v-if="
+                          !row.isBackEndReturnData &&
+                          item.tableList.length - 1 === childIndex
+                        "
+                        :icon="useRenderIcon(uploadIcon)"
+                        @click="
+                          handleChildrenData(row, parIndex, 'edit', parentRow)
+                        "
+                      >
+                        {{ t('提交') }}
+                      </el-button>
+
+                      <!-- <el-popconfirm
                         v-if="item.tableList.length - 1 === childIndex"
                         :title="t('是否确认删除数据么')"
                         @confirm="
@@ -244,7 +252,7 @@
                             <div class="w-[14px] h-[14px] align-middle">D</div>
                           </el-button>
                         </template>
-                      </el-popconfirm>
+                      </el-popconfirm> -->
                     </div>
                   </template>
                 </pure-table>
@@ -269,6 +277,8 @@ import { PureTableBar } from '@/components/RePureTableBar';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import icon_money from '@iconify-icons/ri/money-cny-box-fill';
 import icon_circle_fill from '@iconify-icons/ri/add-circle-fill';
+import saveIcon from '@iconify-icons/ri/save-3-fill';
+import uploadIcon from '@iconify-icons/ri/upload-2-fill';
 import { useSettle } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
 import { t } from '@/plugins/i18n';
@@ -278,6 +288,7 @@ import CustomButton from '@/components/Form/CustomButton.vue';
 import SportTypeNav from './component/SportTypeNav.vue';
 import { MatchEventType } from './utils/type';
 defineOptions({ name: 'settle_admin' });
+import EditPen from '@iconify-icons/ep/edit-pen';
 
 const changeEventTime = (
   row: SattleDataAPI.MatchEventsList,

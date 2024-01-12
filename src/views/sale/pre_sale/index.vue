@@ -49,11 +49,11 @@
               @change="changeSwitch({ row, index })"
             />
           </template>
-          <template #num="{ row }: { row: SaleDataAPI.PreSaleList }">
+          <template #saleHandicaps="{ row }: { row: SaleDataAPI.PreSaleList }">
             <span
               class="underline cursor-pointer"
-              @click="openInfoDialog(row.matchId)"
-              >{{ row.num ?? '-' }}</span
+              @click="openInfoDialog(row.matchId, row)"
+              >{{ row.saleHandicaps }}/{{ row.allHandicaps }}</span
             >
           </template>
           <template #isNeutral="{ row }">
@@ -89,11 +89,10 @@ import OpeningPreview from './component/OpeningPreview.vue';
 import { addDialog } from '@/components/ReDialog';
 
 defineOptions({ name: 'pre_sale' });
-
-const openInfoDialog = (matchId: number) => {
+const openInfoDialog = (matchId: number, row: SaleDataAPI.PreSaleList) => {
   addDialog({
     title: t('盘口预览'),
-    props: { matchId },
+    props: { matchId, matchInfo: row },
     width: '30%',
     draggable: true,
     contentRenderer: () => h(OpeningPreview),

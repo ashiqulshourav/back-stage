@@ -26,6 +26,9 @@ declare namespace SaleDataAPI {
     halfSettlementStatus: number;
     fullSettlementStatus: number;
     showPopover?: boolean;
+    saleHandicaps: number;
+    allHandicaps: number;
+    leagueNameCn: string;
     childrenData: ChildrenDataList[];
   }
 
@@ -82,4 +85,28 @@ declare namespace SaleDataAPI {
     matchName: string;
     sportId: string;
   }
+
+  type getBetItemsListDataType = {
+    betItemsId: number;
+    sportId: number;
+    leagueId: number;
+    matchId: number;
+    kindsCode: string;
+    betItemsName: string;
+    sourceCode: string;
+    sourceBetItemsId: number;
+    sourceBetItemsMid: number;
+    homeOrAway: string;
+    handicap: string;
+    odds: number;
+    isSale: number;
+    displayIndex: number;
+    handicapIndex: number;
+    handicapItemIndex: number;
+    oddsType: string;
+    handicapFilter: string;
+    ctid: number;
+  }
+
+  type getBetItemsListResType = COMMON.BASE_RES_TYPE<getBetItemsListDataType[]>
 }

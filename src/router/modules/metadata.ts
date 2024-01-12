@@ -26,7 +26,7 @@ export default {
         showParent: true,
       }
     },
-    {
+    /* {
       path: "/metadata/player",
       name: "player",
       component: () => import("@/views/metadata/player/index.vue"),
@@ -34,6 +34,6 @@ export default {
         title: t('球员管理'),
         showParent: true,
       }
-    }
+    } */
   ]
 } as RouteConfigsTable;

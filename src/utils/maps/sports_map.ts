@@ -30,3 +30,91 @@ export const PANDA_MATCH_STATUS = {
   1: t('成功匹配'),
   2: t('匹配失败'),
 }
+
+export const PLAY_MATCH = {
+  HT_AH: {
+    Home: t('主'),
+    Away: t('客')
+  },
+  FT_OE: {
+    hideMiddle: true,
+    Odd: t('单'),
+    Even: t('双')
+  },
+  HT_OU: {
+    Over: t('大'),
+    Under: t('小')
+  },
+  FT_OU: {
+    Over: t('大'),
+    Under: t('小')
+  },
+  FT_AH: {
+    Home: t('主'),
+    Away: t('客')
+  },
+  FT_1X2: {
+    hideMiddle: true,
+    Home: t('主胜'),
+    Away: t('客胜'),
+    Draw: t('平')
+  },
+  HT_OE: {
+    hideMiddle: true,
+    Odd: t('单'),
+    Even: t('双')
+  },
+  HT_1X2: {
+    hideMiddle: true,
+    Home: t('主'),
+    Away: t('客'),
+    Draw: t('平')
+  },
+};
+
+const BoDanSort = (a: any, b: any) => {
+  const [aFirst, aSecond] = a.handicap.split('-');
+  const [bFirst, bSecond] = b.handicap.split('-');
+  if (aFirst !== bFirst) {
+    return parseInt(aFirst) - parseInt(bFirst);
+  }
+  return parseInt(aSecond) - parseInt(bSecond);
+};
+
+// 波胆数据格式转换
+export const transferBoDan = (list: any[]) => {
+  const listData: any[] = [];
+  const list1: any[] = [];
+  const list2: any[] = [];
+  const list3: any[] = [];
+  let other: any = null;
+  list.forEach((item) => {
+    const temp = { ...item };
+    if (temp.handicap === 'AOS') {
+      temp.handicap = t('其他');
+      other = temp;
+    } else {
+      const h = temp.handicap.match(/H(\S*)A/)[1];
+      const a = temp.handicap.split('A')[1];
+      temp.handicap = `${h}-${a}`;
+      if (/[0-9]/.test(h) && /[0-9]/.test(a)) {
+        if (h > a) list1.push(temp);
+        if (h === a) list2.push(temp);
+        if (h < a) list3.push(temp);
+      }
+    }
+  });
+  list1.sort(BoDanSort);
+  list2.sort(BoDanSort);
+  list3.sort(BoDanSort);
+  if (other) {
+    list2.push(other);
+  }
+  const len = Math.max(list1.length, list2.length, list3.length);
+  for (let i = 0; i < len; i++) {
+    listData[0 + (i * 3)] = list1[i] || null;
+    listData[1 + (i * 3)] = list2[i] || null;
+    listData[2 + (i * 3)] = list3[i] || null;
+  }
+  return listData;
+};

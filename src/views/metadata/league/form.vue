@@ -32,6 +32,7 @@
       <el-select
         v-model="newFormInline.countryId"
         filterable
+        clearable
         class="w-[280px]"
         :placeholder="t('请选择国家')"
       >
@@ -44,15 +45,16 @@
       </el-select>
     </el-form-item>
 
-    <el-form-item :label="t('188数据源联赛杯赛')" prop="leagueId188Bet">
+    <!-- <el-form-item :label="t('188数据源联赛杯赛')" prop="leagueId188Bet">
       <el-input
         v-model="newFormInline.leagueId188Bet"
         :placeholder="t('188数据源联赛杯赛')"
       />
-    </el-form-item>
+    </el-form-item> -->
     <el-form-item :label="t('联赛杯赛中文名')" prop="leagueNameCn">
       <el-input
         v-model="newFormInline.leagueNameCn"
+        maxLength="35"
         :placeholder="t('联赛杯赛中文名')"
       />
     </el-form-item>
@@ -60,16 +62,19 @@
       <el-input
         v-model="newFormInline.leagueNameEn"
         :placeholder="t('联赛杯英文名称')"
+        maxLength="35"
       />
     </el-form-item>
     <el-form-item :label="t('联赛等级')" prop="level">
-      <el-input
+      <el-select
         v-model="newFormInline.level"
-        v-number="5"
+        class="w-[280px]"
         :placeholder="t('联赛等级')"
-      />
+      >
+        <el-option v-for="item in 8" :key="item" :label="item" :value="item" />
+      </el-select>
     </el-form-item>
-    <el-form-item label="赛种" prop="sportId">
+    <!-- <el-form-item label="赛种" prop="sportId">
       <el-select v-model="newFormInline.sportId" :placeholder="t('赛种')">
         <el-option
           :label="item.label"
@@ -78,7 +83,7 @@
           :key="item.value"
         />
       </el-select>
-    </el-form-item>
+    </el-form-item> -->
   </el-form>
 </template>
 
@@ -89,7 +94,7 @@ import { FormProps } from './utils/types';
 // import type { UploadProps } from 'element-plus';
 // import { Plus } from '@element-plus/icons-vue';
 import { t } from '@/plugins/i18n';
-import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+// import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { useMatchStore } from '@/store/match';
 
 const matchStore = useMatchStore();
@@ -100,8 +105,8 @@ const props = withDefaults(defineProps<FormProps>(), {
     countryId: '',
     leagueNameEn: '',
     leagueId: '',
-    leagueLogo: '',
-    leagueId188Bet: '',
+    // leagueLogo: '',
+    // leagueId188Bet: '',
     sportId: ''
   })
 });

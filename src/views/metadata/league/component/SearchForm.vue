@@ -11,6 +11,7 @@
         :placeholder="t('联赛ID')"
         clearable
         v-enter="search"
+        v-number
         class="!w-[200px]"
       />
     </el-form-item>
@@ -29,6 +30,7 @@
         v-model="form.leagueNameCn"
         :placeholder="t('联赛中文名')"
         clearable
+        maxLength="20"
         v-enter="search"
         class="!w-[200px]"
       />
@@ -38,6 +40,7 @@
         v-model="form.leagueNameEn"
         :placeholder="t('联赛英文名')"
         clearable
+        maxLength="30"
         v-enter="search"
         class="!w-[200px]"
       />
@@ -46,6 +49,7 @@
       <el-select
         v-model="form.countryId"
         filterable
+        clearable
         class="w-[280px]"
         :placeholder="t('请选择国家')"
       >
@@ -63,12 +67,13 @@
         v-model="form.leagueId188Bet"
         :placeholder="t('188数据源联赛杯ID')"
         clearable
+        v-number="15"
         v-enter="search"
         class="!w-[200px]"
       />
     </el-form-item>
     <el-form-item :label="`${t('赛种')}:`" prop="sportId">
-      <el-select v-model="form.sportId" :placeholder="t('赛种')">
+      <el-select v-model="form.sportId" :placeholder="t('赛种')" clearable>
         <el-option
           :label="item.label"
           :value="item.value"

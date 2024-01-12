@@ -28,8 +28,8 @@ declare namespace MetadataAPI {
     countryId: number | string;
     leagueNameCn: string;
     leagueNameEn: string;
-    leagueLogo: string;
-    leagueId188Bet: number | string;
+    leagueLogo?: string;
+    leagueId188Bet?: number | string;
     level: string | number;
   }
   type LeagueListData = {

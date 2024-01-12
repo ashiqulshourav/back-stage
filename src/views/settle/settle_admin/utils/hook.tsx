@@ -101,9 +101,9 @@ export function useSettle() {
 
   const addChildRow = (tableList, type) => {
     if (
-      (tableList.length !== 0 &&
-        !tableList[tableList.length - 1].player1Name) ||
-      tableList[tableList.length - 1].isEdit
+      tableList.length !== 0 &&
+      !tableList[tableList.length - 1].player1Name /* ||
+      tableList[tableList.length - 1].isEdit */
     ) {
       message('请先完成上一个事件添加', { type: 'error' });
     } else {
@@ -190,8 +190,8 @@ export function useSettle() {
       eventTime: row.eventTime,
       sportId: currentSportId.value,
       matchPeriodId: row.matchPeriodId,
-      homeAway: row.homeAway,
-      player1Name: row.player1Name
+      homeAway: row.homeAway
+      // player1Name: row.player1Name
     };
     delete row.isBackEndReturnData;
     if (

@@ -101,8 +101,8 @@ export function usePreSale() {
         const FormRef = formRef.value.getRef();
         const curData = options.props.formInline as FormItemProps;
         function chores() {
-          done(); // 关闭弹框
-          onSearch(); // 刷新表格数据
+          done();
+          onSearch();
         }
         FormRef.validate(valid => {
           if (valid) {

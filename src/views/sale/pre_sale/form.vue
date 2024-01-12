@@ -16,6 +16,7 @@
 
     <el-form-item :label="`${t('赛事名称')}:`" prop="matchName">
       <el-input
+        maxLength="30"
         v-model="newFormInline.matchName"
         :placeholder="t('赛事名称')"
       />

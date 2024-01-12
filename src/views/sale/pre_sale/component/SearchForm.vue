@@ -1,6 +1,6 @@
 <template>
   <div class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]">
-    <div class="mb-3">
+    <!-- <div class="mb-3">
       <el-button
         v-for="item in selectTypeList"
         :key="item.num"
@@ -8,7 +8,7 @@
         @click="changeMatchCondition(item.num)"
         >{{ item.val }}</el-button
       >
-    </div>
+    </div> -->
     <el-form ref="formRef" :inline="true" :model="form">
       <el-form-item :label="`${t('联赛')}:`" prop="leagueId">
         <el-select
@@ -32,6 +32,7 @@
           :placeholder="t('赛事ID')"
           v-enter="search"
           clearable
+          v-number
           class="!w-[150px]"
         />
       </el-form-item>
@@ -76,7 +77,7 @@
           @change="search"
         >
           <el-option :label="t('开售')" :value="1" />
-          <el-option :label="t('关闭')" :value="0" />
+          <el-option :label="t('未开售')" :value="0" />
         </el-select>
       </el-form-item>
 
@@ -121,11 +122,11 @@ const props = withDefaults(
   {}
 );
 
-const selectTypeList = [
+/* const selectTypeList = [
   { val: t('开售管理'), num: 1 },
   { val: t('早盘赛事'), num: 2 },
   { val: t('滚球赛事'), num: 3 }
-];
+]; */
 
 onMounted(() => {
   matchStore.set_lagueList();
@@ -164,10 +165,10 @@ const nextDayArr = computed(() => {
   return nextDayList;
 });
 
-const changeMatchCondition = (n: number) => {
+/* const changeMatchCondition = (n: number) => {
   resetForm(formRef.value);
   emits('changeMatchCondition', n);
-};
+}; */
 </script>
 
 <style scoped lang="scss">

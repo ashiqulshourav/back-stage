@@ -12,10 +12,10 @@ export const columns: TableColumnList = [
   {
     label: t('锁盘'),
     headerRenderer: d => handleTableWidth(d, t('锁盘'), 'auto'),
-    formatter: ({ locking }) => {
+    formatter: ({ isSale }) => {
       return (
         <div class="flex justify-center">
-          <IconifyIconOffline icon="lockUnlockFill" />
+          <IconifyIconOffline icon="lock" />
         </div>
       );
     }
@@ -96,7 +96,7 @@ export const columns: TableColumnList = [
   },
   {
     label: t('开售盘口/总盘口数'),
-    slot: 'num',
+    slot: 'saleHandicaps',
     headerRenderer: d => handleTableWidth(d, t('开售盘口/总盘口数'), 'auto'),
     minWidth: 150
   },
