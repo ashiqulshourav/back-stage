@@ -1,6 +1,8 @@
 import { handleTableWidth } from '@/utils/getTableWidth';
 import dayjs from 'dayjs';
 import { IconifyIconOffline } from '@/components/ReIcon';
+import { useMatchStore } from '@/store/match';
+import { parseCountry } from '@/utils/formatMatch';
 
 export const columns: TableColumnList = [
   {
@@ -56,7 +58,8 @@ export const columns: TableColumnList = [
   {
     label: t('国家/地区'),
     prop: 'countryId',
-    headerRenderer: d => handleTableWidth(d, t('国家/地区'), 'auto')
+    headerRenderer: d => handleTableWidth(d, t('国家/地区'), 'auto'),
+    formatter: ({ countryId }) => parseCountry(countryId)
   },
   {
     label: t('开赛时间'),
@@ -94,7 +97,8 @@ export const columns: TableColumnList = [
   {
     label: t('开售盘口/总盘口数'),
     slot: 'num',
-    headerRenderer: d => handleTableWidth(d, t('开售盘口/总盘口数'), 'auto')
+    headerRenderer: d => handleTableWidth(d, t('开售盘口/总盘口数'), 'auto'),
+    minWidth: 150
   },
 
   {

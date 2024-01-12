@@ -64,7 +64,7 @@ declare namespace MetadataAPI {
     teamNameCn: string;
     stadiumName?: string;
     teamNameEn: string;
-    teamLogo: string;
+    teamLogo?: string;
     level: number;
     isCountryTeam?: number;
   }
@@ -113,4 +113,36 @@ declare namespace MetadataAPI {
   }
 
   type UpdateTeamParamsType = Partial<TeamListParamsType>
+
+  type getCountryListType = {
+    countryId: number;
+    countryNameCn: string;
+    countryNameEn: string;
+    countryLogo: string;
+    countryId188Bet: number;
+  }
+
+  type getCountryListDataType = {
+    total: number;
+    list: getCountryListType[];
+    pageNum: number;
+    pageSize: number;
+    size: number;
+    startRow: number;
+    endRow: number;
+    pages: number;
+    prePage: number;
+    nextPage: number;
+    isFirstPage: boolean;
+    isLastPage: boolean;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
+    navigatePages: number;
+    navigatepageNums: number[];
+    navigateFirstPage: number;
+    navigateLastPage: number;
+  }
+
+  type getCountryListResType = COMMON.BASE_RES_TYPE<getCountryListDataType>
+
 }

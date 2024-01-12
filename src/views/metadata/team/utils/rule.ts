@@ -12,5 +12,4 @@ export const formRules = reactive(<FormRules>{
   sportId: [{ required: true, message: t('赛种不能为空'), trigger: "blur" }],
   teamNameCn: [{ required: true, message: t('球队中文名不能为空'), trigger: "blur" }],
   teamNameEn: [{ required: true, message: t('球队英文名不能为空'), trigger: "blur" }],
-
 });

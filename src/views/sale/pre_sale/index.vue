@@ -49,10 +49,12 @@
               @change="changeSwitch({ row, index })"
             />
           </template>
-          <template #num="{ row }">
-            <span class="underline cursor-pointer" @click="openInfoDialog">{{
-              row.num ?? '-'
-            }}</span>
+          <template #num="{ row }: { row: SaleDataAPI.PreSaleList }">
+            <span
+              class="underline cursor-pointer"
+              @click="openInfoDialog(row.matchId)"
+              >{{ row.num ?? '-' }}</span
+            >
           </template>
           <template #isNeutral="{ row }">
             {{ row.isNeutral === 0 ? t('中立') : t('非中立') }}
@@ -88,10 +90,10 @@ import { addDialog } from '@/components/ReDialog';
 
 defineOptions({ name: 'pre_sale' });
 
-const openInfoDialog = () => {
+const openInfoDialog = (matchId: number) => {
   addDialog({
     title: t('盘口预览'),
-    props: {},
+    props: { matchId },
     width: '30%',
     draggable: true,
     contentRenderer: () => h(OpeningPreview),

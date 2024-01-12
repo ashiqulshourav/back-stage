@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import { handleTableWidth } from '@/utils/getTableWidth';
 import { MATCH_STATUS, PANDA_MATCH_STATUS } from '@/utils/maps/sports_map';
+import { parseMatchScore } from '@/utils/formatMatch';
 
 export const columns: TableColumnList = [
   {
@@ -12,7 +13,7 @@ export const columns: TableColumnList = [
     label: t('序号'),
     fixed: true,
     type: 'index',
-    width: 100,
+    minWidth: 100,
     headerRenderer: d => handleTableWidth(d, t('序号'))
   },
   {
@@ -61,10 +62,7 @@ export const columns: TableColumnList = [
     minWidth: 150,
     headerRenderer: d => handleTableWidth(d, t('当前比分'), 'auto'),
     formatter: ({ currentScore }) => {
-      let r = currentScore.split('');
-      r.shift();
-      r = r.join('').split('A');
-      return currentScore ? `${r[0]} : ${r[1]}` : '-';
+      return currentScore ? parseMatchScore(currentScore) : '-';
     }
   },
   {

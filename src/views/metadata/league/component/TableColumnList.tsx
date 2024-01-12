@@ -1,3 +1,4 @@
+import { parseCountry } from '@/utils/formatMatch';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
 export const columns: TableColumnList = [
@@ -6,16 +7,17 @@ export const columns: TableColumnList = [
     prop: 'leagueId',
     minWidth: 100
   },
+  // {
+  //   label: t('联赛Logo'),
+  //   prop: 'leagueLogo',
+  //   minWidth: 120,
+  //   formatter: ({ leagueLogo }) => (leagueLogo ? leagueLogo : '-')
+  // },
   {
-    label: t('联赛Logo'),
-    prop: 'leagueLogo',
-    minWidth: 120,
-    formatter: ({ leagueLogo }) => (leagueLogo ? leagueLogo : '-')
-  },
-  {
-    label: t('国家地区ID'),
+    label: t('国家地区'),
     prop: 'countryId',
-    minWidth: 150
+    minWidth: 150,
+    formatter: ({ countryId }) => parseCountry(countryId)
   },
   {
     label: t('188数据源联赛杯赛ID'),

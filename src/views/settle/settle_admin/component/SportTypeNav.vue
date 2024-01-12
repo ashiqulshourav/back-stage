@@ -3,7 +3,7 @@
     <CustomButton
       v-for="(item, index) in SPORT_ID_MAP"
       :key="item.value"
-      :type="item.value === currentSportId ? 'success' : ''"
+      :type="item.value === currentSportId ? 'primary' : ''"
       :btnText="item.label"
       :disabled="index > 0"
       @click="$emit('onSearch', 'reload', item.value)"

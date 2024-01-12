@@ -88,7 +88,8 @@ export function usePreSale() {
           sportId: row?.sportId ?? '',
           matchName: row?.matchName ?? '',
           beginTime: row?.beginTime ?? '',
-          level: row?.level ?? ''
+          level: row?.level ?? '',
+          countryId: row?.countryId ?? ''
         }
       },
       width: '40%',

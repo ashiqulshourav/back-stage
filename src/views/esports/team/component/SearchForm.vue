@@ -14,13 +14,20 @@
         class="!w-[200px]"
       />
     </el-form-item>
-    <el-form-item :label="`${t('国家地区ID')}:`" prop="level">
-      <el-input
+    <el-form-item :label="`${t('国家地区')}:`" prop="countryId">
+      <el-select
         v-model="form.countryId"
-        :placeholder="t('国家地区ID')"
-        v-enter="search"
-        class="!w-[200px]"
-      />
+        filterable
+        class="w-[280px]"
+        :placeholder="t('请选择国家')"
+      >
+        <el-option
+          v-for="item in matchStore.countryList"
+          :key="item.countryId"
+          :label="item.countryNameCn"
+          :value="item.countryId"
+        />
+      </el-select>
     </el-form-item>
     <el-form-item :label="`${t('是否国家队')}:`" prop="countryId">
       <el-select v-model="form.isCountryTeam" placeholder="Select">
@@ -97,7 +104,9 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import { t } from '@/plugins/i18n';
 import type { FormInstance } from 'element-plus';
 import { SearchFormType } from '../utils/types';
+import { useMatchStore } from '@/store/match';
 
+const matchStore = useMatchStore();
 defineProps<{
   loading: boolean;
   form: SearchFormType;

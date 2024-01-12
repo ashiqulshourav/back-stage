@@ -44,6 +44,23 @@ const activeName = ref('first');
 const colActiveNames = ref([]);
 const playList = ['进球大/小', '让球', '波胆', '进球数量'];
 
+const props = withDefaults(
+  defineProps<{
+    matchId: number;
+  }>(),
+  {}
+);
+
+onMounted(() => {
+  getBetItemsList();
+  console.log('OpeningPreview.vue文件 55==============行打印=', props.matchId);
+});
+
+const getBetItemsList = async () => {
+  const res = await API.getBetItemsList({ ...props });
+  console.log('OpeningPreview.vue文件 61==============行打印=', res);
+};
+
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event);
 };

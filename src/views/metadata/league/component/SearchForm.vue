@@ -42,15 +42,22 @@
         class="!w-[200px]"
       />
     </el-form-item>
-    <el-form-item :label="`${t('国家ID')}:`" prop="countryId">
-      <el-input
+    <el-form-item :label="`${t('国家')}:`" prop="countryId">
+      <el-select
         v-model="form.countryId"
-        :placeholder="t('国家ID')"
-        clearable
-        v-enter="search"
-        class="!w-[200px]"
-      />
+        filterable
+        class="w-[280px]"
+        :placeholder="t('请选择国家')"
+      >
+        <el-option
+          v-for="item in matchStore.countryList"
+          :key="item.countryId"
+          :label="item.countryNameCn"
+          :value="item.countryId"
+        />
+      </el-select>
     </el-form-item>
+
     <el-form-item :label="`${t('188数据源联赛杯ID')}:`" prop="leagueId188Bet">
       <el-input
         v-model="form.leagueId188Bet"
@@ -94,6 +101,7 @@ import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import type { FormInstance } from 'element-plus';
 import { searchFormType } from '../utils/types';
+import { useMatchStore } from '@/store/match';
 
 defineProps<{
   loading: boolean;
@@ -101,6 +109,7 @@ defineProps<{
 }>();
 
 const formRef = ref();
+const matchStore = useMatchStore();
 
 const emits = defineEmits(['onSearch']);
 const resetForm = (formEl: FormInstance | undefined) => {

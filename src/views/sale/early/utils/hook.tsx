@@ -1,18 +1,20 @@
-import { message } from "@/utils/message";
-import type { PaginationProps } from "@pureadmin/table";
-import { ElMessageBox } from "element-plus";
-import { removeEmptyStringKeys } from "@/utils/utilFn";
-import { t } from "@/plugins/i18n";
-import { usePublicHooks } from "@/hooks";
-import dayjs from "dayjs";
-import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
+import { message } from '@/utils/message';
+import type { PaginationProps } from '@pureadmin/table';
+import { ElMessageBox } from 'element-plus';
+import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { t } from '@/plugins/i18n';
+import { usePublicHooks } from '@/hooks';
+import dayjs from 'dayjs';
+import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+import { useMatchStore } from '@/store/match';
+import { parseCountry } from '@/utils/formatMatch';
 
 export function useLeague() {
   const form = reactive({
     matchId: '',
     matchName: '',
     isSale: '',
-    beginTime: '',
+    beginTime: ''
   });
   const dataList = reactive<SaleDataAPI.PreSaleList[]>([]);
   const loading = ref(true);
@@ -26,47 +28,51 @@ export function useLeague() {
   });
   const columns: TableColumnList = [
     {
-      label: t("赛事ID"),
-      prop: "matchId",
+      label: t('赛事ID'),
+      prop: 'matchId'
     },
     {
       label: t('赛事名称'),
-      prop: "matchName",
+      prop: 'matchName',
       minWidth: 200
     },
     {
       label: t('联赛等级'),
-      prop: "level",
+      prop: 'level'
     },
     {
       label: t('比赛时间'),
-      prop: "beginTimeLong",
+      prop: 'beginTimeLong',
       minWidth: 150,
-      formatter: ({ beginTimeLong }) => dayjs(beginTimeLong).format('YYYY-MM-DD HH:mm:ss')
+      formatter: ({ beginTimeLong }) =>
+        dayjs(beginTimeLong).format('YYYY-MM-DD HH:mm:ss')
     },
     {
       label: t('主队ID'),
-      prop: "homeTeamId",
+      prop: 'homeTeamId'
     },
     {
       label: t('当前比分'),
-      prop: "currentScore",
-      formatter: ({ currentScore }) => currentScore.replace(/H(\d+)A(\d+)/, '$1 - $2')
+      prop: 'currentScore',
+      formatter: ({ currentScore }) =>
+        currentScore.replace(/H(\d+)A(\d+)/, '$1 - $2')
     },
     {
       label: t('客队ID'),
-      prop: "awayTeamId",
+      prop: 'awayTeamId',
       minWidth: 150
     },
     {
-      label: t('国家地区ID'),
-      prop: "countryId",
-      minWidth: 150
+      label: t('国家地区'),
+      prop: 'countryId',
+      minWidth: 150,
+      formatter: ({ countryId }) => parseCountry(countryId)
     },
     {
       label: t('赛种'),
-      prop: "sportId",
-      formatter: ({ sportId }): string => SPORT_ID_MAP.find(_ => _.value === sportId).label,
+      prop: 'sportId',
+      formatter: ({ sportId }): string =>
+        SPORT_ID_MAP.find(_ => _.value === sportId).label,
       minWidth: 150
     },
     {
@@ -77,25 +83,32 @@ export function useLeague() {
     {
       label: t('开售状态'),
       minWidth: 150,
-      slot: 'isSale',
+      slot: 'isSale'
     },
     {
       label: t('联赛杯赛ID'),
-      prop: "leagueId",
+      prop: 'leagueId',
       minWidth: 150
-    },
+    }
   ];
 
-  function changeSwitch({ row }: { row: SaleDataAPI.PreSaleList; index: number }) {
+  function changeSwitch({
+    row
+  }: {
+    row: SaleDataAPI.PreSaleList;
+    index: number;
+  }) {
     ElMessageBox.confirm(
-      `确认要${row.isSale === 0 ? "停用" : "启用"
-      }<strong style='color:var(--el-color-primary)'>${row.matchName
+      `确认要${
+        row.isSale === 0 ? '停用' : '启用'
+      }<strong style='color:var(--el-color-primary)'>${
+        row.matchName
       }</strong>开售状态吗?`,
-      "系统提示",
+      '系统提示',
       {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
         dangerouslyUseHTMLString: true,
         draggable: true
       }
@@ -105,25 +118,25 @@ export function useLeague() {
           isSale: row.isSale,
           matchId: row.matchId
         });
-        if (res.code) return message(res.msg, { type: "error" });
-        message(res.msg, { type: "success" })
+        if (res.code) return message(res.msg, { type: 'error' });
+        message(res.msg, { type: 'success' });
         onSearch();
       })
-      .catch(() => row.isSale = row.isSale === 0 ? 1 : 0);
+      .catch(() => (row.isSale = row.isSale === 0 ? 1 : 0));
   }
 
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
-    onSearch()
+    onSearch();
   }
 
   function handleCurrentChange(val: number) {
     pagination.currentPage = val;
-    onSearch()
+    onSearch();
   }
 
   function handleSelectionChange(val) {
-    console.log("handleSelectionChange", val);
+    console.log('handleSelectionChange', val);
   }
 
   async function onSearch(type?: string) {
@@ -135,13 +148,13 @@ export function useLeague() {
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage
     });
-    if (res.code) return message(res.msg, { type: "error" });
+    if (res.code) return message(res.msg, { type: 'error' });
     dataList.length = 0;
     dataList.push(...res.data.list);
     pagination.total = res.data.total;
     pagination.pageSize = res.data.pageSize;
     pagination.currentPage = res.data.pageNum;
-    setTimeout(() => loading.value = false, 500);
+    setTimeout(() => (loading.value = false), 500);
   }
 
   const resetForm = formEl => {

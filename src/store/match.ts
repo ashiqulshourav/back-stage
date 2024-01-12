@@ -4,6 +4,7 @@ import { MatchType } from "./types";
 export const useMatchStore = defineStore('MATCHSTATE', {
   state: (): MatchType => ({
     leagueList: [],
+    countryList: [],
   }),
   actions: {
     async set_lagueList() {
@@ -13,6 +14,13 @@ export const useMatchStore = defineStore('MATCHSTATE', {
         pageNum: 1
       });
       this.leagueList = res.data.list;
+    },
+    async set_countryList() {
+      const res: MetadataAPI.getCountryListResType = await API.getCountryList({
+        pageNum: 1,
+        pageSize: 9999
+      });
+      this.countryList = res.data.list;
     }
   },
   persist: {

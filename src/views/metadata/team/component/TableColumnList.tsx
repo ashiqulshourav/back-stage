@@ -1,6 +1,7 @@
 import { t } from '@/plugins/i18n';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { handleTableWidth } from '@/utils/getTableWidth';
+import { parseCountry } from '@/utils/formatMatch';
 
 export const columns: TableColumnList = [
   {
@@ -15,15 +16,16 @@ export const columns: TableColumnList = [
   //   headerRenderer: d => handleTableWidth(d, t('球队Logo'), 'auto')
   // },
   {
-    label: t('国家地区ID'),
+    label: t('国家地区'),
     prop: 'countryId',
-    headerRenderer: d => handleTableWidth(d, t('国家地区ID'), 'auto')
+    headerRenderer: d => handleTableWidth(d, t('国家地区'), 'auto'),
+    formatter: ({ countryId }) => parseCountry(countryId)
   },
   {
     label: t('是否国家队'),
     prop: 'isCountryTeam',
-    slot: 'isCountryTeam',
-    headerRenderer: d => handleTableWidth(d, t('是否国家队'), 'auto')
+    headerRenderer: d => handleTableWidth(d, t('是否国家队'), 'auto'),
+    formatter: ({ isCountryTeam }) => (isCountryTeam ? t('否') : t('是'))
   },
   {
     label: t('联赛ID'),
@@ -45,8 +47,8 @@ export const columns: TableColumnList = [
   {
     label: t('主场名称'),
     prop: 'stadiumName',
-    slot: 'stadiumName',
-    headerRenderer: d => handleTableWidth(d, t('主场名称'), 'auto')
+    headerRenderer: d => handleTableWidth(d, t('主场名称'), 'auto'),
+    formatter: ({ stadiumName }) => stadiumName || '-'
   },
   {
     label: t('球队中文名称'),

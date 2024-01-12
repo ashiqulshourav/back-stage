@@ -35,12 +35,6 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
-          <template #isCountryTeam="row">
-            {{ row.isCountryTeam ?? '-' }}
-          </template>
-          <template #stadiumName="row">
-            {{ row.stadiumName ?? '-' }}
-          </template>
           <template #teamLogo="{ row, index }">
             <el-image
               preview-teleported

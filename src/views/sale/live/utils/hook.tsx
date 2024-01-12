@@ -6,6 +6,8 @@ import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 import dayjs from 'dayjs';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+import { useMatchStore } from '@/store/match';
+import { parseCountry } from '@/utils/formatMatch';
 
 export function useLeague() {
   const form = reactive({
@@ -61,9 +63,10 @@ export function useLeague() {
       minWidth: 150
     },
     {
-      label: t('国家地区ID'),
+      label: t('国家地区'),
       prop: 'countryId',
-      minWidth: 150
+      minWidth: 150,
+      formatter: ({ countryId }) => parseCountry(countryId)
     },
     {
       label: t('赛种'),

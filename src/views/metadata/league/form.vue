@@ -24,16 +24,26 @@
         v-model="newFormInline.leagueId"
         clearable
         :placeholder="t('联赛ID')"
+        :disabled="!!newFormInline.leagueId"
       />
     </el-form-item>
 
-    <el-form-item :label="t('国家地区ID')" prop="countryId">
-      <el-input
+    <el-form-item :label="t('国家地区')" prop="countryId">
+      <el-select
         v-model="newFormInline.countryId"
-        clearable
-        :placeholder="t('国家地区ID')"
-      />
+        filterable
+        class="w-[280px]"
+        :placeholder="t('请选择国家')"
+      >
+        <el-option
+          v-for="item in matchStore.countryList"
+          :key="item.countryId"
+          :label="item.countryNameCn"
+          :value="item.countryId"
+        />
+      </el-select>
     </el-form-item>
+
     <el-form-item :label="t('188数据源联赛杯赛')" prop="leagueId188Bet">
       <el-input
         v-model="newFormInline.leagueId188Bet"
@@ -80,7 +90,9 @@ import { FormProps } from './utils/types';
 // import { Plus } from '@element-plus/icons-vue';
 import { t } from '@/plugins/i18n';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+import { useMatchStore } from '@/store/match';
 
+const matchStore = useMatchStore();
 const props = withDefaults(defineProps<FormProps>(), {
   formInline: () => ({
     leagueNameCn: '',

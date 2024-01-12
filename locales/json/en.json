@@ -54,7 +54,6 @@
   "k-45a07fe1": "The password format should be a combination of 8-18 digits",
   "k-dd1ef0c": "Cup ID",
   "k61b489d6": "Event Level",
-  "k39d003ff": "Country ID",
   "kb157b67": "188 Data Source League Cup ID",
   "k2751ca1b": "Event Type",
   "k51a1fffb": "Filter",
@@ -173,7 +172,6 @@
   "k329a5ff8": "League Logo",
   "k60442504": "League Chinese Name",
   "k2d4c7434": "League English Name",
-  "k-793596c4": "createdAt",
   "k91fce8f": "Team Rating",
   "k28a7b54": "Operation Content",
   "k-36ed0803": "Cascade Menu for Operation Logs",
@@ -230,8 +228,12 @@
   "k-7e0a1adf": "Time cannot be earlier than the previous event's occurrence time",
   "k-483744c4": "Are you sure you want to make it available for sale?",
   "k-1bcf25dd": "Are you sure you want to take it offline?",
-  "k15fa6f5f": "未匹配",
-  "k5a05c939": "成功匹配",
-  "k2770a55b": "匹配失败",
-  "k739619ff": "熊猫匹配结果"
+  "k15fa6f5f": "Not matched",
+  "k5a05c939": "Successfully matched",
+  "k2770a55b": "Match failed",
+  "k739619ff": "Panda Matching Results",
+  "k32a3e41": "国家",
+  "k496bd10b": "请选择国家",
+  "k-547e156": "国家地区",
+  "k-3703bae5": "编辑联赛"
 }

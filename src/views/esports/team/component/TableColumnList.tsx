@@ -1,12 +1,14 @@
 import { t } from '@/plugins/i18n';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { handleTableWidth } from '@/utils/getTableWidth';
+import { parseCountry } from '@/utils/formatMatch';
 
 export const columns: TableColumnList = [
   {
-    label: t('国家地区ID'),
+    label: t('国家地区'),
     prop: 'countryId',
-    headerRenderer: d => handleTableWidth(d, t('国家地区ID'))
+    headerRenderer: d => handleTableWidth(d, t('国家地区')),
+    formatter: ({ countryId }) => parseCountry(countryId)
   },
   {
     label: t('联赛ID'),
@@ -51,8 +53,8 @@ export const columns: TableColumnList = [
   {
     label: t('是否国家队'),
     prop: 'isCountryTeam',
-    slot: 'isCountryTeam',
-    headerRenderer: d => handleTableWidth(d, t('是否国家队'))
+    headerRenderer: d => handleTableWidth(d, t('是否国家队')),
+    formatter: ({ isCountryTeam }) => (isCountryTeam ? t('是') : t('否'))
   },
   {
     label: t('主场名称'),
@@ -60,17 +62,17 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('主场名称'))
   },
   {
-    label: t('createdAt'),
+    label: t('创建时间'),
     prop: 'stadiumName',
     slot: 'isCountryTeam',
-    headerRenderer: d => handleTableWidth(d, t('createdAt'))
+    headerRenderer: d => handleTableWidth(d, t('创建时间'))
   },
 
   {
     label: t('主场名称'),
     prop: 'stadiumName',
-    slot: 'stadiumName',
-    headerRenderer: d => handleTableWidth(d, t('主场名称'))
+    headerRenderer: d => handleTableWidth(d, t('主场名称')),
+    formatter: ({ isCountryTeam }) => isCountryTeam || '-'
   }
 
   // {

@@ -71,13 +71,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { formRules } from "./utils/rule";
-import { TeamFormProps } from "./utils/types";
-import type { UploadProps } from "element-plus";
-import { Plus } from "@element-plus/icons-vue";
+import { ref } from 'vue';
+import { formRules } from './utils/rule';
+import { TeamFormProps } from './utils/types';
+import type { UploadProps } from 'element-plus';
+import { Plus } from '@element-plus/icons-vue';
 
-import { t } from "@/plugins/i18n";
+import { t } from '@/plugins/i18n';
 
 const props = withDefaults(defineProps<TeamFormProps>(), {
   formInline: () => ({
@@ -85,15 +85,15 @@ const props = withDefaults(defineProps<TeamFormProps>(), {
     countryId: 0,
     sportId: 0,
     leagueId: 0,
-    teamNameCn: "",
-    teamNameEn: "",
-    teamLogo: "",
+    teamNameCn: '',
+    teamNameEn: '',
+    teamLogo: '',
     isCountryTeam: 0,
     level: 0
   })
 });
 
-const beforeAvatarUpload: UploadProps["beforeUpload"] = _rawFile => {
+const beforeAvatarUpload: UploadProps['beforeUpload'] = _rawFile => {
   // if (rawFile.type !== "image/jpeg") {
   //   console.log("Avatar picture must be JPG format!");
   //   return false;
@@ -104,14 +104,14 @@ const beforeAvatarUpload: UploadProps["beforeUpload"] = _rawFile => {
   return true;
 };
 
-const handleAvatarSuccess: UploadProps["onSuccess"] = (
+const handleAvatarSuccess: UploadProps['onSuccess'] = (
   _response,
   _uploadFile
 ) => {};
 
 const onImgChange = respose => {
   imageUrl.value = URL.createObjectURL(respose.raw);
-  console.log("form.vue文件 87==============行打印=", imageUrl.value);
+  console.log('form.vue文件 87==============行打印=', imageUrl.value);
 };
 
 const ruleFormRef = ref();

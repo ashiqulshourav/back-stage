@@ -14,6 +14,12 @@ export const saleData = {
     endTime?: string;
   }) => http.request<SaleDataAPI.PreSaleListRes>("post", "/match/v1/getPreSaleList", { data }),
 
+
+
+  getBetItemsList: (data: {
+    matchId: number;
+  }) => http.request<MetadataAPI.TeamListRes>("post", "/betItems/v1/getBetItemsList", { data }),
+
   updateSaleStatus: (data: {
     isSale: number;
     matchId: number;

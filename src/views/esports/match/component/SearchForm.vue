@@ -30,10 +30,10 @@
           class="!w-[200px]"
         />
       </el-form-item>
-      <el-form-item :label="`${t('国家ID')}:`" prop="countryId">
+      <el-form-item :label="`${t('国家')}:`" prop="countryId">
         <el-input
           v-model="form.countryId"
-          :placeholder="t('国家ID')"
+          :placeholder="t('请选择国家')"
           clearable
           class="!w-[200px]"
         />
