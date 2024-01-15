@@ -69,7 +69,7 @@
                   {{ MATCH_EVENT_CODE[item.type] }}
                 </div>
                 <pure-table
-                  row-key="id"
+                  :row-key="row => row.id"
                   :data="item.tableList"
                   :loading="childloading"
                   :columns="childColumns"
@@ -110,7 +110,6 @@
                       :placeholder="t('请选择时间')"
                       :disabled="!row.isEdit"
                       :default-value="new Date(new Date().toLocaleDateString())"
-                      :editable="false"
                       value-format="x"
                       @change="changeEventTime(row, childIndex, item.tableList)"
                       format="HH:mm:ss"
@@ -143,6 +142,11 @@
                         "
                       >
                         <el-option :label="t('主队')" value="home" />
+                        <el-option
+                          v-if="!row.isEdit"
+                          :label="t('平局')"
+                          value=""
+                        />
                         <el-option :label="t('客队')" value="away" />
                       </el-select>
                     </div>
