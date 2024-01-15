@@ -10,17 +10,26 @@
         v-model="form.teamId"
         :placeholder="t('球队ID')"
         clearable
+        :formatter="v => formatNumber(v)"
         v-enter="search"
         class="!w-[200px]"
       />
     </el-form-item>
-    <el-form-item :label="`${t('国家地区ID')}:`" prop="countryId">
-      <el-input
+    <el-form-item :label="`${t('国家')}:`" prop="countryId">
+      <el-select
         v-model="form.countryId"
-        :placeholder="t('国家地区ID')"
-        v-enter="search"
-        class="!w-[200px]"
-      />
+        filterable
+        class="w-[280px]"
+        :placeholder="t('请选择国家')"
+        clearable
+      >
+        <el-option
+          v-for="item in matchStore.countryList"
+          :key="item.countryId"
+          :label="item.countryNameCn"
+          :value="item.countryId"
+        />
+      </el-select>
     </el-form-item>
     <el-form-item :label="`${t('是否国家队')}:`" prop="isCountryTeam">
       <el-select v-model="form.isCountryTeam" :placeholder="t('请选择')">
@@ -33,6 +42,7 @@
         v-model="form.leagueId"
         :placeholder="t('联赛ID')"
         clearable
+        :formatter="v => formatNumber(v)"
         v-enter="search"
         class="!w-[200px]"
       />
@@ -42,6 +52,7 @@
         v-model="form.level"
         :placeholder="t('球队等级')"
         clearable
+        :formatter="v => formatNumber(v, 1)"
         v-enter="search"
         class="!w-[200px]"
       />
@@ -63,6 +74,7 @@
         v-model="form.teamNameCn"
         :placeholder="t('球队中文名称')"
         clearable
+        maxLength="30"
         v-enter="search"
         class="!w-[200px]"
       />
@@ -72,6 +84,7 @@
         v-model="form.teamNameEn"
         :placeholder="t('球队英文名称')"
         clearable
+        maxLength="30"
         v-enter="search"
         class="!w-[200px]"
       />
@@ -100,21 +113,28 @@ import type { FormInstance } from 'element-plus';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { t } from '@/plugins/i18n';
 import { SearchFormType } from '../utils/types';
+import { useMatchStore } from '@/store/match';
+import { formatNumber } from '@/utils/formatNumber';
 
-defineProps<{
-  loading: boolean;
-  form: SearchFormType;
-}>();
+const props = withDefaults(
+  defineProps<{
+    loading: boolean;
+    form: SearchFormType;
+  }>(),
+  {}
+);
 
 const emits = defineEmits(['onSearch']);
+const matchStore = useMatchStore();
 const formRef = ref();
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
-  search();
+  emits('onSearch', ...['reload']);
 };
 
 const search = () => {
-  emits('onSearch', ...['reload']);
+  const noEmpty = Object.values(props.form).some(_ => !!_);
+  noEmpty && emits('onSearch', 'reload');
 };
 </script>
 

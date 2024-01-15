@@ -3,7 +3,8 @@ declare namespace SattleDataAPI {
     canceled?: number | boolean;
     dataSourceCode?: string;
     eventCode?: string;
-    eventTime?: number | string | Date;
+    eventTime?: string | number | Date;
+    createdAt?: number;
     extraInfo?: string;
     homeAway?: string;
     id?: number;
@@ -20,6 +21,7 @@ declare namespace SattleDataAPI {
     t1?: number | string;
     t2?: number | string;
     isEdit?: boolean;
+    isSave?: boolean;
     redOrYellow?: number | string;
     isBackEndReturnData: boolean;
   }
@@ -33,7 +35,7 @@ declare namespace SattleDataAPI {
   type MatchEventParams = {
     canceled: number;
     eventCode: string;
-    eventTime: Date;
+    eventTime: Date | number;
     homeAway: string;
     matchId: number;
     matchPeriodId: number;

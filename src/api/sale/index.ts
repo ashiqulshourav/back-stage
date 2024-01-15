@@ -18,6 +18,23 @@ export const saleData = {
     matchId: number;
   }) => http.request<SaleDataAPI.getBetItemsListResType>("post", "/betItems/v1/getBetItemsList", { data }),
 
+  /** 投注玩法锁盘  */
+  saleBetItems: (data: {
+    matchId: number;
+    betItemList: number[],
+  }) => http.request<SaleDataAPI.saleBetItemsResType>("post", "/betItems/v1/saleBetItems", { data }),
+
+  /** 投注玩法批量开启  */
+  openSaleBetItems: (data: {
+    matchId: number;
+    betItemList: number[],
+  }) => http.request<SaleDataAPI.saleBetItemsResType>("post", "/betItems/v1/openSaleBetItems", { data }),
+
+  /** 赛事批量锁盘  */
+  saleBetItemsByMatchIds: (data: {
+    matchIdList: number[],
+  }) => http.request<SaleDataAPI.saleBetItemsResType>("post", "/betItems/v1/saleBetItemsByMatchIds", { data }),
+
   updateSaleStatus: (data: {
     isSale: number;
     matchId: number;

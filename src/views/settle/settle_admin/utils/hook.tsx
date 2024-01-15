@@ -4,6 +4,7 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { t } from '@/plugins/i18n';
 import { childColumns, columns } from './tableColumnList';
 import { MatchEventType, SearchFormType, TempListType } from './type';
+import { dateGetSecond, dateSetSecond } from '@/utils/formmatDate';
 
 export function useSettle() {
   const form = reactive<SearchFormType>({
@@ -21,6 +22,7 @@ export function useSettle() {
   const childDataTotal = ref(0);
   const expandMatchList = reactive<number[]>([]);
   const expandRowList = reactive<SaleDataAPI.PreSaleList[]>([]);
+  const loopTimer = ref<NodeJS.Timeout>();
 
   const balanceLoading = reactive<{ half: boolean; all: boolean }>({
     half: false,
@@ -43,12 +45,9 @@ export function useSettle() {
     onSearch();
   };
 
-  const handleSelectionChange = val => {
-    console.log('handleSelectionChange', val);
-  };
-
-  /** 搜索 */
+  /** 搜索初始化 */
   const onSearch = async (type?: 'reload', spoprtId?: number) => {
+    loopTimer.value && clearInterval(loopTimer.value);
     try {
       if (spoprtId) currentSportId.value = spoprtId;
       if (type === 'reload') pagination.currentPage = 1;
@@ -102,16 +101,15 @@ export function useSettle() {
   const addChildRow = (tableList, type) => {
     if (
       tableList.length !== 0 &&
-      !tableList[tableList.length - 1].player1Name /* ||
-      tableList[tableList.length - 1].isEdit */
+      !tableList[tableList.length - 1]?.isBackEndReturnData
     ) {
-      message('请先完成上一个事件添加', { type: 'error' });
+      message('请先完成上一个事件结算', { type: 'error' });
     } else {
+      loopTimer.value && clearInterval(loopTimer.value);
       const tempList: TempListType = {
         eventTime: null,
         homeAway: null,
         matchPeriodId: null,
-        player1Name: null,
         isBackEndReturnData: false,
         t1: null,
         t2: null,
@@ -124,18 +122,28 @@ export function useSettle() {
 
   const editChild = (row: SattleDataAPI.MatchEventsList) => (row.isEdit = true);
 
+  // 打开关闭结算列表
   const expandChange = (
     row: SaleDataAPI.PreSaleList,
-    d: SaleDataAPI.PreSaleList[]
+    currentExpandList: SaleDataAPI.PreSaleList[]
   ) => {
-    expandMatchList.length = 0;
-    expandRowList.length = 0;
-    expandMatchList.push(...d.map(_ => _.matchId));
-    expandRowList.push(...d);
-    if (!d.some(item => item.matchId === row.matchId)) return;
+    if (currentExpandList.length) {
+      expandMatchList.length = 0;
+      if (row) {
+        expandMatchList.push(row.matchId);
+        expandRowList.push(...currentExpandList);
+      }
+    } else {
+      expandMatchList.length = 0;
+    }
+    if (!currentExpandList.some(item => item.matchId === row.matchId)) {
+      if (loopTimer.value) clearInterval(loopTimer.value);
+      return;
+    }
     getChildrenData(row);
   };
 
+  //- 获取当前展开行结算列表
   const getChildrenData = async row => {
     childloading.value = true;
     const res = await API.getMatchEvents({ matchId: row.matchId });
@@ -148,16 +156,27 @@ export function useSettle() {
       if (item.tableList.length) {
         item.tableList.forEach(_ => {
           _.isEdit = false;
+          _.isSave = false;
           _.matchId = row.matchId;
           _.isBackEndReturnData = true;
+          if (_.eventTime.toString().length < 10) {
+            _.eventTime = dateSetSecond(_.eventTime as number);
+          } else {
+            const t =
+              parseInt(new Date(_.eventTime).getTime() / 1000) -
+              parseInt(new Date(row.beginTime).getTime() / 1000);
+            _.eventTime = dateSetSecond(t);
+          }
           _.canceled = Boolean(_.canceled);
           item.type === 'yellow_red_card' && (_.redOrYellow = '红/黄牌');
         });
       }
     });
+    if (loopTimer.value) clearInterval(loopTimer.value);
+    loopTimer.value = setInterval(() => getChildrenData(row), 10000);
   };
 
-  const removeItem = async (
+  /*  const removeItem = async (
     id: number,
     parentIndex: number,
     tableList: SattleDataAPI.MatchEventsList[]
@@ -170,19 +189,15 @@ export function useSettle() {
       if (res.code) return;
       getChildrenData(dataList[parentIndex]);
     }
-  };
+  }; */
 
+  /* 新增事件  */
   const handleChildrenData = async (
     row: SattleDataAPI.MatchEventsList,
     parentIndex: number,
-    type: 'add' | 'edit' | 'delete',
-    parentRow,
-    tableList?
+    type: 'save' | 'upload',
+    parentRow
   ) => {
-    if (type === 'delete') {
-      return removeItem(row.id, parentIndex, tableList);
-    }
-    if (!row.isEdit) return;
     const requireDdata = {
       t1: row.t1,
       t2: row.t2,
@@ -191,7 +206,6 @@ export function useSettle() {
       sportId: currentSportId.value,
       matchPeriodId: row.matchPeriodId,
       homeAway: row.homeAway
-      // player1Name: row.player1Name
     };
     delete row.isBackEndReturnData;
     if (
@@ -205,13 +219,22 @@ export function useSettle() {
     )
       return message(t('请输入完整的内容'), { type: 'error' });
 
+    if (type === 'save') {
+      row.isSave = true;
+      row.isEdit = false;
+      return;
+    }
+
+    if ((type === 'upload' && !row.isSave) || row.isEdit) {
+      return message(t('请先保存事件'), { type: 'error' });
+    }
+
     childloading.value = true;
-    row.isEdit = true;
 
     const params: SattleDataAPI.MatchEventParams = {
       canceled: 0,
       eventCode: row.eventCode,
-      eventTime: row.eventTime as Date,
+      eventTime: dateGetSecond(row.eventTime as Date),
       homeAway: row.homeAway,
       matchId: dataList[parentIndex].matchId,
       matchPeriodId: +row.matchPeriodId,
@@ -224,14 +247,7 @@ export function useSettle() {
       t2: +row.t2
     };
 
-    let res;
-    if (type === 'add') {
-      res = await API.addMatchEvent(params);
-    } else {
-      params.id = row.id;
-      params.canceled = Number(row.canceled);
-      res = await API.updateMatchEvent(params);
-    }
+    const res = await API.addMatchEvent(params);
     childloading.value = false;
     message(res.msg, { type: res.code ? 'error' : 'success' });
     if (res.code) return;
@@ -259,6 +275,10 @@ export function useSettle() {
 
   onMounted(() => onSearch());
 
+  onUnmounted(() => {
+    loopTimer.value && clearInterval(loopTimer.value);
+  });
+
   const reloadTable = async () => {
     await onSearch('reload');
     expandRowList.forEach(async row => {
@@ -282,7 +302,6 @@ export function useSettle() {
     switchLoadMap,
     expandChange,
     handleCurrentChange,
-    handleSelectionChange,
     childColumns,
     getChildrenData,
     addChildRow,

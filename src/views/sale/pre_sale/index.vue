@@ -11,9 +11,13 @@
       <template #title>
         <div class="flex items-center justify-between">
           <span class="mr-3">{{ t('预开售管理') }}</span>
-          <el-button size="small" :disabled="isLockAll" type="primary">{{
-            t('一键锁盘')
-          }}</el-button>
+          <el-button
+            size="small"
+            :disabled="!selectLockcList.length"
+            type="primary"
+            @click="locakMatch"
+            >{{ t('一键锁盘') }}</el-button
+          >
         </div>
       </template>
       <template v-slot="{ size, dynamicColumns }">
@@ -37,6 +41,14 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
+          <template #lock="{ row }">
+            <div class="flex justify-center">
+              <IconifyIconOffline
+                :icon="row.saleHandicaps === 0 ? 'lock' : 'unlock'"
+              />
+            </div>
+          </template>
+
           <template #isSale="{ row, index, props }">
             <el-switch
               :size="props.size === 'small' ? 'small' : 'default'"
@@ -77,7 +89,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="tsx">
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import EditPen from '@iconify-icons/ep/edit-pen';
@@ -89,14 +101,18 @@ import OpeningPreview from './component/OpeningPreview.vue';
 import { addDialog } from '@/components/ReDialog';
 
 defineOptions({ name: 'pre_sale' });
+
 const openInfoDialog = (matchId: number, row: SaleDataAPI.PreSaleList) => {
   addDialog({
     title: t('盘口预览'),
     props: { matchId, matchInfo: row },
     width: '30%',
     draggable: true,
-    contentRenderer: () => h(OpeningPreview),
-    hideFooter: true
+    hideFooter: true,
+    contentRenderer: () =>
+      h(OpeningPreview, {
+        onReloadTable: () => onSearch()
+      } as any)
   });
 };
 
@@ -113,8 +129,9 @@ const {
   openDialog,
   searchForm,
   switchStyle,
-  isLockAll,
   matchCondition,
-  changeMatchCondition
+  changeMatchCondition,
+  locakMatch,
+  selectLockcList
 } = usePreSale();
 </script>

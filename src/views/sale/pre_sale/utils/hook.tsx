@@ -2,11 +2,11 @@ import { message } from '@/utils/message';
 import editForm from '../form.vue';
 import type { PaginationProps } from '@pureadmin/table';
 import { ElMessageBox } from 'element-plus';
-import { FormItemProps } from 'element-plus';
 import { addDialog } from '@/components/ReDialog';
 import { SearchFormType } from './types';
 import { usePublicHooks } from '@/hooks';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
+import dayJs from 'dayjs';
 
 export function usePreSale() {
   const formRef = ref();
@@ -15,8 +15,8 @@ export function usePreSale() {
   const switchLoadMap = ref({});
   const allSaleSatatus = ref(0);
   const { switchStyle } = usePublicHooks();
-  const isLockAll = ref(true);
   const matchCondition = ref(1);
+  const selectLockcList = reactive<SaleDataAPI.PreSaleList[]>([]);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -31,7 +31,8 @@ export function usePreSale() {
     startTime: '',
     endTime: '',
     leagueNameCn: '',
-    leagueId: ''
+    leagueId: '',
+    handicapStatus: ''
   });
 
   function changeSwitch({
@@ -75,9 +76,23 @@ export function usePreSale() {
   }
 
   function handleSelectionChange(slectList) {
-    console.log('handleSelectionChange', slectList);
-    isLockAll.value = slectList.length !== dataList.length;
+    selectLockcList.length = 0;
+    selectLockcList.push(...slectList);
   }
+
+  const locakMatch = () => {
+    ElMessageBox.confirm(`${t('确定要锁定当前比赛么?')} `, {
+      type: 'warning'
+    }).then(async () => {
+      const res: SaleDataAPI.saleBetItemsResType =
+        await API.saleBetItemsByMatchIds({
+          matchIdList: selectLockcList.map(_ => _.matchId)
+        });
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if (res.code) return;
+      onSearch();
+    });
+  };
 
   const openDialog = (title: string, row?: SaleDataAPI.PreSaleList) => {
     addDialog({
@@ -99,7 +114,11 @@ export function usePreSale() {
       contentRenderer: () => h(editForm, { ref: formRef }),
       beforeSure: (done, { options }) => {
         const FormRef = formRef.value.getRef();
-        const curData = options.props.formInline as FormItemProps;
+        const curData = options.props.formInline;
+        curData.beginTimeLong = curData.beginTime;
+        curData.beginTime = dayJs(curData.beginTime).format(
+          'YYYY-MM-DD HH:mm:ss'
+        );
         function chores() {
           done();
           onSearch();
@@ -148,26 +167,6 @@ export function usePreSale() {
     cb();
   };
 
-  const changeAllSaleStatus = () => {
-    ElMessageBox.confirm(t('确认要调整开售状态吗?'), t('系统提示'), {
-      confirmButtonText: t('确定'),
-      cancelButtonText: t('取消'),
-      type: 'warning',
-      dangerouslyUseHTMLString: true,
-      draggable: true
-    })
-      .then(async () => {
-        // const res = await API.updateSaleStatus({
-        //   isSale: row.isSale,
-        //   matchId: row.matchId
-        // });
-        // if (res.code) return message(res.msg, { type: 'error' });
-        // message(res.msg, { type: 'success' });
-        // onSearch();
-      })
-      .catch(() => (allSaleSatatus.value = 0));
-  };
-
   const changeMatchCondition = (n: number) => {
     matchCondition.value = n;
     onSearch('reload');
@@ -189,12 +188,12 @@ export function usePreSale() {
     handleSelectionChange,
     openDialog,
     changeSwitch,
-    changeAllSaleStatus,
     allSaleSatatus,
     searchForm,
-    isLockAll,
     switchStyle,
     matchCondition,
-    changeMatchCondition
+    changeMatchCondition,
+    locakMatch,
+    selectLockcList
   };
 }

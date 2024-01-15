@@ -32,7 +32,7 @@
           :placeholder="t('赛事ID')"
           v-enter="search"
           clearable
-          v-number
+          :formatter="v => formatNumber(v)"
           class="!w-[150px]"
         />
       </el-form-item>
@@ -81,6 +81,19 @@
         </el-select>
       </el-form-item>
 
+      <el-form-item :label="`${t('盘口状态')}:`" prop="isSale">
+        <el-select
+          v-model="form.handicapStatus"
+          clearable
+          :placeholder="t('请选择')"
+          @change="search"
+        >
+          <el-option :label="t('早盘')" :value="0" />
+          <el-option :label="t('未开售')" :value="1" />
+          <el-option :label="t('滚球中')" :value="2" />
+        </el-select>
+      </el-form-item>
+
       <el-form-item>
         <el-button
           type="primary"
@@ -108,6 +121,7 @@ import { SearchFormType } from '../utils/types';
 import dayjs from 'dayjs';
 import { disableDate } from '@/utils/formmatDate';
 import { useMatchStore } from '@/store/match';
+import { formatNumber } from '@/utils/formatNumber';
 
 const formRef = ref();
 const emits = defineEmits(['onSearch', 'changeMatchCondition']);
@@ -133,30 +147,39 @@ onMounted(() => {
 });
 
 const changeDate = t => {
-  const d = dayjs(t).format('YYYY-MM-DD');
-  selectIndex.value = nextDayArr.value.findIndex(_ => _ === d);
-  props.form.startTime = dayjs(t).format('YYYY-MM-DD HH:mm:ss');
-  const endTime = new Date(`${d} 23:59:59`);
-  props.form.endTime = dayjs(endTime).format('YYYY-MM-DD HH:mm:ss');
-  emits('onSearch', ...['reload']);
+  if (!t) {
+    props.form.startTime = '';
+    props.form.endTime = '';
+    selectIndex.value = -1;
+  } else {
+    const d = dayjs(t).format('YYYY-MM-DD');
+    selectIndex.value = nextDayArr.value.findIndex(_ => _ === d);
+    props.form.startTime = dayjs(t).format('YYYY-MM-DD HH:mm:ss');
+    const endTime = new Date(`${d} 23:59:59`);
+    props.form.endTime = dayjs(endTime).format('YYYY-MM-DD HH:mm:ss');
+  }
+  search();
 };
 
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
   selectIndex.value = -1;
-  search();
+  emits('onSearch', ...['reload']);
 };
+
 const changeSelectDate = (_: number) => {
   selectIndex.value = _;
   const startTime = new Date(`${nextDayArr.value[_]} 00:00:00`);
   const endTime = new Date(`${nextDayArr.value[_]} 23:59:59`);
   props.form.startTime = dayjs(startTime).format('YYYY-MM-DD HH:mm:ss');
   props.form.endTime = dayjs(endTime).format('YYYY-MM-DD HH:mm:ss');
-  emits('onSearch', ...['reload']);
+  search();
 };
+
 const search = () => {
   emits('onSearch', ...['reload']);
 };
+
 const nextDayArr = computed(() => {
   const nextDayList = [];
   for (let i = 0; i < 5; i++) {

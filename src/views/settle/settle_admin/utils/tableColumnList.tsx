@@ -122,9 +122,9 @@ export const childColumns: TableColumnList = [
     slot: 'eventCode'
   },
   {
-    label: t('事件发生时间'),
+    label: t('比赛进行时间'),
     slot: 'eventTime',
-    headerRenderer: d => handleTableWidth(d, t('事件发生时间'))
+    headerRenderer: d => handleTableWidth(d, t('比赛进行时间'))
   },
   {
     label: t('比赛阶段'),

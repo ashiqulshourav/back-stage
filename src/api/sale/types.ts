@@ -29,6 +29,7 @@ declare namespace SaleDataAPI {
     saleHandicaps: number;
     allHandicaps: number;
     leagueNameCn: string;
+    handicapStatus: number;
     childrenData: ChildrenDataList[];
   }
 
@@ -108,5 +109,6 @@ declare namespace SaleDataAPI {
     ctid: number;
   }
 
-  type getBetItemsListResType = COMMON.BASE_RES_TYPE<getBetItemsListDataType[]>
+  type getBetItemsListResType = COMMON.BASE_RES_TYPE<getBetItemsListDataType[]>;
+  type saleBetItemsResType = COMMON.BASE_RES_TYPE<any>;
 }

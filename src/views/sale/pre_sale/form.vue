@@ -23,14 +23,16 @@
     </el-form-item>
 
     <el-form-item :label="`${t('赛事等级')}:`" prop="level">
-      <el-input
+      <el-select
         v-model="newFormInline.level"
+        class="w-[280px]"
         :placeholder="t('赛事等级')"
-        v-number="5"
-      />
+      >
+        <el-option v-for="item in 8" :key="item" :label="item" :value="item" />
+      </el-select>
     </el-form-item>
 
-    <el-form-item :label="`${t('国家地区')}:`" prop="countryId">
+    <!-- <el-form-item :label="`${t('国家地区')}:`" prop="countryId">
       <el-select
         v-model="newFormInline.countryId"
         filterable
@@ -44,7 +46,7 @@
           :value="item.countryId"
         />
       </el-select>
-    </el-form-item>
+    </el-form-item> -->
 
     <el-form-item :label="`${t('比赛时间')}:`" prop="beginTime">
       <el-date-picker
@@ -75,7 +77,7 @@ import { formRules } from './utils/rule';
 import { TeamFormProps } from './utils/types';
 import { t } from '@/plugins/i18n';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
-import { useMatchStore } from '@/store/match';
+// import { useMatchStore } from '@/store/match';
 
 const props = withDefaults(defineProps<TeamFormProps>(), {
   formInline: () => ({
@@ -88,7 +90,7 @@ const props = withDefaults(defineProps<TeamFormProps>(), {
   })
 });
 
-const matchStore = useMatchStore();
+// const matchStore = useMatchStore();
 const ruleFormRef = ref();
 const newFormInline = ref(props.formInline);
 

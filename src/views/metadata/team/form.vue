@@ -25,6 +25,7 @@
         filterable
         class="w-[280px]"
         :placeholder="t('请选择国家')"
+        clearable
       >
         <el-option
           v-for="item in matchStore.countryList"

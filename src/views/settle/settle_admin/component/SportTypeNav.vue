@@ -6,7 +6,7 @@
       :type="item.value === currentSportId ? 'primary' : ''"
       :btnText="item.label"
       :disabled="index > 0"
-      @click="$emit('onSearch', 'reload', item.value)"
+      @click="searchClick(item.value)"
     />
   </div>
 </template>
@@ -14,9 +14,17 @@
 <script setup lang="ts">
 import CustomButton from '@/components/Form/CustomButton.vue';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
-defineProps<{
+const props = defineProps<{
   currentSportId: number;
 }>();
+
+const emites = defineEmits(['onSearch']);
+
+const searchClick = val => {
+  if (val === props.currentSportId) return;
+  emites('onSearch', 'reload', val);
+};
+
 </script>
 
 <style scoped></style>

@@ -24,9 +24,10 @@
 
     <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
       <el-input
-        v-model="form.matchId"
+        v-model.trim="form.matchId"
         :placeholder="t('赛事ID')"
         v-enter="searchVal"
+        :formatter="v => formatNumber(v)"
         clearable
         class="!w-[150px]"
       />
@@ -90,6 +91,7 @@ import { t } from '@/plugins/i18n';
 import { SearchFormType } from '../utils/type';
 import { useMatchStore } from '@/store/match';
 import dayjs from 'dayjs';
+import { formatNumber } from '@/utils/formatNumber';
 // import { useLeague } from "../utils/hook";
 const formRef = ref();
 const matchStore = useMatchStore();
@@ -109,21 +111,27 @@ onMounted(() => {
 });
 
 const changeDate = t => {
-  const d = dayjs(t).format('YYYY-MM-DD');
-  props.form.startTime = dayjs(t).format('YYYY-MM-DD HH:mm:ss');
-  const endTime = new Date(`${d} 23:59:59`);
-  props.form.endTime = dayjs(endTime).format('YYYY-MM-DD HH:mm:ss');
+  if (!t) {
+    props.form.startTime = '';
+    props.form.endTime = '';
+  } else {
+    const d = dayjs(t).format('YYYY-MM-DD');
+    props.form.startTime = dayjs(t).format('YYYY-MM-DD HH:mm:ss');
+    const endTime = new Date(`${d} 23:59:59`);
+    props.form.endTime = dayjs(endTime).format('YYYY-MM-DD HH:mm:ss');
+  }
   emits('onSearch', ...['reload']);
 };
 
 const emits = defineEmits(['onSearch', 'resetForm', 'changeMatchCondition']);
-
 const searchVal = () => {
-  emits('onSearch', 'reload');
+  const noEmpty = Object.values(props.form).some(_ => !!_);
+  noEmpty && emits('onSearch', 'reload');
 };
 
 const resetForm = formRef => {
   emits('resetForm', formRef);
+  emits('onSearch', ...['reload']);
 };
 </script>
 

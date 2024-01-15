@@ -19,5 +19,14 @@ export default {
         showParent: true,
       }
     },
+    {
+      path: "/settle/settle_history",
+      name: "settle_history",
+      component: () => import("@/views/settle/settle_history/index.vue"),
+      meta: {
+        title: t('结算历史'),
+        showParent: true,
+      }
+    },
   ]
 } as RouteConfigsTable;

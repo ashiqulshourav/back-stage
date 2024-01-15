@@ -8,7 +8,7 @@
       @toggleClick="toggleSideBar"
     />
     <Breadcrumb v-if="layout !== 'mix'" class="breadcrumb-container" />
-    <mixNav v-if="layout === 'mix'" />
+    <!-- <mixNav v-if="layout === 'mix'" /> -->
 
     <div v-if="layout === 'vertical'" class="vertical-header-right">
       <!-- 菜单搜索 -->
@@ -30,7 +30,7 @@
                 :icon="LogoutCircleRLine"
                 style="margin: 5px"
               />
-              {{ t("退出系统") }}
+              {{ t('退出系统') }}
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -47,16 +47,16 @@
 </template>
 
 <script setup lang="ts">
-import Search from "./search/index.vue";
-import Notice from "./notice/index.vue";
-import mixNav from "./sidebar/mixNav.vue";
-import { useNav } from "@/layout/hooks/useNav";
-import Breadcrumb from "./sidebar/breadCrumb.vue";
-import topCollapse from "./sidebar/topCollapse.vue";
-import LogoutCircleRLine from "@iconify-icons/ri/logout-circle-r-line";
-import Setting from "@iconify-icons/ri/settings-3-line";
-import LanguageNav from "@/components/LanguageNav/index.vue";
-import { t } from "@/plugins/i18n";
+import Search from './search/index.vue';
+import Notice from './notice/index.vue';
+// import mixNav from "./sidebar/mixNav.vue";
+import { useNav } from '@/layout/hooks/useNav';
+import Breadcrumb from './sidebar/breadCrumb.vue';
+import topCollapse from './sidebar/topCollapse.vue';
+import LogoutCircleRLine from '@iconify-icons/ri/logout-circle-r-line';
+import Setting from '@iconify-icons/ri/settings-3-line';
+import LanguageNav from '@/components/LanguageNav/index.vue';
+import { t } from '@/plugins/i18n';
 
 const {
   layout,

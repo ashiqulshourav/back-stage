@@ -16,6 +16,7 @@ export type SearchFormType = {
   leagueId: string;
   leagueNameCn: string;
   endTime: string;
+  handicapStatus: number | string;
 }
 
 export type {

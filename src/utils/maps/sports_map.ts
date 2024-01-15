@@ -31,6 +31,13 @@ export const PANDA_MATCH_STATUS = {
   2: t('匹配失败'),
 }
 
+export const OPENING_STATUS = {
+  0: t('未开售'),
+  1: t('早盘'),
+  2: t('滚球'),
+}
+
+// 盘口开售状态
 export const PLAY_MATCH = {
   HT_AH: {
     Home: t('主'),

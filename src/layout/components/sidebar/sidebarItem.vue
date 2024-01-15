@@ -4,7 +4,6 @@ import { getConfig } from '@/config';
 import { menuType } from '../../types';
 import extraIcon from './extraIcon.vue';
 import { useNav } from '@/layout/hooks/useNav';
-import { t } from '@/plugins/i18n';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import { ref, toRaw, PropType, nextTick, computed, CSSProperties } from 'vue';
 

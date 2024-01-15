@@ -11,7 +11,7 @@
         >{{ matchInfo.homeTeamNameCn }} VS {{ matchInfo.awayTeamNameCn }}</span
       >
       <span
-        >{{ t('开售盘口/总盘口数:') }} {{ matchInfo.saleHandicaps }} /
+        >{{ t('开售盘口/总盘口数:') }} {{ openLen }} /
         {{ matchInfo.allHandicaps }}</span
       >
     </div>
@@ -54,13 +54,6 @@
                     }}</span>
                     <span>{{ s.odds }}</span>
                   </el-button>
-                  <div
-                    class="h-8 flex justify-center items-center cursor-pointer ml-3"
-                  >
-                    <IconifyIconOffline
-                      :icon="cItem[0].isSale === 2 ? 'unlock' : 'lock'"
-                    />
-                  </div>
                 </template>
                 <template v-else>
                   <el-button
@@ -76,20 +69,29 @@
                       <span>{{ s.odds }}</span>
                     </template>
                   </el-button>
-                  <div
-                    class="h-8 flex justify-center items-center cursor-pointer ml-3"
-                  >
-                    <IconifyIconOffline
-                      :icon="cItem[0].isSale === 2 ? 'unlock' : 'lock'"
-                    />
-                  </div>
                 </template>
+                <div
+                  class="h-8 flex justify-center items-center cursor-pointer ml-3"
+                >
+                  <el-popconfirm
+                    :title="t('是否确认修改锁盘状态?')"
+                    @confirm="upateLockStatus(cItem)"
+                  >
+                    <template #reference>
+                      <IconifyIconOffline
+                        :icon="cItem[0].isSale === 2 ? 'unlock' : 'lock'"
+                      />
+                    </template>
+                  </el-popconfirm>
+                </div>
               </div>
             </el-collapse-item>
           </el-collapse>
         </template>
         <template v-else>
-          <el-empty :description="t('暂无数据')" :image-size="100" />
+          <div v-loading="isLoading">
+            <el-empty :description="t('暂无数据')" :image-size="100" />
+          </div>
         </template>
       </el-tab-pane>
     </el-tabs>
@@ -102,10 +104,13 @@ import { ref } from 'vue';
 // import type { TabsPaneContext } from 'element-plus';
 import { PLAY_MATCH, transferBoDan } from '@/utils/maps/sports_map';
 import dayjs from 'dayjs';
+import { message } from '@/utils/message';
 
 const activeName = ref('0');
 const colActiveNames = ref([0]);
 const timer = ref();
+const openLen = ref(0);
+const isLoading = ref(true);
 
 interface IMData {
   [key: number]: {
@@ -135,12 +140,15 @@ const runGetBetItemsList = () => {
 };
 
 const getBetItemsList = async () => {
+  isLoading.value = true;
   const res: SaleDataAPI.getBetItemsListResType = await API.getBetItemsList({
     matchId: props.matchId
   });
   if (res.code) return;
   Object.keys(mData).forEach(key => (mData[key].formatList.length = 0));
+  openLen.value = 0;
   res.data.forEach(item => {
+    item.isSale === 2 && (openLen.value += 1);
     if (mData[item.ctid]) mData[item.ctid].formatList.push(item);
     else mData[3].formatList.push(item);
   });
@@ -174,6 +182,32 @@ const getBetItemsList = async () => {
       })
       .sort((a, b) => a.length - b.length);
   });
+  isLoading.value = false;
+};
+
+const emits = defineEmits(['reloadTable']);
+const upateLockStatus = async (
+  cItem: SaleDataAPI.getBetItemsListDataType[]
+) => {
+  try {
+    const params = {
+      matchId: cItem[0].matchId,
+      betItemList: cItem.filter(_ => _).map(_ => _.betItemsId)
+    };
+    if (cItem[0].isSale === 2) {
+    } else {
+    }
+    const res: SaleDataAPI.saleBetItemsResType =
+      cItem[0].isSale === 2
+        ? await API.saleBetItems(params)
+        : await API.openSaleBetItems(params);
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    if (res.code) return;
+    getBetItemsList();
+    emits('reloadTable');
+  } catch (error) {
+    console.log('OpeningPreview.vue文件 192==============行打印=', error);
+  }
 };
 
 /* const handleClick = (tab: TabsPaneContext, event: Event) => {
@@ -190,6 +224,13 @@ const handleChange = () => {};
 <style lang="scss" scoped>
 :deep() {
   .el-button {
+    &:hover,
+    &:focus {
+      cursor: auto;
+      background: transparent;
+      border-color: #dcdfe6;
+      color: var(--el-text-color-regular);
+    }
     & > span {
       display: flex;
       justify-content: space-around;

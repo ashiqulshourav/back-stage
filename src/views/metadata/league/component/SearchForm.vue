@@ -11,7 +11,7 @@
         :placeholder="t('联赛ID')"
         clearable
         v-enter="search"
-        v-number
+        :formatter="v => formatNumber(v, 10)"
         class="!w-[200px]"
       />
     </el-form-item>
@@ -19,8 +19,8 @@
       <el-input
         v-model="form.level"
         :placeholder="t('联赛等级')"
+        :formatter="v => formatNumber(v, 1)"
         clearable
-        v-number="5"
         v-enter="search"
         class="!w-[200px]"
       />
@@ -67,7 +67,7 @@
         v-model="form.leagueId188Bet"
         :placeholder="t('188数据源联赛杯ID')"
         clearable
-        v-number="15"
+        :formatter="v => formatNumber(v)"
         v-enter="search"
         class="!w-[200px]"
       />
@@ -107,6 +107,7 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import type { FormInstance } from 'element-plus';
 import { searchFormType } from '../utils/types';
 import { useMatchStore } from '@/store/match';
+import { formatNumber } from '@/utils/formatNumber';
 
 defineProps<{
   loading: boolean;

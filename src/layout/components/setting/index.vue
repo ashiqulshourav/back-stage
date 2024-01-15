@@ -7,31 +7,31 @@ import {
   computed,
   nextTick,
   onBeforeMount
-} from "vue";
+} from 'vue';
 import {
   useDark,
   debounce,
   useGlobal,
   storageLocal,
   storageSession
-} from "@pureadmin/utils";
-import { getConfig } from "@/config";
-import { useRouter } from "vue-router";
-import panel from "../panel/index.vue";
-import { emitter } from "@/utils/mitt";
-import { resetRouter } from "@/router";
-import { removeStorage } from "@/utils/auth";
-import { routerArrays } from "@/layout/types";
-import { useNav } from "@/layout/hooks/useNav";
-import { useAppStoreHook } from "@/store/app";
-import { toggleTheme } from "@pureadmin/theme/dist/browser-utils";
-import { useMultiTagsStoreHook } from "@/store/multiTags";
-import { useDataThemeChange } from "@/layout/hooks/useDataThemeChange";
-import { t } from "@/plugins/i18n";
-import dayIcon from "@/assets/svg/day.svg?component";
-import darkIcon from "@/assets/svg/dark.svg?component";
-import Check from "@iconify-icons/ep/check";
-import Logout from "@iconify-icons/ri/logout-circle-r-line";
+} from '@pureadmin/utils';
+import { getConfig } from '@/config';
+import { useRouter } from 'vue-router';
+import panel from '../panel/index.vue';
+import { emitter } from '@/utils/mitt';
+import { resetRouter } from '@/router';
+import { removeStorage } from '@/utils/auth';
+import { routerArrays } from '@/layout/types';
+import { useNav } from '@/layout/hooks/useNav';
+import { useAppStoreHook } from '@/store/app';
+import { toggleTheme } from '@pureadmin/theme/dist/browser-utils';
+import { useMultiTagsStoreHook } from '@/store/multiTags';
+import { useDataThemeChange } from '@/layout/hooks/useDataThemeChange';
+import { t } from '@/plugins/i18n';
+import dayIcon from '@/assets/svg/day.svg?component';
+import darkIcon from '@/assets/svg/dark.svg?component';
+import Check from '@iconify-icons/ep/check';
+import Logout from '@iconify-icons/ri/logout-circle-r-line';
 
 const router = useRouter();
 const { isDark } = useDark();
@@ -62,7 +62,7 @@ if (unref(layoutTheme)) {
 }
 
 /** 默认灵动模式 */
-const markValue = ref($storage.configure?.showModel ?? "smart");
+const markValue = ref($storage.configure?.showModel ?? 'smart');
 
 const logoVal = ref($storage.configure?.showLogo ?? true);
 
@@ -84,7 +84,7 @@ const getThemeColorStyle = computed(() => {
 /** 当网页为暗黑模式时不显示亮白色切换选项 */
 const showThemeColors = computed(() => {
   return themeColor => {
-    return themeColor === "light" && isDark.value ? false : true;
+    return themeColor === 'light' && isDark.value ? false : true;
   };
 });
 
@@ -97,35 +97,35 @@ function storageConfigureChange<T>(key: string, val: T): void {
 function toggleClass(flag: boolean, clsName: string, target?: HTMLElement) {
   const targetEl = target || document.body;
   let { className } = targetEl;
-  className = className.replace(clsName, "").trim();
+  className = className.replace(clsName, '').trim();
   targetEl.className = flag ? `${className} ${clsName} ` : className;
 }
 
 /** 灰色模式设置 */
 const greyChange = (value): void => {
-  toggleClass(settings.greyVal, "html-grey", document.querySelector("html"));
-  storageConfigureChange("grey", value);
+  toggleClass(settings.greyVal, 'html-grey', document.querySelector('html'));
+  storageConfigureChange('grey', value);
 };
 
 /** 色弱模式设置 */
 const weekChange = (value): void => {
   toggleClass(
     settings.weakVal,
-    "html-weakness",
-    document.querySelector("html")
+    'html-weakness',
+    document.querySelector('html')
   );
-  storageConfigureChange("weak", value);
+  storageConfigureChange('weak', value);
 };
 
 const tagsChange = () => {
   const showVal = settings.tabsVal;
-  storageConfigureChange("hideTabs", showVal);
-  emitter.emit("tagViewsChange", showVal as unknown as string);
+  storageConfigureChange('hideTabs', showVal);
+  emitter.emit('tagViewsChange', showVal as unknown as string);
 };
 
 const multiTagsCacheChange = () => {
   const multiTagsCache = settings.multiTagsCache;
-  storageConfigureChange("multiTagsCache", multiTagsCache);
+  storageConfigureChange('multiTagsCache', multiTagsCache);
   useMultiTagsStoreHook().multiTagsCacheChange(multiTagsCache);
 };
 
@@ -138,29 +138,29 @@ function onReset() {
   useAppStoreHook().setLayout(Layout);
   setEpThemeColor(EpThemeColor);
   useMultiTagsStoreHook().multiTagsCacheChange(MultiTagsCache);
-  toggleClass(Grey, "html-grey", document.querySelector("html"));
-  toggleClass(Weak, "html-weakness", document.querySelector("html"));
-  router.push("/login");
-  useMultiTagsStoreHook().handleTags("equal", [...routerArrays]);
+  toggleClass(Grey, 'html-grey', document.querySelector('html'));
+  toggleClass(Weak, 'html-weakness', document.querySelector('html'));
+  router.push('/login');
+  useMultiTagsStoreHook().handleTags('equal', [...routerArrays]);
   resetRouter();
 }
 
 function onChange(label) {
-  storageConfigureChange("showModel", label);
-  emitter.emit("tagViewsShowModel", label);
+  storageConfigureChange('showModel', label);
+  emitter.emit('tagViewsShowModel', label);
 }
 
 /** 侧边栏Logo */
 function logoChange() {
   unref(logoVal)
-    ? storageConfigureChange("showLogo", true)
-    : storageConfigureChange("showLogo", false);
-  emitter.emit("logoChange", unref(logoVal));
+    ? storageConfigureChange('showLogo', true)
+    : storageConfigureChange('showLogo', false);
+  emitter.emit('logoChange', unref(logoVal));
 }
 
 function setFalse(Doms): any {
   Doms.forEach(v => {
-    toggleClass(false, "is-select", unref(v));
+    toggleClass(false, 'is-select', unref(v));
   });
 }
 
@@ -169,16 +169,16 @@ const getThemeColor = computed(() => {
   return current => {
     if (
       current === layoutTheme.value.theme &&
-      layoutTheme.value.theme !== "light"
+      layoutTheme.value.theme !== 'light'
     ) {
-      return "#fff";
+      return '#fff';
     } else if (
       current === layoutTheme.value.theme &&
-      layoutTheme.value.theme === "light"
+      layoutTheme.value.theme === 'light'
     ) {
-      return "#1d2b45";
+      return '#1d2b45';
     } else {
-      return "transparent";
+      return 'transparent';
     }
   };
 });
@@ -186,7 +186,7 @@ const getThemeColor = computed(() => {
 /** 设置导航模式 */
 function setLayoutModel(layout: string) {
   layoutTheme.value.layout = layout;
-  window.document.body.setAttribute("layout", layout);
+  window.document.body.setAttribute('layout', layout);
   $storage.layout = {
     layout,
     theme: layoutTheme.value.theme,
@@ -198,19 +198,19 @@ function setLayoutModel(layout: string) {
 }
 
 watch($storage, ({ layout }) => {
-  switch (layout["layout"]) {
-    case "vertical":
-      toggleClass(true, "is-select", unref(verticalRef));
+  switch (layout['layout']) {
+    case 'vertical':
+      toggleClass(true, 'is-select', unref(verticalRef));
       debounce(setFalse([horizontalRef]), 50);
       debounce(setFalse([mixRef]), 50);
       break;
-    case "horizontal":
-      toggleClass(true, "is-select", unref(horizontalRef));
+    case 'horizontal':
+      toggleClass(true, 'is-select', unref(horizontalRef));
       debounce(setFalse([verticalRef]), 50);
       debounce(setFalse([mixRef]), 50);
       break;
-    case "mix":
-      toggleClass(true, "is-select", unref(mixRef));
+    case 'mix':
+      toggleClass(true, 'is-select', unref(mixRef));
       debounce(setFalse([verticalRef]), 50);
       debounce(setFalse([horizontalRef]), 50);
       break;
@@ -221,9 +221,9 @@ onBeforeMount(() => {
   /* 初始化项目配置 */
   nextTick(() => {
     settings.greyVal &&
-      document.querySelector("html")?.setAttribute("class", "html-grey");
+      document.querySelector('html')?.setAttribute('class', 'html-grey');
     settings.weakVal &&
-      document.querySelector("html")?.setAttribute("class", "html-weakness");
+      document.querySelector('html')?.setAttribute('class', 'html-weakness');
     settings.tabsVal && tagsChange();
   });
 });
@@ -231,7 +231,7 @@ onBeforeMount(() => {
 
 <template>
   <panel>
-    <el-divider>{{ t("主题") }}</el-divider>
+    <el-divider>{{ t('主题') }}</el-divider>
     <el-switch
       v-model="dataTheme"
       inline-prompt
@@ -278,7 +278,7 @@ onBeforeMount(() => {
         </li>
       </el-tooltip>
 
-      <el-tooltip
+      <!-- <el-tooltip
         v-if="device !== 'mobile'"
         :effect="tooltipEffect"
         class="item"
@@ -294,7 +294,7 @@ onBeforeMount(() => {
           <div />
           <div />
         </li>
-      </el-tooltip>
+      </el-tooltip> -->
     </ul>
 
     <el-divider>主题色</el-divider>
@@ -397,7 +397,7 @@ onBeforeMount(() => {
         height="15"
         style="margin-right: 4px"
       />
-      {{ t("清空缓存并返回登录页") }}
+      {{ t('清空缓存并返回登录页') }}
     </el-button>
   </panel>
 </template>

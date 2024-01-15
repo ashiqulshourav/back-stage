@@ -1,8 +1,7 @@
 import { handleTableWidth } from '@/utils/getTableWidth';
 import dayjs from 'dayjs';
-import { IconifyIconOffline } from '@/components/ReIcon';
-import { useMatchStore } from '@/store/match';
 import { parseCountry } from '@/utils/formatMatch';
+import { OPENING_STATUS } from '@/utils/maps/sports_map';
 
 export const columns: TableColumnList = [
   {
@@ -12,20 +11,15 @@ export const columns: TableColumnList = [
   {
     label: t('锁盘'),
     headerRenderer: d => handleTableWidth(d, t('锁盘'), 'auto'),
-    formatter: ({ isSale }) => {
-      return (
-        <div class="flex justify-center">
-          <IconifyIconOffline icon="lock" />
-        </div>
-      );
-    }
+    slot: 'lock'
   },
   {
     label: t('联赛名称'),
     prop: 'leagueNameCn',
     headerRenderer: d => handleTableWidth(d, t('联赛名称'), 'auto'),
     formatter: ({ leagueNameCn }) => leagueNameCn || '-',
-    align: 'left'
+    align: 'left',
+    minWidth: 200
   },
   {
     label: t('联赛ID'),
@@ -77,13 +71,13 @@ export const columns: TableColumnList = [
       currentScore.replace(/H(\d+)A(\d+)/, '$1 - $2'),
     headerRenderer: d => handleTableWidth(d, t('当前比分'), 'auto')
   }, */
-  /*  {
-    label: t('赛种'),
-    prop: 'sportId',
-    formatter: ({ sportId }): string =>
-      SPORT_ID_MAP.find(_ => _.value === sportId).label,
+  {
+    label: t('盘口状态'),
+    prop: 'handicapStatus',
+    headerRenderer: d => handleTableWidth(d, t('盘口状态'), 'auto'),
+    formatter: ({ handicapStatus }): string => OPENING_STATUS[handicapStatus],
     minWidth: 150
-  }, */
+  },
   {
     label: t('开售控制'),
     slot: 'isSale',
@@ -92,7 +86,7 @@ export const columns: TableColumnList = [
   {
     label: t('开售状态'),
     headerRenderer: d => handleTableWidth(d, t('开售状态'), 'auto'),
-    formatter: ({ isSale }) => (isSale ? '已开售' : '未开售')
+    formatter: ({ isSale }) => (isSale ? t('已开售') : t('未开售'))
   },
   {
     label: t('开售盘口/总盘口数'),
@@ -100,7 +94,6 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('开售盘口/总盘口数'), 'auto'),
     minWidth: 150
   },
-
   {
     label: t('操作'),
     fixed: 'right',

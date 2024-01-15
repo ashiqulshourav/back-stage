@@ -9,18 +9,25 @@
       <el-form-item :label="`${t('联赛ID')}:`" prop="leagueId">
         <el-input
           v-model="form.leagueId"
+          :formatter="v => v.replace(/\D/g, '')"
           :placeholder="t('联赛ID')"
           clearable
           class="!w-[200px]"
         />
       </el-form-item>
       <el-form-item :label="`${t('赛事等级')}:`" prop="level">
-        <el-input
+        <el-select
           v-model="form.level"
+          class="w-[280px]"
           :placeholder="t('赛事等级')"
-          clearable
-          class="!w-[200px]"
-        />
+        >
+          <el-option
+            v-for="item in 8"
+            :key="item"
+            :label="item"
+            :value="item"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item :label="`${t('联赛英文名')}:`" prop="leagueNameEn">
         <el-input

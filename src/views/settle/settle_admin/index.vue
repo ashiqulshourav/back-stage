@@ -20,19 +20,18 @@
           showOverflowTooltip
           :loading="loading"
           :size="size"
-          row-key="matchId"
+          :row-key="row => row.matchId"
+          :expand-row-keys="expandMatchList"
           adaptive
           :data="dataList"
           :columns="dynamicColumns"
           :pagination="pagination"
           :paginationSmall="size === 'small' ? true : false"
-          :expand-row-keys="expandMatchList"
           :header-cell-style="{
             background: 'var(--el-fill-color-light)',
             color: 'var(--el-text-color-primary)'
           }"
           @expand-change="expandChange"
-          @selection-change="handleSelectionChange"
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
@@ -106,14 +105,15 @@
                   </template>
 
                   <template #eventTime="{ row, index: childIndex }">
-                    <el-date-picker
+                    <el-time-picker
                       v-model="row.eventTime"
-                      type="datetime"
                       :placeholder="t('请选择时间')"
                       :disabled="!row.isEdit"
+                      :default-value="new Date(new Date().toLocaleDateString())"
+                      :editable="false"
                       value-format="x"
                       @change="changeEventTime(row, childIndex, item.tableList)"
-                      format="YYYY-MM-DD HH:mm:ss"
+                      format="HH:mm:ss"
                     />
                   </template>
                   <template #matchPeriodId="{ row }">
@@ -179,21 +179,15 @@
                   </template>
 
                   <template
-                    #operation="{
-                      row,
-                      index: childIndex
-                    }: {
-                      row: SattleDataAPI.MatchEventsList,
-                      index: number
-                    }"
+                    #operation="{ row }: { row: SattleDataAPI.MatchEventsList }"
                   >
                     <div class="flex items-center justify-center">
                       <el-button
                         class="reset-margin"
                         link
-                        type="primary"
+                        type="default"
                         :size="size"
-                        v-if="item.tableList.length - 1 === childIndex"
+                        v-if="!row.isBackEndReturnData"
                         :icon="useRenderIcon(EditPen)"
                         @click="editChild(row)"
                       >
@@ -205,13 +199,11 @@
                         link
                         type="primary"
                         :size="size"
-                        v-if="
-                          !row.isBackEndReturnData &&
-                          item.tableList.length - 1 === childIndex
-                        "
+                        v-if="!row.isBackEndReturnData"
+                        :disabled="!row.isEdit"
                         :icon="useRenderIcon(saveIcon)"
                         @click="
-                          handleChildrenData(row, parIndex, 'edit', parentRow)
+                          handleChildrenData(row, parIndex, 'save', parentRow)
                         "
                       >
                         {{ t('保存') }}
@@ -220,39 +212,17 @@
                       <el-button
                         class="reset-margin"
                         link
-                        type="primary"
+                        type="danger"
                         :size="size"
-                        v-if="
-                          !row.isBackEndReturnData &&
-                          item.tableList.length - 1 === childIndex
-                        "
+                        v-if="!row.isBackEndReturnData"
+                        :disabled="!row.isSave || row.isEdit"
                         :icon="useRenderIcon(uploadIcon)"
                         @click="
-                          handleChildrenData(row, parIndex, 'edit', parentRow)
+                          handleChildrenData(row, parIndex, 'upload', parentRow)
                         "
                       >
                         {{ t('提交') }}
                       </el-button>
-
-                      <!-- <el-popconfirm
-                        v-if="item.tableList.length - 1 === childIndex"
-                        :title="t('是否确认删除数据么')"
-                        @confirm="
-                          handleChildrenData(
-                            row,
-                            parIndex,
-                            'delete',
-                            parentRow,
-                            item.tableList
-                          )
-                        "
-                      >
-                        <template #reference>
-                          <el-button circle type="primary">
-                            <div class="w-[14px] h-[14px] align-middle">D</div>
-                          </el-button>
-                        </template>
-                      </el-popconfirm> -->
                     </div>
                   </template>
                 </pure-table>
@@ -287,16 +257,18 @@ import { MATCH_EVENT_CODE } from '@/utils/maps/sports_map';
 import CustomButton from '@/components/Form/CustomButton.vue';
 import SportTypeNav from './component/SportTypeNav.vue';
 import { MatchEventType } from './utils/type';
-defineOptions({ name: 'settle_admin' });
 import EditPen from '@iconify-icons/ep/edit-pen';
 
+defineOptions({ name: 'settle_admin' });
 const changeEventTime = (
   row: SattleDataAPI.MatchEventsList,
   childIndex: number,
   childrenData: SattleDataAPI.MatchEventsList[]
 ) => {
   if (childIndex === 0) return;
-  if (row.eventTime <= childrenData[childIndex - 1].eventTime) {
+  if (
+    +row.eventTime <= new Date(childrenData[childIndex - 1].eventTime).getTime()
+  ) {
     message(t('时间不能小于前一个事件发生时间'), { type: 'error' });
     row.eventTime = '';
   }
@@ -341,7 +313,6 @@ const {
   onSearch,
   handleTableWidthChange,
   handleCurrentChange,
-  handleSelectionChange,
   childColumns,
   expandChange,
   addChildRow,

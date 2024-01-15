@@ -107,6 +107,7 @@ import { SearchFormType } from '../utils/types';
 import { useMatchStore } from '@/store/match';
 
 const matchStore = useMatchStore();
+
 defineProps<{
   loading: boolean;
   form: SearchFormType;

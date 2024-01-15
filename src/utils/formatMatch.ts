@@ -1,6 +1,7 @@
 import { useMatchStore } from "@/store/match";
 import { useI18n } from "vue-i18n";
 
+// 解析当前比分
 export const parseMatchScore = (s: string) => {
   const match = s.match(/H(\d+)A(\d+)/);
   if (match) {
@@ -21,8 +22,6 @@ export const parseCountry = (countryId: number) => {
   if (!country) return '-';
   return (locale.value === 'zh' ? country?.countryNameCn : country?.countryNameEn)
 }
-
-
 
 /* 
 formatter: ({ countryId }) => parseCountry(countryId)
