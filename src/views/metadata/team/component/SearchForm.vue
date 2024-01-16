@@ -32,7 +32,11 @@
       </el-select>
     </el-form-item>
     <el-form-item :label="`${t('是否国家队')}:`" prop="isCountryTeam">
-      <el-select v-model="form.isCountryTeam" :placeholder="t('请选择')">
+      <el-select
+        v-model="form.isCountryTeam"
+        :placeholder="t('请选择')"
+        clearable
+      >
         <el-option :label="t('是')" :value="0" />
         <el-option :label="t('否')" :value="1" />
       </el-select>
@@ -59,7 +63,7 @@
     </el-form-item>
 
     <el-form-item :label="`${t('赛种')}:`" prop="sportId">
-      <el-select v-model="form.sportId" :placeholder="t('赛种')">
+      <el-select v-model="form.sportId" :placeholder="t('赛种')" clearable>
         <el-option
           :label="item.label"
           :value="item.value"
@@ -116,25 +120,21 @@ import { SearchFormType } from '../utils/types';
 import { useMatchStore } from '@/store/match';
 import { formatNumber } from '@/utils/formatNumber';
 
-const props = withDefaults(
-  defineProps<{
-    loading: boolean;
-    form: SearchFormType;
-  }>(),
-  {}
-);
+defineProps<{
+  loading: boolean;
+  form: SearchFormType;
+}>();
 
 const emits = defineEmits(['onSearch']);
 const matchStore = useMatchStore();
 const formRef = ref();
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
-  emits('onSearch', ...['reload']);
+  search();
 };
 
 const search = () => {
-  const noEmpty = Object.values(props.form).some(_ => !!_);
-  noEmpty && emits('onSearch', 'reload');
+  emits('onSearch', 'reload');
 };
 </script>
 

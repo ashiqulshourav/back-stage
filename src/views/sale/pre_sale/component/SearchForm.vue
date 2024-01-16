@@ -14,6 +14,7 @@
         <el-select
           v-model="form.leagueId"
           filterable
+          clearable
           class="w-[280px]"
           :placeholder="t('请选择联赛')"
         >
@@ -73,6 +74,7 @@
       <el-form-item :label="`${t('开售状态')}:`" prop="isSale">
         <el-select
           v-model="form.isSale"
+          clearable
           :placeholder="t('请选择')"
           @change="search"
         >

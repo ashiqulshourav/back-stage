@@ -58,7 +58,7 @@
       />
     </el-form-item>
 
-    <el-form-item :label="`${'赛种'}:`" prop="sportId">
+    <!-- <el-form-item :label="`${'赛种'}:`" prop="sportId">
       <el-select v-model="newFormInline.sportId" :placeholder="t('赛种')">
         <el-option
           :label="item.label"
@@ -67,7 +67,7 @@
           :key="item.value"
         />
       </el-select>
-    </el-form-item>
+    </el-form-item> -->
   </el-form>
 </template>
 
@@ -76,7 +76,7 @@ import { ref } from 'vue';
 import { formRules } from './utils/rule';
 import { TeamFormProps } from './utils/types';
 import { t } from '@/plugins/i18n';
-import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+// import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 // import { useMatchStore } from '@/store/match';
 
 const props = withDefaults(defineProps<TeamFormProps>(), {

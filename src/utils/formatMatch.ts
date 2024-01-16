@@ -15,6 +15,7 @@ export const parseMatchScore = (s: string) => {
   }
 }
 
+// 国家显示
 export const parseCountry = (countryId: number) => {
   const matchStore = useMatchStore();
   const { locale } = useI18n();

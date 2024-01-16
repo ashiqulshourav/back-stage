@@ -15,7 +15,7 @@
         {{ matchInfo.allHandicaps }}</span
       >
     </div>
-    <el-tabs v-model="activeName" type="card">
+    <el-tabs v-model="activeName" type="border-card">
       <el-tab-pane
         :label="o.value"
         :name="index"
@@ -223,6 +223,15 @@ const handleChange = () => {};
 
 <style lang="scss" scoped>
 :deep() {
+  .el-collapse {
+    border-top: none;
+    .el-collapse-item:last-child {
+      .el-collapse-item__wrap,
+      .el-collapse-item__header {
+        border-bottom: none;
+      }
+    }
+  }
   .el-button {
     &:hover,
     &:focus {

@@ -115,7 +115,6 @@ export function usePreSale() {
       beforeSure: (done, { options }) => {
         const FormRef = formRef.value.getRef();
         const curData = options.props.formInline;
-        curData.beginTimeLong = curData.beginTime;
         curData.beginTime = dayJs(curData.beginTime).format(
           'YYYY-MM-DD HH:mm:ss'
         );
@@ -136,7 +135,14 @@ export function usePreSale() {
     });
   };
 
-  async function onSearch(type?: string) {
+  const updateSaleList = async (curData, cb) => {
+    const res = await API.updateMatch(curData);
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    if (res.code) return;
+    cb();
+  };
+
+  const onSearch = async (type?: 'reload') => {
     if (type === 'reload') pagination.currentPage = 1;
     loading.value = true;
     const res: SaleDataAPI.PreSaleListRes = await API.getPreSaleList({
@@ -152,19 +158,12 @@ export function usePreSale() {
     pagination.total = res.data.total;
     pagination.pageSize = res.data.pageSize;
     pagination.currentPage = res.data.pageNum;
-  }
+  };
 
   const resetForm = formEl => {
     if (!formEl) return;
     formEl.resetFields();
     onSearch();
-  };
-
-  const updateSaleList = async (curData, cb) => {
-    const res = await API.updateMatch(curData);
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    if (res.code) return;
-    cb();
   };
 
   const changeMatchCondition = (n: number) => {

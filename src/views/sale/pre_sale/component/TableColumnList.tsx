@@ -29,6 +29,7 @@ export const columns: TableColumnList = [
   {
     label: t('赛事等级'),
     prop: 'level',
+    minWidth: 100,
     sortable: true,
     headerRenderer: d => handleTableWidth(d, t('赛事等级'), 'auto')
   },
@@ -52,6 +53,7 @@ export const columns: TableColumnList = [
   {
     label: t('国家/地区'),
     prop: 'countryId',
+    minWidth: 100,
     headerRenderer: d => handleTableWidth(d, t('国家/地区'), 'auto'),
     formatter: ({ countryId }) => parseCountry(countryId)
   },

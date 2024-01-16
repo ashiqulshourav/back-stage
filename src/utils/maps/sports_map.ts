@@ -31,6 +31,7 @@ export const PANDA_MATCH_STATUS = {
   2: t('匹配失败'),
 }
 
+// 开售状态映射
 export const OPENING_STATUS = {
   0: t('未开售'),
   1: t('早盘'),
@@ -79,6 +80,7 @@ export const PLAY_MATCH = {
   },
 };
 
+// 反波胆内容格式化
 const BoDanSort = (a: any, b: any) => {
   const [aFirst, aSecond] = a.handicap.split('-');
   const [bFirst, bSecond] = b.handicap.split('-');

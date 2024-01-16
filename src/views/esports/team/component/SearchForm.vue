@@ -10,6 +10,7 @@
         v-model="form.teamId"
         :placeholder="t('球队ID')"
         clearable
+        :formatter="v => formatNumber(v)"
         v-enter="search"
         class="!w-[200px]"
       />
@@ -18,6 +19,7 @@
       <el-select
         v-model="form.countryId"
         filterable
+        clearable
         class="w-[280px]"
         :placeholder="t('请选择国家')"
       >
@@ -30,7 +32,11 @@
       </el-select>
     </el-form-item>
     <el-form-item :label="`${t('是否国家队')}:`" prop="countryId">
-      <el-select v-model="form.isCountryTeam" placeholder="Select">
+      <el-select
+        v-model="form.isCountryTeam"
+        :placeholder="t('请选择')"
+        clearable
+      >
         <el-option :label="t('是')" :value="0" />
         <el-option :label="t('否')" :value="1" />
       </el-select>
@@ -40,6 +46,7 @@
         v-model="form.leagueId"
         :placeholder="t('联赛ID')"
         clearable
+        :formatter="v => formatNumber(v)"
         v-enter="search"
         class="!w-[200px]"
       />
@@ -47,6 +54,7 @@
     <el-form-item :label="`${t('球队等级')}:`" prop="level">
       <el-input
         v-model="form.level"
+        :formatter="v => formatNumber(v, 1)"
         :placeholder="t('球队等级')"
         clearable
         v-enter="search"
@@ -68,6 +76,7 @@
         v-model="form.teamNameCn"
         :placeholder="t('球队中文名称')"
         clearable
+        maxLength="20"
         v-enter="search"
         class="!w-[200px]"
       />
@@ -77,6 +86,7 @@
         v-model="form.teamNameEn"
         :placeholder="t('球队英文名称')"
         clearable
+        maxLength="20"
         v-enter="search"
         class="!w-[200px]"
       />
@@ -105,6 +115,7 @@ import { t } from '@/plugins/i18n';
 import type { FormInstance } from 'element-plus';
 import { SearchFormType } from '../utils/types';
 import { useMatchStore } from '@/store/match';
+import { formatNumber } from '@/utils/formatNumber';
 
 const matchStore = useMatchStore();
 
