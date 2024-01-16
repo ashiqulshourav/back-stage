@@ -9,7 +9,7 @@
       <el-form-item :label="`${t('联赛ID')}:`" prop="leagueId">
         <el-input
           v-model="form.leagueId"
-          :formatter="v => v.replace(/\D/g, '')"
+          :formatter="v => formatNumber(v, 10)"
           :placeholder="t('联赛ID')"
           clearable
           class="!w-[200px]"
@@ -88,6 +88,7 @@ import Refresh from '@iconify-icons/ep/refresh';
 import Search from '@iconify-icons/ep/search';
 import type { FormInstance } from 'element-plus';
 import { SearchFormType } from '../utils/types';
+import { formatNumber } from '@/utils/formatNumber';
 
 defineProps<{
   loading: boolean;
