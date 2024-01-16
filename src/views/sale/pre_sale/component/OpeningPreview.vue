@@ -101,7 +101,6 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import { ref } from 'vue';
-// import type { TabsPaneContext } from 'element-plus';
 import { PLAY_MATCH, transferBoDan } from '@/utils/maps/sports_map';
 import dayjs from 'dayjs';
 import { message } from '@/utils/message';

@@ -160,7 +160,6 @@ export const childColumns: TableColumnList = [
   }, */
   {
     label: t('数据商事件'),
-    formatter: ({}) => '-'
-    // headerRenderer: (d) => handleTableWidth(d, t('数据商事件'))
+    formatter: ({ dataSourceCode }) => dataSourceCode ?? '-'
   }
 ];

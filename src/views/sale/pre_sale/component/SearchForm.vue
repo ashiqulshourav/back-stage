@@ -83,7 +83,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="`${t('盘口状态')}:`" prop="isSale">
+      <el-form-item :label="`${t('盘口状态')}:`" prop="handicapStatus">
         <el-select
           v-model="form.handicapStatus"
           clearable

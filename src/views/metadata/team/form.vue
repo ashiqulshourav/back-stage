@@ -46,16 +46,14 @@
       </el-select>
     </el-form-item>
 
-    <el-form-item :label="`${t('联赛ID')}:`" prop="leagueId">
-      <el-input v-model="newFormInline.leagueId" :placeholder="t('联赛ID')" />
-    </el-form-item>
-
     <el-form-item :label="t('球队等级')" prop="level">
-      <el-input
+      <el-select
         v-model="newFormInline.level"
-        :placeholder="t('球队等级')"
-        type="number"
-      />
+        class="w-[280px]"
+        :placeholder="t('联赛等级')"
+      >
+        <el-option v-for="item in 8" :key="item" :label="item" :value="item" />
+      </el-select>
     </el-form-item>
 
     <el-form-item label="赛种" prop="sportId">
@@ -72,6 +70,7 @@
     <el-form-item :label="`${t('主场名称')}:`" prop="stadiumName">
       <el-input
         v-model="newFormInline.stadiumName"
+        maxLength="30"
         :placeholder="t('主场名称')"
       />
     </el-form-item>

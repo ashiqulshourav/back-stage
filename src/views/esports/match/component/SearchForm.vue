@@ -19,6 +19,7 @@
         <el-select
           v-model="form.level"
           class="w-[280px]"
+          clearable
           :placeholder="t('赛事等级')"
         >
           <el-option
@@ -38,18 +39,27 @@
         />
       </el-form-item>
       <el-form-item :label="`${t('国家')}:`" prop="countryId">
-        <el-input
+        <el-select
           v-model="form.countryId"
-          :placeholder="t('请选择国家')"
+          filterable
           clearable
-          class="!w-[200px]"
-        />
+          class="w-[280px]"
+          :placeholder="t('请选择国家')"
+        >
+          <el-option
+            v-for="item in matchStore.countryList"
+            :key="item.countryId"
+            :label="item.countryNameCn"
+            :value="item.countryId"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item :label="`${t('188数据源联赛杯ID')}:`" prop="leagueId188Bet">
         <el-input
           v-model="form.leagueId188Bet"
           :placeholder="t('188数据源联赛杯ID')"
           clearable
+          :formatter="v => formatNumber(v)"
           class="!w-[200px]"
         />
       </el-form-item>
@@ -89,14 +99,15 @@ import Search from '@iconify-icons/ep/search';
 import type { FormInstance } from 'element-plus';
 import { SearchFormType } from '../utils/types';
 import { formatNumber } from '@/utils/formatNumber';
+import { useMatchStore } from '@/store/match';
 
 defineProps<{
   loading: boolean;
   form: SearchFormType;
 }>();
 
+const matchStore = useMatchStore();
 const formRef = ref<FormInstance>();
-
 const emits = defineEmits(['onSearch']);
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
