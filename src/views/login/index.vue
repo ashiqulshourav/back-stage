@@ -59,7 +59,7 @@
                 :loading="loading"
                 @click="onLogin(ruleFormRef)"
               >
-                {{ t("登录") }}
+                {{ t('登录') }}
               </el-button>
             </Motion>
           </el-form>
@@ -70,28 +70,28 @@
 </template>
 
 <script setup lang="ts">
-import Motion from "./utils/motion";
-import { message } from "@/utils/message";
-import { loginRules } from "./utils/rule";
-import { useNav } from "@/layout/hooks/useNav";
-import type { FormInstance } from "element-plus";
-import { useLayout } from "@/layout/hooks/useLayout";
-import { getTopMenu } from "@/router/utils";
-import { bg, avatar, illustration } from "./utils/static";
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-import { toRaw } from "vue";
-import { useDataThemeChange } from "@/layout/hooks/useDataThemeChange";
-import dayIcon from "@/assets/svg/day.svg?component";
-import darkIcon from "@/assets/svg/dark.svg?component";
-import Lock from "@iconify-icons/ri/lock-fill";
-import User from "@iconify-icons/ri/user-3-fill";
-import { addPathMatch } from "@/router/utils";
-import { usePermissionStoreHook } from "@/store/permission";
-import LanguageNav from "@/components/LanguageNav/index.vue";
-import { useUserStore } from "@/store/user";
-import { t } from "@/plugins/i18n";
+import Motion from './utils/motion';
+import { message } from '@/utils/message';
+import { loginRules } from './utils/rule';
+import { useNav } from '@/layout/hooks/useNav';
+import type { FormInstance } from 'element-plus';
+import { useLayout } from '@/layout/hooks/useLayout';
+import { getTopMenu, initRouter } from '@/router/utils';
+import { bg, avatar, illustration } from './utils/static';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import { toRaw } from 'vue';
+import { useDataThemeChange } from '@/layout/hooks/useDataThemeChange';
+import dayIcon from '@/assets/svg/day.svg?component';
+import darkIcon from '@/assets/svg/dark.svg?component';
+import Lock from '@iconify-icons/ri/lock-fill';
+import User from '@iconify-icons/ri/user-3-fill';
+import { addPathMatch } from '@/router/utils';
+import { usePermissionStoreHook } from '@/store/permission';
+import LanguageNav from '@/components/LanguageNav/index.vue';
+import { useUserStore } from '@/store/user';
+import { t } from '@/plugins/i18n';
 
-defineOptions({ name: "Login" });
+defineOptions({ name: 'Login' });
 const router = useRouter();
 const loading = ref(false);
 const ruleFormRef = ref<FormInstance>();
@@ -102,8 +102,8 @@ dataThemeChange();
 const { title } = useNav();
 const userStore = useUserStore();
 const ruleForm = reactive({
-  username: "",
-  password: ""
+  username: '',
+  password: ''
 });
 
 const onLogin = async (formEl: FormInstance | undefined) => {
@@ -128,19 +128,21 @@ const _loginRequest = async () => {
       password: ruleForm.password
     });
     loading.value = false;
-    if (res.code) return message(res.msg, { type: "error" });
+    if (res.code) return message(res.msg, { type: 'error' });
     userStore.setUserInfo(res.data);
-    router.push(getTopMenu(true).path);
-    message(t("登录成功"), { type: "success" });
+    initRouter().then(() => {
+      router.push(getTopMenu(true).path);
+      message(t('登录成功'), { type: 'success' });
+    });
   } catch (error) {
-    message(error.message, { type: "error" });
+    message(error.message, { type: 'error' });
     loading.value = false;
   }
 };
 </script>
 
 <style scoped>
-@import url("@/style/login.css");
+@import url('@/style/login.css');
 </style>
 
 <style lang="scss" scoped>

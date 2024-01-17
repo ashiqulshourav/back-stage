@@ -106,7 +106,7 @@ const openInfoDialog = (matchId: number, row: SaleDataAPI.PreSaleList) => {
   addDialog({
     title: t('盘口预览'),
     props: { matchId, matchInfo: row },
-    width: '30%',
+    width: '40%',
     draggable: true,
     hideFooter: true,
     contentRenderer: () =>

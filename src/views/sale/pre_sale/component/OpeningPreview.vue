@@ -52,7 +52,7 @@
                     <span v-if="!PLAY_MATCH[s.sourceCode].hideMiddle">{{
                       s.handicap
                     }}</span>
-                    <span>{{ s.odds }}</span>
+                    <span>{{ s.odds.toFixed(2) }}</span>
                   </el-button>
                 </template>
                 <template v-else>
@@ -66,7 +66,7 @@
                   >
                     <template v-if="s">
                       <span>{{ s.handicap }}</span>
-                      <span>{{ s.odds }}</span>
+                      <span>{{ s.odds.toFixed(2) }}</span>
                     </template>
                   </el-button>
                 </template>
@@ -101,7 +101,11 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import { ref } from 'vue';
-import { PLAY_MATCH, transferBoDan } from '@/utils/maps/sports_map';
+import {
+  PLAY_MATCH,
+  transferBoDan,
+  GET_PLAYNAME_BY_KC
+} from '@/utils/maps/sports_map';
 import dayjs from 'dayjs';
 import { message } from '@/utils/message';
 
@@ -147,6 +151,7 @@ const getBetItemsList = async () => {
   Object.keys(mData).forEach(key => (mData[key].formatList.length = 0));
   openLen.value = 0;
   res.data.forEach(item => {
+    item.betItemsName = GET_PLAYNAME_BY_KC[item.sourceCode];
     item.isSale === 2 && (openLen.value += 1);
     if (mData[item.ctid]) mData[item.ctid].formatList.push(item);
     else mData[3].formatList.push(item);
@@ -191,11 +196,10 @@ const upateLockStatus = async (
   try {
     const params = {
       matchId: cItem[0].matchId,
-      betItemList: cItem.filter(_ => _).map(_ => _.betItemsId)
+      betItemList: cItem
+        .filter(_ => _)
+        .map(_ => `${_.betItemsId}_${_.handicap}`)
     };
-    if (cItem[0].isSale === 2) {
-    } else {
-    }
     const res: SaleDataAPI.saleBetItemsResType =
       cItem[0].isSale === 2
         ? await API.saleBetItems(params)

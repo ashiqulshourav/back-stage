@@ -256,6 +256,19 @@
   "k6c219e41": "Settlement History",
   "k12711277": "Are you sure you want to lock the current match?",
   "k8fc5b98": "Already on sale",
-  "k5c10d22d": "比赛进行时间",
-  "k5a14ae11": "平局"
+  "k5c10d22d": "Match Duration",
+  "k5a14ae11": "Draw",
+  "k-41d75bfe": "Full Time Over/Under",
+  "k4f4396aa": "Half Time Over/Under",
+  "k-16f35d25": "Full Time Odd/Even",
+  "k-232a28a4": "Odd/Even - First Half",
+  "k376f64a9": "Full Time Handicap",
+  "k-39fba9ff": "Half Time Handicap",
+  "k570001be": "Full Time Win",
+  "k-5994ccea": "Half Time Win",
+  "k58cd23cb": "Full Time Correct Score",
+  "k-45a4befb": "Correct Score - First Half",
+  "kd712b0f": "Both Teams to Score",
+  "k217df49e": "Full Time Handicap Betting",
+  "k32230e20": "Total Sets"
 }

@@ -12,7 +12,7 @@ import { message } from "@/utils/message";
 
 export const useUserStore = defineStore('USERSTATE', {
   state: (): userType => ({
-    roles: storageSession().getItem<DataInfo<number>>(sessionKey)?.roles ?? [],
+    roles: storageSession().getItem<DataInfo<{ id: number; name: string; resources: null }>>(sessionKey)?.roles.map(_ => _.name) ?? [],
     userInfo: {} as UserAPI.Login_User,
     token: '',
   }),

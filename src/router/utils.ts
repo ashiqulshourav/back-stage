@@ -28,6 +28,7 @@ const modulesRoutes = import.meta.glob("/src/views/**/*.{vue,tsx}");
 
 // 动态路由
 import { getAsyncRoutes } from "@/api/routes";
+import { permissionData } from "./permissionRouter";
 
 function handRank(routeInfo: any) {
   const { name, path, parentId, meta } = routeInfo;
@@ -83,8 +84,9 @@ function isOneOfArray(a: Array<string>, b: Array<string>) {
 
 /** 从sessionStorage里取出当前登陆用户的角色roles，过滤无权限的菜单 */
 function filterNoPermissionTree(data: RouteComponent[]) {
+  3
   const currentRoles =
-    storageSession().getItem<DataInfo<number>>(sessionKey)?.roles ?? [];
+    storageSession().getItem<DataInfo<{ id: number; name: string; resources: null }>>(sessionKey)?.roles.map(item => item.name) ?? [];
   const newTree = cloneDeep(data).filter((v: any) =>
     isOneOfArray(v.meta?.roles, currentRoles)
   );
@@ -156,7 +158,6 @@ function handleAsyncRoutes(routeList) {
   } else {
     formatFlatteningRoutes(addAsyncRoutes(routeList)).map(
       (v: RouteRecordRaw) => {
-        // 防止重复添加路由
         if (
           router.options.routes[0].children.findIndex(
             value => value.path === v.path
@@ -164,9 +165,7 @@ function handleAsyncRoutes(routeList) {
         ) {
           return;
         } else {
-          // 切记将路由push到routes后还需要使用addRoute，这样路由才能正常跳转
           router.options.routes[0].children.push(v);
-          // 最终路由进行升序
           ascending(router.options.routes[0].children);
           if (!router.hasRoute(v?.name)) router.addRoute(v);
           const flattenRouters: any = router
@@ -184,7 +183,6 @@ function handleAsyncRoutes(routeList) {
 /** 初始化路由（`new Promise` 写法防止在异步请求中造成无限循环）*/
 function initRouter() {
   if (getConfig()?.CachingAsyncRoutes) {
-    // 开启动态路由缓存本地sessionStorage
     const key = "async-routes";
     const asyncRouteList = storageSession().getItem(key) as any;
     if (asyncRouteList && asyncRouteList?.length > 0) {
@@ -203,10 +201,15 @@ function initRouter() {
     }
   } else {
     return new Promise(resolve => {
-      getAsyncRoutes().then(({ data }) => {
-        handleAsyncRoutes(cloneDeep(data));
-        resolve(router);
-      });
+      const userInfo = storageSession().getItem<DataInfo<{ id: number; name: string; resources: null }>>(sessionKey);
+      const permissionRoute = [];
+      userInfo.roles.forEach((item) => {
+        if (permissionData[item.name]) {
+          permissionRoute.push(...permissionData[item.name])
+        }
+      })
+      handleAsyncRoutes(cloneDeep(permissionRoute));
+      resolve(router);
     });
   }
 }

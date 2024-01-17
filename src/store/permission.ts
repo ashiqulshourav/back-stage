@@ -22,6 +22,7 @@ export const usePermissionStore = defineStore({
       this.wholeMenus = filterNoPermissionTree(
         filterTree(ascending(this.constantMenus.concat(routes)))
       );
+      // console.log('permission.ts文件 25==============行打印=', this.wholeMenus);
     },
     cacheOperate({ mode, name }: cacheType) {
       const delIndex = this.cachePageList.findIndex(v => v === name);

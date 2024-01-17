@@ -4,7 +4,7 @@ import NProgress from "@/utils/progress";
 import { sessionKey, type DataInfo } from "@/utils/auth";
 import { useMultiTagsStoreHook } from "@/store/multiTags";
 import { usePermissionStoreHook } from "@/store/permission";
-import { addPathMatch } from "./utils";
+import { addPathMatch, initRouter } from "./utils";
 import {
   Router,
   createRouter,
@@ -109,7 +109,7 @@ router.beforeEach((to: ToRouteType, _from, next) => {
       handleAliveRoute(to);
     }
   }
-  const userInfo = storageSession().getItem<DataInfo<number>>(sessionKey);
+  const userInfo = storageSession().getItem<DataInfo<{ id: number; name: string; resources: null }>>(sessionKey);
   NProgress.start();
   const externalLink = isUrl(to?.name as string);
   if (!externalLink) {
@@ -127,8 +127,7 @@ router.beforeEach((to: ToRouteType, _from, next) => {
     whiteList.includes(to.fullPath) ? next(_from.fullPath) : next();
   }
   if (userInfo) {
-    // 无权限跳转403页面
-    if (to.meta?.roles && !isOneOfArray(to.meta?.roles, userInfo?.roles)) {
+    if (to.meta?.roles && !isOneOfArray(to.meta?.roles, userInfo?.roles.map(_ => _.name))) {
       next({ path: "/error/403" });
     }
     // 开启隐藏首页后在浏览器地址栏手动输入首页welcome路由则跳转到404页面
@@ -148,38 +147,40 @@ router.beforeEach((to: ToRouteType, _from, next) => {
         usePermissionStoreHook().wholeMenus.length === 0 &&
         to.path !== "/login"
       ) {
-        usePermissionStoreHook().handleWholeMenus([]);
-        addPathMatch();
-        if (!useMultiTagsStoreHook().getMultiTagsCache) {
-          const { path } = to;
-          const route = findRouteByPath(
-            path,
-            router.options.routes[0].children
-          );
-          getTopMenu(true);
-          // query、params模式路由传参数的标签页不在此处处理
-          if (route && route.meta?.title) {
-            if (isAllEmpty(route.parentId) && route.meta?.backstage) {
-              // 此处为动态顶级路由（目录）
-              const { path, name, meta } = route.children[0];
-              useMultiTagsStoreHook().handleTags("push", {
-                path,
-                name,
-                meta
-              });
-            } else {
-              const { path, name, meta } = route;
-              useMultiTagsStoreHook().handleTags("push", {
-                path,
-                name,
-                meta
-              });
+        initRouter().then((router: Router) => {
+          if (!useMultiTagsStoreHook().getMultiTagsCache) {
+            const { path } = to;
+            const route = findRouteByPath(
+              path,
+              router.options.routes[0].children
+            );
+            getTopMenu(true);
+            // query、params模式路由传参数的标签页不在此处处理
+            if (route && route.meta?.title) {
+              if (isAllEmpty(route.parentId) && route.meta?.backstage) {
+                // 此处为动态顶级路由（目录）
+                const { path, name, meta } = route.children[0];
+                useMultiTagsStoreHook().handleTags("push", {
+                  path,
+                  name,
+                  meta
+                });
+              } else {
+                const { path, name, meta } = route;
+                useMultiTagsStoreHook().handleTags("push", {
+                  path,
+                  name,
+                  meta
+                });
+              }
             }
+
           }
-        }
-        // 确保动态路由完全加入路由列表并且不影响静态路由（注意：动态路由刷新时router.beforeEach可能会触发两次，第一次触发动态路由还未完全添加，第二次动态路由才完全添加到路由列表，如果需要在router.beforeEach做一些判断可以在to.name存在的条件下去判断，这样就只会触发一次）
-        if (isAllEmpty(to.name)) router.push(to.fullPath);
+          // 确保动态路由完全加入路由列表并且不影响静态路由（注意：动态路由刷新时router.beforeEach可能会触发两次，第一次触发动态路由还未完全添加，第二次动态路由才完全添加到路由列表，如果需要在router.beforeEach做一些判断可以在to.name存在的条件下去判断，这样就只会触发一次）
+          if (isAllEmpty(to.name)) router.push(to.fullPath);
+        })
       }
+
       toCorrectRoute();
     }
   } else {

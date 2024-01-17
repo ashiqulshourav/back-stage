@@ -127,3 +127,21 @@ export const transferBoDan = (list: any[]) => {
   }
   return listData;
 };
+
+export const GET_PLAYNAME_BY_KC = {
+  'FT_OU': t('全场大小'),
+  'HT_OU': t('半场大小'),
+  'FT_OE': t('全场单双'),
+  'HT_OE': t('单双-上半场'),
+  'FT_AH': t('全场让球'),
+  'HT_AH': t('半场让球'),
+  'FT_1X2': t('全场独赢'),
+  'FT_ML': t('全场独赢'),
+  'HT_1X2': t('半场独赢'),
+  'HT_ML': t('半场独赢'),
+  'FT_CS': t('全场波胆'),
+  'HT_CS': t('波胆-上半场'),
+  'BothTeamsToScore': t('双方进球'),
+  'FTS_AH': t('全场让局'),
+  'FTS_OU': t('总局数'),
+};

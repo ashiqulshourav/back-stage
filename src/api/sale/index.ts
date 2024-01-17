@@ -21,13 +21,13 @@ export const saleData = {
   /** 投注玩法锁盘  */
   saleBetItems: (data: {
     matchId: number;
-    betItemList: number[],
+    betItemList: string[],
   }) => http.request<SaleDataAPI.saleBetItemsResType>("post", "/betItems/v1/saleBetItems", { data }),
 
   /** 投注玩法批量开启  */
   openSaleBetItems: (data: {
     matchId: number;
-    betItemList: number[],
+    betItemList: string[],
   }) => http.request<SaleDataAPI.saleBetItemsResType>("post", "/betItems/v1/openSaleBetItems", { data }),
 
   /** 赛事批量锁盘  */
