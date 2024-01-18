@@ -35,6 +35,11 @@ export const saleData = {
     matchIdList: number[],
   }) => http.request<SaleDataAPI.saleBetItemsResType>("post", "/betItems/v1/saleBetItemsByMatchIds", { data }),
 
+  /** 赛事批量解锁  */
+  openBetItemsByMatchId: (data: {
+    matchIdList: number[],
+  }) => http.request<SaleDataAPI.saleBetItemsResType>("post", "/betItems/v1/openBetItemsByMatchId", { data }),
+
   updateSaleStatus: (data: {
     isSale: number;
     matchId: number;

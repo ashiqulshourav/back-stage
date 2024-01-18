@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { handleTableWidth } from '@/utils/getTableWidth';
-import { MATCH_STATUS, PANDA_MATCH_STATUS } from '@/utils/maps/sports_map';
+import { MATCH_STATUS /* PANDA_MATCH_STATUS */ } from '@/utils/maps/sports_map';
 import { parseMatchScore } from '@/utils/formatMatch';
 
 export const columns: TableColumnList = [
@@ -71,12 +71,12 @@ export const columns: TableColumnList = [
     formatter: ({ status }) => MATCH_STATUS[status] ?? '-',
     headerRenderer: d => handleTableWidth(d, t('比赛状态'))
   },
-  {
+  /* {
     label: t('熊猫匹配结果'),
     prop: 'pandaResult',
     formatter: ({ pandaResult }) => PANDA_MATCH_STATUS[pandaResult],
     headerRenderer: d => handleTableWidth(d, t('熊猫匹配结果'))
-  },
+  }, */
   {
     label: t('是否中立场地'),
     prop: 'isNeutral',
@@ -148,18 +148,15 @@ export const childColumns: TableColumnList = [
   },
   {
     label: t('结算次数'),
-    formatter: ({}) => '-'
-  },
-  /* {
-    label: t("未结算"),
-    formatter: ({ }) => '-'
+    formatter: ({ settleTimes }) => settleTimes ?? '-'
   },
   {
-    label: t("已结算"),
-    formatter: ({ }) => '-'
-  }, */
+    label: t('事件来源类型'),
+    formatter: ({ settleType }) =>
+      settleType === 0 ? t('自动结算') : t('人工结算')
+  },
   {
-    label: t('数据商事件'),
-    formatter: ({ dataSourceCode }) => dataSourceCode ?? '-'
+    label: t('数据商'),
+    slot: 'dataSourceCode'
   }
 ];

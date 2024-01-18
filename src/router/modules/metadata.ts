@@ -1,11 +1,12 @@
 import { t } from "@/plugins/i18n";
+import { METADATA } from "../const_rank";
 
 export default {
   path: "/metadata",
   meta: {
     title: t('赛程管理'),
     icon: 'crown',
-    rank: 1
+    rank: METADATA
   },
   children: [
     {

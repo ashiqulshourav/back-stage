@@ -72,7 +72,7 @@ export function useLeague() {
       label: t('赛种'),
       prop: 'sportId',
       formatter: ({ sportId }): string =>
-        SPORT_ID_MAP.find(_ => _.value === sportId).label,
+        SPORT_ID_MAP.find(_ => _.value === sportId)?.label ?? '-',
       minWidth: 150
     },
     {

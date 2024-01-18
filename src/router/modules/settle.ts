@@ -1,12 +1,13 @@
 
 import { t } from "@/plugins/i18n";
+import { SETTLE } from "../const_rank";
 
 export default {
   path: "/settle",
   meta: {
     title: t('结算平台'),
     icon: 'folderFill',
-    rank: 5,
+    rank: SETTLE,
     redirect: '/settle/settle_admin'
   },
   children: [

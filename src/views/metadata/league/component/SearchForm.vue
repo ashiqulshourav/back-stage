@@ -25,7 +25,7 @@
         class="!w-[200px]"
       />
     </el-form-item>
-    <el-form-item :label="`${t('联赛中文名')}:`" prop="leagueNameEn">
+    <el-form-item :label="`${t('联赛中文名')}:`" prop="leagueNameCn">
       <el-input
         v-model="form.leagueNameCn"
         :placeholder="t('联赛中文名')"

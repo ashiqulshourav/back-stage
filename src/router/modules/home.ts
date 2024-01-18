@@ -1,4 +1,5 @@
 import { t } from "@/plugins/i18n";
+import { HOME } from "../const_rank";
 const { VITE_HIDE_HOME } = import.meta.env;
 const Layout = () => import("@/layout/index.vue");
 
@@ -10,7 +11,7 @@ export default {
   meta: {
     icon: "homeFilled",
     title: "主页",
-    rank: 0,
+    rank: HOME,
   },
   children: [
     {

@@ -25,11 +25,11 @@ export const MATCH_STATUS = {
   nobegin: t('未开始'),
 }
 
-export const PANDA_MATCH_STATUS = {
-  0: t('未匹配'),
-  1: t('成功匹配'),
-  2: t('匹配失败'),
-}
+// export const PANDA_MATCH_STATUS = {
+//   0: t('未匹配'),
+//   1: t('成功匹配'),
+//   2: t('匹配失败'),
+// }
 
 // 开售状态映射
 export const OPENING_STATUS = {

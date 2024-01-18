@@ -38,4 +38,10 @@ export const sattleData = {
   allSettlement: (data: {
     matchId: number;
   }) => http.request<SaleDataAPI.allSettlementRes>("post", "/event/v1/allSettlement", { data }),
+
+  //- 自动结算转手动结算
+  setManualMatchStatus: (data: {
+    matchId: number;
+  }) => http.request<SaleDataAPI.setManualMatchStatusResType>("post", "/event/v1/setManualMatchStatus", { data }),
+
 };

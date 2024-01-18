@@ -115,6 +115,7 @@
                       format="HH:mm:ss"
                     />
                   </template>
+
                   <template #matchPeriodId="{ row }">
                     <el-select
                       :disabled="!row.isEdit"
@@ -186,33 +187,52 @@
                     #operation="{ row }: { row: SattleDataAPI.MatchEventsList }"
                   >
                     <div class="flex items-center justify-center">
-                      <el-button
-                        class="reset-margin"
-                        link
-                        type="default"
-                        :size="size"
-                        v-if="!row.isBackEndReturnData"
-                        :icon="useRenderIcon(EditPen)"
-                        @click="editChild(row)"
-                      >
-                        {{ t('编辑') }}
-                      </el-button>
+                      <template v-if="row.isBackEndReturnData">
+                        <el-countdown
+                          v-if="isSelfHandle && !row.timeEnd"
+                          class="!text-xs"
+                          :value="getTimeValue(row)"
+                          format="HH:mm:ss"
+                          @finish="countdownFinish(row)"
+                        />
+                        <el-button
+                          class="ml-1 reset-margin"
+                          type="primary"
+                          :link="true"
+                          size="small"
+                          :icon="useRenderIcon(icon_money)"
+                          @click="changeSettleType(parentRow.matchId)"
+                          >{{ t('自动转手动结算') }}</el-button
+                        >
+                      </template>
+                      <template v-else>
+                        <el-button
+                          class="reset-margin"
+                          link
+                          type="default"
+                          :size="size"
+                          v-if="!row.isBackEndReturnData"
+                          :icon="useRenderIcon(EditPen)"
+                          @click="editChild(row)"
+                        >
+                          {{ t('编辑') }}
+                        </el-button>
 
-                      <el-button
-                        class="reset-margin"
-                        link
-                        type="primary"
-                        :size="size"
-                        v-if="!row.isBackEndReturnData"
-                        :disabled="!row.isEdit"
-                        :icon="useRenderIcon(saveIcon)"
-                        @click="
-                          handleChildrenData(row, parIndex, 'save', parentRow)
-                        "
-                      >
-                        {{ t('保存') }}
-                      </el-button>
-
+                        <el-button
+                          class="reset-margin"
+                          link
+                          type="primary"
+                          :size="size"
+                          v-if="!row.isBackEndReturnData"
+                          :disabled="!row.isEdit"
+                          :icon="useRenderIcon(saveIcon)"
+                          @click="
+                            handleChildrenData(row, parIndex, 'save', parentRow)
+                          "
+                        >
+                          {{ t('保存') }}
+                        </el-button>
+                      </template>
                       <el-button
                         class="reset-margin"
                         link
@@ -229,9 +249,20 @@
                       </el-button>
                     </div>
                   </template>
+
+                  <template #dataSourceCode="{ row }">
+                    <el-text
+                      v-for="(_, index) in eventQuotientList"
+                      :key="index"
+                      :type="row[_.type] === 1 ? 'primary' : 'info'"
+                      :class="['!text-xs', index === 1 && '!mr-2 !ml-2']"
+                      >{{ _.val }}</el-text
+                    >
+                  </template>
                 </pure-table>
                 <div class="mt-2 cursor-pointer">
                   <IconifyIconOffline
+                    v-if="isShowAddIcon(parentRow.childrenData)"
                     width="25px"
                     :icon="icon_circle_fill"
                     @click="addChildRow(item.tableList, item.type)"
@@ -262,6 +293,7 @@ import CustomButton from '@/components/Form/CustomButton.vue';
 import SportTypeNav from './component/SportTypeNav.vue';
 import { MatchEventType } from './utils/type';
 import EditPen from '@iconify-icons/ep/edit-pen';
+// import CountDown from '@/components/CountDown/index.vue';
 
 defineOptions({ name: 'settle_admin' });
 const changeEventTime = (
@@ -277,6 +309,24 @@ const changeEventTime = (
     row.eventTime = '';
   }
 };
+
+const BASE_TIME = 1000 * 60 * 5;
+const isSelfHandle = row => {
+  return BASE_TIME < row.t - new Date(row.createdAt).getTime();
+};
+
+const getTimeValue = (d: SattleDataAPI.MatchEventsList) => {
+  const t = BASE_TIME - (d.t - new Date(d.createdAt).getTime());
+  return Date.now() + t;
+};
+
+const countdownFinish = row => (row.timeEnd = true);
+
+const eventQuotientList = [
+  { type: 'xjFlag', val: t('188数据') },
+  { type: 'psFlag', val: t('熊猫数据') },
+  { type: 'vsFlag', val: t('播控数据') }
+];
 
 const teamChangeEvent = (
   row: SattleDataAPI.MatchEventsList,
@@ -307,6 +357,14 @@ const teamChangeEvent = (
   }
 };
 
+const isShowAddIcon = (childrenData: SaleDataAPI.ChildrenDataList[]) => {
+  const arr = childrenData
+    .map(item => item.tableList)
+    .flat()
+    .filter(_ => _.settleType);
+  return arr.length > 0;
+};
+
 const {
   form,
   loading,
@@ -328,13 +386,18 @@ const {
   handleChildrenData,
   childDataTotal,
   expandMatchList,
-  reloadTable
+  reloadTable,
+  changeSettleType
 } = useSettle();
 </script>
 
 <style scoped lang="scss">
 :deep(.el-dropdown-menu__item i) {
   margin: 0;
+}
+
+:deep(.el-statistic__number) {
+  font-size: 14px;
 }
 
 .search-form {

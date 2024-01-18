@@ -254,7 +254,6 @@
   "k603a992a": "Live",
   "k-4e7a8869": "Please save the event first",
   "k6c219e41": "Settlement History",
-  "k12711277": "Are you sure you want to lock the current match?",
   "k8fc5b98": "Already on sale",
   "k5c10d22d": "Match Duration",
   "k5a14ae11": "Draw",
@@ -270,5 +269,16 @@
   "k-45a4befb": "Correct Score - First Half",
   "kd712b0f": "Both Teams to Score",
   "k217df49e": "Full Time Handicap Betting",
-  "k32230e20": "Total Sets"
+  "k32230e20": "Total Sets",
+  "k57af36b2": "一键解锁",
+  "k-1a062754": "确定要锁定选中比赛么?",
+  "k-c626f60": "确定要解锁选中的比赛么?",
+  "k5adff295": "请先解锁当前赛事!",
+  "k-3bbd46a4": "188数据",
+  "k-1f9e945f": "熊猫数据",
+  "k5a94f164": "播控数据",
+  "k-46aa54f2": "事件来源类型",
+  "k2213c412": "自动结算",
+  "k-63a9d6f4": "人工结算",
+  "k-b522007": "自动转手动结算"
 }

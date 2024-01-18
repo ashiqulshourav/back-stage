@@ -88,7 +88,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from 'vue';3
 import { formRules } from './utils/rule';
 import { FormProps } from './utils/types';
 // import type { UploadProps } from 'element-plus';

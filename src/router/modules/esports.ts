@@ -1,11 +1,12 @@
 import { t } from "@/plugins/i18n";
+import { ESPORTS } from "../const_rank";
 
 export default {
   path: "/esports",
   meta: {
     title: t('电子竞技'),
     icon: 'monitor',
-    rank: 4
+    rank: ESPORTS
   },
   children: [
     {

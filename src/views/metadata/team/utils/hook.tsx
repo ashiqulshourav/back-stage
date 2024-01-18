@@ -70,13 +70,13 @@ export function useTeam() {
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage
     });
+    loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
     dataList.length = 0;
     dataList.push(...res.data.list);
     pagination.total = res.data.total;
     pagination.pageSize = res.data.pageSize;
     pagination.currentPage = res.data.pageNum;
-    setTimeout(() => (loading.value = false), 500);
   }
 
   const resetForm = formEl => {

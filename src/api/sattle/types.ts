@@ -24,13 +24,16 @@ declare namespace SattleDataAPI {
     isSave?: boolean;
     redOrYellow?: number | string;
     isBackEndReturnData: boolean;
+    xjFlag: number;
+    psFlag: number;
+    vsFlag: number;
+    settleType: number;
+    settleTimes: number;
+    t: number;
+    timeEnd: boolean;
   }
 
-  type getMatchEventsRes = {
-    code: number;
-    msg: string;
-    data: MatchEventsList[];
-  }
+  type getMatchEventsRes = COMMON.BASE_RES_TYPE<MatchEventsList[]>
 
   type MatchEventParams = {
     canceled: number;

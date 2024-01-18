@@ -65,6 +65,7 @@ declare namespace SaleDataAPI {
   type deleteMatchEventRes = COMMON.BASE_RES_TYPE<any>;
   type allSettlementRes = COMMON.BASE_RES_TYPE<any>;
   type UpdateMatchResType = COMMON.BASE_RES_TYPE<any>;
+  type setManualMatchStatusResType = COMMON.BASE_RES_TYPE<any>;
 
   type TeamList = {
     teamId: number;

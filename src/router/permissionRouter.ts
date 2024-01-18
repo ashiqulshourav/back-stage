@@ -1,5 +1,5 @@
 export const permissionData = {
-  'Admin1': [
+  'Admin': [
     {
       path: "/permission",
       meta: {

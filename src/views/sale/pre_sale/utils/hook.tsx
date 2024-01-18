@@ -81,11 +81,25 @@ export function usePreSale() {
   }
 
   const locakMatch = () => {
-    ElMessageBox.confirm(`${t('确定要锁定当前比赛么?')} `, {
+    ElMessageBox.confirm(`${t('确定要锁定选中比赛么?')} `, {
       type: 'warning'
     }).then(async () => {
       const res: SaleDataAPI.saleBetItemsResType =
         await API.saleBetItemsByMatchIds({
+          matchIdList: selectLockcList.map(_ => _.matchId)
+        });
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if (res.code) return;
+      onSearch();
+    });
+  };
+
+  const unLocakMatch = () => {
+    ElMessageBox.confirm(`${t('确定要解锁选中的比赛么?')} `, {
+      type: 'warning'
+    }).then(async () => {
+      const res: SaleDataAPI.saleBetItemsResType =
+        await API.openBetItemsByMatchId({
           matchIdList: selectLockcList.map(_ => _.matchId)
         });
       message(res.msg, { type: res.code ? 'error' : 'success' });
@@ -193,6 +207,7 @@ export function usePreSale() {
     matchCondition,
     changeMatchCondition,
     locakMatch,
-    selectLockcList
+    selectLockcList,
+    unLocakMatch
   };
 }

@@ -29,7 +29,7 @@ export const columns: TableColumnList = [
     label: t('赛种'),
     prop: 'sportId',
     formatter: ({ sportId }): string =>
-      SPORT_ID_MAP.find(_ => _.value === sportId).label,
+      SPORT_ID_MAP.find(_ => _.value === sportId)?.label ?? '-',
     headerRenderer: d => handleTableWidth(d, t('赛种'))
   },
   {

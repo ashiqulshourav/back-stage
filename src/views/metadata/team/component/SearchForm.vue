@@ -15,6 +15,7 @@
         class="!w-[200px]"
       />
     </el-form-item>
+
     <el-form-item :label="`${t('国家')}:`" prop="countryId">
       <el-select
         v-model="form.countryId"
@@ -31,6 +32,7 @@
         />
       </el-select>
     </el-form-item>
+
     <el-form-item :label="`${t('是否国家队')}:`" prop="isCountryTeam">
       <el-select
         v-model="form.isCountryTeam"
@@ -41,6 +43,7 @@
         <el-option :label="t('否')" :value="1" />
       </el-select>
     </el-form-item>
+
     <el-form-item :label="`${t('联赛ID')}:`" prop="leagueId">
       <el-input
         v-model="form.leagueId"
@@ -51,6 +54,7 @@
         class="!w-[200px]"
       />
     </el-form-item>
+
     <el-form-item :label="`${t('球队等级')}:`" prop="level">
       <el-input
         v-model="form.level"
@@ -73,7 +77,7 @@
       </el-select>
     </el-form-item>
 
-    <el-form-item :label="`${t('球队中文名称')}:`" prop="sportId">
+    <el-form-item :label="`${t('球队中文名称')}:`" prop="teamNameCn">
       <el-input
         v-model="form.teamNameCn"
         :placeholder="t('球队中文名称')"
@@ -83,7 +87,8 @@
         class="!w-[200px]"
       />
     </el-form-item>
-    <el-form-item :label="`${t('球队英文名称')}:`" prop="sportId">
+
+    <el-form-item :label="`${t('球队英文名称')}:`" prop="teamNameEn">
       <el-input
         v-model="form.teamNameEn"
         :placeholder="t('球队英文名称')"
@@ -93,6 +98,7 @@
         class="!w-[200px]"
       />
     </el-form-item>
+
     <el-form-item>
       <el-button
         type="primary"

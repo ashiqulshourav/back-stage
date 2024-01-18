@@ -1,11 +1,12 @@
 import { t } from "@/plugins/i18n";
+import { SALE } from "../const_rank";
 
 export default {
   path: "/sale",
   meta: {
     title: t('开售管理'),
     icon: 'storeFill',
-    rank: 2
+    rank: SALE
   },
   children: [
     {

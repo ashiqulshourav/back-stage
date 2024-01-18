@@ -155,9 +155,13 @@ export function useSettle() {
       childDataTotal.value += item.tableList.length;
       if (item.tableList.length) {
         item.tableList.forEach(_ => {
+          // todo
+          // _.createdAt = Date.now() - 1000 * 60 * 4;
+          _.timeEnd = false;
           _.isEdit = false;
           _.isSave = false;
           _.matchId = row.matchId;
+          _.t = res.ts;
           _.isBackEndReturnData = true;
           if (_.eventTime.toString().length < 10) {
             _.eventTime = dateSetSecond(_.eventTime as number);
@@ -289,6 +293,15 @@ export function useSettle() {
     });
   };
 
+  //- 自动结算转手动结算
+
+  const changeSettleType = async matchId => {
+    const res = await API.setManualMatchStatus({ matchId });
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    const row = dataList.find(_ => _.matchId === matchId);
+    getChildrenData(row);
+  };
+
   return {
     form,
     loading,
@@ -312,6 +325,7 @@ export function useSettle() {
     handleChildrenData,
     childDataTotal,
     expandMatchList,
-    reloadTable
+    reloadTable,
+    changeSettleType
   };
 }

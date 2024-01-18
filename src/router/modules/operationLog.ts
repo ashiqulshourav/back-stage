@@ -1,4 +1,5 @@
 import { t } from "@/plugins/i18n";
+import { OPERATION_LOG } from "../const_rank";
 
 export default {
   path: "/operationLog",
@@ -7,6 +8,6 @@ export default {
   meta: {
     title: t("操作日志"),
     icon: "operationLog",
-    rank: 7
+    rank: OPERATION_LOG
   }
 } as RouteConfigsTable;

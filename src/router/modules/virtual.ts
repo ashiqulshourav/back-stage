@@ -1,11 +1,12 @@
 import { t } from "@/plugins/i18n";
+import { VIRTUAL } from "../const_rank";
 
 export default {
   path: "/virtual",
   meta: {
     title: t('虚拟体育'),
     icon: 'files',
-    rank: 3
+    rank: VIRTUAL
   },
   children: [
     {

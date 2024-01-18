@@ -18,6 +18,13 @@
             @click="locakMatch"
             >{{ t('一键锁盘') }}</el-button
           >
+          <el-button
+            size="small"
+            :disabled="!selectLockcList.length"
+            type="primary"
+            @click="unLocakMatch"
+            >{{ t('一键解锁') }}</el-button
+          >
         </div>
       </template>
       <template v-slot="{ size, dynamicColumns }">
@@ -99,10 +106,12 @@ import { columns } from './component/TableColumnList';
 import SearchForm from './component/SearchForm.vue';
 import OpeningPreview from './component/OpeningPreview.vue';
 import { addDialog } from '@/components/ReDialog';
+import { message } from '@/utils/message';
 
 defineOptions({ name: 'pre_sale' });
-
 const openInfoDialog = (matchId: number, row: SaleDataAPI.PreSaleList) => {
+  if (row.saleHandicaps === 0)
+    return message(t('请先解锁当前赛事!'), { type: 'error' });
   addDialog({
     title: t('盘口预览'),
     props: { matchId, matchInfo: row },
@@ -132,6 +141,7 @@ const {
   matchCondition,
   changeMatchCondition,
   locakMatch,
+  unLocakMatch,
   selectLockcList
 } = usePreSale();
 </script>

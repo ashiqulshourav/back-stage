@@ -1,4 +1,5 @@
 import { t } from "@/plugins/i18n";
+import { ERROR } from "../const_rank";
 
 export default {
   path: "/error",
@@ -7,7 +8,7 @@ export default {
     icon: "informationLine",
     title: t("异常页面"),
     showLink: false,
-    rank: 9
+    rank: ERROR
   },
   children: [
     {
