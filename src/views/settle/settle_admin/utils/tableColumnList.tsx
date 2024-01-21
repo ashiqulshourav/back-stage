@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { handleTableWidth } from '@/utils/getTableWidth';
 import { MATCH_STATUS /* PANDA_MATCH_STATUS */ } from '@/utils/maps/sports_map';
-import { parseMatchScore } from '@/utils/formatMatch';
+// import { parseMatchScore } from '@/utils/formatMatch';
 
 export const columns: TableColumnList = [
   {
@@ -21,7 +21,8 @@ export const columns: TableColumnList = [
     label: t('联赛名称'),
     fixed: true,
     align: 'left',
-    headerRenderer: d => handleTableWidth(d, t('联赛名称'))
+    headerRenderer: d => handleTableWidth(d, t('联赛名称'), 'auto'),
+    minWidth: 160
   },
   {
     label: t('赛事ID'),
@@ -34,12 +35,12 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('赛事等级'))
   },
   {
-    label: t('比赛时间'),
+    label: t('开赛时间'),
     prop: 'beginTimeLong',
     minWidth: 200,
     formatter: ({ beginTimeLong }) =>
       dayjs(beginTimeLong).format('YYYY-MM-DD HH:mm:ss'),
-    headerRenderer: d => handleTableWidth(d, t('比赛时间'), 'auto')
+    headerRenderer: d => handleTableWidth(d, t('开赛时间'), 'auto')
   },
   {
     label: t('主队'),
@@ -56,7 +57,7 @@ export const columns: TableColumnList = [
     minWidth: 150,
     headerRenderer: d => handleTableWidth(d, t('客队'), 'auto')
   },
-  {
+  /* {
     label: t('当前比分'),
     prop: 'currentScore',
     minWidth: 150,
@@ -64,7 +65,7 @@ export const columns: TableColumnList = [
     formatter: ({ currentScore }) => {
       return currentScore ? parseMatchScore(currentScore) : '-';
     }
-  },
+  }, */
   {
     label: t('比赛状态'),
     prop: 'status',
@@ -105,21 +106,33 @@ export const columns: TableColumnList = [
         <el-text type="danger">{t('已结算')}</el-text>
       ),
     headerRenderer: d => handleTableWidth(d, t('全场结算'))
+  },
+  {
+    label: t('未结算'),
+    prop: 'unSettlementEvents',
+    headerRenderer: d => handleTableWidth(d, t('未结算'))
   }
 ];
 
 export const childColumns: TableColumnList = [
   {
-    label: t('主队事件数量'),
-    prop: 't1'
-  },
-  {
-    label: t('客队事件数量'),
-    prop: 't2'
+    label: t('主队 : 客队'),
+    prop: 't1',
+    formatter: ({ t1, t2 }) => {
+      return `${t1 ?? '-'} : ${t2 ?? '-'}`;
+    }
   },
   {
     label: t('事件编码'),
     slot: 'eventCode'
+  },
+  {
+    label: t('事件是否有效'),
+    slot: 'canceled'
+  },
+  {
+    label: t('結算類型'),
+    slot: 'settleType'
   },
   {
     label: t('比赛进行时间'),
@@ -131,16 +144,12 @@ export const childColumns: TableColumnList = [
     slot: 'matchPeriodId'
   },
   {
-    label: t('主/客队'),
+    label: t('事件來源'),
     slot: 'homeAway'
   },
   // {
   //   label: t('1号球员名称'),
   //   slot: 'player1Name'
-  // },
-  // {
-  //   label: t('事件是否被取消'),
-  //   slot: 'canceled'
   // },
   {
     label: t('操作'),
@@ -149,11 +158,6 @@ export const childColumns: TableColumnList = [
   {
     label: t('结算次数'),
     formatter: ({ settleTimes }) => settleTimes ?? '-'
-  },
-  {
-    label: t('事件来源类型'),
-    formatter: ({ settleType }) =>
-      settleType === 0 ? t('自动结算') : t('人工结算')
   },
   {
     label: t('数据商'),

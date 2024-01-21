@@ -15,6 +15,12 @@ const padZero = (n) => {
   return n < 10 ? '0' + n : n;
 }
 
+export const getSecondTime = (s1: any, s2: any) => {
+  return dateSetSecond(parseInt(new Date(s1).getTime() / 1000) -
+    parseInt(new Date(s2).getTime() / 1000));
+}
+
+
 export const dateSetSecond = (secondNumber: number) => {
   const today = new Date();
   const year = today.getFullYear();

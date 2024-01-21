@@ -46,7 +46,7 @@
         class="ml-4"
         v-model="form.startTime"
         type="date"
-        :placeholder="t('其他日期')"
+        :placeholder="t('比赛时间')"
         value-format="x"
         format="YYYY-MM-DD"
         @change="changeDate"
@@ -92,11 +92,8 @@ import { SearchFormType } from '../utils/type';
 import { useMatchStore } from '@/store/match';
 import dayjs from 'dayjs';
 import { formatNumber } from '@/utils/formatNumber';
-// import { useLeague } from "../utils/hook";
 const formRef = ref();
 const matchStore = useMatchStore();
-
-// import { SPORT_ID_MAP } from "@/utils/maps/sports_map";
 
 const props = withDefaults(
   defineProps<{
@@ -120,14 +117,12 @@ const changeDate = t => {
     const endTime = new Date(`${d} 23:59:59`);
     props.form.endTime = dayjs(endTime).format('YYYY-MM-DD HH:mm:ss');
   }
-  emits('onSearch', ...['reload']);
+  searchVal();
 };
 
 const emits = defineEmits(['onSearch', 'resetForm', 'changeMatchCondition']);
-const searchVal = () => {
-  const noEmpty = Object.values(props.form).some(_ => !!_);
-  noEmpty && emits('onSearch', 'reload');
-};
+
+const searchVal = () => emits('onSearch', 'reload');
 
 const resetForm = formRef => {
   emits('resetForm', formRef);
@@ -135,4 +130,22 @@ const resetForm = formRef => {
 };
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+:deep(.el-dropdown-menu__item i) {
+  margin: 0;
+}
+
+:deep(.is-horizontal) {
+  display: block !important;
+}
+
+:deep(.el-statistic__number) {
+  font-size: 14px;
+}
+
+.search-form {
+  :deep(.el-form-item) {
+    margin-bottom: 12px;
+  }
+}
+</style>

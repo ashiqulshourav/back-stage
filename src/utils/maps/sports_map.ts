@@ -17,6 +17,7 @@ export const MATCH_EVENT_CODE = {
   goal: t('足球进球'),
   yellow_red_card: t('红牌/黄牌'),
   corner: t('角球'),
+  match_status: t('比赛阶段'),
 }
 
 export const MATCH_STATUS = {

@@ -93,8 +93,8 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
           assetFileNames: "static/[ext]/[name]-[hash].[ext]"
         }
       },
-      outDir: 'dist/kmg-back',
-      // assetsDir: 'static',
+      // outDir: 'dist/kmgames-back-stage',
+      assetsDir: 'static',
     },
     define: {
       __INTLIFY_PROD_DEVTOOLS__: false,

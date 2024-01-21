@@ -4,7 +4,12 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { t } from '@/plugins/i18n';
 import { childColumns, columns } from './tableColumnList';
 import { MatchEventType, SearchFormType, TempListType } from './type';
-import { dateGetSecond, dateSetSecond } from '@/utils/formmatDate';
+import {
+  dateGetSecond,
+  dateSetSecond,
+  getSecondTime
+} from '@/utils/formmatDate';
+import { ElMessageBox } from 'element-plus';
 
 export function useSettle() {
   const form = reactive<SearchFormType>({
@@ -21,7 +26,7 @@ export function useSettle() {
   const currentSportId = ref(1);
   const childDataTotal = ref(0);
   const expandMatchList = reactive<number[]>([]);
-  const expandRowList = reactive<SaleDataAPI.PreSaleList[]>([]);
+  const expandRowList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const loopTimer = ref<NodeJS.Timeout>();
 
   const balanceLoading = reactive<{ half: boolean; all: boolean }>({
@@ -42,6 +47,8 @@ export function useSettle() {
 
   const handleCurrentChange = (val: number) => {
     pagination.currentPage = val;
+    expandMatchList.length = 0;
+    expandRowList.length = 0;
     onSearch();
   };
 
@@ -50,7 +57,11 @@ export function useSettle() {
     loopTimer.value && clearInterval(loopTimer.value);
     try {
       if (spoprtId) currentSportId.value = spoprtId;
-      if (type === 'reload') pagination.currentPage = 1;
+      if (type === 'reload') {
+        pagination.currentPage = 1;
+        expandMatchList.length = 0;
+        expandRowList.length = 0;
+      }
       loading.value = true;
       const data = removeEmptyStringKeys(form);
       const res: SattleDataAPI.getSettlementListRes =
@@ -81,6 +92,11 @@ export function useSettle() {
               type: MatchEventType.Corner,
               key: 'cornerRecordList',
               tableList: []
+            },
+            {
+              type: MatchEventType.MatchStatus,
+              key: 'endGameEventList',
+              tableList: []
             }
           ])
       );
@@ -98,7 +114,7 @@ export function useSettle() {
     onSearch('reload');
   };
 
-  const addChildRow = (tableList, type) => {
+  const addChildRow = (tableList, type, beginTime: string) => {
     if (
       tableList.length !== 0 &&
       !tableList[tableList.length - 1]?.isBackEndReturnData
@@ -107,7 +123,7 @@ export function useSettle() {
     } else {
       loopTimer.value && clearInterval(loopTimer.value);
       const tempList: TempListType = {
-        eventTime: null,
+        eventTime: getSecondTime(Date.now(), new Date(beginTime).getTime()),
         homeAway: null,
         matchPeriodId: null,
         isBackEndReturnData: false,
@@ -125,7 +141,7 @@ export function useSettle() {
   // 打开关闭结算列表
   const expandChange = (
     row: SaleDataAPI.PreSaleList,
-    currentExpandList: SaleDataAPI.PreSaleList[]
+    currentExpandList: SattleDataAPI.getSettlementDataList[]
   ) => {
     if (currentExpandList.length) {
       expandMatchList.length = 0;
@@ -155,24 +171,22 @@ export function useSettle() {
       childDataTotal.value += item.tableList.length;
       if (item.tableList.length) {
         item.tableList.forEach(_ => {
-          // todo
-          // _.createdAt = Date.now() - 1000 * 60 * 4;
-          _.timeEnd = false;
+          // _.createdAt = new Date(_.createdAt).getTime() + 1000 * 60 * 5;
+          _.createdAt =
+            new Date('2024-01-21 19:15:00').getTime() + 1000 * 60 * 5;
           _.isEdit = false;
           _.isSave = false;
+          _.isShowCount = false;
           _.matchId = row.matchId;
           _.t = res.ts;
           _.isBackEndReturnData = true;
           if (_.eventTime.toString().length < 10) {
             _.eventTime = dateSetSecond(_.eventTime as number);
           } else {
-            const t =
-              parseInt(new Date(_.eventTime).getTime() / 1000) -
-              parseInt(new Date(row.beginTime).getTime() / 1000);
-            _.eventTime = dateSetSecond(t);
+            _.eventTime = getSecondTime(_.eventTime, row.beginTime);
           }
           _.canceled = Boolean(_.canceled);
-          item.type === 'yellow_red_card' && (_.redOrYellow = '红/黄牌');
+          item.type === 'yellow_red_card' && (_.redOrYellow = t('红/黄牌'));
         });
       }
     });
@@ -229,7 +243,7 @@ export function useSettle() {
       return;
     }
 
-    if ((type === 'upload' && !row.isSave) || row.isEdit) {
+    if (((type === 'upload' && !row.isSave) || row.isEdit) && !row.id) {
       return message(t('请先保存事件'), { type: 'error' });
     }
 
@@ -244,11 +258,11 @@ export function useSettle() {
       matchPeriodId: +row.matchPeriodId,
       player1Name: row.player1Name,
       dataSourceCode: 'SK',
-      remark: '',
       sourceType: 1,
       sportId: currentSportId.value,
       t1: +row.t1,
-      t2: +row.t2
+      t2: +row.t2,
+      id: row.id ?? null
     };
 
     const res = await API.addMatchEvent(params);
@@ -294,9 +308,60 @@ export function useSettle() {
   };
 
   //- 自动结算转手动结算
-
   const changeSettleType = async matchId => {
-    const res = await API.setManualMatchStatus({ matchId });
+    ElMessageBox.confirm(
+      `${t('一但此賽事開啟人工結算模式，無法關閉')}<br/>${t(
+        '後面只能以人工錄入事件，無法自動化推送數據商事件'
+      )}
+      `,
+      t('警告'),
+      {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: t('确认开启'),
+        cancelButtonText: t('取消'),
+        center: true
+      }
+    ).then(async () => {
+      const res = await API.setManualMatchStatus({ matchId });
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if (res.code) return;
+      const row = dataList.find(_ => _.matchId === matchId);
+      getChildrenData(row);
+      const r: SattleDataAPI.getSettlementListRes = await API.getSettlementList(
+        {
+          matchId: row.matchId,
+          pageSize: 1,
+          pageNum: 1
+        }
+      );
+      dataList.some(item => {
+        if (item.matchId === r.data.list[0].matchId) {
+          item.settlementType = r.data.list[0].settlementType;
+          return true;
+        }
+        return false;
+      });
+    });
+  };
+
+  const advanceSettlement = async (row, parentRow) => {
+    ElMessageBox.confirm('确定要提前结算么?', t('警告'), {
+      dangerouslyUseHTMLString: true,
+      confirmButtonText: t('确认'),
+      cancelButtonText: t('取消'),
+      center: true
+    }).then(async () => {
+      const res = await API.addMatchEvent({ id: row.id });
+      childloading.value = false;
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if (res.code) return;
+      getChildrenData(parentRow);
+    });
+  };
+
+  //- 取消结算时间
+  const cancelMatchEvent = async (id: number, matchId: number) => {
+    const res = await API.cancelMatchEvent({ id });
     message(res.msg, { type: res.code ? 'error' : 'success' });
     const row = dataList.find(_ => _.matchId === matchId);
     getChildrenData(row);
@@ -326,6 +391,8 @@ export function useSettle() {
     childDataTotal,
     expandMatchList,
     reloadTable,
-    changeSettleType
+    changeSettleType,
+    cancelMatchEvent,
+    advanceSettlement
   };
 }

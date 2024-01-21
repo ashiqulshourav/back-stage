@@ -17,6 +17,12 @@ import Monitor from "@iconify-icons/ep/monitor";
 import Files from "@iconify-icons/ep/files";
 import History from "@iconify-icons/ri/history-line";
 import OperationLog from "@iconify-icons/icon-park-outline/log";
+import icon_circle_fill from '@iconify-icons/ri/add-circle-fill';
+import uploadIcon from '@iconify-icons/ri/upload-2-fill';
+import cancelIcon from '@iconify-icons/ri/close-circle-fill';
+import icon_money from '@iconify-icons/ri/money-cny-box-fill';
+import saveIcon from '@iconify-icons/ri/save-3-fill';
+
 
 addIcon("homeFilled", HomeFilled);
 addIcon("informationLine", InformationLine);
@@ -30,3 +36,8 @@ addIcon("history", History);
 addIcon("operationLog", OperationLog);
 addIcon("unlock", LockUnlockFill);
 addIcon("lock", LockFill);
+addIcon("icon_circle_fill", icon_circle_fill);
+addIcon("icon_money", icon_money);
+addIcon("uploadIcon", uploadIcon);
+addIcon("cancelIcon", cancelIcon);
+addIcon("saveIcon", saveIcon);

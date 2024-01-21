@@ -30,7 +30,6 @@ declare namespace SaleDataAPI {
     allHandicaps: number;
     leagueNameCn: string;
     handicapStatus: number;
-    childrenData: ChildrenDataList[];
   }
 
   type ChildrenDataList = {
@@ -66,6 +65,7 @@ declare namespace SaleDataAPI {
   type allSettlementRes = COMMON.BASE_RES_TYPE<any>;
   type UpdateMatchResType = COMMON.BASE_RES_TYPE<any>;
   type setManualMatchStatusResType = COMMON.BASE_RES_TYPE<any>;
+  type cancelMatchEventResType = COMMON.BASE_RES_TYPE<any>;
 
   type TeamList = {
     teamId: number;

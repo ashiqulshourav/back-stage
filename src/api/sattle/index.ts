@@ -8,6 +8,7 @@ export const sattleData = {
     pageSize: number;
     sportId?: number;
     startTime?: number;
+    matchId?: number;
     endTime?: number;
   }) => http.request<SattleDataAPI.getSettlementListRes>("post", "/match/v1/getSettlementList", { data }),
 
@@ -43,5 +44,11 @@ export const sattleData = {
   setManualMatchStatus: (data: {
     matchId: number;
   }) => http.request<SaleDataAPI.setManualMatchStatusResType>("post", "/event/v1/setManualMatchStatus", { data }),
+
+  //- 取消时间
+  cancelMatchEvent: (data: {
+    id: number;
+  }) => http.request<SaleDataAPI.cancelMatchEventResType>("post", "/event/v1/cancelMatchEvent", { data }),
+
 
 };

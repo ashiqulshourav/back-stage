@@ -28,12 +28,20 @@ export function usePublicHooks() {
     };
   });
 
+  const tableHeaderStyle = computed(() => {
+    return {
+      background: 'var(--el-fill-color-light)',
+      color: 'var(--el-text-color-primary)'
+    }
+  })
+
   return {
     /** 当前网页是否为`dark`模式 */
     isDark,
     /** 表现更鲜明的`el-switch`组件  */
     switchStyle,
     /** 表现更鲜明的`el-tag`组件  */
-    tagStyle
+    tagStyle,
+    tableHeaderStyle
   };
 }

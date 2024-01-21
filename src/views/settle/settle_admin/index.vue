@@ -27,31 +27,24 @@
           :columns="dynamicColumns"
           :pagination="pagination"
           :paginationSmall="size === 'small' ? true : false"
-          :header-cell-style="{
-            background: 'var(--el-fill-color-light)',
-            color: 'var(--el-text-color-primary)'
-          }"
+          :header-cell-style="tableHeaderStyle"
           @expand-change="expandChange"
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
           <template
-            #expand="{
-              row: parentRow,
-              index: parIndex
-            }: {
-              row: SaleDataAPI.PreSaleList,
-              index: number
-            }"
+            #expand="{ row: parentRow, index: parIndex }: parentRowType"
           >
             <div class="flex mb-2">
               <CustomButton
                 v-for="key in Object.keys(balanceLoading)"
                 :key="key"
                 :type="key === 'half' ? 'primary' : 'danger'"
-                :btn-text="key === 'half' ? t('上半场结算') : t('全场结算')"
+                :btn-text="
+                  key === 'half' ? t('上半场结束结算') : t('全场结束结算')
+                "
                 :link="true"
-                :icon="useRenderIcon(icon_money)"
+                :icon="useRenderIcon('icon_money')"
                 :loading="balanceLoading[key]"
                 :disabled="
                   (key === 'half'
@@ -64,11 +57,15 @@
               />
             </div>
             <div class="m-4">
-              <div v-for="item in parentRow.childrenData" :key="item.type">
+              <div
+                v-for="(item, idx) in parentRow.childrenData"
+                :key="item.type"
+              >
                 <div class="mt-3 mb-1 font-bold">
                   {{ MATCH_EVENT_CODE[item.type] }}
                 </div>
                 <pure-table
+                  align-whole="center"
                   :row-key="row => row.id"
                   :data="item.tableList"
                   :loading="childloading"
@@ -76,12 +73,7 @@
                   size="small"
                   table-layout="auto"
                   border
-                  :header-cell-style="{
-                    background: 'var(--el-fill-color-light)',
-                    color: 'var(--el-text-color-primary)',
-                    textAlign: 'center'
-                  }"
-                  :cell-style="{ textAlign: 'center' }"
+                  :header-cell-style="tableHeaderStyle"
                 >
                   <template #eventCode="{ row, index: childIndex }">
                     <el-select
@@ -104,7 +96,9 @@
                     <span v-else>{{ MATCH_EVENT_CODE[row.eventCode] }}</span>
                   </template>
 
-                  <template #eventTime="{ row, index: childIndex }">
+                  <template
+                    #eventTime="{ row, index: childIndex }: MatchEventRowType"
+                  >
                     <el-time-picker
                       v-model="row.eventTime"
                       :placeholder="t('请选择时间')"
@@ -116,18 +110,49 @@
                     />
                   </template>
 
-                  <template #matchPeriodId="{ row }">
+                  <template #matchPeriodId="{ row }: MatchEventRowType">
                     <el-select
                       :disabled="!row.isEdit"
                       v-model="row.matchPeriodId"
                       :placeholder="t('请选择')"
                     >
-                      <el-option :label="t('上半场')" :value="6" />
-                      <el-option :label="t('下半场')" :value="7" />
+                      <el-option
+                        :label="
+                          row.eventCode === MatchEventType.MatchStatus
+                            ? t('上半场结束')
+                            : t('上半场')
+                        "
+                        :value="
+                          row.eventCode === MatchEventType.MatchStatus ? 31 : 6
+                        "
+                      />
+                      <el-option
+                        :label="
+                          row.eventCode === MatchEventType.MatchStatus
+                            ? t('下半场结束')
+                            : t('下半场')
+                        "
+                        :value="
+                          row.eventCode === MatchEventType.MatchStatus ? 100 : 7
+                        "
+                      />
                     </el-select>
                   </template>
 
-                  <template #homeAway="{ row, index: childIndex }">
+                  <template #settleType="{ row }: MatchEventRowType">
+                    <CountDownBtn
+                      :row="row"
+                      :parentRow="parentRow"
+                      v-show="row.isShowCount"
+                    />
+                    <span v-show="!row.isShowCount">
+                      {{ row.settleType === 0 ? t('自动结算') : t('人工结算') }}
+                    </span>
+                  </template>
+
+                  <template
+                    #homeAway="{ row, index: childIndex }: MatchEventRowType"
+                  >
                     <div>
                       <el-select
                         :disabled="!row.isEdit"
@@ -153,7 +178,7 @@
                     </div>
                   </template>
 
-                  <template #player1Name="{ row }">
+                  <template #player1Name="{ row }: MatchEventRowType">
                     <el-input
                       v-model="row.player1Name"
                       :disabled="!row.isEdit"
@@ -161,77 +186,40 @@
                     />
                   </template>
 
-                  <template
-                    #canceled="{
-                      row,
-                      index: childIndex
-                    }: {
-                      row: SattleDataAPI.MatchEventsList,
-                      index: number
-                    }"
-                  >
-                    <el-switch
-                      v-if="
-                        row.isBackEndReturnData &&
-                        childIndex === item.tableList.length - 1
-                      "
-                      v-model="row.canceled"
-                      inline-prompt
-                      :disabled="!row.isEdit"
-                      class="pure-datatheme"
-                    />
-                    <span v-else>-</span>
+                  <template #canceled="{ row }: MatchEventRowType">
+                    <el-text
+                      class="!text-xs"
+                      :type="row.canceled === 1 ? 'danger' : 'info'"
+                      >{{ row.canceled === 1 ? t('否') : t('是') }}</el-text
+                    >
                   </template>
 
-                  <template
-                    #operation="{ row }: { row: SattleDataAPI.MatchEventsList }"
-                  >
+                  <template #operation="{ row, index: i }: MatchEventRowType">
                     <div class="flex items-center justify-center">
                       <template v-if="row.isBackEndReturnData">
-                        <el-countdown
-                          v-if="isSelfHandle && !row.timeEnd"
-                          class="!text-xs"
-                          :value="getTimeValue(row)"
-                          format="HH:mm:ss"
-                          @finish="countdownFinish(row)"
+                        <BackEndBtnGroup
+                          :row="row"
+                          :parentRow="parentRow"
+                          :size="size"
+                          @changeSettleType="changeSettleType"
+                          :parIndex="parIndex"
+                          @handleChildrenData="handleChildrenData"
+                          @cancelMatchEvent="cancelMatchEvent"
+                          :dataList="parentRow.childrenData[idx].tableList"
+                          :index="i"
+                          :isShowCount="row.isShowCount"
+                          @advanceSettlement="advanceSettlement"
                         />
-                        <el-button
-                          class="ml-1 reset-margin"
-                          type="primary"
-                          :link="true"
-                          size="small"
-                          :icon="useRenderIcon(icon_money)"
-                          @click="changeSettleType(parentRow.matchId)"
-                          >{{ t('自动转手动结算') }}</el-button
-                        >
                       </template>
-                      <template v-else>
-                        <el-button
-                          class="reset-margin"
-                          link
-                          type="default"
+                      <template v-else="!row.isBackEndReturnData">
+                        <FrontBtnGroup
                           :size="size"
-                          v-if="!row.isBackEndReturnData"
-                          :icon="useRenderIcon(EditPen)"
-                          @click="editChild(row)"
-                        >
-                          {{ t('编辑') }}
-                        </el-button>
-
-                        <el-button
-                          class="reset-margin"
-                          link
-                          type="primary"
-                          :size="size"
-                          v-if="!row.isBackEndReturnData"
-                          :disabled="!row.isEdit"
-                          :icon="useRenderIcon(saveIcon)"
-                          @click="
+                          :row="row"
+                          @editChild="editChild"
+                          @handleChildrenData="
                             handleChildrenData(row, parIndex, 'save', parentRow)
                           "
-                        >
-                          {{ t('保存') }}
-                        </el-button>
+                        />
                       </template>
                       <el-button
                         class="reset-margin"
@@ -240,7 +228,7 @@
                         :size="size"
                         v-if="!row.isBackEndReturnData"
                         :disabled="!row.isSave || row.isEdit"
-                        :icon="useRenderIcon(uploadIcon)"
+                        :icon="useRenderIcon('uploadIcon')"
                         @click="
                           handleChildrenData(row, parIndex, 'upload', parentRow)
                         "
@@ -261,12 +249,27 @@
                   </template>
                 </pure-table>
                 <div class="mt-2 cursor-pointer">
-                  <IconifyIconOffline
-                    v-if="isShowAddIcon(parentRow.childrenData)"
-                    width="25px"
-                    :icon="icon_circle_fill"
-                    @click="addChildRow(item.tableList, item.type)"
-                  />
+                  <el-button
+                    v-if="parentRow.settlementType === 1"
+                    class="ml-1 reset-margin"
+                    @click="changeSettleType(parentRow.matchId)"
+                    >{{ t('开启人工结算') }}</el-button
+                  >
+
+                  <div class="flex items-center" v-else>
+                    <span class="mr-3">{{ t('人工结算中') }}...</span>
+                    <IconifyIconOffline
+                      width="25px"
+                      icon="icon_circle_fill"
+                      @click="
+                        addChildRow(
+                          item.tableList,
+                          item.type,
+                          parentRow.beginTime
+                        )
+                      "
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -280,10 +283,6 @@
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-import icon_money from '@iconify-icons/ri/money-cny-box-fill';
-import icon_circle_fill from '@iconify-icons/ri/add-circle-fill';
-import saveIcon from '@iconify-icons/ri/save-3-fill';
-import uploadIcon from '@iconify-icons/ri/upload-2-fill';
 import { useSettle } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
 import { t } from '@/plugins/i18n';
@@ -291,11 +290,16 @@ import { message } from '@/utils/message';
 import { MATCH_EVENT_CODE } from '@/utils/maps/sports_map';
 import CustomButton from '@/components/Form/CustomButton.vue';
 import SportTypeNav from './component/SportTypeNav.vue';
-import { MatchEventType } from './utils/type';
-import EditPen from '@iconify-icons/ep/edit-pen';
-// import CountDown from '@/components/CountDown/index.vue';
+import { MatchEventRowType, MatchEventType, parentRowType } from './utils/type';
+import BackEndBtnGroup from './component/BackEndBtnGroup.vue';
+import FrontBtnGroup from './component/FrontBtnGroup.vue';
+import { usePublicHooks } from '@/hooks';
+import CountDownBtn from './component/CountDownBtn.vue';
+
+const { tableHeaderStyle } = usePublicHooks();
 
 defineOptions({ name: 'settle_admin' });
+
 const changeEventTime = (
   row: SattleDataAPI.MatchEventsList,
   childIndex: number,
@@ -309,18 +313,6 @@ const changeEventTime = (
     row.eventTime = '';
   }
 };
-
-const BASE_TIME = 1000 * 60 * 5;
-const isSelfHandle = row => {
-  return BASE_TIME < row.t - new Date(row.createdAt).getTime();
-};
-
-const getTimeValue = (d: SattleDataAPI.MatchEventsList) => {
-  const t = BASE_TIME - (d.t - new Date(d.createdAt).getTime());
-  return Date.now() + t;
-};
-
-const countdownFinish = row => (row.timeEnd = true);
 
 const eventQuotientList = [
   { type: 'xjFlag', val: t('188数据') },
@@ -357,13 +349,13 @@ const teamChangeEvent = (
   }
 };
 
-const isShowAddIcon = (childrenData: SaleDataAPI.ChildrenDataList[]) => {
+/* const isShowAddIcon = (childrenData: SaleDataAPI.ChildrenDataList[]) => {
   const arr = childrenData
     .map(item => item.tableList)
     .flat()
     .filter(_ => _.settleType);
   return arr.length > 0;
-};
+}; */
 
 const {
   form,
@@ -387,22 +379,8 @@ const {
   childDataTotal,
   expandMatchList,
   reloadTable,
-  changeSettleType
+  changeSettleType,
+  cancelMatchEvent,
+  advanceSettlement
 } = useSettle();
 </script>
-
-<style scoped lang="scss">
-:deep(.el-dropdown-menu__item i) {
-  margin: 0;
-}
-
-:deep(.el-statistic__number) {
-  font-size: 14px;
-}
-
-.search-form {
-  :deep(.el-form-item) {
-    margin-bottom: 12px;
-  }
-}
-</style>

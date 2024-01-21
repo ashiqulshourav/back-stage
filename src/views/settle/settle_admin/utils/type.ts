@@ -10,7 +10,7 @@ export type FormProps = {
 }
 
 export type TempListType = {
-  eventTime: null,
+  eventTime: number | string,
   homeAway: null,
   matchPeriodId: null,
   // player1Name: null,
@@ -34,4 +34,16 @@ export enum MatchEventType {
   Goal = 'goal',
   YellowRedCard = 'yellow_red_card',
   Corner = 'corner',
+  MatchStatus = 'match_status',
+}
+
+
+export type parentRowType = {
+  row: SattleDataAPI.getSettlementDataList;
+  index?: number;
+}
+
+export type MatchEventRowType = {
+  row: SattleDataAPI.MatchEventsList;
+  index?: number;
 }

@@ -30,25 +30,25 @@ declare namespace SattleDataAPI {
     settleType: number;
     settleTimes: number;
     t: number;
-    timeEnd: boolean;
+    isSettleStatus: boolean;
+    isShowCount: boolean;
   }
 
   type getMatchEventsRes = COMMON.BASE_RES_TYPE<MatchEventsList[]>
 
   type MatchEventParams = {
-    canceled: number;
-    eventCode: string;
-    eventTime: Date | number;
-    homeAway: string;
-    matchId: number;
-    matchPeriodId: number;
-    player1Name: string;
-    remark: string;
-    sourceType: number;
-    sportId: number;
+    canceled?: number;
+    eventCode?: string;
+    eventTime?: Date | number;
+    homeAway?: string;
+    matchId?: number;
+    matchPeriodId?: number;
+    player1Name?: string;
+    sourceType?: number;
+    sportId?: number;
     dataSourceCode?: string;
-    t1: number;
-    t2: number;
+    t1?: number;
+    t2?: number;
     id?: number;
   }
 
@@ -87,12 +87,13 @@ declare namespace SattleDataAPI {
     endTime?: any;
     pageSize: number;
     pageNum: number;
-    childrenData: ChildrenDataList[]
+    childrenData: ChildrenDataList[];
+    settlementType: number; //1 自动结算 //2 手动结算
   }
 
   type ChildrenDataList = {
     type: string;
-    key: string;
+    key: 'matchScoreRecordList' | 'penaltyCardRecordList' | 'cornerRecordList' | 'endGameEventList';
     tableList: MatchEventsList[]
   };
 
