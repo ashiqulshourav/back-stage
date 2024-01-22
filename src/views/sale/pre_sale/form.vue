@@ -22,7 +22,7 @@
       />
     </el-form-item>
 
-    <el-form-item :label="`${t('赛事等级')}:`" prop="level">
+    <!-- <el-form-item :label="`${t('赛事等级')}:`" prop="level">
       <el-select
         v-model="newFormInline.level"
         class="w-[280px]"
@@ -30,7 +30,7 @@
       >
         <el-option v-for="item in 8" :key="item" :label="item" :value="item" />
       </el-select>
-    </el-form-item>
+    </el-form-item> -->
 
     <!-- <el-form-item :label="`${t('国家地区')}:`" prop="countryId">
       <el-select

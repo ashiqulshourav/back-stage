@@ -30,9 +30,9 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('赛事ID'))
   },
   {
-    label: t('赛事等级'),
+    label: t('等级'),
     prop: 'level',
-    headerRenderer: d => handleTableWidth(d, t('赛事等级'))
+    headerRenderer: d => handleTableWidth(d, t('等级'))
   },
   {
     label: t('开赛时间'),
@@ -144,7 +144,7 @@ export const childColumns: TableColumnList = [
     slot: 'matchPeriodId'
   },
   {
-    label: t('事件來源'),
+    label: t('事件来源'),
     slot: 'homeAway'
   },
   // {
@@ -157,6 +157,7 @@ export const childColumns: TableColumnList = [
   },
   {
     label: t('结算次数'),
+    prop: 'settleTimes',
     formatter: ({ settleTimes }) => settleTimes ?? '-'
   },
   {

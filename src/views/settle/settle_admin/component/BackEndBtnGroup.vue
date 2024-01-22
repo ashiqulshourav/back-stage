@@ -1,7 +1,7 @@
 <template>
   <div class="flex" v-if="!row.canceled">
     <template v-if="row.isShowCount && row.settleTimes < 1">
-      <el-button @click="advanceSettlement">{{ t('提前结算') }}</el-button>
+      <el-button @click="advanceSettlement">{{ t('确认结算') }}</el-button>
     </template>
     <template v-else>
       <el-button
@@ -21,7 +21,7 @@
         {{ t('提交') }}
       </el-button>
       <el-button
-        v-else
+        v-if="index === dataList.length - 1 && isAllSettle"
         class="reset-margin"
         link
         type="danger"
@@ -54,6 +54,10 @@ const emits = defineEmits([
   'cancelMatchEvent',
   'advanceSettlement'
 ]);
+
+const isAllSettle = computed(() => {
+  return props.dataList.every(_ => _.settleTimes !== 0);
+});
 
 const handleChildrenData = (...data) => emits('handleChildrenData', ...data);
 

@@ -35,27 +35,14 @@
           <template
             #expand="{ row: parentRow, index: parIndex }: parentRowType"
           >
-            <div class="flex mb-2">
-              <CustomButton
-                v-for="key in Object.keys(balanceLoading)"
-                :key="key"
-                :type="key === 'half' ? 'primary' : 'danger'"
-                :btn-text="
-                  key === 'half' ? t('上半场结束结算') : t('全场结束结算')
-                "
-                :link="true"
-                :icon="useRenderIcon('icon_money')"
-                :loading="balanceLoading[key]"
-                :disabled="
-                  (key === 'half'
-                    ? !!parentRow.halfSettlementStatus
-                    : !!parentRow.fullSettlementStatus) || !childDataTotal
-                "
-                @click="
-                  settlementFunction(parentRow.matchId, key as 'half' | 'all')
-                "
-              />
-            </div>
+            <!-- 全场结算按钮 -->
+            <SettleMatchBtn
+              :balanceLoading="balanceLoading"
+              :parentRow="parentRow"
+              :childDataTotal="childDataTotal"
+              @settlementFunction="settlementFunction"
+            />
+
             <div class="m-4">
               <div
                 v-for="(item, idx) in parentRow.childrenData"
@@ -64,81 +51,42 @@
                 <div class="mt-3 mb-1 font-bold">
                   {{ MATCH_EVENT_CODE[item.type] }}
                 </div>
+
                 <pure-table
                   align-whole="center"
                   :row-key="row => row.id"
                   :data="item.tableList"
                   :loading="childloading"
                   :columns="childColumns"
+                  :row-class-name="tableRowClassName"
                   size="small"
                   table-layout="auto"
                   border
                   :header-cell-style="tableHeaderStyle"
                 >
-                  <template #eventCode="{ row, index: childIndex }">
-                    <el-select
-                      :disabled="!row.isEdit"
-                      v-model="row.redOrYellow"
-                      :placeholder="t('请选择')"
-                      v-if="item.type === 'yellow_red_card'"
-                      @change="
-                        teamChangeEvent(
-                          row,
-                          childIndex,
-                          item.tableList,
-                          item.type
-                        )
-                      "
-                    >
-                      <el-option :label="t('红牌')" :value="2" />
-                      <el-option :label="t('黄牌')" :value="1" />
-                    </el-select>
-                    <span v-else>{{ MATCH_EVENT_CODE[row.eventCode] }}</span>
-                  </template>
-
-                  <template
-                    #eventTime="{ row, index: childIndex }: MatchEventRowType"
-                  >
-                    <el-time-picker
-                      v-model="row.eventTime"
-                      :placeholder="t('请选择时间')"
-                      :disabled="!row.isEdit"
-                      :default-value="new Date(new Date().toLocaleDateString())"
-                      value-format="x"
-                      @change="changeEventTime(row, childIndex, item.tableList)"
-                      format="HH:mm:ss"
+                  <!-- 事件编码 -->
+                  <template #eventCode="{ row, index }: MatchEventRowType">
+                    <EventCode
+                      :row="row"
+                      :index="index"
+                      :item="item"
+                      @teamChangeEvent="teamChangeEvent"
                     />
                   </template>
 
-                  <template #matchPeriodId="{ row }: MatchEventRowType">
-                    <el-select
-                      :disabled="!row.isEdit"
-                      v-model="row.matchPeriodId"
-                      :placeholder="t('请选择')"
+                  <!-- 事件是否有效 -->
+                  <template #canceled="{ row }: MatchEventRowType">
+                    <el-text
+                      :class="[
+                        '!text-xs',
+                        row.canceled === 1 && '!text-sm font-bold'
+                      ]"
+                      :type="row.canceled === 1 ? 'danger' : 'info'"
+                      >{{ row.canceled === 1 ? t('否') : t('是') }}</el-text
                     >
-                      <el-option
-                        :label="
-                          row.eventCode === MatchEventType.MatchStatus
-                            ? t('上半场结束')
-                            : t('上半场')
-                        "
-                        :value="
-                          row.eventCode === MatchEventType.MatchStatus ? 31 : 6
-                        "
-                      />
-                      <el-option
-                        :label="
-                          row.eventCode === MatchEventType.MatchStatus
-                            ? t('下半场结束')
-                            : t('下半场')
-                        "
-                        :value="
-                          row.eventCode === MatchEventType.MatchStatus ? 100 : 7
-                        "
-                      />
-                    </el-select>
                   </template>
 
+                  <!-- 结算类型 -->
                   <template #settleType="{ row }: MatchEventRowType">
                     <CountDownBtn
                       :row="row"
@@ -150,50 +98,27 @@
                     </span>
                   </template>
 
-                  <template
-                    #homeAway="{ row, index: childIndex }: MatchEventRowType"
-                  >
-                    <div>
-                      <el-select
-                        :disabled="!row.isEdit"
-                        v-model="row.homeAway"
-                        :placeholder="t('请选择')"
-                        @change="
-                          teamChangeEvent(
-                            row,
-                            childIndex,
-                            item.tableList,
-                            item.type
-                          )
-                        "
-                      >
-                        <el-option :label="t('主队')" value="home" />
-                        <el-option
-                          v-if="!row.isEdit"
-                          :label="t('平局')"
-                          value=""
-                        />
-                        <el-option :label="t('客队')" value="away" />
-                      </el-select>
-                    </div>
+                  <!-- 比赛进行时间 -->
+                  <template #eventTime="{ row, index }: MatchEventRowType">
+                    <MatchTime :row="row" :index="index" :item="item" />
                   </template>
 
-                  <template #player1Name="{ row }: MatchEventRowType">
-                    <el-input
-                      v-model="row.player1Name"
-                      :disabled="!row.isEdit"
-                      maxLength="20"
+                  <!-- 比赛阶段 -->
+                  <template #matchPeriodId="{ row }: MatchEventRowType">
+                    <MatchStage :row="row" />
+                  </template>
+
+                  <!-- 事件来源 -->
+                  <template #homeAway="{ row, index }: MatchEventRowType">
+                    <EventSource
+                      :row="row"
+                      :index="index"
+                      :item="item"
+                      @teamChangeEvent="teamChangeEvent"
                     />
                   </template>
 
-                  <template #canceled="{ row }: MatchEventRowType">
-                    <el-text
-                      class="!text-xs"
-                      :type="row.canceled === 1 ? 'danger' : 'info'"
-                      >{{ row.canceled === 1 ? t('否') : t('是') }}</el-text
-                    >
-                  </template>
-
+                  <!-- 操作 -->
                   <template #operation="{ row, index: i }: MatchEventRowType">
                     <div class="flex items-center justify-center">
                       <template v-if="row.isBackEndReturnData">
@@ -237,15 +162,17 @@
                       </el-button>
                     </div>
                   </template>
-
-                  <template #dataSourceCode="{ row }">
+                  <!-- 数据商 -->
+                  <template #dataSourceCode="{ row }: MatchEventRowType">
                     <el-text
+                      v-if="row.isBackEndReturnData && row.settleType === 0"
                       v-for="(_, index) in eventQuotientList"
                       :key="index"
                       :type="row[_.type] === 1 ? 'primary' : 'info'"
                       :class="['!text-xs', index === 1 && '!mr-2 !ml-2']"
                       >{{ _.val }}</el-text
                     >
+                    <span>-</span>
                   </template>
                 </pure-table>
                 <div class="mt-2 cursor-pointer">
@@ -255,9 +182,10 @@
                     @click="changeSettleType(parentRow.matchId)"
                     >{{ t('开启人工结算') }}</el-button
                   >
-
                   <div class="flex items-center" v-else>
-                    <span class="mr-3">{{ t('人工结算中') }}...</span>
+                    <span class="mr-3 text-[var(--el-color-danger)]"
+                      >{{ t('人工结算中') }}...</span
+                    >
                     <IconifyIconOffline
                       width="25px"
                       icon="icon_circle_fill"
@@ -281,38 +209,31 @@
 </template>
 
 <script setup lang="ts">
+import { t } from '@/plugins/i18n';
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import { useSettle } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
-import { t } from '@/plugins/i18n';
-import { message } from '@/utils/message';
 import { MATCH_EVENT_CODE } from '@/utils/maps/sports_map';
-import CustomButton from '@/components/Form/CustomButton.vue';
 import SportTypeNav from './component/SportTypeNav.vue';
 import { MatchEventRowType, MatchEventType, parentRowType } from './utils/type';
 import BackEndBtnGroup from './component/BackEndBtnGroup.vue';
 import FrontBtnGroup from './component/FrontBtnGroup.vue';
 import { usePublicHooks } from '@/hooks';
 import CountDownBtn from './component/CountDownBtn.vue';
+import SettleMatchBtn from './component/SettleMatchBtn.vue';
+import MatchTime from './component/MatchTime.vue';
+import EventCode from './component/EventCode.vue';
+import MatchStage from './component/MatchStage.vue';
+import EventSource from './component/EventSource.vue';
 
 const { tableHeaderStyle } = usePublicHooks();
 
 defineOptions({ name: 'settle_admin' });
 
-const changeEventTime = (
-  row: SattleDataAPI.MatchEventsList,
-  childIndex: number,
-  childrenData: SattleDataAPI.MatchEventsList[]
-) => {
-  if (childIndex === 0) return;
-  if (
-    +row.eventTime <= new Date(childrenData[childIndex - 1].eventTime).getTime()
-  ) {
-    message(t('时间不能小于前一个事件发生时间'), { type: 'error' });
-    row.eventTime = '';
-  }
-};
+//- 取消事件置灰
+const tableRowClassName = ({ row }: MatchEventRowType) =>
+  row.canceled === 1 ? 'pure-warning-row' : '';
 
 const eventQuotientList = [
   { type: 'xjFlag', val: t('188数据') },
@@ -349,14 +270,6 @@ const teamChangeEvent = (
   }
 };
 
-/* const isShowAddIcon = (childrenData: SaleDataAPI.ChildrenDataList[]) => {
-  const arr = childrenData
-    .map(item => item.tableList)
-    .flat()
-    .filter(_ => _.settleType);
-  return arr.length > 0;
-}; */
-
 const {
   form,
   loading,
@@ -384,3 +297,29 @@ const {
   advanceSettlement
 } = useSettle();
 </script>
+
+<style lang="scss">
+.pure-warning-row {
+  --el-table-tr-bg-color: var(--el-color-danger-light-7);
+  &:hover {
+    td.el-table__cell {
+      background-color: var(--el-color-danger-light-7) !important;
+    }
+  }
+}
+.canceled {
+  .el-input__wrapper {
+    box-shadow: none !important;
+    border: none !important;
+    background-color: transparent !important;
+  }
+}
+
+.el-message-box__btns {
+  display: flex;
+  flex-direction: row-reverse;
+  button {
+    margin: 0 10px;
+  }
+}
+</style>

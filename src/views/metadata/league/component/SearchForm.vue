@@ -17,9 +17,10 @@
     </el-form-item>
     <el-form-item :label="`${t('联赛等级')}:`" prop="level">
       <el-input
+        :formatter="v => inputRestrictions(v)"
         v-model="form.level"
-        :placeholder="t('联赛等级')"
-        :formatter="v => formatNumber(v, 1)"
+        :placeholder="t('请输入1-200之间的数字')"
+        type="number"
         clearable
         v-enter="search"
         class="!w-[200px]"
@@ -107,7 +108,7 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import type { FormInstance } from 'element-plus';
 import { searchFormType } from '../utils/types';
 import { useMatchStore } from '@/store/match';
-import { formatNumber } from '@/utils/formatNumber';
+import { formatNumber, inputRestrictions } from '@/utils/formatNumber';
 
 defineProps<{
   loading: boolean;

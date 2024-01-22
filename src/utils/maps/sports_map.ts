@@ -39,6 +39,11 @@ export const OPENING_STATUS = {
   2: t('滚球'),
 }
 
+export const YELLOW_OR_RED = {
+  'yellow_card': 1,
+  'red_card': 2
+}
+
 // 盘口开售状态
 export const PLAY_MATCH = {
   HT_AH: {

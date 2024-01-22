@@ -25,19 +25,31 @@ const getTimeValue = (d: SattleDataAPI.MatchEventsList) => {
 };
 
 const isSelfHandle = computed(() => {
-  console.log(
-    'CountDownBtn.vue文件 28==============行打印=',
-    new Date(props.row.createdAt)
-  );
-  const isShow =
-    props.row.t - new Date(props.row.createdAt).getTime() < BASE_TIME;
-  props.row.isShowCount = isShow;
-  console.log('CountDownBtn.vue文件 31==============行打印=', isShow);
-  return isShow;
+  if (props.parentRow.settlementType === 2) return false;
+  const t = props.row.t - new Date(props.row.createdAt).getTime();
+  if (t <= 0) {
+    props.row.isShowCount = false;
+    return false;
+  } else {
+    const isShow =
+      BASE_TIME - (props.row.t - new Date(props.row.createdAt).getTime()) > 0;
+    props.row.isShowCount = isShow;
+    return isShow;
+  }
 });
 
 //- 倒计时结束事件
 const countdownFinish = () => (props.row.isShowCount = false);
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+:deep() {
+  .settle_admin {
+    font-size: 12px;
+  }
+  .el-statistic__number {
+    font-size: 14px;
+    color: var(--el-color-primary-light-3);
+  }
+}
+</style>

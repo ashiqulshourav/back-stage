@@ -39,9 +39,9 @@
       <el-input v-model="newFormInline.leagueId" :placeholder="t('联赛ID')" />
     </el-form-item>
 
-    <el-form-item label="赛事等级">
+    <!-- <el-form-item label="赛事等级">
       <el-input v-model="newFormInline.level" placeholder="赛事等级" />
-    </el-form-item>
+    </el-form-item> -->
 
     <el-form-item label="赛种ID">
       <el-input v-model="newFormInline.sportId" placeholder="赛种ID" />

@@ -24,6 +24,7 @@
           :loading="loading"
           :size="size"
           adaptive
+          :default-sort="{ prop: 'level', order: 'descending' }"
           :data="dataList"
           :columns="dynamicColumns"
           :pagination="pagination"

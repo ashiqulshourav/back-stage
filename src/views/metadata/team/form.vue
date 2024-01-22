@@ -46,14 +46,15 @@
       </el-select>
     </el-form-item>
 
-    <el-form-item :label="t('球队等级')" prop="level">
-      <el-select
+    <el-form-item :label="t('联赛等级')" prop="level">
+      <el-input
+        :formatter="v => inputRestrictions(v)"
         v-model="newFormInline.level"
-        class="w-[280px]"
-        :placeholder="t('联赛等级')"
-      >
-        <el-option v-for="item in 8" :key="item" :label="item" :value="item" />
-      </el-select>
+        :placeholder="t('请输入1-200之间的数字')"
+        type="number"
+        clearable
+        class="!w-[200px]"
+      />
     </el-form-item>
 
     <el-form-item label="赛种" prop="sportId">
@@ -99,6 +100,7 @@ import { TeamFormProps } from './utils/types';
 // import { Plus } from '@element-plus/icons-vue';
 import { t } from '@/plugins/i18n';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+import { inputRestrictions } from '@/utils/formatNumber';
 import { useMatchStore } from '@/store/match';
 
 const matchStore = useMatchStore();

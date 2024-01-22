@@ -15,7 +15,7 @@
           class="!w-[200px]"
         />
       </el-form-item>
-      <el-form-item :label="`${t('赛事等级')}:`" prop="level">
+      <!-- <el-form-item :label="`${t('赛事等级')}:`" prop="level">
         <el-select
           v-model="form.level"
           class="w-[280px]"
@@ -29,7 +29,7 @@
             :value="item"
           />
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item :label="`${t('联赛英文名')}:`" prop="leagueNameEn">
         <el-input
           v-model="form.leagueNameEn"

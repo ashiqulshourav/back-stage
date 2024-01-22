@@ -10,6 +10,7 @@ import {
   getSecondTime
 } from '@/utils/formmatDate';
 import { ElMessageBox } from 'element-plus';
+import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
 
 export function useSettle() {
   const form = reactive<SearchFormType>({
@@ -19,6 +20,7 @@ export function useSettle() {
     startTime: '',
     endTime: ''
   });
+
   const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const loading = ref(true);
   const childloading = ref(true);
@@ -115,11 +117,13 @@ export function useSettle() {
   };
 
   const addChildRow = (tableList, type, beginTime: string) => {
+    const isSettle = tableList.some(item => item.settleTimes === 0);
     if (
-      tableList.length !== 0 &&
-      !tableList[tableList.length - 1]?.isBackEndReturnData
+      (tableList.length !== 0 &&
+        !tableList[tableList.length - 1]?.isBackEndReturnData) ||
+      isSettle
     ) {
-      message('请先完成上一个事件结算', { type: 'error' });
+      message('请先完成之前的事件结算', { type: 'error' });
     } else {
       loopTimer.value && clearInterval(loopTimer.value);
       const tempList: TempListType = {
@@ -171,9 +175,7 @@ export function useSettle() {
       childDataTotal.value += item.tableList.length;
       if (item.tableList.length) {
         item.tableList.forEach(_ => {
-          // _.createdAt = new Date(_.createdAt).getTime() + 1000 * 60 * 5;
-          _.createdAt =
-            new Date('2024-01-21 19:15:00').getTime() + 1000 * 60 * 5;
+          _.createdAt = new Date(_.createdAt).getTime() + 1000 * 60 * 5;
           _.isEdit = false;
           _.isSave = false;
           _.isShowCount = false;
@@ -185,8 +187,8 @@ export function useSettle() {
           } else {
             _.eventTime = getSecondTime(_.eventTime, row.beginTime);
           }
-          _.canceled = Boolean(_.canceled);
-          item.type === 'yellow_red_card' && (_.redOrYellow = t('红/黄牌'));
+          item.type === 'yellow_red_card' &&
+            (_.redOrYellow = YELLOW_OR_RED[_.eventCode]);
         });
       }
     });
@@ -265,12 +267,31 @@ export function useSettle() {
       id: row.id ?? null
     };
 
-    const res = await API.addMatchEvent(params);
-    childloading.value = false;
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    if (res.code) return;
-    row.isEdit = false;
-    getChildrenData(parentRow);
+    ElMessageBox.confirm('确定要增加一条事件么?', t('警告'), {
+      confirmButtonText: t('确认'),
+      cancelButtonText: t('取消'),
+      center: true
+    }).then(async () => {
+      const res = await API.addMatchEvent(params);
+      childloading.value = false;
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if (res.code) return;
+      row.isEdit = false;
+      getChildrenData(parentRow);
+      reloadCurrentMatch(row.matchId, 'unSettlementEvents');
+    });
+  };
+
+  //- 重新渲染赛事更新外层列表
+  const reloadCurrentMatch = async (matchId: number, type: string) => {
+    const r = await API.getSettlementList({ matchId });
+    dataList.some(item => {
+      if (item.matchId === r.data.list[0].matchId) {
+        item[type] = r.data.list[0][type];
+        return true;
+      }
+      return false;
+    });
   };
 
   // 结算
@@ -327,20 +348,7 @@ export function useSettle() {
       if (res.code) return;
       const row = dataList.find(_ => _.matchId === matchId);
       getChildrenData(row);
-      const r: SattleDataAPI.getSettlementListRes = await API.getSettlementList(
-        {
-          matchId: row.matchId,
-          pageSize: 1,
-          pageNum: 1
-        }
-      );
-      dataList.some(item => {
-        if (item.matchId === r.data.list[0].matchId) {
-          item.settlementType = r.data.list[0].settlementType;
-          return true;
-        }
-        return false;
-      });
+      reloadCurrentMatch(row.matchId, 'settlementType');
     });
   };
 
@@ -361,10 +369,17 @@ export function useSettle() {
 
   //- 取消结算时间
   const cancelMatchEvent = async (id: number, matchId: number) => {
-    const res = await API.cancelMatchEvent({ id });
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    const row = dataList.find(_ => _.matchId === matchId);
-    getChildrenData(row);
+    ElMessageBox.confirm('确定要取消该事件么?', t('警告'), {
+      dangerouslyUseHTMLString: true,
+      confirmButtonText: t('确认'),
+      cancelButtonText: t('取消'),
+      center: true
+    }).then(async () => {
+      const res = await API.cancelMatchEvent({ id });
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      const row = dataList.find(_ => _.matchId === matchId);
+      getChildrenData(row);
+    });
   };
 
   return {

@@ -4,8 +4,8 @@ export const sattleData = {
   getSettlementList: (data: {
     isSale?: number;
     leagueId?: number;
-    pageNum: number;
-    pageSize: number;
+    pageNum?: number;
+    pageSize?: number;
     sportId?: number;
     startTime?: number;
     matchId?: number;
