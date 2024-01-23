@@ -41,19 +41,20 @@ export const columns: TableColumnList = [
   {
     label: t('主队'),
     prop: 'homeTeamNameCn',
+    minWidth: 150,
     headerRenderer: d => handleTableWidth(d, t('主队'), 'auto'),
     align: 'left'
   },
   {
     label: t('客队'),
     prop: 'awayTeamNameCn',
+    minWidth: 150,
     headerRenderer: d => handleTableWidth(d, t('客队'), 'auto'),
     align: 'left'
   },
   {
     label: t('国家/地区'),
     prop: 'countryId',
-    minWidth: 100,
     headerRenderer: d => handleTableWidth(d, t('国家/地区'), 'auto'),
     formatter: ({ countryId }) => parseCountry(countryId)
   },

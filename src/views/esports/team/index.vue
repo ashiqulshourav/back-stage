@@ -27,10 +27,7 @@
           :columns="dynamicColumns"
           :pagination="pagination"
           :paginationSmall="size === 'small' ? true : false"
-          :header-cell-style="{
-            background: 'var(--el-fill-color-light)',
-            color: 'var(--el-text-color-primary)'
-          }"
+          :header-cell-style="tableHeaderStyle"
           @selection-change="handleSelectionChange"
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
@@ -88,11 +85,12 @@ import { PureTableBar } from '@/components/RePureTableBar';
 // import AddFill from '@iconify-icons/ri/add-circle-line';
 import { useLeague } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
+import { usePublicHooks } from '@/hooks';
 
 // import { t } from '@/plugins/i18n';
 
 defineOptions({ name: 'eTeam' });
-
+const { tableHeaderStyle } = usePublicHooks();
 const {
   loading,
   columns,

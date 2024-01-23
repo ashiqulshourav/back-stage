@@ -11,6 +11,7 @@ npm-debug.log*
 .pnpm-error.log*
 .pnpm-debug.log
 tests/**/coverage/
+src/demo.tsx
 
 # Editor directories and files
 .idea

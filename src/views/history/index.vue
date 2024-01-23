@@ -27,10 +27,7 @@
           :columns="dynamicColumns"
           :pagination="pagination"
           :paginationSmall="size === 'small' ? true : false"
-          :header-cell-style="{
-            background: 'var(--el-fill-color-light)',
-            color: 'var(--el-text-color-primary)'
-          }"
+          :header-cell-style="tableHeaderStyle"
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
@@ -42,7 +39,7 @@
               :size="size"
               @click="handleSettlementReview(row)"
             >
-              {{ t("结算审核") }}
+              {{ t('结算审核') }}
             </el-button>
           </template>
           <!-- <template #operation="{ row }">
@@ -64,17 +61,19 @@
 </template>
 
 <script setup lang="ts">
-import { PureTableBar } from "@/components/RePureTableBar";
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-import Search from "@iconify-icons/ep/search";
-import Refresh from "@iconify-icons/ep/refresh";
-import EditPen from "@iconify-icons/ep/edit-pen";
-import AddFill from "@iconify-icons/ri/add-circle-line";
-import { useHistory } from "./utils/hook";
+import { PureTableBar } from '@/components/RePureTableBar';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import Search from '@iconify-icons/ep/search';
+import Refresh from '@iconify-icons/ep/refresh';
+import EditPen from '@iconify-icons/ep/edit-pen';
+import AddFill from '@iconify-icons/ri/add-circle-line';
+import { useHistory } from './utils/hook';
 
-import { t } from "@/plugins/i18n";
-defineOptions({ name: "History" });
+import { t } from '@/plugins/i18n';
+import { usePublicHooks } from '@/hooks';
+defineOptions({ name: 'History' });
 
+const { tableHeaderStyle } = usePublicHooks();
 // const formRef = ref();
 const {
   loading,
