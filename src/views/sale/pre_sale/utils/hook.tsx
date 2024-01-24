@@ -163,7 +163,8 @@ export function usePreSale() {
       ...removeEmptyStringKeys(searchForm),
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage,
-      matchCondition: matchCondition.value
+      matchCondition: matchCondition.value,
+      sportId: 1
     });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
@@ -173,13 +174,11 @@ export function usePreSale() {
     pagination.pageSize = res.data.pageSize;
     pagination.currentPage = res.data.pageNum;
   };
-
   const resetForm = formEl => {
     if (!formEl) return;
     formEl.resetFields();
     onSearch();
   };
-
   const changeMatchCondition = (n: number) => {
     matchCondition.value = n;
     onSearch('reload');

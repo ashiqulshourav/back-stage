@@ -22,6 +22,7 @@ import uploadIcon from '@iconify-icons/ri/upload-2-fill';
 import cancelIcon from '@iconify-icons/ri/close-circle-fill';
 import icon_money from '@iconify-icons/ri/money-cny-box-fill';
 import saveIcon from '@iconify-icons/ri/save-3-fill';
+import MoneyDollarCircleFill from '@iconify-icons/ri/money-cny-circle-line';
 
 
 addIcon("homeFilled", HomeFilled);
@@ -41,3 +42,4 @@ addIcon("icon_money", icon_money);
 addIcon("uploadIcon", uploadIcon);
 addIcon("cancelIcon", cancelIcon);
 addIcon("saveIcon", saveIcon);
+addIcon("moneyDollarCircleFill", MoneyDollarCircleFill);

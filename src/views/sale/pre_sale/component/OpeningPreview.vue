@@ -152,6 +152,7 @@ const getBetItemsList = async () => {
   openLen.value = 0;
   res.data.forEach(item => {
     item.betItemsName = GET_PLAYNAME_BY_KC[item.sourceCode];
+    item.source_handicap = item.handicap;
     item.isSale === 2 && (openLen.value += 1);
     if (mData[item.ctid]) mData[item.ctid].formatList.push(item);
     else mData[3].formatList.push(item);
@@ -198,7 +199,7 @@ const upateLockStatus = async (
       matchId: cItem[0].matchId,
       betItemList: cItem
         .filter(_ => _)
-        .map(_ => `${_.betItemsId}_${_.handicap}`)
+        .map(_ => `${_.betItemsId}_${_.source_handicap}`)
     };
     const res: SaleDataAPI.saleBetItemsResType =
       cItem[0].isSale === 2

@@ -100,6 +100,7 @@ declare namespace SaleDataAPI {
     sourceBetItemsMid: number;
     homeOrAway: string;
     handicap: string;
+    source_handicap: string;
     odds: number;
     isSale: number;
     displayIndex: number;

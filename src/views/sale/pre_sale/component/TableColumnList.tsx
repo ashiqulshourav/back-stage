@@ -6,7 +6,8 @@ import { OPENING_STATUS } from '@/utils/maps/sports_map';
 export const columns: TableColumnList = [
   {
     type: 'selection',
-    align: 'left'
+    align: 'left',
+    selectable: row => !(row.saleHandicaps === 0 && row.allHandicaps === 0)
   },
   {
     label: t('锁盘'),

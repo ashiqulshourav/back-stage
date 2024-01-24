@@ -111,7 +111,13 @@ import { message } from '@/utils/message';
 defineOptions({ name: 'pre_sale' });
 const openInfoDialog = (matchId: number, row: SaleDataAPI.PreSaleList) => {
   if (row.saleHandicaps === 0)
-    return message(t('请先解锁当前赛事!'), { type: 'error' });
+    return message(
+      row.allHandicaps === 0 ? t('赛事盘口未开售!') : t('请先解锁当前赛事!'),
+      { type: 'error' }
+    );
+  else if (row.homeTeamNameCn === row.awayTeamNameCn) {
+    return message(t('暂不支持冠军玩法!'), { type: 'error' });
+  }
   addDialog({
     title: t('盘口预览'),
     props: { matchId, matchInfo: row },

@@ -208,7 +208,8 @@
   </div>
 </template>
 
-<script setup lang="ts">3
+<script setup lang="ts">
+3;
 import { t } from '@/plugins/i18n';
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
@@ -314,11 +315,13 @@ const {
   }
 }
 
-.el-message-box__btns {
-  display: flex;
-  flex-direction: row-reverse;
-  button {
-    margin: 0 10px;
+.el-message-box:not(.login_out) {
+  .el-message-box__btns {
+    display: flex;
+    flex-direction: row-reverse;
+    button {
+      margin: 0 10px;
+    }
   }
 }
 </style>

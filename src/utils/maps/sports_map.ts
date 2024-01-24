@@ -150,4 +150,5 @@ export const GET_PLAYNAME_BY_KC = {
   'BothTeamsToScore': t('双方进球'),
   'FTS_AH': t('全场让局'),
   'FTS_OU': t('总局数'),
+  'Outright': t('冠军玩法'),
 };
