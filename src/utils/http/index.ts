@@ -17,13 +17,12 @@ import { useUserStore } from "@/store/user";
 
 const defaultConfig: AxiosRequestConfig = {
   baseURL: '/match',
-  timeout: 10000,
+  timeout: 20000,
   headers: {
     Accept: "application/json, text/plain, */*",
     "Content-Type": "application/json",
     "X-Requested-With": "XMLHttpRequest"
   },
-  // 数组格式参数序列化（https://github.com/axios/axios/issues/5142）
   paramsSerializer: {
     serialize: stringify as unknown as CustomParamsSerializer
   }
@@ -35,19 +34,13 @@ class PureHttp {
     this.httpInterceptorsResponse();
   }
 
-
-  /** 初始化配置对象 */
   private static initConfig: PureHttpRequestConfig = {};
 
-  /** 保存当前Axios实例对象 */
   private static axiosInstance: AxiosInstance = Axios.create(defaultConfig);
 
-
-  /** 请求拦截 */
   private httpInterceptorsRequest(): void {
     PureHttp.axiosInstance.interceptors.request.use(
       async (config: PureHttpRequestConfig): Promise<any> => {
-        // 开启进度条动画
         NProgress.start();
         // 优先判断post/get等方法是否传入回调，否则执行初始化设置等回调
         if (typeof config.beforeRequestCallback === "function") {
@@ -121,18 +114,35 @@ class PureHttp {
       ...param,
       ...axiosConfig
     } as PureHttpRequestConfig;
-
-    // 单独处理自定义请求/响应回调
-    return new Promise((resolve, reject) => {
-      PureHttp.axiosInstance
-        .request(config)
-        .then((response: undefined) => {
-          resolve(response);
+    //todo 后期路由后端获取
+    if (url === '/getRouter') {
+      return new Promise((resolve, reject) => {
+        Axios({
+          method: 'get',
+          url: '/router.json'
+        }).then(d => {
+          resolve({
+            'msg': '操作成功',
+            code: 0,
+            data: d.data
+          })
         })
-        .catch(error => {
-          reject(error);
-        });
-    });
+      })
+    } else {
+      // 单独处理自定义请求/响应回调
+      return new Promise((resolve, reject) => {
+        PureHttp.axiosInstance
+          .request(config)
+          .then((response: undefined) => {
+            resolve(response);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    }
+
+
   }
 
   /** 单独抽离的post工具函数 */

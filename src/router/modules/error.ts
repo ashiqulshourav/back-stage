@@ -1,4 +1,3 @@
-import { t } from "@/plugins/i18n";
 import { ERROR } from "../const_rank";
 
 export default {
@@ -6,7 +5,7 @@ export default {
   redirect: "/error/403",
   meta: {
     icon: "informationLine",
-    title: t("异常页面"),
+    title: "异常页面",
     showLink: false,
     rank: ERROR
   },

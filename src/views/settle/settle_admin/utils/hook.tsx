@@ -8,7 +8,7 @@ import {
   dateGetSecond,
   dateSetSecond,
   getSecondTime
-} from '@/utils/formmatDate';
+} from '@/utils/formatDate';
 import { ElMessageBox } from 'element-plus';
 import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
 
@@ -116,6 +116,7 @@ export function useSettle() {
     onSearch('reload');
   };
 
+  //- 人工结算新增一行
   const addChildRow = (tableList, type, beginTime: string) => {
     const isSettle = tableList.some(item => item.settleTimes === 0);
     if (
@@ -127,7 +128,7 @@ export function useSettle() {
     } else {
       loopTimer.value && clearInterval(loopTimer.value);
       const tempList: TempListType = {
-        eventTime: getSecondTime(Date.now(), new Date(beginTime).getTime()),
+        eventTime: Date.now(),
         homeAway: null,
         matchPeriodId: null,
         isBackEndReturnData: false,
@@ -140,6 +141,7 @@ export function useSettle() {
     }
   };
 
+  //- 当前行编辑
   const editChild = (row: SattleDataAPI.MatchEventsList) => (row.isEdit = true);
 
   // 打开关闭结算列表
@@ -249,12 +251,17 @@ export function useSettle() {
       return message(t('请先保存事件'), { type: 'error' });
     }
 
-    childloading.value = true;
-
+    //- 单独处理红黄牌
+    const eventCode =
+      row.eventCode === 'yellow_red_card'
+        ? row.redOrYellow === 1
+          ? 'yellow_card'
+          : 'red_card'
+        : row.eventCode;
     const params: SattleDataAPI.MatchEventParams = {
       canceled: 0,
-      eventCode: row.eventCode,
-      eventTime: dateGetSecond(row.eventTime as Date),
+      eventCode,
+      eventTime: row.eventTime,
       homeAway: row.homeAway,
       matchId: dataList[parentIndex].matchId,
       matchPeriodId: +row.matchPeriodId,
@@ -272,6 +279,7 @@ export function useSettle() {
       cancelButtonText: t('取消'),
       center: true
     }).then(async () => {
+      childloading.value = true;
       const res = await API.addMatchEvent(params);
       childloading.value = false;
       message(res.msg, { type: res.code ? 'error' : 'success' });
@@ -313,7 +321,6 @@ export function useSettle() {
   };
 
   onMounted(() => onSearch());
-
   onUnmounted(() => {
     loopTimer.value && clearInterval(loopTimer.value);
   });

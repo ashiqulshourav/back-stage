@@ -35,7 +35,7 @@
           <template
             #expand="{ row: parentRow, index: parIndex }: parentRowType"
           >
-            <!-- 全场结算按钮 -->
+            <!-- -全场结算按钮 -->
             <SettleMatchBtn
               :balanceLoading="balanceLoading"
               :parentRow="parentRow"
@@ -64,7 +64,7 @@
                   border
                   :header-cell-style="tableHeaderStyle"
                 >
-                  <!-- 事件编码 -->
+                  <!-- -事件编码 -->
                   <template #eventCode="{ row, index }: MatchEventRowType">
                     <EventCode
                       :row="row"
@@ -74,7 +74,7 @@
                     />
                   </template>
 
-                  <!-- 事件是否有效 -->
+                  <!-- -事件是否有效 -->
                   <template #canceled="{ row }: MatchEventRowType">
                     <el-text
                       :class="[
@@ -86,7 +86,7 @@
                     >
                   </template>
 
-                  <!-- 结算类型 -->
+                  <!-- -结算类型 -->
                   <template #settleType="{ row }: MatchEventRowType">
                     <CountDownBtn
                       :row="row"
@@ -98,17 +98,17 @@
                     </span>
                   </template>
 
-                  <!-- 比赛进行时间 -->
+                  <!-- -比赛进行时间 -->
                   <template #eventTime="{ row, index }: MatchEventRowType">
                     <MatchTime :row="row" :index="index" :item="item" />
                   </template>
 
-                  <!-- 比赛阶段 -->
+                  <!-- -比赛阶段 -->
                   <template #matchPeriodId="{ row }: MatchEventRowType">
                     <MatchStage :row="row" />
                   </template>
 
-                  <!-- 事件来源 -->
+                  <!-- -事件来源 -->
                   <template #homeAway="{ row, index }: MatchEventRowType">
                     <EventSource
                       :row="row"
@@ -118,7 +118,7 @@
                     />
                   </template>
 
-                  <!-- 操作 -->
+                  <!-- -操作 -->
                   <template #operation="{ row, index: i }: MatchEventRowType">
                     <div class="flex items-center justify-center">
                       <template v-if="row.isBackEndReturnData">
@@ -162,7 +162,7 @@
                       </el-button>
                     </div>
                   </template>
-                  <!-- 数据商 -->
+                  <!-- -数据商 -->
                   <template #dataSourceCode="{ row }: MatchEventRowType">
                     <el-text
                       v-if="row.isBackEndReturnData && row.settleType === 0"
@@ -208,7 +208,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts">3
 import { t } from '@/plugins/i18n';
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
@@ -234,7 +234,6 @@ defineOptions({ name: 'settle_admin' });
 //- 取消事件置灰
 const tableRowClassName = ({ row }: MatchEventRowType) =>
   row.canceled === 1 ? 'pure-warning-row' : '';
-
 const eventQuotientList = [
   { type: 'xjFlag', val: t('188数据') },
   { type: 'psFlag', val: t('熊猫数据') },

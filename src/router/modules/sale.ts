@@ -1,10 +1,9 @@
-import { t } from "@/plugins/i18n";
 import { SALE } from "../const_rank";
 
 export default {
   path: "/sale",
   meta: {
-    title: t('开售管理'),
+    title: '开售管理',
     icon: 'storeFill',
     rank: SALE
   },
@@ -14,7 +13,7 @@ export default {
       name: "pre_sale",
       component: () => import("@/views/sale/pre_sale/index.vue"),
       meta: {
-        title: t('预开售管理'),
+        title: '预开售管理',
         showParent: true,
       }
     },

@@ -1,4 +1,3 @@
-import { t } from "@/plugins/i18n";
 import { LOGIN, REDIRECT } from "../const_rank";
 const Layout = () => import("@/layout/index.vue");
 
@@ -8,7 +7,7 @@ export default [
     name: "Login",
     component: () => import("@/views/login/index.vue"),
     meta: {
-      title: t("登录"),
+      title: "登录",
       showLink: false,
       rank: LOGIN
     }
@@ -17,7 +16,7 @@ export default [
     path: "/redirect",
     component: Layout,
     meta: {
-      title: t("重定向"),
+      title: "重定向",
       showLink: false,
       rank: REDIRECT
     },

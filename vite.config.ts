@@ -33,7 +33,6 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
     VITE_COMPRESSION,
     VITE_PUBLIC_PATH,
     VITE_API_BASE_URL,
-    VITE_OTHER_API_BASE_URL
   } = warpperEnv(loadEnv(mode, root));
   return {
     base: VITE_PUBLIC_PATH,
@@ -58,18 +57,6 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
             Referer: VITE_API_BASE_URL
           }
         },
-        "/other-api": {
-          target: VITE_OTHER_API_BASE_URL,
-          rewrite: path => path.replace(/^\/other-api/, "/other-api"),
-          changeOrigin: true,
-          configure: (proxy, _) => {
-            proxy.on("proxyRes", (_, req, _res) => console.log(req.url));
-          },
-          headers: {
-            Origin: VITE_OTHER_API_BASE_URL,
-            Referer: VITE_OTHER_API_BASE_URL
-          }
-        }
       }
     },
     plugins: getPluginsList(command, VITE_CDN, VITE_COMPRESSION),

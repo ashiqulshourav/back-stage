@@ -2,9 +2,8 @@
   <el-time-picker
     :class="[row.canceled === 1 && 'canceled']"
     v-model="row.eventTime"
-    :placeholder="t('请选择时间')"
+    :placeholder="t('请选择当前录入时间')"
     :disabled="!row.isEdit"
-    :default-value="new Date(new Date().toLocaleDateString())"
     value-format="x"
     @change="changeEventTime(row, index, item.tableList)"
     format="HH:mm:ss"

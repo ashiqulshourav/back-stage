@@ -1,4 +1,3 @@
-import { t } from "@/plugins/i18n";
 import { OPERATION_LOG } from "../const_rank";
 
 export default {
@@ -6,7 +5,7 @@ export default {
   name: "operationLog",
   component: () => import("@/views/operationLog/index.vue"),
   meta: {
-    title: t("操作日志"),
+    title: "操作日志",
     icon: "operationLog",
     rank: OPERATION_LOG
   }

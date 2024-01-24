@@ -121,7 +121,7 @@ import Refresh from '@iconify-icons/ep/refresh';
 import type { FormInstance } from 'element-plus';
 import { SearchFormType } from '../utils/types';
 import dayjs from 'dayjs';
-import { disableDate } from '@/utils/formmatDate';
+import { disableDate } from '@/utils/formatDate';
 import { useMatchStore } from '@/store/match';
 import { formatNumber } from '@/utils/formatNumber';
 
@@ -157,8 +157,7 @@ const changeDate = t => {
     const d = dayjs(t).format('YYYY-MM-DD');
     selectIndex.value = nextDayArr.value.findIndex(_ => _ === d);
     props.form.startTime = dayjs(t).format('YYYY-MM-DD HH:mm:ss');
-    const endTime = new Date(`${d} 23:59:59`);
-    props.form.endTime = dayjs(endTime).format('YYYY-MM-DD HH:mm:ss');
+    props.form.endTime = dayjs(t).endOf('day').format('YYYY-MM-DD HH:mm:ss');
   }
   search();
 };
@@ -171,10 +170,12 @@ const resetForm = (formEl: FormInstance | undefined) => {
 
 const changeSelectDate = (_: number) => {
   selectIndex.value = _;
-  const startTime = new Date(`${nextDayArr.value[_]} 00:00:00`);
-  const endTime = new Date(`${nextDayArr.value[_]} 23:59:59`);
-  props.form.startTime = dayjs(startTime).format('YYYY-MM-DD HH:mm:ss');
-  props.form.endTime = dayjs(endTime).format('YYYY-MM-DD HH:mm:ss');
+  props.form.startTime = dayjs(nextDayArr.value[_])
+    .startOf('day')
+    .format('YYYY-MM-DD HH:mm:ss');
+  props.form.endTime = dayjs(nextDayArr.value[_])
+    .endOf('day')
+    .format('YYYY-MM-DD HH:mm:ss');
   search();
 };
 
@@ -189,11 +190,6 @@ const nextDayArr = computed(() => {
   }
   return nextDayList;
 });
-
-/* const changeMatchCondition = (n: number) => {
-  resetForm(formRef.value);
-  emits('changeMatchCondition', n);
-}; */
 </script>
 
 <style scoped lang="scss">
@@ -206,3 +202,4 @@ const nextDayArr = computed(() => {
   }
 }
 </style>
+@/utils/formatDate

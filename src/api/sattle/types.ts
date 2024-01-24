@@ -39,7 +39,7 @@ declare namespace SattleDataAPI {
   type MatchEventParams = {
     canceled?: number;
     eventCode?: string;
-    eventTime?: Date | number;
+    eventTime?: Date | number | string;
     homeAway?: string;
     matchId?: number;
     matchPeriodId?: number;

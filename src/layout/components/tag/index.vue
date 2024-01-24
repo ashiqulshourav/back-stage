@@ -15,7 +15,6 @@ import ArrowDown from '@iconify-icons/ri/arrow-down-s-line';
 import ArrowRightSLine from '@iconify-icons/ri/arrow-right-s-line';
 import ArrowLeftSLine from '@iconify-icons/ri/arrow-left-s-line';
 import CloseBold from '@iconify-icons/ep/close-bold';
-import { t } from '@/plugins/i18n';
 
 const {
   route,

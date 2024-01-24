@@ -102,8 +102,8 @@ dataThemeChange();
 const { title } = useNav();
 const userStore = useUserStore();
 const ruleForm = reactive({
-  username: '',
-  password: ''
+  username: 'admin@gmail.com',
+  password: '111111'
 });
 
 const onLogin = async (formEl: FormInstance | undefined) => {

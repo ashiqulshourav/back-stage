@@ -9,7 +9,6 @@ import { MotionPlugin } from "@vueuse/motion";
 // import { useEcharts } from "@/plugins/echarts";
 import { injectResponsiveStorage } from "@/utils/responsive";
 
-//- 表格宽度自动撑开
 import Table from "@pureadmin/table";
 // import PureDescriptions from "@pureadmin/descriptions";
 
@@ -45,6 +44,12 @@ app.component("FontIcon", FontIcon);
 // 全局注册按钮级别权限组件
 import { Auth } from "@/components/ReAuth";
 app.component("Auth", Auth);
+
+
+//- 全局错误绑定
+app.config.errorHandler = (err, vm, info) => {
+  console.log('全局错误============:', err, vm, info);
+}
 
 getServerConfig(app).then(async config => {
   app.use(router);

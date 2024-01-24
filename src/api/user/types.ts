@@ -21,4 +21,27 @@ declare namespace UserAPI {
     msg: string;
     data: Login_Data;
   }
+
+  type Meta = {
+    title?: string;
+    icon?: string;
+    rank?: number;
+    roles?: string[];
+  }
+
+
+  type RouterChildren = {
+    path: string;
+    name: string;
+    meta: Meta;
+  }
+
+  type RouterData = {
+    path: string;
+    meta: Meta;
+    children: RouterChildren[];
+  }
+
+
+  type GetRouterTyperes = COMMON.BASE_RES_TYPE<RouterData[]>
 }

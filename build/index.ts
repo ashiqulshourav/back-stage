@@ -9,7 +9,6 @@ const warpperEnv = (envConf: Recordable): ViteEnv => {
     VITE_HIDE_HOME: "false",
     VITE_COMPRESSION: "none",
     VITE_API_BASE_URL: "http://172.31.64.13:19030/",
-    VITE_OTHER_API_BASE_URL : "https://other-api.com/"
 
   };
 

@@ -44,7 +44,7 @@ export const YELLOW_OR_RED = {
   'red_card': 2
 }
 
-// 盘口开售状态
+// 玩法映射
 export const PLAY_MATCH = {
   HT_AH: {
     Home: t('主'),

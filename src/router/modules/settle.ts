@@ -1,11 +1,10 @@
 
-import { t } from "@/plugins/i18n";
 import { SETTLE } from "../const_rank";
 
 export default {
   path: "/settle",
   meta: {
-    title: t('结算平台'),
+    title: '结算平台',
     icon: 'folderFill',
     rank: SETTLE,
     redirect: '/settle/settle_admin'
@@ -16,7 +15,7 @@ export default {
       name: "settle_admin",
       component: () => import("@/views/settle/settle_admin/index.vue"),
       meta: {
-        title: t('结算管理'),
+        title: '结算管理',
         showParent: true,
       }
     },

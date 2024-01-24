@@ -112,16 +112,13 @@ const changeDate = t => {
     props.form.startTime = '';
     props.form.endTime = '';
   } else {
-    const d = dayjs(t).format('YYYY-MM-DD');
     props.form.startTime = dayjs(t).format('YYYY-MM-DD HH:mm:ss');
-    const endTime = new Date(`${d} 23:59:59`);
-    props.form.endTime = dayjs(endTime).format('YYYY-MM-DD HH:mm:ss');
+    props.form.endTime = dayjs(t).endOf('day').format('YYYY-MM-DD HH:mm:ss');
   }
   searchVal();
 };
 
 const emits = defineEmits(['onSearch', 'resetForm', 'changeMatchCondition']);
-
 const searchVal = () => emits('onSearch', 'reload');
 
 const resetForm = formRef => {

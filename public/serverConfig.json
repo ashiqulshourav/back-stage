@@ -18,7 +18,7 @@
   "maxNumLen": 15,
   "ShowModel": "smcart",
   "MenuArrowIconNoTransition": true,
-  "CachingAsyncRoutes": false,
+  "CachingAsyncRoutes": true,
   "TooltipEffect": "light",
   "ResponsiveStorageNameSpace": "responsive-"
 }
