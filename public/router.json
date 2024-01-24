@@ -1,5 +1,135 @@
 [
   {
-    "path": "http"
+    "path": "/esports",
+    "meta": {
+      "title": "电子竞技",
+      "icon": "monitor",
+      "rank": 4
+    },
+    "children": [
+      {
+        "path": "/esports/match",
+        "name": "eMatch",
+        "meta": {
+          "title": "联赛库",
+          "showParent": true
+        }
+      },
+      {
+        "path": "/esports/team",
+        "name": "eTeam",
+        "meta": {
+          "title": "球队库",
+          "showParent": true
+        }
+      }
+    ]
+  },
+  {
+    "path": "/history",
+    "name": "history",
+    "meta": {
+      "title": "赛程历史",
+      "icon": "history",
+      "rank": 6
+    }
+  },
+  {
+    "path": "/metadata",
+    "meta": {
+      "title": "赛程管理",
+      "icon": "crown",
+      "rank": 1
+    },
+    "children": [
+      {
+        "path": "/metadata/league",
+        "name": "League",
+        "meta": {
+          "title": "联赛管理",
+          "showParent": true
+        }
+      },
+      {
+        "path": "/metadata/team",
+        "name": "team",
+        "meta": {
+          "title": "球队管理",
+          "showParent": true
+        }
+      }
+    ]
+  },
+  {
+    "path": "/operationLog",
+    "name": "operationLog",
+    "meta": {
+      "title": "操作日志",
+      "icon": "operationLog",
+      "rank": 7
+    }
+  },
+  {
+    "path": "/sale",
+    "meta": {
+      "title": "开售管理",
+      "icon": "storeFill",
+      "rank": 2
+    },
+    "children": [
+      {
+        "path": "/sale/pre_sale",
+        "name": "pre_sale",
+        "meta": {
+          "title": "预开售管理",
+          "showParent": true
+        }
+      }
+    ]
+  },
+  {
+    "path": "/settle",
+    "meta": {
+      "title": "结算平台",
+      "icon": "folderFill",
+      "rank": 3,
+      "redirect": "/settle/settle_admin"
+    },
+    "children": [
+      {
+        "path": "/settle/settle_admin",
+        "name": "settle_admin",
+        "meta": {
+          "title": "结算管理",
+          "showParent": true
+        }
+      }
+    ]
+  },
+  {
+    "path": "/virtual",
+    "meta": {
+      "title": "虚拟体育",
+      "icon": "files",
+      "rank": 5
+    },
+    "children": [
+      {
+        "path": "/virtual/match",
+        "name": "vMatch",
+        "meta": {
+          "title": "联赛库",
+          "showParent": true
+        }
+      },
+      {
+        "path": "/virtual/teams",
+        "name": "vTeams",
+        "meta": {
+          "title": "球队库",
+          "showParent": true
+        }
+      }
+    ]
   }
 ]

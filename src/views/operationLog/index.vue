@@ -44,7 +44,7 @@ import { useOperationLog } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
 
 import { t } from '@/plugins/i18n';
-defineOptions({ name: 'History' });
+defineOptions({ name: 'operationLog' });
 
 // const formRef = ref();
 const {

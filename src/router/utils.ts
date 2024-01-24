@@ -26,7 +26,6 @@ const IFrame = () => import("@/layout/frameView.vue");
 const modulesRoutes = import.meta.glob("/src/views/**/*.{vue,tsx}");
 
 // 动态路由
-import { getAsyncRoutes } from "@/api/routes";
 import { permissionData } from "./permissionRouter";
 
 function handRank(routeInfo: any) {
@@ -186,13 +185,14 @@ function initRouter() {
     const asyncRouteList = storageSession().getItem(key) as any;
     if (asyncRouteList && asyncRouteList?.length > 0) {
       return new Promise(resolve => {
+        //todo 合并本地路由
         handleAsyncRoutes(asyncRouteList);
         resolve(router);
       });
     } else {
       return new Promise(resolve => {
         API.getRouter().then(({ data }) => {
-          data = []
+          //todo 路由合并
           handleAsyncRoutes(cloneDeep(data));
           storageSession().setItem(key, data);
           resolve(router);
@@ -297,6 +297,7 @@ function handleAliveRoute({ name }: ToRouteType, mode?: string) {
 function addAsyncRoutes(arrRoutes: Array<RouteRecordRaw>) {
   if (!arrRoutes || !arrRoutes.length) return;
   const modulesRoutesKeys = Object.keys(modulesRoutes);
+
   arrRoutes.forEach((v: RouteRecordRaw) => {
     // 将backstage属性加入meta，标识此路由为后端返回路由
     v.meta.backstage = true;
@@ -312,7 +313,8 @@ function addAsyncRoutes(arrRoutes: Array<RouteRecordRaw>) {
       // 对后端传component组件路径和不传做兼容（如果后端传component组件路径，那么path可以随便写，如果不传，component组件路径会跟path保持一致）
       const index = v?.component
         ? modulesRoutesKeys.findIndex(ev => ev.includes(v.component as any))
-        : modulesRoutesKeys.findIndex(ev => ev.includes(v.path));
+        // -index.vue文件作为路由文件
+        : modulesRoutesKeys.findIndex(ev => ev.includes(`/src/views${v.path}/index.vue`));
       v.component = modulesRoutes[modulesRoutesKeys[index]];
     }
     if (v?.children && v.children.length) {

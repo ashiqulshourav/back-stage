@@ -116,7 +116,7 @@ class PureHttp {
     } as PureHttpRequestConfig;
     //todo 后期路由后端获取
     if (url === '/getRouter') {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         Axios({
           method: 'get',
           url: '/router.json'

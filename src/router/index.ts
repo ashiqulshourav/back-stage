@@ -110,9 +110,9 @@ router.beforeEach((to: ToRouteType, _from, next) => {
       if (!item.meta.title) return "";
       const Title = getConfig().Title;
       if (Title)
-        document.title = `${item.meta.title
+        document.title = `${t(item.meta.title)
           } | ${Title} `;
-      else document.title = item.meta.title;
+      else document.title = t(item.meta.title);
     });
   }
   /** 如果已经登录并存在登录信息后不能跳转到路由白名单，而是继续保持在当前页面 */
@@ -151,8 +151,7 @@ router.beforeEach((to: ToRouteType, _from, next) => {
             // query、params模式路由传参数的标签页不在此处处理
             if (route && route.meta?.title) {
               if (isAllEmpty(route.parentId) && route.meta?.backstage) {
-                // 此处为动态顶级路由（目录）
-                const { path, name, meta } = route.children[0];
+                const { path, name, meta } = route.children ? route.children[0] : route;
                 useMultiTagsStoreHook().handleTags("push", {
                   path,
                   name,

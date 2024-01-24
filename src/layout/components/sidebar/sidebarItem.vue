@@ -6,7 +6,7 @@ import extraIcon from './extraIcon.vue';
 import { useNav } from '@/layout/hooks/useNav';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import { ref, toRaw, PropType, nextTick, computed, CSSProperties } from 'vue';
-
+import { t } from '@/plugins/i18n';
 import ArrowUp from '@iconify-icons/ep/arrow-up-bold';
 import EpArrowDown from '@iconify-icons/ep/arrow-down-bold';
 import ArrowLeft from '@iconify-icons/ep/arrow-left-bold';
@@ -142,10 +142,10 @@ function overflowSlice(text, item?: any) {
     return layout.value === 'mix' &&
       item?.pathList?.length === 2 &&
       isCollapse.value
-      ? newText
-      : text;
+      ? t(newText)
+      : t(text);
   }
-  return newText;
+  return t(newText);
 }
 
 function hasOneShowingChild(children: menuType[] = [], parent: menuType) {
@@ -229,7 +229,7 @@ function resolvePath(routePath) {
     <template #title>
       <div :style="getDivStyle">
         <span v-if="layout === 'horizontal'">
-          {{ onlyOneChild.meta.title }}
+          {{ t(onlyOneChild.meta.title) }}
         </span>
         <el-tooltip
           v-else
@@ -239,14 +239,14 @@ function resolvePath(routePath) {
           :disabled="!onlyOneChild.showTooltip"
         >
           <template #content>
-            {{ onlyOneChild.meta.title }}
+            {{ t(onlyOneChild.meta.title) }}
           </template>
           <span
             ref="menuTextRef"
             :style="getMenuTextStyle"
             @mouseover="hoverMenu(onlyOneChild)"
           >
-            {{ onlyOneChild.meta.title }}
+            {{ t(onlyOneChild.meta.title) }}
           </span>
         </el-tooltip>
         <extraIcon :extraIcon="onlyOneChild.meta.extraIcon" />
@@ -271,7 +271,7 @@ function resolvePath(routePath) {
         />
       </div>
       <span v-if="layout === 'horizontal'">
-        {{ props.item.meta.title }}
+        {{ t(props.item.meta.title) }}
       </span>
       <div
         :style="getSubMenuDivStyle(props.item)"
@@ -291,7 +291,7 @@ function resolvePath(routePath) {
           :disabled="!props.item.showTooltip"
         >
           <template #content>
-            {{ props.item.meta.title }}
+            {{ t(props.item.meta.title) }}
           </template>
           <span
             ref="menuTextRef"
