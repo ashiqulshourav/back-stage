@@ -80,7 +80,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
           assetFileNames: "static/[ext]/[name]-[hash].[ext]"
         }
       },
-      outDir: 'dist/kmgames-back-stage',
+      outDir: 'dist/dpgames-back-stage',
       // assetsDir: 'static',
     },
     define: {
