@@ -3,9 +3,9 @@ import { App } from "vue";
 import { type I18n, createI18n } from "vue-i18n";
 
 // element-plus国际化
-import enLocale from "element-plus/lib/locale/lang/en";
-import zhLocale from "element-plus/lib/locale/lang/zh-cn";
-import frLocale from "element-plus/lib/locale/lang/fr";
+import enLocale from "element-plus/dist/locale/en.mjs";
+import zhLocale from 'element-plus/dist/locale/zh-cn.mjs'
+import frLocale from "element-plus/dist/locale/fr.mjs";
 import { CRC32 as crc32 } from 'crc_32_ts';
 
 function siphonI18n(prefix = "zh-CN") {
