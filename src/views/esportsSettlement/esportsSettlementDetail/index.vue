@@ -22,6 +22,12 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
+          <template #betOptions="{ row }">
+            <el-radio-group v-model="row.betOptions">
+              <el-radio label="1" border>西安WE</el-radio>
+              <el-radio label="2" border>OMG</el-radio>
+            </el-radio-group>
+          </template>
         </pure-table>
       </template>
     </PureTableBar>

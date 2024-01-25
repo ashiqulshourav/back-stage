@@ -1,6 +1,5 @@
 import { handleTableWidth } from '@/utils/getTableWidth';
 import dayjs from 'dayjs';
-import { parseCountry } from '@/utils/formatMatch';
 import { OPENING_STATUS } from '@/utils/maps/sports_map';
 
 export const columns: TableColumnList = [
@@ -10,7 +9,6 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('序号'), 'auto'),
     minWidth: 100
   },
-
   {
     label: t('联赛名称'),
     prop: 'leagueNameCn',

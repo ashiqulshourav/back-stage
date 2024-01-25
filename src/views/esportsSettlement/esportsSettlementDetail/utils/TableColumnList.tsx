@@ -14,7 +14,7 @@ export const columns: TableColumnList = [
   },
   {
     label: t('盘口投注项'),
-    prop: 'beginTimeLong',
+    slot: 'betOptions',
     minWidth: 200
   },
   {

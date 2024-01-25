@@ -338,8 +338,8 @@ export function useSettle() {
   //- 自动结算转手动结算
   const changeSettleType = async matchId => {
     ElMessageBox.confirm(
-      `${t('一但此賽事開啟人工結算模式，無法關閉')}<br/>${t(
-        '後面只能以人工錄入事件，無法自動化推送數據商事件'
+      `${t('一但此赛事开启人工结算模式，无法关闭')}<br/>${t(
+        '后面只能以人工录入事件，无法自动化推送数据商事件'
       )}
       `,
       t('警告'),
