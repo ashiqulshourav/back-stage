@@ -55,7 +55,7 @@ getServerConfig(app).then(async config => {
   app.use(router);
   await router.isReady();
   injectResponsiveStorage(app, config);
-  app/* .use(MotionPlugin) */
+  app
     .use(Table)
     .use(store)
     .use(useI18n)
