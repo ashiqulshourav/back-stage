@@ -5,7 +5,7 @@ import ElementPlus from "element-plus";
 import { useI18n } from "@/plugins/i18n";
 import { getServerConfig } from "./config";
 import { createApp, Directive } from "vue";
-import { MotionPlugin } from "@vueuse/motion";
+// import { MotionPlugin } from "@vueuse/motion";
 // import { useEcharts } from "@/plugins/echarts";
 import { injectResponsiveStorage } from "@/utils/responsive";
 
@@ -55,7 +55,7 @@ getServerConfig(app).then(async config => {
   app.use(router);
   await router.isReady();
   injectResponsiveStorage(app, config);
-  app.use(MotionPlugin)
+  app/* .use(MotionPlugin) */
     .use(Table)
     .use(store)
     .use(useI18n)
