@@ -21,7 +21,7 @@
         {{ t('提交') }}
       </el-button>
       <el-button
-        v-if="index === dataList.length - 1 && isAllSettle"
+        v-if="isShowCancelBtn && isAllSettle"
         class="reset-margin"
         link
         type="danger"
@@ -65,6 +65,10 @@ const cancelMatchEvent = (...data) => emits('cancelMatchEvent', ...data);
 
 const advanceSettlement = () =>
   emits('advanceSettlement', props.row, props.parentRow);
+
+const isShowCancelBtn = computed(
+  () => props.index === props.dataList.map(item => item.canceled).lastIndexOf(0)
+);
 </script>
 
 <style scoped></style>
