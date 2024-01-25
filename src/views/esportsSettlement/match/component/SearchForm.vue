@@ -6,7 +6,7 @@
           v-model="form.leagueId"
           filterable
           clearable
-          class="w-[280px]"
+          class="!w-[280px]"
           :placeholder="t('请选择联赛')"
         >
           <el-option
@@ -77,7 +77,7 @@
           @change="changeDate"
         />
       </el-form-item>
-      
+
       <el-form-item>
         <el-button
           type="primary"

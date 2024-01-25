@@ -45,7 +45,7 @@
               :preview-src-list="dataList.map(v => v.leagueLogo)"
               :initial-index="index"
               fit="cover"
-              class="w-[80px] h-[30px]"
+              class="!w-[80px] h-[30px]"
             />
           </template> -->
           <template #operation="{ row }">

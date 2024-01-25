@@ -9,7 +9,7 @@
       <el-select
         v-model="form.leagueId"
         filterable
-        class="w-[280px]"
+        class="!w-[280px]"
         clearable
         :placeholder="t('请选择联赛')"
       >

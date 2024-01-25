@@ -107,10 +107,10 @@
           :loading="loading"
           @click="onSearch('reload')"
         >
-          {{ t("筛选") }}
+          {{ t('筛选') }}
         </el-button>
         <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
-          {{ t("重置") }}
+          {{ t('重置') }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -150,10 +150,10 @@
           @page-current-change="handleCurrentChange"
         >
           <template #isCountryTeam="row">
-            {{ row.isCountryTeam ?? "-" }}
+            {{ row.isCountryTeam ?? '-' }}
           </template>
           <template #stadiumName="row">
-            {{ row.stadiumName ?? "-" }}
+            {{ row.stadiumName ?? '-' }}
           </template>
           <template #teamLogo="{ row, index }">
             <el-image
@@ -163,7 +163,7 @@
               :preview-src-list="dataList.map(v => v.picture)"
               :initial-index="index"
               fit="cover"
-              class="w-[80px] h-[30px]"
+              class="!w-[80px] h-[30px]"
             />
           </template>
           <template #operation="{ row }">
@@ -175,7 +175,7 @@
               :icon="useRenderIcon(EditPen)"
               @click="openDialog(t('编辑赛事'), row)"
             >
-              {{ t("编辑") }}
+              {{ t('编辑') }}
             </el-button>
             <el-popconfirm
               :title="`是否确认删除角色名称为${row.name}的这条数据`"
@@ -189,7 +189,7 @@
                   :size="size"
                   :icon="useRenderIcon(Delete)"
                 >
-                  {{ t("删除") }}
+                  {{ t('删除') }}
                 </el-button>
               </template>
             </el-popconfirm>
@@ -201,19 +201,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { PureTableBar } from "@/components/RePureTableBar";
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
+import { ref } from 'vue';
+import { PureTableBar } from '@/components/RePureTableBar';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 
-import Delete from "@iconify-icons/ep/delete";
-import EditPen from "@iconify-icons/ep/edit-pen";
-import Search from "@iconify-icons/ep/search";
-import Refresh from "@iconify-icons/ep/refresh";
+import Delete from '@iconify-icons/ep/delete';
+import EditPen from '@iconify-icons/ep/edit-pen';
+import Search from '@iconify-icons/ep/search';
+import Refresh from '@iconify-icons/ep/refresh';
 // import AddFill from "@iconify-icons/ri/add-circle-line";
-import { useLeague } from "./utils/hook";
+import { useLeague } from './utils/hook';
 
-import { t } from "@/plugins/i18n";
-defineOptions({ name: "League" });
+import { t } from '@/plugins/i18n';
+defineOptions({ name: 'League' });
 
 const formRef = ref();
 const {

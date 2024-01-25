@@ -230,7 +230,7 @@ export default defineComponent({
                     placement="top"
                   >
                     <ExpandIcon
-                      class={['w-[16px]', iconClass.value]}
+                      class={['!w-[16px]', iconClass.value]}
                       style={{
                         transform: isExpandAll.value ? 'none' : 'rotate(-90deg)'
                       }}
@@ -243,7 +243,7 @@ export default defineComponent({
               <el-tooltip effect="dark" content="刷新" placement="top">
                 <RefreshIcon
                   class={[
-                    'w-[16px]',
+                    '!w-[16px]',
                     iconClass.value,
                     loading.value ? 'animate-spin' : ''
                   ]}

@@ -25,7 +25,7 @@
     <!-- <el-form-item :label="`${t('赛事等级')}:`" prop="level">
       <el-select
         v-model="newFormInline.level"
-        class="w-[280px]"
+        class="!w-[280px]"
         :placeholder="t('赛事等级')"
       >
         <el-option v-for="item in 8" :key="item" :label="item" :value="item" />
@@ -36,7 +36,7 @@
       <el-select
         v-model="newFormInline.countryId"
         filterable
-        class="w-[280px]"
+        class="!w-[280px]"
         :placeholder="t('请选择国家')"
       >
         <el-option

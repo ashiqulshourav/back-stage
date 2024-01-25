@@ -51,7 +51,7 @@
         v-model="form.countryId"
         filterable
         clearable
-        class="w-[280px]"
+        class="!w-[280px]"
         :placeholder="t('请选择国家')"
       >
         <el-option
