@@ -163,8 +163,8 @@
     "name": "menuTree",
     "meta": {
       "title": "菜单地图",
-      "icon": "menuTree",
-      "rank": 8
+      "icon": "listUnordered",
+      "rank": 9
     }
   }
 ]

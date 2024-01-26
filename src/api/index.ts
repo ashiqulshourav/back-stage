@@ -6,6 +6,7 @@ import { virtualData } from "./virtual";
 import { esportData } from "./esports";
 import { historyData } from "./history";
 import { operationLogData } from "./operationLog";
+import { esportsSettlement } from "./esportsSettlement";
 
 export const API = {
   ...user,
@@ -15,5 +16,6 @@ export const API = {
   ...virtualData,
   ...esportData,
   ...historyData,
-  ...operationLogData
-};
+  ...operationLogData,
+  ...esportsSettlement
+};3

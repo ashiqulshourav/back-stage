@@ -18,9 +18,7 @@
       <div class="login-box">
         <div class="login-form">
           <avatar class="avatar" />
-          <Motion>
-            <h2 class="outline-none">{{ title }}</h2>
-          </Motion>
+          <h2 class="outline-none">{{ title }}</h2>
 
           <el-form
             ref="ruleFormRef"
@@ -28,40 +26,34 @@
             :rules="loginRules"
             size="large"
           >
-            <Motion :delay="100">
-              <el-form-item prop="username">
-                <el-input
-                  clearable
-                  v-model="ruleForm.username"
-                  :placeholder="t('输入您的用户名')"
-                  :prefix-icon="useRenderIcon(User)"
-                />
-              </el-form-item>
-            </Motion>
+            <el-form-item prop="username">
+              <el-input
+                clearable
+                v-model="ruleForm.username"
+                :placeholder="t('输入您的用户名')"
+                :prefix-icon="useRenderIcon(User)"
+              />
+            </el-form-item>
 
-            <Motion :delay="150">
-              <el-form-item prop="password">
-                <el-input
-                  clearable
-                  show-password
-                  v-model="ruleForm.password"
-                  :placeholder="t('输入密码')"
-                  :prefix-icon="useRenderIcon(Lock)"
-                />
-              </el-form-item>
-            </Motion>
+            <el-form-item prop="password">
+              <el-input
+                clearable
+                show-password
+                v-model="ruleForm.password"
+                :placeholder="t('输入密码')"
+                :prefix-icon="useRenderIcon(Lock)"
+              />
+            </el-form-item>
 
-            <Motion :delay="250">
-              <el-button
-                class="w-full mt-4"
-                size="default"
-                type="primary"
-                :loading="loading"
-                @click="onLogin(ruleFormRef)"
-              >
-                {{ t('登录') }}
-              </el-button>
-            </Motion>
+            <el-button
+              class="w-full mt-4"
+              size="default"
+              type="primary"
+              :loading="loading"
+              @click="onLogin(ruleFormRef)"
+            >
+              {{ t('登录') }}
+            </el-button>
           </el-form>
         </div>
       </div>
@@ -70,7 +62,6 @@
 </template>
 
 <script setup lang="ts">
-import Motion from './utils/motion';
 import { message } from '@/utils/message';
 import { loginRules } from './utils/rule';
 import { useNav } from '@/layout/hooks/useNav';

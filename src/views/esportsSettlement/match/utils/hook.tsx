@@ -1,15 +1,11 @@
 import { message } from '@/utils/message';
-import editForm from '../form.vue';
 import type { PaginationProps } from '@pureadmin/table';
 import { ElMessageBox } from 'element-plus';
-import { addDialog } from '@/components/ReDialog';
 import { SearchFormType } from './types';
 import { usePublicHooks } from '@/hooks';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
-import dayJs from 'dayjs';
 
 export function usePreSale() {
-  const formRef = ref();
   const dataList = reactive<SaleDataAPI.PreSaleList[]>([]);
   const loading = ref(true);
   const switchLoadMap = ref({});
@@ -81,58 +77,10 @@ export function usePreSale() {
     selectLockcList.push(...slectList);
   }
 
-  const openDialog = (title: string, row?: SaleDataAPI.PreSaleList) => {
-    addDialog({
-      title,
-      props: {
-        formInline: {
-          matchId: row?.matchId ?? '',
-          sportId: row?.sportId ?? '',
-          matchName: row?.matchName ?? '',
-          beginTime: row?.beginTime ?? '',
-          level: row?.level ?? '',
-          countryId: row?.countryId ?? ''
-        }
-      },
-      width: '40%',
-      draggable: true,
-      fullscreenIcon: true,
-      closeOnClickModal: false,
-      contentRenderer: () => h(editForm, { ref: formRef }),
-      beforeSure: (done, { options }) => {
-        const FormRef = formRef.value.getRef();
-        const curData = options.props.formInline;
-        curData.beginTime = dayJs(curData.beginTime).format(
-          'YYYY-MM-DD HH:mm:ss'
-        );
-        function chores() {
-          done();
-          onSearch();
-        }
-        FormRef.validate(valid => {
-          if (valid) {
-            if (row) {
-              updateSaleList(curData, () => chores());
-            } else {
-              chores();
-            }
-          }
-        });
-      }
-    });
-  };
-
-  const updateSaleList = async (curData, cb) => {
-    const res = await API.updateMatch(curData);
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    if (res.code) return;
-    cb();
-  };
-
   const onSearch = async (type?: 'reload') => {
     if (type === 'reload') pagination.currentPage = 1;
     loading.value = true;
-    const res: SaleDataAPI.PreSaleListRes = await API.getPreSaleList({
+    const res: SaleDataAPI.PreSaleListRes = await API.getESportMatchList({
       ...removeEmptyStringKeys(searchForm),
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage,
@@ -172,7 +120,6 @@ export function usePreSale() {
     switchLoadMap,
     handleCurrentChange,
     handleSelectionChange,
-    openDialog,
     changeSwitch,
     allSaleSatatus,
     searchForm,

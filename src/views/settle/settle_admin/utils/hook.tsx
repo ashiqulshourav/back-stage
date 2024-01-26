@@ -213,13 +213,8 @@ export function useSettle() {
     }
   }; */
 
-  /* 新增事件  */
-  const handleChildrenData = async (
-    row: SattleDataAPI.MatchEventsList,
-    parentIndex: number,
-    type: 'save' | 'upload',
-    parentRow
-  ) => {
+  //- 是否输入了完整的内容
+  const isTheFormComplete = row => {
     const requireDdata = {
       t1: row.t1,
       t2: row.t2,
@@ -229,17 +224,24 @@ export function useSettle() {
       matchPeriodId: row.matchPeriodId,
       homeAway: row.homeAway
     };
+    return !Object.keys(requireDdata).every(key => {
+      return key === 't1' || key === 't2'
+        ? parseInt(requireDdata[key]) >= 0
+        : requireDdata[key];
+    });
+  };
+
+  //- 新增事件
+  const handleChildrenData = async (
+    row: SattleDataAPI.MatchEventsList,
+    parentIndex: number,
+    type: 'save' | 'upload',
+    parentRow
+  ) => {
     // delete row.isBackEndReturnData;
-    if (
-      !Object.keys(requireDdata).every(key => {
-        if (key === 't1' || key === 't2') {
-          return parseInt(requireDdata[key]) >= 0;
-        } else {
-          return requireDdata[key];
-        }
-      })
-    )
+    if (isTheFormComplete(row)) {
       return message(t('请输入完整的内容'), { type: 'error' });
+    }
 
     if (type === 'save') {
       row.isSave = true;
