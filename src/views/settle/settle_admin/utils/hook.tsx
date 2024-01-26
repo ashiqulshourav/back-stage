@@ -9,7 +9,7 @@ import {
   dateSetSecond,
   getSecondTime
 } from '@/utils/formatDate';
-import { ElMessageBox } from 'element-plus';
+import { ElMessageBox, dayjs } from 'element-plus';
 import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
 
 export function useSettle() {
@@ -258,10 +258,11 @@ export function useSettle() {
           ? 'yellow_card'
           : 'red_card'
         : row.eventCode;
+
     const params: SattleDataAPI.MatchEventParams = {
       canceled: 0,
       eventCode,
-      eventTime: row.eventTime,
+      eventTime: new Date(row.eventTime).getTime(),
       homeAway: row.homeAway,
       matchId: dataList[parentIndex].matchId,
       matchPeriodId: +row.matchPeriodId,
