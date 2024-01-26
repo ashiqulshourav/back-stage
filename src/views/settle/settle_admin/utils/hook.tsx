@@ -117,7 +117,7 @@ export function useSettle() {
   };
 
   //- 人工结算新增一行
-  const addChildRow = (tableList, type, beginTime: string) => {
+  const addChildRow = (tableList, type) => {
     const isSettle = tableList.some(item => item.settleTimes === 0);
     if (
       (tableList.length !== 0 &&
@@ -229,7 +229,7 @@ export function useSettle() {
       matchPeriodId: row.matchPeriodId,
       homeAway: row.homeAway
     };
-    delete row.isBackEndReturnData;
+    // delete row.isBackEndReturnData;
     if (
       !Object.keys(requireDdata).every(key => {
         if (key === 't1' || key === 't2') {

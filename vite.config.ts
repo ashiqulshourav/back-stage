@@ -60,7 +60,6 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
       }
     },
     plugins: getPluginsList(command, VITE_CDN, VITE_COMPRESSION),
-    // https://cn.vitejs.dev/config/dep-optimization-options.html#dep-optimization-options
     optimizeDeps: {
       include,
       exclude

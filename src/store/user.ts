@@ -4,8 +4,6 @@ import { userType } from "./types";
 import { routerArrays } from "@/layout/types";
 import { router, resetRouter } from "@/router";
 import { storageSession } from "@pureadmin/utils";
-// import { getLogin, refreshTokenApi } from "@/api/user";
-// import { UserResult, RefreshTokenResult } from "@/api/user";
 import { useMultiTagsStoreHook } from "@/store/multiTags";
 import { type DataInfo, removeStorage, sessionKey, TokenKey } from "@/utils/auth";
 import { message } from "@/utils/message";

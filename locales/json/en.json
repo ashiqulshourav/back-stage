@@ -274,8 +274,6 @@
   "k-546e521b": "Confirm Enable",
   "k7842a282": "Settlement Type",
   "k1cbe2507": "Confirm",
-  "k5f32cebb": "Once this event is set to manual settlement mode, it cannot be closed",
-  "k163a087f": "Only manual entry of events can be performed later, and automatic data pushing for events is not possible",
   "k1a85c859": "Manual Settlement in Progress",
   "k6bfb3cc8": "Please enter a number between 1 and 200",
   "k-13ef3e18": "Event Source",
@@ -298,9 +296,6 @@
   "k-659d8fb1": "Settlement Details",
   "k-5ece26fe": "All Handicaps",
   "k3ac311bd": "Game 1",
-  "k4eb6034b": "Round 1",
-  "k7ea0ef93": "Round 2",
-  "k33be4cc1": "Round 3",
   "k-5ce730a0": "Handicap Details",
   "k-5563a384": "Game",
   "k4c7ba386": "Event Status",
@@ -320,5 +315,10 @@
   "k5e7ca240": "Lock Handicap Control",
   "k539f27e6": "Settlement Handicap",
   "k-75ee9311": "Event Handicap not available!",
-  "k42c36841": "Championship Play"
+  "k42c36841": "Championship Play",
+  "kad5fd65": "第二局",
+  "k47cb5e37": "第三局",
+  "k-455ddfc1": "暂不支持冠军玩法!",
+  "k59d85452": "一但此赛事开启人工结算模式，无法关闭",
+  "k63b5e055": "后面只能以人工录入事件，无法自动化推送数据商事件"
 }

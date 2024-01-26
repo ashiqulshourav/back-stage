@@ -189,13 +189,7 @@
                     <IconifyIconOffline
                       width="25px"
                       icon="icon_circle_fill"
-                      @click="
-                        addChildRow(
-                          item.tableList,
-                          item.type,
-                          parentRow.beginTime
-                        )
-                      "
+                      @click="addChildRow(item.tableList, item.type)"
                     />
                   </div>
                 </div>
@@ -209,7 +203,6 @@
 </template>
 
 <script setup lang="ts">
-3;
 import { t } from '@/plugins/i18n';
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';

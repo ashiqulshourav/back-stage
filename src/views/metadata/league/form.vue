@@ -5,7 +5,9 @@
     :rules="formRules"
     label-width="150px"
   >
+    <!-- todo 自定义表单添加 -->
     <!-- <el-form-item :label="t('联赛杯Logo')">
+      <CustomInput />
       <el-upload
         action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
         class="avatar-uploader"
@@ -90,7 +92,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-3;
 import { formRules } from './utils/rule';
 import { FormProps } from './utils/types';
 // import type { UploadProps } from 'element-plus';
@@ -99,6 +100,7 @@ import { t } from '@/plugins/i18n';
 // import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { useMatchStore } from '@/store/match';
 import { inputRestrictions } from '@/utils/formatNumber';
+// import CustomInput from '@/components/Form/CustomInput.vue';
 
 const matchStore = useMatchStore();
 const props = withDefaults(defineProps<FormProps>(), {

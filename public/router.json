@@ -12,7 +12,7 @@
         "name": "League",
         "meta": {
           "title": "联赛管理",
-          "showParent": true
+          "showParent": false
         }
       },
       {
@@ -155,6 +155,15 @@
     "meta": {
       "title": "操作日志",
       "icon": "operationLog",
+      "rank": 8
+    }
+  },
+  {
+    "path": "/menuTree",
+    "name": "menuTree",
+    "meta": {
+      "title": "菜单地图",
+      "icon": "menuTree",
       "rank": 8
     }
   }
