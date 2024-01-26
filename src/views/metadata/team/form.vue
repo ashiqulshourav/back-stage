@@ -40,6 +40,7 @@
       <el-select
         v-model="newFormInline.isCountryTeam"
         :placeholder="t('请选择')"
+        class="!w-[150px]"
       >
         <el-option :label="t('是')" :value="0" />
         <el-option :label="t('否')" :value="1" />
@@ -58,7 +59,11 @@
     </el-form-item>
 
     <el-form-item label="赛种" prop="sportId">
-      <el-select v-model="newFormInline.sportId" :placeholder="t('赛种')">
+      <el-select
+        v-model="newFormInline.sportId"
+        :placeholder="t('赛种')"
+        class="!w-[150px]"
+      >
         <el-option
           :label="item.label"
           :value="item.value"

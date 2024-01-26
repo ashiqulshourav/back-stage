@@ -33,6 +33,7 @@
     </el-form-item>
     <el-form-item :label="`${t('是否国家队')}:`" prop="countryId">
       <el-select
+        class="!w-[150px]"
         v-model="form.isCountryTeam"
         :placeholder="t('请选择')"
         clearable

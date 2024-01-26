@@ -27,7 +27,11 @@
       </el-form-item>
 
       <el-form-item :label="`${t('操作类型')}:`" prop="operateType">
-        <el-select v-model="form.operateType" :placeholder="t('操作类型')">
+        <el-select
+          v-model="form.operateType"
+          :placeholder="t('操作类型')"
+          class="!w-[150px]"
+        >
           <el-option
             :label="item"
             :value="item"

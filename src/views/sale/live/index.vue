@@ -24,7 +24,11 @@
       </el-form-item>
 
       <el-form-item :label="`${t('开售状态')}:`" prop="isSale">
-        <el-select v-model="form.isSale" :placeholder="t('请选择')">
+        <el-select
+          v-model="form.isSale"
+          :placeholder="t('请选择')"
+          class="!w-[150px]"
+        >
           <el-option :label="t('关闭')" :value="0" />
           <el-option :label="t('开售')" :value="1" />
         </el-select>
@@ -47,10 +51,10 @@
           :loading="loading"
           @click="onSearch('reload')"
         >
-          {{ t("筛选") }}
+          {{ t('筛选') }}
         </el-button>
         <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
-          {{ t("重置") }}
+          {{ t('重置') }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -104,14 +108,14 @@
 </template>
 
 <script setup lang="ts">
-import { PureTableBar } from "@/components/RePureTableBar";
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
-import Search from "@iconify-icons/ep/search";
-import Refresh from "@iconify-icons/ep/refresh";
-import { useLeague } from "./utils/hook";
+import { PureTableBar } from '@/components/RePureTableBar';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import Search from '@iconify-icons/ep/search';
+import Refresh from '@iconify-icons/ep/refresh';
+import { useLeague } from './utils/hook';
 
-import { t } from "@/plugins/i18n";
-defineOptions({ name: "League" });
+import { t } from '@/plugins/i18n';
+defineOptions({ name: 'League' });
 
 const formRef = ref();
 const {

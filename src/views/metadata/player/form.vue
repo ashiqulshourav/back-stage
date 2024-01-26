@@ -29,7 +29,11 @@
     </el-form-item>
 
     <el-form-item :label="`${t('是否国家队')}:`" prop="leagueId">
-      <el-select v-model="newFormInline.isCountryTeam" placeholder="Select">
+      <el-select
+        v-model="newFormInline.isCountryTeam"
+        placeholder="Select"
+        class="!w-[150px]"
+      >
         <el-option :label="t('是')" :value="0" />
         <el-option :label="t('否')" :value="1" />
       </el-select>

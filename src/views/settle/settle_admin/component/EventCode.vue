@@ -1,7 +1,7 @@
 <template>
   <el-select
     :disabled="!row.isEdit"
-    :class="[row.canceled && 'canceled']"
+    :class="[row.canceled && 'canceled', '!w-[150px]']"
     v-model="row.redOrYellow"
     :placeholder="t('请选择')"
     v-if="item.type === 'yellow_red_card'"

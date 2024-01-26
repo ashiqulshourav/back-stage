@@ -73,8 +73,13 @@
         class="!w-[200px]"
       />
     </el-form-item>
-    <el-form-item :label="`${t('赛种')}:`" prop="sportId" class="!w-[150px]">
-      <el-select v-model="form.sportId" :placeholder="t('赛种')" clearable>
+    <el-form-item :label="`${t('赛种')}:`" prop="sportId">
+      <el-select
+        v-model="form.sportId"
+        :placeholder="t('赛种')"
+        clearable
+        class="!w-[150px]"
+      >
         <el-option
           :label="item.label"
           :value="item.value"

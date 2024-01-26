@@ -41,6 +41,7 @@
 
       <el-form-item :label="`${t('盘口状态')}:`" prop="handicapStatus">
         <el-select
+          class="!w-[150px]"
           v-model="form.handicapStatus"
           clearable
           :placeholder="t('请选择')"
@@ -54,6 +55,7 @@
 
       <el-form-item :label="`${t('赛事状态')}:`" prop="handicapStatus">
         <el-select
+          class="!w-[150px]"
           v-model="form.handicapStatus"
           clearable
           :placeholder="t('请选择')"

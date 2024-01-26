@@ -73,6 +73,7 @@
 
       <el-form-item :label="`${t('开售状态')}:`" prop="isSale">
         <el-select
+          class="!w-[150px]"
           v-model="form.isSale"
           clearable
           :placeholder="t('请选择')"
@@ -85,6 +86,7 @@
 
       <el-form-item :label="`${t('盘口状态')}:`" prop="handicapStatus">
         <el-select
+          class="!w-[150px]"
           v-model="form.handicapStatus"
           clearable
           :placeholder="t('请选择')"

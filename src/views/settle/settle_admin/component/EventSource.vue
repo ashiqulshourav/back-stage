@@ -1,6 +1,6 @@
 <template>
   <el-select
-    :class="[row.canceled && 'canceled']"
+    :class="[row.canceled && 'canceled', '!w-[150px]']"
     :disabled="!row.isEdit"
     v-model="row.homeAway"
     :placeholder="t('请选择')"

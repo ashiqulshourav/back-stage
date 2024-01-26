@@ -33,8 +33,13 @@
       />
     </el-form-item>
 
-    <el-form-item :label="`${t('比赛状态')}:`" prop="status" class="w-[100px]">
-      <el-select v-model="form.status" :placeholder="t('请选择')" clearable>
+    <el-form-item :label="`${t('比赛状态')}:`" prop="status">
+      <el-select
+        v-model="form.status"
+        :placeholder="t('请选择')"
+        clearable
+        class="!w-[150px]"
+      >
         <el-option :label="t('滚球')" value="nover" />
         <el-option :label="t('比赛结束')" value="over" />
         <el-option :label="t('未开始')" value="nobegin" />

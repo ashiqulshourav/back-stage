@@ -33,7 +33,11 @@
       </el-select>
     </el-form-item>
 
-    <el-form-item :label="`${t('是否国家队')}:`" prop="isCountryTeam">
+    <el-form-item
+      :label="`${t('是否国家队')}:`"
+      prop="isCountryTeam"
+      class="!w-[150]"
+    >
       <el-select
         v-model="form.isCountryTeam"
         :placeholder="t('请选择')"
@@ -67,7 +71,12 @@
     </el-form-item>
 
     <el-form-item :label="`${t('赛种')}:`" prop="sportId">
-      <el-select v-model="form.sportId" :placeholder="t('赛种')" clearable>
+      <el-select
+        v-model="form.sportId"
+        :placeholder="t('赛种')"
+        clearable
+        class="!w-[150px]"
+      >
         <el-option
           :label="item.label"
           :value="item.value"
