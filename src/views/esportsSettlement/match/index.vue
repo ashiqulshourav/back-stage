@@ -49,8 +49,10 @@
               >{{ row.saleHandicaps }}/{{ row.allHandicaps }}</span
             >
           </template>
-          <template #isNeutral="{ row }">
-            {{ row.isNeutral === 0 ? t('中立') : t('非中立') }}
+          <template #matchTeam="{ row }: EsportMatchRowType">
+            <span>{{ row.homeTeamNameCn }}</span>
+            <span class="font-bold mr-2 ml-2">VS</span>
+            <span>{{ row.awayTeamNameCn }}</span>
           </template>
           <template #operation="{ row }">
             <el-button
@@ -58,7 +60,7 @@
               type="primary"
               :size="size"
               @click="
-                $router.push('/esportsSettlement/esportsSettlementDetail')
+                $router.push(`/esportsSettlement/esportsSettlementDetail/123`)
               "
             >
               {{ t('结算详情') }}
@@ -72,13 +74,14 @@
 
 <script setup lang="tsx">
 import { PureTableBar } from '@/components/RePureTableBar';
-import { usePreSale } from './utils/hook';
+import { useEsportSettlement } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import { columns } from './component/TableColumnList';
 import SearchForm from './component/SearchForm.vue';
 import OpeningPreview from './component/OpeningPreview.vue';
 import { addDialog } from '@/components/ReDialog';
 import { message } from '@/utils/message';
+import { EsportMatchRowType } from './utils/types';
 
 defineOptions({ name: 'EsportMatchList' });
 const openInfoDialog = (matchId: number, row: SaleDataAPI.PreSaleList) => {
@@ -111,7 +114,7 @@ const {
   switchStyle,
   matchCondition,
   changeMatchCondition
-} = usePreSale();
+} = useEsportSettlement();
 </script>
 
 <style lang="scss">

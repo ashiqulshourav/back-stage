@@ -24,5 +24,6 @@ export const routerTranslate = () => {
     t('电竞结算'),
     t('赛事列表'),
     t('结算详情'),
+    t('菜单地图'),
   ]
 }

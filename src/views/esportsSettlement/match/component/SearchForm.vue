@@ -10,7 +10,7 @@
           :placeholder="t('请选择联赛')"
         >
           <el-option
-            v-for="item in matchStore.leagueList"
+            v-for="item in matchStore.esportLeagueList"
             :key="item.leagueId"
             :label="item.leagueNameCn"
             :value="item.leagueId"
@@ -69,10 +69,10 @@
 
       <el-form-item :label="`${t('日期选择')}:`" prop="startTime">
         <el-date-picker
+          :placeholder="t('请选择日期')"
           class="ml-4 !w-[260px]"
           v-model="time"
           type="daterange"
-          :placeholder="t('请选择')"
           value-format="x"
           format="YYYY-MM-DD"
           :disabled-date="disableDate"
@@ -124,7 +124,8 @@ const props = withDefaults(
 );
 
 onMounted(() => {
-  matchStore.set_lagueList();
+  const matchStore = useMatchStore();
+  matchStore.set_lagueList(1);
 });
 
 const changeDate = t => {

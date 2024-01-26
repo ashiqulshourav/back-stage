@@ -308,7 +308,7 @@ const {
   }
 }
 
-.el-message-box:not(.login_out) {
+.el-message-box:not(.login_out,.no_reverse) {
   .el-message-box__btns {
     display: flex;
     flex-direction: row-reverse;

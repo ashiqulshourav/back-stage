@@ -13,6 +13,35 @@ export const SPORT_ID_MAP = [
   { label: t('拳击/格斗'), value: 10 },
 ]
 
+
+
+export const ESPORT_ID_MAP = [
+  { val: 276, label: 'DOTA2', },
+  { val: 277, label: 'CS2', },
+  { val: 278, label: '英雄联盟', },
+  { val: 279, label: '王者荣耀', },
+  { val: 280, label: 'LOL:激斗峡谷', },
+  { val: 281, label: '永劫无间', },
+  { val: 282, label: '无尽对决', },
+  { val: 283, label: '篮球', },
+  { val: 284, label: '足球', },
+  { val: 285, label: '传说对决', },
+  { val: 286, label: '无畏契约', },
+  { val: 287, label: 'MMA', },
+  { val: 288, label: '绝地求生', },
+  { val: 289, label: '穿越火线', },
+  { val: 290, label: '守望先锋', },
+  { val: 291, label: '星际争霸II', },
+  { val: 292, label: '火箭联盟', },
+  { val: 293, label: '彩虹六号', },
+  { val: 294, label: '炉石传说', },
+  { val: 295, label: 'FIFA', },
+  { val: 296, label: '使命召唤', },
+  { val: 297, label: '魔兽争霸3', },
+]
+
+
+
 export const MATCH_EVENT_CODE = {
   goal: t('足球进球'),
   yellow_red_card: t('红牌/黄牌'),
@@ -24,6 +53,11 @@ export const MATCH_STATUS = {
   nover: t('滚球'),
   over: t('比赛结束'),
   nobegin: t('未开始'),
+}
+export const ESPORT_MATCH_STATUS = {
+  nover: t('比赛中'),
+  over: t('比赛结束'),
+  nobegin: t('未开赛'),
 }
 
 // export const PANDA_MATCH_STATUS = {
@@ -152,3 +186,10 @@ export const GET_PLAYNAME_BY_KC = {
   'FTS_OU': t('总局数'),
   'Outright': t('冠军玩法'),
 };
+
+
+export enum LeagueClassifyType {
+  SPORT_CLASSIFY = 0,
+  ESPORT_CLASSIFY = 1,
+  VIRTUAL_SPORT_CLASSIFY = 2,
+}

@@ -45,6 +45,7 @@ export type userType = {
 
 
 export type MatchType = {
-  leagueList: MetadataAPI.LeagueList[];
+  sportLeagueList: MetadataAPI.LeagueList[];
+  esportLeagueList: MetadataAPI.LeagueList[];
   countryList: MetadataAPI.getCountryListType[];
 };

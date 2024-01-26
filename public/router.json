@@ -79,7 +79,7 @@
         }
       },
       {
-        "path": "/esportsSettlement/esportsSettlementDetail",
+        "path": "/esportsSettlement/esportsSettlementDetail/:matchId",
         "name": "esportsSettlementDetail",
         "meta": {
           "showLink": false,

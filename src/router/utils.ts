@@ -297,7 +297,9 @@ function addAsyncRoutes(arrRoutes: Array<RouteRecordRaw>) {
   if (!arrRoutes || !arrRoutes.length) return;
   const modulesRoutesKeys = Object.keys(modulesRoutes);
 
+
   arrRoutes.forEach((v: RouteRecordRaw) => {
+    const path = v.path.replace(/\/:[^/]+/, '');
     // 将backstage属性加入meta，标识此路由为后端返回路由
     v.meta.backstage = true;
     // 父级的redirect属性取值：如果子级存在且父级的redirect属性不存在，默认取第一个子级的path；如果子级存在且父级的redirect属性存在，取存在的redirect属性，会覆盖默认值
@@ -313,7 +315,7 @@ function addAsyncRoutes(arrRoutes: Array<RouteRecordRaw>) {
       const index = v?.component
         ? modulesRoutesKeys.findIndex(ev => ev.includes(v.component as any))
         // -index.vue文件作为路由文件
-        : modulesRoutesKeys.findIndex(ev => ev.includes(`/src/views${v.path}/index.vue`));
+        : modulesRoutesKeys.findIndex(ev => ev.includes(`/src/views${path}/index.vue`));
       v.component = modulesRoutes[modulesRoutesKeys[index]];
     }
     if (v?.children && v.children.length) {

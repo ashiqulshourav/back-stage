@@ -5,8 +5,8 @@ import { SearchFormType } from './types';
 import { usePublicHooks } from '@/hooks';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 
-export function usePreSale() {
-  const dataList = reactive<SaleDataAPI.PreSaleList[]>([]);
+export function useEsportSettlement() {
+  const dataList = reactive<EsportsSettlementAPI.ESportMatchList[]>([]);
   const loading = ref(true);
   const switchLoadMap = ref({});
   const allSaleSatatus = ref(0);
@@ -80,11 +80,10 @@ export function usePreSale() {
   const onSearch = async (type?: 'reload') => {
     if (type === 'reload') pagination.currentPage = 1;
     loading.value = true;
-    const res: SaleDataAPI.PreSaleListRes = await API.getESportMatchList({
+    const res = await API.getESportMatchList({
       ...removeEmptyStringKeys(searchForm),
       pageSize: pagination.pageSize,
-      pageNum: pagination.currentPage,
-      matchCondition: matchCondition.value
+      pageNum: pagination.currentPage
     });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });

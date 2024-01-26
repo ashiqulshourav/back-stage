@@ -1,6 +1,10 @@
 import { handleTableWidth } from '@/utils/getTableWidth';
 import dayjs from 'dayjs';
-import { OPENING_STATUS } from '@/utils/maps/sports_map';
+import {
+  ESPORT_ID_MAP,
+  ESPORT_MATCH_STATUS,
+  OPENING_STATUS
+} from '@/utils/maps/sports_map';
 
 export const columns: TableColumnList = [
   {
@@ -24,14 +28,16 @@ export const columns: TableColumnList = [
   },
   {
     label: t('游戏ID'),
-    prop: 'level',
+    prop: 'sportId',
     minWidth: 150,
     headerRenderer: d => handleTableWidth(d, t('游戏ID'), 'auto')
   },
   {
     label: t('游戏名称'),
-    prop: 'matchId',
-    headerRenderer: d => handleTableWidth(d, t('游戏名称'), 'auto')
+    prop: 'matchName',
+    minWidth: 200,
+    formatter: ({ sportId }) =>
+      ESPORT_ID_MAP.find(_ => _.val === sportId)?.label ?? '-'
   },
   {
     label: t('赛事ID'),
@@ -41,8 +47,8 @@ export const columns: TableColumnList = [
   },
   {
     label: t('比赛队伍'),
-    prop: 'homeTeamNameCn',
-    minWidth: 200,
+    slot: 'matchTeam',
+    minWidth: 260,
     headerRenderer: d => handleTableWidth(d, t('比赛队伍'), 'auto'),
     align: 'left'
   },
@@ -65,7 +71,7 @@ export const columns: TableColumnList = [
   {
     label: t('赛事状态'),
     headerRenderer: d => handleTableWidth(d, t('赛事状态'), 'auto'),
-    formatter: ({ isSale }) => (isSale ? t('已开售') : t('未开售'))
+    formatter: ({ status }) => ESPORT_MATCH_STATUS[status] ?? '-'
   },
   {
     label: t('锁盘控制'),

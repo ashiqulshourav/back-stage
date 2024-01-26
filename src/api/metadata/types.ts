@@ -9,6 +9,7 @@ declare namespace MetadataAPI {
     leagueNameCn?: string;
     leagueNameEn?: string;
     level?: number;
+    category?: number;
     sportId?: number;
   }
   type updateLeagueParamsType = {

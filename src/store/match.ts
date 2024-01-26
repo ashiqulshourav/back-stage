@@ -1,19 +1,24 @@
 import { defineStore } from "pinia";
 import { MatchType } from "./types";
+import { LeagueClassifyType } from "@/utils/maps/sports_map";
 
 export const useMatchStore = defineStore('MATCHSTATE', {
   state: (): MatchType => ({
-    leagueList: [],
+    sportLeagueList: [],
+    esportLeagueList: [],
     countryList: [],
   }),
   actions: {
-    async set_lagueList() {
-      if (this.leagueList.length) return;
+    //- 设置联赛供搜索使用 体育 + 电子竞技
+    async set_lagueList(category: LeagueClassifyType) {
+      const listType = category === LeagueClassifyType.SPORT_CLASSIFY ? 'sportLeagueList' : 'esportLeagueList';
+      if (this[listType].length) return;
       const res: MetadataAPI.LeagueListRes = await API.getLeagueList({
         pageSize: 9999,
-        pageNum: 1
+        pageNum: 1,
+        category
       });
-      this.leagueList = res.data.list;
+      this[listType] = res.data.list;
     },
     async set_countryList() {
       const res: MetadataAPI.getCountryListResType = await API.getCountryList({

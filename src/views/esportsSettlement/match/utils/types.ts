@@ -20,6 +20,11 @@ export type SearchFormType = {
   handicapStatus: number | string;
 }
 
+export type EsportMatchRowType = {
+  index?: number;
+  row: EsportsSettlementAPI.ESportMatchList;
+}
+
 export type {
   FormProps,
   TeamFormProps

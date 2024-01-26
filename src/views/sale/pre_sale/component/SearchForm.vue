@@ -19,7 +19,7 @@
           :placeholder="t('请选择联赛')"
         >
           <el-option
-            v-for="item in matchStore.leagueList"
+            v-for="item in matchStore.sportLeagueList"
             :key="item.leagueId"
             :label="item.leagueNameCn"
             :value="item.leagueId"
@@ -147,7 +147,7 @@ const props = withDefaults(
 ]; */
 
 onMounted(() => {
-  matchStore.set_lagueList();
+  matchStore.set_lagueList(0);
 });
 
 const changeDate = t => {
