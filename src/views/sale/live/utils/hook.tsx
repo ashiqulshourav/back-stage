@@ -109,6 +109,7 @@ export function useLeague() {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
+        center: true,
         dangerouslyUseHTMLString: true,
         draggable: true
       }

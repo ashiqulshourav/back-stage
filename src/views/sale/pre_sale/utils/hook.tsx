@@ -48,6 +48,7 @@ export function usePreSale() {
         confirmButtonText: t('确定'),
         cancelButtonText: t('取消'),
         type: 'warning',
+        center: true,
         dangerouslyUseHTMLString: true,
         draggable: true
       }
@@ -83,7 +84,7 @@ export function usePreSale() {
   const locakMatch = () => {
     ElMessageBox.confirm(`${t('确定要锁定选中比赛么?')} `, {
       type: 'warning',
-      customClass: 'no_reverse'
+      center: true
     }).then(async () => {
       const res: SaleDataAPI.saleBetItemsResType =
         await API.saleBetItemsByMatchIds({
@@ -98,7 +99,7 @@ export function usePreSale() {
   const unLocakMatch = () => {
     ElMessageBox.confirm(`${t('确定要解锁选中的比赛么?')} `, {
       type: 'warning',
-      customClass: 'no_reverse'
+      center: true
     }).then(async () => {
       const res: SaleDataAPI.saleBetItemsResType =
         await API.openBetItemsByMatchId({

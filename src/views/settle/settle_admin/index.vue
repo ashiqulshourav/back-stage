@@ -308,13 +308,5 @@ const {
   }
 }
 
-.el-message-box:not(.login_out,.no_reverse) {
-  .el-message-box__btns {
-    display: flex;
-    flex-direction: row-reverse;
-    button {
-      margin: 0 10px;
-    }
-  }
-}
+
 </style>

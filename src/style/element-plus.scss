@@ -4,7 +4,7 @@
 }
 
 .el-upload {
-  input[type="file"] {
+  input[type='file'] {
     display: none !important;
   }
 }
@@ -37,7 +37,7 @@
 }
 
 /* 重置 el-button 中 icon 的 margin */
-.reset-margin [class*="el-icon"] + span {
+.reset-margin [class*='el-icon'] + span {
   margin-left: 2px !important;
 }
 
@@ -178,6 +178,16 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
+}
+
+.el-message-box {
+  .el-message-box__btns {
+    display: flex;
+    flex-direction: row-reverse;
+    button {
+      margin: 0 10px;
+    }
+  }
 }

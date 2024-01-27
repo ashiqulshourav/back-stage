@@ -8,7 +8,6 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 export function useEsportSettlement() {
   const dataList = reactive<EsportsSettlementAPI.ESportMatchList[]>([]);
   const loading = ref(true);
-  const switchLoadMap = ref({});
   const allSaleSatatus = ref(0);
   const { switchStyle } = usePublicHooks();
   const matchCondition = ref(1);
@@ -29,9 +28,10 @@ export function useEsportSettlement() {
     leagueNameCn: '',
     leagueId: '',
     handicapStatus: '',
-    gameName: ''
+    status: ''
   });
 
+  //- 锁盘switch点击
   function changeSwitch({
     row
   }: {
@@ -39,26 +39,31 @@ export function useEsportSettlement() {
     index: number;
   }) {
     ElMessageBox.confirm(
-      row.isSale ? t(`确认要开售吗?`) : t('确认要下架吗？'),
+      row.handicapStatus === 0
+        ? t(`确定要解锁选中的比赛么?`)
+        : t('确定要锁定选中比赛么?'),
       t('系统提示'),
       {
         confirmButtonText: t('确定'),
         cancelButtonText: t('取消'),
         type: 'warning',
+        center: true,
         dangerouslyUseHTMLString: true,
         draggable: true
       }
     )
       .then(async () => {
-        const res = await API.updateSaleStatus({
-          isSale: row.isSale,
-          matchId: row.matchId
-        });
+        let res: EsportsSettlementAPI.lockESportHandicapResType;
+        const params = { matchId: row.matchId };
+        res =
+          row.handicapStatus === 1
+            ? await API.lockESportHandicap(params)
+            : await API.unLockESportHandicap(params);
         if (res.code) return message(res.msg, { type: 'error' });
         message(res.msg, { type: 'success' });
         onSearch();
       })
-      .catch(() => (row.isSale = row.isSale === 0 ? 1 : 0));
+      .catch(() => (row.handicapStatus = row.handicapStatus === 0 ? 1 : 0));
   }
 
   function handleTableWidthChange(pageSize: number) {
@@ -116,7 +121,6 @@ export function useEsportSettlement() {
     onSearch,
     resetForm,
     handleTableWidthChange,
-    switchLoadMap,
     handleCurrentChange,
     handleSelectionChange,
     changeSwitch,

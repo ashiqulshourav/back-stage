@@ -1,16 +1,24 @@
 <template>
-  <el-radio-group class="mt-2" v-model="btnRef">
-    <el-radio-button label="1">{{ t('全部盘口') }}</el-radio-button>
-    <el-radio-button label="2"> {{ t('第一局') }} </el-radio-button>
-    <el-radio-button label="3"> {{ t('第一局') }} </el-radio-button>
-    <el-radio-button label="4"> {{ t('第二局') }} </el-radio-button>
-    <el-radio-button label="5"> {{ t('第三局') }} </el-radio-button>
+  <el-radio-group class="mt-2" v-model="currentIndex" @change="changeIndex">
+    <el-radio-button
+      :label="index"
+      v-for="(item, index) in keyList"
+      :key="index"
+      >{{ NAV_TITLE_NAME[item] }}</el-radio-button
+    >
   </el-radio-group>
 </template>
 
 <script setup lang="ts">
-import { t } from '@/plugins/i18n';
-const btnRef = ref(1);
+import { NAV_TITLE_NAME } from '../utils/map';
+const currentIndex = ref(0);
+const emits = defineEmits(['changeIndex']);
+
+defineProps<{
+  keyList: string[];
+}>();
+
+const changeIndex = index => emits('changeIndex', index);
 </script>
 
 <style scoped></style>

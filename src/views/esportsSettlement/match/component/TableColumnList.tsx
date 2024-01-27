@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import {
   ESPORT_ID_MAP,
   ESPORT_MATCH_STATUS,
-  OPENING_STATUS
+  HANDICAP_STATUS
 } from '@/utils/maps/sports_map';
 
 export const columns: TableColumnList = [
@@ -62,20 +62,21 @@ export const columns: TableColumnList = [
     align: 'left'
   },
   {
-    label: t('盘口状态'),
-    prop: 'handicapStatus',
-    headerRenderer: d => handleTableWidth(d, t('盘口状态'), 'auto'),
-    formatter: ({ handicapStatus }): string => OPENING_STATUS[handicapStatus],
-    minWidth: 150
-  },
-  {
     label: t('赛事状态'),
     headerRenderer: d => handleTableWidth(d, t('赛事状态'), 'auto'),
+    minWidth: 180,
     formatter: ({ status }) => ESPORT_MATCH_STATUS[status] ?? '-'
   },
   {
+    label: t('盘口状态'),
+    prop: 'handicapStatus',
+    headerRenderer: d => handleTableWidth(d, t('盘口状态'), 'auto'),
+    formatter: ({ handicapStatus }): string => HANDICAP_STATUS[handicapStatus],
+    minWidth: 150
+  },
+  {
     label: t('锁盘控制'),
-    slot: 'isSale',
+    slot: 'handicapStatus',
     headerRenderer: d => handleTableWidth(d, t('锁盘控制'), 'auto')
   },
   {

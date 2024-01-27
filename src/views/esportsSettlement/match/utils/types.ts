@@ -10,7 +10,6 @@ interface TeamFormProps {
 export type SearchFormType = {
   matchId: string;
   matchName: string;
-  gameName: string;
   isSale: string;
   sportId: string;
   startTime: number | string;
@@ -18,6 +17,7 @@ export type SearchFormType = {
   leagueNameCn: string;
   endTime: string;
   handicapStatus: number | string;
+  status: number | string;
 }
 
 export type EsportMatchRowType = {

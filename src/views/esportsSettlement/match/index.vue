@@ -17,50 +17,45 @@
           :loading="loading"
           :size="size"
           adaptive
-          :default-sort="{ prop: 'beginTimeLong', order: 'ascending' }"
           :data="dataList"
           :columns="dynamicColumns"
           :pagination="pagination"
           :paginationSmall="size === 'small' ? true : false"
-          :header-cell-style="{
-            background: 'var(--el-fill-color-light)',
-            color: 'var(--el-text-color-primary)'
-          }"
+          :header-cell-style="tableHeaderStyle"
           @selection-change="handleSelectionChange"
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
-          <template #isSale="{ row, index, props }">
-            <el-switch
-              :size="props.size === 'small' ? 'small' : 'default'"
-              :loading="switchLoadMap[index]?.loading"
-              v-model="row.isSale"
-              :active-value="1"
-              :inactive-value="0"
-              inline-prompt
-              :style="switchStyle"
-              @change="changeSwitch({ row, index })"
-            />
-          </template>
-          <template #saleHandicaps="{ row }: { row: SaleDataAPI.PreSaleList }">
-            <span
-              class="underline cursor-pointer"
-              @click="openInfoDialog(row.matchId, row)"
-              >{{ row.saleHandicaps }}/{{ row.allHandicaps }}</span
-            >
-          </template>
+          <!-- -比赛队伍 -->
           <template #matchTeam="{ row }: EsportMatchRowType">
             <span>{{ row.homeTeamNameCn }}</span>
             <span class="font-bold mr-2 ml-2">VS</span>
             <span>{{ row.awayTeamNameCn }}</span>
           </template>
-          <template #operation="{ row }">
+
+          <!-- -锁盘按钮 -->
+          <template #handicapStatus="{ row, index, props }">
+            <el-switch
+              :size="props.size === 'small' ? 'small' : 'default'"
+              v-model="row.handicapStatus"
+              :active-value="0"
+              :inactive-value="1"
+              inline-prompt
+              :style="switchStyle"
+              @change="changeSwitch({ row, index })"
+            />
+          </template>
+
+          <!-- -赛事详情按钮 -->
+          <template #operation="{ row }: EsportMatchRowType">
             <el-button
               class="reset-margin"
               type="primary"
               :size="size"
               @click="
-                $router.push(`/esportsSettlement/esportsSettlementDetail/123`)
+                $router.push(
+                  `/esportsSettlement/esportsSettlementDetail/${row.matchId}`
+                )
               "
             >
               {{ t('结算详情') }}
@@ -78,27 +73,11 @@ import { useEsportSettlement } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import { columns } from './component/TableColumnList';
 import SearchForm from './component/SearchForm.vue';
-import OpeningPreview from './component/OpeningPreview.vue';
-import { addDialog } from '@/components/ReDialog';
-import { message } from '@/utils/message';
 import { EsportMatchRowType } from './utils/types';
+import { usePublicHooks } from '@/hooks';
 
 defineOptions({ name: 'EsportMatchList' });
-const openInfoDialog = (matchId: number, row: SaleDataAPI.PreSaleList) => {
-  if (row.saleHandicaps === 0)
-    return message(t('请先解锁当前赛事!'), { type: 'error' });
-  addDialog({
-    title: t('盘口预览'),
-    props: { matchId, matchInfo: row },
-    width: '40%',
-    draggable: true,
-    hideFooter: true,
-    contentRenderer: () =>
-      h(OpeningPreview, {
-        onReloadTable: () => onSearch()
-      } as any)
-  });
-};
+const { tableHeaderStyle } = usePublicHooks();
 
 const {
   loading,
@@ -108,7 +87,6 @@ const {
   handleTableWidthChange,
   handleCurrentChange,
   handleSelectionChange,
-  switchLoadMap,
   changeSwitch,
   searchForm,
   switchStyle,
@@ -122,4 +100,16 @@ const {
   display: block !important;
   height: 10px !important;
 }
+
+/* 
+1-20 2-20 1 
+3-20 4-20 2
+5-20 6-20 
+  
+2: 55000 
+3: 55000
+4: 55000
+5: 55000
+6: 55000
+ */
 </style>

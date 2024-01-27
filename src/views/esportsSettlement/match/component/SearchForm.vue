@@ -6,7 +6,7 @@
           v-model="form.leagueId"
           filterable
           clearable
-          class="!w-[280px]"
+          class="!w-[310px]"
           :placeholder="t('请选择联赛')"
         >
           <el-option
@@ -19,13 +19,20 @@
       </el-form-item>
 
       <el-form-item :label="`${t('游戏名称')}:`" prop="gameName">
-        <el-input
-          v-model="form.gameName"
-          :placeholder="t('请输入游戏名称')"
-          v-enter="search"
+        <el-select
+          v-model="form.sportId"
+          filterable
           clearable
-          class="!w-[150px]"
-        />
+          class="!w-[210px]"
+          :placeholder="t('请选择游戏')"
+        >
+          <el-option
+            v-for="item in ESPORT_ID_MAP"
+            :key="item.val"
+            :label="item.label"
+            :value="item.val"
+          />
+        </el-select>
       </el-form-item>
 
       <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
@@ -35,7 +42,7 @@
           v-enter="search"
           clearable
           :formatter="v => formatNumber(v)"
-          class="!w-[150px]"
+          class="!w-[180px]"
         />
       </el-form-item>
 
@@ -47,35 +54,41 @@
           :placeholder="t('请选择')"
           @change="search"
         >
-          <el-option :label="t('早盘')" :value="0" />
-          <el-option :label="t('未开售')" :value="1" />
-          <el-option :label="t('滚球中')" :value="2" />
+          <el-option
+            :label="item"
+            :value="index"
+            v-for="(item, index) in HANDICAP_STATUS"
+          />
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="`${t('赛事状态')}:`" prop="handicapStatus">
+      <el-form-item :label="`${t('赛事状态')}:`" prop="status">
         <el-select
-          class="!w-[150px]"
-          v-model="form.handicapStatus"
+          class="!w-[180px]"
+          v-model="form.status"
           clearable
           :placeholder="t('请选择')"
           @change="search"
         >
-          <el-option :label="t('早盘')" :value="0" />
-          <el-option :label="t('未开售')" :value="1" />
-          <el-option :label="t('滚球中')" :value="2" />
+          <el-option
+            :label="item"
+            :value="index"
+            v-for="(item, index) in ESPORT_MATCH_STATUS"
+          />
         </el-select>
       </el-form-item>
 
       <el-form-item :label="`${t('日期选择')}:`" prop="startTime">
+        <!--  :disabled-date="disableDate" -->
         <el-date-picker
           :placeholder="t('请选择日期')"
           class="ml-4 !w-[260px]"
           v-model="time"
+          :start-placeholder="t('开始日期')"
+          :end-placeholder="t('结束如期')"
           type="daterange"
           value-format="x"
           format="YYYY-MM-DD"
-          :disabled-date="disableDate"
           @change="changeDate"
         />
       </el-form-item>
@@ -105,13 +118,17 @@ import Refresh from '@iconify-icons/ep/refresh';
 import type { FormInstance } from 'element-plus';
 import { SearchFormType } from '../utils/types';
 import dayjs from 'dayjs';
-import { disableDate } from '@/utils/formatDate';
+// import { disableDate } from '@/utils/formatDate';
 import { useMatchStore } from '@/store/match';
 import { formatNumber } from '@/utils/formatNumber';
+import {
+  ESPORT_ID_MAP,
+  HANDICAP_STATUS,
+  ESPORT_MATCH_STATUS
+} from '@/utils/maps/sports_map';
 
 const formRef = ref();
 const emits = defineEmits(['onSearch', 'changeMatchCondition']);
-const selectIndex = ref(-1);
 const matchStore = useMatchStore();
 const time = ref('');
 const props = withDefaults(
@@ -132,33 +149,23 @@ const changeDate = t => {
   if (!t) {
     props.form.startTime = '';
     props.form.endTime = '';
-    selectIndex.value = -1;
   } else {
-    const d = dayjs(t).format('YYYY-MM-DD');
-    selectIndex.value = nextDayArr.value.findIndex(_ => _ === d);
-    props.form.startTime = dayjs(t).format('YYYY-MM-DD HH:mm:ss');
-    props.form.endTime = dayjs(t).endOf('day').format('YYYY-MM-DD HH:mm:ss');
+    props.form.startTime = dayjs(t[0]).format('YYYY-MM-DD HH:mm:ss');
+    props.form.endTime = dayjs(t[1]).endOf('day').format('YYYY-MM-DD HH:mm:ss');
   }
   search();
 };
 
-const resetForm = (formEl: FormInstance | undefined) => {
-  formEl.resetFields();
-  selectIndex.value = -1;
+const resetForm = (_formEl: FormInstance | undefined) => {
+  Object.keys(props.form).forEach(key => (props.form[key] = ''));
+  time.value = '';
+  // formEl.resetFields();
   emits('onSearch', ...['reload']);
 };
 
 const search = () => {
   emits('onSearch', ...['reload']);
 };
-
-const nextDayArr = computed(() => {
-  const nextDayList = [];
-  for (let i = 0; i < 5; i++) {
-    nextDayList.push(dayjs().add(i, 'day').format('YYYY-MM-DD'));
-  }
-  return nextDayList;
-});
 </script>
 
 <style scoped lang="scss">

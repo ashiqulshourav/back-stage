@@ -65,6 +65,8 @@ declare namespace EsportsSettlementAPI {
   }
 
   type getESportMatchListResType = COMMON.BASE_RES_TYPE<ESportMatchListData>
+  type lockESportHandicapResType = COMMON.BASE_RES_TYPE<any>
+  type unLockESportHandicapResType = COMMON.BASE_RES_TYPE<any>
 
   type getESportMatchListReqParams = {
     awayTeamId?: number;
@@ -82,4 +84,102 @@ declare namespace EsportsSettlementAPI {
     startTime?: string;
     endTime?: string;
   }
+
+  type BetItemsMapData = {
+    betItemsId: number;
+    betItemList?: any;
+    sportId: number;
+    leagueId: number;
+    matchId: number;
+    matchIdList?: any;
+    kindsCode: string;
+    betItemsName: string;
+    sourceCode: string;
+    sourceBetItemsId: number;
+    sourceBetItemsMid: number;
+    homeOrAway: string;
+    handicap: string;
+    odds: number;
+    isSale: number;
+    displayIndex: number;
+    handicapIndex: number;
+    handicapItemIndex: number;
+    oddsType: string;
+    handicapFilter: string;
+    ctid: number;
+    win: number;
+    pageSize: number;
+    pageNum: number;
+    betOptions: number;
+    arr: BetItemsMapData[]
+  }
+
+  type BetItemsMap = {
+    final?: {
+      key: string;
+      list: BetItemsMapData[];
+    },
+    r1?: {
+      key: string;
+      list: BetItemsMapData[];
+    },
+    r2?: {
+      key: string;
+      list: BetItemsMapData[];
+    },
+    map1?: {
+      key: string;
+      list: BetItemsMapData[];
+    },
+    map2?: {
+      key: string;
+      list: BetItemsMapData[];
+    },
+    q1?: {
+      key: string;
+      list: BetItemsMapData[];
+    },
+    q2?: {
+      key: string;
+      list: BetItemsMapData[];
+    },
+  }
+
+  type ESportMatchById = {
+    matchId: number;
+    sportId: number;
+    beginTime: string;
+    beginTimeLong: number;
+    status: string;
+    leagueId: number;
+    leagueNameCn?: any;
+    isSale: number;
+    homeTeamId: number;
+    homeTeamNameCn: string;
+    awayTeamId: number;
+    awayTeamNameCn: string;
+    category: number;
+    settlementStatus?: any;
+    betItemsMap: BetItemsMap;
+  }
+
+  type Data = {
+    matchId: number;
+    sportId: number;
+    beginTime: string;
+    beginTimeLong: number;
+    status: string;
+    leagueId: number;
+    leagueNameCn?: any;
+    isSale: number;
+    homeTeamId: number;
+    homeTeamNameCn: string;
+    awayTeamId: number;
+    awayTeamNameCn: string;
+    category: number;
+    settlementStatus?: any;
+    betItemsMap: BetItemsMap;
+  }
+
+  type getESportMatchByIdResType = COMMON.BASE_RES_TYPE<ESportMatchById>
 }

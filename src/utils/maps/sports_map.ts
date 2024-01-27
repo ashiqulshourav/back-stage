@@ -73,6 +73,12 @@ export const OPENING_STATUS = {
   2: t('滚球'),
 }
 
+//- 盘口状态
+export const HANDICAP_STATUS = {
+  0: t('未锁盘'),
+  1: t('锁盘'),
+}
+
 export const YELLOW_OR_RED = {
   'yellow_card': 1,
   'red_card': 2
