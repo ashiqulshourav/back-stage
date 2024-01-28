@@ -34,7 +34,7 @@
                   :disabled="row.win != null"
                   :label="index"
                   border
-                  class="min-w-44"
+                  :class="[row.arr.length > 2 && 'mb-1']"
                   v-for="(item, index) in row.arr"
                   :key="index"
                 >
@@ -123,6 +123,16 @@ const {
 .search-form {
   :deep(.el-form-item) {
     margin-bottom: 12px;
+  }
+}
+
+.el-radio-group {
+  display: flex;
+  justify-content: space-between;
+  label {
+    width: 45%;
+    margin-left: 0;
+    margin-right: 0;
   }
 }
 </style>

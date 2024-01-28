@@ -115,35 +115,20 @@ declare namespace EsportsSettlementAPI {
     arr: BetItemsMapData[]
   }
 
+  // type bettype = {
+  //   key: string;
+  //   list: BetItemsMapData[];
+  // }
+
   type BetItemsMap = {
-    final?: {
-      key: string;
-      list: BetItemsMapData[];
-    },
-    r1?: {
-      key: string;
-      list: BetItemsMapData[];
-    },
-    r2?: {
-      key: string;
-      list: BetItemsMapData[];
-    },
-    map1?: {
-      key: string;
-      list: BetItemsMapData[];
-    },
-    map2?: {
-      key: string;
-      list: BetItemsMapData[];
-    },
-    q1?: {
-      key: string;
-      list: BetItemsMapData[];
-    },
-    q2?: {
-      key: string;
-      list: BetItemsMapData[];
-    },
+    all?: BetItemsMapData[]
+    r1?: BetItemsMapData[]
+    r2?: BetItemsMapData[]
+    map1?: BetItemsMapData[]
+    map2?: BetItemsMapData[]
+    q1?: BetItemsMapData[]
+    q2?: BetItemsMapData[]
+    [key: string]: BetItemsMapData[]
   }
 
   type ESportMatchById = {

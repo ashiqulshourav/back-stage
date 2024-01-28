@@ -31,13 +31,14 @@ export function useEsportsSettlement() {
     });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
+    res.data.betItemsMap.all = Object.values(res.data.betItemsMap).flat();
     const keyList = Object.keys(res.data.betItemsMap);
     //- 清洗后端返回数据
     if (keyList.length) {
       keyList.forEach((key: string) => {
         const filterKey = key.replace(/^\["|"\]$/g, '');
         res.data.betItemsMap[filterKey] = res.data.betItemsMap[key];
-        delete res.data.betItemsMap[key];
+        key !== 'all' && delete res.data.betItemsMap[key];
       });
     }
     Object.assign(renderObj, res.data);
@@ -53,6 +54,7 @@ export function useEsportsSettlement() {
     });
     rList.length = 0;
     rList.push(...SPORT_LEVEL_LIST.filter(_ => _.list.length));
+
     rList.forEach(item => {
       const l = item.list;
       l.sort((a: any, b: any) => a.displayIndex - b.displayIndex);
