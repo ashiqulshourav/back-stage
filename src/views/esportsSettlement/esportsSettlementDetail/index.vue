@@ -29,7 +29,7 @@
           >
             <!-- - 盘口投注项 -->
             <template #betOptions="{ row }">
-              <el-radio-group v-model="row.betOptions">
+              <el-radio-group class="bet_item" v-model="row.betOptions">
                 <el-radio
                   :disabled="row.win != null"
                   :label="index"
@@ -126,13 +126,15 @@ const {
   }
 }
 
-.el-radio-group {
-  display: flex;
-  justify-content: space-between;
-  label {
-    width: 45%;
-    margin-left: 0;
-    margin-right: 0;
+.bet_item {
+  &.el-radio-group {
+    display: flex;
+    justify-content: space-between;
+    label {
+      width: 45%;
+      margin-left: 0;
+      margin-right: 0;
+    }
   }
 }
 </style>
