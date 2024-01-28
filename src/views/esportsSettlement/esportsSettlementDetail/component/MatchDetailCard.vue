@@ -18,10 +18,7 @@
 
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
-import { useMatchStore } from '@/store/match';
 import { ESPORT_ID_MAP, ESPORT_MATCH_STATUS } from '@/utils/maps/sports_map';
-
-const matchStore = useMatchStore();
 
 const props = defineProps<{
   renderObj: EsportsSettlementAPI.ESportMatchById;
@@ -39,8 +36,7 @@ const renderList = computed(() => {
     { title: t('赛事状态'), val: ESPORT_MATCH_STATUS[_.status] },
     {
       title: t('联赛'),
-      val: matchStore.esportLeagueList.find(_ => _.leagueId === _.leagueId)
-        ?.leagueNameCn
+      val: _.leagueNameCn ?? '-'
     },
     {
       title: t('盘口状态'),
