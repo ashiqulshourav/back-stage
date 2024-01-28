@@ -1,9 +1,6 @@
 import { message } from '@/utils/message';
 import { ElMessageBox } from 'element-plus';
-import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { usePublicHooks } from '@/hooks';
-// import { useMatchStore } from '@/store/match';
-import { parseCountry } from '@/utils/formatMatch';
 import { SPORT_LEVEL_LIST_TYPE } from './type';
 import { SPORT_LEVEL_LIST } from './map';
 export function useEsportsSettlement() {
@@ -12,46 +9,18 @@ export function useEsportsSettlement() {
   const loading = ref(true);
   const switchLoadMap = ref({});
   const { switchStyle } = usePublicHooks();
+  const rList = reactive<SPORT_LEVEL_LIST_TYPE[]>([]);
   const renderObj = reactive<EsportsSettlementAPI.ESportMatchById>(
     {} as EsportsSettlementAPI.ESportMatchById
   );
 
-  function handleTableWidthChange(val: number) {
-    // pagination.pageSize = val;
-    onSearch();
-  }
+  //- 分页点击
+  const handleCurrentChange = (val: number, index) =>
+    (rList[index].currentPage = val);
 
-  function handleCurrentChange(val: number) {
-    // pagination.currentPage = val;
-    onSearch();
-  }
-
-  function handleSelectionChange(val) {
-    console.log('handleSelectionChange', val);
-  }
-
-  async function onSearch(type?: string) {
-    // if (type === 'reload') pagination.currentPage = 1;
-    loading.value = true;
-    const data = removeEmptyStringKeys(form);
-    const res: SaleDataAPI.PreSaleListRes = await API.getMorningSets({
-      ...data
-      // pageSize: pagination.pageSize,
-      // pageNum: pagination.currentPage
-    });
-    if (res.code) return message(res.msg, { type: 'error' });
-    dataList.length = 0;
-    // dataList.push(...res.data.list);
-    // pagination.total = res.data.total;
-    // pagination.pageSize = res.data.pageSize;
-    // pagination.currentPage = res.data.pageNum;
-    setTimeout(() => (loading.value = false), 500);
-  }
-
-  const resetForm = formEl => {
-    if (!formEl) return;
-    formEl.resetFields();
-    onSearch();
+  //- 每页显示条数改变
+  const handleTableWidthChange = (v: number) => {
+    rList.forEach(_ => (_.pageSize = v));
   };
 
   //- 获取详情数据
@@ -75,19 +44,15 @@ export function useEsportsSettlement() {
     formatData();
   };
 
-  const rList = reactive<SPORT_LEVEL_LIST_TYPE[]>([]);
-
+  //- 格式化数据
   const formatData = () => {
     SPORT_LEVEL_LIST.forEach(item => {
       Object.keys(renderObj.betItemsMap).forEach(key => {
-        if (item.key === key) {
-          item.list = renderObj.betItemsMap[key];
-          item.total = renderObj.betItemsMap[key].length;
-        }
+        if (item.key === key) item.list = renderObj.betItemsMap[key];
       });
     });
     rList.length = 0;
-    rList.push(...SPORT_LEVEL_LIST.filter(_ => _.total));
+    rList.push(...SPORT_LEVEL_LIST.filter(_ => _.list.length));
     rList.forEach(item => {
       const l = item.list;
       l.sort((a: any, b: any) => a.displayIndex - b.displayIndex);
@@ -99,56 +64,65 @@ export function useEsportsSettlement() {
       item.list.length = 0;
       Object.values(o).forEach(arr => {
         item.list.push({
-          betOptions: -1,
+          betOptions: arr[0].win === null ? -1 : arr[0].win === 1 ? 0 : 1,
           ...arr[0],
           arr
         });
       });
     });
-    // console.log('hook.tsx文件 117==============行打印=', rList);
   };
 
+  //- 结算提交
   const manualSettleESportHandicapClick = async (
     row: EsportsSettlementAPI.BetItemsMapData
   ) => {
     if (row.betOptions < 0)
       return message(t('请先选择投注项'), { type: 'error' });
-    const params = {
-      matchId: row.matchId,
-      betResultItems: row.arr.map((item, index) => {
-        let betResult;
-        if (index === 0) {
-          betResult = row.betOptions === 0 ? 4 : 3;
-        } else {
-          betResult = row.betOptions === 1 ? 4 : 3;
-        }
-        return {
-          betItemId: item.betItemsId,
-          betResult,
-          handicap: item.handicap,
-          kindsCode: item.kindsCode
-        };
-      })
-    };
-    const res = await API.manualSettleESportHandicap(params);
-    console.log('hook.tsx文件 134==============行打印=', res);
+
+    ElMessageBox.confirm(t('确认要结算该记录么?'), '系统提示', {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning',
+      center: true,
+      dangerouslyUseHTMLString: true,
+      draggable: true
+    }).then(async () => {
+      const params = {
+        matchId: row.matchId,
+        betResultItems: row.arr.map((item, index) => {
+          let betResult;
+          if (index === 0) {
+            betResult = row.betOptions === 0 ? 4 : 3;
+          } else {
+            betResult = row.betOptions === 1 ? 4 : 3;
+          }
+          return {
+            betItemId: item.betItemsId,
+            betResult,
+            handicap: item.handicap,
+            kindsCode: item.kindsCode
+          };
+        })
+      };
+      const res = await API.manualSettleESportHandicap(params);
+      if (res.code) return message(res.msg, { type: 'error' });
+      getEsportMatchInfo();
+    });
   };
 
   onMounted(() => {
     getEsportMatchInfo();
   });
+
   return {
     loading,
     dataList,
-    onSearch,
-    resetForm,
-    handleTableWidthChange,
     switchLoadMap,
     handleCurrentChange,
-    handleSelectionChange,
     switchStyle,
     renderObj,
     rList,
-    manualSettleESportHandicapClick
+    manualSettleESportHandicapClick,
+    handleTableWidthChange
   };
 }

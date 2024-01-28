@@ -18,5 +18,5 @@ export const esportsSettlement = {
       handicap: string;
       kindsCode: string;
     }[]
-  }) => http.request<EsportsSettlementAPI.getESportMatchByIdResType>("post", "/eSport/v1/manualSettleESportHandicap", { data }),
+  }) => http.request<EsportsSettlementAPI.manualSettleESportHandicapResType>("post", "/eSport/v1/manualSettleESportHandicap", { data }),
 };

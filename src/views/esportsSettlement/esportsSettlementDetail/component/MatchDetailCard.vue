@@ -1,12 +1,18 @@
 <template>
-  <div class="bg-bg_color w-[99/100] pl-8 pt-[12px]">
+  <div class="bg-bg_color w-[99/100] pl-8 pb-3 pt-[12px]">
     <div class="text-center font-bold text-2xl">{{ t('盘口详情') }}</div>
-    <div class="flex justify-ceter flex-wrap mt-5 pl-[400px]">
-      <div v-for="(item, index) in renderList" :key="index" class="w-1/2 mb-2">
+    <el-row>
+      <el-col
+        class="mb-2"
+        v-for="(item, index) in renderList"
+        :key="index"
+        :span="6"
+        :offset="index % 2 === 0 ? 6 : 3"
+      >
         <span class="mr-2">{{ item.title }}:</span>
         <span>{{ item.val }}</span>
-      </div>
-    </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 

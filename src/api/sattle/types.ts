@@ -94,7 +94,8 @@ declare namespace SattleDataAPI {
 
   type ChildrenDataList = {
     type: string;
-    key: 'matchScoreRecordList' | 'penaltyCardRecordList' | 'cornerRecordList' | 'endGameEventList';
+    // key: 'matchScoreRecordList' | 'penaltyCardRecordList' | 'cornerRecordList' | 'endGameEventList';
+    key: 'matchScoreRecordList' | 'penaltyCardRecordList' | 'cornerRecordList';
     tableList: MatchEventsList[]
   };
 

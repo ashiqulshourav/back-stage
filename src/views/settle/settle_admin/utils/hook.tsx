@@ -94,12 +94,12 @@ export function useSettle() {
               type: MatchEventType.Corner,
               key: 'cornerRecordList',
               tableList: []
-            },
-            {
+            }
+            /*             {
               type: MatchEventType.MatchStatus,
               key: 'endGameEventList',
               tableList: []
-            }
+            } */
           ])
       );
       pagination.total = res.data.total;

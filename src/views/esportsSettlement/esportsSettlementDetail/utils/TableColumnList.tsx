@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { NAV_TITLE_NAME } from './map';
 
 export const columns: TableColumnList = [
@@ -22,22 +23,24 @@ export const columns: TableColumnList = [
   {
     label: t('盘口投注项'),
     slot: 'betOptions',
-    minWidth: 200
+    minWidth: 300
   },
   {
     label: t('操作'),
     slot: 'operaction',
-    minWidth: 150
+    minWidth: 200
   },
-  // {
-  //   label: t('盘口状态'),
-  //   prop: 'currentScore',
-  //   formatter: ({ currentScore }) =>
-  //     currentScore.replace(/H(\d+)A(\d+)/, '$1 - $2')
-  // },
+  {
+    label: t('盘口状态'),
+    prop: 'win',
+    formatter: ({ win }) =>
+      win === null ? t('未结算') : win === 0 ? t('输') : t('赢')
+  },
   {
     label: t('结算时间'),
-    prop: 'awayTeamId',
-    minWidth: 150
+    prop: 'eventTime',
+    minWidth: 150,
+    formatter: ({ eventTime }) =>
+      eventTime ? dayjs(eventTime).format('YYYY-MM-DD HH:mmss') : '-'
   }
 ];

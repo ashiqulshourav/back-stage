@@ -1,3 +1,3 @@
 export type SPORT_LEVEL_LIST_TYPE = {
-  currentPage: number; pageSize: number; total: number; key: string; list: EsportsSettlementAPI.BetItemsMapData[]
+  currentPage: number; pageSize: number; key: string; list: EsportsSettlementAPI.BetItemsMapData[]
 }

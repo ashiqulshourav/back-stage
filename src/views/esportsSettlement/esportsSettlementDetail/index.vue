@@ -8,11 +8,7 @@
     </template>
     <template v-else>
       <BtnGroup :keyList="keyList" @changeIndex="changeIndex" />
-      <PureTableBar
-        :title="t('盘口详情')"
-        :columns="columns"
-        @refresh="onSearch('reload')"
-      >
+      <PureTableBar :title="t('盘口详情')" :columns="columns">
         <template v-slot="{ size, dynamicColumns }">
           <pure-table
             align-whole="center"
@@ -21,27 +17,24 @@
             :loading="loading"
             :size="size"
             adaptive
-            :data="
-              rList[selectIndex]?.list.slice(
-                (pagination.currentPage - 1) * pagination.pageSize,
-                pagination.pageSize
-              )
-            "
+            :data="renderList"
             :columns="dynamicColumns"
             :pagination="pagination"
             :paginationSmall="size === 'small' ? true : false"
             :header-cell-style="tableHeaderStyle"
-            @selection-change="handleSelectionChange"
+            @page-current-change="
+              index => handleCurrentChange(index, selectIndex)
+            "
             @page-size-change="handleTableWidthChange"
-            @page-current-change="handleCurrentChange"
           >
             <!-- - 盘口投注项 -->
             <template #betOptions="{ row }">
               <el-radio-group v-model="row.betOptions">
                 <el-radio
+                  :disabled="row.win != null"
                   :label="index"
                   border
-                  class="min-w-40"
+                  class="min-w-44"
                   v-for="(item, index) in row.arr"
                   :key="index"
                 >
@@ -54,9 +47,10 @@
             <!-- - 操作 -->
             <template #operaction="{ row }">
               <el-button
-                type="primary"
+                :disabled="row.win !== null"
+                :type="row.win === null ? 'primary' : 'info'"
                 @click="manualSettleESportHandicapClick(row)"
-                >{{ t('操作') }}</el-button
+                >{{ row.win === null ? t('确认结算') : t('已结算') }}</el-button
               >
             </template>
           </pure-table>
@@ -79,18 +73,11 @@ defineOptions({ name: 'esportsSettlementDetail' });
 
 const { tableHeaderStyle } = usePublicHooks();
 const selectIndex = ref(0);
-const changeIndex = index => (selectIndex.value = index);
 
-const {
-  loading,
-  onSearch,
-  handleTableWidthChange,
-  handleCurrentChange,
-  handleSelectionChange,
-  renderObj,
-  rList,
-  manualSettleESportHandicapClick
-} = useEsportsSettlement();
+const changeIndex = index => {
+  selectIndex.value = index;
+  rList.forEach(_ => (_.currentPage = 1));
+};
 
 const keyList = computed(() =>
   renderObj.betItemsMap
@@ -105,12 +92,28 @@ const pagination = computed(() => {
     currentPage: 1
   };
   if (rList[selectIndex.value]) {
-    r.total = rList[selectIndex.value]?.total;
+    r.total = rList[selectIndex.value]?.list.length;
     r.pageSize = rList[selectIndex.value].pageSize;
     r.currentPage = rList[selectIndex.value].currentPage;
   }
   return r;
 });
+
+const renderList = computed(() => {
+  return rList[selectIndex.value]?.list.slice(
+    (pagination.value.currentPage - 1) * pagination.value.pageSize,
+    pagination.value.pageSize * pagination.value.currentPage
+  );
+});
+
+const {
+  loading,
+  handleCurrentChange,
+  renderObj,
+  rList,
+  manualSettleESportHandicapClick,
+  handleTableWidthChange
+} = useEsportsSettlement();
 </script>
 
 <style scoped lang="scss">

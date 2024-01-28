@@ -111,6 +111,7 @@ declare namespace EsportsSettlementAPI {
     pageSize: number;
     pageNum: number;
     betOptions: number;
+    eventTime: number;
     arr: BetItemsMapData[]
   }
 
@@ -182,4 +183,5 @@ declare namespace EsportsSettlementAPI {
   }
 
   type getESportMatchByIdResType = COMMON.BASE_RES_TYPE<ESportMatchById>
+  type manualSettleESportHandicapResType = COMMON.BASE_RES_TYPE<any>
 }
