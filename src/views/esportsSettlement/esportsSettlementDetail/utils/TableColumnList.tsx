@@ -33,14 +33,13 @@ export const columns: TableColumnList = [
   {
     label: t('盘口状态'),
     prop: 'win',
-    formatter: ({ win }) =>
-      win === null ? t('未结算') : win === 0 ? t('输') : t('赢')
+    formatter: ({ win }) => (win === null ? t('未结算') : t('已结算'))
   },
   {
     label: t('结算时间'),
     prop: 'eventTime',
     minWidth: 150,
     formatter: ({ eventTime }) =>
-      eventTime ? dayjs(eventTime).format('YYYY-MM-DD HH:mmss') : '-'
+      eventTime ? dayjs(eventTime).format('YYYY-MM-DD HH:mm:ss') : '-'
   }
 ];

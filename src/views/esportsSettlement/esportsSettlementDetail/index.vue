@@ -50,7 +50,7 @@
                 :disabled="row.win !== null"
                 :type="row.win === null ? 'primary' : 'info'"
                 @click="manualSettleESportHandicapClick(row)"
-                >{{ row.win === null ? t('确认结算') : t('已结算') }}</el-button
+                >{{ t('确认结算') }}</el-button
               >
             </template>
           </pure-table>
