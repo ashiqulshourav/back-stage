@@ -16,7 +16,7 @@ export default {
   children: [
     {
       path: "/welcome",
-      name: "Welcome",
+      name: "WELCOME",
       component: () => import("@/views/welcome/index.vue"),
       meta: {
         title: t("Home"),

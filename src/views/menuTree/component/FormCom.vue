@@ -26,6 +26,10 @@
       </el-radio-group>
     </el-form-item>
 
+    <el-form-item :label="`${t('参数key')}:`">
+      <el-input :placeholder="t('输入按钮链接跳转时的参数key')" />
+    </el-form-item>
+
     <el-form-item :label="`${t('插入位置')}:`" required>
       <el-radio-group v-model="newFormInline.isShow">
         <el-radio :label="1">{{ t('第一列') }}</el-radio>

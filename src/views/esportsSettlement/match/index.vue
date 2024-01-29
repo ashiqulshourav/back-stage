@@ -76,7 +76,7 @@ import SearchForm from './component/SearchForm.vue';
 import { EsportMatchRowType } from './utils/types';
 import { usePublicHooks } from '@/hooks';
 
-defineOptions({ name: 'EsportMatchList' });
+defineOptions({ name: 'MATCH' });
 const { tableHeaderStyle } = usePublicHooks();
 
 const {

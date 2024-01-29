@@ -89,7 +89,7 @@ import { useTeam } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
 import { t } from '@/plugins/i18n';
 
-defineOptions({ name: 'team' });
+defineOptions({ name: 'TEAM' });
 
 const {
   loading,

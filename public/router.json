@@ -3,13 +3,13 @@
     "path": "/metadata",
     "meta": {
       "title": "赛程管理",
-      "icon": "crown",
+      "icon": "metadata",
       "rank": 1
     },
     "children": [
       {
         "path": "/metadata/league",
-        "name": "League",
+        "name": "METADATA_LEAGUE",
         "meta": {
           "title": "联赛管理",
           "showParent": true
@@ -17,7 +17,7 @@
       },
       {
         "path": "/metadata/team",
-        "name": "team",
+        "name": "METADATA_TEAM",
         "meta": {
           "title": "球队管理",
           "showParent": true
@@ -29,13 +29,13 @@
     "path": "/sale",
     "meta": {
       "title": "开售管理",
-      "icon": "storeFill",
+      "icon": "sale",
       "rank": 2
     },
     "children": [
       {
         "path": "/sale/pre_sale",
-        "name": "pre_sale",
+        "name": "SALE_PRE_SALE",
         "meta": {
           "title": "预开售管理",
           "showParent": true
@@ -47,14 +47,14 @@
     "path": "/settle",
     "meta": {
       "title": "结算平台",
-      "icon": "folderFill",
+      "icon": "settle",
       "rank": 3,
       "redirect": "/settle/settle_admin"
     },
     "children": [
       {
         "path": "/settle/settle_admin",
-        "name": "settle_admin",
+        "name": "SETTLE_SETTLE_ADMIN",
         "meta": {
           "title": "结算管理",
           "showParent": true
@@ -62,7 +62,7 @@
       },
       {
         "path": "/settle/settle_history",
-        "name": "settleHistory",
+        "name": "SETTLE_HISTORY",
         "meta": {
           "title": "结算历史",
           "showParent": true
@@ -80,7 +80,7 @@
     "children": [
       {
         "path": "/esportsSettlement/match",
-        "name": "EsportMatchList",
+        "name": "ESPORTSSETTLEMENT_MATCH",
         "meta": {
           "title": "赛事列表",
           "showParent": true
@@ -88,7 +88,7 @@
       },
       {
         "path": "/esportsSettlement/esportsSettlementDetail/:matchId",
-        "name": "esportsSettlementDetail",
+        "name": "ESPORTSSETTLEMENT_ESPORTSSETTLEMENTDETAIL",
         "meta": {
           "showLink": false,
           "title": "结算详情"
@@ -100,13 +100,13 @@
     "path": "/esports",
     "meta": {
       "title": "电子竞技",
-      "icon": "monitor",
+      "icon": "esports",
       "rank": 5
     },
     "children": [
       {
         "path": "/esports/match",
-        "name": "eMatch",
+        "name": "ESPORTS_MATCH",
         "meta": {
           "title": "联赛库",
           "showParent": true
@@ -114,7 +114,7 @@
       },
       {
         "path": "/esports/team",
-        "name": "eTeam",
+        "name": "ESPORTS_TEAM",
         "meta": {
           "title": "球队库",
           "showParent": true
@@ -132,7 +132,7 @@
     "children": [
       {
         "path": "/virtual/match",
-        "name": "vMatch",
+        "name": "VIRTUAL_MATCH",
         "meta": {
           "title": "联赛库",
           "showParent": true
@@ -140,7 +140,7 @@
       },
       {
         "path": "/virtual/teams",
-        "name": "vTeams",
+        "name": "VIRTUAL_VTEAMS",
         "meta": {
           "title": "球队库",
           "showParent": true
@@ -150,7 +150,7 @@
   },
   {
     "path": "/history",
-    "name": "history",
+    "name": "HISTORY",
     "meta": {
       "title": "赛程历史",
       "icon": "history",
@@ -159,7 +159,7 @@
   },
   {
     "path": "/operationLog",
-    "name": "operationLog",
+    "name": "OPERATIONLOG",
     "meta": {
       "title": "操作日志",
       "icon": "operationLog",
@@ -168,10 +168,10 @@
   },
   {
     "path": "/menuTree",
-    "name": "menuTree",
+    "name": "MENUTREE",
     "meta": {
       "title": "菜单地图",
-      "icon": "listUnordered",
+      "icon": "menuTree",
       "rank": 9
     }
   }

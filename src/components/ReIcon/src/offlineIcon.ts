@@ -28,7 +28,25 @@ import addIcons from '@iconify-icons/ri/add-fill';
 import AddFill from '@iconify-icons/ri/add-circle-line';
 import deleteBin_5Line from '@iconify-icons/ri/delete-bin-5-line';
 import EditPen from '@iconify-icons/ep/edit-pen';
+/** //-菜单icon */
+import metadata from "@iconify-icons/ri/vip-crown-2-line";
+import sale from "@iconify-icons/ri/store-2-fill";
+import settle from "@iconify-icons/ri/folder-2-fill";
+import moneyDollarCircleFill from '@iconify-icons/ri/money-cny-circle-line';
+import esports from "@iconify-icons/ep/monitor";
+import virtual from "@iconify-icons/ep/files";
+import menuTree from '@iconify-icons/ri/list-unordered';
 
+addIcon("metadata", metadata);
+addIcon("sale", sale);
+addIcon("settle", settle);
+addIcon("moneyDollarCircleFill", moneyDollarCircleFill);
+addIcon("esports", esports);
+addIcon("virtual", virtual);
+addIcon("history", History);
+addIcon("operationLog", OperationLog);
+addIcon("menuTree", menuTree);
+/* 菜单icon结束 */
 
 addIcon("homeFilled", HomeFilled);
 addIcon("informationLine", InformationLine);
@@ -38,8 +56,6 @@ addIcon("storeFill", StoreFill);
 addIcon("folderFill", FolderFill);
 addIcon("monitor", Monitor);
 addIcon("files", Files);
-addIcon("history", History);
-addIcon("operationLog", OperationLog);
 addIcon("unlock", LockUnlockFill);
 addIcon("lock", LockFill);
 addIcon("icon_circle_fill", icon_circle_fill);

@@ -61,7 +61,7 @@ import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 
 const { tableHeaderStyle } = usePublicHooks();
-defineOptions({ name: 'eMatch' });
+defineOptions({ name: 'MATCH' });
 
 const {
   loading,

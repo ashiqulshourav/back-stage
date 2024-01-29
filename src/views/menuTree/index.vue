@@ -36,9 +36,18 @@
               ><template v-slot:default="{ node, data }">
                 <el-tree-line :node="node" :showLabelLine="true">
                   <template v-slot:node-label>
-                    <span class="text-sm">
-                      {{ t(node.data.meta.title) }}
-                    </span>
+                    <div class="flex items-center">
+                      <span class="text-sm font-bold">
+                        {{ t(node.data.meta.title) }}
+                      </span>
+                      <span class="ml-1 text-red-400 text-xs">
+                        {{ node.data.path }}</span
+                      >
+                      <span class="ml-2 mr-1 text-xs">{{ t('类别') }}:</span>
+                      <span class="ml-1 text-blue-400 text-xs">{{
+                        t('菜单')
+                      }}</span>
+                    </div>
                   </template>
                 </el-tree-line>
                 <div class="btn_group">

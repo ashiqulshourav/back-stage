@@ -108,7 +108,7 @@ import OpeningPreview from './component/OpeningPreview.vue';
 import { addDialog } from '@/components/ReDialog';
 import { message } from '@/utils/message';
 
-defineOptions({ name: 'pre_sale' });
+defineOptions({ name: 'PRE_SALE' });
 const openInfoDialog = (matchId: number, row: SaleDataAPI.PreSaleList) => {
   if (row.saleHandicaps === 0)
     return message(

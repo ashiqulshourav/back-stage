@@ -69,7 +69,7 @@ import { usePublicHooks } from '@/hooks';
 import { columns } from './utils/TableColumnList';
 import { t } from '@/plugins/i18n';
 
-defineOptions({ name: 'esportsSettlementDetail' });
+defineOptions({ name: 'ESPORTSSETTLEMENTDETAIL' });
 
 const { tableHeaderStyle } = usePublicHooks();
 const selectIndex = ref(0);
@@ -131,7 +131,8 @@ const {
     display: flex;
     justify-content: space-between;
     label {
-      width: 45%;
+      padding-right: 10px;
+      min-width: 45%;
       margin-left: 0;
       margin-right: 0;
     }

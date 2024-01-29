@@ -97,7 +97,7 @@ import { usePublicHooks } from '@/hooks';
 
 const { tableHeaderStyle } = usePublicHooks();
 
-defineOptions({ name: 'settleHistory' });
+defineOptions({ name: 'SETTLE_HISTORY' });
 
 //- 取消事件置灰
 const tableRowClassName = ({ row }: MatchEventRowType) =>

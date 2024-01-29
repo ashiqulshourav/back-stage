@@ -221,10 +221,8 @@ import EventCode from './component/EventCode.vue';
 import MatchStage from './component/MatchStage.vue';
 import EventSource from './component/EventSource.vue';
 
+defineOptions({ name: 'SETTLE_ADMIN' });
 const { tableHeaderStyle } = usePublicHooks();
-
-defineOptions({ name: 'settle_admin' });
-
 //- 取消事件置灰
 const tableRowClassName = ({ row }: MatchEventRowType) =>
   row.canceled === 1 ? 'pure-warning-row' : '';
@@ -307,6 +305,4 @@ const {
     background-color: transparent !important;
   }
 }
-
-
 </style>
