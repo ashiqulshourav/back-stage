@@ -12,7 +12,7 @@
         "name": "League",
         "meta": {
           "title": "联赛管理",
-          "showParent": false
+          "showParent": true
         }
       },
       {

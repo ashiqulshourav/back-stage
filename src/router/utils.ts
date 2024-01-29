@@ -179,6 +179,7 @@ function handleAsyncRoutes(routeList) {
 
 /** 初始化路由（`new Promise` 写法防止在异步请求中造成无限循环）*/
 function initRouter() {
+  //- 路由缓存处理
   if (getConfig()?.CachingAsyncRoutes) {
     const key = "async-routes";
     const asyncRouteList = storageSession().getItem(key) as any;

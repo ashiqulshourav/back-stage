@@ -24,6 +24,10 @@ import icon_money from '@iconify-icons/ri/money-cny-box-fill';
 import saveIcon from '@iconify-icons/ri/save-3-fill';
 import MoneyDollarCircleFill from '@iconify-icons/ri/money-cny-circle-line';
 import listUnordered from '@iconify-icons/ri/list-unordered';
+import addIcons from '@iconify-icons/ri/add-fill';
+import AddFill from '@iconify-icons/ri/add-circle-line';
+import deleteBin_5Line from '@iconify-icons/ri/delete-bin-5-line';
+import EditPen from '@iconify-icons/ep/edit-pen';
 
 
 addIcon("homeFilled", HomeFilled);
@@ -45,3 +49,7 @@ addIcon("cancelIcon", cancelIcon);
 addIcon("saveIcon", saveIcon);
 addIcon("moneyDollarCircleFill", MoneyDollarCircleFill);
 addIcon("listUnordered", listUnordered);
+addIcon("addIcon", addIcons);
+addIcon("addFill", AddFill);
+addIcon("editPen", EditPen);
+addIcon("deleteBin_5Line", deleteBin_5Line);

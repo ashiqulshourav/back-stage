@@ -33,7 +33,7 @@ export const deleteChildren = (tree: any[], pathList = []): any => {
   }
   if (!tree || tree.length === 0) return [];
   for (const [key, node] of tree.entries()) {
-    if (node.children && node.children.length === 1) delete node.children;
+    // if (node.children && node.children.length === 1) delete node.children;
     node.id = key;
     node.parentId = pathList.length ? pathList[pathList.length - 1] : null;
     node.pathList = [...pathList, node.id];

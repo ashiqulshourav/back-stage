@@ -1,4 +1,4 @@
-export const HOME = 0
+export const HOME = 100
 export const METADATA = 1
 export const SALE = 2
 export const SETTLE = 3
