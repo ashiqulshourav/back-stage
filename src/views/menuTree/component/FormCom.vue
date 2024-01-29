@@ -20,12 +20,8 @@
           clearable
           :placeholder="t('请输入菜单类型')"
         >
-          <el-option
-            v-for="item in 8"
-            :key="item"
-            :label="item"
-            :value="item"
-          />
+          <el-option :label="t('菜单链接')" :value="0" />
+          <el-option :label="t('按钮链接')" :value="1" />
         </el-select>
       </el-radio-group>
     </el-form-item>

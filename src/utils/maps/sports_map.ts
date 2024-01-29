@@ -46,6 +46,8 @@ export const MATCH_EVENT_CODE = {
   goal: t('足球进球'),
   yellow_red_card: t('红牌/黄牌'),
   corner: t('角球'),
+  yellow_card: t('黄牌'),
+  red_card: t('黄牌'),
   // match_status: t('比赛阶段'),
 }
 
@@ -58,6 +60,18 @@ export const ESPORT_MATCH_STATUS = {
   nover: t('比赛中'),
   over: t('比赛结束'),
   nobegin: t('未开赛'),
+}
+
+//- 上半场 ｜ 下半场
+export const MATCH_LEVEL = {
+  6: t('上半场'),
+  7: t('下半场')
+}
+
+//- 主队 ｜ 客队
+export const HOME_AWAY = {
+  home: t('主队'),
+  away: t('客队')
 }
 
 // export const PANDA_MATCH_STATUS = {

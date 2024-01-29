@@ -26,6 +26,7 @@
               :data="menusData"
               :props="dataProps"
               default-expand-all
+              ref="testRef"
               node-key="uniqueId"
               :draggable="true"
               :expand-on-click-node="false"
@@ -77,6 +78,7 @@
             </div>
           </template>
           <div class="max-h-[585px] min-h-[585px] overflow-y-auto">
+            <!-- :parentData="data" -->
             <FormCom v-if="formTypeNumber > 0" :form-inline="form" />
             <el-empty v-else :description="t('请先选择节点的编辑类型')" />
           </div>
@@ -88,7 +90,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { clone } from '@pureadmin/utils';
+import { clone, isNumber } from '@pureadmin/utils';
 import ElTreeLine from '@/components/ReTreeLine';
 import { deleteChildren } from '@/utils/tree';
 import { usePermissionStoreHook } from '@/store/permission';
@@ -101,6 +103,9 @@ import {
   AllowDropType,
   NodeDropType
 } from 'element-plus/es/components/tree/src/tree.type';
+import { ElMessageBox } from 'element-plus';
+
+const testRef = ref();
 
 defineOptions({
   name: 'menuTree'
@@ -118,18 +123,49 @@ const dataProps = {
 };
 
 //- 拖拽开始规则
-const allowDrop = (sorceNode, targetNode, type: AllowDropType) => {
+const allowDrop = (sourceNode, targetNode, type: AllowDropType) => {
+  const soucePath = sourceNode.data.path.slice(
+    0,
+    sourceNode.data.path.lastIndexOf('/')
+  );
+  const targetPath = targetNode.data.path.slice(
+    0,
+    targetNode.data.path.lastIndexOf('/')
+  );
+  const first_condition =
+    sourceNode.level === 1 && targetNode.sourceNode === 1 && type !== 'inner';
+  const second_conditaion =
+    sourceNode.level === targetNode.level &&
+    type !== 'inner' &&
+    soucePath === targetPath;
   //- 越级禁止拖拽
-  return sorceNode.level === targetNode.level && type !== 'inner';
+  return first_condition || second_conditaion;
 };
 
 //- 拖拽结束
-const handleDragEnd = (
-  draggingNode: Node,
-  dropNode: Node,
-  dropType: NodeDropType
-) => {
-  console.log('tree drag end:', draggingNode, dropNode, dropType);
+const handleDragEnd = (draggingNode, dropNode, dropType: NodeDropType) => {
+  if (!dropNode) return;
+
+  ElMessageBox.confirm(t('确定要调整菜单显示顺序么'), t('警告'), {
+    confirmButtonText: t('确认'),
+    cancelButtonText: t('取消'),
+    center: true
+  })
+    .then(async () => {
+      console.log('tree drag end:', draggingNode, dropNode, dropType);
+    })
+    .catch(_e => {
+      const firIdx = isNumber(draggingNode.key)
+        ? draggingNode.key
+        : draggingNode.key.split('-')[1];
+      const secIdx = isNumber(dropNode.key)
+        ? dropNode.key
+        : dropNode.key.split('-')[1];
+      if (dropNode.parent) {
+        let arr = dropNode.parent.childNodes;
+        [arr[firIdx], arr[secIdx]] = [arr[secIdx], arr[firIdx]];
+      }
+    });
 };
 
 const formTypeNumber = ref<0 | 1 | 2>(0);
@@ -144,6 +180,7 @@ const menusData = computed(() => {
 });
 
 const addClick = data => {
+  formTypeNumber.value = 1;
   console.log('index.vue文件 101==============行打印=', data);
 };
 

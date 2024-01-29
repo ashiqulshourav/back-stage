@@ -322,7 +322,6 @@
   "k63b5e055": "Only manual event entry is allowed later, no automatic data push is supported",
   "k-5ad14f89": "In Progress",
   "k13a88967": "Not Started",
-  "k32264390": "Please select a date",
   "k51e5c6d8": "Menu Map",
   "k-7415316e": "Start Date",
   "k1b52c0d7": "End as Scheduled",
@@ -374,7 +373,12 @@
   "k1c5e419a": "Last Column",
   "k-1d026fb0": "Add Root Node",
   "k-2b4d316b": "Add Submenu",
-  "k-6cc470d3": "是否在菜单栏显示",
-  "k-3d96c34a": "key值",
-  "k-5bd1a45b": "请输入英文大小写key值，禁止包含空格，同级key值不可重复"
+  "k67d68dd1": "类型",
+  "k4617920b": "请输入菜单类型",
+  "k372d49ce": "url地址",
+  "k4a985544": "请输入英文大小写url链接，禁止包含空格，同级地址禁止重复",
+  "k-12eedfe5": "确定要调整菜单显示顺序么",
+  "k-4c18820": "菜单链接",
+  "k-5c5e5698": "按钮链接",
+  "k1e4ca2ab": "结算状态"
 }

@@ -59,6 +59,14 @@
           "title": "结算管理",
           "showParent": true
         }
+      },
+      {
+        "path": "/settle/settle_history",
+        "name": "settleHistory",
+        "meta": {
+          "title": "结算历史",
+          "showParent": true
+        }
       }
     ]
   },

@@ -12,12 +12,14 @@ export const sattleData = {
     endTime?: number;
   }) => http.request<SattleDataAPI.getSettlementListRes>("post", "/match/v1/getSettlementList", { data }),
 
+  //- 体育结算历史
   getSettlementHistory: (data: {
     isSale?: number;
     leagueId?: number;
     pageNum: number;
     pageSize: number;
     sportId?: number;
+    status?: number;
     startTime?: number;
     endTime?: number;
   }) => http.request<SattleDataAPI.getSettlementListRes>("post", "/match/v1/getSettlementHistory", { data }),
@@ -49,6 +51,4 @@ export const sattleData = {
   cancelMatchEvent: (data: {
     id: number;
   }) => http.request<SaleDataAPI.cancelMatchEventResType>("post", "/event/v1/cancelMatchEvent", { data }),
-
-
 };

@@ -81,7 +81,6 @@
       <el-form-item :label="`${t('日期选择')}:`" prop="startTime">
         <!--  :disabled-date="disableDate" -->
         <el-date-picker
-          :placeholder="t('请选择日期')"
           class="ml-4 !w-[260px]"
           v-model="time"
           :start-placeholder="t('开始日期')"

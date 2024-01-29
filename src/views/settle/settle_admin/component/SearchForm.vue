@@ -49,9 +49,10 @@
     <el-form-item :label="`${t('比赛时间')}:`" prop="startTime">
       <el-date-picker
         class="ml-4"
-        v-model="form.startTime"
-        type="date"
-        :placeholder="t('比赛时间')"
+        v-model="time"
+        type="daterange"
+        :start-placeholder="t('开始日期')"
+        :end-placeholder="t('结束如期')"
         value-format="x"
         format="YYYY-MM-DD"
         @change="changeDate"
@@ -99,6 +100,7 @@ import dayjs from 'dayjs';
 import { formatNumber } from '@/utils/formatNumber';
 const formRef = ref();
 const matchStore = useMatchStore();
+const time = ref('');
 
 const props = withDefaults(
   defineProps<{
@@ -117,8 +119,8 @@ const changeDate = t => {
     props.form.startTime = '';
     props.form.endTime = '';
   } else {
-    props.form.startTime = dayjs(t).format('YYYY-MM-DD HH:mm:ss');
-    props.form.endTime = dayjs(t).endOf('day').format('YYYY-MM-DD HH:mm:ss');
+    props.form.startTime = dayjs(t[0]).format('YYYY-MM-DD HH:mm:ss');
+    props.form.endTime = dayjs(t[1]).endOf('day').format('YYYY-MM-DD HH:mm:ss');
   }
   searchVal();
 };
@@ -127,6 +129,8 @@ const emits = defineEmits(['onSearch', 'resetForm', 'changeMatchCondition']);
 const searchVal = () => emits('onSearch', 'reload');
 
 const resetForm = formRef => {
+  Object.keys(props.form).forEach(key => (props.form[key] = ''));
+  time.value = '';
   emits('resetForm', formRef);
   emits('onSearch', ...['reload']);
 };
