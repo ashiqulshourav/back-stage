@@ -79,11 +79,12 @@ const changeIndex = index => {
   rList.forEach(_ => (_.currentPage = 1));
 };
 
-const keyList = computed(() =>
-  renderObj.betItemsMap
+const keyList = computed(() => {
+  console.log('index.vue文件 83==============行打印=', renderObj.betItemsMap);
+  return renderObj.betItemsMap
     ? Object.keys(renderObj.betItemsMap).map(key => key)
-    : []
-);
+    : [];
+});
 
 const pagination = computed(() => {
   const r = {
@@ -131,10 +132,19 @@ const {
     display: flex;
     justify-content: space-between;
     label {
-      padding-right: 10px;
-      min-width: 45%;
-      margin-left: 0;
+      width: 45%;
       margin-right: 0;
+      :deep() {
+        .el-radio__label {
+          display: flex !important;
+          span:first-child {
+            max-width: 100px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+          }
+        }
+      }
     }
   }
 }

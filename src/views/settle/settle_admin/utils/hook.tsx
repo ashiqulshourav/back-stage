@@ -4,12 +4,8 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { t } from '@/plugins/i18n';
 import { childColumns, columns } from './tableColumnList';
 import { MatchEventType, SearchFormType, TempListType } from './type';
-import {
-  dateGetSecond,
-  dateSetSecond,
-  getSecondTime
-} from '@/utils/formatDate';
-import { ElMessageBox, dayjs } from 'element-plus';
+import { dateSetSecond, getSecondTime } from '@/utils/formatDate';
+import { ElMessageBox } from 'element-plus';
 import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
 
 export function useSettle() {
@@ -305,7 +301,7 @@ export function useSettle() {
     });
   };
 
-  // 结算
+  //- 结算
   const settlementFunction = async (matchId: number, type: 'half' | 'all') => {
     try {
       balanceLoading[type] = true;
@@ -313,8 +309,9 @@ export function useSettle() {
         type === 'half' ? 'firstHalfSettlement' : 'allSettlement'
       ]({ matchId });
 
-      message(res.msg, { type: res.code ? 'error' : 'success' });
       balanceLoading[type] = false;
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if (res.code) return;
       await onSearch();
       const row = dataList.find(_ => _.matchId === matchId);
       getChildrenData(row);
