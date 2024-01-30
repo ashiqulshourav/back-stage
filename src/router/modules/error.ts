@@ -1,3 +1,4 @@
+import { t } from "@/plugins/i18n";
 import { ERROR } from "../const_rank";
 
 export default {

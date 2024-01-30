@@ -23,6 +23,7 @@ import { sessionKey, type DataInfo } from "@/utils/auth";
 import { useMultiTagsStoreHook } from "@/store/multiTags";
 import { usePermissionStoreHook } from "@/store/permission";
 const IFrame = () => import("@/layout/frameView.vue");
+// https://cn.vitejs.dev/guide/features.html#glob-import
 const modulesRoutes = import.meta.glob("/src/views/**/*.{vue,tsx}");
 
 // 动态路由
@@ -54,7 +55,7 @@ function ascending(arr: any[]) {
 /** 过滤meta中showLink为false的菜单 */
 function filterTree(data: RouteComponent[]) {
   const newTree = cloneDeep(data).filter(
-    (v: { meta: { showLink: boolean } }) => v.meta?.showLink !== false
+    (v: { meta: { showLink: boolean, Developcomplete?: boolean } }) => v.meta?.showLink !== false && v.meta.Developcomplete != true
   );
   newTree.forEach(
     (v: { children }) => v.children && (v.children = filterTree(v.children))
@@ -82,6 +83,7 @@ function isOneOfArray(a: Array<string>, b: Array<string>) {
 
 /** 从sessionStorage里取出当前登陆用户的角色roles，过滤无权限的菜单 */
 function filterNoPermissionTree(data: RouteComponent[]) {
+  3
   const currentRoles =
     storageSession().getItem<DataInfo<{ id: number; name: string; resources: null }>>(sessionKey)?.roles.map(item => item.name) ?? [];
   const newTree = cloneDeep(data).filter((v: any) =>
@@ -179,20 +181,18 @@ function handleAsyncRoutes(routeList) {
 
 /** 初始化路由（`new Promise` 写法防止在异步请求中造成无限循环）*/
 function initRouter() {
-  //- 路由缓存处理
   if (getConfig()?.CachingAsyncRoutes) {
     const key = "async-routes";
     const asyncRouteList = storageSession().getItem(key) as any;
     if (asyncRouteList && asyncRouteList?.length > 0) {
       return new Promise(resolve => {
-        //todo 合并本地路由
         handleAsyncRoutes(asyncRouteList);
         resolve(router);
       });
     } else {
       return new Promise(resolve => {
+        //todo 后期可进行路由合并
         API.getRouter().then(({ data }) => {
-          //todo 路由合并
           handleAsyncRoutes(cloneDeep(data));
           storageSession().setItem(key, data);
           resolve(router);
@@ -297,10 +297,7 @@ function handleAliveRoute({ name }: ToRouteType, mode?: string) {
 function addAsyncRoutes(arrRoutes: Array<RouteRecordRaw>) {
   if (!arrRoutes || !arrRoutes.length) return;
   const modulesRoutesKeys = Object.keys(modulesRoutes);
-
-
   arrRoutes.forEach((v: RouteRecordRaw) => {
-    const path = v.path.replace(/\/:[^/]+/, '');
     // 将backstage属性加入meta，标识此路由为后端返回路由
     v.meta.backstage = true;
     // 父级的redirect属性取值：如果子级存在且父级的redirect属性不存在，默认取第一个子级的path；如果子级存在且父级的redirect属性存在，取存在的redirect属性，会覆盖默认值
@@ -315,8 +312,7 @@ function addAsyncRoutes(arrRoutes: Array<RouteRecordRaw>) {
       // 对后端传component组件路径和不传做兼容（如果后端传component组件路径，那么path可以随便写，如果不传，component组件路径会跟path保持一致）
       const index = v?.component
         ? modulesRoutesKeys.findIndex(ev => ev.includes(v.component as any))
-        // -index.vue文件作为路由文件
-        : modulesRoutesKeys.findIndex(ev => ev.includes(`/src/views${path}/index.vue`));
+        : modulesRoutesKeys.findIndex(ev => ev.includes(`/src/views${v.path}/index.vue`)); // -index.vue文件作为路由文件
       v.component = modulesRoutes[modulesRoutesKeys[index]];
     }
     if (v?.children && v.children.length) {

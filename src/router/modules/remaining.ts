@@ -1,3 +1,4 @@
+import { t } from "@/plugins/i18n";
 import { LOGIN, REDIRECT } from "../const_rank";
 const Layout = () => import("@/layout/index.vue");
 

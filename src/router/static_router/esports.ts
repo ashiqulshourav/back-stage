@@ -4,7 +4,7 @@ export default {
   path: "/esports",
   meta: {
     title: '电子竞技',
-    icon: 'monitor',
+    icon: 'esports',
     rank: ESPORTS
   },
   children: [

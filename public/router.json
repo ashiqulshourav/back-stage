@@ -174,5 +174,15 @@
       "icon": "menuTree",
       "rank": 9
     }
+  },
+  {
+    "path": "/menuTree1",
+    "name": "MENUTREE1",
+    "meta": {
+      "title": "开发中界面",
+      "icon": "menuTree",
+      "rank": 10,
+      "Developcomplete": true
+    }
   }
 ]

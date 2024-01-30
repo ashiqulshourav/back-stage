@@ -1,11 +1,7 @@
-export const HOME = 100
-export const METADATA = 1
-export const SALE = 2
-export const SETTLE = 3
-export const ESPORTS = 4
-export const VIRTUAL = 5
-export const HISTORY = 6
-export const OPERATION_LOG = 7
+export const HOME = 0
+export const BET_BILL = 1
+export const ACCOUNT = 2
+export const DATA_CENTER = 3
 export const ERROR = 9
 export const LOGIN = 101
 export const REDIRECT = 102

@@ -1,4 +1,3 @@
-import { t } from "@/plugins/i18n";
 import { HOME } from "../const_rank";
 const { VITE_HIDE_HOME } = import.meta.env;
 const Layout = () => import("@/layout/index.vue");
@@ -10,16 +9,16 @@ export default {
   redirect: "/metadata/league",
   meta: {
     icon: "homeFilled",
-    title: "主页",
+    title: '主页',
     rank: HOME,
   },
   children: [
     {
       path: "/welcome",
-      name: "WELCOME",
+      name: "Welcome",
       component: () => import("@/views/welcome/index.vue"),
       meta: {
-        title: t("Home"),
+        title: "首页",
         showLink: VITE_HIDE_HOME === "true" ? false : true
       }
     }
