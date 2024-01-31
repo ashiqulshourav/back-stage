@@ -31,6 +31,11 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
+          <template #requestLog="{ row }">
+            <el-button type="primary" :link="true" @click="openRequestLog(row)">
+              {{ t('点击查看') }}
+            </el-button>
+          </template>
         </pure-table>
       </template>
     </PureTableBar>
@@ -42,9 +47,25 @@ import { PureTableBar } from '@/components/RePureTableBar';
 // import AddFill from '@iconify-icons/ri/add-circle-line';
 import { useOperationLog } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
-
+import RequestDialog from './component/RequestDialog.vue';
 import { t } from '@/plugins/i18n';
+import { addDialog } from '@/components/ReDialog';
 defineOptions({ name: 'operationLog' });
+
+const openRequestLog = (row: OperationLogDataAPI.OperationLogListFetchList) => {
+  addDialog({
+    title: t('请求参数'),
+    props: {
+      requestLog: JSON.parse(row.requestLog) ?? {}
+    },
+    width: '40%',
+    draggable: true,
+    hideFooter: true,
+    fullscreenIcon: true,
+    closeOnClickModal: false,
+    contentRenderer: () => h(RequestDialog)
+  });
+};
 
 // const formRef = ref();
 const {

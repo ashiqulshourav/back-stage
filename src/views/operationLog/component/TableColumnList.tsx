@@ -43,8 +43,8 @@ export const columns: TableColumnList = [
   },
   {
     label: t('请求参数'),
-    headerRenderer: d => handleTableWidth(d, t('请求参数')),
-    prop: 'requestLog'
+    slot: 'requestLog',
+    headerRenderer: d => handleTableWidth(d, t('请求参数'))
   },
   {
     label: t('更新时间'),
