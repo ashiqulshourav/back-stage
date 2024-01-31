@@ -5,8 +5,8 @@
       :key="item.value"
       :type="item.value === currentSportId ? 'primary' : ''"
       :btnText="item.label"
-      :disabled="index > 0"
-      @click="searchClick(item.value)"
+      :disabled="index > 5"
+      @click="changeType(item)"
     />
   </div>
 </template>
@@ -19,15 +19,16 @@ const props = defineProps<{
   currentSportId: number;
 }>();
 
-const emites = defineEmits(['onSearch']);
+const emites = defineEmits(['changeCurrentComponentName']);
 
 const renderList = computed(() => {
   return SPORT_ID_MAP.filter(_ => _.value !== 4);
 });
 
-const searchClick = val => {
-  if (val === props.currentSportId) return;
-  emites('onSearch', 'reload', val);
+const changeType = (_: { value: number; type: string }) => {
+  if (_.value === props.currentSportId) return;
+  // emites('onSearch', 'reload', val);
+  emites('changeCurrentComponentName', _);
 };
 </script>
 

@@ -74,7 +74,7 @@
       <el-button
         type="primary"
         :icon="useRenderIcon(icon_serch)"
-        :loading="loading"
+        :loading="matchStore.settleRequestLoading"
         @click="searchVal"
       >
         {{ t('筛选') }}
@@ -104,7 +104,6 @@ const time = ref('');
 
 const props = withDefaults(
   defineProps<{
-    loading: boolean;
     form: SearchFormType;
   }>(),
   {}

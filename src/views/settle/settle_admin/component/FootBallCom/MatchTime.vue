@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
-import { MatchEventRowType } from '../utils/type';
+import { MatchEventRowType } from '../../utils/type';
 import { message } from '@/utils/message';
 
 defineProps<

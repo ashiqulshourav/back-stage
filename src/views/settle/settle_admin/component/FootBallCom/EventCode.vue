@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { MatchEventRowType } from '../utils/type';
+import { MatchEventRowType } from '../../utils/type';
 import { MATCH_EVENT_CODE } from '@/utils/maps/sports_map';
 import { t } from '@/plugins/i18n';
 

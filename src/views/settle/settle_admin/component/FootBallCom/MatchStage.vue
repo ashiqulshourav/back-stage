@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
-import { MatchEventRowType, MatchEventType } from '../utils/type';
+import { MatchEventRowType, MatchEventType } from '../../utils/type';
 
 defineProps<Omit<MatchEventRowType, 'index'>>();
 </script>

@@ -37,6 +37,11 @@ export enum MatchEventType {
   MatchStatus = 'match_status',
 }
 
+export enum SPORT_TYPE {
+  football = 1,
+  basketball = 2
+}
+
 
 export type parentRowType = {
   row: SattleDataAPI.getSettlementDataList;
