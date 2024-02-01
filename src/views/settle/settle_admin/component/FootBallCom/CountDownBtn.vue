@@ -27,7 +27,7 @@ const getTimeValue = (d: SattleDataAPI.MatchEventsList) => {
 const isSelfHandle = computed(() => {
   if (props.parentRow.settlementType === 2) return false;
   const t = props.row.t - new Date(props.row.createdAt).getTime();
-  if (t <= 0) {
+  if (t <= 0 || props.row.settleTimes > 0) {
     props.row.isShowCount = false;
     return false;
   } else {

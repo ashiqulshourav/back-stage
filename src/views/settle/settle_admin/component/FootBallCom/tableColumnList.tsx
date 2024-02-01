@@ -131,7 +131,7 @@ export const childColumns: TableColumnList = [
     slot: 'canceled'
   },
   {
-    label: t('結算類型'),
+    label: t('结算类型'),
     slot: 'settleType'
   },
   {

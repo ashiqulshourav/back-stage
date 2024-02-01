@@ -349,6 +349,7 @@ export function useFootball() {
     }).then(async () => {
       const res = await API.addMatchEvent({ id: row.id });
       childloading.value = false;
+      row.isShowCount = false;
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if (res.code) return;
       getChildrenData(parentRow);

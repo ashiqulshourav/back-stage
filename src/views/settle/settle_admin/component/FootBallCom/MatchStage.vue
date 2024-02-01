@@ -7,19 +7,19 @@
   >
     <el-option
       :label="
-        row.eventCode === MatchEventType.MatchStatus
+        row.eventCode == MatchEventType.MatchStatus
           ? t('上半场结束')
           : t('上半场')
       "
-      :value="row.eventCode === MatchEventType.MatchStatus ? 31 : 6"
+      :value="row.eventCode == MatchEventType.MatchStatus ? 31 : 6"
     />
     <el-option
       :label="
-        row.eventCode === MatchEventType.MatchStatus
+        row.eventCode == MatchEventType.MatchStatus
           ? t('下半场结束')
           : t('下半场')
       "
-      :value="row.eventCode === MatchEventType.MatchStatus ? 100 : 7"
+      :value="row.eventCode == MatchEventType.MatchStatus ? 100 : 7"
     />
   </el-select>
 </template>
