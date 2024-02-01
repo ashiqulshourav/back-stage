@@ -24,7 +24,8 @@ export function useLeague() {
     countryId: '',
     leagueId: '',
     leagueId188Bet: '',
-    sportId: ''
+    sportId: '',
+    category: 0
   });
 
   function handleTableWidthChange(val: number) {

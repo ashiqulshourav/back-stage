@@ -33,6 +33,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
     VITE_COMPRESSION,
     VITE_PUBLIC_PATH,
     VITE_API_BASE_URL,
+    VITE_BUILD_TYPE,
   } = warpperEnv(loadEnv(mode, root));
   return {
     base: VITE_PUBLIC_PATH,
@@ -79,8 +80,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
           assetFileNames: "static/[ext]/[name]-[hash].[ext]"
         }
       },
-      outDir: 'dist/dpgames-back-stage',
-      // assetsDir: 'static',
+      outDir: `dist${VITE_BUILD_TYPE === 'production' ? '/dpgames-back-stage' : ''}`,
     },
     define: {
       __INTLIFY_PROD_DEVTOOLS__: false,

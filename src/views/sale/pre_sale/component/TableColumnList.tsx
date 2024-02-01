@@ -1,7 +1,11 @@
 import { handleTableWidth } from '@/utils/getTableWidth';
 import dayjs from 'dayjs';
 import { parseCountry } from '@/utils/formatMatch';
-import { OPENING_STATUS } from '@/utils/maps/sports_map';
+import {
+  ESPORT_ID_MAP,
+  OPENING_STATUS,
+  SPORT_ID_MAP
+} from '@/utils/maps/sports_map';
 
 export const columns: TableColumnList = [
   {
@@ -23,6 +27,16 @@ export const columns: TableColumnList = [
     minWidth: 200
   },
   {
+    label: t('游戏种类'),
+    prop: 'sportId',
+    headerRenderer: d => handleTableWidth(d, t('游戏种类'), 'auto'),
+    formatter: ({ sportId, category }) => {
+      const arr = category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
+      return arr.find(_ => _.value === sportId)?.label ?? '-';
+    },
+    minWidth: 120
+  },
+  {
     label: t('联赛ID'),
     prop: 'leagueId',
     headerRenderer: d => handleTableWidth(d, t('联赛ID'), 'auto')
@@ -37,6 +51,7 @@ export const columns: TableColumnList = [
   {
     label: t('赛事ID'),
     prop: 'matchId',
+    minWidth: 120,
     headerRenderer: d => handleTableWidth(d, t('赛事ID'), 'auto')
   },
   {

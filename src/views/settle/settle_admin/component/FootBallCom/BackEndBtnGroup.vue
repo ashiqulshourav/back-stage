@@ -1,7 +1,13 @@
 <template>
   <div class="flex" v-if="!row.canceled">
     <template v-if="row.isShowCount && row.settleTimes < 1">
-      <el-button @click="advanceSettlement">{{ t('确认结算') }}</el-button>
+      <el-button
+        :icon="useRenderIcon('uploadIcon')"
+        link
+        type="danger"
+        @click="advanceSettlement"
+        >{{ t('确认结算') }}</el-button
+      >
     </template>
     <template v-else>
       <el-button
@@ -18,7 +24,7 @@
         :icon="useRenderIcon('uploadIcon')"
         @click="handleChildrenData(row, parIndex, 'upload', parentRow)"
       >
-        {{ t('提交') }}
+        {{ t('确认结算') }}
       </el-button>
       <el-button
         v-if="isShowCancelBtn && isAllSettle && +row.t1 + +row.t2 !== 0"

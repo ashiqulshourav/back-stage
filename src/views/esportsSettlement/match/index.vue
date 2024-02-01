@@ -8,7 +8,7 @@
       @changeMatchCondition="changeMatchCondition"
     />
     <PureTableBar :columns="columns" @refresh="onSearch('reload')">
-      <template #title>{{ t('赛事列表') }}</template>
+      <template #title>{{ t('电竞赛事列表') }}</template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"

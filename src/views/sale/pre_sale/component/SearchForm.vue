@@ -1,15 +1,39 @@
 <template>
   <div class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]">
-    <!-- <div class="mb-3">
-      <el-button
-        v-for="item in selectTypeList"
-        :key="item.num"
-        :type="matchCondition === item.num ? 'primary' : ''"
-        @click="changeMatchCondition(item.num)"
-        >{{ item.val }}</el-button
-      >
-    </div> -->
     <el-form ref="formRef" :inline="true" :model="form">
+      <el-form-item :label="`${t('赛事类型')}:`" prop="category">
+        <el-select
+          v-model="form.category"
+          :placeholder="t('赛事类型')"
+          clearable
+          class="!w-[150px]"
+          @change="chagenMatchType"
+        >
+          <el-option
+            :label="item.label"
+            :value="item.value"
+            v-for="item in SPORT_CATEGORY"
+            :key="item.value"
+          />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item :label="`${t('游戏种类')}:`" prop="sportId">
+        <el-select
+          v-model="form.sportId"
+          :placeholder="t('游戏种类')"
+          clearable
+          class="!w-[150px]"
+        >
+          <el-option
+            :label="item.label"
+            :value="item.value"
+            v-for="item in gameClassify"
+            :key="item.value"
+          />
+        </el-select>
+      </el-form-item>
+
       <el-form-item :label="`${t('联赛')}:`" prop="leagueId">
         <el-select
           v-model="form.leagueId"
@@ -19,7 +43,9 @@
           :placeholder="t('请选择联赛')"
         >
           <el-option
-            v-for="item in matchStore.sportLeagueList"
+            v-for="item in form.category === 0
+              ? matchStore.sportLeagueList
+              : matchStore.esportLeagueList"
             :key="item.leagueId"
             :label="item.leagueNameCn"
             :value="item.leagueId"
@@ -36,6 +62,33 @@
           :formatter="v => formatNumber(v)"
           class="!w-[150px]"
         />
+      </el-form-item>
+
+      <el-form-item :label="`${t('开售状态')}:`" prop="isSale">
+        <el-select
+          class="!w-[150px]"
+          v-model="form.isSale"
+          clearable
+          :placeholder="t('请选择')"
+          @change="search"
+        >
+          <el-option :label="t('开售')" :value="1" />
+          <el-option :label="t('未开售')" :value="0" />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item :label="`${t('盘口状态')}:`" prop="handicapStatus">
+        <el-select
+          class="!w-[150px]"
+          v-model="form.handicapStatus"
+          clearable
+          :placeholder="t('请选择')"
+          @change="search"
+        >
+          <el-option :label="t('早盘')" :value="0" />
+          <el-option :label="t('未开售')" :value="1" />
+          <el-option :label="t('滚球中')" :value="2" />
+        </el-select>
       </el-form-item>
 
       <el-form-item :label="`${t('比赛时间')}:`" prop="startTime">
@@ -71,33 +124,6 @@
         />
       </el-form-item>
 
-      <el-form-item :label="`${t('开售状态')}:`" prop="isSale">
-        <el-select
-          class="!w-[150px]"
-          v-model="form.isSale"
-          clearable
-          :placeholder="t('请选择')"
-          @change="search"
-        >
-          <el-option :label="t('开售')" :value="1" />
-          <el-option :label="t('未开售')" :value="0" />
-        </el-select>
-      </el-form-item>
-
-      <el-form-item :label="`${t('盘口状态')}:`" prop="handicapStatus">
-        <el-select
-          class="!w-[150px]"
-          v-model="form.handicapStatus"
-          clearable
-          :placeholder="t('请选择')"
-          @change="search"
-        >
-          <el-option :label="t('早盘')" :value="0" />
-          <el-option :label="t('未开售')" :value="1" />
-          <el-option :label="t('滚球中')" :value="2" />
-        </el-select>
-      </el-form-item>
-
       <el-form-item>
         <el-button
           type="primary"
@@ -126,11 +152,18 @@ import dayjs from 'dayjs';
 import { disableDate } from '@/utils/formatDate';
 import { useMatchStore } from '@/store/match';
 import { formatNumber } from '@/utils/formatNumber';
+import {
+  ESPORT_ID_MAP,
+  SPORT_ID_MAP,
+  SPORT_CATEGORY
+} from '@/utils/maps/sports_map';
 
 const formRef = ref();
 const emits = defineEmits(['onSearch', 'changeMatchCondition']);
 const selectIndex = ref(-1);
 const matchStore = useMatchStore();
+const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
+
 const props = withDefaults(
   defineProps<{
     loading: boolean;
@@ -147,7 +180,7 @@ const props = withDefaults(
 ]; */
 
 onMounted(() => {
-  matchStore.set_lagueList(0);
+  matchStore.set_lagueList(0, 1);
 });
 
 const changeDate = t => {
@@ -167,6 +200,7 @@ const changeDate = t => {
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
   selectIndex.value = -1;
+  gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
   emits('onSearch', ...['reload']);
 };
 
@@ -183,6 +217,13 @@ const changeSelectDate = (_: number) => {
 
 const search = () => {
   emits('onSearch', ...['reload']);
+};
+
+const chagenMatchType = (type: 0 | 1 | 2) => {
+  props.form.sportId = '';
+  //- 电竞比赛 =1
+  gameClassify.value = type === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
+  matchStore.set_lagueList(type, props.form.sportId);
 };
 
 const nextDayArr = computed(() => {

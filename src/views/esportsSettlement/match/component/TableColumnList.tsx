@@ -37,7 +37,7 @@ export const columns: TableColumnList = [
     prop: 'matchName',
     minWidth: 200,
     formatter: ({ sportId }) =>
-      ESPORT_ID_MAP.find(_ => _.val === sportId)?.label ?? '-'
+      ESPORT_ID_MAP.find(_ => _.value === sportId)?.label ?? '-'
   },
   {
     label: t('赛事ID'),

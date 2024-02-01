@@ -363,7 +363,7 @@ export function useFootball() {
       cancelButtonText: t('取消'),
       center: true
     }).then(async () => {
-      const res = await API.cancelMatchEvent({ id });
+      const res = await API.cancelMatchEvent({ id, matchId });
       message(res.msg, { type: res.code ? 'error' : 'success' });
       const row = dataList.find(_ => _.matchId === matchId);
       getChildrenData(row);

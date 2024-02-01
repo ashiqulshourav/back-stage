@@ -28,9 +28,9 @@
         >
           <el-option
             v-for="item in ESPORT_ID_MAP"
-            :key="item.val"
+            :key="item.value"
             :label="item.label"
-            :value="item.val"
+            :value="item.value"
           />
         </el-select>
       </el-form-item>

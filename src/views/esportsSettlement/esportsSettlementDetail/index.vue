@@ -80,7 +80,6 @@ const changeIndex = index => {
 };
 
 const keyList = computed(() => {
-  console.log('index.vue文件 83==============行打印=', renderObj.betItemsMap);
   return renderObj.betItemsMap
     ? Object.keys(renderObj.betItemsMap).map(key => key)
     : [];

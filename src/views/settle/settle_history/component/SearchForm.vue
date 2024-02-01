@@ -98,7 +98,7 @@ const changeDate = t => {
 };
 
 onMounted(() => {
-  matchStore.set_lagueList(0);
+  matchStore.set_lagueList(0, 1);
 });
 
 const emits = defineEmits(['onSearch', 'resetForm', 'changeMatchCondition']);

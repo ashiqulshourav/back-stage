@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build:dpgames-back-stage": "rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build",
+    "build:dpgames-back-stage": "rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build --mode production",
+    "build:dev": "rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build --mode dev",
     "preview": "vite preview",
     "preview:build": "pnpm build && vite preview",
     "typecheck": "tsc --noEmit && vue-tsc --noEmit --skipLibCheck",

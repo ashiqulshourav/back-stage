@@ -47,8 +47,9 @@ export const sattleData = {
     matchId: number;
   }) => http.request<SaleDataAPI.setManualMatchStatusResType>("post", "/event/v1/setManualMatchStatus", { data }),
 
-  //- 取消时间
+  //- 取消事件
   cancelMatchEvent: (data: {
     id: number;
+    matchId: number;
   }) => http.request<SaleDataAPI.cancelMatchEventResType>("post", "/event/v1/cancelMatchEvent", { data }),
 };

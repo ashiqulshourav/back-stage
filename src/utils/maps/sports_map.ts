@@ -4,7 +4,7 @@ export const SPORT_ID_MAP = [
   { label: t('足球'), value: 1, type: 'FootBall' },
   { label: t('篮球'), value: 2, type: 'BasketBall' },
   { label: t('网球'), value: 3, type: 'Tennis' },
-  { label: t('电子竞技'), value: 4, type: 'FootBall' },
+  // { label: t('电子竞技'), value: 4, type: 'FootBall' },
   { label: t('斯诺克/台球'), value: 5, type: 'Billiards' },
   { label: t('排球'), value: 6, type: 'Volleyball' },
   { label: t('特别项目'), value: 7, type: 'SpecialProjects' },
@@ -16,28 +16,26 @@ export const SPORT_ID_MAP = [
 
 
 export const ESPORT_ID_MAP = [
-  { val: 276, label: 'DOTA2', },
-  { val: 277, label: 'CS2', },
-  { val: 278, label: '英雄联盟', },
-  { val: 279, label: '王者荣耀', },
-  { val: 280, label: 'LOL:激斗峡谷', },
-  { val: 281, label: '永劫无间', },
-  { val: 282, label: '无尽对决', },
-  { val: 283, label: '篮球', },
-  { val: 284, label: '足球', },
-  { val: 285, label: '传说对决', },
-  { val: 286, label: '无畏契约', },
-  { val: 287, label: 'MMA', },
-  { val: 288, label: '绝地求生', },
-  { val: 289, label: '穿越火线', },
-  { val: 290, label: '守望先锋', },
-  { val: 291, label: '星际争霸II', },
-  { val: 292, label: '火箭联盟', },
-  { val: 293, label: '彩虹六号', },
-  { val: 294, label: '炉石传说', },
-  { val: 295, label: 'FIFA', },
-  { val: 296, label: '使命召唤', },
-  { val: 297, label: '魔兽争霸3', },
+  { value: 276, label: 'DOTA2', },
+  { value: 277, label: 'CS2', },
+  { value: 278, label: '英雄联盟', },
+  { value: 279, label: '王者荣耀', },
+  { value: 280, label: 'LOL:激斗峡谷', },
+  { value: 281, label: '永劫无间', },
+  { value: 282, label: '无尽对决', },
+  { value: 285, label: '传说对决', },
+  { value: 286, label: '无畏契约', },
+  { value: 287, label: 'MMA', },
+  { value: 288, label: '绝地求生', },
+  { value: 289, label: '穿越火线', },
+  { value: 290, label: '守望先锋', },
+  { value: 291, label: '星际争霸II', },
+  { value: 292, label: '火箭联盟', },
+  { value: 293, label: '彩虹六号', },
+  { value: 294, label: '炉石传说', },
+  { value: 295, label: 'FIFA', },
+  { value: 296, label: '使命召唤', },
+  { value: 297, label: '魔兽争霸3', },
 ]
 
 
@@ -207,6 +205,11 @@ export const GET_PLAYNAME_BY_KC = {
   'Outright': t('冠军玩法'),
 };
 
+export const SPORT_CATEGORY = [
+  { label: t('普通体育'), value: 0 },
+  { label: t('电子竞技'), value: 1 },
+  { label: t('虚拟体育'), value: 2 },
+]
 
 export enum LeagueClassifyType {
   SPORT_CLASSIFY = 0,

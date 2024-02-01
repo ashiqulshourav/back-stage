@@ -11,6 +11,7 @@ export type searchFormType = {
   leagueId: string;
   leagueId188Bet: string;
   sportId: string;
+  category: string | number;
 }
 
 export type { FormProps };

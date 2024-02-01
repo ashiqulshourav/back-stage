@@ -143,7 +143,18 @@
                         handleChildrenData(row, parIndex, 'upload', parentRow)
                       "
                     >
-                      {{ t('提交') }}
+                      {{ t('确认结算') }}
+                    </el-button>
+                    <el-button
+                      class="reset-margin"
+                      link
+                      type="primary"
+                      :size="size"
+                      v-if="!row.isBackEndReturnData"
+                      :icon="useRenderIcon(Delete)"
+                      @click="item.tableList.pop()"
+                    >
+                      {{ t('取消') }}
                     </el-button>
                   </div>
                 </template>
@@ -201,6 +212,7 @@ import EventSource from './EventSource.vue';
 import { t } from '@/plugins/i18n';
 import { useFootball } from './util/hook';
 import { usePublicHooks } from '@/hooks';
+import Delete from '@iconify-icons/ep/delete';
 import {
   MatchEventRowType,
   MatchEventType,

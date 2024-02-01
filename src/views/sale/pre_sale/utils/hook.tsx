@@ -32,7 +32,8 @@ export function usePreSale() {
     endTime: '',
     leagueNameCn: '',
     leagueId: '',
-    handicapStatus: ''
+    handicapStatus: '',
+    category: 0
   });
 
   function changeSwitch({
@@ -166,8 +167,7 @@ export function usePreSale() {
       ...removeEmptyStringKeys(searchForm),
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage,
-      matchCondition: matchCondition.value,
-      sportId: 1
+      matchCondition: matchCondition.value
     });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });

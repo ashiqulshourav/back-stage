@@ -1,6 +1,7 @@
 import { http } from "@/utils/http";
 
 export const metaData = {
+  //- 普通体育
   getLeagueList: (data: MetadataAPI.LeagueListParams) => http.request<MetadataAPI.LeagueListRes>("post", "/league/v1/getLeagueList", { data }),
 
   updateLeague: (data: MetadataAPI.updateLeagueParamsType) => http.request<MetadataAPI.updateLeagueResType>("post", "/league/v1/updateLeague", { data }),

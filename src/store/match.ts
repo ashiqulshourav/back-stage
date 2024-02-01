@@ -11,14 +11,22 @@ export const useMatchStore = defineStore('MATCHSTATE', {
   }),
   actions: {
     //- 设置联赛供搜索使用 体育 + 电子竞技
-    async set_lagueList(category: LeagueClassifyType) {
-      const listType = category === LeagueClassifyType.SPORT_CLASSIFY ? 'sportLeagueList' : 'esportLeagueList';
-      if (this[listType].length) return;
-      const res: MetadataAPI.LeagueListRes = await API.getLeagueList({
+    async set_lagueList(category: LeagueClassifyType, sportId?: number | string) {
+      const params = {
         pageSize: 9999,
         pageNum: 1,
-        category
-      });
+        category,
+      }
+      let listType: string;
+      if (category === LeagueClassifyType.SPORT_CLASSIFY) {
+        listType = 'sportLeagueList'
+        params['sportId'] = sportId;
+      } else {
+        listType = 'esportLeagueList'
+      }
+      if (this[listType].length) return;
+
+      const res: MetadataAPI.LeagueListRes = await API.getLeagueList(params);
       this[listType] = res.data.list;
     },
     async set_countryList() {

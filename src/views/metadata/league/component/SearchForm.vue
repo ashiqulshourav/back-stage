@@ -5,6 +5,39 @@
     :model="form"
     class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
   >
+    <el-form-item :label="`${t('赛事类型')}:`" prop="category">
+      <el-select
+        v-model="form.category"
+        :placeholder="t('赛事类型')"
+        clearable
+        class="!w-[150px]"
+        @change="chagenMatchType"
+      >
+        <el-option
+          :label="item.label"
+          :value="item.value"
+          v-for="item in SPORT_CATEGORY"
+          :key="item.value"
+        />
+      </el-select>
+    </el-form-item>
+
+    <el-form-item :label="`${t('游戏种类')}:`" prop="sportId">
+      <el-select
+        v-model="form.sportId"
+        :placeholder="t('游戏种类')"
+        clearable
+        class="!w-[150px]"
+      >
+        <el-option
+          :label="item.label"
+          :value="item.value"
+          v-for="item in gameClassify"
+          :key="item.value"
+        />
+      </el-select>
+    </el-form-item>
+
     <el-form-item :label="`${t('联赛ID')}:`" prop="leagueId">
       <el-input
         v-model="form.leagueId"
@@ -108,25 +141,37 @@
 import { t } from '@/plugins/i18n';
 import SearchIcon from '@iconify-icons/ep/search';
 import RefreshIcon from '@iconify-icons/ep/refresh';
-import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import type { FormInstance } from 'element-plus';
 import { searchFormType } from '../utils/types';
 import { useMatchStore } from '@/store/match';
 import { formatNumber, inputRestrictions } from '@/utils/formatNumber';
+import {
+  SPORT_ID_MAP,
+  ESPORT_ID_MAP,
+  SPORT_CATEGORY
+} from '@/utils/maps/sports_map';
 
-defineProps<{
+const props = defineProps<{
   loading: boolean;
   form: searchFormType;
 }>();
 
 const formRef = ref();
 const matchStore = useMatchStore();
+const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
 
 const emits = defineEmits(['onSearch']);
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
+  gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
   search();
+};
+
+const chagenMatchType = (type: 0 | 1 | 2) => {
+  props.form.sportId = '';
+  //- 电竞比赛 =1
+  gameClassify.value = type === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
 };
 
 const search = () => {

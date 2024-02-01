@@ -110,7 +110,7 @@ const props = withDefaults(
 );
 
 onMounted(() => {
-  matchStore.set_lagueList(0);
+  matchStore.set_lagueList(0, 1);
 });
 
 const changeDate = t => {

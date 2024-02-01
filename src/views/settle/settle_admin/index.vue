@@ -44,6 +44,7 @@ const currentComponentName = reactive({
 const changeCurrentComponentName = (_: { value: number; type: string }) => {
   currentComponentName.name = markRaw(comoMap[_.type]);
   currentSportId.value = _.value;
+  onSearch('reload');
 };
 
 //- 搜索相关

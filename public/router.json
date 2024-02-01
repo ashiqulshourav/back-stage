@@ -82,7 +82,7 @@
         "path": "/esportsSettlement/match",
         "name": "ESPORTSSETTLEMENT_MATCH",
         "meta": {
-          "title": "赛事列表",
+          "title": "电竞赛事列表",
           "showParent": true
         }
       },

@@ -297,7 +297,7 @@ onBeforeMount(() => {
       </el-tooltip> -->
     </ul>
 
-    <el-divider>主题色</el-divider>
+    <el-divider>{{ t('主题色') }}</el-divider>
     <ul class="theme-color">
       <li
         v-for="(item, index) in themeColors"
@@ -316,10 +316,10 @@ onBeforeMount(() => {
       </li>
     </ul>
 
-    <el-divider>界面显示</el-divider>
+    <el-divider>{{ t('界面显示') }}</el-divider>
     <ul class="setting">
       <li>
-        <span class="dark:text-white">灰色模式</span>
+        <span class="dark:text-white">{{ t('灰色模式') }}</span>
         <el-switch
           v-model="settings.greyVal"
           inline-prompt

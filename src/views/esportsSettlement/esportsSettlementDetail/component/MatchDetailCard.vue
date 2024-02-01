@@ -31,7 +31,7 @@ const renderList = computed(() => {
     { title: t('开赛时间'), val: _.beginTime },
     {
       title: t('游戏'),
-      val: ESPORT_ID_MAP.find(r => r.val === +_.sportId)?.label
+      val: ESPORT_ID_MAP.find(r => r.value === +_.sportId)?.label
     },
     { title: t('赛事状态'), val: ESPORT_MATCH_STATUS[_.status] },
     {

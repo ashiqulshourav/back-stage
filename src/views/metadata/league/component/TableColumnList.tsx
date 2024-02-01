@@ -1,5 +1,5 @@
 import { parseCountry } from '@/utils/formatMatch';
-import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+import { ESPORT_ID_MAP, SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
 export const columns: TableColumnList = [
   {
@@ -45,8 +45,10 @@ export const columns: TableColumnList = [
   {
     label: t('赛种'),
     prop: 'sportId',
-    formatter: ({ sportId }): string =>
-      SPORT_ID_MAP.find(_ => _.value === sportId)?.label ?? '-',
+    formatter: ({ sportId, category }): string => {
+      const arr = category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
+      return arr.find(_ => _.value === sportId)?.label ?? '-';
+    },
     minWidth: 150
   },
   {
