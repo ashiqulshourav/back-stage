@@ -119,10 +119,10 @@ const openInfoDialog = (matchId: number, row: SaleDataAPI.PreSaleList) => {
     return message(t('暂不支持冠军玩法!'), { type: 'error' });
   }
   addDialog({
-    top: '5vh',
     title: t('盘口预览'),
     props: { matchId, matchInfo: row },
     width: '40%',
+    alignCenter: true,
     draggable: true,
     hideFooter: true,
     contentRenderer: () =>

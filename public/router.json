@@ -123,11 +123,37 @@
     ]
   },
   {
+    "path": "/configCenter",
+    "meta": {
+      "title": "配置中心",
+      "icon": "configCenter",
+      "rank": 6
+    },
+    "children": [
+      {
+        "path": "/configCenter/classify_setting",
+        "name": "CONFIGCENTER_CLASSIFY_SETTING",
+        "meta": {
+          "title": "分类设定",
+          "showParent": true
+        }
+      },
+      {
+        "path": "/configCenter/play_method",
+        "name": "CONFIGCENTER_PLAY_METHOD",
+        "meta": {
+          "title": "自定义玩法",
+          "showParent": true
+        }
+      }
+    ]
+  },
+  {
     "path": "/virtual",
     "meta": {
       "title": "虚拟体育",
       "icon": "files",
-      "rank": 6
+      "rank": 7
     },
     "children": [
       {
@@ -154,7 +180,7 @@
     "meta": {
       "title": "赛程历史",
       "icon": "history",
-      "rank": 7
+      "rank": 8
     }
   },
   {
@@ -163,7 +189,7 @@
     "meta": {
       "title": "操作日志",
       "icon": "operationLog",
-      "rank": 8
+      "rank": 9
     }
   },
   {
@@ -172,7 +198,7 @@
     "meta": {
       "title": "菜单地图",
       "icon": "menuTree",
-      "rank": 9
+      "rank": 10
     }
   },
   {
@@ -181,7 +207,7 @@
     "meta": {
       "title": "开发中界面",
       "icon": "menuTree",
-      "rank": 10,
+      "rank": 11,
       "Developcomplete": true
     }
   }

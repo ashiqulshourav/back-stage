@@ -28,6 +28,7 @@ import addIcons from '@iconify-icons/ri/add-fill';
 import AddFill from '@iconify-icons/ri/add-circle-line';
 import deleteBin_5Line from '@iconify-icons/ri/delete-bin-5-line';
 import EditPen from '@iconify-icons/ep/edit-pen';
+import Delete from '@iconify-icons/ep/delete';
 /** //-菜单icon */
 import metadata from "@iconify-icons/ri/vip-crown-2-line";
 import sale from "@iconify-icons/ri/store-2-fill";
@@ -36,6 +37,7 @@ import moneyDollarCircleFill from '@iconify-icons/ri/money-cny-circle-line';
 import esports from "@iconify-icons/ep/monitor";
 import virtual from "@iconify-icons/ep/files";
 import menuTree from '@iconify-icons/ri/list-unordered';
+import configCenter from '@iconify-icons/ri/settings-3-line';
 
 addIcon("metadata", metadata);
 addIcon("sale", sale);
@@ -46,6 +48,7 @@ addIcon("virtual", virtual);
 addIcon("history", History);
 addIcon("operationLog", OperationLog);
 addIcon("menuTree", menuTree);
+addIcon("configCenter", configCenter);
 /* 菜单icon结束 */
 
 addIcon("homeFilled", HomeFilled);
@@ -69,3 +72,4 @@ addIcon("addIcon", addIcons);
 addIcon("addFill", AddFill);
 addIcon("editPen", EditPen);
 addIcon("deleteBin_5Line", deleteBin_5Line);
+addIcon("Delete", Delete);
