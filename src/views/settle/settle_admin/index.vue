@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import FootBall from './component/FootBallCom/index.vue';
-import BasketBall from './component/BasketballCom/index.vue';
+import BasketBall from './component/Basketball/index.vue';
 import Tennis from './component/Tennis/index.vue';
 import SearchForm from './component/SearchForm.vue';
 import SportTypeNav from './component/SportTypeNav.vue';
