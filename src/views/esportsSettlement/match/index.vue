@@ -46,7 +46,6 @@
             />
           </template>
 
-          <!-- -赛事详情按钮 -->
           <template #operation="{ row }: EsportMatchRowType">
             <el-button
               class="reset-margin"
@@ -94,22 +93,3 @@ const {
   changeMatchCondition
 } = useEsportSettlement();
 </script>
-
-<style lang="scss">
-.is-horizontal {
-  display: block !important;
-  height: 10px !important;
-}
-
-/* 
-1-20 2-20 1 
-3-20 4-20 2
-5-20 6-20 
-  
-2: 55000 
-3: 55000
-4: 55000
-5: 55000
-6: 55000
- */
-</style>

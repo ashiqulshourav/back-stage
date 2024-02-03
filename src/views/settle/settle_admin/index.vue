@@ -6,7 +6,6 @@
       @changeCurrentComponentName="changeCurrentComponentName"
       :currentSportId="currentSportId"
     />
-
     <component
       :is="currentComponentName.name"
       ref="componentStrName"
@@ -17,7 +16,8 @@
 
 <script setup lang="ts">
 import FootBall from './component/FootBallCom/index.vue';
-import BasketBall from './component/BasketballCom/index.vue';
+import BasketBall from './component/Basketball/index.vue';
+import Tennis from './component/Tennis/index.vue';
 import SearchForm from './component/SearchForm.vue';
 import SportTypeNav from './component/SportTypeNav.vue';
 import { SearchFormType } from './utils/type';
@@ -35,7 +35,8 @@ const form = reactive<SearchFormType>({
 });
 const comoMap = {
   FootBall,
-  BasketBall
+  BasketBall,
+  Tennis
 };
 const currentComponentName = reactive({
   name: markRaw(comoMap.FootBall)

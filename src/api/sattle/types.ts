@@ -88,13 +88,12 @@ declare namespace SattleDataAPI {
     pageSize: number;
     pageNum: number;
     unSettlementEvents: number;
-    childrenData: ChildrenDataList[];
+    childrenData?: ChildrenDataList[];
     settlementType: number; //1 自动结算 //2 手动结算
   }
 
   type ChildrenDataList = {
     type: string;
-    // key: 'matchScoreRecordList' | 'penaltyCardRecordList' | 'cornerRecordList' | 'endGameEventList';
     key: 'matchScoreRecordList' | 'penaltyCardRecordList' | 'cornerRecordList';
     tableList: MatchEventsList[]
   };

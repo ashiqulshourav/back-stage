@@ -7,7 +7,7 @@ export const useMatchStore = defineStore('MATCHSTATE', {
     sportLeagueList: [],
     esportLeagueList: [],
     countryList: [],
-    settleRequestLoading: false
+    settleRequestLoading: false   //- 结算页面searchLoading
   }),
   actions: {
     //- 设置联赛供搜索使用 体育 + 电子竞技

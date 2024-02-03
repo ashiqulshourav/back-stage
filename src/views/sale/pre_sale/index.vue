@@ -152,10 +152,3 @@ const {
   selectLockcList
 } = usePreSale();
 </script>
-
-<style lang="scss">
-.is-horizontal {
-  display: block !important;
-  height: 10px !important;
-}
-</style>

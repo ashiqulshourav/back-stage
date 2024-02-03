@@ -67,6 +67,14 @@
           "title": "结算历史",
           "showParent": true
         }
+      },
+      {
+        "path": "/settle/tennis_detail/:matchId",
+        "name": "SETTLE_TENNIS_DETAIL",
+        "meta": {
+          "title": "网球结算",
+          "showLink": false
+        }
       }
     ]
   },

@@ -172,7 +172,7 @@
                     :class="['!text-xs', index === 1 && '!mr-2 !ml-2']"
                     >{{ _.val }}</el-text
                   >
-                  <span>-</span>
+                  <span v-else>-</span>
                 </template>
               </pure-table>
               <div class="mt-2 cursor-pointer">

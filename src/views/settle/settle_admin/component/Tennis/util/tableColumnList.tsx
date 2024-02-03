@@ -5,11 +5,6 @@ import { MATCH_STATUS /* PANDA_MATCH_STATUS */ } from '@/utils/maps/sports_map';
 
 export const columns: TableColumnList = [
   {
-    type: 'expand',
-    slot: 'expand',
-    fixed: true
-  },
-  {
     label: t('序号'),
     fixed: true,
     type: 'index',
@@ -111,57 +106,12 @@ export const columns: TableColumnList = [
     label: t('未结算'),
     prop: 'unSettlementEvents',
     headerRenderer: d => handleTableWidth(d, t('未结算'))
-  }
-];
-
-export const childColumns: TableColumnList = [
-  {
-    label: t('主队 : 客队'),
-    prop: 't1',
-    formatter: ({ t1, t2 }) => {
-      return `${t1 ?? '-'} : ${t2 ?? '-'}`;
-    }
   },
-  {
-    label: t('事件编码'),
-    slot: 'eventCode'
-  },
-  {
-    label: t('事件是否有效'),
-    slot: 'canceled'
-  },
-  {
-    label: t('結算類型'),
-    slot: 'settleType'
-  },
-  {
-    label: t('比赛进行时间'),
-    slot: 'eventTime',
-    headerRenderer: d => handleTableWidth(d, t('比赛进行时间'))
-  },
-  {
-    label: t('比赛阶段'),
-    slot: 'matchPeriodId'
-  },
-  {
-    label: t('事件来源'),
-    slot: 'homeAway'
-  },
-  // {
-  //   label: t('1号球员名称'),
-  //   slot: 'player1Name'
-  // },
   {
     label: t('操作'),
-    slot: 'operation'
-  },
-  {
-    label: t('结算次数'),
-    prop: 'settleTimes',
-    formatter: ({ settleTimes }) => settleTimes ?? '-'
-  },
-  {
-    label: t('数据商'),
-    slot: 'dataSourceCode'
+    slot: 'operation',
+    headerRenderer: d => handleTableWidth(d, t('操作'), 'auto'),
+    minWidth: 160,
+    fixed: 'right'
   }
 ];
