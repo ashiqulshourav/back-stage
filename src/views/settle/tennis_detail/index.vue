@@ -6,7 +6,7 @@
     <PureTableBar
       :title="t('足球结算管理')"
       :columns="columns"
-      @refresh="onSearch('reload')"
+      @refresh="onSearch()"
     >
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
@@ -49,6 +49,7 @@
 
 <script setup lang="ts">
 import { usePublicHooks } from '@/hooks';
+import { PureTableBar } from '@/components/RePureTableBar';
 import DetiltTitle from './component/DetailTitle.vue';
 import { useTennisDetailHook } from './utils/hook';
 import { t } from '@/plugins/i18n';

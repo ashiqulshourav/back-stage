@@ -8,9 +8,13 @@
         :key="index"
         :span="6"
       >
-        <!-- :offset="index % 2 === 0 ? 6 : 3" -->
-        <span class="mr-2 text-sm">{{ item.title }}:</span>
-        <span class="text-sm">{{ item.val }}</span>
+        <template v-if="index !== renderList.length - 1">
+          <span class="mr-2 text-sm">{{ item.title }}:</span>
+          <span class="text-sm">{{ item.val }}</span>
+        </template>
+        <template v-else>
+          <el-button type="primary">{{ t('全场结算') }}</el-button>
+        </template>
       </el-col>
     </el-row>
   </div>
