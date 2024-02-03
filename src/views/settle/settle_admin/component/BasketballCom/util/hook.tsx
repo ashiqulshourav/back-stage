@@ -355,7 +355,7 @@ export function useBasketballHook() {
     });
   };
 
-  //- 取消结算时间
+  //- 取消结算事件
   const cancelMatchEvent = async (id: number, matchId: number) => {
     ElMessageBox.confirm('确定要取消该事件么?', t('警告'), {
       dangerouslyUseHTMLString: true,

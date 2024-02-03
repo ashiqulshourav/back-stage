@@ -191,3 +191,10 @@ input[type='number'] {
     }
   }
 }
+
+.el-table__body-wrapper {
+  .is-horizontal {
+    display: block !important;
+    height: 10px !important;
+  }
+}
