@@ -1,36 +1,10 @@
 [
-   {
-    "path": "/betBill",
-    "meta": {
-      "title": "注单管理",
-      "icon": "crown",
-      "rank": 1
-    },
-    "children": [
-      {
-        "path": "/betBill/unSettlement",
-        "name": "unSettlement",
-        "meta": {
-          "title": "未结算注单",
-          "showParent": true
-        }
-      },
-      {
-        "path": "/betBill/settlement",
-        "name": "settlement",
-        "meta": {
-          "title": "已结算注单",
-          "showParent": true
-        }
-      }
-    ]
-  },
   {
     "path": "/metadata",
     "meta": {
       "title": "赛程管理",
       "icon": "metadata",
-      "rank": 11
+      "rank": 1
     },
     "children": [
       {
@@ -236,5 +210,31 @@
       "rank": 11,
       "Developcomplete": true
     }
+  },
+  {
+    "path": "/betBill",
+    "meta": {
+      "title": "注单管理",
+      "icon": "crown",
+      "rank": 12
+    },
+    "children": [
+      {
+        "path": "/betBill/unSettlement",
+        "name": "unSettlement",
+        "meta": {
+          "title": "未结算注单",
+          "showParent": true
+        }
+      },
+      {
+        "path": "/betBill/settlement",
+        "name": "settlement",
+        "meta": {
+          "title": "已结算注单",
+          "showParent": true
+        }
+      }
+    ]
   }
 ]
