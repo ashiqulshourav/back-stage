@@ -41,7 +41,8 @@ export const localesConfigs = {
 
 export function t(message: any = "", params: any = {}) {
   if (!message) return "";
-  const hashKey = `k${crc32.str(message).toString(16)}`;
+  let hashKey = `k${crc32.str(message).toString(16)}`;
+  if (params.context) hashKey = `${hashKey}_${params.context}`
   let words = i18n.global.t.call(i18n.global.locale, hashKey, params);
   if (words === hashKey) {
     console.log(message, "-未翻译", words, hashKey);
