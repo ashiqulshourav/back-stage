@@ -45,7 +45,7 @@ export const columns: TableColumnList = [
   {
     label: '操作',
     prop: 'operation',
-    width: 250,
+    width: 263,
     headerRenderer: d => handleTableWidth(d, '操作')
   },
 ];

@@ -10,7 +10,7 @@ export default {
   },
   children: [
     {
-      path: "/betBill/unSettlement",
+      path: "/betBill/unSettlement/:matchId",
       name: "unSettlement",
       component: () => import("@/views/betBill/unSettlement/index.vue"),
       meta: {
