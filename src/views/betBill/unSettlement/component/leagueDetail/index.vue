@@ -34,7 +34,7 @@
     </div>
     <div class="item">
       <div class="prop">结算状态</div>
-      <div class="value">结算状态</div>
+      <div class="value">全场结算</div>
     </div>
   </div>
 </div>
