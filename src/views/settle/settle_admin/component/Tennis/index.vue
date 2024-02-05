@@ -47,17 +47,23 @@ const { tableHeaderStyle } = usePublicHooks();
 
 const matchStore = useMatchStore();
 
+const props = defineProps<{
+  form: SearchFormType;
+}>();
+
 const {
   onSearch,
   columns,
   dataList,
   pagination,
   handleTableWidthChange,
-  handleCurrentChange
+  handleCurrentChange,
+  form
 } = useTennisHook();
+form.value = props.form;
 
-const filterData = (type: 'reload', form: SearchFormType) => {
-  onSearch(type, form);
+const filterData = (type: 'reload') => {
+  onSearch(type);
 };
 
 defineExpose({ filterData });

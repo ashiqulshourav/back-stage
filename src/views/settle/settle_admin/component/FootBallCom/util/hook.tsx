@@ -15,14 +15,6 @@ import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
 import { useMatchStore } from '@/store/match';
 
 export function useFootball() {
-  const form = reactive<SearchFormType>({
-    leagueId: '',
-    matchId: '',
-    status: '',
-    startTime: '',
-    endTime: ''
-  });
-
   const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const childloading = ref(true);
   const switchLoadMap = ref({});
@@ -31,12 +23,11 @@ export function useFootball() {
   const expandRowList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const loopTimer = ref<NodeJS.Timeout>();
   const matchStore = useMatchStore();
-
+  const form = ref<SearchFormType>({} as SearchFormType);
   const balanceLoading = reactive<{ half: boolean; all: boolean }>({
     half: false,
     all: false
   });
-
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -56,9 +47,8 @@ export function useFootball() {
   };
 
   /** 搜索初始化 */
-  const onSearch = async (type?: 'reload', form?: SearchFormType) => {
+  const onSearch = async (type?: 'reload') => {
     loopTimer.value && clearInterval(loopTimer.value);
-
     try {
       if (type === 'reload') {
         pagination.currentPage = 1;
@@ -66,7 +56,7 @@ export function useFootball() {
         expandRowList.length = 0;
       }
 
-      const data = removeEmptyStringKeys(form ?? {});
+      const data = removeEmptyStringKeys(form.value ?? {});
       matchStore.set_settleRequestLoading(true);
 
       const res: SattleDataAPI.getSettlementListRes =
@@ -120,7 +110,7 @@ export function useFootball() {
     } else {
       loopTimer.value && clearInterval(loopTimer.value);
       const tempList: TempListType = {
-        eventTime: Date.now(),
+        eventTime: '',
         homeAway: null,
         matchPeriodId: null,
         isBackEndReturnData: false,
@@ -178,9 +168,9 @@ export function useFootball() {
           _.isBackEndReturnData = true;
           if (_.eventTime.toString().length < 10) {
             _.eventTime = dateSetSecond(_.eventTime as number);
-          } else {
+          } /*  else {
             _.eventTime = getSecondTime(_.eventTime, row.beginTime);
-          }
+          } */
           item.type === 'yellow_red_card' &&
             (_.redOrYellow = YELLOW_OR_RED[_.eventCode]);
         });
@@ -372,12 +362,12 @@ export function useFootball() {
   };
 
   return {
-    form,
     childloading,
     columns,
     dataList,
     pagination,
     onSearch,
+    form,
     handleTableWidthChange,
     switchLoadMap,
     expandChange,

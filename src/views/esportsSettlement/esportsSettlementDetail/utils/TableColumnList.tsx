@@ -31,7 +31,7 @@ export const columns: TableColumnList = [
     minWidth: 200
   },
   {
-    label: t('盘口状态'),
+    label: t('结算状态'),
     prop: 'win',
     formatter: ({ win }) => (win === null ? t('未结算') : t('已结算'))
   },

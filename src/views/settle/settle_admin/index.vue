@@ -17,6 +17,7 @@
 <script setup lang="ts">
 import FootBall from './component/FootBallCom/index.vue';
 import BasketBall from './component/Basketball/index.vue';
+import Billiards from './component/Billiards/index.vue';
 import Tennis from './component/Tennis/index.vue';
 import SearchForm from './component/SearchForm.vue';
 import SportTypeNav from './component/SportTypeNav.vue';
@@ -36,7 +37,8 @@ const form = reactive<SearchFormType>({
 const comoMap = {
   FootBall,
   BasketBall,
-  Tennis
+  Tennis,
+  Billiards
 };
 const currentComponentName = reactive({
   name: markRaw(comoMap.FootBall)

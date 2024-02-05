@@ -40,7 +40,8 @@ export enum MatchEventType {
 export enum SPORT_TYPE {
   football = 1,
   basketball = 2,
-  tennis = 3
+  tennis = 3,
+  billiards = 5
 }
 
 
