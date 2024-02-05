@@ -6,41 +6,53 @@
   <div class="grid grid-cols-4 gap-2 mt-4">
     <div class="item">
       <div class="prop">赛事ID</div>
-      <div class="value">455213123457</div>
+      <div class="value">{{props.currentMatch.matchId}}</div>
     </div>
     <div class="item">
       <div class="prop">联 赛</div>
-      <div class="value">WTA华新公开赛-女单</div>
+      <div class="value">{{props.currentMatch.leagueNameCn}}</div>
     </div>
     <div class="item">
       <div class="prop">开赛时间</div>
-      <div class="value">2024-0203 18:00:00</div>
+      <div class="value">{{props.currentMatch.beginTime}}</div>
     </div>
     <div class="item">
       <div class="prop">盘口状态</div>
-      <div class="value">已开赛</div>
+      <div class="value">{{MATCH_STATUS[props.currentMatch.status]}}</div>
     </div>
     <div class="item">
       <div class="prop">赛种</div>
-      <div class="value">网球</div>
+      <div class="value">{{sportName}}</div>
     </div>
     <div class="item">
       <div class="prop">比赛方</div>
-      <div class="value">王欣 vs 小鸟菜菜绪</div>
+      <div class="value">{{matchName}}</div>
     </div>
     <div class="item">
       <div class="prop">结算人员</div>
       <div class="value">Bai Bai</div>
     </div>
     <div class="item">
-      <div class="prop">赛事状态</div>
-      <div class="value">全场结算</div>
+      <div class="prop">结算状态</div>
+      <div class="value">结算状态</div>
     </div>
   </div>
 </div>
 </template>
 
 <script setup lang="ts">
+import { SPORT_ID_MAP, MATCH_STATUS } from '@/utils/maps/sports_map';
+
+const props = defineProps<{
+  currentMatch: EsportsSettlementAPI.ESportMatchList;
+}>();
+console.log(props.currentMatch);
+const sportName = computed(() => {
+  return SPORT_ID_MAP.find(_ => _.value === props.currentMatch.sportId)?.label ?? '-';
+});
+const matchName = computed(() => {
+  return `${props.currentMatch.homeTeamNameCn} VS ${props.currentMatch.awayTeamNameCn}`
+});
 
 </script>
 <style scoped>
@@ -50,7 +62,7 @@
     color: var(--el-text-color-regular);
   }
   .item .prop {
-    width: 25%;
+    width: 20%;
     text-align: justify;
     position: relative;
   }
