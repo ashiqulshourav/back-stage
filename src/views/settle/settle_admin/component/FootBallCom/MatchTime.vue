@@ -5,6 +5,7 @@
     :placeholder="t('请选择当前录入时间')"
     :disabled="!row.isEdit"
     value-format="x"
+    :default-value="dayjs().startOf('day').toDate()"
     @change="changeEventTime(row, index, item.tableList)"
     format="HH:mm:ss"
   />
@@ -14,6 +15,7 @@
 import { t } from '@/plugins/i18n';
 import { MatchEventRowType } from '../../utils/type';
 import { message } from '@/utils/message';
+import dayjs from 'dayjs';
 
 defineProps<
   MatchEventRowType & {

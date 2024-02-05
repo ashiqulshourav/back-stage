@@ -8,6 +8,7 @@ import { useMatchStore } from '@/store/match';
 export function useBasketballHook() {
   const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const matchStore = useMatchStore();
+  const form = ref<SearchFormType>({} as SearchFormType);
 
   const pagination = reactive<PaginationProps>({
     total: 0,
@@ -26,10 +27,10 @@ export function useBasketballHook() {
   };
 
   /** 搜索初始化 */
-  const onSearch = async (type?: 'reload', form?: SearchFormType) => {
+  const onSearch = async (type?: 'reload') => {
     try {
       if (type === 'reload') pagination.currentPage = 1;
-      const data = removeEmptyStringKeys(form ?? {});
+      const data = removeEmptyStringKeys(form.value ?? {});
       matchStore.set_settleRequestLoading(true);
       const res: SattleDataAPI.getSettlementListRes =
         await API.getSettlementList({
@@ -53,6 +54,7 @@ export function useBasketballHook() {
   onMounted(() => onSearch());
 
   return {
+    form,
     onSearch,
     columns,
     dataList,

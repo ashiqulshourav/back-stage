@@ -46,7 +46,7 @@
         />
       </el-form-item>
 
-      <el-form-item :label="`${t('盘口状态')}:`" prop="handicapStatus">
+      <el-form-item :label="`${t('锁盘状态')}:`" prop="handicapStatus">
         <el-select
           class="!w-[150px]"
           v-model="form.handicapStatus"
@@ -163,6 +163,7 @@ const resetForm = (_formEl: FormInstance | undefined) => {
 };
 
 const search = () => {
+  console.log('SearchForm.vue文件 166==============行打印=', props.form);
   emits('onSearch', ...['reload']);
 };
 </script>

@@ -68,9 +68,9 @@ export const columns: TableColumnList = [
     formatter: ({ status }) => ESPORT_MATCH_STATUS[status] ?? '-'
   },
   {
-    label: t('盘口状态'),
+    label: t('锁盘状态'),
     prop: 'handicapStatus',
-    headerRenderer: d => handleTableWidth(d, t('盘口状态'), 'auto'),
+    headerRenderer: d => handleTableWidth(d, t('锁盘状态'), 'auto'),
     formatter: ({ handicapStatus }): string => HANDICAP_STATUS[handicapStatus],
     minWidth: 150
   },

@@ -14,7 +14,7 @@
   "editor.acceptSuggestionOnCommitCharacter": false,
   "css.lint.propertyIgnoredDueToDisplay": "ignore",
   "workbench.colorTheme": "One Monokai",
-  "workbench.iconTheme": "vs-seti",
+  "workbench.iconTheme": "vs-minimal",
   "editor.quickSuggestions": {
     "other": true,
     "comments": true,

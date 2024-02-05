@@ -93,8 +93,8 @@
                 </template>
 
                 <!-- -比赛阶段 -->
-                <template #matchPeriodId="{ row }: MatchEventRowType">
-                  <MatchStage :row="row" />
+                <template #matchPeriodId="{ row, index }: MatchEventRowType">
+                  <MatchStage :row="row" :item="item" :index="index" />
                 </template>
 
                 <!-- -事件来源 -->
@@ -225,6 +225,34 @@ import {
 } from '../../utils/type';
 import { useMatchStore } from '@/store/match';
 
+const {
+  onSearch,
+  childloading,
+  columns,
+  dataList,
+  pagination,
+  handleTableWidthChange,
+  handleCurrentChange,
+  childColumns,
+  expandChange,
+  addChildRow,
+  editChild,
+  balanceLoading,
+  settlementFunction,
+  handleChildrenData,
+  childDataTotal,
+  expandMatchList,
+  reloadTable,
+  changeSettleType,
+  cancelMatchEvent,
+  advanceSettlement,
+  form
+} = useFootball();
+
+const props = defineProps<{
+  form: SearchFormType;
+}>();
+
 const { tableHeaderStyle } = usePublicHooks();
 
 const eventQuotientList = [
@@ -232,6 +260,7 @@ const eventQuotientList = [
   { type: 'psFlag', val: t('熊猫数据') },
   { type: 'vsFlag', val: t('播控数据') }
 ];
+
 const matchStore = useMatchStore();
 
 //- 取消事件置灰
@@ -267,31 +296,10 @@ const teamChangeEvent = (
   }
 };
 
-const {
-  onSearch,
-  childloading,
-  columns,
-  dataList,
-  pagination,
-  handleTableWidthChange,
-  handleCurrentChange,
-  childColumns,
-  expandChange,
-  addChildRow,
-  editChild,
-  balanceLoading,
-  settlementFunction,
-  handleChildrenData,
-  childDataTotal,
-  expandMatchList,
-  reloadTable,
-  changeSettleType,
-  cancelMatchEvent,
-  advanceSettlement
-} = useFootball();
+form.value = props.form;
 
-const filterData = (type: 'reload', form: SearchFormType) => {
-  onSearch(type, form);
+const filterData = (type: 'reload') => {
+  onSearch(type);
 };
 
 defineExpose({ filterData });

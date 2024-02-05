@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
-import { ESPORT_ID_MAP, ESPORT_MATCH_STATUS } from '@/utils/maps/sports_map';
+import { ESPORT_ID_MAP, HANDICAP_STATUS } from '@/utils/maps/sports_map';
 
 const props = defineProps<{
   renderObj: EsportsSettlementAPI.ESportMatchById;
@@ -33,7 +33,7 @@ const renderList = computed(() => {
       title: t('游戏'),
       val: ESPORT_ID_MAP.find(r => r.value === +_.sportId)?.label
     },
-    { title: t('赛事状态'), val: ESPORT_MATCH_STATUS[_.status] },
+    { title: t('锁盘状态'), val: HANDICAP_STATUS[_.status] },
     {
       title: t('联赛'),
       val: _.leagueNameCn ?? '-'

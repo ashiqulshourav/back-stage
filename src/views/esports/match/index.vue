@@ -85,4 +85,5 @@ const {
     margin-bottom: 12px;
   }
 }
+
 </style>
