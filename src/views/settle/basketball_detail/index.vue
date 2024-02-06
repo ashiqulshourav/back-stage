@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <!-- -盘口详情 -->
-    <DetiltTitle :renderObj="currentMatch" />
+    <DetiltTitle :renderObj="currentMatch[0]" />
 
     <PureTableBar
       :title="t('賽果結算')"
@@ -27,7 +27,7 @@
         >
           <template #t1="{ row, index}">
             <input 
-              class="border w-1/3 flex justify-center" 
+              class="border w-1/3 mx-auto" 
               v-if="isEdit && index === renderData.length - 1" 
               v-model="NewEvent.t1"  
             />
@@ -37,7 +37,7 @@
           </template>
           <template #t2="{ row, index}">
             <input 
-              class="border w-1/3 flex justify-center" 
+              class="border w-1/3 mx-auto" 
               v-if="isEdit && index === renderData.length - 1" 
               v-model="NewEvent.t2"  
             />
@@ -70,7 +70,7 @@
                 結算節
               </el-button>
               <el-button
-                @click="isEdit.value = false"              
+                @click="cancelEdit"              
               >取消</el-button>
             </div>
             <span v-else>
@@ -83,7 +83,7 @@
     <el-button 
       type="primary" 
       class="mt-3 px-24"
-      @click="toggleEdit"
+      @click="setEdit"
     >
       新增節
     </el-button>
@@ -100,7 +100,9 @@ import { useBasketballDetailHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import { MATCH_PERIOD } from '@/utils/maps/sports_map';
 import { message } from '@/utils/message';
+import { ElMessageBox } from 'element-plus';
 defineOptions({ name: 'SETTLE_BASKETBALL_DETAIL' });
+
 const router = useRoute();
 const { matchId } = router.params;
 const isEdit = ref(false);
@@ -115,25 +117,49 @@ const renderData= computed(() => {
   return isEdit.value ? dataList.concat(NewEvent) : dataList;
 })
 const handleNewEvent = async () => {
-  const res: MetadataAPI.AddBasketballEeventRes = await API.addBasketballEvent({
-    matchId: NewEvent.matchId,
-    eventTime: Date.now(),
-    t1: 0,
-    t2: 0,
-    matchPeriod: 'Q1',
-    canceled: 0
-  });
-  if (res.code) message(res.msg, { type: 'error' });
-  else {
-    isEdit.value = false;
-    NewEvent.t1 = 0;
-    NewEvent.t2 = 0;
-    NewEvent.matchPeriod = 'Q1'
-    onSearch();
-  }
+  
+  ElMessageBox.confirm(
+    `<p class='text-center'>${currentMatch[0].homeTeamNameCn} VS ${currentMatch[0].awayTeamNameCn} <br />
+      <p class="text-center text-2xl text-bold w-full">${NewEvent.t1} : ${NewEvent.t2}</p>
+      ⼿動結算後無法回退，請再次確認比分</p>
+      `
+      ,
+      `結算第${dataList.length + 1}節`,
+      {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: t('確認結算'),
+        cancelButtonText: t('取消'),
+        center: true,
+      }
+  )
+    .then(async () => {
+      const res: MetadataAPI.AddBasketballEeventRes = await API.addBasketballEvent({
+        matchId: NewEvent.matchId,
+        eventTime: Date.now(),
+        t1: Number(NewEvent.t1),
+        t2: Number(Number(NewEvent.t2)),
+        matchPeriod: NewEvent.matchPeriod,
+        canceled: 0
+      });
+      if (res.code) message(res.msg, { type: 'error' });
+      else {
+        isEdit.value = false;
+        NewEvent.t1 = 0;
+        NewEvent.t2 = 0;
+        NewEvent.matchPeriod = 'Q1'
+        onSearch();
+      }
+      
+    })
+    .catch(() => {
+      cancelEdit();
+    })
 }
-const toggleEdit = () => {
+const setEdit = () => {
   isEdit.value = true;
+}
+const cancelEdit = () => {
+  isEdit.value = false;
 }
 const { tableHeaderStyle } = usePublicHooks();
 const {

@@ -74,7 +74,6 @@ declare namespace SattleDataAPI {
     id?: number;
   }
 
-
   type getSettlementDataList = {
     matchId: number;
     countryId: number;
@@ -112,7 +111,7 @@ declare namespace SattleDataAPI {
     unSettlementEvents: number;
     childrenData?: ChildrenDataList[];
     settlementType: number; //1 自动结算 //2 手动结算
-  }
+  };
 
   type ChildrenDataList = {
     type: string;
