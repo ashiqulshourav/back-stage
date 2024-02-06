@@ -6,7 +6,7 @@ import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
 
 export function useBasketballDetailHook() {
   const dataList = reactive<SattleDataAPI.BasketballEvent[]>([]);
-  const currentMatch = reactive<SattleDataAPI.getSettlementDataList>({});
+  const currentMatch = reactive<SattleDataAPI.getSettlementDataList | {}>({});
   const matchId = ref(0);
   const childloading = ref(true);
   const loading = ref(true);
@@ -34,12 +34,13 @@ export function useBasketballDetailHook() {
   };
 
   /** 搜索初始化 */
-  const onSearch = async (type?: 'reload', form?) => {
+  const onSearch = async () => {
     childloading.value = false;
     loading.value = false;
     console.log('test', matchId.value);
     const res: SattleDataAPI.getBasketballEventRes = await API.getBasketballEvents({ matchId: matchId.value });
     if (!res.code) {
+      console.log(res.data, 'test');
       dataList.length = 0;
       dataList.push(...res.data);
     }

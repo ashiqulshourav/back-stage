@@ -34,7 +34,7 @@ declare namespace SattleDataAPI {
     isShowCount: boolean;
   }
   type BasketballEvent = {
-    awayTeamId: number;
+    awayTeamId?: number;
     canceled?: number | boolean;
     createdAt?: number;
     eventTime?: string | number | Date;
@@ -46,7 +46,7 @@ declare namespace SattleDataAPI {
     matchId?: number;
     matchPeriod?: string;
     settleTimes?: number;
-    settleType: number;
+    settleType?: number;
     sourceType?: number;
     t1?: number | string;
     t2?: number | string;
