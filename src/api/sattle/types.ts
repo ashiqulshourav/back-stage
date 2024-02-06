@@ -33,7 +33,28 @@ declare namespace SattleDataAPI {
     isSettleStatus: boolean;
     isShowCount: boolean;
   }
-
+  type BasketballEvent = {
+    awayTeamId: number;
+    canceled?: number | boolean;
+    createdAt?: number;
+    eventTime?: string | number | Date;
+    homeTeamId?: number;
+    eventCode?: string | number;
+    extraInfo?: string;
+    homeAway?: string;
+    id?: number;
+    matchId?: number;
+    matchPeriod?: string;
+    settleTimes?: number;
+    settleType: number;
+    sourceType?: number;
+    t1?: number | string;
+    t2?: number | string;
+    updatedAt?: number;
+    updatedBy?: number;
+    uuid?: string;
+  }
+  type getBasketballEventRes = COMMON.BASE_RES_TYPE<BasketballEvent[]>
   type getMatchEventsRes = COMMON.BASE_RES_TYPE<MatchEventsList[]>
 
   type MatchEventParams = {
@@ -45,6 +66,7 @@ declare namespace SattleDataAPI {
     matchPeriodId?: number;
     player1Name?: string;
     sourceType?: number;
+    matchPeriod?: string;
     sportId?: number;
     dataSourceCode?: string;
     t1?: number;

@@ -27,8 +27,11 @@ export const sattleData = {
   getMatchEvents: (data: {
     matchId: number;
   }) => http.request<SattleDataAPI.getMatchEventsRes>("post", "/event/v1/getMatchEvents", { data }),
-
+  getBasketballEvents: (data: {
+    matchId: number;
+  }) => http.request<SattleDataAPI.getBasketballEventRes>("post", "/event/v1/getMatchEvents", { data }),
   addMatchEvent: (data: SattleDataAPI.MatchEventParams) => http.request<MetadataAPI.TeamListRes>("post", "/event/v1/addMatchEvent", { data }),
+  addBasketballEvent: (data: SattleDataAPI.MatchEventParams) => http.request<MetadataAPI.AddBasketballEeventRes>("post", " /basketball/v1/addBasketballEvent", { data }),
 
   updateMatchEvent: (data: SattleDataAPI.MatchEventParams) => http.request<SaleDataAPI.PreSaleListRes>("post", "/event/v1/updateMatchEvent", { data }),
 

@@ -28,7 +28,9 @@
         </pure-table>
       </template>
     </PureTableBar>
-    <el-button type="primary" class="mt-3 px-24">新增節</el-button>
+    <el-button 
+      type="primary" 
+      class="mt-3 px-24">新增節</el-button>
   </div>
 </template>
 
@@ -44,7 +46,7 @@ import { t } from '@/plugins/i18n';
 defineOptions({ name: 'SETTLE_BASKETBALL_DETAIL' });
 const router = useRoute();
 const { matchId } = router.params;
-
+const isEdit = ref(false);
 const { tableHeaderStyle } = usePublicHooks();
 const {
   onSearch,
@@ -62,6 +64,7 @@ const {
 
 onMounted(() => {
   getCurrentMatchDetail(Number(matchId));
+  onSearch();
 });
 </script>
 

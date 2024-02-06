@@ -5,8 +5,9 @@ import { dateSetSecond, getSecondTime } from '@/utils/formatDate';
 import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
 
 export function useBasketballDetailHook() {
-  const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
+  const dataList = reactive<SattleDataAPI.BasketballEvent[]>([]);
   const currentMatch = reactive<SattleDataAPI.getSettlementDataList>({});
+  const matchId = ref(0);
   const childloading = ref(true);
   const loading = ref(true);
   const childDataTotal = ref(0);
@@ -36,6 +37,12 @@ export function useBasketballDetailHook() {
   const onSearch = async (type?: 'reload', form?) => {
     childloading.value = false;
     loading.value = false;
+    console.log('test', matchId.value);
+    const res: SattleDataAPI.getBasketballEventRes = await API.getBasketballEvents({ matchId: matchId.value });
+    if (!res.code) {
+      dataList.length = 0;
+      dataList.push(...res.data);
+    }
   };
 
   //- 获取当前展开行结算列表
@@ -72,17 +79,13 @@ export function useBasketballDetailHook() {
   };
 
   const expandChange = () => {};
-  const getCurrentMatchDetail = async (matchId: number) => {
-    const res:SattleDataAPI.getSettlementListRes = await API.getSettlementList({ matchId });
+  const getCurrentMatchDetail = async (matchId1: number) => {
+    matchId.value = matchId1
+    const res:SattleDataAPI.getSettlementListRes = await API.getSettlementList({ matchId: matchId.value });
     if (!res.code) {
-      console.log(res.data.list[0]);
-      console.log(currentMatch)
       Object.assign(currentMatch, res.data.list[0]);
     }
   };
-  onMounted(() => {
-    onSearch()
-  });
 
   return {
     onSearch,

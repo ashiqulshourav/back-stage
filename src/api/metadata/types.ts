@@ -75,6 +75,14 @@ declare namespace MetadataAPI {
     msg: string;
     data: TeamListData;
   }
+  type AddBasketballEeventRes = {
+    code: number;
+    msg: string;
+    data: TeamListData;
+    failure: boolean;
+    success: boolean;
+    ts: number;
+  }
 
   type PlayerList = {
     birthday: string;
