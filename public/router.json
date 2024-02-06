@@ -69,7 +69,7 @@
         }
       },
       {
-        "path": "/settle/tennis_detail/:matchId",
+        "path": "/settle/tennis_detail",
         "name": "SETTLE_TENNIS_DETAIL",
         "meta": {
           "title": "网球结算",

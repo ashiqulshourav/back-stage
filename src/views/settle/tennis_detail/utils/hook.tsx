@@ -1,7 +1,7 @@
 import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { t } from '@/plugins/i18n';
-import { childColumns, columns } from './tableColumnList';
+import { columns, childColumns } from './tableColumnList';
 import { dateSetSecond, getSecondTime } from '@/utils/formatDate';
 import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
 import { useMatchStore } from '@/store/match';
@@ -35,9 +35,13 @@ export function useTennisDetailHook() {
   };
 
   /** 搜索初始化 */
-  const onSearch = async (type?: 'reload', form?) => {
+  const onSearch = async () => {
+    const res = await API.getTennisEvents({
+      matchId: history.state.params.matchId
+    });
     childloading.value = false;
     loading.value = false;
+    if (res.code) return message(res.msg, { type: 'error' });
   };
 
   //- 获取当前展开行结算列表
@@ -75,6 +79,28 @@ export function useTennisDetailHook() {
 
   const expandChange = () => {};
 
+  //- 新增盘信息
+  const addEventRow = row => {
+    console.log('hook.tsx文件 84==============行打印=', row);
+    const params = {
+      inningNum: 0,
+      matchId: history.state.params.matchId,
+      setNum: 0,
+      t1: 0,
+      t2: 0,
+      inningEvents: [
+        {
+          inningNum: 0,
+          matchId: history.state.params.matchId,
+          setNum: 0,
+          t1: 0,
+          t2: 0
+        }
+      ]
+    };
+    dataList.push(params);
+  };
+
   onMounted(() => onSearch());
 
   return {
@@ -88,6 +114,7 @@ export function useTennisDetailHook() {
     expandChange,
     expandMatchList,
     childloading,
-    childColumns
+    childColumns,
+    addEventRow
   };
 }

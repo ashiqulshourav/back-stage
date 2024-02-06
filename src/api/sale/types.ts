@@ -66,6 +66,7 @@ declare namespace SaleDataAPI {
   type UpdateMatchResType = COMMON.BASE_RES_TYPE<any>;
   type setManualMatchStatusResType = COMMON.BASE_RES_TYPE<any>;
   type cancelMatchEventResType = COMMON.BASE_RES_TYPE<any>;
+  type getTennisEventsResType = COMMON.BASE_RES_TYPE<any>;
 
   type TeamList = {
     teamId: number;

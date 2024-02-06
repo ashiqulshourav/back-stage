@@ -1,10 +1,10 @@
 <template>
-  <div class="main">
+  <div class="main tennis_container">
     <!-- -盘口详情 -->
-    <DetiltTitle :renderObj="{}" />
+    <DetiltTitle />
 
     <PureTableBar
-      :title="t('足球结算管理')"
+      :title="t('网球结算管理')"
       :columns="columns"
       @refresh="onSearch()"
     >
@@ -18,19 +18,27 @@
           :expand-row-keys="expandMatchList"
           adaptive
           :data="dataList"
+          default-expand-all
           :columns="dynamicColumns"
-          :pagination="pagination"
-          :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
           @expand-change="expandChange"
-          @page-size-change="handleTableWidthChange"
-          @page-current-change="handleCurrentChange"
         >
-          <template #expand="{ row, index }">
+          <template #operation>
+            <el-button @click="addEventRow" type="primary">{{
+              t('结算盘')
+            }}</el-button>
+          </template>
+
+          <template #empty>
+            <el-button @click="addEventRow" type="primary">{{
+              t('新增盘')
+            }}</el-button>
+          </template>
+          <template #expand="{ row }">
             <pure-table
               align-whole="center"
               :row-key="row => row.id"
-              :data="item.tableList"
+              :data="row.inningEvents"
               :loading="childloading"
               :columns="childColumns"
               row-class-name=""
@@ -39,6 +47,7 @@
               border
               :header-cell-style="tableHeaderStyle"
             >
+            
             </pure-table>
           </template>
         </pure-table>
@@ -57,19 +66,27 @@ import { t } from '@/plugins/i18n';
 defineOptions({ name: 'SETTLE_TENNIS_DETAIL' });
 
 const { tableHeaderStyle } = usePublicHooks();
+
 const {
   onSearch,
   loading,
   columns,
   dataList,
-  pagination,
-  handleTableWidthChange,
-  handleCurrentChange,
   expandChange,
   expandMatchList,
   childloading,
-  childColumns
+  childColumns,
+  addEventRow
 } = useTennisDetailHook();
 </script>
 
-<style scoped></style>
+<style lang="scss">
+.tennis_container {
+  .el-table__empty-block {
+    .el-table__empty-text {
+      width: 100%;
+      text-align: left;
+    }
+  }
+}
+</style>

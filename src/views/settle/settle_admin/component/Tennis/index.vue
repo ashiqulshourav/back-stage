@@ -25,7 +25,7 @@
             class="reset-margin"
             type="primary"
             :size="size"
-            @click="$router.push(`/settle/tennis_detail/${row.matchId}`)"
+            @click="goTennisDetail(row)"
           >
             {{ t('结算详情') }}
           </el-button>
@@ -44,6 +44,7 @@ import { SearchFormType } from '../../utils/type';
 import { useMatchStore } from '@/store/match';
 
 const { tableHeaderStyle } = usePublicHooks();
+const router = useRouter();
 
 const matchStore = useMatchStore();
 
@@ -63,7 +64,15 @@ const {
 form.value = props.form;
 
 const filterData = (type: 'reload') => {
+  console.log('index.vue文件 67==============行打印=', 'tennis');
   onSearch(type);
+};
+const goTennisDetail = row => {
+  const params = JSON.parse(JSON.stringify(row));
+  router.push({
+    name: 'SETTLE_TENNIS_DETAIL',
+    state: { params }
+  });
 };
 
 defineExpose({ filterData });
