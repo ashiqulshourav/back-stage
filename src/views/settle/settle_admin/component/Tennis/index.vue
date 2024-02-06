@@ -64,7 +64,6 @@ const {
 form.value = props.form;
 
 const filterData = (type: 'reload') => {
-  console.log('index.vue文件 67==============行打印=', 'tennis');
   onSearch(type);
 };
 const goTennisDetail = row => {

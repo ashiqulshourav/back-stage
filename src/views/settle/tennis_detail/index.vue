@@ -47,7 +47,6 @@
               border
               :header-cell-style="tableHeaderStyle"
             >
-            
             </pure-table>
           </template>
         </pure-table>
