@@ -81,7 +81,6 @@ export function useTennisDetailHook() {
 
   //- 新增盘信息
   const addEventRow = row => {
-    console.log('hook.tsx文件 84==============行打印=', row);
     const params = {
       inningNum: 0,
       matchId: history.state.params.matchId,
