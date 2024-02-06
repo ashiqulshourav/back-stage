@@ -7,32 +7,12 @@ import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
 import { useMatchStore } from '@/store/match';
 
 export function useTennisDetailHook() {
-  const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
+  const dataList = reactive<SattleDataAPI.TennisEventsData[]>([]);
   const childloading = ref(true);
   const loading = ref(true);
   const childDataTotal = ref(0);
   const expandMatchList = reactive<number[]>([]);
-  const expandRowList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const loopTimer = ref<NodeJS.Timeout>();
-  const matchStore = useMatchStore();
-
-  const pagination = reactive<PaginationProps>({
-    total: 0,
-    pageSize: 10,
-    currentPage: 1
-  });
-
-  const handleTableWidthChange = (pageSize: number) => {
-    pagination.pageSize = pageSize;
-    onSearch();
-  };
-
-  const handleCurrentChange = (val: number) => {
-    pagination.currentPage = val;
-    expandMatchList.length = 0;
-    expandRowList.length = 0;
-    onSearch();
-  };
 
   /** 搜索初始化 */
   const onSearch = async () => {
@@ -42,6 +22,8 @@ export function useTennisDetailHook() {
     childloading.value = false;
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
+    dataList.length = 0;
+    dataList.push(...res.data);
   };
 
   //- 获取当前展开行结算列表
@@ -84,20 +66,64 @@ export function useTennisDetailHook() {
     const params = {
       inningNum: 0,
       matchId: history.state.params.matchId,
-      setNum: 0,
+      setNum: 1,
       t1: 0,
       t2: 0,
       inningEvents: [
         {
-          inningNum: 0,
+          inningNum: 1,
           matchId: history.state.params.matchId,
           setNum: 0,
           t1: 0,
-          t2: 0
+          t2: 0,
+          eventTime: '',
+          isEdit: false
         }
       ]
     };
     dataList.push(params);
+  };
+
+  //- 新增局
+  const addChildRow = parentRow => {
+    const prevIdx = parentRow.inningEvents.length - 1;
+    if (
+      !parentRow.inningEvents[prevIdx].t1 ||
+      !parentRow.inningEvents[prevIdx].t2 ||
+      !parentRow.inningEvents[prevIdx].eventTime ||
+      parentRow.inningEvents[prevIdx].isEdit
+    ) {
+      return message('请先完成之前的事件结算', { type: 'error' });
+    }
+    parentRow.inningEvents.push({
+      inningNum: parentRow.inningEvents.length + 1,
+      matchId: history.state.params.matchId,
+      setNum: parentRow.setNum,
+      t1: 0,
+      t2: 0,
+      eventTime: '',
+      isEdit: false
+    });
+  };
+
+  //- 结算盘
+  const settlementHandicap = async parentRow => {
+    const inningEvents = parentRow.inningEvents.map(item => {
+      delete item['isEdit'];
+      return item;
+    });
+    const params = {
+      eventTime:
+        parentRow.inningEvents[parentRow.inningEvents.length - 1].eventTime,
+      inningEvents,
+      t1: 3,
+      t2: 2,
+      inningNum: 0,
+      setNum: parentRow.setNum,
+      matchId: history.state.params.matchId
+    };
+    const res = await API.addTennisEvent(params);
+    console.log('hook.tsx文件 132==============行打印=', res);
   };
 
   onMounted(() => onSearch());
@@ -107,13 +133,12 @@ export function useTennisDetailHook() {
     loading,
     columns,
     dataList,
-    pagination,
-    handleTableWidthChange,
-    handleCurrentChange,
     expandChange,
     expandMatchList,
     childloading,
     childColumns,
-    addEventRow
+    addEventRow,
+    addChildRow,
+    settlementHandicap
   };
 }

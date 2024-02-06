@@ -60,14 +60,6 @@ declare namespace SaleDataAPI {
     navigateLastPage: number;
   }
 
-  type PreSaleListRes = COMMON.BASE_RES_TYPE<PreSaleListData>;
-  type deleteMatchEventRes = COMMON.BASE_RES_TYPE<any>;
-  type allSettlementRes = COMMON.BASE_RES_TYPE<any>;
-  type UpdateMatchResType = COMMON.BASE_RES_TYPE<any>;
-  type setManualMatchStatusResType = COMMON.BASE_RES_TYPE<any>;
-  type cancelMatchEventResType = COMMON.BASE_RES_TYPE<any>;
-  type getTennisEventsResType = COMMON.BASE_RES_TYPE<any>;
-
   type TeamList = {
     teamId: number;
     countryId: number;
@@ -114,4 +106,17 @@ declare namespace SaleDataAPI {
 
   type getBetItemsListResType = COMMON.BASE_RES_TYPE<getBetItemsListDataType[]>;
   type saleBetItemsResType = COMMON.BASE_RES_TYPE<any>;
+
+
+
+
+
+  type PreSaleListRes = COMMON.BASE_RES_TYPE<PreSaleListData>;
+  type deleteMatchEventRes = COMMON.BASE_RES_TYPE<any>;
+  type allSettlementRes = COMMON.BASE_RES_TYPE<any>;
+  type UpdateMatchResType = COMMON.BASE_RES_TYPE<any>;
+  type setManualMatchStatusResType = COMMON.BASE_RES_TYPE<any>;
+  type cancelMatchEventResType = COMMON.BASE_RES_TYPE<any>;
+
+
 }

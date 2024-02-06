@@ -83,6 +83,7 @@ export const OPENING_STATUS = {
   0: t('未开售'),
   1: t('早盘'),
   2: t('滚球'),
+  3: t('进行中'),
 }
 
 //- 盘口状态

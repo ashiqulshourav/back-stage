@@ -119,6 +119,51 @@ declare namespace SattleDataAPI {
     navigateLastPage: number;
   }
 
+  type InningEvent = {
+    id: number;
+    uuid: string;
+    matchId: number;
+    canceled: number;
+    eventTime: number;
+    homeTeamId: number;
+    awayTeamId: number;
+    inningNum: number;
+    setNum: number;
+    t1: number;
+    t2: number;
+    sourceType: number;
+    settleTimes: number;
+    settleType: number;
+    createdBy: string;
+    updatedBy: string;
+    createdAt: string;
+    updatedAt: string;
+    inningEvents: any[];
+  }
+
+  type TennisEventsData = {
+    id: number;
+    uuid: string;
+    matchId: number;
+    canceled: number;
+    eventTime: number;
+    homeTeamId: number;
+    awayTeamId: number;
+    inningNum: number;
+    setNum: number;
+    t1: number;
+    t2: number;
+    sourceType: number;
+    settleTimes: number;
+    settleType: number;
+    createdBy: string;
+    updatedBy: string;
+    createdAt: string;
+    updatedAt: string;
+    inningEvents: InningEvent[];
+  }
+
   type getSettlementListRes = COMMON.BASE_RES_TYPE<getSettlementDataListRes>
+  type getTennisEventsResType = COMMON.BASE_RES_TYPE<TennisEventsData[]>;
 
 }

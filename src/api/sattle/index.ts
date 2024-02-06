@@ -56,5 +56,10 @@ export const sattleData = {
   //-网球结算赛事列表
   getTennisEvents: (data: {
     matchId: number;
-  }) => http.request<SaleDataAPI.getTennisEventsResType>("post", "/tennis/v1/getTennisEvents", { data }),
+  }) => http.request<SattleDataAPI.getTennisEventsResType>("post", "/tennis/v1/getTennisEvents", { data }),
+
+  //-网球新增事件（按盘）
+  addTennisEvent: (data: {
+    [key: string]: any;
+  }) => http.request<SaleDataAPI.getTennisEventsResType>("post", "/tennis/v1/addTennisEvent", { data }),
 };

@@ -232,7 +232,6 @@
   "k-78f4652a": "Confirmation to update locker status?",
   "k27361d84": "Market Status",
   "k-1da985cf": "Pre-Match",
-  "k603a992a": "In-Play",
   "k-4e7a8869": "Save your config or your setting will be lost.",
   "k6c219e41": "Settlement History",
   "k8fc5b98": "On Sale",
@@ -426,5 +425,7 @@
   "k-3610fc72": "结算盘",
   "k155975d2": "baibai",
   "k4f07f5c7": "賽果結算",
-  "k400ed780": "局"
+  "k400ed780": "局",
+  "k-404e8bbd": "进行中",
+  "k-37fe3f25": "新增局"
 }

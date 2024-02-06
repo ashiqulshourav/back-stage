@@ -7,11 +7,11 @@ export const columns: TableColumnList = [
   },
   {
     label: t('盘'),
-    width: 100,
     prop: 'inningNum',
-    formatter: ({ inningNum }) => {
-      return inningNum;
-    }
+    type: 'index'
+    // formatter: ({ inningNum }) => {
+    //   return inningNum;
+    // }
   },
   {
     headerRenderer: () => history.state.params.homeTeamNameCn ?? '_',
@@ -53,27 +53,22 @@ export const childColumns: TableColumnList = [
   {
     label: t('局'),
     prop: 'inningNum',
-    formatter: ({ inningNum }) => {
-      return inningNum;
-    }
+    type: 'index'
+    // formatter: ({ inningNum }) => {
+    //   return inningNum;
+    // }
   },
   {
     headerRenderer: () => history.state.params.homeTeamNameCn ?? '_',
-    formatter: ({ t1 }) => {
-      return t1;
-    }
+    slot: 't1'
   },
   {
     headerRenderer: () => history.state.params.awayTeamNameCn ?? '_',
-    formatter: ({ t2 }) => {
-      return t2;
-    }
+    slot: 't2'
   },
   {
     label: t('结算时间'),
-    formatter: ({ eventTime }) => {
-      return eventTime ?? '_';
-    }
+    slot: 'eventTime'
   },
   {
     label: t('操作人'),
@@ -89,6 +84,6 @@ export const childColumns: TableColumnList = [
   },
   {
     label: t('操作'),
-    slot: 'operation'
+    slot: 'childOperation'
   }
 ];
