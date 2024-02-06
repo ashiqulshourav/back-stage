@@ -9,8 +9,8 @@
         :span="6"
         :offset="index % 2 === 0 ? 6 : 3"
       >
-        <span class="mr-2">{{ item.title }}:</span>
-        <span>{{ item.val }}</span>
+        <span class="mr-2 text-sm font-bold">{{ item.title }}:</span>
+        <span class="text-sm">{{ item.val }}</span>
       </el-col>
     </el-row>
   </div>
@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
-import { ESPORT_ID_MAP, HANDICAP_STATUS } from '@/utils/maps/sports_map';
+import { ESPORT_ID_MAP, ESPORT_MATCH_STATUS } from '@/utils/maps/sports_map';
 
 const props = defineProps<{
   renderObj: EsportsSettlementAPI.ESportMatchById;
@@ -33,13 +33,13 @@ const renderList = computed(() => {
       title: t('游戏'),
       val: ESPORT_ID_MAP.find(r => r.value === +_.sportId)?.label
     },
-    { title: t('锁盘状态'), val: HANDICAP_STATUS[_.status] },
+    { title: t('赛事状态'), val: ESPORT_MATCH_STATUS[_.status] },
     {
       title: t('联赛'),
       val: _.leagueNameCn ?? '-'
     },
     {
-      title: t('盘口状态'),
+      title: t('开售状态'),
       val: props.renderObj.isSale === 0 ? t('未开盘') : t('已开盘')
     },
     { title: t('队伍'), val: `${_.homeTeamNameCn} - ${_.awayTeamNameCn}` },
