@@ -51,7 +51,9 @@ export function useTennisHook() {
     }
   };
 
-  onMounted(() => onSearch());
+  onMounted(() => {
+    onSearch();
+  });
 
   return {
     onSearch,

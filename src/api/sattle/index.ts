@@ -45,14 +45,19 @@ export const sattleData = {
     matchId: number;
   }) => http.request<SaleDataAPI.allSettlementRes>("post", "/event/v1/allSettlement", { data }),
 
-  //- 自动结算转手动结算
+  //- 足球结算自动结算转手动结算
   setManualMatchStatus: (data: {
     matchId: number;
   }) => http.request<SaleDataAPI.setManualMatchStatusResType>("post", "/event/v1/setManualMatchStatus", { data }),
 
-  //- 取消事件
+  //- 足球结算取消事件
   cancelMatchEvent: (data: {
     id: number;
     matchId: number;
   }) => http.request<SaleDataAPI.cancelMatchEventResType>("post", "/event/v1/cancelMatchEvent", { data }),
+
+  //-网球结算赛事列表
+  getTennisEvents: (data: {
+    matchId: number;
+  }) => http.request<SaleDataAPI.getTennisEventsResType>("post", "/tennis/v1/getTennisEvents", { data }),
 };
