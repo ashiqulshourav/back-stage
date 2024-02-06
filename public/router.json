@@ -77,7 +77,7 @@
         }
       },
       {
-        "path": "/settle/basketball_detail",
+        "path": "/settle/basketball_detail/:matchId",
         "name": "SETTLE_BASKETBALL_DETAIL",
         "meta": {
           "title": "籃球结算",
