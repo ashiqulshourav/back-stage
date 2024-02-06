@@ -25,7 +25,7 @@
             class="reset-margin"
             type="primary"
             :size="size"
-            @click="$router.push(`/betBill/unSettlement/${row.matchId}`)"
+            @click="$router.push(`/settle/basketball_detail/${row.matchId}`)"
           >
             {{ t('结算详情') }}
           </el-button>
