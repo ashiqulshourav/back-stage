@@ -62,11 +62,11 @@ export function useTennisDetailHook() {
   const expandChange = () => {};
 
   //- 新增盘信息
-  const addEventRow = row => {
-    const params = {
+  const addEventRow = () => {
+    const params: Partial<SattleDataAPI.TennisEventsData> = {
       inningNum: 0,
       matchId: history.state.params.matchId,
-      setNum: 1,
+      setNum: dataList.length + 1,
       t1: 0,
       t2: 0,
       inningEvents: [
@@ -79,21 +79,22 @@ export function useTennisDetailHook() {
           eventTime: '',
           isEdit: false
         }
-      ]
+      ] as SattleDataAPI.InningEvent[]
     };
-    dataList.push(params);
+    dataList.push(params as any);
   };
 
   //- 新增局
   const addChildRow = parentRow => {
     const prevIdx = parentRow.inningEvents.length - 1;
     if (
-      !parentRow.inningEvents[prevIdx].t1 ||
-      !parentRow.inningEvents[prevIdx].t2 ||
-      !parentRow.inningEvents[prevIdx].eventTime ||
-      parentRow.inningEvents[prevIdx].isEdit
+      prevIdx > -1 &&
+      (!parentRow.inningEvents[prevIdx].t1 ||
+        !parentRow.inningEvents[prevIdx].t2 ||
+        !parentRow.inningEvents[prevIdx].eventTime ||
+        parentRow.inningEvents[prevIdx].isEdit)
     ) {
-      return message('请先完成之前的事件结算', { type: 'error' });
+      return message('请选保存之前的事件', { type: 'error' });
     }
     parentRow.inningEvents.push({
       inningNum: parentRow.inningEvents.length + 1,
@@ -123,7 +124,12 @@ export function useTennisDetailHook() {
       matchId: history.state.params.matchId
     };
     const res = await API.addTennisEvent(params);
-    console.log('hook.tsx文件 132==============行打印=', res);
+    if (res.code) return message(res.msg, { type: 'error' });
+    onSearch();
+  };
+
+  const deleteChildItem = (list: SattleDataAPI.InningEvent[]) => {
+    list.pop();
   };
 
   onMounted(() => onSearch());
@@ -139,6 +145,7 @@ export function useTennisDetailHook() {
     childColumns,
     addEventRow,
     addChildRow,
-    settlementHandicap
+    settlementHandicap,
+    deleteChildItem
   };
 }

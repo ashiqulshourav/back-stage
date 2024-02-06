@@ -8,6 +8,11 @@
       :columns="columns"
       @refresh="onSearch()"
     >
+      <template #title>
+        <el-button @click="addEventRow" size="small" type="primary">{{
+          t('新增盘')
+        }}</el-button>
+      </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"
@@ -21,23 +26,19 @@
             offsetBottom: 48
           }"
           :data="dataList"
-          :default-expand-all="true"
           :columns="dynamicColumns"
           :header-cell-style="tableHeaderStyle"
           @expand-change="expandChange"
         >
           <template #operation="{ row: parentRow }">
-            <el-button @click="settlementHandicap(parentRow)" type="primary">{{
-              t('结算盘')
-            }}</el-button>
+            <el-button
+              v-if="!parentRow.id"
+              @click="settlementHandicap(parentRow)"
+              type="primary"
+              >{{ t('结算盘') }}</el-button
+            >
+            <span v-else>{{ t('已结算') }}</span>
           </template>
-
-          <template #empty>
-            <el-button @click="addEventRow" type="primary">{{
-              t('新增盘')
-            }}</el-button>
-          </template>
-
           <template #expand="{ row: parentRow, index: parentIndex }">
             <div class="pl-12">
               <pure-table
@@ -58,18 +59,31 @@
                 <template #t2="{ row: childRow }">
                   <Score :row="childRow" type="t2" />
                 </template>
+                <!-- -结算时间 -->
                 <template #eventTime="{ row: childRow, index: childIndex }">
                   <EventTime
                     :row="childRow"
                     :list="parentRow.inningEvents"
                     :index="childIndex"
+                    :dataList="dataList"
+                    :parentIndex="parentIndex"
                   />
                 </template>
-                <template #childOperation="{ row: childRow }">
-                 <ChildOperation row="childRow"/>
+                <!-- -局结算按钮 -->
+                <template
+                  #childOperation="{ row: childRow, index: childIndex }"
+                >
+                  <ChildOperation
+                    :row="childRow"
+                    :list="parentRow.inningEvents"
+                    :childIndex="childIndex"
+                    @deleteChildItem="deleteChildItem(parentRow.inningEvents)"
+                  />
                 </template>
               </pure-table>
+
               <el-button
+                v-if="checkScore && !parentRow.id"
                 class="mt-2"
                 type="primary"
                 size="small"
@@ -92,10 +106,26 @@ import { useTennisDetailHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import Score from './component/Score.vue';
 import EventTime from './component/EventTime.vue';
+import ChildOperation from './component/ChildOperation.vue';
 
 defineOptions({ name: 'SETTLE_TENNIS_DETAIL' });
 
 const { tableHeaderStyle } = usePublicHooks();
+
+const checkScore = computed(() => {
+  const l: SattleDataAPI.TennisEventsData = JSON.parse(
+    JSON.stringify(dataList)
+  )?.pop();
+  if (!l || l.inningEvents.length < 6) return true;
+  const scoreList = l.inningEvents.map(item => [item.t1, item.t2]);
+  let s1 = 0;
+  let s2 = 0;
+  scoreList.forEach(item => {
+    item[0] > item[1] ? ++s1 : ++s2;
+  });
+  if ((s1 >= 6 && s1 - s2 >= 2) || (s2 >= 6 && s2 - s1 >= 2)) return false;
+  return true;
+});
 
 const {
   onSearch,
@@ -108,17 +138,7 @@ const {
   childColumns,
   addEventRow,
   addChildRow,
-  settlementHandicap
+  settlementHandicap,
+  deleteChildItem
 } = useTennisDetailHook();
 </script>
-
-<style lang="scss">
-.tennis_container {
-  .el-table__empty-block {
-    .el-table__empty-text {
-      width: 100%;
-      text-align: left;
-    }
-  }
-}
-</style>

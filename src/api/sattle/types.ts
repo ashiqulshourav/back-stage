@@ -124,7 +124,7 @@ declare namespace SattleDataAPI {
     uuid: string;
     matchId: number;
     canceled: number;
-    eventTime: number;
+    eventTime: number | string;
     homeTeamId: number;
     awayTeamId: number;
     inningNum: number;
@@ -138,6 +138,7 @@ declare namespace SattleDataAPI {
     updatedBy: string;
     createdAt: string;
     updatedAt: string;
+    isEdit?: boolean;
     inningEvents: any[];
   }
 
@@ -146,7 +147,7 @@ declare namespace SattleDataAPI {
     uuid: string;
     matchId: number;
     canceled: number;
-    eventTime: number;
+    eventTime: number | string;
     homeTeamId: number;
     awayTeamId: number;
     inningNum: number;
