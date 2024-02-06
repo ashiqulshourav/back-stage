@@ -75,6 +75,14 @@
           "title": "网球结算",
           "showLink": false
         }
+      },
+      {
+        "path": "/settle/basketball_detail/:matchId",
+        "name": "SETTLE_BASKETBALL_DETAIL",
+        "meta": {
+          "title": "籃球结算",
+          "showLink": false
+        }
       }
     ]
   },
@@ -218,31 +226,5 @@
       "rank": 11,
       "Developcomplete": true
     }
-  },
-  {
-    "path": "/betBill",
-    "meta": {
-      "title": "注单管理",
-      "icon": "crown",
-      "rank": 12
-    },
-    "children": [
-      {
-        "path": "/betBill/unSettlement/:matchId",
-        "name": "unSettlement",
-        "meta": {
-          "title": "未结算注单",
-          "showParent": true
-        }
-      },
-      {
-        "path": "/betBill/settlement",
-        "name": "settlement",
-        "meta": {
-          "title": "已结算注单",
-          "showParent": true
-        }
-      }
-    ]
   }
 ]
