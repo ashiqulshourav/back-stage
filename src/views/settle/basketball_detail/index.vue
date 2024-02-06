@@ -29,6 +29,7 @@
             <input 
               class="border w-1/3 mx-auto" 
               v-if="isEdit && index === renderData.length - 1" 
+              type="number"
               v-model="NewEvent.t1"  
             />
             <span v-else>
@@ -38,7 +39,8 @@
           <template #t2="{ row, index}">
             <input 
               class="border w-1/3 mx-auto" 
-              v-if="isEdit && index === renderData.length - 1" 
+              v-if="isEdit && index === renderData.length - 1"
+              type="number"
               v-model="NewEvent.t2"  
             />
             <span v-else>
@@ -52,7 +54,7 @@
               class="!w-[150px]"
               v-model="NewEvent.matchPeriod"
             >
-              <el-option v-for="(key, value) in MATCH_PERIOD" :label="key" :value="value" />
+              <el-option v-for="(key, value) in restPeriod" :label="key" :value="value" />
             </el-select>
             <span v-else>
               {{MATCH_PERIOD[row.matchPeriod]}}
@@ -106,62 +108,6 @@ defineOptions({ name: 'SETTLE_BASKETBALL_DETAIL' });
 const router = useRoute();
 const { matchId } = router.params;
 const isEdit = ref(false);
-const NewEvent: SattleDataAPI.BasketballEvent = reactive( {
-  matchId: Number(matchId),
-  eventTime: Date.now(),
-  t1: 0,
-  t2: 0,
-  matchPeriod: 'Q1',
-})
-const renderData= computed(() => {
-  return isEdit.value ? dataList.concat(NewEvent) : dataList;
-})
-const handleNewEvent = async () => {
-  
-  ElMessageBox.confirm(
-    `<p class='text-center'>${currentMatch[0].homeTeamNameCn} VS ${currentMatch[0].awayTeamNameCn} <br />
-      <p class="text-center text-2xl text-bold w-full">${NewEvent.t1} : ${NewEvent.t2}</p>
-      ⼿動結算後無法回退，請再次確認比分</p>
-      `
-      ,
-      `結算第${dataList.length + 1}節`,
-      {
-        dangerouslyUseHTMLString: true,
-        confirmButtonText: t('確認結算'),
-        cancelButtonText: t('取消'),
-        center: true,
-      }
-  )
-    .then(async () => {
-      const res: MetadataAPI.AddBasketballEeventRes = await API.addBasketballEvent({
-        matchId: NewEvent.matchId,
-        eventTime: Date.now(),
-        t1: Number(NewEvent.t1),
-        t2: Number(Number(NewEvent.t2)),
-        matchPeriod: NewEvent.matchPeriod,
-        canceled: 0
-      });
-      if (res.code) message(res.msg, { type: 'error' });
-      else {
-        isEdit.value = false;
-        NewEvent.t1 = 0;
-        NewEvent.t2 = 0;
-        NewEvent.matchPeriod = 'Q1'
-        onSearch();
-      }
-      
-    })
-    .catch(() => {
-      cancelEdit();
-    })
-}
-const setEdit = () => {
-  isEdit.value = true;
-}
-const cancelEdit = () => {
-  isEdit.value = false;
-}
-const { tableHeaderStyle } = usePublicHooks();
 const {
   onSearch,
   loading,
@@ -175,6 +121,138 @@ const {
   currentMatch,
   getCurrentMatchDetail
 } = useBasketballDetailHook();
+const restPeriod = computed(() => {
+  const tmp = {};
+  Object.assign(tmp, MATCH_PERIOD);
+  dataList.forEach(obj => {
+    delete tmp[obj.matchPeriod];
+  }) 
+  return tmp;
+})
+const NewEvent: SattleDataAPI.BasketballEvent = reactive( {
+  matchId: Number(matchId),
+  eventTime: Date.now(),
+  t1: 0,
+  t2: 0,
+})
+const renderData= computed(() => {
+  return isEdit.value ? dataList.concat(NewEvent) : dataList;
+})
+const NewErrorPop = (msg: string) => {
+  message(msg, { type: 'error' });
+}
+const validation = () => {
+  if (Number(NewEvent.t1) < 0 || Number(NewEvent.t2) < 0) {
+    NewErrorPop("分数不能为负。");
+    return false;
+  }
+  if (dataList.find(item => item.matchPeriod === NewEvent.matchPeriod)) {
+    NewErrorPop("本轮得分数据现已存在。");
+    return false;
+  }
+  if (NewEvent.matchPeriod === 'HT') {
+    if (!dataList.find(item => item.matchPeriod === 'Q1') || !dataList.find(item => item.matchPeriod === 'Q2')) {
+      NewErrorPop("请输入第一轮和第二轮得分。");
+      return false;
+    }
+    let totalHome = 0;
+    let totalAway = 0;
+
+    for (const item of dataList) {
+      if (item.matchPeriod === 'Q1' || item.matchPeriod === 'Q2') {
+        totalHome += Number(item.t1);
+        totalAway += Number(item.t2);
+      }
+    }
+
+    if (totalHome !== Number(NewEvent.t1) || totalAway !== Number(NewEvent.t2)) {
+      NewErrorPop("分数不可用。");
+      return false;
+    }
+  }
+  if (NewEvent.matchPeriod === 'OT') {
+    const total = dataList.find(item => item.matchPeriod === 'FT');
+    if (!total) {
+      NewErrorPop("请输入全日制成绩。");
+      return false;
+    }
+    if (total.t1 != total.t2) {
+      NewErrorPop("分数无效。");
+      return false;
+    }
+  }
+  if (NewEvent.matchPeriod === 'FT') {
+    if (!dataList.find(item => item.matchPeriod === 'Q1') || !dataList.find(item => item.matchPeriod === 'Q2') || !dataList.find(item => item.matchPeriod === 'Q3') || !dataList.find(item => item.matchPeriod === 'Q4')) {
+      NewErrorPop("请先输入所有轮次得分。");
+      return false;
+    }
+    let totalHome = 0;
+    let totalAway = 0;
+
+    for (const item of dataList) {
+      if (item.matchPeriod !== 'HT' && item.matchPeriod !== 'OT') {
+        totalHome += Number(item.t1);
+        totalAway += Number(item.t2);
+      }
+    }
+
+    if (totalHome !== Number(NewEvent.t1) || totalAway !== Number(NewEvent.t2)) {
+      NewErrorPop("分数不可用。");
+      return false;
+    }
+  }
+  return true;
+} 
+const handleNewEvent = async () => {
+  if (validation()) {
+    ElMessageBox.confirm(
+      `<p class='text-center'>${currentMatch[0].homeTeamNameCn} VS ${currentMatch[0].awayTeamNameCn} <br />
+        <p class="text-center text-2xl text-bold w-full">${NewEvent.t1} : ${NewEvent.t2}</p>
+        ⼿動結算後無法回退，請再次確認比分</p>
+        `
+        ,
+        `結算第${MATCH_PERIOD[NewEvent.matchPeriod]}節`,
+        {
+          dangerouslyUseHTMLString: true,
+          confirmButtonText: t('確認結算'),
+          cancelButtonText: t('取消'),
+          center: true,
+        }
+    )
+    .then(async () => {
+      const res: MetadataAPI.AddBasketballEeventRes = await API.addBasketballEvent({
+        matchId: NewEvent.matchId,
+        eventTime: Date.now(),
+        t1: Number(NewEvent.t1),
+        t2: Number(Number(NewEvent.t2)),
+        matchPeriod: NewEvent.matchPeriod,
+        canceled: 0
+      });
+      if (res.code) message(res.msg, { type: 'error' });
+      else {
+        delete restPeriod[NewEvent.matchPeriod];
+        isEdit.value = false;
+        NewEvent.t1 = 0;
+        NewEvent.t2 = 0;
+        NewEvent.matchPeriod = ''
+        onSearch();
+
+      }
+      
+    })
+    .catch(() => {
+      cancelEdit();
+    })
+  }
+}
+const setEdit = () => {
+  isEdit.value = true;
+}
+const cancelEdit = () => {
+  isEdit.value = false;
+}
+const { tableHeaderStyle } = usePublicHooks();
+
 
 onMounted(() => {
   getCurrentMatchDetail(Number(matchId));

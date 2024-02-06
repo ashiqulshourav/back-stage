@@ -1,6 +1,7 @@
 import { handleTableWidth } from '@/utils/getTableWidth';
 // import { parseMatchScore } from '@/utils/formatMatch';
 import { MATCH_PERIOD } from "@/utils/maps/sports_map";
+import dayjs from 'dayjs';
 export const columns: TableColumnList = [
   {
     label: t('盘'),
@@ -39,7 +40,10 @@ export const columns: TableColumnList = [
   {
     label: t('结算时间'),
     minWidth: 100,
-    prop: 'eventTime'
+    prop: 'eventTime',
+    formatter: ({ eventTime }) => {
+      return dayjs(eventTime).format("YYYY-MM-DD HH:mm:ss")
+    }
   },
   {
     label: t('操作人'),
