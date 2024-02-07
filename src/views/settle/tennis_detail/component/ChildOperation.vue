@@ -1,17 +1,14 @@
 <template>
   <div>
-    <template v-if="!row.updatedBy && childIndex === list.length - 1">
-      <el-button size="small" type="primary" @click="row.isEdit = true">{{
-        t('编辑')
-      }}</el-button>
-      <el-button size="small" type="primary" @click="row.isEdit = false">{{
-        t('保存')
-      }}</el-button>
-      <el-button size="small" type="danger" @click="deleteChildItem">{{
-        t('删除')
-      }}</el-button>
-    </template>
-    <span v-else>-</span>
+    <el-button size="small" type="primary" @click="row.isEdit = true">{{
+      t('编辑')
+    }}</el-button>
+    <el-button size="small" type="primary" @click="row.isEdit = false">{{
+      t('保存')
+    }}</el-button>
+    <el-button size="small" type="danger" @click="deleteChildItem">{{
+      t('删除')
+    }}</el-button>
   </div>
 </template>
 

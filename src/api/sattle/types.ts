@@ -129,8 +129,8 @@ declare namespace SattleDataAPI {
     awayTeamId: number;
     inningNum: number;
     setNum: number;
-    t1: number;
-    t2: number;
+    t1: number | string;
+    t2: number | string;
     sourceType: number;
     settleTimes: number;
     settleType: number;
@@ -183,5 +183,6 @@ declare namespace SattleDataAPI {
   type getSettlementListRes = COMMON.BASE_RES_TYPE<getSettlementDataListRes>
   type getTennisEventsResType = COMMON.BASE_RES_TYPE<TennisEventsData[]>;
   type addTennisEventResType = COMMON.BASE_RES_TYPE<any>;
+  type manualSettlementFullTimeRestType = COMMON.BASE_RES_TYPE<any>;
 
 }

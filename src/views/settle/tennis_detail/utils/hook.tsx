@@ -2,6 +2,7 @@ import { message } from '@/utils/message';
 import { t } from '@/plugins/i18n';
 import { columns, childColumns } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
+import { isNumber } from '@pureadmin/utils';
 
 export function useTennisDetailHook() {
   const dataList = reactive<SattleDataAPI.TennisEventsData[]>([]);
@@ -12,7 +13,7 @@ export function useTennisDetailHook() {
   const t2Score = ref(0);
   const canSettlement = ref(false);
 
-  /** 搜索初始化 */
+  // - 初始化
   const onSearch = async () => {
     const res = await API.getTennisEvents({
       matchId: history.state.params.matchId
@@ -40,8 +41,8 @@ export function useTennisDetailHook() {
           inningNum: 1,
           matchId: history.state.params.matchId,
           setNum: 0,
-          t1: 0,
-          t2: 0,
+          t1: '',
+          t2: '',
           eventTime: '',
           isEdit: false
         }
@@ -52,22 +53,23 @@ export function useTennisDetailHook() {
 
   //- 新增局
   const addChildRow = parentRow => {
-    const prevIdx = parentRow.inningEvents.length - 1;
-    if (
-      prevIdx > -1 &&
-      (!parentRow.inningEvents[prevIdx].t1 ||
-        !parentRow.inningEvents[prevIdx].t2 ||
-        !parentRow.inningEvents[prevIdx].eventTime ||
-        parentRow.inningEvents[prevIdx].isEdit)
-    ) {
-      return message(t('请选保存之前的事件'), { type: 'error' });
-    }
+    const noEmpty = parentRow.inningEvents.every(
+      item =>
+        isNumber(+item.t1) &&
+        isNumber(+item.t2) &&
+        item.eventTime &&
+        !item.isEdit
+    );
+
+    if (!noEmpty)
+      return message(t('请先完成并保存之前的事件'), { type: 'error' });
+
     parentRow.inningEvents.push({
       inningNum: parentRow.inningEvents.length + 1,
       matchId: history.state.params.matchId,
       setNum: parentRow.setNum,
-      t1: 0,
-      t2: 0,
+      t1: '',
+      t2: '',
       eventTime: '',
       isEdit: false
     });
@@ -75,11 +77,24 @@ export function useTennisDetailHook() {
 
   //- 结算盘
   const settlementHandicap = async parentRow => {
-    ElMessageBox.confirm('确定要增加一条事件么?', t('警告'), {
-      confirmButtonText: t('确认'),
-      cancelButtonText: t('取消'),
-      center: true
-    }).then(async () => {
+    ElMessageBox.confirm(
+      `
+      <div>
+          <div>${history.state.params.homeTeamNameCn}VS${
+        history.state.params.awayTeamNameCn
+      }</div>
+          <div>${t1Score.value}局 ： ${t2Score.value}局</div>
+          <div>${t('手动结算后无法回退，请再次确定结果')}</div>
+      </div>
+      `,
+      `${t('结算第')}${parentRow.setNum}${t('盘')}`,
+      {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: t('确认结算'),
+        cancelButtonText: t('取消'),
+        center: true
+      }
+    ).then(async () => {
       const inningEvents = parentRow.inningEvents.map(item => {
         delete item['isEdit'];
         return item;
@@ -100,11 +115,38 @@ export function useTennisDetailHook() {
     });
   };
 
-  const deleteChildItem = (list: SattleDataAPI.InningEvent[]) => {
-    list.pop();
-  };
-
   onMounted(() => onSearch());
+
+  //- 全场结算
+  const allSettleBtnClick = async () => {
+    let s1 = 0;
+    let s2 = 0;
+    const scoreList = dataList.map(item => [item.t1, item.t2]);
+    scoreList.forEach(item => (item[0] > item[1] ? ++s1 : ++s2));
+    if (dataList.length < 2 || Math.abs(s1 - s2) < 1) {
+      return message(t('请先完成结算'), { type: 'error' });
+    }
+    ElMessageBox.confirm(
+      `
+      <div>
+          <div>手动确认比赛结束后，即开始结算</div>
+          <div>全场比赛玩法，结算后无法回退。</div>
+      </div>
+      `,
+      t('确认比赛结算'),
+      {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: t('确认结算'),
+        cancelButtonText: t('取消'),
+        center: true
+      }
+    ).then(async () => {
+      const res = await API.manualSettlementFullTime({
+        matchId: history.state.params.matchId
+      });
+      console.log('hook.tsx文件 114==============行打印=', res);
+    });
+  };
 
   return {
     onSearch,
@@ -117,9 +159,9 @@ export function useTennisDetailHook() {
     addEventRow,
     addChildRow,
     settlementHandicap,
-    deleteChildItem,
     t1Score,
     t2Score,
-    canSettlement
+    canSettlement,
+    allSettleBtnClick
   };
 }

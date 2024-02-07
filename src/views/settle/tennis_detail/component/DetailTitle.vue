@@ -12,7 +12,13 @@
         <span class="text-sm">{{ item.val }}</span>
       </el-col>
       <el-col :span="6">
-        <el-button type="primary">{{ t('全场结算') }}</el-button>
+        <el-button
+          :type="renderObj.fullSettlementStatus === 1 ? 'info' : 'primary'"
+          @click="allSettleBtnClick"
+          >{{
+            renderObj.fullSettlementStatus === 1 ? t('结算完成') : t('全场结算')
+          }}</el-button
+        >
       </el-col>
     </el-row>
   </div>
@@ -21,6 +27,10 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+
+defineProps<{
+  renderObj: SattleDataAPI.getSettlementDataList;
+}>();
 
 const renderList = computed(() => {
   const _ = history.state.params;
@@ -46,6 +56,9 @@ const renderList = computed(() => {
     }
   ];
 });
+
+const emits = defineEmits(['allSettleBtnClick']);
+const allSettleBtnClick = () => emits('allSettleBtnClick');
 </script>
 
 <style scoped></style>

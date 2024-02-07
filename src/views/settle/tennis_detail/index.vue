@@ -1,7 +1,10 @@
 <template>
   <div class="main tennis_container">
     <!-- -盘口详情 -->
-    <DetiltTitle />
+    <DetiltTitle
+      @allSettleBtnClick="allSettleBtnClick"
+      :renderObj="renderObj"
+    />
 
     <PureTableBar
       :title="t('网球结算管理')"
@@ -10,12 +13,14 @@
     >
       <template #title>
         <el-button
+          v-if="renderObj.fullSettlementStatus === 0"
           @click="addEventRow"
           size="small"
           type="primary"
           :disabled="dataList.length >= 5"
           >{{ t('新增盘') }}</el-button
         >
+        <span></span>
       </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
@@ -84,7 +89,9 @@
                     :row="childRow"
                     :list="parentRow.inningEvents"
                     :childIndex="childIndex"
-                    @deleteChildItem="deleteChildItem(parentRow.inningEvents)"
+                    @deleteChildItem="
+                      parentRow.inningEvents.splice(childIndex, 1)
+                    "
                   />
                 </template>
               </pure-table>
@@ -118,6 +125,13 @@ import ChildOperation from './component/ChildOperation.vue';
 defineOptions({ name: 'SETTLE_TENNIS_DETAIL' });
 
 const { tableHeaderStyle } = usePublicHooks();
+const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
+  {} as SattleDataAPI.getSettlementDataList
+);
+
+onMounted(() => {
+  Object.assign(renderObj, history.state.params);
+});
 
 //- 检测当前局结算状态
 const checkScore = computed(() => {
@@ -153,9 +167,9 @@ const {
   addEventRow,
   addChildRow,
   settlementHandicap,
-  deleteChildItem,
   t1Score,
   t2Score,
-  canSettlement
+  canSettlement,
+  allSettleBtnClick
 } = useTennisDetailHook();
 </script>

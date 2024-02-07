@@ -62,4 +62,9 @@ export const sattleData = {
   addTennisEvent: (data:
     SattleDataAPI.addTennisEventReq
   ) => http.request<SattleDataAPI.addTennisEventResType>("post", "/tennis/v1/addTennisEvent", { data }),
+
+  //-网球新增事件（按盘）
+  manualSettlementFullTime: (data:
+    { matchId: number }
+  ) => http.request<SattleDataAPI.manualSettlementFullTimeRestType>("post", "/tennis/v1/manualSettlementFullTime", { data }),
 };
