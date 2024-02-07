@@ -184,5 +184,6 @@ declare namespace SattleDataAPI {
   type getTennisEventsResType = COMMON.BASE_RES_TYPE<TennisEventsData[]>;
   type addTennisEventResType = COMMON.BASE_RES_TYPE<any>;
   type manualSettlementFullTimeRestType = COMMON.BASE_RES_TYPE<any>;
+  type preSaleInfoResType = COMMON.BASE_RES_TYPE<getSettlementDataList>;
 
 }

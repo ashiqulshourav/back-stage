@@ -125,13 +125,13 @@ import ChildOperation from './component/ChildOperation.vue';
 defineOptions({ name: 'SETTLE_TENNIS_DETAIL' });
 
 const { tableHeaderStyle } = usePublicHooks();
-const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
-  {} as SattleDataAPI.getSettlementDataList
-);
+// const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
+//   {} as SattleDataAPI.getSettlementDataList
+// );
 
-onMounted(() => {
-  Object.assign(renderObj, history.state.params);
-});
+// onMounted(() => {
+//   Object.assign(renderObj, history.state.params);
+// });
 
 //- 检测当前局结算状态
 const checkScore = computed(() => {
@@ -170,6 +170,7 @@ const {
   t1Score,
   t2Score,
   canSettlement,
-  allSettleBtnClick
+  allSettleBtnClick,
+  renderObj
 } = useTennisDetailHook();
 </script>

@@ -67,4 +67,9 @@ export const sattleData = {
   manualSettlementFullTime: (data:
     { matchId: number }
   ) => http.request<SattleDataAPI.manualSettlementFullTimeRestType>("post", "/tennis/v1/manualSettlementFullTime", { data }),
+
+  //- 获取单个赛事信息
+  getPreSaleInfo: (data:
+    { matchId: number }
+  ) => http.request<SattleDataAPI.preSaleInfoResType>("post", "/match/v1/getPreSaleInfo", { data }),
 };

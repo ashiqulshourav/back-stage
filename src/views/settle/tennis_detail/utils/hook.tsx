@@ -12,6 +12,9 @@ export function useTennisDetailHook() {
   const t1Score = ref(0);
   const t2Score = ref(0);
   const canSettlement = ref(false);
+  const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
+    {} as SattleDataAPI.getSettlementDataList
+  );
 
   // - 初始化
   const onSearch = async () => {
@@ -115,7 +118,10 @@ export function useTennisDetailHook() {
     });
   };
 
-  onMounted(() => onSearch());
+  onMounted(() => {
+    getMatchDetail();
+    onSearch();
+  });
 
   //- 全场结算
   const allSettleBtnClick = async () => {
@@ -144,8 +150,18 @@ export function useTennisDetailHook() {
       const res = await API.manualSettlementFullTime({
         matchId: history.state.params.matchId
       });
-      console.log('hook.tsx文件 114==============行打印=', res);
+      if (res.code) return message(res.msg, { type: 'error' });
+      getMatchDetail();
     });
+  };
+
+  //- 获取比赛详情
+  const getMatchDetail = async () => {
+    const res = await API.getPreSaleInfo({
+      matchId: history.state.params.matchId
+    });
+    if (res.code) return message(res.msg, { type: 'error' });
+    Object.assign(renderObj, res.data);
   };
 
   return {
@@ -162,6 +178,7 @@ export function useTennisDetailHook() {
     t1Score,
     t2Score,
     canSettlement,
-    allSettleBtnClick
+    allSettleBtnClick,
+    renderObj
   };
 }
