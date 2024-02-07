@@ -2,7 +2,6 @@
   <div class="main">
     <!-- -盘口详情 -->
     <MatchDetailCard :renderObj="renderObj" />
-
     <template v-if="!keyList.length">
       <el-empty :description="t('暂无结算信息')" />
     </template>
@@ -19,7 +18,7 @@
             adaptive
             :data="renderList"
             :columns="dynamicColumns"
-            :pagination="pagination"
+            :pagination="{ ...pagination, pageSizes: [10, 20, 50, 100] }"
             :paginationSmall="size === 'small' ? true : false"
             :header-cell-style="tableHeaderStyle"
             @page-current-change="

@@ -58,6 +58,7 @@ export const ESPORT_MATCH_STATUS = {
   nover: t('比赛中'),
   over: t('比赛结束'),
   nobegin: t('未开赛'),
+  canceled: t('比赛取消'),
 }
 
 //- 上半场 ｜ 下半场

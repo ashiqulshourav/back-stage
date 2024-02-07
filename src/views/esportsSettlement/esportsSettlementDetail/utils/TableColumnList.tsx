@@ -4,7 +4,7 @@ import { NAV_TITLE_NAME } from './map';
 export const columns: TableColumnList = [
   {
     label: t('盘口ID'),
-    prop: 'betItemsId'
+    prop: 'sourceBetItemsMid'
   },
   {
     label: t('盘口名称'),
