@@ -59,5 +59,20 @@ export const sattleData = {
   //-网球结算赛事列表
   getTennisEvents: (data: {
     matchId: number;
-  }) => http.request<SaleDataAPI.getTennisEventsResType>("post", "/tennis/v1/getTennisEvents", { data }),
+  }) => http.request<SattleDataAPI.getTennisEventsResType>("post", "/tennis/v1/getTennisEvents", { data }),
+
+  //-网球新增事件（按盘）
+  addTennisEvent: (data:
+    SattleDataAPI.addTennisEventReq
+  ) => http.request<SattleDataAPI.addTennisEventResType>("post", "/tennis/v1/addTennisEvent", { data }),
+
+  //-网球新增事件（按盘）
+  manualSettlementFullTime: (data:
+    { matchId: number }
+  ) => http.request<SattleDataAPI.manualSettlementFullTimeRestType>("post", "/tennis/v1/manualSettlementFullTime", { data }),
+
+  //- 获取单个赛事信息
+  getPreSaleInfo: (data:
+    { matchId: number }
+  ) => http.request<SattleDataAPI.preSaleInfoResType>("post", "/match/v1/getPreSaleInfo", { data }),
 };

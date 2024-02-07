@@ -1,5 +1,7 @@
 // import { parseMatchScore } from '@/utils/formatMatch';
 
+import dayjs from 'dayjs';
+
 export const columns: TableColumnList = [
   {
     type: 'expand',
@@ -7,11 +9,11 @@ export const columns: TableColumnList = [
   },
   {
     label: t('盘'),
-    width: 100,
     prop: 'inningNum',
-    formatter: ({ inningNum }) => {
-      return inningNum;
-    }
+    type: 'index'
+    // formatter: ({ inningNum }) => {
+    //   return inningNum;
+    // }
   },
   {
     headerRenderer: () => history.state.params.homeTeamNameCn ?? '_',
@@ -28,7 +30,7 @@ export const columns: TableColumnList = [
   {
     label: t('结算时间'),
     formatter: ({ eventTime }) => {
-      return eventTime ?? '_';
+      return eventTime ? dayjs(eventTime).format('HH:mm:ss') : '_';
     }
   },
   {
@@ -53,32 +55,30 @@ export const childColumns: TableColumnList = [
   {
     label: t('局'),
     prop: 'inningNum',
-    formatter: ({ inningNum }) => {
-      return inningNum;
-    }
+    type: 'index'
+    // formatter: ({ inningNum }) => {
+    //   return inningNum;
+    // }
   },
   {
     headerRenderer: () => history.state.params.homeTeamNameCn ?? '_',
-    formatter: ({ t1 }) => {
-      return t1;
-    }
+    slot: 't1',
+    width: 260
   },
   {
     headerRenderer: () => history.state.params.awayTeamNameCn ?? '_',
-    formatter: ({ t2 }) => {
-      return t2;
-    }
+    slot: 't2',
+    width: 260
   },
   {
     label: t('结算时间'),
-    formatter: ({ eventTime }) => {
-      return eventTime ?? '_';
-    }
+    slot: 'eventTime',
+    width: 300
   },
   {
     label: t('操作人'),
-    formatter: ({ createdBy }) => {
-      return createdBy ?? '_';
+    formatter: ({ updatedBy }) => {
+      return updatedBy ?? '_';
     }
   },
   {
@@ -89,6 +89,6 @@ export const childColumns: TableColumnList = [
   },
   {
     label: t('操作'),
-    slot: 'operation'
+    slot: 'childOperation'
   }
 ];

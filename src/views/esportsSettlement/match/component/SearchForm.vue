@@ -163,7 +163,6 @@ const resetForm = (_formEl: FormInstance | undefined) => {
 };
 
 const search = () => {
-  console.log('SearchForm.vue文件 166==============行打印=', props.form);
   emits('onSearch', ...['reload']);
 };
 </script>

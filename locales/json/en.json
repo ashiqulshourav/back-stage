@@ -232,7 +232,6 @@
   "k-78f4652a": "Confirmation to update locker status?",
   "k27361d84": "Market Status",
   "k-1da985cf": "Pre-Match",
-  "k603a992a": "In-Play",
   "k-4e7a8869": "Save your config or your setting will be lost.",
   "k6c219e41": "Settlement History",
   "k8fc5b98": "On Sale",
@@ -426,5 +425,17 @@
   "k-3610fc72": "结算盘",
   "k155975d2": "baibai",
   "k4f07f5c7": "賽果結算",
-  "k400ed780": "局"
+  "k400ed780": "局",
+  "k-404e8bbd": "进行中",
+  "k-37fe3f25": "新增局",
+  "k4c08a482": "当前盘结算时间不能小于上一盘",
+  "k3a2afa6f": "请先结算上一盘",
+  "k6103b8c8": "请先完成结算",
+  "k5a3a385b": "结算完成",
+  "k-626a34f5": "时间不能大于前一个事件发生时间",
+  "k3744d037": "请先完成并保存之前的事件",
+  "k-1c4fd49f": "手动结算后无法回退，请再次确定结果",
+  "k785c570f": "结算第",
+  "k-1309ed57": "确认比赛结算",
+  "k-6af79d48": "比赛取消"
 }

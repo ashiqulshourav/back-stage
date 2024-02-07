@@ -39,6 +39,10 @@
 .el-button.is-link:focus {
   color: var(--el-button-text-color) !important;
 }
+.el-button:focus,
+.el-button:hover {
+  background-color: var(--el-button-bg-color) !important;
+}
 
 /* 重置 el-button 中 icon 的 margin */
 .reset-margin [class*='el-icon'] + span {

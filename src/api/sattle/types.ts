@@ -140,6 +140,71 @@ declare namespace SattleDataAPI {
     navigateLastPage: number;
   }
 
+  type InningEvent = {
+    id: number;
+    uuid: string;
+    matchId: number;
+    canceled: number;
+    eventTime: number | string;
+    homeTeamId: number;
+    awayTeamId: number;
+    inningNum: number;
+    setNum: number;
+    t1: number | string;
+    t2: number | string;
+    sourceType: number;
+    settleTimes: number;
+    settleType: number;
+    createdBy: string;
+    updatedBy: string;
+    createdAt: string;
+    updatedAt: string;
+    isEdit?: boolean;
+    inningEvents: any[];
+  }
+
+  type TennisEventsData = {
+    id: number;
+    uuid: string;
+    matchId: number;
+    canceled: number;
+    eventTime: number | string;
+    homeTeamId: number;
+    awayTeamId: number;
+    inningNum: number;
+    setNum: number;
+    t1: number;
+    t2: number;
+    sourceType: number;
+    settleTimes: number;
+    settleType: number;
+    createdBy: string;
+    updatedBy: string;
+    createdAt: string;
+    updatedAt: string;
+    inningEvents: InningEvent[];
+  }
+
+  type addTennisEventReq = {
+    eventTime: number;
+    inningEvents: {
+      eventTime: number;
+      inningNum: number;
+      matchId: number;
+      setNum: number;
+      t1: number;
+      t2: number;
+    }[];
+    inningNum: number;
+    matchId: number;
+    t1: number;
+    t2: number;
+  }
+
   type getSettlementListRes = COMMON.BASE_RES_TYPE<getSettlementDataListRes>
+  type getTennisEventsResType = COMMON.BASE_RES_TYPE<TennisEventsData[]>;
+  type addTennisEventResType = COMMON.BASE_RES_TYPE<any>;
+  type manualSettlementFullTimeRestType = COMMON.BASE_RES_TYPE<any>;
+  type preSaleInfoResType = COMMON.BASE_RES_TYPE<getSettlementDataList>;
 
 }

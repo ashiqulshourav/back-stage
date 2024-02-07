@@ -9,7 +9,7 @@ import {
   SearchFormType,
   TempListType
 } from '../../../utils/type';
-import { dateSetSecond, getSecondTime } from '@/utils/formatDate';
+import { dateSetSecond } from '@/utils/formatDate';
 import { ElMessageBox } from 'element-plus';
 import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
 import { useMatchStore } from '@/store/match';
