@@ -14,7 +14,6 @@ export function useLeagueTagsHook() {
   const formRef = ref();
   const dataList = reactive<ConfigCenterDataAPI.LeagueTagType[]>([]);
   const loading = ref(true);
-  const dialogLoading = ref(false);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -133,11 +132,15 @@ export function useLeagueTagsHook() {
       width: '40%',
       draggable: true,
       fullscreenIcon: true,
-      loading: dialogLoading.value,
       alignCenter: true,
       closeOnClickModal: false,
       contentRenderer: () => h(editForm, { ref: formRef }),
-      beforeSure: (done, { options }) => {
+      beforeSure: (
+        done,
+        { options },
+        okButtonLoading = null,
+        okButtonText = null
+      ) => {
         const FormRef = formRef.value.getRef();
         const curData = options.props.formInline as FormItemProps;
         function chores() {
@@ -150,11 +153,21 @@ export function useLeagueTagsHook() {
         FormRef.validate(async valid => {
           if (valid) {
             if (row) {
-              updateLeagueTag({ ...curData, id: row.id }, () => chores());
+              updateLeagueTag(
+                { ...curData, id: row.id },
+                () => chores(),
+                okButtonLoading,
+                okButtonText
+              );
             } else {
               // 实际开发先调用编辑接口，再进行下面操作
               // chores();
-              createLeagueTag({ ...curData }, () => chores());
+              createLeagueTag(
+                { ...curData },
+                () => chores(),
+                okButtonLoading,
+                okButtonText
+              );
             }
           }
         });
@@ -162,21 +175,35 @@ export function useLeagueTagsHook() {
     });
   }
 
-  const updateLeagueTag = async (curData, cb) => {
-    dialogLoading.value = true;
+  const updateLeagueTag = async (
+    curData,
+    cb,
+    okButtonLoading,
+    okButtonText
+  ) => {
+    if (okButtonLoading) okButtonLoading.value = true;
+    if (okButtonText) okButtonText.value = t('编辑中');
     const res = await API.updateLeagueTag(curData);
     setTimeout(() => {
-      dialogLoading.value = false;
+      if (okButtonLoading) okButtonLoading.value = false;
+      if (okButtonText) okButtonText.value = t('确定');
       if (!res.code) cb();
     }, 300);
     message(res.msg, { type: res.code ? 'error' : 'success' });
   };
 
-  const createLeagueTag = async (curData, cb) => {
-    dialogLoading.value = true;
+  const createLeagueTag = async (
+    curData,
+    cb,
+    okButtonLoading,
+    okButtonText
+  ) => {
+    if (okButtonLoading) okButtonLoading.value = true;
+    if (okButtonText) okButtonText.value = t('创建中');
     const res = await API.createLeagueTag(curData);
     setTimeout(() => {
-      dialogLoading.value = false;
+      if (okButtonLoading) okButtonLoading.value = false;
+      if (okButtonText) okButtonText.value = t('确定');
       if (!res.code) cb();
     }, 300);
 

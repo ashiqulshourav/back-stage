@@ -118,7 +118,6 @@ interface DialogOptions extends DialogProps {
   props?: any;
   /** 是否隐藏 `Dialog` 按钮操作区的内容 */
   hideFooter?: boolean;
-  loading?: boolean;
   /**
    * @description 自定义对话框标题的内容渲染器
    * @see {@link https://element-plus.org/zh-CN/component/dialog.html#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%A4%B4%E9%83%A8}
