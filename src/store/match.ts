@@ -24,7 +24,6 @@ export const useMatchStore = defineStore('MATCHSTATE', {
       } else {
         listType = 'esportLeagueList'
       }
-      console.log('match.ts文件 27==============行打印=', category, sportId);
       if (this.esportLeagueList.length && category === 1) return;
 
       const res: MetadataAPI.LeagueListRes = await API.getLeagueList(params);

@@ -99,6 +99,15 @@ const pagination = computed(() => {
 });
 
 const renderList = computed(() => {
+  rList[selectIndex.value]?.list.sort((a, b) => {
+    if (a.win === null && b.win !== null) {
+      return -1;
+    } else if (a.win !== null && b.win === null) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
   return rList[selectIndex.value]?.list.slice(
     (pagination.value.currentPage - 1) * pagination.value.pageSize,
     pagination.value.pageSize * pagination.value.currentPage
