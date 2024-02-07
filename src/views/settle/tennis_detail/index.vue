@@ -86,6 +86,7 @@
                   #childOperation="{ row: childRow, index: childIndex }"
                 >
                   <ChildOperation
+                    v-if="renderObj.fullSettlementStatus === 0 && !parentRow.id"
                     :row="childRow"
                     :list="parentRow.inningEvents"
                     :childIndex="childIndex"
@@ -93,6 +94,7 @@
                       parentRow.inningEvents.splice(childIndex, 1)
                     "
                   />
+                  <span v-else>-</span>
                 </template>
               </pure-table>
 

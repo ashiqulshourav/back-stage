@@ -36,7 +36,10 @@ const renderList = computed(() => {
   const _ = props.renderObj;
   return [
     { title: t('赛事ID'), val: _?.matchId },
-    { title: t('联赛'), val: _?.leagueNameCn },
+    {
+      title: t('联赛'),
+      val: _?.leagueNameCn ?? history.state.params.leagueNameCn
+    },
     {
       title: t('开赛时间'),
       val: _?.beginTime

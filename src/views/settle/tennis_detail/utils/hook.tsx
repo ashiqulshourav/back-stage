@@ -83,8 +83,8 @@ export function useTennisDetailHook() {
     ElMessageBox.confirm(
       `
       <div>
-          <div>${history.state.params.homeTeamNameCn}VS${
-        history.state.params.awayTeamNameCn
+          <div>${history.state.params.homeTeamNameCn ?? '_'}VS${
+        history.state.params.awayTeamNameCn ?? '_'
       }</div>
           <div>${t1Score.value}局 ： ${t2Score.value}局</div>
           <div>${t('手动结算后无法回退，请再次确定结果')}</div>
