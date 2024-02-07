@@ -1,5 +1,3 @@
-import { handleTableWidth } from '@/utils/getTableWidth';
-// import { parseMatchScore } from '@/utils/formatMatch';
 import { MATCH_PERIOD } from "@/utils/maps/sports_map";
 import dayjs from 'dayjs';
 export const columns: TableColumnList = [
@@ -21,14 +19,16 @@ export const columns: TableColumnList = [
     slot: 't1',
     headerSlot: 'header_t1',
     headerRenderer: () => {
-      return '王鑫';
+      return history.state.params.homeTeamNameCn ? history.state.params.homeTeamNameCn : '-' ;
     },
   },
   {
     label: t('小岛菜菜'),
     prop: 't2',
     slot: 't2',
-    headerSlot: 'header_t2',
+    headerRenderer: () => {
+      return history.state.params.awayTeamNameCn ? history.state.params.awayTeamNameCn : '-' ;
+    },
   },
   
   
@@ -64,15 +64,5 @@ export const columns: TableColumnList = [
     formatter() {
       return '-';
     },
-  }
-];
-
-export const childColumns: TableColumnList = [
-  {
-    label: t('序号'),
-    fixed: true,
-    type: 'index',
-    minWidth: 100,
-    headerRenderer: d => handleTableWidth(d, t('序号'))
   }
 ];

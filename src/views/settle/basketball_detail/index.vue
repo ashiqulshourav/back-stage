@@ -1,20 +1,29 @@
 <template>
   <div class="main">
     <!-- -盘口详情 -->
-    <DetiltTitle :renderObj="currentMatch[0]" />
+      
+    <DetiltTitle 
+      :renderObj="currentMatch" 
+      @allSettleBtnClick="allSettleBtnClick"  
+    />
     <!-- Switch Match Period Type -->
-    <template v-if="dataList.length === 0">
-      <h3 class="text-xl mt-8">赛制</h3>
-      <div class="flex gap-2 mt-4">
+    <template 
+      v-if="dataList.length === 0"
+      class="p-3"
+    >
+      <h3 class="text-sm mt-8">赛制</h3>
+      <div class="flex mt-4">
         <el-button
+          @click="isFourRound = true"
+          size="small"
           :type="isFourRound ? 'primary' : ''"
-          @click="() => togglePeriodType(true)"
         >
           四节制  
         </el-button>
         <el-button
+          @click="isFourRound = false"
+          size="small"
           :type="!isFourRound ? 'primary' : ''"
-          @click="() => togglePeriodType(false)"
         >
           两节制  
         </el-button>
@@ -118,8 +127,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { onMounted } from 'vue';
 import { usePublicHooks } from '@/hooks';
 import { PureTableBar } from '@/components/RePureTableBar';
 import DetiltTitle from './component/DetailTitle.vue';
@@ -136,14 +144,12 @@ const {
   columns,
   dataList,
   currentMatch,
-  setMatchId,
   isEdit,
+  isFourRound,
+  allSettleBtnClick,
   setNewBasketballEvent
 } = useBasketballDetailHook();
-const router = useRoute();
-
-const { matchId } = router.params;
-const isFourRound = ref(true);
+const  matchId = history.state.params.matchId;
 
 const NewEvent: SattleDataAPI.BasketballEvent = reactive( {
   matchId: Number(matchId),
@@ -155,9 +161,6 @@ const renderData= computed(() => {
   return isEdit.value ? dataList.concat(NewEvent) : dataList;
 })
 
-const togglePeriodType = (tag: boolean) => {
-  isFourRound.value = tag;
-}
 const setNewEventEdit = () => {
   isEdit.value = true;
   if (isFourRound.value) {
@@ -178,9 +181,7 @@ const setNewEventEdit = () => {
 const handleNewEvent = async () => {
   setNewBasketballEvent(NewEvent);
 }
-
 onMounted(() => {
-  setMatchId(matchId);
   onSearch();
 });
 </script>
