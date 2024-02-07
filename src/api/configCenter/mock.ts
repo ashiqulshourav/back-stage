@@ -46,6 +46,29 @@ const getLeagueTagList = (
   );
 };
 
+const searchLeagueTagList = (
+  fetchProps: ConfigCenterDataAPI.LeagueTagType
+) => {
+  return new Promise<ConfigCenterDataAPI.SearchLeagueTagRes>(
+    (resolve, reject) => {
+      setTimeout(() => {
+        const { categoryId, sportId } = fetchProps;
+        if (!Number.isInteger(sportId) || !Number.isInteger(sportId)) {
+          reject();
+        }
+        const list = data.filter(
+          item => item.categoryId === categoryId && item.sportId === sportId
+        );
+        resolve({
+          code: 0,
+          data: list,
+          msg: '成功获取标签目录'
+        });
+      }, 1000);
+    }
+  );
+};
+
 const updateLeagueTag = (dataProp: ConfigCenterDataAPI.LeagueTagType) => {
   return new Promise<ConfigCenterDataAPI.LeagueTagRes>((resolve, reject) => {
     setTimeout(() => {
@@ -93,6 +116,7 @@ const deleteLeagueTag = (dataProp: ConfigCenterDataAPI.LeagueTagType) => {
 
 const mockAPI = {
   getLeagueTagList,
+  searchLeagueTagList,
   updateLeagueTag,
   createLeagueTag,
   deleteLeagueTag

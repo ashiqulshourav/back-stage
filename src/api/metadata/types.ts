@@ -11,6 +11,7 @@ declare namespace MetadataAPI {
     level?: number;
     category?: number;
     sportId?: number;
+    tags?: number[]
   }
   type updateLeagueParamsType = {
     leagueLogo: string;
@@ -21,6 +22,7 @@ declare namespace MetadataAPI {
     leagueNameEn: string;
     level: number;
     sportId: number;
+    tags?: number[];
   }
 
   type LeagueList = {
@@ -32,6 +34,7 @@ declare namespace MetadataAPI {
     leagueLogo?: string;
     leagueId188Bet?: number | string;
     level: string | number;
+    tags?: number[];
   }
   type LeagueListData = {
     total: number;

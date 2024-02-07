@@ -11,6 +11,14 @@ export const configCenterData = {
     // ),
     mockAPI.getLeagueTagList(data),
 
+  searchLeagueTagList: (data: ConfigCenterDataAPI.LeagueTagType) =>
+    // http.request<ConfigCenterDataAPI.ListLeagueTagRes>(
+    //   'post',
+    //   '/leagueTag/v1/getLeagueTagList',
+    //   { data }
+    // ),
+    mockAPI.searchLeagueTagList(data),
+
   updateLeagueTag: (data: ConfigCenterDataAPI.LeagueTagType) =>
     // http.request<ConfigCenterDataAPI.LeagueTagRes>(
     //   'post',

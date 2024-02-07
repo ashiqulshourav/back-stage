@@ -54,6 +54,7 @@ export function useLeague() {
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
+      console.log("league", res.data)
       dataList.push(...res.data.list);
       pagination.total = res.data.total;
       pagination.pageSize = res.data.pageSize;
@@ -69,7 +70,7 @@ export function useLeague() {
     onSearch();
   };
 
-  function openDialog(title: string, row?: MetadataAPI.LeagueList) {
+  async function openDialog(title: string, row?: MetadataAPI.LeagueList) {
     addDialog({
       title,
       props: {
@@ -81,7 +82,8 @@ export function useLeague() {
           leagueNameCn: row?.leagueNameCn ?? '',
           leagueNameEn: row?.leagueNameEn ?? '',
           level: row?.level ?? '',
-          sportId: row?.sportId ?? ''
+          sportId: row?.sportId ?? '',
+          tags: row?.tags ?? []
         }
       },
       width: '40%',

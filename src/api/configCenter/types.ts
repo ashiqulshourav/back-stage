@@ -13,4 +13,5 @@ declare namespace ConfigCenterDataAPI {
   type LeagueTagListType = COMMON.ListData<LeagueTagType>;
   type ListLeagueTagRes = COMMON.BASE_RES_TYPE<LeagueTagListType>;
   type LeagueTagRes = COMMON.BASE_RES_TYPE<LeagueTagType>;
+  type SearchLeagueTagRes = COMMON.BASE_RES_TYPE<LeagueTagType[]>;
 }

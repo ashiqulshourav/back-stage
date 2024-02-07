@@ -87,6 +87,22 @@
         />
       </el-select>
     </el-form-item> -->
+    <el-form-item :label="t('联赛标签')" prop="tags">
+      <el-checkbox
+        v-model="checkAll"
+        :indeterminate="isIndeterminate"
+        @change="handleCheckAllChange"
+        >{{ t('全选') }}</el-checkbox
+      >
+      <el-checkbox-group
+        v-model="newFormInline.tags"
+        @change="handleCheckedTagIdsChange"
+      >
+        <el-checkbox v-for="tag in tags" :key="tag.id" :label="tag.id">{{
+          tag.tagName
+        }}</el-checkbox>
+      </el-checkbox-group>
+    </el-form-item>
   </el-form>
 </template>
 
@@ -101,6 +117,9 @@ import { t } from '@/plugins/i18n';
 import { useMatchStore } from '@/store/match';
 import { inputRestrictions } from '@/utils/formatNumber';
 // import CustomInput from '@/components/Form/CustomInput.vue';
+import { useLeague } from './utils/hook';
+
+const { form } = useLeague();
 
 const matchStore = useMatchStore();
 const props = withDefaults(defineProps<FormProps>(), {
@@ -112,8 +131,20 @@ const props = withDefaults(defineProps<FormProps>(), {
     leagueId: '',
     // leagueLogo: '',
     // leagueId188Bet: '',
-    sportId: ''
+    sportId: '',
+    tags: []
   })
+});
+
+const tags = ref([]);
+
+onMounted(async () => {
+  const response = await API.searchLeagueTagList({
+    categoryId: parseInt(form.category),
+    sportId: parseInt(newFormInline.value.sportId)
+  });
+  tags.value = response.data;
+  console.log(response.data);
 });
 
 /* const beforeAvatarUpload: UploadProps['beforeUpload'] = _rawFile => {
@@ -144,6 +175,19 @@ const newFormInline = ref(props.formInline);
 function getRef() {
   return ruleFormRef.value;
 }
+
+const checkAll = ref(false);
+const isIndeterminate = ref(true);
+
+const handleCheckAllChange = (val: boolean) => {
+  newFormInline.value.tags = val ? tags.value.map(item => item.id) : [];
+  isIndeterminate.value = false;
+};
+const handleCheckedTagIdsChange = (value: number[]) => {
+  const checkedCount = value.length;
+  checkAll.value = checkedCount === tags.value.length;
+  isIndeterminate.value = checkedCount > 0 && checkedCount < tags.value.length;
+};
 
 defineExpose({ getRef });
 </script>
