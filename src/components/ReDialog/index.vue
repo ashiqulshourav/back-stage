@@ -111,6 +111,7 @@ const footerButtons = computed(() => {
             type: "primary",
             text: true,
             bg: true,
+            loading: options.loading,
             btnClick: ({ dialog: { options, index } }) => {
               const done = () =>
                 closeDialog(options, index, { command: "sure" });

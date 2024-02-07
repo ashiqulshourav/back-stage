@@ -13,8 +13,8 @@
   "editor.suggestSelection": "first",
   "editor.acceptSuggestionOnCommitCharacter": false,
   "css.lint.propertyIgnoredDueToDisplay": "ignore",
-  "workbench.colorTheme": "One Monokai",
-  "workbench.iconTheme": "vs-minimal",
+  // "workbench.colorTheme": "One Monokai",
+  // "workbench.iconTheme": "vs-minimal",
   "editor.quickSuggestions": {
     "other": true,
     "comments": true,

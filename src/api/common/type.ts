@@ -30,9 +30,7 @@ declare namespace COMMON {
   type ListFetchProps = {
     pageSize: number;
     pageNum: number;
-  }
-
- 
+  } 
 
   type FormProps<T = any> = {
     formInline: T;

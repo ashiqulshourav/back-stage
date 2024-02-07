@@ -145,12 +145,20 @@
           "title": "分类设定",
           "showParent": true
         }
-      },
+      },      
       {
         "path": "/configCenter/play_method",
         "name": "CONFIGCENTER_PLAY_METHOD",
         "meta": {
           "title": "自定义玩法",
+          "showParent": true
+        }
+      },
+      {
+        "path": "/configCenter/league_tags",
+        "name": "LEAGUE_TAGS",
+        "meta": {
+          "title": "联赛标签",
           "showParent": true
         }
       }
