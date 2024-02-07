@@ -164,7 +164,24 @@ declare namespace SattleDataAPI {
     inningEvents: InningEvent[];
   }
 
+  type addTennisEventReq = {
+    eventTime: number;
+    inningEvents: {
+      eventTime: number;
+      inningNum: number;
+      matchId: number;
+      setNum: number;
+      t1: number;
+      t2: number;
+    }[];
+    inningNum: number;
+    matchId: number;
+    t1: number;
+    t2: number;
+  }
+
   type getSettlementListRes = COMMON.BASE_RES_TYPE<getSettlementDataListRes>
   type getTennisEventsResType = COMMON.BASE_RES_TYPE<TennisEventsData[]>;
+  type addTennisEventResType = COMMON.BASE_RES_TYPE<any>;
 
 }

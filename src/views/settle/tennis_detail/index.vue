@@ -9,9 +9,13 @@
       @refresh="onSearch()"
     >
       <template #title>
-        <el-button @click="addEventRow" size="small" type="primary">{{
-          t('新增盘')
-        }}</el-button>
+        <el-button
+          @click="addEventRow"
+          size="small"
+          type="primary"
+          :disabled="dataList.length >= 5"
+          >{{ t('新增盘') }}</el-button
+        >
       </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
@@ -19,7 +23,7 @@
           showOverflowTooltip
           :loading="loading"
           :size="size"
-          :row-key="row => row.id"
+          :row-key="row => row.eventTime"
           :expand-row-keys="expandMatchList"
           adaptive
           :adaptiveConfig="{
@@ -28,13 +32,14 @@
           :data="dataList"
           :columns="dynamicColumns"
           :header-cell-style="tableHeaderStyle"
-          @expand-change="expandChange"
         >
           <template #operation="{ row: parentRow }">
             <el-button
               v-if="!parentRow.id"
               @click="settlementHandicap(parentRow)"
               type="primary"
+              size="small"
+              :disabled="!canSettlement"
               >{{ t('结算盘') }}</el-button
             >
             <span v-else>{{ t('已结算') }}</span>
@@ -53,12 +58,14 @@
                 border
                 :header-cell-style="tableHeaderStyle"
               >
+                <!-- -比分 -->
                 <template #t1="{ row: childRow }">
                   <Score :row="childRow" type="t1" />
                 </template>
                 <template #t2="{ row: childRow }">
                   <Score :row="childRow" type="t2" />
                 </template>
+
                 <!-- -结算时间 -->
                 <template #eventTime="{ row: childRow, index: childIndex }">
                   <EventTime
@@ -112,18 +119,26 @@ defineOptions({ name: 'SETTLE_TENNIS_DETAIL' });
 
 const { tableHeaderStyle } = usePublicHooks();
 
+//- 检测当前局结算状态
 const checkScore = computed(() => {
   const l: SattleDataAPI.TennisEventsData = JSON.parse(
     JSON.stringify(dataList)
   )?.pop();
-  if (!l || l.inningEvents.length < 6) return true;
+  if (!l || l.inningEvents.length < 6) {
+    canSettlement.value = false;
+    return true;
+  }
   const scoreList = l.inningEvents.map(item => [item.t1, item.t2]);
   let s1 = 0;
   let s2 = 0;
-  scoreList.forEach(item => {
-    item[0] > item[1] ? ++s1 : ++s2;
-  });
-  if ((s1 >= 6 && s1 - s2 >= 2) || (s2 >= 6 && s2 - s1 >= 2)) return false;
+  scoreList.forEach(item => (item[0] > item[1] ? ++s1 : ++s2));
+  t1Score.value = s1;
+  t2Score.value = s2;
+  if ((s1 >= 6 && s1 - s2 >= 2) || (s2 >= 6 && s2 - s1 >= 2)) {
+    canSettlement.value = true;
+    return false;
+  }
+  canSettlement.value = false;
   return true;
 });
 
@@ -132,13 +147,15 @@ const {
   loading,
   columns,
   dataList,
-  expandChange,
   expandMatchList,
   childloading,
   childColumns,
   addEventRow,
   addChildRow,
   settlementHandicap,
-  deleteChildItem
+  deleteChildItem,
+  t1Score,
+  t2Score,
+  canSettlement
 } = useTennisDetailHook();
 </script>

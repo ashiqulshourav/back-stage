@@ -1,18 +1,16 @@
 import { message } from '@/utils/message';
-import type { PaginationProps } from '@pureadmin/table';
 import { t } from '@/plugins/i18n';
 import { columns, childColumns } from './tableColumnList';
-import { dateSetSecond, getSecondTime } from '@/utils/formatDate';
-import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
-import { useMatchStore } from '@/store/match';
+import { ElMessageBox } from 'element-plus';
 
 export function useTennisDetailHook() {
   const dataList = reactive<SattleDataAPI.TennisEventsData[]>([]);
   const childloading = ref(true);
   const loading = ref(true);
-  const childDataTotal = ref(0);
   const expandMatchList = reactive<number[]>([]);
-  const loopTimer = ref<NodeJS.Timeout>();
+  const t1Score = ref(0);
+  const t2Score = ref(0);
+  const canSettlement = ref(false);
 
   /** 搜索初始化 */
   const onSearch = async () => {
@@ -26,43 +24,11 @@ export function useTennisDetailHook() {
     dataList.push(...res.data);
   };
 
-  //- 获取当前展开行结算列表
-  const getChildrenData = async row => {
-    childloading.value = true;
-    const res = await API.getMatchEvents({ matchId: row.matchId });
-    childloading.value = false;
-    if (res.code) return message(res.msg, { type: 'error' });
-    childDataTotal.value = 0;
-    row.childrenData.forEach((item: SaleDataAPI.ChildrenDataList) => {
-      item.tableList = res.data[item.key];
-      childDataTotal.value += item.tableList.length;
-      if (item.tableList.length) {
-        item.tableList.forEach(_ => {
-          _.createdAt = new Date(_.createdAt).getTime() + 1000 * 60 * 5;
-          _.isEdit = false;
-          _.isSave = false;
-          _.isShowCount = false;
-          _.matchId = row.matchId;
-          _.t = res.ts;
-          _.isBackEndReturnData = true;
-          if (_.eventTime.toString().length < 10) {
-            _.eventTime = dateSetSecond(_.eventTime as number);
-          } else {
-            _.eventTime = getSecondTime(_.eventTime, row.beginTime);
-          }
-          item.type === 'yellow_red_card' &&
-            (_.redOrYellow = YELLOW_OR_RED[_.eventCode]);
-        });
-      }
-    });
-    if (loopTimer.value) clearInterval(loopTimer.value);
-    loopTimer.value = setInterval(() => getChildrenData(row), 10000);
-  };
-
-  const expandChange = () => {};
-
   //- 新增盘信息
   const addEventRow = () => {
+    if (dataList.length > 0 && !dataList[dataList.length - 1].id) {
+      return message(t('请先结算上一盘'), { type: 'error' });
+    }
     const params: Partial<SattleDataAPI.TennisEventsData> = {
       inningNum: 0,
       matchId: history.state.params.matchId,
@@ -94,7 +60,7 @@ export function useTennisDetailHook() {
         !parentRow.inningEvents[prevIdx].eventTime ||
         parentRow.inningEvents[prevIdx].isEdit)
     ) {
-      return message('请选保存之前的事件', { type: 'error' });
+      return message(t('请选保存之前的事件'), { type: 'error' });
     }
     parentRow.inningEvents.push({
       inningNum: parentRow.inningEvents.length + 1,
@@ -109,23 +75,29 @@ export function useTennisDetailHook() {
 
   //- 结算盘
   const settlementHandicap = async parentRow => {
-    const inningEvents = parentRow.inningEvents.map(item => {
-      delete item['isEdit'];
-      return item;
+    ElMessageBox.confirm('确定要增加一条事件么?', t('警告'), {
+      confirmButtonText: t('确认'),
+      cancelButtonText: t('取消'),
+      center: true
+    }).then(async () => {
+      const inningEvents = parentRow.inningEvents.map(item => {
+        delete item['isEdit'];
+        return item;
+      });
+      const params = {
+        eventTime:
+          parentRow.inningEvents[parentRow.inningEvents.length - 1].eventTime,
+        inningEvents,
+        t1: t1Score.value,
+        t2: t2Score.value,
+        inningNum: 0,
+        setNum: parentRow.setNum,
+        matchId: history.state.params.matchId
+      };
+      const res = await API.addTennisEvent(params);
+      if (res.code) return message(res.msg, { type: 'error' });
+      onSearch();
     });
-    const params = {
-      eventTime:
-        parentRow.inningEvents[parentRow.inningEvents.length - 1].eventTime,
-      inningEvents,
-      t1: 3,
-      t2: 2,
-      inningNum: 0,
-      setNum: parentRow.setNum,
-      matchId: history.state.params.matchId
-    };
-    const res = await API.addTennisEvent(params);
-    if (res.code) return message(res.msg, { type: 'error' });
-    onSearch();
   };
 
   const deleteChildItem = (list: SattleDataAPI.InningEvent[]) => {
@@ -139,13 +111,15 @@ export function useTennisDetailHook() {
     loading,
     columns,
     dataList,
-    expandChange,
     expandMatchList,
     childloading,
     childColumns,
     addEventRow,
     addChildRow,
     settlementHandicap,
-    deleteChildItem
+    deleteChildItem,
+    t1Score,
+    t2Score,
+    canSettlement
   };
 }
