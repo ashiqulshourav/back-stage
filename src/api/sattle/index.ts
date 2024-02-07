@@ -42,14 +42,34 @@ export const sattleData = {
     matchId: number;
   }) => http.request<SaleDataAPI.allSettlementRes>("post", "/event/v1/allSettlement", { data }),
 
-  //- 自动结算转手动结算
+  //- 足球结算自动结算转手动结算
   setManualMatchStatus: (data: {
     matchId: number;
   }) => http.request<SaleDataAPI.setManualMatchStatusResType>("post", "/event/v1/setManualMatchStatus", { data }),
 
-  //- 取消事件
+  //- 足球结算取消事件
   cancelMatchEvent: (data: {
     id: number;
     matchId: number;
   }) => http.request<SaleDataAPI.cancelMatchEventResType>("post", "/event/v1/cancelMatchEvent", { data }),
+
+  //-网球结算赛事列表
+  getTennisEvents: (data: {
+    matchId: number;
+  }) => http.request<SattleDataAPI.getTennisEventsResType>("post", "/tennis/v1/getTennisEvents", { data }),
+
+  //-网球新增事件（按盘）
+  addTennisEvent: (data:
+    SattleDataAPI.addTennisEventReq
+  ) => http.request<SattleDataAPI.addTennisEventResType>("post", "/tennis/v1/addTennisEvent", { data }),
+
+  //-网球新增事件（按盘）
+  manualSettlementFullTime: (data:
+    { matchId: number }
+  ) => http.request<SattleDataAPI.manualSettlementFullTimeRestType>("post", "/tennis/v1/manualSettlementFullTime", { data }),
+
+  //- 获取单个赛事信息
+  getPreSaleInfo: (data:
+    { matchId: number }
+  ) => http.request<SattleDataAPI.preSaleInfoResType>("post", "/match/v1/getPreSaleInfo", { data }),
 };

@@ -22,10 +22,12 @@ import Tennis from './component/Tennis/index.vue';
 import SearchForm from './component/SearchForm.vue';
 import SportTypeNav from './component/SportTypeNav.vue';
 import { SearchFormType } from './utils/type';
+import { useMatchStore } from '@/store/match';
 
 defineOptions({ name: 'SETTLE_ADMIN' });
 const componentStrName = ref<any>('FootBall');
 const currentSportId = ref<number>(1);
+const matchStore = useMatchStore();
 
 const form = reactive<SearchFormType>({
   leagueId: '',
@@ -47,7 +49,7 @@ const currentComponentName = reactive({
 const changeCurrentComponentName = (_: { value: number; type: string }) => {
   currentComponentName.name = markRaw(comoMap[_.type]);
   currentSportId.value = _.value;
-  onSearch('reload');
+  matchStore.set_lagueList(0, _.value);
 };
 
 //- 搜索相关

@@ -8,13 +8,17 @@
         :key="index"
         :span="6"
       >
-        <template v-if="index !== renderList.length - 1">
-          <span class="mr-2 text-sm">{{ item.title }}:</span>
-          <span class="text-sm">{{ item.val }}</span>
-        </template>
-        <template v-else>
-          <el-button type="primary">{{ t('全场结算') }}</el-button>
-        </template>
+        <span class="mr-2 text-sm">{{ item.title }}:</span>
+        <span class="text-sm">{{ item.val }}</span>
+      </el-col>
+      <el-col :span="6">
+        <el-button
+          :type="renderObj.fullSettlementStatus === 1 ? 'info' : 'primary'"
+          @click="allSettleBtnClick"
+          >{{
+            renderObj.fullSettlementStatus === 1 ? t('结算完成') : t('全场结算')
+          }}</el-button
+        >
       </el-col>
     </el-row>
   </div>
@@ -22,34 +26,42 @@
 
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
-import { ESPORT_ID_MAP, ESPORT_MATCH_STATUS } from '@/utils/maps/sports_map';
+import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
 const props = defineProps<{
-  renderObj: EsportsSettlementAPI.ESportMatchById;
+  renderObj: SattleDataAPI.getSettlementDataList;
 }>();
 
 const renderList = computed(() => {
   const _ = props.renderObj;
   return [
-    { title: t('赛事ID'), val: 123123123213 },
-    { title: t('联赛'), val: '公开赛-女单' },
+    { title: t('赛事ID'), val: _?.matchId },
+    {
+      title: t('联赛'),
+      val: _?.leagueNameCn ?? history.state.params.leagueNameCn
+    },
     {
       title: t('开赛时间'),
-      val: '2024-11-01 18:00:00'
+      val: _?.beginTime
     },
-    { title: t('盘口状态'), val: '已开盘' },
+    { title: t('盘口状态'), val: _?.isSale === 0 ? t('未开售') : t('已开售') },
     {
       title: t('赛种'),
-      val: '网球'
+      val: SPORT_ID_MAP.find(item => item.value === _?.sportId)?.label
     },
     {
       title: t('比赛方'),
-      val: '响亮 VS 立新'
+      val: `${_?.homeTeamNameCn ?? '_'} VS ${_?.awayTeamNameCn ?? '_'}`
     },
-    { title: '结算状态', val: '已结算' },
-    { title: t('结算人员'), val: t('baibai') }
+    {
+      title: '结算状态',
+      val: _?.fullSettlementStatus === 0 ? t('未结算') : t('已结算')
+    }
   ];
 });
+
+const emits = defineEmits(['allSettleBtnClick']);
+const allSettleBtnClick = () => emits('allSettleBtnClick');
 </script>
 
 <style scoped></style>

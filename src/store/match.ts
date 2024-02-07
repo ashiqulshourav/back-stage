@@ -24,7 +24,7 @@ export const useMatchStore = defineStore('MATCHSTATE', {
       } else {
         listType = 'esportLeagueList'
       }
-      if (this[listType].length) return;
+      if (this.esportLeagueList.length && category === 1) return;
 
       const res: MetadataAPI.LeagueListRes = await API.getLeagueList(params);
       this[listType] = res.data.list;

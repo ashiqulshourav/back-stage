@@ -58,6 +58,7 @@ export const ESPORT_MATCH_STATUS = {
   nover: t('比赛中'),
   over: t('比赛结束'),
   nobegin: t('未开赛'),
+  canceled: t('比赛取消'),
 }
 
 //- 上半场 ｜ 下半场
@@ -83,6 +84,7 @@ export const OPENING_STATUS = {
   0: t('未开售'),
   1: t('早盘'),
   2: t('滚球'),
+  3: t('进行中'),
 }
 
 //- 盘口状态
