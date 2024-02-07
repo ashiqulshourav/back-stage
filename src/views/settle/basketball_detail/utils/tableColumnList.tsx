@@ -4,15 +4,22 @@ import { MATCH_PERIOD } from "@/utils/maps/sports_map";
 import dayjs from 'dayjs';
 export const columns: TableColumnList = [
   {
-    label: t('盘'),
-    prop: 'level',
-    width: 50,
-    type: 'index',
+    label: t('节'),
+    prop: 'matchPeriod',
+    slot: 'matchPeriod',
+    width: '100px',
+    headerRenderer: () => {
+      return '节';
+    },
+    formatter: ({ matchPeriod }) => {
+      return MATCH_PERIOD[matchPeriod];
+    }
   },
   {
     minWidth: 100,
     prop: 't1',
     slot: 't1',
+    headerSlot: 'header_t1',
     headerRenderer: () => {
       return '王鑫';
     },
@@ -21,26 +28,15 @@ export const columns: TableColumnList = [
     label: t('小岛菜菜'),
     prop: 't2',
     slot: 't2',
-    headerRenderer: () => {
-      return '小岛菜菜';
-    }
+    headerSlot: 'header_t2',
   },
-  {
-    label: t('比赛阶段'),
-    prop: 'matchPeriod',
-    slot: 'matchPeriod',
-    headerRenderer: () => {
-      return '比赛阶段';
-    },
-    formatter: ({ matchPeriod }) => {
-      return MATCH_PERIOD[matchPeriod];
-    }
-  },
+  
   
   {
     label: t('结算时间'),
     minWidth: 100,
     prop: 'eventTime',
+    slot: 'eventTime',
     formatter: ({ eventTime }) => {
       return dayjs(eventTime).format("YYYY-MM-DD HH:mm:ss")
     }
@@ -48,8 +44,9 @@ export const columns: TableColumnList = [
   {
     label: t('操作人'),
     minWidth: 100,
-    formatter: () => {
-      return '-';
+    prop: 'createdBy',
+    formatter: ({createdBy}) => {
+      return createdBy ? createdBy : '-';
     }
   },
   {

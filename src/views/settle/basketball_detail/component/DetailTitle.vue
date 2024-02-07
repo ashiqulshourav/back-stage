@@ -8,11 +8,13 @@
         :key="index"
         :span="6"
       >
-        <template v-if="index === renderList.length - 1 && props.renderObj?.unSettlementEvents === 0">
-          <el-button 
+        <template v-if="(item.title == 'button')">
+          <el-button
             type="primary"
-            @click="onSettlement"  
-          >{{ t('全场结算') }}</el-button>
+            @click="onSettlement"
+          >
+            {{item.val}}
+          </el-button>
         </template>
         <template v-else>
           <span class="mr-2 text-sm">{{ item.title }}:</span>
@@ -27,12 +29,14 @@
 import { SPORT_ID_MAP, MATCH_STATUS } from '@/utils/maps/sports_map';
 import { t } from '@/plugins/i18n';
 import { ElMessageBox } from 'element-plus';
+import { message } from '@/utils/message';
 
 const props = defineProps<{
   renderObj: EsportsSettlementAPI.ESportMatchById;
 }>();
 const renderList = computed(() => {
   const _ = props.renderObj;
+  console.log(_);
   return [
     {
       title: t('赛事ID'),
@@ -58,8 +62,8 @@ const renderList = computed(() => {
       title: t('比赛方'),
       val: `${_?.homeTeamNameCn} VS ${_?.awayTeamNameCn}`
     },
-    { title: t('结算人员'), val: t('baibai') },
-    { title: '结算状态', val: '已结算' },
+    { title: t('结算状态'), val: _?.settlementStatus === 1 ? '已结算' : '未结算'},
+    { title: 'button', val: t('全場結算')}
   ];
 });
 const onSettlement = () => {
@@ -77,7 +81,11 @@ const onSettlement = () => {
       }
   )
     .then(async () => {
-      
+      const res = await API.allBasketballSettlement({ matchId: Number(props.renderObj.matchId) });
+      if (res.code) {
+        message(res.msg, { type: 'error' });
+      } else {
+      }
     })
 }
 </script>
