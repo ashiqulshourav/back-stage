@@ -15,14 +15,14 @@
           size="small"
           :type="isFourRound ? 'primary' : ''"
         >
-          四节制
+          {{t('四节制')}}  
         </el-button>
         <el-button
           @click="isFourRound = false"
           size="small"
           :type="!isFourRound ? 'primary' : ''"
         >
-          两节制
+          {{t('两节制')}}  
         </el-button>
       </div>
     </template>
@@ -85,38 +85,37 @@
               class="flex gap-2 justify-center"
               v-if="isEdit && index === renderData.length - 1"
             >
-              <el-button type="primary" @click="handleNewEvent">
-                結算節
+              <el-button 
+                type="primary"
+                @click="handleNewEvent"  
+              >
+                {{t('結算節')}}
               </el-button>
-              <el-button @click="isEdit = false">取消</el-button>
+              <el-button
+                @click="isEdit = false"              
+              >{{t('取消')}}</el-button>
             </div>
             <span v-else> - </span>
           </template>
         </pure-table>
       </template>
     </PureTableBar>
-    <template
-      v-if="
-        (currentMatch.fullSettlementStatus !== 1 &&
-          !isEdit &&
-          isFourRound &&
-          dataList.length < 4) ||
-        (!isFourRound && dataList.length < 2)
-      "
-    >
-      <el-button type="primary" class="mt-3 px-24" @click="setNewEventEdit">
-        新增節
+    <template v-if="currentMatch.fullSettlementStatus !== 1 && !isEdit && (isFourRound && dataList.length < 4) || (!isFourRound && dataList.length < 2) ">
+      <el-button
+        type="primary" 
+        class="mt-3 px-24"
+        @click="setNewEventEdit"
+      >
+        {{t('新增節')}}
       </el-button>
     </template>
-    <template
-      v-else-if="
-        currentMatch.fullSettlementStatus !== 1 &&
-        !isEdit &&
-        dataList[dataList.length - 1].t1 === dataList[dataList.length - 1].t2
-      "
-    >
-      <el-button type="primary" class="mt-3 px-24" @click="setNewEventEdit">
-        新增加时赛
+    <template v-else-if="currentMatch.fullSettlementStatus !== 1 && !isEdit && (dataList[dataList.length - 1].t1 === dataList[dataList.length - 1].t2)">
+      <el-button
+        type="primary" 
+        class="mt-3 px-24"
+        @click="setNewEventEdit"
+      >
+        {{t('新增加时赛')}}
       </el-button>
     </template>
   </div>

@@ -37,7 +37,7 @@ export function useTennisHook() {
           ...data,
           pageSize: pagination.pageSize,
           pageNum: pagination.currentPage,
-          sportId: SPORT_TYPE.tennis
+          sportId: SPORT_TYPE.volleyball
         });
       matchStore.set_settleRequestLoading(false);
       if (res.code) return message(res.msg, { type: 'error' });

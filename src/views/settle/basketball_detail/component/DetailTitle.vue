@@ -61,7 +61,7 @@ const renderList = computed(() => {
       title: t('比赛方'),
       val: `${_?.homeTeamNameCn || '-'} VS ${_?.awayTeamNameCn || '-'}`
     },
-    { title: t('结算状态'), val: _.fullSettlementStatus === 1 ? '已结算' : '未结算'},
+    { title: t('结算状态'), val: _.fullSettlementStatus === 1 ? t('已结算') : t('未结算')},
     { title: 'button', val: t('全場結算')}
   ];
 });

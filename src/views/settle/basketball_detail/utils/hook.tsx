@@ -30,15 +30,15 @@ export function useBasketballDetailHook() {
   };
   const validation = (NewEvent: SattleDataAPI.BasketballEvent) => {
     if (!NewEvent.eventTime || NewEvent.eventTime <= dataList[dataList.length - 1]?.eventTime) {
-      message('无效时间', { type: 'error' });
+      message(t('无效时间'), { type: 'error' });
       return false;
     }
     if (Number(NewEvent.t1) < 0 || Number(NewEvent.t2) < 0 || Number(NewEvent.t1) > 300 || Number(NewEvent.t2) > 300) {
-      message('无效值', { type: 'error' });
+      message(t('无效值'), { type: 'error' });
       return false;
     }
     if (NewEvent.t1 < dataList[dataList.length - 1]?.t1 || NewEvent.t2 < dataList[dataList.length - 1]?.t2) {
-      message('无效值', { type: 'error' });
+      message(t('无效值'), { type: 'error' });
       return false;
     }
     return true;
@@ -84,15 +84,13 @@ export function useBasketballDetailHook() {
   }
   const allSettleBtnClick = () => {
     if (dataList[dataList.length -1]?.t1 === dataList[dataList.length -1]?.t2 || ((isFourRound.value && dataList.length < 4) || (!isFourRound.value && dataList.length < 2))) {
-      message('请先完成结算', { type: 'error' });
+      message(t('请先完成结算'), { type: 'error' });
       return;
     }
     ElMessageBox.confirm(
-    `⼿動確認比嚼算全場比賽後，即開始結算
-      全場比賽玩法，結算後無法回退。
-      `
+    t('⼿動確認比嚼算全場比賽後，即開始結算全場比賽玩法，結算後無法回退。')
       ,
-      `確認結算全場比賽`,
+      t('確認結算全場比賽'),
       {
         dangerouslyUseHTMLString: true,
         confirmButtonText: t('確認結算'),
