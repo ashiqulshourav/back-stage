@@ -76,7 +76,7 @@ export function useTennisDetailHook() {
   };
 
   //- 新增局
-  const addChildRow = parentRow => {
+  const addChildRow = (parentRow: SattleDataAPI.TennisEventsData) => {
     const noEmpty = parentRow.inningEvents.every(
       item =>
         isNumber(+item.t1) &&
@@ -97,13 +97,13 @@ export function useTennisDetailHook() {
       t2: '',
       eventTime: '',
       isEdit: false
-    });
+    } as SattleDataAPI.InningEvent);
   };
-  /* 
-  57343 */
 
   //- 结算盘
-  const settlementHandicap = async parentRow => {
+  const settlementHandicap = async (
+    parentRow: SattleDataAPI.TennisEventsData
+  ) => {
     const { eventTime, t1, t2 } =
       parentRow.inningEvents[parentRow.inningEvents.length - 1];
 
@@ -151,11 +151,6 @@ export function useTennisDetailHook() {
     });
   };
 
-  onMounted(() => {
-    getMatchDetail();
-    onSearch();
-  });
-
   //- 全场结算
   const allSettleBtnClick = async () => {
     let s1 = 0;
@@ -163,13 +158,13 @@ export function useTennisDetailHook() {
     const scoreList = dataList.map(item => [item.t1, item.t2]);
     scoreList.forEach(item => (item[0] > item[1] ? ++s1 : ++s2));
     if (dataList.length < 2 || Math.abs(s1 - s2) < 1) {
-      return message(t('请先完成结算'), { type: 'error' });
+      return message(t('请先完成盘结算'), { type: 'error' });
     }
     ElMessageBox.confirm(
       `
       <div class="text-center">
-          <div>手动确认比赛结束后，即开始结算</div>
-          <div>全场比赛玩法，结算后无法回退。</div>
+          <div>${t('手动确认比赛结束后，即开始结算')}</div>
+          <div>${t('全场比赛玩法，结算后无法回退。')}</div>
       </div>
       `,
       t('确认比赛结算'),
@@ -196,6 +191,11 @@ export function useTennisDetailHook() {
     if (res.code) return message(res.msg, { type: 'error' });
     Object.assign(renderObj, res.data);
   };
+
+  onMounted(() => {
+    getMatchDetail();
+    onSearch();
+  });
 
   return {
     onSearch,

@@ -69,7 +69,7 @@ const filterData = (type: 'reload') => {
 const goTennisDetail = row => {
   const params = JSON.parse(JSON.stringify(row));
   router.push({
-    name: 'SETTLE_TENNIS_DETAIL',
+    name: 'SETTLET_VOLLEBALL_DETAIL',
     state: { params }
   });
 };

@@ -161,7 +161,7 @@ declare namespace SattleDataAPI {
     updatedAt: string;
     isEdit?: boolean;
     gameRule: string;
-    inningEvents: any[];
+    inningEvents?: any[];
   }
 
   type TennisEventsData = {
@@ -216,14 +216,14 @@ declare namespace SattleDataAPI {
   }
 
   type addTennisEventReq = {
-    eventTime: number;
+    eventTime: number | string;
     inningEvents: {
-      eventTime: number;
+      eventTime: number | string;
       inningNum: number;
       matchId: number;
       setNum: number;
-      t1: number;
-      t2: number;
+      t1: number | string;
+      t2: number | string;
     }[];
     inningNum: number;
     matchId: number;
