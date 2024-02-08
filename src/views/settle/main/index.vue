@@ -1,7 +1,6 @@
 <template>
   <div class="main">
     <SearchForm :form="form" @resetForm="resetForm" @onSearch="onSearch" />
-
     <SportTypeNav
       @changeCurrentComponentName="changeCurrentComponentName"
       :currentSportId="currentSportId"

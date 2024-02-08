@@ -2,7 +2,6 @@ import { message } from '@/utils/message';
 import { t } from '@/plugins/i18n';
 import { columns, childColumns } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
-import { isNumber } from '@pureadmin/utils';
 
 export function useTennisDetailHook() {
   const dataList = reactive<SattleDataAPI.TennisEventsData[]>([]);
@@ -17,6 +16,20 @@ export function useTennisDetailHook() {
   const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
     {} as SattleDataAPI.getSettlementDataList
   );
+
+  //- 展开关闭局列表
+  const expandChange = (
+    row: SattleDataAPI.TennisEventsData,
+    list: SattleDataAPI.TennisEventsData[]
+  ) => {
+    if (list.length) {
+      if (!expandMatchList.includes(row.setNum)) {
+        expandMatchList.push(row.setNum);
+      }
+    } else {
+      expandMatchList.length = 0;
+    }
+  };
 
   // - 初始化
   const onSearch = async () => {
@@ -77,13 +90,15 @@ export function useTennisDetailHook() {
 
   //- 新增局
   const addChildRow = (parentRow: SattleDataAPI.TennisEventsData) => {
-    const noEmpty = parentRow.inningEvents.every(
-      item =>
-        isNumber(+item.t1) &&
-        isNumber(+item.t2) &&
+    const noEmpty = parentRow.inningEvents.every(item => {
+      return (
+        item.t1 !== '' &&
+        item.t2 !== '' &&
+        item.t1 !== item.t2 &&
         item.eventTime &&
         !item.isEdit
-    );
+      );
+    });
 
     if (!noEmpty)
       return message(t('请先完成并保存之前的事件'), { type: 'error' });
@@ -153,11 +168,16 @@ export function useTennisDetailHook() {
 
   //- 全场结算
   const allSettleBtnClick = async () => {
+    console.log('hook.tsx文件 158==============行打印=', expandMatchList);
     let s1 = 0;
     let s2 = 0;
     const scoreList = dataList.map(item => [item.t1, item.t2]);
     scoreList.forEach(item => (item[0] > item[1] ? ++s1 : ++s2));
-    if (dataList.length < 2 || Math.abs(s1 - s2) < 1) {
+    if (
+      dataList.length < 2 ||
+      dataList.some(item => !item.id) ||
+      Math.abs(s1 - s2) < 1
+    ) {
       return message(t('请先完成盘结算'), { type: 'error' });
     }
     ElMessageBox.confirm(
@@ -216,6 +236,7 @@ export function useTennisDetailHook() {
     boardType,
     juType,
     changeBoardType,
-    changeJuType
+    changeJuType,
+    expandChange
   };
 }
