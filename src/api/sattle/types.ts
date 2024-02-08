@@ -53,6 +53,7 @@ declare namespace SattleDataAPI {
     updatedAt?: number;
     updatedBy?: number;
     uuid?: string;
+    gameRule?: 'INNING' | 'HT';
   }
   type getBasketballEventRes = COMMON.BASE_RES_TYPE<BasketballEvent[]>
   type getMatchEventsRes = COMMON.BASE_RES_TYPE<MatchEventsList[]>
@@ -72,6 +73,7 @@ declare namespace SattleDataAPI {
     t1?: number;
     t2?: number;
     id?: number;
+    gameRule?: 'INNING' | 'HT';
   }
 
   type getSettlementDataList = {

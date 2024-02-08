@@ -1,5 +1,5 @@
 import { columns } from './tableColumnList';
-import { ElMessageBox } from 'element-plus';
+import { ElMessageBox, dayjs } from 'element-plus';
 import { MATCH_PERIOD } from '@/utils/maps/sports_map';
 import { message } from '@/utils/message';
 
@@ -10,6 +10,7 @@ export function useBasketballDetailHook() {
   const isFourRound = ref(true);  
   const matchId = ref(history.state.params.matchId);
   const isEdit = ref(false);
+  const timestamps = ref(0);
 
   const onSearch = async () => {
     getCurrentMatchDetail();
@@ -17,6 +18,7 @@ export function useBasketballDetailHook() {
     if (!res.code) {
       dataList.length = 0;
       dataList.push(...res.data);
+      isFourRound.value = (dataList.length && dataList[0].gameRule === 'INNING') ? true : dataList[0].gameRule === 'HT' ? false : isFourRound.value ;
     }
   };
 
@@ -41,9 +43,23 @@ export function useBasketballDetailHook() {
       message(t('无效值'), { type: 'error' });
       return false;
     }
+    if (NewEvent.t1 === NewEvent.t2) {
+      if ((isFourRound.value && dataList.length === 4) || (!isFourRound.value && dataList.length === 2)) {
+        message(t('无效值'), { type: 'error' });
+        return false;
+      }
+    }
     return true;
   }
+  const getCorrectTime = (tmp: number | string | Date) => {
+    const day = new Date(tmp);
+    day.setFullYear(1970, 0, 1);
+    const currenTime = new Date(currentMatch.beginTime);
+    return  currenTime.getTime() + day.getTime() + 28800000;
+  }
   const setNewBasketballEvent = async (NewEvent: SattleDataAPI.BasketballEvent) => {
+    NewEvent.eventTime = getCorrectTime(timestamps.value);
+    console.log(dayjs(NewEvent.eventTime).format('YYYY-MM-DD HH:mm:ss'));
     if (validation(NewEvent)) {
       ElMessageBox.confirm(
         `<p class='text-center'>${currentMatch.homeTeamNameCn || '-'} VS ${currentMatch.awayTeamNameCn || '-'} <br />
@@ -66,7 +82,8 @@ export function useBasketballDetailHook() {
           t1: Number(NewEvent.t1),
           t2: Number(Number(NewEvent.t2)),
           matchPeriod: NewEvent.matchPeriod,
-          canceled: 0
+          canceled: 0,
+          gameRule: isFourRound.value ? 'INNING' : 'HT'
         });
         if (res.code) message(res.msg, { type: 'error' });
         else {
@@ -114,6 +131,7 @@ export function useBasketballDetailHook() {
     columns,
     dataList,
     currentMatch,
+    timestamps,
     getCurrentMatchDetail,
     setNewBasketballEvent,
     allSettleBtnClick,
