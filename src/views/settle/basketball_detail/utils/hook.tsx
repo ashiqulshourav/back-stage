@@ -18,7 +18,7 @@ export function useBasketballDetailHook() {
     if (!res.code) {
       dataList.length = 0;
       dataList.push(...res.data);
-      isFourRound.value = (dataList.length && dataList[0].gameRule === 'INNING') ? true : dataList[0].gameRule === 'HT' ? false : isFourRound.value ;
+      isFourRound.value = (dataList.length && dataList[0]?.gameRule === 'INNING') ? true : dataList[0]?.gameRule === 'HT' ? false : isFourRound.value ;
     }
   };
 
