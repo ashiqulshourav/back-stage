@@ -17,7 +17,7 @@
             :disabled="dataList.length >= 5"
             >{{ t('新增盘') }}</el-button
           >
-          <span class="text-sm ml-10 mr-2">{{ t('盘类型') }}:</span>
+          <!-- <span class="text-sm ml-10 mr-2">{{ t('盘类型') }}:</span>
           <el-radio-group v-model="boardType" @change="changeBoardType">
             <el-radio-button size="small" label="5-3">{{
               t('五盘三胜')
@@ -25,7 +25,8 @@
             <el-radio-button size="small" label="3-2">{{
               t('三盘两胜')
             }}</el-radio-button>
-          </el-radio-group>
+          </el-radio-group> -->
+          <span></span>
         </div>
       </template>
 
@@ -57,7 +58,7 @@
             <span v-else>{{ t('已结算') }}</span>
           </template>
           <template #expand="{ row: parentRow, index: parentIndex }">
-            <div class="mb-2">
+            <!-- <div class="mb-2">
               <el-radio-group
                 v-model="juType"
                 @change="
@@ -71,7 +72,7 @@
                   t('短盘制(抢七)')
                 }}</el-radio-button>
               </el-radio-group>
-            </div>
+            </div> -->
             <div class="pl-12">
               <pure-table
                 align-whole="center"
@@ -191,10 +192,10 @@ const {
   t2Score,
   canSettlement,
   allSettleBtnClick,
-  renderObj,
-  boardType,
-  juType,
-  changeBoardType,
-  changeJuType
+  renderObj
+  // boardType,
+  // juType,
+  // changeBoardType,
+  // changeJuType
 } = useTennisDetailHook();
 </script>

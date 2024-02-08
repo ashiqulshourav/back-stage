@@ -72,7 +72,6 @@ export function useTennisDetailHook() {
         }
       ] as SattleDataAPI.InningEvent[]
     };
-    console.log('hook.tsx文件 58==============行打印=', params);
     dataList.push(params as SattleDataAPI.TennisEventsData);
   };
 
