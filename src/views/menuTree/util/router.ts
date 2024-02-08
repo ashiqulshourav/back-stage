@@ -37,7 +37,7 @@ export const router = [
     "title": "结算平台",
     "children": [
       {
-        "path": "/settle/settle_admin",
+        "path": "/settle/main",
         "title": "结算管理",
         "showParent": true,
         "rank": "2-0",

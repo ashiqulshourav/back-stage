@@ -49,12 +49,12 @@
       "title": "结算平台",
       "icon": "settle",
       "rank": 3,
-      "redirect": "/settle/settle_admin"
+      "redirect": "/settle/main"
     },
     "children": [
       {
-        "path": "/settle/settle_admin",
-        "name": "SETTLE_SETTLE_ADMIN",
+        "path": "/settle/main",
+        "name": "SETTLE_MAIN",
         "meta": {
           "title": "结算管理",
           "showParent": true

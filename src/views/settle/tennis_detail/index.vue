@@ -6,20 +6,25 @@
       :renderObj="renderObj"
     />
 
-    <PureTableBar
-      :title="t('网球结算管理')"
-      :columns="columns"
-      @refresh="onSearch()"
-    >
+    <PureTableBar :columns="columns" @refresh="onSearch()">
       <template #title>
-        <el-button
+        <div
+          class="flex items-center"
           v-if="renderObj.fullSettlementStatus === 0"
-          @click="addEventRow"
-          size="small"
-          type="primary"
-          :disabled="dataList.length >= 5"
-          >{{ t('新增盘') }}</el-button
         >
+          <el-button
+            @click="addEventRow"
+            size="small"
+            type="primary"
+            :disabled="dataList.length >= 5"
+            >{{ t('新增盘') }}</el-button
+          >
+          <span class="text-sm ml-10 mr-2">{{ t('盘类型') }}:</span>
+          <el-radio-group v-model="boardType">
+            <el-radio-button label="5-3">{{ t('五盘三胜') }}</el-radio-button>
+            <el-radio-button label="3-2">{{ t('三盘两胜') }}</el-radio-button>
+          </el-radio-group>
+        </div>
         <span></span>
       </template>
       <template v-slot="{ size, dynamicColumns }">
@@ -127,13 +132,7 @@ import ChildOperation from './component/ChildOperation.vue';
 defineOptions({ name: 'SETTLE_TENNIS_DETAIL' });
 
 const { tableHeaderStyle } = usePublicHooks();
-// const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
-//   {} as SattleDataAPI.getSettlementDataList
-// );
-
-// onMounted(() => {
-//   Object.assign(renderObj, history.state.params);
-// });
+const boardType = ref('5-3');
 
 //- 检测当前局结算状态
 const checkScore = computed(() => {

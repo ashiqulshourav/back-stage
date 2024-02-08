@@ -30,6 +30,7 @@ export const useMatchStore = defineStore('MATCHSTATE', {
       this[listType] = res.data.list;
     },
     async set_countryList() {
+      if (this.countryList.length > 0) return;
       const res: MetadataAPI.getCountryListResType = await API.getCountryList({
         pageNum: 1,
         pageSize: 9999

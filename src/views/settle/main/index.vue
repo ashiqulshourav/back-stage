@@ -19,12 +19,13 @@ import FootBall from './component/FootBallCom/index.vue';
 import BasketBall from './component/Basketball/index.vue';
 import Billiards from './component/Billiards/index.vue';
 import Tennis from './component/Tennis/index.vue';
+import Volleyball from './component/Tennis/index.vue';
 import SearchForm from './component/SearchForm.vue';
 import SportTypeNav from './component/SportTypeNav.vue';
 import { SearchFormType } from './utils/type';
 import { useMatchStore } from '@/store/match';
 
-defineOptions({ name: 'SETTLE_ADMIN' });
+defineOptions({ name: 'VOLLEYBALL' });
 const componentStrName = ref<any>('FootBall');
 const currentSportId = ref<number>(1);
 const matchStore = useMatchStore();
@@ -40,7 +41,8 @@ const comoMap = {
   FootBall,
   BasketBall,
   Tennis,
-  Billiards
+  Billiards,
+  Volleyball
 };
 const currentComponentName = reactive({
   name: markRaw(comoMap.FootBall)
