@@ -1,58 +1,69 @@
-import { handleTableWidth } from '@/utils/getTableWidth';
-// import { parseMatchScore } from '@/utils/formatMatch';
-
+import { MATCH_PERIOD } from "@/utils/maps/sports_map";
+import dayjs from 'dayjs';
 export const columns: TableColumnList = [
   {
-    label: t('盘'),
-    prop: 'level',
-    width: 50
+    label: t('节'),
+    prop: 'matchPeriod',
+    slot: 'matchPeriod',
+    width: '100px',
+    headerRenderer: () => {
+      return '节';
+    },
+    formatter: ({ matchPeriod }) => {
+      return MATCH_PERIOD[matchPeriod];
+    }
   },
   {
     minWidth: 100,
+    prop: 't1',
+    slot: 't1',
+    headerSlot: 'header_t1',
     headerRenderer: () => {
-      return '王鑫';
-    }
+      return history.state.params.homeTeamNameCn ? history.state.params.homeTeamNameCn : '-' ;
+    },
   },
   {
-    label: t('盘'),
+    label: t('小岛菜菜'),
+    prop: 't2',
+    slot: 't2',
     headerRenderer: () => {
-      return '小岛菜菜';
-    }
+      return history.state.params.awayTeamNameCn ? history.state.params.awayTeamNameCn : '-' ;
+    },
   },
-  {
-    label: t('盘'),
-    headerRenderer: () => {
-      return '比赛阶段';
-    }
-  },
+  
   
   {
     label: t('结算时间'),
     minWidth: 100,
-    cellRenderer: () => {
-      return '2023-05-11';
+    prop: 'eventTime',
+    slot: 'eventTime',
+    formatter: ({ eventTime }) => {
+      console.log(dayjs(eventTime).format("HH:mm:ss"));
+      return dayjs(eventTime).format("HH:mm:ss")
     }
   },
   {
     label: t('操作人'),
-    minWidth: 100
+    minWidth: 100,
+    prop: 'createdBy',
+    formatter: ({createdBy}) => {
+      return createdBy ? createdBy : '-';
+    }
   },
   {
     label: t('状态'),
-    minWidth: 100
+    minWidth: 100,
+    prop: 'settleType',
+    formatter: ({ settleType }) => {
+      return settleType === '0' ? '自动结算' : settleType === 1 ? '⼈⼯結算' : '-'
+    }
   },
   {
     label: t('操作'),
-    minWidth: 100
-  }
-];
-
-export const childColumns: TableColumnList = [
-  {
-    label: t('序号'),
-    fixed: true,
-    type: 'index',
     minWidth: 100,
-    headerRenderer: d => handleTableWidth(d, t('序号'))
+    slot: 'operation',
+    formatter() {
+      return '-';
+    },
   }
 ];

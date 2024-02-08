@@ -1,6 +1,6 @@
 <template>
   <div class="bg-bg_color w-[99/100] pl-8 pb-3 pt-[12px]">
-    <div class="text-center font-bold text-2xl mb-3">{{ t('盘口详情') }}</div>
+    <div class="font-bold text-lg mb-3">{{ t('盘口详情') }}</div>
     <el-row>
       <el-col
         class="mb-2"
@@ -8,12 +8,18 @@
         :key="index"
         :span="6"
       >
-        <template v-if="props.renderObj.unSettlementEvents === 0">
-          <span class="mr-2 text-sm">{{ item.title }}:</span>
-          <span class="text-sm">{{ item.val }}</span>
+        <template v-if="(item.title == 'button')">
+          <el-button
+            :type="renderObj.fullSettlementStatus !== 1 ? 'primary' : 'info'"
+            @click="allSettleBtnClick"
+            :disabled="renderObj.fullSettlementStatus === 1"
+          >
+            {{renderObj.fullSettlementStatus === 1 ? t('结算完成') : t('全场结算')}}
+          </el-button>
         </template>
         <template v-else>
-          <el-button type="primary">{{ t('全场结算') }}</el-button>
+          <span class="mr-2 text-sm">{{ item.title }}:</span>
+          <span class="text-sm">{{ item.val }}</span>
         </template>
       </el-col>
     </el-row>
@@ -25,40 +31,43 @@ import { SPORT_ID_MAP, MATCH_STATUS } from '@/utils/maps/sports_map';
 import { t } from '@/plugins/i18n';
 
 const props = defineProps<{
-  renderObj: EsportsSettlementAPI.ESportMatchById;
+  renderObj: EsportsSettlementAPI.ESportMatchList;
 }>();
-console.log(props.renderObj, 'adfadf');
 const renderList = computed(() => {
   const _ = props.renderObj;
+  console.log(_);
   return [
     {
       title: t('赛事ID'),
-      val: _.matchId
+      val: _?.matchId || ''
     },
     {
       title: t('联赛'),
-      val: _.leagueNameCn
+      val: _?.leagueNameCn || ''
     },
     {
       title: t('开赛时间'),
-      val: _.beginTime
+      val: _?.beginTime
     },
     {
       title: t('盘口状态'),
-      val: MATCH_STATUS[_.status]
+      val: MATCH_STATUS[_?.status]
     },
     {
       title: t('赛种'),
-      val: SPORT_ID_MAP.find(item => item.value === _.sportId)?.label ?? '-'
+      val: SPORT_ID_MAP.find(item => item.value === _?.sportId)?.label ?? '-'
     },
     {
       title: t('比赛方'),
-      val: `${_.homeTeamNameCn} VS ${_.awayTeamNameCn}`
+      val: `${_?.homeTeamNameCn || '-'} VS ${_?.awayTeamNameCn || '-'}`
     },
-    { title: t('结算人员'), val: t('baibai') },
-    { title: '结算状态', val: '已结算' },
+    { title: t('结算状态'), val: _.fullSettlementStatus === 1 ? '已结算' : '未结算'},
+    { title: 'button', val: t('全場結算')}
   ];
 });
+
+const emits = defineEmits(['allSettleBtnClick']);
+const allSettleBtnClick = () => emits('allSettleBtnClick');
 </script>
 
 <style scoped></style>

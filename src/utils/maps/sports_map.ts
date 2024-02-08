@@ -86,7 +86,15 @@ export const OPENING_STATUS = {
   2: t('滚球'),
   3: t('进行中'),
 }
-
+export const MATCH_PERIOD = {
+  Q1: ' 第一节',
+  Q2: ' 第二节 ',
+  Q3: ' 第三节 ',
+  Q4: ' 第四节 ',
+  OT: ' 加时赛',
+  HT: '上半场',
+  FT: '下半场',
+}
 //- 盘口状态
 export const HANDICAP_STATUS = {
   0: t('未锁盘'),
