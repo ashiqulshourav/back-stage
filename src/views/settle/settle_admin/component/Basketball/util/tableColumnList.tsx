@@ -94,6 +94,7 @@ export const columns: TableColumnList = [
   {
     label: t('全场结算'),
     prop: 'fullSettlementStatus',
+    fixed: 'right',
     formatter: ({ fullSettlementStatus }) =>
       fullSettlementStatus === 0 ? (
         t('未结算')

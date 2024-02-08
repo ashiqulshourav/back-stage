@@ -93,7 +93,7 @@ export const MATCH_PERIOD = {
   Q4: ' 第四节 ',
   OT: ' 加时赛',
   HT: '上半场',
-  FT: ' 全场',
+  FT: '下半场',
 }
 //- 盘口状态
 export const HANDICAP_STATUS = {

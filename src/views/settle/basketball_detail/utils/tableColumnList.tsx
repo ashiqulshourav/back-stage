@@ -38,7 +38,8 @@ export const columns: TableColumnList = [
     prop: 'eventTime',
     slot: 'eventTime',
     formatter: ({ eventTime }) => {
-      return dayjs(eventTime).format("YYYY-MM-DD HH:mm:ss")
+      console.log(dayjs(eventTime).format("HH:mm:ss"));
+      return dayjs(eventTime).format("HH:mm:ss")
     }
   },
   {

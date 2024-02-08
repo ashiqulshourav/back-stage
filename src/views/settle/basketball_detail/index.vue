@@ -81,7 +81,7 @@
               :default-value="dayjs(0).startOf('day').toDate()"
               format="HH:mm:ss"
             />
-            <span v-else>{{dayjs(row.eventTime).format("YYYY-MM-DD HH:mm:ss")}}</span>
+            <span v-else>{{dayjs(row.eventTime).format("HH:mm:ss")}}</span>
           </template>
           <template #operation="{ index}">
             <div 
