@@ -74,7 +74,7 @@
           <template #eventTime="{row, index}">
             <el-time-picker
               v-if="isEdit && index === renderData.length - 1"
-              v-model="row.eventTime"
+              v-model="NewEvent.eventTime"
               :placeholder="t('请选择当前录入时间')"
               :disabled="!isEdit"
               value-format="x"

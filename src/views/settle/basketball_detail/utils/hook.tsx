@@ -37,7 +37,7 @@ export function useBasketballDetailHook() {
       message('无效值', { type: 'error' });
       return false;
     }
-    if (NewEvent.t1 < dataList[dataList.length - 1].t1 || NewEvent.t2 < dataList[dataList.length - 1].t2) {
+    if (NewEvent.t1 < dataList[dataList.length - 1]?.t1 || NewEvent.t2 < dataList[dataList.length - 1]?.t2) {
       message('无效值', { type: 'error' });
       return false;
     }
