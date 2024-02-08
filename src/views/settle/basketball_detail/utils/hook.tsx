@@ -35,10 +35,10 @@ export function useBasketballDetailHook() {
     }
     if (Number(NewEvent.t1) < 0 || Number(NewEvent.t2) < 0 || Number(NewEvent.t1) > 300 || Number(NewEvent.t2) > 300) {
       message('无效值', { type: 'error' });
-      if (NewEvent.t1 < dataList[dataList.length - 1].t1 || NewEvent.t2 < dataList[dataList.length - 1].t2) {
-        message('无效值', { type: 'error' });
-        return false;
-      }
+      return false;
+    }
+    if (NewEvent.t1 < dataList[dataList.length - 1].t1 || NewEvent.t2 < dataList[dataList.length - 1].t2) {
+      message('无效值', { type: 'error' });
       return false;
     }
     return true;

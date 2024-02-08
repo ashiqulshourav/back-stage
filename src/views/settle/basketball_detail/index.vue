@@ -105,7 +105,7 @@
         </pure-table>
       </template>
     </PureTableBar>
-    <template v-if="!isEdit && (isFourRound && dataList.length < 4) || (!isFourRound && dataList.length < 2) ">
+    <template v-if="currentMatch.fullSettlementStatus !== 1 && !isEdit && (isFourRound && dataList.length < 4) || (!isFourRound && dataList.length < 2) ">
       <el-button
         type="primary" 
         class="mt-3 px-24"
@@ -114,7 +114,7 @@
         新增節
       </el-button>
     </template>
-    <template v-else-if="!isEdit && (dataList[dataList.length - 1].t1 === dataList[dataList.length - 1].t2)">
+    <template v-else-if="currentMatch.fullSettlementStatus !== 1 && !isEdit && (dataList[dataList.length - 1].t1 === dataList[dataList.length - 1].t2)">
       <el-button
         type="primary" 
         class="mt-3 px-24"
