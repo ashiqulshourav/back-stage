@@ -35,7 +35,6 @@ const props = defineProps<{
 }>();
 const renderList = computed(() => {
   const _ = props.renderObj;
-  console.log(_);
   return [
     {
       title: t('赛事ID'),
