@@ -7,7 +7,7 @@ export const columns: TableColumnList = [
     slot: 'matchPeriod',
     width: '100px',
     headerRenderer: () => {
-      return '节';
+      return t('节');
     },
     formatter: ({ matchPeriod }) => {
       return MATCH_PERIOD[matchPeriod];
@@ -55,7 +55,7 @@ export const columns: TableColumnList = [
     minWidth: 100,
     prop: 'settleType',
     formatter: ({ settleType }) => {
-      return settleType === '0' ? '自动结算' : settleType === 1 ? '⼈⼯結算' : '-'
+      return settleType === '0' ? t('自动结算') : settleType === 1 ? t('⼈⼯結算') : '-'
     }
   },
   {

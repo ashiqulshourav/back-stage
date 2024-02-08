@@ -18,14 +18,14 @@
           size="small"
           :type="isFourRound ? 'primary' : ''"
         >
-          四节制  
+          {{t('四节制')}}  
         </el-button>
         <el-button
           @click="isFourRound = false"
           size="small"
           :type="!isFourRound ? 'primary' : ''"
         >
-          两节制  
+          {{t('两节制')}}  
         </el-button>
       </div>
     </template>
@@ -92,11 +92,11 @@
                 type="primary"
                 @click="handleNewEvent"  
               >
-                結算節
+                {{t('結算節')}}
               </el-button>
               <el-button
                 @click="isEdit = false"              
-              >取消</el-button>
+              >{{t('取消')}}</el-button>
             </div>
             <span v-else>
               -
@@ -111,7 +111,7 @@
         class="mt-3 px-24"
         @click="setNewEventEdit"
       >
-        新增節
+        {{t('新增節')}}
       </el-button>
     </template>
     <template v-else-if="currentMatch.fullSettlementStatus !== 1 && !isEdit && (dataList[dataList.length - 1].t1 === dataList[dataList.length - 1].t2)">
@@ -120,7 +120,7 @@
         class="mt-3 px-24"
         @click="setNewEventEdit"
       >
-        新增加时赛
+        {{t('新增加时赛')}}
       </el-button>
     </template>
   </div>
