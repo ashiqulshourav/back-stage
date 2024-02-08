@@ -54,6 +54,7 @@ export const sattleData = {
   cancelMatchEvent: (data: {
     id: number;
     matchId: number;
+    remark: string;
   }) => http.request<SaleDataAPI.cancelMatchEventResType>("post", "/event/v1/cancelMatchEvent", { data }),
 
   //-网球结算赛事列表

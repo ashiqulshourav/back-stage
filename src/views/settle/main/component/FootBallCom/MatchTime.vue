@@ -17,12 +17,25 @@ import { MatchEventRowType } from '../../utils/type';
 import { message } from '@/utils/message';
 import dayjs from 'dayjs';
 
-defineProps<
+const props = defineProps<
   MatchEventRowType & {
     item: SattleDataAPI.ChildrenDataList;
   }
 >();
 const emits = defineEmits(['changeEventTime']);
+
+watch(
+  () => props.row,
+  d => {
+    if (d.t1 == 0 && d.t2 == 0) {
+      d.eventTime = dayjs().startOf('day').valueOf();
+    }
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+);
 
 const changeEventTime = (
   row: SattleDataAPI.MatchEventsList,

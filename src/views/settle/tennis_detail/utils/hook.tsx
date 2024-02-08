@@ -12,6 +12,8 @@ export function useTennisDetailHook() {
   const t1Score = ref(0);
   const t2Score = ref(0);
   const canSettlement = ref(false);
+  const boardType = ref('5-3');
+  const juType = ref('LONG-SET');
   const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
     {} as SattleDataAPI.getSettlementDataList
   );
@@ -28,15 +30,33 @@ export function useTennisDetailHook() {
     dataList.push(...res.data);
   };
 
+  //- 修改盘类型
+  const changeBoardType = (type: string) => {
+    dataList.forEach(item => {
+      if (!item.id) item.gameRule = type;
+    });
+  };
+
+  //- 修改局类型
+  const changeJuType = (
+    dataList: SattleDataAPI.InningEvent[],
+    type: string
+  ) => {
+    dataList.forEach(item => {
+      if (!item.id) item.gameRule = type;
+    });
+  };
+
   //- 新增盘信息
   const addEventRow = () => {
     if (dataList.length > 0 && !dataList[dataList.length - 1].id) {
-      return message(t('请先结算上一盘'), { type: 'error' });
+      return message(t('请先结算上一盘赛事'), { type: 'error' });
     }
     const params: Partial<SattleDataAPI.TennisEventsData> = {
       inningNum: 0,
       matchId: history.state.params.matchId,
       setNum: dataList.length + 1,
+      gameRule: boardType.value,
       t1: 0,
       t2: 0,
       inningEvents: [
@@ -47,11 +67,12 @@ export function useTennisDetailHook() {
           t1: '',
           t2: '',
           eventTime: '',
+          gameRule: juType.value,
           isEdit: false
         }
       ] as SattleDataAPI.InningEvent[]
     };
-    dataList.push(params as any);
+    dataList.push(params as SattleDataAPI.TennisEventsData);
   };
 
   //- 新增局
@@ -71,21 +92,33 @@ export function useTennisDetailHook() {
       inningNum: parentRow.inningEvents.length + 1,
       matchId: history.state.params.matchId,
       setNum: parentRow.setNum,
+      gameRule: juType.value,
       t1: '',
       t2: '',
       eventTime: '',
       isEdit: false
     });
   };
+  /* 
+  57343 */
 
   //- 结算盘
   const settlementHandicap = async parentRow => {
+    const { eventTime, t1, t2 } =
+      parentRow.inningEvents[parentRow.inningEvents.length - 1];
+
+    if (!eventTime || !t1 || !t2) {
+      return message(t('请先完成并保存事件'), { type: 'error' });
+    }
+
     ElMessageBox.confirm(
       `
-      <div>
-          <div>${history.state.params.homeTeamNameCn ?? '_'}VS${
-        history.state.params.awayTeamNameCn ?? '_'
-      }</div>
+      <div class="text-center">
+          <div class="flex">
+            <span >${history.state.params.homeTeamNameCn ?? '_'}</span>
+            <span class="font-bold>VS</span>
+            <span>${history.state.params.awayTeamNameCn ?? '_'}</span>
+         </div>
           <div>${t1Score.value}局 ： ${t2Score.value}局</div>
           <div>${t('手动结算后无法回退，请再次确定结果')}</div>
       </div>
@@ -103,11 +136,11 @@ export function useTennisDetailHook() {
         return item;
       });
       const params = {
-        eventTime:
-          parentRow.inningEvents[parentRow.inningEvents.length - 1].eventTime,
+        eventTime,
         inningEvents,
         t1: t1Score.value,
         t2: t2Score.value,
+        gameRule: parentRow.gameRule,
         inningNum: 0,
         setNum: parentRow.setNum,
         matchId: history.state.params.matchId
@@ -134,7 +167,7 @@ export function useTennisDetailHook() {
     }
     ElMessageBox.confirm(
       `
-      <div>
+      <div class="text-center">
           <div>手动确认比赛结束后，即开始结算</div>
           <div>全场比赛玩法，结算后无法回退。</div>
       </div>
@@ -179,6 +212,10 @@ export function useTennisDetailHook() {
     t2Score,
     canSettlement,
     allSettleBtnClick,
-    renderObj
+    renderObj,
+    boardType,
+    juType,
+    changeBoardType,
+    changeJuType
   };
 }

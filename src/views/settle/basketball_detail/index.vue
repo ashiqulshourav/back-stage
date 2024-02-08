@@ -1,16 +1,13 @@
 <template>
   <div class="main">
     <!-- -盘口详情 -->
-      
-    <DetiltTitle 
-      :renderObj="currentMatch" 
-      @allSettleBtnClick="allSettleBtnClick"  
+
+    <DetiltTitle
+      :renderObj="currentMatch"
+      @allSettleBtnClick="allSettleBtnClick"
     />
     <!-- Switch Match Period Type -->
-    <template 
-      v-if="dataList.length === 0"
-      class="p-3"
-    >
+    <template v-if="dataList.length === 0" class="p-3">
       <h3 class="text-sm mt-8">赛制</h3>
       <div class="flex mt-4">
         <el-button
@@ -44,34 +41,34 @@
           :columns="dynamicColumns"
           :header-cell-style="tableHeaderStyle"
         >
-        <template #matchPeriod="{ row }">
+          <template #matchPeriod="{ row }">
             <span>
-              {{MATCH_PERIOD[row.matchPeriod]}}
+              {{ MATCH_PERIOD[row.matchPeriod] }}
             </span>
           </template>
-          <template #t1="{ row, index}">
-            <input 
-              class="border w-1/3 mx-auto" 
-              v-if="isEdit && index === renderData.length - 1" 
-              type="number"
-              v-model="NewEvent.t1"  
-            />
-            <span v-else>
-              {{row.t1}}
-            </span>
-          </template>
-          <template #t2="{ row, index}">
-            <input 
-              class="border w-1/3 mx-auto" 
+          <template #t1="{ row, index }">
+            <input
+              class="border w-1/3 mx-auto"
               v-if="isEdit && index === renderData.length - 1"
               type="number"
-              v-model="NewEvent.t2"  
+              v-model="NewEvent.t1"
             />
             <span v-else>
-              {{row.t2}}
+              {{ row.t1 }}
             </span>
           </template>
-          <template #eventTime="{row, index}">
+          <template #t2="{ row, index }">
+            <input
+              class="border w-1/3 mx-auto"
+              v-if="isEdit && index === renderData.length - 1"
+              type="number"
+              v-model="NewEvent.t2"
+            />
+            <span v-else>
+              {{ row.t2 }}
+            </span>
+          </template>
+          <template #eventTime="{ row, index }">
             <el-time-picker
               v-if="isEdit && index === renderData.length - 1"
               v-model="NewEvent.eventTime"
@@ -81,12 +78,12 @@
               :default-value="dayjs(0).startOf('day').toDate()"
               format="HH:mm:ss"
             />
-            <span v-else>{{dayjs(row.eventTime).format("HH:mm:ss")}}</span>
+            <span v-else>{{ dayjs(row.eventTime).format('HH:mm:ss') }}</span>
           </template>
-          <template #operation="{ index}">
-            <div 
-              class="flex gap-2 justify-center" 
-              v-if="isEdit && index === renderData.length - 1" 
+          <template #operation="{ index }">
+            <div
+              class="flex gap-2 justify-center"
+              v-if="isEdit && index === renderData.length - 1"
             >
               <el-button 
                 type="primary"
@@ -98,9 +95,7 @@
                 @click="isEdit = false"              
               >{{t('取消')}}</el-button>
             </div>
-            <span v-else>
-              -
-            </span>
+            <span v-else> - </span>
           </template>
         </pure-table>
       </template>
@@ -149,17 +144,17 @@ const {
   allSettleBtnClick,
   setNewBasketballEvent
 } = useBasketballDetailHook();
-const  matchId = history.state.params.matchId;
+const matchId = history.state.params.matchId;
 
-const NewEvent: SattleDataAPI.BasketballEvent = reactive( {
+const NewEvent: SattleDataAPI.BasketballEvent = reactive({
   matchId: Number(matchId),
   eventTime: '',
   t1: 0,
-  t2: 0,
-})
-const renderData= computed(() => {
+  t2: 0
+});
+const renderData = computed(() => {
   return isEdit.value ? dataList.concat(NewEvent) : dataList;
-})
+});
 
 const setNewEventEdit = () => {
   isEdit.value = true;
@@ -167,28 +162,32 @@ const setNewEventEdit = () => {
     if (dataList.length >= 4) {
       NewEvent.matchPeriod = 'OT';
     } else {
-      NewEvent.matchPeriod = `Q${dataList.length + 1}`
+      NewEvent.matchPeriod = `Q${dataList.length + 1}`;
     }
   } else {
     switch (dataList.length) {
-      case 0: NewEvent.matchPeriod = 'HT'; break;
-      case 1: NewEvent.matchPeriod = 'FT'; break;
-      default: NewEvent.matchPeriod = 'OT'
+      case 0:
+        NewEvent.matchPeriod = 'HT';
+        break;
+      case 1:
+        NewEvent.matchPeriod = 'FT';
+        break;
+      default:
+        NewEvent.matchPeriod = 'OT';
     }
   }
-}
+};
 
 const handleNewEvent = async () => {
   setNewBasketballEvent(NewEvent);
-}
+};
 onMounted(() => {
   onSearch();
 });
 </script>
 
 <style scoped>
-  .custom-switch .el-switch__core{
-    width: 500px;
-    
-  }
+.custom-switch .el-switch__core {
+  width: 500px;
+}
 </style>

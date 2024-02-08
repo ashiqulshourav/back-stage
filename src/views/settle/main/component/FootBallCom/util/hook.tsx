@@ -347,14 +347,22 @@ export function useFootball() {
   };
 
   //- 取消结算时间
-  const cancelMatchEvent = async (id: number, matchId: number) => {
+  const cancelMatchEvent = async (
+    id: number,
+    matchId: number,
+    settleTimes: number
+  ) => {
     ElMessageBox.confirm('确定要取消该事件么?', t('警告'), {
       dangerouslyUseHTMLString: true,
       confirmButtonText: t('确认'),
       cancelButtonText: t('取消'),
       center: true
     }).then(async () => {
-      const res = await API.cancelMatchEvent({ id, matchId });
+      const res = await API.cancelMatchEvent({
+        id,
+        matchId,
+        remark: settleTimes === 0 ? '未结算' : '已结算'
+      });
       message(res.msg, { type: res.code ? 'error' : 'success' });
       const row = dataList.find(_ => _.matchId === matchId);
       getChildrenData(row);

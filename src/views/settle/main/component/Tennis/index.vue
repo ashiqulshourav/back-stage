@@ -45,7 +45,6 @@ import { useMatchStore } from '@/store/match';
 
 const { tableHeaderStyle } = usePublicHooks();
 const router = useRouter();
-
 const matchStore = useMatchStore();
 
 const props = defineProps<{
