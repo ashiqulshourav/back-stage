@@ -27,13 +27,13 @@
         {{ t('确认结算') }}
       </el-button>
       <el-button
-        v-if="isShowCancelBtn && isAllSettle && +row.t1 + +row.t2 !== 0"
+        v-if="isShowCancelBtn && +row.t1 + +row.t2 !== 0"
         class="reset-margin"
         link
         type="danger"
         size="small"
         :icon="useRenderIcon('cancelIcon')"
-        @click="cancelMatchEvent(row.id, row.matchId)"
+        @click="cancelMatchEvent(row.id, row.matchId, row.settleTimes)"
       >
         {{ t('取消事件') }}
       </el-button>
@@ -61,9 +61,10 @@ const emits = defineEmits([
   'advanceSettlement'
 ]);
 
-const isAllSettle = computed(() => {
+//- 是否已经结算
+/* const isAllSettle = computed(() => {
   return props.dataList.every(_ => _.settleTimes !== 0);
-});
+}); */
 
 const handleChildrenData = (...data) => emits('handleChildrenData', ...data);
 

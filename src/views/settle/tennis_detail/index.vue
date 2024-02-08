@@ -8,25 +8,27 @@
 
     <PureTableBar :columns="columns" @refresh="onSearch()">
       <template #title>
-        <div
-          class="flex items-center"
-          v-if="renderObj.fullSettlementStatus === 0"
-        >
+        <div class="flex items-center">
           <el-button
             @click="addEventRow"
             size="small"
             type="primary"
+            v-if="renderObj.fullSettlementStatus === 0"
             :disabled="dataList.length >= 5"
             >{{ t('新增盘') }}</el-button
           >
           <span class="text-sm ml-10 mr-2">{{ t('盘类型') }}:</span>
-          <el-radio-group v-model="boardType">
-            <el-radio-button label="5-3">{{ t('五盘三胜') }}</el-radio-button>
-            <el-radio-button label="3-2">{{ t('三盘两胜') }}</el-radio-button>
+          <el-radio-group v-model="boardType" @change="changeBoardType">
+            <el-radio-button size="small" label="5-3">{{
+              t('五盘三胜')
+            }}</el-radio-button>
+            <el-radio-button size="small" label="3-2">{{
+              t('三盘两胜')
+            }}</el-radio-button>
           </el-radio-group>
         </div>
-        <span></span>
       </template>
+
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"
@@ -37,7 +39,7 @@
           :expand-row-keys="expandMatchList"
           adaptive
           :adaptiveConfig="{
-            offsetBottom: 48
+            offsetBottom: 60
           }"
           :data="dataList"
           :columns="dynamicColumns"
@@ -55,6 +57,21 @@
             <span v-else>{{ t('已结算') }}</span>
           </template>
           <template #expand="{ row: parentRow, index: parentIndex }">
+            <div class="mb-2">
+              <el-radio-group
+                v-model="juType"
+                @change="
+                  type => changeJuType(parentRow.inningEvents, type.toString())
+                "
+              >
+                <el-radio-button size="small" label="LONG-SET">{{
+                  t('长盘制')
+                }}</el-radio-button>
+                <el-radio-button size="small" label="SHORT-SET">{{
+                  t('短盘制(抢七)')
+                }}</el-radio-button>
+              </el-radio-group>
+            </div>
             <div class="pl-12">
               <pure-table
                 align-whole="center"
@@ -86,6 +103,7 @@
                     :parentIndex="parentIndex"
                   />
                 </template>
+
                 <!-- -局结算按钮 -->
                 <template
                   #childOperation="{ row: childRow, index: childIndex }"
@@ -132,7 +150,6 @@ import ChildOperation from './component/ChildOperation.vue';
 defineOptions({ name: 'SETTLE_TENNIS_DETAIL' });
 
 const { tableHeaderStyle } = usePublicHooks();
-const boardType = ref('5-3');
 
 //- 检测当前局结算状态
 const checkScore = computed(() => {
@@ -149,10 +166,12 @@ const checkScore = computed(() => {
   scoreList.forEach(item => (item[0] > item[1] ? ++s1 : ++s2));
   t1Score.value = s1;
   t2Score.value = s2;
+  //- 长盘制
   if ((s1 >= 6 && s1 - s2 >= 2) || (s2 >= 6 && s2 - s1 >= 2)) {
     canSettlement.value = true;
     return false;
   }
+  //- 短盘制
   canSettlement.value = false;
   return true;
 });
@@ -172,6 +191,10 @@ const {
   t2Score,
   canSettlement,
   allSettleBtnClick,
-  renderObj
+  renderObj,
+  boardType,
+  juType,
+  changeBoardType,
+  changeJuType
 } = useTennisDetailHook();
 </script>

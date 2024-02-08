@@ -139,6 +139,7 @@ declare namespace SattleDataAPI {
     createdAt: string;
     updatedAt: string;
     isEdit?: boolean;
+    gameRule: string;
     inningEvents: any[];
   }
 
@@ -161,6 +162,7 @@ declare namespace SattleDataAPI {
     updatedBy: string;
     createdAt: string;
     updatedAt: string;
+    gameRule: string;
     inningEvents: InningEvent[];
   }
 
