@@ -43,10 +43,10 @@
                       <span class="ml-1 text-red-400 text-xs">
                         {{ node.data.path }}</span
                       >
-                      <span class="ml-2 mr-1 text-xs">{{ t('类别') }}:</span>
+                      <!-- <span class="ml-2 mr-1 text-xs">{{ t('类别') }}:</span>
                       <span class="ml-1 text-blue-400 text-xs">{{
                         t('菜单')
-                      }}</span>
+                      }}</span> -->
                     </div>
                   </template>
                 </el-tree-line>
@@ -116,9 +116,7 @@ import { ElMessageBox } from 'element-plus';
 
 const testRef = ref();
 
-defineOptions({
-  name: 'menuTree'
-});
+defineOptions({ name: 'menuTree' });
 
 const FORM_TITLE_MAP = {
   0: t('请选择操作类型'),
@@ -188,9 +186,8 @@ const menusData = computed(() => {
   return deleteChildren(menusTree);
 });
 
-const addClick = data => {
+const addClick = _data => {
   formTypeNumber.value = 1;
-  console.log('index.vue文件 101==============行打印=', data);
 };
 
 const { form } = useMenuTree();

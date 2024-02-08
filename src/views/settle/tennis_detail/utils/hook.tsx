@@ -2,7 +2,6 @@ import { message } from '@/utils/message';
 import { t } from '@/plugins/i18n';
 import { columns, childColumns } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
-import { isNumber } from '@pureadmin/utils';
 
 export function useTennisDetailHook() {
   const dataList = reactive<SattleDataAPI.TennisEventsData[]>([]);
@@ -17,6 +16,20 @@ export function useTennisDetailHook() {
   const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
     {} as SattleDataAPI.getSettlementDataList
   );
+
+  //- 展开关闭局列表
+  const expandChange = (
+    row: SattleDataAPI.TennisEventsData,
+    list: SattleDataAPI.TennisEventsData[]
+  ) => {
+    if (list.length) {
+      if (!expandMatchList.includes(row.setNum)) {
+        expandMatchList.push(row.setNum);
+      }
+    } else {
+      expandMatchList.length = 0;
+    }
+  };
 
   // - 初始化
   const onSearch = async () => {
@@ -76,14 +89,16 @@ export function useTennisDetailHook() {
   };
 
   //- 新增局
-  const addChildRow = parentRow => {
-    const noEmpty = parentRow.inningEvents.every(
-      item =>
-        isNumber(+item.t1) &&
-        isNumber(+item.t2) &&
+  const addChildRow = (parentRow: SattleDataAPI.TennisEventsData) => {
+    const noEmpty = parentRow.inningEvents.every(item => {
+      return (
+        item.t1 !== '' &&
+        item.t2 !== '' &&
+        item.t1 !== item.t2 &&
         item.eventTime &&
         !item.isEdit
-    );
+      );
+    });
 
     if (!noEmpty)
       return message(t('请先完成并保存之前的事件'), { type: 'error' });
@@ -97,13 +112,13 @@ export function useTennisDetailHook() {
       t2: '',
       eventTime: '',
       isEdit: false
-    });
+    } as SattleDataAPI.InningEvent);
   };
-  /* 
-  57343 */
 
   //- 结算盘
-  const settlementHandicap = async parentRow => {
+  const settlementHandicap = async (
+    parentRow: SattleDataAPI.TennisEventsData
+  ) => {
     const { eventTime, t1, t2 } =
       parentRow.inningEvents[parentRow.inningEvents.length - 1];
 
@@ -151,25 +166,25 @@ export function useTennisDetailHook() {
     });
   };
 
-  onMounted(() => {
-    getMatchDetail();
-    onSearch();
-  });
-
   //- 全场结算
   const allSettleBtnClick = async () => {
+    console.log('hook.tsx文件 158==============行打印=', expandMatchList);
     let s1 = 0;
     let s2 = 0;
     const scoreList = dataList.map(item => [item.t1, item.t2]);
     scoreList.forEach(item => (item[0] > item[1] ? ++s1 : ++s2));
-    if (dataList.length < 2 || Math.abs(s1 - s2) < 1) {
-      return message(t('请先完成结算'), { type: 'error' });
+    if (
+      dataList.length < 2 ||
+      dataList.some(item => !item.id) ||
+      Math.abs(s1 - s2) < 1
+    ) {
+      return message(t('请先完成盘结算'), { type: 'error' });
     }
     ElMessageBox.confirm(
       `
       <div class="text-center">
-          <div>手动确认比赛结束后，即开始结算</div>
-          <div>全场比赛玩法，结算后无法回退。</div>
+          <div>${t('手动确认比赛结束后，即开始结算')}</div>
+          <div>${t('全场比赛玩法，结算后无法回退。')}</div>
       </div>
       `,
       t('确认比赛结算'),
@@ -197,6 +212,11 @@ export function useTennisDetailHook() {
     Object.assign(renderObj, res.data);
   };
 
+  onMounted(() => {
+    getMatchDetail();
+    onSearch();
+  });
+
   return {
     onSearch,
     loading,
@@ -216,6 +236,7 @@ export function useTennisDetailHook() {
     boardType,
     juType,
     changeBoardType,
-    changeJuType
+    changeJuType,
+    expandChange
   };
 }

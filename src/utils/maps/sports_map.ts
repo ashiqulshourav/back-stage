@@ -13,8 +13,6 @@ export const SPORT_ID_MAP = [
   { label: t('拳击/格斗'), value: 10, type: 'Boxing' },
 ]
 
-
-
 export const ESPORT_ID_MAP = [
   { value: 276, label: 'DOTA2', },
   { value: 277, label: 'CS2', },
@@ -37,8 +35,6 @@ export const ESPORT_ID_MAP = [
   { value: 296, label: '使命召唤', },
   { value: 297, label: '魔兽争霸3', },
 ]
-
-
 
 export const MATCH_EVENT_CODE = {
   goal: t('足球进球'),

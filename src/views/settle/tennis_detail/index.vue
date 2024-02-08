@@ -36,8 +36,9 @@
           showOverflowTooltip
           :loading="loading"
           :size="size"
-          :row-key="row => row.eventTime"
+          :row-key="row => row.setNum"
           :expand-row-keys="expandMatchList"
+          @expand-change="expandChange"
           adaptive
           :adaptiveConfig="{
             offsetBottom: 60
@@ -192,7 +193,8 @@ const {
   t2Score,
   canSettlement,
   allSettleBtnClick,
-  renderObj
+  renderObj,
+  expandChange
   // boardType,
   // juType,
   // changeBoardType,
