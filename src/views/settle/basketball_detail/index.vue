@@ -71,14 +71,14 @@
           <template #eventTime="{ row, index }">
             <el-time-picker
               v-if="isEdit && index === renderData.length - 1"
-              v-model="NewEvent.eventTime"
+              v-model="timestamps"
               :placeholder="t('请选择当前录入时间')"
               :disabled="!isEdit"
               value-format="x"
-              :default-value="dayjs(0).startOf('day').toDate()"
+              :default-value="dayjs().startOf('day').toDate()"
               format="HH:mm:ss"
             />
-            <span v-else>{{ dayjs(row.eventTime).format('HH:mm:ss') }}</span>
+            <span v-else>{{ dayjs((dayjs(row.eventTime).diff(dayjs(currentMatch.beginTime) + 28800000))).format('HH:mm:ss') }}</span>
           </template>
           <template #operation="{ index }">
             <div
@@ -100,7 +100,7 @@
         </pure-table>
       </template>
     </PureTableBar>
-    <template v-if="currentMatch.fullSettlementStatus !== 1 && !isEdit && (isFourRound && dataList.length < 4) || (!isFourRound && dataList.length < 2) ">
+    <template v-if="currentMatch.fullSettlementStatus !== 1 && !isEdit && ((isFourRound && dataList.length < 4) || (!isFourRound && dataList.length < 2)) ">
       <el-button
         type="primary" 
         class="mt-3 px-24"
@@ -137,6 +137,7 @@ const { tableHeaderStyle } = usePublicHooks();
 const {
   onSearch,
   columns,
+  timestamps,
   dataList,
   currentMatch,
   isEdit,
@@ -148,7 +149,7 @@ const matchId = history.state.params.matchId;
 
 const NewEvent: SattleDataAPI.BasketballEvent = reactive({
   matchId: Number(matchId),
-  eventTime: '',
+  eventTime: 0,
   t1: 0,
   t2: 0
 });

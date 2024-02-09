@@ -53,6 +53,7 @@ declare namespace SattleDataAPI {
     updatedAt?: number;
     updatedBy?: number;
     uuid?: string;
+    gameRule?: 'INNING' | 'HT';
   }
 
   type MatchEventParams = {
@@ -70,6 +71,7 @@ declare namespace SattleDataAPI {
     t1?: number;
     t2?: number;
     id?: number;
+    gameRule?: 'INNING' | 'HT';
   }
 
   type getSettlementDataList = {
