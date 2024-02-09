@@ -16,7 +16,7 @@
 
       <el-col :span="6">
         <el-button
-          :type="renderObj.fullSettlementStatus === 1 ? 'info' : 'primary'"
+          :type="renderObj.fullSettlementStatus === 1 ? 'danger' : 'primary'"
           @click="allSettleBtnClick"
           >{{
             renderObj.fullSettlementStatus === 1 ? t('结算完成') : t('全场结算')

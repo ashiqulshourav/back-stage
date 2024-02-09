@@ -8,13 +8,17 @@
         :key="index"
         :span="6"
       >
-        <template v-if="(item.title == 'button')">
+        <template v-if="item.title == 'button'">
           <el-button
-            :type="renderObj.fullSettlementStatus !== 1 ? 'primary' : 'info'"
+            :type="renderObj.fullSettlementStatus !== 1 ? 'danger' : 'info'"
             @click="allSettleBtnClick"
             :disabled="renderObj.fullSettlementStatus === 1"
           >
-            {{renderObj.fullSettlementStatus === 1 ? t('结算完成') : t('全场结算')}}
+            {{
+              renderObj.fullSettlementStatus === 1
+                ? t('结算完成')
+                : t('全场结算')
+            }}
           </el-button>
         </template>
         <template v-else>
@@ -60,8 +64,11 @@ const renderList = computed(() => {
       title: t('比赛方'),
       val: `${_?.homeTeamNameCn || '-'} VS ${_?.awayTeamNameCn || '-'}`
     },
-    { title: t('结算状态'), val: _.fullSettlementStatus === 1 ? t('已结算') : t('未结算')},
-    { title: 'button', val: t('全場結算')}
+    {
+      title: t('结算状态'),
+      val: _.fullSettlementStatus === 1 ? t('已结算') : t('未结算')
+    },
+    { title: 'button', val: t('全場結算') }
   ];
 });
 
