@@ -46,9 +46,9 @@
                     v-for="s in cItem"
                     :key="s.sourceBetItemsId"
                   >
-                    <span>{{
-                      PLAY_MATCH[s.sourceCode][s.homeOrAway || s.handicap]
-                    }}</span>
+                    <span>
+                      {{ PLAY_MATCH[s.sourceCode][s.homeOrAway || s.handicap] }}
+                    </span>
                     <span v-if="!PLAY_MATCH[s.sourceCode].hideMiddle">{{
                       s.handicap
                     }}</span>

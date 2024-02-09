@@ -6,7 +6,7 @@
         class="mb-2"
         v-for="(item, index) in renderList"
         :key="index"
-        :span="6"
+        :span="index === 1 || index === 5 ? 9 : 5"
       >
         <div class="flex">
           <div class="mr-2 text-sm flex-shrink-0">{{ item.title }}:</div>
@@ -14,14 +14,16 @@
         </div>
       </el-col>
 
-      <el-col :span="6">
+      <el-col :span="5">
         <el-button
           :type="renderObj.fullSettlementStatus === 1 ? 'danger' : 'primary'"
+          :loading="allSettleLoading"
           @click="allSettleBtnClick"
-          >{{
-            renderObj.fullSettlementStatus === 1 ? t('结算完成') : t('全场结算')
-          }}</el-button
         >
+          {{
+            renderObj.fullSettlementStatus === 1 ? t('结算完成') : t('全场结算')
+          }}
+        </el-button>
       </el-col>
     </el-row>
   </div>
@@ -33,6 +35,7 @@ import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
 const props = defineProps<{
   renderObj: SattleDataAPI.getSettlementDataList;
+  allSettleLoading: boolean;
 }>();
 
 const renderList = computed(() => {

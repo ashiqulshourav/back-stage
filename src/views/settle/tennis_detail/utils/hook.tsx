@@ -2,10 +2,12 @@ import { message } from '@/utils/message';
 import { t } from '@/plugins/i18n';
 import { columns, childColumns } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
+import { getSecondTime } from '@/utils/formatDate';
 
 export function useTennisDetailHook() {
   const dataList = reactive<SattleDataAPI.TennisEventsData[]>([]);
   const childloading = ref(true);
+  const allSettleLoading = ref(false);
   const loading = ref(true);
   const expandMatchList = reactive<number[]>([]);
   const t1Score = ref(0);
@@ -39,6 +41,18 @@ export function useTennisDetailHook() {
     childloading.value = false;
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
+    res.data.forEach(item => {
+      item.eventTime = getSecondTime(
+        item.eventTime,
+        history.state.params.beginTime
+      );
+      item.inningEvents.forEach(_ => {
+        _.eventTime = getSecondTime(
+          _.eventTime,
+          history.state.params.beginTime
+        );
+      });
+    });
     dataList.length = 0;
     dataList.push(...res.data);
   };
@@ -70,6 +84,7 @@ export function useTennisDetailHook() {
       matchId: history.state.params.matchId,
       setNum: dataList.length + 1,
       gameRule: boardType.value,
+      loading: false,
       t1: 0,
       t2: 0,
       inningEvents: [
@@ -165,19 +180,25 @@ export function useTennisDetailHook() {
         delete item['isEdit'];
         return item;
       });
+      parentRow.loading = true;
       const params = {
         eventTime,
         inningEvents,
         t1: t1Score.value,
         t2: t2Score.value,
         gameRule: parentRow.gameRule,
-        inningNum: parentRow.setNum,
+        inningNum: 0,
         setNum: parentRow.setNum,
         matchId: history.state.params.matchId
       };
-      const res = await API.addTennisEvent(params);
-      if (res.code) return message(res.msg, { type: 'error' });
-      onSearch();
+      try {
+        const res = await API.addTennisEvent(params);
+        if (res.code) return message(res.msg, { type: 'error' });
+        parentRow.loading = false;
+        onSearch();
+      } catch (error) {
+        parentRow.loading = false;
+      }
     });
   };
 
@@ -209,11 +230,17 @@ export function useTennisDetailHook() {
         center: true
       }
     ).then(async () => {
-      const res = await API.manualSettlementFullTime({
-        matchId: history.state.params.matchId
-      });
-      if (res.code) return message(res.msg, { type: 'error' });
-      getMatchDetail();
+      try {
+        allSettleLoading.value = true;
+        const res = await API.manualSettlementFullTime({
+          matchId: history.state.params.matchId
+        });
+        allSettleLoading.value = false;
+        if (res.code) return message(res.msg, { type: 'error' });
+        getMatchDetail();
+      } catch (error) {
+        allSettleLoading.value = false;
+      }
     });
   };
 
@@ -251,6 +278,7 @@ export function useTennisDetailHook() {
     juType,
     changeBoardType,
     changeJuType,
-    expandChange
+    expandChange,
+    allSettleLoading
   };
 }

@@ -4,6 +4,7 @@
     <DetiltTitle
       @allSettleBtnClick="allSettleBtnClick"
       :renderObj="renderObj"
+      :allSettleLoading="allSettleLoading"
     />
 
     <PureTableBar :columns="columns" @refresh="onSearch()">
@@ -106,7 +107,7 @@
                   />
                 </template>
 
-                <!-- -局结算按钮 -->
+                <!-- -局按钮 -->
                 <template
                   #childOperation="{ row: childRow, index: childIndex }"
                 >
@@ -194,7 +195,8 @@ const {
   canSettlement,
   allSettleBtnClick,
   renderObj,
-  expandChange
+  expandChange,
+  allSettleLoading
   // boardType,
   // juType,
   // changeBoardType,

@@ -142,6 +142,44 @@ export const PLAY_MATCH = {
     Away: t('客'),
     Draw: t('平')
   },
+  S1_ML: {
+    hideMiddle: true,
+    Home: t('主'),
+    Away: t('客'),
+  },
+  FT_ML: {
+    hideMiddle: true,
+    Home: t('主'),
+    Away: t('客'),
+  },
+  FTS_AH: {
+    Home: t('主'),
+    Away: t('客'),
+  },
+};
+
+export const GET_PLAYNAME_BY_KC = {
+  'FT_OU': t('全场大小'),
+  'HT_OU': t('半场大小'),
+  'FT_OE': t('全场单双'),
+  'HT_OE': t('单双-上半场'),
+  'FT_AH': t('全场让球'),
+  'HT_AH': t('半场让球'),
+  'Q1_AH': t('让球第一节'),
+  'Q2_AH': t('让球第二节'),
+  'Q3_AH': t('让球第三节'),
+  'Q4_AH': t('让球第四节'),
+  'FT_1X2': t('全场独赢'),
+  'FT_ML': t('全场独赢'),
+  'HT_1X2': t('半场独赢'),
+  'HT_ML': t('半场独赢'),
+  'FT_CS': t('全场波胆'),
+  'HT_CS': t('波胆-上半场'),
+  'S1_ML': t('冠军-第一盘'),
+  'BothTeamsToScore': t('双方进球'),
+  'FTS_AH': t('全场让局'),
+  'FTS_OU': t('总局数'),
+  'Outright': t('冠军玩法'),
 };
 
 // 反波胆内容格式化
@@ -192,28 +230,7 @@ export const transferBoDan = (list: any[]) => {
   return listData;
 };
 
-export const GET_PLAYNAME_BY_KC = {
-  'FT_OU': t('全场大小'),
-  'HT_OU': t('半场大小'),
-  'FT_OE': t('全场单双'),
-  'HT_OE': t('单双-上半场'),
-  'FT_AH': t('全场让球'),
-  'HT_AH': t('半场让球'),
-  'Q1_AH': t('让球第一节'),
-  'Q2_AH': t('让球第二节'),
-  'Q3_AH': t('让球第三节'),
-  'Q4_AH': t('让球第四节'),
-  'FT_1X2': t('全场独赢'),
-  'FT_ML': t('全场独赢'),
-  'HT_1X2': t('半场独赢'),
-  'HT_ML': t('半场独赢'),
-  'FT_CS': t('全场波胆'),
-  'HT_CS': t('波胆-上半场'),
-  'BothTeamsToScore': t('双方进球'),
-  'FTS_AH': t('全场让局'),
-  'FTS_OU': t('总局数'),
-  'Outright': t('冠军玩法'),
-};
+
 
 export const SPORT_CATEGORY = [
   { label: t('普通体育'), value: 0 },

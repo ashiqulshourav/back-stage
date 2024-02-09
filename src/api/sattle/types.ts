@@ -187,6 +187,7 @@ declare namespace SattleDataAPI {
     updatedAt: string;
     gameRule: string;
     inningEvents: InningEvent[];
+    loading?: boolean;
   }
 
 
