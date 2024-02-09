@@ -14,6 +14,12 @@
   "editor.acceptSuggestionOnCommitCharacter": false,
   "css.lint.propertyIgnoredDueToDisplay": "ignore",
   "workbench.colorTheme": "One Monokai",
+  "workbench.colorCustomizations": {
+    "[One Monokai]": {
+      "tab.activeBackground": "#1b1414",
+      "list.inactiveFocusOutline": "#ff0000"
+    }
+  },
   "workbench.iconTheme": "vs-minimal",
   "editor.quickSuggestions": {
     "other": true,

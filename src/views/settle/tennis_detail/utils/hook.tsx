@@ -66,7 +66,7 @@ export function useTennisDetailHook() {
       return message(t('请先结算上一盘赛事'), { type: 'error' });
     }
     const params: Partial<SattleDataAPI.TennisEventsData> = {
-      inningNum: 0,
+      inningNum: dataList.length + 1,
       matchId: history.state.params.matchId,
       setNum: dataList.length + 1,
       gameRule: boardType.value,
@@ -74,12 +74,17 @@ export function useTennisDetailHook() {
       t2: 0,
       inningEvents: [
         {
-          inningNum: 1,
+          inningNum: (dataList.length + 1) * 100 + 1,
           matchId: history.state.params.matchId,
-          setNum: 0,
+          setNum: dataList.length + 1,
           t1: '',
           t2: '',
-          eventTime: '',
+
+          //todo eventTime: '',
+          eventTime:
+            dataList.length === 0
+              ? Date.now()
+              : +dataList[dataList.length - 1].eventTime + 1000 * 60,
           gameRule: juType.value,
           isEdit: false
         }
@@ -103,16 +108,23 @@ export function useTennisDetailHook() {
     if (!noEmpty)
       return message(t('请先完成并保存之前的事件'), { type: 'error' });
 
-    parentRow.inningEvents.push({
-      inningNum: parentRow.inningEvents.length + 1,
+    const params = {
+      inningNum: dataList.length * 100 + parentRow.inningEvents.length + 1,
       matchId: history.state.params.matchId,
       setNum: parentRow.setNum,
       gameRule: juType.value,
       t1: '',
       t2: '',
-      eventTime: '',
+      // eventTime: '',
+      eventTime:
+        parentRow.inningEvents.length === 0
+          ? +dataList[dataList.length - 1].eventTime + 1000 * 60
+          : +parentRow.inningEvents[parentRow.inningEvents.length - 1]
+              .eventTime +
+            1000 * 60,
       isEdit: false
-    } as SattleDataAPI.InningEvent);
+    } as SattleDataAPI.InningEvent;
+    parentRow.inningEvents.push(params);
   };
 
   //- 结算盘
@@ -129,10 +141,14 @@ export function useTennisDetailHook() {
     ElMessageBox.confirm(
       `
       <div class="text-center">
-          <div class="flex">
-            <span >${history.state.params.homeTeamNameCn ?? '_'}</span>
-            <span class="font-bold>VS</span>
-            <span>${history.state.params.awayTeamNameCn ?? '_'}</span>
+          <div class="flex  justify-between">
+            <span class="w-[45%]">${
+              history.state.params.homeTeamNameCn ?? '_'
+            }</span>
+            <span class="font-bold">VS</span>
+            <span class="w-[45%]">${
+              history.state.params.awayTeamNameCn ?? '_'
+            }</span>
          </div>
           <div>${t1Score.value}局 ： ${t2Score.value}局</div>
           <div>${t('手动结算后无法回退，请再次确定结果')}</div>
@@ -156,7 +172,7 @@ export function useTennisDetailHook() {
         t1: t1Score.value,
         t2: t2Score.value,
         gameRule: parentRow.gameRule,
-        inningNum: 0,
+        inningNum: parentRow.setNum,
         setNum: parentRow.setNum,
         matchId: history.state.params.matchId
       };
@@ -168,7 +184,6 @@ export function useTennisDetailHook() {
 
   //- 全场结算
   const allSettleBtnClick = async () => {
-    console.log('hook.tsx文件 158==============行打印=', expandMatchList);
     let s1 = 0;
     let s2 = 0;
     const scoreList = dataList.map(item => [item.t1, item.t2]);

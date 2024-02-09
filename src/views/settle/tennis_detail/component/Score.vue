@@ -3,6 +3,7 @@
     <el-input
       :disabled="!row.isEdit"
       v-model="row[type]"
+      ref="inputRef"
       :formatter="v => formatNumber(v, 3)"
     />
   </div>
@@ -10,11 +11,24 @@
 
 <script setup lang="ts">
 import { formatNumber } from '@/utils/formatNumber';
+const inputRef = ref();
 
-defineProps<{
+const props = defineProps<{
   row: any;
   type: string;
 }>();
+
+watch(
+  () => props.row,
+  row => {
+    if (row.isEdit && props.type === 't1' && row.t1 === '') {
+      inputRef.value.focus();
+    }
+  },
+  {
+    deep: true
+  }
+);
 </script>
 
 <style scoped lang="scss">

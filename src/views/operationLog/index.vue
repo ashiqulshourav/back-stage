@@ -24,10 +24,7 @@
           :columns="dynamicColumns"
           :pagination="pagination"
           :paginationSmall="size === 'small' ? true : false"
-          :header-cell-style="{
-            background: 'var(--el-fill-color-light)',
-            color: 'var(--el-text-color-primary)'
-          }"
+          :header-cell-style="tableHeaderStyle"
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
@@ -50,8 +47,10 @@ import SearchForm from './component/SearchForm.vue';
 import RequestDialog from './component/RequestDialog.vue';
 import { t } from '@/plugins/i18n';
 import { addDialog } from '@/components/ReDialog';
-defineOptions({ name: 'operationLog' });
+import { usePublicHooks } from '@/hooks';
 
+defineOptions({ name: 'operationLog' });
+const { tableHeaderStyle } = usePublicHooks();
 const openRequestLog = (row: OperationLogDataAPI.OperationLogListFetchList) => {
   addDialog({
     title: t('请求参数'),
