@@ -46,10 +46,19 @@
                     v-for="s in cItem"
                     :key="s.sourceBetItemsId"
                   >
-                    <span>
-                      {{ PLAY_MATCH[s.sourceCode][s.homeOrAway || s.handicap] }}
+                    <span
+                      class="text-ellipsis overflow-hidden whitespace-nowrap max-w-[33%]"
+                      v-if="
+                        ['S1_AH', 'S2_AH', 'FTS_AH'].includes(s.sourceCode) &&
+                        matchInfo.sportId === 3
+                      "
+                    >
+                      {{ nameMap[s.homeOrAway] }}
                     </span>
-                    <span v-if="!PLAY_MATCH[s.sourceCode].hideMiddle">{{
+                    <span v-else>
+                      {{ PLAY_MATCH(s.sourceCode)[s.homeOrAway || s.handicap] }}
+                    </span>
+                    <span v-if="!PLAY_MATCH(s.sourceCode).hideMiddle">{{
                       s.handicap
                     }}</span>
                     <span>{{ s.odds.toFixed(2) }}</span>
@@ -101,11 +110,7 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import { ref } from 'vue';
-import {
-  PLAY_MATCH,
-  transferBoDan,
-  GET_PLAYNAME_BY_KC
-} from '@/utils/maps/sports_map';
+import { PLAY_MATCH, transferBoDan } from '@/utils/maps/sports_map';
 import dayjs from 'dayjs';
 import { message } from '@/utils/message';
 
@@ -121,19 +126,34 @@ interface IMData {
     value: string;
   };
 }
-const mData = reactive<IMData>({
-  0: { formatList: [], value: t('进球玩法') },
-  1: { formatList: [], value: t('角球玩法') },
-  2: { formatList: [], value: t('罚牌玩法') },
-  3: { formatList: [], value: t('其他玩法') }
-});
 
 const props = withDefaults(
   defineProps<{ matchId: number; matchInfo: SaleDataAPI.PreSaleList }>(),
   {}
 );
 
+const nameMap = computed(() => {
+  return {
+    Home: props.matchInfo.homeTeamNameCn,
+    Away: props.matchInfo.awayTeamNameCn
+  };
+});
+
+const mData = reactive<IMData>({} as IMData);
+
 onMounted(() => {
+  if (props.matchInfo.sportId === 1) {
+    Object.assign(mData, {
+      0: { formatList: [], value: t('进球玩法') },
+      1: { formatList: [], value: t('角球玩法') },
+      2: { formatList: [], value: t('罚牌玩法') },
+      3: { formatList: [], value: t('其他玩法') }
+    });
+  } else {
+    Object.assign(mData, {
+      0: { formatList: [], value: t('全部玩法') }
+    });
+  }
   getBetItemsList();
   runGetBetItemsList();
 });
@@ -151,7 +171,6 @@ const getBetItemsList = async () => {
   Object.keys(mData).forEach(key => (mData[key].formatList.length = 0));
   openLen.value = 0;
   res.data.forEach(item => {
-    item.betItemsName = GET_PLAYNAME_BY_KC[item.sourceCode];
     item.source_handicap = item.handicap;
     item.isSale === 2 && (openLen.value += 1);
     if (mData[item.ctid]) mData[item.ctid].formatList.push(item);

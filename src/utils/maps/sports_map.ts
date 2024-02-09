@@ -102,85 +102,46 @@ export const YELLOW_OR_RED = {
   'red_card': 2
 }
 
-// 玩法映射
-export const PLAY_MATCH = {
-  HT_AH: {
-    Home: t('主'),
-    Away: t('客')
-  },
-  FT_OE: {
-    hideMiddle: true,
-    Odd: t('单'),
-    Even: t('双')
-  },
-  HT_OU: {
-    Over: t('大'),
-    Under: t('小')
-  },
-  FT_OU: {
-    Over: t('大'),
-    Under: t('小')
-  },
-  FT_AH: {
-    Home: t('主'),
-    Away: t('客')
-  },
-  FT_1X2: {
-    hideMiddle: true,
-    Home: t('主胜'),
-    Away: t('客胜'),
-    Draw: t('平')
-  },
-  HT_OE: {
-    hideMiddle: true,
-    Odd: t('单'),
-    Even: t('双')
-  },
-  HT_1X2: {
-    hideMiddle: true,
-    Home: t('主'),
-    Away: t('客'),
-    Draw: t('平')
-  },
-  S1_ML: {
-    hideMiddle: true,
-    Home: t('主'),
-    Away: t('客'),
-  },
-  FT_ML: {
-    hideMiddle: true,
-    Home: t('主'),
-    Away: t('客'),
-  },
-  FTS_AH: {
-    Home: t('主'),
-    Away: t('客'),
-  },
-};
 
-export const GET_PLAYNAME_BY_KC = {
-  'FT_OU': t('全场大小'),
-  'HT_OU': t('半场大小'),
-  'FT_OE': t('全场单双'),
-  'HT_OE': t('单双-上半场'),
-  'FT_AH': t('全场让球'),
-  'HT_AH': t('半场让球'),
-  'Q1_AH': t('让球第一节'),
-  'Q2_AH': t('让球第二节'),
-  'Q3_AH': t('让球第三节'),
-  'Q4_AH': t('让球第四节'),
-  'FT_1X2': t('全场独赢'),
-  'FT_ML': t('全场独赢'),
-  'HT_1X2': t('半场独赢'),
-  'HT_ML': t('半场独赢'),
-  'FT_CS': t('全场波胆'),
-  'HT_CS': t('波胆-上半场'),
-  'S1_ML': t('冠军-第一盘'),
-  'BothTeamsToScore': t('双方进球'),
-  'FTS_AH': t('全场让局'),
-  'FTS_OU': t('总局数'),
-  'Outright': t('冠军玩法'),
-};
+//- 玩法声明映射
+export const PLAY_MATCH = (code) => {
+  const t1 = ['Q1_OU', 'Q2_OU', 'Q3_OU', 'Q4_OU', 'HT_OU', 'S1_OU', 'S2_OU', 'S3_OU', 'S4_OU', 'FTS_OU', 'FT_OU', 'PT_OU']
+  const t2 = ['HT_AH', 'FT_AH', 'FTS_AH', 'Q4_AH', 'Q3_AH', 'Q1_AH', 'Q2_AH', 'S1_AH', 'S2_AH', 'S3_AH', 'S4_AH', 'PT_AH']
+  const t3 = ['FT_OE', 'S2_ML', 'HT_OE']
+  const t4 = ['FT_1X2', 'HT_1X2']
+  const t5 = ['S1_ML', 'Q1_ML', 'Q2_ML', 'Q3_ML', 'Q4_ML', 'FT_ML', 'HT_ML', 'Winner_2ndFrame', 'Winner_1stFrame']
+  switch (true) {
+    case t1.includes(code):
+      return {
+        Over: t('大'),
+        Under: t('小')
+      }
+    case t2.includes(code):
+      return {
+        Home: t('主'),
+        Away: t('客')
+      }
+    case t3.includes(code):
+      return {
+        hideMiddle: true,
+        Odd: t('单'),
+        Even: t('双')
+      }
+    case t4.includes(code):
+      return {
+        hideMiddle: true,
+        Home: t('主胜'),
+        Away: t('客胜'),
+        Draw: t('平')
+      }
+    case t5.includes(code):
+      return {
+        hideMiddle: true,
+        Home: t('主'),
+        Away: t('客'),
+      }
+  }
+}
 
 // 反波胆内容格式化
 const BoDanSort = (a: any, b: any) => {
