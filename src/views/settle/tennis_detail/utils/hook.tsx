@@ -60,13 +60,13 @@ export function useTennisDetailHook() {
     });
   };
 
-  //- 新增盘信息
+  //- 新增盘
   const addEventRow = () => {
     if (dataList.length > 0 && !dataList[dataList.length - 1].id) {
       return message(t('请先结算上一盘赛事'), { type: 'error' });
     }
     const params: Partial<SattleDataAPI.TennisEventsData> = {
-      inningNum: dataList.length + 1,
+      inningNum: 0,
       matchId: history.state.params.matchId,
       setNum: dataList.length + 1,
       gameRule: boardType.value,
@@ -74,12 +74,11 @@ export function useTennisDetailHook() {
       t2: 0,
       inningEvents: [
         {
-          inningNum: (dataList.length + 1) * 100 + 1,
+          inningNum: 1,
           matchId: history.state.params.matchId,
           setNum: dataList.length + 1,
           t1: '',
           t2: '',
-
           //todo eventTime: '',
           eventTime:
             dataList.length === 0
@@ -109,7 +108,7 @@ export function useTennisDetailHook() {
       return message(t('请先完成并保存之前的事件'), { type: 'error' });
 
     const params = {
-      inningNum: dataList.length * 100 + parentRow.inningEvents.length + 1,
+      inningNum: parentRow.inningEvents.length + 1,
       matchId: history.state.params.matchId,
       setNum: parentRow.setNum,
       gameRule: juType.value,
@@ -127,7 +126,7 @@ export function useTennisDetailHook() {
     parentRow.inningEvents.push(params);
   };
 
-  //- 结算盘
+  //- 结算盘事件
   const settlementHandicap = async (
     parentRow: SattleDataAPI.TennisEventsData
   ) => {
