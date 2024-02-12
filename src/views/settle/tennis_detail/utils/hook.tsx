@@ -1,8 +1,8 @@
 import { message } from '@/utils/message';
 import { t } from '@/plugins/i18n';
 import { columns, childColumns } from './tableColumnList';
-import { ElMessageBox } from 'element-plus';
-import { getSecondTime } from '@/utils/formatDate';
+import { ElMessageBox, dayjs } from 'element-plus';
+import { dateSetSecond, getSecondTime } from '@/utils/formatDate';
 
 export function useTennisDetailHook() {
   const dataList = reactive<SattleDataAPI.TennisEventsData[]>([]);
@@ -41,18 +41,6 @@ export function useTennisDetailHook() {
     childloading.value = false;
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
-    res.data.forEach(item => {
-      item.eventTime = getSecondTime(
-        item.eventTime,
-        history.state.params.beginTime
-      );
-      item.inningEvents.forEach(_ => {
-        _.eventTime = getSecondTime(
-          _.eventTime,
-          history.state.params.beginTime
-        );
-      });
-    });
     dataList.length = 0;
     dataList.push(...res.data);
   };

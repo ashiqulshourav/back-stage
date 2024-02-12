@@ -175,7 +175,7 @@ const checkScore = computed(() => {
     // return false;
   }
   //- 短盘制
-  canSettlement.value = false;
+  // canSettlement.value = false;
   return true;
 });
 
