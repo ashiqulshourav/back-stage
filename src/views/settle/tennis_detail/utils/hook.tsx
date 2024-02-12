@@ -1,8 +1,7 @@
 import { message } from '@/utils/message';
 import { t } from '@/plugins/i18n';
 import { columns, childColumns } from './tableColumnList';
-import { ElMessageBox, dayjs } from 'element-plus';
-import { dateSetSecond, getSecondTime } from '@/utils/formatDate';
+import { ElMessageBox } from 'element-plus';
 
 export function useTennisDetailHook() {
   const dataList = reactive<SattleDataAPI.TennisEventsData[]>([]);
