@@ -25,7 +25,7 @@
             class="reset-margin"
             type="primary"
             :size="size"
-            @click="$router.push(`/betBill/unSettlement/${row.matchId}`)"
+            @click="goSettleDetail(row)"
           >
             {{ t('结算详情') }}
           </el-button>
@@ -64,6 +64,15 @@ const {
 form.value = props.form;
 const filterData = (type: 'reload') => {
   onSearch(type);
+};
+
+const router = useRouter();
+const goSettleDetail = row => {
+  const params = JSON.parse(JSON.stringify(row));
+  router.push({
+    name: 'SETTLET_BILLIARDS_DETAIL',
+    state: { params }
+  });
 };
 
 defineExpose({ filterData });
