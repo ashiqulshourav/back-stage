@@ -14,7 +14,6 @@
             size="small"
             type="primary"
             v-if="renderObj.fullSettlementStatus === 0"
-            :disabled="dataList.length >= 5"
             >{{ t('新增盘') }}</el-button
           >
           <!-- <span class="text-sm ml-10 mr-2">{{ t('盘类型') }}:</span>
