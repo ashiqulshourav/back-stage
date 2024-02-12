@@ -52,45 +52,18 @@ export const columns: TableColumnList = [
     minWidth: 150,
     headerRenderer: d => handleTableWidth(d, t('客队'), 'auto')
   },
-  /* {
-    label: t('当前比分'),
-    prop: 'currentScore',
-    minWidth: 150,
-    headerRenderer: d => handleTableWidth(d, t('当前比分'), 'auto'),
-    formatter: ({ currentScore }) => {
-      return currentScore ? parseMatchScore(currentScore) : '-';
-    }
-  }, */
   {
     label: t('比赛状态'),
     prop: 'status',
     formatter: ({ status }) => MATCH_STATUS[status] ?? '-',
     headerRenderer: d => handleTableWidth(d, t('比赛状态'))
   },
-  /* {
-    label: t('熊猫匹配结果'),
-    prop: 'pandaResult',
-    formatter: ({ pandaResult }) => PANDA_MATCH_STATUS[pandaResult],
-    headerRenderer: d => handleTableWidth(d, t('熊猫匹配结果'))
-  }, */
   {
     label: t('是否中立场地'),
     prop: 'isNeutral',
     formatter: ({ isNeutral }) => (isNeutral ? t('是') : t('否')),
     headerRenderer: d => handleTableWidth(d, t('是否中立场地'))
   },
-  {
-    label: t('上半场结算'),
-    prop: 'halfSettlementStatus',
-    formatter: ({ halfSettlementStatus }) =>
-      halfSettlementStatus === 0 ? (
-        t('未结算')
-      ) : (
-        <el-text type="danger">{t('已结算')}</el-text>
-      ),
-    headerRenderer: d => handleTableWidth(d, t('上半场结算'))
-  },
-
   {
     label: t('全场结算'),
     prop: 'fullSettlementStatus',
@@ -101,11 +74,6 @@ export const columns: TableColumnList = [
         <el-text type="danger">{t('已结算')}</el-text>
       ),
     headerRenderer: d => handleTableWidth(d, t('全场结算'))
-  },
-  {
-    label: t('未结算'),
-    prop: 'unSettlementEvents',
-    headerRenderer: d => handleTableWidth(d, t('未结算'))
   },
   {
     label: t('操作'),

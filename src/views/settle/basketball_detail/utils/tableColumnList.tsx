@@ -1,4 +1,4 @@
-import { MATCH_PERIOD } from "@/utils/maps/sports_map";
+import { MATCH_PERIOD } from '@/utils/maps/sports_map';
 import dayjs from 'dayjs';
 const truncateString = (str: string) => {
   if (str.length > 10) {
@@ -37,23 +37,22 @@ export const columns: TableColumnList = [
       return history.state.params.awayTeamNameCn ? history.state.params.awayTeamNameCn : history.state.params.awayTeamNameEn;
     },
   },
-  
-  
+
   {
     label: t('结算时间'),
     minWidth: 100,
     prop: 'eventTime',
     slot: 'eventTime',
     formatter: ({ eventTime }) => {
-      console.log(dayjs(eventTime).format("HH:mm:ss"));
-      return dayjs(eventTime).format("HH:mm:ss")
+      console.log(dayjs(eventTime).format('HH:mm:ss'));
+      return dayjs(eventTime).format('HH:mm:ss');
     }
   },
   {
     label: t('操作人'),
     minWidth: 100,
     prop: 'createdBy',
-    formatter: ({createdBy}) => {
+    formatter: ({ createdBy }) => {
       return createdBy ? createdBy : '-';
     }
   },
@@ -62,7 +61,11 @@ export const columns: TableColumnList = [
     minWidth: 100,
     prop: 'settleType',
     formatter: ({ settleType }) => {
-      return settleType === '0' ? t('自动结算') : settleType === 1 ? t('⼈⼯結算') : '-'
+      return settleType === '0'
+        ? t('自动结算')
+        : settleType === 1
+        ? t('⼈⼯結算')
+        : '-';
     }
   },
   {
@@ -71,6 +74,6 @@ export const columns: TableColumnList = [
     slot: 'operation',
     formatter() {
       return '-';
-    },
+    }
   }
 ];

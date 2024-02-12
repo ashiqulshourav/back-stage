@@ -98,21 +98,24 @@ export const columns: TableColumnList = [
     minWidth: 150
   },
   {
-    label: t('开售控制'),
-    slot: 'isSale',
-    headerRenderer: d => handleTableWidth(d, t('开售控制'), 'auto')
-  },
-  {
-    label: t('开售状态'),
-    headerRenderer: d => handleTableWidth(d, t('开售状态'), 'auto'),
-    formatter: ({ isSale }) => (isSale ? t('已开售') : t('未开售'))
-  },
-  {
     label: t('开售盘口/总盘口数'),
     slot: 'saleHandicaps',
     headerRenderer: d => handleTableWidth(d, t('开售盘口/总盘口数'), 'auto'),
-    minWidth: 150
+    minWidth: 150,
+    fixed: 'right'
   },
+  {
+    label: t('开售控制'),
+    slot: 'isSale',
+    headerRenderer: d => handleTableWidth(d, t('开售控制'), 'auto'),
+    fixed: 'right'
+  },
+  /*  {
+    label: t('开售状态'),
+    headerRenderer: d => handleTableWidth(d, t('开售状态'), 'auto'),
+    formatter: ({ isSale }) => (isSale ? t('已开售') : t('未开售'))
+  }, */
+
   {
     label: t('操作'),
     fixed: 'right',

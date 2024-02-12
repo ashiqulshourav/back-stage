@@ -11,10 +11,13 @@ export const SPORT_ID_MAP = [
   { label: t('飞镖'), value: 8, type: 'Darts' },
   { label: t('橄榄球'), value: 9, type: 'Rugby' },
   { label: t('拳击/格斗'), value: 10, type: 'Boxing' },
-  { label: t('美式⾜球'), value: 16, type: 'MatchLists' },
-  { label: t('⽻⽑球'), value: 19, type: 'MatchLists' },
+  { label: t('手球'), value: 11, type: 'Handball' },
+  { label: t('冰球'), value: 12, type: 'IceHockey' },
+  { label: t('板球'), value: 13, type: 'Cricket' },
+  { label: t('美式足球'), value: 16, type: 'MatchLists' },
+  { label: t('羽毛球'), value: 19, type: 'MatchLists' },
   { label: t('乒乓球'), value: 23, type: 'MatchLists' },
-  { label: t('英式橄欖球'), value: 27, type: 'MatchLists' },
+  { label: t('曲棍球'), value: 28, type: 'Hockey' },
 ]
 
 export const ESPORT_ID_MAP = [

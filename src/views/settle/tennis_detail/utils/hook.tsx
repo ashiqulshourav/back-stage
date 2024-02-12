@@ -2,7 +2,6 @@ import { message } from '@/utils/message';
 import { t } from '@/plugins/i18n';
 import { columns, childColumns } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
-import { getSecondTime } from '@/utils/formatDate';
 
 export function useTennisDetailHook() {
   const dataList = reactive<SattleDataAPI.TennisEventsData[]>([]);
@@ -41,18 +40,6 @@ export function useTennisDetailHook() {
     childloading.value = false;
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
-    res.data.forEach(item => {
-      item.eventTime = getSecondTime(
-        item.eventTime,
-        history.state.params.beginTime
-      );
-      item.inningEvents.forEach(_ => {
-        _.eventTime = getSecondTime(
-          _.eventTime,
-          history.state.params.beginTime
-        );
-      });
-    });
     dataList.length = 0;
     dataList.push(...res.data);
   };
@@ -164,7 +151,7 @@ export function useTennisDetailHook() {
               history.state.params.awayTeamNameCn ?? '_'
             }</span>
          </div>
-          <div>${t1Score.value}局 ： ${t2Score.value}局</div>
+          <div>${t1Score.value}${t('局')} ： ${t2Score.value}${t('局')}</div>
           <div>${t('手动结算后无法回退，请再次确定结果')}</div>
       </div>
       `,
@@ -209,7 +196,7 @@ export function useTennisDetailHook() {
     const scoreList = dataList.map(item => [item.t1, item.t2]);
     scoreList.forEach(item => (item[0] > item[1] ? ++s1 : ++s2));
     if (
-      dataList.length < 2 ||
+      dataList.length < 5 ||
       dataList.some(item => !item.id) ||
       Math.abs(s1 - s2) < 1
     ) {

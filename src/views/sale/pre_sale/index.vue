@@ -38,7 +38,7 @@
           :default-sort="{ prop: 'beginTimeLong', order: 'ascending' }"
           :data="dataList"
           :columns="dynamicColumns"
-          :pagination="pagination"
+          :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="{
             background: 'var(--el-fill-color-light)',

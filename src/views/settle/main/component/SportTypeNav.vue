@@ -1,11 +1,10 @@
 <template>
   <div class="flex mt-4">
     <CustomButton
-      v-for="(item, index) in renderList"
+      v-for="item in renderList"
       :key="item.value"
       :type="item.value === currentSportId ? 'primary' : ''"
       :btnText="item.label"
-      :disabled="index > 33"
       @click="changeType(item)"
     />
   </div>
