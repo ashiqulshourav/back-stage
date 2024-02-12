@@ -4,6 +4,7 @@
     <DetiltTitle
       @allSettleBtnClick="allSettleBtnClick"
       :renderObj="renderObj"
+      :allSettleLoading="allSettleLoading"
     />
 
     <PureTableBar :columns="columns" @refresh="onSearch()">
@@ -56,8 +57,8 @@
 <script setup lang="ts">
 import { usePublicHooks } from '@/hooks';
 import { PureTableBar } from '@/components/RePureTableBar';
-import DetiltTitle from './component/DetailTitle.vue';
-import { useVolleballDetailHook } from './utils/hook';
+import DetiltTitle from '../component/Settle_detail_title.vue';
+import { useBilliardsHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import Score from './component/Score.vue';
 import EventTime from './component/EventTime.vue';
@@ -98,19 +99,17 @@ const {
   columns,
   dataList,
   expandMatchList,
-  childloading,
-  childColumns,
   addEventRow,
-  addChildRow,
   settlementHandicap,
   t1Score,
   t2Score,
   canSettlement,
   allSettleBtnClick,
-  renderObj
+  renderObj,
+  allSettleLoading
   // boardType,
   // juType,
   // changeBoardType,
   // changeJuType
-} = useVolleballDetailHook();
+} = useBilliardsHook();
 </script>
