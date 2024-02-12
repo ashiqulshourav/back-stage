@@ -149,10 +149,7 @@
           :columns="dynamicColumns"
           :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
           :paginationSmall="size === 'small' ? true : false"
-          :header-cell-style="{
-            background: 'var(--el-fill-color-light)',
-            color: 'var(--el-text-color-primary)'
-          }"
+          :header-cell-style="tableHeaderStyle"
           @selection-change="handleSelectionChange"
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
@@ -221,7 +218,9 @@ import Refresh from '@iconify-icons/ep/refresh';
 import { useLeague } from './utils/hook';
 
 import { t } from '@/plugins/i18n';
+import { usePublicHooks } from '@/hooks';
 defineOptions({ name: 'League' });
+const { tableHeaderStyle } = usePublicHooks();
 
 const formRef = ref();
 const {
