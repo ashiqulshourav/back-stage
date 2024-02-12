@@ -49,4 +49,5 @@ export type MatchType = {
   esportLeagueList: MetadataAPI.LeagueList[];
   countryList: MetadataAPI.getCountryListType[];
   settleRequestLoading: boolean;
+  sportId: number;
 };

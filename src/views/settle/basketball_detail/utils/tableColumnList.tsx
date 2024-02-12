@@ -1,5 +1,11 @@
 import { MATCH_PERIOD } from "@/utils/maps/sports_map";
 import dayjs from 'dayjs';
+const truncateString = (str: string) => {
+  if (str.length > 10) {
+    return str.substring(0, 10) + '...';
+  }
+  return str;
+}
 export const columns: TableColumnList = [
   {
     label: t('节'),
@@ -14,20 +20,21 @@ export const columns: TableColumnList = [
     }
   },
   {
+    label: truncateString(history.state.params.homeTeamNameCn ? history.state.params.homeTeamNameCn : history.state.params.homeTeamNameEn),
     minWidth: 100,
     prop: 't1',
     slot: 't1',
     headerSlot: 'header_t1',
     headerRenderer: () => {
-      return history.state.params.homeTeamNameCn ? history.state.params.homeTeamNameCn : '-' ;
+      return history.state.params.homeTeamNameCn ? history.state.params.homeTeamNameCn : history.state.params.homeTeamNameEn ;
     },
   },
   {
-    label: t('小岛菜菜'),
+    label: truncateString(history.state.params.awayTeamNameCn ? history.state.params.awayTeamNameCn : history.state.params.awayTeamNameEn),
     prop: 't2',
     slot: 't2',
     headerRenderer: () => {
-      return history.state.params.awayTeamNameCn ? history.state.params.awayTeamNameCn : '-' ;
+      return history.state.params.awayTeamNameCn ? history.state.params.awayTeamNameCn : history.state.params.awayTeamNameEn;
     },
   },
   
