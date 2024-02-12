@@ -4,15 +4,23 @@ export const esportData = {
   getESportsLeagueList: (data: ESportsAPI.ESportsLeagueListParams) => http.request<ESportsAPI.ESportsLeagueListType>("post", "/league/v1/getESportsLeagueList", { data }),
   getESportsTeamList: (data: ESportsAPI.ESportsTeamListParams) => http.request<ESportsAPI.ESportsTeamListResType>("post", "/team/v1/getESportsTeamList", { data }),
 
-  // createEMatch: (props: ESportsAPI.League) => {
-  //   // return http.request<ESportsAPI.TeamListRes>("post", "/team/v1/getTeamList", { data })
-  //   return esportsMockAPI.createEMatch(props);
-  // },
+  createEMatch: (data: any) => {
+    return http.request<ESportsAPI.TeamListRes>("post", "/team/v1/getTeamList", { data })
+    // return esportsMockAPI.createEMatch(props);
+  },
 
-  // updateEMatch: (props: ESportsAPI.League) => {
-  //   // return http.request<ESportsAPI.TeamListRes>("post", "/team/v1/getTeamList", { data })
-  //   return esportsMockAPI.updateEMatch(props);
-  // },
+  updateEMatch: (data: {
+    countryId?: number;
+    leagueId?: number;
+    leagueId188Bet?: number;
+    leagueLogo?: number;
+    leagueNameCn?: number;
+    level?: number;
+    leagueNameEn?: number;
+    sportId?: number;
+  }) => {
+    return http.request<ESportsAPI.updateLeagueResType>("post", "/league/v1/updateESportsLeague", { data })
+  },
 
   // getETeamList: (data: ESportsAPI.TeamListFetchProps) => {
   //   // return http.request<ESportsAPI.TeamListRes>("post", "/team/v1/getTeamList", { data })

@@ -32,7 +32,7 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
-          <!--  <template #operation="{ row }">
+          <template #operation="{ row }">
             <el-button
               class="reset-margin"
               link
@@ -43,7 +43,7 @@
             >
               {{ t('编辑') }}
             </el-button>
-          </template> -->
+          </template>
         </pure-table>
       </template>
     </PureTableBar>
@@ -52,8 +52,8 @@
 
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
-// import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-// import EditPen from '@iconify-icons/ep/edit-pen';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import EditPen from '@iconify-icons/ep/edit-pen';
 // import AddFill from '@iconify-icons/ri/add-circle-line';
 import { useLeague } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
@@ -71,8 +71,8 @@ const {
   onSearch,
   handleTableWidthChange,
   handleCurrentChange,
-  form
-  // openDialog
+  form,
+  openDialog
 } = useLeague();
 </script>
 
