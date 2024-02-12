@@ -1,4 +1,4 @@
-import { MATCH_PERIOD } from "@/utils/maps/sports_map";
+import { MATCH_PERIOD } from '@/utils/maps/sports_map';
 import dayjs from 'dayjs';
 export const columns: TableColumnList = [
   {
@@ -19,34 +19,36 @@ export const columns: TableColumnList = [
     slot: 't1',
     headerSlot: 'header_t1',
     headerRenderer: () => {
-      return history.state.params.homeTeamNameCn ? history.state.params.homeTeamNameCn : '-' ;
-    },
+      return history.state.params.homeTeamNameCn
+        ? history.state.params.homeTeamNameCn
+        : '-';
+    }
   },
   {
-    label: t('小岛菜菜'),
     prop: 't2',
     slot: 't2',
     headerRenderer: () => {
-      return history.state.params.awayTeamNameCn ? history.state.params.awayTeamNameCn : '-' ;
-    },
+      return history.state.params.awayTeamNameCn
+        ? history.state.params.awayTeamNameCn
+        : '-';
+    }
   },
-  
-  
+
   {
     label: t('结算时间'),
     minWidth: 100,
     prop: 'eventTime',
     slot: 'eventTime',
     formatter: ({ eventTime }) => {
-      console.log(dayjs(eventTime).format("HH:mm:ss"));
-      return dayjs(eventTime).format("HH:mm:ss")
+      console.log(dayjs(eventTime).format('HH:mm:ss'));
+      return dayjs(eventTime).format('HH:mm:ss');
     }
   },
   {
     label: t('操作人'),
     minWidth: 100,
     prop: 'createdBy',
-    formatter: ({createdBy}) => {
+    formatter: ({ createdBy }) => {
       return createdBy ? createdBy : '-';
     }
   },
@@ -55,7 +57,11 @@ export const columns: TableColumnList = [
     minWidth: 100,
     prop: 'settleType',
     formatter: ({ settleType }) => {
-      return settleType === '0' ? t('自动结算') : settleType === 1 ? t('⼈⼯結算') : '-'
+      return settleType === '0'
+        ? t('自动结算')
+        : settleType === 1
+        ? t('⼈⼯結算')
+        : '-';
     }
   },
   {
@@ -64,6 +70,6 @@ export const columns: TableColumnList = [
     slot: 'operation',
     formatter() {
       return '-';
-    },
+    }
   }
 ];

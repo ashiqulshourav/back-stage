@@ -164,7 +164,7 @@ export function useTennisDetailHook() {
               history.state.params.awayTeamNameCn ?? '_'
             }</span>
          </div>
-          <div>${t1Score.value}局 ： ${t2Score.value}局</div>
+          <div>${t1Score.value}${t('局')} ： ${t2Score.value}${t('局')}</div>
           <div>${t('手动结算后无法回退，请再次确定结果')}</div>
       </div>
       `,
