@@ -36,7 +36,7 @@ export const columns: TableColumnList = [
   {
     label: t('操作人'),
     formatter: ({ createdBy }) => {
-      return createdBy ?? '_';
+      return createdBy ? createdBy : '_';
     }
   },
   {

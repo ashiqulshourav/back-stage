@@ -65,7 +65,7 @@ export function useNav() {
   });
 
   const title = computed(() => {
-    return $config.Title;
+    return $config.Title + t("赛程后台");
   });
 
   /** 动态title */

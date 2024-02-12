@@ -1,11 +1,19 @@
 <template>
   <div>
-    <el-button size="small" type="primary" @click="row.isEdit = true">{{
-      t('编辑')
-    }}</el-button>
-    <el-button size="small" type="primary" @click="row.isEdit = false">{{
-      t('保存')
-    }}</el-button>
+    <el-button
+      size="small"
+      type="primary"
+      v-if="!row.isEdit"
+      @click="row.isEdit = true"
+      >{{ t('编辑') }}</el-button
+    >
+    <el-button
+      v-if="row.isEdit"
+      size="small"
+      type="primary"
+      @click="row.isEdit = false"
+      >{{ t('保存') }}</el-button
+    >
     <el-button size="small" type="danger" @click="deleteChildItem">{{
       t('删除')
     }}</el-button>

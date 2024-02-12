@@ -13,8 +13,6 @@ export const SPORT_ID_MAP = [
   { label: t('拳击/格斗'), value: 10, type: 'Boxing' },
 ]
 
-
-
 export const ESPORT_ID_MAP = [
   { value: 276, label: 'DOTA2', },
   { value: 277, label: 'CS2', },
@@ -37,8 +35,6 @@ export const ESPORT_ID_MAP = [
   { value: 296, label: '使命召唤', },
   { value: 297, label: '魔兽争霸3', },
 ]
-
-
 
 export const MATCH_EVENT_CODE = {
   goal: t('足球进球'),
@@ -86,7 +82,15 @@ export const OPENING_STATUS = {
   2: t('滚球'),
   3: t('进行中'),
 }
-
+export const MATCH_PERIOD = {
+  Q1: ' 第一节',
+  Q2: ' 第二节 ',
+  Q3: ' 第三节 ',
+  Q4: ' 第四节 ',
+  OT: ' 加时赛',
+  HT: '上半场',
+  FT: '下半场',
+}
 //- 盘口状态
 export const HANDICAP_STATUS = {
   0: t('未锁盘'),
@@ -98,47 +102,46 @@ export const YELLOW_OR_RED = {
   'red_card': 2
 }
 
-// 玩法映射
-export const PLAY_MATCH = {
-  HT_AH: {
-    Home: t('主'),
-    Away: t('客')
-  },
-  FT_OE: {
-    hideMiddle: true,
-    Odd: t('单'),
-    Even: t('双')
-  },
-  HT_OU: {
-    Over: t('大'),
-    Under: t('小')
-  },
-  FT_OU: {
-    Over: t('大'),
-    Under: t('小')
-  },
-  FT_AH: {
-    Home: t('主'),
-    Away: t('客')
-  },
-  FT_1X2: {
-    hideMiddle: true,
-    Home: t('主胜'),
-    Away: t('客胜'),
-    Draw: t('平')
-  },
-  HT_OE: {
-    hideMiddle: true,
-    Odd: t('单'),
-    Even: t('双')
-  },
-  HT_1X2: {
-    hideMiddle: true,
-    Home: t('主'),
-    Away: t('客'),
-    Draw: t('平')
-  },
-};
+
+//- 玩法声明映射
+export const PLAY_MATCH = (code) => {
+  const t1 = ['Q1_OU', 'Q2_OU', 'Q3_OU', 'Q4_OU', 'HT_OU', 'S1_OU', 'S2_OU', 'S3_OU', 'S4_OU', 'FTS_OU', 'FT_OU', 'PT_OU']
+  const t2 = ['HT_AH', 'FT_AH', 'FTS_AH', 'Q4_AH', 'Q3_AH', 'Q1_AH', 'Q2_AH', 'S1_AH', 'S2_AH', 'S3_AH', 'S4_AH', 'PT_AH']
+  const t3 = ['FT_OE', 'S2_ML', 'HT_OE']
+  const t4 = ['FT_1X2', 'HT_1X2']
+  const t5 = ['S1_ML', 'Q1_ML', 'Q2_ML', 'Q3_ML', 'Q4_ML', 'FT_ML', 'HT_ML', 'Winner_2ndFrame', 'Winner_1stFrame']
+  switch (true) {
+    case t1.includes(code):
+      return {
+        Over: t('大'),
+        Under: t('小')
+      }
+    case t2.includes(code):
+      return {
+        Home: t('主'),
+        Away: t('客')
+      }
+    case t3.includes(code):
+      return {
+        hideMiddle: true,
+        Odd: t('单'),
+        Even: t('双')
+      }
+    case t4.includes(code):
+      return {
+        hideMiddle: true,
+        Home: t('主胜'),
+        Away: t('客胜'),
+        Draw: t('平')
+      }
+    case t5.includes(code):
+      return {
+        hideMiddle: true,
+        Home: t('主'),
+        Away: t('客'),
+      }
+  }
+}
 
 // 反波胆内容格式化
 const BoDanSort = (a: any, b: any) => {
@@ -188,24 +191,7 @@ export const transferBoDan = (list: any[]) => {
   return listData;
 };
 
-export const GET_PLAYNAME_BY_KC = {
-  'FT_OU': t('全场大小'),
-  'HT_OU': t('半场大小'),
-  'FT_OE': t('全场单双'),
-  'HT_OE': t('单双-上半场'),
-  'FT_AH': t('全场让球'),
-  'HT_AH': t('半场让球'),
-  'FT_1X2': t('全场独赢'),
-  'FT_ML': t('全场独赢'),
-  'HT_1X2': t('半场独赢'),
-  'HT_ML': t('半场独赢'),
-  'FT_CS': t('全场波胆'),
-  'HT_CS': t('波胆-上半场'),
-  'BothTeamsToScore': t('双方进球'),
-  'FTS_AH': t('全场让局'),
-  'FTS_OU': t('总局数'),
-  'Outright': t('冠军玩法'),
-};
+
 
 export const SPORT_CATEGORY = [
   { label: t('普通体育'), value: 0 },

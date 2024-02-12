@@ -160,6 +160,7 @@ export function usePreSale() {
     cb();
   };
 
+  //- 初始化搜索
   const onSearch = async (type?: 'reload') => {
     if (type === 'reload') pagination.currentPage = 1;
     loading.value = true;
