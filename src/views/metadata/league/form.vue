@@ -75,6 +75,7 @@
         type="number"
         clearable
         class="!w-[200px]"
+        v-enter="updateVal"
       />
     </el-form-item>
     <!-- <el-form-item label="赛种" prop="sportId">
@@ -116,6 +117,8 @@ import { t } from '@/plugins/i18n';
 // import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { useMatchStore } from '@/store/match';
 import { inputRestrictions } from '@/utils/formatNumber';
+import { closeAllDialog } from '@/components/ReDialog';
+import { message } from '@/utils/message';
 // import CustomInput from '@/components/Form/CustomInput.vue';
 import { useLeague } from './utils/hook';
 
@@ -135,6 +138,20 @@ const props = withDefaults(defineProps<FormProps>(), {
     tags: []
   })
 });
+
+const emits = defineEmits(['reloadTable']);
+const updateVal = () => {
+  ruleFormRef.value.validate(async valid => {
+    if (valid) {
+      const res = await API.updateLeague(
+        props.formInline as MetadataAPI.updateLeagueParamsType
+      );
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      closeAllDialog();
+      if (!res.code) emits('reloadTable');
+    }
+  });
+};
 
 const tags = ref([]);
 

@@ -85,6 +85,14 @@
         }
       },
       {
+        "path": "/settle/billiards_detail",
+        "name": "SETTLET_BILLIARDS_DETAIL",
+        "meta": {
+          "title": "台球结算",
+          "showLink": false
+        }
+      },
+      {
         "path": "/settle/basketball_detail",
         "name": "SETTLE_BASKETBALL_DETAIL",
         "meta": {

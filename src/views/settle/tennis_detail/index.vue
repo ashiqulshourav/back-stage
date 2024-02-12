@@ -6,7 +6,6 @@
       :renderObj="renderObj"
       :allSettleLoading="allSettleLoading"
     />
-
     <PureTableBar :columns="columns" @refresh="onSearch()">
       <template #title>
         <div class="flex items-center">
@@ -15,7 +14,6 @@
             size="small"
             type="primary"
             v-if="renderObj.fullSettlementStatus === 0"
-            :disabled="dataList.length >= 5"
             >{{ t('新增盘') }}</el-button
           >
           <!-- <span class="text-sm ml-10 mr-2">{{ t('盘类型') }}:</span>
@@ -143,7 +141,7 @@
 <script setup lang="ts">
 import { usePublicHooks } from '@/hooks';
 import { PureTableBar } from '@/components/RePureTableBar';
-import DetiltTitle from './component/DetailTitle.vue';
+import DetiltTitle from '../component/Settle_detail_title.vue';
 import { useTennisDetailHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import Score from './component/Score.vue';
@@ -170,12 +168,13 @@ const checkScore = computed(() => {
   t1Score.value = s1;
   t2Score.value = s2;
   //- 长盘制
-  if ((s1 >= 6 && s1 - s2 >= 2) || (s2 >= 6 && s2 - s1 >= 2)) {
+  // if ((s1 >= 6 && s1 - s2 >= 2) || (s2 >= 6 && s2 - s1 >= 2)) {
+  if (s1 >= 6 || s2 >= 6) {
     canSettlement.value = true;
-    return false;
+    // return false;
   }
   //- 短盘制
-  canSettlement.value = false;
+  // canSettlement.value = false;
   return true;
 });
 

@@ -90,14 +90,12 @@ export function useLeague() {
       draggable: true,
       fullscreenIcon: true,
       closeOnClickModal: false,
-      contentRenderer: () => h(editForm, { ref: formRef }),
+      contentRenderer: () =>
+        h(editForm, { ref: formRef, onReloadTable: () => onSearch() }),
       beforeSure: (done, { options }) => {
         const FormRef = formRef.value.getRef();
         const curData = options.props.formInline as FormItemProps;
         function chores() {
-          // message(`您${title}了角色名称为${curData.name}的这条数据`, {
-          //   type: "success"
-          // });
           done(); // 关闭弹框
           onSearch(); // 刷新表格数据
         }
