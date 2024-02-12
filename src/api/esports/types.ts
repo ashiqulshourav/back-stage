@@ -80,4 +80,6 @@ declare namespace ESportsAPI {
     msg: string;
     data: ESportsTeamListDataType;
   }
+
+  type updateLeagueResType = COMMON.BASE_RES_TYPE<any>
 }

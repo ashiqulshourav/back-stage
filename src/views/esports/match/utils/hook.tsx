@@ -1,17 +1,19 @@
 import { message } from '@/utils/message';
-// import editForm from '../form.vue';
+import editForm from '../form.vue';
 import type { PaginationProps } from '@pureadmin/table';
 // import { addDialog } from '@/components/ReDialog';
 // import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 import { columns } from '../component/TableColumnList';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { addDialog } from '@/components/ReDialog';
 
 export function useLeague() {
   const dataList = reactive<ESportsAPI.ESportsLeagueListArrType[]>([]);
   const loading = ref(true);
   const switchLoadMap = ref({});
   const { switchStyle } = usePublicHooks();
+  const formRef = ref();
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -56,48 +58,47 @@ export function useLeague() {
     setTimeout(() => (loading.value = false), 500);
   }
 
-  /*  function openDialog(title: string, row?: ESportsAPI.League) {
+  function openDialog(
+    title: string,
+    row?: ESportsAPI.ESportsLeagueListArrType
+  ) {
     addDialog({
       title,
       props: {
         formInline: {
           leagueId: row?.leagueId ?? '',
           leagueNameCn: row?.leagueNameCn ?? '',
-          leagueNameEn: row?.leagueNameEn ?? '',
-          leagueName: row?.leagueName ?? '',
-          dataSource: row?.dataSource ?? '',
-          dataSourceName: row?.dataSourceName ?? '',
-          sort: row?.sort
+          leagueNameEn: row?.leagueNameEn ?? ''
         }
       },
       width: '40%',
       draggable: true,
       fullscreenIcon: true,
       closeOnClickModal: false,
-      contentRenderer: () => h(editForm, { ref: formRef }),
+      contentRenderer: () =>
+        h(editForm, { ref: formRef, onReloadTable: () => onSearch() }),
       beforeSure: (done, { options }) => {
         const FormRef = formRef.value.getRef();
-        const curData = options.props.formInline as ESportsAPI.League;
+        const curData = options.props.formInline;
         function chores() {
           done();
           onSearch();
         }
-        // FormRef.validate(async valid => {
-        //   if (valid) {
-        //     console.log('curData', curData);
-
-        //     if (title === '新增') {
-        //       await API.createEMatch(curData);
-        //       chores();
-        //     } else {
-        //       await API.updateEMatch(curData);
-        //       chores();
-        //     }
-        //   }
-        // });
+        FormRef.validate(async valid => {
+          if (valid) {
+            if (title === '新增') {
+              await API.createEMatch(curData);
+              chores();
+            } else {
+              const res = await API.updateEMatch(curData);
+              message(res.msg, { type: res.code ? 'error' : 'success' });
+              chores();
+            }
+          }
+        });
       }
     });
-  } */
+  }
 
   onMounted(() => {
     onSearch();
@@ -111,7 +112,7 @@ export function useLeague() {
     handleTableWidthChange,
     switchLoadMap,
     handleCurrentChange,
-    // openDialog,
+    openDialog,
     switchStyle,
     form
   };

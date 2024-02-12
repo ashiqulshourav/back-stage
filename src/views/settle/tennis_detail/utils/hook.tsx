@@ -196,7 +196,8 @@ export function useTennisDetailHook() {
     const scoreList = dataList.map(item => [item.t1, item.t2]);
     scoreList.forEach(item => (item[0] > item[1] ? ++s1 : ++s2));
     if (
-      dataList.length < 5 ||
+      //- todo
+      dataList.length < 2 ||
       dataList.some(item => !item.id) ||
       Math.abs(s1 - s2) < 1
     ) {

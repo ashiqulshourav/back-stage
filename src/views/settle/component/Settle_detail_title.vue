@@ -25,6 +25,7 @@
         <el-button
           :type="renderObj.fullSettlementStatus === 1 ? 'danger' : 'primary'"
           :loading="allSettleLoading"
+          :disabled="renderObj.fullSettlementStatus === 1"
           @click="allSettleBtnClick"
         >
           {{
