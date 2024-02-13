@@ -3,18 +3,31 @@
     <el-input
       :disabled="!row.isEdit"
       v-model="row[type]"
-      :formatter="v => formatNumber(v, 3)"
+      ref="inputRef"
+      :formatter="v => formatChinese(v, 4)"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { formatNumber } from '@/utils/formatNumber';
+import { formatChinese } from '@/utils/formatNumber';
+const inputRef = ref();
 
-defineProps<{
-  row: any;
+const props = defineProps<{
+  row: SattleDataAPI.volleyballData;
   type: string;
 }>();
+
+watch(
+  () => props.row,
+  row => {
+    if (row.isEdit && props.type === 't1' && row.t1 === '')
+      inputRef.value.focus();
+  },
+  {
+    deep: true
+  }
+);
 </script>
 
 <style scoped lang="scss">
@@ -26,6 +39,9 @@ defineProps<{
       .el-input__wrapper {
         background-color: transparent;
         box-shadow: none;
+        .el-input__inner {
+          text-align: center;
+        }
       }
     }
   }

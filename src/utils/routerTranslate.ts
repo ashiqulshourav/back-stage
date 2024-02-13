@@ -32,5 +32,7 @@ export const routerTranslate = () => {
     t('配置中心'),
     t('网球结算'),
     t('籃球结算'),
+    t('台球结算'),
+    t('排球结算'),
   ]
 }
