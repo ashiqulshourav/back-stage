@@ -13,14 +13,14 @@ declare namespace MetadataAPI {
     sportId?: number;
   }
   type updateLeagueParamsType = {
-    leagueLogo: string;
-    leagueId: number;
-    countryId: number;
-    leagueId188Bet: number;
-    leagueNameCn: string;
-    leagueNameEn: string;
-    level: number;
-    sportId: number;
+    leagueLogo?: string;
+    leagueId?: number;
+    countryId?: number;
+    leagueId188Bet?: number;
+    leagueNameCn?: string;
+    leagueNameEn?: string;
+    level?: number;
+    sportId?: number;
   }
 
   type LeagueList = {

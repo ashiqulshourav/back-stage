@@ -141,7 +141,7 @@
 <script setup lang="ts">
 import { usePublicHooks } from '@/hooks';
 import { PureTableBar } from '@/components/RePureTableBar';
-import DetiltTitle from './component/DetailTitle.vue';
+import DetiltTitle from '../component/Settle_detail_title.vue';
 import { useTennisDetailHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import Score from './component/Score.vue';

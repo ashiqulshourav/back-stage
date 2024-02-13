@@ -1,28 +1,57 @@
 <template>
-  <div>
-    <el-button size="small" type="primary" @click="row.isEdit = true">{{
-      t('编辑')
-    }}</el-button>
-    <el-button size="small" type="primary" @click="row.isEdit = false">{{
-      t('保存')
-    }}</el-button>
+  <div v-if="!row.id">
+    <el-button
+      size="small"
+      type="primary"
+      v-if="!row.isEdit"
+      @click="row.isEdit = true"
+      >{{ t('编辑') }}</el-button
+    >
+    <el-button
+      v-if="row.isEdit"
+      size="small"
+      type="primary"
+      @click="row.isEdit = false"
+      >{{ t('保存') }}</el-button
+    >
+    <el-button
+      v-if="!row.isEdit && isShowSettleBtn"
+      size="small"
+      type="primary"
+      @click="settleJunClick"
+      >{{ t('结算局') }}</el-button
+    >
     <el-button size="small" type="danger" @click="deleteChildItem">{{
       t('删除')
     }}</el-button>
   </div>
+  <span v-else>--</span>
 </template>
 
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
-defineProps<{
+const props = defineProps<{
   row: SettleDataAPI.InningEvent;
-  list: SettleDataAPI.InningEvent[];
   childIndex: number;
 }>();
 
-const emits = defineEmits(['deleteChildItem']);
+const isShowSettleBtn = computed(() => {
+  return (
+    props.row.t1 !== '' &&
+    props.row.t2 !== '' &&
+    props.row.eventTime &&
+    !props.row.isEdit
+  );
+});
+
+const emits = defineEmits(['deleteChildItem', 'settlementHandicap']);
 
 const deleteChildItem = () => emits('deleteChildItem');
+
+const settleJunClick = () => {
+  props.row.isEdit = false;
+  emits('settlementHandicap');
+};
 </script>
 
 <style scoped></style>

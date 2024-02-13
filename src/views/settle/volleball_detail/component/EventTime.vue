@@ -16,38 +16,20 @@
 import { t } from '@/plugins/i18n';
 import { message } from '@/utils/message';
 import dayjs from 'dayjs';
+
 const props = defineProps<{
-  row: SettleDataAPI.InningEvent;
+  row: SettleDataAPI.SnookerEventsResData;
   index: number;
-  list: SettleDataAPI.InningEvent[];
-  dataList: SettleDataAPI.TennisEventsData[];
-  parentIndex: number;
+  dataList: SettleDataAPI.SnookerEventsResData[];
 }>();
 
 const emits = defineEmits(['changeEventTime']);
 
 const changeEventTime = () => {
-  const { index, row, list, dataList, parentIndex } = props;
-  if (
-    parentIndex > 0 &&
-    index === 0 &&
-    row.eventTime < dataList[parentIndex - 1].eventTime
-  ) {
-    return message(t('当前盘结算时间不能小于上一盘'), { type: 'error' });
-  }
-  const preData = list[index - 1];
-  const nextData = list[index + 1];
-  if (
-    +row.eventTime <=
-    (preData?.eventTime && (new Date(preData?.eventTime).getTime() as number))
-  ) {
-    message(t('时间不能小于前一个事件发生时间'), { type: 'error' });
+  const { index, row, dataList } = props;
+  if (index > 0 && row.eventTime < dataList[index - 1].eventTime) {
     row.eventTime = '';
-  } else if (
-    +row.eventTime >= (new Date(nextData?.eventTime).getTime() as number)
-  ) {
-    message(t('时间不能大于前一个事件发生时间'), { type: 'error' });
-    row.eventTime = '';
+    return message(t('当前盘结算时间不能小于上一局'), { type: 'error' });
   }
 };
 </script>
@@ -60,6 +42,13 @@ const changeEventTime = () => {
         border: none;
         background-color: transparent;
         box-shadow: none;
+        .el-input__prefix {
+          display: none;
+        }
+        .el-input__inner {
+          flex-grow: 0;
+          text-align: center;
+        }
       }
     }
   }

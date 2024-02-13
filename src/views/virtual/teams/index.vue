@@ -24,7 +24,7 @@
           adaptive
           :data="dataList"
           :columns="dynamicColumns"
-          :pagination="pagination"
+          :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="{
             background: 'var(--el-fill-color-light)',
@@ -42,7 +42,7 @@
               :icon="useRenderIcon(EditPen)"
               @click="openDialog(t('编辑球队'), row)"
             >
-              {{ t("编辑") }}
+              {{ t('编辑') }}
             </el-button>
           </template>
         </pure-table>
@@ -52,16 +52,16 @@
 </template>
 
 <script setup lang="ts">
-import { PureTableBar } from "@/components/RePureTableBar";
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
+import { PureTableBar } from '@/components/RePureTableBar';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 // import Search from "@iconify-icons/ep/search";
 // import Refresh from "@iconify-icons/ep/refresh";
-import EditPen from "@iconify-icons/ep/edit-pen";
-import AddFill from "@iconify-icons/ri/add-circle-line";
-import { useTeam } from "./utils/hook";
+import EditPen from '@iconify-icons/ep/edit-pen';
+import AddFill from '@iconify-icons/ri/add-circle-line';
+import { useTeam } from './utils/hook';
 
-import { t } from "@/plugins/i18n";
-defineOptions({ name: "League" });
+import { t } from '@/plugins/i18n';
+defineOptions({ name: 'League' });
 
 // const formRef = ref();
 const {

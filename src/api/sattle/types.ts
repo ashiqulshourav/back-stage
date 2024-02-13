@@ -188,9 +188,37 @@ declare namespace SettleDataAPI {
     loading?: boolean;
   };
 
-  type getSettlementListRes = COMMON.BASE_RES_TYPE<getSettlementDataListRes>;
+  type SnookerEventsResData = {
+    id: number;
+    uuid: string;
+    matchId: number;
+    canceled: number;
+    eventTime: number | string;
+    homeTeamId: number;
+    awayTeamId: number;
+    inningNum: number;
+    gameRule: string;
+    t1: number | string;
+    t2: number | string;
+    sourceType: number;
+    settleTimes: number;
+    settleType: number;
+    createdBy: string;
+    updatedBy: string;
+    createdAt: string;
+    updatedAt: string;
+    homeTeamName?: any;
+    awayTeamName?: any;
+    isEdit?: boolean;
+  }
+
+  type volleyballData = SnookerEventsResData;
+
+  type getSettlementListRes = COMMON.BASE_RES_TYPE<getSettlementDataListRes>
   type getTennisEventsResType = COMMON.BASE_RES_TYPE<TennisEventsData[]>;
   type addTennisEventResType = COMMON.BASE_RES_TYPE<any>;
+  type getSnookerEventsResType = COMMON.BASE_RES_TYPE<SnookerEventsResData[]>;
+  type getVolleyballEventsResType = COMMON.BASE_RES_TYPE<volleyballData[]>;
   type manualSettlementFullTimeRestType = COMMON.BASE_RES_TYPE<any>;
   type preSaleInfoResType = COMMON.BASE_RES_TYPE<getSettlementDataList>;
   type getBasketballEventRes = COMMON.BASE_RES_TYPE<BasketballEvent[]>;
@@ -227,7 +255,16 @@ declare namespace SettleDataAPI {
     matchId: number;
     t1: number;
     t2: number;
-  };
+  }
+  type SnookerEventReq = {
+    eventTime: number | string;
+    matchId: number;
+    inningNum: number;
+    t1: number | string;
+    t2: number | string;
+    gameRule: string;
+
+  }
 
   type getSettlementListPrams = {
     isSale?: number;

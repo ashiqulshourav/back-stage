@@ -116,6 +116,41 @@ export const sattleData = {
       '/tennis/v1/manualSettlementFullTime',
       { data }
     ),
+  //-斯诺克新增事件（按局）
+  addSnookerEvent: (data:
+    SattleDataAPI.SnookerEventReq
+  ) => http.request<SattleDataAPI.addTennisEventResType>("post", "/snooker/v1/addSnookerEvent", { data }),
+
+
+  //-排球新增事件（按局）
+  addVolleyballEvent: (data:
+    SattleDataAPI.SnookerEventReq
+  ) => http.request<SattleDataAPI.addTennisEventResType>("post", "/volleyball/v1/addVolleyballEvent", { data }),
+
+  //-斯诺克结算事件列表
+  getSnookerEvents: (data: {
+    matchId: number;
+  }) => http.request<SattleDataAPI.getSnookerEventsResType>("post", "/snooker/v1/getSnookerEvents", { data }),
+
+  //-排球结算事件列表
+  getVolleyballEvents: (data: {
+    matchId: number;
+  }) => http.request<SattleDataAPI.getVolleyballEventsResType>("post", "/volleyball/v1/getVolleyballEvents", { data }),
+
+  //-排球全场结算（按盘）
+  manualSettlementFullTime: (data:
+    { matchId: number }
+  ) => http.request<SattleDataAPI.manualSettlementFullTimeRestType>("post", "/tennis/v1/manualSettlementFullTime", { data }),
+
+  //-排球全场结算（按盘）
+  volleyballManualSettlementFullTime: (data:
+    { matchId: number }
+  ) => http.request<SattleDataAPI.manualSettlementFullTimeRestType>("post", "/volleyball/v1/manualSettlementFullTime", { data }),
+
+  //-斯诺克全场结算（按盘）
+  snookerManualSettlementFullTime: (data:
+    { matchId: number }
+  ) => http.request<SattleDataAPI.manualSettlementFullTimeRestType>("post", "/snooker/v1/manualSettlementFullTime", { data }),
 
   //- 获取单个赛事信息
   getPreSaleInfo: (data: { matchId: number }) =>

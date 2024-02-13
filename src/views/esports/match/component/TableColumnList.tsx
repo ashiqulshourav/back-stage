@@ -1,6 +1,6 @@
 import { t } from '@/plugins/i18n';
-import { useMatchStore } from '@/store/match';
 import { parseCountry } from '@/utils/formatMatch';
+import { ESPORT_ID_MAP } from '@/utils/maps/sports_map';
 
 export const columns: TableColumnList = [
   {
@@ -22,6 +22,11 @@ export const columns: TableColumnList = [
   //   formatter: ({ leagueLogo }) => (leagueLogo ? leagueLogo : '-')
   // },
   {
+    label: t('游戏分类'),
+    formatter: ({ sportId }) =>
+      ESPORT_ID_MAP.find(item => item.value === sportId)?.label
+  },
+  {
     label: t('联赛中文名'),
     prop: 'leagueNameCn',
     align: 'left'
@@ -34,10 +39,9 @@ export const columns: TableColumnList = [
   {
     label: t('赛事等级'),
     prop: 'level'
+  },
+  {
+    label: t('操作'),
+    slot: 'operation'
   }
-  // {
-  //   label: t('操作'),
-  //   slot: 'operation',
-  //   align: 'right'
-  // }
 ];
