@@ -1,37 +1,20 @@
-// import { parseMatchScore } from '@/utils/formatMatch';
-
-import dayjs from 'dayjs';
-
 export const columns: TableColumnList = [
   {
-    type: 'expand',
-    slot: 'expand'
-  },
-  {
-    label: t('盘'),
+    label: t('局'),
     prop: 'inningNum',
     type: 'index'
-    // formatter: ({ inningNum }) => {
-    //   return inningNum;
-    // }
   },
   {
     headerRenderer: () => history.state.params.homeTeamNameCn ?? '_',
-    formatter: ({ t1 }) => {
-      return t1;
-    }
+    slot: 't1'
   },
   {
     headerRenderer: () => history.state.params.awayTeamNameCn ?? '_',
-    formatter: ({ t2 }) => {
-      return t2;
-    }
+    slot: 't2'
   },
   {
     label: t('结算时间'),
-    formatter: ({ eventTime }) => {
-      return eventTime ? dayjs(eventTime).format('HH:mm:ss') : '_';
-    }
+    slot: 'eventTime'
   },
   {
     label: t('操作人'),

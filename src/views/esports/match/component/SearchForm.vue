@@ -12,29 +12,40 @@
           :formatter="v => formatNumber(v, 10)"
           :placeholder="t('联赛ID')"
           clearable
+          v-enter="search"
           class="!w-[200px]"
         />
       </el-form-item>
-      <!-- <el-form-item :label="`${t('赛事等级')}:`" prop="level">
+      <el-form-item :label="`${t('游戏种类')}:`" prop="sportId">
         <el-select
-          v-model="form.level"
-          class="!w-[280px]"
+          v-model="form.sportId"
+          :placeholder="t('游戏种类')"
           clearable
-          :placeholder="t('赛事等级')"
+          class="!w-[150px]"
         >
           <el-option
-            v-for="item in 8"
-            :key="item"
-            :label="item"
-            :value="item"
+            :label="item.label"
+            :value="item.value"
+            v-for="item in ESPORT_ID_MAP.slice(0, 4)"
+            :key="item.value"
           />
         </el-select>
-      </el-form-item> -->
+      </el-form-item>
+      <el-form-item :label="`${t('联赛中文名')}:`" prop="leagueNameEn">
+        <el-input
+          v-model="form.leagueNameCn"
+          :placeholder="t('联赛中文名')"
+          clearable
+          v-enter="search"
+          class="!w-[200px]"
+        />
+      </el-form-item>
       <el-form-item :label="`${t('联赛英文名')}:`" prop="leagueNameEn">
         <el-input
           v-model="form.leagueNameEn"
           :placeholder="t('联赛英文名')"
           clearable
+          v-enter="search"
           class="!w-[200px]"
         />
       </el-form-item>
@@ -100,6 +111,7 @@ import type { FormInstance } from 'element-plus';
 import { SearchFormType } from '../utils/types';
 import { formatNumber } from '@/utils/formatNumber';
 import { useMatchStore } from '@/store/match';
+import { ESPORT_ID_MAP } from '@/utils/maps/sports_map';
 
 defineProps<{
   loading: boolean;

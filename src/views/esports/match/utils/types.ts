@@ -1,14 +1,6 @@
 
 interface FormProps {
-  formInline: {
-    leagueId: string;
-    leagueNameCn: string;
-    leagueNameEn: string;
-    leagueName: string;
-    dataSource: string;
-    dataSourceName: string;
-    sort: number;
-  };
+  formInline: MetadataAPI.LeagueList;
 }
 
 export type SearchFormType = {
