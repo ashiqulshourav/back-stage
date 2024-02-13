@@ -4,7 +4,7 @@ import { columns, childColumns } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
 
 export function useTennisDetailHook() {
-  const dataList = reactive<SattleDataAPI.TennisEventsData[]>([]);
+  const dataList = reactive<SettleDataAPI.TennisEventsData[]>([]);
   const childloading = ref(true);
   const allSettleLoading = ref(false);
   const loading = ref(true);
@@ -14,14 +14,14 @@ export function useTennisDetailHook() {
   const canSettlement = ref(false);
   const boardType = ref('5-3');
   const juType = ref('LONG-SET');
-  const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
-    {} as SattleDataAPI.getSettlementDataList
+  const renderObj = reactive<SettleDataAPI.getSettlementDataList>(
+    {} as SettleDataAPI.getSettlementDataList
   );
 
   //- 展开关闭局列表
   const expandChange = (
-    row: SattleDataAPI.TennisEventsData,
-    list: SattleDataAPI.TennisEventsData[]
+    row: SettleDataAPI.TennisEventsData,
+    list: SettleDataAPI.TennisEventsData[]
   ) => {
     if (list.length) {
       if (!expandMatchList.includes(row.setNum)) {
@@ -53,7 +53,7 @@ export function useTennisDetailHook() {
 
   //- 修改局类型
   const changeJuType = (
-    dataList: SattleDataAPI.InningEvent[],
+    dataList: SettleDataAPI.InningEvent[],
     type: string
   ) => {
     dataList.forEach(item => {
@@ -66,7 +66,7 @@ export function useTennisDetailHook() {
     if (dataList.length > 0 && !dataList[dataList.length - 1].id) {
       return message(t('请先结算上一盘赛事'), { type: 'error' });
     }
-    const params: Partial<SattleDataAPI.TennisEventsData> = {
+    const params: Partial<SettleDataAPI.TennisEventsData> = {
       inningNum: 0,
       matchId: history.state.params.matchId,
       setNum: dataList.length + 1,
@@ -89,13 +89,13 @@ export function useTennisDetailHook() {
           gameRule: juType.value,
           isEdit: false
         }
-      ] as SattleDataAPI.InningEvent[]
+      ] as SettleDataAPI.InningEvent[]
     };
-    dataList.push(params as SattleDataAPI.TennisEventsData);
+    dataList.push(params as SettleDataAPI.TennisEventsData);
   };
 
   //- 新增局
-  const addChildRow = (parentRow: SattleDataAPI.TennisEventsData) => {
+  const addChildRow = (parentRow: SettleDataAPI.TennisEventsData) => {
     const noEmpty = parentRow.inningEvents.every(item => {
       return (
         item.t1 !== '' &&
@@ -124,13 +124,13 @@ export function useTennisDetailHook() {
               .eventTime +
             1000 * 60,
       isEdit: false
-    } as SattleDataAPI.InningEvent;
+    } as SettleDataAPI.InningEvent;
     parentRow.inningEvents.push(params);
   };
 
   //- 结算盘事件
   const settlementHandicap = async (
-    parentRow: SattleDataAPI.TennisEventsData
+    parentRow: SettleDataAPI.TennisEventsData
   ) => {
     const { eventTime, t1, t2 } =
       parentRow.inningEvents[parentRow.inningEvents.length - 1];

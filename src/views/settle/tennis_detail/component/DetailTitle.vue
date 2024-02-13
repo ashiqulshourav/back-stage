@@ -41,7 +41,7 @@ import { t } from '@/plugins/i18n';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
 const props = defineProps<{
-  renderObj: SattleDataAPI.getSettlementDataList;
+  renderObj: SettleDataAPI.getSettlementDataList;
   allSettleLoading: boolean;
 }>();
 

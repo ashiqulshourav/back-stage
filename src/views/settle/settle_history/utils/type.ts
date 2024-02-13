@@ -1,4 +1,3 @@
-
 export type FormProps = {
   matchId?: string | number;
   matchType?: string;
@@ -7,42 +6,41 @@ export type FormProps = {
   fullSettlementStatus: number | string;
   dataVendors?: string;
   [key: string]: any;
-}
+};
 
 export type TempListType = {
-  eventTime: number | string,
-  homeAway: null,
-  matchPeriodId: null,
+  eventTime: number | string;
+  homeAway: null;
+  matchPeriodId: null;
   // player1Name: null,
-  isBackEndReturnData: false,
-  t1: null,
-  t2: null,
-  eventCode: 'goal' | 'yellow_red_card' | 'corner'
+  isBackEndReturnData: false;
+  t1: null;
+  t2: null;
+  eventCode: 'goal' | 'yellow_red_card' | 'corner';
   redOrYellow?: number;
-}
+};
 
 export type SearchFormType = {
-  leagueId: string,
-  matchId: string,
-  status: string,
-  startTime: string,
-  endTime: string
-}
-
+  leagueId: string;
+  matchId: string;
+  status: string;
+  startTime: string;
+  endTime: string;
+};
 
 export enum MatchEventType {
   Goal = 'goal',
   YellowRedCard = 'yellow_red_card',
   Corner = 'corner',
-  MatchStatus = 'match_status',
+  MatchStatus = 'match_status'
 }
 
 export type parentRowType = {
-  row: SattleDataAPI.getSettlementDataList;
+  row: SettleDataAPI.getSettlementDataList;
   index?: number;
-}
+};
 
 export type MatchEventRowType = {
-  row: SattleDataAPI.MatchEventsList;
+  row: SettleDataAPI.MatchEventsList;
   index?: number;
-}
+};

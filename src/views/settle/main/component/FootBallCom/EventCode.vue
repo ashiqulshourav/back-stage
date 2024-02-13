@@ -20,7 +20,7 @@ import { t } from '@/plugins/i18n';
 
 defineProps<
   MatchEventRowType & {
-    item: SattleDataAPI.ChildrenDataList;
+    item: SettleDataAPI.ChildrenDataList;
   }
 >();
 const emits = defineEmits(['teamChangeEvent']);

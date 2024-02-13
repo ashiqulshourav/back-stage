@@ -147,7 +147,7 @@ const {
 } = useBasketballDetailHook();
 const matchId = history.state.params.matchId;
 
-const NewEvent: SattleDataAPI.BasketballEvent = reactive({
+const NewEvent: SettleDataAPI.BasketballEvent = reactive({
   matchId: Number(matchId),
   eventTime: 0,
   t1: 0,

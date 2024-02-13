@@ -5,7 +5,7 @@ import { ElMessageBox } from 'element-plus';
 import { isNumber } from '@pureadmin/utils';
 
 export function useVolleballDetailHook() {
-  const dataList = reactive<SattleDataAPI.TennisEventsData[]>([]);
+  const dataList = reactive<SettleDataAPI.TennisEventsData[]>([]);
   const childloading = ref(true);
   const loading = ref(true);
   const expandMatchList = reactive<number[]>([]);
@@ -14,8 +14,8 @@ export function useVolleballDetailHook() {
   const canSettlement = ref(false);
   const boardType = ref('5-3');
   const juType = ref('LONG-SET');
-  const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
-    {} as SattleDataAPI.getSettlementDataList
+  const renderObj = reactive<SettleDataAPI.getSettlementDataList>(
+    {} as SettleDataAPI.getSettlementDataList
   );
 
   // - 初始化
@@ -39,7 +39,7 @@ export function useVolleballDetailHook() {
 
   //- 修改局类型
   const changeJuType = (
-    dataList: SattleDataAPI.InningEvent[],
+    dataList: SettleDataAPI.InningEvent[],
     type: string
   ) => {
     dataList.forEach(item => {
@@ -52,7 +52,7 @@ export function useVolleballDetailHook() {
     if (dataList.length > 0 && !dataList[dataList.length - 1].id) {
       return message(t('请先结算上一盘赛事'), { type: 'error' });
     }
-    const params: Partial<SattleDataAPI.TennisEventsData> = {
+    const params: Partial<SettleDataAPI.TennisEventsData> = {
       inningNum: 0,
       matchId: history.state.params.matchId,
       setNum: dataList.length + 1,
@@ -70,9 +70,9 @@ export function useVolleballDetailHook() {
           gameRule: juType.value,
           isEdit: false
         }
-      ] as SattleDataAPI.InningEvent[]
+      ] as SettleDataAPI.InningEvent[]
     };
-    dataList.push(params as SattleDataAPI.TennisEventsData);
+    dataList.push(params as SettleDataAPI.TennisEventsData);
   };
 
   //- 新增局

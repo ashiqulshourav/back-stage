@@ -1,4 +1,4 @@
-import { t } from '@/plugins/i18n'
+import { t } from '@/plugins/i18n';
 export const routerTranslate = () => {
   return [
     t('赛程管理'),
@@ -32,5 +32,6 @@ export const routerTranslate = () => {
     t('配置中心'),
     t('网球结算'),
     t('籃球结算'),
-  ]
-}
+    t('曲棍球结算')
+  ];
+};

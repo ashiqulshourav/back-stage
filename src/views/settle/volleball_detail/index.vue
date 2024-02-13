@@ -154,7 +154,7 @@ const { tableHeaderStyle } = usePublicHooks();
 
 //- 检测当前局结算状态
 const checkScore = computed(() => {
-  const l: SattleDataAPI.TennisEventsData = JSON.parse(
+  const l: SettleDataAPI.TennisEventsData = JSON.parse(
     JSON.stringify(dataList)
   )?.pop();
   if (!l || l.inningEvents.length < 6) {

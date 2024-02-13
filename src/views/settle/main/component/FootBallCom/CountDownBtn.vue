@@ -12,14 +12,14 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  row: SattleDataAPI.MatchEventsList;
-  parentRow: SattleDataAPI.getSettlementDataList;
+  row: SettleDataAPI.MatchEventsList;
+  parentRow: SettleDataAPI.getSettlementDataList;
 }>();
 
 //- 距离事件接受后剩余时间
 const BASE_TIME = 1000 * 60 * 5;
 
-const getTimeValue = (d: SattleDataAPI.MatchEventsList) => {
+const getTimeValue = (d: SettleDataAPI.MatchEventsList) => {
   const t = BASE_TIME - (d.t - new Date(d.createdAt).getTime());
   return Date.now() + t;
 };

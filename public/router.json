@@ -99,6 +99,14 @@
           "title": "籃球结算",
           "showLink": false
         }
+      },
+      {
+        "path": "/settle/hockey_detail",
+        "name": "SETTLE_HOCKEY_DETAIL",
+        "meta": {
+          "title": "曲棍球结算",
+          "showLink": false
+        }
       }
     ]
   },

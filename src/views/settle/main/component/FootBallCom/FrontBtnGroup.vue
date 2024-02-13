@@ -34,7 +34,7 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 
 defineProps<{
   size: any;
-  row: SattleDataAPI.MatchEventsList;
+  row: SettleDataAPI.MatchEventsList;
 }>();
 
 const emites = defineEmits(['editChild', 'handleChildrenData']);

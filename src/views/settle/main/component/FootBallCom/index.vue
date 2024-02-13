@@ -268,9 +268,9 @@ const tableRowClassName = ({ row }: MatchEventRowType) =>
   row.canceled === 1 ? 'pure-warning-row' : '';
 
 const teamChangeEvent = (
-  row: SattleDataAPI.MatchEventsList,
+  row: SettleDataAPI.MatchEventsList,
   childIndex: number,
-  childrenData: SattleDataAPI.MatchEventsList[],
+  childrenData: SettleDataAPI.MatchEventsList[],
   type: string
 ) => {
   if (!row.homeAway) return;

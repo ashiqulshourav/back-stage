@@ -25,7 +25,7 @@ import { t } from '@/plugins/i18n';
 
 defineProps<{
   balanceLoading: any;
-  parentRow: SattleDataAPI.getSettlementDataList;
+  parentRow: SettleDataAPI.getSettlementDataList;
   childDataTotal: number;
 }>();
 

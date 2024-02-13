@@ -23,8 +23,8 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 defineProps<{
-  row: SattleDataAPI.InningEvent;
-  list: SattleDataAPI.InningEvent[];
+  row: SettleDataAPI.InningEvent;
+  list: SettleDataAPI.InningEvent[];
   childIndex: number;
 }>();
 

@@ -18,7 +18,7 @@ const props = defineProps<{
   currentSportId: number;
 }>();
 
-const emites = defineEmits(['changeCurrentComponentName']);
+const emits = defineEmits(['changeCurrentComponentName']);
 
 const renderList = computed(() => {
   return SPORT_ID_MAP.filter(_ => _.value !== 4);
@@ -26,8 +26,8 @@ const renderList = computed(() => {
 
 const changeType = (_: { value: number; type: string }) => {
   if (_.value === props.currentSportId) return;
-  // emites('onSearch', 'reload', val);
-  emites('changeCurrentComponentName', _);
+  // emits('onSearch', 'reload', val);
+  emits('changeCurrentComponentName', _);
 };
 </script>
 
