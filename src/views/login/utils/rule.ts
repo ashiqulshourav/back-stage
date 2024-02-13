@@ -9,15 +9,13 @@ export const REGEXP_PWD =
 export const REGEXP_EMAIL = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
 
-/** 登录校验 */
+//- 登录校验 
 const loginRules = reactive(<FormRules>{
   username: [
     {
       validator: (_, value, callback) => {
         if (value === "") {
           callback(new Error(t("请输入用户名")));
-        } else if (!REGEXP_EMAIL.test(value)) {
-          callback(new Error(t("请输入电子邮件格式的用户名")));
         } else {
           callback();
         }
@@ -30,9 +28,9 @@ const loginRules = reactive(<FormRules>{
       validator: (_, value, callback) => {
         if (value === "") {
           callback(new Error(t("请输入密码")));
-        }/*  else if (!REGEXP_PWD.test(value)) {
-          callback(new Error(t("密码格式应为 8-18 位数字的任意组合")));
-        }  */else {
+        } /* else if (value !== '123456' && !REGEXP_PWD.test(value)) {
+          callback(new Error(t("密码格式应为 8-18 位数字的任意组合或初始密码")));
+        } */ else {
           callback();
         }
       },
