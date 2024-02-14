@@ -19,8 +19,43 @@ export function useMatchDetailsHook() {
   };
 
   //- 获取当前展开行结算列表
+  const checkSettleCapability = () => {
+    if (dataList[dataList?.length - 1]?.matchPeriod === 'OT') {
+      return false;
+    }
+    if (dataList?.length === 4 || (dataList?.length === 2 && dataList[0]?.gameRule === 'HT')) {
+      let diff = 0;
+      dataList.forEach((item) => {
+        diff += Number(item.t1) - Number(item.t2)
+      })
+      if (diff !== 0)
+        return false;
+    }
+    return true;
+  }
+
   const allSettleBtnClick = async () => {
-    console.log('123');
+    if (checkSettleCapability()) {
+      message(t('请先完成结算'), { type: 'error' });
+      return;
+    }
+    ElMessageBox.confirm(
+      t('⼿動確認比嚼算全場比賽後，即開始結算全場比賽玩法，結算後無法回退。'),
+      t('確認結算全場比賽'),
+      {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: t('確認結算'),
+        cancelButtonText: t('取消'),
+        center: true
+      }
+    ).then(async () => {
+      const res = await API.allBasketballSettlement({ matchId: history.state.params?.matchId });
+      if (res.code) {
+        message(res.msg, { type: 'error' });
+      } else {
+        onSearch();
+      }
+    });
   };
 
   const getCurrentMatchDetail = async () => {
@@ -47,7 +82,7 @@ export function useMatchDetailsHook() {
     return true;
   }
   const timeValidation = (NewGoalEvent: SattleDataAPI.BasketballEvent) => {
-    if (!NewGoalEvent.eventTime || NewGoalEvent.eventTime < dataList[0]?.eventTime) {
+    if (!NewGoalEvent.eventTime || NewGoalEvent.eventTime <= dataList[dataList.length - 1]?.eventTime) {
       message('无效时间', { type: 'error' });  
       return false;
     }
@@ -80,6 +115,7 @@ export function useMatchDetailsHook() {
               t1: NewGoalEvent.t1 as number,
               t2: NewGoalEvent.t2 as number,
               matchPeriod: NewGoalEvent.matchPeriod,
+              gameRule: NewGoalEvent.gameRule,
               canceled: 0,
             });
           if (res.code) message(res.msg, { type: 'error' });
