@@ -35,5 +35,6 @@ export const routerTranslate = () => {
     t('台球结算'),
     t('排球结算'),
     t('曲棍球结算')
+    t('DP体育总控后台'),
   ];
 };

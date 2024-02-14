@@ -97,13 +97,7 @@ export function useTennisDetailHook() {
   //- 新增局
   const addChildRow = (parentRow: SattleDataAPI.TennisEventsData) => {
     const noEmpty = parentRow.inningEvents.every(item => {
-      return (
-        item.t1 !== '' &&
-        item.t2 !== '' &&
-        item.t1 !== item.t2 &&
-        item.eventTime &&
-        !item.isEdit
-      );
+      return item.t1 !== '' && item.t2 !== '' && item.eventTime && !item.isEdit;
     });
 
     if (!noEmpty)
