@@ -59,14 +59,14 @@ export function useMatchDetailsHook() {
   };
 
   const getCurrentMatchDetail = async () => {
-    const res = await API.getSettlementList({
+    const res = await API.getPreSaleInfo({
       matchId: history.state.params?.matchId
     });
     if (res.code) return message(res.msg, { type: 'error' });
-    Object.assign(renderObj, res.data.list[0]);
+    Object.assign(renderObj, res.data);
   };
 
-  const scoreValidation = (NewGoalEvent: SattleDataAPI.BasketballEvent) => {
+  const scoreValidation = (NewGoalEvent: SattleDataAPI.MatchEventParams) => {
     const { t1, t2, matchPeriod } = NewGoalEvent;
     switch (history.state.params?.sportId) {
       case 2: 
@@ -81,14 +81,14 @@ export function useMatchDetailsHook() {
     }
     return true;
   }
-  const timeValidation = (NewGoalEvent: SattleDataAPI.BasketballEvent) => {
+  const timeValidation = (NewGoalEvent: SattleDataAPI.MatchEventParams) => {
     if (!NewGoalEvent.eventTime || NewGoalEvent.eventTime <= dataList[dataList.length - 1]?.eventTime) {
       message('无效时间', { type: 'error' });  
       return false;
     }
     return true;
   }
-  const onAddNewGoalEvent = (NewGoalEvent: SattleDataAPI.BasketballEvent) => {
+  const onAddNewGoalEvent = (NewGoalEvent: SattleDataAPI.MatchEventParams) => {
     if (scoreValidation(NewGoalEvent) && timeValidation(NewGoalEvent)) {
       ElMessageBox.confirm(
         `<p class='text-center'>${history.state.params?.homeTeamNameCn || '-'} VS ${
@@ -110,13 +110,7 @@ export function useMatchDetailsHook() {
         .then(async () => {
           const res: MetadataAPI.AddBasketballEeventRes =
             await API.addBasketballEvent({
-              matchId: NewGoalEvent.matchId,
-              eventTime: NewGoalEvent.eventTime,
-              t1: NewGoalEvent.t1 as number,
-              t2: NewGoalEvent.t2 as number,
-              matchPeriod: NewGoalEvent.matchPeriod,
-              gameRule: NewGoalEvent.gameRule,
-              canceled: 0,
+              ...NewGoalEvent
             });
           if (res.code) message(res.msg, { type: 'error' });
           else {

@@ -150,7 +150,7 @@ const checkNoMore = () => {
   if (gameRule.value === 'INNING' && props.dataList.length > 4) return false;
   return true;
 }
-const NewGoalEvent: SattleDataAPI.BasketballEvent = reactive({
+const NewGoalEvent: SattleDataAPI.MatchEventParams = reactive({
   matchId: history.state.params?.matchId,
   t1: 0 as number,
   t2: 0 as number,

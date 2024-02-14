@@ -2,7 +2,7 @@ import { http } from "@/utils/http";
 
 export const sattleData = {
   getSettlementList: (data: SattleDataAPI.getSettlementListPrams) => http.request<SattleDataAPI.getSettlementListRes>("post", "/match/v1/getSettlementList", { data }),
-
+  
   //- 体育结算历史
   getSettlementHistory: (data: SattleDataAPI.getSettlementHistoryParams) => http.request<SattleDataAPI.getSettlementListRes>("post", "/match/v1/getSettlementHistory", { data }),
 
