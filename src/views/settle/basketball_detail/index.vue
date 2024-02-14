@@ -75,7 +75,9 @@
               :placeholder="t('请选择当前录入时间')"
               :disabled="!isEdit"
               value-format="x"
+              hover="none"
               :default-value="dayjs().startOf('day').toDate()"
+              class="custom-time-picker"
               format="HH:mm:ss"
             />
             <span v-else>{{ dayjs((dayjs(row.eventTime).diff(dayjs(currentMatch.beginTime) + 28800000))).format('HH:mm:ss') }}</span>
@@ -190,5 +192,11 @@ onMounted(() => {
 <style scoped>
 .custom-switch .el-switch__core {
   width: 500px;
+}
+.custom-time-picker {
+  width: 100px;
+}
+.custom-time-picker:hover {
+  display: none;
 }
 </style>

@@ -1,6 +1,6 @@
 import { MATCH_PERIOD } from '@/utils/maps/sports_map';
 import dayjs from 'dayjs';
-const truncateString = (str: string) => {
+const truncateString = (str: string = '') => {
   if (str.length > 10) {
     return str.substring(0, 10) + '...';
   }
@@ -20,7 +20,7 @@ export const columns: TableColumnList = [
     }
   },
   {
-    label: truncateString(history.state.params.homeTeamNameCn ? history.state.params.homeTeamNameCn : history.state.params.homeTeamNameEn),
+    label: truncateString(history.state.params?.homeTeamNameCn ? history.state.params?.homeTeamNameCn : history.state.params?.homeTeamNameEn),
     minWidth: 100,
     prop: 't1',
     slot: 't1',
@@ -30,7 +30,7 @@ export const columns: TableColumnList = [
     },
   },
   {
-    label: truncateString(history.state.params.awayTeamNameCn ? history.state.params.awayTeamNameCn : history.state.params.awayTeamNameEn),
+    label: truncateString(history.state.params?.awayTeamNameCn ? history.state.params?.awayTeamNameCn : history.state.params?.awayTeamNameEn),
     prop: 't2',
     slot: 't2',
     headerRenderer: () => {
