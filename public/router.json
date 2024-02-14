@@ -99,6 +99,30 @@
           "title": "籃球结算",
           "showLink": false
         }
+      },
+      {
+        "path": "/settle/handball_detail",
+        "name": "SETTLE_HANDBALL_DETAIL",
+        "meta": {
+          "title": "手球结算",
+          "showLink": false
+        }
+      },
+      {
+        "path": "/settle/iceHockey_detail",
+        "name": "SETTLE_ICEHOCKEY_DETAIL",
+        "meta": {
+          "title": "冰球结算",
+          "showLink": false
+        }
+      },
+      {
+        "path": "/settle/cricket_detail",
+        "name": "SETTLE_CRICKET_DETAIL",
+        "meta": {
+          "title": "板球结算",
+          "showLink": false
+        }
       }
     ]
   },

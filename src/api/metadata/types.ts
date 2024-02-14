@@ -87,6 +87,16 @@ declare namespace MetadataAPI {
     ts: number;
   }
 
+  type AddSportEventRes = {
+    code: number;
+    msg: string;
+    data?: TeamListData;
+    failure?: boolean;
+    success?: boolean;
+    ts: number;
+  };
+
+
   type PlayerList = {
     birthday: string;
     countryId: number;
