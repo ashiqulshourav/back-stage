@@ -84,6 +84,8 @@ declare namespace MetadataAPI {
     ts: number;
   }
 
+  type AddHockeyEventRes = AddBasketballEeventRes;
+
   type PlayerList = {
     birthday: string;
     countryId: number;

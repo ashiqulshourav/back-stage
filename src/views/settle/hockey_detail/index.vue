@@ -2,30 +2,11 @@
   <div class="main">
     <!-- -盘口详情 -->
 
-    <DetiltTitle
+    <DetailTitle
       :renderObj="currentMatch"
       @allSettleBtnClick="allSettleBtnClick"
     />
-    <!-- Switch Match Period Type -->
-    <template v-if="dataList.length === 0" class="p-3">
-      <h3 class="text-sm mt-8">赛制</h3>
-      <div class="flex mt-4">
-        <el-button
-          @click="isFourRound = true"
-          size="small"
-          :type="isFourRound ? 'primary' : ''"
-        >
-          {{t('四节制')}}  
-        </el-button>
-        <el-button
-          @click="isFourRound = false"
-          size="small"
-          :type="!isFourRound ? 'primary' : ''"
-        >
-          {{t('两节制')}}  
-        </el-button>
-      </div>
-    </template>
+  
     <PureTableBar
       :title="t('賽果結算')"
       :columns="columns"
@@ -100,7 +81,7 @@
         </pure-table>
       </template>
     </PureTableBar>
-    <template v-if="currentMatch.fullSettlementStatus !== 1 && !isEdit && ((isFourRound && dataList.length < 4) || (!isFourRound && dataList.length < 2)) ">
+    <template v-if="currentMatch.fullSettlementStatus !== 1 && !isEdit && dataList.length < 4">
       <el-button
         type="primary" 
         class="mt-3 px-24"
@@ -125,7 +106,7 @@
 import { onMounted } from 'vue';
 import { usePublicHooks } from '@/hooks';
 import { PureTableBar } from '@/components/RePureTableBar';
-import DetiltTitle from './component/DetailTitle.vue';
+import DetailTitle from './component/DetailTitle.vue';
 import { useHockeyDetailHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import { MATCH_PERIOD } from '@/utils/maps/sports_map';
@@ -141,13 +122,12 @@ const {
   dataList,
   currentMatch,
   isEdit,
-  isFourRound,
   allSettleBtnClick,
   setNewHockeyEvent
 } = useHockeyDetailHook();
 const matchId = history.state.params.matchId;
 
-const NewEvent: SettleDataAPI.BasketballEvent = reactive({
+const NewEvent: SettleDataAPI.HockeyEventData = reactive({
   matchId: Number(matchId),
   eventTime: 0,
   t1: 0,
@@ -159,29 +139,18 @@ const renderData = computed(() => {
 
 const setNewEventEdit = () => {
   isEdit.value = true;
-  if (isFourRound.value) {
-    if (dataList.length >= 4) {
-      NewEvent.matchPeriod = 'OT';
-    } else {
-      NewEvent.matchPeriod = `Q${dataList.length + 1}`;
-    }
+
+  if (dataList.length >= 4) {
+    NewEvent.matchPeriod = 'OT';
   } else {
-    switch (dataList.length) {
-      case 0:
-        NewEvent.matchPeriod = 'HT';
-        break;
-      case 1:
-        NewEvent.matchPeriod = 'FT';
-        break;
-      default:
-        NewEvent.matchPeriod = 'OT';
-    }
+    NewEvent.matchPeriod = `Q${dataList.length + 1}`;
   }
 };
 
 const handleNewEvent = async () => {
   setNewHockeyEvent(NewEvent);
 };
+
 onMounted(() => {
   onSearch();
 });

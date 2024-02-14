@@ -25,16 +25,14 @@ declare namespace COMMON {
     msg: string;
     ts?: number;
     data: T;
-  }
+  };
 
   type ListFetchProps = {
     pageSize: number;
     pageNum: number;
-  }
-
- 
+  };
 
   type FormProps<T = any> = {
     formInline: T;
-  }
+  };
 }

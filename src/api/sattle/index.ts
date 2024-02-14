@@ -30,6 +30,13 @@ export const sattleData = {
       { data }
     ),
 
+  getHockeyEvents: (data: { matchId: number }) =>
+    http.request<SettleDataAPI.getHockeyEventRes>(
+      'post',
+      '/hockey/v1/getHockeyEvents',
+      { data }
+    ),
+
   addMatchEvent: (data: SettleDataAPI.MatchEventParams) =>
     http.request<MetadataAPI.TeamListRes>('post', '/event/v1/addMatchEvent', {
       data
@@ -42,10 +49,24 @@ export const sattleData = {
       { data }
     ),
 
+  addHockeyEvent: (data: SettleDataAPI.MatchEventParams) =>
+    http.request<MetadataAPI.AddHockeyEventRes>(
+      'post',
+      '/hockey/v1/addHockeyEvent',
+      { data }
+    ),
+
   allBasketballSettlement: (data: { matchId: number }) =>
     http.request<MetadataAPI.AddBasketballEeventRes>(
       'post',
       '/basketball/v1/manualSettlementFullTime',
+      { data }
+    ),
+
+  allHockeySettlement: (data: { matchId: number }) =>
+    http.request<MetadataAPI.AddHockeyEventRes>(
+      'post',
+      '/hockey/v1/manualSettlementFullTime',
       { data }
     ),
 
@@ -145,14 +166,6 @@ export const sattleData = {
     http.request<SettleDataAPI.getVolleyballEventsResType>(
       'post',
       '/volleyball/v1/getVolleyballEvents',
-      { data }
-    ),
-
-  //-排球全场结算（按盘）
-  manualSettlementFullTime: (data: { matchId: number }) =>
-    http.request<SettleDataAPI.manualSettlementFullTimeRestType>(
-      'post',
-      '/tennis/v1/manualSettlementFullTime',
       { data }
     ),
 

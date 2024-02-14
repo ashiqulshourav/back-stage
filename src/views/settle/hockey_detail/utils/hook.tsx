@@ -4,44 +4,39 @@ import { MATCH_PERIOD } from '@/utils/maps/sports_map';
 import { message } from '@/utils/message';
 
 export function useHockeyDetailHook() {
-  const dataList = reactive<SettleDataAPI.BasketballEvent[]>([]);
+  const dataList = reactive<SettleDataAPI.HockeyEventData[]>([]);
   const currentMatch = reactive<SettleDataAPI.getSettlementDataList>(
     {} as SettleDataAPI.getSettlementDataList
   );
 
-  const isFourRound = ref(true);
   const matchId = ref(history.state.params.matchId);
   const isEdit = ref(false);
   const timestamps = ref(0);
 
   const onSearch = async () => {
     getCurrentMatchDetail();
-    const res: SettleDataAPI.getBasketballEventRes =
-      await API.getBasketballEvents({ matchId: matchId.value });
+    const res: SettleDataAPI.getHockeyEventRes = await API.getHockeyEvents({
+      matchId: matchId.value
+    });
+
+    // seed some mock data
+
     if (!res.code) {
       dataList.length = 0;
       dataList.push(...res.data);
-      isFourRound.value =
-        dataList.length && dataList[0]?.gameRule === 'INNING'
-          ? true
-          : dataList[0]?.gameRule === 'HT'
-          ? false
-          : isFourRound.value;
     }
   };
 
   //- 获取当前展开行结算列表
-
   const getCurrentMatchDetail = async () => {
     const res: SettleDataAPI.getSettlementListRes = await API.getSettlementList(
       { matchId: matchId.value }
     );
-    if (!res.code) {
-      Object.assign(currentMatch, res.data.list[0]);
-    }
+
+    if (!res.code) Object.assign(currentMatch, res.data.list[0]);
   };
 
-  const validation = (NewEvent: SettleDataAPI.BasketballEvent) => {
+  const validation = (NewEvent: SettleDataAPI.HockeyEventData) => {
     if (
       !NewEvent.eventTime ||
       NewEvent.eventTime <= dataList[dataList.length - 1]?.eventTime
@@ -58,31 +53,18 @@ export function useHockeyDetailHook() {
       message(t('无效值'), { type: 'error' });
       return false;
     }
-    /*   if (
-      NewEvent.t1 < dataList[dataList.length - 1]?.t1 ||
-      NewEvent.t2 < dataList[dataList.length - 1]?.t2
-    ) {
-      message(t('无效值'), { type: 'error' });
-      return false;
-    } */
-    /*    if (NewEvent.t1 === NewEvent.t2) {
-      if (
-        (isFourRound.value && dataList.length === 4) ||
-        (!isFourRound.value && dataList.length === 2)
-      ) {
-        message(t('无效值'), { type: 'error' });
-        return false;
-      }
-    } */
+
     return true;
   };
+
   const getCorrectTime = (tmp: number | string | Date) => {
     const day = new Date(tmp);
     day.setFullYear(1970, 0, 1);
     const currenTime = new Date(currentMatch.beginTime);
     return currenTime.getTime() + day.getTime() + 28800000;
   };
-  const setNewHockeyEvent = async (NewEvent: SettleDataAPI.BasketballEvent) => {
+
+  const setNewHockeyEvent = async (NewEvent: SettleDataAPI.HockeyEventData) => {
     NewEvent.eventTime = getCorrectTime(timestamps.value);
     console.log(dayjs(NewEvent.eventTime).format('YYYY-MM-DD HH:mm:ss'));
     if (validation(NewEvent)) {
@@ -104,16 +86,15 @@ export function useHockeyDetailHook() {
         }
       )
         .then(async () => {
-          const res: MetadataAPI.AddBasketballEeventRes =
-            await API.addBasketballEvent({
-              matchId: NewEvent.matchId,
-              eventTime: NewEvent.eventTime,
-              t1: Number(NewEvent.t1),
-              t2: Number(Number(NewEvent.t2)),
-              matchPeriod: NewEvent.matchPeriod,
-              canceled: 0,
-              gameRule: isFourRound.value ? 'INNING' : 'HT'
-            });
+          const res: MetadataAPI.AddHockeyEventRes = await API.addHockeyEvent({
+            matchId: NewEvent.matchId,
+            eventTime: NewEvent.eventTime,
+            t1: Number(NewEvent.t1),
+            t2: Number(Number(NewEvent.t2)),
+            matchPeriod: NewEvent.matchPeriod,
+            canceled: 0
+          });
+
           if (res.code) message(res.msg, { type: 'error' });
           else {
             isEdit.value = false;
@@ -128,11 +109,11 @@ export function useHockeyDetailHook() {
         });
     }
   };
+
   const allSettleBtnClick = () => {
     if (
       dataList[dataList.length - 1]?.t1 === dataList[dataList.length - 1]?.t2 ||
-      (isFourRound.value && dataList.length < 4) ||
-      (!isFourRound.value && dataList.length < 2)
+      dataList.length < 4
     ) {
       message(t('请先完成结算'), { type: 'error' });
       return;
@@ -147,7 +128,7 @@ export function useHockeyDetailHook() {
         center: true
       }
     ).then(async () => {
-      const res = await API.allBasketballSettlement({ matchId: matchId.value });
+      const res = await API.allHockeySettlement({ matchId: matchId.value });
       if (res.code) {
         message(res.msg, { type: 'error' });
       } else {
@@ -155,10 +136,10 @@ export function useHockeyDetailHook() {
       }
     });
   };
+
   return {
     onSearch,
     isEdit,
-    isFourRound,
     columns,
     dataList,
     currentMatch,

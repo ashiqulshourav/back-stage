@@ -33,28 +33,6 @@ declare namespace SettleDataAPI {
     isSettleStatus: boolean;
     isShowCount: boolean;
   };
-  type BasketballEvent = {
-    awayTeamId?: number;
-    canceled?: number | boolean;
-    createdAt?: number;
-    eventTime?: string | number | Date;
-    homeTeamId?: number;
-    eventCode?: string | number;
-    extraInfo?: string;
-    homeAway?: string;
-    id?: number;
-    matchId?: number;
-    matchPeriod?: string;
-    settleTimes?: number;
-    settleType?: number;
-    sourceType?: number;
-    t1?: number | string;
-    t2?: number | string;
-    updatedAt?: number;
-    updatedBy?: number;
-    uuid?: string;
-    gameRule?: 'INNING' | 'HT';
-  };
 
   type MatchEventParams = {
     canceled?: number;
@@ -164,57 +142,51 @@ declare namespace SettleDataAPI {
     inningEvents?: any[];
   };
 
-  type TennisEventsData = {
-    id: number;
-    uuid: string;
-    matchId: number;
-    canceled: number;
-    eventTime: number | string;
-    homeTeamId: number;
-    awayTeamId: number;
+  type CommonEventData = {
+    id?: number;
+    uuid?: string;
+    matchId?: number;
+    canceled?: number | boolean;
+    eventTime?: number | string | Date;
+    homeTeamId?: number;
+    awayTeamId?: number;
+    t1?: number | string;
+    t2?: number | string;
+    sourceType?: number;
+    settleTimes?: number;
+    settleType?: number;
+    gameRule?: string;
+    createdBy?: string;
+    updatedBy?: string;
+    createdAt?: string;
+    updatedAt?: string;
+  };
+
+  type BasketballEvent = CommonEventData & {
+    eventCode?: string | number;
+    extraInfo?: string;
+    homeAway?: string;
+    matchPeriod?: string;
+  };
+
+  type TennisEventsData = CommonEventData & {
     inningNum: number;
     setNum: number;
-    t1: number;
-    t2: number;
-    sourceType: number;
-    settleTimes: number;
-    settleType: number;
-    createdBy: string;
-    updatedBy: string;
-    createdAt: string;
-    updatedAt: string;
-    gameRule: string;
     inningEvents: InningEvent[];
     loading?: boolean;
   };
 
-  type SnookerEventsResData = {
-    id: number;
-    uuid: string;
-    matchId: number;
-    canceled: number;
-    eventTime: number | string;
-    homeTeamId: number;
-    awayTeamId: number;
+  type SnookerEventsResData = CommonEventData & {
     inningNum: number;
-    gameRule: string;
-    t1: number | string;
-    t2: number | string;
-    sourceType: number;
-    settleTimes: number;
-    settleType: number;
-    createdBy: string;
-    updatedBy: string;
-    createdAt: string;
-    updatedAt: string;
     homeTeamName?: any;
     awayTeamName?: any;
     isEdit?: boolean;
-  }
+  };
 
   type volleyballData = SnookerEventsResData;
+  type HockeyEventData = CommonEventData & { matchPeriod?: string };
 
-  type getSettlementListRes = COMMON.BASE_RES_TYPE<getSettlementDataListRes>
+  type getSettlementListRes = COMMON.BASE_RES_TYPE<getSettlementDataListRes>;
   type getTennisEventsResType = COMMON.BASE_RES_TYPE<TennisEventsData[]>;
   type addTennisEventResType = COMMON.BASE_RES_TYPE<any>;
   type getSnookerEventsResType = COMMON.BASE_RES_TYPE<SnookerEventsResData[]>;
@@ -222,6 +194,7 @@ declare namespace SettleDataAPI {
   type manualSettlementFullTimeRestType = COMMON.BASE_RES_TYPE<any>;
   type preSaleInfoResType = COMMON.BASE_RES_TYPE<getSettlementDataList>;
   type getBasketballEventRes = COMMON.BASE_RES_TYPE<BasketballEvent[]>;
+  type getHockeyEventRes = COMMON.BASE_RES_TYPE<HockeyEventData[]>;
   type getMatchEventsRes = COMMON.BASE_RES_TYPE<MatchEventsList[]>;
 
   type getSettlementHistoryParams = {
@@ -255,7 +228,7 @@ declare namespace SettleDataAPI {
     matchId: number;
     t1: number;
     t2: number;
-  }
+  };
   type SnookerEventReq = {
     eventTime: number | string;
     matchId: number;
@@ -263,8 +236,7 @@ declare namespace SettleDataAPI {
     t1: number | string;
     t2: number | string;
     gameRule: string;
-
-  }
+  };
 
   type getSettlementListPrams = {
     isSale?: number;
