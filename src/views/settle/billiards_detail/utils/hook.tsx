@@ -4,136 +4,54 @@ import { columns } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
 
 export function useBilliardsHook() {
-  const dataList = reactive<SattleDataAPI.TennisEventsData[]>([]);
-  const childloading = ref(true);
+  const dataList = reactive<SattleDataAPI.SnookerEventsResData[]>([]);
   const allSettleLoading = ref(false);
   const loading = ref(true);
-  const expandMatchList = reactive<number[]>([]);
-  const t1Score = ref(0);
-  const t2Score = ref(0);
-  const canSettlement = ref(false);
-  const boardType = ref('5-3');
-  const juType = ref('LONG-SET');
+  const boardType = ref('INNING');
   const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
     {} as SattleDataAPI.getSettlementDataList
   );
 
-  //- 展开关闭局列表
-  const expandChange = (
-    row: SattleDataAPI.TennisEventsData,
-    list: SattleDataAPI.TennisEventsData[]
-  ) => {
-    if (list.length) {
-      if (!expandMatchList.includes(row.setNum)) {
-        expandMatchList.push(row.setNum);
-      }
-    } else {
-      expandMatchList.length = 0;
-    }
-  };
-
   // - 初始化
   const onSearch = async () => {
-    const res = await API.getTennisEvents({
+    const res = await API.getSnookerEvents({
       matchId: history.state.params.matchId
     });
-    childloading.value = false;
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
     dataList.length = 0;
     dataList.push(...res.data);
   };
 
-  //- 修改盘类型
-  const changeBoardType = (type: string) => {
-    dataList.forEach(item => {
-      if (!item.id) item.gameRule = type;
-    });
-  };
-
-  //- 修改局类型
-  const changeJuType = (
-    dataList: SattleDataAPI.InningEvent[],
-    type: string
-  ) => {
-    dataList.forEach(item => {
-      if (!item.id) item.gameRule = type;
-    });
-  };
-
-  //- 新增盘
-  const addEventRow = () => {
-    if (dataList.length > 0 && !dataList[dataList.length - 1].id) {
-      return message(t('请先结算上一盘赛事'), { type: 'error' });
-    }
-    const params: Partial<SattleDataAPI.TennisEventsData> = {
-      inningNum: 0,
-      matchId: history.state.params.matchId,
-      setNum: dataList.length + 1,
-      gameRule: boardType.value,
-      loading: false,
-      t1: 0,
-      t2: 0,
-      inningEvents: [
-        {
-          inningNum: 1,
-          matchId: history.state.params.matchId,
-          setNum: dataList.length + 1,
-          t1: '',
-          t2: '',
-          //todo eventTime: '',
-          eventTime:
-            dataList.length === 0
-              ? Date.now()
-              : +dataList[dataList.length - 1].eventTime + 1000 * 60,
-          gameRule: juType.value,
-          isEdit: false
-        }
-      ] as SattleDataAPI.InningEvent[]
-    };
-    dataList.push(params as SattleDataAPI.TennisEventsData);
-  };
-
   //- 新增局
-  const addChildRow = (parentRow: SattleDataAPI.TennisEventsData) => {
-    const noEmpty = parentRow.inningEvents.every(item => {
+  const addEventRow = () => {
+    const noEmpty = dataList.every(item => {
       return (
-        item.t1 !== '' &&
-        item.t2 !== '' &&
+        item.t1.toString() !== '' &&
+        item.t2.toString() !== '' &&
         item.t1 !== item.t2 &&
         item.eventTime &&
         !item.isEdit
       );
     });
+    if (!noEmpty || (dataList.length > 0 && !dataList[dataList.length - 1].id))
+      return message(t('请先结算之前的局赛事'), { type: 'error' });
 
-    if (!noEmpty)
-      return message(t('请先完成并保存之前的事件'), { type: 'error' });
-
-    const params = {
-      inningNum: parentRow.inningEvents.length + 1,
+    const params: Partial<SattleDataAPI.SnookerEventsResData> = {
+      eventTime: '',
       matchId: history.state.params.matchId,
-      setNum: parentRow.setNum,
-      gameRule: juType.value,
+      inningNum: dataList.length + 1,
+      gameRule: boardType.value,
+      isEdit: false,
       t1: '',
-      t2: '',
-      // eventTime: '',
-      eventTime:
-        parentRow.inningEvents.length === 0
-          ? +dataList[dataList.length - 1].eventTime + 1000 * 60
-          : +parentRow.inningEvents[parentRow.inningEvents.length - 1]
-              .eventTime +
-            1000 * 60,
-      isEdit: false
-    } as SattleDataAPI.InningEvent;
-    parentRow.inningEvents.push(params);
+      t2: ''
+    };
+    dataList.push(params as SattleDataAPI.SnookerEventsResData);
   };
 
-  //- 结算盘事件
-  const settlementHandicap = async (
-    parentRow: SattleDataAPI.TennisEventsData
-  ) => {
-    const { eventTime, t1, t2 } =
-      parentRow.inningEvents[parentRow.inningEvents.length - 1];
+  //- 结算局事件
+  const settlementHandicap = async (row: SattleDataAPI.TennisEventsData) => {
+    const { eventTime, t1, t2 } = row;
 
     if (!eventTime || !t1 || !t2) {
       return message(t('请先完成并保存事件'), { type: 'error' });
@@ -151,11 +69,11 @@ export function useBilliardsHook() {
               history.state.params.awayTeamNameCn ?? '_'
             }</span>
          </div>
-          <div>${t1Score.value}${t('局')} ： ${t2Score.value}${t('局')}</div>
+          <div>${t1} ： ${t2}</div>
           <div>${t('手动结算后无法回退，请再次确定结果')}</div>
       </div>
       `,
-      `${t('结算第')}${parentRow.setNum}${t('盘')}`,
+      `${t('结算第')}${row.inningNum}${t('局')}`,
       {
         dangerouslyUseHTMLString: true,
         confirmButtonText: t('确认结算'),
@@ -163,28 +81,22 @@ export function useBilliardsHook() {
         center: true
       }
     ).then(async () => {
-      const inningEvents = parentRow.inningEvents.map(item => {
-        delete item['isEdit'];
-        return item;
-      });
-      parentRow.loading = true;
+      loading.value = true;
       const params = {
         eventTime,
-        inningEvents,
-        t1: t1Score.value,
-        t2: t2Score.value,
-        gameRule: parentRow.gameRule,
-        inningNum: 0,
-        setNum: parentRow.setNum,
-        matchId: history.state.params.matchId
+        t1: row.t1,
+        t2: row.t2,
+        gameRule: boardType.value,
+        matchId: history.state.params.matchId,
+        inningNum: row.inningNum
       };
       try {
-        const res = await API.addTennisEvent(params);
+        const res = await API.addSnookerEvent(params);
         if (res.code) return message(res.msg, { type: 'error' });
-        parentRow.loading = false;
+        loading.value = false;
         onSearch();
       } catch (error) {
-        parentRow.loading = false;
+        loading.value = false;
       }
     });
   };
@@ -219,7 +131,7 @@ export function useBilliardsHook() {
     ).then(async () => {
       try {
         allSettleLoading.value = true;
-        const res = await API.manualSettlementFullTime({
+        const res = await API.snookerManualSettlementFullTime({
           matchId: history.state.params.matchId
         });
         allSettleLoading.value = false;
@@ -250,21 +162,10 @@ export function useBilliardsHook() {
     loading,
     columns,
     dataList,
-    expandMatchList,
-    childloading,
     addEventRow,
-    addChildRow,
     settlementHandicap,
-    t1Score,
-    t2Score,
-    canSettlement,
     allSettleBtnClick,
     renderObj,
-    boardType,
-    juType,
-    changeBoardType,
-    changeJuType,
-    expandChange,
     allSettleLoading
   };
 }
