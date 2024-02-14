@@ -42,7 +42,7 @@
       >
         <el-option :label="t('滚球')" value="nover" />
         <el-option :label="t('比赛结束')" value="over" />
-        <!-- <el-option :label="t('未开始')" value="nobegin" /> -->
+        <el-option :label="t('未开始')" value="nobegin" />
       </el-select>
     </el-form-item>
 

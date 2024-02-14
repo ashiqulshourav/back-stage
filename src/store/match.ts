@@ -7,7 +7,8 @@ export const useMatchStore = defineStore('MATCHSTATE', {
     sportLeagueList: [],
     esportLeagueList: [],
     countryList: [],
-    settleRequestLoading: false //- 结算页面searchLoading
+    sportId: 1,
+    settleRequestLoading: false   //- 结算页面searchLoading
   }),
   actions: {
     //- 设置联赛供搜索使用 体育 + 电子竞技
@@ -42,6 +43,9 @@ export const useMatchStore = defineStore('MATCHSTATE', {
     },
     set_settleRequestLoading(_: boolean) {
       this.settleRequestLoading = _;
+    },
+    set_currentSportId(id: number) {
+      this.sportId = id;
     }
   },
   persist: {

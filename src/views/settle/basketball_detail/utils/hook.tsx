@@ -96,7 +96,7 @@ export function useBasketballDetailHook() {
         }</p>
           ⼿動結算後無法回退，請再次確認比分</p>
           `,
-        `結算第${MATCH_PERIOD[NewEvent.matchPeriod]}節`,
+        `結算${MATCH_PERIOD[NewEvent.matchPeriod]}`,
         {
           dangerouslyUseHTMLString: true,
           confirmButtonText: t('確認結算'),
@@ -129,7 +129,8 @@ export function useBasketballDetailHook() {
         });
     }
   };
-  const allSettleBtnClick = () => {
+  const allSettleBtnClick = async () => {
+    console.log('123');
     if (
       dataList[dataList.length - 1]?.t1 === dataList[dataList.length - 1]?.t2 ||
       (isFourRound.value && dataList.length < 4) ||

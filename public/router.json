@@ -101,6 +101,14 @@
         }
       },
       {
+        "path": "/settle/settleDetails",
+        "name": "SETTLE_DETAILS",
+        "meta": {
+          "title": "结算管理",
+          "showLink": false
+        }
+      },
+      {
         "path": "/settle/handball_detail",
         "name": "SETTLE_HANDBALL_DETAIL",
         "meta": {

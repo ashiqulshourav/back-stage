@@ -34,5 +34,6 @@ export const routerTranslate = () => {
     t('籃球结算'),
     t('台球结算'),
     t('排球结算'),
+    t('DP体育总控后台'),
   ]
 }
