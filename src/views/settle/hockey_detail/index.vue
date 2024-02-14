@@ -127,7 +127,7 @@ const {
 } = useHockeyDetailHook();
 const matchId = history.state.params.matchId;
 
-const NewEvent: SettleDataAPI.HockeyEventData = reactive({
+const NewEvent: SattleDataAPI.HockeyEventData = reactive({
   matchId: Number(matchId),
   eventTime: 0,
   t1: 0,

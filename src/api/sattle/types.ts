@@ -1,4 +1,4 @@
-declare namespace SettleDataAPI {
+declare namespace SattleDataAPI {
   type MatchEventsList = {
     canceled?: number | boolean;
     dataSourceCode?: string;

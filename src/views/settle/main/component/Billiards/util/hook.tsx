@@ -6,7 +6,7 @@ import { SPORT_TYPE, SearchFormType } from '../../../utils/type';
 import { useMatchStore } from '@/store/match';
 
 export function useBilliardsHook() {
-  const dataList = reactive<SettleDataAPI.getSettlementDataList[]>([]);
+  const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const matchStore = useMatchStore();
   const form = ref<SearchFormType>({} as SearchFormType);
   const pagination = reactive<PaginationProps>({
@@ -31,7 +31,7 @@ export function useBilliardsHook() {
       if (type === 'reload') pagination.currentPage = 1;
       const data = removeEmptyStringKeys(form.value ?? {});
       matchStore.set_settleRequestLoading(true);
-      const res: SettleDataAPI.getSettlementListRes =
+      const res: SattleDataAPI.getSettlementListRes =
         await API.getSettlementList({
           ...data,
           pageSize: pagination.pageSize,

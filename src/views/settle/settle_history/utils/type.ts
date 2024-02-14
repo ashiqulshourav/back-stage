@@ -36,11 +36,11 @@ export enum MatchEventType {
 }
 
 export type parentRowType = {
-  row: SettleDataAPI.getSettlementDataList;
+  row: SattleDataAPI.getSettlementDataList;
   index?: number;
 };
 
 export type MatchEventRowType = {
-  row: SettleDataAPI.MatchEventsList;
+  row: SattleDataAPI.MatchEventsList;
   index?: number;
 };

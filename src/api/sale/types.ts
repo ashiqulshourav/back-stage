@@ -35,7 +35,7 @@ declare namespace SaleDataAPI {
   type ChildrenDataList = {
     type: string;
     key: string;
-    tableList: SettleDataAPI.MatchEventsList[];
+    tableList: SattleDataAPI.MatchEventsList[];
   };
 
   type PreSaleListData = {

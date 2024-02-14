@@ -4,12 +4,12 @@ import { columns } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
 
 export function useBilliardsHook() {
-  const dataList = reactive<SettleDataAPI.volleyballData[]>([]);
+  const dataList = reactive<SattleDataAPI.volleyballData[]>([]);
   const allSettleLoading = ref(false);
   const loading = ref(true);
   const boardType = ref('INNING');
-  const renderObj = reactive<SettleDataAPI.getSettlementDataList>(
-    {} as SettleDataAPI.getSettlementDataList
+  const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
+    {} as SattleDataAPI.getSettlementDataList
   );
 
   // - 初始化
@@ -37,7 +37,7 @@ export function useBilliardsHook() {
     if (!noEmpty || (dataList.length > 0 && !dataList[dataList.length - 1].id))
       return message(t('请先结算之前的局赛事'), { type: 'error' });
 
-    const params: Partial<SettleDataAPI.volleyballData> = {
+    const params: Partial<SattleDataAPI.volleyballData> = {
       eventTime: '',
       matchId: history.state.params.matchId,
       inningNum: dataList.length + 1,
@@ -46,11 +46,11 @@ export function useBilliardsHook() {
       t1: '',
       t2: ''
     };
-    dataList.push(params as SettleDataAPI.volleyballData);
+    dataList.push(params as SattleDataAPI.volleyballData);
   };
 
   //- 结算局事件
-  const settlementHandicap = async (row: SettleDataAPI.TennisEventsData) => {
+  const settlementHandicap = async (row: SattleDataAPI.TennisEventsData) => {
     const { eventTime, t1, t2 } = row;
     if (!eventTime || !t1 || !t2) {
       return message(t('请先完成并保存事件'), { type: 'error' });

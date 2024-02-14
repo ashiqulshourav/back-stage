@@ -4,12 +4,12 @@ import { columns } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
 
 export function useBilliardsHook() {
-  const dataList = reactive<SettleDataAPI.SnookerEventsResData[]>([]);
+  const dataList = reactive<SattleDataAPI.SnookerEventsResData[]>([]);
   const allSettleLoading = ref(false);
   const loading = ref(true);
   const boardType = ref('INNING');
-  const renderObj = reactive<SettleDataAPI.getSettlementDataList>(
-    {} as SettleDataAPI.getSettlementDataList
+  const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
+    {} as SattleDataAPI.getSettlementDataList
   );
 
   // - 初始化
@@ -37,7 +37,7 @@ export function useBilliardsHook() {
     if (!noEmpty || (dataList.length > 0 && !dataList[dataList.length - 1].id))
       return message(t('请先结算之前的局赛事'), { type: 'error' });
 
-    const params: Partial<SettleDataAPI.SnookerEventsResData> = {
+    const params: Partial<SattleDataAPI.SnookerEventsResData> = {
       eventTime: '',
       matchId: history.state.params.matchId,
       inningNum: dataList.length + 1,
@@ -46,11 +46,11 @@ export function useBilliardsHook() {
       t1: '',
       t2: ''
     };
-    dataList.push(params as SettleDataAPI.SnookerEventsResData);
+    dataList.push(params as SattleDataAPI.SnookerEventsResData);
   };
 
   //- 结算局事件
-  const settlementHandicap = async (row: SettleDataAPI.TennisEventsData) => {
+  const settlementHandicap = async (row: SattleDataAPI.TennisEventsData) => {
     const { eventTime, t1, t2 } = row;
 
     if (!eventTime || !t1 || !t2) {

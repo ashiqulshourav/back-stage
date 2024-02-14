@@ -40,11 +40,11 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import { t } from '@/plugins/i18n';
 
 const props = defineProps<{
-  row: SettleDataAPI.MatchEventsList;
-  parentRow: SettleDataAPI.getSettlementDataList;
+  row: SattleDataAPI.MatchEventsList;
+  parentRow: SattleDataAPI.getSettlementDataList;
   size: any;
   parIndex: number;
-  dataList: SettleDataAPI.MatchEventsList[];
+  dataList: SattleDataAPI.MatchEventsList[];
   index: number;
 }>();
 
@@ -70,7 +70,7 @@ const isShowCancelBtn = computed(
   () =>
     props.index ===
     props.dataList
-      .map((item: SettleDataAPI.MatchEventsList) => item.canceled)
+      .map((item: SattleDataAPI.MatchEventsList) => item.canceled)
       .lastIndexOf(0)
 );
 </script>

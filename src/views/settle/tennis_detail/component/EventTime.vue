@@ -17,10 +17,10 @@ import { t } from '@/plugins/i18n';
 import { message } from '@/utils/message';
 import dayjs from 'dayjs';
 const props = defineProps<{
-  row: SettleDataAPI.InningEvent;
+  row: SattleDataAPI.InningEvent;
   index: number;
-  list: SettleDataAPI.InningEvent[];
-  dataList: SettleDataAPI.TennisEventsData[];
+  list: SattleDataAPI.InningEvent[];
+  dataList: SattleDataAPI.TennisEventsData[];
   parentIndex: number;
 }>();
 

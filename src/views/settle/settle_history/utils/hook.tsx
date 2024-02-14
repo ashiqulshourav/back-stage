@@ -15,14 +15,14 @@ export function useSettle() {
     endTime: ''
   });
 
-  const dataList = reactive<SettleDataAPI.getSettlementDataList[]>([]);
+  const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const loading = ref(true);
   const childloading = ref(true);
   const switchLoadMap = ref({});
   const currentSportId = ref(1);
   const childDataTotal = ref(0);
   const expandMatchList = reactive<number[]>([]);
-  const expandRowList = reactive<SettleDataAPI.getSettlementDataList[]>([]);
+  const expandRowList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const loopTimer = ref<NodeJS.Timeout>();
 
   const pagination = reactive<PaginationProps>({
@@ -55,7 +55,7 @@ export function useSettle() {
       }
       loading.value = true;
       const data = removeEmptyStringKeys(form);
-      const res: SettleDataAPI.getSettlementListRes =
+      const res: SattleDataAPI.getSettlementListRes =
         await API.getSettlementHistory({
           ...data,
           pageSize: pagination.pageSize,
@@ -103,7 +103,7 @@ export function useSettle() {
   //- 打开关闭结算列表
   const expandChange = (
     row: SaleDataAPI.PreSaleList,
-    currentExpandList: SettleDataAPI.getSettlementDataList[]
+    currentExpandList: SattleDataAPI.getSettlementDataList[]
   ) => {
     if (currentExpandList.length) {
       expandMatchList.length = 0;

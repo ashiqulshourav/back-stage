@@ -18,7 +18,7 @@ import { MatchEventRowType } from '../../utils/type';
 
 defineProps<
   MatchEventRowType & {
-    item: SettleDataAPI.ChildrenDataList;
+    item: SattleDataAPI.ChildrenDataList;
   }
 >();
 

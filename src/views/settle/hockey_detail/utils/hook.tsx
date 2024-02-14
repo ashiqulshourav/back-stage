@@ -4,9 +4,9 @@ import { MATCH_PERIOD } from '@/utils/maps/sports_map';
 import { message } from '@/utils/message';
 
 export function useHockeyDetailHook() {
-  const dataList = reactive<SettleDataAPI.HockeyEventData[]>([]);
-  const currentMatch = reactive<SettleDataAPI.getSettlementDataList>(
-    {} as SettleDataAPI.getSettlementDataList
+  const dataList = reactive<SattleDataAPI.HockeyEventData[]>([]);
+  const currentMatch = reactive<SattleDataAPI.getSettlementDataList>(
+    {} as SattleDataAPI.getSettlementDataList
   );
 
   const matchId = ref(history.state.params.matchId);
@@ -16,12 +16,12 @@ export function useHockeyDetailHook() {
   const onSearch = async () => {
     getCurrentMatchDetail();
     // REAL RESULT FROM API REQUEST
-    // const res: SettleDataAPI.getHockeyEventRes = await API.getHockeyEvents({
+    // const res: SattleDataAPI.getHockeyEventRes = await API.getHockeyEvents({
     //   matchId: matchId.value
     // });
 
     // MOCK DATA WITHOUT API REQUEST
-    const res: SettleDataAPI.getHockeyEventRes = {
+    const res: SattleDataAPI.getHockeyEventRes = {
       code: 0,
       msg: 'Operation successful',
       ts: 11111111111,
@@ -36,14 +36,14 @@ export function useHockeyDetailHook() {
 
   //- 获取当前展开行结算列表
   const getCurrentMatchDetail = async () => {
-    const res: SettleDataAPI.getSettlementListRes = await API.getSettlementList(
+    const res: SattleDataAPI.getSettlementListRes = await API.getSettlementList(
       { matchId: matchId.value }
     );
 
     if (!res.code) Object.assign(currentMatch, res.data.list[0]);
   };
 
-  const validation = (NewEvent: SettleDataAPI.HockeyEventData) => {
+  const validation = (NewEvent: SattleDataAPI.HockeyEventData) => {
     if (
       !NewEvent.eventTime ||
       NewEvent.eventTime <= dataList[dataList.length - 1]?.eventTime
@@ -71,7 +71,7 @@ export function useHockeyDetailHook() {
     return currenTime.getTime() + day.getTime() + 28800000;
   };
 
-  const setNewHockeyEvent = async (NewEvent: SettleDataAPI.HockeyEventData) => {
+  const setNewHockeyEvent = async (NewEvent: SattleDataAPI.HockeyEventData) => {
     NewEvent.eventTime = getCorrectTime(timestamps.value);
 
     if (validation(NewEvent)) {

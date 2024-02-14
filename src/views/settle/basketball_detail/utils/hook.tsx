@@ -4,9 +4,9 @@ import { MATCH_PERIOD } from '@/utils/maps/sports_map';
 import { message } from '@/utils/message';
 
 export function useBasketballDetailHook() {
-  const dataList = reactive<SettleDataAPI.BasketballEvent[]>([]);
-  const currentMatch = reactive<SettleDataAPI.getSettlementDataList>(
-    {} as SettleDataAPI.getSettlementDataList
+  const dataList = reactive<SattleDataAPI.BasketballEvent[]>([]);
+  const currentMatch = reactive<SattleDataAPI.getSettlementDataList>(
+    {} as SattleDataAPI.getSettlementDataList
   );
 
   const isFourRound = ref(true);
@@ -16,7 +16,7 @@ export function useBasketballDetailHook() {
 
   const onSearch = async () => {
     getCurrentMatchDetail();
-    const res: SettleDataAPI.getBasketballEventRes =
+    const res: SattleDataAPI.getBasketballEventRes =
       await API.getBasketballEvents({ matchId: matchId.value });
     if (!res.code) {
       dataList.length = 0;
@@ -33,14 +33,14 @@ export function useBasketballDetailHook() {
   //- 获取当前展开行结算列表
 
   const getCurrentMatchDetail = async () => {
-    const res: SettleDataAPI.getSettlementListRes = await API.getSettlementList(
+    const res: SattleDataAPI.getSettlementListRes = await API.getSettlementList(
       { matchId: matchId.value }
     );
     if (!res.code) {
       Object.assign(currentMatch, res.data.list[0]);
     }
   };
-  const validation = (NewEvent: SettleDataAPI.BasketballEvent) => {
+  const validation = (NewEvent: SattleDataAPI.BasketballEvent) => {
     if (
       !NewEvent.eventTime ||
       NewEvent.eventTime <= dataList[dataList.length - 1]?.eventTime
@@ -82,7 +82,7 @@ export function useBasketballDetailHook() {
     return currenTime.getTime() + day.getTime() + 28800000;
   };
   const setNewBasketballEvent = async (
-    NewEvent: SettleDataAPI.BasketballEvent
+    NewEvent: SattleDataAPI.BasketballEvent
   ) => {
     NewEvent.eventTime = getCorrectTime(timestamps.value);
     console.log(dayjs(NewEvent.eventTime).format('YYYY-MM-DD HH:mm:ss'));

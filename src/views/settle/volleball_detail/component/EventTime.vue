@@ -18,9 +18,9 @@ import { message } from '@/utils/message';
 import dayjs from 'dayjs';
 
 const props = defineProps<{
-  row: SettleDataAPI.SnookerEventsResData;
+  row: SattleDataAPI.SnookerEventsResData;
   index: number;
-  dataList: SettleDataAPI.SnookerEventsResData[];
+  dataList: SattleDataAPI.SnookerEventsResData[];
 }>();
 
 const emits = defineEmits(['changeEventTime']);

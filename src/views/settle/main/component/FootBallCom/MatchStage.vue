@@ -32,7 +32,7 @@ import { message } from '@/utils/message';
 
 const props = defineProps<
   MatchEventRowType & {
-    item: SettleDataAPI.ChildrenDataList;
+    item: SattleDataAPI.ChildrenDataList;
   }
 >();
 

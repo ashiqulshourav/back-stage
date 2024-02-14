@@ -31,7 +31,7 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 const props = defineProps<{
-  row: SettleDataAPI.InningEvent;
+  row: SattleDataAPI.InningEvent;
   childIndex: number;
 }>();
 

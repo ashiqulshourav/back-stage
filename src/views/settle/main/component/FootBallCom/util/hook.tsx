@@ -15,12 +15,12 @@ import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
 import { useMatchStore } from '@/store/match';
 
 export function useFootball() {
-  const dataList = reactive<SettleDataAPI.getSettlementDataList[]>([]);
+  const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const childloading = ref(true);
   const switchLoadMap = ref({});
   const childDataTotal = ref(0);
   const expandMatchList = reactive<number[]>([]);
-  const expandRowList = reactive<SettleDataAPI.getSettlementDataList[]>([]);
+  const expandRowList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const loopTimer = ref<NodeJS.Timeout>();
   const matchStore = useMatchStore();
   const form = ref<SearchFormType>({} as SearchFormType);
@@ -59,7 +59,7 @@ export function useFootball() {
       const data = removeEmptyStringKeys(form.value ?? {});
       matchStore.set_settleRequestLoading(true);
 
-      const res: SettleDataAPI.getSettlementListRes =
+      const res: SattleDataAPI.getSettlementListRes =
         await API.getSettlementList({
           ...data,
           pageSize: pagination.pageSize,
@@ -124,12 +124,12 @@ export function useFootball() {
   };
 
   //- 当前行编辑
-  const editChild = (row: SettleDataAPI.MatchEventsList) => (row.isEdit = true);
+  const editChild = (row: SattleDataAPI.MatchEventsList) => (row.isEdit = true);
 
   // 打开关闭结算列表
   const expandChange = (
     row: SaleDataAPI.PreSaleList,
-    currentExpandList: SettleDataAPI.getSettlementDataList[]
+    currentExpandList: SattleDataAPI.getSettlementDataList[]
   ) => {
     if (currentExpandList.length) {
       expandMatchList.length = 0;
@@ -200,7 +200,7 @@ export function useFootball() {
 
   //- 新增事件
   const handleChildrenData = async (
-    row: SettleDataAPI.MatchEventsList,
+    row: SattleDataAPI.MatchEventsList,
     parentIndex: number,
     type: 'save' | 'upload',
     parentRow
@@ -228,7 +228,7 @@ export function useFootball() {
           : 'red_card'
         : row.eventCode;
 
-    const params: SettleDataAPI.MatchEventParams = {
+    const params: SattleDataAPI.MatchEventParams = {
       canceled: 0,
       eventCode,
       eventTime: new Date(row.eventTime).getTime(),

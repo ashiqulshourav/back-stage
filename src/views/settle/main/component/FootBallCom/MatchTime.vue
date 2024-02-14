@@ -19,7 +19,7 @@ import dayjs from 'dayjs';
 
 const props = defineProps<
   MatchEventRowType & {
-    item: SettleDataAPI.ChildrenDataList;
+    item: SattleDataAPI.ChildrenDataList;
   }
 >();
 const emits = defineEmits(['changeEventTime']);
@@ -38,9 +38,9 @@ watch(
 );
 
 const changeEventTime = (
-  row: SettleDataAPI.MatchEventsList,
+  row: SattleDataAPI.MatchEventsList,
   childIndex: number,
-  childrenData: SettleDataAPI.MatchEventsList[]
+  childrenData: SattleDataAPI.MatchEventsList[]
 ) => {
   if (childIndex === 0) return;
   if (
