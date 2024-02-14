@@ -1,6 +1,6 @@
 <template>
   <PureTableBar
-    :title="t('蓝球结算管理')"
+    :title="t('篮球结算管理')"
     :columns="columns"
     @refresh="onSearch('reload')"
   >
