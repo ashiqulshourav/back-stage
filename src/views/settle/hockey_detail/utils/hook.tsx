@@ -15,11 +15,18 @@ export function useHockeyDetailHook() {
 
   const onSearch = async () => {
     getCurrentMatchDetail();
-    const res: SettleDataAPI.getHockeyEventRes = await API.getHockeyEvents({
-      matchId: matchId.value
-    });
+    // REAL RESULT FROM API REQUEST
+    // const res: SettleDataAPI.getHockeyEventRes = await API.getHockeyEvents({
+    //   matchId: matchId.value
+    // });
 
-    // seed some mock data
+    // MOCK DATA WITHOUT API REQUEST
+    const res: SettleDataAPI.getHockeyEventRes = {
+      code: 0,
+      msg: 'Operation successful',
+      ts: 11111111111,
+      data: []
+    };
 
     if (!res.code) {
       dataList.length = 0;
@@ -66,7 +73,7 @@ export function useHockeyDetailHook() {
 
   const setNewHockeyEvent = async (NewEvent: SettleDataAPI.HockeyEventData) => {
     NewEvent.eventTime = getCorrectTime(timestamps.value);
-    console.log(dayjs(NewEvent.eventTime).format('YYYY-MM-DD HH:mm:ss'));
+
     if (validation(NewEvent)) {
       ElMessageBox.confirm(
         `<p class='text-center'>${currentMatch.homeTeamNameCn || '-'} VS ${
@@ -77,7 +84,7 @@ export function useHockeyDetailHook() {
         }</p>
           ⼿動結算後無法回退，請再次確認比分</p>
           `,
-        `結算第${MATCH_PERIOD[NewEvent.matchPeriod]}節`,
+        `結算${MATCH_PERIOD[NewEvent.matchPeriod]}`,
         {
           dangerouslyUseHTMLString: true,
           confirmButtonText: t('確認結算'),
@@ -86,14 +93,24 @@ export function useHockeyDetailHook() {
         }
       )
         .then(async () => {
-          const res: MetadataAPI.AddHockeyEventRes = await API.addHockeyEvent({
-            matchId: NewEvent.matchId,
-            eventTime: NewEvent.eventTime,
-            t1: Number(NewEvent.t1),
-            t2: Number(Number(NewEvent.t2)),
-            matchPeriod: NewEvent.matchPeriod,
-            canceled: 0
-          });
+          // const res: MetadataAPI.AddHockeyEventRes = await API.addHockeyEvent({
+          //   matchId: NewEvent.matchId,
+          //   eventTime: NewEvent.eventTime,
+          //   t1: Number(NewEvent.t1),
+          //   t2: Number(Number(NewEvent.t2)),
+          //   matchPeriod: NewEvent.matchPeriod,
+          //   canceled: 0
+          // });
+
+          // MOCK RESULT
+          const res: MetadataAPI.AddHockeyEventRes = {
+            code: 0,
+            data: null,
+            msg: 'Operation successful',
+            ts: 111111111111,
+            failure: false,
+            success: true
+          };
 
           if (res.code) message(res.msg, { type: 'error' });
           else {
