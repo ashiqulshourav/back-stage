@@ -173,13 +173,8 @@ const renderBegintime = computed(() => history.state.params?.beginTimeLong + 288
 const handleNewEvent = () => {
   if (timestamps.value)
     NewGoalEvent.eventTime = history.state.params?.beginTimeLong + dayjs(timestamps.value).diff(dayjs(timestamps.value).startOf('day'));
-  try {
-    props.onAddNewGoalEvent(NewGoalEvent);
-  } catch (error) {
-    
-  }
+  props.onAddNewGoalEvent(NewGoalEvent);
   isEdit.value = false;
-  
 }
 
 </script>

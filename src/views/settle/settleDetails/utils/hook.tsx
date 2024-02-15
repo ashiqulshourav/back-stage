@@ -2,16 +2,26 @@ import { message } from "@/utils/message";
 import { MATCH_PERIOD } from '@/utils/maps/sports_map';
 import { columns } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
+import { useMatchStore } from "@/store/match";
 
 export function useMatchDetailsHook() {
   const dataList = reactive<SattleDataAPI.BasketballEvent[]>([]);
+  const { sportId } = useMatchStore();
   const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
     {} as SattleDataAPI.getSettlementDataList
   );
 
   const onSearch = async () => {
     getCurrentMatchDetail();
-    const res: SattleDataAPI.getBasketballEventRes = await API.getBasketballEvents({ matchId: history.state.params?.matchId });
+    let res;
+    switch (sportId) {
+      case 2:
+        res = await API.getBasketballEvents({ matchId: history.state.params?.matchId });
+        break;
+      case 19:
+        res = await API.getBadmintonEvents({ matchId: history.state.params?.matchId });
+        break;
+    }
     if (!res.code) {
       dataList.length = 0;
       dataList.push(...res.data);
@@ -78,6 +88,24 @@ export function useMatchDetailsHook() {
           message('无效分数', { type: 'error' });  
           return false;
         }
+      case 19:
+        if (t1 > 30 || t2 > 30 || t1 < 0 || t2 < 0) {
+          message('无效分数', { type: 'error' });
+          return false;
+        }
+        if (t1 < 25 && t2 < 25) {
+          message('无效分数', { type: 'error' });
+          return false;
+        }
+        if (t1 >= 24 && t2 >= 24 && Math.abs(t1 - t2) !== 2) {
+          message('无效分数', { type: 'error' });
+          return false;
+        }
+        if ((t1 < 24 && t2 > 25) || (t2 < 24 && t1 > 25)) {
+          message('无效分数', { type: 'error' });
+          return false;
+        }
+        return true;
     }
     return true;
   }
@@ -90,33 +118,76 @@ export function useMatchDetailsHook() {
   }
   const onAddNewGoalEvent = (NewGoalEvent: SattleDataAPI.MatchEventParams) => {
     if (scoreValidation(NewGoalEvent) && timeValidation(NewGoalEvent)) {
-      ElMessageBox.confirm(
-        `<p class='text-center'>${history.state.params?.homeTeamNameCn || '-'} VS ${
-          history.state.params?.awayTeamNameCn || '-'
-        } <br />
-          <p class="text-center text-2xl text-bold w-full">${NewGoalEvent.t1} : ${
-          NewGoalEvent.t2
-        }</p>
-          ⼿動結算後無法回退，請再次確認比分</p>
-          `,
-        `結算${MATCH_PERIOD[NewGoalEvent.matchPeriod]}`,
-        {
-          dangerouslyUseHTMLString: true,
-          confirmButtonText: t('確認結算'),
-          cancelButtonText: t('取消'),
-          center: true
-        }
-      )
-        .then(async () => {
-          const res: MetadataAPI.AddBasketballEeventRes =
-            await API.addBasketballEvent({
-              ...NewGoalEvent
-            });
-          if (res.code) message(res.msg, { type: 'error' });
-          else {
-            onSearch();
-          }
-        })
+      switch (sportId) {
+        case 2:
+          ElMessageBox.confirm(
+            `<p class='text-center'>${history.state.params?.homeTeamNameCn || '-'} VS ${history.state.params?.awayTeamNameCn || '-'
+            } <br />
+              <p class="text-center text-2xl text-bold w-full">${NewGoalEvent.t1} : ${NewGoalEvent.t2
+            }</p>
+              ⼿動結算後無法回退，請再次確認比分</p>
+              `,
+            `結算${MATCH_PERIOD[NewGoalEvent.matchPeriod]}`,
+            {
+              dangerouslyUseHTMLString: true,
+              confirmButtonText: t('確認結算'),
+              cancelButtonText: t('取消'),
+              center: true
+            }
+          )
+            .then(async () => {
+              const res: MetadataAPI.AddBasketballEeventRes =
+                await API.addBasketballEvent({
+                  ...NewGoalEvent
+                });
+              if (res.code) {
+                message(res.msg, { type: 'error' });
+                return false;
+              }
+              else {
+                onSearch();
+                return true;
+              }
+            })
+            .catch(() => {
+              return false;
+            })
+          break;
+        case 19:
+          ElMessageBox.confirm(
+            `<p class='text-center'>${history.state.params?.homeTeamNameCn || '-'} VS ${history.state.params?.awayTeamNameCn || '-'
+            } <br />
+              <p class="text-center text-2xl text-bold w-full">${NewGoalEvent.t1} : ${NewGoalEvent.t2
+            }</p>
+              ⼿動結算後無法回退，請再次確認比分</p>
+              `,
+            `結算第 ${NewGoalEvent.inningNum} 节`,
+            {
+              dangerouslyUseHTMLString: true,
+              confirmButtonText: t('確認結算'),
+              cancelButtonText: t('取消'),
+              center: true
+            }
+          )
+            .then(async () => {
+              const res =
+                await API.addBadmintonballEvent({
+                  ...NewGoalEvent as SattleDataAPI.BadmintonEventReq
+                });
+              if (res.code) {
+                message(res.msg, { type: 'error' });
+                return false;
+              }
+              else {
+                onSearch();
+                return true;
+              }
+            })
+            .catch(() => {
+              return false;
+            })
+          break;
+      }
     }
   }
 
@@ -127,6 +198,7 @@ export function useMatchDetailsHook() {
     renderObj,
     columns,
     dataList,
+    sportId,
     allSettleBtnClick,
     getCurrentMatchDetail,
     onAddNewGoalEvent,

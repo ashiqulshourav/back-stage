@@ -60,6 +60,9 @@ export const sattleData = {
   addVolleyballEvent: (data:
     SattleDataAPI.SnookerEventReq
   ) => http.request<SattleDataAPI.addTennisEventResType>("post", "/volleyball/v1/addVolleyballEvent", { data }),
+  addBadmintonballEvent: (data:
+    SattleDataAPI.BadmintonEventReq
+  ) => http.request<SattleDataAPI.addBadmintonEventResType>("post", "/badminton/v1/addBadmintonEvent", { data }),
 
   //-斯诺克结算事件列表
   getSnookerEvents: (data: {
@@ -70,6 +73,9 @@ export const sattleData = {
   getVolleyballEvents: (data: {
     matchId: number;
   }) => http.request<SattleDataAPI.getVolleyballEventsResType>("post", "/volleyball/v1/getVolleyballEvents", { data }),
+  getBadmintonEvents: (data: {
+    matchId: number;
+  }) => http.request<SattleDataAPI.getBadmintonEventRes>("post", "/badminton/v1/getBadmintonEvents", { data }),
 
   //-排球全场结算（按盘）
   manualSettlementFullTime: (data:
