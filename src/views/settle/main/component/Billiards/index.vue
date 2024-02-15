@@ -7,7 +7,6 @@
     <template v-slot="{ size, dynamicColumns }">
       <pure-table
         align-whole="center"
-        showOverflowTooltip
         :loading="matchStore.settleRequestLoading"
         :size="size"
         :row-key="row => row.matchId"

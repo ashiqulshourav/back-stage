@@ -41,6 +41,9 @@ export function useBilliardsHook() {
       matchStore.set_settleRequestLoading(false);
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
+      res.data.list.forEach(item => {
+        item.isShowCancelBtn = +res.ts < +item.beginTimeLong;
+      });
       dataList.push(...res.data.list);
       pagination.total = res.data.total;
       pagination.pageSize = res.data.pageSize;
