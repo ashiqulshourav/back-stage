@@ -21,6 +21,9 @@ export function useMatchDetailsHook() {
       case 19:
         res = await API.getBadmintonEvents({ matchId: history.state.params?.matchId });
         break;
+      case 23:
+        res = await API.getPingpongEvents({ matchId: history.state.params?.matchId });
+        break;
     }
     if (!res.code) {
       dataList.length = 0;
@@ -30,6 +33,7 @@ export function useMatchDetailsHook() {
 
   //- 获取当前展开行结算列表
   const checkSettleCapability = () => {
+    let winCount1 = 0, winCount2 = 0;
     switch (sportId) {
       case 2:
         if (dataList[dataList?.length - 1]?.matchPeriod === 'OT') {
@@ -45,11 +49,19 @@ export function useMatchDetailsHook() {
         }
         return true;
       case 19:
-        let winCount1 = 0, winCount2 = 0;
+        winCount1 = 0, winCount2 = 0;
         dataList.forEach(element => {
           element.t1 > element.t2 ? winCount1++ : winCount2++;
         });
         if (winCount1 > 1 || winCount2 > 1)
+          return false;
+        return true;
+      case 23:
+        winCount1 = 0, winCount2 = 0;
+        dataList.forEach(element => {
+          element.t1 > element.t2 ? winCount1++ : winCount2++;
+        });
+        if (winCount1 >= Number(dataList[0]?.gameRule[2]) || winCount2 >= Number(dataList[0]?.gameRule[2]))
           return false;
         return true;
     }
@@ -78,6 +90,9 @@ export function useMatchDetailsHook() {
         case 19:
           res = await API.BamintonManualSettlementFullTime({ matchId: history.state.params?.matchId });
           break;
+        case 23:
+          res = await API.PingPongManualSettlementFullTime({ matchId: history.state.params?.matchId });
+          break;
       }
       if (res.code) {
         message(res.msg, { type: 'error' });
@@ -93,6 +108,7 @@ export function useMatchDetailsHook() {
     });
     if (res.code) return message(res.msg, { type: 'error' });
     Object.assign(renderObj, res.data);
+    console.log(renderObj);
   };
 
   const scoreValidation = (NewGoalEvent: SattleDataAPI.MatchEventParams) => {
@@ -126,6 +142,24 @@ export function useMatchDetailsHook() {
           return false;
         }
         return true;
+      case 23:
+        if (t1 < 0 || t2 < 0) {
+          message('无效分数', { type: 'error' });
+          return false;
+        }
+        if (t1 < 11 && t2 < 11) {
+          message('无效分数', { type: 'error' });
+          return false;
+        }
+        if (t1 >= 10 && t2 >= 10 && Math.abs(t1 - t2) !== 2) {
+          message('无效分数', { type: 'error' });
+          return false;
+        }
+        if ((t1 < 10 && t2 > 11) || (t2 < 10 && t1 > 11)) {
+          message('无效分数', { type: 'error' });
+          return false;
+        }
+        return true;  
     }
     return true;
   }
@@ -209,8 +243,41 @@ export function useMatchDetailsHook() {
               tag = false;
             })
           break;
+        case 23:
+          ElMessageBox.confirm(
+            `<p class='text-center'>${history.state.params?.homeTeamNameCn || '-'} VS ${history.state.params?.awayTeamNameCn || '-'
+            } <br />
+              <p class="text-center text-2xl text-bold w-full">${NewGoalEvent.t1} : ${NewGoalEvent.t2
+            }</p>
+              ⼿動結算後無法回退，請再次確認比分</p>
+              `,
+            `結算第 ${NewGoalEvent.inningNum + 1} 节`,
+            {
+              dangerouslyUseHTMLString: true,
+              confirmButtonText: t('確認結算'),
+              cancelButtonText: t('取消'),
+              center: true
+            }
+          )
+            .then(async () => {
+              const res =
+                await API.addPingPongballEvent({
+                  ...NewGoalEvent as SattleDataAPI.BadmintonEventReq
+                });
+              if (res.code) {
+                message(res.msg, { type: 'error' });
+                return false;
+              }
+              else {
+                onSearch();
+                return true;
+              }
+            })
+            .catch(() => {
+              tag = false;
+            })
+          break;
       }
-      console.log(tag);
       return tag;
     }
   }

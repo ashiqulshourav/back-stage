@@ -63,6 +63,9 @@ export const sattleData = {
   addBadmintonballEvent: (data:
     SattleDataAPI.BadmintonEventReq
   ) => http.request<SattleDataAPI.addBadmintonEventResType>("post", "/badminton/v1/addBadmintonEvent", { data }),
+  addPingPongballEvent: (data:
+    SattleDataAPI.BadmintonEventReq
+  ) => http.request<SattleDataAPI.addBadmintonEventResType>("post", "/pingPong/v1/addPingPongEvent", { data }),
 
   //-斯诺克结算事件列表
   getSnookerEvents: (data: {
@@ -76,6 +79,9 @@ export const sattleData = {
   getBadmintonEvents: (data: {
     matchId: number;
   }) => http.request<SattleDataAPI.getBadmintonEventRes>("post", "/badminton/v1/getBadmintonEvents", { data }),
+  getPingpongEvents: (data: {
+    matchId: number;
+  }) => http.request<SattleDataAPI.getBadmintonEventRes>("post", "/pingPong/v1/getPingPongEvents", { data }),
 
   //-排球全场结算（按盘）
   manualSettlementFullTime: (data:
@@ -94,7 +100,9 @@ export const sattleData = {
   BamintonManualSettlementFullTime: (data:
     { matchId: number }
   ) => http.request<SattleDataAPI.manualSettlementFullTimeRestType>("post", "/badminton/v1/manualSettlementFullTime", { data }),
-
+  PingPongManualSettlementFullTime: (data:
+    { matchId: number }
+  ) => http.request<SattleDataAPI.manualSettlementFullTimeRestType>("post", "/pingPong/v1/manualSettlementFullTime", { data }),  
   //- 获取单个赛事信息
   getPreSaleInfo: (data:
     { matchId: number }

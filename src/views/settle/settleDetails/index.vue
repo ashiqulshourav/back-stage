@@ -17,6 +17,12 @@
       :dataList="dataList"
       :onAddNewGoalEvent="onAddNewGoalEvent"
     />
+    <pingpong-goal-events 
+      v-if="sportId === 23"
+      :columns="columns"
+      :dataList="dataList"
+      :onAddNewGoalEvent="onAddNewGoalEvent"
+    />
   </div>
 </template>
 
@@ -24,6 +30,7 @@
 import matchDetails from './components/matchDetails/index.vue';
 import baskectballGoalEvents from './components/goalEvents/baskectball.vue';
 import badmintonGoalEvents from './components/goalEvents/badminton.vue';
+import pingpongGoalEvents from './components/goalEvents/pingpong.vue';
 import { useMatchDetailsHook } from './utils/hook';
 defineOptions({ name: 'SETTLE_DETAILS' });
 
@@ -36,7 +43,6 @@ const {
   allSettleBtnClick,
   onAddNewGoalEvent
 } = useMatchDetailsHook();
-console.log(sportId);
 </script>
 
 <style scoped>
