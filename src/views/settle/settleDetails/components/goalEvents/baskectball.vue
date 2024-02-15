@@ -130,7 +130,7 @@ const getMatchPeriod = () => {
     return 'OT';
   }
   if (gameRule.value === 'HT') {
-    return props.dataList.length === 0 ? 'FT' : 'HT';
+    return props.dataList.length === 0 ? 'HT' : 'FT';
   }
   return `Q${props.dataList.length + 1}`;
 }
@@ -173,10 +173,9 @@ const renderBegintime = computed(() => history.state.params?.beginTimeLong + 288
 const handleNewEvent = () => {
   if (timestamps.value)
     NewGoalEvent.eventTime = history.state.params?.beginTimeLong + dayjs(timestamps.value).diff(dayjs(timestamps.value).startOf('day'));
-  props.onAddNewGoalEvent(NewGoalEvent);
-  isEdit.value = false;
+  if(props.onAddNewGoalEvent(NewGoalEvent))
+    isEdit.value = false;
 }
-
 </script>
 <style scoped>
 </style>

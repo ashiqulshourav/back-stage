@@ -30,18 +30,29 @@ export function useMatchDetailsHook() {
 
   //- 获取当前展开行结算列表
   const checkSettleCapability = () => {
-    if (dataList[dataList?.length - 1]?.matchPeriod === 'OT') {
-      return false;
+    switch (sportId) {
+      case 2:
+        if (dataList[dataList?.length - 1]?.matchPeriod === 'OT') {
+          return false;
+        }
+        if (dataList?.length === 4 || (dataList?.length === 2 && dataList[0]?.gameRule === 'HT')) {
+          let diff = 0;
+          dataList.forEach((item) => {
+            diff += Number(item.t1) - Number(item.t2)
+          })
+          if (diff !== 0)
+            return false;
+        }
+        return true;
+      case 19:
+        let winCount1 = 0, winCount2 = 0;
+        dataList.forEach(element => {
+          element.t1 > element.t2 ? winCount1++ : winCount2++;
+        });
+        if (winCount1 > 1 || winCount2 > 1)
+          return false;
+        return true;
     }
-    if (dataList?.length === 4 || (dataList?.length === 2 && dataList[0]?.gameRule === 'HT')) {
-      let diff = 0;
-      dataList.forEach((item) => {
-        diff += Number(item.t1) - Number(item.t2)
-      })
-      if (diff !== 0)
-        return false;
-    }
-    return true;
   }
 
   const allSettleBtnClick = async () => {
@@ -59,7 +70,15 @@ export function useMatchDetailsHook() {
         center: true
       }
     ).then(async () => {
-      const res = await API.allBasketballSettlement({ matchId: history.state.params?.matchId });
+      let res;
+      switch (sportId) {
+        case 2:
+          res = await API.allBasketballSettlement({ matchId: history.state.params?.matchId });
+          break;
+        case 19:
+          res = await API.BamintonManualSettlementFullTime({ matchId: history.state.params?.matchId });
+          break;
+      }
       if (res.code) {
         message(res.msg, { type: 'error' });
       } else {
@@ -78,16 +97,17 @@ export function useMatchDetailsHook() {
 
   const scoreValidation = (NewGoalEvent: SattleDataAPI.MatchEventParams) => {
     const { t1, t2, matchPeriod } = NewGoalEvent;
-    switch (history.state.params?.sportId) {
-      case 2: 
+    switch (sportId) {
+      case 2:
         if (t1 as number < 0 || t2 as number < 0 || t1 as number > 150 || t2 as number > 150) {
-          message('无效分数', { type: 'error' });  
+          message('无效分数', { type: 'error' });
           return false;
         }
         if (matchPeriod === 'OT' && t1 === t2) {
-          message('无效分数', { type: 'error' });  
+          message('无效分数', { type: 'error' });
           return false;
         }
+        break;
       case 19:
         if (t1 > 30 || t2 > 30 || t1 < 0 || t2 < 0) {
           message('无效分数', { type: 'error' });
@@ -118,6 +138,7 @@ export function useMatchDetailsHook() {
   }
   const onAddNewGoalEvent = (NewGoalEvent: SattleDataAPI.MatchEventParams) => {
     if (scoreValidation(NewGoalEvent) && timeValidation(NewGoalEvent)) {
+      let tag = true;
       switch (sportId) {
         case 2:
           ElMessageBox.confirm(
@@ -150,6 +171,7 @@ export function useMatchDetailsHook() {
               }
             })
             .catch(() => {
+              tag = false;
               return false;
             })
           break;
@@ -161,7 +183,7 @@ export function useMatchDetailsHook() {
             }</p>
               ⼿動結算後無法回退，請再次確認比分</p>
               `,
-            `結算第 ${NewGoalEvent.inningNum} 节`,
+            `結算第 ${NewGoalEvent.inningNum + 1} 节`,
             {
               dangerouslyUseHTMLString: true,
               confirmButtonText: t('確認結算'),
@@ -184,10 +206,12 @@ export function useMatchDetailsHook() {
               }
             })
             .catch(() => {
-              return false;
+              tag = false;
             })
           break;
       }
+      console.log(tag);
+      return tag;
     }
   }
 

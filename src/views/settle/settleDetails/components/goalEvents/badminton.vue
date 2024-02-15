@@ -80,7 +80,7 @@
       type="primary"
       v-if="checkNoMore()"
       @click="handleEditEvent"
-      >{{(gameRule === 'HT' && props.dataList.length == 2) || (gameRule === 'INNING' && props.dataList.length == 4) ? '新增加时赛' : '新增局'}}</el-button>
+      >{{'新增局'}}</el-button>
   </div>
 </template>
 
@@ -102,6 +102,14 @@ const checkNoMore = () => {
   if (isEdit.value) {
     return false;
   }
+  if (props.dataList.length === 3)
+    return false;
+  let winCount1 = 0, winCount2 = 0;
+  props.dataList.forEach(item => {
+    item.t1 > item.t2 ? winCount1++ : winCount2++;
+  });
+  if (winCount1 === 2 || winCount2 === 2)
+    return false; 
   return true;
 }
 const NewGoalEvent: SattleDataAPI.MatchEventParams = reactive({
@@ -116,6 +124,7 @@ const handleEditEvent = () => {
   isEdit.value = true;
   NewGoalEvent.t1 = 0;
   NewGoalEvent.t2 = 0;
+  NewGoalEvent.inningNum = props.dataList.length;
 }
 const isEdit = ref(false);
 const renderData = computed(() =>
@@ -128,9 +137,9 @@ const handleNewEvent = () => {
   if (timestamps.value)
     NewGoalEvent.eventTime = history.state.params?.beginTimeLong + dayjs(timestamps.value).diff(dayjs(timestamps.value).startOf('day'));
   if (props.onAddNewGoalEvent(NewGoalEvent)) {
+    console.log('adfadf');
     isEdit.value = false;
   }
-  
 }
 
 </script>

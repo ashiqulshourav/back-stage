@@ -91,6 +91,9 @@ export const sattleData = {
   snookerManualSettlementFullTime: (data:
     { matchId: number }
   ) => http.request<SattleDataAPI.manualSettlementFullTimeRestType>("post", "/snooker/v1/manualSettlementFullTime", { data }),
+  BamintonManualSettlementFullTime: (data:
+    { matchId: number }
+  ) => http.request<SattleDataAPI.manualSettlementFullTimeRestType>("post", "/badminton/v1/manualSettlementFullTime", { data }),
 
   //- 获取单个赛事信息
   getPreSaleInfo: (data:
