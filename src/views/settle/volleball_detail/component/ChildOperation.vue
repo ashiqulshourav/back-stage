@@ -11,7 +11,7 @@
       v-if="row.isEdit"
       size="small"
       type="primary"
-      @click="row.isEdit = false"
+      @click="saveItem"
       >{{ t('保存') }}</el-button
     >
     <el-button
@@ -30,6 +30,7 @@
 
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
+import { message } from '@/utils/message';
 const props = defineProps<{
   row: SattleDataAPI.InningEvent;
   childIndex: number;
@@ -44,6 +45,32 @@ const isShowSettleBtn = computed(() => {
   );
 });
 
+const saveItem = () => {
+  props.row.t1Error = false;
+  props.row.t2Error = false;
+  props.row.eventTimeError = false;
+  let errMsg = '';
+  switch (true) {
+    case !props.row.t1:
+      props.row.t1Error = true;
+      errMsg = t('主队比分不能为空');
+      break;
+    case !props.row.t2:
+      errMsg = t('客队比分不能为空');
+      props.row.t2Error = true;
+      break;
+    case !props.row.eventTime:
+      errMsg = t('结算时间不能为空');
+      props.row.eventTimeError = true;
+      break;
+  }
+  if (!errMsg) {
+    props.row.isEdit = false;
+  } else {
+    message(errMsg, { type: 'error' });
+  }
+};
+
 const emits = defineEmits(['deleteChildItem', 'settlementHandicap']);
 
 const deleteChildItem = () => emits('deleteChildItem');
@@ -53,5 +80,3 @@ const settleJunClick = () => {
   emits('settlementHandicap');
 };
 </script>
-
-<style scoped></style>

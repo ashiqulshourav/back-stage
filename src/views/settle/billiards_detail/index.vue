@@ -37,15 +37,20 @@
         >
           <!-- -比分 -->
           <template #t1="{ row }">
-            <Score :row="row" type="t1" />
+            <Score :row="row" type="t1" :errorType="row.t1Error" />
           </template>
           <template #t2="{ row }">
-            <Score :row="row" type="t2" />
+            <Score :row="row" type="t2" :errorType="row.t2Error" />
           </template>
 
           <!-- -结算时间 -->
           <template #eventTime="{ row, index }">
-            <EventTime :row="row" :index="index" :dataList="dataList" />
+            <EventTime
+              :row="row"
+              :index="index"
+              :dataList="dataList"
+              :errorType="row.eventTimeError"
+            />
           </template>
 
           <!-- -局按钮 -->
