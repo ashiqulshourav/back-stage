@@ -14,7 +14,7 @@
         :columns="dynamicColumns"
         :header-cell-style="tableHeaderStyle"
       >
-        <template #matchPeriod="{index}">
+        <template #matchPeriod="{ index }">
           <span>
             {{ `第 ${index + 1} 节` }}
           </span>
@@ -53,34 +53,29 @@
             class="custom-time-picker"
             format="HH:mm:ss"
           />
-          <span v-else>{{ dayjs(dayjs(row.eventTime).diff(renderBegintime)).format('HH:mm:ss') }}</span>
+          <span v-else>{{
+            dayjs(dayjs(row.eventTime).diff(renderBegintime)).format('HH:mm:ss')
+          }}</span>
         </template>
         <template #operation="{ index }">
           <div
             class="flex gap-2 justify-center"
             v-if="isEdit && index === renderData.length - 1"
           >
-            <el-button 
-              type="primary"
-              @click="handleNewEvent"  
-            >
-              {{t('結算節')}}
+            <el-button type="primary" @click="handleNewEvent">
+              {{ t('結算節') }}
             </el-button>
-            <el-button
-              @click="isEdit = false"              
-            >{{t('取消')}}</el-button>
+            <el-button @click="isEdit = false">{{ t('取消') }}</el-button>
           </div>
           <span v-else> - </span>
-        </template> 
+        </template>
       </pure-table>
     </template>
   </PureTableBar>
   <div class="mt-4">
-    <el-button 
-      type="primary"
-      v-if="checkNoMore()"
-      @click="handleEditEvent"
-      >{{'新增局'}}</el-button>
+    <el-button type="primary" v-if="checkNoMore()" @click="handleEditEvent">{{
+      '新增节'
+    }}</el-button>
   </div>
 </template>
 
@@ -102,16 +97,15 @@ const checkNoMore = () => {
   if (isEdit.value) {
     return false;
   }
-  if (props.dataList.length === 3)
-    return false;
-  let winCount1 = 0, winCount2 = 0;
+  if (props.dataList.length === 3) return false;
+  let winCount1 = 0,
+    winCount2 = 0;
   props.dataList.forEach(item => {
     item.t1 > item.t2 ? winCount1++ : winCount2++;
   });
-  if (winCount1 === 2 || winCount2 === 2)
-    return false; 
+  if (winCount1 === 2 || winCount2 === 2) return false;
   return true;
-}
+};
 const NewGoalEvent: SattleDataAPI.MatchEventParams = reactive({
   matchId: history.state.params?.matchId,
   t1: 0 as number,
@@ -125,23 +119,25 @@ const handleEditEvent = () => {
   NewGoalEvent.t1 = 0;
   NewGoalEvent.t2 = 0;
   NewGoalEvent.inningNum = props.dataList.length;
-}
+};
 const isEdit = ref(false);
 const renderData = computed(() =>
   isEdit.value ? props.dataList.concat(NewGoalEvent) : props.dataList
-)
+);
 const { tableHeaderStyle } = usePublicHooks();
-const renderBegintime = computed(() => history.state.params?.beginTimeLong + 28800000);
+const renderBegintime = computed(
+  () => history.state.params?.beginTimeLong + 28800000
+);
 
 const handleNewEvent = () => {
   if (timestamps.value)
-    NewGoalEvent.eventTime = history.state.params?.beginTimeLong + dayjs(timestamps.value).diff(dayjs(timestamps.value).startOf('day'));
+    NewGoalEvent.eventTime =
+      history.state.params?.beginTimeLong +
+      dayjs(timestamps.value).diff(dayjs(timestamps.value).startOf('day'));
   if (props.onAddNewGoalEvent(NewGoalEvent)) {
     console.log('adfadf');
     isEdit.value = false;
   }
-}
-
+};
 </script>
-<style scoped>
-</style>
+<style scoped></style>
