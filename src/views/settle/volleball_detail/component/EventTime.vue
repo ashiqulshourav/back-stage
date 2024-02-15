@@ -2,6 +2,7 @@
   <div class="timer_container">
     <el-time-picker
       v-model="row.eventTime"
+      :class="[errorType && 'error_color']"
       :placeholder="t('请选择当前录入时间')"
       :disabled="!row.isEdit"
       value-format="x"
@@ -18,9 +19,10 @@ import { message } from '@/utils/message';
 import dayjs from 'dayjs';
 
 const props = defineProps<{
-  row: SattleDataAPI.SnookerEventsResData;
+  row: SattleDataAPI.volleyballData;
   index: number;
-  dataList: SattleDataAPI.SnookerEventsResData[];
+  dataList: SattleDataAPI.volleyballData[];
+  errorType: boolean;
 }>();
 
 const emits = defineEmits(['changeEventTime']);
@@ -49,6 +51,11 @@ const changeEventTime = () => {
           flex-grow: 0;
           text-align: center;
         }
+      }
+    }
+    .error_color {
+      .el-input__wrapper {
+        box-shadow: 0 0 0 1px var(--el-color-danger) inset !important;
       }
     }
   }
