@@ -164,6 +164,9 @@ declare namespace SattleDataAPI {
     isEdit?: boolean;
     gameRule: string;
     inningEvents?: any[];
+    t1Error: boolean;
+    t2Error: boolean;
+    eventTimeError: boolean;
   }
 
   type TennisEventsData = {
