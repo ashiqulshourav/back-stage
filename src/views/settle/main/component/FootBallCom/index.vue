@@ -22,6 +22,15 @@
         @page-size-change="handleTableWidthChange"
         @page-current-change="handleCurrentChange"
       >
+        <template #operation="{ row }">
+          <el-button
+            type="danger"
+            :size="size"
+            :disabled="!row.isShowCancelBtn"
+            @click="cancelBetOrder(row)"
+            >{{ t('取消注单') }}</el-button
+          >
+        </template>
         <template #expand="{ row: parentRow, index: parIndex }: parentRowType">
           <!-- -全场结算按钮 -->
           <SettleMatchBtn
@@ -224,6 +233,7 @@ import {
   parentRowType
 } from '../../utils/type';
 import { useMatchStore } from '@/store/match';
+import { useSettileHook } from '../../utils/hook';
 
 const {
   onSearch,
@@ -248,6 +258,8 @@ const {
   advanceSettlement,
   form
 } = useFootball();
+
+const { cancelBetOrder } = useSettileHook();
 
 const props = defineProps<{
   form: SearchFormType;

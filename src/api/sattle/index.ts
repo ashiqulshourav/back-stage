@@ -99,4 +99,13 @@ export const sattleData = {
   getPreSaleInfo: (data:
     { matchId: number }
   ) => http.request<SattleDataAPI.preSaleInfoResType>("post", "/match/v1/getPreSaleInfo", { data }),
+
+  //- 取消赛事
+  cancelBetOrder: (data:
+    {
+      matchId: number;
+      remark: string;
+      sportName: string;
+    }
+  ) => http.request<SattleDataAPI.cancelBetOrderResType>("post", "/match/v1/cancelMatchOrder", { data }),
 };

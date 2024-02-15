@@ -112,6 +112,7 @@ declare namespace SattleDataAPI {
     unSettlementEvents: number;
     childrenData?: ChildrenDataList[];
     settlementType: number; //1 自动结算 //2 手动结算
+    isShowCancelBtn?: boolean;
   };
 
   type ChildrenDataList = {
@@ -141,6 +142,7 @@ declare namespace SattleDataAPI {
     navigatepageNums: number[];
     navigateFirstPage: number;
     navigateLastPage: number;
+
   }
 
   type InningEvent = {
@@ -231,6 +233,7 @@ declare namespace SattleDataAPI {
   type getBasketballEventRes = COMMON.BASE_RES_TYPE<BasketballEvent[]>
   type getBadmintonEventRes = COMMON.BASE_RES_TYPE<BasketballEvent[]>
   type getMatchEventsRes = COMMON.BASE_RES_TYPE<MatchEventsList[]>
+  type cancelBetOrderResType = COMMON.BASE_RES_TYPE<null>
 
 
   type getSettlementHistoryParams = {

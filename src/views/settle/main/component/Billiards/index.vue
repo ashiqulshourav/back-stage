@@ -7,7 +7,6 @@
     <template v-slot="{ size, dynamicColumns }">
       <pure-table
         align-whole="center"
-        showOverflowTooltip
         :loading="matchStore.settleRequestLoading"
         :size="size"
         :row-key="row => row.matchId"
@@ -29,6 +28,13 @@
           >
             {{ t('结算详情') }}
           </el-button>
+          <el-button
+            type="danger"
+            :size="size"
+            :disabled="!row.isShowCancelBtn"
+            @click="cancelBetOrder(row)"
+            >{{ t('取消注单') }}</el-button
+          >
         </template>
       </pure-table>
     </template>
@@ -42,6 +48,7 @@ import { useBilliardsHook } from './util/hook';
 import { usePublicHooks } from '@/hooks';
 import { SearchFormType } from '../../utils/type';
 import { useMatchStore } from '@/store/match';
+import { useSettileHook } from '../../utils/hook';
 
 const { tableHeaderStyle } = usePublicHooks();
 
@@ -60,6 +67,8 @@ const {
   handleCurrentChange,
   form
 } = useBilliardsHook();
+
+const { cancelBetOrder } = useSettileHook();
 
 form.value = props.form;
 const filterData = (type: 'reload') => {

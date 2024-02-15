@@ -43,7 +43,7 @@ const comoMap = {
   Tennis,
   Billiards,
   Volleyball,
-  MatchLists,
+  MatchLists
 };
 const currentComponentName = reactive({
   name: markRaw(comoMap.FootBall)
