@@ -1,17 +1,17 @@
 <template>
   <div class="main">
-    <match-details 
+    <match-details
       :renderObj="renderObj"
       @allSettleBtnClick="allSettleBtnClick"
       :onSearch="onSearch"
     />
-    <baskectball-goal-events 
+    <baskectball-goal-events
       v-if="sportId == 2"
       :columns="columns"
       :dataList="dataList"
       :onAddNewGoalEvent="onAddNewGoalEvent"
     />
-    <badminton-goal-events 
+    <badminton-goal-events
       v-if="sportId === 19"
       :columns="columns"
       :dataList="dataList"
@@ -45,5 +45,4 @@ const {
 } = useMatchDetailsHook();
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
