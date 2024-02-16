@@ -22,7 +22,7 @@
         @page-size-change="handleTableWidthChange"
         @page-current-change="handleCurrentChange"
       >
-        <!-- <template #operation="{ row }">
+        <template #operation="{ row }">
           <el-button
             type="danger"
             :size="size"
@@ -30,7 +30,7 @@
             @click="cancelBetOrder(row)"
             >{{ t('取消注单') }}</el-button
           >
-        </template> -->
+        </template>
         <template #expand="{ row: parentRow, index: parIndex }: parentRowType">
           <!-- -全场结算按钮 -->
           <SettleMatchBtn

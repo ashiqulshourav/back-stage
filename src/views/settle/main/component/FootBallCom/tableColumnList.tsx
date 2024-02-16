@@ -111,13 +111,13 @@ export const columns: TableColumnList = [
     label: t('未结算'),
     prop: 'unSettlementEvents',
     headerRenderer: d => handleTableWidth(d, t('未结算'))
+  },
+  {
+    label: t('操作'),
+    slot: 'operation',
+    minWidth: 150,
+    fixed: 'right'
   }
-  // {
-  //   label: t('操作'),
-  //   slot: 'operation',
-  //   minWidth: 150,
-  //   fixed: 'right'
-  // }
 ];
 
 export const childColumns: TableColumnList = [
