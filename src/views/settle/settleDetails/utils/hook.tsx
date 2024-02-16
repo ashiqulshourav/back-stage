@@ -74,10 +74,10 @@ export function useMatchDetailsHook() {
     }
     ElMessageBox.confirm(
       t('手动确认结算全场比赛后，即开始截赛全场比赛玩法，结算后无法回退。'),
-      t('確認結算全場比賽'),
+      t('确认结算全场比赛'),
       {
         dangerouslyUseHTMLString: true,
-        confirmButtonText: t('確認結算'),
+        confirmButtonText: t('确认结算'),
         cancelButtonText: t('取消'),
         center: true
       }
@@ -180,12 +180,12 @@ export function useMatchDetailsHook() {
             } <br />
               <p class="text-center text-2xl text-bold w-full">${NewGoalEvent.t1} : ${NewGoalEvent.t2
             }</p>
-              ⼿動結算後無法回退，請再次確認比分</p>
+              手动结算后无法回退，请再次确认比分</p>
               `,
-            `結算${MATCH_PERIOD[NewGoalEvent.matchPeriod]}`,
+            `结算${MATCH_PERIOD[NewGoalEvent.matchPeriod]}`,
             {
               dangerouslyUseHTMLString: true,
-              confirmButtonText: t('確認結算'),
+              confirmButtonText: t('确认结算'),
               cancelButtonText: t('取消'),
               center: true
             }
@@ -215,12 +215,12 @@ export function useMatchDetailsHook() {
             } <br />
               <p class="text-center text-2xl text-bold w-full">${NewGoalEvent.t1} : ${NewGoalEvent.t2
             }</p>
-              ⼿動結算後無法回退，請再次確認比分</p>
+              手动结算后无法回退，请再次确认比分</p>
               `,
-            `結算第 ${NewGoalEvent.inningNum + 1} 节`,
+            `结算第 ${NewGoalEvent.inningNum + 1} 节`,
             {
               dangerouslyUseHTMLString: true,
-              confirmButtonText: t('確認結算'),
+              confirmButtonText: t('确认结算'),
               cancelButtonText: t('取消'),
               center: true
             }
@@ -249,12 +249,12 @@ export function useMatchDetailsHook() {
             } <br />
               <p class="text-center text-2xl text-bold w-full">${NewGoalEvent.t1} : ${NewGoalEvent.t2
             }</p>
-              ⼿動結算後無法回退，請再次確認比分</p>
+              手动结算后无法回退，请再次确认比分</p>
               `,
-            `結算第 ${NewGoalEvent.inningNum + 1} 节`,
+            `结算第 ${NewGoalEvent.inningNum + 1} 节`,
             {
               dangerouslyUseHTMLString: true,
-              confirmButtonText: t('確認結算'),
+              confirmButtonText: t('确认结算'),
               cancelButtonText: t('取消'),
               center: true
             }

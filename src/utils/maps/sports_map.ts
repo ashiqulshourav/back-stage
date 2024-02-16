@@ -108,7 +108,11 @@ export const YELLOW_OR_RED = {
   'yellow_card': 1,
   'red_card': 2
 }
-
+export const  MATCH_UNITS = {
+  2: '节',
+  19: '局',
+  23: '局',
+}
 
 //- 玩法声明映射
 export const PLAY_MATCH = (code) => {
