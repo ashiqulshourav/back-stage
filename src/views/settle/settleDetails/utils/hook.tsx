@@ -73,7 +73,7 @@ export function useMatchDetailsHook() {
       return;
     }
     ElMessageBox.confirm(
-      t('⼿動確認比嚼算全場比賽後，即開始結算全場比賽玩法，結算後無法回退。'),
+      t('手动确认结算全场比赛后，即开始截赛全场比赛玩法，结算后无法回退。'),
       t('確認結算全場比賽'),
       {
         dangerouslyUseHTMLString: true,
