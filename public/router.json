@@ -109,6 +109,14 @@
         }
       },
       {
+        "path": "/settle/boxing_detail",
+        "name": "SETTLE_BOXING_DETAIL",
+        "meta": {
+          "title": "拳击/格斗结算",
+          "showLink": false
+        }
+      },
+      {
         "path": "/settle/settleDetails",
         "name": "SETTLE_DETAILS",
         "meta": {

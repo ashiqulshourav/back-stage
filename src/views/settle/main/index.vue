@@ -20,6 +20,7 @@ import Billiards from './component/Billiards/index.vue';
 import Tennis from './component/Tennis/index.vue';
 import Volleyball from './component/Volleyball/index.vue';
 import Hockey from './component/Hockey/index.vue';
+import Boxing from './component/Boxing/index.vue';
 import MatchLists from './component/MatchLists/index.vue';
 import SearchForm from './component/SearchForm.vue';
 import SportTypeNav from './component/SportTypeNav.vue';
@@ -45,7 +46,8 @@ const comoMap = {
   Billiards,
   Volleyball,
   Hockey,
-  MatchLists
+  MatchLists,
+  Boxing
 };
 const currentComponentName = reactive({
   name: markRaw(comoMap.FootBall)
