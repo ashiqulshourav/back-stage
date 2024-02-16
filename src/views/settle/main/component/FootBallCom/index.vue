@@ -22,15 +22,16 @@
         @page-size-change="handleTableWidthChange"
         @page-current-change="handleCurrentChange"
       >
-        <!-- <template #operation="{ row }">
+        <template #operation="{ row }">
+          <span v-if="!row.isShowCancelBtn">-</span>
           <el-button
+            v-else
             type="danger"
             :size="size"
-            :disabled="!row.isShowCancelBtn"
             @click="cancelBetOrder(row)"
             >{{ t('取消注单') }}</el-button
           >
-        </template> -->
+        </template>
         <template #expand="{ row: parentRow, index: parIndex }: parentRowType">
           <!-- -全场结算按钮 -->
           <SettleMatchBtn
