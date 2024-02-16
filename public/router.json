@@ -117,6 +117,14 @@
         }
       },
       {
+        "path": "/settle/darts_detail",
+        "name": "SETTLE_DARTS_DETAIL",
+        "meta": {
+          "title": "飞镖结算",
+          "showLink": false
+        }
+      },
+      {
         "path": "/settle/settleDetails",
         "name": "SETTLE_DETAILS",
         "meta": {

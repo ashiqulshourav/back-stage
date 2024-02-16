@@ -45,20 +45,12 @@ import { useMatchStore } from '@/store/match';
 
 const { tableHeaderStyle } = usePublicHooks();
 const router = useRouter();
-
 const matchStore = useMatchStore();
 
 const props = defineProps<{
   form: SearchFormType;
 }>();
 
-const goBoxingDetail = row => {
-  const params = JSON.parse(JSON.stringify(row));
-  router.push({
-    name: 'SETTLE_BOXING_DETAIL',
-    state: { params }
-  });
-};
 const {
   onSearch,
   columns,
@@ -72,6 +64,14 @@ const {
 form.value = props.form;
 const filterData = (type: 'reload') => {
   onSearch(type);
+};
+
+const goBoxingDetail = row => {
+  const params = JSON.parse(JSON.stringify(row));
+  router.push({
+    name: 'SETTLE_BOXING_DETAIL',
+    state: { params }
+  });
 };
 
 defineExpose({ filterData });
