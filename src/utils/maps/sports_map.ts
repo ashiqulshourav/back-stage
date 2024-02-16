@@ -120,7 +120,7 @@ export const PLAY_MATCH = (code) => {
   const t2 = ['HT_AH', 'FT_AH', 'FTS_AH', 'Q4_AH', 'Q3_AH', 'Q1_AH', 'Q2_AH', 'S1_AH', 'S2_AH', 'S3_AH', 'S4_AH', 'PT_AH']
   const t3 = ['FT_OE', 'S2_ML', 'HT_OE']
   const t4 = ['FT_1X2', 'HT_1X2']
-  const t5 = ['S1_ML', 'Q1_ML', 'Q2_ML', 'Q3_ML', 'Q4_ML', 'FT_ML', 'HT_ML', 'Winner_2ndFrame', 'Winner_1stFrame']
+  const t5 = ['S1_ML', 'Q1_ML', 'Q2_ML', 'Q3_ML', 'Q4_ML', 'FT_ML', 'HT_ML', 'Winner_2ndFrame', 'Winner_1stFrame', 'Winner', 'Winner_1X2']
   switch (true) {
     case t1.includes(code):
       return {

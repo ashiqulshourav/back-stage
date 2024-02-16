@@ -206,3 +206,7 @@ input[type='number'] {
     height: 10px !important;
   }
 }
+
+.el-message-box__header.show-close {
+  padding-right: 0;
+}

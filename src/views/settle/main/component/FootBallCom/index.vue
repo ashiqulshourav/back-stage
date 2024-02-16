@@ -28,6 +28,7 @@
             v-else
             type="danger"
             :size="size"
+            :disabled="row.cancelOrderTimes > 0"
             @click="cancelBetOrder(row)"
             >{{ t('取消注单') }}</el-button
           >
