@@ -109,6 +109,7 @@ declare namespace SattleDataAPI {
     endTime?: any;
     pageSize: number;
     pageNum: number;
+    cancelOrderTimes?: number;
     unSettlementEvents: number;
     childrenData?: ChildrenDataList[];
     settlementType: number; //1 自动结算 //2 手动结算
