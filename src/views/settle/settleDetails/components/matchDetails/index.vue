@@ -33,9 +33,8 @@
 <script setup lang="ts">
 import { SPORT_ID_MAP, MATCH_STATUS } from '@/utils/maps/sports_map';
 import { t } from '@/plugins/i18n';
-import { truncateString } from '../../utils/tableColumnList';
 const props = defineProps<{
-  renderObj: EsportsSettlementAPI.ESportMatchList;
+  renderObj: SattleDataAPI.getSettlementDataList;
 }>();
 const renderList = computed(() => {
   const _ = props.renderObj;
@@ -62,7 +61,7 @@ const renderList = computed(() => {
     },
     {
       title: t('比赛方'),
-      val: `${truncateString(_?.homeTeamNameCn) || '-'} VS ${truncateString(_?.awayTeamNameCn) || '-'}`
+      val: `${_?.homeTeamNameCn || '-'} VS ${_?.awayTeamNameCn || '-'}`
     },
     {
       title: t('结算状态'),

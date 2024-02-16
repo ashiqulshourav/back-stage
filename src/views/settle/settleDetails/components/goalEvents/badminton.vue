@@ -16,7 +16,7 @@
       >
         <template #matchPeriod="{ index }">
           <span>
-            {{ `第 ${index + 1} 节` }}
+            {{ `第 ${index + 1} 局` }}
           </span>
         </template>
         <template #t1="{ row, index }">
@@ -74,7 +74,7 @@
   </PureTableBar>
   <div class="mt-4">
     <el-button type="primary" v-if="checkNoMore()" @click="handleEditEvent">{{
-      '新增节'
+      '新增局'
     }}</el-button>
   </div>
 </template>
@@ -86,10 +86,10 @@ import dayjs from 'dayjs';
 import { t } from '@/plugins/i18n';
 
 const props = defineProps<{
-  columns;
-  dataList;
-  onAddNewGoalEvent;
-  onSearch;
+  columns: TableColumnList;
+  dataList: SattleDataAPI.BasketballEvent[];
+  onAddNewGoalEvent: (NewGoalEvent: SattleDataAPI.MatchEventParams) => boolean;
+  onSearch: () => void;
 }>();
 
 const timestamps = ref(0);

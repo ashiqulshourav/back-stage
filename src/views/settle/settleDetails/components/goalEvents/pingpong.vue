@@ -7,14 +7,14 @@
         size="small"
         :type="gameRule === '7-4' ? 'primary' : ''"
       >
-        {{t('七局四勝')}}  
+        {{t('七局四胜')}}  
       </el-button>
       <el-button
         @click="editGameRule = '5-3'"
         size="small"
         :type="gameRule === '5-3' ? 'primary' : ''"
       >
-        {{t('五局三勝')}}  
+        {{t('五局三胜')}}  
       </el-button>
     </div>
   </template>
@@ -36,7 +36,7 @@
       >
         <template #matchPeriod="{index}">
           <span>
-            {{ `第 ${index + 1} 节` }}
+            {{ `第 ${index + 1} 局` }}
           </span>
         </template>
         <template #t1="{ row, index }">
@@ -111,10 +111,10 @@ import dayjs from 'dayjs';
 import { t } from '@/plugins/i18n';
 
 const props = defineProps<{
-  columns;
-  dataList;
-  onAddNewGoalEvent;
-  onSearch;
+  columns: TableColumnList;
+  dataList: SattleDataAPI.BasketballEvent[];
+  onAddNewGoalEvent: (NewGoalEvent: SattleDataAPI.MatchEventParams) => boolean;
+  onSearch: () => void;
 }>();
 const editGameRule = ref('7-4');
 const gameRule = computed(() => {
@@ -150,7 +150,7 @@ const handleEditEvent = () => {
 }
 const isEdit = ref(false);
 const renderData = computed(() =>
-  isEdit.value ? props.dataList.concat(NewGoalEvent) : props.dataList
+  isEdit.value ? props.dataList.concat(NewGoalEvent as SattleDataAPI.BasketballEvent) : props.dataList
 )
 const { tableHeaderStyle } = usePublicHooks();
 const renderBegintime = computed(() => history.state.params?.beginTimeLong + 28800000);

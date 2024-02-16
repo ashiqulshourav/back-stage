@@ -1,5 +1,5 @@
 <template>
-  <template v-if="dataList.length === 0 && !isEdit" class="p-3">
+  <template v-if="dataList.length === 0 " class="p-3">
     <h3 class="text-sm mt-8">赛制</h3>
     <div class="flex mt-4">
       <el-button
@@ -14,12 +14,12 @@
         size="small"
         :type="gameRule === 'HT' ? 'primary' : ''"
       >
-        {{ t('两节制') }}
+        {{ t('上下半场制') }}
       </el-button>
     </div>
   </template>
   <PureTableBar
-    :title="t('賽果結算')"
+    :title="t('赛果结算')"
     :columns="props.columns"
     @refresh="props.onSearch()"
   >
@@ -38,10 +38,15 @@
             {{ MATCH_PERIOD[row.matchPeriod] }}
           </span>
         </template>
+        <template #matchPeriodHeader="{  }">
+          <span>
+            {{ MATCH_PERIOD[row.matchPeriod] }}
+          </span>
+        </template>
         <template #t1="{ row, index }">
           <input
             v-if="isEdit && index === renderData.length - 1"
-            class="border w-1/3 mx-auto"
+            class="border px-2 w-1/3 mx-auto"
             type="number"
             v-model="NewGoalEvent.t1"
           />
@@ -51,7 +56,7 @@
         </template>
         <template #t2="{ row, index }">
           <input
-            class="border w-1/3 mx-auto"
+            class="border px-2 w-1/3 mx-auto"
             v-if="isEdit && index === renderData.length - 1"
             type="number"
             v-model="NewGoalEvent.t2"
@@ -82,7 +87,7 @@
             v-if="isEdit && index === renderData.length - 1"
           >
             <el-button type="primary" @click="handleNewEvent">
-              {{ t('結算節') }}
+              {{ gameRule === 'INNING' ? t('结算节') : index === 0 ? t('结算上半场') : index === 1 ? t('结算下半场') : t('结算加时赛') }}
             </el-button>
             <el-button @click="isEdit = false">{{ t('取消') }}</el-button>
           </div>
@@ -96,7 +101,7 @@
       (gameRule === 'HT' && props.dataList.length == 2) ||
       (gameRule === 'INNING' && props.dataList.length == 4)
         ? '新增加时赛'
-        : '新增节'
+    : gameRule === 'INNING' ? '新增节': '新增上/下班场'
     }}</el-button>
   </div>
 </template>
@@ -109,10 +114,10 @@ import { t } from '@/plugins/i18n';
 import { MATCH_PERIOD } from '@/utils/maps/sports_map';
 
 const props = defineProps<{
-  columns;
-  dataList;
-  onAddNewGoalEvent;
-  onSearch;
+  columns: TableColumnList;
+  dataList: SattleDataAPI.BasketballEvent[];
+  onAddNewGoalEvent: (NewGoalEvent: SattleDataAPI.MatchEventParams) => boolean;
+  onSearch: () => void;
 }>();
 
 const timestamps = ref(0);

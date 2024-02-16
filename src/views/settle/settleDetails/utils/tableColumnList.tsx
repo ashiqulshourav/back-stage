@@ -1,4 +1,4 @@
-import { MATCH_PERIOD } from '@/utils/maps/sports_map';
+import { MATCH_PERIOD, MATCH_UNITS } from '@/utils/maps/sports_map';
 import dayjs from 'dayjs';
 export const truncateString = (str: string = '') => {
   if (str?.length > 8) {
@@ -8,12 +8,12 @@ export const truncateString = (str: string = '') => {
 }
 export const columns: TableColumnList = [
   {
-    label: t('节'),
     prop: 'matchPeriod',
     slot: 'matchPeriod',
+    headerSlot: 'matchPeriodHeader',
     width: '100px',
     headerRenderer: () => {
-      return t('节');
+      return t(MATCH_UNITS[history.state.params?.sportId]);
     },
     formatter: ({ matchPeriod }) => {
       return MATCH_PERIOD[matchPeriod];
@@ -24,7 +24,6 @@ export const columns: TableColumnList = [
     minWidth: 100,
     prop: 't1',
     slot: 't1',
-    headerSlot: 'header_t1',
     headerRenderer: () => {
       return truncateString(history.state.params.homeTeamNameCn ? history.state.params.homeTeamNameCn : history.state.params.homeTeamNameEn) ;
     },
