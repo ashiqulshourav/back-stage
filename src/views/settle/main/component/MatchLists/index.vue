@@ -25,7 +25,7 @@
               class="reset-margin"
               type="primary"
               :size="size"
-              @click="goTennisDetail(row)"
+              @click="goToDetails(row)"
             >
               {{ t('结算详情') }}
             </el-button>
@@ -46,6 +46,8 @@ import { useMatchLists } from './util/hook';
 
 const { tableHeaderStyle } = usePublicHooks();
 const matchStore = useMatchStore();
+const router = useRouter();
+
 const props = defineProps<{
   form: SearchFormType;
 }>();
@@ -63,7 +65,13 @@ form.value = props.form;
 const filterData = (type: 'reload') => {
   onSearch(type);
 };
-
+const goToDetails = row => {
+  const params = JSON.parse(JSON.stringify(row));
+  router.push({
+    name: 'SETTLE_DETAILS',
+    state: { params }
+  });
+};
 defineExpose({ filterData });
 
 </script>

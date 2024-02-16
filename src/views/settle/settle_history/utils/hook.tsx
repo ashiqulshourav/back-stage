@@ -138,8 +138,6 @@ export function useSettle() {
           _.isBackEndReturnData = true;
           if (_.eventTime.toString().length < 10) {
             _.eventTime = dateSetSecond(_.eventTime as number);
-          } else {
-            _.eventTime = getSecondTime(_.eventTime, row.beginTime);
           }
           item.type === 'yellow_red_card' &&
             (_.redOrYellow = YELLOW_OR_RED[_.eventCode]);

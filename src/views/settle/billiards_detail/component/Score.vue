@@ -1,6 +1,7 @@
 <template>
   <div class="score_main">
     <el-input
+      :class="[errorType && 'error_color']"
       :disabled="!row.isEdit"
       v-model="row[type]"
       ref="inputRef"
@@ -16,6 +17,7 @@ const inputRef = ref();
 const props = defineProps<{
   row: SattleDataAPI.volleyballData;
   type: string;
+  errorType: boolean;
 }>();
 
 watch(
@@ -42,6 +44,11 @@ watch(
         .el-input__inner {
           text-align: center;
         }
+      }
+    }
+    .error_color {
+      .el-input__wrapper {
+        box-shadow: 0 0 0 1px var(--el-color-danger) inset !important;
       }
     }
   }
