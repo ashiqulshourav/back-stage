@@ -200,10 +200,10 @@ declare namespace SattleDataAPI {
   type getVolleyballEventsResType = COMMON.BASE_RES_TYPE<volleyballData[]>;
   type manualSettlementFullTimeRestType = COMMON.BASE_RES_TYPE<any>;
   type preSaleInfoResType = COMMON.BASE_RES_TYPE<getSettlementDataList>;
-  type getBasketballEventRes = COMMON.BASE_RES_TYPE<BasketballEvent[]>
+  type getBasketballEventRes = COMMON.BASE_RES_TYPE<BasketballEvent[]>;
+  type getHockeyEventRes = COMMON.BASE_RES_TYPE<HockeyEventData[]>;
   type getBadmintonEventRes = COMMON.BASE_RES_TYPE<BasketballEvent[]>
-  type getMatchEventsRes = COMMON.BASE_RES_TYPE<MatchEventsList[]>
-  type cancelBetOrderResType = COMMON.BASE_RES_TYPE<null>
+  type getMatchEventsRes = COMMON.BASE_RES_TYPE<MatchEventsList[]>;  type cancelBetOrderResType = COMMON.BASE_RES_TYPE<null>
 
 
   type getSettlementHistoryParams = {
