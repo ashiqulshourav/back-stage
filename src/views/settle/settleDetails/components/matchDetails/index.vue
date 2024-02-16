@@ -46,7 +46,7 @@ const renderList = computed(() => {
     },
     {
       title: t('联赛'),
-      val: _?.leagueNameCn || ''
+      val: history.state.params?.leagueNameCn || ''
     },
     {
       title: t('开赛时间'),

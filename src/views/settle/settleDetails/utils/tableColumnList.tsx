@@ -1,7 +1,7 @@
 import { MATCH_PERIOD } from '@/utils/maps/sports_map';
 import dayjs from 'dayjs';
 export const truncateString = (str: string = '') => {
-  if (str.length > 8) {
+  if (str?.length > 8) {
     return str.substring(0, 7) + '...';
   }
   return str;

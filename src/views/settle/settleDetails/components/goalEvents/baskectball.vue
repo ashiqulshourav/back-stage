@@ -7,14 +7,14 @@
         size="small"
         :type="gameRule === 'INNING' ? 'primary' : ''"
       >
-        {{t('四节制')}}  
+        {{ t('四节制') }}
       </el-button>
       <el-button
         @click="editGameRule = 'HT'"
         size="small"
         :type="gameRule === 'HT' ? 'primary' : ''"
       >
-        {{t('两节制')}}  
+        {{ t('两节制') }}
       </el-button>
     </div>
   </template>
@@ -33,7 +33,7 @@
         :columns="dynamicColumns"
         :header-cell-style="tableHeaderStyle"
       >
-        <template #matchPeriod="{row}">
+        <template #matchPeriod="{ row }">
           <span>
             {{ MATCH_PERIOD[row.matchPeriod] }}
           </span>
@@ -72,34 +72,32 @@
             class="custom-time-picker"
             format="HH:mm:ss"
           />
-          <span v-else>{{ dayjs(dayjs(row.eventTime).diff(renderBegintime)).format('HH:mm:ss') }}</span>
+          <span v-else>{{
+            dayjs(dayjs(row.eventTime).diff(renderBegintime)).format('HH:mm:ss')
+          }}</span>
         </template>
         <template #operation="{ index }">
           <div
             class="flex gap-2 justify-center"
             v-if="isEdit && index === renderData.length - 1"
           >
-            <el-button 
-              type="primary"
-              @click="handleNewEvent"  
-            >
-              {{t('結算節')}}
+            <el-button type="primary" @click="handleNewEvent">
+              {{ t('結算節') }}
             </el-button>
-            <el-button
-              @click="isEdit = false"              
-            >{{t('取消')}}</el-button>
+            <el-button @click="isEdit = false">{{ t('取消') }}</el-button>
           </div>
           <span v-else> - </span>
-        </template> 
+        </template>
       </pure-table>
     </template>
   </PureTableBar>
   <div class="mt-4">
-    <el-button 
-      type="primary"
-      v-if="checkNoMore()"
-      @click="handleEditEvent"
-      >{{(gameRule === 'HT' && props.dataList.length == 2) || (gameRule === 'INNING' && props.dataList.length == 4) ? '新增加时赛' : '新增局'}}</el-button>
+    <el-button type="primary" v-if="checkNoMore()" @click="handleEditEvent">{{
+      (gameRule === 'HT' && props.dataList.length == 2) ||
+      (gameRule === 'INNING' && props.dataList.length == 4)
+        ? '新增加时赛'
+        : '新增节'
+    }}</el-button>
   </div>
 </template>
 
@@ -121,19 +119,20 @@ const timestamps = ref(0);
 const editGameRule = ref('INNING');
 const gameRule = computed(() => {
   return props.dataList[0]?.gameRule || editGameRule.value;
-})
+});
 
 const getMatchPeriod = () => {
-  if ((gameRule.value === 'HT' && props.dataList.length == 2)
-        || (gameRule.value === 'INNING' && props.dataList.length == 4)
+  if (
+    (gameRule.value === 'HT' && props.dataList.length == 2) ||
+    (gameRule.value === 'INNING' && props.dataList.length == 4)
   ) {
     return 'OT';
   }
   if (gameRule.value === 'HT') {
-    return props.dataList.length === 0 ? 'FT' : 'HT';
+    return props.dataList.length === 0 ? 'HT' : 'FT';
   }
   return `Q${props.dataList.length + 1}`;
-}
+};
 
 const checkNoMore = () => {
   if (isEdit.value) {
@@ -149,8 +148,8 @@ const checkNoMore = () => {
   if (gameRule.value === 'HT' && props.dataList.length > 2) return false;
   if (gameRule.value === 'INNING' && props.dataList.length > 4) return false;
   return true;
-}
-const NewGoalEvent: SattleDataAPI.BasketballEvent = reactive({
+};
+const NewGoalEvent: SattleDataAPI.MatchEventParams = reactive({
   matchId: history.state.params?.matchId,
   t1: 0 as number,
   t2: 0 as number,
@@ -163,25 +162,21 @@ const handleEditEvent = () => {
   NewGoalEvent.t1 = 0;
   NewGoalEvent.t2 = 0;
   NewGoalEvent.matchPeriod = getMatchPeriod();
-}
+};
 const isEdit = ref(false);
 const renderData = computed(() =>
   isEdit.value ? props.dataList.concat(NewGoalEvent) : props.dataList
-)
+);
 const { tableHeaderStyle } = usePublicHooks();
-const renderBegintime = computed(() => history.state.params?.beginTimeLong + 28800000)
+const renderBegintime = computed(
+  () => history.state.params?.beginTimeLong + 28800000
+);
 const handleNewEvent = () => {
   if (timestamps.value)
-    NewGoalEvent.eventTime = history.state.params?.beginTimeLong + dayjs(timestamps.value).diff(dayjs(timestamps.value).startOf('day'));
-  try {
-    props.onAddNewGoalEvent(NewGoalEvent);
-  } catch (error) {
-    
-  }
-  isEdit.value = false;
-  
-}
-
+    NewGoalEvent.eventTime =
+      history.state.params?.beginTimeLong +
+      dayjs(timestamps.value).diff(dayjs(timestamps.value).startOf('day'));
+  if (props.onAddNewGoalEvent(NewGoalEvent)) isEdit.value = false;
+};
 </script>
-<style scoped>
-</style>
+<style scoped></style>
