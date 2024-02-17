@@ -89,29 +89,7 @@ export const OPENING_STATUS = {
   2: t('滚球'),
   3: t('进行中'),
 }
-export const MATCH_PERIOD_TYPES = {
-  Q1: ' 第一节',
-  Q2: ' 第二节 ',
-  Q3: ' 第三节 ',
-  Q4: ' 第四节 ',
-  OT: ' 加时赛',
-  HT: '上半场',
-  FT: '下半场',
-}
-export const MATCH_PERIOD = {
-  'INNING': {
-    1: 'Q1',
-    2: 'Q2',
-    3: 'Q3',
-    4: 'Q4',
-    5: 'OT',
-  },
-  'HT': {
-    1: 'HT',
-    2: 'FT',
-    3: 'OT'
-  }
-}
+
 //- 盘口状态
 export const HANDICAP_STATUS = {
   0: t('未锁盘'),
@@ -121,11 +99,6 @@ export const HANDICAP_STATUS = {
 export const YELLOW_OR_RED = {
   'yellow_card': 1,
   'red_card': 2
-}
-export const  MATCH_UNITS = {
-  2: '节',
-  19: '局',
-  23: '局',
 }
 
 //- 玩法声明映射

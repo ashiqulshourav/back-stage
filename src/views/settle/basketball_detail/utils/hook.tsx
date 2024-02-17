@@ -1,8 +1,7 @@
 import { message } from '@/utils/message';
 import { t } from '@/plugins/i18n';
-import { columns } from './tableColumnList';
+import { columns,  MATCH_PERIOD, MATCH_PERIOD_TYPES } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
-import {  MATCH_PERIOD, MATCH_PERIOD_TYPES } from '@/utils/maps/sports_map';
 export function useBilliardsHook() {
   const dataList = reactive<SattleDataAPI.basketballData[]>([]);
   const allSettleLoading = ref(false);

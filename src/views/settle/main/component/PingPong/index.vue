@@ -1,6 +1,6 @@
 <template>
   <PureTableBar
-    :title="t('排球结算管理')"
+    :title="t('乒乓球结算管理')"
     :columns="columns"
     @refresh="onSearch('reload')"
   >
@@ -81,7 +81,7 @@ const filterData = (type: 'reload') => {
 const goTennisDetail = row => {
   const params = JSON.parse(JSON.stringify(row));
   router.push({
-    name: 'SETTLET_VOLLEBALL_DETAIL',
+    name: 'SETTLE_PINGPONG_DETAIL',
     state: { params }
   });
 };

@@ -81,7 +81,7 @@ export const sattleData = {
   }) => http.request<SattleDataAPI.getBadmintonEventRes>("post", "/badminton/v1/getBadmintonEvents", { data }),
   getPingpongEvents: (data: {
     matchId: number;
-  }) => http.request<SattleDataAPI.getBadmintonEventRes>("post", "/pingPong/v1/getPingPongEvents", { data }),
+  }) => http.request<SattleDataAPI.getPingPongEventRes>("post", "/pingPong/v1/getPingPongEvents", { data }),
 
   //-排球全场结算（按盘）
   manualSettlementFullTime: (data:

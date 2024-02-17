@@ -2,7 +2,7 @@ export const columns: TableColumnList = [
   {
     label: t('局'),
     prop: 'inningNum',
-    type: 'index'
+    formatter: ({inningNum}) => t(`第 ${inningNum} 局`)
   },
   {
     headerRenderer: () => history.state.params.homeTeamNameCn ?? '_',

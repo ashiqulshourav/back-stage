@@ -4,17 +4,17 @@ import { columns } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
 
 export function useBilliardsHook() {
-  const dataList = reactive<SattleDataAPI.volleyballData[]>([]);
+  const dataList = reactive<SattleDataAPI.pingpongData[]>([]);
   const allSettleLoading = ref(false);
   const loading = ref(true);
-  const boardType = ref('INNING');
+  const boardType = ref('7-4');
   const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
     {} as SattleDataAPI.getSettlementDataList
   );
 
   // - 初始化
   const onSearch = async () => {
-    const res = await API.getVolleyballEvents({
+    const res = await API.getPingpongEvents({
       matchId: history.state.params.matchId
     });
     loading.value = false;
@@ -50,10 +50,19 @@ export function useBilliardsHook() {
   };
 
   //- 结算局事件
-  const settlementHandicap = async (row: SattleDataAPI.TennisEventsData) => {
+  const settlementHandicap = async (row: SattleDataAPI.pingpongData) => {
     const { eventTime, t1, t2 } = row;
     if (!eventTime || !t1 || !t2) {
       return message(t('请先完成并保存事件'), { type: 'error' });
+    }
+    if (
+      (Number(t1) < 0 || Number(t2) < 0) ||
+      t1 === t2 ||
+      (t1 as number >= 10 && t2 as number >= 10 && Math.abs(Number(t1) - Number(t2)) !== 2) ||
+      (Number(t1) < 11 && Number(t2) < 11) ||
+      ((Number(t1) > 11 && Number(t2) < 10) || (Number(t2) > 11 && Number(t1) < 10)) 
+    ) {
+      return message(t('无效分数'), { type: 'error' });
     }
     ElMessageBox.confirm(
       `
@@ -89,7 +98,7 @@ export function useBilliardsHook() {
         inningNum: row.inningNum
       };
       try {
-        const res = await API.addVolleyballEvent(params);
+        const res = await API.addPingPongballEvent(params);
         if (res.code) return message(res.msg, { type: 'error' });
         loading.value = false;
         onSearch();
@@ -105,13 +114,15 @@ export function useBilliardsHook() {
     let s2 = 0;
     const scoreList = dataList.map(item => [item.t1, item.t2]);
     scoreList.forEach(item => (item[0] > item[1] ? ++s1 : ++s2));
+    s1 = s1 < s2 ? s2 : s1;
     if (
       dataList.length < 2 ||
       dataList.some(item => !item.id) ||
-      Math.abs(s1 - s2) < 1
+      s1 !== Number(dataList[0].gameRule[2])
     ) {
       return message(t('请先完成盘结算'), { type: 'error' });
     }
+    
     ElMessageBox.confirm(
       `
       <div class="text-center">
@@ -129,7 +140,7 @@ export function useBilliardsHook() {
     ).then(async () => {
       try {
         allSettleLoading.value = true;
-        const res = await API.volleyballManualSettlementFullTime({
+        const res = await API.PingPongManualSettlementFullTime({
           matchId: history.state.params.matchId
         });
         allSettleLoading.value = false;
@@ -154,15 +165,27 @@ export function useBilliardsHook() {
     getMatchDetail();
     onSearch();
   });
-
+  const checkNoMore = () => {
+    let s1 = 0;
+    let s2 = 0;
+    const scoreList = dataList.map(item => [item.t1, item.t2]);
+    scoreList.forEach(item => (item[0] > item[1] ? ++s1 : ++s2));
+    s1 = s1 < s2 ? s2 : s1;
+    if (dataList.length && s1 === Number(dataList[0].gameRule[2])) {
+      return false;
+    }
+    return true;
+  }
   return {
     onSearch,
     loading,
     columns,
     dataList,
+    boardType,
     addEventRow,
     settlementHandicap,
     allSettleBtnClick,
+    checkNoMore,
     renderObj,
     allSettleLoading
   };
