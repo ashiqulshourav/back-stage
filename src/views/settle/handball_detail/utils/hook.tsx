@@ -1,6 +1,6 @@
 import { columns } from './tableColumnList';
 import { ElMessageBox, dayjs } from 'element-plus';
-import { MATCH_PERIOD } from '@/utils/maps/sports_map';
+import { MATCH_PERIOD_TYPES } from '@/utils/maps/sports_map';
 import { message } from '@/utils/message';
 
 export function useDetailHook() {
@@ -73,7 +73,7 @@ export function useDetailHook() {
         }</p>
           ⼿动结算后无法回退，请再次确认比分</p>
           `,
-        `結算第${MATCH_PERIOD[NewEvent.matchPeriod]}节`,
+        `結算第${MATCH_PERIOD_TYPES[NewEvent.matchPeriod]}节`,
         {
           dangerouslyUseHTMLString: true,
           confirmButtonText: t('确认结算'),

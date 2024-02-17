@@ -2,7 +2,7 @@ import { message } from '@/utils/message';
 import { t } from '@/plugins/i18n';
 import { columns } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
-import {  MATCH_PERIOD, MATCH_PERIOD_TYPES } from '@/utils/maps/sports_map';
+import { MATCH_PERIOD_TYPES } from '@/utils/maps/sports_map';
 export function useBilliardsHook() {
   const dataList = reactive<SattleDataAPI.basketballData[]>([]);
   const allSettleLoading = ref(false);
@@ -39,7 +39,7 @@ export function useBilliardsHook() {
       isEdit: false,
       t1: '',
       t2: '',
-      matchPeriod: MATCH_PERIOD[boardType.value][dataList.length + 1]
+      matchPeriod: MATCH_PERIOD_TYPES[boardType.value][dataList.length + 1]
     };
     dataList.push(params as SattleDataAPI.volleyballData);
   };
@@ -81,7 +81,7 @@ export function useBilliardsHook() {
         gameRule: boardType.value,
         matchId: history.state.params.matchId,
         inningNum: row.inningNum,
-        matchPeriod: MATCH_PERIOD[boardType.value][row.inningNum]  
+        matchPeriod: MATCH_PERIOD_TYPES[boardType.value][row.inningNum]  
       };
       try {
         const res = await API.addBasketballEvent(params);

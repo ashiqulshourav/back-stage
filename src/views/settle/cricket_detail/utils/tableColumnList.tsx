@@ -1,4 +1,4 @@
-import { MATCH_PERIOD } from '@/utils/maps/sports_map';
+import { MATCH_PERIOD_TYPES } from '@/utils/maps/sports_map';
 import dayjs from 'dayjs';
 export const columns: TableColumnList = [
   {
@@ -10,7 +10,7 @@ export const columns: TableColumnList = [
       return t('节');
     },
     formatter: ({ matchPeriod }) => {
-      return MATCH_PERIOD[matchPeriod];
+      return MATCH_PERIOD_TYPES[matchPeriod];
     }
   },
   {

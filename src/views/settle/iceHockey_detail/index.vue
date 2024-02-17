@@ -23,7 +23,7 @@
         >
           <template #matchPeriod="{ row }">
             <span>
-              {{ MATCH_PERIOD[row.matchPeriod] }}
+              {{ MATCH_PERIOD_TYPES[row.matchPeriod] }}
             </span>
           </template>
           <template #t1="{ row, index }">
@@ -114,7 +114,7 @@ import { PureTableBar } from '@/components/RePureTableBar';
 import DetiltTitle from './component/DetailTitle.vue';
 import { useDetailHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
-import { MATCH_PERIOD } from '@/utils/maps/sports_map';
+import { MATCH_PERIOD_TYPES } from '@/utils/maps/sports_map';
 import dayjs from 'dayjs';
 
 defineOptions({ name: 'SETTLE_ICEHOCKEY_DETAIL' });

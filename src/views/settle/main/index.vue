@@ -50,7 +50,7 @@ const comoMap = {
   Billiards,
   Volleyball,
   Badminton,
-  PingPong
+  PingPong,
   // MatchLists,
   Volleyball,
   Handball,
