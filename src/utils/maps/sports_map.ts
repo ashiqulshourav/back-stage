@@ -2,7 +2,7 @@ import { t } from "@/plugins/i18n";
 
 export const SPORT_ID_MAP = [
   { label: t('足球'), value: 1, type: 'FootBall' },
-  { label: t('篮球'), value: 2, type: 'MatchLists' },
+  { label: t('篮球'), value: 2, type: 'BasketBall' },
   { label: t('网球'), value: 3, type: 'Tennis' },
   // { label: t('电子竞技'), value: 4, type: 'FootBall' },
   { label: t('斯诺克/台球'), value: 5, type: 'Billiards' },
@@ -15,8 +15,8 @@ export const SPORT_ID_MAP = [
   { label: t('冰球'), value: 12, type: 'IceHockey' },
   { label: t('板球'), value: 13, type: 'Cricket' },
   { label: t('美式足球'), value: 16, type: 'MatchLists' },
-  { label: t('羽毛球'), value: 19, type: 'MatchLists' },
-  { label: t('乒乓球'), value: 23, type: 'MatchLists' },
+  { label: t('羽毛球'), value: 19, type: 'Badminton' },
+  { label: t('乒乓球'), value: 23, type: 'PingPong' },
   { label: t('曲棍球'), value: 28, type: 'Hockey' },
 ]
 
@@ -89,7 +89,7 @@ export const OPENING_STATUS = {
   2: t('滚球'),
   3: t('进行中'),
 }
-export const MATCH_PERIOD = {
+export const MATCH_PERIOD_TYPES = {
   Q1: ' 第一节',
   Q2: ' 第二节 ',
   Q3: ' 第三节 ',
@@ -97,6 +97,20 @@ export const MATCH_PERIOD = {
   OT: ' 加时赛',
   HT: '上半场',
   FT: '下半场',
+}
+export const MATCH_PERIOD = {
+  'INNING': {
+    1: 'Q1',
+    2: 'Q2',
+    3: 'Q3',
+    4: 'Q4',
+    5: 'OT',
+  },
+  'HT': {
+    1: 'HT',
+    2: 'FT',
+    3: 'OT'
+  }
 }
 //- 盘口状态
 export const HANDICAP_STATUS = {

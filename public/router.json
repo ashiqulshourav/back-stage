@@ -96,15 +96,23 @@
         "path": "/settle/basketball_detail",
         "name": "SETTLE_BASKETBALL_DETAIL",
         "meta": {
-          "title": "籃球结算",
+          "title": "篮球结算",
           "showLink": false
         }
       },
       {
-        "path": "/settle/settleDetails",
-        "name": "SETTLE_DETAILS",
+        "path": "/settle/pingpong_detail",
+        "name": "SETTLE_PINGPONG_DETAIL",
         "meta": {
-          "title": "结算管理",
+          "title": "乒乓球结算",
+          "showLink": false
+        }
+      },
+      {
+        "path": "/settle/badminton_detail",
+        "name": "SETTLE_BADMINTON_DETAIL",
+        "meta": {
+          "title": "⽻⽑球结算",
           "showLink": false
         }
       }
