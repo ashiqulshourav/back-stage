@@ -4,17 +4,17 @@ import { columns } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
 
 export function useBilliardsHook() {
-  const dataList = reactive<SattleDataAPI.volleyballData[]>([]);
+  const dataList = reactive<SattleDataAPI.badmintonData[]>([]);
   const allSettleLoading = ref(false);
   const loading = ref(true);
-  const boardType = ref('INNING');
+  const boardType = ref('3-2');
   const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
     {} as SattleDataAPI.getSettlementDataList
   );
 
   // - 初始化
   const onSearch = async () => {
-    const res = await API.getVolleyballEvents({
+    const res = await API.getBadmintonEvents({
       matchId: history.state.params.matchId
     });
     loading.value = false;
@@ -55,6 +55,16 @@ export function useBilliardsHook() {
     if (!eventTime || !t1 || !t2) {
       return message(t('请先完成并保存事件'), { type: 'error' });
     }
+    if (
+      (t1 < 0 || t2 < 0) ||
+      t1 === t2 ||
+      (t1 >= 20 && t2 >= 20 && Math.abs(t1 - t2) !== 2) ||
+      (t1 < 21 && t2 < 21) ||
+      ((t1 > 21 && t2 < 20) || (t2 > 21 && t1 < 20)) ||
+      (t1 > 30 || t2 > 30)
+    ) {
+      return message(t('无效分数'), { type: 'error' });
+    }
     ElMessageBox.confirm(
       `
       <div class="text-center">
@@ -89,7 +99,7 @@ export function useBilliardsHook() {
         inningNum: row.inningNum
       };
       try {
-        const res = await API.addVolleyballEvent(params);
+        const res = await API.addBadmintonballEvent(params);
         if (res.code) return message(res.msg, { type: 'error' });
         loading.value = false;
         onSearch();
@@ -129,7 +139,7 @@ export function useBilliardsHook() {
     ).then(async () => {
       try {
         allSettleLoading.value = true;
-        const res = await API.volleyballManualSettlementFullTime({
+        const res = await API.BamintonManualSettlementFullTime({
           matchId: history.state.params.matchId
         });
         allSettleLoading.value = false;
@@ -149,7 +159,21 @@ export function useBilliardsHook() {
     if (res.code) return message(res.msg, { type: 'error' });
     Object.assign(renderObj, res.data);
   };
+  const checknoMore = () => {
+    let s1 = 0;
+    let s2 = 0;
+    const scoreList = dataList.map(item => [item.t1, item.t2]);
+    scoreList.forEach(item => (item[0] > item[1] ? ++s1 : ++s2));
+    if (
+      dataList.length < 2 ||
+      dataList.some(item => !item.id) ||
+      Math.abs(s1 - s2) < 1
+    ) {
+      return true;
+    }
+    return false;
 
+  }
   onMounted(() => {
     getMatchDetail();
     onSearch();
@@ -160,6 +184,7 @@ export function useBilliardsHook() {
     loading,
     columns,
     dataList,
+    checknoMore,
     addEventRow,
     settlementHandicap,
     allSettleBtnClick,

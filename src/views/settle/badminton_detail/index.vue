@@ -9,15 +9,8 @@
 
     <PureTableBar :columns="columns" @refresh="onSearch()">
       <template #title>
-        <div class="flex items-center">
-          <el-button
-            @click="addEventRow"
-            size="small"
-            type="primary"
-            v-if="renderObj.fullSettlementStatus === 0"
-            >{{ t('新增局') }}</el-button
-          >
-          <span></span>
+        <div>
+          <h2>{{t('赛果结算')}}</h2>
         </div>
       </template>
 
@@ -27,7 +20,6 @@
           :loading="loading"
           :size="size"
           :row-key="row => row.inningNum"
-          adaptive
           :adaptiveConfig="{
             offsetBottom: 60
           }"
@@ -65,13 +57,25 @@
         </pure-table>
       </template>
     </PureTableBar>
+    <template
+      v-if="renderObj.fullSettlementStatus !== 1 && checknoMore()"
+    >
+      <div class="mt-4">
+        <el-button 
+          type="primary" 
+          @click="addEventRow"
+          >
+          {{t('新增局')}}
+        </el-button>
+      </div>
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
 import { usePublicHooks } from '@/hooks';
 import { PureTableBar } from '@/components/RePureTableBar';
-import DetiltTitle from '../component/Settle_detail_title.vue';
+import DetiltTitle from './component/DetailTitle.vue';
 import { useBilliardsHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import Score from './component/Score.vue';
@@ -89,6 +93,7 @@ const {
   addEventRow,
   settlementHandicap,
   allSettleBtnClick,
+  checknoMore,
   renderObj,
   allSettleLoading
 } = useBilliardsHook();

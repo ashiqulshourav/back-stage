@@ -25,11 +25,9 @@ const props = defineProps<{
   errorType: boolean;
 }>();
 
-const emits = defineEmits(['changeEventTime']);
-
 const changeEventTime = () => {
   const { index, row, dataList } = props;
-  if (index > 0 && row.eventTime < dataList[index - 1].eventTime) {
+  if (index > 0 && row.eventTime <= dataList[index - 1].eventTime) {
     row.eventTime = '';
     return message(t('当前盘结算时间不能小于上一局'), { type: 'error' });
   }

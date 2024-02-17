@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-bg_color w-[99/100] pl-8 pb-3 pt-[12px]">
-    <div class="text-center font-bold text-2xl mb-3">{{ t('盘口详情') }}</div>
+  <div class="bg-bg_color w-[99/100] pl-6 pb-3 pt-[12px]">
+    <div class="font-bold text-2xl mb-3">{{ t('盘口详情') }}</div>
     <el-row :gutter="20">
       <el-col
         class="mb-2"
@@ -17,6 +17,7 @@
       <el-col :span="6">
         <el-button
           :type="renderObj.fullSettlementStatus === 1 ? 'danger' : 'primary'"
+          :disabled="renderObj.fullSettlementStatus === 1"
           @click="allSettleBtnClick"
           >{{
             renderObj.fullSettlementStatus === 1 ? t('结算完成') : t('全场结算')

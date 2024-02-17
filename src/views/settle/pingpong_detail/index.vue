@@ -9,15 +9,8 @@
 
     <PureTableBar :columns="columns" @refresh="onSearch()">
       <template #title>
-        <div class="flex items-center">
-          <el-button
-            @click="addEventRow"
-            size="small"
-            type="primary"
-            v-if="renderObj.fullSettlementStatus === 0"
-            >{{ t('新增局') }}</el-button
-          >
-          <span></span>
+        <div>
+          <h2>{{t('赛果结算')}}</h2>
         </div>
       </template>
 
@@ -27,7 +20,6 @@
           :loading="loading"
           :size="size"
           :row-key="row => row.inningNum"
-          adaptive
           :adaptiveConfig="{
             offsetBottom: 60
           }"
@@ -65,13 +57,43 @@
         </pure-table>
       </template>
     </PureTableBar>
+    <template
+      v-if="renderObj.fullSettlementStatus !== 1 && checkNoMore()"
+    >
+      <div 
+        class="flex mt-4"
+        >
+        <el-button
+          @click="boardType = '7-4'"
+          :type="boardType === '7-4' ? 'primary' : 'default'"
+          :disabled="dataList.length && dataList[0].gameRule === '5-3'"
+        >
+          {{ t('七局四胜') }}
+        </el-button>
+        <el-button
+          @click="boardType = '5-3'"
+          :type="boardType === '5-3' ? 'primary' : ''"
+          :disabled="dataList.length && dataList[0].gameRule === '7-4'"
+        >
+          {{ t('五局三胜') }}
+        </el-button>
+      </div>
+      <div class="mt-4">
+        <el-button 
+          type="primary" 
+          @click="addEventRow"
+          >
+          {{t('新增节')}}</el-button>
+      </div>
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
 import { usePublicHooks } from '@/hooks';
 import { PureTableBar } from '@/components/RePureTableBar';
-import DetiltTitle from '../component/Settle_detail_title.vue';
+import DetiltTitle from './component/DetailTitle.vue';
+
 import { useBilliardsHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import Score from './component/Score.vue';
@@ -86,6 +108,8 @@ const {
   loading,
   columns,
   dataList,
+  boardType,
+  checkNoMore,
   addEventRow,
   settlementHandicap,
   allSettleBtnClick,
