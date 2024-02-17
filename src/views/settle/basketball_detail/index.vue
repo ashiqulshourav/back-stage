@@ -1,202 +1,124 @@
 <template>
-  <div class="main">
+  <div class="main tennis_container">
     <!-- -盘口详情 -->
-
     <DetiltTitle
-      :renderObj="currentMatch"
       @allSettleBtnClick="allSettleBtnClick"
+      :renderObj="renderObj"
+      :allSettleLoading="allSettleLoading"
     />
-    <!-- Switch Match Period Type -->
-    <template v-if="dataList.length === 0" class="p-3">
-      <h3 class="text-sm mt-8">赛制</h3>
-      <div class="flex mt-4">
-        <el-button
-          @click="isFourRound = true"
-          size="small"
-          :type="isFourRound ? 'primary' : ''"
-        >
-          {{t('四节制')}}  
-        </el-button>
-        <el-button
-          @click="isFourRound = false"
-          size="small"
-          :type="!isFourRound ? 'primary' : ''"
-        >
-          {{t('两节制')}}  
-        </el-button>
-      </div>
-    </template>
-    <PureTableBar
-      :title="t('賽果結算')"
-      :columns="columns"
-      @refresh="onSearch()"
-    >
+
+    <PureTableBar :columns="columns" @refresh="onSearch()">
+      <template #title>
+        <div>
+          <h2>{{t('赛果结算')}}</h2>
+        </div>
+      </template>
+
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"
-          showOverflowTooltip
+          :loading="loading"
           :size="size"
-          :row-key="row => row.matchId"
-          :data="renderData"
+          :row-key="row => row.inningNum"
+          :adaptiveConfig="{
+            offsetBottom: 60
+          }"
+          :data="dataList"
           :columns="dynamicColumns"
           :header-cell-style="tableHeaderStyle"
         >
-          <template #matchPeriod="{ row }">
-            <span>
-              {{ MATCH_PERIOD[row.matchPeriod] }}
-            </span>
+          <!-- -比分 -->
+          <template #t1="{ row }">
+            <Score :row="row" type="t1" :errorType="row.t1Error" />
           </template>
-          <template #t1="{ row, index }">
-            <input
-              class="border w-1/3 mx-auto"
-              v-if="isEdit && index === renderData.length - 1"
-              type="number"
-              v-model="NewEvent.t1"
-            />
-            <span v-else>
-              {{ row.t1 }}
-            </span>
+          <template #t2="{ row }">
+            <Score :row="row" type="t2" :errorType="row.t2Error" />
           </template>
-          <template #t2="{ row, index }">
-            <input
-              class="border w-1/3 mx-auto"
-              v-if="isEdit && index === renderData.length - 1"
-              type="number"
-              v-model="NewEvent.t2"
-            />
-            <span v-else>
-              {{ row.t2 }}
-            </span>
+          <template #inningNum>
+            {{boardType === 'INNING' ? t('节') : t('上/下班场') }}
           </template>
+          <!-- -结算时间 -->
           <template #eventTime="{ row, index }">
-            <el-time-picker
-              v-if="isEdit && index === renderData.length - 1"
-              v-model="timestamps"
-              :placeholder="t('请选择当前录入时间')"
-              :disabled="!isEdit"
-              value-format="x"
-              hover="none"
-              :default-value="dayjs().startOf('day').toDate()"
-              class="custom-time-picker"
-              format="HH:mm:ss"
+            <EventTime
+              :row="row"
+              :index="index"
+              :dataList="dataList"
+              :errorType="row.eventTimeError"
             />
-            <span v-else>{{ dayjs((dayjs(row.eventTime).diff(dayjs(currentMatch.beginTime) + 28800000))).format('HH:mm:ss') }}</span>
           </template>
-          <template #operation="{ index }">
-            <div
-              class="flex gap-2 justify-center"
-              v-if="isEdit && index === renderData.length - 1"
-            >
-              <el-button 
-                type="primary"
-                @click="handleNewEvent"  
-              >
-                {{t('結算節')}}
-              </el-button>
-              <el-button
-                @click="isEdit = false"              
-              >{{t('取消')}}</el-button>
-            </div>
-            <span v-else> - </span>
+
+          <!-- -局按钮 -->
+          <template #operation="{ row, index }">
+            <ChildOperation
+              :row="row"
+              :childIndex="index"
+              @deleteChildItem="() => dataList.pop()"
+              @settlementHandicap="settlementHandicap(row)"
+            />
           </template>
         </pure-table>
       </template>
     </PureTableBar>
-    <template v-if="currentMatch.fullSettlementStatus !== 1 && !isEdit && ((isFourRound && dataList.length < 4) || (!isFourRound && dataList.length < 2)) ">
-      <el-button
-        type="primary" 
-        class="mt-3 px-24"
-        @click="setNewEventEdit"
-      >
-        {{t('新增節')}}
-      </el-button>
-    </template>
-    <template v-else-if="currentMatch.fullSettlementStatus !== 1 && !isEdit && (dataList[dataList.length - 1].t1 === dataList[dataList.length - 1].t2)">
-      <el-button
-        type="primary" 
-        class="mt-3 px-24"
-        @click="setNewEventEdit"
-      >
-        {{t('新增加时赛')}}
-      </el-button>
+    <template
+      v-if="renderObj.fullSettlementStatus !== 1 && checkNoMore()"
+    >
+      <div 
+        class="flex mt-4"
+        >
+        <el-button
+          @click="boardType = 'INNING'"
+          :type="boardType === 'INNING' ? 'primary' : 'default'"
+        >
+          {{ t('四节制') }}
+        </el-button>
+        <el-button
+          @click="boardType = 'HT'"
+          :type="boardType === 'HT' ? 'primary' : ''"
+        >
+          {{ t('上/下半场制') }}
+        </el-button>
+      </div>
+      <div class="mt-4">
+        <el-button 
+          type="primary" 
+          @click="addEventRow"
+          >
+          {{
+          (boardType === 'HT' && dataList.length == 2) ||
+          (boardType === 'INNING' && dataList.length == 4)
+            ? t('新增加时赛')
+          : boardType === 'INNING'
+        ? t('新增节') : t('新增上/下班场')
+        }}</el-button>
+      </div>
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
 import { usePublicHooks } from '@/hooks';
 import { PureTableBar } from '@/components/RePureTableBar';
 import DetiltTitle from './component/DetailTitle.vue';
-import { useBasketballDetailHook } from './utils/hook';
+import { useBilliardsHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
-import { MATCH_PERIOD } from '@/utils/maps/sports_map';
-import dayjs from 'dayjs';
+import Score from './component/Score.vue';
+import EventTime from './component/EventTime.vue';
+import ChildOperation from './component/ChildOperation.vue';
 
 defineOptions({ name: 'SETTLE_BASKETBALL_DETAIL' });
-
 const { tableHeaderStyle } = usePublicHooks();
+
 const {
   onSearch,
+  loading,
   columns,
-  timestamps,
   dataList,
-  currentMatch,
-  isEdit,
-  isFourRound,
+  boardType,
+  addEventRow,
+  settlementHandicap,
   allSettleBtnClick,
-  setNewBasketballEvent
-} = useBasketballDetailHook();
-const matchId = history.state.params.matchId;
-
-const NewEvent: SattleDataAPI.BasketballEvent = reactive({
-  matchId: Number(matchId),
-  eventTime: 0,
-  t1: 0,
-  t2: 0
-});
-const renderData = computed(() => {
-  return isEdit.value ? dataList.concat(NewEvent) : dataList;
-});
-
-const setNewEventEdit = () => {
-  isEdit.value = true;
-  if (isFourRound.value) {
-    if (dataList.length >= 4) {
-      NewEvent.matchPeriod = 'OT';
-    } else {
-      NewEvent.matchPeriod = `Q${dataList.length + 1}`;
-    }
-  } else {
-    switch (dataList.length) {
-      case 0:
-        NewEvent.matchPeriod = 'HT';
-        break;
-      case 1:
-        NewEvent.matchPeriod = 'FT';
-        break;
-      default:
-        NewEvent.matchPeriod = 'OT';
-    }
-  }
-};
-
-const handleNewEvent = async () => {
-  setNewBasketballEvent(NewEvent);
-};
-onMounted(() => {
-  onSearch();
-});
+  renderObj,
+  allSettleLoading,
+  checkNoMore
+} = useBilliardsHook();
 </script>
-
-<style scoped>
-.custom-switch .el-switch__core {
-  width: 500px;
-}
-.custom-time-picker {
-  width: 100px;
-}
-.custom-time-picker:hover {
-  display: none;
-}
-</style>

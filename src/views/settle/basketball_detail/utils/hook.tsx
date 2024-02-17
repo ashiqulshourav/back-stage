@@ -1,172 +1,190 @@
-import { columns } from './tableColumnList';
-import { ElMessageBox, dayjs } from 'element-plus';
-import { MATCH_PERIOD } from '@/utils/maps/sports_map';
 import { message } from '@/utils/message';
-
-export function useBasketballDetailHook() {
-  const dataList = reactive<SattleDataAPI.BasketballEvent[]>([]);
-  const currentMatch = reactive<SattleDataAPI.getSettlementDataList>(
+import { t } from '@/plugins/i18n';
+import { columns } from './tableColumnList';
+import { ElMessageBox } from 'element-plus';
+import {  MATCH_PERIOD, MATCH_PERIOD_TYPES } from '@/utils/maps/sports_map';
+export function useBilliardsHook() {
+  const dataList = reactive<SattleDataAPI.basketballData[]>([]);
+  const allSettleLoading = ref(false);
+  const loading = ref(true);
+  const boardType = ref('INNING');
+  const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
     {} as SattleDataAPI.getSettlementDataList
   );
 
-  const isFourRound = ref(true);
-  const matchId = ref(history.state.params.matchId);
-  const isEdit = ref(false);
-  const timestamps = ref(0);
-
+  // - 初始化
   const onSearch = async () => {
-    getCurrentMatchDetail();
-    const res: SattleDataAPI.getBasketballEventRes =
-      await API.getBasketballEvents({ matchId: matchId.value });
-    if (!res.code) {
-      dataList.length = 0;
-      dataList.push(...res.data);
-      isFourRound.value =
-        dataList.length && dataList[0]?.gameRule === 'INNING'
-          ? true
-          : dataList[0]?.gameRule === 'HT'
-          ? false
-          : isFourRound.value;
-    }
+    const res = await API.getBasketballEvents({
+      matchId: history.state.params.matchId
+    });
+    loading.value = false;
+    if (res.code) return message(res.msg, { type: 'error' });
+    dataList.length = 0;
+    dataList.push(...res.data);
   };
 
-  //- 获取当前展开行结算列表
-
-  const getCurrentMatchDetail = async () => {
-    const res: SattleDataAPI.getSettlementListRes = await API.getSettlementList(
-      { matchId: matchId.value }
-    );
-    if (!res.code) {
-      Object.assign(currentMatch, res.data.list[0]);
-    }
-  };
-  const validation = (NewEvent: SattleDataAPI.BasketballEvent) => {
-    if (
-      !NewEvent.eventTime ||
-      NewEvent.eventTime <= dataList[dataList.length - 1]?.eventTime
-    ) {
-      message(t('无效时间'), { type: 'error' });
-      return false;
-    }
-    if (
-      Number(NewEvent.t1) < 0 ||
-      Number(NewEvent.t2) < 0 ||
-      Number(NewEvent.t1) > 300 ||
-      Number(NewEvent.t2) > 300
-    ) {
-      message(t('无效值'), { type: 'error' });
-      return false;
-    }
-    /*   if (
-      NewEvent.t1 < dataList[dataList.length - 1]?.t1 ||
-      NewEvent.t2 < dataList[dataList.length - 1]?.t2
-    ) {
-      message(t('无效值'), { type: 'error' });
-      return false;
-    } */
-    /*    if (NewEvent.t1 === NewEvent.t2) {
-      if (
-        (isFourRound.value && dataList.length === 4) ||
-        (!isFourRound.value && dataList.length === 2)
-      ) {
-        message(t('无效值'), { type: 'error' });
-        return false;
-      }
-    } */
-    return true;
-  };
-  const getCorrectTime = (tmp: number | string | Date) => {
-    const day = new Date(tmp);
-    day.setFullYear(1970, 0, 1);
-    const currenTime = new Date(currentMatch.beginTime);
-    return currenTime.getTime() + day.getTime() + 28800000;
-  };
-  const setNewBasketballEvent = async (
-    NewEvent: SattleDataAPI.BasketballEvent
-  ) => {
-    NewEvent.eventTime = getCorrectTime(timestamps.value);
-    console.log(dayjs(NewEvent.eventTime).format('YYYY-MM-DD HH:mm:ss'));
-    if (validation(NewEvent)) {
-      ElMessageBox.confirm(
-        `<p class='text-center'>${currentMatch.homeTeamNameCn || '-'} VS ${
-          currentMatch.awayTeamNameCn || '-'
-        } <br />
-          <p class="text-center text-2xl text-bold w-full">${NewEvent.t1} : ${
-          NewEvent.t2
-        }</p>
-          ⼿動結算後無法回退，請再次確認比分</p>
-          `,
-        `結算${MATCH_PERIOD[NewEvent.matchPeriod]}`,
-        {
-          dangerouslyUseHTMLString: true,
-          confirmButtonText: t('確認結算'),
-          cancelButtonText: t('取消'),
-          center: true
-        }
-      )
-        .then(async () => {
-          const res: MetadataAPI.AddBasketballEeventRes =
-            await API.addBasketballEvent({
-              matchId: NewEvent.matchId,
-              eventTime: NewEvent.eventTime,
-              t1: Number(NewEvent.t1),
-              t2: Number(Number(NewEvent.t2)),
-              matchPeriod: NewEvent.matchPeriod,
-              canceled: 0,
-              gameRule: isFourRound.value ? 'INNING' : 'HT'
-            });
-          if (res.code) message(res.msg, { type: 'error' });
-          else {
-            isEdit.value = false;
-            NewEvent.t1 = 0;
-            NewEvent.t2 = 0;
-            NewEvent.matchPeriod = '';
-            onSearch();
-          }
-        })
-        .catch(() => {
-          isEdit.value = false;
-        });
-    }
-  };
-  const allSettleBtnClick = async () => {
-    console.log('123');
-    if (
-      dataList[dataList.length - 1]?.t1 === dataList[dataList.length - 1]?.t2 ||
-      (isFourRound.value && dataList.length < 4) ||
-      (!isFourRound.value && dataList.length < 2)
-    ) {
-      message(t('请先完成结算'), { type: 'error' });
+  //- 新增局
+  const addEventRow = () => {
+    if (dataList.length !==0 && boardType.value !== dataList[0].gameRule) {
+      message(t('当前游戏方法不可用'), {
+        type: 'error'
+      });
       return;
     }
+    const params: Partial<SattleDataAPI.BasketBallEventsData> = {
+      eventTime: '',
+      matchId: history.state.params.matchId,
+      inningNum: dataList.length + 1,
+      gameRule: boardType.value,
+      isEdit: false,
+      t1: '',
+      t2: '',
+      matchPeriod: MATCH_PERIOD[boardType.value][dataList.length + 1]
+    };
+    dataList.push(params as SattleDataAPI.volleyballData);
+  };
+  //- 结算局事件
+  const settlementHandicap = async (row: SattleDataAPI.BasketBallEventsData) => {
+    const { eventTime, t1, t2 } = row;
+    if (!eventTime || !t1 || !t2 ) {
+      return message(t('请先完成并保存事件'), { type: 'error' });
+    }
     ElMessageBox.confirm(
-      t('⼿動確認比嚼算全場比賽後，即開始結算全場比賽玩法，結算後無法回退。'),
-      t('確認結算全場比賽'),
+      `
+      <div class="text-center">
+          <div class="flex  justify-between">
+            <span class="w-[45%]">${
+              history.state.params.homeTeamNameCn ?? '_'
+            }</span>
+            <span class="font-bold">VS</span>
+            <span class="w-[45%]">${
+              history.state.params.awayTeamNameCn ?? '_'
+            }</span>
+         </div>
+          <div>${t1} ： ${t2}</div>
+          <div>${t('手动结算后无法回退，请再次确定结果')}</div>
+      </div>
+      `,
+      `${t('结算')} ${MATCH_PERIOD_TYPES[row.matchPeriod]}`,
       {
         dangerouslyUseHTMLString: true,
-        confirmButtonText: t('確認結算'),
+        confirmButtonText: t('确认结算'),
         cancelButtonText: t('取消'),
         center: true
       }
     ).then(async () => {
-      const res = await API.allBasketballSettlement({ matchId: matchId.value });
-      if (res.code) {
-        message(res.msg, { type: 'error' });
-      } else {
+      loading.value = true;
+      const params = {
+        eventTime,
+        t1: row.t1,
+        t2: row.t2,
+        gameRule: boardType.value,
+        matchId: history.state.params.matchId,
+        inningNum: row.inningNum,
+        matchPeriod: MATCH_PERIOD[boardType.value][row.inningNum]  
+      };
+      try {
+        const res = await API.addBasketballEvent(params);
+        if (res.code) {
+          loading.value = false;
+          return message(res.msg, { type: 'error' })
+        };
+        loading.value = false;
         onSearch();
+      } catch (error) {
+        loading.value = false;
       }
     });
   };
+
+  //- 全场结算
+  const allSettleBtnClick = async () => {
+    let s1 = 0;
+    const scoreList = dataList.map(item => [item.t1, item.t2]);
+    scoreList.forEach(item => { 
+      s1 += Number(item[0]) - Number(item[1]);
+    });
+    if (
+      dataList.length < 2 ||
+      dataList.some(item => !item.id) ||
+      s1 === 0 ||
+      (dataList[0].gameRule === 'INNING' && dataList.length < 4) 
+    ) {
+      return message(t('请先完成盘结算'), { type: 'error' });
+    }
+    ElMessageBox.confirm(
+      `
+      <div class="text-center">
+          <div>${t('手动确认比赛结束后，即开始结算')}</div>
+          <div>${t('全场比赛玩法，结算后无法回退。')}</div>
+      </div>
+      `,
+      t('确认比赛结算'),
+      {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: t('确认结算'),
+        cancelButtonText: t('取消'),
+        center: true
+      }
+    ).then(async () => {
+      try {
+        allSettleLoading.value = true;
+        const res = await API.allBasketballSettlement({
+          matchId: history.state.params.matchId
+        });
+        allSettleLoading.value = false;
+        if (res.code) return message(res.msg, { type: 'error' });
+        getMatchDetail();
+      } catch (error) {
+        allSettleLoading.value = false;
+      }
+    });
+  };
+
+  //- 获取比赛详情
+  const getMatchDetail = async () => {
+    const res = await API.getPreSaleInfo({
+      matchId: history.state.params.matchId
+    });
+    if (res.code) return message(res.msg, { type: 'error' });
+    Object.assign(renderObj, res.data);
+  };
+  
+  const checkNoMore = () => {
+    let s1 = 0;
+    const scoreList = dataList.map(item => [item.t1, item.t2]);
+    scoreList.forEach(item => { 
+      s1 += Number(item[0]) - Number(item[1]);
+    });
+    if (dataList.length === 0)
+      return true;
+    if (
+      (dataList[0].gameRule === 'INNING' && dataList.length === 5) ||
+      (dataList[0].gameRule === 'INNING' && dataList.length === 4 && s1 !== 0) ||
+      (dataList[0].gameRule === 'HT' && dataList.length === 3) ||
+      (dataList[0].gameRule === 'HT' && dataList.length ===2 && s1 !== 0) 
+    ) {
+      return false;
+    }
+    return true;
+  }
+
+  onMounted(() => {
+    getMatchDetail();
+    onSearch();
+  });
+
   return {
     onSearch,
-    isEdit,
-    isFourRound,
+    loading,
     columns,
     dataList,
-    currentMatch,
-    timestamps,
-    getCurrentMatchDetail,
-    setNewBasketballEvent,
-    allSettleBtnClick
+    boardType,
+    checkNoMore,
+    addEventRow,
+    settlementHandicap,
+    allSettleBtnClick,
+    renderObj,
+    allSettleLoading
   };
 }

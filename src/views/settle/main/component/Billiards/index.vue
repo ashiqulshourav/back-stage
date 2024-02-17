@@ -7,7 +7,6 @@
     <template v-slot="{ size, dynamicColumns }">
       <pure-table
         align-whole="center"
-        showOverflowTooltip
         :loading="matchStore.settleRequestLoading"
         :size="size"
         :row-key="row => row.matchId"
@@ -30,9 +29,10 @@
             {{ t('结算详情') }}
           </el-button>
           <el-button
+            v-if="row.isShowCancelBtn"
             type="danger"
             :size="size"
-            :disabled="!row.isShowCancelBtn"
+            :disabled="row.cancelOrderTimes > 0"
             @click="cancelBetOrder(row)"
             >{{ t('取消注单') }}</el-button
           >

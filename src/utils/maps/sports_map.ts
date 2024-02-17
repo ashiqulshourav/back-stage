@@ -2,7 +2,7 @@ import { t } from '@/plugins/i18n';
 
 export const SPORT_ID_MAP = [
   { label: t('足球'), value: 1, type: 'FootBall' },
-  { label: t('篮球'), value: 2, type: 'MatchLists' },
+  { label: t('篮球'), value: 2, type: 'BasketBall' },
   { label: t('网球'), value: 3, type: 'Tennis' },
   // { label: t('电子竞技'), value: 4, type: 'FootBall' },
   { label: t('斯诺克/台球'), value: 5, type: 'Billiards' },
@@ -15,8 +15,8 @@ export const SPORT_ID_MAP = [
   { label: t('冰球'), value: 12, type: 'IceHockey' },
   { label: t('板球'), value: 13, type: 'Cricket' },
   { label: t('美式足球'), value: 16, type: 'MatchLists' },
-  { label: t('羽毛球'), value: 19, type: 'MatchLists' },
-  { label: t('乒乓球'), value: 23, type: 'MatchLists' },
+  { label: t('羽毛球'), value: 19, type: 'Badminton' },
+  { label: t('乒乓球'), value: 23, type: 'PingPong' },
   { label: t('曲棍球'), value: 28, type: 'Hockey' },
 ]
 
@@ -87,9 +87,9 @@ export const OPENING_STATUS = {
   0: t('未开售'),
   1: t('早盘'),
   2: t('滚球'),
-  3: t('进行中')
-};
-export const MATCH_PERIOD = {
+  3: t('进行中'),
+}
+export const MATCH_PERIOD_TYPES = {
   Q1: ' 第一节',
   Q2: ' 第二节 ',
   Q3: ' 第三节 ',
@@ -109,53 +109,22 @@ export const HANDICAP_STATUS = {
 };
 
 export const YELLOW_OR_RED = {
-  yellow_card: 1,
-  red_card: 2
-};
+  'yellow_card': 1,
+  'red_card': 2
+}
+export const  MATCH_UNITS = {
+  2: '节',
+  19: '局',
+  23: '局',
+}
 
 //- 玩法声明映射
-export const PLAY_MATCH = code => {
-  const t1 = [
-    'Q1_OU',
-    'Q2_OU',
-    'Q3_OU',
-    'Q4_OU',
-    'HT_OU',
-    'S1_OU',
-    'S2_OU',
-    'S3_OU',
-    'S4_OU',
-    'FTS_OU',
-    'FT_OU',
-    'PT_OU'
-  ];
-  const t2 = [
-    'HT_AH',
-    'FT_AH',
-    'FTS_AH',
-    'Q4_AH',
-    'Q3_AH',
-    'Q1_AH',
-    'Q2_AH',
-    'S1_AH',
-    'S2_AH',
-    'S3_AH',
-    'S4_AH',
-    'PT_AH'
-  ];
-  const t3 = ['FT_OE', 'S2_ML', 'HT_OE'];
-  const t4 = ['FT_1X2', 'HT_1X2'];
-  const t5 = [
-    'S1_ML',
-    'Q1_ML',
-    'Q2_ML',
-    'Q3_ML',
-    'Q4_ML',
-    'FT_ML',
-    'HT_ML',
-    'Winner_2ndFrame',
-    'Winner_1stFrame'
-  ];
+export const PLAY_MATCH = (code) => {
+  const t1 = ['Q1_OU', 'Q2_OU', 'Q3_OU', 'Q4_OU', 'HT_OU', 'S1_OU', 'S2_OU', 'S3_OU', 'S4_OU', 'FTS_OU', 'FT_OU', 'PT_OU']
+  const t2 = ['HT_AH', 'FT_AH', 'FTS_AH', 'Q4_AH', 'Q3_AH', 'Q1_AH', 'Q2_AH', 'S1_AH', 'S2_AH', 'S3_AH', 'S4_AH', 'PT_AH']
+  const t3 = ['FT_OE', 'S2_ML', 'HT_OE']
+  const t4 = ['FT_1X2', 'HT_1X2']
+  const t5 = ['S1_ML', 'Q1_ML', 'Q2_ML', 'Q3_ML', 'Q4_ML', 'FT_ML', 'HT_ML', 'Winner_2ndFrame', 'Winner_1stFrame', 'Winner', 'Winner_1X2']
   switch (true) {
     case t1.includes(code):
       return {

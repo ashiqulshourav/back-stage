@@ -23,10 +23,12 @@
         @page-current-change="handleCurrentChange"
       >
         <template #operation="{ row }">
+          <span v-if="!row.isShowCancelBtn">-</span>
           <el-button
+            v-else
             type="danger"
             :size="size"
-            :disabled="!row.isShowCancelBtn"
+            :disabled="row.cancelOrderTimes > 0"
             @click="cancelBetOrder(row)"
             >{{ t('取消注单') }}</el-button
           >

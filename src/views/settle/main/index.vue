@@ -19,6 +19,9 @@ import BasketBall from './component/Basketball/index.vue';
 import Billiards from './component/Billiards/index.vue';
 import Tennis from './component/Tennis/index.vue';
 import Volleyball from './component/Volleyball/index.vue';
+import Badminton from './component/Badminton/index.vue';
+import PingPong from './component/PingPong/index.vue';
+
 import MatchLists from './component/MatchLists/index.vue';
 import Handball from './component/Handball/index.vue';
 import IceHockey from './component/IceHockey/index.vue';
@@ -46,7 +49,9 @@ const comoMap = {
   Tennis,
   Billiards,
   Volleyball,
-  MatchLists,
+  Badminton,
+  PingPong
+  // MatchLists,
   Volleyball,
   Handball,
   IceHockey,
