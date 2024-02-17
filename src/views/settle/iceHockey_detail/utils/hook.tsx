@@ -1,6 +1,6 @@
 import { columns } from './tableColumnList';
 import { ElMessageBox, dayjs } from 'element-plus';
-import { MATCH_PERIOD_TYPES } from '@/utils/maps/sports_map';
+// import { MATCH_PERIOD_TYPES } from '@/utils/maps/sports_map';
 import { message } from '@/utils/message';
 
 export function useDetailHook() {
@@ -16,9 +16,10 @@ export function useDetailHook() {
 
   const onSearch = async () => {
     getCurrentMatchDetail();
-    const res: SattleDataAPI.getIceHockeyEventRes = await API.getIceHockeyEvents({
-      matchId: matchId.value
-    });
+    const res: SattleDataAPI.getIceHockeyEventRes =
+      await API.getIceHockeyEvents({
+        matchId: matchId.value
+      });
     if (!res.code) {
       dataList.length = 0;
       dataList.push(...res.data);
@@ -73,7 +74,7 @@ export function useDetailHook() {
         }</p>
           ⼿动结算后无法回退，请再次确认比分</p>
           `,
-        `結算第${MATCH_PERIOD_TYPES[NewEvent.matchPeriod]}节`,
+        // `結算第${MATCH_PERIOD_TYPES[NewEvent.matchPeriod]}节`,
         {
           dangerouslyUseHTMLString: true,
           confirmButtonText: t('确认结算'),
@@ -82,14 +83,16 @@ export function useDetailHook() {
         }
       )
         .then(async () => {
-          const res: MetadataAPI.AddSportEventRes = await API.addIceHockeyEvent({
-            matchId: NewEvent.matchId,
-            eventTime: NewEvent.eventTime,
-            t1: Number(NewEvent.t1),
-            t2: Number(Number(NewEvent.t2)),
-            matchPeriod: NewEvent.matchPeriod,
-            canceled: 0
-          });
+          const res: MetadataAPI.AddSportEventRes = await API.addIceHockeyEvent(
+            {
+              matchId: NewEvent.matchId,
+              eventTime: NewEvent.eventTime,
+              t1: Number(NewEvent.t1),
+              t2: Number(Number(NewEvent.t2)),
+              matchPeriod: NewEvent.matchPeriod,
+              canceled: 0
+            }
+          );
           if (res.code) message(res.msg, { type: 'error' });
           else {
             NewEvent.t1 = 0;
