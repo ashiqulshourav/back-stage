@@ -146,7 +146,7 @@ const matchId = history.state.params.matchId;
 
 const gameRuleOpts = [4, 6, 8, 10, 12];
 
-const NewEvent: SattleDataAPI.BoxingEventData = reactive({
+const NewEvent: SattleDataAPI.BoxingEvenstData = reactive({
   matchId: Number(matchId),
   eventTime: 0,
   t1: 0,
