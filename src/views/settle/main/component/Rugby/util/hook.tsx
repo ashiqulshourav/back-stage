@@ -1,25 +1,21 @@
-import { toRef } from 'vue';
 import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { columns } from './tableColumnList';
-import { SearchFormType } from '../../../utils/type';
+import { SPORT_TYPE, SearchFormType } from '../../../utils/type';
 import { useMatchStore } from '@/store/match';
-import { SPORT_ID_MAP } from '@/utils/maps/sports_map'; 
 
-export function useMatchLists() {
+export function useTennisHook() {
   const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const matchStore = useMatchStore();
   const form = ref<SearchFormType>({} as SearchFormType);
-  const sportId = toRef(matchStore, 'sportId');
+
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
     currentPage: 1
   });
-  const matchName = computed(() => {
-    return SPORT_ID_MAP.find(item => item.value === sportId.value).label;
-  })
+
   const handleTableWidthChange = (pageSize: number) => {
     pagination.pageSize = pageSize;
     onSearch();
@@ -29,7 +25,7 @@ export function useMatchLists() {
     pagination.currentPage = val;
     onSearch();
   };
-  
+
   /** 搜索初始化 */
   const onSearch = async (type?: 'reload') => {
     try {
@@ -41,11 +37,14 @@ export function useMatchLists() {
           ...data,
           pageSize: pagination.pageSize,
           pageNum: pagination.currentPage,
-          sportId: sportId.value
+          sportId: SPORT_TYPE.rugby
         });
       matchStore.set_settleRequestLoading(false);
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
+      res.data.list.forEach(item => {
+        item.isShowCancelBtn = +res.ts < +item.beginTimeLong;
+      });
       dataList.push(...res.data.list);
       pagination.total = res.data.total;
       pagination.pageSize = res.data.pageSize;
@@ -54,19 +53,17 @@ export function useMatchLists() {
       matchStore.settleRequestLoading = false;
     }
   };
-  watch(sportId, (newSportId, oldSportId) => {
-    if (newSportId !== oldSportId)
-      onSearch();
+
+  onMounted(() => {
+    onSearch();
   });
-  onMounted(() => onSearch());
-  
+
   return {
-    form,
     onSearch,
     columns,
+    form,
     dataList,
     pagination,
-    matchName,
     handleTableWidthChange,
     handleCurrentChange
   };

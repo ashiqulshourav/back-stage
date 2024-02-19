@@ -71,7 +71,7 @@ declare namespace SattleDataAPI {
     t1?: number | string;
     t2?: number | string;
     id?: number;
-    gameRule?: 'INNING' | 'HT';
+    gameRule?: string;
     inningNum?: number;
   };
   type MatchEvent = {

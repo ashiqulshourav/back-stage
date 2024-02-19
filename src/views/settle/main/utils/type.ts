@@ -45,6 +45,8 @@ export enum SPORT_TYPE {
   volleyball = 6,
   badminton = 19,
   pingpong = 23,
+  rugby = 9,
+  american_football = 16,
 }
 
 

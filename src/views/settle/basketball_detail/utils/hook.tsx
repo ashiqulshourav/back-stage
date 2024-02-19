@@ -1,6 +1,6 @@
 import { message } from '@/utils/message';
 import { t } from '@/plugins/i18n';
-import { columns,  MATCH_PERIOD, MATCH_PERIOD_TYPES } from './tableColumnList';
+import { columns, MATCH_PERIOD, MATCH_PERIOD_TYPES } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
 export function useBilliardsHook() {
   const dataList = reactive<SattleDataAPI.basketballData[]>([]);
@@ -38,7 +38,7 @@ export function useBilliardsHook() {
       isEdit: false,
       t1: '',
       t2: '',
-      matchPeriod: MATCH_PERIOD_TYPES[boardType.value][dataList.length + 1]
+      matchPeriod: MATCH_PERIOD[boardType.value][dataList.length + 1]
     };
     dataList.push(params as SattleDataAPI.volleyballData);
   };
@@ -80,7 +80,7 @@ export function useBilliardsHook() {
         gameRule: boardType.value,
         matchId: history.state.params.matchId,
         inningNum: row.inningNum,
-        matchPeriod: MATCH_PERIOD_TYPES[boardType.value][row.inningNum]  
+        matchPeriod: MATCH_PERIOD[boardType.value][row.inningNum]  
       };
       try {
         const res = await API.addBasketballEvent(params);

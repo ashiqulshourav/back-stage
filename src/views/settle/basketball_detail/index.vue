@@ -35,7 +35,7 @@
             <Score :row="row" type="t2" :errorType="row.t2Error" />
           </template>
           <template #inningNum>
-            {{boardType === 'INNING' ? t('节') : t('上/下班场') }}
+            {{boardType === 'INNING' ? t('节') : t('上/下半场') }}
           </template>
           <!-- -结算时间 -->
           <template #eventTime="{ row, index }">
@@ -88,7 +88,7 @@
           (boardType === 'INNING' && dataList.length == 4)
             ? t('新增加时赛')
           : boardType === 'INNING'
-        ? t('新增节') : t('新增上/下班场')
+        ? t('新增节') : t('新增上/下半场')
         }}</el-button>
       </div>
     </template>

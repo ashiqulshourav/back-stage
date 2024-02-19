@@ -21,8 +21,10 @@ import Tennis from './component/Tennis/index.vue';
 import Volleyball from './component/Volleyball/index.vue';
 import Badminton from './component/Badminton/index.vue';
 import PingPong from './component/PingPong/index.vue';
+import Rugby from './component/Rugby/index.vue';
+import AmericanFootball from './component/American_football/index.vue';
 
-import MatchLists from './component/MatchLists/index.vue';
+
 import Handball from './component/Handball/index.vue';
 import IceHockey from './component/IceHockey/index.vue';
 import Cricket from './component/Cricket/index.vue';
@@ -51,10 +53,11 @@ const comoMap = {
   Volleyball,
   Badminton,
   PingPong,
-  // MatchLists,
   Handball,
   IceHockey,
-  Cricket
+  Cricket,
+  AmericanFootball,
+  Rugby
 };
 const currentComponentName = reactive({
   name: markRaw(comoMap.FootBall)

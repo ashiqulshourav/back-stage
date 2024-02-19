@@ -117,6 +117,22 @@
         }
       },
       {
+        "path": "/settle/rugby_detail",
+        "name": "SETTLE_RUGBY_DETAIL",
+        "meta": {
+          "title": "英式橄欖球结算",
+          "showLink": false
+        }
+      },
+      {
+        "path": "/settle/americanfootball_detail",
+        "name": "SETTLE_AMERICANFOOTBALL_DETAIL",
+        "meta": {
+          "title": "美式⾜球结算",
+          "showLink": false
+        }
+      },
+      {
         "path": "/settle/handball_detail",
         "name": "SETTLE_HANDBALL_DETAIL",
         "meta": {
