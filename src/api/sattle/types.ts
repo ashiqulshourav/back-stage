@@ -34,6 +34,49 @@ declare namespace SattleDataAPI {
     isShowCount: boolean;
   };
 
+  type CommonEventData = {
+    id?: number;
+    uuid?: string;
+    matchId?: number;
+    canceled?: number | boolean;
+    eventTime?: number | string | Date;
+    homeTeamId?: number;
+    awayTeamId?: number;
+    t1?: number | string;
+    t2?: number | string;
+    sourceType?: number;
+    settleTimes?: number;
+    settleType?: number;
+    gameRule?: string | number;
+    createdBy?: string;
+    updatedBy?: string;
+    createdAt?: string;
+    updatedAt?: string;
+  };
+
+  type BasketballEvent = {
+    awayTeamId?: number;
+    canceled?: number | boolean;
+    createdAt?: number;
+    eventTime?: string | number | Date;
+    homeTeamId?: number;
+    eventCode?: string | number;
+    extraInfo?: string;
+    homeAway?: string;
+    id?: number;
+    matchId?: number;
+    matchPeriod?: string;
+    settleTimes?: number;
+    settleType?: number;
+    sourceType?: number;
+    t1?: number | string;
+    t2?: number | string;
+    updatedAt?: number;
+    updatedBy?: number;
+    uuid?: string;
+    gameRule?: 'INNING' | 'HT';
+  };
+
   type MatchEventParams = {
     canceled?: number;
     eventCode?: string | number;
@@ -46,12 +89,37 @@ declare namespace SattleDataAPI {
     matchPeriod?: string;
     sportId?: number;
     dataSourceCode?: string;
-    t1?: number;
-    t2?: number;
+    t1?: number | string;
+    t2?: number | string;
     id?: number;
-    gameRule?: string;
+    gameRule?: 'INNING' | 'HT';
     inningNum?: number;
   };
+  type MatchEvent = {
+    awayTeamId?: number;
+    canceled?: number | boolean;
+    createdAt?: number;
+    createdBy?: string;
+    eventTime?: string | number | Date;
+    homeTeamId?: number;
+    eventCode?: string | number;
+    extraInfo?: string;
+    homeAway?: string;
+    id?: number;
+    matchId?: number;
+    matchPeriod?: string;
+    settleTimes?: number;
+    settleType?: number;
+    sourceType?: number;
+    t1?: number | string;
+    t2?: number | string;
+    updatedAt?: number;
+    updatedBy?: string;
+    uuid?: string;
+  };
+  type HandballEvent = MatchEvent & {};
+  type IceHockeyEvent = MatchEvent & {};
+  type CricketEvent = MatchEvent & {};
 
   type getSettlementDataList = {
     matchId: number;
@@ -148,38 +216,53 @@ declare namespace SattleDataAPI {
     eventTimeError: boolean;
   };
 
-  type CommonEventData = {
-    id?: number;
-    uuid?: string;
-    matchId?: number;
-    canceled?: number | boolean;
-    eventTime?: number | string | Date;
-    homeTeamId?: number;
-    awayTeamId?: number;
-    t1?: number | string;
-    t2?: number | string;
-    sourceType?: number;
-    settleTimes?: number;
-    settleType?: number;
-    gameRule?: string | number;
-    createdBy?: string;
-    updatedBy?: string;
-    createdAt?: string;
-    updatedAt?: string;
-  };
-
-  type BasketballEvent = CommonEventData & {
-    eventCode?: string | number;
-    extraInfo?: string;
-    homeAway?: string;
-    matchPeriod?: string;
-  };
-
-  type TennisEventsData = CommonEventData & {
+  type TennisEventsData = {
+    id: number;
+    uuid: string;
+    matchId: number;
+    canceled: number;
+    eventTime: number | string;
+    homeTeamId: number;
+    awayTeamId: number;
     inningNum: number;
     setNum: number;
+    t1: number;
+    t2: number;
+    sourceType: number;
+    settleTimes: number;
+    settleType: number;
+    createdBy: string;
+    updatedBy: string;
+    createdAt: string;
+    updatedAt: string;
+    gameRule: string;
     inningEvents: InningEvent[];
     loading?: boolean;
+  };
+  type BasketBallEventsData = {
+    id: number;
+    uuid: string;
+    matchId: number;
+    canceled: number;
+    eventTime: number | string;
+    homeTeamId: number;
+    awayTeamId: number;
+    inningNum: number;
+    setNum: number;
+    t1: number | string;
+    t2: number | string;
+    sourceType: number;
+    settleTimes: number;
+    settleType: number;
+    createdBy: string;
+    updatedBy: string;
+    createdAt: string;
+    updatedAt: string;
+    gameRule: string;
+    inningEvents: InningEvent[];
+    loading?: boolean;
+    matchPeriod?: string;
+    isEdit: boolean;
   };
 
   type SnookerEventsResData = CommonEventData & {
@@ -193,6 +276,9 @@ declare namespace SattleDataAPI {
   type HockeyEventData = CommonEventData & { matchPeriod?: string };
   type BoxingEventData = CommonEventData & { matchPeriod?: string };
   type DartsEventData = CommonEventData & { matchPeriod?: string };
+  type basketballData = SnookerEventsResData;
+  type badmintonData = SnookerEventsResData;
+  type pingpongData = SnookerEventsResData;
 
   type getSettlementListRes = COMMON.BASE_RES_TYPE<getSettlementDataListRes>;
   type getTennisEventsResType = COMMON.BASE_RES_TYPE<TennisEventsData[]>;
@@ -202,11 +288,17 @@ declare namespace SattleDataAPI {
   type getVolleyballEventsResType = COMMON.BASE_RES_TYPE<volleyballData[]>;
   type manualSettlementFullTimeRestType = COMMON.BASE_RES_TYPE<any>;
   type preSaleInfoResType = COMMON.BASE_RES_TYPE<getSettlementDataList>;
-  type getBasketballEventRes = COMMON.BASE_RES_TYPE<BasketballEvent[]>;
-  type getHockeyEventRes = COMMON.BASE_RES_TYPE<HockeyEventData[]>;
-  type getBoxingEventRes = COMMON.BASE_RES_TYPE<BoxingEventData[]>;
-  type getDartsEventRes = COMMON.BASE_RES_TYPE<DartsEventData[]>;
-  type getBadmintonEventRes = COMMON.BASE_RES_TYPE<BasketballEvent[]>;
+
+  type getHandballEventRes = COMMON.BASE_RES_TYPE<HandballEvent[]>;
+  type addHandballEventResType = COMMON.BASE_RES_TYPE<any>;
+  type getIceHockeyEventRes = COMMON.BASE_RES_TYPE<IceHockeyEvent[]>;
+  type addIceHockeyEventResType = COMMON.BASE_RES_TYPE<any>;
+  type getCricketEventRes = COMMON.BASE_RES_TYPE<CricketEvent[]>;
+  type addCricketEventResType = COMMON.BASE_RES_TYPE<any>;
+  type getBasketballEventRes = COMMON.BASE_RES_TYPE<basketballData[]>;
+  type getBadmintonEventRes = COMMON.BASE_RES_TYPE<badmintonData[]>;
+  type getPingPongEventRes = COMMON.BASE_RES_TYPE<pingpongData[]>;
+
   type getMatchEventsRes = COMMON.BASE_RES_TYPE<MatchEventsList[]>;
   type cancelBetOrderResType = COMMON.BASE_RES_TYPE<null>;
 

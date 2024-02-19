@@ -34,7 +34,7 @@
             type="danger"
             :size="size"
             :disabled="row.cancelOrderTimes > 0"
-            @click="cancelBetOrder(row)"
+            @click="cancelClick(row)"
             >{{ t('取消注单') }}</el-button
           >
         </template>
@@ -83,6 +83,11 @@ const goTennisDetail = row => {
     name: 'SETTLE_TENNIS_DETAIL',
     state: { params }
   });
+};
+
+const cancelClick = async row => {
+  await cancelBetOrder(row);
+  onSearch();
 };
 
 defineExpose({ filterData });

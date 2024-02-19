@@ -7,6 +7,7 @@ import { esportData } from "./esports";
 import { historyData } from "./history";
 import { operationLogData } from "./operationLog";
 import { esportsSettlement } from "./esportsSettlement";
+import { configCenterData } from "./configCenter";
 
 export const API = {
   ...user,
@@ -17,5 +18,6 @@ export const API = {
   ...esportData,
   ...historyData,
   ...operationLogData,
-  ...esportsSettlement
-};3
+  ...esportsSettlement,
+  ...configCenterData
+}

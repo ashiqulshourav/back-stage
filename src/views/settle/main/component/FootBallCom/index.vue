@@ -29,7 +29,7 @@
             type="danger"
             :size="size"
             :disabled="row.cancelOrderTimes > 0"
-            @click="cancelBetOrder(row)"
+            @click="cancelClick(row)"
             >{{ t('取消注单') }}</el-button
           >
         </template>
@@ -260,7 +260,6 @@ const {
   advanceSettlement,
   form
 } = useFootball();
-
 const { cancelBetOrder } = useSettileHook();
 
 const props = defineProps<{
@@ -276,6 +275,11 @@ const eventQuotientList = [
 ];
 
 const matchStore = useMatchStore();
+
+const cancelClick = async row => {
+  await cancelBetOrder(row);
+  onSearch();
+};
 
 //- 取消事件置灰
 const tableRowClassName = ({ row }: MatchEventRowType) =>

@@ -22,7 +22,13 @@ import Volleyball from './component/Volleyball/index.vue';
 import Hockey from './component/Hockey/index.vue';
 import Boxing from './component/Boxing/index.vue';
 import Darts from './component/Darts/index.vue';
+import Badminton from './component/Badminton/index.vue';
+import PingPong from './component/PingPong/index.vue';
+
 import MatchLists from './component/MatchLists/index.vue';
+import Handball from './component/Handball/index.vue';
+import IceHockey from './component/IceHockey/index.vue';
+import Cricket from './component/Cricket/index.vue';
 import SearchForm from './component/SearchForm.vue';
 import SportTypeNav from './component/SportTypeNav.vue';
 import { SearchFormType } from './utils/type';
@@ -46,6 +52,12 @@ const comoMap = {
   Tennis,
   Billiards,
   Volleyball,
+  Badminton,
+  PingPong,
+  // MatchLists,
+  Handball,
+  IceHockey,
+  Cricket,
   Hockey,
   Boxing,
   Darts,

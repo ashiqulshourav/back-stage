@@ -1,4 +1,5 @@
 import { http } from '@/utils/http';
+import mockAPI from './mock';
 
 export const sattleData = {
   getSettlementList: (data: SattleDataAPI.getSettlementListPrams) =>
@@ -30,6 +31,32 @@ export const sattleData = {
       { data }
     ),
 
+  getHandballEvents: (data: { matchId: number }) =>
+    // http.request<SattleDataAPI.getHandballEventRes>(
+    //   'post',
+    //   '/handball/v1/getHandballEvents',
+    //   { data }
+    // ),
+    mockAPI.getHandballEvents(data),
+  getIceHockeyEvents: (data: { matchId: number }) =>
+    // http.request<SattleDataAPI.getIceHockeyEventRes>(
+    //   'post',
+    //   '/iceHockey/v1/getIceHockyEvents',
+    //   { data }
+    // ),
+    mockAPI.getIceHockeyEvents(data),
+  getCricketEvents: (data: { matchId: number }) =>
+    // http.request<SattleDataAPI.getCricketEventRes>(
+    //   'post',
+    //   '/cricket/v1/getCricketEvents',
+    //   { data }
+    // ),
+    mockAPI.getCricketEvents(data),
+
+  addMatchEvent: (data: SattleDataAPI.MatchEventParams) =>
+    http.request<MetadataAPI.TeamListRes>('post', '/event/v1/addMatchEvent', {
+      data
+    }),
   getHockeyEvents: (data: { matchId: number }) =>
     http.request<SattleDataAPI.getHockeyEventRes>(
       'post',
@@ -62,7 +89,59 @@ export const sattleData = {
       '/basketball/v1/addBasketballEvent',
       { data }
     ),
+  addHandballEvent: (data: SattleDataAPI.MatchEventParams) =>
+    //   http.request<MetadataAPI.AddSportEventRes>(
+    //     'post',
+    //     '/handball/v1/addHandballEvent',
+    //     { data }
+    //   ),
+    mockAPI.addHandballEvent(data),
+  addIceHockeyEvent: (data: SattleDataAPI.MatchEventParams) =>
+    //   http.request<MetadataAPI.AddSportEventRes>(
+    //     'post',
+    //     '/iceHockey/v1/addIceHockeyEvent',
+    //     { data }
+    //   ),
+    mockAPI.addIceHockeyEvent(data),
+  addCricketEvent: (data: SattleDataAPI.MatchEventParams) =>
+    //   http.request<MetadataAPI.AddSportEventRes>(
+    //     'post',
+    //     '/cricket/v1/addCricketEvent',
+    //     { data }
+    //   ),
+    mockAPI.addCricketEvent(data),
 
+  allBasketballSettlement: (data: { matchId: number }) =>
+    http.request<MetadataAPI.AddSportEventRes>(
+      'post',
+      '/handball/v1/manualSettlementFullTime',
+      { data }
+    ),
+  allHandballSettlement: (data: { matchId: number }) =>
+    http.request<MetadataAPI.AddBasketballEeventRes>(
+      'post',
+      '/basketball/v1/manualSettlementFullTime',
+      { data }
+    ),
+  allIceHockeySettlement: (data: { matchId: number }) =>
+    http.request<MetadataAPI.AddSportEventRes>(
+      'post',
+      '/iceHocky/v1/manualSettlementFullTime',
+      { data }
+    ),
+  allCricketSettlement: (data: { matchId: number }) =>
+    http.request<MetadataAPI.AddSportEventRes>(
+      'post',
+      '/cricket/v1/manualSettlementFullTime',
+      { data }
+    ),
+
+  updateMatchEvent: (data: SattleDataAPI.MatchEventParams) =>
+    http.request<SaleDataAPI.PreSaleListRes>(
+      'post',
+      '/event/v1/updateMatchEvent',
+      { data }
+    ),
   addHockeyEvent: (data: SattleDataAPI.MatchEventParams) =>
     http.request<MetadataAPI.AddHockeyEventRes>(
       'post',
@@ -216,22 +295,21 @@ export const sattleData = {
     ),
 
   //-排球结算事件列表
-  getVolleyballEvents: (data: { matchId: number }) =>
-    http.request<SattleDataAPI.getVolleyballEventsResType>(
+  getVolleyballEvents: (data: {
+    matchId: number;
+  }) => http.request<SattleDataAPI.getVolleyballEventsResType>("post", "/volleyball/v1/getVolleyballEvents", { data }),
+  getBadmintonEvents: (data: {
+    matchId: number;
+  }) => http.request<SattleDataAPI.getBadmintonEventRes>("post", "/badminton/v1/getBadmintonEvents", { data }),
+  getPingpongEvents: (data: {
+    matchId: number;
+  }) => http.request<SattleDataAPI.getPingPongEventRes>("post", "/pingPong/v1/getPingPongEvents", { data }),
+
+  //-排球全场结算（按盘）
+  manualSettlementFullTime: (data: { matchId: number }) =>
+    http.request<SattleDataAPI.manualSettlementFullTimeRestType>(
       'post',
-      '/volleyball/v1/getVolleyballEvents',
-      { data }
-    ),
-  getBadmintonEvents: (data: { matchId: number }) =>
-    http.request<SattleDataAPI.getBadmintonEventRes>(
-      'post',
-      '/badminton/v1/getBadmintonEvents',
-      { data }
-    ),
-  getPingpongEvents: (data: { matchId: number }) =>
-    http.request<SattleDataAPI.getBadmintonEventRes>(
-      'post',
-      '/pingPong/v1/getPingPongEvents',
+      '/tennis/v1/manualSettlementFullTime',
       { data }
     ),
 

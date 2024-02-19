@@ -96,7 +96,39 @@
         "path": "/settle/basketball_detail",
         "name": "SETTLE_BASKETBALL_DETAIL",
         "meta": {
-          "title": "籃球结算",
+          "title": "篮球结算",
+          "showLink": false
+        }
+      },
+      {
+        "path": "/settle/pingpong_detail",
+        "name": "SETTLE_PINGPONG_DETAIL",
+        "meta": {
+          "title": "乒乓球结算",
+          "showLink": false
+        }
+      },
+      {
+        "path": "/settle/badminton_detail",
+        "name": "SETTLE_BADMINTON_DETAIL",
+        "meta": {
+          "title": "⽻⽑球结算",
+          "showLink": false
+        }
+      },
+      {
+        "path": "/settle/handball_detail",
+        "name": "SETTLE_HANDBALL_DETAIL",
+        "meta": {
+          "title": "手球结算",
+          "showLink": false
+        }
+      },
+      {
+        "path": "/settle/iceHockey_detail",
+        "name": "SETTLE_ICEHOCKEY_DETAIL",
+        "meta": {
+          "title": "冰球结算",
           "showLink": false
         }
       },
@@ -125,10 +157,10 @@
         }
       },
       {
-        "path": "/settle/settleDetails",
-        "name": "SETTLE_DETAILS",
+        "path": "/settle/cricket_detail",
+        "name": "SETTLE_CRICKET_DETAIL",
         "meta": {
-          "title": "结算管理",
+          "title": "板球结算",
           "showLink": false
         }
       }
@@ -201,12 +233,20 @@
           "title": "分类设定",
           "showParent": true
         }
-      },
+      },      
       {
         "path": "/configCenter/play_method",
         "name": "CONFIGCENTER_PLAY_METHOD",
         "meta": {
           "title": "自定义玩法",
+          "showParent": true
+        }
+      },
+      {
+        "path": "/configCenter/league_tags",
+        "name": "LEAGUE_TAGS",
+        "meta": {
+          "title": "联赛标签",
           "showParent": true
         }
       }
