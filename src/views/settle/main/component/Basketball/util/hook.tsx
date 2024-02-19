@@ -41,6 +41,9 @@ export function useBasketballHook() {
         });
       matchStore.set_settleRequestLoading(false);
       if (res.code) return message(res.msg, { type: 'error' });
+      res.data.list.forEach(item => {
+        item.isShowCancelBtn = +res.ts < +item.beginTimeLong;
+      });
       dataList.length = 0;
       dataList.push(...res.data.list);
       pagination.total = res.data.total;

@@ -29,6 +29,14 @@
           >
             {{ t('结算详情') }}
           </el-button>
+          <el-button
+            v-if="row.isShowCancelBtn"
+            type="danger"
+            :size="size"
+            :disabled="row.cancelOrderTimes > 0"
+            @click="cancelClick(row)"
+            >{{ t('取消注单') }}</el-button
+          >
         </template>
       </pure-table>
     </template>
@@ -42,22 +50,18 @@ import { useBasketballHook } from './util/hook';
 import { usePublicHooks } from '@/hooks';
 import { SearchFormType } from '../../utils/type';
 import { useMatchStore } from '@/store/match';
+import { useSettileHook } from '../../utils/hook';
 
 const { tableHeaderStyle } = usePublicHooks();
 const router = useRouter();
 
 const matchStore = useMatchStore();
+const { cancelBetOrder } = useSettileHook();
 
 const props = defineProps<{
   form: SearchFormType;
 }>();
-const goTennisDetail = row => {
-  const params = JSON.parse(JSON.stringify(row));
-  router.push({
-    name: 'SETTLE_BASKETBALL_DETAIL',
-    state: { params }
-  });
-};
+
 const {
   onSearch,
   columns,
@@ -68,6 +72,17 @@ const {
   form
 } = useBasketballHook();
 
+const goTennisDetail = row => {
+  const params = JSON.parse(JSON.stringify(row));
+  router.push({
+    name: 'SETTLE_BASKETBALL_DETAIL',
+    state: { params }
+  });
+};
+const cancelClick = async row => {
+  await cancelBetOrder(row);
+  onSearch();
+};
 form.value = props.form;
 const filterData = (type: 'reload') => {
   onSearch(type);

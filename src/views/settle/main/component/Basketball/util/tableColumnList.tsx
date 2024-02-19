@@ -49,7 +49,7 @@ export const columns: TableColumnList = [
     label: t('客队'),
     prop: 'awayTeamNameCn',
     align: 'left',
-    minWidth: 150,
+    minWidth: 100,
     headerRenderer: d => handleTableWidth(d, t('客队'), 'auto')
   },
   /* {
@@ -94,13 +94,13 @@ export const columns: TableColumnList = [
   {
     label: t('未结算'),
     prop: 'unSettlementEvents',
-    headerRenderer: d => handleTableWidth(d, t('未结算'))
+    headerRenderer: d => handleTableWidth(d, t('未结算'), 'auto')
   },
   {
     label: t('操作'),
     slot: 'operation',
     headerRenderer: d => handleTableWidth(d, t('操作'), 'auto'),
-    minWidth: 160,
+    minWidth: 260,
     fixed: 'right'
   }
 ];
