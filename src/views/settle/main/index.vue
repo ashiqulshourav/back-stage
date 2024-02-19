@@ -21,6 +21,7 @@ import Tennis from './component/Tennis/index.vue';
 import Volleyball from './component/Volleyball/index.vue';
 import Hockey from './component/Hockey/index.vue';
 import Boxing from './component/Boxing/index.vue';
+import Darts from './component/Darts/index.vue';
 import MatchLists from './component/MatchLists/index.vue';
 import SearchForm from './component/SearchForm.vue';
 import SportTypeNav from './component/SportTypeNav.vue';
@@ -47,6 +48,7 @@ const comoMap = {
   Volleyball,
   Hockey,
   Boxing,
+  Darts,
   MatchLists
 };
 const currentComponentName = reactive({
