@@ -350,7 +350,7 @@ export function useFootball() {
     });
   };
 
-  //- 取消结算时间
+  //- 取消结算事件
   const cancelMatchEvent = async (
     id: number,
     matchId: number,
@@ -370,6 +370,7 @@ export function useFootball() {
       message(res.msg, { type: res.code ? 'error' : 'success' });
       const row = dataList.find(_ => _.matchId === matchId);
       getChildrenData(row);
+      reloadCurrentMatch(row.matchId, 'settlementType');
     });
   };
 

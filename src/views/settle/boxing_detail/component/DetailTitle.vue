@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-bg_color w-[99/100] px-6 pb-3 pt-[12px]">
-    <div class="font-bold text-md mb-3">{{ t('盘口详情') }}</div>
+  <div class="bg-bg_color w-[99/100] pl-8 pb-3 pt-[12px]">
+    <div class="font-bold text-lg mb-3">{{ t('盘口详情') }}</div>
     <el-row>
       <el-col
         class="mb-2"
@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import { SPORT_ID_MAP, MATCH_STATUS } from '@/utils/maps/sports_map';
 import { t } from '@/plugins/i18n';
-import { truncateString } from '../../utils/tableColumnList';
+
 const props = defineProps<{
   renderObj: EsportsSettlementAPI.ESportMatchList;
 }>();
@@ -46,7 +46,7 @@ const renderList = computed(() => {
     },
     {
       title: t('联赛'),
-      val: history.state.params?.leagueNameCn || ''
+      val: _?.leagueNameCn || ''
     },
     {
       title: t('开赛时间'),
@@ -62,7 +62,7 @@ const renderList = computed(() => {
     },
     {
       title: t('比赛方'),
-      val: `${truncateString(_?.homeTeamNameCn) || '-'} VS ${truncateString(_?.awayTeamNameCn) || '-'}`
+      val: `${_?.homeTeamNameCn || '-'} VS ${_?.awayTeamNameCn || '-'}`
     },
     {
       title: t('结算状态'),

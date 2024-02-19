@@ -43,7 +43,9 @@ export enum SPORT_TYPE {
   volleyball = 6,
   darts = 8,
   boxing = 10,
-  hockey = 28
+  hockey = 28,
+  badminton = 19,
+  pingpong = 23,
 }
 
 export type parentRowType = {

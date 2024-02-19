@@ -11,16 +11,18 @@ declare namespace MetadataAPI {
     level?: number;
     category?: number;
     sportId?: number;
+    tags?: number[]
   }
   type updateLeagueParamsType = {
-    leagueLogo?: string;
-    leagueId?: number;
-    countryId?: number;
-    leagueId188Bet?: number;
-    leagueNameCn?: string;
-    leagueNameEn?: string;
-    level?: number;
-    sportId?: number;
+    leagueLogo: string;
+    leagueId: number;
+    countryId: number;
+    leagueId188Bet: number;
+    leagueNameCn: string;
+    leagueNameEn: string;
+    level: number;
+    sportId: number;
+    tags?: number[];
   }
 
   type LeagueList = {
@@ -32,6 +34,7 @@ declare namespace MetadataAPI {
     leagueLogo?: string;
     leagueId188Bet?: number | string;
     level: string | number;
+    tags?: number[];
   }
   type LeagueListData = {
     total: number;
@@ -85,6 +88,18 @@ declare namespace MetadataAPI {
   }
 
   type AddHockeyEventRes = AddBasketballEeventRes;
+  type AddBoxingEventRes = AddBasketballEeventRes;
+  type AddDartsEventRes = AddBasketballEeventRes;
+
+  type AddSportEventRes = {
+    code: number;
+    msg: string;
+    data?: TeamListData;
+    failure?: boolean;
+    success?: boolean;
+    ts: number;
+  };
+
 
   type PlayerList = {
     birthday: string;

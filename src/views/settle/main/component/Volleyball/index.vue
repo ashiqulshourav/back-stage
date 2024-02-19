@@ -33,7 +33,8 @@
             v-if="row.isShowCancelBtn"
             type="danger"
             :size="size"
-            @click="cancelBetOrder(row)"
+            :disabled="row.cancelOrderTimes > 0"
+            @click="cancelClick(row)"
             >{{ t('取消注单') }}</el-button
           >
         </template>
@@ -83,6 +84,11 @@ const goTennisDetail = row => {
     name: 'SETTLET_VOLLEBALL_DETAIL',
     state: { params }
   });
+};
+
+const cancelClick = async row => {
+  await cancelBetOrder(row);
+  onSearch();
 };
 
 defineExpose({ filterData });

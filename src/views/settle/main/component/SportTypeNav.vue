@@ -25,6 +25,7 @@ const renderList = computed(() => {
 });
 
 const changeType = (_: { value: number; type: string }) => {
+  console.log(_)
   if (_.value === props.currentSportId) return;
   // emits('onSearch', 'reload', val);
   matchStore.set_currentSportId(_.value);

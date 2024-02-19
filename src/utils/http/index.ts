@@ -2,26 +2,26 @@ import Axios, {
   AxiosInstance,
   AxiosRequestConfig,
   CustomParamsSerializer
-} from "axios";
+} from 'axios';
 import {
   PureHttpError,
   RequestMethods,
   PureHttpResponse,
   PureHttpRequestConfig
-} from "./types.d";
-import { stringify } from "qs";
-import NProgress from "../progress";
-import { formatToken, TokenKey } from "@/utils/auth";
-import { storageSession } from "@pureadmin/utils";
-import { useUserStore } from "@/store/user";
+} from './types.d';
+import { stringify } from 'qs';
+import NProgress from '../progress';
+import { formatToken, TokenKey } from '@/utils/auth';
+import { storageSession } from '@pureadmin/utils';
+import { useUserStore } from '@/store/user';
 
 const defaultConfig: AxiosRequestConfig = {
   baseURL: '/match',
   timeout: 20000,
   headers: {
-    Accept: "application/json, text/plain, */*",
-    "Content-Type": "application/json",
-    "X-Requested-With": "XMLHttpRequest"
+    Accept: 'application/json, text/plain, */*',
+    'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest'
   },
   paramsSerializer: {
     serialize: stringify as unknown as CustomParamsSerializer
@@ -43,7 +43,7 @@ class PureHttp {
       async (config: PureHttpRequestConfig): Promise<any> => {
         NProgress.start();
         // 优先判断post/get等方法是否传入回调，否则执行初始化设置等回调
-        if (typeof config.beforeRequestCallback === "function") {
+        if (typeof config.beforeRequestCallback === 'function') {
           config.beforeRequestCallback(config);
           return config;
         }
@@ -52,11 +52,11 @@ class PureHttp {
           return config;
         }
         /** 请求白名单，放置一些不需要token的接口（通过设置请求白名单，防止token过期后再请求造成的死循环问题） */
-        const whiteList = ["/refreshToken", "/login"];
+        const whiteList = ['/refreshToken', '/login'];
         if (whiteList.some(_ => config.url.indexOf(_) < 0)) {
           const token: string = storageSession().getItem(TokenKey) ?? '';
           if (token) {
-            config.headers["Authorization"] = formatToken(token);
+            config.headers['Authorization'] = formatToken(token);
           }
         }
         return config;
@@ -76,7 +76,7 @@ class PureHttp {
         // close progress bar animation
         NProgress.done();
         // 优先判断post/get等方法是否传入回调，否则执行初始化设置等回调
-        if (typeof $config.beforeResponseCallback === "function") {
+        if (typeof $config.beforeResponseCallback === 'function') {
           $config.beforeResponseCallback(response);
           return response.data;
         }
@@ -89,7 +89,7 @@ class PureHttp {
       (error: PureHttpError) => {
         switch (error.response.status) {
           case 403:
-            useUserStore().logOut()
+            useUserStore().logOut();
             break;
         }
         const $error = error;
@@ -116,18 +116,18 @@ class PureHttp {
     } as PureHttpRequestConfig;
     //todo 后期路由后端获取
     if (url === '/getRouter') {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         Axios({
           method: 'get',
           url: '/router.json'
         }).then(d => {
           resolve({
-            'msg': '操作成功',
+            msg: '操作成功',
             code: 0,
             data: d.data
-          })
-        })
-      })
+          });
+        });
+      });
     } else {
       // 单独处理自定义请求/响应回调
       return new Promise((resolve, reject) => {
@@ -141,8 +141,6 @@ class PureHttp {
           });
       });
     }
-
-
   }
 
   /** 单独抽离的post工具函数 */
@@ -151,7 +149,7 @@ class PureHttp {
     params?: AxiosRequestConfig<T>,
     config?: PureHttpRequestConfig
   ): Promise<P> {
-    return this.request<P>("post", url, params, config);
+    return this.request<P>('post', url, params, config);
   }
 
   /** 单独抽离的get工具函数 */
@@ -160,7 +158,7 @@ class PureHttp {
     params?: AxiosRequestConfig<T>,
     config?: PureHttpRequestConfig
   ): Promise<P> {
-    return this.request<P>("get", url, params, config);
+    return this.request<P>('get', url, params, config);
   }
 }
 
