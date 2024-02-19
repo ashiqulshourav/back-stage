@@ -30,12 +30,12 @@ declare namespace SaleDataAPI {
     allHandicaps: number;
     leagueNameCn: string;
     handicapStatus: number;
-  }
+  };
 
   type ChildrenDataList = {
     type: string;
     key: string;
-    tableList: SattleDataAPI.MatchEventsList[]
+    tableList: SattleDataAPI.MatchEventsList[];
   };
 
   type PreSaleListData = {
@@ -58,7 +58,7 @@ declare namespace SaleDataAPI {
     navigatepageNums: number[];
     navigateFirstPage: number;
     navigateLastPage: number;
-  }
+  };
 
   type TeamList = {
     teamId: number;
@@ -71,7 +71,7 @@ declare namespace SaleDataAPI {
     level: number;
     isCountryTeam?: number;
     [key: string]: any;
-  }
+  };
 
   type UpdateMatchParamsType = {
     beginTime: string;
@@ -79,7 +79,7 @@ declare namespace SaleDataAPI {
     matchId: number;
     matchName: string;
     sportId: string;
-  }
+  };
 
   type getBetItemsListDataType = {
     betItemsId: number;
@@ -102,14 +102,10 @@ declare namespace SaleDataAPI {
     oddsType: string;
     handicapFilter: string;
     ctid: number;
-  }
+  };
 
   type getBetItemsListResType = COMMON.BASE_RES_TYPE<getBetItemsListDataType[]>;
   type saleBetItemsResType = COMMON.BASE_RES_TYPE<any>;
-
-
-
-
 
   type PreSaleListRes = COMMON.BASE_RES_TYPE<PreSaleListData>;
   type deleteMatchEventRes = COMMON.BASE_RES_TYPE<any>;
@@ -117,6 +113,4 @@ declare namespace SaleDataAPI {
   type UpdateMatchResType = COMMON.BASE_RES_TYPE<any>;
   type setManualMatchStatusResType = COMMON.BASE_RES_TYPE<any>;
   type cancelMatchEventResType = COMMON.BASE_RES_TYPE<any>;
-
-
 }

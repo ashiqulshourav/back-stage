@@ -149,6 +149,30 @@
         }
       },
       {
+        "path": "/settle/hockey_detail",
+        "name": "SETTLE_HOCKEY_DETAIL",
+        "meta": {
+          "title": "曲棍球结算",
+          "showLink": false
+        }
+      },
+      {
+        "path": "/settle/boxing_detail",
+        "name": "SETTLE_BOXING_DETAIL",
+        "meta": {
+          "title": "拳击/格斗结算",
+          "showLink": false
+        }
+      },
+      {
+        "path": "/settle/darts_detail",
+        "name": "SETTLE_DARTS_DETAIL",
+        "meta": {
+          "title": "飞镖结算",
+          "showLink": false
+        }
+      },
+      {
         "path": "/settle/cricket_detail",
         "name": "SETTLE_CRICKET_DETAIL",
         "meta": {

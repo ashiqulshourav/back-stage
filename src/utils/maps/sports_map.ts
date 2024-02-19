@@ -17,8 +17,8 @@ export const SPORT_ID_MAP = [
   { label: t('美式足球'), value: 16, type: 'AmericanFootball' },
   { label: t('羽毛球'), value: 19, type: 'Badminton' },
   { label: t('乒乓球'), value: 23, type: 'PingPong' },
-  { label: t('曲棍球'), value: 28, type: 'Hockey' },
-]
+  { label: t('曲棍球'), value: 28, type: 'Hockey' }
+];
 
 export const ESPORT_ID_MAP = [
   { value: 276, label: 'DOTA2' },
@@ -87,8 +87,8 @@ export const OPENING_STATUS = {
   0: t('未开售'),
   1: t('早盘'),
   2: t('滚球'),
-  3: t('进行中'),
-}
+  3: t('进行中')
+};
 //- 盘口状态
 export const HANDICAP_STATUS = {
   0: t('未锁盘'),
@@ -96,17 +96,72 @@ export const HANDICAP_STATUS = {
 };
 
 export const YELLOW_OR_RED = {
-  'yellow_card': 1,
-  'red_card': 2
-}
+  yellow_card: 1,
+  red_card: 2
+};
+
+// 格斗 / 曲棍球 / 飞镖
+export const MATCH_PERIOD = {
+  Q1: ' 第一节',
+  Q2: ' 第二节 ',
+  Q3: ' 第三节 ',
+  Q4: ' 第四节 ',
+  Q5: ' 第五节 ',
+  Q6: ' 第六节 ',
+  Q7: ' 第七节 ',
+  Q8: ' 第八节 ',
+  Q9: ' 第九节 ',
+  Q10: ' 第十节 ',
+  Q11: ' 第十一节 ',
+  Q12: ' 第十二节 ',
+  OT: ' 加时赛'
+};
 
 //- 玩法声明映射
-export const PLAY_MATCH = (code) => {
-  const t1 = ['Q1_OU', 'Q2_OU', 'Q3_OU', 'Q4_OU', 'HT_OU', 'S1_OU', 'S2_OU', 'S3_OU', 'S4_OU', 'FTS_OU', 'FT_OU', 'PT_OU']
-  const t2 = ['HT_AH', 'FT_AH', 'FTS_AH', 'Q4_AH', 'Q3_AH', 'Q1_AH', 'Q2_AH', 'S1_AH', 'S2_AH', 'S3_AH', 'S4_AH', 'PT_AH']
-  const t3 = ['FT_OE', 'S2_ML', 'HT_OE']
-  const t4 = ['FT_1X2', 'HT_1X2']
-  const t5 = ['S1_ML', 'Q1_ML', 'Q2_ML', 'Q3_ML', 'Q4_ML', 'FT_ML', 'HT_ML', 'Winner_2ndFrame', 'Winner_1stFrame', 'Winner', 'Winner_1X2']
+export const PLAY_MATCH = code => {
+  const t1 = [
+    'Q1_OU',
+    'Q2_OU',
+    'Q3_OU',
+    'Q4_OU',
+    'HT_OU',
+    'S1_OU',
+    'S2_OU',
+    'S3_OU',
+    'S4_OU',
+    'FTS_OU',
+    'FT_OU',
+    'PT_OU'
+  ];
+  const t2 = [
+    'HT_AH',
+    'FT_AH',
+    'FTS_AH',
+    'Q4_AH',
+    'Q3_AH',
+    'Q1_AH',
+    'Q2_AH',
+    'S1_AH',
+    'S2_AH',
+    'S3_AH',
+    'S4_AH',
+    'PT_AH'
+  ];
+  const t3 = ['FT_OE', 'S2_ML', 'HT_OE'];
+  const t4 = ['FT_1X2', 'HT_1X2'];
+  const t5 = [
+    'S1_ML',
+    'Q1_ML',
+    'Q2_ML',
+    'Q3_ML',
+    'Q4_ML',
+    'FT_ML',
+    'HT_ML',
+    'Winner_2ndFrame',
+    'Winner_1stFrame',
+    'Winner',
+    'Winner_1X2'
+  ];
   switch (true) {
     case t1.includes(code):
       return {
