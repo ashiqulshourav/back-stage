@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export const MATCH_PERIOD_TYPES = {
   Q1: t('第一节'),
   Q2: t('第二节'),
@@ -48,6 +50,12 @@ export const columns: TableColumnList = [
     label: t('状态'),
     formatter: () => {
       return t('人工结算');
+    }
+  },
+  {
+    label: t('确认时间'),
+    formatter: ({ id, updatedAt }) => {
+      return id ? dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss') : '_';
     }
   },
   {

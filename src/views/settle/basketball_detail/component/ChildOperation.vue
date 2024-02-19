@@ -23,9 +23,9 @@
         row.gameRule === 'INNING' ?
           t('结算节') :
         row.inningNum === 1 ?
-          t('结算上班场') :
+          t('结算上半场') :
         row.inningNum === 2 ?
-          t('结算下班场') : t('结算加时赛')
+          t('结算下半场') : t('结算加时赛')
 }}</el-button
     >
     <el-button size="small" type="danger" @click="deleteChildItem">{{
