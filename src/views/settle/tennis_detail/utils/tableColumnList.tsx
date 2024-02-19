@@ -48,6 +48,12 @@ export const columns: TableColumnList = [
   {
     label: t('操作'),
     slot: 'operation'
+  },
+  {
+    label: t('确认时间'),
+    formatter: ({ id, updatedAt }) => {
+      return id ? dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss') : '_';
+    }
   }
 ];
 

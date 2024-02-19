@@ -167,6 +167,12 @@ export const childColumns: TableColumnList = [
     formatter: ({ settleTimes }) => settleTimes ?? '-'
   },
   {
+    label: t('确认时间'),
+    prop: 'updatedAt',
+    formatter: ({ updatedAt, settleTimes }) =>
+      settleTimes > 0 ? dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss') : '-'
+  },
+  {
     label: t('数据商'),
     slot: 'dataSourceCode'
   }
