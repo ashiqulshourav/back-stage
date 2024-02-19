@@ -1,0 +1,116 @@
+<template>
+  <el-form
+    ref="formRef"
+    :model="newFormInline"
+    :rules="formRules"
+    label-width="150px"
+  >
+    <el-form-item :label="t('赛事类型')" prop="categoryId">
+      <el-select
+        v-model="newFormInline.categoryId"
+        :placeholder="t('赛事类型')"
+      >
+        <el-option
+          :label="item.label"
+          :value="item.value"
+          v-for="item in SPORT_CATEGORY"
+          :key="item.value"
+        />
+      </el-select>
+    </el-form-item>
+    <el-form-item label="赛种" prop="sportId">
+      <el-select
+        v-model="newFormInline.sportId"
+        :placeholder="t('赛种')"
+        :disabled="newFormInline.categoryId === undefined"
+      >
+        <el-option
+          :label="item.label"
+          :value="item.value"
+          v-for="item in sports"
+          :key="item.value"
+        />
+      </el-select>
+    </el-form-item>
+    <el-form-item :label="t('标签名称')" prop="tagName">
+      <el-input
+        v-model="newFormInline.tagName"
+        maxLength="35"
+        :placeholder="t('标签名称')"
+      />
+    </el-form-item>
+  </el-form>
+</template>
+
+<script setup lang="ts">
+import { ref, reactive } from 'vue';
+import { formRules } from './utils/rule';
+import { FormProps } from './utils/types';
+import { t } from '@/plugins/i18n';
+import {
+  SPORT_ID_MAP,
+  SPORT_CATEGORY,
+  ESPORT_ID_MAP
+} from '@/utils/maps/sports_map';
+import { inputRestrictions } from '@/utils/formatNumber';
+
+const props = withDefaults(defineProps<FormProps>(), {
+  formInline: () => ({
+    categoryId: undefined,
+    sportId: undefined,
+    tagName: ''
+  })
+});
+
+const formRef = ref();
+const newFormInline = reactive(props.formInline);
+const sports = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
+
+watch(
+  () => newFormInline.categoryId,
+  newValue => {
+    console.log('watch', newValue);
+    sports.value = newValue === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
+    // newFormInline.sportId = newValue === 1 ? 276 : 1;
+    newFormInline.sportId = undefined;
+  }
+  // { deep: true }
+);
+
+function getRef() {
+  return formRef.value;
+}
+onMounted(() => {
+  sports.value =
+    newFormInline.categoryId === undefined
+      ? []
+      : newFormInline.categoryId === 1
+      ? ESPORT_ID_MAP
+      : SPORT_ID_MAP;
+});
+
+defineExpose({ getRef });
+</script>
+
+<style lang="scss">
+.avatar-uploader {
+  .el-upload {
+    border: 1px dashed var(--el-border-color);
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: var(--el-transition-duration-fast);
+  }
+  .el-upload:hover {
+    border-color: var(--el-color-primary);
+  }
+  .el-icon.avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 100px;
+    height: 100px;
+    text-align: center;
+  }
+}
+</style>
