@@ -53,10 +53,6 @@ export const sattleData = {
     // ),
     mockAPI.getCricketEvents(data),
 
-  addMatchEvent: (data: SattleDataAPI.MatchEventParams) =>
-    http.request<MetadataAPI.TeamListRes>('post', '/event/v1/addMatchEvent', {
-      data
-    }),
   getHockeyEvents: (data: { matchId: number }) =>
     http.request<SattleDataAPI.getHockeyEventRes>(
       'post',
@@ -111,12 +107,6 @@ export const sattleData = {
     //   ),
     mockAPI.addCricketEvent(data),
 
-  allBasketballSettlement: (data: { matchId: number }) =>
-    http.request<MetadataAPI.AddSportEventRes>(
-      'post',
-      '/handball/v1/manualSettlementFullTime',
-      { data }
-    ),
   allHandballSettlement: (data: { matchId: number }) =>
     http.request<MetadataAPI.AddBasketballEeventRes>(
       'post',
@@ -136,12 +126,6 @@ export const sattleData = {
       { data }
     ),
 
-  updateMatchEvent: (data: SattleDataAPI.MatchEventParams) =>
-    http.request<SaleDataAPI.PreSaleListRes>(
-      'post',
-      '/event/v1/updateMatchEvent',
-      { data }
-    ),
   addHockeyEvent: (data: SattleDataAPI.MatchEventParams) =>
     http.request<MetadataAPI.AddHockeyEventRes>(
       'post',
@@ -251,13 +235,6 @@ export const sattleData = {
       { data }
     ),
 
-  //-网球新增事件（按盘）
-  manualSettlementFullTime: (data: { matchId: number }) =>
-    http.request<SattleDataAPI.manualSettlementFullTimeRestType>(
-      'post',
-      '/tennis/v1/manualSettlementFullTime',
-      { data }
-    ),
   //-斯诺克新增事件（按局）
   addSnookerEvent: (data: SattleDataAPI.SnookerEventReq) =>
     http.request<SattleDataAPI.addTennisEventResType>(
@@ -295,15 +272,24 @@ export const sattleData = {
     ),
 
   //-排球结算事件列表
-  getVolleyballEvents: (data: {
-    matchId: number;
-  }) => http.request<SattleDataAPI.getVolleyballEventsResType>("post", "/volleyball/v1/getVolleyballEvents", { data }),
-  getBadmintonEvents: (data: {
-    matchId: number;
-  }) => http.request<SattleDataAPI.getBadmintonEventRes>("post", "/badminton/v1/getBadmintonEvents", { data }),
-  getPingpongEvents: (data: {
-    matchId: number;
-  }) => http.request<SattleDataAPI.getPingPongEventRes>("post", "/pingPong/v1/getPingPongEvents", { data }),
+  getVolleyballEvents: (data: { matchId: number }) =>
+    http.request<SattleDataAPI.getVolleyballEventsResType>(
+      'post',
+      '/volleyball/v1/getVolleyballEvents',
+      { data }
+    ),
+  getBadmintonEvents: (data: { matchId: number }) =>
+    http.request<SattleDataAPI.getBadmintonEventRes>(
+      'post',
+      '/badminton/v1/getBadmintonEvents',
+      { data }
+    ),
+  getPingpongEvents: (data: { matchId: number }) =>
+    http.request<SattleDataAPI.getPingPongEventRes>(
+      'post',
+      '/pingPong/v1/getPingPongEvents',
+      { data }
+    ),
 
   //-排球全场结算（按盘）
   manualSettlementFullTime: (data: { matchId: number }) =>
