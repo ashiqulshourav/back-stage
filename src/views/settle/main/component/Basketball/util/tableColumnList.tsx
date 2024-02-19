@@ -80,18 +80,6 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('是否中立场地'))
   },
   {
-    label: t('上半场结算'),
-    prop: 'halfSettlementStatus',
-    formatter: ({ halfSettlementStatus }) =>
-      halfSettlementStatus === 0 ? (
-        t('未结算')
-      ) : (
-        <el-text type="danger">{t('已结算')}</el-text>
-      ),
-    headerRenderer: d => handleTableWidth(d, t('上半场结算'))
-  },
-
-  {
     label: t('全场结算'),
     prop: 'fullSettlementStatus',
     fixed: 'right',
