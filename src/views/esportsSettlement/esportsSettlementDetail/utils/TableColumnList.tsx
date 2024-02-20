@@ -9,7 +9,9 @@ export const columns: TableColumnList = [
   {
     label: t('盘口名称'),
     prop: 'betItemsNameEn',
-    minWidth: 200
+    minWidth: 200,
+    formatter: ({ betItemsNameEn, betItemsName }) =>
+      betItemsNameEn ? betItemsNameEn : betItemsName
   },
   {
     label: t('所属局数'),
