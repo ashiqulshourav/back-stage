@@ -83,7 +83,7 @@
           type="primary" 
           @click="addEventRow"
           >
-          {{t('新增节')}}</el-button>
+          {{t('新增局')}}</el-button>
       </div>
     </template>
   </div>
