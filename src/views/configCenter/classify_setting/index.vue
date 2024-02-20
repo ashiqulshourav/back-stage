@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <SearchForm :loading="loading" @on-search="onSearch" :form="searchForm" />
-    <PureTableBar :columns="columns" @refresh="onSearch('reload')">
+    <PureTableBar :columns="columns" @refresh="onSearch">
       <template #title>
         <el-button
           type="primary"
@@ -60,6 +60,7 @@
                   type="danger"
                   :size="size"
                   :icon="useRenderIcon('Delete')"
+                  @click="deleteTag(row)"
                 >
                   {{ t('删除') }}
                 </el-button>
@@ -93,6 +94,7 @@ const {
   handleDelete,
   handleTableWidthChange,
   handleSelectionChange,
-  searchForm
+  searchForm,
+  deleteTag
 } = useClassifySettingHook();
 </script>

@@ -34,14 +34,18 @@
           >
         </template>
         <template #expand="{ row: parentRow, index: parIndex }: parentRowType">
-          <!-- -全场结算按钮 -->
-          <SettleMatchBtn
-            :balanceLoading="balanceLoading"
-            :parentRow="parentRow"
-            :childDataTotal="childDataTotal"
-            @settlementFunction="settlementFunction"
-          />
-
+          <div class="flex items-center">
+            <!-- -全场结算按钮 -->
+            <SettleMatchBtn
+              :balanceLoading="balanceLoading"
+              :parentRow="parentRow"
+              :childDataTotal="childDataTotal"
+              @settlementFunction="settlementFunction"
+            />
+            <el-text type="danger" class="!ml-2">{{
+              t('请依照正序进行确认结算')
+            }}</el-text>
+          </div>
           <div class="m-4">
             <div v-for="(item, idx) in parentRow.childrenData" :key="item.type">
               <div class="mt-3 mb-1 font-bold">

@@ -12,8 +12,9 @@ import {
 import { stringify } from 'qs';
 import NProgress from '../progress';
 import { formatToken, TokenKey } from '@/utils/auth';
-import { storageSession } from '@pureadmin/utils';
+import { storageLocal, storageSession } from '@pureadmin/utils';
 import { useUserStore } from '@/store/user';
+import { addAcceptLanguageList } from './helper';
 
 const defaultConfig: AxiosRequestConfig = {
   baseURL: '/match',
@@ -57,6 +58,11 @@ class PureHttp {
           const token: string = storageSession().getItem(TokenKey) ?? '';
           if (token) {
             config.headers['Authorization'] = formatToken(token);
+          }
+          if (addAcceptLanguageList.includes(config.url)) {
+            const lan: { locale: string } = storageLocal().getItem('responsive-locale') ?? { locale: 'zh' }
+            let lanStr = lan.locale === 'zh' ? 'CN' : 'EN'
+            config.headers['accept-language'] = lanStr;
           }
         }
         return config;

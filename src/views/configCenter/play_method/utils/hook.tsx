@@ -1,6 +1,5 @@
 import editForm from '../form.vue';
 import { message } from '@/utils/message';
-import { FormItemProps } from 'element-plus';
 import { addDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted, h } from 'vue';
@@ -8,8 +7,7 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { searchFormType } from './types';
 
 export function usePlayMethodHook() {
-  const formRef = ref();
-  const dataList = reactive<MetadataAPI.LeagueList[]>([]);
+  const dataList = reactive<PLayMethodAPI.getKindsCodeMatchList[]>([]);
   const loading = ref(true);
   const pagination = reactive<PaginationProps>({
     total: 0,
@@ -17,11 +15,11 @@ export function usePlayMethodHook() {
     currentPage: 1,
     background: true
   });
+
   const form = reactive<searchFormType>({
     matchId: '',
     startTime: '',
     endTime: '',
-    countryId: '',
     leagueId: '',
     sportId: 1
   });
@@ -44,7 +42,7 @@ export function usePlayMethodHook() {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       loading.value = true;
-      const res: MetadataAPI.LeagueListRes = await API.getKindsCodeMatchList({
+      const res = await API.getKindsCodeMatchList({
         ...removeEmptyStringKeys(form),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
@@ -54,8 +52,6 @@ export function usePlayMethodHook() {
       dataList.length = 0;
       dataList.push(...res.data.list);
       pagination.total = res.data.total;
-      pagination.pageSize = res.data.pageSize;
-      pagination.currentPage = res.data.pageNum;
     } catch (error) {
       loading.value = false;
     }
@@ -67,56 +63,21 @@ export function usePlayMethodHook() {
     onSearch();
   };
 
-  function openDialog(title: string, row?: MetadataAPI.LeagueList) {
+  //- 开启玩法设定弹窗
+  function openDialog(row: PLayMethodAPI.getKindsCodeMatchList) {
     addDialog({
-      title,
-      props: {
-        formInline: {
-          leagueLogo: row?.leagueLogo ?? '',
-          leagueId: row?.leagueId ?? '',
-          countryId: row?.countryId ?? '',
-          leagueId188Bet: row?.leagueId188Bet ?? '',
-          leagueNameCn: row?.leagueNameCn ?? '',
-          leagueNameEn: row?.leagueNameEn ?? '',
-          level: row?.level ?? '',
-          sportId: row?.sportId ?? ''
-        }
-      },
+      title: t('分类预览'),
       width: '40%',
       draggable: true,
-      fullscreenIcon: true,
       alignCenter: true,
       closeOnClickModal: false,
-      contentRenderer: () => h(editForm, { ref: formRef }),
-      beforeSure: (done, { options }) => {
-        const FormRef = formRef.value.getRef();
-        const curData = options.props.formInline as FormItemProps;
-        function chores() {
-          // message(`您${title}了角色名称为${curData.name}的这条数据`, {
-          //   type: "success"
-          // });
-          done(); // 关闭弹框
-          onSearch(); // 刷新表格数据
-        }
-        FormRef.validate(async valid => {
-          if (valid) {
-            if (row) {
-              updateLeague(curData, () => chores());
-            } else {
-              // 实际开发先调用编辑接口，再进行下面操作
-              // chores();
-            }
-          }
-        });
-      }
+      contentRenderer: () =>
+        h(editForm, {
+          matchId: row.matchId,
+          sportId: row.sportId
+        })
     });
   }
-
-  const updateLeague = async (curData, cb) => {
-    const res = await API.updateLeague(curData);
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    if (!res.code) cb();
-  };
 
   onMounted(() => {
     onSearch();
@@ -126,12 +87,10 @@ export function usePlayMethodHook() {
     loading,
     dataList,
     pagination,
-    // buttonClass,
     onSearch,
     resetForm,
     openDialog,
     form,
-    // handleDatabase,
     handleTableWidthChange,
     handleCurrentChange,
     handleSelectionChange

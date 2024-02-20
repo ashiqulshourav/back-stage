@@ -1,18 +1,14 @@
 import editForm from '../form.vue';
 import { message } from '@/utils/message';
-// import { ElMessageBox } from "element-plus";
 import { addDialog, closeDialog } from '@/components/ReDialog';
-import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted, h } from 'vue';
-// import { usePublicHooks } from "@/hooks";
-import { FormItemProps } from 'element-plus';
 import { columns } from '../component/TableColumnList';
 import { SearchFormType } from './types';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+import { ElMessageBox } from 'element-plus';
 
 export function useClassifySettingHook() {
-  const formRef = ref();
-  const dataList = reactive<MetadataAPI.TeamList[]>([]);
+  const dataList = reactive<PLayMethodAPI.getKindsCodeList[]>([]);
   const loading = ref(true);
 
   const searchForm = reactive<SearchFormType>({
@@ -24,7 +20,7 @@ export function useClassifySettingHook() {
     onSearch();
   }
 
-  function handleTableWidthChange(val: number) {
+  function handleTableWidthChange() {
     onSearch();
   }
 
@@ -32,7 +28,8 @@ export function useClassifySettingHook() {
     console.log('handleSelectionChange', val);
   }
 
-  async function onSearch(type?: string) {
+  //- 初始化
+  async function onSearch() {
     loading.value = true;
     const res = await API.getKindsCodeList({
       ...searchForm
@@ -40,19 +37,33 @@ export function useClassifySettingHook() {
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
     dataList.length = 0;
-    dataList.push(...res.data.list);
+    dataList.push(...res.data);
   }
 
-  const resetForm = formEl => {
-    if (!formEl) return;
-    formEl.resetFields();
-    onSearch();
+  //- 删除分类
+  const deleteTag = (row: PLayMethodAPI.getKindsCodeList) => {
+    ElMessageBox.confirm(t('确定要删除当前分类么?'), t('警告'), {
+      showCancelButton: true,
+      cancelButtonText: t('取消'),
+      confirmButtonText: t('确认'),
+      type: 'warning',
+      center: true
+    }).then(async () => {
+      const res = await API.deleteKindsCode({
+        configValue: row.configValue,
+        sportName: SPORT_ID_MAP.find(item => item.value === row.sportId).label,
+        id: row.id
+      });
+      message(res.msg, { type: res.msg ? 'error' : 'success' });
+      onSearch();
+    });
   };
 
-  function openDialog(title: string, row?: MetadataAPI.TeamList) {
+  //- 新增修改弹窗
+  function openDialog(title: string, row?: PLayMethodAPI.getKindsCodeList) {
     addDialog({
       title,
-      width: '25%',
+      width: '30%',
       closeOnClickModal: false,
       center: true,
       hideFooter: true,
@@ -63,10 +74,14 @@ export function useClassifySettingHook() {
             sportName: SPORT_ID_MAP.find(
               item => item.value === searchForm.sportId
             ).label,
-            configValue: ''
+            id: row?.id ?? '',
+            configValue: row?.configValue ?? '',
+            tags: row?.tags ?? [],
+            sort: row?.sort ?? ''
           },
-          onCloseDialog: () => {
+          onCloseDialog: (type?: string) => {
             closeDialog(options, index);
+            type && onSearch();
           }
         })
     });
@@ -80,14 +95,12 @@ export function useClassifySettingHook() {
     loading,
     columns,
     dataList,
-    // buttonClass,
     onSearch,
-    resetForm,
     openDialog,
     handleDelete,
-    // handleDatabase,
     handleTableWidthChange,
     handleSelectionChange,
-    searchForm
+    searchForm,
+    deleteTag
   };
 }

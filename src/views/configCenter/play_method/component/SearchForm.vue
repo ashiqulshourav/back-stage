@@ -7,6 +7,7 @@
           :placeholder="t('游戏种类')"
           clearable
           class="!w-[150px]"
+          @change="changeGameType"
         >
           <el-option
             :label="item.label"
@@ -94,11 +95,7 @@ import { searchFormType } from '../utils/types';
 import dayjs from 'dayjs';
 import { useMatchStore } from '@/store/match';
 import { formatNumber } from '@/utils/formatNumber';
-import {
-  ESPORT_ID_MAP,
-  SPORT_ID_MAP,
-  SPORT_CATEGORY
-} from '@/utils/maps/sports_map';
+import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
 const time = ref('');
 const formRef = ref();
@@ -129,21 +126,18 @@ const changeDate = t => {
   search();
 };
 
+const changeGameType = sportId => {
+  matchStore.set_lagueList(0, sportId);
+};
+
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
-  gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
+  gameClassify.value = SPORT_ID_MAP;
   emits('onSearch', ...['reload']);
 };
 
 const search = () => {
   emits('onSearch', ...['reload']);
-};
-
-const chagenMatchType = (type: 0 | 1 | 2) => {
-  props.form.sportId = '';
-  //- 电竞比赛 =1
-  gameClassify.value = type === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
-  matchStore.set_lagueList(type, props.form.sportId);
 };
 </script>
 

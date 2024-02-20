@@ -4,9 +4,9 @@
       ref="ruleFormRef"
       :model="formData"
       :rules="formRules"
-      label-width="100px"
+      label-width="150px"
     >
-      <el-form-item :label="t('分类名称')" prop="configValue">
+      <el-form-item :label="`${t('分类名称')}:`" prop="configValue">
         <el-input
           maxlength="30"
           v-model="formData.configValue"
@@ -26,10 +26,20 @@
         </el-select>
       </el-form-item>
 
+      <el-form-item :label="`${t('分类排序')}:`" prop="sort">
+        <el-input
+          :formatter="v => inputRestrictions(v)"
+          v-model="formData.sort"
+          type="number"
+          :placeholder="t('请输入1-200之间的数字')"
+          clearable
+        />
+      </el-form-item>
+
       <div class="flex justify-end">
         <el-button @click="closeDialog"> {{ t('取消') }} </el-button>
-        <el-button type="primary">
-          {{ t('确认新增') }}
+        <el-button :loading="btnLoading" type="primary" @click="addPlayMethod">
+          {{ formData.id ? t('确认修改') : t('确认新增') }}
         </el-button>
       </div>
     </el-form>
@@ -40,17 +50,26 @@
 import { ref } from 'vue';
 import { formRules } from './utils/rule';
 import { t } from '@/plugins/i18n';
+import { FormInstance } from 'element-plus';
+import { message } from '@/utils/message';
+import { inputRestrictions } from '@/utils/formatNumber';
+import { removeEmptyStringKeys } from '@/utils/utilFn';
 
-const props = withDefaults(
-  defineProps<{
-    form: { sportId: number; sportName: string; configValue: string };
-  }>(),
-  {}
-);
+const props = defineProps<{
+  form: {
+    sportId: number;
+    sportName: string;
+    configValue: string;
+    tags: string[];
+    id: number | string;
+    sort: number | string;
+  };
+}>();
 
-const formData = reactive({ ...props.form, tags: [] });
+const formData = reactive({ ...props.form });
 const tagList = reactive<string[]>([]);
-const ruleFormRef = ref();
+const ruleFormRef = ref<FormInstance>();
+const btnLoading = ref(false);
 
 onMounted(() => {
   initTag();
@@ -68,27 +87,21 @@ const emits = defineEmits(['closeDialog']);
 const closeDialog = () => {
   emits('closeDialog');
 };
-</script>
 
-<style lang="scss">
-.avatar-uploader {
-  .el-upload {
-    border: 1px dashed var(--el-border-color);
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: var(--el-transition-duration-fast);
-  }
-  .el-upload:hover {
-    border-color: var(--el-color-primary);
-  }
-  .el-icon.avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 100px;
-    height: 100px;
-    text-align: center;
-  }
-}
-</style>
+//- 新增玩法
+const addPlayMethod = async () => {
+  ruleFormRef.value.validate(async v => {
+    if (v) {
+      btnLoading.value = true;
+      const urlPath = formData.id ? 'updateKindsCode' : 'addKindsCode';
+      const params = { ...formData };
+      const res = await API[urlPath](removeEmptyStringKeys(params));
+      btnLoading.value = false;
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if (!res.code) {
+        emits('closeDialog', 'reload');
+      }
+    }
+  });
+};
+</script>

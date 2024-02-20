@@ -30,18 +30,13 @@
       >
         {{ t('筛选') }}
       </el-button>
-      <el-button :icon="useRenderIcon(RefreshIcon)" @click="resetForm(formRef)">
-        {{ t('重置') }}
-      </el-button>
     </el-form-item>
   </el-form>
 </template>
 
 <script setup lang="ts">
 import SearchIcon from '@iconify-icons/ep/search';
-import RefreshIcon from '@iconify-icons/ep/refresh';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-import type { FormInstance } from 'element-plus';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { t } from '@/plugins/i18n';
 import { SearchFormType } from '../utils/types';
@@ -53,10 +48,6 @@ defineProps<{
 
 const emits = defineEmits(['onSearch']);
 const formRef = ref();
-const resetForm = (formEl: FormInstance | undefined) => {
-  formEl.resetFields();
-  search();
-};
 
 const search = () => {
   emits('onSearch', 'reload');
