@@ -33,7 +33,10 @@
                   :disabled="row.win != null"
                   :label="index"
                   border
-                  :class="[row.arr.length > 2 && 'mb-1']"
+                  :class="[
+                    row.arr.length > 2 && 'mb-1',
+                    `item_${row.arr.length}`
+                  ]"
                   v-for="(item, index) in row.arr"
                   :key="index"
                 >
@@ -151,6 +154,9 @@ const {
             text-overflow: ellipsis;
           }
         }
+      }
+      &.item_3 {
+        width: 30%;
       }
     }
   }

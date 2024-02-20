@@ -87,6 +87,10 @@ declare namespace MetadataAPI {
     ts: number;
   }
 
+  type AddHockeyEventRes = AddBasketballEeventRes;
+  type AddBoxingEventRes = AddBasketballEeventRes;
+  type AddDartsEventRes = AddBasketballEeventRes;
+
   type AddSportEventRes = {
     code: number;
     msg: string;
