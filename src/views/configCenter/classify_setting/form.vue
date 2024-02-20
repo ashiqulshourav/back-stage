@@ -1,121 +1,73 @@
 <template>
-  <el-form
-    ref="ruleFormRef"
-    :model="newFormInline"
-    :rules="formRules"
-    label-width="100px"
-  >
-    <el-form-item :label="t('分类名称')" prop="countryId">
-      <el-input
-        maxlength="30"
-        v-model="newFormInline.level"
-        :placeholder="t('请输入分类名称')"
-        clearable
-      />
-    </el-form-item>
-
-    <!-- <el-form-item :label="`${t('是否国家队')}:`" prop="isCountryTeam">
-      <el-select
-        v-model="newFormInline.isCountryTeam"
-        :placeholder="t('请选择')"
-        class="!w-[150px]"
-      >
-        <el-option :label="t('是')" :value="0" />
-        <el-option :label="t('否')" :value="1" />
-      </el-select>
-    </el-form-item> -->
-
-    <!-- <el-form-item :label="t('联赛等级')" prop="level">
-      <el-input
-        :formatter="v => inputRestrictions(v)"
-        v-model="newFormInline.level"
-        :placeholder="t('请输入1-200之间的数字')"
-        type="number"
-        clearable
-        class="!w-[200px]"
-      />
-    </el-form-item>
-
-    <el-form-item label="赛种" prop="sportId">
-      <el-select
-        v-model="newFormInline.sportId"
-        :placeholder="t('赛种')"
-        class="!w-[150px]"
-      >
-        <el-option
-          :label="item.label"
-          :value="item.value"
-          v-for="item in SPORT_ID_MAP"
-          :key="item.value"
+  <div class="pr-6">
+    <el-form
+      ref="ruleFormRef"
+      :model="formData"
+      :rules="formRules"
+      label-width="100px"
+    >
+      <el-form-item :label="t('分类名称')" prop="configValue">
+        <el-input
+          maxlength="30"
+          v-model="formData.configValue"
+          :placeholder="t('请输入分类名称')"
+          clearable
         />
-      </el-select>
-    </el-form-item> -->
+      </el-form-item>
 
-    <!-- <el-form-item :label="`${t('球队中文名称')}:`" prop="teamNameCn">
-      <el-input
-        v-model="newFormInline.teamNameCn"
-        :placeholder="t('球队中文名称')"
-      />
-    </el-form-item> -->
-  </el-form>
+      <el-form-item :label="`${t('分类标签')}:`" prop="tags">
+        <el-select v-model="formData.tags" :placeholder="t('请选择')" multiple>
+          <el-option
+            :label="item"
+            :value="item"
+            v-for="item in tagList"
+            :key="item"
+          />
+        </el-select>
+      </el-form-item>
+
+      <div class="flex justify-end">
+        <el-button @click="closeDialog"> {{ t('取消') }} </el-button>
+        <el-button type="primary">
+          {{ t('确认新增') }}
+        </el-button>
+      </div>
+    </el-form>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import { formRules } from './utils/rule';
-import { TeamFormProps } from './utils/types';
-// import type { UploadProps } from 'element-plus';
-// import { Plus } from '@element-plus/icons-vue';
 import { t } from '@/plugins/i18n';
-import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
-import { inputRestrictions } from '@/utils/formatNumber';
-import { useMatchStore } from '@/store/match';
 
-const matchStore = useMatchStore();
-const props = withDefaults(defineProps<TeamFormProps>(), {
-  formInline: () => ({
-    teamId: 0,
-    countryId: 0,
-    sportId: 0,
-    leagueId: 0,
-    teamNameCn: '',
-    teamNameEn: '',
-    // teamLogo: '',
-    isCountryTeam: 0,
-    level: 0
-  })
+const props = withDefaults(
+  defineProps<{
+    form: { sportId: number; sportName: string; configValue: string };
+  }>(),
+  {}
+);
+
+const formData = reactive({ ...props.form, tags: [] });
+const tagList = reactive<string[]>([]);
+const ruleFormRef = ref();
+
+onMounted(() => {
+  initTag();
 });
 
-/* const beforeAvatarUpload: UploadProps['beforeUpload'] = _rawFile => {
-  if (rawFile.type !== 'image/jpeg') {
-    console.log('Avatar picture must be JPG format!');
-    return false;
-  } else if (rawFile.size / 1024 / 1024 > 2) {
-    console.log('Avatar picture size can not exceed 2MB!');
-    return false;
-  }
-  return true;
-}; */
+//- 获取分类标签
+const initTag = async () => {
+  const res = await API.getTags({ sportId: formData.sportId });
+  if (res.code) return;
+  tagList.length = 0;
+  tagList.push(...res.data);
+};
 
-/* const handleAvatarSuccess: UploadProps['onSuccess'] = (
-  _response,
-  _uploadFile
-) => {}; */
-
-/* const onImgChange = respose => {
-  imageUrl.value = URL.createObjectURL(respose.raw);
-}; */
-
-const ruleFormRef = ref();
-const newFormInline = ref(props.formInline);
-
-// const imageUrl = ref<string>(newFormInline.value.teamLogo);
-
-function getRef() {
-  return ruleFormRef.value;
-}
-
-defineExpose({ getRef });
+const emits = defineEmits(['closeDialog']);
+const closeDialog = () => {
+  emits('closeDialog');
+};
 </script>
 
 <style lang="scss">

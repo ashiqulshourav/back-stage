@@ -8,7 +8,7 @@ export const columns: TableColumnList = [
   },
   {
     label: t('盘口名称'),
-    prop: 'betItemsName',
+    prop: 'betItemsNameEn',
     minWidth: 200
   },
   {

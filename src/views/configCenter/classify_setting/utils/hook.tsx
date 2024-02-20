@@ -7,41 +7,17 @@ import { reactive, ref, onMounted, h } from 'vue';
 // import { usePublicHooks } from "@/hooks";
 import { FormItemProps } from 'element-plus';
 import { columns } from '../component/TableColumnList';
-import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { SearchFormType } from './types';
+import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
-export function useClassifySetting() {
+export function useClassifySettingHook() {
   const formRef = ref();
   const dataList = reactive<MetadataAPI.TeamList[]>([]);
   const loading = ref(true);
-  const pagination = reactive<PaginationProps>({
-    total: 0,
-    pageSize: 10,
-    currentPage: 1,
-    background: true
-  });
-  const searchForm = reactive<SearchFormType>({
-    teamId: '',
-    countryId: '',
-    isCountryTeam: '',
-    leagueId: '',
-    level: '',
-    sportId: '',
-    stadiumName: '',
-    teamLogo: '',
-    teamNameCn: '',
-    teamNameEn: ''
-  });
 
-  // const buttonClass = computed(() => {
-  //   return [
-  //     "!h-[20px]",
-  //     "reset-margin",
-  //     "!text-gray-500",
-  //     "dark:!text-white",
-  //     "dark:hover:!text-primary"
-  //   ];
-  // });
+  const searchForm = reactive<SearchFormType>({
+    sportId: 1
+  });
 
   function handleDelete(row) {
     message(`您删除了角色名称为${row.name}的这条数据`, { type: 'success' });
@@ -49,12 +25,6 @@ export function useClassifySetting() {
   }
 
   function handleTableWidthChange(val: number) {
-    pagination.pageSize = val;
-    onSearch();
-  }
-
-  function handleCurrentChange(val: number) {
-    pagination.currentPage = val;
     onSearch();
   }
 
@@ -63,20 +33,14 @@ export function useClassifySetting() {
   }
 
   async function onSearch(type?: string) {
-    if (type === 'reload') pagination.currentPage = 1;
     loading.value = true;
-    const res: MetadataAPI.TeamListRes = await API.getTeamList({
-      ...removeEmptyStringKeys(searchForm),
-      pageSize: pagination.pageSize,
-      pageNum: pagination.currentPage
+    const res = await API.getKindsCodeList({
+      ...searchForm
     });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
     dataList.length = 0;
     dataList.push(...res.data.list);
-    pagination.total = res.data.total;
-    pagination.pageSize = res.data.pageSize;
-    pagination.currentPage = res.data.pageNum;
   }
 
   const resetForm = formEl => {
@@ -88,64 +52,25 @@ export function useClassifySetting() {
   function openDialog(title: string, row?: MetadataAPI.TeamList) {
     addDialog({
       title,
-      props: {
-        formInline: {
-          countryId: row?.countryId ?? '',
-          isCountryTeam: row?.isCountryTeam ?? '',
-          leagueId: row?.leagueId ?? '',
-          level: row?.level ?? '',
-          sportId: row?.sportId ?? '',
-          teamId: row?.teamId ?? '',
-          stadiumName: row?.stadiumName ?? '',
-          teamNameCn: row?.teamNameCn ?? '',
-          teamNameEn: row?.teamNameEn ?? '',
-          teamLogo: row?.teamLogo ?? ''
-        }
-      },
-      width: '30%',
-      draggable: true,
-      fullscreenIcon: true,
+      width: '25%',
       closeOnClickModal: false,
-      contentRenderer: () => h(editForm, { ref: formRef }),
-      footerRenderer: ({ options, index }) => {
-        return (
-          <>
-            <el-button onClick={() => closeDialog(options, index)}>
-              {t('取消')}
-            </el-button>
-            <el-button type="primary" onClick={() => {}}>
-              {row ? t('确认') : t('确认新增')}
-            </el-button>
-          </>
-        );
-      },
-      beforeSure: (done, { options }) => {
-        const FormRef = formRef.value.getRef();
-        const curData = options.props.formInline as FormItemProps;
-        function chores() {
-          done(); // 关闭弹框
-          onSearch(); // 刷新表格数据
-        }
-        FormRef.validate(valid => {
-          if (valid) {
-            if (row) {
-              updateTeam(curData, () => chores());
-              // 实际开发先调用新增接口，再进行下面操作
-            } else {
-              // 实际开发先调用编辑接口，再进行下面操作
-              chores();
-            }
+      center: true,
+      hideFooter: true,
+      contentRenderer: ({ options, index }) =>
+        h(editForm, {
+          form: {
+            sportId: searchForm.sportId,
+            sportName: SPORT_ID_MAP.find(
+              item => item.value === searchForm.sportId
+            ).label,
+            configValue: ''
+          },
+          onCloseDialog: () => {
+            closeDialog(options, index);
           }
-        });
-      }
+        })
     });
   }
-
-  const updateTeam = async (curData, cb) => {
-    const res = await API.updateTeam(curData);
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    if (!res.code) cb();
-  };
 
   onMounted(() => {
     onSearch();
@@ -155,7 +80,6 @@ export function useClassifySetting() {
     loading,
     columns,
     dataList,
-    pagination,
     // buttonClass,
     onSearch,
     resetForm,
@@ -163,7 +87,6 @@ export function useClassifySetting() {
     handleDelete,
     // handleDatabase,
     handleTableWidthChange,
-    handleCurrentChange,
     handleSelectionChange,
     searchForm
   };

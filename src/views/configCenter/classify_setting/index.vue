@@ -1,12 +1,8 @@
 <template>
   <div class="main">
-    <!-- <SearchForm :loading="loading" @on-search="onSearch" :form="searchForm" /> -->
-    <PureTableBar
-      :title="t('分类列表')"
-      :columns="columns"
-      @refresh="onSearch('reload')"
-    >
-      <template #buttons>
+    <SearchForm :loading="loading" @on-search="onSearch" :form="searchForm" />
+    <PureTableBar :columns="columns" @refresh="onSearch('reload')">
+      <template #title>
         <el-button
           type="primary"
           :icon="useRenderIcon('addFill')"
@@ -26,15 +22,10 @@
           adaptive
           :data="dataList"
           :columns="dynamicColumns"
-          :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
           :paginationSmall="size === 'small' ? true : false"
-          :header-cell-style="{
-            background: 'var(--el-fill-color-light)',
-            color: 'var(--el-text-color-primary)'
-          }"
+          :header-cell-style="tableHeaderStyle"
           @selection-change="handleSelectionChange"
           @page-size-change="handleTableWidthChange"
-          @page-current-change="handleCurrentChange"
         >
           <template #teamLogo="{ row, index }">
             <el-image
@@ -85,23 +76,23 @@
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import EditPen from '@iconify-icons/ep/edit-pen';
-import { useClassifySetting } from './utils/hook';
-// import SearchForm from './component/SearchForm.vue';
+import { useClassifySettingHook } from './utils/hook';
+import SearchForm from './component/SearchForm.vue';
 import { t } from '@/plugins/i18n';
+import { usePublicHooks } from '@/hooks';
 
 defineOptions({ name: 'TEAM' });
+const { tableHeaderStyle } = usePublicHooks();
 
 const {
   loading,
   columns,
   dataList,
-  pagination,
   onSearch,
   openDialog,
   handleDelete,
   handleTableWidthChange,
-  handleCurrentChange,
-  handleSelectionChange
-  // searchForm
-} = useClassifySetting();
+  handleSelectionChange,
+  searchForm
+} = useClassifySettingHook();
 </script>

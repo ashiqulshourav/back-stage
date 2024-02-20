@@ -9,8 +9,7 @@ export type searchFormType = {
   endTime: string;
   countryId: string;
   leagueId: string;
-  sportId: string;
-  category: string | number;
+  sportId: string | number;
 }
 
 export type { FormProps };

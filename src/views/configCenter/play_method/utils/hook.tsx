@@ -23,8 +23,7 @@ export function usePlayMethodHook() {
     endTime: '',
     countryId: '',
     leagueId: '',
-    sportId: '',
-    category: 0
+    sportId: 1
   });
 
   function handleTableWidthChange(val: number) {
@@ -45,7 +44,7 @@ export function usePlayMethodHook() {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       loading.value = true;
-      const res: MetadataAPI.LeagueListRes = await API.getLeagueList({
+      const res: MetadataAPI.LeagueListRes = await API.getKindsCodeMatchList({
         ...removeEmptyStringKeys(form),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage

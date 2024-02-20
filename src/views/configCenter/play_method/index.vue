@@ -3,7 +3,7 @@
     <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
 
     <PureTableBar
-      :title="t('联赛列表')"
+      :title="t('赛事列表')"
       :columns="columns"
       @refresh="onSearch('reload')"
     >

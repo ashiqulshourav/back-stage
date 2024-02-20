@@ -1,23 +1,6 @@
 <template>
   <div class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]">
     <el-form ref="formRef" :inline="true" :model="form">
-      <el-form-item :label="`${t('赛事类型')}:`" prop="category">
-        <el-select
-          v-model="form.category"
-          :placeholder="t('赛事类型')"
-          clearable
-          class="!w-[150px]"
-          @change="chagenMatchType"
-        >
-          <el-option
-            :label="item.label"
-            :value="item.value"
-            v-for="item in SPORT_CATEGORY"
-            :key="item.value"
-          />
-        </el-select>
-      </el-form-item>
-
       <el-form-item :label="`${t('游戏种类')}:`" prop="sportId">
         <el-select
           v-model="form.sportId"
@@ -43,9 +26,7 @@
           :placeholder="t('请选择联赛')"
         >
           <el-option
-            v-for="item in form.category === 0
-              ? matchStore.sportLeagueList
-              : matchStore.esportLeagueList"
+            v-for="item in matchStore.sportLeagueList"
             :key="item.leagueId"
             :label="item.leagueNameCn"
             :value="item.leagueId"
@@ -63,7 +44,6 @@
           class="!w-[150px]"
         />
       </el-form-item>
-      <br />
       <el-form-item :label="`${t('比赛时间')}:`" prop="startTime">
         <el-date-picker
           v-model="time"

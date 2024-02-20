@@ -8,6 +8,7 @@ import { historyData } from "./history";
 import { operationLogData } from "./operationLog";
 import { esportsSettlement } from "./esportsSettlement";
 import { configCenterData } from "./configCenter";
+import { playMethodData } from "./playMethd";
 
 export const API = {
   ...user,
@@ -19,5 +20,6 @@ export const API = {
   ...historyData,
   ...operationLogData,
   ...esportsSettlement,
-  ...configCenterData
+  ...configCenterData,
+  ...playMethodData
 }

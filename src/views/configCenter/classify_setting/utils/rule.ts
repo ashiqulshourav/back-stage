@@ -3,7 +3,7 @@ import type { FormRules } from "element-plus";
 
 /** 自定义表单规则校验 */
 export const formRules = reactive(<FormRules>{
-  countryId: [{ required: true, message: t('国家地区ID不能为空'), trigger: "blur" }],
+  countryId: [{ required: true, message: t('分类名称不能为空'), trigger: "blur" }],
   isCountryTeam: [{ required: true, message: t('是否是国家队不能为空'), trigger: "blur" }],
   leagueId: [{ required: true, message: t('联赛ID不能为空'), trigger: "blur" }],
   teamId: [{ required: true, message: t('球队ID不能为空'), trigger: "blur" }],
