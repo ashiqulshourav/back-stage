@@ -13,15 +13,25 @@ declare namespace PLayMethodAPI {
     data: string[];
   }
 
-  type LeagueListParams = {
-    sportId?: number | string;
-    leagueId?: number | string;
-    startTime?: number | string;
-    endTime?: number | string;
-    matchId?: number | string;
+  type configKindsCodeReqType = {
+    sportId: number;
+    matchId: number;
+    sportName: string;
+    kindsCodeList: {
+      configValue: string;
+      configCodes: string[]
+    }[]
   }
 
-  type ConfigMap = {}
+  type LeagueListParams = {
+    sportId: number | string;
+    leagueId: number | string;
+    startTime: number | string;
+    endTime: number | string;
+    matchId: number | string;
+  }
+
+  type ConfigMap = any
 
   type getKindsCodeList = {
     id: number;
@@ -143,6 +153,7 @@ declare namespace PLayMethodAPI {
     configCodes: any[];
     configMap: ConfigMap;
     sportName?: any;
+    checkAll?: boolean;
   }
 
   type updateKindsCodeResType = COMMON.BASE_RES_TYPE<null>;

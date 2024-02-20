@@ -4,5 +4,6 @@ export const addAcceptLanguageList = [
   '/kindsCode/v1/getKindsCodeList',
   '/kindsCode/v1/updateKindsCode',
   '/kindsCode/v1/deleteKindsCode',
-  '/kindsCode/v1/getKindsCodeByMatchId'
+  '/kindsCode/v1/getKindsCodeByMatchId',
+  '/kindsCode/v1/configKindsCode'
 ]

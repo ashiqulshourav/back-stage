@@ -45,6 +45,7 @@
           class="!w-[150px]"
         />
       </el-form-item>
+
       <el-form-item :label="`${t('比赛时间')}:`" prop="startTime">
         <el-date-picker
           v-model="time"
@@ -54,17 +55,6 @@
           value-format="x"
           format="YYYY-MM-DD"
           @change="changeDate"
-        />
-      </el-form-item>
-
-      <el-form-item prop="endTime" class="!hidden">
-        <el-date-picker
-          class="ml-4"
-          v-model="form.endTime"
-          type="date"
-          :placeholder="t('其他日期')"
-          value-format="x"
-          format="YYYY-MM-DD"
         />
       </el-form-item>
 
@@ -103,13 +93,10 @@ const emits = defineEmits(['onSearch']);
 const matchStore = useMatchStore();
 const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
 
-const props = withDefaults(
-  defineProps<{
-    loading: boolean;
-    form: searchFormType;
-  }>(),
-  {}
-);
+const props = defineProps<{
+  loading: boolean;
+  form: searchFormType;
+}>();
 
 onMounted(() => {
   matchStore.set_lagueList(0, 1);
@@ -128,11 +115,15 @@ const changeDate = t => {
 
 const changeGameType = sportId => {
   matchStore.set_lagueList(0, sportId);
+  props.form.leagueId = '';
 };
 
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
-  gameClassify.value = SPORT_ID_MAP;
+  time.value = '';
+  props.form.startTime = '';
+  props.form.endTime = '';
+  matchStore.set_lagueList(0, 1);
   emits('onSearch', ...['reload']);
 };
 

@@ -1,6 +1,6 @@
 import editForm from '../form.vue';
 import { message } from '@/utils/message';
-import { addDialog } from '@/components/ReDialog';
+import { addDialog, closeDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted, h } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
@@ -43,7 +43,7 @@ export function usePlayMethodHook() {
     try {
       loading.value = true;
       const res = await API.getKindsCodeMatchList({
-        ...removeEmptyStringKeys(form),
+        ...(removeEmptyStringKeys(form) as searchFormType),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
@@ -71,10 +71,18 @@ export function usePlayMethodHook() {
       draggable: true,
       alignCenter: true,
       closeOnClickModal: false,
-      contentRenderer: () =>
+      hideFooter: true,
+      contentRenderer: ({ options, index }) =>
         h(editForm, {
           matchId: row.matchId,
-          sportId: row.sportId
+          sportId: row.sportId,
+          leagueName: row.leagueNameCn,
+          beginTime: row.beginTime,
+          homeName: row.homeTeamNameCn,
+          awayName: row.awayTeamNameCn,
+          onCloseDialog: () => {
+            closeDialog(options, index);
+          }
         })
     });
   }

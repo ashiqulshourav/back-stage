@@ -19,7 +19,6 @@ export const playMethodData = {
   getTags: (data: { sportId: number; }) => http.request<PLayMethodAPI.getTagsRes>("post", "/kindsCode/v1/getTags", { data }),
   //- 查询赛事玩法配置
   getKindsCodeByMatchId: (data: { sportId: number; matchId: number }) => http.request<PLayMethodAPI.getKindsCodebyMatchIdResType>("post", "/kindsCode/v1/getKindsCodeByMatchId", { data }),
-
-
-
+  //- 配置赛事玩法
+  configKindsCode: (data: PLayMethodAPI.configKindsCodeReqType) => http.request<PLayMethodAPI.getKindsCodebyMatchIdResType>("post", "/kindsCode/v1/configKindsCode", { data }),
 };

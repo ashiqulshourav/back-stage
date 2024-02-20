@@ -78,7 +78,7 @@ onMounted(() => {
 //- 获取分类标签
 const initTag = async () => {
   const res = await API.getTags({ sportId: formData.sportId });
-  if (res.code) return;
+  if (res.code || !res.data) return;
   tagList.length = 0;
   tagList.push(...res.data);
 };
@@ -95,7 +95,14 @@ const addPlayMethod = async () => {
       btnLoading.value = true;
       const urlPath = formData.id ? 'updateKindsCode' : 'addKindsCode';
       const params = { ...formData };
-      const res = await API[urlPath](removeEmptyStringKeys(params));
+      if ((params as typeof formData).tags.length === 0) {
+        delete params.tags;
+      }
+      const res = await API[urlPath](
+        removeEmptyStringKeys(params) as PLayMethodAPI.KindsCodeRequestCode & {
+          id: number;
+        }
+      );
       btnLoading.value = false;
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if (!res.code) {
