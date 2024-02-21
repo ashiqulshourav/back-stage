@@ -200,7 +200,6 @@ export const PLAY_MATCH = code => {
         Away: t('客')
       };
     default:
-      console.log('sports_map.ts文件 203==============行打印=', code);
       return {
         hideMiddle: true,
         Home: t('主'),
