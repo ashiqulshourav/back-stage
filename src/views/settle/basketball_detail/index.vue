@@ -10,7 +10,7 @@
     <PureTableBar :columns="columns" @refresh="onSearch()">
       <template #title>
         <div>
-          <h2>{{t('赛果结算')}}</h2>
+          <h2>{{ t('赛果结算') }}</h2>
         </div>
       </template>
 
@@ -35,7 +35,7 @@
             <Score :row="row" type="t2" :errorType="row.t2Error" />
           </template>
           <template #inningNum>
-            {{boardType === 'INNING' ? t('节') : t('上/下半场') }}
+            {{ boardType === 'INNING' ? t('节') : t('上/下半场') }}
           </template>
           <!-- -结算时间 -->
           <template #eventTime="{ row, index }">
@@ -59,12 +59,8 @@
         </pure-table>
       </template>
     </PureTableBar>
-    <template
-      v-if="renderObj.fullSettlementStatus !== 1 && checkNoMore()"
-    >
-      <div 
-        class="flex mt-4"
-        >
+    <template v-if="renderObj.fullSettlementStatus !== 1 && checkNoMore()">
+      <div class="flex mt-4">
         <el-button
           @click="boardType = 'INNING'"
           :type="boardType === 'INNING' ? 'primary' : 'default'"
@@ -79,17 +75,16 @@
         </el-button>
       </div>
       <div class="mt-4">
-        <el-button 
-          type="primary" 
-          @click="addEventRow"
-          >
+        <el-button type="primary" @click="addEventRow">
           {{
-          (boardType === 'HT' && dataList.length == 2) ||
-          (boardType === 'INNING' && dataList.length == 4)
-            ? t('新增加时赛')
-          : boardType === 'INNING'
-        ? t('新增节') : t('新增上/下半场')
-        }}</el-button>
+            (boardType === 'HT' && dataList.length == 2) ||
+            (boardType === 'INNING' && dataList.length == 4)
+              ? t('新增加时赛')
+              : boardType === 'INNING'
+              ? t('新增节')
+              : t('新增上/下半场')
+          }}</el-button
+        >
       </div>
     </template>
   </div>
