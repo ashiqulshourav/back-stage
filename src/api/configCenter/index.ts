@@ -27,7 +27,7 @@ export const configCenterData = {
       }
     ),
   // mockAPI.updateLeagueTag(data),
-  createLeagueTag: (data: ConfigCenterDataAPI.LeagueTagType) =>
+  createLeagueTag: (data: ConfigCenterDataAPI.LeagueTagType[]) =>
     http.request<ConfigCenterDataAPI.LeagueTagRes>('post', '/league/tag/', {
       data
     }),

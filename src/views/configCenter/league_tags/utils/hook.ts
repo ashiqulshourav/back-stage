@@ -215,7 +215,7 @@ export function useLeagueTagsHook() {
   ) => {
     if (okButtonLoading) okButtonLoading.value = true;
     if (okButtonText) okButtonText.value = t('创建中');
-    const res = await API.createLeagueTag(curData);
+    const res = await API.createLeagueTag([curData]);
     setTimeout(() => {
       if (okButtonLoading) okButtonLoading.value = false;
       if (okButtonText) okButtonText.value = t('确定');
