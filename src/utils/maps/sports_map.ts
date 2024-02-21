@@ -145,22 +145,29 @@ export const PLAY_MATCH = code => {
     'S2_AH',
     'S3_AH',
     'S4_AH',
-    'PT_AH'
+    'PT_AH',
+    'WinningMargin'
   ];
-  const t3 = ['FT_OE', 'S2_ML', 'HT_OE'];
+  const t3 = ['FT_OE', 'HT_OE'];
   const t4 = ['FT_1X2', 'HT_1X2'];
   const t5 = [
     'S1_ML',
+    'S2_ML',
+    'S3_ML',
+    'S4_ML',
     'Q1_ML',
     'Q2_ML',
     'Q3_ML',
     'Q4_ML',
     'FT_ML',
     'HT_ML',
+    'FT_TG',
     'Winner_2ndFrame',
     'Winner_1stFrame',
     'Winner',
-    'Winner_1X2'
+    'Winner_1X2',
+    'ToWinToNil',
+    'FT_1X2_And_BothTeamsToScore',
   ];
   switch (true) {
     case t1.includes(code):
@@ -187,6 +194,13 @@ export const PLAY_MATCH = code => {
         Draw: t('平')
       };
     case t5.includes(code):
+      return {
+        hideMiddle: true,
+        Home: t('主'),
+        Away: t('客')
+      };
+    default:
+      console.log('sports_map.ts文件 203==============行打印=', code);
       return {
         hideMiddle: true,
         Home: t('主'),

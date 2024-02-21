@@ -35,7 +35,6 @@
           :loading="loading"
           :size="size"
           adaptive
-          :default-sort="{ prop: 'beginTimeLong', order: 'ascending' }"
           :data="dataList"
           :columns="dynamicColumns"
           :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
