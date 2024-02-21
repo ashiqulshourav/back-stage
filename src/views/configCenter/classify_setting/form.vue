@@ -15,6 +15,16 @@
         />
       </el-form-item>
 
+      <el-form-item :label="`${t('分类排序')}:`" prop="sort">
+        <el-input
+          :formatter="v => inputRestrictions(v)"
+          v-model="formData.sort"
+          type="number"
+          :placeholder="t('请输入1-200之间的数字')"
+          clearable
+        />
+      </el-form-item>
+
       <el-form-item :label="`${t('分类标签')}:`" prop="tags">
         <el-select v-model="formData.tags" :placeholder="t('请选择')" multiple>
           <el-option
@@ -24,16 +34,6 @@
             :key="item"
           />
         </el-select>
-      </el-form-item>
-
-      <el-form-item :label="`${t('分类排序')}:`" prop="sort">
-        <el-input
-          :formatter="v => inputRestrictions(v)"
-          v-model="formData.sort"
-          type="number"
-          :placeholder="t('请输入1-200之间的数字')"
-          clearable
-        />
       </el-form-item>
 
       <div class="flex justify-end">

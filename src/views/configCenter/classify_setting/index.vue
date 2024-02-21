@@ -27,17 +27,6 @@
           @selection-change="handleSelectionChange"
           @page-size-change="handleTableWidthChange"
         >
-          <template #teamLogo="{ row, index }">
-            <el-image
-              preview-teleported
-              loading="lazy"
-              :src="row.leagueLogo"
-              :preview-src-list="dataList.map(v => v.teamLogo)"
-              :initial-index="index"
-              fit="cover"
-              class="w-[80px] h-[30px]"
-            />
-          </template>
           <template #operation="{ row }">
             <el-button
               class="reset-margin"
@@ -49,23 +38,16 @@
             >
               {{ t('编辑') }}
             </el-button>
-            <el-popconfirm
-              :title="`是否确认删除角色名称为${row.name}的这条数据`"
-              @confirm="handleDelete(row)"
+            <el-button
+              class="reset-margin"
+              link
+              type="danger"
+              :size="size"
+              :icon="useRenderIcon('Delete')"
+              @click="deleteTag(row)"
             >
-              <template #reference>
-                <el-button
-                  class="reset-margin"
-                  link
-                  type="danger"
-                  :size="size"
-                  :icon="useRenderIcon('Delete')"
-                  @click="deleteTag(row)"
-                >
-                  {{ t('删除') }}
-                </el-button>
-              </template>
-            </el-popconfirm>
+              {{ t('删除') }}
+            </el-button>
           </template>
         </pure-table>
       </template>
@@ -91,7 +73,6 @@ const {
   dataList,
   onSearch,
   openDialog,
-  handleDelete,
   handleTableWidthChange,
   handleSelectionChange,
   searchForm,

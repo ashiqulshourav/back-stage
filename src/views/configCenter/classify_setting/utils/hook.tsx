@@ -15,11 +15,6 @@ export function useClassifySettingHook() {
     sportId: 1
   });
 
-  function handleDelete(row) {
-    message(`您删除了角色名称为${row.name}的这条数据`, { type: 'success' });
-    onSearch();
-  }
-
   function handleTableWidthChange() {
     onSearch();
   }
@@ -97,7 +92,6 @@ export function useClassifySettingHook() {
     dataList,
     onSearch,
     openDialog,
-    handleDelete,
     handleTableWidthChange,
     handleSelectionChange,
     searchForm,
