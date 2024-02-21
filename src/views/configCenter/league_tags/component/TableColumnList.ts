@@ -12,16 +12,16 @@ export const columns: TableColumnList = [
   },
   {
     label: t('赛事类型'),
-    prop: 'categoryId',
+    prop: 'category',
     minWidth: 150,
-    formatter: ({ categoryId }) =>
-      SPORT_CATEGORY.find(item => item.value === categoryId)?.label ?? '-'
+    formatter: ({ category }) =>
+      SPORT_CATEGORY.find(item => item.value === category)?.label ?? '-'
   },
   {
     label: t('赛种'),
     prop: 'sportId',
-    formatter: ({ sportId, categoryId }): string => {
-      const arr = categoryId === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
+    formatter: ({ sportId, category }): string => {
+      const arr = category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
       return arr.find(_ => _.value === sportId)?.label ?? '-';
     },
     minWidth: 150
@@ -29,7 +29,7 @@ export const columns: TableColumnList = [
   {
     label: t('标签名称'),
     // sortable: true,
-    prop: 'tagName',
+    prop: 'text',
     minWidth: 150
   },
   {

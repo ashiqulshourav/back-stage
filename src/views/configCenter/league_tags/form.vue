@@ -5,9 +5,9 @@
     :rules="formRules"
     label-width="150px"
   >
-    <el-form-item :label="t('赛事类型')" prop="categoryId">
+    <el-form-item :label="t('赛事类型')" prop="category">
       <el-select
-        v-model="newFormInline.categoryId"
+        v-model="newFormInline.category"
         :placeholder="t('赛事类型')"
       >
         <el-option
@@ -22,7 +22,7 @@
       <el-select
         v-model="newFormInline.sportId"
         :placeholder="t('赛种')"
-        :disabled="newFormInline.categoryId === undefined"
+        :disabled="newFormInline.category === undefined"
       >
         <el-option
           :label="item.label"
@@ -32,9 +32,9 @@
         />
       </el-select>
     </el-form-item>
-    <el-form-item :label="t('标签名称')" prop="tagName">
+    <el-form-item :label="t('标签名称')" prop="text">
       <el-input
-        v-model="newFormInline.tagName"
+        v-model="newFormInline.text"
         maxLength="35"
         :placeholder="t('标签名称')"
       />
@@ -56,9 +56,9 @@ import { inputRestrictions } from '@/utils/formatNumber';
 
 const props = withDefaults(defineProps<FormProps>(), {
   formInline: () => ({
-    categoryId: undefined,
+    category: undefined,
     sportId: undefined,
-    tagName: ''
+    text: ''
   })
 });
 
@@ -67,7 +67,7 @@ const newFormInline = reactive(props.formInline);
 const sports = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
 
 watch(
-  () => newFormInline.categoryId,
+  () => newFormInline.category,
   newValue => {
     console.log('watch', newValue);
     sports.value = newValue === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
@@ -82,9 +82,9 @@ function getRef() {
 }
 onMounted(() => {
   sports.value =
-    newFormInline.categoryId === undefined
+    newFormInline.category === undefined
       ? []
-      : newFormInline.categoryId === 1
+      : newFormInline.category === 1
       ? ESPORT_ID_MAP
       : SPORT_ID_MAP;
 });

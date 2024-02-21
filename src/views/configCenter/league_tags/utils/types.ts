@@ -4,9 +4,9 @@ interface FormProps {
 }
 
 export type searchFormType = {
-  tagName: string;
+  text: string;
   sportId?: number;
-  categoryId?: number;
+  category?: number;
 }
 
 export type { FormProps };

@@ -1,9 +1,9 @@
 <template>
   <div class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]">
     <el-form ref="formRef" :inline="true" :model="form">
-      <el-form-item :label="`${t('赛事类型')}:`" prop="categoryId">
+      <el-form-item :label="`${t('赛事类型')}:`" prop="category">
         <el-select
-          v-model="form.categoryId"
+          v-model="form.category"
           :placeholder="t('赛事类型')"
           clearable
           class="!w-[150px]"
@@ -34,10 +34,10 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="`${t('分类名称')}:`" prop="tagName">
+      <el-form-item :label="`${t('标签名称')}:`" prop="text">
         <el-input
-          v-model="form.tagName"
-          :placeholder="t('分类名称')"
+          v-model="form.text"
+          :placeholder="t('标签名称')"
           v-enter="search"
           clearable
           class="!w-[150px]"

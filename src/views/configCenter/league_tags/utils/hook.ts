@@ -21,14 +21,14 @@ export function useLeagueTagsHook() {
     background: true
   });
   const form = reactive<searchFormType>({
-    tagName: '',
+    text: '',
     sportId: 1,
-    categoryId: 0
+    category: 0
   });
 
   function handleDelete(row) {
     ElMessageBox.confirm(
-      h('p', `是否删除${row.tagName}标签，一旦被删除将无法恢复`),
+      h('p', `是否删除${row.text}标签，一旦被删除将无法恢复`),
       t('标签分类'),
       {
         showCancelButton: true,
@@ -36,46 +36,61 @@ export function useLeagueTagsHook() {
         confirmButtonText: t('确认'),
         type: 'warning',
         icon: markRaw(Delete),
-        center: true
-      }
-    ).then(() => {
-      ElMessageBox.confirm(
-        h('div', null, [
-          h('div', null, `目前标签${row.tagName}相关联赛有：`),
-          h('div', { style: 'color: teal' }, '联赛1'),
-          h('div', { style: 'color: teal' }, '联赛2'),
-          h('div', null, '请取消标签相关联赛')
-        ]),
-        t('标签分类'),
-        {
-          showCancelButton: true,
-          cancelButtonText: t('取消'),
-          confirmButtonText: t('确认'),
-          type: 'warning',
-          icon: markRaw(Delete),
-          center: true,
-          beforeClose: async (action, instance, done) => {
-            if (action === 'confirm') {
-              instance.confirmButtonLoading = true;
-              instance.confirmButtonText = '删除中...';
-              await API.deleteLeagueTag(row);
+        center: true,
+        beforeClose: async (action, instance, done) => {
+          if (action === 'confirm') {
+            instance.confirmButtonLoading = true;
+            instance.confirmButtonText = '删除中...';
+            const response = await API.deleteLeagueTag(row);
+            const {
+              data
+            }: { data: ConfigCenterDataAPI.LeagueTagType[] | null } = response;
+            if (data && data.length > 0) {
+              ElMessageBox.confirm(
+                h('div', null, [
+                  h('div', null, `目前标签${row.text}相关联赛有：`),
+                  ...data.map(item =>
+                    h('div', { style: 'color: teal' }, item.leagueNameCn)
+                  ),
+                  h('div', null, '请取消标签相关联赛')
+                ]),
+                t('标签分类'),
+                {
+                  showCancelButton: true,
+                  cancelButtonText: t('取消'),
+                  confirmButtonText: t('确认'),
+                  type: 'warning',
+                  icon: markRaw(Delete),
+                  center: true
+                }
+              ).then(async () => {
+                await API.bulkDeleteLeagueTag(data.map(item => item.id));
+                await API.deleteLeagueTag(row);
+                done();
+                ElMessage({
+                  type: 'success',
+                  message: `${row.text}标签成功删除`
+                });
+                onSearch();
+              });
               done();
               setTimeout(() => {
                 instance.confirmButtonLoading = false;
               }, 300);
             } else {
               done();
+              ElMessage({
+                type: 'success',
+                message: `${row.text}标签成功删除`
+              });
+              onSearch();
             }
+          } else {
+            done();
           }
         }
-      ).then(() => {
-        ElMessage({
-          type: 'success',
-          message: `${row.tagName}标签成功删除`
-        });
-        onSearch();
-      });
-    });
+      }
+    );
   }
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -124,9 +139,9 @@ export function useLeagueTagsHook() {
       title,
       props: {
         formInline: {
-          categoryId: row?.categoryId ?? undefined,
+          category: row?.category ?? undefined,
           sportId: row?.sportId ?? undefined,
-          tagName: row?.tagName ?? ''
+          text: row?.text ?? ''
         }
       },
       width: '40%',

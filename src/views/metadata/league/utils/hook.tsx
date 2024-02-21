@@ -11,6 +11,7 @@ export function useLeague() {
   const formRef = ref();
   const dataList = reactive<MetadataAPI.LeagueList[]>([]);
   const loading = ref(true);
+  // const tags = ref<ConfigCenterDataAPI.LeagueTagType[]>([]);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -83,7 +84,7 @@ export function useLeague() {
           leagueNameEn: row?.leagueNameEn ?? '',
           level: row?.level ?? '',
           sportId: row?.sportId ?? '',
-          tags: row?.tags ?? []
+          leagueTagsId: row?.leagueTagsId ?? []
         }
       },
       width: '40%',

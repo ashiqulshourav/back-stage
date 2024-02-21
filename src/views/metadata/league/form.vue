@@ -88,7 +88,7 @@
         />
       </el-select>
     </el-form-item> -->
-    <el-form-item :label="t('联赛标签')" prop="tags">
+    <el-form-item :label="t('联赛标签')" prop="leagueTagsId">
       <el-checkbox
         v-model="checkAll"
         :indeterminate="isIndeterminate"
@@ -96,11 +96,11 @@
         >{{ t('全选') }}</el-checkbox
       >
       <el-checkbox-group
-        v-model="newFormInline.tags"
+        v-model="newFormInline.leagueTagsId"
         @change="handleCheckedTagIdsChange"
       >
-        <el-checkbox v-for="tag in tags" :key="tag.id" :label="tag.id">{{
-          tag.tagName
+        <el-checkbox v-for="tag in leagueTagsId" :key="tag.id" :label="tag.id">{{
+          tag.text
         }}</el-checkbox>
       </el-checkbox-group>
     </el-form-item>
@@ -132,10 +132,8 @@ const props = withDefaults(defineProps<FormProps>(), {
     countryId: '',
     leagueNameEn: '',
     leagueId: '',
-    // leagueLogo: '',
-    // leagueId188Bet: '',
     sportId: '',
-    tags: []
+    leagueTagsId: []
   })
 });
 
@@ -153,15 +151,14 @@ const updateVal = () => {
   });
 };
 
-const tags = ref([]);
+const leagueTagsId = ref([]);
 
 onMounted(async () => {
-  const response = await API.searchLeagueTagList({
-    categoryId: parseInt(form.category),
+  const response = await API.getLeagueTagList({
+    category: parseInt(form.category),
     sportId: parseInt(newFormInline.value.sportId)
   });
-  tags.value = response.data;
-  console.log(response.data);
+  leagueTagsId.value = response.data.list;
 });
 
 /* const beforeAvatarUpload: UploadProps['beforeUpload'] = _rawFile => {
@@ -197,13 +194,13 @@ const checkAll = ref(false);
 const isIndeterminate = ref(true);
 
 const handleCheckAllChange = (val: boolean) => {
-  newFormInline.value.tags = val ? tags.value.map(item => item.id) : [];
+  newFormInline.value.leagueTagsId = val ? leagueTagsId.value.map(item => item.id) : [];
   isIndeterminate.value = false;
 };
 const handleCheckedTagIdsChange = (value: number[]) => {
   const checkedCount = value.length;
-  checkAll.value = checkedCount === tags.value.length;
-  isIndeterminate.value = checkedCount > 0 && checkedCount < tags.value.length;
+  checkAll.value = checkedCount === leagueTagsId.value.length;
+  isIndeterminate.value = checkedCount > 0 && checkedCount < leagueTagsId.value.length;
 };
 
 defineExpose({ getRef });
