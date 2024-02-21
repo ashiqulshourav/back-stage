@@ -33,3 +33,9 @@ export const dateSetSecond = (secondNumber: number) => {
   const hours = Math.floor(secondNumber / 3600);
   return `${year}-${padZero(month)}-${padZero(day)} ${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
 };
+
+//- 十分秒获取时间戳
+export const compareTime = (time: string) => {
+  const [hours, minutes, seconds] = time.split(':').map(Number);
+  return hours * 3600 + minutes * 60 + seconds;
+};

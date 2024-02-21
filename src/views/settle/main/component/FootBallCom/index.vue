@@ -104,7 +104,12 @@
 
                 <!-- -比赛进行时间 -->
                 <template #eventTime="{ row, index }: MatchEventRowType">
-                  <MatchTime :row="row" :index="index" :item="item" />
+                  <MatchTime
+                    :row="row"
+                    :index="index"
+                    :item="item"
+                    :beginTime="parentRow.beginTimeLong"
+                  />
                 </template>
 
                 <!-- -比赛阶段 -->

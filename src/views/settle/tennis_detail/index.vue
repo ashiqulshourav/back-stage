@@ -102,6 +102,7 @@
                     :index="childIndex"
                     :dataList="dataList"
                     :parentIndex="parentIndex"
+                    :beginTime="renderObj.beginTimeLong"
                   />
                 </template>
 

@@ -1,6 +1,12 @@
 <template>
   <div class="timer_container">
+    <span class="text-sm" v-if="row.id">
+      {{ getTime(showTime).h }}:{{ getTime(showTime).m }}:{{
+        getTime(showTime).s
+      }}
+    </span>
     <el-time-picker
+      v-else
       v-model="row.eventTime"
       :class="[errorType && 'error_color']"
       :placeholder="t('请选择当前录入时间')"
@@ -17,21 +23,32 @@
 import { t } from '@/plugins/i18n';
 import { message } from '@/utils/message';
 import dayjs from 'dayjs';
+import { getTime } from '@pureadmin/utils';
+import { compareTime } from '@/utils/formatDate';
 
 const props = defineProps<{
   row: SattleDataAPI.volleyballData;
   index: number;
   dataList: SattleDataAPI.volleyballData[];
   errorType: boolean;
+  beginTime: number;
 }>();
 
 const emits = defineEmits(['changeEventTime']);
 
+const showTime = computed(() => {
+  return (+props.row.eventTime - props.beginTime) / 1000;
+});
+
 const changeEventTime = () => {
   const { index, row, dataList } = props;
-  if (index > 0 && row.eventTime < dataList[index - 1].eventTime) {
+  if (
+    index > 0 &&
+    compareTime(dayjs(row.eventTime).format('HH:mm:ss')) <=
+      (+dataList[index - 1].eventTime - props.beginTime) / 1000
+  ) {
     row.eventTime = '';
-    return message(t('当前盘结算时间不能小于上一局'), { type: 'error' });
+    return message(t('当前结算时间不能小于上一局'), { type: 'error' });
   }
 };
 </script>

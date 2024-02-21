@@ -37,12 +37,13 @@ const props = defineProps<
 >();
 
 const changeSwitch = val => {
-  if (props.item.tableList.length === 1) {
+  /* if (props.item.tableList.length === 1) {
     if (val === 7 || val === 100) {
       message(t('请先选择上半场进行结算'), { type: 'error' });
       props.row.matchPeriodId = 6;
     }
-  } else if (
+  }  */ if (
+    props.item.tableList.length > 1 &&
     props.item.tableList[props.index - 1].matchPeriodId == 7 &&
     val === 6
   ) {
