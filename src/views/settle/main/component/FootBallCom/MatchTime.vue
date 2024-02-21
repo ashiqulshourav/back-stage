@@ -1,9 +1,15 @@
 <template>
+  <span class="text-sm" v-if="row.isBackEndReturnData">
+    {{ getTime(showTime).h }}:{{ getTime(showTime).m }}:{{
+      getTime(showTime).s
+    }}
+  </span>
   <el-time-picker
+    v-else
     :class="[row.canceled === 1 && 'canceled']"
     v-model="row.eventTime"
-    :placeholder="t('请选择当前录入时间')"
     :disabled="!row.isEdit"
+    :placeholder="t('请选择当前录入时间')"
     value-format="x"
     :default-value="dayjs().startOf('day').toDate()"
     @change="changeEventTime(row, index, item.tableList)"
@@ -16,10 +22,13 @@ import { t } from '@/plugins/i18n';
 import { MatchEventRowType } from '../../utils/type';
 import { message } from '@/utils/message';
 import dayjs from 'dayjs';
+import { getTime } from '@pureadmin/utils';
+import { compareTime } from '@/utils/formatDate';
 
 const props = defineProps<
   MatchEventRowType & {
     item: SattleDataAPI.ChildrenDataList;
+    beginTime: number;
   }
 >();
 const emits = defineEmits(['changeEventTime']);
@@ -37,6 +46,10 @@ watch(
   }
 );
 
+const showTime = computed(() => {
+  return (+props.row.eventTime - props.beginTime) / 1000;
+});
+
 const changeEventTime = (
   row: SattleDataAPI.MatchEventsList,
   childIndex: number,
@@ -44,7 +57,8 @@ const changeEventTime = (
 ) => {
   if (childIndex === 0) return;
   if (
-    +row.eventTime <= new Date(childrenData[childIndex - 1].eventTime).getTime()
+    compareTime(dayjs(row.eventTime).format('HH:mm:ss')) <=
+    (+childrenData[childIndex - 1].eventTime - props.beginTime) / 1000
   ) {
     message(t('时间不能小于前一个事件发生时间'), { type: 'error' });
     row.eventTime = '';

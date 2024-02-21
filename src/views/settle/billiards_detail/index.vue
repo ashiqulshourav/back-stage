@@ -50,6 +50,7 @@
               :index="index"
               :dataList="dataList"
               :errorType="row.eventTimeError"
+              :begin-time="renderObj.beginTimeLong"
             />
           </template>
 

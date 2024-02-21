@@ -8,16 +8,7 @@ interface TeamFormProps {
 }
 
 export type SearchFormType = {
-  teamId: string;
-  countryId: string;
-  isCountryTeam: string;
-  leagueId: string;
-  level: string;
-  sportId: string;
-  stadiumName: string;
-  teamLogo: string;
-  teamNameCn: string;
-  teamNameEn: string;
+  sportId: number;
 }
 
 export type {

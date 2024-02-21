@@ -23,7 +23,8 @@ export const columns: TableColumnList = [
   {
     label: t('操作记录'),
     prop: 'operateLog',
-    headerRenderer: d => handleTableWidth(d, t('操作记录'))
+    minWidth: 200,
+    headerRenderer: d => handleTableWidth(d, t('操作记录'), 'auto')
   },
   {
     label: t('操作日志菜单'),

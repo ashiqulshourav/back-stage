@@ -76,7 +76,6 @@ export const columns: TableColumnList = [
   },
   {
     label: t('开赛时间'),
-    sortable: true,
     prop: 'beginTimeLong',
     formatter: ({ beginTimeLong }) =>
       dayjs(beginTimeLong).format('YYYY-MM-DD HH:mm:ss'),

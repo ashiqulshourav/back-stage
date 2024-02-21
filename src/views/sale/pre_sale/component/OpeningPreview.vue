@@ -56,7 +56,10 @@
                       {{ nameMap[s.homeOrAway] }}
                     </span>
                     <span v-else>
-                      {{ PLAY_MATCH(s.sourceCode)[s.homeOrAway || s.handicap] }}
+                      {{
+                        PLAY_MATCH(s.sourceCode)[s.homeOrAway || s.handicap] ??
+                        s.handicap
+                      }}
                     </span>
                     <span v-if="!PLAY_MATCH(s.sourceCode).hideMiddle">{{
                       s.handicap
@@ -173,8 +176,13 @@ const getBetItemsList = async () => {
   res.data.forEach(item => {
     item.source_handicap = item.handicap;
     item.isSale === 2 && (openLen.value += 1);
-    if (mData[item.ctid]) mData[item.ctid].formatList.push(item);
-    else mData[3].formatList.push(item);
+    if (mData[item.ctid]) {
+      mData[item.ctid].formatList.push(item);
+    } else if (props.matchInfo.sportId !== 1) {
+      mData[0].formatList.push(item);
+    } else {
+      mData[3].formatList.push(item);
+    }
   });
 
   Object.values(mData).forEach(d => {
@@ -254,6 +262,10 @@ const handleChange = () => {};
         border-bottom: none;
       }
     }
+  }
+  .el-tabs__content {
+    max-height: 600px;
+    overflow-y: auto;
   }
   .el-button {
     &:hover,

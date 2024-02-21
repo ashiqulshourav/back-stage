@@ -7,40 +7,11 @@ export const columns: TableColumnList = [
     prop: 'leagueId',
     minWidth: 100
   },
-  // {
-  //   label: t('联赛Logo'),
-  //   prop: 'leagueLogo',
-  //   minWidth: 120,
-  //   formatter: ({ leagueLogo }) => (leagueLogo ? leagueLogo : '-')
-  // },
   {
-    label: t('国家地区'),
-    prop: 'countryId',
-    minWidth: 150,
-    formatter: ({ countryId }) => parseCountry(countryId)
-  },
-  {
-    label: t('188数据源联赛杯赛ID'),
-    prop: 'leagueId188Bet',
-    minWidth: 150
-  },
-  {
-    label: t('联赛中文名'),
+    label: t('联赛名称'),
     prop: 'leagueNameCn',
     minWidth: 150,
     align: 'left'
-  },
-  {
-    label: t('联赛英文名'),
-    prop: 'leagueNameEn',
-    minWidth: 150,
-    align: 'left'
-  },
-  {
-    label: t('联赛等级'),
-    sortable: true,
-    prop: 'level',
-    minWidth: 150
   },
   {
     label: t('赛种'),
@@ -51,6 +22,27 @@ export const columns: TableColumnList = [
     },
     minWidth: 150
   },
+  {
+    label: t('赛事ID'),
+    prop: 'matchId',
+    minWidth: 150
+  },
+  {
+    label: t('主队'),
+    prop: 'homeTeamNameCn',
+    minWidth: 150
+  },
+  {
+    label: t('客队'),
+    prop: 'awayTeamNameCn',
+    minWidth: 150
+  },
+  {
+    label: t('开赛时间'),
+    prop: 'beginTime',
+    minWidth: 150
+  },
+
   {
     label: t('操作'),
     fixed: 'right',

@@ -1,12 +1,8 @@
 <template>
   <div class="main">
-    <!-- <SearchForm :loading="loading" @on-search="onSearch" :form="searchForm" /> -->
-    <PureTableBar
-      :title="t('分类列表')"
-      :columns="columns"
-      @refresh="onSearch('reload')"
-    >
-      <template #buttons>
+    <SearchForm :loading="loading" @on-search="onSearch" :form="searchForm" />
+    <PureTableBar :columns="columns" @refresh="onSearch">
+      <template #title>
         <el-button
           type="primary"
           :icon="useRenderIcon('addFill')"
@@ -26,27 +22,11 @@
           adaptive
           :data="dataList"
           :columns="dynamicColumns"
-          :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
           :paginationSmall="size === 'small' ? true : false"
-          :header-cell-style="{
-            background: 'var(--el-fill-color-light)',
-            color: 'var(--el-text-color-primary)'
-          }"
+          :header-cell-style="tableHeaderStyle"
           @selection-change="handleSelectionChange"
           @page-size-change="handleTableWidthChange"
-          @page-current-change="handleCurrentChange"
         >
-          <template #teamLogo="{ row, index }">
-            <el-image
-              preview-teleported
-              loading="lazy"
-              :src="row.leagueLogo"
-              :preview-src-list="dataList.map(v => v.teamLogo)"
-              :initial-index="index"
-              fit="cover"
-              class="w-[80px] h-[30px]"
-            />
-          </template>
           <template #operation="{ row }">
             <el-button
               class="reset-margin"
@@ -58,22 +38,16 @@
             >
               {{ t('编辑') }}
             </el-button>
-            <el-popconfirm
-              :title="`是否确认删除角色名称为${row.name}的这条数据`"
-              @confirm="handleDelete(row)"
+            <el-button
+              class="reset-margin"
+              link
+              type="danger"
+              :size="size"
+              :icon="useRenderIcon('Delete')"
+              @click="deleteTag(row)"
             >
-              <template #reference>
-                <el-button
-                  class="reset-margin"
-                  link
-                  type="danger"
-                  :size="size"
-                  :icon="useRenderIcon('Delete')"
-                >
-                  {{ t('删除') }}
-                </el-button>
-              </template>
-            </el-popconfirm>
+              {{ t('删除') }}
+            </el-button>
           </template>
         </pure-table>
       </template>
@@ -85,23 +59,23 @@
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import EditPen from '@iconify-icons/ep/edit-pen';
-import { useClassifySetting } from './utils/hook';
-// import SearchForm from './component/SearchForm.vue';
+import { useClassifySettingHook } from './utils/hook';
+import SearchForm from './component/SearchForm.vue';
 import { t } from '@/plugins/i18n';
+import { usePublicHooks } from '@/hooks';
 
 defineOptions({ name: 'TEAM' });
+const { tableHeaderStyle } = usePublicHooks();
 
 const {
   loading,
   columns,
   dataList,
-  pagination,
   onSearch,
   openDialog,
-  handleDelete,
   handleTableWidthChange,
-  handleCurrentChange,
-  handleSelectionChange
-  // searchForm
-} = useClassifySetting();
+  handleSelectionChange,
+  searchForm,
+  deleteTag
+} = useClassifySettingHook();
 </script>

@@ -38,7 +38,6 @@ export const columns: TableColumnList = [
   },
   {
     label: t('联赛等级'),
-    sortable: true,
     prop: 'level',
     minWidth: 150
   },

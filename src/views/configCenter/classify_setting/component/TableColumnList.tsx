@@ -1,15 +1,13 @@
 import { t } from '@/plugins/i18n';
-import { parseCountry } from '@/utils/formatMatch';
 
 export const columns: TableColumnList = [
   {
     label: t('分类ID'),
-    prop: 'teamId'
+    prop: 'id'
   },
   {
     label: t('分类名称'),
-    prop: 'countryId',
-    formatter: ({ countryId }) => parseCountry(countryId)
+    prop: 'configValue'
   },
   {
     label: t('操作'),

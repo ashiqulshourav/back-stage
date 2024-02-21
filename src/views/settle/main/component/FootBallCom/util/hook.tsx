@@ -9,8 +9,8 @@ import {
   SearchFormType,
   TempListType
 } from '../../../utils/type';
-import { dateSetSecond } from '@/utils/formatDate';
-import { ElMessageBox } from 'element-plus';
+import { compareTime, dateSetSecond } from '@/utils/formatDate';
+import { ElMessageBox, dayjs } from 'element-plus';
 import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
 import { useMatchStore } from '@/store/match';
 
@@ -209,17 +209,14 @@ export function useFootball() {
     type: 'save' | 'upload',
     parentRow
   ) => {
-    // delete row.isBackEndReturnData;
     if (isTheFormComplete(row)) {
       return message(t('请输入完整的内容'), { type: 'error' });
     }
-
     if (type === 'save') {
       row.isSave = true;
       row.isEdit = false;
       return;
     }
-
     if (((type === 'upload' && !row.isSave) || row.isEdit) && !row.id) {
       return message(t('请先保存事件'), { type: 'error' });
     }
@@ -235,7 +232,9 @@ export function useFootball() {
     const params: SattleDataAPI.MatchEventParams = {
       canceled: 0,
       eventCode,
-      eventTime: new Date(row.eventTime).getTime(),
+      eventTime:
+        parentRow.beginTimeLong +
+        compareTime(dayjs(row.eventTime).format('HH:mm:ss')) * 1000,
       homeAway: row.homeAway,
       matchId: dataList[parentIndex].matchId,
       matchPeriodId: +row.matchPeriodId,

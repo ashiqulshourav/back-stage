@@ -1,172 +1,143 @@
 <template>
-  <el-form
-    ref="ruleFormRef"
-    :model="newFormInline"
-    :rules="formRules"
-    label-width="150px"
-  >
-    <!-- todo 自定义表单添加 -->
-    <!-- <el-form-item :label="t('联赛杯Logo')">
-      <CustomInput />
-      <el-upload
-        action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-        class="avatar-uploader"
-        :show-file-list="false"
-        :on-success="handleAvatarSuccess"
-        :before-upload="beforeAvatarUpload"
-        :on-change="onImgChange"
-        :auto-upload="false"
+  <div>
+    <div class="mb-4">
+      <div class="flex mb-2">
+        <span>{{ leagueName }}</span>
+        <span class="ml-3">{{ beginTime }}</span>
+      </div>
+      <div class="flex">
+        <span>{{ homeName }}</span>
+        <span class="mr-1 ml-1 font-bold">VS</span>
+        <span>{{ awayName }}</span>
+      </div>
+    </div>
+    <el-card>
+      <el-collapse class="collapse_paly" v-model="activeName">
+        <el-collapse-item
+          :title="item.configValue"
+          :name="(index + 1).toString()"
+          v-for="(item, index) in dataList"
+          :key="index"
+        >
+          <div>
+            <div class="flex items-center">
+              <span class="mr-3">{{ t('玩法分类设定(多选)') }}</span>
+              <el-checkbox
+                v-model="item.checkAll"
+                @change="handleCheckAllChange(item, item.configMap)"
+                >{{ t('全选') }}</el-checkbox
+              >
+            </div>
+            <el-checkbox-group
+              v-model="item.configCodes"
+              @change="value => checkItemClick(item, value)"
+            >
+              <el-checkbox
+                v-for="(d, i) in Object.entries(item.configMap)"
+                :key="i"
+                :label="d[0]"
+                >{{ d[0] }}</el-checkbox
+              >
+            </el-checkbox-group>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
+    </el-card>
+    <div class="flex justify-end mt-4">
+      <el-button @click="closeDialog">{{ t('取消') }}</el-button>
+      <el-button
+        :loading="btnLoading"
+        type="primary"
+        @click="addPalyMethodType"
+        >{{ t('确认') }}</el-button
       >
-        <img v-if="imageUrl" :src="imageUrl" class="w-[200px]" />
-        <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-      </el-upload>
-    </el-form-item> -->
-    <el-form-item :label="t('联赛ID')" prop="leagueId">
-      <el-input
-        v-model="newFormInline.leagueId"
-        clearable
-        :placeholder="t('联赛ID')"
-        :disabled="!!newFormInline.leagueId"
-      />
-    </el-form-item>
-
-    <el-form-item :label="t('国家地区')" prop="countryId">
-      <el-select
-        v-model="newFormInline.countryId"
-        filterable
-        clearable
-        class="!w-[280px]"
-        :placeholder="t('请选择国家')"
-      >
-        <el-option
-          v-for="item in matchStore.countryList"
-          :key="item.countryId"
-          :label="item.countryNameCn"
-          :value="item.countryId"
-        />
-      </el-select>
-    </el-form-item>
-
-    <!-- <el-form-item :label="t('188数据源联赛杯赛')" prop="leagueId188Bet">
-      <el-input
-        v-model="newFormInline.leagueId188Bet"
-        :placeholder="t('188数据源联赛杯赛')"
-      />
-    </el-form-item> -->
-    <el-form-item :label="t('联赛杯赛中文名')" prop="leagueNameCn">
-      <el-input
-        v-model="newFormInline.leagueNameCn"
-        maxLength="35"
-        :placeholder="t('联赛杯赛中文名')"
-      />
-    </el-form-item>
-    <el-form-item :label="t('联赛杯英文名称')" prop="leagueNameEn">
-      <el-input
-        v-model="newFormInline.leagueNameEn"
-        :placeholder="t('联赛杯英文名称')"
-        maxLength="35"
-      />
-    </el-form-item>
-    <el-form-item :label="t('联赛等级')" prop="level">
-      <el-input
-        :formatter="v => inputRestrictions(v)"
-        v-model="newFormInline.level"
-        :placeholder="t('请输入1-200之间的数字')"
-        type="number"
-        clearable
-        class="!w-[200px]"
-      />
-    </el-form-item>
-    <!-- <el-form-item label="赛种" prop="sportId">
-      <el-select v-model="newFormInline.sportId" :placeholder="t('赛种')">
-        <el-option
-          :label="item.label"
-          :value="item.value"
-          v-for="item in SPORT_ID_MAP"
-          :key="item.value"
-        />
-      </el-select>
-    </el-form-item> -->
-  </el-form>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { formRules } from './utils/rule';
-import { FormProps } from './utils/types';
-// import type { UploadProps } from 'element-plus';
-// import { Plus } from '@element-plus/icons-vue';
+import { message } from '@/utils/message';
 import { t } from '@/plugins/i18n';
-// import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
-import { useMatchStore } from '@/store/match';
-import { inputRestrictions } from '@/utils/formatNumber';
-// import CustomInput from '@/components/Form/CustomInput.vue';
+import { CheckboxValueType } from 'element-plus/es/components/checkbox/src/checkbox';
+import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
-const matchStore = useMatchStore();
-const props = withDefaults(defineProps<FormProps>(), {
-  formInline: () => ({
-    leagueNameCn: '',
-    level: '',
-    countryId: '',
-    leagueNameEn: '',
-    leagueId: '',
-    // leagueLogo: '',
-    // leagueId188Bet: '',
-    sportId: ''
-  })
+const props = defineProps<{
+  sportId: number;
+  matchId: number;
+  leagueName: string;
+  beginTime: string;
+  homeName: string;
+  awayName: string;
+}>();
+
+const activeName = ref('1');
+const dataList = reactive<PLayMethodAPI.getKindsCodebyMatchIdData[]>([]);
+const btnLoading = ref(false);
+
+onMounted(() => {
+  initMethodList();
 });
 
-/* const beforeAvatarUpload: UploadProps['beforeUpload'] = _rawFile => {
-  if (rawFile.type !== "image/jpeg") {
-    console.log("Avatar picture must be JPG format!");
-    return false;
-  } else if (rawFile.size / 1024 / 1024 > 2) {
-    console.log("Avatar picture size can not exceed 2MB!");
-    return false;
+const handleCheckAllChange = (item, list: string[]) => {
+  item.configCodes.length = 0;
+  if (item.checkAll) {
+    item.configCodes.push(...Object.keys(list));
   }
-  return true;
-}; */
+};
 
-/* const handleAvatarSuccess: UploadProps['onSuccess'] = (
-  _response,
-  _uploadFile
-) => {}; */
+const emits = defineEmits(['closeDialog']);
+const closeDialog = () => {
+  emits('closeDialog');
+};
 
-/* const onImgChange = respose => {
-  imageUrl.value = URL.createObjectURL(respose.raw);
-}; */
+const checkItemClick = (item, value: CheckboxValueType[]) => {
+  item.checkAll = value.length === Object.keys(item.configMap).length;
+};
 
-const ruleFormRef = ref();
-const newFormInline = ref(props.formInline);
+const initMethodList = async () => {
+  const res = await API.getKindsCodeByMatchId(props);
+  if (res.code) return message(res.msg, { type: 'error' });
+  res.data.forEach(item => {
+    item.checkAll = Object.values(item.configMap).every(_ => +_ > 0);
+    item.configCodes = [];
+    item.configCodes.push(
+      ...Object.entries(item.configMap)
+        .filter(item => +item[1] > 0)
+        .map(_ => _[0])
+    );
+  });
+  dataList.length = 0;
+  dataList.push(...res.data);
+};
 
-// const imageUrl = ref<string>(newFormInline.value.leagueLogo);
-
-function getRef() {
-  return ruleFormRef.value;
-}
-
-defineExpose({ getRef });
+const addPalyMethodType = async () => {
+  btnLoading.value = true;
+  const params = {
+    sportId: props.sportId,
+    matchId: props.matchId,
+    sportName: SPORT_ID_MAP.find(_ => _.value === props.sportId).label,
+    kindsCodeList: dataList.map(item => {
+      return {
+        configValue: item.configValue,
+        configCodes: item.configCodes
+      };
+    })
+  };
+  const res = await API.configKindsCode(params);
+  if (res.code) {
+    return message(res.msg, { type: 'error' });
+  } else {
+    closeDialog();
+  }
+};
 </script>
 
 <style lang="scss">
-.avatar-uploader {
-  .el-upload {
-    border: 1px dashed var(--el-border-color);
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: var(--el-transition-duration-fast);
-  }
-  .el-upload:hover {
-    border-color: var(--el-color-primary);
-  }
-  .el-icon.avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 100px;
-    height: 100px;
-    text-align: center;
-  }
+.collapse_paly {
+  border: none;
+}
+
+.el-card.is-always-shadow {
+  box-shadow: none;
 }
 </style>

@@ -1,6 +1,12 @@
 <template>
   <div class="timer_container">
+    <span class="text-sm" v-if="row.id">
+      {{ getTime(showTime).h }}:{{ getTime(showTime).m }}:{{
+        getTime(showTime).s
+      }}
+    </span>
     <el-time-picker
+      v-else
       v-model="row.eventTime"
       :placeholder="t('请选择当前录入时间')"
       :disabled="!row.isEdit"
@@ -16,15 +22,22 @@
 import { t } from '@/plugins/i18n';
 import { message } from '@/utils/message';
 import dayjs from 'dayjs';
+import { getTime } from '@pureadmin/utils';
+
 const props = defineProps<{
   row: SattleDataAPI.InningEvent;
   index: number;
   list: SattleDataAPI.InningEvent[];
   dataList: SattleDataAPI.TennisEventsData[];
   parentIndex: number;
+  beginTime: number;
 }>();
 
 const emits = defineEmits(['changeEventTime']);
+
+const showTime = computed(() => {
+  return (+props.row.eventTime - props.beginTime) / 1000;
+});
 
 const changeEventTime = () => {
   const { index, row, list, dataList, parentIndex } = props;

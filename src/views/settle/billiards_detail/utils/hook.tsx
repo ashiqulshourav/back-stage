@@ -2,6 +2,8 @@ import { message } from '@/utils/message';
 import { t } from '@/plugins/i18n';
 import { columns } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
+import { compareTime } from '@/utils/formatDate';
+import dayjs from 'dayjs';
 
 export function useBilliardsHook() {
   const dataList = reactive<SattleDataAPI.SnookerEventsResData[]>([]);
@@ -83,7 +85,9 @@ export function useBilliardsHook() {
     ).then(async () => {
       loading.value = true;
       const params = {
-        eventTime,
+        eventTime:
+          renderObj.beginTimeLong +
+          compareTime(dayjs(eventTime).format('HH:mm:ss')) * 1000,
         t1: row.t1,
         t2: row.t2,
         gameRule: boardType.value,
