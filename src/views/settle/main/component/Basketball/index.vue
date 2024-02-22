@@ -73,11 +73,12 @@ const {
 } = useBasketballHook();
 
 const goTennisDetail = row => {
-  const params = JSON.parse(JSON.stringify(row));
-  router.push({
-    name: 'SETTLE_BASKETBALL_DETAIL',
-    state: { params }
-  });
+  // const params = JSON.parse(JSON.stringify(row));
+  // router.push({
+  //   name: 'SETTLE_BASKETBALL_DETAIL',
+  //   state: { params }
+  // });
+  router.push(`/settle/new_basketball_detail/${row.matchId}`);
 };
 const cancelClick = async row => {
   await cancelBetOrder(row);
