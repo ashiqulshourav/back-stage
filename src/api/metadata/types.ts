@@ -1,6 +1,6 @@
 declare namespace MetadataAPI {
   type LeagueListParams = {
-    pageNum: number
+    pageNum: number;
     pageSize: number;
     countryId?: number;
     leagueId?: number;
@@ -11,8 +11,8 @@ declare namespace MetadataAPI {
     level?: number;
     category?: number;
     sportId?: number;
-    tags?: number[]
-  }
+    leagueTagsId?: ConfigCenterDataAPI.LeagueTagType[];
+  };
   type updateLeagueParamsType = {
     leagueLogo: string;
     leagueId: number;
@@ -22,8 +22,8 @@ declare namespace MetadataAPI {
     leagueNameEn: string;
     level: number;
     sportId: number;
-    tags?: number[];
-  }
+    leagueTagsId?: ConfigCenterDataAPI.LeagueTagType[];
+  };
 
   type LeagueList = {
     leagueId: number | string;
@@ -34,8 +34,8 @@ declare namespace MetadataAPI {
     leagueLogo?: string;
     leagueId188Bet?: number | string;
     level: string | number;
-    tags?: number[];
-  }
+    leagueTagsId?: ConfigCenterDataAPI.LeagueTagType[];
+  };
   type LeagueListData = {
     total: number;
     list: LeagueList[];

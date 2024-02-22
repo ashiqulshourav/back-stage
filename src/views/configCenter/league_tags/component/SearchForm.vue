@@ -1,9 +1,9 @@
 <template>
   <div class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]">
     <el-form ref="formRef" :inline="true" :model="form">
-      <el-form-item :label="`${t('赛事类型')}:`" prop="categoryId">
+      <el-form-item :label="`${t('赛事类型')}:`" prop="category">
         <el-select
-          v-model="form.categoryId"
+          v-model="form.category"
           :placeholder="t('赛事类型')"
           clearable
           class="!w-[150px]"
@@ -34,10 +34,10 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="`${t('分类名称')}:`" prop="tagName">
+      <el-form-item :label="`${t('标签名称')}:`" prop="text">
         <el-input
-          v-model="form.tagName"
-          :placeholder="t('分类名称')"
+          v-model="form.text"
+          :placeholder="t('标签名称')"
           v-enter="search"
           clearable
           class="!w-[150px]"
@@ -74,7 +74,7 @@ import {
   SPORT_CATEGORY
 } from '@/utils/maps/sports_map';
 
-const time = ref('');
+// const time = ref('');
 const formRef = ref();
 const emits = defineEmits(['onSearch']);
 const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
@@ -102,7 +102,7 @@ const search = () => {
 };
 
 const changeMatchType = (type: 0 | 1 | 2) => {
-  props.form.sportId = '';
+  props.form.sportId = undefined;
   //- 电竞比赛 =1
   gameClassify.value = type === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
   emits('onSearch', ...['reload']);

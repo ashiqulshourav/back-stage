@@ -8,8 +8,8 @@ import {
 for (let i = 0; i < 50; i++) {
   data.push({
     id: i,
-    tagName: `tagName${i}`,
-    categoryId: SPORT_CATEGORY[i % 3].value,
+    text: `text${i}`,
+    category: SPORT_CATEGORY[i % 3].value,
     sportId:
       i % 3 === 1 ? ESPORT_ID_MAP[i % 20].value : SPORT_ID_MAP[i % 9].value
   });

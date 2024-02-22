@@ -1,75 +1,63 @@
-// import { MATCH_PERIOD_TYPES } from '@/utils/maps/sports_map';
 import dayjs from 'dayjs';
+export const MATCH_PERIOD_TYPES = {
+  Q1: t('第一局'),
+  Q2: t('第二局'),
+  Q3: t('第三局'),
+  OT: t('加时赛'),
+  // HT: t('上半场'),
+  // FT: t('下半场')
+};
+export const MATCH_PERIOD = {
+  INNING: {
+    1: 'Q1',
+    2: 'Q2',
+    3: 'Q3',
+    4: 'OT'
+  },
+  HT: {
+    1: 'HT',
+    2: 'FT',
+    3: 'OT'
+  }
+};
 export const columns: TableColumnList = [
   {
-    label: t('节'),
-    prop: 'matchPeriod',
-    slot: 'matchPeriod',
-    width: '100px',
-    headerRenderer: () => {
-      return t('节');
-    },
-    formatter: ({ matchPeriod }) => {
-      // return MATCH_PERIOD_TYPES[matchPeriod];
-    }
+    headerSlot: 'inningNum',
+    formatter: ({ inningNum, gameRule }) =>
+      MATCH_PERIOD_TYPES[MATCH_PERIOD[gameRule][inningNum]] ?? '-'
   },
   {
-    minWidth: 100,
-    prop: 't1',
-    slot: 't1',
-    headerSlot: 'header_t1',
-    headerRenderer: () => {
-      return history.state.params.homeTeamNameCn
-        ? history.state.params.homeTeamNameCn
-        : '-';
-    }
+    headerRenderer: () => history.state.params.homeTeamNameCn ?? '_',
+    slot: 't1'
   },
   {
-    prop: 't2',
-    slot: 't2',
-    headerRenderer: () => {
-      return history.state.params.awayTeamNameCn
-        ? history.state.params.awayTeamNameCn
-        : '-';
-    }
+    headerRenderer: () => history.state.params.awayTeamNameCn ?? '_',
+    slot: 't2'
   },
-
   {
     label: t('结算时间'),
-    minWidth: 150,
-    prop: 'eventTime',
-    slot: 'eventTime',
-    formatter: ({ eventTime }) => {
-      console.log(dayjs(eventTime).format('HH:mm:ss'));
-      return dayjs(eventTime).format('HH:mm:ss');
-    }
+    slot: 'eventTime'
   },
   {
     label: t('操作人'),
-    minWidth: 100,
-    prop: 'createdBy',
     formatter: ({ createdBy }) => {
-      return createdBy ? createdBy : '-';
+      return createdBy ? createdBy : '_';
     }
   },
   {
     label: t('状态'),
-    minWidth: 100,
-    prop: 'settleType',
-    formatter: ({ settleType }) => {
-      return settleType === '0'
-        ? t('自动结算')
-        : settleType === 1
-        ? t('⼈⼯結算')
-        : '-';
+    formatter: () => {
+      return t('人工结算');
+    }
+  },
+  {
+    label: t('确认时间'),
+    formatter: ({ id, updatedAt }) => {
+      return id ? dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss') : '_';
     }
   },
   {
     label: t('操作'),
-    minWidth: 100,
-    slot: 'operation',
-    formatter() {
-      return '-';
-    }
+    slot: 'operation'
   }
 ];

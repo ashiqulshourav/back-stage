@@ -4,40 +4,51 @@ import mockAPI from './mock';
 export const configCenterData = {
   //- 联赛标签
   getLeagueTagList: (data: ConfigCenterDataAPI.LeagueTagListFetchProps) =>
-    // http.request<ConfigCenterDataAPI.ListLeagueTagRes>(
-    //   'post',
-    //   '/leagueTag/v1/getLeagueTagList',
-    //   { data }
-    // ),
-    mockAPI.getLeagueTagList(data),
+    http.request<ConfigCenterDataAPI.ListLeagueTagRes>(
+      'post',
+      '/league/tag/search',
+      { data }
+    ),
+  // mockAPI.getLeagueTagList(data),
 
-  searchLeagueTagList: (data: ConfigCenterDataAPI.LeagueTagType) =>
-    // http.request<ConfigCenterDataAPI.ListLeagueTagRes>(
-    //   'post',
-    //   '/leagueTag/v1/getLeagueTagList',
-    //   { data }
-    // ),
-    mockAPI.searchLeagueTagList(data),
+  searchLeagueTagList: (id: number) =>
+    http.request<ConfigCenterDataAPI.ListLeagueTagRes>(
+      'get',
+      '/league/tag/leagueToTagByTagId/' + id
+    ),
+  // mockAPI.searchLeagueTagList(data),
 
   updateLeagueTag: (data: ConfigCenterDataAPI.LeagueTagType) =>
-    // http.request<ConfigCenterDataAPI.LeagueTagRes>(
-    //   'post',
-    //   '/leagueTag/v1/updateLeagueTag',
-    //   { data }
-    // ),
-    mockAPI.updateLeagueTag(data),
-  createLeagueTag: (data: ConfigCenterDataAPI.LeagueTagType) =>
-    // http.request<ConfigCenterDataAPI.LeagueTagRes>(
-    //   'post',
-    //   '/leagueTag/v1/createLeagueTag',
-    //   { data }
-    // ),
-    mockAPI.createLeagueTag(data),
+    http.request<ConfigCenterDataAPI.LeagueTagRes>(
+      'post',
+      '/league/tag/update',
+      {
+        data
+      }
+    ),
+  // mockAPI.updateLeagueTag(data),
+  createLeagueTag: (data: ConfigCenterDataAPI.LeagueTagType[]) =>
+    http.request<ConfigCenterDataAPI.LeagueTagRes>(
+      'post',
+      '/league/tag/create',
+      {
+        data
+      }
+    ),
+  // mockAPI.createLeagueTag(data),
   deleteLeagueTag: (data: ConfigCenterDataAPI.LeagueTagType) =>
-    // http.request<COMMON.BASE_RES_TYPE<null>>(
-    //   'post',
-    //   '/leagueTag/v1/deleteLeagueTag',
-    //   { data }
-    // )
-    mockAPI.deleteLeagueTag(data)
+    http.request<
+      COMMON.BASE_RES_TYPE<null | ConfigCenterDataAPI.LeagueTagType[]>
+    >('post', '/league/tag/del', {
+      data
+    }),
+  // mockAPI.deleteLeagueTag(data)
+  bulkDeleteLeagueTag: (data: number[]) =>
+    http.request<COMMON.BASE_RES_TYPE<null>>(
+      'post',
+      'league/tag/leagueToTag/batchDelete',
+      {
+        data
+      }
+    )
 };
