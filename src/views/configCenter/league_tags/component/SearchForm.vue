@@ -74,7 +74,7 @@ import {
   SPORT_CATEGORY
 } from '@/utils/maps/sports_map';
 
-const time = ref('');
+// const time = ref('');
 const formRef = ref();
 const emits = defineEmits(['onSearch']);
 const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
@@ -102,7 +102,7 @@ const search = () => {
 };
 
 const changeMatchType = (type: 0 | 1 | 2) => {
-  props.form.sportId = '';
+  props.form.sportId = undefined;
   //- 电竞比赛 =1
   gameClassify.value = type === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
   emits('onSearch', ...['reload']);

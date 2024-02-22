@@ -6,14 +6,11 @@
     label-width="150px"
   >
     <el-form-item :label="t('赛事类型')" prop="category">
-      <el-select
-        v-model="newFormInline.category"
-        :placeholder="t('赛事类型')"
-      >
+      <el-select v-model="newFormInline.category" :placeholder="t('赛事类型')">
         <el-option
+          v-for="item in SPORT_CATEGORY"
           :label="item.label"
           :value="item.value"
-          v-for="item in SPORT_CATEGORY"
           :key="item.value"
         />
       </el-select>
@@ -25,9 +22,9 @@
         :disabled="newFormInline.category === undefined"
       >
         <el-option
+          v-for="item in sports"
           :label="item.label"
           :value="item.value"
-          v-for="item in sports"
           :key="item.value"
         />
       </el-select>
@@ -52,7 +49,7 @@ import {
   SPORT_CATEGORY,
   ESPORT_ID_MAP
 } from '@/utils/maps/sports_map';
-import { inputRestrictions } from '@/utils/formatNumber';
+// import { inputRestrictions } from '@/utils/formatNumber';
 
 const props = withDefaults(defineProps<FormProps>(), {
   formInline: () => ({

@@ -1,174 +1,103 @@
 <template>
-  <div class="main">
+  <div class="main tennis_container">
     <!-- -盘口详情 -->
-
     <DetiltTitle
-      :renderObj="currentMatch"
       @allSettleBtnClick="allSettleBtnClick"
+      :renderObj="renderObj"
+      :allSettleLoading="allSettleLoading"
     />
-    <PureTableBar
-      :title="t('賽果結算')"
-      :columns="columns"
-      @refresh="onSearch()"
-    >
+
+    <PureTableBar :columns="columns" @refresh="onSearch()">
+      <template #title>
+        <div>
+          <h2>{{ t('赛果结算') }}</h2>
+        </div>
+      </template>
+
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"
-          showOverflowTooltip
+          :loading="loading"
           :size="size"
-          :row-key="row => row.matchId"
-          :data="renderData"
+          :row-key="row => row.inningNum"
+          :adaptiveConfig="{
+            offsetBottom: 60
+          }"
+          :data="dataList"
           :columns="dynamicColumns"
           :header-cell-style="tableHeaderStyle"
         >
-          <template #matchPeriod="{ row }">
-            <span>
-              <!-- {{ MATCH_PERIOD_TYPES[row.matchPeriod] }} -->
-            </span>
+          <!-- -比分 -->
+          <template #t1="{ row }">
+            <Score :row="row" type="t1" :errorType="row.t1Error" />
           </template>
-          <template #t1="{ row, index }">
-            <input
-              class="border w-1/3 mx-auto"
-              v-if="isEdit && index === renderData.length - 1"
-              type="number"
-              v-model="NewEvent.t1"
-            />
-            <span v-else>
-              {{ row.t1 }}
-            </span>
+          <template #t2="{ row }">
+            <Score :row="row" type="t2" :errorType="row.t2Error" />
           </template>
-          <template #t2="{ row, index }">
-            <input
-              class="border w-1/3 mx-auto"
-              v-if="isEdit && index === renderData.length - 1"
-              type="number"
-              v-model="NewEvent.t2"
-            />
-            <span v-else>
-              {{ row.t2 }}
-            </span>
+          <template #inningNum>
+            <!-- {{boardType === 'INNING' ? t('节') : t('上/下半场') }} -->
+            {{ t('局') }}
           </template>
+          <!-- -结算时间 -->
           <template #eventTime="{ row, index }">
-            <el-time-picker
-              v-if="isEdit && index === renderData.length - 1"
-              v-model="timestamps"
-              :placeholder="t('请选择当前录入时间')"
-              :disabled="!isEdit"
-              value-format="x"
-              :default-value="dayjs().startOf('day').toDate()"
-              format="HH:mm:ss"
+            <EventTime
+              :row="row"
+              :index="index"
+              :dataList="dataList"
+              :errorType="row.eventTimeError"
             />
-            <span v-else>{{
-              dayjs(
-                dayjs(row.eventTime).diff(
-                  dayjs(currentMatch.beginTime) + 28800000
-                )
-              ).format('HH:mm:ss')
-            }}</span>
           </template>
-          <template #operation="{ index }">
-            <div
-              class="flex gap-2 justify-center"
-              v-if="isEdit && index === renderData.length - 1"
-            >
-              <el-button type="primary" @click="handleNewEvent">
-                {{ t('結算節') }}
-              </el-button>
-              <el-button @click="isEdit = false">{{ t('取消') }}</el-button>
-            </div>
-            <span v-else> - </span>
+
+          <!-- -局按钮 -->
+          <template #operation="{ row, index }">
+            <ChildOperation
+              :row="row"
+              :childIndex="index"
+              @deleteChildItem="() => dataList.pop()"
+              @settlementHandicap="settlementHandicap(row)"
+            />
           </template>
         </pure-table>
       </template>
     </PureTableBar>
-    <template
-      v-if="
-        currentMatch.fullSettlementStatus !== 1 &&
-        !isEdit &&
-        dataList.length < 3
-      "
-    >
-      <el-button type="primary" class="mt-3 px-24" @click="setNewEventEdit">
-        {{ t('新增節') }}
-      </el-button>
-    </template>
-    <template
-      v-else-if="
-        currentMatch.fullSettlementStatus !== 1 &&
-        !isEdit &&
-        dataList[dataList.length - 1].t1 === dataList[dataList.length - 1].t2 &&
-        dataList.length < 4
-      "
-    >
-      <el-button type="primary" class="mt-3 px-24" @click="setNewEventEdit">
-        {{ t('新增加时赛') }}
-      </el-button>
+    <template v-if="renderObj.fullSettlementStatus !== 1 && checkNoMore()">
+      <div class="mt-4">
+        <el-button type="primary" @click="addEventRow">
+          {{
+            dataList.length == 3
+              ? t('新增加时赛')
+              : t('新增局')
+          }}</el-button
+        >
+      </div>
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
 import { usePublicHooks } from '@/hooks';
 import { PureTableBar } from '@/components/RePureTableBar';
 import DetiltTitle from './component/DetailTitle.vue';
 import { useDetailHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
-// import { MATCH_PERIOD_TYPES } from '@/utils/maps/sports_map';
-import dayjs from 'dayjs';
+import Score from './component/Score.vue';
+import EventTime from './component/EventTime.vue';
+import ChildOperation from './component/ChildOperation.vue';
 
 defineOptions({ name: 'SETTLE_ICEHOCKEY_DETAIL' });
-
 const { tableHeaderStyle } = usePublicHooks();
+
 const {
   onSearch,
+  loading,
   columns,
-  timestamps,
   dataList,
-  currentMatch,
-  isEdit,
+  // boardType,
+  addEventRow,
+  settlementHandicap,
   allSettleBtnClick,
-  setNewEvent
+  renderObj,
+  allSettleLoading,
+  checkNoMore
 } = useDetailHook();
-const matchId = history.state.params.matchId;
-
-const NewEvent: SattleDataAPI.IceHockeyEvent = reactive({
-  matchId: Number(matchId),
-  eventTime: 0,
-  t1: 0,
-  t2: 0
-});
-const renderData = computed(() => {
-  return isEdit.value ? dataList.concat(NewEvent) : dataList;
-});
-
-const setNewEventEdit = () => {
-  isEdit.value = true;
-  switch (dataList.length) {
-    case 0:
-      NewEvent.matchPeriod = 'R1';
-      break;
-    case 1:
-      NewEvent.matchPeriod = 'R2';
-      break;
-    case 2:
-      NewEvent.matchPeriod = 'R3';
-      break;
-    default:
-      NewEvent.matchPeriod = 'OT';
-  }
-};
-
-const handleNewEvent = async () => {
-  setNewEvent(NewEvent);
-};
-onMounted(() => {
-  onSearch();
-});
 </script>
-
-<style scoped>
-.custom-switch .el-switch__core {
-  width: 500px;
-}
-</style>
