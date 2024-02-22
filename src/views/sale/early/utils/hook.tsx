@@ -37,7 +37,7 @@ export function useLeague() {
       minWidth: 200
     },
     {
-      label: t('联赛等级'),
+      label: t('热门排序'),
       prop: 'level'
     },
     {
