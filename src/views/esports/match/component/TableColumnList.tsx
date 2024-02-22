@@ -37,7 +37,7 @@ export const columns: TableColumnList = [
     align: 'left'
   },
   {
-    label: t('赛事等级'),
+    label: t('热门排序'),
     prop: 'level'
   },
   {

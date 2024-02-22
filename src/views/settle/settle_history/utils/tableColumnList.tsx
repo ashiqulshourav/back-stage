@@ -36,9 +36,9 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('赛事ID'))
   },
   {
-    label: t('等级'),
+    label: t('热门排序'),
     prop: 'level',
-    headerRenderer: d => handleTableWidth(d, t('等级'))
+    headerRenderer: d => handleTableWidth(d, t('热门排序'))
   },
   {
     label: t('比赛时间'),
@@ -123,10 +123,10 @@ export const childColumns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('事件编码')),
     formatter: ({ eventCode }) => MATCH_EVENT_CODE[eventCode]
   },
-  {
-    label: t('事件是否有效'),
-    slot: 'canceled'
-  },
+  // {
+  //   label: t('事件是否有效'),
+  //   slot: 'canceled'
+  // },
   {
     label: t('結算類型'),
     slot: 'settleType',

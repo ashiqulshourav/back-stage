@@ -28,7 +28,7 @@
       <el-form-item :label="`${t('分类标签')}:`" prop="tags">
         <el-select v-model="formData.tags" :placeholder="t('请选择')" multiple>
           <el-option
-            :label="item"
+            :label="item.split('|')[1]"
             :value="item"
             v-for="item in tagList"
             :key="item"
@@ -97,6 +97,8 @@ const addPlayMethod = async () => {
       const params = { ...formData };
       if ((params as typeof formData).tags.length === 0) {
         delete params.tags;
+      } else {
+        params.tags = params.tags.map(_ => _.split('|')[0]);
       }
       const res = await API[urlPath](
         removeEmptyStringKeys(params) as PLayMethodAPI.KindsCodeRequestCode & {

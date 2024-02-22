@@ -67,7 +67,7 @@
         maxLength="35"
       />
     </el-form-item>
-    <el-form-item :label="t('联赛等级')" prop="level">
+    <el-form-item :label="t('热门排序')" prop="level">
       <el-input
         :formatter="v => inputRestrictions(v)"
         v-model="newFormInline.level"
