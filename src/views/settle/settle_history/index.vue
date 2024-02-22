@@ -52,7 +52,7 @@
                   :header-cell-style="tableHeaderStyle"
                 >
                   <!-- -事件是否有效 -->
-                  <template #canceled="{ row }: MatchEventRowType">
+                  <!-- <template #canceled="{ row }: MatchEventRowType">
                     <el-text
                       :class="[
                         '!text-xs',
@@ -61,7 +61,7 @@
                       :type="row.canceled === 1 ? 'danger' : 'info'"
                       >{{ row.canceled === 1 ? t('否') : t('是') }}</el-text
                     >
-                  </template>
+                  </template> -->
 
                   <!-- -数据商 -->
                   <template #dataSourceCode="{ row }: MatchEventRowType">

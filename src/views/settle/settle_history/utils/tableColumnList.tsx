@@ -123,10 +123,10 @@ export const childColumns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('事件编码')),
     formatter: ({ eventCode }) => MATCH_EVENT_CODE[eventCode]
   },
-  {
-    label: t('事件是否有效'),
-    slot: 'canceled'
-  },
+  // {
+  //   label: t('事件是否有效'),
+  //   slot: 'canceled'
+  // },
   {
     label: t('結算類型'),
     slot: 'settleType',
