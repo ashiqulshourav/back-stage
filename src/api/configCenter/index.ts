@@ -14,37 +14,39 @@ export const configCenterData = {
   searchLeagueTagList: (id: number) =>
     http.request<ConfigCenterDataAPI.ListLeagueTagRes>(
       'get',
-      '/league/tag/leagueToTagByTagId/' + id,
+      '/league/tag/leagueToTagByTagId/' + id
     ),
   // mockAPI.searchLeagueTagList(data),
 
   updateLeagueTag: (data: ConfigCenterDataAPI.LeagueTagType) =>
     http.request<ConfigCenterDataAPI.LeagueTagRes>(
-      'put',
-      '/league/tag/' + data.id,
+      'post',
+      '/league/tag/update',
       {
         data
       }
     ),
   // mockAPI.updateLeagueTag(data),
   createLeagueTag: (data: ConfigCenterDataAPI.LeagueTagType[]) =>
-    http.request<ConfigCenterDataAPI.LeagueTagRes>('post', '/league/tag/', {
-      data
-    }),
-  // mockAPI.createLeagueTag(data),
-  deleteLeagueTag: (data: ConfigCenterDataAPI.LeagueTagType) =>
-    http.request<COMMON.BASE_RES_TYPE<null>>(
-      'delete',
-      '/league/tag/' + data.id,
+    http.request<ConfigCenterDataAPI.LeagueTagRes>(
+      'post',
+      '/league/tag/create',
       {
         data
       }
     ),
+  // mockAPI.createLeagueTag(data),
+  deleteLeagueTag: (data: ConfigCenterDataAPI.LeagueTagType) =>
+    http.request<
+      COMMON.BASE_RES_TYPE<null | ConfigCenterDataAPI.LeagueTagType[]>
+    >('post', '/league/tag/del', {
+      data
+    }),
   // mockAPI.deleteLeagueTag(data)
   bulkDeleteLeagueTag: (data: number[]) =>
     http.request<COMMON.BASE_RES_TYPE<null>>(
-      'delete',
-      'league/tag/leagueToTag/batchDelete/',
+      'post',
+      'league/tag/leagueToTag/batchDelete',
       {
         data
       }

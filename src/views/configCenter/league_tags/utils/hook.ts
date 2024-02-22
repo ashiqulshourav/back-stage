@@ -61,18 +61,28 @@ export function useLeagueTagsHook() {
                   confirmButtonText: t('确认'),
                   type: 'warning',
                   icon: markRaw(Delete),
-                  center: true
+                  center: true,
+                  beforeClose: async (action2, instance2, done2) => {
+                    if (action2 === 'confirm') {
+                      instance2.confirmButtonLoading = true;
+                      instance2.confirmButtonText = '删除中...';
+                      await API.bulkDeleteLeagueTag(data.map(item => item.id));
+                      await API.deleteLeagueTag(row);
+                      done2();
+                      setTimeout(() => {
+                        instance2.confirmButtonLoading = false;
+                      }, 300);
+                      ElMessage({
+                        type: 'success',
+                        message: `${row.text}标签成功删除`
+                      });
+                      onSearch();
+                    } else {
+                      done2();
+                    }
+                  }
                 }
-              ).then(async () => {
-                await API.bulkDeleteLeagueTag(data.map(item => item.id));
-                await API.deleteLeagueTag(row);
-                done();
-                ElMessage({
-                  type: 'success',
-                  message: `${row.text}标签成功删除`
-                });
-                onSearch();
-              });
+              );
               done();
               setTimeout(() => {
                 instance.confirmButtonLoading = false;
@@ -225,9 +235,9 @@ export function useLeagueTagsHook() {
     message(res.msg, { type: res.code ? 'error' : 'success' });
   };
 
-  onMounted(() => {
-    onSearch();
-  });
+  // onMounted(() => {
+  //   onSearch();
+  // });
 
   return {
     loading,
