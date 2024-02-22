@@ -101,6 +101,14 @@
         }
       },
       {
+        "path": "/settle/new_basketball_detail/:matchId",
+        "name": "SETTLE_NEW_BASKETBALL_DETAIL",
+        "meta": {
+          "title": "篮球结算",
+          "showLink": false
+        }
+      },
+      {
         "path": "/settle/pingpong_detail",
         "name": "SETTLE_PINGPONG_DETAIL",
         "meta": {
@@ -249,7 +257,7 @@
           "title": "分类设定",
           "showParent": true
         }
-      },      
+      },
       {
         "path": "/configCenter/play_method",
         "name": "CONFIGCENTER_PLAY_METHOD",
