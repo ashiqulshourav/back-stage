@@ -11,7 +11,7 @@
         <span>{{ awayName }}</span>
       </div>
     </div>
-    <el-card>
+    <el-card class="classify_card">
       <el-collapse class="collapse_paly" v-model="activeName">
         <el-collapse-item
           :title="item.configValue"
@@ -140,5 +140,11 @@ const addPalyMethodType = async () => {
 
 .el-card.is-always-shadow {
   box-shadow: none;
+}
+.classify_card {
+  .el-card__body {
+    max-height: 600px;
+    overflow-y: auto;
+  }
 }
 </style>
