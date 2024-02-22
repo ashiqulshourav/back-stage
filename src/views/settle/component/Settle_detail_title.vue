@@ -52,7 +52,7 @@ const renderList = computed(() => {
     { title: t('赛事ID'), val: _?.matchId },
     {
       title: t('联赛'),
-      val: _?.leagueNameCn ?? history.state.params.leagueNameCn
+      val: _?.leagueNameCn ?? history.state.params?.leagueNameCn
     },
     {
       title: t('开赛时间'),
