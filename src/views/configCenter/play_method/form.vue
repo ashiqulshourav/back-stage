@@ -36,7 +36,7 @@
                 v-for="(d, i) in Object.entries(item.configMap)"
                 :key="i"
                 :label="d[0]"
-                >{{ d[0] }}</el-checkbox
+                >{{ d[0].split('|')[1] }}</el-checkbox
               >
             </el-checkbox-group>
           </div>
@@ -110,6 +110,7 @@ const initMethodList = async () => {
   dataList.push(...res.data);
 };
 
+//- 修改玩法内容列表
 const addPalyMethodType = async () => {
   btnLoading.value = true;
   const params = {
@@ -119,7 +120,7 @@ const addPalyMethodType = async () => {
     kindsCodeList: dataList.map(item => {
       return {
         configValue: item.configValue,
-        configCodes: item.configCodes
+        configCodes: item.configCodes.map(item => item.split('|')[0])
       };
     })
   };
