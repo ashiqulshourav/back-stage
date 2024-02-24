@@ -9,7 +9,7 @@ declare namespace ConfigCenterDataAPI {
     leagueNameEn?: string;
     tagId?: number;
   };
-  type LeagueTagListFetchProps = COMMON.ListFetchProps & {
+  type LeagueTagListFetchProps = {
     text?: string;
     sportId?: number;
     category?: number;

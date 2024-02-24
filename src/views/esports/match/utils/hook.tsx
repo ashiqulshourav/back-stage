@@ -85,15 +85,19 @@ export function useLeague() {
           onSearch();
         }
         FormRef.validate(async valid => {
+          if (formRef.value.uploadFormFile) {
+            const res = await API.fileUpload(formRef.value.uploadFormFile);
+            console.log('hook.tsx文件 107==============行打印=', res);
+          }
           if (valid) {
-            if (title === '新增') {
-              await API.createEMatch(curData);
-              chores();
-            } else {
-              const res = await API.updateEMatch(curData);
-              message(res.msg, { type: res.code ? 'error' : 'success' });
-              chores();
-            }
+            // if (title === '新增') {
+            //   await API.createEMatch(curData);
+            //   chores();
+            // } else {
+            //   const res = await API.updateEMatch(curData);
+            //   message(res.msg, { type: res.code ? 'error' : 'success' });
+            //   chores();
+            // }
           }
         });
       }

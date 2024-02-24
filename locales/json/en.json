@@ -80,7 +80,6 @@
   "k4b924d32": "Match Time",
   "k38958395": "Neutral",
   "k-d465297": "Not Neutral",
-  "k50c697b3": "League Sorting Level",
   "k-5a50b92": "Home Team ID",
   "k-676b3c58": "Current Score",
   "k16270e57": "Visiting Team ID",
@@ -155,7 +154,6 @@
   "k2f4d0a37": "Request Parameters",
   "k-5350e14f": "Operator ID",
   "k-710494fa": "Operator Username",
-  "k6b69dfc9": "Logo",
   "k22d098da": "League ID is required",
   "kf86f890": "Country/Region ID is required",
   "k-e35c270": "188 Data Source League Cup is required",
@@ -179,7 +177,6 @@
   "k-5fbae369": "Cancel",
   "k5c8fa534": "Match ID is required",
   "k6dc1a51b": "Match Name is required",
-  "k-70ab99c1": "Match Level is required",
   "k-7fd48510": "Match Time is required",
   "k-3795af1b": "Sale Edit",
   "k-5bc2e28e": "Logo",
@@ -514,5 +511,10 @@
   "k368d0f93": "分类排序规则不能为空",
   "k-453658f5": "玩法分类设定(多选)",
   "k17e039be": "分类预览",
-  "k-4e21672a": "请依照正序进行确认结算"
+  "k-4e21672a": "请依照正序进行确认结算",
+  "k-71472e73": "编辑标签",
+  "k276ffc2d": "热门排序",
+  "k3f47dca7": "热门排序不能为空",
+  "k437583c8": "当前结算时间不能小于上一局",
+  "k550d6883": "比赛一方必须胜出另一方"
 }

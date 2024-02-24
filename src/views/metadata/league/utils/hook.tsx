@@ -55,7 +55,6 @@ export function useLeague() {
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
-      console.log("league", res.data)
       dataList.push(...res.data.list);
       pagination.total = res.data.total;
       pagination.pageSize = res.data.pageSize;
@@ -101,9 +100,25 @@ export function useLeague() {
           onSearch(); // 刷新表格数据
         }
         FormRef.validate(async valid => {
+          if (formRef.value.uploadFormFile) {
+            let formData = new FormData();
+            formData.append('file', formRef.value.uploadFormFile);
+
+            formData.append('fileUsageCategory', '3');
+            console.log(
+              'hook.tsx文件 106==============行打印=',
+              formRef.value.uploadFormFile
+            );
+            const res = await API.fileUpload(formData);
+            console.log('hook.tsx文件 107==============行打印=', res);
+          }
           if (valid) {
             if (row) {
-              updateLeague(curData, () => chores());
+              // if (formRef.value.uploadFormFile) {
+              //   const res = await API.fileUpload(formRef.value.uploadFormFile);
+              //   console.log('hook.tsx文件 107==============行打印=', res);
+              // }
+              // updateLeague(curData, () => chores());
             } else {
               // 实际开发先调用编辑接口，再进行下面操作
               // chores();
