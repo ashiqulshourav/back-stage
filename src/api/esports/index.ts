@@ -4,10 +4,6 @@ export const esportData = {
   getESportsLeagueList: (data: ESportsAPI.ESportsLeagueListParams) => http.request<ESportsAPI.ESportsLeagueListType>("post", "/league/v1/getESportsLeagueList", { data }),
   getESportsTeamList: (data: ESportsAPI.ESportsTeamListParams) => http.request<ESportsAPI.ESportsTeamListResType>("post", "/team/v1/getESportsTeamList", { data }),
 
-  createEMatch: (data: any) => {
-    return http.request<ESportsAPI.TeamListRes>("post", "/team/v1/getTeamList", { data })
-    // return esportsMockAPI.createEMatch(props);
-  },
 
   updateEMatch: (data: {
     countryId?: number;
@@ -19,7 +15,7 @@ export const esportData = {
     leagueNameEn?: number;
     sportId?: number;
   }) => {
-    return http.request<ESportsAPI.updateLeagueResType>("post", "/league/v1/updateESportsLeague", { data })
+    return http.request<ESportsAPI.updateLeagueResType>("post", "/team/v1/updateESportsTeam", { data })
   },
 
   // getETeamList: (data: ESportsAPI.TeamListFetchProps) => {

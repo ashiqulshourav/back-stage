@@ -1,10 +1,9 @@
 import editForm from '../form.vue';
 import { message } from '@/utils/message';
-// import { ElMessageBox } from "element-plus";
 import { addDialog } from '@/components/ReDialog';
+import { FormItemProps } from 'element-plus';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted, h } from 'vue';
-// import { usePublicHooks } from "@/hooks";
 import { columns } from '../component/TableColumnList';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 
@@ -98,29 +97,34 @@ export function useLeague() {
       contentRenderer: () => h(editForm, { ref: formRef }),
       beforeSure: (done, { options }) => {
         const FormRef = formRef.value.getRef();
+        const curData = options.props.formInline as FormItemProps;
         function chores() {
-          console.log('hook.tsx文件 167==============行打印=', options);
-          // message(`您${title}了角色名称为${curData.name}的这条数据`, {
-          //   type: "success"
-          // });
           done(); // 关闭弹框
           onSearch(); // 刷新表格数据
         }
-        FormRef.validate(valid => {
+        FormRef.validate(async valid => {
           if (valid) {
-            // 表单规则校验通过
-            if (title === '新增') {
-              // 实际开发先调用新增接口，再进行下面操作
-              chores();
-            } else {
-              // 实际开发先调用编辑接口，再进行下面操作
-              chores();
+            if (formRef.value.uploadFormFile) {
+              let formData = new FormData();
+              formData.append('file', formRef.value.uploadFormFile);
+              formData.append('fileUsageCategory', '3');
+              const res = await API.fileUpload(formData);
+              if (res.data?.url) {
+                (curData as any).leagueLogo = res.data?.url;
+              }
             }
+            updateTeam(curData, () => chores());
           }
         });
       }
     });
   }
+
+  const updateTeam = async (curData, cb) => {
+    const res = await API.updateEMatch(curData);
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    if (!res.code) cb();
+  };
 
   onMounted(() => {
     onSearch();
@@ -131,12 +135,10 @@ export function useLeague() {
     columns,
     dataList,
     pagination,
-    // buttonClass,
     onSearch,
     resetForm,
     openDialog,
     handleDelete,
-    // handleDatabase,
     handleTableWidthChange,
     handleCurrentChange,
     handleSelectionChange,

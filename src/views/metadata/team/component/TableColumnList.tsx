@@ -9,12 +9,11 @@ export const columns: TableColumnList = [
     prop: 'teamId',
     headerRenderer: d => handleTableWidth(d, t('球队ID'), 'auto')
   },
-  // {
-  //   label: t('球队Logo'),
-  //   prop: 'teamLogo',
-  //   slot: 'teamLogo',
-  //   headerRenderer: d => handleTableWidth(d, t('球队Logo'), 'auto')
-  // },
+  {
+    label: t('球队Logo'),
+    prop: 'teamLogo',
+    slot: 'teamLogo'
+  },
   {
     label: t('国家地区'),
     prop: 'countryId',

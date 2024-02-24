@@ -47,13 +47,7 @@
           />
         </el-select>
       </el-form-item>
-
-      <!-- <el-form-item :label="t('188数据源联赛杯赛')" prop="leagueId188Bet">
-      <el-input
-        v-model="newFormInline.leagueId188Bet"
-        :placeholder="t('188数据源联赛杯赛')"
-      />
-    </el-form-item> -->
+     
       <el-form-item :label="t('联赛杯赛中文名')" prop="leagueNameCn">
         <el-input
           v-model="newFormInline.leagueNameCn"
@@ -97,7 +91,7 @@
           >{{ t('全选') }}</el-checkbox
         >
         <el-checkbox-group
-          v-model="newFormInline.leagueTagsId"
+          v-model="(newFormInline.leagueTagsId as any)"
           @change="handleCheckedTagIdsChange"
         >
           <el-checkbox
@@ -118,7 +112,6 @@ import { formRules } from './utils/rule';
 import { FormProps } from './utils/types';
 import { Plus } from '@element-plus/icons-vue';
 import { t } from '@/plugins/i18n';
-// import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { useMatchStore } from '@/store/match';
 import { inputRestrictions } from '@/utils/formatNumber';
 import { closeAllDialog } from '@/components/ReDialog';

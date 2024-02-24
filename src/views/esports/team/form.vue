@@ -7,14 +7,17 @@
   >
     <el-form-item :label="`${t('球队Logo')}:`" prop="teamLogo">
       <el-upload
+        action=""
+        :auto-upload="false"
         class="avatar-uploader"
         :show-file-list="false"
-        :on-success="handleAvatarSuccess"
-        :before-upload="beforeAvatarUpload"
         :on-change="onImgChange"
-        :auto-upload="false"
       >
-        <img v-if="imageUrl" :src="imageUrl" class="w-[200px]" />
+        <img
+          v-if="imageUrl"
+          :src="imageUrl"
+          class="max-h-[100px] max-w=[200px]"
+        />
         <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
       </el-upload>
     </el-form-item>
@@ -35,47 +38,43 @@
       </el-select>
     </el-form-item>
 
-    <el-form-item :label="`${t('是否国家队')}:`" prop="leagueId">
-      <el-select
-        v-model="newFormInline.isCountryTeam"
-        placeholder="Select"
-        class="!w-[150px]"
-      >
-        <el-option :label="t('是')" :value="0" />
-        <el-option :label="t('否')" :value="1" />
-      </el-select>
-    </el-form-item>
-
     <el-form-item :label="`${t('联赛ID')}:`">
-      <el-input v-model="newFormInline.leagueId" :placeholder="t('联赛ID')" />
+      <el-input
+        disabled
+        v-model="newFormInline.leagueId"
+        :placeholder="t('联赛ID')"
+      />
     </el-form-item>
 
-    <el-form-item :label="t('球队等级')">
-      <el-input v-model="newFormInline.level" :placeholder="t('球队等级')" />
+    <el-form-item :label="t('热门排序')" prop="level">
+      <el-input
+        :formatter="v => inputRestrictions(v)"
+        v-model="newFormInline.level"
+        :placeholder="t('请输入1-200之间的数字')"
+        type="number"
+        clearable
+        class="!w-[200px]"
+      />
     </el-form-item>
-
-    <!-- <el-form-item label="赛种ID">
-      <el-input v-model="newFormInline.sportId" placeholder="赛种ID" />
-    </el-form-item> -->
 
     <el-form-item :label="`${t('主场名称')}:`">
       <el-input
-        v-model="newFormInline.leagueId188Bet"
+        v-model="newFormInline.stadiumName"
         :placeholder="t('主场名称')"
       />
     </el-form-item>
 
-    <el-form-item :label="`${t('球队中文名称')}:`">
+    <el-form-item :label="`${t('队伍中文名称')}:`">
       <el-input
         v-model="newFormInline.teamNameCn"
-        :placeholder="t('球队中文名称')"
+        :placeholder="t('队伍中文名称')"
       />
     </el-form-item>
 
-    <el-form-item :label="`${t('球队英文名称')}:`">
+    <el-form-item :label="`${t('队伍英文名称')}:`">
       <el-input
         v-model="newFormInline.teamNameEn"
-        :placeholder="t('球队英文名称')"
+        :placeholder="t('队伍英文名称')"
       />
     </el-form-item>
   </el-form>
@@ -85,10 +84,11 @@
 import { ref } from 'vue';
 import { formRules } from './utils/rule';
 import { TeamFormProps } from './utils/types';
-import type { UploadProps } from 'element-plus';
 import { Plus } from '@element-plus/icons-vue';
 import { t } from '@/plugins/i18n';
 import { useMatchStore } from '@/store/match';
+import { inputRestrictions } from '@/utils/formatNumber';
+import { message } from '@/utils/message';
 
 const matchStore = useMatchStore();
 const props = withDefaults(defineProps<TeamFormProps>(), {
@@ -105,37 +105,36 @@ const props = withDefaults(defineProps<TeamFormProps>(), {
   })
 });
 
-const beforeAvatarUpload: UploadProps['beforeUpload'] = _rawFile => {
-  // if (rawFile.type !== "image/jpeg") {
-  //   console.log("Avatar picture must be JPG format!");
-  //   return false;
-  // } else if (rawFile.size / 1024 / 1024 > 2) {
-  //   console.log("Avatar picture size can not exceed 2MB!");
-  //   return false;
-  // }
-  return true;
+const uploadFormFile = ref();
+const imageUrl = ref<string>(props.formInline.teamLogo);
+const onImgChange = file => {
+  let name = file.name.slice(-3);
+  let kb = 15360 * 1024;
+  if (
+    name.toLowerCase() === 'png' ||
+    name.toLowerCase() === 'jpg' ||
+    name.toLowerCase() === 'jpeg'
+  ) {
+    if (file.size > kb) {
+      message(t('文件过大，请重新上传'), { type: 'error' });
+    } else {
+      uploadFormFile.value = file.raw;
+      imageUrl.value = URL.createObjectURL(file.raw);
+    }
+  } else {
+    message(t('上传文件格式不匹配,请上传png,jpg,jpeg格式文件'), {
+      type: 'error'
+    });
+  }
 };
-
-const handleAvatarSuccess: UploadProps['onSuccess'] = (
-  _response,
-  _uploadFile
-) => {};
-
-const onImgChange = respose => {
-  imageUrl.value = URL.createObjectURL(respose.raw);
-  console.log('form.vue文件 87==============行打印=', imageUrl.value);
-};
-
 const ruleFormRef = ref();
 const newFormInline = ref(props.formInline);
-
-const imageUrl = ref<string>(newFormInline.value.leagueLogo);
 
 function getRef() {
   return ruleFormRef.value;
 }
 
-defineExpose({ getRef });
+defineExpose({ getRef, uploadFormFile });
 </script>
 
 <style lang="scss">
