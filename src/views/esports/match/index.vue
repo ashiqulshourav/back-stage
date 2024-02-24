@@ -32,6 +32,17 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
+          <template #leagueLogo="{ row, index }">
+            <el-image
+              preview-teleported
+              loading="lazy"
+              :src="row.leagueLogo"
+              :preview-src-list="dataList.map(v => v.leagueLogo)"
+              :initial-index="index"
+              fit="cover"
+              class="!w-[80px] h-[30px]"
+            />
+          </template>
           <template #operation="{ row }">
             <el-button
               class="reset-margin"

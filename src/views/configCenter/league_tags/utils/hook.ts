@@ -132,7 +132,6 @@ export function useLeagueTagsHook() {
       dataList.push(...res.data.list);
       pagination.total = res.data.total;
       pagination.pageSize = res.data.pageSize;
-      pagination.currentPage = res.data.pageNum;
     } catch (error) {
       loading.value = false;
     }

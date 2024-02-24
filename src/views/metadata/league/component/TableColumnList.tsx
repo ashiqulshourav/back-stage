@@ -7,12 +7,11 @@ export const columns: TableColumnList = [
     prop: 'leagueId',
     minWidth: 100
   },
-  // {
-  //   label: t('联赛Logo'),
-  //   prop: 'leagueLogo',
-  //   minWidth: 120,
-  //   formatter: ({ leagueLogo }) => (leagueLogo ? leagueLogo : '-')
-  // },
+  {
+    label: t('联赛Logo'),
+    slot: 'leagueLogo',
+    minWidth: 120
+  },
   {
     label: t('国家地区'),
     prop: 'countryId',

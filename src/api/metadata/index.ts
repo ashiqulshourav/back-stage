@@ -7,8 +7,7 @@ export const metaData = {
   updateLeague: (data: MetadataAPI.updateLeagueParamsType) => http.request<MetadataAPI.updateLeagueResType>("post", "/league/v1/updateLeague", { data }),
 
   //- 文件上传
-  fileUpload: (data: any) => http.request<MetadataAPI.TeamListRes>("post", "/match/v1/fileUpload", { data }),
-  // fileUpload: (data: any) => http.request<MetadataAPI.TeamListRes>("post", "/kmg/control/fileUpload", { data }),
+  fileUpload: (data: any) => http.request<MetadataAPI.fileUploadResType>("post", "/match/v1/fileUpload", { data }),
 
   getTeamList: (data: MetadataAPI.TeamListParamsType) => http.request<MetadataAPI.TeamListRes>("post", "/team/v1/getTeamList", { data }),
 

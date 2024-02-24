@@ -53,8 +53,6 @@ export function useLeague() {
     dataList.length = 0;
     dataList.push(...res.data.list);
     pagination.total = res.data.total;
-    pagination.pageSize = res.data.pageSize;
-    pagination.currentPage = res.data.pageNum;
     setTimeout(() => (loading.value = false), 500);
   }
 
@@ -85,11 +83,20 @@ export function useLeague() {
           onSearch();
         }
         FormRef.validate(async valid => {
-          if (formRef.value.uploadFormFile) {
-            const res = await API.fileUpload(formRef.value.uploadFormFile);
-            console.log('hook.tsx文件 107==============行打印=', res);
-          }
           if (valid) {
+            if (formRef.value.uploadFormFile) {
+              let formData = new FormData();
+              formData.append('file', formRef.value.uploadFormFile);
+              formData.append('fileUsageCategory', '3');
+              const res = await API.fileUpload(formData);
+              if (res.data?.url) {
+                (curData as any).leagueLogo = res.data?.url;
+              }
+            }
+
+            const r = await API.updateEMatch(curData);
+            message(r.msg, { type: r.code ? 'error' : 'success' });
+            chores();
             // if (title === '新增') {
             //   await API.createEMatch(curData);
             //   chores();

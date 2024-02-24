@@ -87,6 +87,13 @@ declare namespace MetadataAPI {
     ts: number;
   }
 
+  type UpLoadData = {
+    remoteFileName: string;
+    url: string;
+    originalFileName: string;
+  }
+
+  type fileUploadResType = COMMON.BASE_RES_TYPE<UpLoadData>
   type AddHockeyEventRes = AddBasketballEeventRes;
   type AddBoxingEventRes = AddBasketballEeventRes;
   type AddDartsEventRes = AddBasketballEeventRes;

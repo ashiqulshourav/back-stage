@@ -42,7 +42,7 @@
           <el-option
             v-for="item in matchStore.countryList"
             :key="item.countryId"
-            :label="item.countryNameCn"
+            :label="item.countryNameCn || item.countryNameEn"
             :value="item.countryId"
           />
         </el-select>

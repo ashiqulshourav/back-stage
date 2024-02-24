@@ -57,8 +57,6 @@ export function useLeague() {
       dataList.length = 0;
       dataList.push(...res.data.list);
       pagination.total = res.data.total;
-      pagination.pageSize = res.data.pageSize;
-      pagination.currentPage = res.data.pageNum;
     } catch (error) {
       loading.value = false;
     }
@@ -100,35 +98,22 @@ export function useLeague() {
           onSearch(); // 刷新表格数据
         }
         FormRef.validate(async valid => {
-          if (formRef.value.uploadFormFile) {
-            let formData = new FormData();
-            formData.append('file', formRef.value.uploadFormFile);
-
-            formData.append('fileUsageCategory', '3');
-            console.log(
-              'hook.tsx文件 106==============行打印=',
-              formRef.value.uploadFormFile
-            );
-            const res = await API.fileUpload(formData);
-            console.log('hook.tsx文件 107==============行打印=', res);
-          }
           if (valid) {
-            if (row) {
-              // if (formRef.value.uploadFormFile) {
-              //   const res = await API.fileUpload(formRef.value.uploadFormFile);
-              //   console.log('hook.tsx文件 107==============行打印=', res);
-              // }
-              // updateLeague(curData, () => chores());
-            } else {
-              // 实际开发先调用编辑接口，再进行下面操作
-              // chores();
+            if (formRef.value.uploadFormFile) {
+              let formData = new FormData();
+              formData.append('file', formRef.value.uploadFormFile);
+              formData.append('fileUsageCategory', '3');
+              const res = await API.fileUpload(formData);
+              if (res.data?.url) {
+                (curData as any).leagueLogo = res.data?.url;
+              }
             }
+            updateLeague(curData, () => chores());
           }
         });
       }
     });
   }
-
   const updateLeague = async (curData, cb) => {
     const res = await API.updateLeague(curData);
     message(res.msg, { type: res.code ? 'error' : 'success' });
