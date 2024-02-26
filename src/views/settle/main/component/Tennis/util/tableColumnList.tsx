@@ -17,7 +17,7 @@ export const columns: TableColumnList = [
     fixed: true,
     align: 'left',
     headerRenderer: d => handleTableWidth(d, t('联赛名称'), 'auto'),
-    minWidth: 160
+    minWidth: 200
   },
   {
     label: t('赛事ID'),
@@ -32,7 +32,7 @@ export const columns: TableColumnList = [
   {
     label: t('开赛时间'),
     prop: 'beginTimeLong',
-    minWidth: 200,
+    minWidth: 220,
     formatter: ({ beginTimeLong }) =>
       dayjs(beginTimeLong).format('YYYY-MM-DD HH:mm:ss'),
     headerRenderer: d => handleTableWidth(d, t('开赛时间'), 'auto')
@@ -55,8 +55,9 @@ export const columns: TableColumnList = [
   {
     label: t('比赛状态'),
     prop: 'status',
+    width: 200,
     formatter: ({ status }) => MATCH_STATUS[status] ?? '-',
-    headerRenderer: d => handleTableWidth(d, t('比赛状态'))
+    headerRenderer: d => handleTableWidth(d, t('比赛状态'), 'auto')
   },
   {
     label: t('全场结算'),
@@ -73,7 +74,7 @@ export const columns: TableColumnList = [
     label: t('操作'),
     slot: 'operation',
     headerRenderer: d => handleTableWidth(d, t('操作'), 'auto'),
-    minWidth: 160,
+    width: 200,
     fixed: 'right'
   }
 ];

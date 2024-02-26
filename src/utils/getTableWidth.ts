@@ -4,7 +4,7 @@ import { TableColumnRenderer } from "@pureadmin/table";
 export const handleTableWidth = (d: TableColumnRenderer, label: string, type?: 'auto') => {
   const { $storage } = useNav();
   if ((type && $storage.locale.locale === 'zh') || d.column.width) return label;
-  d.column.width = getColumnWidth(d.column.label);
+  d.column.width = getColumnWidth(d.column.label) < 150 ? 150 : getColumnWidth(d.column.label);
 }
 
 export const getColumnWidth = (strs: string) => {
