@@ -6,15 +6,6 @@
       :columns="columns"
       @refresh="onSearch('reload')"
     >
-      <!-- <template #buttons>
-        <el-button
-          type="primary"
-          :icon="useRenderIcon(AddFill)"
-          @click="openDialog(t('新增球队'))"
-        >
-          {{ t("新增球队") }}
-        </el-button>
-      </template> -->
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"
@@ -36,14 +27,14 @@
             <el-image
               preview-teleported
               loading="lazy"
-              :src="row.leagueLogo"
+              :src="row.teamLogo"
               :preview-src-list="dataList.map(v => v.teamLogo)"
               :initial-index="index"
               fit="cover"
               class="!w-[80px] h-[30px]"
             />
           </template>
-          <!-- <template #operation="{ row }">
+          <template #operation="{ row }">
             <el-button
               class="reset-margin"
               link
@@ -54,23 +45,7 @@
             >
               {{ t('编辑') }}
             </el-button>
-            <el-popconfirm
-              :title="`是否确认删除角色名称为${row.name}的这条数据`"
-              @confirm="handleDelete(row)"
-            >
-              <template #reference>
-                <el-button
-                  class="reset-margin"
-                  link
-                  type="danger"
-                  :size="size"
-                  :icon="useRenderIcon(Delete)"
-                >
-                  {{ t('删除') }}
-                </el-button>
-              </template>
-            </el-popconfirm>
-          </template> -->
+          </template>
         </pure-table>
       </template>
     </PureTableBar>
@@ -79,15 +54,12 @@
 
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
-// import Delete from '@iconify-icons/ep/delete';
-// import EditPen from '@iconify-icons/ep/edit-pen';
-
-// import AddFill from '@iconify-icons/ri/add-circle-line';
+import EditPen from '@iconify-icons/ep/edit-pen';
 import { useLeague } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
 import { usePublicHooks } from '@/hooks';
-
-// import { t } from '@/plugins/i18n';
+import { t } from '@/plugins/i18n';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 
 defineOptions({ name: 'eTeam' });
 const { tableHeaderStyle } = usePublicHooks();
@@ -97,8 +69,7 @@ const {
   dataList,
   pagination,
   onSearch,
-  // openDialog,
-  // handleDelete,
+  openDialog,
   handleTableWidthChange,
   handleCurrentChange,
   handleSelectionChange,

@@ -16,11 +16,10 @@ export const columns: TableColumnList = [
     label: t('188数据源联赛ID'),
     prop: 'leagueId188Bet'
   },
-  // {
-  //   label: t('联赛LOGO'),
-  //   prop: 'leagueLogo',
-  //   formatter: ({ leagueLogo }) => (leagueLogo ? leagueLogo : '-')
-  // },
+  {
+    label: t('联赛LOGO'),
+    slot: 'leagueLogo'
+  },
   {
     label: t('游戏分类'),
     formatter: ({ sportId }) =>

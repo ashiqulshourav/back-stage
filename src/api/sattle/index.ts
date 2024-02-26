@@ -32,19 +32,19 @@ export const sattleData = {
     ),
 
   getHandballEvents: (data: { matchId: number }) =>
-    // http.request<SattleDataAPI.getHandballEventRes>(
-    //   'post',
-    //   '/handball/v1/getHandballEvents',
-    //   { data }
-    // ),
-    mockAPI.getHandballEvents(data),
+    http.request<SattleDataAPI.getHandballEventRes>(
+      'post',
+      '/handball/v1/getHandballEvents',
+      { data }
+    ),
+  // mockAPI.getHandballEvents(data),
   getIceHockeyEvents: (data: { matchId: number }) =>
-    // http.request<SattleDataAPI.getIceHockeyEventRes>(
-    //   'post',
-    //   '/iceHockey/v1/getIceHockyEvents',
-    //   { data }
-    // ),
-    mockAPI.getIceHockeyEvents(data),
+    http.request<SattleDataAPI.getIceHockeyEventRes>(
+      'post',
+      '/iceHockey/v1/getIceHockeyEvents',
+      { data }
+    ),
+  // mockAPI.getIceHockeyEvents(data),
   getCricketEvents: (data: { matchId: number }) =>
     // http.request<SattleDataAPI.getCricketEventRes>(
     //   'post',
@@ -86,19 +86,19 @@ export const sattleData = {
       { data }
     ),
   addHandballEvent: (data: SattleDataAPI.MatchEventParams) =>
-    //   http.request<MetadataAPI.AddSportEventRes>(
-    //     'post',
-    //     '/handball/v1/addHandballEvent',
-    //     { data }
-    //   ),
-    mockAPI.addHandballEvent(data),
+    http.request<MetadataAPI.AddSportEventRes>(
+      'post',
+      '/handball/v1/addHandballEvent',
+      { data }
+    ),
+  // mockAPI.addHandballEvent(data),
   addIceHockeyEvent: (data: SattleDataAPI.MatchEventParams) =>
-    //   http.request<MetadataAPI.AddSportEventRes>(
-    //     'post',
-    //     '/iceHockey/v1/addIceHockeyEvent',
-    //     { data }
-    //   ),
-    mockAPI.addIceHockeyEvent(data),
+    http.request<MetadataAPI.AddSportEventRes>(
+      'post',
+      '/iceHockey/v1/addIceHockeyEvent',
+      { data }
+    ),
+  // mockAPI.addIceHockeyEvent(data),
   addCricketEvent: (data: SattleDataAPI.MatchEventParams) =>
     //   http.request<MetadataAPI.AddSportEventRes>(
     //     'post',
@@ -108,15 +108,15 @@ export const sattleData = {
     mockAPI.addCricketEvent(data),
 
   allHandballSettlement: (data: { matchId: number }) =>
-    http.request<MetadataAPI.AddBasketballEeventRes>(
+    http.request<MetadataAPI.AddSportEventRes>(
       'post',
-      '/basketball/v1/manualSettlementFullTime',
+      '/handball/v1/manualSettlementFullTime',
       { data }
     ),
   allIceHockeySettlement: (data: { matchId: number }) =>
     http.request<MetadataAPI.AddSportEventRes>(
       'post',
-      '/iceHocky/v1/manualSettlementFullTime',
+      '/iceHockey/v1/manualSettlementFullTime',
       { data }
     ),
   allCricketSettlement: (data: { matchId: number }) =>

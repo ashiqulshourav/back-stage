@@ -1,10 +1,8 @@
 import editForm from '../form.vue';
 import { message } from '@/utils/message';
-// import { ElMessageBox } from "element-plus";
 import { addDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted, h } from 'vue';
-// import { usePublicHooks } from "@/hooks";
 import { FormItemProps } from 'element-plus';
 import { columns } from '../component/TableColumnList';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
@@ -32,21 +30,6 @@ export function useTeam() {
     teamNameCn: '',
     teamNameEn: ''
   });
-
-  // const buttonClass = computed(() => {
-  //   return [
-  //     "!h-[20px]",
-  //     "reset-margin",
-  //     "!text-gray-500",
-  //     "dark:!text-white",
-  //     "dark:hover:!text-primary"
-  //   ];
-  // });
-
-  function handleDelete(row) {
-    message(`您删除了角色名称为${row.name}的这条数据`, { type: 'success' });
-    onSearch();
-  }
 
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -111,18 +94,21 @@ export function useTeam() {
         const FormRef = formRef.value.getRef();
         const curData = options.props.formInline as FormItemProps;
         function chores() {
-          done(); // 关闭弹框
-          onSearch(); // 刷新表格数据
+          done();
+          onSearch();
         }
-        FormRef.validate(valid => {
+        FormRef.validate(async valid => {
           if (valid) {
-            if (row) {
-              updateTeam(curData, () => chores());
-              // 实际开发先调用新增接口，再进行下面操作
-            } else {
-              // 实际开发先调用编辑接口，再进行下面操作
-              chores();
+            if (formRef.value.uploadFormFile) {
+              let formData = new FormData();
+              formData.append('file', formRef.value.uploadFormFile);
+              formData.append('fileUsageCategory', '3');
+              const res = await API.fileUpload(formData);
+              if (res.data?.url) {
+                (curData as any).teamLogo = res.data?.url;
+              }
             }
+            updateTeam(curData, () => chores());
           }
         });
       }
@@ -144,12 +130,9 @@ export function useTeam() {
     columns,
     dataList,
     pagination,
-    // buttonClass,
     onSearch,
     resetForm,
     openDialog,
-    handleDelete,
-    // handleDatabase,
     handleTableWidthChange,
     handleCurrentChange,
     handleSelectionChange,

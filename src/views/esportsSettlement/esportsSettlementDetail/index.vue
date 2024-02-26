@@ -11,7 +11,6 @@
         <template v-slot="{ size, dynamicColumns }">
           <pure-table
             align-whole="center"
-            showOverflowTooltip
             table-layout="auto"
             :loading="loading"
             :size="size"
@@ -147,12 +146,6 @@ const {
       :deep() {
         .el-radio__label {
           display: flex !important;
-          span:first-child {
-            max-width: 100px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-          }
         }
       }
       &.item_3 {

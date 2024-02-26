@@ -11,6 +11,7 @@ export function useLeague() {
   const formRef = ref();
   const dataList = reactive<MetadataAPI.LeagueList[]>([]);
   const loading = ref(true);
+  // const tags = ref<ConfigCenterDataAPI.LeagueTagType[]>([]);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -54,11 +55,8 @@ export function useLeague() {
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
-      console.log("league", res.data)
       dataList.push(...res.data.list);
       pagination.total = res.data.total;
-      pagination.pageSize = res.data.pageSize;
-      pagination.currentPage = res.data.pageNum;
     } catch (error) {
       loading.value = false;
     }
@@ -83,7 +81,7 @@ export function useLeague() {
           leagueNameEn: row?.leagueNameEn ?? '',
           level: row?.level ?? '',
           sportId: row?.sportId ?? '',
-          tags: row?.tags ?? []
+          leagueTagsId: row?.leagueTagsId ?? []
         }
       },
       width: '40%',
@@ -101,18 +99,21 @@ export function useLeague() {
         }
         FormRef.validate(async valid => {
           if (valid) {
-            if (row) {
-              updateLeague(curData, () => chores());
-            } else {
-              // 实际开发先调用编辑接口，再进行下面操作
-              // chores();
+            if (formRef.value.uploadFormFile) {
+              let formData = new FormData();
+              formData.append('file', formRef.value.uploadFormFile);
+              formData.append('fileUsageCategory', '3');
+              const res = await API.fileUpload(formData);
+              if (res.data?.url) {
+                (curData as any).leagueLogo = res.data?.url;
+              }
             }
+            updateLeague(curData, () => chores());
           }
         });
       }
     });
   }
-
   const updateLeague = async (curData, cb) => {
     const res = await API.updateLeague(curData);
     message(res.msg, { type: res.code ? 'error' : 'success' });

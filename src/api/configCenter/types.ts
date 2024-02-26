@@ -1,14 +1,19 @@
 declare namespace ConfigCenterDataAPI {
   type LeagueTagType = {
     id?: number;
-    tagName?: string;
+    text?: string;
     sportId?: number;
-    categoryId?: number;
+    category?: number;
+    leagueId?: number;
+    leagueNameCn?: string;
+    leagueNameEn?: string;
+    tagId?: number;
   };
-  type LeagueTagListFetchProps = COMMON.ListFetchProps & {
-    tagName?: string;
+  type LeagueTagListFetchProps = {
+    text?: string;
     sportId?: number;
-    categoryId?: number;
+    category?: number;
+    leagueId?: number;
   };
   type LeagueTagListType = COMMON.ListData<LeagueTagType>;
   type ListLeagueTagRes = COMMON.BASE_RES_TYPE<LeagueTagListType>;

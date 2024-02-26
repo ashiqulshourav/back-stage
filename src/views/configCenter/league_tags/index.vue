@@ -11,7 +11,7 @@
         <el-button
           type="primary"
           :icon="useRenderIcon(AddFill)"
-          @click="openDialog(t('新增'))"
+          @click="openDialog(t('新增标签'))"
         >
           {{ t('新增标签') }}
         </el-button>
@@ -44,7 +44,7 @@
               type="primary"
               :size="size"
               :icon="useRenderIcon(EditPen)"
-              @click="openDialog(t('分类设定'), row)"
+              @click="openDialog(t('编辑标签'), row)"
             >
               {{ t('编辑') }}
             </el-button>

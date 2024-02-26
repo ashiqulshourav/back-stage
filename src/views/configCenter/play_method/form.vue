@@ -128,6 +128,7 @@ const addPalyMethodType = async () => {
   if (res.code) {
     return message(res.msg, { type: 'error' });
   } else {
+    message(res.msg, { type: 'success' });
     closeDialog();
   }
 };

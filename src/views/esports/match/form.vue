@@ -5,7 +5,6 @@
     :rules="formRules"
     label-width="150px"
   >
-    <!-- todo 自定义表单添加 -->
     <el-form-item :label="t('联赛ID')" prop="leagueId">
       <el-input
         v-model="newFormInline.leagueId"
@@ -13,6 +12,23 @@
         :placeholder="t('联赛ID')"
         :disabled="!!newFormInline.leagueId"
       />
+    </el-form-item>
+
+    <el-form-item :label="`${t('联赛Logo')}:`">
+      <el-upload
+        action=""
+        :auto-upload="false"
+        class="avatar-uploader"
+        :show-file-list="false"
+        :on-change="onImgChange"
+      >
+        <img
+          v-if="imageUrl"
+          :src="imageUrl"
+          class="max-h-[100px] max-w=[200px]"
+        />
+        <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+      </el-upload>
     </el-form-item>
 
     <!-- <el-form-item :label="t('国家地区')" prop="countryId">
@@ -88,7 +104,7 @@ import { t } from '@/plugins/i18n';
 import { inputRestrictions } from '@/utils/formatNumber';
 import { closeAllDialog } from '@/components/ReDialog';
 import { message } from '@/utils/message';
-// import CustomInput from '@/components/Form/CustomInput.vue';
+import { Plus } from '@element-plus/icons-vue';
 
 // const matchStore = useMatchStore();
 const props = withDefaults(defineProps<FormProps>(), {
@@ -98,12 +114,13 @@ const props = withDefaults(defineProps<FormProps>(), {
     countryId: '',
     leagueNameEn: '',
     leagueId: '',
-    // leagueLogo: '',
+    leagueLogo: '',
     // leagueId188Bet: '',
     sportId: ''
   })
 });
 
+const uploadFormFile = ref();
 const emits = defineEmits(['reloadTable']);
 const updateVal = () => {
   ruleFormRef.value.validate(async valid => {
@@ -118,36 +135,36 @@ const updateVal = () => {
   });
 };
 
-/* const beforeAvatarUpload: UploadProps['beforeUpload'] = _rawFile => {
-  if (rawFile.type !== "image/jpeg") {
-    console.log("Avatar picture must be JPG format!");
-    return false;
-  } else if (rawFile.size / 1024 / 1024 > 2) {
-    console.log("Avatar picture size can not exceed 2MB!");
-    return false;
-  }
-  return true;
-}; */
-
-/* const handleAvatarSuccess: UploadProps['onSuccess'] = (
-  _response,
-  _uploadFile
-) => {}; */
-
-/* const onImgChange = respose => {
-  imageUrl.value = URL.createObjectURL(respose.raw);
-}; */
-
 const ruleFormRef = ref();
 const newFormInline = ref(props.formInline);
+const imageUrl = ref<string>(newFormInline.value.leagueLogo);
 
-// const imageUrl = ref<string>(newFormInline.value.leagueLogo);
+const onImgChange = file => {
+  let name = file.name.slice(-3);
+  let kb = 15360 * 1024;
+  if (
+    name.toLowerCase() === 'png' ||
+    name.toLowerCase() === 'jpg' ||
+    name.toLowerCase() === 'jpeg'
+  ) {
+    if (file.size > kb) {
+      message(t('文件过大，请重新上传'), { type: 'error' });
+    } else {
+      uploadFormFile.value = file.raw;
+      imageUrl.value = URL.createObjectURL(file.raw);
+    }
+  } else {
+    message(t('上传文件格式不匹配,请上传png,jpg,jpeg格式文件'), {
+      type: 'error'
+    });
+  }
+};
 
 function getRef() {
   return ruleFormRef.value;
 }
 
-defineExpose({ getRef });
+defineExpose({ getRef, uploadFormFile });
 </script>
 
 <style lang="scss">

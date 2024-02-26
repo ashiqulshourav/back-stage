@@ -95,31 +95,37 @@ declare namespace SattleDataAPI {
     gameRule?: string;
     inningNum?: number;
   };
-  type MatchEvent = {
-    awayTeamId?: number;
-    canceled?: number | boolean;
-    createdAt?: number;
-    createdBy?: string;
-    eventTime?: string | number | Date;
-    homeTeamId?: number;
-    eventCode?: string | number;
-    extraInfo?: string;
-    homeAway?: string;
-    id?: number;
-    matchId?: number;
+  // type MatchEvent = {
+  //   awayTeamId?: number;
+  //   canceled?: number | boolean;
+  //   createdAt?: number;
+  //   createdBy?: string;
+  //   eventTime?: string | number | Date;
+  //   homeTeamId?: number;
+  //   eventCode?: string | number;
+  //   extraInfo?: string;
+  //   homeAway?: string;
+  //   id?: number;
+  //   matchId?: number;
+  //   matchPeriod?: string;
+  //   settleTimes?: number;
+  //   settleType?: number;
+  //   sourceType?: number;
+  //   t1?: number | string;
+  //   t2?: number | string;
+  //   updatedAt?: number;
+  //   updatedBy?: string;
+  //   uuid?: string;
+  // };
+  type HandballEvent = CommonEventData & {
+    inningNum: number;
+    isEdit?: boolean;
+    homeTeamName?: any;
+    awayTeamName?: any;
     matchPeriod?: string;
-    settleTimes?: number;
-    settleType?: number;
-    sourceType?: number;
-    t1?: number | string;
-    t2?: number | string;
-    updatedAt?: number;
-    updatedBy?: string;
-    uuid?: string;
   };
-  type HandballEvent = MatchEvent & {};
-  type IceHockeyEvent = MatchEvent & {};
-  type CricketEvent = MatchEvent & {};
+  type IceHockeyEvent = HandballEvent;
+  type CricketEvent = HandballEvent;
 
   type getSettlementDataList = {
     matchId: number;

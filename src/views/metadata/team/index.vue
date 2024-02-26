@@ -6,15 +6,6 @@
       :columns="columns"
       @refresh="onSearch('reload')"
     >
-      <!-- <template #buttons>
-        <el-button
-          type="primary"
-          :icon="useRenderIcon(AddFill)"
-          @click="openDialog(t('新增球队'))"
-        >
-          {{ t("新增球队") }}
-        </el-button>
-      </template> -->
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"
@@ -27,10 +18,7 @@
           :columns="dynamicColumns"
           :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
           :paginationSmall="size === 'small' ? true : false"
-          :header-cell-style="{
-            background: 'var(--el-fill-color-light)',
-            color: 'var(--el-text-color-primary)'
-          }"
+          :header-cell-style="tableHeaderStyle"
           @selection-change="handleSelectionChange"
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
@@ -39,7 +27,7 @@
             <el-image
               preview-teleported
               loading="lazy"
-              :src="row.leagueLogo"
+              :src="row.teamLogo"
               :preview-src-list="dataList.map(v => v.teamLogo)"
               :initial-index="index"
               fit="cover"
@@ -57,22 +45,6 @@
             >
               {{ t('编辑') }}
             </el-button>
-            <!-- <el-popconfirm
-              :title="`是否确认删除角色名称为${row.name}的这条数据`"
-              @confirm="handleDelete(row)"
-            >
-              <template #reference>
-                <el-button
-                  class="reset-margin"
-                  link
-                  type="danger"
-                  :size="size"
-                  :icon="useRenderIcon(Delete)"
-                >
-                  {{ t('删除') }}
-                </el-button>
-              </template>
-            </el-popconfirm> -->
           </template>
         </pure-table>
       </template>
@@ -83,13 +55,14 @@
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-// import Delete from '@iconify-icons/ep/delete';
 import EditPen from '@iconify-icons/ep/edit-pen';
 import { useTeam } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
 import { t } from '@/plugins/i18n';
+import { usePublicHooks } from '@/hooks';
 
 defineOptions({ name: 'TEAM' });
+const { tableHeaderStyle } = usePublicHooks();
 
 const {
   loading,
@@ -98,7 +71,6 @@ const {
   pagination,
   onSearch,
   openDialog,
-  // handleDelete,
   handleTableWidthChange,
   handleCurrentChange,
   handleSelectionChange,

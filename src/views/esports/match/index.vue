@@ -7,15 +7,6 @@
       :columns="columns"
       @refresh="onSearch('reload')"
     >
-      <!-- <template #buttons>
-        <el-button
-          type="primary"
-          :icon="useRenderIcon(AddFill)"
-          @click="openDialog(t('新增'))"
-        >
-          {{ t('新增联赛') }}
-        </el-button>
-      </template> -->
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"
@@ -32,6 +23,17 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
+          <template #leagueLogo="{ row, index }">
+            <el-image
+              preview-teleported
+              loading="lazy"
+              :src="row.leagueLogo"
+              :preview-src-list="dataList.map(v => v.leagueLogo)"
+              :initial-index="index"
+              fit="cover"
+              class="!w-[80px] h-[30px]"
+            />
+          </template>
           <template #operation="{ row }">
             <el-button
               class="reset-margin"

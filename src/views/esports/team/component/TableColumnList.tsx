@@ -1,5 +1,5 @@
 import { t } from '@/plugins/i18n';
-import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+import { ESPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { handleTableWidth } from '@/utils/getTableWidth';
 import { parseCountry } from '@/utils/formatMatch';
 
@@ -29,7 +29,7 @@ export const columns: TableColumnList = [
     label: t('赛种'),
     prop: 'sportId',
     formatter: ({ sportId }): string =>
-      SPORT_ID_MAP.find(_ => _.value === sportId)?.label ?? '-',
+      ESPORT_ID_MAP.find(_ => _.value === sportId)?.label ?? '-',
     headerRenderer: d => handleTableWidth(d, t('赛种'))
   },
   {
@@ -59,26 +59,13 @@ export const columns: TableColumnList = [
   {
     label: t('主场名称'),
     prop: 'stadiumName',
-    headerRenderer: d => handleTableWidth(d, t('主场名称'))
-  },
-  {
-    label: t('创建时间'),
-    prop: 'stadiumName',
-    slot: 'isCountryTeam',
-    headerRenderer: d => handleTableWidth(d, t('创建时间'))
-  },
-
-  {
-    label: t('主场名称'),
-    prop: 'stadiumName',
     headerRenderer: d => handleTableWidth(d, t('主场名称')),
-    formatter: ({ isCountryTeam }) => isCountryTeam || '-'
+    formatter: ({ stadiumName }) => (stadiumName ? stadiumName : '-')
+  },
+  {
+    slot: 'operation',
+    label: t('操作'),
+    fixed: 'right',
+    minWidth: 150
   }
-
-  // {
-  //   label: t('操作'),
-  //   fixed: "right",
-  //   width: 240,
-  //   slot: "operation"
-  // }
 ];

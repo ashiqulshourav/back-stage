@@ -1,84 +1,79 @@
 <template>
-  <el-form
-    ref="ruleFormRef"
-    :model="newFormInline"
-    :rules="formRules"
-    label-width="150px"
-  >
-    <!-- todo 自定义表单添加 -->
-    <!-- <el-form-item :label="t('联赛杯Logo')">
-      <CustomInput />
-      <el-upload
-        action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-        class="avatar-uploader"
-        :show-file-list="false"
-        :on-success="handleAvatarSuccess"
-        :before-upload="beforeAvatarUpload"
-        :on-change="onImgChange"
-        :auto-upload="false"
-      >
-        <img v-if="imageUrl" :src="imageUrl" class="w-[200px]" />
-        <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-      </el-upload>
-    </el-form-item> -->
-    <el-form-item :label="t('联赛ID')" prop="leagueId">
-      <el-input
-        v-model="newFormInline.leagueId"
-        clearable
-        :placeholder="t('联赛ID')"
-        :disabled="!!newFormInline.leagueId"
-      />
-    </el-form-item>
-
-    <el-form-item :label="t('国家地区')" prop="countryId">
-      <el-select
-        v-model="newFormInline.countryId"
-        filterable
-        clearable
-        class="!w-[280px]"
-        :placeholder="t('请选择国家')"
-      >
-        <el-option
-          v-for="item in matchStore.countryList"
-          :key="item.countryId"
-          :label="item.countryNameCn"
-          :value="item.countryId"
+  <div class="pr-6">
+    <el-form
+      ref="ruleFormRef"
+      :model="newFormInline"
+      :rules="formRules"
+      label-width="180px"
+    >
+      <el-form-item :label="`${t('联赛Logo')}:`">
+        <el-upload
+          action=""
+          :auto-upload="false"
+          class="avatar-uploader"
+          :show-file-list="false"
+          :on-change="onImgChange"
+        >
+          <img
+            v-if="imageUrl"
+            :src="imageUrl"
+            class="max-h-[100px] max-w=[200px]"
+          />
+          <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+        </el-upload>
+      </el-form-item>
+      <el-form-item :label="t('联赛ID')" prop="leagueId">
+        <el-input
+          v-model="newFormInline.leagueId"
+          clearable
+          :placeholder="t('联赛ID')"
+          :disabled="!!newFormInline.leagueId"
         />
-      </el-select>
-    </el-form-item>
+      </el-form-item>
 
-    <!-- <el-form-item :label="t('188数据源联赛杯赛')" prop="leagueId188Bet">
-      <el-input
-        v-model="newFormInline.leagueId188Bet"
-        :placeholder="t('188数据源联赛杯赛')"
-      />
-    </el-form-item> -->
-    <el-form-item :label="t('联赛杯赛中文名')" prop="leagueNameCn">
-      <el-input
-        v-model="newFormInline.leagueNameCn"
-        maxLength="35"
-        :placeholder="t('联赛杯赛中文名')"
-      />
-    </el-form-item>
-    <el-form-item :label="t('联赛杯英文名称')" prop="leagueNameEn">
-      <el-input
-        v-model="newFormInline.leagueNameEn"
-        :placeholder="t('联赛杯英文名称')"
-        maxLength="35"
-      />
-    </el-form-item>
-    <el-form-item :label="t('热门排序')" prop="level">
-      <el-input
-        :formatter="v => inputRestrictions(v)"
-        v-model="newFormInline.level"
-        :placeholder="t('请输入1-200之间的数字')"
-        type="number"
-        clearable
-        class="!w-[200px]"
-        v-enter="updateVal"
-      />
-    </el-form-item>
-    <!-- <el-form-item label="赛种" prop="sportId">
+      <el-form-item :label="t('国家地区')" prop="countryId">
+        <el-select
+          v-model="newFormInline.countryId"
+          filterable
+          clearable
+          class="!w-[280px]"
+          :placeholder="t('请选择国家')"
+        >
+          <el-option
+            v-for="item in matchStore.countryList"
+            :key="item.countryId"
+            :label="item.countryNameCn || item.countryNameEn"
+            :value="item.countryId"
+          />
+        </el-select>
+      </el-form-item>
+     
+      <el-form-item :label="t('联赛杯赛中文名')" prop="leagueNameCn">
+        <el-input
+          v-model="newFormInline.leagueNameCn"
+          maxLength="35"
+          :placeholder="t('联赛杯赛中文名')"
+        />
+      </el-form-item>
+      <el-form-item :label="t('联赛杯英文名称')" prop="leagueNameEn">
+        <el-input
+          v-model="newFormInline.leagueNameEn"
+          :placeholder="t('联赛杯英文名称')"
+          maxLength="35"
+        />
+      </el-form-item>
+      <el-form-item :label="t('热门排序')" prop="level">
+        <el-input
+          :formatter="v => inputRestrictions(v)"
+          v-model="newFormInline.level"
+          :placeholder="t('请输入1-200之间的数字')"
+          type="number"
+          clearable
+          class="!w-[200px]"
+          v-enter="updateVal"
+        />
+      </el-form-item>
+      <!-- <el-form-item label="赛种" prop="sportId">
       <el-select v-model="newFormInline.sportId" :placeholder="t('赛种')">
         <el-option
           :label="item.label"
@@ -88,41 +83,43 @@
         />
       </el-select>
     </el-form-item> -->
-    <el-form-item :label="t('联赛标签')" prop="tags">
-      <el-checkbox
-        v-model="checkAll"
-        :indeterminate="isIndeterminate"
-        @change="handleCheckAllChange"
-        >{{ t('全选') }}</el-checkbox
-      >
-      <el-checkbox-group
-        v-model="newFormInline.tags"
-        @change="handleCheckedTagIdsChange"
-      >
-        <el-checkbox v-for="tag in tags" :key="tag.id" :label="tag.id">{{
-          tag.tagName
-        }}</el-checkbox>
-      </el-checkbox-group>
-    </el-form-item>
-  </el-form>
+      <el-form-item :label="t('联赛标签')" prop="leagueTagsId">
+        <el-checkbox
+          v-model="checkAll"
+          :indeterminate="isIndeterminate"
+          @change="handleCheckAllChange"
+          >{{ t('全选') }}</el-checkbox
+        >
+        <el-checkbox-group
+          v-model="(newFormInline.leagueTagsId as any)"
+          @change="handleCheckedTagIdsChange"
+        >
+          <el-checkbox
+            v-for="tag in leagueTagsId"
+            :key="tag.id"
+            :label="tag.id"
+            >{{ tag.text }}</el-checkbox
+          >
+        </el-checkbox-group>
+      </el-form-item>
+    </el-form>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import { formRules } from './utils/rule';
 import { FormProps } from './utils/types';
-// import type { UploadProps } from 'element-plus';
-// import { Plus } from '@element-plus/icons-vue';
+import { Plus } from '@element-plus/icons-vue';
 import { t } from '@/plugins/i18n';
-// import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { useMatchStore } from '@/store/match';
 import { inputRestrictions } from '@/utils/formatNumber';
 import { closeAllDialog } from '@/components/ReDialog';
 import { message } from '@/utils/message';
-// import CustomInput from '@/components/Form/CustomInput.vue';
 import { useLeague } from './utils/hook';
 
 const { form } = useLeague();
+const uploadFormFile = ref();
 
 const matchStore = useMatchStore();
 const props = withDefaults(defineProps<FormProps>(), {
@@ -132,10 +129,9 @@ const props = withDefaults(defineProps<FormProps>(), {
     countryId: '',
     leagueNameEn: '',
     leagueId: '',
-    // leagueLogo: '',
-    // leagueId188Bet: '',
+    leagueLogo: '',
     sportId: '',
-    tags: []
+    leagueTagsId: []
   })
 });
 
@@ -153,41 +149,40 @@ const updateVal = () => {
   });
 };
 
-const tags = ref([]);
+const leagueTagsId = ref([]);
 
 onMounted(async () => {
-  const response = await API.searchLeagueTagList({
-    categoryId: parseInt(form.category),
+  const response = await API.getLeagueTagList({
+    category: parseInt(form.category),
     sportId: parseInt(newFormInline.value.sportId)
   });
-  tags.value = response.data;
-  console.log(response.data);
+  leagueTagsId.value = response.data.list;
 });
 
-/* const beforeAvatarUpload: UploadProps['beforeUpload'] = _rawFile => {
-  if (rawFile.type !== "image/jpeg") {
-    console.log("Avatar picture must be JPG format!");
-    return false;
-  } else if (rawFile.size / 1024 / 1024 > 2) {
-    console.log("Avatar picture size can not exceed 2MB!");
-    return false;
+const onImgChange = file => {
+  let name = file.name.slice(-3);
+  let kb = 15360 * 1024;
+  if (
+    name.toLowerCase() === 'png' ||
+    name.toLowerCase() === 'jpg' ||
+    name.toLowerCase() === 'jpeg'
+  ) {
+    if (file.size > kb) {
+      message(t('文件过大，请重新上传'), { type: 'error' });
+    } else {
+      uploadFormFile.value = file.raw;
+      imageUrl.value = URL.createObjectURL(file.raw);
+    }
+  } else {
+    message(t('上传文件格式不匹配,请上传png,jpg,jpeg格式文件'), {
+      type: 'error'
+    });
   }
-  return true;
-}; */
-
-/* const handleAvatarSuccess: UploadProps['onSuccess'] = (
-  _response,
-  _uploadFile
-) => {}; */
-
-/* const onImgChange = respose => {
-  imageUrl.value = URL.createObjectURL(respose.raw);
-}; */
+};
 
 const ruleFormRef = ref();
 const newFormInline = ref(props.formInline);
-
-// const imageUrl = ref<string>(newFormInline.value.leagueLogo);
+const imageUrl = ref<string>(newFormInline.value.leagueLogo);
 
 function getRef() {
   return ruleFormRef.value;
@@ -197,16 +192,19 @@ const checkAll = ref(false);
 const isIndeterminate = ref(true);
 
 const handleCheckAllChange = (val: boolean) => {
-  newFormInline.value.tags = val ? tags.value.map(item => item.id) : [];
+  newFormInline.value.leagueTagsId = val
+    ? leagueTagsId.value.map(item => item.id)
+    : [];
   isIndeterminate.value = false;
 };
 const handleCheckedTagIdsChange = (value: number[]) => {
   const checkedCount = value.length;
-  checkAll.value = checkedCount === tags.value.length;
-  isIndeterminate.value = checkedCount > 0 && checkedCount < tags.value.length;
+  checkAll.value = checkedCount === leagueTagsId.value.length;
+  isIndeterminate.value =
+    checkedCount > 0 && checkedCount < leagueTagsId.value.length;
 };
 
-defineExpose({ getRef });
+defineExpose({ getRef, uploadFormFile });
 </script>
 
 <style lang="scss">

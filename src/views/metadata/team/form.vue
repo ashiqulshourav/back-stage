@@ -5,19 +5,22 @@
     :rules="formRules"
     label-width="150px"
   >
-    <!-- <el-form-item :label="`${t('球队Logo')}:`" prop="teamLogo">
+    <el-form-item :label="`${t('球队Logo')}:`" prop="teamLogo">
       <el-upload
+        action=""
+        :auto-upload="false"
         class="avatar-uploader"
         :show-file-list="false"
-        :on-success="handleAvatarSuccess"
-        :before-upload="beforeAvatarUpload"
         :on-change="onImgChange"
-        :auto-upload="false"
       >
-        <img v-if="imageUrl" :src="imageUrl" class="w-[200px]" />
+        <img
+          v-if="imageUrl"
+          :src="imageUrl"
+          class="max-h-[100px] max-w=[200px]"
+        />
         <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
       </el-upload>
-    </el-form-item> -->
+    </el-form-item>
 
     <el-form-item :label="t('国家地区')" prop="countryId">
       <el-select
@@ -101,14 +104,15 @@
 import { ref } from 'vue';
 import { formRules } from './utils/rule';
 import { TeamFormProps } from './utils/types';
-// import type { UploadProps } from 'element-plus';
-// import { Plus } from '@element-plus/icons-vue';
+import { Plus } from '@element-plus/icons-vue';
 import { t } from '@/plugins/i18n';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { inputRestrictions } from '@/utils/formatNumber';
 import { useMatchStore } from '@/store/match';
+import { message } from '@/utils/message';
 
 const matchStore = useMatchStore();
+const uploadFormFile = ref();
 const props = withDefaults(defineProps<TeamFormProps>(), {
   formInline: () => ({
     teamId: 0,
@@ -117,42 +121,42 @@ const props = withDefaults(defineProps<TeamFormProps>(), {
     leagueId: 0,
     teamNameCn: '',
     teamNameEn: '',
-    // teamLogo: '',
+    teamLogo: '',
     isCountryTeam: 0,
     level: 0
   })
 });
 
-/* const beforeAvatarUpload: UploadProps['beforeUpload'] = _rawFile => {
-  if (rawFile.type !== 'image/jpeg') {
-    console.log('Avatar picture must be JPG format!');
-    return false;
-  } else if (rawFile.size / 1024 / 1024 > 2) {
-    console.log('Avatar picture size can not exceed 2MB!');
-    return false;
+const imageUrl = ref<string>(props.formInline.teamLogo);
+const onImgChange = file => {
+  let name = file.name.slice(-3);
+  let kb = 15360 * 1024;
+  if (
+    name.toLowerCase() === 'png' ||
+    name.toLowerCase() === 'jpg' ||
+    name.toLowerCase() === 'jpeg'
+  ) {
+    if (file.size > kb) {
+      message(t('文件过大，请重新上传'), { type: 'error' });
+    } else {
+      uploadFormFile.value = file.raw;
+      imageUrl.value = URL.createObjectURL(file.raw);
+    }
+  } else {
+    message(t('上传文件格式不匹配,请上传png,jpg,jpeg格式文件'), {
+      type: 'error'
+    });
   }
-  return true;
-}; */
-
-/* const handleAvatarSuccess: UploadProps['onSuccess'] = (
-  _response,
-  _uploadFile
-) => {}; */
-
-/* const onImgChange = respose => {
-  imageUrl.value = URL.createObjectURL(respose.raw);
-}; */
+};
 
 const ruleFormRef = ref();
 const newFormInline = ref(props.formInline);
-
-// const imageUrl = ref<string>(newFormInline.value.teamLogo);
 
 function getRef() {
   return ruleFormRef.value;
 }
 
-defineExpose({ getRef });
+defineExpose({ getRef, uploadFormFile });
 </script>
 
 <style lang="scss">
