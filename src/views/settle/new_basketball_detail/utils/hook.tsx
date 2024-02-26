@@ -196,7 +196,7 @@ export function useNewBasketBallHook() {
 
   //- 初始化联赛
   const route = useRoute();
-  const initMatchList = async () => {
+  const initMatchData = async () => {
     const res = await API.getPreSaleInfo({
       matchId: +route.params.matchId
     });
@@ -205,7 +205,7 @@ export function useNewBasketBallHook() {
   };
 
   onMounted(() => {
-    initMatchList();
+    initMatchData();
   });
   onUnmounted(() => {
     loopTimer.value && clearInterval(loopTimer.value);
