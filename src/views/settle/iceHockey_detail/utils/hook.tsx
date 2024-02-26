@@ -25,6 +25,27 @@ export function useDetailHook() {
 
   //- 新增局
   const addEventRow = () => {
+    if (
+      !(
+        dataList.filter(item => Number.isInteger(item.id)).length ===
+        dataList.length
+      )
+    ) {
+      const presentRow = dataList[dataList.length - 1];
+      message(
+        t(
+          `请先完成结算${
+            MATCH_PERIOD_TYPES[
+              MATCH_PERIOD[presentRow.gameRule][presentRow.inningNum]
+            ]
+          }`
+        ),
+        {
+          type: 'error'
+        }
+      );
+      return;
+    }
     if (dataList.length !== 0 && boardType.value !== dataList[0].gameRule) {
       message(t('当前游戏方法不可用'), {
         type: 'error'
