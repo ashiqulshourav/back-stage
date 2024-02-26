@@ -28,9 +28,7 @@
           :size="size"
           :row-key="row => row.inningNum"
           adaptive
-          :adaptiveConfig="{
-            offsetBottom: 60
-          }"
+          :adaptiveConfig="{ offsetBottom: 60 }"
           :data="dataList"
           :columns="dynamicColumns"
           :header-cell-style="tableHeaderStyle"
