@@ -16,7 +16,8 @@ export const columns: TableColumnList = [
   },
   {
     label: t('结算时间'),
-    slot: 'eventTime'
+    slot: 'eventTime',
+    minWidth: 220
   },
   {
     label: t('操作人'),
