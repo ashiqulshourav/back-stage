@@ -1,10 +1,13 @@
+import { handleTableWidth } from '@/utils/getTableWidth';
 import dayjs from 'dayjs';
 
 export const columns: TableColumnList = [
   {
     label: t('局'),
     prop: 'inningNum',
-    type: 'index'
+    type: 'index',
+    minWidth: 100,
+    headerRenderer: d => handleTableWidth(d, t('局'))
   },
   {
     headerRenderer: () => history.state.params.homeTeamNameCn ?? '_',
