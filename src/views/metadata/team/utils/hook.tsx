@@ -105,7 +105,7 @@ export function useTeam() {
               formData.append('fileUsageCategory', '3');
               const res = await API.fileUpload(formData);
               if (res.data?.url) {
-                (curData as any).leagueLogo = res.data?.url;
+                (curData as any).teamLogo = res.data?.url;
               }
             }
             updateTeam(curData, () => chores());

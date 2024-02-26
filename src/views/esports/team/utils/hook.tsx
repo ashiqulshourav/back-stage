@@ -75,19 +75,20 @@ export function useLeague() {
     onSearch();
   };
 
-  function openDialog(title: string, row?: MetadataAPI.LeagueList) {
+  function openDialog(title: string, row?: ESportsAPI.TeamList) {
     addDialog({
       title,
       props: {
         formInline: {
-          leagueNameCn: row?.leagueNameCn ?? '',
-          leagueNameEn: row?.leagueNameEn ?? '',
-          leagueId188Bet: row?.leagueId188Bet ?? '',
-          leagueLogo: row?.leagueLogo ?? '',
+          teamNameEn: row?.teamNameCn ?? '',
+          teamNameCn: row?.teamNameEn ?? '',
           level: row?.level ?? '',
-          countryId: row?.countryId ?? '',
           leagueId: row?.leagueId ?? '',
-          sportId: row?.sportId ?? ''
+          sportId: row?.sportId ?? '',
+          countryId: row?.countryId ?? '',
+          teamId: row?.teamId ?? '',
+          teamLogo: row?.teamLogo ?? '',
+          isCountryTeam: row?.isCountryTeam ?? ''
         }
       },
       width: '40%',
@@ -110,7 +111,7 @@ export function useLeague() {
               formData.append('fileUsageCategory', '3');
               const res = await API.fileUpload(formData);
               if (res.data?.url) {
-                (curData as any).leagueLogo = res.data?.url;
+                (curData as any).teamLogo = res.data?.url;
               }
             }
             updateTeam(curData, () => chores());
@@ -121,7 +122,7 @@ export function useLeague() {
   }
 
   const updateTeam = async (curData, cb) => {
-    const res = await API.updateEMatch(curData);
+    const res = await API.updateETeam(curData);
     message(res.msg, { type: res.code ? 'error' : 'success' });
     if (!res.code) cb();
   };

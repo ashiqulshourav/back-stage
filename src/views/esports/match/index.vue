@@ -7,15 +7,6 @@
       :columns="columns"
       @refresh="onSearch('reload')"
     >
-      <!-- <template #buttons>
-        <el-button
-          type="primary"
-          :icon="useRenderIcon(AddFill)"
-          @click="openDialog(t('新增'))"
-        >
-          {{ t('新增联赛') }}
-        </el-button>
-      </template> -->
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"

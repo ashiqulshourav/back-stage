@@ -30,7 +30,7 @@
             <el-image
               preview-teleported
               loading="lazy"
-              :src="row.leagueLogo"
+              :src="row.teamLogo"
               :preview-src-list="dataList.map(v => v.teamLogo)"
               :initial-index="index"
               fit="cover"
