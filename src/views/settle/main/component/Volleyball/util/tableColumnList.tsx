@@ -55,6 +55,7 @@ export const columns: TableColumnList = [
   {
     label: t('比赛状态'),
     prop: 'status',
+    width: 200,
     formatter: ({ status }) => MATCH_STATUS[status] ?? '-',
     headerRenderer: d => handleTableWidth(d, t('比赛状态'))
   },
@@ -73,7 +74,7 @@ export const columns: TableColumnList = [
     label: t('操作'),
     slot: 'operation',
     headerRenderer: d => handleTableWidth(d, t('操作'), 'auto'),
-    minWidth: 160,
+    width: 200,
     fixed: 'right'
   }
 ];
