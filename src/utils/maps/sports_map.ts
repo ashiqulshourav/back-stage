@@ -19,6 +19,16 @@ export const SPORT_ID_MAP = [
   { label: t('乒乓球'), value: 23, type: 'PingPong' },
   { label: t('曲棍球'), value: 28, type: 'Hockey' }
 ];
+export const MATH_RULE = {
+  basketBall: [
+    { key: 2, val: t('上下半场制') },
+    { key: 4, val: t('4节比赛制') },
+  ],
+  otherMatch: [
+    { key: 3, val: t('三盘两胜制') },
+    { key: 5, val: t('五盘三胜制') },
+  ]
+}
 
 export const ESPORT_ID_MAP = [
   { value: 276, label: 'DOTA2' },
