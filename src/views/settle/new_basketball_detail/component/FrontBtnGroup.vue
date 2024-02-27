@@ -4,7 +4,6 @@
     link
     type="default"
     :size="size"
-    v-if="!row.isBackEndReturnData"
     :icon="useRenderIcon(EditPen)"
     @click="editChild(row)"
   >
@@ -16,15 +15,12 @@
     link
     type="primary"
     :size="size"
-    v-if="!row.isBackEndReturnData"
     :disabled="!row.isEdit"
     :icon="useRenderIcon('saveIcon')"
     @click="handleChildrenData()"
   >
     {{ t('保存') }}
   </el-button>
-
-
 </template>
 
 <script setup lang="ts">
@@ -34,7 +30,7 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 
 defineProps<{
   size: any;
-  row: SattleDataAPI.MatchEventsList;
+  row: SattleDataAPI.newBasketballEventsList;
 }>();
 
 const emites = defineEmits(['editChild', 'handleChildrenData']);

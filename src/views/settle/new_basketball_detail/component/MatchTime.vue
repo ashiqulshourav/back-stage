@@ -1,5 +1,5 @@
 <template>
-  <span class="text-sm" v-if="row.isBackEndReturnData">
+  <span class="text-sm" v-if="row.id">
     {{ getTime(showTime).h }}:{{ getTime(showTime).m }}:{{
       getTime(showTime).s
     }}
@@ -12,7 +12,7 @@
     :placeholder="t('请选择当前录入时间')"
     value-format="x"
     :default-value="dayjs().startOf('day').toDate()"
-    @change="changeEventTime(row, index, item.tableList)"
+    @change="changeEventTime(row, index)"
     format="HH:mm:ss"
   />
 </template>
@@ -27,38 +27,24 @@ import { compareTime } from '@/utils/formatDate';
 
 const props = defineProps<
   MatchEventRowType & {
-    item: SattleDataAPI.ChildrenDataList;
     beginTime: number;
+    dataList: SattleDataAPI.newBasketballEventsList[];
   }
 >();
 const emits = defineEmits(['changeEventTime']);
-
-watch(
-  () => props.row,
-  d => {
-    if (d.t1 == 0 && d.t2 == 0) {
-      d.eventTime = dayjs().startOf('day').valueOf();
-    }
-  },
-  {
-    immediate: true,
-    deep: true
-  }
-);
 
 const showTime = computed(() => {
   return (+props.row.eventTime - props.beginTime) / 1000;
 });
 
 const changeEventTime = (
-  row: SattleDataAPI.MatchEventsList,
-  childIndex: number,
-  childrenData: SattleDataAPI.MatchEventsList[]
+  row: SattleDataAPI.newBasketballEventsList,
+  childIndex: number
 ) => {
   if (childIndex === 0) return;
   if (
     compareTime(dayjs(row.eventTime).format('HH:mm:ss')) <=
-    (+childrenData[childIndex - 1].eventTime - props.beginTime) / 1000
+    (+props.dataList[childIndex - 1].eventTime - props.beginTime) / 1000
   ) {
     message(t('时间不能小于前一个事件发生时间'), { type: 'error' });
     row.eventTime = '';

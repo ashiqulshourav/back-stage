@@ -1,34 +1,40 @@
 import dayjs from 'dayjs';
 import { handleTableWidth } from '@/utils/getTableWidth';
+import { BASKETBALL_EVENT_TYPE } from './map';
 
 export const childColumns: TableColumnList = [
   {
-    label: t('主队 : 客队'),
-    prop: 't1',
-    formatter: ({ t1, t2 }) => {
-      return `${t1 ?? '-'} : ${t2 ?? '-'}`;
+    prop: 'matchPeriod',
+    formatter: ({ matchPeriodId }) => {
+      return BASKETBALL_EVENT_TYPE[matchPeriodId] ?? '-';
+    },
+    headerRenderer: () => {
+      return history.state.params.periodType === 4
+        ? t('比赛节数')
+        : t('比赛时段');
     }
   },
   {
     label: t('事件编码'),
-    slot: 'eventCode'
+    prop: 'eventCode',
+    formatter: ({ periodType }) => {
+      return periodType === 2 ? t('篮球半场比分') : t('篮球小节比分');
+    }
   },
   {
     label: t('结算类型'),
-    slot: 'settleType'
+    prop: 'settleType',
+    formatter: ({ settleType }) =>
+      settleType === 0 ? t('自动结算') : t('人工结算')
   },
   {
-    label: t('比赛进行时间'),
+    label: t('主队比分 : 客队比分'),
+    slot: 'score'
+  },
+  {
+    label: t('事件生成时间'),
     slot: 'eventTime',
-    headerRenderer: d => handleTableWidth(d, t('比赛进行时间'))
-  },
-  {
-    label: t('比赛阶段'),
-    slot: 'matchPeriodId'
-  },
-  {
-    label: t('事件来源'),
-    slot: 'homeAway'
+    headerRenderer: d => handleTableWidth(d, t('事件生成时间'))
   },
   {
     label: t('操作'),

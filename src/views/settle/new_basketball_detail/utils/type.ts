@@ -8,17 +8,7 @@ export type FormProps = {
   [key: string]: any;
 };
 
-export type TempListType = {
-  eventTime: number | string;
-  homeAway: null;
-  matchPeriodId: null;
-  // player1Name: null,
-  isBackEndReturnData: false;
-  t1: null;
-  t2: null;
-  eventCode: 'goal' | 'yellow_red_card' | 'corner';
-  redOrYellow?: number;
-};
+
 
 export type SearchFormType = {
   leagueId: string;
@@ -27,13 +17,6 @@ export type SearchFormType = {
   startTime: string;
   endTime: string;
 };
-
-export enum MatchEventType {
-  Goal = 'goal',
-  YellowRedCard = 'yellow_red_card',
-  Corner = 'corner',
-  MatchStatus = 'match_status'
-}
 
 export enum SPORT_TYPE {
   football = 1,
@@ -56,6 +39,6 @@ export type parentRowType = {
 };
 
 export type MatchEventRowType = {
-  row: SattleDataAPI.MatchEventsList;
+  row: SattleDataAPI.newBasketballEventsList;
   index?: number;
 };
