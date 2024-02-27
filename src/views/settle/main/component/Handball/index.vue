@@ -30,7 +30,7 @@
             {{ t('结算详情') }}
           </el-button>
           <el-button
-            v-if="true"
+            v-if="row.isShowCancelBtn"
             type="danger"
             :size="size"
             :disabled="row.cancelOrderTimes > 0"
