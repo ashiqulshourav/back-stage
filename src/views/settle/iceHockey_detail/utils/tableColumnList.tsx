@@ -3,7 +3,7 @@ export const MATCH_PERIOD_TYPES = {
   Q1: t('第一局'),
   Q2: t('第二局'),
   Q3: t('第三局'),
-  OT: t('加时赛'),
+  OT: t('加时赛')
   // HT: t('上半场'),
   // FT: t('下半场')
 };
@@ -58,6 +58,7 @@ export const columns: TableColumnList = [
   },
   {
     label: t('操作'),
-    slot: 'operation'
+    slot: 'operation',
+    minWidth: 240
   }
 ];
