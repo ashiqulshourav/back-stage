@@ -11,6 +11,7 @@
     >
       {{ t('取消事件') }}
     </el-button>
+    <span v-else>-</span>
   </div>
 </template>
 
