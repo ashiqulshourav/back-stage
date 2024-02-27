@@ -133,7 +133,7 @@ export function useDetailHook() {
       s1 += Number(item[0]) - Number(item[1]);
     });
     if (dataList.length < 2 || dataList.some(item => !item.id) || s1 === 0) {
-      return message(t('请先完成盘结算'), { type: 'error' });
+      return message(t('请先完成上/下半场或附加赛结算'), { type: 'error' });
     }
     ElMessageBox.confirm(
       `
