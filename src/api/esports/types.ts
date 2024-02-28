@@ -132,7 +132,7 @@ declare namespace ESportsAPI {
     teamNameEn?: string;
     teamLogo?: string;
     stadiumName?: string;
-    isCountryTeam?: string;
+    isCountryTeam?: string | number;
     level?: number;
   }
 }

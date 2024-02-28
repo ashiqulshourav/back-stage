@@ -1,12 +1,10 @@
 import { message } from '@/utils/message';
 import editForm from '../form.vue';
 import type { PaginationProps } from '@pureadmin/table';
-// import { addDialog } from '@/components/ReDialog';
-// import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 import { columns } from '../component/TableColumnList';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
-import { addDialog } from '@/components/ReDialog';
+import { addDialog, closeDialog } from '@/components/ReDialog';
 
 export function useLeague() {
   const dataList = reactive<ESportsAPI.ESportsLeagueListArrType[]>([]);
@@ -71,43 +69,15 @@ export function useLeague() {
       },
       width: '40%',
       draggable: true,
-      fullscreenIcon: true,
       closeOnClickModal: false,
-      contentRenderer: () =>
-        h(editForm, { ref: formRef, onReloadTable: () => onSearch() }),
-      beforeSure: (done, { options }) => {
-        const FormRef = formRef.value.getRef();
-        const curData = options.props.formInline;
-        function chores() {
-          done();
-          onSearch();
-        }
-        FormRef.validate(async valid => {
-          if (valid) {
-            if (formRef.value.uploadFormFile) {
-              let formData = new FormData();
-              formData.append('file', formRef.value.uploadFormFile);
-              formData.append('fileUsageCategory', '3');
-              const res = await API.fileUpload(formData);
-              if (res.data?.url) {
-                (curData as any).leagueLogo = res.data?.url;
-              }
-            }
-
-            const r = await API.updateEMatch(curData);
-            message(r.msg, { type: r.code ? 'error' : 'success' });
-            chores();
-            // if (title === '新增') {
-            //   await API.createEMatch(curData);
-            //   chores();
-            // } else {
-            //   const res = await API.updateEMatch(curData);
-            //   message(res.msg, { type: res.code ? 'error' : 'success' });
-            //   chores();
-            // }
+      hideFooter: true,
+      contentRenderer: ({ options, index }) =>
+        h(editForm, {
+          onCloseDialog: (params: string) => {
+            closeDialog(options, index);
+            params && onSearch();
           }
-        });
-      }
+        })
     });
   }
 
