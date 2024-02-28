@@ -1,9 +1,8 @@
 import editForm from '../form.vue';
 import { message } from '@/utils/message';
-import { addDialog } from '@/components/ReDialog';
+import { addDialog, closeDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted, h } from 'vue';
-import { FormItemProps } from 'element-plus';
 import { columns } from '../component/TableColumnList';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { SearchFormType } from './types';
@@ -89,37 +88,17 @@ export function useTeam() {
       draggable: true,
       fullscreenIcon: true,
       closeOnClickModal: false,
-      contentRenderer: () => h(editForm, { ref: formRef }),
-      beforeSure: (done, { options }) => {
-        const FormRef = formRef.value.getRef();
-        const curData = options.props.formInline as FormItemProps;
-        function chores() {
-          done();
-          onSearch();
-        }
-        FormRef.validate(async valid => {
-          if (valid) {
-            if (formRef.value.uploadFormFile) {
-              let formData = new FormData();
-              formData.append('file', formRef.value.uploadFormFile);
-              formData.append('fileUsageCategory', '3');
-              const res = await API.fileUpload(formData);
-              if (res.data?.url) {
-                (curData as any).teamLogo = res.data?.url;
-              }
-            }
-            updateTeam(curData, () => chores());
+      hideFooter: true,
+      contentRenderer: ({ options, index }) =>
+        h(editForm, {
+          ref: formRef,
+          onCloseDialog: (params: string) => {
+            closeDialog(options, index);
+            params && onSearch();
           }
-        });
-      }
+        })
     });
   }
-
-  const updateTeam = async (curData, cb) => {
-    const res = await API.updateTeam(curData);
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    if (!res.code) cb();
-  };
 
   onMounted(() => {
     onSearch();

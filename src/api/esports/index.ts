@@ -6,14 +6,14 @@ export const esportData = {
 
   //- 编辑联赛
   updateEMatch: (data: {
-    countryId?: number;
-    leagueId?: number;
-    leagueId188Bet?: number;
-    teamLogo?: string;
-    leagueNameCn?: number;
-    level?: number;
-    leagueNameEn?: number;
-    sportId?: number;
+    countryId?: number | string;
+    leagueId?: number | string;
+    leagueId188Bet?: number | string;
+    leagueLogo?: string;
+    leagueNameCn?: number | string;
+    level?: number | string;
+    leagueNameEn?: number | string;
+    sportId?: number | string;
   }) => {
     return http.request<ESportsAPI.updateLeagueResType>("post", "/league/v1/updateESportsLeague", { data })
   },

@@ -1,17 +1,14 @@
 import editForm from '../form.vue';
 import { message } from '@/utils/message';
-import { FormItemProps } from 'element-plus';
-import { addDialog } from '@/components/ReDialog';
+import { addDialog, closeDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted, h } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { searchFormType } from './types';
 
 export function useLeague() {
-  const formRef = ref();
   const dataList = reactive<MetadataAPI.LeagueList[]>([]);
   const loading = ref(true);
-  // const tags = ref<ConfigCenterDataAPI.LeagueTagType[]>([]);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -86,39 +83,17 @@ export function useLeague() {
       },
       width: '40%',
       draggable: true,
-      fullscreenIcon: true,
       closeOnClickModal: false,
-      contentRenderer: () =>
-        h(editForm, { ref: formRef, onReloadTable: () => onSearch() }),
-      beforeSure: (done, { options }) => {
-        const FormRef = formRef.value.getRef();
-        const curData = options.props.formInline as FormItemProps;
-        function chores() {
-          done(); // 关闭弹框
-          onSearch(); // 刷新表格数据
-        }
-        FormRef.validate(async valid => {
-          if (valid) {
-            if (formRef.value.uploadFormFile) {
-              let formData = new FormData();
-              formData.append('file', formRef.value.uploadFormFile);
-              formData.append('fileUsageCategory', '3');
-              const res = await API.fileUpload(formData);
-              if (res.data?.url) {
-                (curData as any).leagueLogo = res.data?.url;
-              }
-            }
-            updateLeague(curData, () => chores());
+      hideFooter: true,
+      contentRenderer: ({ options, index }) =>
+        h(editForm, {
+          onCloseDialog: (params: string) => {
+            closeDialog(options, index);
+            params && onSearch();
           }
-        });
-      }
+        })
     });
   }
-  const updateLeague = async (curData, cb) => {
-    const res = await API.updateLeague(curData);
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    if (!res.code) cb();
-  };
 
   onMounted(() => {
     onSearch();
@@ -128,12 +103,10 @@ export function useLeague() {
     loading,
     dataList,
     pagination,
-    // buttonClass,
     onSearch,
     resetForm,
     openDialog,
     form,
-    // handleDatabase,
     handleTableWidthChange,
     handleCurrentChange,
     handleSelectionChange

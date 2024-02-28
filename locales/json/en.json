@@ -143,7 +143,6 @@
   "k329a5ff8": "Logo",
   "k60442504": "Chinese Name (League)",
   "k2d4c7434": "English Name (League)",
-  "k91fce8f": "Team Level",
   "k28a7b54": "Operation Content",
   "k-36ed0803": "Cascade Menu for Operation Logs",
   "k-14603253": "Username",
@@ -168,7 +167,6 @@
   "k374fe366": "is this required?",
   "k29ced184": "League ID is required",
   "k4dd3db8f": "Team ID is required",
-  "k67f6d854": "Team Level is required",
   "k26e21e5e": "Home Team Name is required",
   "k4c2b39e2": "Chinese Name (Team) is required",
   "k-22c7565a": "English Name (Team) is required",
@@ -522,5 +520,9 @@
   "k-24502be8": "队伍中文名称",
   "k52bfd5e2": "队伍英文名称",
   "k-53336763": "请先完成上/下半场或附加赛结算",
-  "k285b3ec2": "请先完成局或加时赛结算"
+  "k285b3ec2": "请先完成局或加时赛结算",
+  "k-542eb3b": "队伍ID",
+  "k1b4d9bae": "队伍等级",
+  "k19f9c7ae": "队伍Logo",
+  "k91fce8f": "球队等级"
 }

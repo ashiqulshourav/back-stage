@@ -56,10 +56,10 @@
       />
     </el-form-item>
 
-    <el-form-item :label="`${t('球队等级')}:`" prop="level">
+    <el-form-item :label="`${t('热门排序')}:`" prop="level">
       <el-input
         v-model="form.level"
-        :placeholder="t('球队等级')"
+        :placeholder="t('热门排序')"
         clearable
         :formatter="v => formatNumber(v, 1)"
         v-enter="search"
