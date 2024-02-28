@@ -23,6 +23,7 @@
           v-model="form.sportId"
           :placeholder="t('游戏种类')"
           clearable
+          @change="chagenDetailMatchType"
           class="!w-[150px]"
         >
           <el-option
@@ -225,6 +226,10 @@ const chagenMatchType = (type: 0 | 1 | 2) => {
   //- 电竞比赛 =1
   gameClassify.value = type === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
   matchStore.set_lagueList(type, props.form.sportId);
+};
+//- 赛种联赛筛选
+const chagenDetailMatchType = val => {
+  matchStore.set_lagueList(props.form.category as number, val);
 };
 
 const nextDayArr = computed(() => {

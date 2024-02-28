@@ -32,9 +32,9 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('联赛ID'), 'auto')
   },
   {
-    label: t('热门排序'),
+    label: t('球队等级'),
     prop: 'level',
-    headerRenderer: d => handleTableWidth(d, t('热门排序'), 'auto')
+    headerRenderer: d => handleTableWidth(d, t('球队等级'), 'auto')
   },
   {
     label: t('赛种'),
