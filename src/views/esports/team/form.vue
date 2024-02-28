@@ -129,7 +129,7 @@ const confirmBtnClick = () => {
         let formData = new FormData();
         formData.append('file', uploadFormFile.value);
         formData.append('fileUsageCategory', '3');
-        const res = await API.fileUpload(formData);
+        const res = await API.esFileUpload(formData);
         if (res.data?.url) {
           newFormInline.value.teamLogo = res.data?.url;
         }

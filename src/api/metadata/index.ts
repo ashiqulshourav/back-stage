@@ -6,8 +6,10 @@ export const metaData = {
 
   updateLeague: (data: MetadataAPI.updateLeagueParamsType) => http.request<MetadataAPI.updateLeagueResType>("post", "/league/v1/updateLeague", { data }),
 
-  //- 文件上传
-  fileUpload: (data: any) => http.request<MetadataAPI.fileUploadResType>("post", "/match/v1/fileUpload", { data }),
+  //- 普通体育文件上传
+  fileUpload: (data: any) => http.request<MetadataAPI.fileUploadResType>("post", "/upload/v1/fileUploadSportLogo", { data }),
+  //- 电竞文件上传
+  esFileUpload: (data: any) => http.request<MetadataAPI.fileUploadResType>("post", "/upload/v1/fileUploadESportLogo", { data }),
 
   getTeamList: (data: MetadataAPI.TeamListParamsType) => http.request<MetadataAPI.TeamListRes>("post", "/team/v1/getTeamList", { data }),
 
