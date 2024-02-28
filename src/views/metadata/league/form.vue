@@ -204,7 +204,7 @@ const confirmBtnClick = () => {
         formData.append('fileUsageCategory', '3');
         const res = await API.fileUpload(formData);
         if (res.data?.url) {
-          newFormInline.value.leagueLogo = res.data?.url;
+          newFormInline.value.leagueLogo = res.data?.relativelyFileName;
         }
       }
       updateLeague();

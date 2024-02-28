@@ -1,10 +1,10 @@
-import { message } from "@/utils/message";
+import { message } from '@/utils/message';
 // import editForm from "../form.vue";
-import type { PaginationProps } from "@pureadmin/table";
+import type { PaginationProps } from '@pureadmin/table';
 // import { addDialog } from "@/components/ReDialog";
-import { t } from "@/plugins/i18n";
-import { usePublicHooks } from "@/hooks";
-import dayjs from "dayjs";
+import { t } from '@/plugins/i18n';
+import { usePublicHooks } from '@/hooks';
+import dayjs from 'dayjs';
 
 export function useHistory() {
   const dataList = reactive<HistoryDataAPI.History[]>([]);
@@ -20,88 +20,88 @@ export function useHistory() {
   });
   const columns: TableColumnList = [
     {
-      label: t("序号"),
-      prop: "historyId",
+      label: t('序号'),
+      prop: 'historyId',
       minWidth: 150,
       fixed: true
     },
     {
-      label: t("联赛"),
-      prop: "league",
+      label: t('联赛'),
+      prop: 'league',
       minWidth: 150,
       fixed: true
     },
     {
-      label: t("联赛"),
-      prop: "leagueLevel",
+      label: t('联赛'),
+      prop: 'leagueLevel',
       minWidth: 150
     },
     {
-      label: t("今日"),
-      prop: "dateAndStatus",
+      label: t('今日'),
+      prop: 'dateAndStatus',
       minWidth: 250,
       formatter: ({ date, status }) =>
-        `${dayjs(date).format("YYYY-MM-DD HH:mm:ss")} : ${status}`
+        `${dayjs(date).format('YYYY-MM-DD HH:mm:ss')} : ${status}`
     },
     {
-      label: t("主队名称"),
-      prop: "homeTeam",
+      label: t('主队名称'),
+      prop: 'homeTeam',
       minWidth: 150
     },
     {
-      label: t("比分"),
-      prop: "score",
+      label: t('比分'),
+      prop: 'score',
       minWidth: 150
     },
     {
-      label: t("客队名称"),
-      prop: "awayTeam",
+      label: t('客队名称'),
+      prop: 'awayTeam',
       minWidth: 150
     },
     {
-      label: t("中立场"),
-      prop: "neutral",
+      label: t('中立场'),
+      prop: 'neutral',
       minWidth: 150
     },
     {
-      label: t("商业数据源"),
-      prop: "businessDataSource",
+      label: t('商业数据源'),
+      prop: 'businessDataSource',
       minWidth: 150
     },
     {
-      label: t("竞品数据源"),
-      prop: "competitionDataSource",
+      label: t('竞品数据源'),
+      prop: 'competitionDataSource',
       minWidth: 150
     },
     {
-      label: t("结算审核"),
-      prop: "settlementReview",
-      slot: "settlementReview",
+      label: t('结算审核'),
+      prop: 'settlementReview',
+      slot: 'settlementReview',
       minWidth: 150
     },
     {
-      label: t("滚球"),
-      prop: "live",
+      label: t('滚球'),
+      prop: 'live',
       minWidth: 150
     },
     {
-      label: t("开售状态"),
-      prop: "saleStatus",
+      label: t('开售状态'),
+      prop: 'saleStatus',
       minWidth: 150
     },
     {
-      label: t("早盘主数据源"),
-      prop: "earlyDataSource",
+      label: t('早盘主数据源'),
+      prop: 'earlyDataSource',
       minWidth: 150
     },
     {
-      label: t("早盘开售玩法"),
-      prop: "earlyGamePlay",
+      label: t('早盘开售玩法'),
+      prop: 'earlyGamePlay',
       minWidth: 150
     },
     {
-      label: t("滚球"),
-      prop: "liveDataSource",
+      label: t('滚球'),
+      prop: 'liveDataSource',
       minWidth: 150
     }
   ];
@@ -118,10 +118,11 @@ export function useHistory() {
   function handleCurrentChange(val: number) {
     pagination.currentPage = val;
     onSearch();
+    document.querySelector('.table_container .el-scrollbar__wrap').scroll(0, 0);
   }
 
   async function onSearch(type?: string) {
-    if (type === "reload") pagination.currentPage = 1;
+    if (type === 'reload') pagination.currentPage = 1;
     loading.value = true;
     // const data = removeEmptyStringKeys(form);
     const res: HistoryDataAPI.HistoryListRes = await API.getHistoryList({
@@ -129,7 +130,7 @@ export function useHistory() {
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage
     });
-    if (res.code) return message(res.msg, { type: "error" });
+    if (res.code) return message(res.msg, { type: 'error' });
     dataList.length = 0;
     dataList.push(...res.data.list);
     pagination.total = res.data.total;

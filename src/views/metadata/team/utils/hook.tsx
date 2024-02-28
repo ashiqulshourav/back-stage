@@ -38,6 +38,7 @@ export function useTeam() {
   function handleCurrentChange(val: number) {
     pagination.currentPage = val;
     onSearch();
+    document.querySelector('.table_container .el-scrollbar__wrap').scroll(0, 0);
   }
 
   function handleSelectionChange(val) {

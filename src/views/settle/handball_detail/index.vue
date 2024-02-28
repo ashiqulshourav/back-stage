@@ -16,6 +16,7 @@
 
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
+          class="table_container"
           align-whole="center"
           :loading="loading"
           :size="size"
@@ -63,9 +64,7 @@
       <div class="mt-4">
         <el-button type="primary" @click="addEventRow">
           {{
-            dataList.length == 2
-              ? t('新增加时赛')
-              : t('新增上/下半场')
+            dataList.length == 2 ? t('新增加时赛') : t('新增上/下半场')
           }}</el-button
         >
       </div>
