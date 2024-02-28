@@ -33,13 +33,11 @@ export function useDetailHook() {
     ) {
       const presentRow = dataList[dataList.length - 1];
       message(
-        t(
-          `请先完成结算${
-            MATCH_PERIOD_TYPES[
-              MATCH_PERIOD[presentRow.gameRule][presentRow.inningNum]
-            ]
-          }`
-        ),
+        `${t('请先完成结算')}${
+          MATCH_PERIOD_TYPES[
+            MATCH_PERIOD[presentRow.gameRule][presentRow.inningNum]
+          ]
+        }`,
         {
           type: 'error'
         }
