@@ -32,8 +32,6 @@ declare namespace COMMON {
     pageNum: number;
   }
 
- 
-
   type FormProps<T = any> = {
     formInline: T;
   };
