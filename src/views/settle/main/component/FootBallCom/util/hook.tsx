@@ -2,7 +2,7 @@ import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { t } from '@/plugins/i18n';
-import { childColumns, columns } from '../tableColumnList';
+import { childColumns, yellow_red_column, columns } from '../tableColumnList';
 import {
   MatchEventType,
   SPORT_TYPE,
@@ -129,7 +129,6 @@ export function useFootball() {
 
   //- 当前行编辑
   const editChild = (row: SattleDataAPI.MatchEventsList) => (row.isEdit = true);
-
   // 打开关闭结算列表
   const expandChange = (
     row: SaleDataAPI.PreSaleList,
@@ -172,11 +171,17 @@ export function useFootball() {
           _.isBackEndReturnData = true;
           if (_.eventTime.toString().length < 10) {
             _.eventTime = dateSetSecond(_.eventTime as number);
-          } /*  else {
-            _.eventTime = getSecondTime(_.eventTime, row.beginTime);
-          } */
-          item.type === 'yellow_red_card' &&
-            (_.redOrYellow = YELLOW_OR_RED[_.eventCode]);
+          }
+          if (item.type === 'yellow_red_card') {
+            _.redOrYellow = YELLOW_OR_RED[_.eventCode];
+            if (_.redOrYellow === 1) {
+              _.t1_yellowScore = +_.t1;
+              _.t2_yellowScore = +_.t2;
+            } else {
+              _.t1_redScore = +_.t1;
+              _.t2_redScore = +_.t2;
+            }
+          }
         });
       }
     });
@@ -396,6 +401,7 @@ export function useFootball() {
     reloadTable,
     changeSettleType,
     cancelMatchEvent,
-    advanceSettlement
+    advanceSettlement,
+    yellow_red_column
   };
 }

@@ -33,55 +33,62 @@
               <div
                 v-for="cItem in _"
                 :key="cItem.sourceBetItemsId"
-                class="flex items-center mb-1"
+                class="flex items-center justify-between"
               >
-                <template
-                  v-if="
-                    cItem[0].sourceCode !== 'FT_CS' &&
-                    cItem[0].sourceCode !== 'HT_CS'
-                  "
-                >
-                  <el-button
-                    class="flex-grow text-center flex justify-between w-1/3"
-                    v-for="s in cItem"
-                    :key="s.sourceBetItemsId"
+                <div class="flex flex-wrap flex-grow">
+                  <template
+                    v-if="
+                      cItem[0].sourceCode !== 'FT_CS' &&
+                      cItem[0].sourceCode !== 'HT_CS'
+                    "
                   >
-                    <span
-                      class="text-ellipsis overflow-hidden whitespace-nowrap max-w-[33%]"
-                      v-if="
-                        ['S1_AH', 'S2_AH', 'FTS_AH'].includes(s.sourceCode) &&
-                        matchInfo.sportId === 3
-                      "
+                    <el-button
+                      class="flex-grow text-center flex justify-between w-1/4 mb-1"
+                      v-for="s in cItem"
+                      :key="s.sourceBetItemsId"
                     >
-                      {{ nameMap[s.homeOrAway] }}
-                    </span>
-                    <span v-else>
-                      {{
-                        PLAY_MATCH(s.sourceCode)[s.homeOrAway || s.handicap] ??
-                        s.handicap
-                      }}
-                    </span>
-                    <span v-if="!PLAY_MATCH(s.sourceCode).hideMiddle">{{
-                      s.handicap
-                    }}</span>
-                    <span>{{ s.odds.toFixed(2) }}</span>
-                  </el-button>
-                </template>
-                <template v-else>
-                  <el-button
-                    :class="[
-                      'flex-grow text-center flex justify-between w-1/3',
-                      s ? 'visible' : 'invisible'
-                    ]"
-                    v-for="(s, idx) in cItem"
-                    :key="idx"
-                  >
-                    <template v-if="s">
-                      <span>{{ s.handicap }}</span>
+                      <span
+                        class="text-ellipsis overflow-hidden whitespace-nowrap max-w-[33%]"
+                        v-if="
+                          ['S1_AH', 'S2_AH', 'FTS_AH'].includes(s.sourceCode) &&
+                          matchInfo.sportId === 3
+                        "
+                      >
+                        {{ nameMap[s.homeOrAway] }}
+                      </span>
+                      <span v-else>
+                        {{
+                          s.n
+                            ? s.n
+                            : PLAY_MATCH(s.sourceCode)[
+                                s.homeOrAway || s.handicap
+                              ] ?? s.handicap
+                        }}
+                      </span>
+                      <span
+                        v-if="!PLAY_MATCH(s.sourceCode).hideMiddle && !s.n"
+                        >{{ s.handicap }}</span
+                      >
                       <span>{{ s.odds.toFixed(2) }}</span>
-                    </template>
-                  </el-button>
-                </template>
+                    </el-button>
+                  </template>
+                  <template v-else>
+                    <el-button
+                      :class="[
+                        'flex-grow text-center flex justify-between w-1/4 flex-shrink',
+                        s ? 'visible' : 'invisible'
+                      ]"
+                      v-for="(s, idx) in cItem"
+                      :key="idx"
+                    >
+                      <template v-if="s">
+                        <span>{{ s.handicap }}</span>
+                        <span>{{ s.odds.toFixed(2) }}</span>
+                      </template>
+                    </el-button>
+                  </template>
+                </div>
+
                 <div
                   class="h-8 flex justify-center items-center cursor-pointer ml-3"
                 >
@@ -268,6 +275,8 @@ const handleChange = () => {};
     overflow-y: auto;
   }
   .el-button {
+    margin: 0 5px 5px !important;
+    font-size: 12px;
     &:hover,
     &:focus {
       cursor: auto;
