@@ -130,7 +130,7 @@ export function useFootball() {
 
   //- 当前行编辑
   const editChild = (row: SattleDataAPI.MatchEventsList) => (row.isEdit = true);
-  // 打开关闭结算列表
+  //- 打开关闭结算列表
   const expandChange = (
     row: SaleDataAPI.PreSaleList,
     currentExpandList: SattleDataAPI.getSettlementDataList[]
@@ -162,7 +162,7 @@ export function useFootball() {
       item.tableList = res.data[item.key];
       childDataTotal.value += item.tableList.length;
       if (item.tableList.length) {
-        item.tableList.forEach(_ => {
+        item.tableList.forEach((_, index) => {
           _.createdAt = new Date(_.createdAt).getTime() + 1000 * 60 * 5;
           _.isEdit = false;
           _.isSave = false;
@@ -176,11 +176,27 @@ export function useFootball() {
           if (item.type === 'yellow_red_card') {
             _.redOrYellow = YELLOW_OR_RED[_.eventCode];
             if (_.redOrYellow === 1) {
-              _.t1_yellowScore = +_.t1;
-              _.t2_yellowScore = +_.t2;
+              _.t1Y = +_.t1;
+              _.t2Y = +_.t2;
+              _.t1R =
+                _.t1R ??
+                item.tableList[index - 1 < 0 ? 0 : index - 1]?.t1R ??
+                0;
+              _.t2R =
+                _.t2R ??
+                item.tableList[index - 1 < 0 ? 0 : index - 1]?.t2R ??
+                0;
             } else {
-              _.t1_redScore = +_.t1;
-              _.t2_redScore = +_.t2;
+              _.t1R = +_.t1;
+              _.t2R = +_.t2;
+              _.t1Y =
+                _.t1Y ??
+                item.tableList[index - 1 < 0 ? 0 : index - 1]?.t1Y ??
+                0;
+              _.t2Y =
+                _.t2Y ??
+                item.tableList[index - 1 < 0 ? 0 : index - 1]?.t2Y ??
+                0;
             }
           }
         });
