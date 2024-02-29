@@ -47,11 +47,12 @@ export function useLeague() {
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
+    loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
     dataList.length = 0;
     dataList.push(...res.data.list);
+    document.querySelector('.table_container .el-scrollbar__wrap').scroll(0, 0);
     pagination.total = res.data.total;
-    setTimeout(() => (loading.value = false), 500);
   }
 
   function openDialog(

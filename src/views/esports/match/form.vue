@@ -172,7 +172,7 @@ const confirmBtnClick = () => {
         formData.append('fileUsageCategory', '3');
         const res = await API.esFileUpload(formData);
         if (res.data?.url) {
-          newFormInline.value.leagueLogo = res.data?.url;
+          newFormInline.value.leagueLogo = res.data?.remoteFileName;
         }
       }
       updateEMatch();

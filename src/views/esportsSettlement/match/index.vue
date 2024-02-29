@@ -11,6 +11,7 @@
       <template #title>{{ t('电竞赛事列表') }}</template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
+          class="table_container"
           align-whole="center"
           showOverflowTooltip
           table-layout="auto"

@@ -90,6 +90,7 @@ declare namespace MetadataAPI {
   type UpLoadData = {
     remoteFileName: string;
     url: string;
+    relativelyFileName: string;
     originalFileName: string;
   }
 

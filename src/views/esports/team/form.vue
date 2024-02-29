@@ -131,7 +131,7 @@ const confirmBtnClick = () => {
         formData.append('fileUsageCategory', '3');
         const res = await API.esFileUpload(formData);
         if (res.data?.url) {
-          newFormInline.value.teamLogo = res.data?.url;
+          newFormInline.value.teamLogo = res.data?.remoteFileName;
         }
       }
       updateTeam();

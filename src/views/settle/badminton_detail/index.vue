@@ -10,12 +10,13 @@
     <PureTableBar :columns="columns" @refresh="onSearch()">
       <template #title>
         <div>
-          <h2>{{t('赛果结算')}}</h2>
+          <h2>{{ t('赛果结算') }}</h2>
         </div>
       </template>
 
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
+          class="table_container"
           align-whole="center"
           :loading="loading"
           :size="size"
@@ -57,15 +58,10 @@
         </pure-table>
       </template>
     </PureTableBar>
-    <template
-      v-if="renderObj.fullSettlementStatus !== 1 && checknoMore()"
-    >
+    <template v-if="renderObj.fullSettlementStatus !== 1 && checknoMore()">
       <div class="mt-4">
-        <el-button 
-          type="primary" 
-          @click="addEventRow"
-          >
-          {{t('新增局')}}
+        <el-button type="primary" @click="addEventRow">
+          {{ t('新增局') }}
         </el-button>
       </div>
     </template>

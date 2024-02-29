@@ -18,6 +18,7 @@
       </template> -->
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
+          class="table_container"
           align-whole="center"
           showOverflowTooltip
           table-layout="auto"
@@ -43,9 +44,15 @@
               :src="row.leagueLogo"
               :preview-src-list="dataList.map(v => v.leagueLogo)"
               :initial-index="index"
-              fit="cover"
+              fit="fill"
               class="!w-[80px] h-[30px]"
-            />
+            >
+              <template #placeholder>
+                <div class="loading_container">
+                  <IconifyIconOffline icon="loadingIcon"></IconifyIconOffline>
+                </div>
+              </template>
+            </el-image>
           </template>
           <template #operation="{ row }">
             <el-button

@@ -21,6 +21,10 @@ declare namespace SattleDataAPI {
     t1?: number | string;
     t2?: number | string;
     isEdit?: boolean;
+    t1_yellowScore?: number;
+    t2_yellowScore?: number;
+    t1_redScore?: number;
+    t2_redScore?: number;
     isSave?: boolean;
     redOrYellow?: number | string;
     isBackEndReturnData: boolean;

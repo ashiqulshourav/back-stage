@@ -10,12 +10,13 @@
     <PureTableBar :columns="columns" @refresh="onSearch()">
       <template #title>
         <div>
-          <h2>{{t('赛果结算')}}</h2>
+          <h2>{{ t('赛果结算') }}</h2>
         </div>
       </template>
 
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
+          class="table_container"
           align-whole="center"
           :loading="loading"
           :size="size"
@@ -57,12 +58,8 @@
         </pure-table>
       </template>
     </PureTableBar>
-    <template
-      v-if="renderObj.fullSettlementStatus !== 1 && checkNoMore()"
-    >
-      <div 
-        class="flex mt-4"
-        >
+    <template v-if="renderObj.fullSettlementStatus !== 1 && checkNoMore()">
+      <div class="flex mt-4">
         <el-button
           @click="boardType = '7-4'"
           :type="boardType === '7-4' ? 'primary' : 'default'"
@@ -79,11 +76,9 @@
         </el-button>
       </div>
       <div class="mt-4">
-        <el-button 
-          type="primary" 
-          @click="addEventRow"
-          >
-          {{t('新增局')}}</el-button>
+        <el-button type="primary" @click="addEventRow">
+          {{ t('新增局') }}</el-button
+        >
       </div>
     </template>
   </div>

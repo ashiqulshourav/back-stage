@@ -10,6 +10,7 @@
       <PureTableBar :title="t('盘口详情')" :columns="columns">
         <template v-slot="{ size, dynamicColumns }">
           <pure-table
+            class="table_container"
             align-whole="center"
             table-layout="auto"
             :loading="loading"
