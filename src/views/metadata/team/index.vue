@@ -31,9 +31,15 @@
               :src="row.teamLogo"
               :preview-src-list="dataList.map(v => v.teamLogo)"
               :initial-index="index"
-              fit="cover"
+              fit="fill"
               class="w-[80px] h-[30px]"
-            />
+            >
+              <template #placeholder>
+                <div class="loading_container">
+                  <IconifyIconOffline icon="loadingIcon"></IconifyIconOffline>
+                </div>
+              </template>
+            </el-image>
           </template>
           <template #operation="{ row }">
             <el-button
