@@ -52,11 +52,11 @@
         class="!w-[200px]"
       />
     </el-form-item>
-    <el-form-item :label="`${t('球队等级')}:`" prop="level">
+    <el-form-item :label="`${t('热门排序')}:`" prop="level">
       <el-input
         v-model="form.level"
         :formatter="v => formatNumber(v, 1)"
-        :placeholder="t('球队等级')"
+        :placeholder="t('热门排序')"
         clearable
         v-enter="search"
         class="!w-[200px]"
@@ -72,7 +72,7 @@
         />
       </el-select>
     </el-form-item> -->
-    <el-form-item :label="`${t('球队中文名称')}:`" prop="sportId">
+    <el-form-item :label="`${t('球队中文名称')}:`" prop="teamNameCn">
       <el-input
         v-model="form.teamNameCn"
         :placeholder="t('球队中文名称')"
@@ -82,7 +82,7 @@
         class="!w-[200px]"
       />
     </el-form-item>
-    <el-form-item :label="`${t('球队英文名称')}:`" prop="sportId">
+    <el-form-item :label="`${t('球队英文名称')}:`" prop="teamNameEn">
       <el-input
         v-model="form.teamNameEn"
         :placeholder="t('球队英文名称')"

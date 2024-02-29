@@ -211,3 +211,12 @@ input[type='number'] {
 .el-dialog__header.show-close {
   padding-right: 0;
 }
+
+/* 图片样式处理 */
+.el-image {
+  text-align: center;
+  img {
+    width: auto;
+    margin: 0 auto;
+  }
+}

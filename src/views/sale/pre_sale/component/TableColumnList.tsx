@@ -45,7 +45,6 @@ export const columns: TableColumnList = [
     label: t('热门排序'),
     prop: 'level',
     minWidth: 100,
-    sortable: true,
     headerRenderer: d => handleTableWidth(d, t('热门排序'), 'auto')
   },
   {

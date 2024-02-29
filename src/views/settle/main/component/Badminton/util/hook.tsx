@@ -46,9 +46,10 @@ export function useTennisHook() {
         item.isShowCancelBtn = +res.ts < +item.beginTimeLong;
       });
       dataList.push(...res.data.list);
+      document
+        .querySelector('.table_container .el-scrollbar__wrap')
+        .scroll(0, 0);
       pagination.total = res.data.total;
-      pagination.pageSize = res.data.pageSize;
-      pagination.currentPage = res.data.pageNum;
     } catch (error) {
       matchStore.settleRequestLoading = false;
     }

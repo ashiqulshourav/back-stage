@@ -21,6 +21,10 @@ declare namespace SattleDataAPI {
     t1?: number | string;
     t2?: number | string;
     isEdit?: boolean;
+    t1Y?: number;
+    t2Y?: number;
+    t1R?: number;
+    t2R?: number;
     isSave?: boolean;
     redOrYellow?: number | string;
     isBackEndReturnData: boolean;
@@ -285,11 +289,15 @@ declare namespace SattleDataAPI {
   type basketballData = SnookerEventsResData;
   type badmintonData = SnookerEventsResData;
   type pingpongData = SnookerEventsResData;
+  type rugbyData = SnookerEventsResData;
+
 
   type getSettlementListRes = COMMON.BASE_RES_TYPE<getSettlementDataListRes>;
   type getTennisEventsResType = COMMON.BASE_RES_TYPE<TennisEventsData[]>;
   type addTennisEventResType = COMMON.BASE_RES_TYPE<any>;
   type addBadmintonEventResType = COMMON.BASE_RES_TYPE<any>;
+  type addRugbyEventResType = COMMON.BASE_RES_TYPE<any>;
+
   type getSnookerEventsResType = COMMON.BASE_RES_TYPE<SnookerEventsResData[]>;
   type getVolleyballEventsResType = COMMON.BASE_RES_TYPE<volleyballData[]>;
   type manualSettlementFullTimeRestType = COMMON.BASE_RES_TYPE<any>;
@@ -308,7 +316,7 @@ declare namespace SattleDataAPI {
   type getBasketballEventRes = COMMON.BASE_RES_TYPE<basketballData[]>;
   type getBadmintonEventRes = COMMON.BASE_RES_TYPE<badmintonData[]>;
   type getPingPongEventRes = COMMON.BASE_RES_TYPE<pingpongData[]>;
-
+  type getRugbyEventRes = COMMON.BASE_RES_TYPE<rugbyData[]>;
   type getMatchEventsRes = COMMON.BASE_RES_TYPE<MatchEventsList[]>;
   type cancelBetOrderResType = COMMON.BASE_RES_TYPE<null>;
 
@@ -343,6 +351,14 @@ declare namespace SattleDataAPI {
     matchId: number;
     t1: number;
     t2: number;
+  };
+  type addRugbyEventReq = {
+    eventTime: number | string | Date;
+    matchId: number;
+    inningNum: number;
+    t1: number | string;
+    t2: number | string;
+    gameRule: string;
   };
   type SnookerEventReq = {
     eventTime: number | string;

@@ -47,7 +47,7 @@
           />
         </el-select>
       </el-form-item>
-     
+
       <el-form-item :label="t('联赛杯赛中文名')" prop="leagueNameCn">
         <el-input
           v-model="newFormInline.leagueNameCn"
@@ -73,16 +73,6 @@
           v-enter="updateVal"
         />
       </el-form-item>
-      <!-- <el-form-item label="赛种" prop="sportId">
-      <el-select v-model="newFormInline.sportId" :placeholder="t('赛种')">
-        <el-option
-          :label="item.label"
-          :value="item.value"
-          v-for="item in SPORT_ID_MAP"
-          :key="item.value"
-        />
-      </el-select>
-    </el-form-item> -->
       <el-form-item :label="t('联赛标签')" prop="leagueTagsId">
         <el-checkbox
           v-model="checkAll"
@@ -103,6 +93,12 @@
         </el-checkbox-group>
       </el-form-item>
     </el-form>
+    <div class="flex justify-end">
+      <el-button @click="cancelDialog">{{ t('取消') }}</el-button>
+      <el-button :loading="loading" @click="confirmBtnClick" type="primary">{{
+        t('确定')
+      }}</el-button>
+    </div>
   </div>
 </template>
 
@@ -114,14 +110,15 @@ import { Plus } from '@element-plus/icons-vue';
 import { t } from '@/plugins/i18n';
 import { useMatchStore } from '@/store/match';
 import { inputRestrictions } from '@/utils/formatNumber';
-import { closeAllDialog } from '@/components/ReDialog';
 import { message } from '@/utils/message';
 import { useLeague } from './utils/hook';
 
 const { form } = useLeague();
 const uploadFormFile = ref();
-
+const loading = ref(false);
 const matchStore = useMatchStore();
+const leagueTagsId = ref([]);
+
 const props = withDefaults(defineProps<FormProps>(), {
   formInline: () => ({
     leagueNameCn: '',
@@ -135,7 +132,7 @@ const props = withDefaults(defineProps<FormProps>(), {
   })
 });
 
-const emits = defineEmits(['reloadTable']);
+const emits = defineEmits(['reloadTable', 'closeDialog']);
 const updateVal = () => {
   ruleFormRef.value.validate(async valid => {
     if (valid) {
@@ -143,13 +140,10 @@ const updateVal = () => {
         props.formInline as MetadataAPI.updateLeagueParamsType
       );
       message(res.msg, { type: res.code ? 'error' : 'success' });
-      closeAllDialog();
-      if (!res.code) emits('reloadTable');
+      if (!res.code) emits('closeDialog', 'reload');
     }
   });
 };
-
-const leagueTagsId = ref([]);
 
 onMounted(async () => {
   const response = await API.getLeagueTagList({
@@ -162,11 +156,7 @@ onMounted(async () => {
 const onImgChange = file => {
   let name = file.name.slice(-3);
   let kb = 15360 * 1024;
-  if (
-    name.toLowerCase() === 'png' ||
-    name.toLowerCase() === 'jpg' ||
-    name.toLowerCase() === 'jpeg'
-  ) {
+  if (['png', 'jpg', 'peg'].includes(name.toLowerCase())) {
     if (file.size > kb) {
       message(t('文件过大，请重新上传'), { type: 'error' });
     } else {
@@ -184,10 +174,6 @@ const ruleFormRef = ref();
 const newFormInline = ref(props.formInline);
 const imageUrl = ref<string>(newFormInline.value.leagueLogo);
 
-function getRef() {
-  return ruleFormRef.value;
-}
-
 const checkAll = ref(false);
 const isIndeterminate = ref(true);
 
@@ -204,7 +190,33 @@ const handleCheckedTagIdsChange = (value: number[]) => {
     checkedCount > 0 && checkedCount < leagueTagsId.value.length;
 };
 
-defineExpose({ getRef, uploadFormFile });
+const cancelDialog = () => {
+  emits('closeDialog');
+};
+
+const confirmBtnClick = () => {
+  ruleFormRef.value.validate(async valid => {
+    if (valid) {
+      loading.value = true;
+      if (uploadFormFile.value) {
+        let formData = new FormData();
+        formData.append('file', uploadFormFile.value);
+        formData.append('fileUsageCategory', '3');
+        const res = await API.fileUpload(formData);
+        if (res.data?.url) {
+          newFormInline.value.leagueLogo = res.data?.remoteFileName;
+        }
+      }
+      updateLeague();
+    }
+  });
+};
+
+const updateLeague = async () => {
+  const res = await API.updateLeague(newFormInline.value);
+  message(res.msg, { type: res.code ? 'error' : 'success' });
+  emits('closeDialog', !res.code && 'reload');
+};
 </script>
 
 <style lang="scss">

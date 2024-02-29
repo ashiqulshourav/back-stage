@@ -6,6 +6,7 @@
   >
     <template v-slot="{ size, dynamicColumns }">
       <pure-table
+        class="table_container"
         align-whole="center"
         showOverflowTooltip
         :loading="matchStore.settleRequestLoading"
@@ -51,13 +52,17 @@
               <div class="mt-3 mb-1 font-bold">
                 {{ MATCH_EVENT_CODE[item.type] }}
               </div>
-
               <pure-table
+                class="table_container"
                 align-whole="center"
                 :row-key="row => row.id"
                 :data="item.tableList"
                 :loading="childloading"
-                :columns="childColumns"
+                :columns="
+                  item.type === 'yellow_red_card'
+                    ? [...yellow_red_column, ...childColumns.slice(1)]
+                    : childColumns
+                "
                 :row-class-name="tableRowClassName"
                 size="small"
                 table-layout="auto"
@@ -73,19 +78,6 @@
                     @teamChangeEvent="teamChangeEvent"
                   />
                 </template>
-
-                <!-- -事件是否有效 -->
-                <!-- <template #canceled="{ row }: MatchEventRowType">
-                  <el-text
-                    :class="[
-                      '!text-xs',
-                      row.canceled === 1 && '!text-sm font-bold'
-                    ]"
-                    :type="row.canceled === 1 ? 'danger' : 'info'"
-                    >{{ row.canceled === 1 ? t('否') : t('是') }}</el-text
-                  >
-                </template> -->
-
                 <!-- -结算类型 -->
                 <template #settleType="{ row }: MatchEventRowType">
                   <CountDownBtn
@@ -267,7 +259,8 @@ const {
   changeSettleType,
   cancelMatchEvent,
   advanceSettlement,
-  form
+  form,
+  yellow_red_column
 } = useFootball();
 const { cancelBetOrder } = useSettileHook();
 
@@ -304,22 +297,40 @@ const teamChangeEvent = (
   const isHome = row.homeAway === 'home';
   const isYellowRedCard = type === MatchEventType.YellowRedCard;
   if (childIndex === 0) {
-    row.t1 = isHome ? (isYellowRedCard ? row.redOrYellow : 1) : 0;
-    row.t2 = isHome ? 0 : isYellowRedCard ? row.redOrYellow : 1;
+    row.t1 = isHome ? 1 : 0;
+    row.t2 = isHome ? 0 : 1;
+    if (isYellowRedCard) {
+      if (row.redOrYellow === 2) {
+        row.t1R = isHome ? 1 : 0;
+        row.t2R = isHome ? 0 : 1;
+      } else {
+        row.t1Y = isHome ? 1 : 0;
+        row.t2Y = isHome ? 0 : 1;
+      }
+    }
   } else {
     const prevRow = childrenData[childIndex - 1];
-    const t1Increment = isHome
-      ? isYellowRedCard
-        ? (row.redOrYellow as number)
-        : 1
-      : 0;
-    const t2Increment = isHome
-      ? 0
-      : isYellowRedCard
-      ? (row.redOrYellow as number)
-      : 1;
+    const t1Increment = isHome ? 1 : 0;
+    const t2Increment = isHome ? 0 : 1;
     row.t1 = +prevRow.t1 + t1Increment;
     row.t2 = +prevRow.t2 + t2Increment;
+    if (isYellowRedCard) {
+      if (row.redOrYellow === 2) {
+        row.t1R = +(prevRow.t1R ?? 0) + t1Increment;
+        row.t2R = +(prevRow.t2R ?? 0) + t2Increment;
+        row.t1 = row.t1R;
+        row.t2 = row.t2R;
+        row.t1Y = prevRow.t1Y;
+        row.t2Y = prevRow.t2Y;
+      } else {
+        row.t1Y = +(prevRow.t1Y ?? 0) + t1Increment;
+        row.t2Y = +(prevRow.t2Y ?? 0) + t2Increment;
+        row.t1 = row.t1Y;
+        row.t2 = row.t2Y;
+        row.t1R = +(prevRow.t1R ?? 0);
+        row.t2R = +(prevRow.t2R ?? 0);
+      }
+    }
   }
 };
 

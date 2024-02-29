@@ -60,7 +60,9 @@ const comoMap = {
   Cricket,
   Hockey,
   Boxing,
-  Darts
+  Darts,
+  Rugby,
+  AmericanFootball,
   // MatchLists
 };
 const currentComponentName = reactive({

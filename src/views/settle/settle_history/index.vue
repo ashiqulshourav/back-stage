@@ -16,6 +16,7 @@
     >
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
+          class="table_container"
           align-whole="center"
           showOverflowTooltip
           :loading="loading"
@@ -40,6 +41,7 @@
                 </div>
 
                 <pure-table
+                  class="table_container"
                   align-whole="center"
                   :row-key="row => row.id"
                   :data="item.tableList"

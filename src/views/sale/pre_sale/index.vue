@@ -29,6 +29,7 @@
       </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
+          class="table_container"
           align-whole="center"
           showOverflowTooltip
           table-layout="auto"
@@ -39,10 +40,7 @@
           :columns="dynamicColumns"
           :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
           :paginationSmall="size === 'small' ? true : false"
-          :header-cell-style="{
-            background: 'var(--el-fill-color-light)',
-            color: 'var(--el-text-color-primary)'
-          }"
+          :header-cell-style="tableHeaderStyle"
           @selection-change="handleSelectionChange"
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
@@ -106,8 +104,10 @@ import SearchForm from './component/SearchForm.vue';
 import OpeningPreview from './component/OpeningPreview.vue';
 import { addDialog } from '@/components/ReDialog';
 import { message } from '@/utils/message';
+import { usePublicHooks } from '@/hooks';
 
 defineOptions({ name: 'PRE_SALE' });
+const { tableHeaderStyle } = usePublicHooks();
 const openInfoDialog = (matchId: number, row: SaleDataAPI.PreSaleList) => {
   if (row.saleHandicaps === 0)
     return message(

@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
 import { handleTableWidth } from '@/utils/getTableWidth';
-import { MATCH_STATUS /* PANDA_MATCH_STATUS */ } from '@/utils/maps/sports_map';
-// import { parseMatchScore } from '@/utils/formatMatch';
+import { MATCH_STATUS } from '@/utils/maps/sports_map';
 
 export const columns: TableColumnList = [
   {
@@ -120,6 +119,43 @@ export const columns: TableColumnList = [
   }
 ];
 
+export const yellow_red_column = [
+  {
+    headerRenderer: () => {
+      return (
+        <>
+          <div class="border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#303030]">
+            {t('黄牌')}
+          </div>
+          <div class="flex justify-center">
+            {t('主队')} : {t('客队')}
+          </div>
+        </>
+      );
+    },
+    formatter: ({ t1Y, t2Y }) => {
+      return `${t1Y ?? 0} : ${t2Y ?? 0}`;
+    }
+  },
+  {
+    headerRenderer: () => {
+      return (
+        <>
+          <div class="border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#303030]">
+            {t('红牌')}
+          </div>
+          <div class="flex justify-center">
+            {t('主队')} : {t('客队')}
+          </div>
+        </>
+      );
+    },
+    formatter: ({ t1R, t2R }) => {
+      return `${t1R ?? 0} : ${t2R ?? 0}`;
+    }
+  }
+];
+
 export const childColumns: TableColumnList = [
   {
     label: t('主队 : 客队'),
@@ -132,10 +168,6 @@ export const childColumns: TableColumnList = [
     label: t('事件编码'),
     slot: 'eventCode'
   },
-  // {
-  //   label: t('事件是否有效'),
-  //   slot: 'canceled'
-  // },
   {
     label: t('结算类型'),
     slot: 'settleType'

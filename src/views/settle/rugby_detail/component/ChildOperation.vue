@@ -19,7 +19,7 @@
       size="small"
       type="primary"
       @click="settleJunClick"
-      >{{ t('结算局') }}</el-button
+      >{{ t('结算') + t(MATCH_PERIOD[row.inningNum]) }}</el-button
     >
     <el-button size="small" type="danger" @click="deleteChildItem">{{
       t('删除')
@@ -31,6 +31,7 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import { message } from '@/utils/message';
+import { MATCH_PERIOD } from '../utils/tableColumnList';
 const props = defineProps<{
   row: SattleDataAPI.InningEvent;
   childIndex: number;

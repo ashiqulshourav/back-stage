@@ -1,10 +1,17 @@
 import dayjs from "dayjs";
+export const MATCH_PERIOD = {
+  1: t('上半场'),
+  2: t('下半场'),
+  40: t('加时赛')
+}
 
 export const columns: TableColumnList = [
   {
-    label: t('局'),
+    label: t('场'),
     prop: 'inningNum',
-    type: 'index'
+    formatter: ({inningNum}) => {
+      return MATCH_PERIOD[inningNum];
+    }
   },
   {
     headerRenderer: () => history.state.params.homeTeamNameCn ?? '_',
@@ -38,6 +45,7 @@ export const columns: TableColumnList = [
   },
   {
     label: t('操作'),
-    slot: 'operation'
+    slot: 'operation',
+    width: 260
   }
 ];

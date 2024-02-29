@@ -1,9 +1,9 @@
-import { message } from "@/utils/message";
-import editForm from "../form.vue";
-import type { PaginationProps } from "@pureadmin/table";
-import { addDialog } from "@/components/ReDialog";
-import { t } from "@/plugins/i18n";
-import { usePublicHooks } from "@/hooks";
+import { message } from '@/utils/message';
+import editForm from '../form.vue';
+import type { PaginationProps } from '@pureadmin/table';
+import { addDialog } from '@/components/ReDialog';
+import { t } from '@/plugins/i18n';
+import { usePublicHooks } from '@/hooks';
 
 export function useLeague() {
   const dataList = reactive<VirtualAPI.League[]>([]);
@@ -19,57 +19,57 @@ export function useLeague() {
   });
   const columns: TableColumnList = [
     {
-      label: t("联赛ID"),
-      prop: "leagueId",
+      label: t('联赛ID'),
+      prop: 'leagueId',
       fixed: 'left'
     },
     {
       label: t('中文简体'),
-      prop: "leagueNameCn",
+      prop: 'leagueNameCn',
       minWidth: 200,
       fixed: 'left'
     },
     {
       label: t('英文名称'),
-      prop: "leagueNameEn",
+      prop: 'leagueNameEn',
       minWidth: 200
     },
     {
       label: t('简称'),
-      prop: "leagueName",
+      prop: 'leagueName',
       minWidth: 200
     },
     {
       label: t('英文名（数据商）'),
-      prop: "dataSource",
+      prop: 'dataSource',
       minWidth: 150
     },
     {
       label: t('英文名（数据商）Name'),
-      prop: "dataSourceName",
+      prop: 'dataSourceName',
       minWidth: 100
     },
     {
       label: t('联赛排序'),
-      prop: "sort",
+      prop: 'sort',
       minWidth: 80
     },
     {
       label: t('操作'),
       width: 240,
-      slot: "operation",
+      slot: 'operation',
       align: 'right'
     }
   ];
 
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
-    onSearch()
+    onSearch();
   }
 
   function handleCurrentChange(val: number) {
     pagination.currentPage = val;
-    onSearch()
+    onSearch();
   }
 
   async function onSearch(type?: string) {
@@ -81,13 +81,12 @@ export function useLeague() {
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage
     });
-    if (res.code) return message(res.msg, { type: "error" });
+    loading.value = false;
+    if (res.code) return message(res.msg, { type: 'error' });
     dataList.length = 0;
     dataList.push(...res.data.list);
+    document.querySelector('.table_container .el-scrollbar__wrap').scroll(0, 0);
     pagination.total = res.data.total;
-    pagination.pageSize = res.data.pageSize;
-    pagination.currentPage = res.data.pageNum;
-    setTimeout(() => loading.value = false, 500);
   }
 
   const resetForm = formEl => {
@@ -101,16 +100,16 @@ export function useLeague() {
       title,
       props: {
         formInline: {
-          leagueId: row?.leagueId ?? "",
-          leagueNameCn: row?.leagueNameCn ?? "",
-          leagueNameEn: row?.leagueNameEn ?? "",
-          leagueName: row?.leagueName ?? "",
-          dataSource: row?.dataSource ?? "",
-          dataSourceName: row?.dataSourceName ?? "",
+          leagueId: row?.leagueId ?? '',
+          leagueNameCn: row?.leagueNameCn ?? '',
+          leagueNameEn: row?.leagueNameEn ?? '',
+          leagueName: row?.leagueName ?? '',
+          dataSource: row?.dataSource ?? '',
+          dataSourceName: row?.dataSourceName ?? '',
           sort: row?.sort
         }
       },
-      width: "40%",
+      width: '40%',
       draggable: true,
       fullscreenIcon: true,
       closeOnClickModal: false,
@@ -122,11 +121,11 @@ export function useLeague() {
           done();
           onSearch();
         }
-        FormRef.validate(async (valid) => {
+        FormRef.validate(async valid => {
           if (valid) {
-            console.log("curData", curData);
+            console.log('curData', curData);
 
-            if (title === "新增") {
+            if (title === '新增') {
               await API.createVMatch(curData);
               chores();
             } else {

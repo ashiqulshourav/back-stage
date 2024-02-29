@@ -2,7 +2,7 @@ import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { t } from '@/plugins/i18n';
-import { childColumns, columns } from '../tableColumnList';
+import { childColumns, yellow_red_column, columns } from '../tableColumnList';
 import {
   MatchEventType,
   SPORT_TYPE,
@@ -95,8 +95,9 @@ export function useFootball() {
           ])
       );
       pagination.total = res.data.total;
-      pagination.pageSize = res.data.pageSize;
-      pagination.currentPage = res.data.pageNum;
+      document
+        .querySelector('.table_container .el-scrollbar__wrap')
+        .scroll(0, 0);
     } catch (error) {
       matchStore.settleRequestLoading = false;
     }
@@ -129,8 +130,7 @@ export function useFootball() {
 
   //- 当前行编辑
   const editChild = (row: SattleDataAPI.MatchEventsList) => (row.isEdit = true);
-
-  // 打开关闭结算列表
+  //- 打开关闭结算列表
   const expandChange = (
     row: SaleDataAPI.PreSaleList,
     currentExpandList: SattleDataAPI.getSettlementDataList[]
@@ -162,7 +162,7 @@ export function useFootball() {
       item.tableList = res.data[item.key];
       childDataTotal.value += item.tableList.length;
       if (item.tableList.length) {
-        item.tableList.forEach(_ => {
+        item.tableList.forEach((_, index) => {
           _.createdAt = new Date(_.createdAt).getTime() + 1000 * 60 * 5;
           _.isEdit = false;
           _.isSave = false;
@@ -172,11 +172,33 @@ export function useFootball() {
           _.isBackEndReturnData = true;
           if (_.eventTime.toString().length < 10) {
             _.eventTime = dateSetSecond(_.eventTime as number);
-          } /*  else {
-            _.eventTime = getSecondTime(_.eventTime, row.beginTime);
-          } */
-          item.type === 'yellow_red_card' &&
-            (_.redOrYellow = YELLOW_OR_RED[_.eventCode]);
+          }
+          if (item.type === 'yellow_red_card') {
+            _.redOrYellow = YELLOW_OR_RED[_.eventCode];
+            if (_.redOrYellow === 1) {
+              _.t1Y = +_.t1;
+              _.t2Y = +_.t2;
+              _.t1R =
+                _.t1R ??
+                item.tableList[index - 1 < 0 ? 0 : index - 1]?.t1R ??
+                0;
+              _.t2R =
+                _.t2R ??
+                item.tableList[index - 1 < 0 ? 0 : index - 1]?.t2R ??
+                0;
+            } else {
+              _.t1R = +_.t1;
+              _.t2R = +_.t2;
+              _.t1Y =
+                _.t1Y ??
+                item.tableList[index - 1 < 0 ? 0 : index - 1]?.t1Y ??
+                0;
+              _.t2Y =
+                _.t2Y ??
+                item.tableList[index - 1 < 0 ? 0 : index - 1]?.t2Y ??
+                0;
+            }
+          }
         });
       }
     });
@@ -396,6 +418,7 @@ export function useFootball() {
     reloadTable,
     changeSettleType,
     cancelMatchEvent,
-    advanceSettlement
+    advanceSettlement,
+    yellow_red_column
   };
 }

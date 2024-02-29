@@ -14,14 +14,14 @@ declare namespace MetadataAPI {
     leagueTagsId?: ConfigCenterDataAPI.LeagueTagType[];
   };
   type updateLeagueParamsType = {
-    leagueLogo: string;
-    leagueId: number;
-    countryId: number;
-    leagueId188Bet: number;
-    leagueNameCn: string;
-    leagueNameEn: string;
-    level: number;
-    sportId: number;
+    leagueLogo?: string;
+    leagueId?: number | string;
+    countryId?: number | string;
+    leagueId188Bet?: number | string;
+    leagueNameCn?: string;
+    leagueNameEn?: string;
+    level?: number | string;
+    sportId?: number | string;
     leagueTagsId?: ConfigCenterDataAPI.LeagueTagType[];
   };
 
@@ -90,6 +90,7 @@ declare namespace MetadataAPI {
   type UpLoadData = {
     remoteFileName: string;
     url: string;
+    relativelyFileName: string;
     originalFileName: string;
   }
 

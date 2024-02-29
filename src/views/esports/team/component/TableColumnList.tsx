@@ -16,14 +16,14 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('联赛ID'))
   },
   {
-    label: t('球队ID'),
+    label: t('队伍ID'),
     prop: 'teamId',
-    headerRenderer: d => handleTableWidth(d, t('球队ID'))
+    headerRenderer: d => handleTableWidth(d, t('队伍ID'))
   },
   {
-    label: t('球队等级'),
+    label: t('队伍等级'),
     prop: 'level',
-    headerRenderer: d => handleTableWidth(d, t('球队等级'))
+    headerRenderer: d => handleTableWidth(d, t('队伍等级'))
   },
   {
     label: t('赛种'),
@@ -33,34 +33,28 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('赛种'))
   },
   {
-    label: t('球队Logo'),
-    prop: 'teamLogo',
+    label: t('队伍Logo'),
     slot: 'teamLogo',
-    headerRenderer: d => handleTableWidth(d, t('球队Logo'))
+    minWidth: 200,
+    headerRenderer: d => handleTableWidth(d, t('队伍Logo'))
   },
   {
-    label: t('球队中文名称'),
+    label: t('队伍中文名称'),
     prop: 'teamNameCn',
     align: 'left',
-    headerRenderer: d => handleTableWidth(d, t('球队中文名称'))
+    headerRenderer: d => handleTableWidth(d, t('队伍中文名称'))
   },
   {
-    label: t('球队英文名称'),
+    label: t('队伍英文名称'),
     prop: 'teamNameEn',
     align: 'left',
-    headerRenderer: d => handleTableWidth(d, t('球队英文名称'))
+    headerRenderer: d => handleTableWidth(d, t('队伍英文名称'))
   },
   {
     label: t('是否国家队'),
     prop: 'isCountryTeam',
     headerRenderer: d => handleTableWidth(d, t('是否国家队')),
     formatter: ({ isCountryTeam }) => (isCountryTeam ? t('是') : t('否'))
-  },
-  {
-    label: t('主场名称'),
-    prop: 'stadiumName',
-    headerRenderer: d => handleTableWidth(d, t('主场名称')),
-    formatter: ({ stadiumName }) => (stadiumName ? stadiumName : '-')
   },
   {
     slot: 'operation',

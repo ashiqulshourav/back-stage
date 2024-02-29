@@ -1,37 +1,38 @@
 <template>
-  <el-form
-    ref="ruleFormRef"
-    :model="newFormInline"
-    :rules="formRules"
-    label-width="150px"
-  >
-    <el-form-item :label="t('联赛ID')" prop="leagueId">
-      <el-input
-        v-model="newFormInline.leagueId"
-        clearable
-        :placeholder="t('联赛ID')"
-        :disabled="!!newFormInline.leagueId"
-      />
-    </el-form-item>
-
-    <el-form-item :label="`${t('联赛Logo')}:`">
-      <el-upload
-        action=""
-        :auto-upload="false"
-        class="avatar-uploader"
-        :show-file-list="false"
-        :on-change="onImgChange"
-      >
-        <img
-          v-if="imageUrl"
-          :src="imageUrl"
-          class="max-h-[100px] max-w=[200px]"
+  <div>
+    <el-form
+      ref="ruleFormRef"
+      :model="newFormInline"
+      :rules="formRules"
+      label-width="150px"
+    >
+      <el-form-item :label="t('联赛ID')" prop="leagueId">
+        <el-input
+          v-model="newFormInline.leagueId"
+          clearable
+          :placeholder="t('联赛ID')"
+          :disabled="!!newFormInline.leagueId"
         />
-        <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-      </el-upload>
-    </el-form-item>
+      </el-form-item>
 
-    <!-- <el-form-item :label="t('国家地区')" prop="countryId">
+      <el-form-item :label="`${t('联赛Logo')}:`">
+        <el-upload
+          action=""
+          :auto-upload="false"
+          class="avatar-uploader"
+          :show-file-list="false"
+          :on-change="onImgChange"
+        >
+          <img
+            v-if="imageUrl"
+            :src="imageUrl"
+            class="max-h-[100px] max-w=[200px]"
+          />
+          <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+        </el-upload>
+      </el-form-item>
+
+      <!-- <el-form-item :label="t('国家地区')" prop="countryId">
       <el-select
         v-model="newFormInline.countryId"
         filterable
@@ -48,13 +49,13 @@
       </el-select>
     </el-form-item> -->
 
-    <!-- <el-form-item :label="t('188数据源联赛杯赛')" prop="leagueId188Bet">
+      <!-- <el-form-item :label="t('188数据源联赛杯赛')" prop="leagueId188Bet">
       <el-input
         v-model="newFormInline.leagueId188Bet"
         :placeholder="t('188数据源联赛杯赛')"
       />
     </el-form-item> -->
-    <!-- <el-form-item :label="t('联赛杯赛中文名')" prop="leagueNameCn">
+      <!-- <el-form-item :label="t('联赛杯赛中文名')" prop="leagueNameCn">
       <el-input
         v-model="newFormInline.leagueNameCn"
         maxLength="35"
@@ -68,18 +69,18 @@
         maxLength="35"
       />
     </el-form-item> -->
-    <el-form-item :label="t('热门排序')" prop="level">
-      <el-input
-        :formatter="v => inputRestrictions(v)"
-        v-model="newFormInline.level"
-        :placeholder="t('请输入1-200之间的数字')"
-        type="number"
-        clearable
-        class="!w-[200px]"
-        v-enter="updateVal"
-      />
-    </el-form-item>
-    <!-- <el-form-item label="赛种" prop="sportId">
+      <el-form-item :label="t('热门排序')" prop="level">
+        <el-input
+          :formatter="v => inputRestrictions(v)"
+          v-model="newFormInline.level"
+          :placeholder="t('请输入1-200之间的数字')"
+          type="number"
+          clearable
+          class="!w-[200px]"
+          v-enter="updateVal"
+        />
+      </el-form-item>
+      <!-- <el-form-item label="赛种" prop="sportId">
       <el-select v-model="newFormInline.sportId" :placeholder="t('赛种')">
         <el-option
           :label="item.label"
@@ -89,7 +90,14 @@
         />
       </el-select>
     </el-form-item> -->
-  </el-form>
+    </el-form>
+    <div class="flex justify-end">
+      <el-button @click="cancelDialog">{{ t('取消') }}</el-button>
+      <el-button :loading="loading" @click="confirmBtnClick" type="primary">{{
+        t('确定')
+      }}</el-button>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -102,11 +110,10 @@ import { t } from '@/plugins/i18n';
 // import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 // import { useMatchStore } from '@/store/match';
 import { inputRestrictions } from '@/utils/formatNumber';
-import { closeAllDialog } from '@/components/ReDialog';
 import { message } from '@/utils/message';
 import { Plus } from '@element-plus/icons-vue';
 
-// const matchStore = useMatchStore();
+const loading = ref(false);
 const props = withDefaults(defineProps<FormProps>(), {
   formInline: () => ({
     leagueNameCn: '',
@@ -121,7 +128,7 @@ const props = withDefaults(defineProps<FormProps>(), {
 });
 
 const uploadFormFile = ref();
-const emits = defineEmits(['reloadTable']);
+const emits = defineEmits(['closeDialog']);
 const updateVal = () => {
   ruleFormRef.value.validate(async valid => {
     if (valid) {
@@ -129,8 +136,7 @@ const updateVal = () => {
         props.formInline as MetadataAPI.updateLeagueParamsType
       );
       message(res.msg, { type: res.code ? 'error' : 'success' });
-      closeAllDialog();
-      if (!res.code) emits('reloadTable');
+      if (!res.code) emits('closeDialog', 'reload');
     }
   });
 };
@@ -142,11 +148,7 @@ const imageUrl = ref<string>(newFormInline.value.leagueLogo);
 const onImgChange = file => {
   let name = file.name.slice(-3);
   let kb = 15360 * 1024;
-  if (
-    name.toLowerCase() === 'png' ||
-    name.toLowerCase() === 'jpg' ||
-    name.toLowerCase() === 'jpeg'
-  ) {
+  if (['png', 'jpg', 'peg'].includes(name.toLowerCase())) {
     if (file.size > kb) {
       message(t('文件过大，请重新上传'), { type: 'error' });
     } else {
@@ -160,11 +162,33 @@ const onImgChange = file => {
   }
 };
 
-function getRef() {
-  return ruleFormRef.value;
-}
+const confirmBtnClick = () => {
+  ruleFormRef.value.validate(async valid => {
+    if (valid) {
+      loading.value = true;
+      if (uploadFormFile.value) {
+        let formData = new FormData();
+        formData.append('file', uploadFormFile.value);
+        formData.append('fileUsageCategory', '3');
+        const res = await API.esFileUpload(formData);
+        if (res.data?.url) {
+          newFormInline.value.leagueLogo = res.data?.remoteFileName;
+        }
+      }
+      updateEMatch();
+    }
+  });
+};
 
-defineExpose({ getRef, uploadFormFile });
+const updateEMatch = async () => {
+  const res = await API.updateEMatch(newFormInline.value);
+  message(res.msg, { type: res.code ? 'error' : 'success' });
+  emits('closeDialog', !res.code && 'reload');
+};
+
+const cancelDialog = () => {
+  emits('closeDialog');
+};
 </script>
 
 <style lang="scss">

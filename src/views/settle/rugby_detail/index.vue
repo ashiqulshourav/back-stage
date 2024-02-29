@@ -14,8 +14,9 @@
             @click="addEventRow"
             size="small"
             type="primary"
+            :disabled="noMore()"
             v-if="renderObj.fullSettlementStatus === 0"
-            >{{ t('新增局') }}</el-button
+            >{{ t('新增场') }}</el-button
           >
           <span></span>
         </div>
@@ -23,6 +24,7 @@
 
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
+          class="table_container"
           align-whole="center"
           :loading="loading"
           :size="size"
@@ -71,7 +73,7 @@
 <script setup lang="ts">
 import { usePublicHooks } from '@/hooks';
 import { PureTableBar } from '@/components/RePureTableBar';
-import DetiltTitle from '../component/Settle_detail_title.vue';
+import DetiltTitle from './component/DetailTitle.vue';
 import { useBilliardsHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import Score from './component/Score.vue';
@@ -90,6 +92,7 @@ const {
   settlementHandicap,
   allSettleBtnClick,
   renderObj,
-  allSettleLoading
+  allSettleLoading,
+  noMore
 } = useBilliardsHook();
 </script>

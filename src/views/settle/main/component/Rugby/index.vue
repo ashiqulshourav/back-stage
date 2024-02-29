@@ -1,11 +1,12 @@
 <template>
   <PureTableBar
-    :title="t('英式橄欖球结算管理')"
+    :title="t('英式橄榄球结算管理')"
     :columns="columns"
     @refresh="onSearch('reload')"
   >
     <template v-slot="{ size, dynamicColumns }">
       <pure-table
+        class="table_container"
         align-whole="center"
         showOverflowTooltip
         :loading="matchStore.settleRequestLoading"

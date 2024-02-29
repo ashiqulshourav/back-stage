@@ -27,6 +27,7 @@ import listUnordered from '@iconify-icons/ri/list-unordered';
 import addIcons from '@iconify-icons/ri/add-fill';
 import AddFill from '@iconify-icons/ri/add-circle-line';
 import deleteBin_5Line from '@iconify-icons/ri/delete-bin-5-line';
+import loading from '@iconify-icons/ri/loader-2-line';
 import EditPen from '@iconify-icons/ep/edit-pen';
 import Delete from '@iconify-icons/ep/delete';
 /** //-菜单icon */
@@ -73,3 +74,4 @@ addIcon("addFill", AddFill);
 addIcon("editPen", EditPen);
 addIcon("deleteBin_5Line", deleteBin_5Line);
 addIcon("Delete", Delete);
+addIcon("loadingIcon", loading);
