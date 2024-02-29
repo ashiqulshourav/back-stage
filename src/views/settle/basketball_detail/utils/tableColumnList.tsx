@@ -60,6 +60,7 @@ export const columns: TableColumnList = [
   },
   {
     label: t('操作'),
-    slot: 'operation'
+    slot: 'operation',
+    width: 260
   }
 ];

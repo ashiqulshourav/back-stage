@@ -9,7 +9,7 @@ export const SPORT_ID_MAP = [
   { label: t('排球'), value: 6, type: 'Volleyball' },
   { label: t('特别项目'), value: 7, type: 'SpecialProjects' },
   { label: t('飞镖'), value: 8, type: 'Darts' },
-  { label: t('英式橄欖球'), value: 9, type: 'Rugby' },
+  { label: t('英式橄榄球'), value: 9, type: 'Rugby' },
   { label: t('拳击/格斗'), value: 10, type: 'Boxing' },
   { label: t('手球'), value: 11, type: 'Handball' },
   { label: t('冰球'), value: 12, type: 'IceHockey' },
