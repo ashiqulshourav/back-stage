@@ -50,7 +50,7 @@ export function useClassifySettingHook() {
         sportName: SPORT_ID_MAP.find(item => item.value === row.sportId).label,
         id: row.id
       });
-      message(res.msg, { type: res.msg ? 'error' : 'success' });
+      message(res.msg, { type: res.code ? 'error' : 'success' });
       onSearch();
     });
   };
