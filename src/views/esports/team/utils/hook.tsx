@@ -43,7 +43,6 @@ export function useLeague() {
   function handleCurrentChange(val: number) {
     pagination.currentPage = val;
     onSearch();
-    document.querySelector('.table_container .el-scrollbar__wrap').scroll(0, 0);
   }
 
   function handleSelectionChange(val) {
@@ -60,13 +59,14 @@ export function useLeague() {
         pageNum: pagination.currentPage
       }
     );
+    loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
     dataList.length = 0;
     dataList.push(...res.data.list);
     pagination.total = res.data.total;
     pagination.pageSize = res.data.pageSize;
     pagination.currentPage = res.data.pageNum;
-    setTimeout(() => (loading.value = false), 500);
+    document.querySelector('.table_container .el-scrollbar__wrap').scroll(0, 0);
   }
 
   const resetForm = formEl => {
@@ -80,8 +80,8 @@ export function useLeague() {
       title,
       props: {
         formInline: {
-          teamNameEn: row?.teamNameCn ?? '',
-          teamNameCn: row?.teamNameEn ?? '',
+          teamNameEn: row?.teamNameEn ?? '',
+          teamNameCn: row?.teamNameCn ?? '',
           level: row?.level ?? '',
           leagueId: row?.leagueId ?? '',
           sportId: row?.sportId ?? '',

@@ -33,6 +33,7 @@ export function useClassifySettingHook() {
     if (res.code) return message(res.msg, { type: 'error' });
     dataList.length = 0;
     dataList.push(...res.data);
+    document.querySelector('.table_container .el-scrollbar__wrap').scroll(0, 0);
   }
 
   //- 删除分类

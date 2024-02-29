@@ -95,8 +95,9 @@ export function useFootball() {
           ])
       );
       pagination.total = res.data.total;
-      pagination.pageSize = res.data.pageSize;
-      pagination.currentPage = res.data.pageNum;
+      document
+        .querySelector('.table_container .el-scrollbar__wrap')
+        .scroll(0, 0);
     } catch (error) {
       matchStore.settleRequestLoading = false;
     }

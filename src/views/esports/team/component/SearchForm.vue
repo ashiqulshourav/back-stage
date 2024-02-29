@@ -72,7 +72,7 @@
         />
       </el-select>
     </el-form-item> -->
-    <el-form-item :label="`${t('球队中文名称')}:`" prop="sportId">
+    <el-form-item :label="`${t('球队中文名称')}:`" prop="teamNameCn">
       <el-input
         v-model="form.teamNameCn"
         :placeholder="t('球队中文名称')"
@@ -82,7 +82,7 @@
         class="!w-[200px]"
       />
     </el-form-item>
-    <el-form-item :label="`${t('球队英文名称')}:`" prop="sportId">
+    <el-form-item :label="`${t('球队英文名称')}:`" prop="teamNameEn">
       <el-input
         v-model="form.teamNameEn"
         :placeholder="t('球队英文名称')"
