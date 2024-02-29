@@ -250,6 +250,12 @@ export const sattleData = {
       '/volleyball/v1/addVolleyballEvent',
       { data }
     ),
+  addRugbyEvent: (data: SattleDataAPI.addRugbyEventReq) =>
+    http.request<SattleDataAPI.addRugbyEventResType>(
+      'post',
+      '/rugby/v1/addRugbyEvent',
+      { data }
+    ),
   addBadmintonballEvent: (data: SattleDataAPI.BadmintonEventReq) =>
     http.request<SattleDataAPI.addBadmintonEventResType>(
       'post',
@@ -290,6 +296,12 @@ export const sattleData = {
       '/pingPong/v1/getPingPongEvents',
       { data }
     ),
+  getRugbyEvents: (data: { matchId: number }) =>
+    http.request<SattleDataAPI.getRugbyEventRes>(
+      'post',
+      '/rugby/v1/getRugbyEvents',
+      { data }
+    ),
 
   //-排球全场结算（按盘）
   manualSettlementFullTime: (data: { matchId: number }) =>
@@ -324,6 +336,12 @@ export const sattleData = {
     http.request<SattleDataAPI.manualSettlementFullTimeRestType>(
       'post',
       '/pingPong/v1/manualSettlementFullTime',
+      { data }
+    ),
+  RugbyManualSettlementFullTime: (data: { matchId: number }) =>
+    http.request<SattleDataAPI.manualSettlementFullTimeRestType>(
+      'post',
+      '/rugby/v1/manualSettlementFullTime',
       { data }
     ),
   //- 获取单个赛事信息
