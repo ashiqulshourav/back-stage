@@ -92,7 +92,7 @@ export function useLeague() {
         }
       },
       hideFooter: true,
-      width: '40%',
+      width: '35%',
       draggable: true,
       closeOnClickModal: false,
       contentRenderer: ({ options, index }) =>

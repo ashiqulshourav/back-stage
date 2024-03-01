@@ -77,14 +77,6 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="`${t('主场名称')}:`" prop="stadiumName">
-        <el-input
-          v-model="newFormInline.stadiumName"
-          maxLength="30"
-          :placeholder="t('主场名称')"
-        />
-      </el-form-item>
-
       <el-form-item :label="`${t('球队中文名称')}:`" prop="teamNameCn">
         <el-input
           v-model="newFormInline.teamNameCn"
@@ -96,6 +88,14 @@
         <el-input
           v-model="newFormInline.teamNameEn"
           :placeholder="t('球队英文名称')"
+        />
+      </el-form-item>
+
+      <el-form-item :label="`${t('主场名称')}:`" prop="stadiumName">
+        <el-input
+          v-model="newFormInline.stadiumName"
+          maxLength="30"
+          :placeholder="t('主场名称')"
         />
       </el-form-item>
     </el-form>
