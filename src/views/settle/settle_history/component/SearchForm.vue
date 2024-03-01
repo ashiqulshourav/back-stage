@@ -131,3 +131,4 @@ const resetForm = formRef => {
   }
 }
 </style>
+./FootBall/utils/type
