@@ -87,7 +87,7 @@
           <el-checkbox
             v-for="tag in leagueTagsId"
             :key="tag.id"
-            :label="tag.id"
+            :value="tag.id"
             >{{ tag.text }}</el-checkbox
           >
         </el-checkbox-group>

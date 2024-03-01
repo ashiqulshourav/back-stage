@@ -241,7 +241,6 @@
   "kba34f34": "1st Half Ended",
   "k-29ca694f": "FT Ended",
   "k7216919": "Cancelation",
-  "k-6ac3845c": "Valid Event?",
   "k-3b21ffff": "Home : Away",
   "k-763d16a8": "Enable Manual",
   "k617ce69c": "Warning",
@@ -526,5 +525,8 @@
   "k44ef92fd": "Rugby Union",
   "k2c690a14": "英式橄榄球结算管理",
   "k2e274386": "新增场",
-  "k-59d7ab23": "场"
+  "k-59d7ab23": "场",
+  "k-6f24a672": "列展示",
+  "k5748883d": "队伍中文名不能为空",
+  "k-39a4e787": "队伍英文名不能为空"
 }
