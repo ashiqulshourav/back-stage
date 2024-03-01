@@ -16,8 +16,8 @@
 <script setup lang="ts">
 import FootBall from './component/FootBallCom/index.vue';
 import BasketBall from './component/Basketball/index.vue';
-import Billiards from './component/Billiards/index.vue';
 import Tennis from './component/Tennis/index.vue';
+import Billiards from './component/Billiards/index.vue';
 import Volleyball from './component/Volleyball/index.vue';
 import Hockey from './component/Hockey/index.vue';
 import Boxing from './component/Boxing/index.vue';
@@ -26,7 +26,6 @@ import Badminton from './component/Badminton/index.vue';
 import PingPong from './component/PingPong/index.vue';
 import Rugby from './component/Rugby/index.vue';
 import AmericanFootball from './component/American_football/index.vue';
-
 import Handball from './component/Handball/index.vue';
 import IceHockey from './component/IceHockey/index.vue';
 import Cricket from './component/Cricket/index.vue';
@@ -34,10 +33,15 @@ import SearchForm from './component/SearchForm.vue';
 import SportTypeNav from './component/SportTypeNav.vue';
 import { SearchFormType } from './utils/type';
 import { useMatchStore } from '@/store/match';
+import { useSettingStoreHook } from '@/store/settings';
+import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
 defineOptions({ name: 'VOLLEYBALL' });
 const componentStrName = ref<any>('FootBall');
-const currentSportId = ref<number>(1);
+const settingStore = useSettingStoreHook();
+const currentSportId = ref<number>(
+  settingStore.settleHistoryInfo.matchType ?? 1
+);
 const matchStore = useMatchStore();
 
 const form = reactive<SearchFormType>({
@@ -60,11 +64,16 @@ const comoMap = {
   Cricket,
   Hockey,
   Boxing,
-  Darts
+  Darts,
+  Rugby,
+  AmericanFootball
   // MatchLists
 };
+const comType = SPORT_ID_MAP.find(item => {
+  return item.value === (settingStore.settleHistoryInfo.matchType ?? 1);
+}).type;
 const currentComponentName = reactive({
-  name: markRaw(comoMap.FootBall)
+  name: markRaw(comoMap[comType])
 });
 
 const changeCurrentComponentName = (_: { value: number; type: string }) => {

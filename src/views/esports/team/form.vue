@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pr-6">
     <el-form
       ref="ruleFormRef"
       :model="newFormInline"
@@ -23,6 +23,35 @@
         </el-upload>
       </el-form-item>
 
+      <el-form-item :label="`${t('队伍中文名称')}:`" prop="teamNameCn">
+        <el-input
+          v-model="newFormInline.teamNameCn"
+          :placeholder="t('队伍中文名称')"
+        />
+      </el-form-item>
+
+      <el-form-item :label="`${t('队伍英文名称')}:`" prop="teamNameEn">
+        <el-input
+          v-model="newFormInline.teamNameEn"
+          :placeholder="t('队伍英文名称')"
+        />
+      </el-form-item>
+
+      <el-form-item :label="`${t('联赛ID')}:`">
+        <el-input
+          disabled
+          v-model="newFormInline.leagueId"
+          :placeholder="t('联赛ID')"
+        />
+      </el-form-item>
+
+      <el-form-item :label="`${t('主场名称')}:`">
+        <el-input
+          v-model="newFormInline.stadiumName"
+          :placeholder="t('主场名称')"
+        />
+      </el-form-item>
+
       <el-form-item :label="`${t('国家地区')}:`" prop="countryId">
         <el-select
           v-model="newFormInline.countryId"
@@ -39,14 +68,6 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="`${t('联赛ID')}:`">
-        <el-input
-          disabled
-          v-model="newFormInline.leagueId"
-          :placeholder="t('联赛ID')"
-        />
-      </el-form-item>
-
       <el-form-item :label="t('热门排序')" prop="level">
         <el-input
           :formatter="v => inputRestrictions(v)"
@@ -54,28 +75,7 @@
           :placeholder="t('请输入1-200之间的数字')"
           type="number"
           clearable
-          class="!w-[200px]"
-        />
-      </el-form-item>
-
-      <el-form-item :label="`${t('主场名称')}:`">
-        <el-input
-          v-model="newFormInline.stadiumName"
-          :placeholder="t('主场名称')"
-        />
-      </el-form-item>
-
-      <el-form-item :label="`${t('队伍中文名称')}:`">
-        <el-input
-          v-model="newFormInline.teamNameCn"
-          :placeholder="t('队伍中文名称')"
-        />
-      </el-form-item>
-
-      <el-form-item :label="`${t('队伍英文名称')}:`">
-        <el-input
-          v-model="newFormInline.teamNameEn"
-          :placeholder="t('队伍英文名称')"
+          class="!w-[280px]"
         />
       </el-form-item>
     </el-form>
@@ -154,7 +154,7 @@ const imageUrl = ref<string>(props.formInline.teamLogo);
 const onImgChange = file => {
   let name = file.name.slice(-3);
   let kb = 15360 * 1024;
-  if (['png', 'jpg', 'peg'].includes(name.toLowerCase())) {
+  if (['png'].includes(name.toLowerCase())) {
     if (file.size > kb) {
       message(t('文件过大，请重新上传'), { type: 'error' });
     } else {
@@ -162,7 +162,7 @@ const onImgChange = file => {
       imageUrl.value = URL.createObjectURL(file.raw);
     }
   } else {
-    message(t('上传文件格式不匹配,请上传png,jpg,jpeg格式文件'), {
+    message(t('上传文件格式不匹配,请上传png格式文件'), {
       type: 'error'
     });
   }

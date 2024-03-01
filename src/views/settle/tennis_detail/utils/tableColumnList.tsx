@@ -1,16 +1,15 @@
 // import { parseMatchScore } from '@/utils/formatMatch';
 
+import { handleTableWidth } from '@/utils/getTableWidth';
 import dayjs from 'dayjs';
 
 export const columns: TableColumnList = [
   {
-    type: 'expand',
-    slot: 'expand'
-  },
-  {
     label: t('盘'),
     prop: 'inningNum',
-    type: 'index'
+    type: 'index',
+    minWidth: 100,
+    headerRenderer: d => handleTableWidth(d, t('盘'))
     // formatter: ({ inningNum }) => {
     //   return inningNum;
     // }
@@ -23,6 +22,7 @@ export const columns: TableColumnList = [
   },
   {
     headerRenderer: () => history.state.params.awayTeamNameCn ?? '_',
+    minWidth: 150,
     formatter: ({ t2 }) => {
       return t2;
     }

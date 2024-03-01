@@ -4,6 +4,7 @@ import NProgress from "@/utils/progress";
 import { sessionKey, type DataInfo } from "@/utils/auth";
 import { useMultiTagsStoreHook } from "@/store/multiTags";
 import { usePermissionStoreHook } from "@/store/permission";
+import { useSettingStoreHook } from "@/store/settings";
 import { initRouter } from "./utils";
 import {
   Router,
@@ -196,7 +197,12 @@ router.beforeEach((to: ToRouteType, _from, next) => {
   }
 });
 
-router.afterEach(() => {
+router.afterEach((to) => {
+  //- 返回页面非结算历史，清空标签存储
+  const settingStore = useSettingStoreHook()
+  if (!(to?.name as string)?.startsWith('SETTLE') || to?.name === 'SETTLE_HISTORY') {
+    settingStore.set_settle_history({ page: null, matchType: null })
+  }
   NProgress.done();
 });
 

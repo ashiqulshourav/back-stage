@@ -1,20 +1,20 @@
 import { message } from '@/utils/message';
 import { t } from '@/plugins/i18n';
-import { columns } from './tableColumnList';
+import { columns, MATCH_PERIOD } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
 
 export function useBilliardsHook() {
-  const dataList = reactive<SattleDataAPI.volleyballData[]>([]);
+  const dataList = reactive<SattleDataAPI.rugbyData[]>([]);
   const allSettleLoading = ref(false);
   const loading = ref(true);
-  const boardType = ref('INNING');
+  const boardType = ref('HT');
   const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
     {} as SattleDataAPI.getSettlementDataList
   );
 
   // - 初始化
   const onSearch = async () => {
-    const res = await API.getVolleyballEvents({
+    const res = await API.getRugbyEvents({
       matchId: history.state.params.matchId
     });
     loading.value = false;
@@ -25,36 +25,41 @@ export function useBilliardsHook() {
 
   //- 新增局
   const addEventRow = () => {
-    const noEmpty = dataList.every(item => {
-      return (
-        item.t1.toString() !== '' &&
-        item.t2.toString() !== '' &&
-        item.t1 !== item.t2 &&
-        item.eventTime &&
-        !item.isEdit
-      );
-    });
-    if (!noEmpty || (dataList.length > 0 && !dataList[dataList.length - 1].id))
+    
+    if ((dataList.length > 0 && !dataList[dataList.length - 1].id))
       return message(t('请先结算之前的局赛事'), { type: 'error' });
-
-    const params: Partial<SattleDataAPI.volleyballData> = {
+    const params: Partial<SattleDataAPI.rugbyData> = {
       eventTime: '',
       matchId: history.state.params.matchId,
-      inningNum: dataList.length + 1,
+      inningNum: dataList.length === 2 ? 40 : dataList.length + 1,
       gameRule: boardType.value,
       isEdit: false,
       t1: '',
       t2: ''
     };
-    dataList.push(params as SattleDataAPI.volleyballData);
+    dataList.push(params as SattleDataAPI.rugbyData);
   };
 
   //- 结算局事件
-  const settlementHandicap = async (row: SattleDataAPI.TennisEventsData) => {
-    const { eventTime, t1, t2 } = row;
-    if (!eventTime || !t1 || !t2) {
+  const settlementHandicap = async (row: SattleDataAPI.rugbyData) => {
+    const { eventTime, t1, t2, inningNum } = row;
+    if (!eventTime || !t1 || !t2 ) {
       return message(t('请先完成并保存事件'), { type: 'error' });
     }
+    let s1 = 0;
+    let s2 = 0;
+    dataList.forEach(item => {
+      s1 += item.t1 as number;
+      s2 += item.t2 as number;
+    })
+    if (
+      t1 as number < 0 ||
+      t2 as number < 0 ||
+      (inningNum === 40 && s1 ===s2)
+    ) {
+      return message(t('无效值'), { type: 'error' });
+    }
+
     ElMessageBox.confirm(
       `
       <div class="text-center">
@@ -71,7 +76,7 @@ export function useBilliardsHook() {
           <div>${t('手动结算后无法回退，请再次确定结果')}</div>
       </div>
       `,
-      `${t('结算第')}${row.inningNum}${t('局')}`,
+      `${t('结算') + t(MATCH_PERIOD[inningNum])}`,
       {
         dangerouslyUseHTMLString: true,
         confirmButtonText: t('确认结算'),
@@ -89,7 +94,7 @@ export function useBilliardsHook() {
         inningNum: row.inningNum
       };
       try {
-        const res = await API.addVolleyballEvent(params);
+        const res = await API.addRugbyEvent(params);
         if (res.code) return message(res.msg, { type: 'error' });
         loading.value = false;
         onSearch();
@@ -103,8 +108,10 @@ export function useBilliardsHook() {
   const allSettleBtnClick = async () => {
     let s1 = 0;
     let s2 = 0;
-    const scoreList = dataList.map(item => [item.t1, item.t2]);
-    scoreList.forEach(item => (item[0] > item[1] ? ++s1 : ++s2));
+    dataList.forEach(item => {
+      s1 += item.t1 as number;
+      s2 += item.t2 as number;
+    })
     if (
       dataList.length < 2 ||
       dataList.some(item => !item.id) ||
@@ -129,7 +136,7 @@ export function useBilliardsHook() {
     ).then(async () => {
       try {
         allSettleLoading.value = true;
-        const res = await API.volleyballManualSettlementFullTime({
+        const res = await API.RugbyManualSettlementFullTime({
           matchId: history.state.params.matchId
         });
         allSettleLoading.value = false;
@@ -154,12 +161,27 @@ export function useBilliardsHook() {
     getMatchDetail();
     onSearch();
   });
-
+  const noMore = () => {
+    let s1 = 0;
+    let s2 = 0;
+    dataList.forEach(item => {
+      s1 += item.t1 as number;
+      s2 += item.t2 as number;
+    })
+    if (
+      dataList.length === 3 ||
+      (dataList.length === 2 && s1 !== s2)
+    ) {
+      return true;
+      }
+    return false;
+  }
   return {
     onSearch,
     loading,
     columns,
     dataList,
+    noMore,
     addEventRow,
     settlementHandicap,
     allSettleBtnClick,

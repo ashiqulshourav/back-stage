@@ -72,7 +72,7 @@
                 <el-radio-button size="small" label="SHORT-SET">{{
                   t('短盘制(抢七)')
                 }}</el-radio-button>
-              </el-radio-group>
+              </el-radio-group>`
             </div> -->
             <div class="pl-12">
               <pure-table

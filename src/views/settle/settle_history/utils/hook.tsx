@@ -3,7 +3,7 @@ import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { childColumns, columns } from './tableColumnList';
 import { MatchEventType, SearchFormType } from './type';
-import { dateSetSecond, getSecondTime } from '@/utils/formatDate';
+import { dateSetSecond } from '@/utils/formatDate';
 import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
 
 export function useSettle() {
