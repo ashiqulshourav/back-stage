@@ -59,21 +59,6 @@
             <span v-else>{{ t('已结算') }}</span>
           </template>
           <template #expand="{ row: parentRow, index: parentIndex }">
-            <!-- <div class="mb-2">
-              <el-radio-group
-                v-model="juType"
-                @change="
-                  type => changeJuType(parentRow.inningEvents, type.toString())
-                "
-              >
-                <el-radio-button size="small" label="LONG-SET">{{
-                  t('长盘制')
-                }}</el-radio-button>
-                <el-radio-button size="small" label="SHORT-SET">{{
-                  t('短盘制(抢七)')
-                }}</el-radio-button>
-              </el-radio-group>
-            </div> -->
             <div class="pl-12">
               <pure-table
                 class="table_container"
@@ -124,7 +109,6 @@
                   <span v-else>-</span>
                 </template>
               </pure-table>
-
               <el-button
                 v-if="checkScore && !parentRow.id"
                 class="mt-2"

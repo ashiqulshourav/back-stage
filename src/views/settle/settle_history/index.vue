@@ -53,18 +53,15 @@
                   border
                   :header-cell-style="tableHeaderStyle"
                 >
-                  <!-- -事件是否有效 -->
-                  <!-- <template #canceled="{ row }: MatchEventRowType">
-                    <el-text
-                      :class="[
-                        '!text-xs',
-                        row.canceled === 1 && '!text-sm font-bold'
-                      ]"
-                      :type="row.canceled === 1 ? 'danger' : 'info'"
-                      >{{ row.canceled === 1 ? t('否') : t('是') }}</el-text
-                    >
-                  </template> -->
-
+                  <!-- -比赛进行时间 -->
+                  <template #eventTime="{ row, index }: MatchEventRowType">
+                    <MatchTime
+                      :row="row"
+                      :index="index"
+                      :item="item"
+                      :beginTime="parentRow.beginTimeLong"
+                    />
+                  </template>
                   <!-- -数据商 -->
                   <template #dataSourceCode="{ row }: MatchEventRowType">
                     <el-text
@@ -75,7 +72,7 @@
                       :class="['!text-xs', index === 1 && '!mr-2 !ml-2']"
                       >{{ _.val }}</el-text
                     >
-                    <span>-</span>
+                    <span v-else>-</span>
                   </template>
                 </pure-table>
               </div>
@@ -94,6 +91,7 @@ import { useSettle } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
 import { MATCH_EVENT_CODE } from '@/utils/maps/sports_map';
 import SportTypeNav from './component/SportTypeNav.vue';
+import MatchTime from './component/MatchTime.vue';
 import { MatchEventRowType, parentRowType } from './utils/type';
 import { usePublicHooks } from '@/hooks';
 

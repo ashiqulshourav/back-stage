@@ -123,10 +123,6 @@ export const childColumns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('事件编码')),
     formatter: ({ eventCode }) => MATCH_EVENT_CODE[eventCode]
   },
-  // {
-  //   label: t('事件是否有效'),
-  //   slot: 'canceled'
-  // },
   {
     label: t('結算類型'),
     slot: 'settleType',
@@ -136,7 +132,7 @@ export const childColumns: TableColumnList = [
   {
     label: t('比赛进行时间'),
     headerRenderer: d => handleTableWidth(d, t('比赛进行时间')),
-    formatter: ({ eventTime }) => dayjs(eventTime).format('HH:mm:ss')
+    slot: 'eventTime'
   },
   {
     label: t('比赛阶段'),
@@ -148,10 +144,6 @@ export const childColumns: TableColumnList = [
     prop: 'homeAway',
     formatter: ({ homeAway }) => HOME_AWAY[homeAway]
   },
-  // {
-  //   label: t('1号球员名称'),
-  //   slot: 'player1Name'
-  // },
   {
     label: t('结算次数'),
     prop: 'settleTimes',

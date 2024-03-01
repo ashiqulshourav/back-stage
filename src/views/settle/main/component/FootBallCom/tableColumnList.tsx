@@ -133,8 +133,8 @@ export const yellow_red_column = [
         </>
       );
     },
-    formatter: ({ t1_yellowScore, t2_yellowScore }) => {
-      return `${t1_yellowScore ?? 0} : ${t2_yellowScore ?? 0}`;
+    formatter: ({ t1Y, t2Y }) => {
+      return `${t1Y ?? 0} : ${t2Y ?? 0}`;
     }
   },
   {
@@ -150,8 +150,8 @@ export const yellow_red_column = [
         </>
       );
     },
-    formatter: ({ t1_redScore, t2_redScore }) => {
-      return `${t1_redScore ?? 0} : ${t2_redScore ?? 0}`;
+    formatter: ({ t1R, t2R }) => {
+      return `${t1R ?? 0} : ${t2R ?? 0}`;
     }
   }
 ];

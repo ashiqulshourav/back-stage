@@ -301,11 +301,11 @@ const teamChangeEvent = (
     row.t2 = isHome ? 0 : 1;
     if (isYellowRedCard) {
       if (row.redOrYellow === 2) {
-        row.t1_redScore = isHome ? 1 : 0;
-        row.t2_redScore = isHome ? 0 : 1;
+        row.t1R = isHome ? 1 : 0;
+        row.t2R = isHome ? 0 : 1;
       } else {
-        row.t1_yellowScore = isHome ? 1 : 0;
-        row.t2_yellowScore = isHome ? 0 : 1;
+        row.t1Y = isHome ? 1 : 0;
+        row.t2Y = isHome ? 0 : 1;
       }
     }
   } else {
@@ -316,19 +316,19 @@ const teamChangeEvent = (
     row.t2 = +prevRow.t2 + t2Increment;
     if (isYellowRedCard) {
       if (row.redOrYellow === 2) {
-        row.t1_redScore = +(prevRow.t1_redScore ?? 0) + t1Increment;
-        row.t2_redScore = +(prevRow.t2_redScore ?? 0) + t2Increment;
-        row.t1 = row.t1_redScore;
-        row.t2 = row.t2_redScore;
-        row.t1_yellowScore = prevRow.t1_yellowScore;
-        row.t2_yellowScore = prevRow.t2_yellowScore;
+        row.t1R = +(prevRow.t1R ?? 0) + t1Increment;
+        row.t2R = +(prevRow.t2R ?? 0) + t2Increment;
+        row.t1 = row.t1R;
+        row.t2 = row.t2R;
+        row.t1Y = prevRow.t1Y;
+        row.t2Y = prevRow.t2Y;
       } else {
-        row.t1_yellowScore = +(prevRow.t1_yellowScore ?? 0) + t1Increment;
-        row.t2_yellowScore = +(prevRow.t2_yellowScore ?? 0) + t2Increment;
-        row.t1 = row.t1_yellowScore;
-        row.t2 = row.t2_yellowScore;
-        row.t1_redScore = +(prevRow.t1_redScore ?? 0);
-        row.t2_redScore = +(prevRow.t2_redScore ?? 0);
+        row.t1Y = +(prevRow.t1Y ?? 0) + t1Increment;
+        row.t2Y = +(prevRow.t2Y ?? 0) + t2Increment;
+        row.t1 = row.t1Y;
+        row.t2 = row.t2Y;
+        row.t1R = +(prevRow.t1R ?? 0);
+        row.t2R = +(prevRow.t2R ?? 0);
       }
     }
   }

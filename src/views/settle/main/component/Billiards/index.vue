@@ -50,15 +50,16 @@ import { useBilliardsHook } from './util/hook';
 import { usePublicHooks } from '@/hooks';
 import { SearchFormType } from '../../utils/type';
 import { useMatchStore } from '@/store/match';
+import { useSettingStoreHook } from '@/store/settings';
 import { useSettileHook } from '../../utils/hook';
-
-const { tableHeaderStyle } = usePublicHooks();
-
-const matchStore = useMatchStore();
 
 const props = defineProps<{
   form: SearchFormType;
 }>();
+
+const settingStore = useSettingStoreHook();
+const { tableHeaderStyle } = usePublicHooks();
+const matchStore = useMatchStore();
 
 const {
   onSearch,
@@ -79,6 +80,10 @@ const filterData = (type: 'reload') => {
 
 const router = useRouter();
 const goSettleDetail = row => {
+  settingStore.set_settle_history({
+    page: pagination.currentPage,
+    matchType: 5
+  });
   const params = JSON.parse(JSON.stringify(row));
   router.push({
     name: 'SETTLET_BILLIARDS_DETAIL',

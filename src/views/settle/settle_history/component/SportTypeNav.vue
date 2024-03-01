@@ -1,11 +1,10 @@
 <template>
   <div class="flex mt-4">
     <CustomButton
-      v-for="(item, index) in SPORT_ID_MAP.slice(0, 1)"
+      v-for="item in SPORT_ID_MAP"
       :key="item.value"
       :type="item.value === currentSportId ? 'primary' : ''"
       :btnText="item.label"
-      :disabled="index > 0"
       @click="searchClick(item.value)"
     />
   </div>
