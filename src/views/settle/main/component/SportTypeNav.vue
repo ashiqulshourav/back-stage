@@ -1,6 +1,7 @@
 <template>
-  <div class="flex mt-4 overflow-x-auto w-full">
+  <div class="flex mt-4 flex-wrap w-full">
     <CustomButton
+      class="mb-2 !ml-0 mr-2"
       v-for="item in renderList"
       :key="item.value"
       :type="item.value === currentSportId ? 'primary' : ''"
@@ -25,7 +26,6 @@ const renderList = computed(() => {
 });
 
 const changeType = (_: { value: number; type: string }) => {
-  console.log(_);
   if (_.value === props.currentSportId) return;
   // emits('onSearch', 'reload', val);
   matchStore.set_currentSportId(_.value);

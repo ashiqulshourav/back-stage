@@ -8,7 +8,11 @@ export const useSettingStore = defineStore({
   state: (): setType => ({
     title: getConfig().Title,
     fixedHeader: getConfig().FixedHeader,
-    hiddenSideBar: getConfig().HiddenSideBar
+    hiddenSideBar: getConfig().HiddenSideBar,
+    settleHistoryInfo: {
+      page: null,
+      matchType: null,
+    }
   }),
   getters: {
     getTitle(state) {
@@ -29,7 +33,10 @@ export const useSettingStore = defineStore({
     },
     changeSetting(data) {
       this.CHANGE_SETTING(data);
-    }
+    },
+    set_settle_history(info: { page: number; matchType: number }) {
+      this.settleHistoryInfo = info;
+    },
   }
 });
 
