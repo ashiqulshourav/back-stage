@@ -4,17 +4,19 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { columns } from './tableColumnList';
 import { SPORT_TYPE, SearchFormType } from '../../../utils/type';
 import { useMatchStore } from '@/store/match';
+import { useSettingStoreHook } from '@/store/settings';
 
 export function useTennisHook() {
   const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   console.warn(dataList);
   const matchStore = useMatchStore();
   const form = ref<SearchFormType>({} as SearchFormType);
+  const settingStore = useSettingStoreHook();
 
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
-    currentPage: 1
+    currentPage: settingStore.settleHistoryInfo.page ?? 1
   });
 
   const handleTableWidthChange = (pageSize: number) => {
