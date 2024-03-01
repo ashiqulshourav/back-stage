@@ -5,6 +5,10 @@ import dayjs from 'dayjs';
 
 export const columns: TableColumnList = [
   {
+    type: 'expand',
+    slot: 'expand'
+  },
+  {
     label: t('盘'),
     prop: 'inningNum',
     type: 'index',
