@@ -52,6 +52,7 @@ export function useLeague() {
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
+      // console.log("data", dataList)
       dataList.push(...res.data.list);
       pagination.total = res.data.total;
     } catch (error) {
@@ -78,6 +79,7 @@ export function useLeague() {
           leagueNameEn: row?.leagueNameEn ?? '',
           level: row?.level ?? '',
           sportId: row?.sportId ?? '',
+          category: row?.category ?? '',
           leagueTagsId: row?.leagueTagsId ?? []
         }
       },

@@ -74,12 +74,15 @@
         />
       </el-form-item>
       <el-form-item :label="t('联赛标签')" prop="leagueTagsId">
-        <el-checkbox
-          v-model="checkAll"
-          :indeterminate="isIndeterminate"
-          @change="handleCheckAllChange"
-          >{{ t('全选') }}</el-checkbox
-        >
+        <!-- <el-row> </el-row> -->
+        <div v-bind:style="{ width: '100%' }">
+          <el-checkbox
+            v-model="checkAll"
+            :indeterminate="isIndeterminate"
+            @change="handleCheckAllChange"
+            >{{ t('全选') }}</el-checkbox
+          >
+        </div>
         <el-checkbox-group
           v-model="(newFormInline.leagueTagsId as any)"
           @change="handleCheckedTagIdsChange"
@@ -111,9 +114,9 @@ import { t } from '@/plugins/i18n';
 import { useMatchStore } from '@/store/match';
 import { inputRestrictions } from '@/utils/formatNumber';
 import { message } from '@/utils/message';
-import { useLeague } from './utils/hook';
+// import { useLeague } from './utils/hook';
 
-const { form } = useLeague();
+// const { form } = useLeague();
 const uploadFormFile = ref();
 const loading = ref(false);
 const matchStore = useMatchStore();
@@ -128,6 +131,7 @@ const props = withDefaults(defineProps<FormProps>(), {
     leagueId: '',
     leagueLogo: '',
     sportId: '',
+    category: '',
     leagueTagsId: []
   })
 });
@@ -144,14 +148,6 @@ const updateVal = () => {
     }
   });
 };
-
-onMounted(async () => {
-  const response = await API.getLeagueTagList({
-    category: parseInt(form.category),
-    sportId: parseInt(newFormInline.value.sportId)
-  });
-  leagueTagsId.value = response.data.list;
-});
 
 const onImgChange = file => {
   let name = file.name.slice(-3);
@@ -189,7 +185,14 @@ const handleCheckedTagIdsChange = (value: number[]) => {
   isIndeterminate.value =
     checkedCount > 0 && checkedCount < leagueTagsId.value.length;
 };
-
+onMounted(async () => {
+  console.log('newFormInline', newFormInline);
+  const response = await API.getLeagueTagList({
+    category: parseInt(newFormInline.value.category),
+    sportId: parseInt(newFormInline.value.sportId)
+  });
+  leagueTagsId.value = response.data.list;
+});
 const cancelDialog = () => {
   emits('closeDialog');
 };
