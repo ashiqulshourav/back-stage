@@ -69,6 +69,22 @@
         }
       },
       {
+        "path": "/settle/basketball_detail",
+        "name": "SETTLE_BASKETBALL_DETAIL",
+        "meta": {
+          "title": "篮球结算",
+          "showLink": false
+        }
+      },
+      {
+        "path": "/settle/football_detail",
+        "name": "SETTLE_FOOTBALL_DETAIL",
+        "meta": {
+          "title": "足球结算",
+          "showLink": false
+        }
+      },
+      {
         "path": "/settle/tennis_detail",
         "name": "SETTLE_TENNIS_DETAIL",
         "meta": {
@@ -89,14 +105,6 @@
         "name": "SETTLET_BILLIARDS_DETAIL",
         "meta": {
           "title": "台球结算",
-          "showLink": false
-        }
-      },
-      {
-        "path": "/settle/basketball_detail",
-        "name": "SETTLE_BASKETBALL_DETAIL",
-        "meta": {
-          "title": "篮球结算",
           "showLink": false
         }
       },
@@ -249,7 +257,7 @@
           "title": "分类设定",
           "showParent": true
         }
-      },      
+      },
       {
         "path": "/configCenter/play_method",
         "name": "CONFIGCENTER_PLAY_METHOD",

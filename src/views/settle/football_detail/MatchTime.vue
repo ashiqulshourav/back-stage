@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
-import { MatchEventRowType } from '../../utils/type';
+import { MatchEventRowType } from './util/type';
 import { message } from '@/utils/message';
 import dayjs from 'dayjs';
 import { getTime } from '@pureadmin/utils';

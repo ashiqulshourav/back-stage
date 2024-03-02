@@ -8,7 +8,7 @@ import {
   SPORT_TYPE,
   SearchFormType,
   TempListType
-} from '../../../utils/type';
+} from './type';
 import { compareTime, dateSetSecond } from '@/utils/formatDate';
 import { ElMessageBox, dayjs } from 'element-plus';
 import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
@@ -19,10 +19,14 @@ export function useFootball() {
   const childloading = ref(true);
   const switchLoadMap = ref({});
   const childDataTotal = ref(0);
+  const allSettleLoading = ref(false);
   const expandMatchList = reactive<number[]>([]);
   const expandRowList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const loopTimer = ref<NodeJS.Timeout>();
   const matchStore = useMatchStore();
+  const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
+    {} as SattleDataAPI.getSettlementDataList
+  );
   const form = ref<SearchFormType>({} as SearchFormType);
   const balanceLoading = reactive<{ half: boolean; all: boolean }>({
     half: false,
@@ -316,7 +320,11 @@ export function useFootball() {
     }
   };
 
-  onMounted(() => onSearch());
+  onMounted(() => {
+    onSearch();
+    getMatchDetail();
+  });
+
   onUnmounted(() => {
     loopTimer.value && clearInterval(loopTimer.value);
   });
@@ -395,6 +403,17 @@ export function useFootball() {
     });
   };
 
+  //- 获取比赛详情
+  const getMatchDetail = async () => {
+    const res = await API.getPreSaleInfo({
+      matchId: history.state.params.matchId
+    });
+    if (res.code) return message(res.msg, { type: 'error' });
+    Object.assign(renderObj, res.data);
+  };
+
+  const allSettleBtnClick = () => {};
+
   return {
     childloading,
     columns,
@@ -414,11 +433,13 @@ export function useFootball() {
     settlementFunction,
     handleChildrenData,
     childDataTotal,
-    expandMatchList,
     reloadTable,
     changeSettleType,
     cancelMatchEvent,
     advanceSettlement,
-    yellow_red_column
+    yellow_red_column,
+    renderObj,
+    allSettleLoading,
+    allSettleBtnClick
   };
 }

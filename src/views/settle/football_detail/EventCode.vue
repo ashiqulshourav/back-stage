@@ -1,28 +1,30 @@
 <template>
   <el-select
-    :class="[row.canceled && 'canceled', '!w-[150px]']"
     :disabled="!row.isEdit"
-    v-model="row.homeAway"
+    :class="[row.canceled && 'canceled', '!w-[150px]']"
+    v-model="row.redOrYellow"
     :placeholder="t('请选择')"
+    v-if="item.type === 'yellow_red_card'"
     @change="teamChangeEvent(row, index, item.tableList, item.type)"
   >
-    <el-option :label="t('主队')" value="home" />
-    <el-option v-if="!row.isEdit" :label="t('平局')" value="" />
-    <el-option :label="t('客队')" value="away" />
+    <el-option :label="t('红牌')" :value="2" />
+    <el-option :label="t('黄牌')" :value="1" />
   </el-select>
+  <span v-else>{{ MATCH_EVENT_CODE[row.eventCode] }}</span>
 </template>
 
 <script setup lang="ts">
+import { MatchEventRowType } from './util/type';
+import { MATCH_EVENT_CODE } from '@/utils/maps/sports_map';
 import { t } from '@/plugins/i18n';
-import { MatchEventRowType } from '../../utils/type';
 
 defineProps<
   MatchEventRowType & {
     item: SattleDataAPI.ChildrenDataList;
   }
 >();
-
 const emits = defineEmits(['teamChangeEvent']);
-
 const teamChangeEvent = (...data) => emits('teamChangeEvent', ...data);
 </script>
+
+<style scoped></style>

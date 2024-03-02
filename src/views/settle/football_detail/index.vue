@@ -1,4 +1,11 @@
 <template>
+  <!-- -盘口详情 -->
+  <DetiltTitle
+    @allSettleBtnClick="allSettleBtnClick"
+    :renderObj="renderObj"
+    :allSettleLoading="allSettleLoading"
+  />
+
   <PureTableBar
     :title="t('足球结算管理')"
     :columns="columns"
@@ -12,7 +19,6 @@
         :loading="matchStore.settleRequestLoading"
         :size="size"
         :row-key="row => row.matchId"
-        :expand-row-keys="expandMatchList"
         adaptive
         :data="dataList"
         :columns="dynamicColumns"
@@ -23,17 +29,6 @@
         @page-size-change="handleTableWidthChange"
         @page-current-change="handleCurrentChange"
       >
-        <template #operation="{ row }">
-          <span v-if="!row.isShowCancelBtn">-</span>
-          <el-button
-            v-else
-            type="danger"
-            :size="size"
-            :disabled="row.cancelOrderTimes > 0"
-            @click="cancelClick(row)"
-            >{{ t('取消注单') }}</el-button
-          >
-        </template>
         <template #expand="{ row: parentRow, index: parIndex }: parentRowType">
           <div class="flex items-center">
             <!-- -全场结算按钮 -->
@@ -217,6 +212,7 @@
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import { MATCH_EVENT_CODE } from '@/utils/maps/sports_map';
+import DetiltTitle from '../component/Settle_detail_title.vue';
 import BackEndBtnGroupCom from './BackEndBtnGroup.vue';
 import FrontBtnGroupCom from './FrontBtnGroup.vue';
 import CountDownBtn from './CountDownBtn.vue';
@@ -234,9 +230,8 @@ import {
   MatchEventType,
   SearchFormType,
   parentRowType
-} from '../../utils/type';
+} from './util/type';
 import { useMatchStore } from '@/store/match';
-import { useSettileHook } from '../../utils/hook';
 
 const {
   onSearch,
@@ -254,15 +249,16 @@ const {
   settlementFunction,
   handleChildrenData,
   childDataTotal,
-  expandMatchList,
   reloadTable,
   changeSettleType,
   cancelMatchEvent,
   advanceSettlement,
+  renderObj,
   form,
-  yellow_red_column
+  yellow_red_column,
+  allSettleBtnClick,
+  allSettleLoading
 } = useFootball();
-const { cancelBetOrder } = useSettileHook();
 
 const props = defineProps<{
   form: SearchFormType;
@@ -277,11 +273,6 @@ const eventQuotientList = [
 ];
 
 const matchStore = useMatchStore();
-
-const cancelClick = async row => {
-  await cancelBetOrder(row);
-  onSearch();
-};
 
 //- 取消事件置灰
 const tableRowClassName = ({ row }: MatchEventRowType) =>

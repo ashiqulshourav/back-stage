@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import FootBall from './component/FootBallCom/index.vue';
+import FootBall from './component/FootBall/index.vue';
 import BasketBall from './component/Basketball/index.vue';
 import Tennis from './component/Tennis/index.vue';
 import Billiards from './component/Billiards/index.vue';
@@ -67,7 +67,6 @@ const comoMap = {
   Darts,
   Rugby,
   AmericanFootball
-  // MatchLists
 };
 const comType = SPORT_ID_MAP.find(item => {
   return item.value === (settingStore.settleHistoryInfo.matchType ?? 1);

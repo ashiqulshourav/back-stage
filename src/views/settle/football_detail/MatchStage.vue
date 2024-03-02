@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
-import { MatchEventRowType, MatchEventType } from '../../utils/type';
+import { MatchEventRowType, MatchEventType } from './util/type';
 import { message } from '@/utils/message';
 
 const props = defineProps<

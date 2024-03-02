@@ -1,13 +1,8 @@
-import dayjs from 'dayjs';
 import { handleTableWidth } from '@/utils/getTableWidth';
 import { MATCH_STATUS } from '@/utils/maps/sports_map';
+import dayjs from 'dayjs';
 
 export const columns: TableColumnList = [
-  {
-    type: 'expand',
-    slot: 'expand',
-    fixed: true
-  },
   {
     label: t('序号'),
     fixed: true,
@@ -56,27 +51,12 @@ export const columns: TableColumnList = [
     minWidth: 150,
     headerRenderer: d => handleTableWidth(d, t('客队'), 'auto')
   },
-  /* {
-    label: t('当前比分'),
-    prop: 'currentScore',
-    minWidth: 150,
-    headerRenderer: d => handleTableWidth(d, t('当前比分'), 'auto'),
-    formatter: ({ currentScore }) => {
-      return currentScore ? parseMatchScore(currentScore) : '-';
-    }
-  }, */
   {
     label: t('比赛状态'),
     prop: 'status',
     formatter: ({ status }) => MATCH_STATUS[status] ?? '-',
     headerRenderer: d => handleTableWidth(d, t('比赛状态'))
   },
-  /* {
-    label: t('熊猫匹配结果'),
-    prop: 'pandaResult',
-    formatter: ({ pandaResult }) => PANDA_MATCH_STATUS[pandaResult],
-    headerRenderer: d => handleTableWidth(d, t('熊猫匹配结果'))
-  }, */
   {
     label: t('是否中立场地'),
     prop: 'isNeutral',
@@ -116,96 +96,5 @@ export const columns: TableColumnList = [
     slot: 'operation',
     minWidth: 150,
     fixed: 'right'
-  }
-];
-
-export const yellow_red_column = [
-  {
-    headerRenderer: () => {
-      return (
-        <>
-          <div class="border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#303030]">
-            {t('黄牌')}
-          </div>
-          <div class="flex justify-center">
-            {t('主队')} : {t('客队')}
-          </div>
-        </>
-      );
-    },
-    formatter: ({ t1Y, t2Y }) => {
-      return `${t1Y ?? 0} : ${t2Y ?? 0}`;
-    }
-  },
-  {
-    headerRenderer: () => {
-      return (
-        <>
-          <div class="border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#303030]">
-            {t('红牌')}
-          </div>
-          <div class="flex justify-center">
-            {t('主队')} : {t('客队')}
-          </div>
-        </>
-      );
-    },
-    formatter: ({ t1R, t2R }) => {
-      return `${t1R ?? 0} : ${t2R ?? 0}`;
-    }
-  }
-];
-
-export const childColumns: TableColumnList = [
-  {
-    label: t('主队 : 客队'),
-    prop: 't1',
-    formatter: ({ t1, t2 }) => {
-      return `${t1 ?? '-'} : ${t2 ?? '-'}`;
-    }
-  },
-  {
-    label: t('事件编码'),
-    slot: 'eventCode'
-  },
-  {
-    label: t('结算类型'),
-    slot: 'settleType'
-  },
-  {
-    label: t('比赛进行时间'),
-    slot: 'eventTime',
-    headerRenderer: d => handleTableWidth(d, t('比赛进行时间'))
-  },
-  {
-    label: t('比赛阶段'),
-    slot: 'matchPeriodId'
-  },
-  {
-    label: t('事件来源'),
-    slot: 'homeAway'
-  },
-  // {
-  //   label: t('1号球员名称'),
-  //   slot: 'player1Name'
-  // },
-  {
-    label: t('操作'),
-    slot: 'operation'
-  },
-  {
-    label: t('结算次数'),
-    prop: 'settleTimes',
-    formatter: ({ settleTimes }) => settleTimes ?? '-'
-  },
-  {
-    label: t('确认时间'),
-    prop: 'updatedAt',
-    formatter: ({ updatedAt, settleTimes }) =>
-      settleTimes > 0 ? dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss') : '-'
-  },
-  {
-    label: t('数据商'),
-    slot: 'dataSourceCode'
   }
 ];
