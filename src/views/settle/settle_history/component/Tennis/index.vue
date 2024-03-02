@@ -57,8 +57,9 @@ const {
 } = useSettle();
 const goTennisDetail = row => {
   const params = JSON.parse(JSON.stringify(row));
+  console.log(1111,params)
   router.push({
-    name: 'SETTLE_NEW_BASKETBALL_DETAIL',
+    name: 'SETTLE_TENNIS_DETAIL',
     state: { params }
   });
 };

@@ -3,10 +3,9 @@ import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { childColumns, columns } from './tableColumnList';
 import { MatchEventType, SearchFormType } from './type';
-import { dateSetSecond } from '@/utils/formatDate';
-import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
-
+import {useSettleHistoryStoreHook} from "@/views/settle/settle_history/store";
 export function useSettle() {
+  const useSettleHistoryStore=useSettleHistoryStoreHook();
   const form = reactive<SearchFormType>({
     leagueId: '',
     matchId: '',
@@ -20,7 +19,6 @@ export function useSettle() {
   const childloading = ref(true);
   const switchLoadMap = ref({});
   const currentSportId = ref(1);
-  const childDataTotal = ref(0);
   const expandMatchList = reactive<number[]>([]);
   const expandRowList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const loopTimer = ref<NodeJS.Timeout>();
@@ -45,6 +43,7 @@ export function useSettle() {
 
   //- 搜索初始化
   const onSearch = async (type?: 'reload', spoprtId?: number) => {
+    console.log(5555,spoprtId)
     loopTimer.value && clearInterval(loopTimer.value);
     try {
       if (spoprtId) currentSportId.value = spoprtId;
@@ -60,7 +59,7 @@ export function useSettle() {
           ...data,
           pageSize: pagination.pageSize,
           pageNum: pagination.currentPage,
-          sportId: currentSportId.value
+          sportId: useSettleHistoryStore.sportId,
         });
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
@@ -101,51 +100,8 @@ export function useSettle() {
     onSearch('reload');
   };
 
-  //- 打开关闭结算列表
-  const expandChange = (
-    row: SaleDataAPI.PreSaleList,
-    currentExpandList: SattleDataAPI.getSettlementDataList[]
-  ) => {
-    if (currentExpandList.length) {
-      expandMatchList.length = 0;
-      if (row) {
-        expandMatchList.push(row.matchId);
-        expandRowList.push(...currentExpandList);
-      }
-    } else {
-      expandMatchList.length = 0;
-    }
-    getChildrenData(row);
-  };
 
-  //- 获取当前展开行结算列表
-  const getChildrenData = async row => {
-    childloading.value = true;
-    const res = await API.getMatchEvents({ matchId: row.matchId });
-    childloading.value = false;
-    if (res.code) return message(res.msg, { type: 'error' });
-    childDataTotal.value = 0;
-    row.childrenData.forEach((item: SaleDataAPI.ChildrenDataList) => {
-      item.tableList = res.data[item.key];
-      childDataTotal.value += item.tableList.length;
-      if (item.tableList.length) {
-        item.tableList.forEach(_ => {
-          _.createdAt = new Date(_.createdAt).getTime() + 1000 * 60 * 5;
-          _.isEdit = false;
-          _.isSave = false;
-          _.isShowCount = false;
-          _.matchId = row.matchId;
-          _.t = res.ts;
-          _.isBackEndReturnData = true;
-          if (_.eventTime.toString().length < 10) {
-            _.eventTime = dateSetSecond(_.eventTime as number);
-          }
-          item.type === 'yellow_red_card' &&
-            (_.redOrYellow = YELLOW_OR_RED[_.eventCode]);
-        });
-      }
-    });
-  };
+
 
   onMounted(() => onSearch());
   onUnmounted(() => {
@@ -155,7 +111,6 @@ export function useSettle() {
   const reloadTable = async () => {
     await onSearch('reload');
     expandRowList.forEach(async row => {
-      await getChildrenData(row);
       dataList.forEach(d => {
         if (d.matchId === row.matchId) d.childrenData = row.childrenData;
       });
@@ -173,10 +128,8 @@ export function useSettle() {
     resetForm,
     handleTableWidthChange,
     switchLoadMap,
-    expandChange,
     handleCurrentChange,
     childColumns,
-    getChildrenData,
     currentSportId,
     expandMatchList,
     reloadTable

@@ -5,8 +5,10 @@ import { childColumns, columns } from './tableColumnList';
 import { MatchEventType, SearchFormType } from './type';
 import { dateSetSecond } from '@/utils/formatDate';
 import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
+import {useSettleHistoryStoreHook} from "@/views/settle/settle_history/store";
 
 export function useSettle() {
+  const useSettleHistoryStore=useSettleHistoryStoreHook();
   const form = reactive<SearchFormType>({
     leagueId: '',
     matchId: '',
@@ -60,7 +62,7 @@ export function useSettle() {
           ...data,
           pageSize: pagination.pageSize,
           pageNum: pagination.currentPage,
-          sportId: currentSportId.value
+          sportId: useSettleHistoryStore.sportId
         });
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });

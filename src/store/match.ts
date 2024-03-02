@@ -9,7 +9,7 @@ export const useMatchStore = defineStore('MATCHSTATE', {
     countryList: [],
     sportId: 1,
     settleRequestLoading: false,   //- 结算页面searchLoading
-    
+
   }),
   actions: {
     //- 设置联赛供搜索使用 体育 + 电子竞技
@@ -30,7 +30,6 @@ export const useMatchStore = defineStore('MATCHSTATE', {
         listType = 'esportLeagueList';
       }
       if (this.esportLeagueList.length && category === 1) return;
-
       const res: MetadataAPI.LeagueListRes = await API.getLeagueList(params);
       this[listType] = res.data.list;
     },
