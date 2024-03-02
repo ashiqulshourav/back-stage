@@ -8,7 +8,7 @@
     />
     <SportTypeNav
       @changeCurrentComponentName="changeCurrentComponentName"
-      :currentSportId="useSettleHistoryStore.sportId"
+      :currentSportId="currentSportId"
     />
     <component
       :is="currentComponentName.name"
@@ -28,15 +28,12 @@ import BasketBall from './component/Basketball/index.vue';
 import Tennis from './component/Tennis/index.vue';
 import {useSettingStoreHook} from "@/store/settings";
 import {useMatchStore} from "@/store/match";
-import {useSettleHistoryStoreHook} from './store'
 defineOptions({ name: 'SETTLE_HISTORY' });
 const componentStrName = ref<any>('FootBall');
 const settingStore = useSettingStoreHook();
-const useSettleHistoryStore=useSettleHistoryStoreHook();
-
-// const currentSportId = ref<number>(
-//     settingStore.settleHistoryInfo.matchType ?? 1
-// );
+const currentSportId = ref<number>(
+    settingStore.settleHistoryInfo.matchType ?? 1
+);
 const {
   form,
   loading,
@@ -57,8 +54,8 @@ const currentComponentName = reactive({
 });
 const changeCurrentComponentName = (_: { value: number; type: string }) => {
   currentComponentName.name = markRaw(comoMap[_.type]);
+  currentSportId.value = _.value;
   matchStore.set_lagueList(0, _.value);
-  useSettleHistoryStore.setSportId(_.value)
 };
 </script>
 
