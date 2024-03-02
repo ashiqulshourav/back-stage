@@ -1,5 +1,4 @@
 import { http } from '@/utils/http';
-import mockAPI from './mock';
 
 export const sattleData = {
   getSettlementList: (data: SattleDataAPI.getSettlementListPrams) =>
@@ -37,7 +36,6 @@ export const sattleData = {
       '/handball/v1/getHandballEvents',
       { data }
     ),
-  // mockAPI.getHandballEvents(data),
   getIceHockeyEvents: (data: { matchId: number }) =>
     http.request<SattleDataAPI.getIceHockeyEventRes>(
       'post',
@@ -46,12 +44,11 @@ export const sattleData = {
     ),
   // mockAPI.getIceHockeyEvents(data),
   getCricketEvents: (data: { matchId: number }) =>
-    // http.request<SattleDataAPI.getCricketEventRes>(
-    //   'post',
-    //   '/cricket/v1/getCricketEvents',
-    //   { data }
-    // ),
-    mockAPI.getCricketEvents(data),
+    http.request<SattleDataAPI.getCricketEventRes>(
+      'post',
+      '/cricket/v1/getCricketEvents',
+      { data }
+    ),
 
   getHockeyEvents: (data: { matchId: number }) =>
     http.request<SattleDataAPI.getHockeyEventRes>(
@@ -100,12 +97,11 @@ export const sattleData = {
     ),
   // mockAPI.addIceHockeyEvent(data),
   addCricketEvent: (data: SattleDataAPI.MatchEventParams) =>
-    //   http.request<MetadataAPI.AddSportEventRes>(
-    //     'post',
-    //     '/cricket/v1/addCricketEvent',
-    //     { data }
-    //   ),
-    mockAPI.addCricketEvent(data),
+    http.request<MetadataAPI.AddSportEventRes>(
+      'post',
+      '/cricket/v1/addCricketEvent',
+      { data }
+    ),
 
   allHandballSettlement: (data: { matchId: number }) =>
     http.request<MetadataAPI.AddSportEventRes>(
@@ -362,5 +358,28 @@ export const sattleData = {
       'post',
       '/match/v1/cancelMatchOrder',
       { data }
-    )
+    ),
+
+  /* 
+  * 篮球结算新版接口
+   */
+
+  getNewBasketballEvents: (data: { matchId: number }) => http.request<SattleDataAPI.newBasketballEventsResType>(
+    'post', '/basketball/v2/getBasketballEvents', { data }),
+  //- 篮球手动新增事件
+  addBasketballEventV2: (data: SattleDataAPI.addBasketballEventV2ReqType) => http.request<SattleDataAPI.newBasketballEventsResType>(
+    'post', '/basketball/v2/addBasketballEventV2', { data }),
+  //- 篮球全场结算
+  v2ManualSettlementFullTime: (data: {
+    matchId: number;
+  }) => http.request<SattleDataAPI.manualSettlementFullTimeResType>(
+    'post', '/basketball/v2/manualSettlementFullTime', { data }),
+  //- 篮球取消结算事件
+  basketballCancelMatchEvent: (data: {
+    matchId: number;
+    id: number;
+  }) => http.request<SattleDataAPI.basketballCancelMatchEventResType>(
+    'post', '/basketball/v1/cancelMatchEvent', { data }),
+
+
 };
