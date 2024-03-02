@@ -4,16 +4,18 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { columns } from './tableColumnList';
 import { SPORT_TYPE, SearchFormType } from '../../../utils/type';
 import { useMatchStore } from '@/store/match';
+import { useSettingStoreHook } from '@/store/settings';
 
 export function useBasketballHook() {
   const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const matchStore = useMatchStore();
   const form = ref<SearchFormType>({} as SearchFormType);
+  const settingStore = useSettingStoreHook();
 
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
-    currentPage: 1
+    currentPage: settingStore.settleHistoryInfo.page ?? 1
   });
 
   const handleTableWidthChange = (pageSize: number) => {
@@ -39,8 +41,10 @@ export function useBasketballHook() {
           pageNum: pagination.currentPage,
           sportId: SPORT_TYPE.football
         });
+
       matchStore.set_settleRequestLoading(false);
       if (res.code) return message(res.msg, { type: 'error' });
+
       res.data.list.forEach(item => {
         item.isShowCancelBtn = +res.ts < +item.beginTimeLong;
       });

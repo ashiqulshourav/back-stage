@@ -26,7 +26,7 @@
             class="reset-margin"
             type="primary"
             :size="size"
-            @click="goTennisDetail(row)"
+            @click="goDetailPage(row)"
           >
             {{ t('结算详情') }}
           </el-button>
@@ -75,7 +75,12 @@ const {
   form
 } = useBasketballHook();
 
-const goTennisDetail = row => {
+form.value = props.form;
+const filterData = (type: 'reload') => {
+  onSearch(type);
+};
+
+const goDetailPage = row => {
   settingStore.set_settle_history({
     page: pagination.currentPage,
     matchType: 1
@@ -86,13 +91,10 @@ const goTennisDetail = row => {
     state: { params }
   });
 };
+
 const cancelClick = async row => {
   await cancelBetOrder(row);
   onSearch();
-};
-form.value = props.form;
-const filterData = (type: 'reload') => {
-  onSearch(type);
 };
 
 defineExpose({ filterData });

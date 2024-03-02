@@ -1,5 +1,5 @@
 <template>
-  <div class="flex mb-2">
+  <div class="flex">
     <CustomButton
       v-if="!parentRow.halfSettlementStatus"
       type="primary"

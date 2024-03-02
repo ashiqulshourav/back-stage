@@ -131,6 +131,7 @@ declare namespace SattleDataAPI {
   type IceHockeyEvent = HandballEvent;
   type CricketEvent = HandballEvent;
 
+
   type getSettlementDataList = {
     matchId: number;
     countryId: number;
@@ -174,6 +175,7 @@ declare namespace SattleDataAPI {
 
   type ChildrenDataList = {
     type: string;
+    val: string;
     key: 'matchScoreRecordList' | 'penaltyCardRecordList' | 'cornerRecordList';
     tableList: MatchEventsList[];
   };

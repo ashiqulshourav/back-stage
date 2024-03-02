@@ -68,9 +68,11 @@ const comoMap = {
   Rugby,
   AmericanFootball
 };
+
 const comType = SPORT_ID_MAP.find(item => {
   return item.value === (settingStore.settleHistoryInfo.matchType ?? 1);
 }).type;
+
 const currentComponentName = reactive({
   name: markRaw(comoMap[comType])
 });
@@ -85,6 +87,7 @@ const changeCurrentComponentName = (_: { value: number; type: string }) => {
 const onSearch = val => {
   componentStrName.value.filterData(val, form);
 };
+
 const resetForm = formEl => {
   if (!formEl) return;
   formEl.resetFields();

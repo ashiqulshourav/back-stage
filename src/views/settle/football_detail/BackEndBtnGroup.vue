@@ -22,7 +22,7 @@
         "
         :size="size"
         :icon="useRenderIcon('uploadIcon')"
-        @click="handleChildrenData(row, parIndex, 'upload', parentRow)"
+        @click="handleChildrenData(row, 'upload', parentRow)"
       >
         {{ t('确认结算') }}
       </el-button>
@@ -49,7 +49,6 @@ const props = defineProps<{
   row: SattleDataAPI.MatchEventsList;
   parentRow: SattleDataAPI.getSettlementDataList;
   size: any;
-  parIndex: number;
   dataList: SattleDataAPI.MatchEventsList[];
   index: number;
 }>();

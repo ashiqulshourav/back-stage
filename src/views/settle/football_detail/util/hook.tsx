@@ -1,23 +1,38 @@
 import { message } from '@/utils/message';
-import type { PaginationProps } from '@pureadmin/table';
 import { t } from '@/plugins/i18n';
 import { childColumns, yellow_red_column, columns } from '../tableColumnList';
 import { MatchEventType, SPORT_TYPE, TempListType } from './type';
 import { compareTime, dateSetSecond } from '@/utils/formatDate';
 import { ElMessageBox, dayjs } from 'element-plus';
 import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
-import { useMatchStore } from '@/store/match';
 
 export function useFootball() {
-  const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
+  const dataList = reactive<SattleDataAPI.ChildrenDataList[]>([
+    {
+      val: t('足球进球'),
+      type: MatchEventType.Goal,
+      key: 'matchScoreRecordList',
+      tableList: []
+    },
+    {
+      val: t('红黄牌'),
+      type: MatchEventType.YellowRedCard,
+      key: 'penaltyCardRecordList',
+      tableList: []
+    },
+    {
+      val: t('角球'),
+      type: MatchEventType.Corner,
+      key: 'cornerRecordList',
+      tableList: []
+    }
+  ]);
   const childloading = ref(true);
   const switchLoadMap = ref({});
   const childDataTotal = ref(0);
   const allSettleLoading = ref(false);
-  const expandMatchList = reactive<number[]>([]);
   const expandRowList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const loopTimer = ref<NodeJS.Timeout>();
-  const matchStore = useMatchStore();
   const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
     {} as SattleDataAPI.getSettlementDataList
   );
@@ -25,79 +40,6 @@ export function useFootball() {
     half: false,
     all: false
   });
-  const pagination = reactive<PaginationProps>({
-    total: 0,
-    pageSize: 10,
-    currentPage: 1
-  });
-
-  const handleTableWidthChange = (pageSize: number) => {
-    pagination.pageSize = pageSize;
-    onSearch();
-  };
-
-  const handleCurrentChange = (val: number) => {
-    pagination.currentPage = val;
-    expandMatchList.length = 0;
-    expandRowList.length = 0;
-    onSearch();
-  };
-
-  /** 搜索初始化 */
-  const onSearch = async (type?: 'reload') => {
-    loopTimer.value && clearInterval(loopTimer.value);
-    try {
-      if (type === 'reload') {
-        pagination.currentPage = 1;
-        expandMatchList.length = 0;
-        expandRowList.length = 0;
-      }
-
-      matchStore.set_settleRequestLoading(true);
-
-      const res: SattleDataAPI.getSettlementListRes =
-        await API.getSettlementList({
-          ...data,
-          pageSize: pagination.pageSize,
-          pageNum: pagination.currentPage,
-          sportId: SPORT_TYPE.football
-        });
-      matchStore.set_settleRequestLoading(false);
-      if (res.code) return message(res.msg, { type: 'error' });
-      dataList.length = 0;
-      res.data.list.forEach(item => {
-        item.isShowCancelBtn = +res.ts < +item.beginTimeLong;
-      });
-
-      dataList.push(...res.data.list);
-      dataList.forEach(
-        _ =>
-          (_.childrenData = [
-            {
-              type: MatchEventType.Goal,
-              key: 'matchScoreRecordList',
-              tableList: []
-            },
-            {
-              type: MatchEventType.YellowRedCard,
-              key: 'penaltyCardRecordList',
-              tableList: []
-            },
-            {
-              type: MatchEventType.Corner,
-              key: 'cornerRecordList',
-              tableList: []
-            }
-          ])
-      );
-      pagination.total = res.data.total;
-      document
-        .querySelector('.table_container .el-scrollbar__wrap')
-        .scroll(0, 0);
-    } catch (error) {
-      matchStore.settleRequestLoading = false;
-    }
-  };
 
   //- 人工结算新增一行
   const addChildRow = (tableList, type) => {
@@ -107,7 +49,7 @@ export function useFootball() {
         !tableList[tableList.length - 1]?.isBackEndReturnData) ||
       isSettle
     ) {
-      message('请先完成之前的事件结算', { type: 'error' });
+      message(t('请先完成之前的事件结算'), { type: 'error' });
     } else {
       loopTimer.value && clearInterval(loopTimer.value);
       const tempList: TempListType = {
@@ -126,35 +68,18 @@ export function useFootball() {
 
   //- 当前行编辑
   const editChild = (row: SattleDataAPI.MatchEventsList) => (row.isEdit = true);
-  //- 打开关闭结算列表
-  const expandChange = (
-    row: SaleDataAPI.PreSaleList,
-    currentExpandList: SattleDataAPI.getSettlementDataList[]
-  ) => {
-    if (currentExpandList.length) {
-      expandMatchList.length = 0;
-      if (row) {
-        expandMatchList.push(row.matchId);
-        expandRowList.push(...currentExpandList);
-      }
-    } else {
-      expandMatchList.length = 0;
-    }
-    if (!currentExpandList.some(item => item.matchId === row.matchId)) {
-      if (loopTimer.value) clearInterval(loopTimer.value);
-      return;
-    }
-    getChildrenData(row);
-  };
 
   //- 获取当前展开行结算列表
-  const getChildrenData = async row => {
+  const getChildrenData = async () => {
     childloading.value = true;
-    const res = await API.getMatchEvents({ matchId: row.matchId });
+
+    const res = await API.getMatchEvents({
+      matchId: history.state.params.matchId
+    });
     childloading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
     childDataTotal.value = 0;
-    row.childrenData.forEach((item: SaleDataAPI.ChildrenDataList) => {
+    dataList.forEach((item: SaleDataAPI.ChildrenDataList) => {
       item.tableList = res.data[item.key];
       childDataTotal.value += item.tableList.length;
       if (item.tableList.length) {
@@ -163,7 +88,7 @@ export function useFootball() {
           _.isEdit = false;
           _.isSave = false;
           _.isShowCount = false;
-          _.matchId = row.matchId;
+          _.matchId = history.state.params.matchId;
           _.t = res.ts;
           _.isBackEndReturnData = true;
           if (_.eventTime.toString().length < 10) {
@@ -199,7 +124,8 @@ export function useFootball() {
       }
     });
     if (loopTimer.value) clearInterval(loopTimer.value);
-    loopTimer.value = setInterval(() => getChildrenData(row), 10000);
+    if ((renderObj.settlementType ?? history.state.params.settlementType) === 1)
+      loopTimer.value = setInterval(() => getChildrenData(), 10000);
   };
 
   //- 是否输入了完整的内容
@@ -223,7 +149,6 @@ export function useFootball() {
   //- 新增事件
   const handleChildrenData = async (
     row: SattleDataAPI.MatchEventsList,
-    parentIndex: number,
     type: 'save' | 'upload',
     parentRow
   ) => {
@@ -254,7 +179,7 @@ export function useFootball() {
         parentRow.beginTimeLong +
         compareTime(dayjs(row.eventTime).format('HH:mm:ss')) * 1000,
       homeAway: row.homeAway,
-      matchId: dataList[parentIndex].matchId,
+      matchId: renderObj.matchId,
       matchPeriodId: +row.matchPeriodId,
       player1Name: row.player1Name,
       dataSourceCode: 'SK',
@@ -276,8 +201,8 @@ export function useFootball() {
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if (res.code) return;
       row.isEdit = false;
-      getChildrenData(parentRow);
-      reloadCurrentMatch(row.matchId, 'unSettlementEvents');
+      getChildrenData();
+      getMatchDetail();
     });
   };
 
@@ -304,7 +229,7 @@ export function useFootball() {
       balanceLoading[type] = false;
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if (res.code) return;
-      await onSearch();
+      // await onSearch();
       const row = dataList.find(_ => _.matchId === matchId);
       getChildrenData(row);
     } catch (error) {
@@ -313,7 +238,7 @@ export function useFootball() {
   };
 
   onMounted(() => {
-    onSearch();
+    getChildrenData();
     getMatchDetail();
   });
 
@@ -332,7 +257,7 @@ export function useFootball() {
   };
 
   //- 自动结算转手动结算
-  const changeSettleType = async matchId => {
+  const changeSettleType = async () => {
     ElMessageBox.confirm(
       `${t('一但此赛事开启人工结算模式，无法关闭')}<br/>${t(
         '后面只能以人工录入事件，无法自动化推送数据商事件'
@@ -346,12 +271,14 @@ export function useFootball() {
         center: true
       }
     ).then(async () => {
-      const res = await API.setManualMatchStatus({ matchId });
+      const res = await API.setManualMatchStatus({
+        matchId: renderObj.matchId
+      });
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if (res.code) return;
-      const row = dataList.find(_ => _.matchId === matchId);
-      getChildrenData(row);
-      reloadCurrentMatch(row.matchId, 'settlementType');
+      getChildrenData();
+      getMatchDetail();
+      loopTimer.value && clearInterval(loopTimer.value);
     });
   };
 
@@ -367,7 +294,7 @@ export function useFootball() {
       row.isShowCount = false;
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if (res.code) return;
-      getChildrenData(parentRow);
+      getChildrenData();
     });
   };
 
@@ -389,9 +316,8 @@ export function useFootball() {
         remark: settleTimes === 0 ? '未结算' : '已结算'
       });
       message(res.msg, { type: res.code ? 'error' : 'success' });
-      const row = dataList.find(_ => _.matchId === matchId);
-      getChildrenData(row);
-      reloadCurrentMatch(row.matchId, 'settlementType');
+      getChildrenData();
+      getMatchDetail();
     });
   };
 
@@ -410,12 +336,7 @@ export function useFootball() {
     childloading,
     columns,
     dataList,
-    pagination,
-    onSearch,
-    handleTableWidthChange,
     switchLoadMap,
-    expandChange,
-    handleCurrentChange,
     childColumns,
     getChildrenData,
     addChildRow,

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-bg_color w-[99/100] pl-8 pb-3 pt-[12px]">
+  <div class="bg-bg_color w-full pl-8 pb-3 pt-[12px]">
     <div class="text-center font-bold text-2xl mb-3 relative">
       <span>{{ t('盘口详情') }}</span>
       <IconifyIconOffline
