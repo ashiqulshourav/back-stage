@@ -86,8 +86,8 @@
           :placeholder="t('请选择')"
           @change="search"
         >
-          <el-option :label="t('早盘')" :value="0" />
-          <el-option :label="t('未开售')" :value="1" />
+          <el-option :label="t('未开售')" :value="0" />
+          <el-option :label="t('早盘')" :value="1" />
           <el-option :label="t('滚球')" :value="2" />
           <el-option :label="t('进行中')" :value="3" />
         </el-select>
