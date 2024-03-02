@@ -83,12 +83,9 @@ import { MATCH_EVENT_CODE } from '@/utils/maps/sports_map';
 import MatchTime from './MatchTime.vue';
 import { MatchEventRowType, parentRowType } from './utils/type';
 import { usePublicHooks } from '@/hooks';
-
 const { tableHeaderStyle } = usePublicHooks();
-
 defineOptions({ name: 'SETTLE_HISTORY' });
-
-//- 取消事件置灰
+import { SPORT_TYPE, SearchFormType } from '../../utils/type';
 const tableRowClassName = ({ row }: MatchEventRowType) =>
   row.canceled === 1 ? 'pure-warning-row' : '';
 const eventQuotientList = [

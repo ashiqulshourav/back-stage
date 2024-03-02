@@ -2,13 +2,11 @@ import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { childColumns, columns } from './tableColumnList';
-import { MatchEventType, SearchFormType } from './type';
+import { MatchEventType } from './type';
 import { dateSetSecond } from '@/utils/formatDate';
 import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
-import {useSettleHistoryStoreHook} from "@/views/settle/settle_history/store";
-
+import { SPORT_TYPE, SearchFormType } from '../../../utils/type';
 export function useSettle() {
-  const useSettleHistoryStore=useSettleHistoryStoreHook();
   const form = reactive<SearchFormType>({
     leagueId: '',
     matchId: '',
@@ -62,7 +60,7 @@ export function useSettle() {
           ...data,
           pageSize: pagination.pageSize,
           pageNum: pagination.currentPage,
-          sportId: useSettleHistoryStore.getSportId
+          sportId: SPORT_TYPE.tennis,
         });
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
