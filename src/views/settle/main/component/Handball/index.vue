@@ -52,13 +52,14 @@ import { usePublicHooks } from '@/hooks';
 import { SearchFormType } from '../../utils/type';
 import { useMatchStore } from '@/store/match';
 import { useSettileHook } from '../../utils/hook';
+import { useSettingStoreHook } from '@/store/settings';
 
 const { tableHeaderStyle } = usePublicHooks();
 const router = useRouter();
 
 const matchStore = useMatchStore();
 const { cancelBetOrder } = useSettileHook();
-
+const settingStore = useSettingStoreHook();
 const props = defineProps<{
   form: SearchFormType;
 }>();
@@ -74,6 +75,10 @@ const {
 } = useSportHook();
 
 const goDetail = row => {
+  settingStore.set_settle_history({
+    page: pagination.currentPage,
+    matchType: 11
+  });
   const params = JSON.parse(JSON.stringify(row));
   router.push({
     name: 'SETTLE_HANDBALL_DETAIL',
