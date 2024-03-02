@@ -66,7 +66,7 @@ export const MATCH_EVENT_CODE = {
   yellow_red_card: t('红牌/黄牌'),
   corner: t('角球'),
   yellow_card: t('黄牌'),
-  red_card: t('黄牌')
+  red_card: t('红牌')
   // match_status: t('比赛阶段'),
 };
 
