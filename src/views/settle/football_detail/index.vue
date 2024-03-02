@@ -5,9 +5,25 @@
     :renderObj="renderObj"
     :allSettleLoading="allSettleLoading"
   />
-
-  
-
+  <PureTableBar :columns="columns" @refresh="reloadTable">
+    <template #title>
+      <div class="flex">
+        <div class="flex items-center">
+          <!-- -全场结算按钮 -->
+          <SettleMatchBtn
+            :balanceLoading="balanceLoading"
+            :parentRow="renderObj"
+            :childDataTotal="childDataTotal"
+            @settlementFunction="settlementFunction"
+          />
+          <el-text type="danger" class="!ml-2">{{
+            t('请依照正序进行确认结算')
+          }}</el-text>
+        </div>
+      </div>
+    </template>
+    <template v-slot="{ size, dynamicColumns }"></template>
+  </PureTableBar>
 </template>
 
 <script setup lang="ts">
