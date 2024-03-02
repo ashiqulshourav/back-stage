@@ -79,10 +79,8 @@
 import { t } from '@/plugins/i18n';
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useSettle } from './utils/hook';
-import SearchForm from './component/SearchForm.vue';
 import { MATCH_EVENT_CODE } from '@/utils/maps/sports_map';
-import SportTypeNav from './component/SportTypeNav.vue';
-import MatchTime from './component/MatchTime.vue';
+import MatchTime from './MatchTime.vue';
 import { MatchEventRowType, parentRowType } from './utils/type';
 import { usePublicHooks } from '@/hooks';
 
@@ -100,19 +98,15 @@ const eventQuotientList = [
 ];
 
 const {
-  form,
   loading,
   childloading,
   columns,
   dataList,
   pagination,
-  onSearch,
   handleTableWidthChange,
   handleCurrentChange,
   childColumns,
   expandChange,
-  resetForm,
-  currentSportId,
   expandMatchList,
   reloadTable
 } = useSettle();

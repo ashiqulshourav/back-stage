@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import dayjs from 'dayjs';
 import { getTime } from '@pureadmin/utils';
-import { MatchEventRowType } from '../utils/type';
+import { MatchEventRowType } from '../../utils/type';
 
 const props = defineProps<
   MatchEventRowType & {

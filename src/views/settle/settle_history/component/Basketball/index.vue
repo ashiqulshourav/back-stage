@@ -13,61 +13,24 @@
           :loading="loading"
           :size="size"
           :row-key="row => row.matchId"
-          :expand-row-keys="expandMatchList"
           adaptive
           :data="dataList"
           :columns="dynamicColumns"
           :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
-          @expand-change="expandChange"
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
-          <template #expand="{ row: parentRow }: parentRowType">
-            <div class="m-4">
-              <div v-for="item in parentRow.childrenData" :key="item.type">
-                <div class="mt-3 mb-1 font-bold">
-                  {{ MATCH_EVENT_CODE[item.type] }}
-                </div>
-
-                <pure-table
-                  class="table_container"
-                  align-whole="center"
-                  :row-key="row => row.id"
-                  :data="item.tableList"
-                  :loading="childloading"
-                  :columns="childColumns"
-                  :row-class-name="tableRowClassName"
-                  size="small"
-                  table-layout="auto"
-                  border
-                  :header-cell-style="tableHeaderStyle"
-                >
-                  <!-- -比赛进行时间 -->
-                  <template #eventTime="{ row, index }: MatchEventRowType">
-                    <MatchTime
-                      :row="row"
-                      :index="index"
-                      :item="item"
-                      :beginTime="parentRow.beginTimeLong"
-                    />
-                  </template>
-                  <!-- -数据商 -->
-                  <template #dataSourceCode="{ row }: MatchEventRowType">
-                    <el-text
-                      v-if="row.isBackEndReturnData && row.settleType === 0"
-                      v-for="(_, index) in eventQuotientList"
-                      :key="index"
-                      :type="row[_.type] === 1 ? 'primary' : 'info'"
-                      :class="['!text-xs', index === 1 && '!mr-2 !ml-2']"
-                      >{{ _.val }}</el-text
-                    >
-                    <span v-else>-</span>
-                  </template>
-                </pure-table>
-              </div>
-            </div>
+          <template #operation="{ row }">
+            <el-button
+                class="reset-margin"
+                type="primary"
+                :size="size"
+                @click="goTennisDetail(row)"
+            >
+              {{ t('结算详情') }}
+            </el-button>
           </template>
         </pure-table>
       </template>
@@ -79,43 +42,26 @@
 import { t } from '@/plugins/i18n';
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useSettle } from './utils/hook';
-import SearchForm from './component/SearchForm.vue';
-import { MATCH_EVENT_CODE } from '@/utils/maps/sports_map';
-import SportTypeNav from './component/SportTypeNav.vue';
-import MatchTime from './component/MatchTime.vue';
-import { MatchEventRowType, parentRowType } from './utils/type';
 import { usePublicHooks } from '@/hooks';
-
 const { tableHeaderStyle } = usePublicHooks();
-
 defineOptions({ name: 'SETTLE_HISTORY' });
-
-//- 取消事件置灰
-const tableRowClassName = ({ row }: MatchEventRowType) =>
-  row.canceled === 1 ? 'pure-warning-row' : '';
-const eventQuotientList = [
-  { type: 'xjFlag', val: t('188数据') },
-  { type: 'psFlag', val: t('熊猫数据') },
-  { type: 'vsFlag', val: t('播控数据') }
-];
-
+const router = useRouter();
 const {
-  form,
   loading,
-  childloading,
   columns,
   dataList,
   pagination,
-  onSearch,
   handleTableWidthChange,
   handleCurrentChange,
-  childColumns,
-  expandChange,
-  resetForm,
-  currentSportId,
-  expandMatchList,
   reloadTable
 } = useSettle();
+const goTennisDetail = row => {
+  const params = JSON.parse(JSON.stringify(row));
+  router.push({
+    name: 'SETTLE_NEW_BASKETBALL_DETAIL',
+    state: { params }
+  });
+};
 </script>
 
 <style lang="scss">

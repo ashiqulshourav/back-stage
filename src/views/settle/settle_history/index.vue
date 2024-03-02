@@ -25,6 +25,7 @@ import { SPORT_ID_MAP} from '@/utils/maps/sports_map';
 import SportTypeNav from './component/SportTypeNav.vue';
 import FootBall from './component/FootBallCom/index.vue';
 import BasketBall from './component/Basketball/index.vue';
+import Tennis from './component/Tennis/index.vue';
 import {useSettingStoreHook} from "@/store/settings";
 import {useMatchStore} from "@/store/match";
 defineOptions({ name: 'SETTLE_HISTORY' });
@@ -42,6 +43,7 @@ const {
 const comoMap = {
   FootBall,
   BasketBall,
+  Tennis,
 };
 const matchStore = useMatchStore();
 const comType = SPORT_ID_MAP.find(item => {

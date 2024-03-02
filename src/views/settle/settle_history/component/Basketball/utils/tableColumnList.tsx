@@ -11,11 +11,6 @@ import { parseMatchScore } from '@/utils/formatMatch';
 
 export const columns: TableColumnList = [
   {
-    type: 'expand',
-    slot: 'expand',
-    fixed: true
-  },
-  {
     label: t('序号'),
     fixed: true,
     type: 'index',
@@ -78,12 +73,6 @@ export const columns: TableColumnList = [
     formatter: ({ status }) => MATCH_STATUS[status] ?? '-',
     headerRenderer: d => handleTableWidth(d, t('比赛状态'))
   },
-  /* {
-    label: t('熊猫匹配结果'),
-    prop: 'pandaResult',
-    formatter: ({ pandaResult }) => PANDA_MATCH_STATUS[pandaResult],
-    headerRenderer: d => handleTableWidth(d, t('熊猫匹配结果'))
-  }, */
   {
     label: t('是否中立场地'),
     prop: 'isNeutral',
@@ -106,6 +95,13 @@ export const columns: TableColumnList = [
     prop: 'unSettlementEvents',
     headerRenderer: d => handleTableWidth(d, t('未结算')),
     formatter: ({ unSettlementEvents }) => unSettlementEvents ?? '0'
+  },
+  {
+    label: t('操作'),
+    slot: 'operation',
+    headerRenderer: d => handleTableWidth(d, t('操作'), 'auto'),
+    minWidth: 260,
+    fixed: 'right'
   }
 ];
 
@@ -152,5 +148,12 @@ export const childColumns: TableColumnList = [
   {
     label: t('数据商'),
     slot: 'dataSourceCode'
+  },
+  {
+    label: t('操作'),
+    slot: 'operation',
+    headerRenderer: d => handleTableWidth(d, t('操作'), 'auto'),
+    minWidth: 260,
+    fixed: 'right'
   }
 ];
