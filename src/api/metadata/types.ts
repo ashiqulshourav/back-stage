@@ -22,12 +22,14 @@ declare namespace MetadataAPI {
     leagueNameEn?: string;
     level?: number | string;
     sportId?: number | string;
+    category?: number | string;
     leagueTagsId?: ConfigCenterDataAPI.LeagueTagType[];
   };
 
   type LeagueList = {
     leagueId: number | string;
     sportId: number | string;
+    category?: number | string;
     countryId: number | string;
     leagueNameCn: string;
     leagueNameEn: string;
