@@ -1,14 +1,8 @@
 import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
-import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { t } from '@/plugins/i18n';
 import { childColumns, yellow_red_column, columns } from '../tableColumnList';
-import {
-  MatchEventType,
-  SPORT_TYPE,
-  SearchFormType,
-  TempListType
-} from './type';
+import { MatchEventType, SPORT_TYPE, TempListType } from './type';
 import { compareTime, dateSetSecond } from '@/utils/formatDate';
 import { ElMessageBox, dayjs } from 'element-plus';
 import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
@@ -27,7 +21,6 @@ export function useFootball() {
   const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
     {} as SattleDataAPI.getSettlementDataList
   );
-  const form = ref<SearchFormType>({} as SearchFormType);
   const balanceLoading = reactive<{ half: boolean; all: boolean }>({
     half: false,
     all: false
@@ -60,7 +53,6 @@ export function useFootball() {
         expandRowList.length = 0;
       }
 
-      const data = removeEmptyStringKeys(form.value ?? {});
       matchStore.set_settleRequestLoading(true);
 
       const res: SattleDataAPI.getSettlementListRes =
@@ -420,7 +412,6 @@ export function useFootball() {
     dataList,
     pagination,
     onSearch,
-    form,
     handleTableWidthChange,
     switchLoadMap,
     expandChange,

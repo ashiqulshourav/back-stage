@@ -46,7 +46,7 @@
     "types/*.d.ts",
     "vite.config.ts",
     "src/plugins/i18n.ts"
-  ],
+, "src/views/settle/football_detail/test.js"  ],
   "exclude": [
     "dist",
     "**/*.js",

@@ -20,13 +20,6 @@ export type TempListType = {
   redOrYellow?: number;
 };
 
-export type SearchFormType = {
-  leagueId: string;
-  matchId: string;
-  status: string;
-  startTime: string;
-  endTime: string;
-};
 
 export enum MatchEventType {
   Goal = 'goal',
