@@ -23,25 +23,35 @@
   >
     {{ t('保存') }}
   </el-button>
-
-
 </template>
 
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import EditPen from '@iconify-icons/ep/edit-pen';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import { message } from '@/utils/message';
 
-defineProps<{
+const props = defineProps<{
   size: any;
+  list: SattleDataAPI.MatchEventsList[];
   row: SattleDataAPI.MatchEventsList;
+  index: number;
 }>();
 
 const emites = defineEmits(['editChild', 'handleChildrenData']);
 
 const editChild = row => emites('editChild', row);
 
-const handleChildrenData = () => emites('handleChildrenData');
+const handleChildrenData = () => {
+  if (props.index > 0) {
+    if (props.list[props.index - 1].eventTime >= props.row.eventTime) {
+      message(t('时间不能小于前一个事件发生时间'), { type: 'error' });
+      props.row.eventTime = '';
+      return;
+    }
+  }
+  emites('handleChildrenData');
+};
 </script>
 
 <style lang="scss" scoped></style>

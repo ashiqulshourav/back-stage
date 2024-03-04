@@ -127,11 +127,11 @@
                   <template v-else="!row.isBackEndReturnData">
                     <FrontBtnGroupCom
                       :size="size"
+                      :index="i"
                       :row="row"
+                      :list="item.tableList"
                       @editChild="editChild"
-                      @handleChildrenData="
-                        handleChildrenData(row, 'save', renderObj)
-                      "
+                      @handleChildrenData="handleChildrenData(row, 'save')"
                     />
                   </template>
                   <el-button
@@ -142,7 +142,7 @@
                     v-if="!row.isBackEndReturnData"
                     :disabled="!row.isSave || row.isEdit"
                     :icon="useRenderIcon('uploadIcon')"
-                    @click="handleChildrenData(row, 'upload', renderObj)"
+                    @click="handleChildrenData(row, 'upload')"
                   >
                     {{ t('确认结算') }}
                   </el-button>

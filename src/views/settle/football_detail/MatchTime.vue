@@ -1,8 +1,6 @@
 <template>
   <span class="text-sm" v-if="row.isBackEndReturnData">
-    {{ getTime(showTime).h }}:{{ getTime(showTime).m }}:{{
-      getTime(showTime).s
-    }}
+    {{ padZero(parseInt(showTime / 60)) }}:{{ padZero(showTime % 60) }}
   </span>
   <div class="flex" v-else>
     <el-input
@@ -10,14 +8,18 @@
       size="small"
       :placeholder="t('分')"
       class="mr-2"
-      :formatter="v => inputRestrictions(v)"
+      v-model="minuteNum"
+      :disabled="!row.isEdit"
+      :formatter="v => inputRestrictions(v, 0, 150)"
     />
     <el-input
       type="number"
       size="small"
       :placeholder="t('秒')"
       class="ml-2"
-      :formatter="v => inputRestrictions(v)"
+      :disabled="!row.isEdit"
+      v-model="secondNum"
+      :formatter="v => inputRestrictions(v, 0, 59)"
     />
   </div>
   <!-- <el-time-picker
@@ -36,10 +38,8 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import { MatchEventRowType } from './util/type';
-import { message } from '@/utils/message';
 import dayjs from 'dayjs';
-import { getTime } from '@pureadmin/utils';
-import { compareTime } from '@/utils/formatDate';
+import { padZero } from '@/utils/formatDate';
 import { inputRestrictions } from '@/utils/formatNumber';
 
 const props = defineProps<
@@ -49,6 +49,8 @@ const props = defineProps<
   }
 >();
 const emits = defineEmits(['changeEventTime']);
+const secondNum = ref<number>(null);
+const minuteNum = ref<number>(null);
 
 watch(
   () => props.row,
@@ -67,18 +69,16 @@ const showTime = computed(() => {
   return (new Date(props.row.eventTime).getTime() - props.beginTime) / 1000;
 });
 
-const changeEventTime = (
-  row: SattleDataAPI.MatchEventsList,
-  childIndex: number,
-  childrenData: SattleDataAPI.MatchEventsList[]
-) => {
-  if (childIndex === 0) return;
-  if (
-    compareTime(dayjs(row.eventTime).format('HH:mm:ss')) <=
-    (+childrenData[childIndex - 1].eventTime - props.beginTime) / 1000
-  ) {
-    message(t('时间不能小于前一个事件发生时间'), { type: 'error' });
-    row.eventTime = '';
+watch(
+  () => secondNum.value,
+  () => {
+    if (!minuteNum.value) {
+      minuteNum.value = 0;
+    }
+    if (minuteNum.value !== null && secondNum.value !== null) {
+      const r = minuteNum.value * 60 + +secondNum.value;
+      props.row.eventTime = props.beginTime + r * 1000;
+    }
   }
-};
+);
 </script>

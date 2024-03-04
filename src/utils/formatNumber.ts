@@ -14,6 +14,7 @@ export const formatChinese = (val: string, len?: number) => {
 const MIN = 1;
 const MAX = 200;
 export const inputRestrictions = (val, min: number = MIN, max: number = MAX) => {
+  if (val === '0') return val;
   if (val !== '') {
     let n = val.replace(/\D/g, '').replace(/^0{1,}/g, '');
     if (n > max) n = max;

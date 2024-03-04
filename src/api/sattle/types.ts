@@ -171,6 +171,7 @@ declare namespace SattleDataAPI {
     childrenData?: ChildrenDataList[];
     settlementType: number; //1 自动结算 //2 手动结算
     isShowCancelBtn?: boolean;
+    periodType?: number;
   };
 
   type ChildrenDataList = {
@@ -389,4 +390,73 @@ declare namespace SattleDataAPI {
     matchId?: number;
     endTime?: number;
   };
+
+  type newBasketballEventsList = {
+    id: number;
+    uuid: string;
+    matchId: number;
+    canceled: number;
+    eventCode: string;
+    eventTime: number | string;
+    homeAway: string;
+    matchPeriodId: number;
+    t1: number | string | null;
+    t2: number;
+    firstNum: number;
+    firstT1: number;
+    firstT2: number;
+    secondNum: number;
+    secondT1: number;
+    secondT2: number;
+    sourceType: number;
+    settleTimes: number;
+    settleType: number;
+    xjFlag: number;
+    psFlag: number;
+    vsFlag: number;
+    createdAt: string;
+    updatedAt: string;
+    createdBy: string;
+    updatedBy: string;
+    oldEventId?: any;
+    remark?: any;
+    pageSize: number;
+    pageNum: number;
+    periodType?: number;
+    isEdit?: boolean;
+    isSave?: boolean;
+  }
+
+  type newBasketballEventsData = {
+    total: number;
+    list: newBasketballEventsList[];
+    pageNum: number;
+    pageSize: number;
+    size: number;
+    startRow: number;
+    endRow: number;
+    pages: number;
+    prePage: number;
+    nextPage: number;
+    isFirstPage: boolean;
+    isLastPage: boolean;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
+    navigatePages: number;
+    navigatepageNums: number[];
+    navigateFirstPage: number;
+    navigateLastPage: number;
+  }
+
+  type newBasketballEventsResType = COMMON.BASE_RES_TYPE<newBasketballEventsData>
+  type manualSettlementFullTimeResType = COMMON.BASE_RES_TYPE<null>
+  type basketballCancelMatchEventResType = COMMON.BASE_RES_TYPE<null>
+
+  type addBasketballEventV2ReqType = {
+    eventTime: string | number | Date;
+    matchId: number;
+    matchPeriodId: string | number;
+    t1: number;
+    t2: number;
+  }
 }

@@ -1,7 +1,7 @@
 <template>
   <el-radio-group class="mt-2" v-model="currentIndex" @change="changeIndex">
     <el-radio-button
-      :value="index"
+      :label="index"
       v-for="(item, index) in mapList"
       :key="index"
       >{{ NAV_TITLE_NAME[item] }}</el-radio-button

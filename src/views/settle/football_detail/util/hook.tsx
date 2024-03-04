@@ -148,8 +148,7 @@ export function useFootball() {
   //- 新增事件
   const handleChildrenData = async (
     row: SattleDataAPI.MatchEventsList,
-    type: 'save' | 'upload',
-    parentRow
+    type: 'save' | 'upload'
   ) => {
     if (isTheFormComplete(row)) {
       return message(t('请输入完整的内容'), { type: 'error' });
@@ -174,9 +173,7 @@ export function useFootball() {
     const params: SattleDataAPI.MatchEventParams = {
       canceled: 0,
       eventCode,
-      eventTime:
-        parentRow.beginTimeLong +
-        compareTime(dayjs(row.eventTime).format('HH:mm:ss')) * 1000,
+      eventTime: row.eventTime,
       homeAway: row.homeAway,
       matchId: renderObj.matchId,
       matchPeriodId: +row.matchPeriodId,

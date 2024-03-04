@@ -13,7 +13,7 @@ export const dateGetSecond = (timestamp: Date) => {
   return totalSeconds;
 };
 
-const padZero = (n) => {
+export const padZero = (n) => {
   return n < 10 ? '0' + n : n;
 }
 

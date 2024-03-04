@@ -31,7 +31,7 @@
               <el-radio-group class="bet_item" v-model="row.betOptions">
                 <el-radio
                   :disabled="row.win != null"
-                  :value="index"
+                  :label="index"
                   border
                   :class="[
                     row.arr.length > 2 && 'mb-1',
