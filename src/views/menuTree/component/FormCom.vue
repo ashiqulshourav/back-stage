@@ -32,8 +32,8 @@
 
     <el-form-item :label="`${t('插入位置')}:`" required>
       <el-radio-group v-model="newFormInline.isShow">
-        <el-radio :value="1">{{ t('第一列') }}</el-radio>
-        <el-radio :value="2">{{ t('最后一列') }}</el-radio>
+        <el-radio :label="1">{{ t('第一列') }}</el-radio>
+        <el-radio :label="2">{{ t('最后一列') }}</el-radio>
       </el-radio-group>
     </el-form-item>
 
