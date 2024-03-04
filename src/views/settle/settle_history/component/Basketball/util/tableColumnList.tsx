@@ -1,12 +1,6 @@
 import dayjs from 'dayjs';
 import { handleTableWidth } from '@/utils/getTableWidth';
-import {
-  HOME_AWAY,
-  MATCH_EVENT_CODE,
-  MATCH_LEVEL,
-  MATCH_STATUS /* PANDA_MATCH_STATUS */
-} from '@/utils/maps/sports_map';
-import { parseMatchScore } from '@/utils/formatMatch';
+import { MATCH_STATUS /* PANDA_MATCH_STATUS */ } from '@/utils/maps/sports_map';
 // import { parseMatchScore } from '@/utils/formatMatch';
 
 export const columns: TableColumnList = [
@@ -31,17 +25,17 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('赛事ID'))
   },
   {
-    label: t('热门排序'),
+    label: t('等级'),
     prop: 'level',
-    headerRenderer: d => handleTableWidth(d, t('热门排序'))
+    headerRenderer: d => handleTableWidth(d, t('等级'))
   },
   {
-    label: t('比赛时间'),
+    label: t('开赛时间'),
     prop: 'beginTimeLong',
     minWidth: 200,
     formatter: ({ beginTimeLong }) =>
       dayjs(beginTimeLong).format('YYYY-MM-DD HH:mm:ss'),
-    headerRenderer: d => handleTableWidth(d, t('比赛时间'), 'auto')
+    headerRenderer: d => handleTableWidth(d, t('开赛时间'), 'auto')
   },
   {
     label: t('主队'),
@@ -55,24 +49,30 @@ export const columns: TableColumnList = [
     label: t('客队'),
     prop: 'awayTeamNameCn',
     align: 'left',
-    minWidth: 150,
+    minWidth: 100,
     headerRenderer: d => handleTableWidth(d, t('客队'), 'auto')
   },
-  {
-    label: t('比分'),
+  /* {
+    label: t('当前比分'),
     prop: 'currentScore',
     minWidth: 150,
-    headerRenderer: d => handleTableWidth(d, t('比分'), 'auto'),
+    headerRenderer: d => handleTableWidth(d, t('当前比分'), 'auto'),
     formatter: ({ currentScore }) => {
       return currentScore ? parseMatchScore(currentScore) : '-';
     }
-  },
+  }, */
   {
     label: t('比赛状态'),
     prop: 'status',
     formatter: ({ status }) => MATCH_STATUS[status] ?? '-',
     headerRenderer: d => handleTableWidth(d, t('比赛状态'))
   },
+  /* {
+    label: t('熊猫匹配结果'),
+    prop: 'pandaResult',
+    formatter: ({ pandaResult }) => PANDA_MATCH_STATUS[pandaResult],
+    headerRenderer: d => handleTableWidth(d, t('熊猫匹配结果'))
+  }, */
   {
     label: t('是否中立场地'),
     prop: 'isNeutral',
@@ -80,21 +80,21 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('是否中立场地'))
   },
   {
-    label: t('结算状态'),
-    prop: 'halfSettlementStatus',
-    formatter: ({ halfSettlementStatus }) =>
-      halfSettlementStatus === 0 ? (
+    label: t('全场结算'),
+    prop: 'fullSettlementStatus',
+    fixed: 'right',
+    formatter: ({ fullSettlementStatus }) =>
+      fullSettlementStatus === 0 ? (
         t('未结算')
       ) : (
         <el-text type="danger">{t('已结算')}</el-text>
       ),
-    headerRenderer: d => handleTableWidth(d, t('结算状态'))
+    headerRenderer: d => handleTableWidth(d, t('全场结算'))
   },
   {
     label: t('未结算'),
     prop: 'unSettlementEvents',
-    headerRenderer: d => handleTableWidth(d, t('未结算')),
-    formatter: ({ unSettlementEvents }) => unSettlementEvents ?? '0'
+    headerRenderer: d => handleTableWidth(d, t('未结算'), 'auto')
   },
   {
     label: t('操作'),
@@ -103,50 +103,4 @@ export const columns: TableColumnList = [
     minWidth: 260,
     fixed: 'right'
   }
-];
-
-export const childColumns: TableColumnList = [
-  {
-    label: t('主队 : 客队'),
-    prop: 't1',
-    formatter: ({ t1, t2 }) => {
-      return `${t1 ?? '-'} : ${t2 ?? '-'}`;
-    }
-  },
-  {
-    label: t('事件编码'),
-    prop: 'eventCode',
-    headerRenderer: d => handleTableWidth(d, t('事件编码')),
-    formatter: ({ eventCode }) => MATCH_EVENT_CODE[eventCode]
-  },
-  {
-    label: t('結算類型'),
-    slot: 'settleType',
-    formatter: ({ settleType }) =>
-      settleType === 0 ? t('自动结算') : t('人工结算')
-  },
-  {
-    label: t('比赛进行时间'),
-    headerRenderer: d => handleTableWidth(d, t('比赛进行时间')),
-    slot: 'eventTime'
-  },
-  {
-    label: t('比赛阶段'),
-    headerRenderer: d => handleTableWidth(d, t('比赛阶段')),
-    formatter: ({ matchPeriodId }) => MATCH_LEVEL[matchPeriodId]
-  },
-  {
-    label: t('事件来源'),
-    prop: 'homeAway',
-    formatter: ({ homeAway }) => HOME_AWAY[homeAway]
-  },
-  {
-    label: t('结算次数'),
-    prop: 'settleTimes',
-    formatter: ({ settleTimes }) => settleTimes ?? '-'
-  },
-  {
-    label: t('数据商'),
-    slot: 'dataSourceCode'
-  },
 ];
