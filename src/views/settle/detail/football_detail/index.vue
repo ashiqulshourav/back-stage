@@ -7,21 +7,41 @@
     >
       <el-row :gutter="20">
         <el-col :span="5">
-          <div class="flex">
-            <span class="text-sm">{{ t('目前比分') }}:</span>
+          <div class="flex item-center text-sm">
+            <span>{{ t('目前比分') }}: </span>
             <span>
-              <!-- {{dataList[0].tableList. }} -->
+              {{ dataList[0].tableList[dataList[0].tableList.length - 1]?.t1 }}
+              -
+              {{ dataList[0].tableList[dataList[0].tableList.length - 1]?.t2 }}
             </span>
           </div>
         </el-col>
         <el-col :span="9">
-          <div class="flex">
-            <span class="text-sm">{{ t('目前罚牌') }}:</span>
+          <div class="flex text-sm">
+            <div class="flex">
+              <span>{{ t('目前红牌') }}：</span>
+              <span>{{ t('主队') }}-</span>
+              <el-text type="danger">{{ getCurrentCard.home.red }}</el-text>
+              <span class="ml-2">{{ t('客队') }}-</span>
+              <el-text type="danger">{{ getCurrentCard.away.red }}</el-text>
+            </div>
+            <div class="flex ml-3">
+              <span class="text-sm">{{ t('目前黄牌') }}：</span>
+              <span>{{ t('主队') }}-</span>
+              <el-text type="primary">{{ getCurrentCard.home.yellow }}</el-text>
+              <span class="ml-2">{{ t('客队') }}-</span>
+              <el-text type="primary">{{ getCurrentCard.away.yellow }}</el-text>
+            </div>
           </div>
         </el-col>
         <el-col :span="5">
-          <div class="flex">
-            <span class="text-sm">{{ t('目前角球') }}:</span>
+          <div class="flex text-sm">
+            <span>{{ t('目前角球') }}：</span>
+            <span>
+              {{ dataList[2].tableList[dataList[2].tableList.length - 1]?.t1 }}
+              -
+              {{ dataList[2].tableList[dataList[2].tableList.length - 1]?.t2 }}
+            </span>
           </div>
         </el-col>
       </el-row>
@@ -66,7 +86,6 @@
               :row-key="row => row.id"
               :loading="childloading"
               adaptive
-              ref="tableRef"
               :columns="
                 item.type === 'yellow_red_card'
                   ? [...yellow_red_column, ...childColumns.slice(1)]
@@ -233,36 +252,39 @@ import { useFootball } from './util/hook';
 import { usePublicHooks } from '@/hooks';
 import Delete from '@iconify-icons/ep/delete';
 import { MatchEventRowType, MatchEventType } from './util/type';
-import { ElTable } from 'element-plus';
-
-const {
-  childloading,
-  dataList,
-  childColumns,
-  addChildRow,
-  cancelMatchEvent,
-  editChild,
-  balanceLoading,
-  settlementFunction,
-  handleChildrenData,
-  childDataTotal,
-  reloadTable,
-  changeSettleType,
-  advanceSettlement,
-  renderObj,
-  yellow_red_column,
-  allSettleBtnClick,
-  allSettleLoading
-} = useFootball();
 
 const { tableHeaderStyle } = usePublicHooks();
-const tableRef = ref<InstanceType<typeof ElTable>>();
 
 const eventQuotientList = [
   { type: 'xjFlag', val: t('188数据') },
   { type: 'psFlag', val: t('熊猫数据') },
   { type: 'vsFlag', val: t('播控数据') }
 ];
+
+const getCurrentCard = computed(() => {
+  const data = {
+    home: {
+      red: 0,
+      yellow: 0
+    },
+    away: {
+      red: 0,
+      yellow: 0
+    }
+  };
+  dataList[1].tableList.forEach(item => {
+    if (item.homeAway === 'home') {
+      item.eventCode === 'yellow_red_card'
+        ? (data.home.yellow += 0)
+        : (data.home.red += 0);
+    } else {
+      item.eventCode === 'yellow_red_card'
+        ? (data.away.yellow += 0)
+        : (data.away.red += 0);
+    }
+  });
+  return data;
+});
 
 //- 取消事件置灰
 const tableRowClassName = ({ row }: MatchEventRowType) =>
@@ -314,12 +336,32 @@ const teamChangeEvent = (
     }
   }
 };
+
+const {
+  childloading,
+  dataList,
+  childColumns,
+  addChildRow,
+  cancelMatchEvent,
+  editChild,
+  balanceLoading,
+  settlementFunction,
+  handleChildrenData,
+  childDataTotal,
+  reloadTable,
+  changeSettleType,
+  advanceSettlement,
+  renderObj,
+  yellow_red_column,
+  allSettleBtnClick,
+  allSettleLoading
+} = useFootball();
 </script>
 
 <style lang="scss">
 .football_detail {
   .el-table--fit {
-    max-height: 500px;
+    max-height: 480px;
   }
 }
 </style>

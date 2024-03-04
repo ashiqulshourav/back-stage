@@ -35,7 +35,6 @@ export const useSettingStore = defineStore({
       this.CHANGE_SETTING(data);
     },
     set_settle_history(info: { page: number; matchType: number }) {
-      console.log(4444,info)
       this.settleHistoryInfo = info;
     },
   }

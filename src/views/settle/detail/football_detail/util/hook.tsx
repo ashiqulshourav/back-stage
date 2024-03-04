@@ -2,8 +2,8 @@ import { message } from '@/utils/message';
 import { t } from '@/plugins/i18n';
 import { childColumns, yellow_red_column, columns } from '../tableColumnList';
 import { MatchEventType, SPORT_TYPE, TempListType } from './type';
-import { compareTime, dateSetSecond } from '@/utils/formatDate';
-import { ElMessageBox, dayjs } from 'element-plus';
+import { dateSetSecond } from '@/utils/formatDate';
+import { ElMessageBox } from 'element-plus';
 import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
 
 export function useFootball() {
@@ -90,9 +90,9 @@ export function useFootball() {
           _.matchId = history.state.params.matchId;
           _.t = res.ts;
           _.isBackEndReturnData = true;
-          if (_.eventTime.toString().length < 10) {
-            _.eventTime = dateSetSecond(_.eventTime as number);
-          }
+          // if (_.eventTime.toString().length < 10) {
+          //   _.eventTime = dateSetSecond(_.eventTime as number);
+          // }
           if (item.type === 'yellow_red_card') {
             _.redOrYellow = YELLOW_OR_RED[_.eventCode];
             if (_.redOrYellow === 1) {

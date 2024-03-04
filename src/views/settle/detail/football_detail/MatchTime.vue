@@ -1,6 +1,8 @@
 <template>
   <span class="text-sm" v-if="row.isBackEndReturnData">
-    {{ padZero(parseInt(showTime / 60)) }}:{{ padZero(showTime % 60) }}
+    {{ padZero(parseInt(+row.eventTime / 60)) }}:{{
+      padZero(+row.eventTime % 60)
+    }}
   </span>
   <div class="flex" v-else>
     <el-input
@@ -22,17 +24,6 @@
       :formatter="v => inputRestrictions(v, 0, 59)"
     />
   </div>
-  <!-- <el-time-picker
-    v-else
-    :class="[row.canceled === 1 && 'canceled']"
-    v-model="row.eventTime"
-    :disabled="!row.isEdit"
-    :placeholder="t('请选择当前录入时间')"
-    value-format="x"
-    :default-value="dayjs().startOf('day').toDate()"
-    @change="changeEventTime(row, index, item.tableList)"
-    format="HH:mm:ss"
-  /> -->
 </template>
 
 <script setup lang="ts">
@@ -64,10 +55,6 @@ watch(
     deep: true
   }
 );
-
-const showTime = computed(() => {
-  return (new Date(props.row.eventTime).getTime() - props.beginTime) / 1000;
-});
 
 watch(
   () => secondNum.value,
