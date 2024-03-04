@@ -16,15 +16,6 @@
             v-if="renderObj.fullSettlementStatus === 0"
             >{{ t('新增盘') }}</el-button
           >
-          <!-- <span class="text-sm ml-10 mr-2">{{ t('盘类型') }}:</span>
-          <el-radio-group v-model="boardType" @change="changeBoardType">
-            <el-radio-button size="small" label="5-3">{{
-              t('五盘三胜')
-            }}</el-radio-button>
-            <el-radio-button size="small" label="3-2">{{
-              t('三盘两胜')
-            }}</el-radio-button>
-          </el-radio-group> -->
           <span></span>
         </div>
       </template>
@@ -183,9 +174,5 @@ const {
   renderObj,
   expandChange,
   allSettleLoading
-  // boardType,
-  // juType,
-  // changeBoardType,
-  // changeJuType
 } = useTennisDetailHook();
 </script>

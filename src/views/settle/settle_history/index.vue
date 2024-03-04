@@ -34,7 +34,7 @@ defineOptions({ name: 'SETTLE_HISTORY' });
 const componentStrName = ref<any>('FootBall');
 const settingStore = useSettingStoreHook();
 const currentSportId = ref<number>(
-  settingStore.settleHistoryInfo.matchType ?? 1
+  settingStore.settleHistoryPageInfo.matchType ?? 1
 );
 const { form, loading, resetForm } = useSettle();
 const comoMap = {
@@ -45,7 +45,7 @@ const comoMap = {
 };
 const matchStore = useMatchStore();
 const comType = SPORT_ID_MAP.find(item => {
-  return item.value === (settingStore.settleHistoryInfo.matchType ?? 1);
+  return item.value === (settingStore.settleHistoryPageInfo.matchType ?? 1);
 }).type;
 const currentComponentName = reactive({
   name: markRaw(comoMap[comType])

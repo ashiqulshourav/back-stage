@@ -4,6 +4,8 @@
       @allSettleBtnClick="allSettleBtnClick"
       :renderObj="renderObj"
       :allSettleLoading="allSettleLoading"
+      :hideAllSettleBtn="isHisotry ? false : true"
+      :isFootBallTitle="true"
     >
       <el-row :gutter="20">
         <el-col :span="5">
@@ -214,7 +216,7 @@
             </pure-table>
             <div
               class="flex items-center mt-2 text-sm"
-              v-if="renderObj.settlementType !== 1"
+              v-if="renderObj.settlementType !== 1 && !isHisotry"
             >
               <span
                 class="mr-3 text-[var(--el-color-danger)] cursor-pointer"
@@ -276,10 +278,6 @@ const getCurrentCard = computed(() => {
   };
   dataList[1].tableList.forEach(item => {
     if (item.homeAway === 'home') {
-      console.log(
-        'index.vue文件 280==============行打印=',
-        item.eventCode === 'yellow_card'
-      );
       item.eventCode === 'yellow_card'
         ? (data.home.yellow += 1)
         : (data.home.red += 1);

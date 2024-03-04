@@ -69,7 +69,7 @@ const filterData = (type: 'reload') => {
   onSearch(type);
 };
 const goTennisDetail = row => {
-  settingStore.set_settle_history({
+  settingStore.save_selttle_history_page_info({
     page: pagination.currentPage,
     matchType: 3
   });

@@ -33,9 +33,13 @@ export type setType = {
   title: string;
   fixedHeader: boolean;
   hiddenSideBar: boolean;
-  settleHistoryInfo: {
-    page: number ;
-    matchType: number ;
+  settlePageInfo: {
+    page: number;
+    matchType: number;
+  }
+  settleHistoryPageInfo: {
+    page: number;
+    matchType: number;
   }
 };
 

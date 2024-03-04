@@ -21,7 +21,7 @@
         </div>
       </el-col>
 
-      <el-col :span="5">
+      <el-col :span="5" v-if="!hideAllSettleBtn">
         <el-button
           :type="renderObj.fullSettlementStatus === 1 ? 'danger' : 'primary'"
           :loading="allSettleLoading"
@@ -42,10 +42,18 @@
 import { t } from '@/plugins/i18n';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
-const props = defineProps<{
-  renderObj: SattleDataAPI.getSettlementDataList;
-  allSettleLoading: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    renderObj: SattleDataAPI.getSettlementDataList;
+    allSettleLoading: boolean;
+    hideAllSettleBtn?: boolean;
+    isFootBallTitle?: boolean;
+  }>(),
+  {
+    hideAllSettleBtn: false,
+    isFootBallTitle: false
+  }
+);
 
 const renderList = computed(() => {
   const _ = props.renderObj;

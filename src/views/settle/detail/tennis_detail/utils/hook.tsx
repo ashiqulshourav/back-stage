@@ -81,11 +81,11 @@ export function useTennisDetailHook() {
           setNum: dataList.length + 1,
           t1: '',
           t2: '',
-          //todo eventTime: '',
-          eventTime:
-            dataList.length === 0
-              ? Date.now()
-              : +dataList[dataList.length - 1].eventTime + 1000 * 60,
+          eventTime: 0,
+          // eventTime:
+          //   dataList.length === 0
+          //     ? Date.now()
+          //     : +dataList[dataList.length - 1].eventTime + 1000 * 60,
           gameRule: juType.value,
           isEdit: false
         }
@@ -97,7 +97,7 @@ export function useTennisDetailHook() {
   //- 新增局
   const addChildRow = (parentRow: SattleDataAPI.TennisEventsData) => {
     const noEmpty = parentRow.inningEvents.every(item => {
-      return item.t1 !== '' && item.t2 !== '' && item.eventTime && !item.isEdit;
+      return item.t1 !== '' && item.t2 !== '' && !item.isEdit;
     });
 
     if (!noEmpty)
@@ -110,13 +110,12 @@ export function useTennisDetailHook() {
       gameRule: juType.value,
       t1: '',
       t2: '',
-      // eventTime: '',
-      eventTime:
-        parentRow.inningEvents.length === 0
-          ? +dataList[dataList.length - 1].eventTime + 1000 * 60
-          : +parentRow.inningEvents[parentRow.inningEvents.length - 1]
-              .eventTime +
-            1000 * 60,
+      eventTime: 0,
+      // parentRow.inningEvents.length === 0
+      //   ? +dataList[dataList.length - 1].eventTime + 1000 * 60
+      //   : +parentRow.inningEvents[parentRow.inningEvents.length - 1]
+      //       .eventTime +
+      //     1000 * 60,
       isEdit: false
     } as SattleDataAPI.InningEvent;
     parentRow.inningEvents.push(params);
@@ -126,10 +125,10 @@ export function useTennisDetailHook() {
   const settlementHandicap = async (
     parentRow: SattleDataAPI.TennisEventsData
   ) => {
-    const { eventTime, t1, t2 } =
+    const { t1, t2 } =
       parentRow.inningEvents[parentRow.inningEvents.length - 1];
 
-    if (!eventTime || !t1 || !t2) {
+    if (!t1 || !t2) {
       return message(t('请先完成并保存事件'), { type: 'error' });
     }
 
@@ -163,7 +162,7 @@ export function useTennisDetailHook() {
       });
       parentRow.loading = true;
       const params = {
-        eventTime,
+        eventTime: 0,
         inningEvents,
         t1: t1Score.value,
         t2: t2Score.value,

@@ -60,7 +60,6 @@ const router = useRouter();
 const matchStore = useMatchStore();
 const settingStore = useSettingStoreHook();
 
-
 const props = defineProps<{
   form: SearchFormType;
 }>();
@@ -83,7 +82,7 @@ const filterData = (type: 'reload') => {
   onSearch(type);
 };
 const goTennisDetail = row => {
-  settingStore.set_settle_history({
+  settingStore.save_selttle_page_info({
     page: pagination.currentPage,
     matchType: 23
   });

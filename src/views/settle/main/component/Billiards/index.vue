@@ -80,7 +80,7 @@ const filterData = (type: 'reload') => {
 
 const router = useRouter();
 const goSettleDetail = row => {
-  settingStore.set_settle_history({
+  settingStore.save_selttle_page_info({
     page: pagination.currentPage,
     matchType: 5
   });

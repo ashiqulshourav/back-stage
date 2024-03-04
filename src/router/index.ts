@@ -199,11 +199,18 @@ router.beforeEach((to: ToRouteType, _from, next) => {
 
 router.afterEach((to) => {
   //- 返回页面非结算历史，清空标签存储
-  const settingStore = useSettingStoreHook()
-  if (!(to?.name as string)?.startsWith('SETTLE') || to?.name === 'SETTLE_HISTORY') {
-    settingStore.set_settle_history({ page: null, matchType: null })
-  }
+  clearSettleInfo(to)
   NProgress.done();
 });
+//- 清空结算页面信息
+const clearSettleInfo = (to) => {
+  const settingStore = useSettingStoreHook();
+  if (!(to?.name as string)?.startsWith('SETTLE') || to?.name === 'SETTLE_HISTORY') {
+    settingStore.save_selttle_page_info({ page: null, matchType: null })
+  }
+  if (!(to?.name as string)?.startsWith('SETTLE') || to?.name === 'SETTLE_MAIN') {
+    settingStore.save_selttle_history_page_info({ page: null, matchType: null })
+  }
+}
 
 export default router;

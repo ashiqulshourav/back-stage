@@ -15,7 +15,7 @@ export function useBasketballHook() {
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
-    currentPage: settingStore.settleHistoryInfo.page ?? 1
+    currentPage: settingStore.settlePageInfo.page ?? 1
   });
 
   const handleTableWidthChange = (pageSize: number) => {

@@ -39,9 +39,7 @@ import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 defineOptions({ name: 'VOLLEYBALL' });
 const componentStrName = ref<any>('FootBall');
 const settingStore = useSettingStoreHook();
-const currentSportId = ref<number>(
-  settingStore.settleHistoryInfo.matchType ?? 1
-);
+const currentSportId = ref<number>(settingStore.settlePageInfo.matchType ?? 1);
 const matchStore = useMatchStore();
 
 const form = reactive<SearchFormType>({
@@ -70,7 +68,7 @@ const comoMap = {
 };
 
 const comType = SPORT_ID_MAP.find(item => {
-  return item.value === (settingStore.settleHistoryInfo.matchType ?? 1);
+  return item.value === (settingStore.settlePageInfo.matchType ?? 1);
 }).type;
 
 const currentComponentName = reactive({
