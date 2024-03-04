@@ -35,7 +35,7 @@ export function useTennisHook() {
       const data = removeEmptyStringKeys(form.value ?? {});
       matchStore.set_settleRequestLoading(true);
       const res: SattleDataAPI.getSettlementListRes =
-        await API.getSettlementHistory({
+        await API.getSettlementList({
           ...data,
           pageSize: pagination.pageSize,
           pageNum: pagination.currentPage,
