@@ -19,7 +19,7 @@ export const columns: TableColumnList = [
     formatter: ({ countryId }) => parseCountry(countryId)
   },
   {
-    label: t('188数据源联赛杯赛ID'),
+    label: t('188数据源联赛ID'),
     prop: 'leagueId188Bet',
     minWidth: 150
   },
