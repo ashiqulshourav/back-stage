@@ -27,7 +27,9 @@ import FootBall from './component/FootBall/index.vue';
 import BasketBall from './component/Basketball/index.vue';
 import Tennis from './component/Tennis/index.vue';
 import { useSettingStoreHook } from '@/store/settings';
+import Volleyball from './component/Volleyball/index.vue';
 import { useMatchStore } from '@/store/match';
+
 defineOptions({ name: 'SETTLE_HISTORY' });
 const componentStrName = ref<any>('FootBall');
 const settingStore = useSettingStoreHook();
@@ -38,7 +40,8 @@ const { form, loading, onSearch, resetForm } = useSettle();
 const comoMap = {
   FootBall,
   BasketBall,
-  Tennis
+  Tennis,
+  Volleyball
 };
 const matchStore = useMatchStore();
 const comType = SPORT_ID_MAP.find(item => {
