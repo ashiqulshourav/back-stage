@@ -45,6 +45,7 @@ export const useMatchStore = defineStore('MATCHSTATE', {
       this.settleRequestLoading = _;
     },
     set_currentSportId(id: number) {
+      console.log(3333,id)
       this.sportId = id;
     }
   },

@@ -58,6 +58,9 @@ const {
 const goTennisDetail = row => {
   const params = JSON.parse(JSON.stringify(row));
 
+
+  console.log(22222222,params)
+
   router.push({
     name: 'SETTLE_NEW_BASKETBALL_DETAIL',
     state: { params }
