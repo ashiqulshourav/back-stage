@@ -24,10 +24,10 @@ import SearchForm from './component/SearchForm.vue';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import SportTypeNav from './component/SportTypeNav.vue';
 import FootBall from './component/FootBall/index.vue';
-// import BasketBall from './component/Basketball/index.vue';
+import BasketBall from './component/Basketball/index.vue';
 import Tennis from './component/Tennis/index.vue';
 import { useSettingStoreHook } from '@/store/settings';
-// import Volleyball from './component/Volleyball/index.vue';
+import Volleyball from './component/Volleyball/index.vue';
 import { useMatchStore } from '@/store/match';
 
 defineOptions({ name: 'SETTLE_HISTORY' });
@@ -42,9 +42,9 @@ const {
   resetForm} = useSettle();
 const comoMap = {
   FootBall,
-  // BasketBall,
+  BasketBall,
   Tennis,
-  // Volleyball
+  Volleyball
 };
 const matchStore = useMatchStore();
 const comType = SPORT_ID_MAP.find(item => {

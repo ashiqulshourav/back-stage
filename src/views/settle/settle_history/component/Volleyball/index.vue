@@ -30,14 +30,6 @@
           >
             {{ t('结算详情') }}
           </el-button>
-          <el-button
-            v-if="row.isShowCancelBtn"
-            type="danger"
-            :size="size"
-            :disabled="row.cancelOrderTimes > 0"
-            @click="cancelClick(row)"
-            >{{ t('取消注单') }}</el-button
-          >
         </template>
       </pure-table>
     </template>
@@ -51,7 +43,6 @@ import { useTennisHook } from './util/hook';
 import { usePublicHooks } from '@/hooks';
 import { SearchFormType } from '../../utils/type';
 import { useMatchStore } from '@/store/match';
-import { useSettileHook } from '../../utils/hook';
 import { useSettingStoreHook } from '@/store/settings';
 
 const { tableHeaderStyle } = usePublicHooks();
@@ -73,8 +64,6 @@ const {
   form
 } = useTennisHook();
 
-const { cancelBetOrder } = useSettileHook();
-
 form.value = props.form;
 
 const filterData = (type: 'reload') => {
@@ -91,11 +80,5 @@ const goTennisDetail = row => {
     state: { params }
   });
 };
-
-const cancelClick = async row => {
-  await cancelBetOrder(row);
-  onSearch();
-};
-
 defineExpose({ filterData });
 </script>
