@@ -2,7 +2,6 @@ import { message } from '@/utils/message';
 import { t } from '@/plugins/i18n';
 import { childColumns, yellow_red_column, columns } from '../tableColumnList';
 import { MatchEventType, SPORT_TYPE, TempListType } from './type';
-import { dateSetSecond } from '@/utils/formatDate';
 import { ElMessageBox } from 'element-plus';
 import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
 

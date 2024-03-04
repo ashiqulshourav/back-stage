@@ -49,24 +49,26 @@
     <PureTableBar @refresh="reloadTable" :columns="childColumns">
       <template #title>
         <div class="flex items-center">
-          <SettleMatchBtn
-            :balanceLoading="balanceLoading"
-            :parentRow="renderObj"
-            :childDataTotal="childDataTotal"
-            @settlementFunction="settlementFunction"
-          />
-          <!-- -开启人工结算 -->
-          <div class="cursor-pointer">
-            <el-button
-              v-if="renderObj.settlementType === 1"
-              class="ml-1 reset-margin"
-              @click="changeSettleType"
-              >{{ t('开启人工结算') }}</el-button
-            >
-          </div>
-          <el-text type="danger" class="!ml-2">{{
-            t('请依照正序进行确认结算')
-          }}</el-text>
+          <template v-if="!isHisotry">
+            <SettleMatchBtn
+              :balanceLoading="balanceLoading"
+              :parentRow="renderObj"
+              :childDataTotal="childDataTotal"
+              @settlementFunction="settlementFunction"
+            />
+            <!-- -开启人工结算 -->
+            <div class="cursor-pointer">
+              <el-button
+                v-if="renderObj.settlementType === 1"
+                class="ml-1 reset-margin"
+                @click="changeSettleType"
+                >{{ t('开启人工结算') }}</el-button
+              >
+            </div>
+            <el-text type="danger" class="!ml-2">{{
+              t('请依照正序进行确认结算')
+            }}</el-text>
+          </template>
         </div>
       </template>
       <template v-slot="{ size }">
@@ -76,7 +78,6 @@
             v-for="(item, idx) in dataList"
             :key="item.type"
           >
-            <!-- min-h-[500px] max-h-[500px] -->
             <pure-table
               class="table_container"
               align-whole="center"
@@ -260,6 +261,8 @@ const eventQuotientList = [
   { type: 'psFlag', val: t('熊猫数据') },
   { type: 'vsFlag', val: t('播控数据') }
 ];
+
+const isHisotry = ref(history.state.params.isHisToryPage);
 
 const getCurrentCard = computed(() => {
   const data = {

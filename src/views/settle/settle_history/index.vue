@@ -21,33 +21,28 @@
 <script setup lang="ts">
 import { useSettle } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
-import { SPORT_ID_MAP} from '@/utils/maps/sports_map';
+import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import SportTypeNav from './component/SportTypeNav.vue';
-import FootBall from './component/FootBallCom/index.vue';
+import FootBall from './component/FootBall/index.vue';
 import BasketBall from './component/Basketball/index.vue';
 import Tennis from './component/Tennis/index.vue';
-import {useSettingStoreHook} from "@/store/settings";
-import {useMatchStore} from "@/store/match";
+import { useSettingStoreHook } from '@/store/settings';
+import { useMatchStore } from '@/store/match';
 defineOptions({ name: 'SETTLE_HISTORY' });
 const componentStrName = ref<any>('FootBall');
 const settingStore = useSettingStoreHook();
 const currentSportId = ref<number>(
-    settingStore.settleHistoryInfo.matchType ?? 1
+  settingStore.settleHistoryInfo.matchType ?? 1
 );
-const {
-  form,
-  loading,
-  onSearch,
-  resetForm,
-} = useSettle();
+const { form, loading, onSearch, resetForm } = useSettle();
 const comoMap = {
   FootBall,
   BasketBall,
-  Tennis,
+  Tennis
 };
 const matchStore = useMatchStore();
 const comType = SPORT_ID_MAP.find(item => {
-    return item.value === (settingStore.settleHistoryInfo.matchType ?? 1);
+  return item.value === (settingStore.settleHistoryInfo.matchType ?? 1);
 }).type;
 const currentComponentName = reactive({
   name: markRaw(comoMap[comType])
