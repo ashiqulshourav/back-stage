@@ -1,7 +1,7 @@
 import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
-import { childColumns, columns } from './tableColumnList';
+import { columns } from './tableColumnList';
 import { SPORT_TYPE, SearchFormType } from '../../../utils/type';
 export function useSettle() {
   const form = reactive<SearchFormType>({
@@ -14,11 +14,8 @@ export function useSettle() {
 
   const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const loading = ref(true);
-  const childloading = ref(true);
   const switchLoadMap = ref({});
   const currentSportId = ref(1);
-  const expandMatchList = reactive<number[]>([]);
-  const expandRowList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const loopTimer = ref<NodeJS.Timeout>();
 
   const pagination = reactive<PaginationProps>({
@@ -34,8 +31,6 @@ export function useSettle() {
 
   const handleCurrentChange = (val: number) => {
     pagination.currentPage = val;
-    expandMatchList.length = 0;
-    expandRowList.length = 0;
     onSearch();
   };
 
@@ -46,8 +41,6 @@ export function useSettle() {
       if (spoprtId) currentSportId.value = spoprtId;
       if (type === 'reload') {
         pagination.currentPage = 1;
-        expandMatchList.length = 0;
-        expandRowList.length = 0;
       }
       loading.value = true;
       const data = removeEmptyStringKeys(form);
@@ -76,28 +69,17 @@ export function useSettle() {
     formEl.resetFields();
     onSearch('reload');
   };
-
-
-
-
   onMounted(() => onSearch());
   onUnmounted(() => {
     loopTimer.value && clearInterval(loopTimer.value);
   });
-
   const reloadTable = async () => {
     await onSearch('reload');
-    expandRowList.forEach(async row => {
-      dataList.forEach(d => {
-        if (d.matchId === row.matchId) d.childrenData = row.childrenData;
-      });
-    });
   };
 
   return {
     form,
     loading,
-    childloading,
     columns,
     dataList,
     pagination,
@@ -106,9 +88,7 @@ export function useSettle() {
     handleTableWidthChange,
     switchLoadMap,
     handleCurrentChange,
-    childColumns,
     currentSportId,
-    expandMatchList,
     reloadTable
   };
 }

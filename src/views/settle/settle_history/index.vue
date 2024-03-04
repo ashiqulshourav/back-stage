@@ -36,7 +36,10 @@ const settingStore = useSettingStoreHook();
 const currentSportId = ref<number>(
   settingStore.settleHistoryInfo.matchType ?? 1
 );
-const { form, loading, onSearch, resetForm } = useSettle();
+const {
+  form,
+  loading,
+  resetForm} = useSettle();
 const comoMap = {
   FootBall,
   BasketBall,
@@ -54,6 +57,10 @@ const changeCurrentComponentName = (_: { value: number; type: string }) => {
   currentComponentName.name = markRaw(comoMap[_.type]);
   currentSportId.value = _.value;
   matchStore.set_lagueList(0, _.value);
+};
+//- 搜索相关
+const onSearch = val => {
+  componentStrName.value.filterData(val, form);
 };
 </script>
 
