@@ -1,12 +1,11 @@
 <template>
-  <!-- -盘口详情 -->
-  <div class="main">
+  <div class="main football_detail">
     <DetiltTitle
       @allSettleBtnClick="allSettleBtnClick"
       :renderObj="renderObj"
       :allSettleLoading="allSettleLoading"
     />
-    <PureTableBar :columns="columns" @refresh="reloadTable">
+    <PureTableBar @refresh="reloadTable" :columns="childColumns">
       <template #title>
         <div class="flex items-center">
           <SettleMatchBtn
@@ -30,20 +29,23 @@
         </div>
       </template>
       <template v-slot="{ size }">
-        <el-tabs tab-position="top">
+        <el-tabs tab-position="top" :lazy="true">
           <el-tab-pane
             :label="item.val"
             v-for="(item, idx) in dataList"
             :key="item.type"
           >
+            <!-- min-h-[500px] max-h-[500px] -->
             <pure-table
+              class="table_container"
               align-whole="center"
-              :row-key="row => row.id"
+              table-layout="auto"
               :data="item.tableList"
-              showOverflowTooltip
+              :fit="true"
+              :row-key="row => row.id"
               :loading="childloading"
               adaptive
-              table-layout="auto"
+              ref="tableRef"
               :columns="
                 item.type === 'yellow_red_card'
                   ? [...yellow_red_column, ...childColumns.slice(1)]
@@ -210,10 +212,10 @@ import { useFootball } from './util/hook';
 import { usePublicHooks } from '@/hooks';
 import Delete from '@iconify-icons/ep/delete';
 import { MatchEventRowType, MatchEventType } from './util/type';
+import { ElTable } from 'element-plus';
 
 const {
   childloading,
-  columns,
   dataList,
   childColumns,
   addChildRow,
@@ -233,6 +235,7 @@ const {
 } = useFootball();
 
 const { tableHeaderStyle } = usePublicHooks();
+const tableRef = ref<InstanceType<typeof ElTable>>();
 
 const eventQuotientList = [
   { type: 'xjFlag', val: t('188数据') },
@@ -292,4 +295,10 @@ const teamChangeEvent = (
 };
 </script>
 
-<style scoped></style>
+<style lang="scss">
+.football_detail {
+  .el-table--fit {
+    max-height: 500px;
+  }
+}
+</style>

@@ -31,7 +31,6 @@ export function useFootball() {
   const switchLoadMap = ref({});
   const childDataTotal = ref(0);
   const allSettleLoading = ref(false);
-  const expandRowList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const loopTimer = ref<NodeJS.Timeout>();
   const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
     {} as SattleDataAPI.getSettlementDataList
@@ -206,19 +205,7 @@ export function useFootball() {
     });
   };
 
-  //- 重新渲染赛事更新外层列表
-  const reloadCurrentMatch = async (matchId: number, type: string) => {
-    const r = await API.getSettlementList({ matchId });
-    dataList.some(item => {
-      if (item.matchId === r.data.list[0].matchId) {
-        item[type] = r.data.list[0][type];
-        return true;
-      }
-      return false;
-    });
-  };
-
-  //- 结算
+  //-全场 + 上半场结算
   const settlementFunction = async (matchId: number, type: 'half' | 'all') => {
     try {
       balanceLoading[type] = true;
@@ -229,9 +216,8 @@ export function useFootball() {
       balanceLoading[type] = false;
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if (res.code) return;
-      // await onSearch();
-      const row = dataList.find(_ => _.matchId === matchId);
-      getChildrenData(row);
+      getChildrenData();
+      getMatchDetail();
     } catch (error) {
       balanceLoading[type] = false;
     }
@@ -247,13 +233,7 @@ export function useFootball() {
   });
 
   const reloadTable = async () => {
-    await onSearch('reload');
-    expandRowList.forEach(async row => {
-      await getChildrenData(row);
-      dataList.forEach(d => {
-        if (d.matchId === row.matchId) d.childrenData = row.childrenData;
-      });
-    });
+    getChildrenData();
   };
 
   //- 自动结算转手动结算
@@ -282,7 +262,7 @@ export function useFootball() {
     });
   };
 
-  const advanceSettlement = async (row, parentRow) => {
+  const advanceSettlement = async row => {
     ElMessageBox.confirm('确定要提前结算么?', t('警告'), {
       dangerouslyUseHTMLString: true,
       confirmButtonText: t('确认'),

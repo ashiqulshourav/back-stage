@@ -4,7 +4,23 @@
       getTime(showTime).s
     }}
   </span>
-  <el-time-picker
+  <div class="flex" v-else>
+    <el-input
+      type="number"
+      size="small"
+      :placeholder="t('分')"
+      class="mr-2"
+      :formatter="v => inputRestrictions(v)"
+    />
+    <el-input
+      type="number"
+      size="small"
+      :placeholder="t('秒')"
+      class="ml-2"
+      :formatter="v => inputRestrictions(v)"
+    />
+  </div>
+  <!-- <el-time-picker
     v-else
     :class="[row.canceled === 1 && 'canceled']"
     v-model="row.eventTime"
@@ -14,7 +30,7 @@
     :default-value="dayjs().startOf('day').toDate()"
     @change="changeEventTime(row, index, item.tableList)"
     format="HH:mm:ss"
-  />
+  /> -->
 </template>
 
 <script setup lang="ts">
@@ -24,6 +40,7 @@ import { message } from '@/utils/message';
 import dayjs from 'dayjs';
 import { getTime } from '@pureadmin/utils';
 import { compareTime } from '@/utils/formatDate';
+import { inputRestrictions } from '@/utils/formatNumber';
 
 const props = defineProps<
   MatchEventRowType & {
@@ -47,7 +64,7 @@ watch(
 );
 
 const showTime = computed(() => {
-  return (+props.row.eventTime - props.beginTime) / 1000;
+  return (new Date(props.row.eventTime).getTime() - props.beginTime) / 1000;
 });
 
 const changeEventTime = (
