@@ -1,8 +1,6 @@
 <template>
   <span class="text-sm" v-if="row.id">
-    {{ getTime(showTime).h }}:{{ getTime(showTime).m }}:{{
-      getTime(showTime).s
-    }}
+    {{ getTime(showTime).m }}:{{ getTime(showTime).s }}
   </span>
   <el-time-picker
     v-else
