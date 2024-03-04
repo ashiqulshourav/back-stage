@@ -77,7 +77,7 @@ watch(
     }
     if (minuteNum.value !== null && secondNum.value !== null) {
       const r = minuteNum.value * 60 + +secondNum.value;
-      props.row.eventTime = props.beginTime + r * 1000;
+      props.row.eventTime = r;
     }
   }
 );

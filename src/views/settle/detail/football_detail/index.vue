@@ -9,6 +9,9 @@
         <el-col :span="5">
           <div class="flex">
             <span class="text-sm">{{ t('目前比分') }}:</span>
+            <span>
+              <!-- {{dataList[0].tableList. }} -->
+            </span>
           </div>
         </el-col>
         <el-col :span="9">
@@ -216,7 +219,7 @@
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-import DetiltTitle from '../component/Settle_detail_title.vue';
+import DetiltTitle from '../../component/Settle_detail_title.vue';
 import BackEndBtnGroupCom from './BackEndBtnGroup.vue';
 import FrontBtnGroupCom from './FrontBtnGroup.vue';
 import CountDownBtn from './CountDownBtn.vue';
