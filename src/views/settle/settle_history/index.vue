@@ -32,7 +32,6 @@ defineOptions({ name: 'SETTLE_HISTORY' });
 const componentStrName = ref<any>('FootBall');
 const settingStore = useSettingStoreHook();
 const currentSportId = ref<number>(
-
     settingStore.settleHistoryInfo.matchType ?? 1
 );
 const {
