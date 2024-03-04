@@ -38,7 +38,6 @@ const currentSportId = ref<number>(
 const {
   form,
   loading,
-  onSearch,
   resetForm,
 } = useSettle();
 const comoMap = {
@@ -58,6 +57,10 @@ const changeCurrentComponentName = (_: { value: number; type: string }) => {
   currentComponentName.name = markRaw(comoMap[_.type]);
   currentSportId.value = _.value;
   matchStore.set_lagueList(0, _.value);
+};
+//- 搜索相关
+const onSearch = val => {
+  componentStrName.value.filterData(val, form);
 };
 </script>
 
