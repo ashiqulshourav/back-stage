@@ -36,10 +36,7 @@ const settingStore = useSettingStoreHook();
 const currentSportId = ref<number>(
   settingStore.settleHistoryInfo.matchType ?? 1
 );
-const {
-  form,
-  loading,
-  resetForm} = useSettle();
+const { form, loading, resetForm } = useSettle();
 const comoMap = {
   FootBall,
   BasketBall,

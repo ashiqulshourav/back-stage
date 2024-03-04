@@ -20,16 +20,15 @@
           <div class="flex text-sm">
             <div class="flex">
               <span>{{ t('目前红牌') }}：</span>
-              <span>{{ t('主队') }}-</span>
               <el-text type="danger">{{ getCurrentCard.home.red }}</el-text>
-              <span class="ml-2">{{ t('客队') }}-</span>
+              <span>-</span>
               <el-text type="danger">{{ getCurrentCard.away.red }}</el-text>
             </div>
             <div class="flex ml-3">
               <span class="text-sm">{{ t('目前黄牌') }}：</span>
               <span>{{ t('主队') }}-</span>
               <el-text type="primary">{{ getCurrentCard.home.yellow }}</el-text>
-              <span class="ml-2">{{ t('客队') }}-</span>
+              <span class="2">-</span>
               <el-text type="primary">{{ getCurrentCard.away.yellow }}</el-text>
             </div>
           </div>
@@ -80,10 +79,10 @@
           >
             <pure-table
               class="table_container"
-              align-whole="center"
               table-layout="auto"
-              :data="item.tableList"
               :fit="true"
+              align-whole="center"
+              :data="item.tableList"
               :row-key="row => row.id"
               :loading="childloading"
               adaptive
@@ -277,13 +276,17 @@ const getCurrentCard = computed(() => {
   };
   dataList[1].tableList.forEach(item => {
     if (item.homeAway === 'home') {
-      item.eventCode === 'yellow_red_card'
-        ? (data.home.yellow += 0)
-        : (data.home.red += 0);
+      console.log(
+        'index.vue文件 280==============行打印=',
+        item.eventCode === 'yellow_card'
+      );
+      item.eventCode === 'yellow_card'
+        ? (data.home.yellow += 1)
+        : (data.home.red += 1);
     } else {
-      item.eventCode === 'yellow_red_card'
-        ? (data.away.yellow += 0)
-        : (data.away.red += 0);
+      item.eventCode === 'red_card'
+        ? (data.away.yellow += 1)
+        : (data.away.red += 1);
     }
   });
   return data;
@@ -364,7 +367,7 @@ const {
 <style lang="scss">
 .football_detail {
   .el-table--fit {
-    max-height: 480px;
+    max-height: 460px;
   }
 }
 </style>

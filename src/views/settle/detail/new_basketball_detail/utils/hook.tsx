@@ -1,8 +1,8 @@
 import { message } from '@/utils/message';
 import { childColumns } from './tableColumnList';
 import { SearchFormType } from './type';
-import { compareTime } from '@/utils/formatDate';
-import { ElMessageBox, dayjs } from 'element-plus';
+// import { compareTime } from '@/utils/formatDate';
+import { ElMessageBox } from 'element-plus';
 import { NEW_ROW_TYPE } from './map';
 
 export function useNewBasketBallHook() {
@@ -31,7 +31,7 @@ export function useNewBasketBallHook() {
     } else {
       const tempList = {
         settleTimes: 0,
-        eventTime: '',
+        // eventTime: '',
         t1: '',
         t2: '',
         settleType: 1,
@@ -55,8 +55,8 @@ export function useNewBasketBallHook() {
   const isTheFormComplete = row => {
     const requireDdata = {
       t1: row.t1,
-      t2: row.t2,
-      eventTime: row.eventTime
+      t2: row.t2
+      // eventTime: row.eventTime
     };
     return !Object.keys(requireDdata).every(key => {
       return key === 't1' || key === 't2'
@@ -84,9 +84,10 @@ export function useNewBasketBallHook() {
     }
 
     const params: SattleDataAPI.addBasketballEventV2ReqType = {
-      eventTime:
-        renderObj.beginTimeLong +
-        compareTime(dayjs(row.eventTime).format('HH:mm:ss')) * 1000,
+      eventTime: 0,
+      // eventTime:
+      //   renderObj.beginTimeLong +
+      //   compareTime(dayjs(row.eventTime).format('HH:mm:ss')) * 1000,
       matchId: renderObj.matchId,
       matchPeriodId: row.matchPeriodId,
       t1: +row.t1,

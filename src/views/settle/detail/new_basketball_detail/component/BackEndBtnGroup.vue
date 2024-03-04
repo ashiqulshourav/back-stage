@@ -1,7 +1,7 @@
 <template>
   <div class="flex" v-if="!row.canceled">
+    <!--   v-if="row.settleTimes === 0" -->
     <el-button
-      v-if="row.settleTimes === 0"
       class="reset-margin"
       link
       type="danger"
@@ -11,7 +11,7 @@
     >
       {{ t('取消事件') }}
     </el-button>
-    <span v-else>-</span>
+    <!-- <span v-else>-</span> -->
   </div>
 </template>
 

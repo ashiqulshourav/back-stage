@@ -31,11 +31,11 @@ export const childColumns: TableColumnList = [
     label: t('主队比分 : 客队比分'),
     slot: 'score'
   },
-  {
-    label: t('事件生成时间'),
-    slot: 'eventTime',
-    headerRenderer: d => handleTableWidth(d, t('事件生成时间'))
-  },
+  // {
+  //   label: t('事件生成时间'),
+  //   slot: 'eventTime',
+  //   headerRenderer: d => handleTableWidth(d, t('事件生成时间'))
+  // },
   {
     label: t('操作'),
     slot: 'operation'
