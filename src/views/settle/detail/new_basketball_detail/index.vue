@@ -42,14 +42,14 @@
 
           <!-- -操作 -->
           <template #operation="{ row }: MatchEventRowType">
-            <div class="flex items-center justify-center">
+            <div class="flex items-center justify-center" v-if="!isHisotry">
               <template v-if="row.id">
                 <BackEndBtnGroupCom
                   :row="row"
                   @cancelMatchEvent="cancelMatchEvent"
                 />
               </template>
-              <template v-else="!row.id">
+              <template v-else>
                 <FrontBtnGroupCom
                   :size="size"
                   :row="row"
@@ -81,6 +81,7 @@
                 {{ t('取消') }}
               </el-button>
             </div>
+            <div v-else>-</div>
           </template>
 
           <!-- -数据商 -->
@@ -155,6 +156,8 @@ const {
 } = useNewBasketBallHook();
 
 const { tableHeaderStyle } = usePublicHooks();
+const isHisotry = ref(history.state.params.isHisToryPage);
+console.log('index.vue文件 160==============行打印=', isHisotry.value);
 
 const eventQuotientList = [
   { type: 'xjFlag', val: t('188数据') },

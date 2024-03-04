@@ -152,30 +152,33 @@
               <!-- -操作 -->
               <template #operation="{ row, index: i }: MatchEventRowType">
                 <div class="flex items-center justify-center">
-                  <template v-if="row.isBackEndReturnData">
-                    <BackEndBtnGroupCom
-                      :row="row"
-                      :parentRow="renderObj"
-                      :size="size"
-                      @changeSettleType="changeSettleType"
-                      @handleChildrenData="handleChildrenData"
-                      @cancelMatchEvent="cancelMatchEvent"
-                      :dataList="dataList[idx].tableList"
-                      :index="i"
-                      :isShowCount="row.isShowCount"
-                      @advanceSettlement="advanceSettlement"
-                    />
+                  <template v-if="!isHisotry">
+                    <template v-if="row.isBackEndReturnData">
+                      <BackEndBtnGroupCom
+                        :row="row"
+                        :parentRow="renderObj"
+                        :size="size"
+                        @changeSettleType="changeSettleType"
+                        @handleChildrenData="handleChildrenData"
+                        @cancelMatchEvent="cancelMatchEvent"
+                        :dataList="dataList[idx].tableList"
+                        :index="i"
+                        :isShowCount="row.isShowCount"
+                        @advanceSettlement="advanceSettlement"
+                      />
+                    </template>
+                    <template v-else>
+                      <FrontBtnGroupCom
+                        :size="size"
+                        :index="i"
+                        :row="row"
+                        :list="item.tableList"
+                        @editChild="editChild"
+                        @handleChildrenData="handleChildrenData(row, 'save')"
+                      />
+                    </template>
                   </template>
-                  <template v-else="!row.isBackEndReturnData">
-                    <FrontBtnGroupCom
-                      :size="size"
-                      :index="i"
-                      :row="row"
-                      :list="item.tableList"
-                      @editChild="editChild"
-                      @handleChildrenData="handleChildrenData(row, 'save')"
-                    />
-                  </template>
+                  <template v-else>-</template>
                   <el-button
                     class="reset-margin"
                     link

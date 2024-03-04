@@ -70,7 +70,7 @@ const goTennisDetail = row => {
   const params = JSON.parse(JSON.stringify(row));
   router.push({
     name: 'SETTLE_NEW_BASKETBALL_DETAIL',
-    state: { params }
+    state: { params: { ...params, isHisToryPage: true } }
   });
 };
 

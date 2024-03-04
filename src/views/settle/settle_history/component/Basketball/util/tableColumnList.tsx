@@ -67,34 +67,12 @@ export const columns: TableColumnList = [
     formatter: ({ status }) => MATCH_STATUS[status] ?? '-',
     headerRenderer: d => handleTableWidth(d, t('比赛状态'))
   },
-  /* {
-    label: t('熊猫匹配结果'),
-    prop: 'pandaResult',
-    formatter: ({ pandaResult }) => PANDA_MATCH_STATUS[pandaResult],
-    headerRenderer: d => handleTableWidth(d, t('熊猫匹配结果'))
-  }, */
-  {
-    label: t('是否中立场地'),
-    prop: 'isNeutral',
-    formatter: ({ isNeutral }) => (isNeutral ? t('是') : t('否')),
-    headerRenderer: d => handleTableWidth(d, t('是否中立场地'))
-  },
   {
     label: t('全场结算'),
     prop: 'fullSettlementStatus',
     fixed: 'right',
-    formatter: ({ fullSettlementStatus }) =>
-      fullSettlementStatus === 0 ? (
-        t('未结算')
-      ) : (
-        <el-text type="danger">{t('已结算')}</el-text>
-      ),
+    formatter: () => <el-text type="danger">{t('已结算')}</el-text>,
     headerRenderer: d => handleTableWidth(d, t('全场结算'))
-  },
-  {
-    label: t('未结算'),
-    prop: 'unSettlementEvents',
-    headerRenderer: d => handleTableWidth(d, t('未结算'), 'auto')
   },
   {
     label: t('操作'),
