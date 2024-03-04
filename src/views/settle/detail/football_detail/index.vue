@@ -4,7 +4,7 @@
       @allSettleBtnClick="allSettleBtnClick"
       :renderObj="renderObj"
       :allSettleLoading="allSettleLoading"
-      :hideAllSettleBtn="isHisotry ? false : true"
+      :hideAllSettleBtn="renderObj.fullSettlementStatus ? false : true"
       :isFootBallTitle="true"
     >
       <el-row :gutter="20">
@@ -50,7 +50,7 @@
     <PureTableBar @refresh="reloadTable" :columns="childColumns">
       <template #title>
         <div class="flex items-center">
-          <template v-if="!isHisotry">
+          <template v-if="!renderObj.fullSettlementStatus">
             <SettleMatchBtn
               :balanceLoading="balanceLoading"
               :parentRow="renderObj"
@@ -152,7 +152,7 @@
               <!-- -操作 -->
               <template #operation="{ row, index: i }: MatchEventRowType">
                 <div class="flex items-center justify-center">
-                  <template v-if="!isHisotry">
+                  <template v-if="!renderObj.fullSettlementStatus">
                     <template v-if="row.isBackEndReturnData">
                       <BackEndBtnGroupCom
                         :row="row"
@@ -219,7 +219,10 @@
             </pure-table>
             <div
               class="flex items-center mt-2 text-sm"
-              v-if="renderObj.settlementType !== 1 && !isHisotry"
+              v-if="
+                renderObj.settlementType !== 1 &&
+                !renderObj.fullSettlementStatus
+              "
             >
               <span
                 class="mr-3 text-[var(--el-color-danger)] cursor-pointer"
@@ -265,8 +268,6 @@ const eventQuotientList = [
   { type: 'psFlag', val: t('熊猫数据') },
   { type: 'vsFlag', val: t('播控数据') }
 ];
-
-const isHisotry = ref(history.state.params.isHisToryPage);
 
 const getCurrentCard = computed(() => {
   const data = {

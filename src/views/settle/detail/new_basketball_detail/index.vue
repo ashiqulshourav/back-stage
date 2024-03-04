@@ -42,7 +42,10 @@
 
           <!-- -操作 -->
           <template #operation="{ row }: MatchEventRowType">
-            <div class="flex items-center justify-center" v-if="!isHisotry">
+            <div
+              class="flex items-center justify-center"
+              v-if="!renderObj.fullSettlementStatus"
+            >
               <template v-if="row.id">
                 <BackEndBtnGroupCom
                   :row="row"
@@ -156,8 +159,6 @@ const {
 } = useNewBasketBallHook();
 
 const { tableHeaderStyle } = usePublicHooks();
-const isHisotry = ref(history.state.params.isHisToryPage);
-console.log('index.vue文件 160==============行打印=', isHisotry.value);
 
 const eventQuotientList = [
   { type: 'xjFlag', val: t('188数据') },
