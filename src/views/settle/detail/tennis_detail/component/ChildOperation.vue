@@ -11,7 +11,7 @@
       v-if="row.isEdit"
       size="small"
       type="primary"
-      @click="row.isEdit = false"
+      @click="saveCurrentMatch"
       >{{ t('保存') }}</el-button
     >
     <el-button size="small" type="danger" @click="deleteChildItem">{{
@@ -22,11 +22,20 @@
 
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
-defineProps<{
+import { message } from '@/utils/message';
+const props = defineProps<{
   row: SattleDataAPI.InningEvent;
   list: SattleDataAPI.InningEvent[];
   childIndex: number;
 }>();
+
+const saveCurrentMatch = () => {
+  if (props.row.t1 === '' || props.row.t2 === '') {
+    message(t('比分不能为空'), { type: 'error' });
+  } else {
+    props.row.isEdit = false;
+  }
+};
 
 const emits = defineEmits(['deleteChildItem']);
 

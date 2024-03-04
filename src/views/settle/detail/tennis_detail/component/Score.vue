@@ -4,13 +4,13 @@
       :disabled="!row.isEdit"
       v-model="row[type]"
       ref="inputRef"
-      :formatter="v => formatChinese(v, 4)"
+      :formatter="v => formatNumber(v, 4)"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { formatChinese } from '@/utils/formatNumber';
+import { formatNumber } from '@/utils/formatNumber';
 const inputRef = ref();
 
 const props = defineProps<{
@@ -21,11 +21,15 @@ const props = defineProps<{
 watch(
   () => props.row,
   row => {
-    if (row.isEdit && props.type === 't1' && row.t1 === '')
-      inputRef.value.focus();
+    if (row.isEdit && props.type === 't1' && row.t1 === '') {
+      nextTick(() => {
+        inputRef.value.focus();
+      });
+    }
   },
   {
-    deep: true
+    deep: true,
+    immediate: true
   }
 );
 </script>

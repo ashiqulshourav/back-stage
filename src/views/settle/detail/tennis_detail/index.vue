@@ -49,7 +49,7 @@
             >
             <span v-else>{{ t('已结算') }}</span>
           </template>
-          <template #expand="{ row: parentRow, index: parentIndex }">
+          <template #expand="{ row: parentRow }">
             <div class="pl-12">
               <pure-table
                 class="table_container"
@@ -70,18 +70,6 @@
                 </template>
                 <template #t2="{ row: childRow }">
                   <Score :row="childRow" type="t2" />
-                </template>
-
-                <!-- -结算时间 -->
-                <template #eventTime="{ row: childRow, index: childIndex }">
-                  <EventTime
-                    :row="childRow"
-                    :list="parentRow.inningEvents"
-                    :index="childIndex"
-                    :dataList="dataList"
-                    :parentIndex="parentIndex"
-                    :beginTime="renderObj.beginTimeLong"
-                  />
                 </template>
 
                 <!-- -局按钮 -->
@@ -123,7 +111,6 @@ import DetiltTitle from '../../component/Settle_detail_title.vue';
 import { useTennisDetailHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import Score from './component/Score.vue';
-import EventTime from './component/EventTime.vue';
 import ChildOperation from './component/ChildOperation.vue';
 
 defineOptions({ name: 'SETTLE_TENNIS_DETAIL' });

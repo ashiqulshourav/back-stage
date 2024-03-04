@@ -87,7 +87,7 @@ export function useTennisDetailHook() {
           //     ? Date.now()
           //     : +dataList[dataList.length - 1].eventTime + 1000 * 60,
           gameRule: juType.value,
-          isEdit: false
+          isEdit: true
         }
       ] as SattleDataAPI.InningEvent[]
     };
@@ -111,12 +111,7 @@ export function useTennisDetailHook() {
       t1: '',
       t2: '',
       eventTime: 0,
-      // parentRow.inningEvents.length === 0
-      //   ? +dataList[dataList.length - 1].eventTime + 1000 * 60
-      //   : +parentRow.inningEvents[parentRow.inningEvents.length - 1]
-      //       .eventTime +
-      //     1000 * 60,
-      isEdit: false
+      isEdit: true
     } as SattleDataAPI.InningEvent;
     parentRow.inningEvents.push(params);
   };
