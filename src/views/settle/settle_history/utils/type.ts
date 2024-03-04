@@ -19,7 +19,23 @@ export type TempListType = {
   eventCode: 'goal' | 'yellow_red_card' | 'corner';
   redOrYellow?: number;
 };
-
+export enum SPORT_TYPE {
+  football = 1,
+  basketball = 2,
+  tennis = 3,
+  billiards = 5,
+  volleyball = 6,
+  darts = 8,
+  boxing = 10,
+  hockey = 28,
+  badminton = 19,
+  pingpong = 23,
+  rugby = 9,
+  american_football = 16,
+  handball = 11,
+  iceHockey = 12,
+  cricket = 13
+}
 export type SearchFormType = {
   leagueId: string;
   matchId: string;
@@ -27,7 +43,6 @@ export type SearchFormType = {
   startTime: string;
   endTime: string;
 };
-
 export enum MatchEventType {
   Goal = 'goal',
   YellowRedCard = 'yellow_red_card',

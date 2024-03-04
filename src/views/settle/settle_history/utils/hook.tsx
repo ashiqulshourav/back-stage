@@ -1,7 +1,6 @@
 import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
-import { childColumns, columns } from './tableColumnList';
 import { MatchEventType, SearchFormType } from './type';
 import { dateSetSecond } from '@/utils/formatDate';
 import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
@@ -166,7 +165,6 @@ export function useSettle() {
     form,
     loading,
     childloading,
-    columns,
     dataList,
     pagination,
     onSearch,
@@ -175,7 +173,6 @@ export function useSettle() {
     switchLoadMap,
     expandChange,
     handleCurrentChange,
-    childColumns,
     getChildrenData,
     currentSportId,
     expandMatchList,
