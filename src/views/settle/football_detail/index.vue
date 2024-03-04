@@ -4,7 +4,25 @@
       @allSettleBtnClick="allSettleBtnClick"
       :renderObj="renderObj"
       :allSettleLoading="allSettleLoading"
-    />
+    >
+      <el-row :gutter="20">
+        <el-col :span="5">
+          <div class="flex">
+            <span class="text-sm">{{ t('目前比分') }}:</span>
+          </div>
+        </el-col>
+        <el-col :span="9">
+          <div class="flex">
+            <span class="text-sm">{{ t('目前罚牌') }}:</span>
+          </div>
+        </el-col>
+        <el-col :span="5">
+          <div class="flex">
+            <span class="text-sm">{{ t('目前角球') }}:</span>
+          </div>
+        </el-col>
+      </el-row>
+    </DetiltTitle>
     <PureTableBar @refresh="reloadTable" :columns="childColumns">
       <template #title>
         <div class="flex items-center">

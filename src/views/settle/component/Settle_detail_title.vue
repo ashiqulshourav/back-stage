@@ -34,6 +34,7 @@
         </el-button>
       </el-col>
     </el-row>
+    <slot> </slot>
   </div>
 </template>
 
