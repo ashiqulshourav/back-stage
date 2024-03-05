@@ -135,7 +135,7 @@ const matchId = history.state.params.matchId;
 
 const NewEvent: SattleDataAPI.HockeyEventData = reactive({
   matchId: Number(matchId),
-  eventTime: 0,
+  eventTime: 1,
   t1: 0,
   t2: 0
 });
