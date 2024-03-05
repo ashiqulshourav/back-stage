@@ -291,7 +291,6 @@ const getCurrentCard = computed(() => {
         : (data.away.red += 1);
     }
   });
-  // console.log('index.vue文件 294==============行打印=', data);
   return data;
 });
 
