@@ -1,26 +1,14 @@
 declare namespace UserAPI {
-  type Login_Role = {
-    id: number;
-    name: string;
-    resources?: any;
-  }
-
-  type Login_User = {
-    id: number;
-    email: string;
-    roles: Login_Role[];
-  }
-
-  type Login_Data = {
+  type LoginData = {
     token: string;
-    user: Login_User;
+    name: string;
+    id: number;
+    status: number;
+    isAdmin: number;
   }
 
-  type Login = {
-    code: number;
-    msg: string;
-    data: Login_Data;
-  }
+  type Login = COMMON.BASE_RES_TYPE<LoginData>
+  type LoginResType = COMMON.BASE_RES_TYPE<LoginData>
 
   type Meta = {
     title?: string;
@@ -29,19 +17,50 @@ declare namespace UserAPI {
     roles?: string[];
   }
 
-
   type RouterChildren = {
     path: string;
     name: string;
+    enName?: string;
+    childResourceList?: any[];
+    sort?: string | number;
     meta: Meta;
   }
 
   type RouterData = {
     path: string;
+    name?: string;
     meta: Meta;
-    children: RouterChildren[];
+    enName?: string;
+    childResourceList?: any[];
+    sort?: string | number;
+    children?: RouterChildren[];
   }
 
+  type ChildResourceList = {
+    id: number;
+    name: string;
+    enName: string;
+    routerPath: string;
+    parentId: number;
+    type: number;
+    sort: number;
+    resourceFlag: number;
+    path: string;
+    childResourceList: any[];
+  }
 
-  type GetRouterTyperes = COMMON.BASE_RES_TYPE<RouterData[]>
+  type RouterResData = {
+    id: number;
+    name: string;
+    enName: string;
+    routerPath: string;
+    parentId: number;
+    type: number;
+    sort: number;
+    resourceFlag: number;
+    path: string;
+    childResourceList: ChildResourceList[];
+  }
+
+  type RouterResType = COMMON.BASE_RES_TYPE<RouterResData[]>
 }

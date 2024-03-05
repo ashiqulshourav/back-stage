@@ -28,9 +28,7 @@ const loginRules = reactive(<FormRules>{
       validator: (_, value, callback) => {
         if (value === "") {
           callback(new Error(t("请输入密码")));
-        } /* else if (value !== '123456' && !REGEXP_PWD.test(value)) {
-          callback(new Error(t("密码格式应为 8-18 位数字的任意组合或初始密码")));
-        } */ else {
+        } else {
           callback();
         }
       },

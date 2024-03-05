@@ -23,8 +23,8 @@ import { sessionKey, type DataInfo } from "@/utils/auth";
 import { useMultiTagsStoreHook } from "@/store/multiTags";
 import { usePermissionStoreHook } from "@/store/permission";
 const IFrame = () => import("@/layout/frameView.vue");
-// https://cn.vitejs.dev/guide/features.html#glob-import
 const modulesRoutes = import.meta.glob("/src/views/**/*.{vue,tsx}");
+import { useUserStore } from "@/store/user";
 
 // 动态路由
 import { permissionData } from "./permissionRouter";
@@ -179,6 +179,31 @@ function handleAsyncRoutes(routeList) {
   addPathMatch();
 }
 
+//- 清洗后端返回数据
+const transformItem = (item: UserAPI.RouterResData) => {
+  const baseItem = {
+    path: item.path,
+    name: item.path.slice(1).split('/').join('_').toUpperCase(),
+    meta: {
+      title: item.name,
+      enTitle: item.enName,
+      icon: item.enName,
+      rank: item.sort
+    }
+  };
+
+  const hasChildrenWithZeroType = item.childResourceList.some(child => child.type === 0);
+  if (hasChildrenWithZeroType) {
+    (baseItem as any).children = item.childResourceList.map(transformItem);
+  } else {
+    (baseItem.meta as any).childResourceList = item.childResourceList.map(grandChildItem => ({
+      ...grandChildItem,
+      enName: grandChildItem.enName.toUpperCase()
+    }));
+  }
+  return baseItem;
+}
+
 /** 初始化路由（`new Promise` 写法防止在异步请求中造成无限循环）*/
 function initRouter() {
   if (getConfig()?.CachingAsyncRoutes) {
@@ -191,8 +216,11 @@ function initRouter() {
       });
     } else {
       return new Promise(resolve => {
-        //todo 后期可进行路由合并
-        API.getRouter().then(({ data }) => {
+        const userStore = useUserStore();
+        API.getRouter({
+          id: userStore.userInfo.id
+        }).then(({ data }: { data: UserAPI.RouterResData[] }) => {
+          data = data.map(transformItem) as any;
           handleAsyncRoutes(cloneDeep(data));
           storageSession().setItem(key, data);
           resolve(router);
