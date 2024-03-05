@@ -101,7 +101,7 @@
             <span v-else>-</span>
           </template>
         </pure-table>
-        <div class="mt-2 cursor-pointer">
+        <div class="mt-2 cursor-pointer" v-if="!renderObj.fullSettlementStatus">
           <el-button
             v-if="renderObj.settlementType === 1"
             class="ml-1 reset-margin"

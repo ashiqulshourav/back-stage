@@ -54,6 +54,7 @@ const changeCurrentComponentName = (_: { value: number; type: string }) => {
   currentComponentName.name = markRaw(comoMap[_.type]);
   currentSportId.value = _.value;
   matchStore.set_lagueList(0, _.value);
+  settingStore.save_selttle_history_page_info({ page: null, matchType: null });
 };
 //- 搜索相关
 const onSearch = val => {

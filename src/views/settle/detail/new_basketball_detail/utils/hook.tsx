@@ -133,7 +133,7 @@ export function useNewBasketBallHook() {
     eventList.length = 0;
     eventList.push(...res.data.list);
     //- 开启轮训
-    if (renderObj.settlementType === 1) {
+    if (renderObj.settlementType === 1 && !renderObj.fullSettlementStatus) {
       loopTimer.value = setInterval(() => getEventList(), 10000);
     }
   };
