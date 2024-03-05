@@ -155,7 +155,7 @@ const gameRuleOpts = [4, 6, 8, 10, 12];
 
 const NewEvent: SattleDataAPI.BoxingEventData = reactive({
   matchId: Number(matchId),
-  eventTime: 0,
+  eventTime: 1,
   t1: 0,
   t2: 0
 });

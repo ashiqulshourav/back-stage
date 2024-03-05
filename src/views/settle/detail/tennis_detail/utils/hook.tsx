@@ -81,7 +81,7 @@ export function useTennisDetailHook() {
           setNum: dataList.length + 1,
           t1: '',
           t2: '',
-          eventTime: 0,
+          eventTime: 1,
           // eventTime:
           //   dataList.length === 0
           //     ? Date.now()
@@ -110,7 +110,7 @@ export function useTennisDetailHook() {
       gameRule: juType.value,
       t1: '',
       t2: '',
-      eventTime: 0,
+      eventTime: 1,
       isEdit: true
     } as SattleDataAPI.InningEvent;
     parentRow.inningEvents.push(params);
@@ -157,7 +157,7 @@ export function useTennisDetailHook() {
       });
       parentRow.loading = true;
       const params = {
-        eventTime: 0,
+        eventTime: 1,
         inningEvents,
         t1: t1Score.value,
         t2: t2Score.value,

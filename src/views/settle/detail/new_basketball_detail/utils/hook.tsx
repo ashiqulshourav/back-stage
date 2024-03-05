@@ -84,7 +84,7 @@ export function useNewBasketBallHook() {
     }
 
     const params: SattleDataAPI.addBasketballEventV2ReqType = {
-      eventTime: 0,
+      eventTime: 1,
       // eventTime:
       //   renderObj.beginTimeLong +
       //   compareTime(dayjs(row.eventTime).format('HH:mm:ss')) * 1000,
