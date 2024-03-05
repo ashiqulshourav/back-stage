@@ -286,11 +286,12 @@ const getCurrentCard = computed(() => {
         ? (data.home.yellow += 1)
         : (data.home.red += 1);
     } else {
-      item.eventCode === 'red_card'
+      item.eventCode === 'yellow_card'
         ? (data.away.yellow += 1)
         : (data.away.red += 1);
     }
   });
+  // console.log('index.vue文件 294==============行打印=', data);
   return data;
 });
 
