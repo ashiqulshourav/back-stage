@@ -4,7 +4,7 @@ export const user = {
   //- 登录
   login: (data: { name: string; pwd: string }) => http.request<UserAPI.Login>("post", "/kmg/auth/login", { data }),
   //- 修改密码
-  updatePwd: (data: { id: number; pwd: string, newPwd: string }) => http.request<UserAPI.LoginResType>("post", "/sysUser/v1/updatePwd", { data }),
+  updatePwd: (data: { id: number; pwd: string, newPwd: string }) => http.request<UserAPI.LoginResType>("post", "/kmg/matchUser/v1/updatePwd", { data }),
   //- 获取路由表
   getRouter: (data: { id: number }) => http.request<UserAPI.RouterResType>("post", "/kmg/matchRole/v1/getResourcelist", { data }),
   //- 退出登录
