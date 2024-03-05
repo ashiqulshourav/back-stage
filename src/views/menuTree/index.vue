@@ -8,7 +8,6 @@
         <span class="text-xs ml-2 text-red-500"
           >(可手动进行拖拽调整位置，拖拽规则为同级进行拖拽)</span
         >
-        <a style="display: none" href="/dist1.zip">123</a>
       </div>
     </template>
 
