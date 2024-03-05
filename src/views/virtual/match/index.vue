@@ -55,30 +55,22 @@
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-// import Search from "@iconify-icons/ep/search";
-// import Refresh from "@iconify-icons/ep/refresh";
 import EditPen from '@iconify-icons/ep/edit-pen';
 import AddFill from '@iconify-icons/ri/add-circle-line';
 import { useLeague } from './utils/hook';
 
 import { t } from '@/plugins/i18n';
-defineOptions({ name: 'League' });
+defineOptions({ name: 'VIRTUAL_MATCH' });
 
-// const formRef = ref();
 const {
-  // form,
   loading,
   columns,
   dataList,
-  // switchStyle,
   pagination,
   onSearch,
-  // resetForm,
   handleTableWidthChange,
   handleCurrentChange,
-  // switchLoadMap,
   openDialog
-  // changeSwitch
 } = useLeague();
 </script>
 

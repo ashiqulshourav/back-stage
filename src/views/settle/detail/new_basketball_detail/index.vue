@@ -142,7 +142,7 @@ import Delete from '@iconify-icons/ep/delete';
 import { MatchEventRowType } from './utils/type';
 
 import DetiltTitle from '../../component/Settle_detail_title.vue';
-defineOptions({ name: 'SETTLE_NEW_BASKETBALL_DETAIL' });
+defineOptions({ name: 'SETTLE_DETAIL_NEW_BASKETBALL_DETAIL' });
 
 const {
   loading,

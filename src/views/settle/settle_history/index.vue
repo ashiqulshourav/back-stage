@@ -30,7 +30,7 @@ import { useSettingStoreHook } from '@/store/settings';
 import Volleyball from './component/Volleyball/index.vue';
 import { useMatchStore } from '@/store/match';
 
-defineOptions({ name: 'SETTLE_HISTORY' });
+defineOptions({ name: 'SETTLE_SETTLE_HISTORY' });
 const componentStrName = ref<any>('FootBall');
 const settingStore = useSettingStoreHook();
 const currentSportId = ref<number>(

@@ -81,7 +81,7 @@ import Score from './component/Score.vue';
 import EventTime from './component/EventTime.vue';
 import ChildOperation from './component/ChildOperation.vue';
 
-defineOptions({ name: 'SETTLE_TENNIS_DETAIL' });
+defineOptions({ name: '123_DETAIL_TENNIS_DETAIL' });
 const { tableHeaderStyle } = usePublicHooks();
 
 const {

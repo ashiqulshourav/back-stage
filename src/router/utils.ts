@@ -185,7 +185,8 @@ const transformItem = (item: UserAPI.RouterResData) => {
       title: item.name,
       enTitle: item.enName,
       icon: item.enName,
-      rank: item.sort
+      rank: item.sort,
+      showLink: item.type !== 2
     }
   };
 

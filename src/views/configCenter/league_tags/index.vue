@@ -77,7 +77,7 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 
-// defineOptions({ name: 'LEAGUE' });
+defineOptions({ name: 'CONFIGCENTER_LEAGUE_TAGS' });
 
 const {
   loading,

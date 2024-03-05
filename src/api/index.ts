@@ -9,6 +9,8 @@ import { operationLogData } from "./operationLog";
 import { esportsSettlement } from "./esportsSettlement";
 import { configCenterData } from "./configCenter";
 import { playMethodData } from "./playMethd";
+import { userMangerData } from "./userManger";
+import { roleData } from "./role";
 
 export const API = {
   ...user,
@@ -18,8 +20,10 @@ export const API = {
   ...virtualData,
   ...esportData,
   ...historyData,
+  ...roleData,
   ...operationLogData,
   ...esportsSettlement,
   ...configCenterData,
+  ...userMangerData,
   ...playMethodData
 }

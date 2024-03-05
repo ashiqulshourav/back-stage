@@ -65,7 +65,7 @@ import SearchForm from './component/SearchForm.vue';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 
-defineOptions({ name: 'TEAM' });
+defineOptions({ name: 'CONFIGCENTER_CLASSIFY_SETTING' });
 const { tableHeaderStyle } = usePublicHooks();
 
 const {

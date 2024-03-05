@@ -36,7 +36,7 @@ import { useMatchStore } from '@/store/match';
 import { useSettingStoreHook } from '@/store/settings';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
-defineOptions({ name: 'VOLLEYBALL' });
+defineOptions({ name: 'SETTLE_MAIN' });
 const componentStrName = ref<any>('FootBall');
 const settingStore = useSettingStoreHook();
 const currentSportId = ref<number>(settingStore.settlePageInfo.matchType ?? 1);

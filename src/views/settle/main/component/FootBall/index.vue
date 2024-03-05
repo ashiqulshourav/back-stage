@@ -87,7 +87,7 @@ const goDetailPage = row => {
   });
   const params = JSON.parse(JSON.stringify(row));
   router.push({
-    name: 'SETTLE_FOOTBALL_DETAIL',
+    name: 'SETTLE_DETAIL_FOOTBALL_DETAIL',
     state: { params }
   });
 };

@@ -106,7 +106,7 @@ import { addDialog } from '@/components/ReDialog';
 import { message } from '@/utils/message';
 import { usePublicHooks } from '@/hooks';
 
-defineOptions({ name: 'PRE_SALE' });
+defineOptions({ name: 'SALE_PRE_SALE' });
 const { tableHeaderStyle } = usePublicHooks();
 const openInfoDialog = (matchId: number, row: SaleDataAPI.PreSaleList) => {
   if (row.saleHandicaps === 0)

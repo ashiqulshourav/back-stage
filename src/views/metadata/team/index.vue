@@ -68,7 +68,7 @@ import SearchForm from './component/SearchForm.vue';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 
-defineOptions({ name: 'TEAM' });
+defineOptions({ name: 'METADATA_TEAM' });
 const { tableHeaderStyle } = usePublicHooks();
 
 const {

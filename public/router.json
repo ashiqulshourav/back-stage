@@ -70,7 +70,7 @@
       },
       {
         "path": "/settle/detail/new_basketball_detail",
-        "name": "SETTLE_NEW_BASKETBALL_DETAIL",
+        "name": "SETTLE_DETAIL_NEW_BASKETBALL_DETAIL",
         "meta": {
           "title": "篮球结算",
           "showLink": false
@@ -78,7 +78,7 @@
       },
       {
         "path": "/settle/detail/football_detail",
-        "name": "SETTLE_FOOTBALL_DETAIL",
+        "name": "SETTLE_DETAIL_FOOTBALL_DETAIL",
         "meta": {
           "title": "足球结算",
           "showLink": false
@@ -86,7 +86,7 @@
       },
       {
         "path": "/settle/detail/tennis_detail",
-        "name": "SETTLE_TENNIS_DETAIL",
+        "name": "SETTLE_DETAIL_TENNIS_DETAIL",
         "meta": {
           "title": "网球结算",
           "showLink": false
@@ -94,7 +94,7 @@
       },
       {
         "path": "/settle/detail/volleball_detail",
-        "name": "SETTLET_VOLLEBALL_DETAIL",
+        "name": "SETTLE_DETAIL_VOLLEBALL_DETAIL",
         "meta": {
           "title": "排球结算",
           "showLink": false

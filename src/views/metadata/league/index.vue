@@ -99,7 +99,7 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 
-defineOptions({ name: 'LEAGUE' });
+defineOptions({ name: 'METADATA_LEAGUE' });
 
 const {
   loading,

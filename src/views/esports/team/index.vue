@@ -67,7 +67,7 @@ import { usePublicHooks } from '@/hooks';
 import { t } from '@/plugins/i18n';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 
-defineOptions({ name: 'eTeam' });
+defineOptions({ name: 'ESPORTS_TEAM' });
 const { tableHeaderStyle } = usePublicHooks();
 const {
   loading,
