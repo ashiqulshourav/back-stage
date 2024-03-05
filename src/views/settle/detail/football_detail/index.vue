@@ -1,5 +1,5 @@
 <template>
-  <div class="main football_detail">
+  <div class="main">
     <DetiltTitle
       @allSettleBtnClick="allSettleBtnClick"
       :renderObj="renderObj"
@@ -73,21 +73,22 @@
         </div>
       </template>
       <template v-slot="{ size }">
-        <el-tabs tab-position="top" :lazy="true">
+        <el-tabs tab-position="top" :lazy="true" @tab-change="changeTab">
           <el-tab-pane
             :label="item.val"
             v-for="(item, idx) in dataList"
             :key="item.type"
           >
             <pure-table
+              v-if="item.type"
+              :fit="true"
               class="table_container"
               table-layout="auto"
-              :fit="true"
               align-whole="center"
               :data="item.tableList"
-              :row-key="row => row.id"
-              :loading="childloading"
               adaptive
+              lazy
+              :loading="childloading"
               :columns="
                 item.type === 'yellow_red_card'
                   ? [...yellow_red_column, ...childColumns.slice(1)]
@@ -345,6 +346,11 @@ const teamChangeEvent = (
   }
 };
 
+const changeTab = () => {
+  const resizeEvent = new Event('resize');
+  window.dispatchEvent(resizeEvent);
+};
+
 const {
   childloading,
   dataList,
@@ -366,10 +372,4 @@ const {
 } = useFootball();
 </script>
 
-<style lang="scss">
-.football_detail {
-  .el-table--fit {
-    max-height: 460px;
-  }
-}
-</style>
+<style lang="scss"></style>
