@@ -57,7 +57,7 @@ class PureHttp {
         if (whiteList.some(_ => config.url.indexOf(_) < 0)) {
           const token: string = storageSession().getItem(TokenKey) ?? '';
           if (token) {
-            config.headers['Authorization'] = formatToken(token);
+            config.headers["Accesstoken"] = token;
           }
           if (addAcceptLanguageList.includes(config.url)) {
             const lan: { locale: string } = storageLocal().getItem('responsive-locale') ?? { locale: 'zh' }
@@ -120,33 +120,17 @@ class PureHttp {
       ...param,
       ...axiosConfig
     } as PureHttpRequestConfig;
-    //todo 后期路由后端获取
-    if (url === '/getRouter') {
-      return new Promise(resolve => {
-        Axios({
-          method: 'get',
-          url: '/router.json'
-        }).then(d => {
-          resolve({
-            msg: '操作成功',
-            code: 0,
-            data: d.data
-          });
+    // 单独处理自定义请求/响应回调
+    return new Promise((resolve, reject) => {
+      PureHttp.axiosInstance
+        .request(config)
+        .then((response: undefined) => {
+          resolve(response);
+        })
+        .catch(error => {
+          reject(error);
         });
-      });
-    } else {
-      // 单独处理自定义请求/响应回调
-      return new Promise((resolve, reject) => {
-        PureHttp.axiosInstance
-          .request(config)
-          .then((response: undefined) => {
-            resolve(response);
-          })
-          .catch(error => {
-            reject(error);
-          });
-      });
-    }
+    });
   }
 
   /** 单独抽离的post工具函数 */
