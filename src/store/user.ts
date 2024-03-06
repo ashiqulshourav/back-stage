@@ -20,10 +20,10 @@ export const useUserStore = defineStore('USERSTATE', {
     },
     /** 前端登出（不调用接口） */
     async logOut() {
-      await API.loginOut({
-        id: this.userInfo.id as number,
-        name: this.userInfo.name
-      })
+      // await API.loginOut({
+      //   id: this.userInfo.id as number,
+      //   name: this.userInfo.name
+      // })
       this.roles = [];
       removeStorage();
       useMultiTagsStoreHook().handleTags("equal", [...routerArrays]);
