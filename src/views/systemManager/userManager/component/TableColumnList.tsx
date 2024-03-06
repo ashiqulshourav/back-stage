@@ -1,10 +1,12 @@
+import { handleTableWidth } from '@/utils/getTableWidth';
 import { depList } from '../utils/map';
 
 export const columns: TableColumnList = [
   {
     label: t('序号'),
     type: 'index',
-    minWidth: 100
+    minWidth: 100,
+    headerRenderer: d => handleTableWidth(d, t('序号'))
   },
   {
     label: t('账号'),

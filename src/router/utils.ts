@@ -14,7 +14,8 @@ import {
   isAllEmpty,
   intersection,
   storageSession,
-  isIncludeAllChildren
+  isIncludeAllChildren,
+  storageLocal
 } from "@pureadmin/utils";
 import { getConfig } from "@/config";
 import { menuType } from "@/layout/types";
@@ -28,6 +29,7 @@ import { useUserStore } from "@/store/user";
 
 // 动态路由
 import { permissionData } from "./permissionRouter";
+import { getLan } from "@/utils/utilFn";
 
 function handRank(routeInfo: any) {
   const { name, path, parentId, meta } = routeInfo;
@@ -147,8 +149,18 @@ function addPathMatch() {
   }
 }
 
+const translateLan = (list) => {
+  const lan = getLan() ?? 'zh';
+  list.forEach(item => {
+    if (item.children) translateLan(item.children)
+    item.meta.title = lan === 'zh' ? item.meta.title : item.meta.enTitle
+  })
+}
+
+
 /** 处理动态路由（后端返回的路由） */
 function handleAsyncRoutes(routeList) {
+  translateLan(routeList);
   if (routeList.length === 0) {
     usePermissionStoreHook().handleWholeMenus(routeList);
   } else {
