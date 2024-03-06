@@ -381,5 +381,14 @@ export const sattleData = {
   }) => http.request<SattleDataAPI.basketballCancelMatchEventResType>(
     'post', '/basketball/v1/cancelMatchEvent', { data }),
 
+  //- 足球开启重新结算
+  open2ndSettlementStatus: (data: {
+    matchId: number;
+  }) => http.request<SattleDataAPI.open2ndSettlementStatusResType>(
+    'post', '/event/v1/open2ndSettlementStatus', { data }),
+
+  //- 足球开启二次结算
+  confirm2ndSettlement: (data: SattleDataAPI.confirm2ndSettlementReqType) => http.request<SattleDataAPI.open2ndSettlementStatusResType>(
+    'post', '/event/v1/confirm2ndSettlement', { data }),
 
 };

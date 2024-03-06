@@ -1,51 +1,18 @@
 <template>
   <div class="main">
     <DetiltTitle
-      @allSettleBtnClick="allSettleBtnClick"
+      @allSettleBtnClick="void"
       :renderObj="renderObj"
       :allSettleLoading="allSettleLoading"
       :hideAllSettleBtn="renderObj.fullSettlementStatus ? false : true"
       :isFootBallTitle="true"
     >
-      <el-row :gutter="20">
-        <el-col :span="5">
-          <div class="flex item-center text-sm">
-            <span>{{ t('目前比分') }}: </span>
-            <span>
-              {{ dataList[0].tableList[dataList[0].tableList.length - 1]?.t1 }}
-              -
-              {{ dataList[0].tableList[dataList[0].tableList.length - 1]?.t2 }}
-            </span>
-          </div>
-        </el-col>
-        <el-col :span="9">
-          <div class="flex text-sm">
-            <div class="flex">
-              <span>{{ t('目前红牌') }}：</span>
-              <el-text type="danger">{{ getCurrentCard.home.red }}</el-text>
-              <span>-</span>
-              <el-text type="danger">{{ getCurrentCard.away.red }}</el-text>
-            </div>
-            <div class="flex ml-3">
-              <span class="text-sm">{{ t('目前黄牌') }}：</span>
-              <span>{{ t('主队') }}-</span>
-              <el-text type="primary">{{ getCurrentCard.home.yellow }}</el-text>
-              <span class="2">-</span>
-              <el-text type="primary">{{ getCurrentCard.away.yellow }}</el-text>
-            </div>
-          </div>
-        </el-col>
-        <el-col :span="5">
-          <div class="flex text-sm">
-            <span>{{ t('目前角球') }}：</span>
-            <span>
-              {{ dataList[2].tableList[dataList[2].tableList.length - 1]?.t1 }}
-              -
-              {{ dataList[2].tableList[dataList[2].tableList.length - 1]?.t2 }}
-            </span>
-          </div>
-        </el-col>
-      </el-row>
+      <Score
+        :renderObj="renderObj"
+        :dataList="dataList"
+        @openSecondSettleClick="openSecondSettleClick"
+        @confirmSecondSettleClick="confirmSecondSettleClick"
+      />
     </DetiltTitle>
     <PureTableBar @refresh="reloadTable" :columns="childColumns">
       <template #title>
@@ -153,15 +120,22 @@
               <!-- -操作 -->
               <template #operation="{ row, index: i }: MatchEventRowType">
                 <div class="flex items-center justify-center">
-                  <template v-if="!renderObj.fullSettlementStatus">
+                  <template
+                    v-if="
+                      !renderObj.fullSettlementStatus ||
+                      renderObj.reSettleStatus === 1
+                    "
+                  >
                     <template v-if="row.isBackEndReturnData">
                       <BackEndBtnGroupCom
                         :row="row"
                         :parentRow="renderObj"
                         :size="size"
                         @changeSettleType="changeSettleType"
+                        :renderObj="renderObj"
                         @handleChildrenData="handleChildrenData"
                         @cancelMatchEvent="cancelMatchEvent"
+                        @saveCancelEventIds="saveCancelEventIds"
                         :dataList="dataList[idx].tableList"
                         :index="i"
                         :isShowCount="row.isShowCount"
@@ -190,7 +164,11 @@
                     :icon="useRenderIcon('uploadIcon')"
                     @click="handleChildrenData(row, 'upload')"
                   >
-                    {{ t('确认结算') }}
+                    {{
+                      renderObj.reSettleStatus === 1
+                        ? t('重新结算')
+                        : t('确认结算')
+                    }}
                   </el-button>
                   <el-button
                     class="reset-margin"
@@ -199,7 +177,7 @@
                     :size="size"
                     v-if="!row.isBackEndReturnData"
                     :icon="useRenderIcon(Delete)"
-                    @click="item.tableList.pop()"
+                    @click="cancelItem(item.tableList,row) "
                   >
                     {{ t('取消') }}
                   </el-button>
@@ -221,14 +199,19 @@
             <div
               class="flex items-center mt-2 text-sm"
               v-if="
-                renderObj.settlementType !== 1 &&
-                !renderObj.fullSettlementStatus
+                (renderObj.settlementType !== 1 &&
+                  !renderObj.fullSettlementStatus) ||
+                renderObj.reSettleStatus === 1
               "
             >
               <span
                 class="mr-3 text-[var(--el-color-danger)] cursor-pointer"
                 @click="addChildRow(item.tableList, item.type)"
-                >{{ t('人工结算中') }}...</span
+                >{{
+                  renderObj.reSettleStatus === 1
+                    ? t('重新结算中')
+                    : t('人工结算中')
+                }}...</span
               >
               <IconifyIconOffline
                 class="cursor-pointer"
@@ -253,6 +236,7 @@ import FrontBtnGroupCom from './FrontBtnGroup.vue';
 import CountDownBtn from './CountDownBtn.vue';
 import SettleMatchBtn from './SettleMatchBtn.vue';
 import MatchTime from './MatchTime.vue';
+import Score from './Score.vue';
 import EventCode from './EventCode.vue';
 import MatchStage from './MatchStage.vue';
 import EventSource from './EventSource.vue';
@@ -269,31 +253,6 @@ const eventQuotientList = [
   { type: 'psFlag', val: t('熊猫数据') },
   { type: 'vsFlag', val: t('播控数据') }
 ];
-
-const getCurrentCard = computed(() => {
-  const data = {
-    home: {
-      red: 0,
-      yellow: 0
-    },
-    away: {
-      red: 0,
-      yellow: 0
-    }
-  };
-  dataList[1].tableList.forEach(item => {
-    if (item.homeAway === 'home') {
-      item.eventCode === 'yellow_card'
-        ? (data.home.yellow += 1)
-        : (data.home.red += 1);
-    } else {
-      item.eventCode === 'yellow_card'
-        ? (data.away.yellow += 1)
-        : (data.away.red += 1);
-    }
-  });
-  return data;
-});
 
 //- 取消事件置灰
 const tableRowClassName = ({ row }: MatchEventRowType) =>
@@ -367,8 +326,11 @@ const {
   advanceSettlement,
   renderObj,
   yellow_red_column,
-  allSettleBtnClick,
-  allSettleLoading
+  allSettleLoading,
+  openSecondSettleClick,
+  saveCancelEventIds,
+  confirmSecondSettleClick,
+  cancelItem
 } = useFootball();
 </script>
 

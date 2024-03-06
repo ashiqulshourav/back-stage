@@ -68,4 +68,16 @@ watch(
     }
   }
 );
+watch(
+  () => minuteNum.value,
+  () => {
+    if (!secondNum.value) {
+      secondNum.value = 0;
+    }
+    if (minuteNum.value !== null && secondNum.value !== null) {
+      const r = minuteNum.value * 60 + +secondNum.value;
+      props.row.eventTime = r;
+    }
+  }
+);
 </script>

@@ -33,7 +33,17 @@
         type="danger"
         size="small"
         :icon="useRenderIcon('cancelIcon')"
-        @click="cancelMatchEvent(row.id, row.matchId, row.settleTimes)"
+        @click="
+          renderObj.reSettleStatus === 1
+            ? saveCancelEventIds(row.id, dataList, index)
+            : cancelMatchEvent(
+                row.id,
+                row.matchId,
+                row.settleTimes,
+                parentRow,
+                index
+              )
+        "
       >
         {{ t('取消事件') }}
       </el-button>
@@ -51,13 +61,15 @@ const props = defineProps<{
   size: any;
   dataList: SattleDataAPI.MatchEventsList[];
   index: number;
+  renderObj: SattleDataAPI.getSettlementDataList;
 }>();
 
 const emits = defineEmits([
   'changeSettleType',
   'handleChildrenData',
   'cancelMatchEvent',
-  'advanceSettlement'
+  'advanceSettlement',
+  'saveCancelEventIds'
 ]);
 
 //- 是否已经结算
@@ -68,6 +80,9 @@ const emits = defineEmits([
 const handleChildrenData = (...data) => emits('handleChildrenData', ...data);
 
 const cancelMatchEvent = (...data) => emits('cancelMatchEvent', ...data);
+
+//- 二次结算取消事件
+const saveCancelEventIds = (...data) => emits('saveCancelEventIds', ...data);
 
 const advanceSettlement = () =>
   emits('advanceSettlement', props.row, props.parentRow);

@@ -172,6 +172,7 @@ declare namespace SattleDataAPI {
     settlementType: number; //1 自动结算 //2 手动结算
     isShowCancelBtn?: boolean;
     periodType?: number;
+    reSettleStatus?: number;
   };
 
   type ChildrenDataList = {
@@ -451,6 +452,7 @@ declare namespace SattleDataAPI {
   type newBasketballEventsResType = COMMON.BASE_RES_TYPE<newBasketballEventsData>
   type manualSettlementFullTimeResType = COMMON.BASE_RES_TYPE<null>
   type basketballCancelMatchEventResType = COMMON.BASE_RES_TYPE<null>
+  type open2ndSettlementStatusResType = COMMON.BASE_RES_TYPE<null>
 
   type addBasketballEventV2ReqType = {
     eventTime: string | number | Date;
@@ -458,5 +460,19 @@ declare namespace SattleDataAPI {
     matchPeriodId: string | number;
     t1: number;
     t2: number;
+  }
+
+  type confirm2ndSettlementReqType = {
+    matchId: number;
+    cancelEventIds: number[];
+    newEventList: {
+      matchId: number;
+      eventCode: string | number;
+      eventTime: number | string | Date;
+      homeAway: string;
+      matchPeriodId: number | string;
+      t1: number | string;
+      t2: number | string;
+    }[]
   }
 }

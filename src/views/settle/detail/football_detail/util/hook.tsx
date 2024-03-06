@@ -32,7 +32,7 @@ export function useFootball() {
   const allSettleLoading = ref(false);
   const loopTimer = ref<NodeJS.Timeout>();
   const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
-    {} as SattleDataAPI.getSettlementDataList
+    history.state.params as SattleDataAPI.getSettlementDataList
   );
   const balanceLoading = reactive<{ half: boolean; all: boolean }>({
     half: false,
@@ -43,13 +43,13 @@ export function useFootball() {
   const addChildRow = (tableList, type) => {
     const isSettle = tableList.some(item => item.settleTimes === 0);
     if (
-      (tableList.length !== 0 &&
+      ((tableList.length !== 0 &&
         !tableList[tableList.length - 1]?.isBackEndReturnData) ||
-      isSettle
+        isSettle) &&
+      renderObj.reSettleStatus !== 1
     ) {
       message(t('请先完成之前的事件结算'), { type: 'error' });
     } else {
-      loopTimer.value && clearInterval(loopTimer.value);
       const tempList: TempListType = {
         eventTime: '',
         homeAway: null,
@@ -122,7 +122,7 @@ export function useFootball() {
       }
     });
     if (loopTimer.value) clearInterval(loopTimer.value);
-    if ((renderObj.settlementType ?? history.state.params.settlementType) === 1)
+    if (renderObj.settlementType === 1 && renderObj.fullSettlementStatus !== 1)
       loopTimer.value = setInterval(() => getChildrenData(), 10000);
   };
 
@@ -152,6 +152,9 @@ export function useFootball() {
     if (isTheFormComplete(row)) {
       return message(t('请输入完整的内容'), { type: 'error' });
     }
+    if (renderObj.reSettleStatus === 1 && type !== 'save')
+      return saveSecondMathList(row);
+
     if (type === 'save') {
       row.isSave = true;
       row.isEdit = false;
@@ -219,15 +222,6 @@ export function useFootball() {
     }
   };
 
-  onMounted(() => {
-    getChildrenData();
-    getMatchDetail();
-  });
-
-  onUnmounted(() => {
-    loopTimer.value && clearInterval(loopTimer.value);
-  });
-
   const reloadTable = async () => {
     getChildrenData();
   };
@@ -258,6 +252,7 @@ export function useFootball() {
     });
   };
 
+  //- 倒计时的提前结算
   const advanceSettlement = async row => {
     ElMessageBox.confirm('确定要提前结算么?', t('警告'), {
       dangerouslyUseHTMLString: true,
@@ -306,8 +301,97 @@ export function useFootball() {
     Object.assign(renderObj, res.data);
   };
 
-  const allSettleBtnClick = () => {};
+  /*
+   * 二次结算逻辑处理
+   */
 
+  const confirmParams = reactive<SattleDataAPI.confirm2ndSettlementReqType>({
+    cancelEventIds: [],
+    newEventList: [],
+    matchId: history.state.params.matchId
+  } as SattleDataAPI.confirm2ndSettlementReqType);
+  //- 足球开启二次结算
+  const openSecondSettleClick = async () => {
+    const res = await API.open2ndSettlementStatus({
+      matchId: renderObj.matchId
+    });
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    if (!res.code) getMatchDetail();
+  };
+
+  //- 二次结算发送后端
+  const confirmSecondSettleClick = async () => {
+    ElMessageBox.confirm(
+      <div class="text-center pl-2 pr-2">
+        本场比赛已结算完毕，重新结算将会影响所有关联的已结算注单，进行重新下发赛果，是否确认重新结算?
+      </div>,
+      t('警告'),
+      {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: t('确认'),
+        cancelButtonText: t('取消'),
+        center: true
+      }
+    ).then(async () => {
+      const res = await API.confirm2ndSettlement(confirmParams);
+      if (res.code) return message(res.msg, { type: 'error' });
+      confirmParams.cancelEventIds = [];
+      confirmParams.newEventList = [];
+      getChildrenData();
+    });
+  };
+
+  //- 保存取消结算ID
+  const saveCancelEventIds = (id: number, list, index) => {
+    ElMessageBox.confirm('确定要取消该事件结算么?', t('警告'), {
+      dangerouslyUseHTMLString: true,
+      confirmButtonText: t('确认'),
+      cancelButtonText: t('取消'),
+      center: true
+    }).then(() => {
+      confirmParams.cancelEventIds.push(id);
+      list.splice(index, 1);
+    });
+  };
+
+  //- 新增二次结算事件
+  const saveSecondMathList = (row: SattleDataAPI.MatchEventsList) => {
+    if (
+      confirmParams.newEventList.findIndex(
+        item => item.eventTime === row.eventTime
+      ) < 0
+    ) {
+      confirmParams.newEventList.push({
+        matchId: renderObj.matchId,
+        eventCode: row.eventCode,
+        eventTime: row.eventTime,
+        homeAway: row.homeAway,
+        matchPeriodId: row.matchPeriodId,
+        t1: row.t1,
+        t2: row.t2
+      });
+    }
+  };
+
+  //- 取消当前编辑行
+  const cancelItem = (list, row: SattleDataAPI.MatchEventsList) => {
+    list.pop();
+    const index = confirmParams.newEventList.findIndex(
+      item => item.eventTime === row.eventTime
+    );
+    if (index >= 0) {
+      confirmParams.newEventList.splice(index, 1);
+    }
+  };
+
+  onMounted(() => {
+    getChildrenData();
+    getMatchDetail();
+  });
+
+  onUnmounted(() => {
+    loopTimer.value && clearInterval(loopTimer.value);
+  });
   return {
     childloading,
     columns,
@@ -328,6 +412,9 @@ export function useFootball() {
     yellow_red_column,
     renderObj,
     allSettleLoading,
-    allSettleBtnClick
+    openSecondSettleClick,
+    saveCancelEventIds,
+    confirmSecondSettleClick,
+    cancelItem
   };
 }

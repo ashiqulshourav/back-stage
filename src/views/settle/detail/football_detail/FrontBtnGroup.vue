@@ -19,7 +19,7 @@
     v-if="!row.isBackEndReturnData"
     :disabled="!row.isEdit"
     :icon="useRenderIcon('saveIcon')"
-    @click="handleChildrenData()"
+    @click="handleChildrenData"
   >
     {{ t('保存') }}
   </el-button>

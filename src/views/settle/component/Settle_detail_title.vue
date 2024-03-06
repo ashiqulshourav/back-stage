@@ -27,6 +27,7 @@
           :loading="allSettleLoading"
           :disabled="renderObj.fullSettlementStatus === 1"
           @click="allSettleBtnClick"
+          size="small"
         >
           {{
             renderObj.fullSettlementStatus === 1 ? t('结算完成') : t('全场结算')
