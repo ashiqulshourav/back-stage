@@ -374,7 +374,9 @@ function getHistoryMode(routerHistory): RouterHistory {
 
 /** 获取当前页面按钮级别的权限 */
 function getAuths(): Array<string> {
-  return router.currentRoute.value.meta.auths as Array<string>;
+  console.log(router.currentRoute.value.meta.childResourceList);
+  return (router.currentRoute.value.meta.childResourceList as any[]).map(item => item.enName);
+  // return router.currentRoute.value.meta.auths as Array<string>;
 }
 
 /** 是否有按钮级别的权限 */

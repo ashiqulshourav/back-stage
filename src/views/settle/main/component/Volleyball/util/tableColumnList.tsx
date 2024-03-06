@@ -74,7 +74,7 @@ export const columns: TableColumnList = [
     label: t('操作'),
     slot: 'operation',
     headerRenderer: d => handleTableWidth(d, t('操作'), 'auto'),
-    width: 200,
+    width: 220,
     fixed: 'right'
   }
 ];

@@ -23,9 +23,10 @@
       >
         <template #operation="{ row }">
           <el-button
+            v-auth="['DETAIL']"
             class="reset-margin"
             type="primary"
-            :size="size"
+            size="small"
             @click="goDetailPage(row)"
           >
             {{ t('结算详情') }}

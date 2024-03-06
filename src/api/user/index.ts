@@ -8,5 +8,5 @@ export const user = {
   //- 获取路由表
   getRouter: (data: { id: number }) => http.request<UserAPI.RouterResType>("post", "/kmg/matchRole/v1/getResourcelist", { data }),
   //- 退出登录
-  loginOut: (data: { id: number, name: string }) => http.request<UserAPI.RouterResType>("post", "/auth/loginOut", { data }),
+  loginOut: (data: { id: number, name: string }) => http.request<UserAPI.RouterResType>("post", "/kmg/auth/loginOut", { data }),
 };

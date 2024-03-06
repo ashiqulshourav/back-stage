@@ -85,8 +85,8 @@ const initTreeList = async () => {
 const filterHalfChecked = menusData => {
   menusData.forEach(item => {
     if (item.childResourceList.length) {
-      item.resourceFlag = item.childResourceList.every(_ => _.resourceFlag);
       filterHalfChecked(item.childResourceList);
+      item.resourceFlag = item.childResourceList.every(_ => _.resourceFlag);
     }
   });
 };

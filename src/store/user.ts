@@ -19,19 +19,18 @@ export const useUserStore = defineStore('USERSTATE', {
       this.roles = roles;
     },
     /** 前端登出（不调用接口） */
-    logOut() {
+    async logOut() {
+      await API.loginOut({
+        id: this.userInfo.id as number,
+        name: this.userInfo.name
+      })
       this.roles = [];
       removeStorage();
       useMultiTagsStoreHook().handleTags("equal", [...routerArrays]);
       resetRouter();
       this.userInfo = {};
-      router.push("/login");
-    },
-    async signOut() {
-      API.loginOut({
-        id: this.userInfo.id as number,
-        name: this.userInfo.name
-      })
+      window.location.reload();
+      // router.push("/login");
     },
     setUserInfo(_: UserAPI.LoginData) {
       this.userInfo = Object.assign(this.userInfo, _)

@@ -12,6 +12,7 @@
         <div class="flex items-center justify-between">
           <span class="mr-3">{{ t('预开售管理') }}</span>
           <el-button
+            v-auth="['LOCK']"
             size="small"
             :disabled="!selectLockcList.length"
             type="primary"
@@ -19,6 +20,7 @@
             >{{ t('一键锁盘') }}</el-button
           >
           <el-button
+            v-auth="['UNLOCK']"
             size="small"
             :disabled="!selectLockcList.length"
             type="primary"
@@ -77,6 +79,7 @@
           </template>
           <template #operation="{ row }">
             <el-button
+              v-auth="['UPDATE']"
               class="reset-margin"
               link
               type="primary"

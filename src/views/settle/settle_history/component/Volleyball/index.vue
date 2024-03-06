@@ -25,7 +25,8 @@
           <el-button
             class="reset-margin"
             type="primary"
-            :size="size"
+            v-auth="['DETAIL']"
+            size="small"
             @click="goTennisDetail(row)"
           >
             {{ t('结算详情') }}

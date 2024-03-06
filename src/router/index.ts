@@ -86,6 +86,7 @@ export function resetRouter() {
   router.getRoutes().forEach(route => {
     const { name, meta } = route;
     if (name && router.hasRoute(name) && meta?.backstage) {
+
       router.removeRoute(name);
       router.options.routes = formatTwoStageRoutes(
         formatFlatteningRoutes(
