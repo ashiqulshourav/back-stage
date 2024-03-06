@@ -49,7 +49,7 @@
           </span>
         </div>
       </el-col>
-      <el-col :span="5" v-if="renderObj.fullSettlementStatus === 1">
+      <!-- <el-col :span="5" v-if="renderObj.fullSettlementStatus === 1">
         <el-button
           @click="openSecondSettleClick"
           type="primary"
@@ -64,7 +64,7 @@
           v-else
           >{{ t('确认重新结算') }}</el-button
         >
-      </el-col>
+      </el-col> -->
     </el-row>
   </div>
 </template>
