@@ -49,6 +49,7 @@
 
           <template #operation="{ row }: EsportMatchRowType">
             <el-button
+              v-auth="['DETAIL']"
               class="reset-margin"
               type="primary"
               :size="size"

@@ -9,6 +9,7 @@
     >
       <template #buttons>
         <el-button
+          v-if="hasAuth('INSERT')"
           type="primary"
           :icon="useRenderIcon(AddFill)"
           @click="openDialog(t('新增标签'))"
@@ -76,6 +77,7 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
+import { hasAuth } from '@/router/utils';
 
 defineOptions({ name: 'CONFIGCENTER_LEAGUE_TAGS' });
 

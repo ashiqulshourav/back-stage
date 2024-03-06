@@ -7,6 +7,7 @@
     >
       <template #buttons>
         <el-button
+          v-if="hasAuth('INSERT')"
           type="primary"
           :icon="useRenderIcon(AddFill)"
           @click="openDialog(t('新增'))"
@@ -36,6 +37,7 @@
         >
           <template #operation="{ row }">
             <el-button
+              v-auth="['UPDATE']"
               class="reset-margin"
               link
               type="primary"
@@ -60,6 +62,7 @@ import AddFill from '@iconify-icons/ri/add-circle-line';
 import { useLeague } from './utils/hook';
 
 import { t } from '@/plugins/i18n';
+import { hasAuth } from '@/router/utils';
 defineOptions({ name: 'VIRTUAL_MATCH' });
 
 const {

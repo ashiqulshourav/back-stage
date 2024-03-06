@@ -4,9 +4,14 @@
 
     <PureTableBar :columns="columns" @refresh="onSearch('reload')">
       <template #title>
-        <el-button type="primary" @click="openDialog(t('新增账号'))">
+        <el-button
+          v-if="hasAuth('USERMANAGERADD')"
+          type="primary"
+          @click="openDialog(t('新增账号'))"
+        >
           {{ t('新增账号') }}
         </el-button>
+        <div v-else></div>
       </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
@@ -49,6 +54,7 @@
           </template>
           <template #resetPassword="{ row }">
             <el-button
+              v-auth="['USERMANAGERUPDATEPROFILE']"
               class="reset-margin"
               type="primary"
               size="small"
@@ -59,6 +65,7 @@
           </template>
           <template #operation="{ row }">
             <el-button
+              v-if="hasAuth('USERMANAGERUPDATE')"
               class="reset-margin"
               link
               type="primary"
@@ -68,6 +75,7 @@
               {{ t('编辑') }}
             </el-button>
             <el-button
+              v-if="hasAuth('USERMANAGERDELETE')"
               @click="handleDelete(row)"
               class="reset-margin"
               link
@@ -92,6 +100,7 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
+import { hasAuth } from '@/router/utils';
 const { switchStyle } = usePublicHooks();
 defineOptions({ name: 'USERMANAGER' });
 

@@ -43,6 +43,7 @@
           </template>
           <template #operation="{ row }">
             <el-button
+              v-auth="['UPDATE']"
               class="reset-margin"
               link
               type="primary"
