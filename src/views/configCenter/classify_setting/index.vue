@@ -4,12 +4,14 @@
     <PureTableBar :columns="columns" @refresh="onSearch">
       <template #title>
         <el-button
+          v-if="hasAuth('INSERT')"
           type="primary"
           :icon="useRenderIcon('addFill')"
           @click="openDialog(t('新增分类'))"
         >
           {{ t('新增分类') }}
         </el-button>
+        <div v-else></div>
       </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
@@ -34,6 +36,7 @@
               link
               type="primary"
               :size="size"
+              v-if="hasAuth('UPDATE')"
               :icon="useRenderIcon(EditPen)"
               @click="openDialog(t('编辑分类'), row)"
             >
@@ -42,6 +45,7 @@
             <el-button
               class="reset-margin"
               link
+              v-auth="['DELETE']"
               type="danger"
               :size="size"
               :icon="useRenderIcon('Delete')"
@@ -64,8 +68,9 @@ import { useClassifySettingHook } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
+import { hasAuth } from '@/router/utils';
 
-defineOptions({ name: 'TEAM' });
+defineOptions({ name: 'CONFIGCENTER_CLASSIFY_SETTING' });
 const { tableHeaderStyle } = usePublicHooks();
 
 const {

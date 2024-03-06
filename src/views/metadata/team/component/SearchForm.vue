@@ -77,7 +77,7 @@
         <el-option
           :label="item.label"
           :value="item.value"
-          v-for="item in SPORT_ID_MAP"
+          v-for="item in FULL_SPORT_ID_MAP"
           :key="item.value"
         />
       </el-select>
@@ -126,7 +126,7 @@ import SearchIcon from '@iconify-icons/ep/search';
 import RefreshIcon from '@iconify-icons/ep/refresh';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import type { FormInstance } from 'element-plus';
-import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+import { FULL_SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { t } from '@/plugins/i18n';
 import { SearchFormType } from '../utils/types';
 import { useMatchStore } from '@/store/match';

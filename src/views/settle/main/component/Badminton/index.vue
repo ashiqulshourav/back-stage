@@ -52,11 +52,13 @@ import { usePublicHooks } from '@/hooks';
 import { SearchFormType } from '../../utils/type';
 import { useMatchStore } from '@/store/match';
 import { useSettileHook } from '../../utils/hook';
+import { useSettingStoreHook } from '@/store/settings';
 
 const { tableHeaderStyle } = usePublicHooks();
 const router = useRouter();
 
 const matchStore = useMatchStore();
+const settingStore = useSettingStoreHook();
 
 const props = defineProps<{
   form: SearchFormType;
@@ -80,6 +82,10 @@ const filterData = (type: 'reload') => {
   onSearch(type);
 };
 const goTennisDetail = row => {
+  settingStore.save_selttle_page_info({
+    page: pagination.currentPage,
+    matchType: 19
+  });
   const params = JSON.parse(JSON.stringify(row));
   router.push({
     name: 'SETTLE_BADMINTON_DETAIL',

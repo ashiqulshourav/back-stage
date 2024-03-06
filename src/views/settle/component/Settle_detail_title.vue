@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-bg_color w-[99/100] pl-8 pb-3 pt-[12px]">
+  <div class="bg-bg_color w-full pl-8 pb-3 pt-[12px]">
     <div class="text-center font-bold text-2xl mb-3 relative">
       <span>{{ t('盘口详情') }}</span>
       <IconifyIconOffline
@@ -21,12 +21,13 @@
         </div>
       </el-col>
 
-      <el-col :span="5">
+      <el-col :span="5" v-if="!hideAllSettleBtn">
         <el-button
           :type="renderObj.fullSettlementStatus === 1 ? 'danger' : 'primary'"
           :loading="allSettleLoading"
           :disabled="renderObj.fullSettlementStatus === 1"
           @click="allSettleBtnClick"
+          size="small"
         >
           {{
             renderObj.fullSettlementStatus === 1 ? t('结算完成') : t('全场结算')
@@ -34,6 +35,7 @@
         </el-button>
       </el-col>
     </el-row>
+    <slot> </slot>
   </div>
 </template>
 
@@ -41,10 +43,18 @@
 import { t } from '@/plugins/i18n';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
-const props = defineProps<{
-  renderObj: SattleDataAPI.getSettlementDataList;
-  allSettleLoading: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    renderObj: SattleDataAPI.getSettlementDataList;
+    allSettleLoading: boolean;
+    hideAllSettleBtn?: boolean;
+    isFootBallTitle?: boolean;
+  }>(),
+  {
+    hideAllSettleBtn: false,
+    isFootBallTitle: false
+  }
+);
 
 const renderList = computed(() => {
   const _ = props.renderObj;

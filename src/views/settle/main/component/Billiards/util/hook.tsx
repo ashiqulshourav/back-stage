@@ -4,15 +4,17 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { columns } from './tableColumnList';
 import { SPORT_TYPE, SearchFormType } from '../../../utils/type';
 import { useMatchStore } from '@/store/match';
+import { useSettingStoreHook } from '@/store/settings';
 
 export function useBilliardsHook() {
   const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const matchStore = useMatchStore();
+  const settingStore = useSettingStoreHook();
   const form = ref<SearchFormType>({} as SearchFormType);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
-    currentPage: 1
+    currentPage: settingStore.settlePageInfo.page ?? 1
   });
 
   const handleTableWidthChange = (pageSize: number) => {

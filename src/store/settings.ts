@@ -8,7 +8,15 @@ export const useSettingStore = defineStore({
   state: (): setType => ({
     title: getConfig().Title,
     fixedHeader: getConfig().FixedHeader,
-    hiddenSideBar: getConfig().HiddenSideBar
+    hiddenSideBar: getConfig().HiddenSideBar,
+    settlePageInfo: {
+      page: null,
+      matchType: null,
+    },
+    settleHistoryPageInfo: {
+      page: null,
+      matchType: null,
+    },
   }),
   getters: {
     getTitle(state) {
@@ -29,7 +37,15 @@ export const useSettingStore = defineStore({
     },
     changeSetting(data) {
       this.CHANGE_SETTING(data);
-    }
+    },
+    //- 结算页面信息保存
+    save_selttle_page_info(info: { page: number; matchType: number }) {
+      this.settlePageInfo = info;
+    },
+    //- 结算历史页面信息保存
+    save_selttle_history_page_info(info: { page: number; matchType: number }) {
+      this.settleHistoryPageInfo = info;
+    },
   }
 });
 

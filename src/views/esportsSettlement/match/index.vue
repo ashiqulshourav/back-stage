@@ -49,6 +49,7 @@
 
           <template #operation="{ row }: EsportMatchRowType">
             <el-button
+              v-auth="['DETAIL']"
               class="reset-margin"
               type="primary"
               :size="size"
@@ -76,7 +77,7 @@ import SearchForm from './component/SearchForm.vue';
 import { EsportMatchRowType } from './utils/types';
 import { usePublicHooks } from '@/hooks';
 
-defineOptions({ name: 'MATCH' });
+defineOptions({ name: 'ESPORTSSETTLEMENT' });
 const { tableHeaderStyle } = usePublicHooks();
 
 const {

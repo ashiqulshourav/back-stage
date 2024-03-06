@@ -56,6 +56,7 @@
           </template>
           <template #operation="{ row }">
             <el-button
+              v-auth="['UPDATE']"
               class="reset-margin"
               link
               type="primary"
@@ -98,8 +99,7 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
-
-defineOptions({ name: 'LEAGUE' });
+defineOptions({ name: 'METADATA_LEAGUE' });
 
 const {
   loading,

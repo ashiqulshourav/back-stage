@@ -23,6 +23,7 @@
       >
         <template #operation="{ row }">
           <el-button
+            v-auth="['DETAIL']"
             class="reset-margin"
             type="primary"
             :size="size"
@@ -52,10 +53,12 @@ import { usePublicHooks } from '@/hooks';
 import { SearchFormType } from '../../utils/type';
 import { useMatchStore } from '@/store/match';
 import { useSettileHook } from '../../utils/hook';
+import { useSettingStoreHook } from '@/store/settings';
 
 const { tableHeaderStyle } = usePublicHooks();
 const router = useRouter();
 const matchStore = useMatchStore();
+const settingStore = useSettingStoreHook();
 
 const props = defineProps<{
   form: SearchFormType;
@@ -74,14 +77,17 @@ const {
 const { cancelBetOrder } = useSettileHook();
 
 form.value = props.form;
-
 const filterData = (type: 'reload') => {
   onSearch(type);
 };
 const goTennisDetail = row => {
+  settingStore.save_selttle_page_info({
+    page: pagination.currentPage,
+    matchType: 3
+  });
   const params = JSON.parse(JSON.stringify(row));
   router.push({
-    name: 'SETTLE_TENNIS_DETAIL',
+    name: 'SETTLE_DETAIL_TENNIS_DETAIL',
     state: { params }
   });
 };

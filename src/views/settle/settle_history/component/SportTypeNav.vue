@@ -1,12 +1,12 @@
 <template>
-  <div class="flex mt-4">
+  <div class="flex mt-4 flex-wrap w-full">
     <CustomButton
-      v-for="(item, index) in SPORT_ID_MAP.slice(0, 1)"
+      class="mb-2 !ml-0 mr-2"
+      v-for="item in renderList"
       :key="item.value"
       :type="item.value === currentSportId ? 'primary' : ''"
       :btnText="item.label"
-      :disabled="index > 0"
-      @click="searchClick(item.value)"
+      @click="changeType(item)"
     />
   </div>
 </template>
@@ -14,15 +14,21 @@
 <script setup lang="ts">
 import CustomButton from '@/components/Form/CustomButton.vue';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+import { useMatchStore } from '@/store/match';
 const props = defineProps<{
   currentSportId: number;
 }>();
 
-const emites = defineEmits(['onSearch']);
+const emits = defineEmits(['changeCurrentComponentName']);
+const matchStore = useMatchStore();
+const renderList = computed(() => {
+  return SPORT_ID_MAP.filter(_ => _.value !== 4).slice(0, 4);
+});
 
-const searchClick = val => {
-  if (val === props.currentSportId) return;
-  emites('onSearch', 'reload', val);
+const changeType = (_: { value: number; type: string }) => {
+  if (_.value === props.currentSportId) return;
+  matchStore.set_currentSportId(_.value);
+  emits('changeCurrentComponentName', _);
 };
 </script>
 

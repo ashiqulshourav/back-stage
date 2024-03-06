@@ -43,6 +43,7 @@
           </template>
           <template #operation="{ row }">
             <el-button
+              v-auth="['UPDATE']"
               class="reset-margin"
               link
               type="primary"
@@ -70,7 +71,7 @@ import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 
 const { tableHeaderStyle } = usePublicHooks();
-defineOptions({ name: 'MATCH' });
+defineOptions({ name: 'ESPORTS_MATCH' });
 
 const {
   loading,

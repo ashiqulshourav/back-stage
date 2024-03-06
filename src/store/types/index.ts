@@ -33,6 +33,14 @@ export type setType = {
   title: string;
   fixedHeader: boolean;
   hiddenSideBar: boolean;
+  settlePageInfo: {
+    page: number;
+    matchType: number;
+  }
+  settleHistoryPageInfo: {
+    page: number;
+    matchType: number;
+  }
 };
 
 export type userType = {
@@ -40,9 +48,8 @@ export type userType = {
   verifyCode?: string;
   currentPage?: number;
   token: string;
-  userInfo: UserAPI.Login_User
+  userInfo: UserAPI.LoginData
 };
-
 
 export type MatchType = {
   sportLeagueList: MetadataAPI.LeagueList[];
@@ -50,4 +57,5 @@ export type MatchType = {
   countryList: MetadataAPI.getCountryListType[];
   settleRequestLoading: boolean;
   sportId: number;
+
 };

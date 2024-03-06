@@ -50,7 +50,7 @@ import { t } from '@/plugins/i18n';
 import { addDialog } from '@/components/ReDialog';
 import { usePublicHooks } from '@/hooks';
 
-defineOptions({ name: 'operationLog' });
+defineOptions({ name: 'OPERATIONLOG' });
 const { tableHeaderStyle } = usePublicHooks();
 const openRequestLog = (row: OperationLogDataAPI.OperationLogListFetchList) => {
   addDialog({

@@ -74,12 +74,15 @@
         />
       </el-form-item>
       <el-form-item :label="t('联赛标签')" prop="leagueTagsId">
-        <el-checkbox
-          v-model="checkAll"
-          :indeterminate="isIndeterminate"
-          @change="handleCheckAllChange"
-          >{{ t('全选') }}</el-checkbox
-        >
+        <!-- <el-row> </el-row> -->
+        <div v-bind:style="{ width: '100%' }">
+          <el-checkbox
+            v-model="checkAll"
+            :indeterminate="isIndeterminate"
+            @change="handleCheckAllChange"
+            >{{ t('全选') }}</el-checkbox
+          >
+        </div>
         <el-checkbox-group
           v-model="(newFormInline.leagueTagsId as any)"
           @change="handleCheckedTagIdsChange"
@@ -87,7 +90,7 @@
           <el-checkbox
             v-for="tag in leagueTagsId"
             :key="tag.id"
-            :label="tag.id"
+            :value="tag.id"
             >{{ tag.text }}</el-checkbox
           >
         </el-checkbox-group>
@@ -111,9 +114,9 @@ import { t } from '@/plugins/i18n';
 import { useMatchStore } from '@/store/match';
 import { inputRestrictions } from '@/utils/formatNumber';
 import { message } from '@/utils/message';
-import { useLeague } from './utils/hook';
+// import { useLeague } from './utils/hook';
 
-const { form } = useLeague();
+// const { form } = useLeague();
 const uploadFormFile = ref();
 const loading = ref(false);
 const matchStore = useMatchStore();
@@ -128,6 +131,7 @@ const props = withDefaults(defineProps<FormProps>(), {
     leagueId: '',
     leagueLogo: '',
     sportId: '',
+    category: '',
     leagueTagsId: []
   })
 });
@@ -145,18 +149,10 @@ const updateVal = () => {
   });
 };
 
-onMounted(async () => {
-  const response = await API.getLeagueTagList({
-    category: parseInt(form.category),
-    sportId: parseInt(newFormInline.value.sportId)
-  });
-  leagueTagsId.value = response.data.list;
-});
-
 const onImgChange = file => {
   let name = file.name.slice(-3);
-  let kb = 15360 * 1024;
-  if (['png', 'jpg', 'peg'].includes(name.toLowerCase())) {
+  let kb = 10000 * 1024;
+  if (['png'].includes(name.toLowerCase())) {
     if (file.size > kb) {
       message(t('文件过大，请重新上传'), { type: 'error' });
     } else {
@@ -164,7 +160,7 @@ const onImgChange = file => {
       imageUrl.value = URL.createObjectURL(file.raw);
     }
   } else {
-    message(t('上传文件格式不匹配,请上传png,jpg,jpeg格式文件'), {
+    message(t('上传文件格式不匹配,请上传png格式文件'), {
       type: 'error'
     });
   }
@@ -189,7 +185,14 @@ const handleCheckedTagIdsChange = (value: number[]) => {
   isIndeterminate.value =
     checkedCount > 0 && checkedCount < leagueTagsId.value.length;
 };
-
+onMounted(async () => {
+  console.log('newFormInline', newFormInline);
+  const response = await API.getLeagueTagList({
+    category: parseInt(newFormInline.value.category),
+    sportId: parseInt(newFormInline.value.sportId)
+  });
+  leagueTagsId.value = response.data.list;
+});
 const cancelDialog = () => {
   emits('closeDialog');
 };

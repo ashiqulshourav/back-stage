@@ -23,9 +23,10 @@
       >
         <template #operation="{ row }">
           <el-button
+            v-auth="['DETAIL']"
             class="reset-margin"
             type="primary"
-            :size="size"
+            size="small"
             @click="goTennisDetail(row)"
           >
             {{ t('结算详情') }}
@@ -33,7 +34,7 @@
           <el-button
             v-if="row.isShowCancelBtn"
             type="danger"
-            :size="size"
+            size="small"
             :disabled="row.cancelOrderTimes > 0"
             @click="cancelClick(row)"
             >{{ t('取消注单') }}</el-button
@@ -52,12 +53,14 @@ import { usePublicHooks } from '@/hooks';
 import { SearchFormType } from '../../utils/type';
 import { useMatchStore } from '@/store/match';
 import { useSettileHook } from '../../utils/hook';
+import { useSettingStoreHook } from '@/store/settings';
 
 const { tableHeaderStyle } = usePublicHooks();
 const router = useRouter();
 
 const matchStore = useMatchStore();
 const { cancelBetOrder } = useSettileHook();
+const settingStore = useSettingStoreHook();
 
 const props = defineProps<{
   form: SearchFormType;
@@ -74,9 +77,13 @@ const {
 } = useBasketballHook();
 
 const goTennisDetail = row => {
+  settingStore.save_selttle_page_info({
+    page: pagination.currentPage,
+    matchType: 2
+  });
   const params = JSON.parse(JSON.stringify(row));
   router.push({
-    name: 'SETTLE_BASKETBALL_DETAIL',
+    name: 'SETTLE_DETAIL_NEW_BASKETBALL_DETAIL',
     state: { params }
   });
 };

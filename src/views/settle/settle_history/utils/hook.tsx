@@ -1,9 +1,8 @@
 import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
-import { childColumns, columns } from './tableColumnList';
-import { MatchEventType, SearchFormType } from './type';
-import { dateSetSecond, getSecondTime } from '@/utils/formatDate';
+import {  SearchFormType } from './type';
+import { dateSetSecond } from '@/utils/formatDate';
 import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
 
 export function useSettle() {
@@ -66,26 +65,7 @@ export function useSettle() {
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
       dataList.push(...res.data.list);
-      dataList.forEach(
-        _ =>
-          (_.childrenData = [
-            {
-              type: MatchEventType.Goal,
-              key: 'matchScoreRecordList',
-              tableList: []
-            },
-            {
-              type: MatchEventType.YellowRedCard,
-              key: 'penaltyCardRecordList',
-              tableList: []
-            },
-            {
-              type: MatchEventType.Corner,
-              key: 'cornerRecordList',
-              tableList: []
-            }
-          ])
-      );
+
       pagination.total = res.data.total;
       document
         .querySelector('.table_container .el-scrollbar__wrap')
@@ -166,7 +146,6 @@ export function useSettle() {
     form,
     loading,
     childloading,
-    columns,
     dataList,
     pagination,
     onSearch,
@@ -175,7 +154,6 @@ export function useSettle() {
     switchLoadMap,
     expandChange,
     handleCurrentChange,
-    childColumns,
     getChildrenData,
     currentSportId,
     expandMatchList,

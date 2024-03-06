@@ -63,7 +63,6 @@ import {
   defineComponent
 } from 'vue';
 
-import { routerTranslate } from '@/utils/routerTranslate';
 import navbar from './components/navbar.vue';
 import tag from './components/tag/index.vue';
 import appMain from './components/appMain.vue';
@@ -81,7 +80,6 @@ const pureSetting = useSettingStoreHook();
 const { $storage } = useGlobal<GlobalPropertiesApi>();
 const matchStore = useMatchStore();
 
-routerTranslate();
 const set: setType = reactive({
   sidebar: computed(() => {
     return useAppStoreHook().sidebar;

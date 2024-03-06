@@ -4,6 +4,7 @@ import NProgress from "@/utils/progress";
 import { sessionKey, type DataInfo } from "@/utils/auth";
 import { useMultiTagsStoreHook } from "@/store/multiTags";
 import { usePermissionStoreHook } from "@/store/permission";
+import { useSettingStoreHook } from "@/store/settings";
 import { initRouter } from "./utils";
 import {
   Router,
@@ -85,6 +86,7 @@ export function resetRouter() {
   router.getRoutes().forEach(route => {
     const { name, meta } = route;
     if (name && router.hasRoute(name) && meta?.backstage) {
+
       router.removeRoute(name);
       router.options.routes = formatTwoStageRoutes(
         formatFlatteningRoutes(
@@ -117,9 +119,9 @@ router.beforeEach((to: ToRouteType, _from, next) => {
       if (!item.meta.title) return "";
       const Title = getConfig().Title;
       if (Title)
-        document.title = `${t(item.meta.title)
+        document.title = `${item.meta.title
           } | ${Title} `;
-      else document.title = t(item.meta.title);
+      else document.title = item.meta.title;
     });
   }
   /** 如果已经登录并存在登录信息后不能跳转到路由白名单，而是继续保持在当前页面 */
@@ -196,8 +198,20 @@ router.beforeEach((to: ToRouteType, _from, next) => {
   }
 });
 
-router.afterEach(() => {
+router.afterEach((to) => {
+  //- 返回页面非结算历史，清空标签存储
+  clearSettleInfo(to)
   NProgress.done();
 });
+//- 清空结算页面信息
+const clearSettleInfo = (to) => {
+  const settingStore = useSettingStoreHook();
+  if (!(to?.name as string)?.startsWith('SETTLE') || to?.name === 'SETTLE_HISTORY') {
+    settingStore.save_selttle_page_info({ page: null, matchType: null })
+  }
+  if (!(to?.name as string)?.startsWith('SETTLE') || to?.name === 'SETTLE_MAIN') {
+    settingStore.save_selttle_history_page_info({ page: null, matchType: null })
+  }
+}
 
 export default router;

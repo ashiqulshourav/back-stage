@@ -154,7 +154,7 @@ const imageUrl = ref<string>(props.formInline.teamLogo);
 const onImgChange = file => {
   let name = file.name.slice(-3);
   let kb = 15360 * 1024;
-  if (['png', 'jpg', 'peg'].includes(name.toLowerCase())) {
+  if (['png'].includes(name.toLowerCase())) {
     if (file.size > kb) {
       message(t('文件过大，请重新上传'), { type: 'error' });
     } else {
@@ -162,7 +162,7 @@ const onImgChange = file => {
       imageUrl.value = URL.createObjectURL(file.raw);
     }
   } else {
-    message(t('上传文件格式不匹配,请上传png,jpg,jpeg格式文件'), {
+    message(t('上传文件格式不匹配,请上传png格式文件'), {
       type: 'error'
     });
   }

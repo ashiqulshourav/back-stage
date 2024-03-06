@@ -81,6 +81,8 @@ import { usePermissionStoreHook } from '@/store/permission';
 import LanguageNav from '@/components/LanguageNav/index.vue';
 import { useUserStore } from '@/store/user';
 import { t } from '@/plugins/i18n';
+import { getMD5 } from '@/utils/caypto';
+import { useResetPasswordHook } from '@/hooks/resetPasswordHook';
 
 defineOptions({ name: 'Login' });
 const router = useRouter();
@@ -115,21 +117,30 @@ const _loginRequest = async () => {
   addPathMatch();
   try {
     const res: UserAPI.Login = await API.login({
-      email: ruleForm.username,
-      password: ruleForm.password
+      name: ruleForm.username,
+      pwd: getMD5(ruleForm.password)
     });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
+    //- 第一次登录强制弹出充值密码弹窗
+    message(t('登录成功'), { type: 'success' });
     userStore.setUserInfo(res.data);
+
+    if (ruleForm.password === '123456') {
+      ruleForm.password = '';
+      return openResetDialog();
+    }
+
     initRouter().then(() => {
       router.push(getTopMenu(true).path);
-      message(t('登录成功'), { type: 'success' });
     });
   } catch (error) {
     message(error.message, { type: 'error' });
     loading.value = false;
   }
 };
+
+const { openResetDialog } = useResetPasswordHook();
 </script>
 
 <style scoped>
