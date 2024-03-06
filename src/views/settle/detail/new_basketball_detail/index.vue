@@ -7,7 +7,27 @@
       :allSettleLoading="loading"
     />
     <PureTableBar :columns="childColumns" @refresh="reloadTable">
-      <template #title>{{ baseTitle }}</template>
+      <template #title>
+        <div class="flex items-center text-sm">
+          <span class="mr-2">
+            {{ baseTitle }}
+          </span>
+          <el-button
+            @click="openSecondSettleClick"
+            type="primary"
+            size="small"
+            v-if="renderObj.reSettleStatus === 0"
+            >{{ t('开启重新结算') }}</el-button
+          >
+          <el-button
+            @click="confirmSecondSettleClick"
+            type="warning"
+            v-else
+            size="small"
+            >{{ t('确认重新结算') }}</el-button
+          >
+        </div>
+      </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"
@@ -41,14 +61,19 @@
           </template>
 
           <!-- -操作 -->
-          <template #operation="{ row }: MatchEventRowType">
+          <template #operation="{ row, index }: MatchEventRowType">
             <div
               class="flex items-center justify-center"
-              v-if="!renderObj.fullSettlementStatus"
+              v-if="
+                !renderObj.fullSettlementStatus ||
+                renderObj.reSettleStatus === 1
+              "
             >
               <template v-if="row.id">
                 <BackEndBtnGroupCom
                   :row="row"
+                  :dataList="eventList"
+                  :index="index"
                   @cancelMatchEvent="cancelMatchEvent"
                 />
               </template>
@@ -79,7 +104,7 @@
                 :size="size"
                 v-if="!row.id"
                 :icon="useRenderIcon(Delete)"
-                @click="eventList.pop()"
+                @click="cancelItem(row)"
               >
                 {{ t('取消') }}
               </el-button>
@@ -101,19 +126,33 @@
             <span v-else>-</span>
           </template>
         </pure-table>
-        <div class="mt-2 cursor-pointer" v-if="!renderObj.fullSettlementStatus">
+        <div
+          class="mt-2 cursor-pointer"
+          v-if="
+            !renderObj.fullSettlementStatus || renderObj.reSettleStatus === 1
+          "
+        >
           <el-button
-            v-if="renderObj.settlementType === 1"
+            v-if="
+              renderObj.settlementType === 1 && renderObj.reSettleStatus !== 1
+            "
             class="ml-1 reset-margin"
             @click="changeSettleType"
             >{{ t('开启人工结算') }}</el-button
           >
           <div
             class="flex items-center"
-            v-if="renderObj.settlementType !== 1 && isShowSettleBen"
+            v-if="
+              (renderObj.settlementType !== 1 && isShowSettleBen) ||
+              renderObj.reSettleStatus === 1
+            "
           >
             <span class="mr-3 text-[var(--el-color-danger)]"
-              >{{ t('人工结算中') }}...</span
+              >{{
+                renderObj.reSettleStatus === 1
+                  ? t('重新结算中')
+                  : t('人工结算中')
+              }}...</span
             >
             <IconifyIconOffline
               width="25px"
@@ -155,7 +194,10 @@ const {
   cancelMatchEvent,
   eventList,
   renderObj,
-  allSettleBtnClick
+  allSettleBtnClick,
+  openSecondSettleClick,
+  confirmSecondSettleClick,
+  cancelItem
 } = useNewBasketBallHook();
 
 const { tableHeaderStyle } = usePublicHooks();

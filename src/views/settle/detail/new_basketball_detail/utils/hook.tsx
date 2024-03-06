@@ -12,7 +12,7 @@ export function useNewBasketBallHook() {
   const childDataTotal = ref(0);
   const loopTimer = ref<NodeJS.Timeout>();
   const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
-    {} as SattleDataAPI.getSettlementDataList
+    history.state.params as SattleDataAPI.getSettlementDataList
   );
   const form = ref<SearchFormType>({} as SearchFormType);
   const balanceLoading = reactive<{ half: boolean; all: boolean }>({
@@ -24,8 +24,9 @@ export function useNewBasketBallHook() {
   const addChildRow = () => {
     const isSettle = eventList.some(item => item.settleTimes === 0);
     if (
-      (eventList.length !== 0 && !eventList[eventList.length - 1]?.id) ||
-      isSettle
+      ((eventList.length !== 0 && !eventList[eventList.length - 1]?.id) ||
+        isSettle) &&
+      renderObj.reSettleStatus !== 1
     ) {
       message('请先完成之前的事件结算', { type: 'error' });
     } else {
@@ -83,6 +84,9 @@ export function useNewBasketBallHook() {
       return;
     }
 
+    if (renderObj.reSettleStatus === 1 && type !== 'save')
+      return saveSecondMathList(row);
+
     const params: SattleDataAPI.addBasketballEventV2ReqType = {
       eventTime: 1,
       // eventTime:
@@ -111,7 +115,7 @@ export function useNewBasketBallHook() {
   //- 初始化联赛
   const initMatchData = async () => {
     const res = await API.getPreSaleInfo({
-      matchId: +history.state.params.matchId
+      matchId: +renderObj.matchId
     });
     if (res.code) return message(res.msg, { type: 'error' });
     Object.assign(renderObj, res.data);
@@ -137,14 +141,6 @@ export function useNewBasketBallHook() {
       loopTimer.value = setInterval(() => getEventList(), 10000);
     }
   };
-
-  onMounted(() => {
-    initMatchData();
-  });
-
-  onUnmounted(() => {
-    loopTimer.value && clearInterval(loopTimer.value);
-  });
 
   const reloadTable = async () => {};
 
@@ -174,20 +170,24 @@ export function useNewBasketBallHook() {
   };
 
   //- 取消结算事件
-  const cancelMatchEvent = async id => {
-    ElMessageBox.confirm('确定要取消该事件么?', t('警告'), {
-      dangerouslyUseHTMLString: true,
-      confirmButtonText: t('确认'),
-      cancelButtonText: t('取消'),
-      center: true
-    }).then(async () => {
-      const res = await API.basketballCancelMatchEvent({
-        id,
-        matchId: renderObj.matchId
+  const cancelMatchEvent = async (id: number, index: number) => {
+    if (renderObj.reSettleStatus === 1) {
+      saveCancelEventIds(id, index);
+    } else {
+      ElMessageBox.confirm('确定要取消该事件么?', t('警告'), {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: t('确认'),
+        cancelButtonText: t('取消'),
+        center: true
+      }).then(async () => {
+        const res = await API.basketballCancelMatchEvent({
+          id,
+          matchId: renderObj.matchId
+        });
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        getEventList();
       });
-      message(res.msg, { type: res.code ? 'error' : 'success' });
-      getEventList();
-    });
+    }
   };
 
   //- 全场结算事件
@@ -206,6 +206,100 @@ export function useNewBasketBallHook() {
     });
   };
 
+  /*
+   * 二次结算逻辑
+   */
+  const confirmParams = reactive<SattleDataAPI.confirm2ndSettlementReqType>({
+    cancelEventIds: [],
+    newEventList: [],
+    matchId: history.state.params.matchId
+  } as SattleDataAPI.confirm2ndSettlementReqType);
+  //- 开启二次结算
+  const openSecondSettleClick = async () => {
+    const res = await API.basketballOpen2ndSettlementStatus({
+      matchId: renderObj.matchId
+    });
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    if (!res.code) initMatchData();
+  };
+
+  //- 二次结算发送后端
+  const confirmSecondSettleClick = async () => {
+    ElMessageBox.confirm(
+      <div class="text-center pl-2 pr-2">
+        本场比赛已结算完毕，重新结算将会影响所有关联的已结算注单，进行重新下发赛果，是否确认重新结算?
+      </div>,
+      t('警告'),
+      {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: t('确认'),
+        cancelButtonText: t('取消'),
+        center: true
+      }
+    ).then(async () => {
+      const res = await API.basketballConfirm2ndSettlement(confirmParams);
+      if (res.code) return message(res.msg, { type: 'error' });
+      confirmParams.cancelEventIds = [];
+      confirmParams.newEventList = [];
+      getEventList();
+    });
+  };
+
+  //- 保存取消结算ID
+  const saveCancelEventIds = (id: number, index: number) => {
+    ElMessageBox.confirm('确定要取消当前事件结算结果么?', t('警告'), {
+      dangerouslyUseHTMLString: true,
+      confirmButtonText: t('确认'),
+      cancelButtonText: t('取消'),
+      center: true
+    }).then(() => {
+      confirmParams.cancelEventIds.push(id);
+      eventList.splice(index, 1);
+    });
+  };
+
+  //- 新增二次结算事件
+  const saveSecondMathList = (row: SattleDataAPI.newBasketballEventsList) => {
+    if (
+      confirmParams.newEventList.findIndex(
+        item => item.eventTime === row.eventTime
+      ) < 0
+    ) {
+      confirmParams.newEventList.push({
+        matchId: renderObj.matchId,
+        eventCode: row.eventCode,
+        eventTime: 1,
+        homeAway: row.homeAway,
+        matchPeriodId: row.matchPeriodId,
+        t1: row.t1,
+        t2: row.t2
+      });
+    }
+  };
+
+  //- 取消当前编辑行
+  const cancelItem = (row: SattleDataAPI.newBasketballEventsList) => {
+    eventList.pop();
+    const index = confirmParams.newEventList.findIndex(
+      item => item.matchPeriodId === row.matchPeriodId
+    );
+    if (index >= 0) {
+      confirmParams.newEventList.splice(index, 1);
+    }
+  };
+
+  /*
+   * 二次结算逻辑结束
+   */
+
+  onMounted(() => {
+    initMatchData();
+  });
+
+  onUnmounted(() => {
+    loopTimer.value && clearInterval(loopTimer.value);
+  });
+
   return {
     loading,
     eventList,
@@ -221,6 +315,9 @@ export function useNewBasketBallHook() {
     changeSettleType,
     cancelMatchEvent,
     renderObj,
-    allSettleBtnClick
+    allSettleBtnClick,
+    openSecondSettleClick,
+    confirmSecondSettleClick,
+    cancelItem
   };
 }

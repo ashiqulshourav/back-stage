@@ -343,7 +343,7 @@ export function useFootball() {
 
   //- 保存取消结算ID
   const saveCancelEventIds = (id: number, list, index) => {
-    ElMessageBox.confirm('确定要取消该事件结算么?', t('警告'), {
+    ElMessageBox.confirm('确定要取消当前事件结算结果么?', t('警告'), {
       dangerouslyUseHTMLString: true,
       confirmButtonText: t('确认'),
       cancelButtonText: t('取消'),

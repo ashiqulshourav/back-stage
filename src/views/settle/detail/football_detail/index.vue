@@ -177,7 +177,7 @@
                     :size="size"
                     v-if="!row.isBackEndReturnData"
                     :icon="useRenderIcon(Delete)"
-                    @click="cancelItem(item.tableList,row) "
+                    @click="cancelItem(item.tableList,row)"
                   >
                     {{ t('取消') }}
                   </el-button>

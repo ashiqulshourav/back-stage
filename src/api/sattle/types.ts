@@ -453,6 +453,7 @@ declare namespace SattleDataAPI {
   type manualSettlementFullTimeResType = COMMON.BASE_RES_TYPE<null>
   type basketballCancelMatchEventResType = COMMON.BASE_RES_TYPE<null>
   type open2ndSettlementStatusResType = COMMON.BASE_RES_TYPE<null>
+  type basketballOpen2ndSettlementStatusResType = COMMON.BASE_RES_TYPE<null>
 
   type addBasketballEventV2ReqType = {
     eventTime: string | number | Date;
