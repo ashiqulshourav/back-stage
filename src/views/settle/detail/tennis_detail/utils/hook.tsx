@@ -44,23 +44,6 @@ export function useTennisDetailHook() {
     dataList.push(...res.data);
   };
 
-  //- 修改盘类型
-  const changeBoardType = (type: string) => {
-    dataList.forEach(item => {
-      if (!item.id) item.gameRule = type;
-    });
-  };
-
-  //- 修改局类型
-  const changeJuType = (
-    dataList: SattleDataAPI.InningEvent[],
-    type: string
-  ) => {
-    dataList.forEach(item => {
-      if (!item.id) item.gameRule = type;
-    });
-  };
-
   //- 新增盘
   const addEventRow = () => {
     if (dataList.length > 0 && !dataList[dataList.length - 1].id) {
@@ -82,10 +65,6 @@ export function useTennisDetailHook() {
           t1: '',
           t2: '',
           eventTime: 1,
-          // eventTime:
-          //   dataList.length === 0
-          //     ? Date.now()
-          //     : +dataList[dataList.length - 1].eventTime + 1000 * 60,
           gameRule: juType.value,
           isEdit: true
         }
@@ -250,10 +229,6 @@ export function useTennisDetailHook() {
     canSettlement,
     allSettleBtnClick,
     renderObj,
-    boardType,
-    juType,
-    changeBoardType,
-    changeJuType,
     expandChange,
     allSettleLoading
   };

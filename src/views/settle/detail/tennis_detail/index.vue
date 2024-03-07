@@ -132,14 +132,9 @@ const checkScore = computed(() => {
   scoreList.forEach(item => (item[0] > item[1] ? ++s1 : ++s2));
   t1Score.value = s1;
   t2Score.value = s2;
-  //- 长盘制
-  // if ((s1 >= 6 && s1 - s2 >= 2) || (s2 >= 6 && s2 - s1 >= 2)) {
   if (s1 >= 6 || s2 >= 6) {
     canSettlement.value = true;
-    // return false;
   }
-  //- 短盘制
-  // canSettlement.value = false;
   return true;
 });
 
