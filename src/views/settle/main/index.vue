@@ -80,6 +80,7 @@ const changeCurrentComponentName = (_: { value: number; type: string }) => {
   currentSportId.value = _.value;
   matchStore.set_lagueList(0, _.value);
   settingStore.save_selttle_page_info({ page: null, matchType: null });
+  form.leagueId = '';
 };
 
 //- 搜索相关

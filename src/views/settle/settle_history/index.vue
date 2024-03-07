@@ -1,11 +1,6 @@
 <template>
   <div class="main">
-    <SearchForm
-      :form="form"
-      @resetForm="resetForm"
-      :loading="loading"
-      @onSearch="onSearch"
-    />
+    <SearchForm :form="form" @resetForm="resetForm" @onSearch="onSearch" />
     <SportTypeNav
       @changeCurrentComponentName="changeCurrentComponentName"
       :currentSportId="currentSportId"
@@ -19,7 +14,6 @@
 </template>
 
 <script setup lang="ts">
-import { useSettle } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import SportTypeNav from './component/SportTypeNav.vue';
@@ -29,6 +23,7 @@ import Tennis from './component/Tennis/index.vue';
 import { useSettingStoreHook } from '@/store/settings';
 import Volleyball from './component/Volleyball/index.vue';
 import { useMatchStore } from '@/store/match';
+import { SearchFormType } from './utils/type';
 
 defineOptions({ name: 'SETTLE_SETTLE_HISTORY' });
 const componentStrName = ref<any>('FootBall');
@@ -36,7 +31,14 @@ const settingStore = useSettingStoreHook();
 const currentSportId = ref<number>(
   settingStore.settleHistoryPageInfo.matchType ?? 1
 );
-const { form, loading, resetForm } = useSettle();
+
+const form = reactive<SearchFormType>({
+  leagueId: '',
+  matchId: '',
+  status: '',
+  startTime: '',
+  endTime: ''
+});
 const comoMap = {
   FootBall,
   BasketBall,
@@ -55,10 +57,17 @@ const changeCurrentComponentName = (_: { value: number; type: string }) => {
   currentSportId.value = _.value;
   matchStore.set_lagueList(0, _.value);
   settingStore.save_selttle_history_page_info({ page: null, matchType: null });
+  form.leagueId = '';
 };
 //- 搜索相关
 const onSearch = val => {
   componentStrName.value.filterData(val, form);
+};
+
+const resetForm = formEl => {
+  if (!formEl) return;
+  formEl.resetFields();
+  onSearch('reload');
 };
 </script>
 
