@@ -7,7 +7,7 @@ import {
 } from "vue-router";
 import { router } from "./index";
 import { isProxy, toRaw } from "vue";
-import { useTimeoutFn } from "@vueuse/core";
+import { useStorage, useTimeoutFn } from "@vueuse/core";
 import {
   isString,
   cloneDeep,
@@ -15,7 +15,6 @@ import {
   intersection,
   storageSession,
   isIncludeAllChildren,
-  storageLocal
 } from "@pureadmin/utils";
 import { getConfig } from "@/config";
 import { menuType } from "@/layout/types";
@@ -225,11 +224,12 @@ function initRouter() {
         resolve(router);
       });
     } else {
-      return new Promise(resolve => {
+      return new Promise((resolve, reject) => {
         const userStore = useUserStore();
         API.getRouter({
           id: userStore.userInfo.id
         }).then(({ data }: { data: UserAPI.RouterResData[] }) => {
+          if (!data.length) reject(t('请联系上级进行权限设置'))
           data = data.map(transformItem) as any;
           handleAsyncRoutes(cloneDeep(data));
           storageSession().setItem(key, data);

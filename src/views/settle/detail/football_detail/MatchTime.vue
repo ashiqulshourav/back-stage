@@ -1,7 +1,7 @@
 <template>
   <span class="text-sm" v-if="row.isBackEndReturnData">
-    {{ padZero(parseInt(+row.eventTime / 60)) }}:{{
-      padZero(+row.eventTime % 60)
+    {{ row.eventTime == 1 ? '00' : padZero(parseInt(+row.eventTime / 60)) }}:{{
+      row.eventTime == 1 ? '00' : padZero(+row.eventTime % 60)
     }}
   </span>
   <div class="flex" v-else>
@@ -29,7 +29,6 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import { MatchEventRowType } from './util/type';
-import dayjs from 'dayjs';
 import { padZero } from '@/utils/formatDate';
 import { inputRestrictions } from '@/utils/formatNumber';
 
@@ -42,19 +41,6 @@ const props = defineProps<
 const emits = defineEmits(['changeEventTime']);
 const secondNum = ref<number>(null);
 const minuteNum = ref<number>(null);
-
-watch(
-  () => props.row,
-  d => {
-    if (d.t1 == 0 && d.t2 == 0) {
-      d.eventTime = dayjs().startOf('day').valueOf();
-    }
-  },
-  {
-    immediate: true,
-    deep: true
-  }
-);
 
 watch(
   () => secondNum.value,
