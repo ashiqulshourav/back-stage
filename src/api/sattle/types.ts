@@ -8,6 +8,7 @@ declare namespace SattleDataAPI {
     extraInfo?: string;
     homeAway?: string;
     id?: number;
+    _tempDate?: number;
     matchId?: number;
     matchPeriodId?: number | string;
     matchType?: number;
@@ -92,6 +93,7 @@ declare namespace SattleDataAPI {
     sourceType?: number;
     matchPeriod?: string;
     sportId?: number;
+    _tempDate?: number,
     dataSourceCode?: string;
     t1?: number | string;
     t2?: number | string;
@@ -398,6 +400,7 @@ declare namespace SattleDataAPI {
     matchId: number;
     canceled: number;
     eventCode: string;
+    _tempDate?: number;
     eventTime: number | string;
     homeAway: string;
     matchPeriodId: number;
@@ -468,6 +471,7 @@ declare namespace SattleDataAPI {
     cancelEventIds: number[];
     newEventList: {
       matchId: number;
+      _tempDate?: number;
       eventCode: string | number;
       eventTime: number | string | Date;
       homeAway: string;

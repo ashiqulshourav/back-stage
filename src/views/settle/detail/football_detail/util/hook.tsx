@@ -55,6 +55,7 @@ export function useFootball() {
         homeAway: null,
         matchPeriodId: null,
         isBackEndReturnData: false,
+        _tempDate: Date.now(),
         t1: null,
         t2: null,
         eventCode: type
@@ -89,9 +90,6 @@ export function useFootball() {
           _.matchId = history.state.params.matchId;
           _.t = res.ts;
           _.isBackEndReturnData = true;
-          // if (_.eventTime.toString().length < 10) {
-          //   _.eventTime = dateSetSecond(_.eventTime as number);
-          // }
           if (item.type === 'yellow_red_card') {
             _.redOrYellow = YELLOW_OR_RED[_.eventCode];
             if (_.redOrYellow === 1) {
@@ -310,6 +308,7 @@ export function useFootball() {
     newEventList: [],
     matchId: history.state.params.matchId
   } as SattleDataAPI.confirm2ndSettlementReqType);
+
   //- 足球开启二次结算
   const openSecondSettleClick = async () => {
     const res = await API.open2ndSettlementStatus({
@@ -323,7 +322,9 @@ export function useFootball() {
   const confirmSecondSettleClick = async () => {
     ElMessageBox.confirm(
       <div class="text-center pl-2 pr-2">
-        本场比赛已结算完毕，重新结算将会影响所有关联的已结算注单，进行重新下发赛果，是否确认重新结算?
+        {t(
+          '本场比赛已结算完毕，重新结算将会影响所有关联的已结算注单，进行重新下发赛果，是否确认重新结算?'
+        )}
       </div>,
       t('警告'),
       {
@@ -333,6 +334,7 @@ export function useFootball() {
         center: true
       }
     ).then(async () => {
+      confirmParams.newEventList.forEach(item => delete item._tempDate);
       const res = await API.confirm2ndSettlement(confirmParams);
       if (res.code) return message(res.msg, { type: 'error' });
       confirmParams.cancelEventIds = [];
@@ -343,7 +345,7 @@ export function useFootball() {
 
   //- 保存取消结算ID
   const saveCancelEventIds = (id: number, list, index) => {
-    ElMessageBox.confirm('确定要取消当前事件结算结果么?', t('警告'), {
+    ElMessageBox.confirm(t('确定要取消当前事件结算结果么?'), t('警告'), {
       dangerouslyUseHTMLString: true,
       confirmButtonText: t('确认'),
       cancelButtonText: t('取消'),
@@ -356,9 +358,10 @@ export function useFootball() {
 
   //- 新增二次结算事件
   const saveSecondMathList = (row: SattleDataAPI.MatchEventsList) => {
+    message(t('新增事件保存成功'), { type: 'success' });
     if (
       confirmParams.newEventList.findIndex(
-        item => item.eventTime === row.eventTime
+        item => item._tempDate === row._tempDate
       ) < 0
     ) {
       confirmParams.newEventList.push({
@@ -366,6 +369,7 @@ export function useFootball() {
         eventCode: row.eventCode,
         eventTime: row.eventTime,
         homeAway: row.homeAway,
+        _tempDate: row._tempDate,
         matchPeriodId: row.matchPeriodId,
         t1: row.t1,
         t2: row.t2

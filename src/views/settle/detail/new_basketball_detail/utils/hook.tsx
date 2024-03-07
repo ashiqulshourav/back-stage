@@ -32,7 +32,7 @@ export function useNewBasketBallHook() {
     } else {
       const tempList = {
         settleTimes: 0,
-        // eventTime: '',
+        _tempDate: Date.now(),
         t1: '',
         t2: '',
         settleType: 1,
@@ -227,7 +227,9 @@ export function useNewBasketBallHook() {
   const confirmSecondSettleClick = async () => {
     ElMessageBox.confirm(
       <div class="text-center pl-2 pr-2">
-        本场比赛已结算完毕，重新结算将会影响所有关联的已结算注单，进行重新下发赛果，是否确认重新结算?
+        {t(
+          '本场比赛已结算完毕，重新结算将会影响所有关联的已结算注单，进行重新下发赛果，是否确认重新结算?'
+        )}
       </div>,
       t('警告'),
       {
@@ -237,6 +239,7 @@ export function useNewBasketBallHook() {
         center: true
       }
     ).then(async () => {
+      confirmParams.newEventList.forEach(item => delete item._tempDate);
       const res = await API.basketballConfirm2ndSettlement(confirmParams);
       if (res.code) return message(res.msg, { type: 'error' });
       confirmParams.cancelEventIds = [];
@@ -262,7 +265,7 @@ export function useNewBasketBallHook() {
   const saveSecondMathList = (row: SattleDataAPI.newBasketballEventsList) => {
     if (
       confirmParams.newEventList.findIndex(
-        item => item.eventTime === row.eventTime
+        item => item._tempDate === row._tempDate
       ) < 0
     ) {
       confirmParams.newEventList.push({
@@ -270,6 +273,7 @@ export function useNewBasketBallHook() {
         eventCode: row.eventCode,
         eventTime: 1,
         homeAway: row.homeAway,
+        _tempDate: row._tempDate,
         matchPeriodId: row.matchPeriodId,
         t1: row.t1,
         t2: row.t2

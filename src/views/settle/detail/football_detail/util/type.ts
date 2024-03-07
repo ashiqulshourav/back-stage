@@ -13,6 +13,7 @@ export type TempListType = {
   homeAway: null;
   matchPeriodId: null;
   // player1Name: null,
+  _tempDate?: number,
   isBackEndReturnData: false;
   t1: null;
   t2: null;

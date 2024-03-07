@@ -12,7 +12,7 @@
           <span class="mr-2">
             {{ baseTitle }}
           </span>
-          <!-- <el-button
+          <el-button
             @click="openSecondSettleClick"
             type="primary"
             size="small"
@@ -25,7 +25,7 @@
             v-else
             size="small"
             >{{ t('确认重新结算') }}</el-button
-          > -->
+          >
         </div>
       </template>
       <template v-slot="{ size, dynamicColumns }">
