@@ -186,7 +186,7 @@ export function useFootball() {
       id: row.id ?? null
     };
 
-    ElMessageBox.confirm('确定要增加一条事件么?', t('警告'), {
+    ElMessageBox.confirm(t('确定要增加一条事件么?'), t('警告'), {
       confirmButtonText: t('确认'),
       cancelButtonText: t('取消'),
       center: true
@@ -252,7 +252,7 @@ export function useFootball() {
 
   //- 倒计时的提前结算
   const advanceSettlement = async row => {
-    ElMessageBox.confirm('确定要提前结算么?', t('警告'), {
+    ElMessageBox.confirm(t('确定要提前结算么?'), t('警告'), {
       dangerouslyUseHTMLString: true,
       confirmButtonText: t('确认'),
       cancelButtonText: t('取消'),
@@ -273,7 +273,7 @@ export function useFootball() {
     matchId: number,
     settleTimes: number
   ) => {
-    ElMessageBox.confirm('确定要取消该事件么?', t('警告'), {
+    ElMessageBox.confirm(t('确定要取消该事件么?'), t('警告'), {
       dangerouslyUseHTMLString: true,
       confirmButtonText: t('确认'),
       cancelButtonText: t('取消'),
@@ -282,7 +282,7 @@ export function useFootball() {
       const res = await API.cancelMatchEvent({
         id,
         matchId,
-        remark: settleTimes === 0 ? '未结算' : '已结算'
+        remark: settleTimes === 0 ? t('未结算') : t('已结算')
       });
       message(res.msg, { type: res.code ? 'error' : 'success' });
       getChildrenData();
