@@ -364,9 +364,17 @@ export function useFootball() {
         item => item._tempDate === row._tempDate
       ) < 0
     ) {
+      //- 单独处理红黄牌
+      const eventCode =
+        row.eventCode === 'yellow_red_card'
+          ? row.redOrYellow === 1
+            ? 'yellow_card'
+            : 'red_card'
+          : row.eventCode;
+
       confirmParams.newEventList.push({
         matchId: renderObj.matchId,
-        eventCode: row.eventCode,
+        eventCode,
         eventTime: row.eventTime,
         homeAway: row.homeAway,
         _tempDate: row._tempDate,
