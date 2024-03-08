@@ -20,6 +20,7 @@
           :loading="loading"
           :size="size"
           adaptive
+          :show-overflow-tooltip="{}"
           :data="dataList"
           :columns="dynamicColumns"
           :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
@@ -113,5 +114,10 @@ const {
   :deep(.el-form-item) {
     margin-bottom: 12px;
   }
+}
+
+.role_table_tip {
+  margin: 0 50px;
+  padding: 100px;
 }
 </style>
