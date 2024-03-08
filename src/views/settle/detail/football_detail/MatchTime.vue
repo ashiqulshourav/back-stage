@@ -1,7 +1,7 @@
 <template>
   <span class="text-sm" v-if="row.isBackEndReturnData">
-    {{ padZero(parseInt(+row.eventTime / 60)) }}:{{
-      padZero(+row.eventTime % 60)
+    {{ row.eventTime == 1 ? '00' : padZero(parseInt(+row.eventTime / 60)) }}:{{
+      row.eventTime == 1 ? '00' : padZero(+row.eventTime % 60)
     }}
   </span>
   <div class="flex" v-else>
