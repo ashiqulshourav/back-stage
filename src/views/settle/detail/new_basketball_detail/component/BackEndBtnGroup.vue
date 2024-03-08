@@ -1,18 +1,15 @@
 <template>
   <div class="flex">
-    <!--   v-if="row.settleTimes === 0" -->
     <el-button
       class="reset-margin"
       link
-      v-if="isShowCancelBtn"
-      type="danger"
+      type="primary"
       size="small"
-      :icon="useRenderIcon('cancelIcon')"
-      @click="cancelMatchEvent(row.id, index)"
+      :icon="useRenderIcon('settle')"
+      @click="cancelMatchEvent(row, index)"
     >
-      {{ t('取消事件') }}
+      {{ t('重新结算') }}
     </el-button>
-    <!-- <span v-else>-</span> -->
   </div>
 </template>
 
@@ -20,23 +17,15 @@
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import { t } from '@/plugins/i18n';
 
-const props = defineProps<{
+defineProps<{
   row: SattleDataAPI.newBasketballEventsList;
   dataList: SattleDataAPI.newBasketballEventsList[];
   index: number;
 }>();
 
-const emits = defineEmits(['cancelMatchEvent']);
+const emits = defineEmits(['cancelMatchEvent', 'resetSettleBtnClick']);
 
 const cancelMatchEvent = (...data) => emits('cancelMatchEvent', ...data);
-
-const isShowCancelBtn = computed(
-  () =>
-    props.index ===
-    props.dataList
-      .map((item: SattleDataAPI.newBasketballEventsList) => item.canceled)
-      .lastIndexOf(0)
-);
 </script>
 
 <style scoped></style>

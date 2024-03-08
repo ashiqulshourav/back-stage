@@ -378,9 +378,11 @@ export const sattleData = {
   basketballCancelMatchEvent: (data: {
     matchId: number;
     id: number;
+    matchPeriodId: number;
+    t1: number | string;
+    t2: number | string;
   }) => http.request<SattleDataAPI.basketballCancelMatchEventResType>(
     'post', '/basketball/v1/cancelMatchEvent', { data }),
-
   //- 足球开启重新结算
   open2ndSettlementStatus: (data: {
     matchId: number;

@@ -12,20 +12,22 @@
           <span class="mr-2">
             {{ baseTitle }}
           </span>
-          <el-button
-            @click="openSecondSettleClick"
-            type="primary"
-            size="small"
-            v-if="renderObj.reSettleStatus === 0"
-            >{{ t('开启重新结算') }}</el-button
-          >
-          <el-button
-            @click="confirmSecondSettleClick"
-            type="warning"
-            v-else
-            size="small"
-            >{{ t('确认重新结算') }}</el-button
-          >
+          <div v-if="renderObj.fullSettlementStatus === 1">
+            <el-button
+              @click="openSecondSettleClick"
+              type="primary"
+              size="small"
+              v-if="renderObj.reSettleStatus === 0"
+              >{{ t('开启重新结算') }}</el-button
+            >
+            <el-button
+              @click="confirmSecondSettleClick"
+              type="warning"
+              v-else
+              size="small"
+              >{{ t('确认重新结算') }}</el-button
+            >
+          </div>
         </div>
       </template>
       <template v-slot="{ size, dynamicColumns }">
@@ -179,8 +181,8 @@ import { useNewBasketBallHook } from './utils/hook';
 import { usePublicHooks } from '@/hooks';
 import Delete from '@iconify-icons/ep/delete';
 import { MatchEventRowType } from './utils/type';
-
 import DetiltTitle from '../../component/Settle_detail_title.vue';
+
 defineOptions({ name: 'SETTLE_DETAIL_NEW_BASKETBALL_DETAIL' });
 
 const {

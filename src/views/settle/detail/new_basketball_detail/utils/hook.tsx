@@ -170,19 +170,25 @@ export function useNewBasketBallHook() {
   };
 
   //- 取消结算事件
-  const cancelMatchEvent = async (id: number, index: number) => {
+  const cancelMatchEvent = async (
+    row: SattleDataAPI.newBasketballEventsList,
+    index: number
+  ) => {
     if (renderObj.reSettleStatus === 1) {
-      saveCancelEventIds(id, index);
+      saveCancelEventIds(row.id, index);
     } else {
-      ElMessageBox.confirm('确定要取消该事件么?', t('警告'), {
+      ElMessageBox.confirm('确定要重新结算该事件么?', t('警告'), {
         dangerouslyUseHTMLString: true,
         confirmButtonText: t('确认'),
         cancelButtonText: t('取消'),
         center: true
       }).then(async () => {
         const res = await API.basketballCancelMatchEvent({
-          id,
-          matchId: renderObj.matchId
+          id: row.id,
+          matchId: renderObj.matchId,
+          matchPeriodId: row.matchPeriodId,
+          t1: row.t1,
+          t2: row.t2
         });
         message(res.msg, { type: res.code ? 'error' : 'success' });
         getEventList();
@@ -209,6 +215,7 @@ export function useNewBasketBallHook() {
   /*
    * 二次结算逻辑
    */
+
   const confirmParams = reactive<SattleDataAPI.confirm2ndSettlementReqType>({
     cancelEventIds: [],
     newEventList: [],

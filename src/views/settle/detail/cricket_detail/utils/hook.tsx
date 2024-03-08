@@ -113,7 +113,7 @@ export function useDetailHook() {
       return;
     }
     ElMessageBox.confirm(
-      t('⼿动确认比嚼算全场比赛后，即开始结算全场比赛玩法，结算后无法回退。'),
+      t('手动确认结算全场比赛后，即开启结算全场比赛玩法，结算后无法回退。'),
       t('确认结算全场比赛'),
       {
         dangerouslyUseHTMLString: true,

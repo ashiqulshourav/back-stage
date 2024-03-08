@@ -73,9 +73,10 @@ export function useRoleHook() {
   const updateUserStatus = async (row: RoleAPI.querySysAccountListData) => {
     if (row.userCount > 0 && +row.status === 1) {
       ElMessageBox.confirm(
-        <div class="text-center">{`${t('该角色下仍有')}${row.userCount}${t(
-          '个用户'
-        )},${t('禁用此角色将导致这些用户无法访问系统。是否继续?')}`}</div>,
+        <div class="text-center">
+          {`${t('该角色下仍有')}${t(row.userCount)}${t('个用户')},
+        ${t('禁用此角色将导致这些用户无法访问系统。是否继续?')}`}
+        </div>,
         t('操作提示'),
         {
           center: true,
@@ -128,15 +129,19 @@ export function useRoleHook() {
   //- 删除角色
   const handleDelete = (row: RoleAPI.querySysAccountListData) => {
     if (row.userCount > 0) {
-      ElMessageBox.confirm(t('角色底下还有用户，不可删除'), t('操作无效'), {
-        confirmButtonText: t('朕知道了'),
-        showCancelButton: false,
-        center: true
-      });
+      ElMessageBox.confirm(
+        t('角色底下还有{n}个用户不可删除!', { n: row.userCount }),
+        t('操作无效'),
+        {
+          confirmButtonText: t('朕知道了'),
+          showCancelButton: false,
+          center: true
+        }
+      );
     } else {
       ElMessageBox.confirm(
         `<div class="text-center">
-       <p>${'确定要删除角色'}${row.name}</br></p>
+       <p>${t('确定要删除角色')}${row.name}</br></p>
       <p>${t('角色删除后不可恢复')}</p>
       </div>`,
         t('警告'),
