@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import { MatchEventRowType } from './util/type';
-import dayjs from 'dayjs';
+// import dayjs from 'dayjs';
 import { padZero } from '@/utils/formatDate';
 import { inputRestrictions } from '@/utils/formatNumber';
 
@@ -43,7 +43,7 @@ const emits = defineEmits(['changeEventTime']);
 const secondNum = ref<number>(null);
 const minuteNum = ref<number>(null);
 
-watch(
+/* watch(
   () => props.row,
   d => {
     if (d.t1 == 0 && d.t2 == 0) {
@@ -54,7 +54,7 @@ watch(
     immediate: true,
     deep: true
   }
-);
+); */
 
 watch(
   () => secondNum.value,
