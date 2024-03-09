@@ -82,8 +82,8 @@ export function useEsportsSettlement() {
       return message(t('请先选择投注项'), { type: 'error' });
 
     ElMessageBox.confirm(t('确认要结算该记录么?'), '系统提示', {
-      confirmButtonText: '确认',
-      cancelButtonText: '取消',
+      confirmButtonText: t('确认'),
+      cancelButtonText: t('取消'),
       type: 'warning',
       center: true,
       dangerouslyUseHTMLString: true,

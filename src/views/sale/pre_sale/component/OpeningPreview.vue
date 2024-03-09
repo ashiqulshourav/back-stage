@@ -43,7 +43,7 @@
                     "
                   >
                     <el-button
-                      class="flex-grow text-center flex justify-between w-1/4 mb-1"
+                      class="flex-grow text-center flex justify-between w-1/4 mb-1 break_word"
                       v-for="s in cItem"
                       :key="s.sourceBetItemsId"
                     >
@@ -75,7 +75,7 @@
                   <template v-else>
                     <el-button
                       :class="[
-                        'flex-grow text-center flex justify-between w-1/4 flex-shrink',
+                        'flex-grow text-center flex justify-between w-1/4 flex-shrink ',
                         s ? 'visible' : 'invisible'
                       ]"
                       v-for="(s, idx) in cItem"
@@ -169,7 +169,7 @@ onMounted(() => {
 });
 
 const runGetBetItemsList = () => {
-  timer.value = setInterval(getBetItemsList, 5000);
+  // timer.value = setInterval(getBetItemsList, 5000);
 };
 
 const getBetItemsList = async () => {
@@ -269,6 +269,9 @@ const handleChange = () => {};
         border-bottom: none;
       }
     }
+  }
+  .break_word {
+    white-space: unset;
   }
   .el-tabs__content {
     max-height: 600px;

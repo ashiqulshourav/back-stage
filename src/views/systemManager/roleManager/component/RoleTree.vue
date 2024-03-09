@@ -43,6 +43,7 @@
 <script setup lang="ts">
 import ElTreeLine from '@/components/ReTreeLine';
 import { t } from '@/plugins/i18n';
+import { useUserStore } from '@/store/user';
 import { message } from '@/utils/message';
 
 defineOptions({ name: 'menuTree' });
@@ -50,6 +51,7 @@ const treeRef = ref();
 const selectAll = ref(false);
 const emits = defineEmits(['closeDialog']);
 const defaultKeyList = reactive<number[]>([]);
+const userStore = useUserStore();
 
 const dataProps = {
   value: 'id',
@@ -66,9 +68,11 @@ onMounted(() => {
 });
 
 const closeDialog = () => emits('closeDialog');
+
 const initTreeList = async () => {
   const res = await API.allPermissionList({
-    roleId: props.roleId
+    // roleId: props.roleId
+    roleId: userStore.userInfo.id
   });
   if (res.code) return message(res.msg, { type: 'error' });
   menusData.length = 0;

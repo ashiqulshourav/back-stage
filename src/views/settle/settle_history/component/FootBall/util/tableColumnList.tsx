@@ -89,7 +89,7 @@ export const columns: TableColumnList = [
   {
     label: t('操作'),
     slot: 'operation',
-    minWidth: 150,
+    minWidth: 200,
     fixed: 'right'
   }
 ];
