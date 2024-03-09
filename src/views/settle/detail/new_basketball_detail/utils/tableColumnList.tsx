@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import { handleTableWidth } from '@/utils/getTableWidth';
 import { BASKETBALL_EVENT_TYPE } from './map';
 
 export const childColumns: TableColumnList = [

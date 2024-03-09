@@ -46,9 +46,9 @@
           <!-- - 比分 -->
           <template #score="{ row }: MatchEventRowType">
             <div class="flex justify-center items-center">
-              <Score :row="row" type="t1" />
+              <Score :row="row" type="t1" :renderObj="renderObj" />
               <span class="ml-1 mr-1 font-bold leading-[2]">:</span>
-              <Score :row="row" type="t2" />
+              <Score :row="row" type="t2" :renderObj="renderObj" />
             </div>
           </template>
 
@@ -76,6 +76,8 @@
                   :row="row"
                   :dataList="eventList"
                   :index="index"
+                  @resetMatchEvent="resetMatchEvent"
+                  :renderObj="renderObj"
                   @cancelMatchEvent="cancelMatchEvent"
                 />
               </template>
@@ -145,8 +147,7 @@
           <div
             class="flex items-center"
             v-if="
-              (renderObj.settlementType !== 1 && isShowSettleBen) ||
-              renderObj.reSettleStatus === 1
+              renderObj.settlementType !== 1 || renderObj.reSettleStatus === 1
             "
           >
             <span class="mr-3 text-[var(--el-color-danger)]"
@@ -199,7 +200,8 @@ const {
   allSettleBtnClick,
   openSecondSettleClick,
   confirmSecondSettleClick,
-  cancelItem
+  cancelItem,
+  resetMatchEvent
 } = useNewBasketBallHook();
 
 const { tableHeaderStyle } = usePublicHooks();
@@ -210,8 +212,8 @@ const eventQuotientList = [
   { type: 'vsFlag', val: t('播控数据') }
 ];
 
-//- 人工结算是否需要加时赛
-const isShowSettleBen = computed(() => {
+//- 人工结算是否需要加时赛 暂时不添加验证
+/* const isShowSettleBen = computed(() => {
   if (
     eventList[eventList.length - 1]?.matchPeriodId === 40 &&
     eventList[eventList.length - 1]?.id
@@ -229,7 +231,7 @@ const isShowSettleBen = computed(() => {
     return homeScore === awayScore;
   }
   return true;
-});
+}); */
 
 //- 取消事件置灰
 const tableRowClassName = ({ row }: MatchEventRowType) =>

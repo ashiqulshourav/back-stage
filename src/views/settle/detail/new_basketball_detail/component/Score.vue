@@ -1,8 +1,8 @@
 <template>
   <div class="score_main">
+    <!-- :disabled="!row.isEdit" -->
     <el-input
-      v-if="!row.id"
-      :disabled="!row.isEdit"
+      v-if="!row.id || renderObj.settlementType === 2"
       v-model="row[type]"
       ref="inputRef"
       :placeholder="scorePlaceHolderData[type]"
@@ -19,6 +19,7 @@ const inputRef = ref();
 const props = defineProps<{
   row: SattleDataAPI.newBasketballEventsList;
   type: string;
+  renderObj: SattleDataAPI.getSettlementDataList;
 }>();
 
 const scorePlaceHolderData = {

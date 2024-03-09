@@ -405,7 +405,7 @@ declare namespace SattleDataAPI {
     homeAway: string;
     matchPeriodId: number;
     t1: number | string | null;
-    t2: number;
+    t2: number | string | null;
     firstNum: number;
     firstT1: number;
     firstT2: number;
@@ -431,28 +431,7 @@ declare namespace SattleDataAPI {
     isSave?: boolean;
   }
 
-  type newBasketballEventsData = {
-    total: number;
-    list: newBasketballEventsList[];
-    pageNum: number;
-    pageSize: number;
-    size: number;
-    startRow: number;
-    endRow: number;
-    pages: number;
-    prePage: number;
-    nextPage: number;
-    isFirstPage: boolean;
-    isLastPage: boolean;
-    hasPreviousPage: boolean;
-    hasNextPage: boolean;
-    navigatePages: number;
-    navigatepageNums: number[];
-    navigateFirstPage: number;
-    navigateLastPage: number;
-  }
-
-  type newBasketballEventsResType = COMMON.BASE_RES_TYPE<newBasketballEventsData>
+  type newBasketballEventsResType = COMMON.BASE_RES_TYPE<newBasketballEventsList[]>
   type manualSettlementFullTimeResType = COMMON.BASE_RES_TYPE<null>
   type basketballCancelMatchEventResType = COMMON.BASE_RES_TYPE<null>
   type open2ndSettlementStatusResType = COMMON.BASE_RES_TYPE<null>

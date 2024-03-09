@@ -49,6 +49,21 @@
             >
             <span v-else>{{ t('已结算') }}</span>
           </template>
+
+          <!-- -数据商 -->
+          <template #dataSourceCode="{ row }">
+            <div v-if="row.id && row.settleType === 0">
+              <el-text
+                v-for="(_, index) in eventQuotientList"
+                :key="index"
+                :type="row[_.type] === 1 ? 'primary' : 'info'"
+                :class="['!text-xs', index === 1 && '!mr-2 !ml-2']"
+                >{{ _.val }}</el-text
+              >
+            </div>
+            <span v-else>-</span>
+          </template>
+
           <template #expand="{ row: parentRow }">
             <div class="pl-12">
               <pure-table
@@ -116,6 +131,12 @@ import ChildOperation from './component/ChildOperation.vue';
 defineOptions({ name: 'SETTLE_DETAIL_TENNIS_DETAIL' });
 
 const { tableHeaderStyle } = usePublicHooks();
+
+const eventQuotientList = [
+  { type: 'xjFlag', val: t('188数据') },
+  { type: 'psFlag', val: t('熊猫数据') },
+  { type: 'vsFlag', val: t('播控数据') }
+];
 
 //- 检测当前局结算状态
 const checkScore = computed(() => {

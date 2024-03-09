@@ -55,6 +55,10 @@ export const columns: TableColumnList = [
     formatter: ({ id, updatedAt }) => {
       return id ? dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss') : '_';
     }
+  },
+  {
+    label: t('数据商'),
+    slot: 'dataSourceCode'
   }
 ];
 

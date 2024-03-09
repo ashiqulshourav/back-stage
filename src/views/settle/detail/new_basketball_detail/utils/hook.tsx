@@ -89,16 +89,13 @@ export function useNewBasketBallHook() {
 
     const params: SattleDataAPI.addBasketballEventV2ReqType = {
       eventTime: 1,
-      // eventTime:
-      //   renderObj.beginTimeLong +
-      //   compareTime(dayjs(row.eventTime).format('HH:mm:ss')) * 1000,
       matchId: renderObj.matchId,
       matchPeriodId: row.matchPeriodId,
       t1: +row.t1,
       t2: +row.t2
     };
 
-    ElMessageBox.confirm('确定要增加一条事件么?', t('警告'), {
+    ElMessageBox.confirm(t('确定要增加一条事件么?'), t('警告'), {
       confirmButtonText: t('确认'),
       cancelButtonText: t('取消'),
       center: true
@@ -131,11 +128,11 @@ export function useNewBasketBallHook() {
     });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
-    res.data.list.forEach(item => {
+    res.data.forEach(item => {
       item.periodType = renderObj.periodType;
     });
     eventList.length = 0;
-    eventList.push(...res.data.list);
+    eventList.push(...res.data);
     //- 开启轮训
     if (renderObj.settlementType === 1 && !renderObj.fullSettlementStatus) {
       loopTimer.value = setInterval(() => getEventList(), 10000);
@@ -169,21 +166,24 @@ export function useNewBasketBallHook() {
     });
   };
 
-  //- 取消结算事件
-  const cancelMatchEvent = async (
+  //- 重新结算单事件
+  const resetMatchEvent = async (
     row: SattleDataAPI.newBasketballEventsList,
     index: number
   ) => {
     if (renderObj.reSettleStatus === 1) {
       saveCancelEventIds(row.id, index);
     } else {
-      ElMessageBox.confirm('确定要重新结算该事件么?', t('警告'), {
+      if ((row.t1 as string) === '' || (row.t2 as string) === '')
+        return message(t('比分不能为空'), { type: 'error' });
+
+      ElMessageBox.confirm(t('确定要重新结算该事件么?'), t('警告'), {
         dangerouslyUseHTMLString: true,
         confirmButtonText: t('确认'),
         cancelButtonText: t('取消'),
         center: true
       }).then(async () => {
-        const res = await API.basketballCancelMatchEvent({
+        const res = await API.reSettleMatchEvent({
           id: row.id,
           matchId: renderObj.matchId,
           matchPeriodId: row.matchPeriodId,
@@ -191,9 +191,27 @@ export function useNewBasketBallHook() {
           t2: row.t2
         });
         message(res.msg, { type: res.code ? 'error' : 'success' });
-        getEventList();
+        if (!res.code) getEventList();
       });
     }
+  };
+
+  //- 取消事件
+  const cancelMatchEvent = async (
+    row: SattleDataAPI.newBasketballEventsList
+  ) => {
+    ElMessageBox.confirm(t('确定要取消该事件么?'), t('警告'), {
+      dangerouslyUseHTMLString: true,
+      confirmButtonText: t('确认'),
+      cancelButtonText: t('取消'),
+      center: true
+    }).then(async () => {
+      const res = await API.basketBallCancelMatchEvent({
+        id: row.id
+      });
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      getEventList();
+    });
   };
 
   //- 全场结算事件
@@ -329,6 +347,7 @@ export function useNewBasketBallHook() {
     allSettleBtnClick,
     openSecondSettleClick,
     confirmSecondSettleClick,
-    cancelItem
+    cancelItem,
+    resetMatchEvent
   };
 }

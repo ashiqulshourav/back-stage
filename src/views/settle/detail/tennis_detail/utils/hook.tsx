@@ -34,14 +34,19 @@ export function useTennisDetailHook() {
 
   // - 初始化
   const onSearch = async () => {
-    const res = await API.getTennisEvents({
-      matchId: history.state.params.matchId
-    });
-    childloading.value = false;
-    loading.value = false;
-    if (res.code) return message(res.msg, { type: 'error' });
-    dataList.length = 0;
-    dataList.push(...res.data);
+    try {
+      const res = await API.getTennisEvents({
+        matchId: history.state.params.matchId
+      });
+      childloading.value = false;
+      loading.value = false;
+      if (res.code) return message(res.msg, { type: 'error' });
+      dataList.length = 0;
+      dataList.push(...res.data);
+    } catch (error) {
+      childloading.value = false;
+      loading.value = false;
+    }
   };
 
   //- 新增盘

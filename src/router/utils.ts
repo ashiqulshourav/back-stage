@@ -229,11 +229,15 @@ function initRouter() {
         API.getRouter({
           id: userStore.userInfo.id
         }).then(({ data }: { data: UserAPI.RouterResData[] }) => {
-          if (!data.length) reject(t('请联系上级进行权限设置'))
-          data = data.map(transformItem) as any;
-          handleAsyncRoutes(cloneDeep(data));
-          storageSession().setItem(key, data);
-          resolve(router);
+          if (!data.length) {
+            reject(t('请联系上级进行用户角色权限设置'))
+          } else {
+            data = data.map(transformItem) as any;
+            handleAsyncRoutes(cloneDeep(data));
+            storageSession().setItem(key, data);
+            resolve(router);
+          }
+
         });
       });
     }
