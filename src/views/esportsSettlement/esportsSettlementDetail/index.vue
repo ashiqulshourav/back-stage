@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <!-- -盘口详情 -->
-    <MatchDetailCard :renderObj="renderObj" />
+    <MatchDetailCard :renderObj="renderObj" @closeSettle="closeSettle" />
     <template v-if="!keyList.length">
       <el-empty :description="t('暂无结算信息')" />
     </template>
@@ -30,7 +30,7 @@
             <template #betOptions="{ row }">
               <el-radio-group class="bet_item" v-model="row.betOptions">
                 <el-radio
-                  :disabled="row.win != null"
+                  :disabled="row.win != null && row.isEdit === false"
                   :label="index"
                   border
                   :class="[
@@ -49,11 +49,36 @@
             <!-- - 操作 -->
             <template #operaction="{ row }">
               <el-button
+                v-if="row.win === null"
                 :disabled="row.win !== null"
+                size="small"
                 :type="row.win === null ? 'primary' : 'info'"
                 @click="manualSettleESportHandicapClick(row)"
                 >{{ t('确认结算') }}</el-button
               >
+              <template v-else>
+                <el-button
+                  size="small"
+                  v-if="row.isEdit === false"
+                  @click="row.isEdit = true"
+                  type="danger"
+                  >{{ t('重新结算') }}</el-button
+                >
+                <template v-else>
+                  <el-button
+                    size="small"
+                    type="primary"
+                    @click="row.isEdit = false"
+                    >{{ t('取消') }}</el-button
+                  >
+                  <el-button
+                    size="small"
+                    type="danger"
+                    @click="resetManualSettleESportHandicapClick(row)"
+                    >{{ t('确认重新结算') }}</el-button
+                  >
+                </template>
+              </template>
             </template>
           </pure-table>
         </template>
@@ -111,6 +136,9 @@ const renderList = computed(() => {
       return 0;
     }
   });
+  rList.forEach(item => {
+    item.list.forEach(_ => (_.isEdit = false));
+  });
   return rList[selectIndex.value]?.list.slice(
     (pagination.value.currentPage - 1) * pagination.value.pageSize,
     pagination.value.pageSize * pagination.value.currentPage
@@ -123,7 +151,9 @@ const {
   renderObj,
   rList,
   manualSettleESportHandicapClick,
-  handleTableWidthChange
+  handleTableWidthChange,
+  closeSettle,
+  resetManualSettleESportHandicapClick
 } = useEsportsSettlement();
 </script>
 
@@ -147,6 +177,13 @@ const {
       :deep() {
         .el-radio__label {
           display: flex !important;
+          flex-grow: 1;
+          span:first-child {
+            max-width: 150px;
+            overflow: hidden;
+            flex-grow: 1;
+            text-overflow: ellipsis;
+          }
         }
       }
       &.item_3 {

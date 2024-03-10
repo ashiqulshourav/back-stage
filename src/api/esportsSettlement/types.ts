@@ -41,6 +41,7 @@ declare namespace EsportsSettlementAPI {
     unSettlementEvents?: any;
     pageSize: number;
     pageNum: number;
+    isEdit?: boolean;
   }
 
   type ESportMatchListData = {
@@ -100,6 +101,7 @@ declare namespace EsportsSettlementAPI {
     homeOrAway: string;
     handicap: string;
     odds: number;
+    id?: number;
     isSale: number;
     displayIndex: number;
     handicapIndex: number;
@@ -111,8 +113,10 @@ declare namespace EsportsSettlementAPI {
     pageSize: number;
     pageNum: number;
     betOptions: number;
+    oldBetOptions: number;
     eventTime: number;
-    arr: BetItemsMapData[]
+    arr: BetItemsMapData[];
+    isEdit: boolean;
   }
 
   // type bettype = {

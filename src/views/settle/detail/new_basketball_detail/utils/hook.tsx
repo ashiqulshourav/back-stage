@@ -74,6 +74,10 @@ export function useNewBasketBallHook() {
     if (isTheFormComplete(row)) {
       return message(t('请输入完整的内容'), { type: 'error' });
     }
+
+    if (renderObj.reSettleStatus === 1 && type === 'save')
+      return confirmResetMatchEvent(row, false);
+
     if (type === 'save') {
       if (row.t1 === row.t2 && row.matchPeriodId === 40) {
         message(t('结束局比分不能为平局'), { type: 'error' });
@@ -83,9 +87,6 @@ export function useNewBasketBallHook() {
       }
       return;
     }
-
-    if (renderObj.reSettleStatus === 1 && type !== 'save')
-      return saveSecondMathList(row);
 
     const params: SattleDataAPI.addBasketballEventV2ReqType = {
       eventTime: 1,
@@ -236,9 +237,11 @@ export function useNewBasketBallHook() {
 
   const confirmParams = reactive<SattleDataAPI.confirm2ndSettlementReqType>({
     cancelEventIds: [],
+    deleteEventIds: [],
     newEventList: [],
     matchId: history.state.params.matchId
   } as SattleDataAPI.confirm2ndSettlementReqType);
+
   //- 开启二次结算
   const openSecondSettleClick = async () => {
     const res = await API.basketballOpen2ndSettlementStatus({
@@ -269,7 +272,8 @@ export function useNewBasketBallHook() {
       if (res.code) return message(res.msg, { type: 'error' });
       confirmParams.cancelEventIds = [];
       confirmParams.newEventList = [];
-      getEventList();
+      confirmParams.deleteEventIds = [];
+      initMatchData();
     });
   };
 
@@ -286,26 +290,6 @@ export function useNewBasketBallHook() {
     });
   };
 
-  //- 新增二次结算事件
-  const saveSecondMathList = (row: SattleDataAPI.newBasketballEventsList) => {
-    if (
-      confirmParams.newEventList.findIndex(
-        item => item._tempDate === row._tempDate
-      ) < 0
-    ) {
-      confirmParams.newEventList.push({
-        matchId: renderObj.matchId,
-        eventCode: row.eventCode,
-        eventTime: 1,
-        homeAway: row.homeAway,
-        _tempDate: row._tempDate,
-        matchPeriodId: row.matchPeriodId,
-        t1: row.t1,
-        t2: row.t2
-      });
-    }
-  };
-
   //- 取消当前编辑行
   const cancelItem = (row: SattleDataAPI.newBasketballEventsList) => {
     eventList.pop();
@@ -315,6 +299,62 @@ export function useNewBasketBallHook() {
     if (index >= 0) {
       confirmParams.newEventList.splice(index, 1);
     }
+  };
+
+  //- 直接在原事件上进行修改
+  const confirmResetMatchEvent = (
+    row: SattleDataAPI.newBasketballEventsList,
+    isDelete?: boolean
+  ) => {
+    if ((row.t1 as string) === '' || (row.t2 as string) === '')
+      return message(t('比分不能为空'), { type: 'error' });
+
+    ElMessageBox.confirm(t('确定要修改该事件么？'), t('警告'), {
+      confirmButtonText: t('确认'),
+      cancelButtonText: t('取消'),
+      center: true
+    }).then(async () => {
+      !confirmParams.cancelEventIds.includes(row.id) &&
+        isDelete &&
+        confirmParams.cancelEventIds.push(row.id);
+      if (
+        confirmParams.newEventList.findIndex(
+          item => item._tempDate === row._tempDate
+        ) < 0
+      ) {
+        confirmParams.newEventList.push({
+          matchId: renderObj.matchId,
+          eventCode: row.eventCode,
+          eventTime: 1,
+          homeAway: row.homeAway,
+          _tempDate: row._tempDate,
+          matchPeriodId: row.matchPeriodId,
+          t1: row.t1,
+          t2: row.t2
+        });
+      }
+    });
+  };
+
+  //- 历史记录-删除事件
+  const deletMatchevent = (
+    row: SattleDataAPI.newBasketballEventsList,
+    index: number
+  ) => {
+    ElMessageBox.confirm(t('确定要删除该事件么'), t('警告'), {
+      confirmButtonText: t('确认'),
+      cancelButtonText: t('取消'),
+      center: true
+    }).then(async () => {
+      eventList.splice(index, 1);
+      confirmParams.deleteEventIds.push(row.id);
+      const i = confirmParams.newEventList.findIndex(
+        item => item.matchPeriodId === row.matchPeriodId
+      );
+      if (i >= 0) {
+        confirmParams.newEventList.splice(index, 1);
+      }
+    });
   };
 
   /*
@@ -348,6 +388,8 @@ export function useNewBasketBallHook() {
     openSecondSettleClick,
     confirmSecondSettleClick,
     cancelItem,
-    resetMatchEvent
+    resetMatchEvent,
+    confirmResetMatchEvent,
+    deletMatchevent
   };
 }

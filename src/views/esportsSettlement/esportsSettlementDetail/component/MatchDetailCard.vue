@@ -11,6 +11,15 @@
       >
         <span class="mr-2 text-sm font-bold">{{ item.title }}:</span>
         <span class="text-sm">{{ item.val }}</span>
+        <el-button
+          class="ml-2"
+          size="small"
+          type="primary"
+          :disabled="renderObj.isSale === 0"
+          @click="closeSettle"
+          v-if="renderList.length - 1 === index"
+          >{{ t('关闭开售') }}</el-button
+        >
       </el-col>
     </el-row>
   </div>
@@ -23,6 +32,12 @@ import { ESPORT_ID_MAP, ESPORT_MATCH_STATUS } from '@/utils/maps/sports_map';
 const props = defineProps<{
   renderObj: EsportsSettlementAPI.ESportMatchById;
 }>();
+
+const emits = defineEmits(['closeSettle']);
+
+const closeSettle = () => {
+  emits('closeSettle');
+};
 
 const renderList = computed(() => {
   const _ = props.renderObj;

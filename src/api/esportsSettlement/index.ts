@@ -19,4 +19,15 @@ export const esportsSettlement = {
       kindsCode: string;
     }[]
   }) => http.request<EsportsSettlementAPI.manualSettleESportHandicapResType>("post", "/eSport/v1/manualSettleESportHandicap", { data }),
+  //- 重新结算
+  eSportReSettlement: (data: {
+    matchId: number;
+    betResultItems: {
+      betItemId: number;
+      betResult: number;
+      handicap: string;
+      kindsCode: string;
+      sourceBetItemsMid: number;
+    }[]
+  }) => http.request<EsportsSettlementAPI.manualSettleESportHandicapResType>("post", "/eSport/v1/reSettlement", { data }),
 };

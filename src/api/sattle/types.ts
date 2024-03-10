@@ -448,6 +448,7 @@ declare namespace SattleDataAPI {
   type confirm2ndSettlementReqType = {
     matchId: number;
     cancelEventIds: number[];
+    deleteEventIds: number[];
     newEventList: {
       matchId: number;
       _tempDate?: number;

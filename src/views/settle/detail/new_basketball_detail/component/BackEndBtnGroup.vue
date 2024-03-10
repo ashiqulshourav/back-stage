@@ -1,27 +1,49 @@
 <template>
   <div class="flex">
-    <el-button
-      v-if="renderObj.settlementType === 2"
-      class="reset-margin"
-      link
-      type="primary"
-      size="small"
-      :icon="useRenderIcon('settle')"
-      @click="resetMatchEvent(row, index)"
+    <template
+      v-if="renderObj.settlementType === 2 && renderObj.reSettleStatus === 0"
     >
-      {{ t('重新结算') }}
-    </el-button>
-    <el-button
-      v-if="renderObj.settlementType === 2"
-      class="reset-margin"
-      link
-      type="danger"
-      size="small"
-      :icon="useRenderIcon(Delete)"
-      @click="cancelMatchEvent(row, index)"
-    >
-      {{ t('取消事件') }}
-    </el-button>
+      <el-button
+        class="reset-margin"
+        link
+        type="primary"
+        size="small"
+        :icon="useRenderIcon('settle')"
+        @click="resetMatchEvent(row, index)"
+      >
+        {{ t('重新结算') }}
+      </el-button>
+      <el-button
+        class="reset-margin"
+        link
+        type="danger"
+        size="small"
+        :icon="useRenderIcon(Delete)"
+        @click="cancelMatchEvent(row, index)"
+      >
+        {{ t('取消事件') }}
+      </el-button>
+    </template>
+    <template v-if="renderObj.reSettleStatus === 1">
+      <el-button
+        class="reset-margin"
+        link
+        type="primary"
+        size="small"
+        @click="confirmResetMatchEvent(row, true)"
+      >
+        {{ t('保存') }}
+      </el-button>
+      <el-button
+        class="reset-margin"
+        link
+        type="danger"
+        size="small"
+        @click="deletMatchevent(row, index)"
+      >
+        {{ t('删除') }}
+      </el-button>
+    </template>
   </div>
 </template>
 
@@ -40,11 +62,16 @@ defineProps<{
 const emits = defineEmits([
   'cancelMatchEvent',
   'resetSettleBtnClick',
-  'resetMatchEvent'
+  'resetMatchEvent',
+  'confirmResetMatchEvent',
+  'deletMatchevent'
 ]);
 
 const cancelMatchEvent = (...data) => emits('cancelMatchEvent', ...data);
 const resetMatchEvent = (...data) => emits('resetMatchEvent', ...data);
+const deletMatchevent = (...data) => emits('deletMatchevent', ...data);
+const confirmResetMatchEvent = (...data) =>
+  emits('confirmResetMatchEvent', ...data);
 </script>
 
 <style scoped></style>

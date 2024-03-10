@@ -4,6 +4,7 @@
     link
     type="default"
     :size="size"
+    v-if="renderObj.reSettleStatus === 0"
     :icon="useRenderIcon(EditPen)"
     @click="editChild(row)"
   >
@@ -15,7 +16,7 @@
     link
     type="primary"
     :size="size"
-    :disabled="!row.isEdit"
+    :disabled="!row.isEdit && renderObj.reSettleStatus === 0"
     :icon="useRenderIcon('saveIcon')"
     @click="handleChildrenData()"
   >
@@ -31,6 +32,7 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 defineProps<{
   size: any;
   row: SattleDataAPI.newBasketballEventsList;
+  renderObj: SattleDataAPI.getSettlementDataList;
 }>();
 
 const emites = defineEmits(['editChild', 'handleChildrenData']);

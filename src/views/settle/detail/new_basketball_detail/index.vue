@@ -79,6 +79,8 @@
                   @resetMatchEvent="resetMatchEvent"
                   :renderObj="renderObj"
                   @cancelMatchEvent="cancelMatchEvent"
+                  @confirmResetMatchEvent="confirmResetMatchEvent"
+                  @deletMatchevent="deletMatchevent"
                 />
               </template>
               <template v-else>
@@ -86,6 +88,7 @@
                   :size="size"
                   :row="row"
                   @editChild="editChild"
+                  :renderObj="renderObj"
                   @handleChildrenData="handleChildrenData(row, 'save')"
                 />
               </template>
@@ -94,7 +97,7 @@
                 link
                 type="danger"
                 :size="size"
-                v-if="!row.id"
+                v-if="!row.id && renderObj.reSettleStatus === 0"
                 :disabled="!row.isSave || row.isEdit"
                 :icon="useRenderIcon('uploadIcon')"
                 @click="handleChildrenData(row, 'upload')"
@@ -201,7 +204,9 @@ const {
   openSecondSettleClick,
   confirmSecondSettleClick,
   cancelItem,
-  resetMatchEvent
+  resetMatchEvent,
+  confirmResetMatchEvent,
+  deletMatchevent
 } = useNewBasketBallHook();
 
 const { tableHeaderStyle } = usePublicHooks();
