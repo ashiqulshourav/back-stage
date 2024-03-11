@@ -88,7 +88,7 @@ const goTennisDetail = row => {
   });
   const params = JSON.parse(JSON.stringify(row));
   router.push({
-    name: 'SETTLE_PINGPONG_DETAIL',
+    name: 'SETTLE_DETAIL_PINGPONG_DETAIL',
     state: { params }
   });
 };
