@@ -8,7 +8,6 @@ import { useSettingStoreHook } from '@/store/settings';
 
 export function useTennisHook() {
   const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
-  console.warn(dataList);
   const matchStore = useMatchStore();
   const form = ref<SearchFormType>({} as SearchFormType);
   const settingStore = useSettingStoreHook();
