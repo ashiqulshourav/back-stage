@@ -65,7 +65,7 @@ export function useEsportsSettlement() {
       });
       item.list.length = 0;
       Object.values(o).forEach((arr: any[]) => {
-        const selectIndex = arr.findIndex(item => item.win === 1);
+        const selectIndex = arr.findIndex(item => item.win === 4);
         item.list.push({
           betOptions: selectIndex,
           oldBetOptions: selectIndex,
