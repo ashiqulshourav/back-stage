@@ -1,17 +1,14 @@
 <template>
-  <!-- <el-button
+  <el-button
     class="reset-margin"
     link
     type="default"
     :size="size"
-    v-if="renderObj.reSettleStatus === 0"
     :icon="useRenderIcon(EditPen)"
-    @click="editChild(row)"
+    @click="row.isEdit = true"
   >
     {{ t('编辑') }}
-  </el-button> -->
-
-  <!-- :disabled="renderObj.reSettleStatus === 0" -->
+  </el-button>
   <el-button
     class="reset-margin"
     link
@@ -26,7 +23,7 @@
 
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
-// import EditPen from '@iconify-icons/ep/edit-pen';
+import EditPen from '@iconify-icons/ep/edit-pen';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 
 defineProps<{
