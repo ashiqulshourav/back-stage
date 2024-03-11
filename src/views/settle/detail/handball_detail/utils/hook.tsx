@@ -27,7 +27,7 @@ export function useDetailHook() {
   const addEventRow = () => {
     if (
       !(
-        dataList.filter(item => Number.isInteger(item.id)).length ===
+        dataList.filter(item => item.id).length ===
         dataList.length
       )
     ) {
