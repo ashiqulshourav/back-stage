@@ -103,13 +103,9 @@ const getCurrentCard = computed(() => {
   };
   props.dataList[1].tableList.forEach(item => {
     if (item.homeAway === 'home') {
-      item.eventCode === 'yellow_card'
-        ? (data.home.yellow += 1)
-        : (data.home.red += 1);
-    } else {
-      item.eventCode === 'yellow_card'
-        ? (data.away.yellow += 1)
-        : (data.away.red += 1);
+      item.redOrYellow === 1 ? (data.home.yellow += 1) : (data.home.red += 1);
+    } else if (item.homeAway === 'away') {
+      item.redOrYellow === 1 ? (data.away.yellow += 1) : (data.away.red += 1);
     }
   });
   return data;

@@ -65,27 +65,30 @@
                 >
               </template>
               <template v-else>
-                <el-button
-                  size="small"
-                  v-if="row.isEdit === false"
-                  @click="row.isEdit = true"
-                  type="danger"
-                  >{{ t('重新结算') }}</el-button
-                >
-                <template v-else>
+                <span v-if="row.betOptions === -1">{{ t('盘口已取消') }}</span>
+                <div v-else>
                   <el-button
                     size="small"
-                    type="primary"
-                    @click="row.isEdit = false"
-                    >{{ t('取消') }}</el-button
-                  >
-                  <el-button
-                    size="small"
+                    v-if="row.isEdit === false"
+                    @click="row.isEdit = true"
                     type="danger"
-                    @click="resetManualSettleESportHandicapClick(row)"
-                    >{{ t('确认二次结算') }}</el-button
+                    >{{ t('重新结算') }}</el-button
                   >
-                </template>
+                  <template v-else>
+                    <el-button
+                      size="small"
+                      type="primary"
+                      @click="row.isEdit = false"
+                      >{{ t('取消') }}</el-button
+                    >
+                    <el-button
+                      size="small"
+                      type="danger"
+                      @click="resetManualSettleESportHandicapClick(row)"
+                      >{{ t('确认二次结算') }}</el-button
+                    >
+                  </template>
+                </div>
               </template>
             </template>
           </pure-table>
