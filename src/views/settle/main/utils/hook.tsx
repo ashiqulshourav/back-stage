@@ -36,7 +36,7 @@ export const useSettileHook = () => {
               const res = await API.cancelBetOrder(params);
               options.footerButtons[1].loading = false;
 
-              message(res.code ? res.msg : t('取消注单成功'), {
+              message(res.msg, {
                 type: res.code ? 'error' : 'success'
               });
               closeDialog(options, index);
