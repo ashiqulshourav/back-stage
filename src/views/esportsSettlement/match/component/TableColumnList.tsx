@@ -84,6 +84,6 @@ export const columns: TableColumnList = [
     label: t('结算盘口'),
     fixed: 'right',
     slot: 'operation',
-    minWidth: getLan() === 'zh' ? 200 : 300
+    minWidth: getLan() === 'zh' ? 160 : 200
   }
 ];

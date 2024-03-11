@@ -144,7 +144,7 @@ const renderList = computed(() => {
     } else if (a.win !== null && b.win === null) {
       return 1;
     } else {
-      return 0;
+      return a.win - b.win;
     }
   });
   rList.forEach(item => {
