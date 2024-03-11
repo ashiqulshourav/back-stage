@@ -125,7 +125,7 @@ export function useEsportsSettlement() {
     });
   };
 
-  //- 确认重新结算
+  //- 确认二次结算
   const resetManualSettleESportHandicapClick = async (
     row: EsportsSettlementAPI.BetItemsMapData
   ) => {

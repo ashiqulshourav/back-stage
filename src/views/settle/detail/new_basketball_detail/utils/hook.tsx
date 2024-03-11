@@ -47,11 +47,6 @@ export function useNewBasketBallHook() {
       );
     }
   };
-  //- 当前行编辑
-  const editChild = (row: SattleDataAPI.newBasketballEventsList) => {
-    row.isEdit = true;
-  };
-
   //- 是否输入了完整的内容
   const isTheFormComplete = row => {
     const requireDdata = {
@@ -134,7 +129,8 @@ export function useNewBasketBallHook() {
     });
     eventList.length = 0;
     eventList.push(...res.data);
-    //- 开启轮训
+
+    //- 自动结算开启轮询
     if (renderObj.settlementType === 1 && !renderObj.fullSettlementStatus) {
       loopTimer.value = setInterval(() => getEventList(), 10000);
     }
@@ -256,7 +252,7 @@ export function useNewBasketBallHook() {
     ElMessageBox.confirm(
       <div class="text-center pl-2 pr-2">
         {t(
-          '本场比赛已结算完毕，重新结算将会影响所有关联的已结算注单，进行重新下发赛果，是否确认重新结算?'
+          '本场比赛已结算完毕，重新结算将会影响所有关联的已结算注单，进行重新下发赛果，是否确认二次结算?'
         )}
       </div>,
       t('警告'),
@@ -376,7 +372,6 @@ export function useNewBasketBallHook() {
     switchLoadMap,
     childColumns,
     addChildRow,
-    editChild,
     balanceLoading,
     handleChildrenData,
     childDataTotal,

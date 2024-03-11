@@ -1,6 +1,8 @@
 // import { parseMatchScore } from '@/utils/formatMatch';
 
 import { handleTableWidth } from '@/utils/getTableWidth';
+import { getLan } from '@/utils/utilFn';
+const lan = getLan();
 
 export const columns: TableColumnList = [
   {
@@ -15,15 +17,19 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('盘'))
   },
   {
-    label: history.state.params.homeTeamNameCn ?? '_',
-    headerRenderer: d =>
-      handleTableWidth(d, history.state.params.homeTeamNameCn ?? '_'),
+    headerRenderer: () =>
+      history.state.params[
+        lan === 'zh' ? 'homeTeamNameCn' : 'homeTeamNameEn'
+      ] ?? '_',
+    minWidth: 200,
     formatter: ({ t1 }) => t1
   },
   {
-    label: history.state.params.homeTeamNameCn ?? '_',
-    headerRenderer: d =>
-      handleTableWidth(d, history.state.params.awayTeamNameCn ?? '_'),
+    minWidth: 200,
+    headerRenderer: () =>
+      history.state.params[
+        lan === 'zh' ? 'awayTeamNameCn' : 'awayTeamNameEn'
+      ] ?? '_',
     formatter: ({ t2 }) => t2
   },
   {

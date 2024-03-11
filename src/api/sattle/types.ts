@@ -267,46 +267,46 @@ declare namespace SattleDataAPI {
 
 
   type ChildEvent = {
-    id: string;
-    uuid: string;
-    matchId: number;
-    canceled: number;
-    eventCode: string;
-    eventTime: number;
-    homeAway: string;
-    matchPeriodId: number;
-    t1: number;
-    t2: number;
-    firstNum: number;
-    firstT1: number;
-    firstT2: number;
-    secondNum: number;
-    secondT1: number | string;
-    secondT2: number | string;
-    sourceType: number;
-    settleTimes: number;
-    settleType: number;
-    xjFlag: number;
-    psFlag: number;
-    vsFlag: number;
-    createdAt: string;
-    updatedAt: string;
-    createdBy: string;
-    updatedBy: string;
+    id?: string;
+    uuid?: string;
+    matchId?: number;
+    canceled?: number;
+    eventCode?: string;
+    eventTime?: number;
+    homeAway?: string;
+    matchPeriodId?: number | string;
+    t1?: number;
+    t2?: number;
+    firstNum?: number | string;
+    firstT1?: number;
+    firstT2?: number;
+    secondNum?: number;
+    secondT1?: number | string;
+    secondT2?: number | string;
+    sourceType?: number;
+    settleTimes?: number;
+    settleType?: number;
+    xjFlag?: number;
+    psFlag?: number;
+    vsFlag?: number;
+    createdAt?: string;
+    updatedAt?: string;
+    createdBy?: string;
+    updatedBy?: string;
     oldEventId?: any;
     remark?: any;
-    pageSize: number;
-    pageNum: number;
-    eventCodes: any[];
-    matchPeriodIds: any[];
-    childEvents: any[];
+    pageSize?: number;
+    pageNum?: number;
+    eventCodes?: any[];
+    matchPeriodIds?: any[];
+    childEvents?: any[];
     isEdit?: boolean;
   }
 
   type TennisEventsData = {
     id?: any;
     uuid?: any;
-    matchId: number;
+    matchId: number | string;
     canceled: number;
     eventCode?: any;
     eventTime?: any;
@@ -315,6 +315,7 @@ declare namespace SattleDataAPI {
     t1: number;
     t2: number;
     firstNum?: any;
+    loading?: boolean;
     firstT1?: any;
     firstT2?: any;
     secondNum?: any;
@@ -335,6 +336,7 @@ declare namespace SattleDataAPI {
     pageSize: number;
     pageNum: number;
     eventCodes: any[];
+    isEdit?: boolean;
     matchPeriodIds: any[];
     childEvents: ChildEvent[];
   }
@@ -395,19 +397,23 @@ declare namespace SattleDataAPI {
   };
 
   type addTennisEventReq = {
-    eventTime: number | string;
-    inningEvents: {
-      eventTime: number | string;
-      inningNum: number;
-      matchId: number;
-      setNum: number;
-      t1: number | string;
-      t2: number | string;
+    childEvents: {
+      eventTime?: number | string;
+      firstNum?: number | string;
+      firstT1?: number | string;
+      firstT2?: number | string;
+      homeAway?: string;
+      matchId?: number | string;
+      matchPeriodId?: number | string;
+      secondT1?: number | string;
+      secondT2?: number | string;
     }[];
-    inningNum: number;
-    matchId: number;
-    t1: number;
-    t2: number;
+    eventTime?: number | string;
+    firstNum?: number | string;
+    homeAway?: string;
+    matchId?: number | string;
+    t1?: number;
+    t2?: number;
   };
   type addRugbyEventReq = {
     eventTime: number | string | Date;

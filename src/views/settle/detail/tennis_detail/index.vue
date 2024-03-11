@@ -29,23 +29,18 @@
                 renderObj.settlementType !== 1 || renderObj.reSettleStatus === 1
               "
             >
-              <span class="mr-3 text-[var(--el-color-danger)]"
+              <span class="mr-3 text-[var(--el-color-danger)] text-sm"
                 >{{
                   renderObj.reSettleStatus === 1
                     ? t('重新结算中')
                     : t('人工结算中')
                 }}...</span
               >
-              <IconifyIconOffline
-                width="25px"
-                icon="icon_circle_fill"
-                @click="addChildRow"
-              />
+              <el-button @click="addEventRow" size="small" type="primary">{{
+                t('新增盘')
+              }}</el-button>
             </div>
           </div>
-          <el-button @click="addEventRow" size="small" type="primary" v-else>{{
-            t('新增盘')
-          }}</el-button>
         </div>
       </template>
       <template v-slot="{ size, dynamicColumns }">
@@ -68,11 +63,11 @@
         >
           <template #operation="{ row: parentRow }">
             <el-button
-              v-if="!parentRow.id"
+              v-if="parentRow.id !== null"
               @click="settlementHandicap(parentRow)"
               type="primary"
               size="small"
-              :disabled="!canSettlement"
+              :disabled="canSettlement(parentRow.childEvents)"
               >{{ t('结算盘') }}</el-button
             >
             <span v-else>{{ t('已结算') }}</span>
@@ -134,7 +129,7 @@
                   <ChildOperation
                     v-if="
                       renderObj.fullSettlementStatus === 0 &&
-                      !parentRow.id === null
+                      !(parentRow.id === null)
                     "
                     :row="childRow"
                     :list="parentRow.childEvents"
@@ -146,9 +141,8 @@
                   <span v-else>-</span>
                 </template>
               </pure-table>
-
               <el-button
-                v-if="checkScore && !parentRow.id === null"
+                v-if="parentRow.id !== null"
                 class="mt-2"
                 type="primary"
                 size="small"
@@ -182,26 +176,11 @@ const eventQuotientList = [
   { type: 'vsFlag', val: t('播控数据') }
 ];
 
-//- 检测当前局结算状态
-const checkScore = computed(() => {
-  const l: SattleDataAPI.TennisEventsData = JSON.parse(
-    JSON.stringify(dataList)
-  )?.pop();
-  if (!l || l.childEvents.length < 6) {
-    canSettlement.value = false;
-    return true;
-  }
-  const scoreList = l.childEvents.map(item => [item.t1, item.t2]);
-  let s1 = 0;
-  let s2 = 0;
-  scoreList.forEach(item => (item[0] > item[1] ? ++s1 : ++s2));
-  t1Score.value = s1;
-  t2Score.value = s2;
-  if (s1 >= 6 || s2 >= 6) {
-    canSettlement.value = true;
-  }
-  return true;
-});
+const canSettlement = (list: SattleDataAPI.ChildEvent[]) => {
+  return !list.every(item => {
+    return item.secondT1 !== '' && item.secondT2 !== '' && !item.isEdit;
+  });
+};
 
 const {
   onSearch,
@@ -214,9 +193,6 @@ const {
   addEventRow,
   addChildRow,
   settlementHandicap,
-  t1Score,
-  t2Score,
-  canSettlement,
   allSettleBtnClick,
   renderObj,
   expandChange,

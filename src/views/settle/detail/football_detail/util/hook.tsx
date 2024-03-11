@@ -325,7 +325,7 @@ export function useFootball() {
     ElMessageBox.confirm(
       <div class="text-center pl-2 pr-2">
         {t(
-          '本场比赛已结算完毕，重新结算将会影响所有关联的已结算注单，进行重新下发赛果，是否确认重新结算?'
+          '本场比赛已结算完毕，重新结算将会影响所有关联的已结算注单，进行重新下发赛果，是否确认二次结算?'
         )}
       </div>,
       t('警告'),

@@ -75,7 +75,7 @@
                     size="small"
                     type="danger"
                     @click="resetManualSettleESportHandicapClick(row)"
-                    >{{ t('确认重新结算') }}</el-button
+                    >{{ t('确认二次结算') }}</el-button
                   >
                 </template>
               </template>

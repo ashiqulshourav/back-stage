@@ -18,14 +18,14 @@
               type="primary"
               size="small"
               v-if="renderObj.reSettleStatus === 0"
-              >{{ t('开启重新结算') }}</el-button
+              >{{ t('开启二次结算') }}</el-button
             >
             <el-button
               @click="confirmSecondSettleClick"
               type="warning"
               v-else
               size="small"
-              >{{ t('确认重新结算') }}</el-button
+              >{{ t('确认二次结算') }}</el-button
             >
           </div>
         </div>
@@ -87,7 +87,6 @@
                 <FrontBtnGroupCom
                   :size="size"
                   :row="row"
-                  @editChild="editChild"
                   :renderObj="renderObj"
                   @handleChildrenData="handleChildrenData(row, 'save')"
                 />
@@ -193,7 +192,6 @@ const {
   loading,
   childColumns,
   addChildRow,
-  editChild,
   handleChildrenData,
   reloadTable,
   changeSettleType,

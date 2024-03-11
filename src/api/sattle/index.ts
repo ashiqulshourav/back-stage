@@ -227,7 +227,7 @@ export const sattleData = {
   addTennisEvent: (data: SattleDataAPI.addTennisEventReq) =>
     http.request<SattleDataAPI.addTennisEventResType>(
       'post',
-      '/tennis/v1/addTennisEvent',
+      '/tennis/v2/addTennisEvent',
       { data }
     ),
 
@@ -391,7 +391,7 @@ export const sattleData = {
   }) => http.request<SattleDataAPI.basketballCancelMatchEventResType>(
     'post', '/basketball/v1/cancelMatchEvent', { data }),
 
-  //- 足球开启重新结算
+  //- 足球开启二次结算
   open2ndSettlementStatus: (data: {
     matchId: number;
   }) => http.request<SattleDataAPI.open2ndSettlementStatusResType>(
@@ -401,7 +401,7 @@ export const sattleData = {
   confirm2ndSettlement: (data: SattleDataAPI.confirm2ndSettlementReqType) => http.request<SattleDataAPI.open2ndSettlementStatusResType>(
     'post', '/event/v1/confirm2ndSettlement', { data }),
 
-  //- 篮球开启重新结算
+  //- 篮球开启二次结算
   basketballOpen2ndSettlementStatus: (data: {
     matchId: number;
   }) => http.request<SattleDataAPI.basketballOpen2ndSettlementStatusResType>(

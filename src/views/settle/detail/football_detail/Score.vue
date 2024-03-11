@@ -55,14 +55,14 @@
           type="primary"
           size="small"
           v-if="renderObj.reSettleStatus === 0"
-          >{{ t('开启重新结算') }}</el-button
+          >{{ t('开启二次结算') }}</el-button
         >
         <el-button
           @click="confirmSecondSettleClick"
           type="warning"
           size="small"
           v-else
-          >{{ t('确认重新结算') }}</el-button
+          >{{ t('确认二次结算') }}</el-button
         >
       </el-col>
     </el-row>
