@@ -30,6 +30,12 @@ export function useTennisDetailHook() {
     }
   };
 
+  //- 删除当前局
+  const deleteChildItem = (row, index, parIdx) => {
+    row.childEvents.splice(index, 1);
+    if (row.childEvents.length === 0) dataList.splice(parIdx, 1);
+  };
+
   // - 初始化
   const onSearch = async () => {
     loopTimer.value && clearInterval(loopTimer.value);
@@ -342,6 +348,7 @@ export function useTennisDetailHook() {
     expandChange,
     allSettleLoading,
     changeSettleType,
-    resetMatchEvent
+    resetMatchEvent,
+    deleteChildItem
   };
 }

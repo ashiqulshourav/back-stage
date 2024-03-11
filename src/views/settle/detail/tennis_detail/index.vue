@@ -88,9 +88,11 @@
 
           <template
             #expand="{
-              row: parentRow
+              row: parentRow,
+              index: parentIndex
             }: {
-              row: SattleDataAPI.TennisEventsData
+              row: SattleDataAPI.TennisEventsData,
+              index: number
             }"
           >
             <div class="pl-12">
@@ -149,7 +151,7 @@
                     :list="parentRow.childEvents"
                     :childIndex="childIndex"
                     @deleteChildItem="
-                      parentRow.childEvents.splice(childIndex, 1)
+                      deleteChildItem(parentRow, childIndex, parentIndex)
                     "
                   />
                   <span v-else>-</span>
@@ -212,6 +214,7 @@ const {
   expandChange,
   allSettleLoading,
   changeSettleType,
-  resetMatchEvent
+  resetMatchEvent,
+  deleteChildItem
 } = useTennisDetailHook();
 </script>
