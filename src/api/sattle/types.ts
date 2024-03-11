@@ -232,29 +232,6 @@ declare namespace SattleDataAPI {
     eventTimeError: boolean;
   };
 
-  type TennisEventsData = {
-    id: number;
-    uuid: string;
-    matchId: number;
-    canceled: number;
-    eventTime: number | string;
-    homeTeamId: number;
-    awayTeamId: number;
-    inningNum: number;
-    setNum: number;
-    t1: number;
-    t2: number;
-    sourceType: number;
-    settleTimes: number;
-    settleType: number;
-    createdBy: string;
-    updatedBy: string;
-    createdAt: string;
-    updatedAt: string;
-    gameRule: string;
-    inningEvents: InningEvent[];
-    loading?: boolean;
-  };
   type BasketBallEventsData = {
     id: number;
     uuid: string;
@@ -287,6 +264,80 @@ declare namespace SattleDataAPI {
     awayTeamName?: any;
     isEdit?: boolean;
   };
+
+
+  type ChildEvent = {
+    id: string;
+    uuid: string;
+    matchId: number;
+    canceled: number;
+    eventCode: string;
+    eventTime: number;
+    homeAway: string;
+    matchPeriodId: number;
+    t1: number;
+    t2: number;
+    firstNum: number;
+    firstT1: number;
+    firstT2: number;
+    secondNum: number;
+    secondT1: number | string;
+    secondT2: number | string;
+    sourceType: number;
+    settleTimes: number;
+    settleType: number;
+    xjFlag: number;
+    psFlag: number;
+    vsFlag: number;
+    createdAt: string;
+    updatedAt: string;
+    createdBy: string;
+    updatedBy: string;
+    oldEventId?: any;
+    remark?: any;
+    pageSize: number;
+    pageNum: number;
+    eventCodes: any[];
+    matchPeriodIds: any[];
+    childEvents: any[];
+    isEdit?: boolean;
+  }
+
+  type TennisEventsData = {
+    id?: any;
+    uuid?: any;
+    matchId: number;
+    canceled: number;
+    eventCode?: any;
+    eventTime?: any;
+    homeAway: string;
+    matchPeriodId: number;
+    t1: number;
+    t2: number;
+    firstNum?: any;
+    firstT1?: any;
+    firstT2?: any;
+    secondNum?: any;
+    secondT1?: any;
+    secondT2?: any;
+    sourceType?: any;
+    settleTimes?: any;
+    settleType?: any;
+    xjFlag?: any;
+    psFlag?: any;
+    vsFlag?: any;
+    createdAt?: any;
+    updatedAt?: any;
+    createdBy?: any;
+    updatedBy?: any;
+    oldEventId?: any;
+    remark?: any;
+    pageSize: number;
+    pageNum: number;
+    eventCodes: any[];
+    matchPeriodIds: any[];
+    childEvents: ChildEvent[];
+  }
 
   type volleyballData = SnookerEventsResData;
   type HockeyEventData = CommonEventData & { matchPeriod?: string };

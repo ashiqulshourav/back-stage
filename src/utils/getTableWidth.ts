@@ -10,7 +10,7 @@ export const handleTableWidth = (d: TableColumnRenderer, label: string, type?: '
 export const getColumnWidth = (strs: string) => {
   const { $storage } = useNav();
   if ($storage.locale.locale === 'zh') {
-    return strs.length * 30;
+    return strs.length * 20;
   } else {
     return strs.length * 15;
   }

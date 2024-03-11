@@ -150,14 +150,16 @@ export function useFootball() {
     if (isTheFormComplete(row)) {
       return message(t('请输入完整的内容'), { type: 'error' });
     }
-    if (renderObj.reSettleStatus === 1 && type !== 'save')
-      return saveSecondMathList(row);
 
     if (type === 'save') {
       row.isSave = true;
       row.isEdit = false;
+      if (renderObj.reSettleStatus === 1) {
+        return saveSecondMathList(row);
+      }
       return;
     }
+
     if (((type === 'upload' && !row.isSave) || row.isEdit) && !row.id) {
       return message(t('请先保存事件'), { type: 'error' });
     }
@@ -336,10 +338,13 @@ export function useFootball() {
     ).then(async () => {
       confirmParams.newEventList.forEach(item => delete item._tempDate);
       const res = await API.confirm2ndSettlement(confirmParams);
-      if (res.code) return message(res.msg, { type: 'error' });
-      confirmParams.cancelEventIds = [];
-      confirmParams.newEventList = [];
-      getChildrenData();
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if (!res.code) {
+        confirmParams.cancelEventIds = [];
+        confirmParams.newEventList = [];
+        getChildrenData();
+        getMatchDetail();
+      }
     });
   };
 

@@ -4,7 +4,7 @@
       @allSettleBtnClick="void"
       :renderObj="renderObj"
       :allSettleLoading="allSettleLoading"
-      :hideAllSettleBtn="renderObj.fullSettlementStatus ? false : true"
+      :hideAllSettleBtn="true"
       :isFootBallTitle="true"
     >
       <Score
@@ -159,16 +159,14 @@
                     link
                     type="danger"
                     :size="size"
-                    v-if="!row.isBackEndReturnData"
+                    v-if="
+                      !row.isBackEndReturnData && renderObj.reSettleStatus === 0
+                    "
                     :disabled="!row.isSave || row.isEdit"
                     :icon="useRenderIcon('uploadIcon')"
                     @click="handleChildrenData(row, 'upload')"
                   >
-                    {{
-                      renderObj.reSettleStatus === 1
-                        ? t('重新结算')
-                        : t('确认结算')
-                    }}
+                    {{ t('确认结算') }}
                   </el-button>
                   <el-button
                     class="reset-margin"

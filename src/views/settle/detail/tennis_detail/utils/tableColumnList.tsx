@@ -1,7 +1,6 @@
 // import { parseMatchScore } from '@/utils/formatMatch';
 
 import { handleTableWidth } from '@/utils/getTableWidth';
-import dayjs from 'dayjs';
 
 export const columns: TableColumnList = [
   {
@@ -16,49 +15,20 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('盘'))
   },
   {
-    headerRenderer: () => history.state.params.homeTeamNameCn ?? '_',
-    formatter: ({ t1 }) => {
-      return t1;
-    }
+    label: history.state.params.homeTeamNameCn ?? '_',
+    headerRenderer: d =>
+      handleTableWidth(d, history.state.params.homeTeamNameCn ?? '_'),
+    formatter: ({ t1 }) => t1
   },
   {
-    headerRenderer: () => history.state.params.awayTeamNameCn ?? '_',
-    minWidth: 150,
-    formatter: ({ t2 }) => {
-      return t2;
-    }
-  },
-  // {
-  //   label: t('结算时间'),
-  //   formatter: ({ eventTime }) => {
-  //     return eventTime ? dayjs(eventTime).format('HH:mm:ss') : '_';
-  //   }
-  // },
-  {
-    label: t('操作人'),
-    formatter: ({ createdBy }) => {
-      return createdBy ? createdBy : '_';
-    }
-  },
-  {
-    label: t('状态'),
-    formatter: () => {
-      return t('人工结算');
-    }
+    label: history.state.params.homeTeamNameCn ?? '_',
+    headerRenderer: d =>
+      handleTableWidth(d, history.state.params.awayTeamNameCn ?? '_'),
+    formatter: ({ t2 }) => t2
   },
   {
     label: t('操作'),
     slot: 'operation'
-  },
-  {
-    label: t('确认时间'),
-    formatter: ({ id, updatedAt }) => {
-      return id ? dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss') : '_';
-    }
-  },
-  {
-    label: t('数据商'),
-    slot: 'dataSourceCode'
   }
 ];
 
@@ -70,30 +40,33 @@ export const childColumns: TableColumnList = [
   },
   {
     headerRenderer: () => history.state.params.homeTeamNameCn ?? '_',
-    slot: 't1',
+    slot: 'secondT1',
     width: 260
   },
   {
     headerRenderer: () => history.state.params.awayTeamNameCn ?? '_',
-    slot: 't2',
+    slot: 'secondT2',
     width: 260
   },
-  // {
-  //   label: t('结算时间'),
-  //   slot: 'eventTime',
-  //   width: 300
-  // },
   {
     label: t('操作人'),
     formatter: ({ updatedBy }) => {
-      return updatedBy ?? '_';
+      return updatedBy ? updatedBy : '_';
     }
   },
   {
     label: t('状态'),
-    formatter: () => {
-      return t('人工结算');
+    formatter: ({ settleType }) => {
+      return settleType === 0 ? t('自动结算') : t('人工结算');
     }
+  },
+  {
+    label: t('数据商'),
+    slot: 'dataSourceCode'
+  },
+  {
+    label: t('结算次数'),
+    prop: 'settleTimes'
   },
   {
     label: t('操作'),

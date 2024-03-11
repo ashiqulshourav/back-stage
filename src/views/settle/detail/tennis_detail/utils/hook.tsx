@@ -14,6 +14,7 @@ export function useTennisDetailHook() {
   const canSettlement = ref(false);
   const boardType = ref('5-3');
   const juType = ref('LONG-SET');
+  const loopTimer = ref<NodeJS.Timeout>();
   const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
     {} as SattleDataAPI.getSettlementDataList
   );
@@ -24,8 +25,8 @@ export function useTennisDetailHook() {
     list: SattleDataAPI.TennisEventsData[]
   ) => {
     if (list.length) {
-      if (!expandMatchList.includes(row.setNum)) {
-        expandMatchList.push(row.setNum);
+      if (!expandMatchList.includes(row.matchPeriodId)) {
+        expandMatchList.push(row.matchPeriodId);
       }
     } else {
       expandMatchList.length = 0;
@@ -47,6 +48,31 @@ export function useTennisDetailHook() {
       childloading.value = false;
       loading.value = false;
     }
+  };
+
+  //- 开启人工结算
+  const changeSettleType = async () => {
+    ElMessageBox.confirm(
+      `${t('一但此赛事开启人工结算模式，无法关闭')}<br/>${t(
+        '后面只能以人工录入事件，无法自动化推送数据商事件'
+      )}
+      `,
+      t('警告'),
+      {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: t('确认开启'),
+        cancelButtonText: t('取消'),
+        center: true
+      }
+    ).then(async () => {
+      const res = await API.setManualMatchStatus({
+        matchId: renderObj.matchId
+      });
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if (res.code) return;
+      loopTimer.value && clearInterval(loopTimer.value);
+      getMatchDetail();
+    });
   };
 
   //- 新增盘
@@ -235,6 +261,7 @@ export function useTennisDetailHook() {
     allSettleBtnClick,
     renderObj,
     expandChange,
-    allSettleLoading
+    allSettleLoading,
+    changeSettleType
   };
 }

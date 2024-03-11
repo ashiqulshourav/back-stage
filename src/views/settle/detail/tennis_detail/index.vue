@@ -9,17 +9,45 @@
     <PureTableBar :columns="columns" @refresh="onSearch()">
       <template #title>
         <div class="flex items-center">
-          <el-button
-            @click="addEventRow"
-            size="small"
-            type="primary"
-            v-if="renderObj.fullSettlementStatus === 0"
-            >{{ t('新增盘') }}</el-button
+          <div
+            class="mt-2 cursor-pointer"
+            v-if="
+              !renderObj.fullSettlementStatus || renderObj.reSettleStatus === 1
+            "
           >
-          <span></span>
+            <el-button
+              v-if="
+                renderObj.settlementType === 1 && renderObj.reSettleStatus !== 1
+              "
+              class="ml-1 reset-margin"
+              @click="changeSettleType"
+              >{{ t('开启人工结算') }}</el-button
+            >
+            <div
+              class="flex items-center"
+              v-if="
+                renderObj.settlementType !== 1 || renderObj.reSettleStatus === 1
+              "
+            >
+              <span class="mr-3 text-[var(--el-color-danger)]"
+                >{{
+                  renderObj.reSettleStatus === 1
+                    ? t('重新结算中')
+                    : t('人工结算中')
+                }}...</span
+              >
+              <IconifyIconOffline
+                width="25px"
+                icon="icon_circle_fill"
+                @click="addChildRow"
+              />
+            </div>
+          </div>
+          <el-button @click="addEventRow" size="small" type="primary" v-else>{{
+            t('新增盘')
+          }}</el-button>
         </div>
       </template>
-
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           class="table_container"
@@ -27,7 +55,7 @@
           showOverflowTooltip
           :loading="loading"
           :size="size"
-          :row-key="row => row.setNum"
+          :row-key="row => row.matchPeriodId"
           :expand-row-keys="expandMatchList"
           @expand-change="expandChange"
           adaptive
@@ -50,27 +78,19 @@
             <span v-else>{{ t('已结算') }}</span>
           </template>
 
-          <!-- -数据商 -->
-          <template #dataSourceCode="{ row }">
-            <div v-if="row.id && row.settleType === 0">
-              <el-text
-                v-for="(_, index) in eventQuotientList"
-                :key="index"
-                :type="row[_.type] === 1 ? 'primary' : 'info'"
-                :class="['!text-xs', index === 1 && '!mr-2 !ml-2']"
-                >{{ _.val }}</el-text
-              >
-            </div>
-            <span v-else>-</span>
-          </template>
-
-          <template #expand="{ row: parentRow }">
+          <template
+            #expand="{
+              row: parentRow
+            }: {
+              row: SattleDataAPI.TennisEventsData
+            }"
+          >
             <div class="pl-12">
               <pure-table
                 class="table_container"
                 align-whole="center"
                 :row-key="row => row.id"
-                :data="parentRow.inningEvents"
+                :data="parentRow.childEvents"
                 :loading="childloading"
                 :columns="childColumns"
                 row-class-name=""
@@ -80,31 +100,55 @@
                 :header-cell-style="tableHeaderStyle"
               >
                 <!-- -比分 -->
-                <template #t1="{ row: childRow }">
-                  <Score :row="childRow" type="t1" />
+                <template #secondT1="{ row: childRow }">
+                  <Score :row="childRow" type="secondT1" />
                 </template>
-                <template #t2="{ row: childRow }">
-                  <Score :row="childRow" type="t2" />
+                <template #secondT2="{ row: childRow }">
+                  <Score :row="childRow" type="secondT2" />
+                </template>
+
+                <!-- -数据商 -->
+                <template #dataSourceCode="{ row }">
+                  <div v-if="row.id && row.settleType === 0">
+                    <el-text
+                      v-for="(_, index) in eventQuotientList"
+                      :key="index"
+                      :type="row[_.type] === 1 ? 'primary' : 'info'"
+                      :class="['!text-xs', index === 1 && '!mr-2 !ml-2']"
+                      >{{ _.val }}</el-text
+                    >
+                  </div>
+                  <span v-else>-</span>
                 </template>
 
                 <!-- -局按钮 -->
                 <template
-                  #childOperation="{ row: childRow, index: childIndex }"
+                  #childOperation="{
+                    row: childRow,
+                    index: childIndex
+                  }: {
+                    row: SattleDataAPI.ChildEvent,
+                    index: number
+                  }"
                 >
                   <ChildOperation
-                    v-if="renderObj.fullSettlementStatus === 0 && !parentRow.id"
+                    v-if="
+                      renderObj.fullSettlementStatus === 0 &&
+                      !parentRow.id === null
+                    "
                     :row="childRow"
-                    :list="parentRow.inningEvents"
+                    :list="parentRow.childEvents"
                     :childIndex="childIndex"
                     @deleteChildItem="
-                      parentRow.inningEvents.splice(childIndex, 1)
+                      parentRow.childEvents.splice(childIndex, 1)
                     "
                   />
                   <span v-else>-</span>
                 </template>
               </pure-table>
+
               <el-button
-                v-if="checkScore && !parentRow.id"
+                v-if="checkScore && !parentRow.id === null"
                 class="mt-2"
                 type="primary"
                 size="small"
@@ -143,11 +187,11 @@ const checkScore = computed(() => {
   const l: SattleDataAPI.TennisEventsData = JSON.parse(
     JSON.stringify(dataList)
   )?.pop();
-  if (!l || l.inningEvents.length < 6) {
+  if (!l || l.childEvents.length < 6) {
     canSettlement.value = false;
     return true;
   }
-  const scoreList = l.inningEvents.map(item => [item.t1, item.t2]);
+  const scoreList = l.childEvents.map(item => [item.t1, item.t2]);
   let s1 = 0;
   let s2 = 0;
   scoreList.forEach(item => (item[0] > item[1] ? ++s1 : ++s2));
@@ -176,6 +220,7 @@ const {
   allSettleBtnClick,
   renderObj,
   expandChange,
-  allSettleLoading
+  allSettleLoading,
+  changeSettleType
 } = useTennisDetailHook();
 </script>
