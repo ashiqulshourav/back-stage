@@ -52,7 +52,7 @@
               v-auth="['DETAIL']"
               class="reset-margin"
               type="primary"
-              :size="size"
+              size="small"
               @click="
                 $router.push(
                   `/esportsSettlement/esportsSettlementDetail/${row.matchId}`
@@ -61,6 +61,14 @@
             >
               {{ t('结算详情') }}
             </el-button>
+            <el-button
+              v-if="row.isShowCancelBtn"
+              type="danger"
+              size="small"
+              :disabled="row.cancelOrderTimes > 0"
+              @click="cancelClick(row)"
+              >{{ t('取消注单') }}</el-button
+            >
           </template>
         </pure-table>
       </template>
@@ -76,10 +84,16 @@ import { columns } from './component/TableColumnList';
 import SearchForm from './component/SearchForm.vue';
 import { EsportMatchRowType } from './utils/types';
 import { usePublicHooks } from '@/hooks';
+import { useSettileHook } from '@/views/settle/main/utils/hook';
 
 defineOptions({ name: 'ESPORTSSETTLEMENT' });
 const { tableHeaderStyle } = usePublicHooks();
+const { cancelBetOrder } = useSettileHook();
 
+const cancelClick = async row => {
+  await cancelBetOrder(row);
+  onSearch();
+};
 const {
   loading,
   dataList,

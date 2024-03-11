@@ -20,6 +20,8 @@ declare namespace EsportsSettlementAPI {
     status: string;
     currentScore: string;
     currentTime: string;
+    isShowCancelBtn?: boolean;
+    cancelOrderTimes?: number;
     currentPc: string;
     pandaResult: number;
     pandaVideoId: string;

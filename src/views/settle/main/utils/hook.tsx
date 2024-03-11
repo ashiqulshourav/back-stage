@@ -28,8 +28,9 @@ export const useSettileHook = () => {
               const params = {
                 remark: remark.value,
                 matchId: row.matchId,
-                sportName: SPORT_ID_MAP.find(item => item.value === row.sportId)
-                  .label
+                sportName:
+                  SPORT_ID_MAP.find(item => item.value === row.sportId)
+                    ?.label ?? t('电竞')
               };
               options.footerButtons[1].loading = true;
               const res = await API.cancelBetOrder(params);

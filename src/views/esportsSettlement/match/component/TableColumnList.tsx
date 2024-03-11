@@ -5,6 +5,7 @@ import {
   ESPORT_MATCH_STATUS,
   HANDICAP_STATUS
 } from '@/utils/maps/sports_map';
+import { getLan } from '@/utils/utilFn';
 
 export const columns: TableColumnList = [
   {
@@ -83,7 +84,6 @@ export const columns: TableColumnList = [
     label: t('结算盘口'),
     fixed: 'right',
     slot: 'operation',
-    headerRenderer: d => handleTableWidth(d, t('结算盘口'), 'auto'),
-    minWidth: 150
+    minWidth: getLan() === 'zh' ? 200 : 300
   }
 ];

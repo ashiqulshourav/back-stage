@@ -2,7 +2,7 @@
   <div class="score_main">
     <!-- -->
     <el-input
-      v-if="!row.id || renderObj.settlementType === 2"
+      v-if="row.isEdit || !row.id"
       v-model="row[type]"
       ref="inputRef"
       :disabled="!row.isEdit"

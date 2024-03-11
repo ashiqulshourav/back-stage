@@ -94,9 +94,11 @@ export function useEsportSettlement() {
     if (res.code) return message(res.msg, { type: 'error' });
     dataList.length = 0;
     dataList.push(...res.data.list);
+    dataList.forEach(item => {
+      item.isShowCancelBtn =
+        item.status === 'nover' || item.status === 'nobegin';
+    });
     pagination.total = res.data.total;
-    pagination.pageSize = res.data.pageSize;
-    pagination.currentPage = res.data.pageNum;
   };
 
   const resetForm = formEl => {
