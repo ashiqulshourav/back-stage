@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import { handleTableWidth } from '@/utils/getTableWidth';
 import { MATCH_STATUS /* PANDA_MATCH_STATUS */ } from '@/utils/maps/sports_map';
+import { getLan } from '@/utils/utilFn';
 // import { parseMatchScore } from '@/utils/formatMatch';
 
 export const columns: TableColumnList = [
@@ -72,8 +73,7 @@ export const columns: TableColumnList = [
   {
     label: t('操作'),
     slot: 'operation',
-    headerRenderer: d => handleTableWidth(d, t('操作'), 'auto'),
-    minWidth: 160,
+    minWidth: getLan() === 'zh' ? 200 : 300,
     fixed: 'right'
   }
 ];

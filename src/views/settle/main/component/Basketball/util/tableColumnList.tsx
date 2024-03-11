@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import { handleTableWidth } from '@/utils/getTableWidth';
 import { MATCH_STATUS /* PANDA_MATCH_STATUS */ } from '@/utils/maps/sports_map';
+import { getLan } from '@/utils/utilFn';
 // import { parseMatchScore } from '@/utils/formatMatch';
 
 export const columns: TableColumnList = [
@@ -99,8 +100,8 @@ export const columns: TableColumnList = [
   {
     label: t('操作'),
     slot: 'operation',
-    headerRenderer: d => handleTableWidth(d, t('操作'), 'auto'),
-    minWidth: 220,
+    showOverflowTooltip: false,
+    minWidth: getLan() === 'zh' ? 220 : 300,
     fixed: 'right'
   }
 ];

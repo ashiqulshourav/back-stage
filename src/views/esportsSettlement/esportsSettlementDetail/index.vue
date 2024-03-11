@@ -48,14 +48,22 @@
 
             <!-- - 操作 -->
             <template #operaction="{ row }">
-              <el-button
-                v-if="row.win === null"
-                :disabled="row.win !== null"
-                size="small"
-                :type="row.win === null ? 'primary' : 'info'"
-                @click="manualSettleESportHandicapClick(row)"
-                >{{ t('确认结算') }}</el-button
-              >
+              <template v-if="row.win === null">
+                <el-button
+                  :disabled="row.win !== null"
+                  size="small"
+                  :type="row.win === null ? 'primary' : 'info'"
+                  @click="manualSettleESportHandicapClick(row)"
+                  >{{ t('确认结算') }}</el-button
+                >
+                <el-button
+                  :disabled="row.win !== null"
+                  size="small"
+                  type="danger"
+                  @click="manualSettleESportHandicapClick(row, 'cancel')"
+                  >{{ t('取消盘口') }}</el-button
+                >
+              </template>
               <template v-else>
                 <el-button
                   size="small"

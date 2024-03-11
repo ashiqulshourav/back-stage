@@ -78,25 +78,30 @@ export function useEsportsSettlement() {
 
   //- 结算提交
   const manualSettleESportHandicapClick = async (
-    row: EsportsSettlementAPI.BetItemsMapData
+    row: EsportsSettlementAPI.BetItemsMapData,
+    type?: 'cancel'
   ) => {
-    if (row.betOptions < 0)
+    if (row.betOptions < 0 && !type)
       return message(t('请先选择投注项'), { type: 'error' });
 
-    ElMessageBox.confirm(t('确认要结算该记录么?'), '系统提示', {
-      confirmButtonText: t('确认'),
-      cancelButtonText: t('取消'),
-      type: 'warning',
-      center: true,
-      dangerouslyUseHTMLString: true,
-      draggable: true
-    }).then(async () => {
+    ElMessageBox.confirm(
+      type ? t('确认要取消盘口么?') : t('确认要结算该记录么?'),
+      '系统提示',
+      {
+        confirmButtonText: t('确认'),
+        cancelButtonText: t('取消'),
+        type: 'warning',
+        center: true,
+        dangerouslyUseHTMLString: true,
+        draggable: true
+      }
+    ).then(async () => {
       const params = {
         matchId: row.matchId,
         betResultItems: row.arr.map((item, index) => {
           return {
             betItemId: item.betItemsId,
-            betResult: row.betOptions === index ? 4 : 3,
+            betResult: type ? 18 : row.betOptions === index ? 4 : 3,
             handicap: item.handicap,
             kindsCode: item.kindsCode
           };
