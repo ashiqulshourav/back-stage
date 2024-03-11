@@ -220,13 +220,8 @@ export function useTennisDetailHook() {
     let s1 = 0;
     let s2 = 0;
     const scoreList = dataList.map(item => [item.t1, item.t2]);
-    scoreList.forEach(item => (item[0] > item[1] ? ++s1 : ++s2));
-    if (
-      //- todo
-      dataList.length < 2 ||
-      dataList.some(item => !item.id) ||
-      Math.abs(s1 - s2) < 1
-    ) {
+    scoreList.forEach(item => (+item[0] > +item[1] ? s1++ : s2++));
+    if (dataList.length < 2 || Math.abs(s1 - s2) < 1) {
       return message(t('请先完成盘结算'), { type: 'error' });
     }
     ElMessageBox.confirm(
@@ -247,7 +242,9 @@ export function useTennisDetailHook() {
       try {
         allSettleLoading.value = true;
         const res = await API.manualSettlementFullTime({
-          matchId: history.state.params.matchId
+          matchId: history.state.params.matchId,
+          t1: s1,
+          t2: s2
         });
         allSettleLoading.value = false;
         if (res.code) return message(res.msg, { type: 'error' });
@@ -285,7 +282,7 @@ export function useTennisDetailHook() {
       getScore();
       let f1 = 0;
       let f2 = 0;
-      const childEvents = row.childEvents.map(item => {
+      const childEvents = row.childEvents.map((item, index) => {
         +item.secondT1 > +item.secondT2 ? f1++ : f2++;
         delete item['isEdit'];
         return {
@@ -295,7 +292,7 @@ export function useTennisDetailHook() {
           firstT2: f2,
           homeAway: f1 > f2 ? 'home' : 'away',
           matchId: item.matchId,
-          matchPeriodId: item.matchPeriodId,
+          matchPeriodId: dataList.length * 100 + index + 1,
           secondT1: item.secondT1,
           secondT2: item.secondT2
         };
@@ -304,7 +301,7 @@ export function useTennisDetailHook() {
       const params = {
         childEvents,
         eventTime: 1,
-        firstNum: row.firstNum,
+        firstNum: dataList.length,
         homeAway: t1Score.value > t2Score.value ? 'home' : 'away',
         matchId: row.matchId,
         t1: t1Score.value,

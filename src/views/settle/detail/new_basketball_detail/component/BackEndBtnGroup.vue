@@ -11,7 +11,7 @@
         :icon="useRenderIcon('settle')"
         @click="resetMatchEvent(row, index)"
       >
-        {{ t('重新结算') }}
+        {{ !row.isEdit ? t('开启重新结算') : t('重新结算') }}
       </el-button>
       <el-button
         class="reset-margin"

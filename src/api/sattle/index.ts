@@ -306,11 +306,11 @@ export const sattleData = {
       { data }
     ),
 
-  //-排球全场结算（按盘）
-  manualSettlementFullTime: (data: { matchId: number }) =>
+  //-网球全场结算（按盘）
+  manualSettlementFullTime: (data: { matchId: number, t1: number; t2: number; }) =>
     http.request<SattleDataAPI.manualSettlementFullTimeRestType>(
       'post',
-      '/tennis/v1/manualSettlementFullTime',
+      '/tennis/v2/manualSettlementFullTime',
       { data }
     ),
 

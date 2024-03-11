@@ -1,10 +1,11 @@
 <template>
   <div class="score_main">
-    <!-- :disabled="!row.isEdit" -->
+    <!-- -->
     <el-input
       v-if="!row.id || renderObj.settlementType === 2"
       v-model="row[type]"
       ref="inputRef"
+      :disabled="!row.isEdit"
       :placeholder="scorePlaceHolderData[type]"
       :formatter="v => formatChinese(v, 3)"
     />

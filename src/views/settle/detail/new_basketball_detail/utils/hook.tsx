@@ -126,6 +126,7 @@ export function useNewBasketBallHook() {
     if (res.code) return message(res.msg, { type: 'error' });
     res.data.forEach(item => {
       item.periodType = renderObj.periodType;
+      item.isEdit = false;
     });
     eventList.length = 0;
     eventList.push(...res.data);
@@ -168,6 +169,8 @@ export function useNewBasketBallHook() {
     row: SattleDataAPI.newBasketballEventsList,
     index: number
   ) => {
+    if (!row.isEdit) return (row.isEdit = true);
+
     if (renderObj.reSettleStatus === 1) {
       saveCancelEventIds(row.id, index);
     } else {

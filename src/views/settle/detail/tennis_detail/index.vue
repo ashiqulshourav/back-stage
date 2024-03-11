@@ -36,9 +36,9 @@
                     : t('人工结算中')
                 }}...</span
               >
-              <el-button @click="addEventRow" size="small" type="primary">{{
-                t('新增盘')
-              }}</el-button>
+              <el-button @click="addEventRow" size="small" type="primary">
+                {{ t('新增盘') }}
+              </el-button>
             </div>
           </div>
         </div>
@@ -62,27 +62,28 @@
           :header-cell-style="tableHeaderStyle"
         >
           <template #operation="{ row: parentRow }">
-            <el-button
-              v-if="parentRow.id !== null"
-              @click="settlementHandicap(parentRow)"
-              type="primary"
-              size="small"
-              :disabled="canSettlement(parentRow.childEvents)"
-              >{{ t('结算盘') }}</el-button
-            >
-            <el-button
-              class="reset-margin"
-              type="primary"
-              size="small"
-              v-else
-              @click="resetMatchEvent(parentRow)"
-            >
-              {{
-                parentRow.isCanResetSettle
-                  ? t('重新二次结算')
-                  : t('开启二次结算')
-              }}
-            </el-button>
+            <template v-if="renderObj.fullSettlementStatus === 0">
+              <el-button
+                v-if="parentRow.id !== null"
+                @click="settlementHandicap(parentRow)"
+                type="primary"
+                size="small"
+                :disabled="canSettlement(parentRow.childEvents)"
+                >{{ t('结算盘') }}</el-button
+              >
+              <el-button
+                class="reset-margin"
+                type="primary"
+                size="small"
+                v-if="renderObj.settlementType === 2 && parentRow.id === null"
+                @click="resetMatchEvent(parentRow)"
+              >
+                {{
+                  parentRow.isCanResetSettle ? t('重新结算') : t('开启重新结算')
+                }}
+              </el-button>
+            </template>
+            <span v-else>-</span>
           </template>
 
           <template

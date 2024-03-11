@@ -483,6 +483,7 @@ declare namespace SattleDataAPI {
     oldEventId?: any;
     remark?: any;
     pageSize: number;
+    isShowReSttleBtn?: boolean;
     pageNum: number;
     periodType?: number;
     isEdit?: boolean;
