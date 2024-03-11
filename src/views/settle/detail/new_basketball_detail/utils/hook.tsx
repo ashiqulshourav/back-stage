@@ -207,7 +207,8 @@ export function useNewBasketBallHook() {
       center: true
     }).then(async () => {
       const res = await API.basketBallCancelMatchEvent({
-        id: row.id
+        id: row.id,
+        matchId: row.matchId
       });
       message(res.msg, { type: res.code ? 'error' : 'success' });
       getEventList();

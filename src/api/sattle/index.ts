@@ -395,6 +395,7 @@ export const sattleData = {
   //- 篮球取消结算事件
   basketBallCancelMatchEvent: (data: {
     id: number;
+    matchId: number;
   }) => http.request<SattleDataAPI.basketballCancelMatchEventResType>(
     'post', '/basketball/v1/cancelMatchEvent', { data }),
 
