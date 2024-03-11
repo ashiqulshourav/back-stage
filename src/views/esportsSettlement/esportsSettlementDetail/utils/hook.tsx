@@ -31,10 +31,10 @@ export function useEsportsSettlement() {
     });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
-    res.data.betItemsMap.all = Object.values(res.data.betItemsMap).flat();
     const keyList = Object.keys(res.data.betItemsMap);
     //- 清洗后端返回数据
     if (keyList.length) {
+      res.data.betItemsMap.all = Object.values(res.data.betItemsMap).flat();
       keyList.forEach((key: string) => {
         const filterKey = key.replace(/^\["|"\]$/g, '');
         res.data.betItemsMap[filterKey] = res.data.betItemsMap[key];
