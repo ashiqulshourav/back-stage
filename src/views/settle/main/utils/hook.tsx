@@ -8,7 +8,7 @@ export const useSettileHook = () => {
     return new Promise<void>(resolve => {
       const remark = ref('');
       addDialog({
-        title: t('取消注单'),
+        title: t('取消比赛'),
         width: '20%',
         footerButtons: [
           {
