@@ -20,10 +20,16 @@ import SportTypeNav from './component/SportTypeNav.vue';
 import FootBall from './component/FootBall/index.vue';
 import BasketBall from './component/Basketball/index.vue';
 import Tennis from './component/Tennis/index.vue';
-import { useSettingStoreHook } from '@/store/settings';
+import Handball from './component/Handball/index.vue';
 import Volleyball from './component/Volleyball/index.vue';
+import IceHockey from './component/IceHockey/index.vue';
+import PingPong from './component/PingPong/index.vue';
+import Badminton from './component/Badminton/index.vue';
+import Billiards from './component/Billiards/index.vue';
+import { useSettingStoreHook } from '@/store/settings';
 import { useMatchStore } from '@/store/match';
 import { SearchFormType } from './utils/type';
+
 
 defineOptions({ name: 'SETTLE_SETTLE_HISTORY' });
 const componentStrName = ref<any>('FootBall');
@@ -43,7 +49,13 @@ const comoMap = {
   FootBall,
   BasketBall,
   Tennis,
-  Volleyball
+  Volleyball,
+    Handball,
+    IceHockey,
+    PingPong,
+  Badminton,
+  Billiards
+
 };
 const matchStore = useMatchStore();
 const comType = SPORT_ID_MAP.find(item => {
