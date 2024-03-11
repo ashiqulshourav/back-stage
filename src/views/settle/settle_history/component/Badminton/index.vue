@@ -77,7 +77,7 @@ const goTennisDetail = row => {
   });
   const params = JSON.parse(JSON.stringify(row));
   router.push({
-    name: 'SETTLE_BADMINTON_DETAIL',
+    name: 'SETTLE_DETAIL_BADMINTON_DETAIL',
     state: { params }
   });
 };
