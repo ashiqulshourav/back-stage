@@ -231,6 +231,13 @@ export const sattleData = {
       { data }
     ),
 
+  //-网球重新结算（按盘）
+  TennisReSettleMatchEvent: (data: SattleDataAPI.addTennisEventReq) =>
+    http.request<SattleDataAPI.addTennisEventResType>(
+      'post',
+      '/tennis/v2/reSettleMatchEvent',
+      { data }
+    ),
   //-斯诺克新增事件（按局）
   addSnookerEvent: (data: SattleDataAPI.SnookerEventReq) =>
     http.request<SattleDataAPI.addTennisEventResType>(

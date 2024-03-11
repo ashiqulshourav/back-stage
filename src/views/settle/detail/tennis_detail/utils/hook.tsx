@@ -40,6 +40,9 @@ export function useTennisDetailHook() {
       childloading.value = false;
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
+      res.data.forEach(item => {
+        item.isCanResetSettle = false;
+      });
       dataList.length = 0;
       dataList.push(...res.data);
 
@@ -264,6 +267,57 @@ export function useTennisDetailHook() {
     Object.assign(renderObj, res.data);
   };
 
+  //- 重新结算单事件
+  const resetMatchEvent = async (row: SattleDataAPI.TennisEventsData) => {
+    if (!row.isCanResetSettle) return (row.isCanResetSettle = true);
+    const noEmpty = row.childEvents.every(item => {
+      return item.secondT1 !== '' && item.secondT2 !== '' && !item.isEdit;
+    });
+    if (!noEmpty)
+      return message(t('请先完成并保存之前的事件'), { type: 'error' });
+
+    ElMessageBox.confirm(t('确定要重新结算该事件么?'), t('警告'), {
+      dangerouslyUseHTMLString: true,
+      confirmButtonText: t('确认'),
+      cancelButtonText: t('取消'),
+      center: true
+    }).then(async () => {
+      getScore();
+      let f1 = 0;
+      let f2 = 0;
+      const childEvents = row.childEvents.map(item => {
+        +item.secondT1 > +item.secondT2 ? f1++ : f2++;
+        delete item['isEdit'];
+        return {
+          eventTime: 1,
+          firstNum: item.firstNum,
+          firstT1: f1,
+          firstT2: f2,
+          homeAway: f1 > f2 ? 'home' : 'away',
+          matchId: item.matchId,
+          matchPeriodId: item.matchPeriodId,
+          secondT1: item.secondT1,
+          secondT2: item.secondT2
+        };
+      });
+      row.loading = true;
+      const params = {
+        childEvents,
+        eventTime: 1,
+        firstNum: row.firstNum,
+        homeAway: t1Score.value > t2Score.value ? 'home' : 'away',
+        matchId: row.matchId,
+        t1: t1Score.value,
+        t2: t2Score.value
+      };
+      const res = await API.TennisReSettleMatchEvent(params);
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if (!res.code) {
+        onSearch();
+      }
+    });
+  };
+
   onMounted(() => {
     getMatchDetail();
     onSearch();
@@ -290,6 +344,7 @@ export function useTennisDetailHook() {
     renderObj,
     expandChange,
     allSettleLoading,
-    changeSettleType
+    changeSettleType,
+    resetMatchEvent
   };
 }
