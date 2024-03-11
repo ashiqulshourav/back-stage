@@ -46,7 +46,8 @@ export function useFootbballHistoryHook() {
       if (res.code) return message(res.msg, { type: 'error' });
 
       res.data.list.forEach(item => {
-        item.isShowCancelBtn = +res.ts < +item.beginTimeLong;
+        item.isShowCancelBtn =
+          item.status === 'nover' || item.status === 'nobegin';
       });
       dataList.length = 0;
       dataList.push(...res.data.list);

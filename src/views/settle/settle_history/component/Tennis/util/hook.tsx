@@ -45,7 +45,8 @@ export function useTennisHook() {
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
       res.data.list.forEach(item => {
-        item.isShowCancelBtn = +res.ts < +item.beginTimeLong;
+        item.isShowCancelBtn =
+          item.status === 'nover' || item.status === 'nobegin';
       });
       dataList.push(...res.data.list);
       pagination.total = res.data.total;
