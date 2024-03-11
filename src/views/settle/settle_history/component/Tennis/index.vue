@@ -42,7 +42,7 @@ import { PureTableBar } from '@/components/RePureTableBar';
 import { t } from '@/plugins/i18n';
 import { useTennisHook } from './util/hook';
 import { usePublicHooks } from '@/hooks';
-import { SearchFormType } from '../../utils/type';
+import {SearchFormType, SPORT_TYPE} from '../../utils/type';
 import { useMatchStore } from '@/store/match';
 import { useSettingStoreHook } from '@/store/settings';
 
@@ -72,7 +72,7 @@ const filterData = (type: 'reload') => {
 const goTennisDetail = row => {
   settingStore.save_selttle_history_page_info({
     page: pagination.currentPage,
-    matchType: 3
+    matchType: SPORT_TYPE.tennis
   });
   const params = JSON.parse(JSON.stringify(row));
   router.push({

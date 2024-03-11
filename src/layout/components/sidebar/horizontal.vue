@@ -1,31 +1,3 @@
-<script setup lang="ts">
-import Search from "../search/index.vue";
-import Notice from "../notice/index.vue";
-import SidebarItem from "./sidebarItem.vue";
-import { isAllEmpty } from "@pureadmin/utils";
-import { ref, nextTick, computed } from "vue";
-import { useNav } from "@/layout/hooks/useNav";
-import { useTranslationLang } from "../../hooks/useTranslationLang";
-import { usePermissionStoreHook } from "@/store/permission";
-import LogoutCircleRLine from "@iconify-icons/ri/logout-circle-r-line";
-import Setting from "@iconify-icons/ri/settings-3-line";
-import LanguageNav from "@/components/LanguageNav/index.vue";
-import { t } from "@/plugins/i18n";
-
-const menuRef = ref();
-
-const { route } = useTranslationLang(menuRef);
-const { title, logout, backTopMenu, onPanel, userAvatar } = useNav();
-
-const defaultActive = computed(() =>
-  !isAllEmpty(route.meta?.activePath) ? route.meta.activePath : route.path
-);
-
-nextTick(() => {
-  menuRef.value?.handleResize();
-});
-</script>
-
 <template>
   <div
     v-loading="usePermissionStoreHook().wholeMenus.length === 0"
@@ -51,24 +23,31 @@ nextTick(() => {
     </el-menu>
     <div class="horizontal-header-right">
       <!-- 菜单搜索 -->
-      <Search />
+      <!-- <Search /> -->
       <!-- 通知 -->
-      <Notice id="header-notice" />
+      <!-- <Notice id="header-notice" /> -->
       <!-- 国际化 -->
       <LanguageNav />
       <!-- 退出登录 -->
       <el-dropdown trigger="click">
         <span class="el-dropdown-link navbar-bg-hover">
           <img :src="userAvatar" />
+          <p v-if="userStore.userInfo.name" class="dark:text-white ml-1">
+            {{ userStore.userInfo.name }}
+          </p>
         </span>
         <template #dropdown>
           <el-dropdown-menu class="logout">
+            <el-dropdown-item @click="openResetDialog">
+              <IconifyIconOffline icon="configCenter" style="margin: 5px" />
+              {{ t('重置密码') }}
+            </el-dropdown-item>
             <el-dropdown-item @click="logout">
               <IconifyIconOffline
                 :icon="LogoutCircleRLine"
                 style="margin: 5px"
               />
-              {{ t("退出系统") }}
+              {{ t('退出系统') }}
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -84,6 +63,36 @@ nextTick(() => {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+// import Search from '../search/index.vue';
+// import Notice from '../notice/index.vue';
+import SidebarItem from './sidebarItem.vue';
+import { isAllEmpty } from '@pureadmin/utils';
+import { ref, nextTick, computed } from 'vue';
+import { useNav } from '@/layout/hooks/useNav';
+import { useTranslationLang } from '../../hooks/useTranslationLang';
+import { usePermissionStoreHook } from '@/store/permission';
+import LogoutCircleRLine from '@iconify-icons/ri/logout-circle-r-line';
+import Setting from '@iconify-icons/ri/settings-3-line';
+import LanguageNav from '@/components/LanguageNav/index.vue';
+import { t } from '@/plugins/i18n';
+import { useResetPasswordHook } from '@/hooks/resetPasswordHook';
+import { useUserStore } from '@/store/user';
+
+const menuRef = ref();
+
+const { route } = useTranslationLang(menuRef);
+const { title, logout, backTopMenu, onPanel, userAvatar } = useNav();
+const userStore = useUserStore();
+const defaultActive = computed(() =>
+  !isAllEmpty(route.meta?.activePath) ? route.meta.activePath : route.path
+);
+const { openResetDialog } = useResetPasswordHook();
+nextTick(() => {
+  menuRef.value?.handleResize();
+});
+</script>
 
 <style lang="scss" scoped>
 :deep(.el-loading-mask) {

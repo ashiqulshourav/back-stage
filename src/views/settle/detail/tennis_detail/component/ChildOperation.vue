@@ -24,13 +24,13 @@
 import { t } from '@/plugins/i18n';
 import { message } from '@/utils/message';
 const props = defineProps<{
-  row: SattleDataAPI.InningEvent;
-  list: SattleDataAPI.InningEvent[];
+  row: SattleDataAPI.ChildEvent;
+  list: SattleDataAPI.ChildEvent[];
   childIndex: number;
 }>();
 
 const saveCurrentMatch = () => {
-  if (props.row.t1 === '' || props.row.t2 === '') {
+  if (props.row.secondT1 === '' || props.row.secondT2 === '') {
     message(t('比分不能为空'), { type: 'error' });
   } else {
     props.row.isEdit = false;

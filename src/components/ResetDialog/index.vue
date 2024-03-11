@@ -132,14 +132,18 @@ const resetPasswordRules = reactive({
 });
 
 const resetPassword = async () => {
-  const res = await API.updatePwd({
-    id: userStore.userInfo.id,
-    pwd: getMD5(resetForm.oldPassword),
-    newPwd: getMD5(resetForm.newPassword)
+  resetFormRef.value.validate(async e => {
+    if (e) {
+      const res = await API.updatePwd({
+        id: userStore.userInfo.id,
+        pwd: getMD5(resetForm.oldPassword),
+        newPwd: getMD5(resetForm.newPassword)
+      });
+      if (res.code) return message(res.msg, { type: 'error' });
+      else message(t('修改成功，请重新登录'), { type: 'success' });
+      closeDialog();
+    }
   });
-  if (res.code) return message(res.msg, { type: 'error' });
-  else message(t('修改成功，请重新登录'), { type: 'success' });
-  closeDialog();
 };
 
 const closeDialog = () => {

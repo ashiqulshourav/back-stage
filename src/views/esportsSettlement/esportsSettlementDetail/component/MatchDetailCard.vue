@@ -1,6 +1,11 @@
 <template>
-  <div class="bg-bg_color w-[99/100] pl-8 pb-3 pt-[12px]">
+  <div class="bg-bg_color w-[99/100] pl-8 pb-3 pt-[12px] relative">
     <div class="text-center font-bold text-2xl">{{ t('盘口详情') }}</div>
+    <IconifyIconOffline
+      icon="cancelIcon"
+      class="absolute right-4 top-1 cursor-pointer text-[26px]"
+      @click="$router.go(-1)"
+    />
     <el-row>
       <el-col
         class="mb-2"
@@ -11,6 +16,15 @@
       >
         <span class="mr-2 text-sm font-bold">{{ item.title }}:</span>
         <span class="text-sm">{{ item.val }}</span>
+        <el-button
+          class="ml-2"
+          size="small"
+          type="primary"
+          :disabled="renderObj.isSale === 0"
+          @click="closeSettle"
+          v-if="renderList.length - 1 === index"
+          >{{ t('关闭开售') }}</el-button
+        >
       </el-col>
     </el-row>
   </div>
@@ -23,6 +37,12 @@ import { ESPORT_ID_MAP, ESPORT_MATCH_STATUS } from '@/utils/maps/sports_map';
 const props = defineProps<{
   renderObj: EsportsSettlementAPI.ESportMatchById;
 }>();
+
+const emits = defineEmits(['closeSettle']);
+
+const closeSettle = () => {
+  emits('closeSettle');
+};
 
 const renderList = computed(() => {
   const _ = props.renderObj;

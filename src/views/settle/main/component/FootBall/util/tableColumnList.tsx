@@ -1,7 +1,7 @@
 import { handleTableWidth } from '@/utils/getTableWidth';
 import { MATCH_STATUS } from '@/utils/maps/sports_map';
+import { getLan } from '@/utils/utilFn';
 import dayjs from 'dayjs';
-
 export const columns: TableColumnList = [
   {
     label: t('序号'),
@@ -94,7 +94,8 @@ export const columns: TableColumnList = [
   {
     label: t('操作'),
     slot: 'operation',
-    minWidth: 220,
+    showOverflowTooltip: false,
+    minWidth: getLan() === 'zh' ? 220 : 300,
     fixed: 'right'
   }
 ];

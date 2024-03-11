@@ -25,7 +25,7 @@
           <el-button
             class="reset-margin"
             type="primary"
-            :size="size"
+            size="small"
             @click="goDetail(row)"
           >
             {{ t('结算详情') }}
@@ -33,10 +33,10 @@
           <el-button
             v-if="row.isShowCancelBtn"
             type="danger"
-            :size="size"
+            size="small"
             :disabled="row.cancelOrderTimes > 0"
             @click="cancelClick(row)"
-            >{{ t('取消注单') }}</el-button
+            >{{ t('取消比赛') }}</el-button
           >
         </template>
       </pure-table>
@@ -81,7 +81,7 @@ const goDetail = row => {
   });
   const params = JSON.parse(JSON.stringify(row));
   router.push({
-    name: 'SETTLE_HANDBALL_DETAIL',
+    name: 'SETTLE_DETAIL_HANDBALL_DETAIL',
     state: { params }
   });
 };

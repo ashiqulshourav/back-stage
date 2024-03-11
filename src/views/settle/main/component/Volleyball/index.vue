@@ -37,7 +37,7 @@
             size="small"
             :disabled="row.cancelOrderTimes > 0"
             @click="cancelClick(row)"
-            >{{ t('取消注单') }}</el-button
+            >{{ t('取消比赛') }}</el-button
           >
         </template>
       </pure-table>

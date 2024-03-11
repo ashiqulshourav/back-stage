@@ -1,10 +1,11 @@
 <template>
   <div class="score_main">
+    <!-- -->
     <el-input
-      v-if="!row.id"
-      :disabled="!row.isEdit"
+      v-if="row.isEdit || !row.id"
       v-model="row[type]"
       ref="inputRef"
+      :disabled="!row.isEdit"
       :placeholder="scorePlaceHolderData[type]"
       :formatter="v => formatChinese(v, 3)"
     />
@@ -19,6 +20,7 @@ const inputRef = ref();
 const props = defineProps<{
   row: SattleDataAPI.newBasketballEventsList;
   type: string;
+  renderObj: SattleDataAPI.getSettlementDataList;
 }>();
 
 const scorePlaceHolderData = {

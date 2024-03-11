@@ -12,20 +12,22 @@
           <span class="mr-2">
             {{ baseTitle }}
           </span>
-          <!-- <el-button
-            @click="openSecondSettleClick"
-            type="primary"
-            size="small"
-            v-if="renderObj.reSettleStatus === 0"
-            >{{ t('开启重新结算') }}</el-button
-          >
-          <el-button
-            @click="confirmSecondSettleClick"
-            type="warning"
-            v-else
-            size="small"
-            >{{ t('确认重新结算') }}</el-button
-          > -->
+          <div v-if="renderObj.fullSettlementStatus === 1">
+            <el-button
+              @click="openSecondSettleClick"
+              type="primary"
+              size="small"
+              v-if="renderObj.reSettleStatus === 0"
+              >{{ t('开启二次结算') }}</el-button
+            >
+            <el-button
+              @click="confirmSecondSettleClick"
+              type="warning"
+              v-else
+              size="small"
+              >{{ t('确认二次结算') }}</el-button
+            >
+          </div>
         </div>
       </template>
       <template v-slot="{ size, dynamicColumns }">
@@ -44,9 +46,9 @@
           <!-- - 比分 -->
           <template #score="{ row }: MatchEventRowType">
             <div class="flex justify-center items-center">
-              <Score :row="row" type="t1" />
+              <Score :row="row" type="t1" :renderObj="renderObj" />
               <span class="ml-1 mr-1 font-bold leading-[2]">:</span>
-              <Score :row="row" type="t2" />
+              <Score :row="row" type="t2" :renderObj="renderObj" />
             </div>
           </template>
 
@@ -74,14 +76,18 @@
                   :row="row"
                   :dataList="eventList"
                   :index="index"
+                  @resetMatchEvent="resetMatchEvent"
+                  :renderObj="renderObj"
                   @cancelMatchEvent="cancelMatchEvent"
+                  @confirmResetMatchEvent="confirmResetMatchEvent"
+                  @deletMatchevent="deletMatchevent"
                 />
               </template>
               <template v-else>
                 <FrontBtnGroupCom
                   :size="size"
                   :row="row"
-                  @editChild="editChild"
+                  :renderObj="renderObj"
                   @handleChildrenData="handleChildrenData(row, 'save')"
                 />
               </template>
@@ -90,7 +96,7 @@
                 link
                 type="danger"
                 :size="size"
-                v-if="!row.id"
+                v-if="!row.id && renderObj.reSettleStatus === 0"
                 :disabled="!row.isSave || row.isEdit"
                 :icon="useRenderIcon('uploadIcon')"
                 @click="handleChildrenData(row, 'upload')"
@@ -143,8 +149,7 @@
           <div
             class="flex items-center"
             v-if="
-              (renderObj.settlementType !== 1 && isShowSettleBen) ||
-              renderObj.reSettleStatus === 1
+              renderObj.settlementType !== 1 || renderObj.reSettleStatus === 1
             "
           >
             <span class="mr-3 text-[var(--el-color-danger)]"
@@ -179,15 +184,14 @@ import { useNewBasketBallHook } from './utils/hook';
 import { usePublicHooks } from '@/hooks';
 import Delete from '@iconify-icons/ep/delete';
 import { MatchEventRowType } from './utils/type';
-
 import DetiltTitle from '../../component/Settle_detail_title.vue';
+
 defineOptions({ name: 'SETTLE_DETAIL_NEW_BASKETBALL_DETAIL' });
 
 const {
   loading,
   childColumns,
   addChildRow,
-  editChild,
   handleChildrenData,
   reloadTable,
   changeSettleType,
@@ -197,7 +201,10 @@ const {
   allSettleBtnClick,
   openSecondSettleClick,
   confirmSecondSettleClick,
-  cancelItem
+  cancelItem,
+  resetMatchEvent,
+  confirmResetMatchEvent,
+  deletMatchevent
 } = useNewBasketBallHook();
 
 const { tableHeaderStyle } = usePublicHooks();
@@ -208,8 +215,8 @@ const eventQuotientList = [
   { type: 'vsFlag', val: t('播控数据') }
 ];
 
-//- 人工结算是否需要加时赛
-const isShowSettleBen = computed(() => {
+//- 人工结算是否需要加时赛 暂时不添加验证
+/* const isShowSettleBen = computed(() => {
   if (
     eventList[eventList.length - 1]?.matchPeriodId === 40 &&
     eventList[eventList.length - 1]?.id
@@ -227,7 +234,7 @@ const isShowSettleBen = computed(() => {
     return homeScore === awayScore;
   }
   return true;
-});
+}); */
 
 //- 取消事件置灰
 const tableRowClassName = ({ row }: MatchEventRowType) =>

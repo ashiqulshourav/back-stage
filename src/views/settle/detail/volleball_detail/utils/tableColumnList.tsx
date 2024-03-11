@@ -1,4 +1,5 @@
 import { handleTableWidth } from '@/utils/getTableWidth';
+import { getLan } from '@/utils/utilFn';
 import dayjs from 'dayjs';
 
 export const columns: TableColumnList = [
@@ -42,6 +43,7 @@ export const columns: TableColumnList = [
   },
   {
     label: t('操作'),
-    slot: 'operation'
+    slot: 'operation',
+    minWidth: getLan() === 'zh' ? 200 : 300
   }
 ];

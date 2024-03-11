@@ -12,19 +12,25 @@
 
     <div v-if="layout === 'vertical'" class="vertical-header-right">
       <!-- 菜单搜索 -->
-      <Search />
+      <!-- <Search /> -->
       <!-- 通知 -->
-      <Notice id="header-notice" />
+      <!-- <Notice id="header-notice" /> -->
       <!-- 国际化 -->
       <LanguageNav />
       <!-- 退出登录 -->
       <el-dropdown trigger="click">
         <span class="el-dropdown-link navbar-bg-hover select-none">
           <img :src="userAvatar" />
-          <!-- <p v-if="username" class="dark:text-white">{{ username }}</p> -->
+          <p v-if="userStore.userInfo.name" class="dark:text-white ml-1">
+            {{ userStore.userInfo.name }}
+          </p>
         </span>
         <template #dropdown>
           <el-dropdown-menu class="logout">
+            <el-dropdown-item @click="openResetDialog">
+              <IconifyIconOffline icon="configCenter" style="margin: 5px" />
+              {{ t('重置密码') }}
+            </el-dropdown-item>
             <el-dropdown-item @click="logout">
               <IconifyIconOffline
                 :icon="LogoutCircleRLine"
@@ -47,8 +53,8 @@
 </template>
 
 <script setup lang="ts">
-import Search from './search/index.vue';
-import Notice from './notice/index.vue';
+// import Search from './search/index.vue';
+// import Notice from './notice/index.vue';
 // import mixNav from "./sidebar/mixNav.vue";
 import { useNav } from '@/layout/hooks/useNav';
 import Breadcrumb from './sidebar/breadCrumb.vue';
@@ -57,16 +63,14 @@ import LogoutCircleRLine from '@iconify-icons/ri/logout-circle-r-line';
 import Setting from '@iconify-icons/ri/settings-3-line';
 import LanguageNav from '@/components/LanguageNav/index.vue';
 import { t } from '@/plugins/i18n';
+import { useUserStore } from '@/store/user';
+import { useResetPasswordHook } from '@/hooks/resetPasswordHook';
 
-const {
-  layout,
-  logout,
-  onPanel,
-  pureApp,
-  // username,
-  userAvatar,
-  toggleSideBar
-} = useNav();
+const { openResetDialog } = useResetPasswordHook();
+
+const userStore = useUserStore();
+const { layout, logout, onPanel, pureApp, userAvatar, toggleSideBar } =
+  useNav();
 </script>
 
 <style lang="scss" scoped>

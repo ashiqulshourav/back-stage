@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { NAV_TITLE_NAME } from './map';
 import { handleTableWidth } from '@/utils/getTableWidth';
-
+import { getLan } from '@/utils/utilFn';
 export const columns: TableColumnList = [
   {
     label: t('盘口ID'),
@@ -34,7 +34,7 @@ export const columns: TableColumnList = [
   {
     label: t('操作'),
     slot: 'operaction',
-    minWidth: 200
+    width: getLan() === 'zh' ? 200 : 260
   },
   {
     label: t('结算状态'),

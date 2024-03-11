@@ -21,7 +21,7 @@ const props = defineProps<{
 watch(
   () => props.row,
   row => {
-    if (row.isEdit && props.type === 't1' && row.t1 === '') {
+    if (row.isEdit && props.type === 'secondT1' && row.secondT1 === '') {
       nextTick(() => {
         inputRef.value.focus();
       });

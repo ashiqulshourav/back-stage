@@ -6,7 +6,8 @@ import {
   OPENING_STATUS,
   SPORT_ID_MAP
 } from '@/utils/maps/sports_map';
-
+import { getLan } from '@/utils/utilFn';
+const lan = getLan();
 export const columns: TableColumnList = [
   {
     type: 'selection',
@@ -22,7 +23,10 @@ export const columns: TableColumnList = [
     label: t('联赛名称'),
     prop: 'leagueNameCn',
     headerRenderer: d => handleTableWidth(d, t('联赛名称'), 'auto'),
-    formatter: ({ leagueNameCn }) => leagueNameCn || '-',
+    formatter: ({ leagueNameCn, leagueNameEn }) => {
+      const d = { zh: leagueNameCn, en: leagueNameEn };
+      return d[lan] ?? leagueNameCn ?? '-';
+    },
     align: 'left',
     minWidth: 200
   },
@@ -55,14 +59,14 @@ export const columns: TableColumnList = [
   },
   {
     label: t('主队'),
-    prop: 'homeTeamNameCn',
+    prop: lan === 'zh' ? 'homeTeamNameCn' : 'homeTeamNameEn',
     minWidth: 150,
     headerRenderer: d => handleTableWidth(d, t('主队'), 'auto'),
     align: 'left'
   },
   {
     label: t('客队'),
-    prop: 'awayTeamNameCn',
+    prop: lan === 'zh' ? 'awayTeamNameCn' : 'awayTeamNameEn',
     minWidth: 150,
     headerRenderer: d => handleTableWidth(d, t('客队'), 'auto'),
     align: 'left'

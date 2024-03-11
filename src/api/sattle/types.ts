@@ -8,6 +8,7 @@ declare namespace SattleDataAPI {
     extraInfo?: string;
     homeAway?: string;
     id?: number;
+    _tempDate?: number;
     matchId?: number;
     matchPeriodId?: number | string;
     matchType?: number;
@@ -92,6 +93,7 @@ declare namespace SattleDataAPI {
     sourceType?: number;
     matchPeriod?: string;
     sportId?: number;
+    _tempDate?: number,
     dataSourceCode?: string;
     t1?: number | string;
     t2?: number | string;
@@ -230,29 +232,6 @@ declare namespace SattleDataAPI {
     eventTimeError: boolean;
   };
 
-  type TennisEventsData = {
-    id: number;
-    uuid: string;
-    matchId: number;
-    canceled: number;
-    eventTime: number | string;
-    homeTeamId: number;
-    awayTeamId: number;
-    inningNum: number;
-    setNum: number;
-    t1: number;
-    t2: number;
-    sourceType: number;
-    settleTimes: number;
-    settleType: number;
-    createdBy: string;
-    updatedBy: string;
-    createdAt: string;
-    updatedAt: string;
-    gameRule: string;
-    inningEvents: InningEvent[];
-    loading?: boolean;
-  };
   type BasketBallEventsData = {
     id: number;
     uuid: string;
@@ -285,6 +264,83 @@ declare namespace SattleDataAPI {
     awayTeamName?: any;
     isEdit?: boolean;
   };
+
+
+  type ChildEvent = {
+    id?: string;
+    uuid?: string;
+    matchId?: number;
+    canceled?: number;
+    eventCode?: string;
+    eventTime?: number;
+    homeAway?: string;
+    matchPeriodId?: number | string;
+    t1?: number;
+    t2?: number;
+    firstNum?: number | string;
+    firstT1?: number;
+    firstT2?: number;
+    secondNum?: number;
+    secondT1?: number | string;
+    secondT2?: number | string;
+    sourceType?: number;
+    settleTimes?: number;
+    settleType?: number;
+    xjFlag?: number;
+    psFlag?: number;
+    vsFlag?: number;
+    createdAt?: string;
+    updatedAt?: string;
+    createdBy?: string;
+    updatedBy?: string;
+    oldEventId?: any;
+    remark?: any;
+    pageSize?: number;
+    pageNum?: number;
+    eventCodes?: any[];
+    matchPeriodIds?: any[];
+    childEvents?: any[];
+    isEdit: boolean;
+  }
+
+  type TennisEventsData = {
+    id?: any;
+    uuid?: any;
+    matchId: number | string;
+    canceled: number;
+    eventCode?: any;
+    eventTime?: any;
+    homeAway: string;
+    matchPeriodId: number;
+    t1: number;
+    t2: number;
+    firstNum?: any;
+    loading?: boolean;
+    firstT1?: any;
+    firstT2?: any;
+    secondNum?: any;
+    secondT1?: any;
+    secondT2?: any;
+    sourceType?: any;
+    settleTimes?: any;
+    settleType?: any;
+    xjFlag?: any;
+    psFlag?: any;
+    vsFlag?: any;
+    createdAt?: any;
+    updatedAt?: any;
+    createdBy?: any;
+    updatedBy?: any;
+    oldEventId?: any;
+    remark?: any;
+    pageSize: number;
+    pageNum: number;
+    eventCodes: any[];
+    isCanResetSettle?: boolean;
+    isEdit?: boolean;
+    matchPeriodIds: any[];
+    childEvents: ChildEvent[];
+  }
 
   type volleyballData = SnookerEventsResData;
   type HockeyEventData = CommonEventData & { matchPeriod?: string };
@@ -342,19 +398,23 @@ declare namespace SattleDataAPI {
   };
 
   type addTennisEventReq = {
-    eventTime: number | string;
-    inningEvents: {
-      eventTime: number | string;
-      inningNum: number;
-      matchId: number;
-      setNum: number;
-      t1: number | string;
-      t2: number | string;
+    childEvents: {
+      eventTime?: number | string;
+      firstNum?: number | string;
+      firstT1?: number | string;
+      firstT2?: number | string;
+      homeAway?: string;
+      matchId?: number | string;
+      matchPeriodId?: number | string;
+      secondT1?: number | string;
+      secondT2?: number | string;
     }[];
-    inningNum: number;
-    matchId: number;
-    t1: number;
-    t2: number;
+    eventTime?: number | string;
+    firstNum?: number | string;
+    homeAway?: string;
+    matchId?: number | string;
+    t1?: number;
+    t2?: number;
   };
   type addRugbyEventReq = {
     eventTime: number | string | Date;
@@ -398,11 +458,12 @@ declare namespace SattleDataAPI {
     matchId: number;
     canceled: number;
     eventCode: string;
+    _tempDate?: number;
     eventTime: number | string;
     homeAway: string;
     matchPeriodId: number;
     t1: number | string | null;
-    t2: number;
+    t2: number | string | null;
     firstNum: number;
     firstT1: number;
     firstT2: number;
@@ -422,34 +483,14 @@ declare namespace SattleDataAPI {
     oldEventId?: any;
     remark?: any;
     pageSize: number;
+    isShowReSttleBtn?: boolean;
     pageNum: number;
     periodType?: number;
     isEdit?: boolean;
     isSave?: boolean;
   }
 
-  type newBasketballEventsData = {
-    total: number;
-    list: newBasketballEventsList[];
-    pageNum: number;
-    pageSize: number;
-    size: number;
-    startRow: number;
-    endRow: number;
-    pages: number;
-    prePage: number;
-    nextPage: number;
-    isFirstPage: boolean;
-    isLastPage: boolean;
-    hasPreviousPage: boolean;
-    hasNextPage: boolean;
-    navigatePages: number;
-    navigatepageNums: number[];
-    navigateFirstPage: number;
-    navigateLastPage: number;
-  }
-
-  type newBasketballEventsResType = COMMON.BASE_RES_TYPE<newBasketballEventsData>
+  type newBasketballEventsResType = COMMON.BASE_RES_TYPE<newBasketballEventsList[]>
   type manualSettlementFullTimeResType = COMMON.BASE_RES_TYPE<null>
   type basketballCancelMatchEventResType = COMMON.BASE_RES_TYPE<null>
   type open2ndSettlementStatusResType = COMMON.BASE_RES_TYPE<null>
@@ -466,8 +507,10 @@ declare namespace SattleDataAPI {
   type confirm2ndSettlementReqType = {
     matchId: number;
     cancelEventIds: number[];
+    deleteEventIds: number[];
     newEventList: {
       matchId: number;
+      _tempDate?: number;
       eventCode: string | number;
       eventTime: number | string | Date;
       homeAway: string;

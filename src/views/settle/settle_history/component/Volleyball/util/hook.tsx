@@ -8,7 +8,6 @@ import { useSettingStoreHook } from '@/store/settings';
 
 export function useTennisHook() {
   const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
-  console.warn(dataList);
   const matchStore = useMatchStore();
   const form = ref<SearchFormType>({} as SearchFormType);
   const settingStore = useSettingStoreHook();
@@ -46,7 +45,8 @@ export function useTennisHook() {
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
       res.data.list.forEach(item => {
-        item.isShowCancelBtn = +res.ts < +item.beginTimeLong;
+        item.isShowCancelBtn =
+          item.status === 'nover' || item.status === 'nobegin';
       });
       dataList.push(...res.data.list);
       pagination.total = res.data.total;

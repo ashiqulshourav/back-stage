@@ -1,16 +1,30 @@
 import { t } from '@/plugins/i18n';
+
+/* 
+  足球：半自動結算(v) ＋ 滚球重新結算（） + 取消事件 (v) ＋ 历史二次結算(v)
+  籃球：半自動結算(v) ＋ 滚球重新結算(v) + 取消事件 (v) ＋ 历史二次結算(v)
+  網球：半自動結算（）
+  排球：手動結算(v) 
+  台球：手動結算(v) 
+  手球：手動結算(v) 
+  冰球：手動結算(v) 
+  羽毛球：手動結算(v) 
+  乒乓球：手動結算(v)
+  電競：手動結算(v) ＋  历史二次結算(v) + 取消
+ */
+
 export const SPORT_ID_MAP = [
   { label: t('足球'), value: 1, type: 'FootBall' },
   { label: t('篮球'), value: 2, type: 'BasketBall' },
   { label: t('网球'), value: 3, type: 'Tennis' },
   { label: t('排球'), value: 6, type: 'Volleyball' },
   { label: t('斯诺克/台球'), value: 5, type: 'Billiards' },
-  { label: t('乒乓球'), value: 23, type: 'PingPong' },
-  { label: t('羽毛球'), value: 19, type: 'Badminton' },
-  { label: t('英式橄榄球'), value: 9, type: 'Rugby' },
   { label: t('手球'), value: 11, type: 'Handball' },
   { label: t('冰球'), value: 12, type: 'IceHockey' },
+  { label: t('羽毛球'), value: 19, type: 'Badminton' },
+  { label: t('乒乓球'), value: 23, type: 'PingPong' },
   /* 未提测内容 */
+  { label: t('英式橄榄球'), value: 9, type: 'Rugby' },
   { label: t('板球'), value: 13, type: 'Cricket' },
   { label: t('曲棍球'), value: 28, type: 'Hockey' },
   { label: t('飞镖'), value: 8, type: 'Darts' },

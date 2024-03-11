@@ -268,7 +268,7 @@ export default defineComponent({
                 <div class={[topClass.value]}>
                   <el-checkbox
                     class="!-mr-1"
-                    value="t('列展示')"
+                    label="列展示"
                     v-model={checkAll.value}
                     indeterminate={isIndeterminate.value}
                     onChange={value => handleCheckAllChange(value)}
@@ -304,7 +304,7 @@ export default defineComponent({
                             />
                             <el-checkbox
                               key={item}
-                              value={item}
+                              label={item}
                               onChange={value =>
                                 handleCheckColumnListChange(value, item)
                               }

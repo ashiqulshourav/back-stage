@@ -7,8 +7,8 @@
     <template v-slot="{ size, dynamicColumns }">
       <pure-table
         class="table_container"
-        align-whole="center"
         showOverflowTooltip
+        align-whole="center"
         :loading="matchStore.settleRequestLoading"
         :size="size"
         :row-key="row => row.matchId"
@@ -37,7 +37,7 @@
             size="small"
             :disabled="row.cancelOrderTimes > 0"
             @click="cancelClick(row)"
-            >{{ t('取消注单') }}</el-button
+            >{{ t('取消比赛') }}</el-button
           >
         </template>
       </pure-table>

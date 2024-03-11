@@ -49,22 +49,22 @@
           </span>
         </div>
       </el-col>
-      <!-- <el-col :span="5" v-if="renderObj.fullSettlementStatus === 1">
+      <el-col :span="5" v-if="renderObj.fullSettlementStatus === 1">
         <el-button
           @click="openSecondSettleClick"
           type="primary"
           size="small"
           v-if="renderObj.reSettleStatus === 0"
-          >{{ t('开启重新结算') }}</el-button
+          >{{ t('开启二次结算') }}</el-button
         >
         <el-button
           @click="confirmSecondSettleClick"
           type="warning"
           size="small"
           v-else
-          >{{ t('确认重新结算') }}</el-button
+          >{{ t('确认二次结算') }}</el-button
         >
-      </el-col> -->
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -103,13 +103,9 @@ const getCurrentCard = computed(() => {
   };
   props.dataList[1].tableList.forEach(item => {
     if (item.homeAway === 'home') {
-      item.eventCode === 'yellow_card'
-        ? (data.home.yellow += 1)
-        : (data.home.red += 1);
-    } else {
-      item.eventCode === 'yellow_card'
-        ? (data.away.yellow += 1)
-        : (data.away.red += 1);
+      item.redOrYellow === 1 ? (data.home.yellow += 1) : (data.home.red += 1);
+    } else if (item.homeAway === 'away') {
+      item.redOrYellow === 1 ? (data.away.yellow += 1) : (data.away.red += 1);
     }
   });
   return data;

@@ -55,6 +55,7 @@ export function useFootball() {
         homeAway: null,
         matchPeriodId: null,
         isBackEndReturnData: false,
+        _tempDate: Date.now(),
         t1: null,
         t2: null,
         eventCode: type
@@ -89,9 +90,6 @@ export function useFootball() {
           _.matchId = history.state.params.matchId;
           _.t = res.ts;
           _.isBackEndReturnData = true;
-          // if (_.eventTime.toString().length < 10) {
-          //   _.eventTime = dateSetSecond(_.eventTime as number);
-          // }
           if (item.type === 'yellow_red_card') {
             _.redOrYellow = YELLOW_OR_RED[_.eventCode];
             if (_.redOrYellow === 1) {
@@ -152,14 +150,16 @@ export function useFootball() {
     if (isTheFormComplete(row)) {
       return message(t('请输入完整的内容'), { type: 'error' });
     }
-    if (renderObj.reSettleStatus === 1 && type !== 'save')
-      return saveSecondMathList(row);
 
     if (type === 'save') {
       row.isSave = true;
       row.isEdit = false;
+      if (renderObj.reSettleStatus === 1) {
+        return saveSecondMathList(row);
+      }
       return;
     }
+
     if (((type === 'upload' && !row.isSave) || row.isEdit) && !row.id) {
       return message(t('请先保存事件'), { type: 'error' });
     }
@@ -188,7 +188,7 @@ export function useFootball() {
       id: row.id ?? null
     };
 
-    ElMessageBox.confirm('确定要增加一条事件么?', t('警告'), {
+    ElMessageBox.confirm(t('确定要增加一条事件么?'), t('警告'), {
       confirmButtonText: t('确认'),
       cancelButtonText: t('取消'),
       center: true
@@ -254,7 +254,7 @@ export function useFootball() {
 
   //- 倒计时的提前结算
   const advanceSettlement = async row => {
-    ElMessageBox.confirm('确定要提前结算么?', t('警告'), {
+    ElMessageBox.confirm(t('确定要提前结算么?'), t('警告'), {
       dangerouslyUseHTMLString: true,
       confirmButtonText: t('确认'),
       cancelButtonText: t('取消'),
@@ -275,7 +275,7 @@ export function useFootball() {
     matchId: number,
     settleTimes: number
   ) => {
-    ElMessageBox.confirm('确定要取消该事件么?', t('警告'), {
+    ElMessageBox.confirm(t('确定要取消该事件么?'), t('警告'), {
       dangerouslyUseHTMLString: true,
       confirmButtonText: t('确认'),
       cancelButtonText: t('取消'),
@@ -284,7 +284,7 @@ export function useFootball() {
       const res = await API.cancelMatchEvent({
         id,
         matchId,
-        remark: settleTimes === 0 ? '未结算' : '已结算'
+        remark: settleTimes === 0 ? t('未结算') : t('已结算')
       });
       message(res.msg, { type: res.code ? 'error' : 'success' });
       getChildrenData();
@@ -310,6 +310,7 @@ export function useFootball() {
     newEventList: [],
     matchId: history.state.params.matchId
   } as SattleDataAPI.confirm2ndSettlementReqType);
+
   //- 足球开启二次结算
   const openSecondSettleClick = async () => {
     const res = await API.open2ndSettlementStatus({
@@ -323,7 +324,9 @@ export function useFootball() {
   const confirmSecondSettleClick = async () => {
     ElMessageBox.confirm(
       <div class="text-center pl-2 pr-2">
-        本场比赛已结算完毕，重新结算将会影响所有关联的已结算注单，进行重新下发赛果，是否确认重新结算?
+        {t(
+          '本场比赛已结算完毕，重新结算将会影响所有关联的已结算注单，进行重新下发赛果，是否确认二次结算?'
+        )}
       </div>,
       t('警告'),
       {
@@ -333,17 +336,21 @@ export function useFootball() {
         center: true
       }
     ).then(async () => {
+      confirmParams.newEventList.forEach(item => delete item._tempDate);
       const res = await API.confirm2ndSettlement(confirmParams);
-      if (res.code) return message(res.msg, { type: 'error' });
-      confirmParams.cancelEventIds = [];
-      confirmParams.newEventList = [];
-      getChildrenData();
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if (!res.code) {
+        confirmParams.cancelEventIds = [];
+        confirmParams.newEventList = [];
+        getChildrenData();
+        getMatchDetail();
+      }
     });
   };
 
   //- 保存取消结算ID
   const saveCancelEventIds = (id: number, list, index) => {
-    ElMessageBox.confirm('确定要取消当前事件结算结果么?', t('警告'), {
+    ElMessageBox.confirm(t('确定要取消当前事件结算结果么?'), t('警告'), {
       dangerouslyUseHTMLString: true,
       confirmButtonText: t('确认'),
       cancelButtonText: t('取消'),
@@ -356,16 +363,26 @@ export function useFootball() {
 
   //- 新增二次结算事件
   const saveSecondMathList = (row: SattleDataAPI.MatchEventsList) => {
+    message(t('新增事件保存成功'), { type: 'success' });
     if (
       confirmParams.newEventList.findIndex(
-        item => item.eventTime === row.eventTime
+        item => item._tempDate === row._tempDate
       ) < 0
     ) {
+      //- 单独处理红黄牌
+      const eventCode =
+        row.eventCode === 'yellow_red_card'
+          ? row.redOrYellow === 1
+            ? 'yellow_card'
+            : 'red_card'
+          : row.eventCode;
+
       confirmParams.newEventList.push({
         matchId: renderObj.matchId,
-        eventCode: row.eventCode,
+        eventCode,
         eventTime: row.eventTime,
         homeAway: row.homeAway,
+        _tempDate: row._tempDate,
         matchPeriodId: row.matchPeriodId,
         t1: row.t1,
         t2: row.t2

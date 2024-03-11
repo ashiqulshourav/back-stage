@@ -22,7 +22,7 @@ const props = defineProps<{
 const emits = defineEmits(['changeCurrentComponentName']);
 const matchStore = useMatchStore();
 const renderList = computed(() => {
-  return SPORT_ID_MAP.filter(_ => _.value !== 4).slice(0, 4);
+  return SPORT_ID_MAP.filter(_ => _.value !== 4).slice(0, 9);
 });
 
 const changeType = (_: { value: number; type: string }) => {

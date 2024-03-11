@@ -8,7 +8,7 @@ export const useSettileHook = () => {
     return new Promise<void>(resolve => {
       const remark = ref('');
       addDialog({
-        title: t('取消注单'),
+        title: t('取消比赛'),
         width: '20%',
         footerButtons: [
           {
@@ -28,8 +28,9 @@ export const useSettileHook = () => {
               const params = {
                 remark: remark.value,
                 matchId: row.matchId,
-                sportName: SPORT_ID_MAP.find(item => item.value === row.sportId)
-                  .label
+                sportName:
+                  SPORT_ID_MAP.find(item => item.value === row.sportId)
+                    ?.label ?? t('电竞')
               };
               options.footerButtons[1].loading = true;
               const res = await API.cancelBetOrder(params);
