@@ -70,7 +70,19 @@
               :disabled="canSettlement(parentRow.childEvents)"
               >{{ t('结算盘') }}</el-button
             >
-            <span v-else>{{ t('已结算') }}</span>
+            <el-button
+              class="reset-margin"
+              type="primary"
+              size="small"
+              v-else
+              @click="resetMatchEvent(parentRow)"
+            >
+              {{
+                parentRow.isCanResetSettle
+                  ? t('重新二次结算')
+                  : t('开启二次结算')
+              }}
+            </el-button>
           </template>
 
           <template
@@ -128,8 +140,9 @@
                 >
                   <ChildOperation
                     v-if="
-                      renderObj.fullSettlementStatus === 0 &&
-                      !(parentRow.id === null)
+                      (renderObj.fullSettlementStatus === 0 &&
+                        !(parentRow.id === null)) ||
+                      parentRow.isCanResetSettle
                     "
                     :row="childRow"
                     :list="parentRow.childEvents"
@@ -142,7 +155,7 @@
                 </template>
               </pure-table>
               <el-button
-                v-if="parentRow.id !== null"
+                v-if="parentRow.id !== null || parentRow.isCanResetSettle"
                 class="mt-2"
                 type="primary"
                 size="small"
@@ -197,6 +210,7 @@ const {
   renderObj,
   expandChange,
   allSettleLoading,
-  changeSettleType
+  changeSettleType,
+  resetMatchEvent
 } = useTennisDetailHook();
 </script>

@@ -336,6 +336,7 @@ declare namespace SattleDataAPI {
     pageSize: number;
     pageNum: number;
     eventCodes: any[];
+    isCanResetSettle?: boolean;
     isEdit?: boolean;
     matchPeriodIds: any[];
     childEvents: ChildEvent[];
