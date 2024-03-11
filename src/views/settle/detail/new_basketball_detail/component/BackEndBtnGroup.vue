@@ -30,6 +30,15 @@
         link
         type="primary"
         size="small"
+        @click="row.isEdit = true"
+      >
+        {{ t('编辑') }}
+      </el-button>
+      <el-button
+        class="reset-margin"
+        link
+        type="primary"
+        size="small"
         @click="confirmResetMatchEvent(row, true)"
       >
         {{ t('保存') }}

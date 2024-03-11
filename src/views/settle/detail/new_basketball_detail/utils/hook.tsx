@@ -307,32 +307,26 @@ export function useNewBasketBallHook() {
   ) => {
     if ((row.t1 as string) === '' || (row.t2 as string) === '')
       return message(t('比分不能为空'), { type: 'error' });
-
-    ElMessageBox.confirm(t('确定要修改该事件么？'), t('警告'), {
-      confirmButtonText: t('确认'),
-      cancelButtonText: t('取消'),
-      center: true
-    }).then(async () => {
-      !confirmParams.cancelEventIds.includes(row.id) &&
-        isDelete &&
-        confirmParams.cancelEventIds.push(row.id);
-      if (
-        confirmParams.newEventList.findIndex(
-          item => item._tempDate === row._tempDate
-        ) < 0
-      ) {
-        confirmParams.newEventList.push({
-          matchId: renderObj.matchId,
-          eventCode: row.eventCode,
-          eventTime: 1,
-          homeAway: row.homeAway,
-          _tempDate: row._tempDate,
-          matchPeriodId: row.matchPeriodId,
-          t1: row.t1,
-          t2: row.t2
-        });
-      }
-    });
+    row.isEdit = false;
+    !confirmParams.cancelEventIds.includes(row.id) &&
+      isDelete &&
+      confirmParams.cancelEventIds.push(row.id);
+    if (
+      confirmParams.newEventList.findIndex(
+        item => item._tempDate === row._tempDate
+      ) < 0
+    ) {
+      confirmParams.newEventList.push({
+        matchId: renderObj.matchId,
+        eventCode: row.eventCode,
+        eventTime: 1,
+        homeAway: row.homeAway,
+        _tempDate: row._tempDate,
+        matchPeriodId: row.matchPeriodId,
+        t1: row.t1,
+        t2: row.t2
+      });
+    }
   };
 
   //- 历史记录-删除事件

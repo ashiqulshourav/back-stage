@@ -81,7 +81,7 @@ const goDetail = row => {
   });
   const params = JSON.parse(JSON.stringify(row));
   router.push({
-    name: 'SETTLE_HANDBALL_DETAIL',
+    name: 'SETTLE_DETAIL_HANDBALL_DETAIL',
     state: { params }
   });
 };

@@ -82,7 +82,7 @@ const goDetail = row => {
   });
   const params = JSON.parse(JSON.stringify(row));
   router.push({
-    name: 'SETTLE_ICEHOCKEY_DETAIL',
+    name: 'SETTLE_DETAIL_ICEHOCKEY_DETAIL',
     state: { params }
   });
 };

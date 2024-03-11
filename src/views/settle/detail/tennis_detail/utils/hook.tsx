@@ -123,7 +123,7 @@ export function useTennisDetailHook() {
 
     const params = {
       eventTime: 1,
-      firstNum: dataList.length,
+      firstNum: parentRow.firstNum,
       firstT1: 0,
       firstT2: 0,
       homeAway: '',
@@ -292,7 +292,7 @@ export function useTennisDetailHook() {
           firstT2: f2,
           homeAway: f1 > f2 ? 'home' : 'away',
           matchId: item.matchId,
-          matchPeriodId: dataList.length * 100 + index + 1,
+          matchPeriodId: row.matchPeriodId + index + 1,
           secondT1: item.secondT1,
           secondT2: item.secondT2
         };
@@ -301,7 +301,7 @@ export function useTennisDetailHook() {
       const params = {
         childEvents,
         eventTime: 1,
-        firstNum: dataList.length,
+        firstNum: row.firstNum,
         homeAway: t1Score.value > t2Score.value ? 'home' : 'away',
         matchId: row.matchId,
         t1: t1Score.value,

@@ -86,7 +86,7 @@ const goSettleDetail = row => {
   });
   const params = JSON.parse(JSON.stringify(row));
   router.push({
-    name: 'SETTLET_BILLIARDS_DETAIL',
+    name: 'SETTLE_DETAIL_BILLIARDS_DETAIL',
     state: { params }
   });
 };
