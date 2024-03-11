@@ -65,8 +65,6 @@ const currentComponentName = reactive({
   name: markRaw(comoMap[comType])
 });
 const changeCurrentComponentName = (_: { value: number; type: string }) => {
-
-    console.log(2222,_,_.type)
   currentComponentName.name = markRaw(comoMap[_.type]);
   currentSportId.value = _.value;
   matchStore.set_lagueList(0, _.value);
