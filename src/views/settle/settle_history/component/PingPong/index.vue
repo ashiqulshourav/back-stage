@@ -45,6 +45,7 @@ import { usePublicHooks } from '@/hooks';
 import { SearchFormType } from '../../utils/type';
 import { useMatchStore } from '@/store/match';
 import { useSettingStoreHook } from '@/store/settings';
+import {SPORT_TYPE} from '../../utils/type'
 
 const { tableHeaderStyle } = usePublicHooks();
 const router = useRouter();
@@ -73,7 +74,7 @@ const filterData = (type: 'reload') => {
 const goTennisDetail = row => {
   settingStore.save_selttle_history_page_info({
     page: pagination.currentPage,
-    matchType: 6
+    matchType:SPORT_TYPE.pingpong
   });
   const params = JSON.parse(JSON.stringify(row));
   router.push({
