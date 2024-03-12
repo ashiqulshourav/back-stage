@@ -2,7 +2,8 @@ import { handleTableWidth } from '@/utils/getTableWidth';
 import { MATCH_STATUS } from '@/utils/maps/sports_map';
 import { getLan } from '@/utils/utilFn';
 import dayjs from 'dayjs';
-export const columns: TableColumnList = [
+
+const baseColumns: TableColumnList = [
   {
     label: t('序号'),
     fixed: true,
@@ -99,3 +100,5 @@ export const columns: TableColumnList = [
     fixed: 'right'
   }
 ];
+
+export const columns: TableColumnList = baseColumns;

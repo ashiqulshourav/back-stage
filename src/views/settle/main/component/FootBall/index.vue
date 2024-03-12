@@ -48,7 +48,7 @@
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
 import { t } from '@/plugins/i18n';
-import { useBasketballHook } from './util/hook';
+import { useSettleHook } from './util/hook';
 import { usePublicHooks } from '@/hooks';
 import { SearchFormType } from '../../utils/type';
 import { useMatchStore } from '@/store/match';
@@ -74,7 +74,7 @@ const {
   handleTableWidthChange,
   handleCurrentChange,
   form
-} = useBasketballHook();
+} = useSettleHook();
 
 form.value = props.form;
 const filterData = (type: 'reload') => {

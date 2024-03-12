@@ -6,7 +6,7 @@ import { SPORT_TYPE, SearchFormType } from '../../../utils/type';
 import { useMatchStore } from '@/store/match';
 import { useSettingStoreHook } from '@/store/settings';
 
-export function useBasketballHook() {
+export function useSettleHook() {
   const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const matchStore = useMatchStore();
   const form = ref<SearchFormType>({} as SearchFormType);
