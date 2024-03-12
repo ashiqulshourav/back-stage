@@ -7,17 +7,28 @@ import { useMatchStore } from '@/store/match';
 import { SearchFormType } from './type';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { columns } from './tableColumnList';
-import { SPORT_NAME_TYPE } from './map';
+import { SPORT_LIST_MAP, SPORT_NAME_TYPE } from './map';
 
 export const useSettileHook = () => {
   const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const matchStore = useMatchStore();
-  const form = ref<SearchFormType>({} as SearchFormType);
   const settingStore = useSettingStoreHook();
   const classifyNavList = reactive(SPORT_ID_MAP.slice(0, 9));
+  const currentSportId = ref<number>(
+    settingStore.settlePageInfo.matchType ?? SPORT_NAME_TYPE.football
+  );
+  const loading = ref(false);
+
+  const form = reactive<SearchFormType>({
+    leagueId: '',
+    matchId: '',
+    status: '',
+    startTime: '',
+    endTime: ''
+  });
 
   //- 取消注单
-  const cancelBetOrder = row => {
+  const cancelClick = row => {
     return new Promise<void>(resolve => {
       const remark = ref('');
       addDialog({
@@ -74,7 +85,20 @@ export const useSettileHook = () => {
   };
 
   //- 跳转详情页面
-  const goDetailPage = () => {};
+  const router = useRouter();
+  const goDetailPage = row => {
+    settingStore.save_selttle_page_info({
+      page: pagination.currentPage,
+      matchType: currentSportId.value
+    });
+
+    const params = JSON.parse(JSON.stringify(row));
+    router.push({
+      name: SPORT_LIST_MAP.find(item => item.value === currentSportId.value)
+        .linkName,
+      state: { params }
+    });
+  };
 
   const pagination = reactive<PaginationProps>({
     total: 0,
@@ -96,24 +120,23 @@ export const useSettileHook = () => {
   const onSearch = async (type?: 'reload') => {
     try {
       if (type === 'reload') pagination.currentPage = 1;
-      const data = removeEmptyStringKeys(form.value ?? {});
-      matchStore.set_settleRequestLoading(true);
+      const data = removeEmptyStringKeys(form ?? {});
+      loading.value = true;
       const res: SattleDataAPI.getSettlementListRes =
         await API.getSettlementList({
           ...data,
           pageSize: pagination.pageSize,
           pageNum: pagination.currentPage,
-          sportId:
-            settingStore.settlePageInfo.matchType ?? SPORT_NAME_TYPE.football
+          sportId: currentSportId.value
         });
-
-      matchStore.set_settleRequestLoading(false);
+      loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
 
       res.data.list.forEach(item => {
         item.isShowCancelBtn =
           item.status === 'nover' || item.status === 'nobegin';
       });
+
       dataList.length = 0;
       dataList.push(...res.data.list);
       pagination.total = res.data.total;
@@ -121,11 +144,17 @@ export const useSettileHook = () => {
         .querySelector('.table_container .el-scrollbar__wrap')
         .scroll(0, 0);
     } catch (error) {
-      matchStore.settleRequestLoading = false;
+      loading.value = false;
     }
   };
 
-  const changeNavType = () => {};
+  //- 修改分类切换
+  const changeNavType = v => {
+    currentSportId.value = v;
+    matchStore.set_lagueList(0, v);
+    settingStore.save_selttle_page_info({ page: null, matchType: null });
+    onSearch('reload');
+  };
 
   onMounted(() => onSearch());
 
@@ -139,6 +168,9 @@ export const useSettileHook = () => {
     handleCurrentChange,
     classifyNavList,
     changeNavType,
-    goDetailPage
+    goDetailPage,
+    currentSportId,
+    cancelClick,
+    loading
   };
 };

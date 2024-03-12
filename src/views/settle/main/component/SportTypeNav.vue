@@ -14,14 +14,12 @@
 <script setup lang="ts">
 import CustomButton from '@/components/Form/CustomButton.vue';
 import { useMatchStore } from '@/store/match';
-import { SPORT_LIST_MAP, SPORT_NAME_TYPE } from '../utils/map';
-import { useSettingStoreHook } from '@/store/settings';
+import { SPORT_LIST_MAP } from '../utils/map';
 import { sport_list_map_type } from '../utils/type';
-const settingStore = useSettingStoreHook();
 
-const currentSportId = ref<number>(
-  settingStore.settlePageInfo.matchType ?? SPORT_NAME_TYPE.football
-);
+const props = defineProps<{
+  currentSportId: number;
+}>();
 
 const emits = defineEmits(['changeNavType']);
 const matchStore = useMatchStore();
@@ -30,9 +28,9 @@ const renderList = computed(() => {
 });
 
 const changeType = (_: sport_list_map_type) => {
-  if (_.value === currentSportId.value) return;
+  if (_.value === props.currentSportId) return;
   matchStore.set_currentSportId(_.value);
-  emits('changeNavType');
+  emits('changeNavType', _.value);
 };
 </script>
 

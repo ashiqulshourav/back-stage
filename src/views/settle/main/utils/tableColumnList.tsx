@@ -55,27 +55,11 @@ const baseColumns: TableColumnList = [
   {
     label: t('比赛状态'),
     prop: 'status',
-    formatter: ({ status }) => MATCH_STATUS[status] ?? '-',
+    formatter: ({ status }) => {
+      return MATCH_STATUS[status] ?? '-';
+    },
     headerRenderer: d => handleTableWidth(d, t('比赛状态'))
   },
-  {
-    label: t('是否中立场地'),
-    prop: 'isNeutral',
-    formatter: ({ isNeutral }) => (isNeutral ? t('是') : t('否')),
-    headerRenderer: d => handleTableWidth(d, t('是否中立场地'))
-  },
-  {
-    label: t('上半场结算'),
-    prop: 'halfSettlementStatus',
-    formatter: ({ halfSettlementStatus }) =>
-      halfSettlementStatus === 0 ? (
-        t('未结算')
-      ) : (
-        <el-text type="danger">{t('已结算')}</el-text>
-      ),
-    headerRenderer: d => handleTableWidth(d, t('上半场结算'))
-  },
-
   {
     label: t('全场结算'),
     prop: 'fullSettlementStatus',
@@ -100,5 +84,4 @@ const baseColumns: TableColumnList = [
     fixed: 'right'
   }
 ];
-
 export const columns: TableColumnList = baseColumns;

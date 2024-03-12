@@ -1,59 +1,85 @@
 <template>
   <div class="main">
-    <SearchForm @onSearch="onSearch" />
-    <SportTypeNav @changeNavType="changeNavType" />
-    <SportTable>
-      <el-button
-        v-auth="['DETAIL']"
-        class="reset-margin"
-        type="primary"
-        size="small"
-        @click="goDetailPage(row)"
-      >
-        {{ t('结算详情') }}
-      </el-button>
-      <el-button
-        v-if="row.isShowCancelBtn"
-        type="danger"
-        size="small"
-        :disabled="row.cancelOrderTimes > 0"
-        @click="cancelClick(row)"
-        >{{ t('取消比赛') }}</el-button
-      >
+    <SearchForm @onSearch="onSearch" :form="form" />
+    <SportTypeNav
+      @changeNavType="changeNavType"
+      :currentSportId="currentSportId"
+    />
+    <SportTable
+      :dataList="dataList"
+      :currentSport="currentSport"
+      :columns="renderColumnList"
+      :pagination="pagination"
+      :loading="loading"
+      @handleTableWidthChange="handleTableWidthChange"
+      @handleCurrentChange="handleCurrentChange"
+    >
+      <template #default="{ row }">
+        <el-button
+          v-auth="['DETAIL']"
+          class="reset-margin"
+          type="primary"
+          size="small"
+          @click="goDetailPage(row)"
+        >
+          {{ t('结算详情') }}
+        </el-button>
+        <el-button
+          v-if="row.isShowCancelBtn"
+          type="danger"
+          size="small"
+          :disabled="row.cancelOrderTimes > 0"
+          @click="cancelClick(row)"
+          >{{ t('取消比赛') }}</el-button
+        >
+      </template>
     </SportTable>
-    <!-- <component
-      :is="currentComponentName.name"
-      ref="componentStrName"
-      :form="form"
-    ></component> -->
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="tsx">
 import SearchForm from './component/SearchForm.vue';
 import SportTypeNav from './component/SportTypeNav.vue';
-import { useMatchStore } from '@/store/match';
-import { useSettingStoreHook } from '@/store/settings';
-import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { useSettileHook } from './utils/hook';
+import { t } from '@/plugins/i18n';
+import SportTable from './component/SportTable.vue';
+import { SPORT_LIST_MAP } from './utils/map';
+import { handleTableWidth } from '@/utils/getTableWidth';
+import { SPORT_NAME_TYPE } from './utils/map';
 
 defineOptions({ name: 'SETTLE_MAIN' });
-const componentStrName = ref<any>('FootBall');
-const settingStore = useSettingStoreHook();
 
-const matchStore = useMatchStore();
+const currentSport = computed(() =>
+  SPORT_LIST_MAP.find(item => item.value === currentSportId.value)
+);
 
-const comType = SPORT_ID_MAP.find(item => {
-  return item.value === (settingStore.settlePageInfo.matchType ?? 1);
-}).type;
-
-// const changeCurrentComponentName = (_: { value: number; type: string }) => {
-//   currentComponentName.name = markRaw(comoMap[_.type]);
-//   currentSportId.value = _.value;
-//   matchStore.set_lagueList(0, _.value);
-//   settingStore.save_selttle_page_info({ page: null, matchType: null });
-//   form.leagueId = '';
-// };
+const renderColumnList = computed(() => {
+  const fillList = [
+    {
+      label: t('是否中立场地'),
+      prop: 'isNeutral',
+      formatter: ({ isNeutral }) => (isNeutral ? t('是') : t('否')),
+      headerRenderer: d => handleTableWidth(d, t('是否中立场地')),
+      hide: () => currentSport.value.value != 1
+    },
+    {
+      label: t('上半场结算'),
+      prop: 'halfSettlementStatus',
+      formatter: ({ halfSettlementStatus }) =>
+        halfSettlementStatus === 0 ? (
+          t('未结算')
+        ) : (
+          <el-text type="danger">{t('已结算')}</el-text>
+        ),
+      headerRenderer: d => handleTableWidth(d, t('上半场结算')),
+      hide: () =>
+        currentSport.value.value != SPORT_NAME_TYPE.football &&
+        currentSport.value.value != SPORT_NAME_TYPE.basketball
+    }
+  ];
+  columns.splice(columns.length - 3, 0, ...fillList);
+  return columns;
+});
 
 const {
   changeNavType,
@@ -64,8 +90,10 @@ const {
   pagination,
   handleTableWidthChange,
   handleCurrentChange,
-  classifyNavList,
-  goDetailPage
+  goDetailPage,
+  currentSportId,
+  cancelClick,
+  loading
 } = useSettileHook();
 </script>
 

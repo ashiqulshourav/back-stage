@@ -106,27 +106,25 @@ onMounted(() => {
   matchStore.set_lagueList(0, 1);
 });
 
+const props = defineProps<{
+  form: SearchFormType;
+}>();
+
 const changeDate = t => {
   if (!t) {
-    form.startTime = '';
-    form.endTime = '';
+    props.form.startTime = '';
+    props.form.endTime = '';
   } else {
-    form.startTime = dayjs(t[0]).format('YYYY-MM-DD HH:mm:ss');
-    form.endTime = dayjs(t[1]).endOf('day').format('YYYY-MM-DD HH:mm:ss');
+    props.form.startTime = dayjs(t[0]).format('YYYY-MM-DD HH:mm:ss');
+    props.form.endTime = dayjs(t[1]).endOf('day').format('YYYY-MM-DD HH:mm:ss');
   }
   searchVal();
 };
-const form = reactive<SearchFormType>({
-  leagueId: '',
-  matchId: '',
-  status: '',
-  startTime: '',
-  endTime: ''
-});
+
 const emits = defineEmits(['onSearch']);
 
 const resetForm = formRef => {
-  Object.keys(form).forEach(key => (form[key] = ''));
+  Object.keys(props.form).forEach(key => (props.form[key] = ''));
   time.value = '';
   formRef.resetFields();
   searchVal();

@@ -1,5 +1,9 @@
 <template>
-  <PureTableBar :title="title" :columns="columns" @refresh="onSearch">
+  <PureTableBar
+    :title="currentSport.label + t('列表')"
+    :columns="columns"
+    @refresh="onSearch"
+  >
     <template v-slot="{ size, dynamicColumns }">
       <pure-table
         class="table_container"
@@ -17,8 +21,8 @@
         @page-size-change="handleTableWidthChange"
         @page-current-change="handleCurrentChange"
       >
-        <template #operation>
-          <slot></slot>
+        <template #operation="{ row }">
+          <slot :row="row"></slot>
         </template>
       </pure-table>
     </template>
@@ -28,12 +32,15 @@
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
 import { usePublicHooks } from '@/hooks';
+import type { PaginationProps } from '@pureadmin/table';
+import { sport_list_map_type } from '../utils/type';
+import { t } from '@/plugins/i18n';
 
-const props = defineProps<{
-  title: string;
-  columns;
-  dataList;
-  pagination;
+defineProps<{
+  columns: TableColumnList;
+  dataList: SattleDataAPI.getSettlementDataList[];
+  pagination: PaginationProps;
+  currentSport: sport_list_map_type;
   loading: boolean;
 }>();
 
@@ -45,6 +52,6 @@ const emites = defineEmits([
 
 const { tableHeaderStyle } = usePublicHooks();
 const onSearch = () => emites('onSearch', 'reload');
-const handleTableWidthChange = () => emites('handleTableWidthChange');
-const handleCurrentChange = () => emites('handleCurrentChange');
+const handleTableWidthChange = v => emites('handleTableWidthChange', v);
+const handleCurrentChange = v => emites('handleCurrentChange', v);
 </script>
