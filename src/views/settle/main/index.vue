@@ -1,98 +1,71 @@
 <template>
   <div class="main">
-    <SearchForm :form="form" @resetForm="resetForm" @onSearch="onSearch" />
-    <SportTypeNav
-      @changeCurrentComponentName="changeCurrentComponentName"
-      :currentSportId="currentSportId"
-    />
-    <component
+    <SearchForm @onSearch="onSearch" />
+    <SportTypeNav @changeNavType="changeNavType" />
+    <!-- <SportTable>
+      <el-button
+        v-auth="['DETAIL']"
+        class="reset-margin"
+        type="primary"
+        size="small"
+        @click="goDetailPage(row)"
+      >
+        {{ t('结算详情') }}
+      </el-button>
+      <el-button
+        v-if="row.isShowCancelBtn"
+        type="danger"
+        size="small"
+        :disabled="row.cancelOrderTimes > 0"
+        @click="cancelClick(row)"
+        >{{ t('取消比赛') }}</el-button
+      >
+    </SportTable> -->
+    <!-- <component
       :is="currentComponentName.name"
       ref="componentStrName"
       :form="form"
-    ></component>
+    ></component> -->
   </div>
 </template>
 
 <script setup lang="ts">
-import FootBall from './component/FootBall/index.vue';
-import BasketBall from './component/Basketball/index.vue';
-import Tennis from './component/Tennis/index.vue';
-import Billiards from './component/Billiards/index.vue';
-import Volleyball from './component/Volleyball/index.vue';
-import Hockey from './component/Hockey/index.vue';
-import Boxing from './component/Boxing/index.vue';
-import Darts from './component/Darts/index.vue';
-import Badminton from './component/Badminton/index.vue';
-import PingPong from './component/PingPong/index.vue';
-import Rugby from './component/Rugby/index.vue';
-import AmericanFootball from './component/American_football/index.vue';
-import Handball from './component/Handball/index.vue';
-import IceHockey from './component/IceHockey/index.vue';
-import Cricket from './component/Cricket/index.vue';
 import SearchForm from './component/SearchForm.vue';
 import SportTypeNav from './component/SportTypeNav.vue';
-import { SearchFormType } from './utils/type';
 import { useMatchStore } from '@/store/match';
 import { useSettingStoreHook } from '@/store/settings';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+import { useSettileHook } from './utils/hook';
 
 defineOptions({ name: 'SETTLE_MAIN' });
 const componentStrName = ref<any>('FootBall');
 const settingStore = useSettingStoreHook();
-const currentSportId = ref<number>(settingStore.settlePageInfo.matchType ?? 1);
-const matchStore = useMatchStore();
 
-const form = reactive<SearchFormType>({
-  leagueId: '',
-  matchId: '',
-  status: '',
-  startTime: '',
-  endTime: ''
-});
-const comoMap = {
-  FootBall,
-  BasketBall,
-  Tennis,
-  Billiards,
-  Volleyball,
-  Badminton,
-  PingPong,
-  Handball,
-  IceHockey,
-  Cricket,
-  Hockey,
-  Boxing,
-  Darts,
-  Rugby,
-  AmericanFootball
-};
+const matchStore = useMatchStore();
 
 const comType = SPORT_ID_MAP.find(item => {
   return item.value === (settingStore.settlePageInfo.matchType ?? 1);
 }).type;
 
-const currentComponentName = reactive({
-  name: markRaw(comoMap[comType])
-});
+// const changeCurrentComponentName = (_: { value: number; type: string }) => {
+//   currentComponentName.name = markRaw(comoMap[_.type]);
+//   currentSportId.value = _.value;
+//   matchStore.set_lagueList(0, _.value);
+//   settingStore.save_selttle_page_info({ page: null, matchType: null });
+//   form.leagueId = '';
+// };
 
-const changeCurrentComponentName = (_: { value: number; type: string }) => {
-  currentComponentName.name = markRaw(comoMap[_.type]);
-  currentSportId.value = _.value;
-  matchStore.set_lagueList(0, _.value);
-  settingStore.save_selttle_page_info({ page: null, matchType: null });
-  form.leagueId = '';
-};
-
-//- 搜索相关
-const onSearch = val => {
-  componentStrName.value.filterData(val, form);
-};
-
-const resetForm = formEl => {
-  if (!formEl) return;
-  formEl.resetFields();
-  onSearch('reload');
-};
+const {
+  changeNavType,
+  form,
+  onSearch,
+  columns,
+  dataList,
+  pagination,
+  handleTableWidthChange,
+  handleCurrentChange,
+  classifyNavList
+} = useSettileHook();
 </script>
 
 <style lang="scss">

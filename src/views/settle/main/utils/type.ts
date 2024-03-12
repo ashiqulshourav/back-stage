@@ -28,6 +28,12 @@ export type SearchFormType = {
   endTime: string;
 };
 
+export type sport_list_map_type = {
+  label: string;
+  value: number;
+  linkName: string;
+}
+
 export enum MatchEventType {
   Goal = 'goal',
   YellowRedCard = 'yellow_red_card',

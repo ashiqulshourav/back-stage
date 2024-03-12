@@ -102,37 +102,37 @@ const formRef = ref();
 const matchStore = useMatchStore();
 const time = ref('');
 
-const props = withDefaults(
-  defineProps<{
-    form: SearchFormType;
-  }>(),
-  {}
-);
-
 onMounted(() => {
   matchStore.set_lagueList(0, 1);
 });
 
 const changeDate = t => {
   if (!t) {
-    props.form.startTime = '';
-    props.form.endTime = '';
+    form.startTime = '';
+    form.endTime = '';
   } else {
-    props.form.startTime = dayjs(t[0]).format('YYYY-MM-DD HH:mm:ss');
-    props.form.endTime = dayjs(t[1]).endOf('day').format('YYYY-MM-DD HH:mm:ss');
+    form.startTime = dayjs(t[0]).format('YYYY-MM-DD HH:mm:ss');
+    form.endTime = dayjs(t[1]).endOf('day').format('YYYY-MM-DD HH:mm:ss');
   }
   searchVal();
 };
-
-const emits = defineEmits(['onSearch', 'resetForm', 'changeMatchCondition']);
-const searchVal = () => emits('onSearch', 'reload');
+const form = reactive<SearchFormType>({
+  leagueId: '',
+  matchId: '',
+  status: '',
+  startTime: '',
+  endTime: ''
+});
+const emits = defineEmits(['onSearch']);
 
 const resetForm = formRef => {
-  Object.keys(props.form).forEach(key => (props.form[key] = ''));
+  Object.keys(form).forEach(key => (form[key] = ''));
   time.value = '';
-  emits('resetForm', formRef);
-  emits('onSearch', ...['reload']);
+  formRef.resetFields();
+  searchVal();
 };
+
+const searchVal = () => emits('onSearch', 'reload');
 </script>
 
 <style scoped lang="scss">
