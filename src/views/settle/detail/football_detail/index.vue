@@ -83,11 +83,7 @@
                   v-show="row.isShowCount"
                 />
                 <span v-show="!row.isShowCount">
-                  {{
-                    row.settleType === 0 || renderObj.settlementType === 1
-                      ? t('自动结算')
-                      : t('人工结算')
-                  }}
+                  {{ row.settleType === 0 ? t('自动结算') : t('人工结算') }}
                 </span>
               </template>
 
