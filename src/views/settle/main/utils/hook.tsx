@@ -7,6 +7,7 @@ import { useMatchStore } from '@/store/match';
 import { SearchFormType } from './type';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { columns } from './tableColumnList';
+import { SPORT_NAME_TYPE } from './map';
 
 export const useSettileHook = () => {
   const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
@@ -72,6 +73,9 @@ export const useSettileHook = () => {
     });
   };
 
+  //- 跳转详情页面
+  const goDetailPage = () => {};
+
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -99,7 +103,8 @@ export const useSettileHook = () => {
           ...data,
           pageSize: pagination.pageSize,
           pageNum: pagination.currentPage,
-          sportId: SPORT_TYPE.football
+          sportId:
+            settingStore.settlePageInfo.matchType ?? SPORT_NAME_TYPE.football
         });
 
       matchStore.set_settleRequestLoading(false);
@@ -133,6 +138,7 @@ export const useSettileHook = () => {
     handleTableWidthChange,
     handleCurrentChange,
     classifyNavList,
-    changeNavType
+    changeNavType,
+    goDetailPage
   };
 };

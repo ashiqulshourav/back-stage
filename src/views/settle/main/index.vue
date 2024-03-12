@@ -2,7 +2,7 @@
   <div class="main">
     <SearchForm @onSearch="onSearch" />
     <SportTypeNav @changeNavType="changeNavType" />
-    <!-- <SportTable>
+    <SportTable>
       <el-button
         v-auth="['DETAIL']"
         class="reset-margin"
@@ -20,7 +20,7 @@
         @click="cancelClick(row)"
         >{{ t('取消比赛') }}</el-button
       >
-    </SportTable> -->
+    </SportTable>
     <!-- <component
       :is="currentComponentName.name"
       ref="componentStrName"
@@ -64,7 +64,8 @@ const {
   pagination,
   handleTableWidthChange,
   handleCurrentChange,
-  classifyNavList
+  classifyNavList,
+  goDetailPage
 } = useSettileHook();
 </script>
 
