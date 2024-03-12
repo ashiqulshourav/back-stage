@@ -51,7 +51,6 @@ const treeRef = ref();
 const selectAll = ref(false);
 const emits = defineEmits(['closeDialog']);
 const defaultKeyList = reactive<number[]>([]);
-const userStore = useUserStore();
 
 const dataProps = {
   value: 'id',
@@ -71,8 +70,7 @@ const closeDialog = () => emits('closeDialog');
 
 const initTreeList = async () => {
   const res = await API.allPermissionList({
-    // roleId: props.roleId
-    roleId: userStore.userInfo.id
+    roleId: props.roleId
   });
   if (res.code) return message(res.msg, { type: 'error' });
   menusData.length = 0;
