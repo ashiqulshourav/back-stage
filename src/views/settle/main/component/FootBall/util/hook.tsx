@@ -5,12 +5,15 @@ import { columns } from './tableColumnList';
 import { SPORT_TYPE, SearchFormType } from '../../../utils/type';
 import { useMatchStore } from '@/store/match';
 import { useSettingStoreHook } from '@/store/settings';
+import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
 export function useSettleHook() {
   const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
   const matchStore = useMatchStore();
   const form = ref<SearchFormType>({} as SearchFormType);
   const settingStore = useSettingStoreHook();
+  const classifyNavList = reactive(SPORT_ID_MAP.slice(0, 9));
+  
 
   const pagination = reactive<PaginationProps>({
     total: 0,
@@ -69,6 +72,7 @@ export function useSettleHook() {
     dataList,
     pagination,
     handleTableWidthChange,
-    handleCurrentChange
+    handleCurrentChange,
+    classifyNavList
   };
 }
