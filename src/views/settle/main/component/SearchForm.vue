@@ -102,16 +102,13 @@ const formRef = ref();
 const matchStore = useMatchStore();
 const time = ref('');
 
-const props = withDefaults(
-  defineProps<{
-    form: SearchFormType;
-  }>(),
-  {}
-);
-
 onMounted(() => {
   matchStore.set_lagueList(0, 1);
 });
+
+const props = defineProps<{
+  form: SearchFormType;
+}>();
 
 const changeDate = t => {
   if (!t) {
@@ -124,15 +121,16 @@ const changeDate = t => {
   searchVal();
 };
 
-const emits = defineEmits(['onSearch', 'resetForm', 'changeMatchCondition']);
-const searchVal = () => emits('onSearch', 'reload');
+const emits = defineEmits(['onSearch']);
 
 const resetForm = formRef => {
   Object.keys(props.form).forEach(key => (props.form[key] = ''));
   time.value = '';
-  emits('resetForm', formRef);
-  emits('onSearch', ...['reload']);
+  formRef.resetFields();
+  searchVal();
 };
+
+const searchVal = () => emits('onSearch', 'reload');
 </script>
 
 <style scoped lang="scss">

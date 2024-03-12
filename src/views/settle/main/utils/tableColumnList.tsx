@@ -1,10 +1,9 @@
-import dayjs from 'dayjs';
 import { handleTableWidth } from '@/utils/getTableWidth';
-import { MATCH_STATUS /* PANDA_MATCH_STATUS */ } from '@/utils/maps/sports_map';
+import { MATCH_STATUS } from '@/utils/maps/sports_map';
 import { getLan } from '@/utils/utilFn';
-// import { parseMatchScore } from '@/utils/formatMatch';
+import dayjs from 'dayjs';
 
-export const columns: TableColumnList = [
+const baseColumns: TableColumnList = [
   {
     label: t('序号'),
     fixed: true,
@@ -18,7 +17,7 @@ export const columns: TableColumnList = [
     fixed: true,
     align: 'left',
     headerRenderer: d => handleTableWidth(d, t('联赛名称'), 'auto'),
-    minWidth: 200
+    minWidth: 160
   },
   {
     label: t('赛事ID'),
@@ -26,14 +25,14 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('赛事ID'))
   },
   {
-    label: t('等级'),
+    label: t('热门排序'),
     prop: 'level',
-    headerRenderer: d => handleTableWidth(d, t('等级'))
+    headerRenderer: d => handleTableWidth(d, t('热门排序'))
   },
   {
     label: t('开赛时间'),
     prop: 'beginTimeLong',
-    minWidth: 220,
+    minWidth: 200,
     formatter: ({ beginTimeLong }) =>
       dayjs(beginTimeLong).format('YYYY-MM-DD HH:mm:ss'),
     headerRenderer: d => handleTableWidth(d, t('开赛时间'), 'auto')
@@ -56,9 +55,10 @@ export const columns: TableColumnList = [
   {
     label: t('比赛状态'),
     prop: 'status',
-    width: 200,
-    formatter: ({ status }) => MATCH_STATUS[status] ?? '-',
-    headerRenderer: d => handleTableWidth(d, t('比赛状态'), 'auto')
+    formatter: ({ status }) => {
+      return MATCH_STATUS[status] ?? '-';
+    },
+    headerRenderer: d => handleTableWidth(d, t('比赛状态'))
   },
   {
     label: t('全场结算'),
@@ -72,10 +72,16 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('全场结算'))
   },
   {
+    label: t('未结算'),
+    prop: 'unSettlementEvents',
+    headerRenderer: d => handleTableWidth(d, t('未结算'))
+  },
+  {
     label: t('操作'),
     slot: 'operation',
-    headerRenderer: d => handleTableWidth(d, t('操作'), 'auto'),
-    width: getLan() === 'zh' ? 220 : 280,
+    showOverflowTooltip: false,
+    minWidth: getLan() === 'zh' ? 220 : 300,
     fixed: 'right'
   }
 ];
+export const columns: TableColumnList = baseColumns;

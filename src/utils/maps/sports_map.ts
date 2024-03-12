@@ -23,7 +23,6 @@ export const SPORT_ID_MAP = [
   { label: t('冰球'), value: 12, type: 'IceHockey' },
   { label: t('羽毛球'), value: 19, type: 'Badminton' },
   { label: t('乒乓球'), value: 23, type: 'PingPong' },
-  /* 未提测内容 */
   { label: t('英式橄榄球'), value: 9, type: 'Rugby' },
   { label: t('板球'), value: 13, type: 'Cricket' },
   { label: t('曲棍球'), value: 28, type: 'Hockey' },
