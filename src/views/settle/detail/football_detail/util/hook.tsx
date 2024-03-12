@@ -68,10 +68,9 @@ export function useFootball() {
   //- 当前行编辑
   const editChild = (row: SattleDataAPI.MatchEventsList) => (row.isEdit = true);
 
-  //- 获取当前展开行结算列表
+  //- 赛事列表获取
   const getChildrenData = async () => {
     childloading.value = true;
-
     const res = await API.getMatchEvents({
       matchId: history.state.params.matchId
     });
@@ -120,8 +119,12 @@ export function useFootball() {
       }
     });
     if (loopTimer.value) clearInterval(loopTimer.value);
-    if (renderObj.settlementType === 1 && renderObj.fullSettlementStatus !== 1)
+    if (
+      renderObj.settlementType === 1 &&
+      renderObj.fullSettlementStatus !== 1
+    ) {
       loopTimer.value = setInterval(() => getChildrenData(), 10000);
+    }
   };
 
   //- 是否输入了完整的内容
@@ -401,9 +404,9 @@ export function useFootball() {
     }
   };
 
-  onMounted(() => {
+  onMounted(async () => {
+    await getMatchDetail();
     getChildrenData();
-    getMatchDetail();
   });
 
   onUnmounted(() => {
