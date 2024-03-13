@@ -3,7 +3,7 @@
   "version": "4.5.0",
   "private": true,
   "scripts": {
-    "dev": "node build/config.ts && vite",
+    "dev": "node build/config.ts",
     "build:dpgames-back-stage": "node build/config.ts --isbuild=run",
     "build:dev": "node build/config.ts --isbuild=run",
     "preview": "vite preview",

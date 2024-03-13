@@ -33,8 +33,9 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
     VITE_COMPRESSION,
     VITE_PUBLIC_PATH,
     VITE_API_BASE_URL,
-    VITE_BUILD_BASE_URL
+    VITE_BUILD_BASE_URL,
   } = warpperEnv(loadEnv(mode, root));
+
   return {
     base: VITE_PUBLIC_PATH,
     root,
