@@ -27,6 +27,7 @@ const __APP_INFO__ = {
 };
 
 export default ({ command, mode }: ConfigEnv): UserConfigExport => {
+  console.log('vite.config.ts文件 30==============行打印=', mode);
   const {
     VITE_CDN,
     VITE_PORT,
