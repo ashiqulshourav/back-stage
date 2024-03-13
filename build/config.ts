@@ -14,7 +14,6 @@ const getBranch = () => {
 
 const init = () => {
   const branchMap = {
-    dev: 'dev',
     fat: 'fat',
     uat: 'uat',
     pro: 'pro'
