@@ -35,7 +35,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
     VITE_API_BASE_URL,
     VITE_BUILD_BASE_URL,
   } = warpperEnv(loadEnv(mode, root));
-
+  console.log('vite.config.ts文件 38==============行打印=', VITE_BUILD_BASE_URL);
   return {
     base: VITE_PUBLIC_PATH,
     root,
