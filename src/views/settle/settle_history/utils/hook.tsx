@@ -15,7 +15,7 @@ export const useSettileHook = () => {
   const settingStore = useSettingStoreHook();
   const classifyNavList = reactive(SPORT_ID_MAP.slice(0, 9));
   const currentSportId = ref<number>(
-      settingStore.settleHistoryPageInfo.matchType ?? 1
+    settingStore.settleHistoryPageInfo.matchType ?? 1
   );
   const loading = ref(false);
 
@@ -85,7 +85,7 @@ export const useSettileHook = () => {
   //- 跳转详情页面
   const router = useRouter();
   const goDetailPage = row => {
-    settingStore.save_selttle_page_info({
+    settingStore.save_selttle_history_page_info({
       page: pagination.currentPage,
       matchType: currentSportId.value
     });
@@ -145,7 +145,10 @@ export const useSettileHook = () => {
   const changeNavType = v => {
     currentSportId.value = v;
     matchStore.set_lagueList(0, v);
-    settingStore.save_selttle_history_page_info({ page: null, matchType: null });
+    settingStore.save_selttle_history_page_info({
+      page: null,
+      matchType: null
+    });
     onSearch('reload');
   };
 
