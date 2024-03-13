@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "node build/config.ts",
-    "build:dpgames-back-stage": "node build/config.ts --isbuild=run",
+    "build:dpgames-back-stage": "rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build --mode",
     "build:dev": "node build/config.ts --isbuild=run",
     "preview": "vite preview",
     "preview:build": "pnpm build && vite preview",
