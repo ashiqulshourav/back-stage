@@ -13,7 +13,7 @@ const getBranch = () => {
 
 const init = () => {
   const branchMap = {
-    dev: 'dev',
+    dev: 'fat',
     release: 'production',
     uat: 'release'
   }
