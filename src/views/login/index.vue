@@ -144,6 +144,13 @@ const _loginRequest = async () => {
   }
 };
 
+onMounted(() => {
+  console.log(
+    'index.vue文件 148==============行打印=',
+    import.meta.env.VITE_BUILD_TYPE
+  );
+});
+
 const { openResetDialog } = useResetPasswordHook();
 </script>
 

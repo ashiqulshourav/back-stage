@@ -27,6 +27,7 @@ const __APP_INFO__ = {
 };
 
 export default ({ command, mode }: ConfigEnv): UserConfigExport => {
+  console.log('vite.config.ts文件 30==============行打印=', mode);
   const {
     VITE_CDN,
     VITE_PORT,
@@ -34,6 +35,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
     VITE_PUBLIC_PATH,
     VITE_API_BASE_URL,
     VITE_BUILD_TYPE,
+    VITE_BUILD_BASE_URL
   } = warpperEnv(loadEnv(mode, root));
   return {
     base: VITE_PUBLIC_PATH,
@@ -80,7 +82,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
           assetFileNames: "static/[ext]/[name]-[hash].[ext]"
         }
       },
-      outDir: `dist${VITE_BUILD_TYPE === 'production' ? '/dpgames-back-stage' : ''}`,
+      outDir: `dist${VITE_BUILD_BASE_URL}`,
     },
     define: {
       __INTLIFY_PROD_DEVTOOLS__: false,
