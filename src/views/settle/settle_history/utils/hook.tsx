@@ -15,7 +15,7 @@ export const useSettileHook = () => {
   const settingStore = useSettingStoreHook();
   const classifyNavList = reactive(SPORT_ID_MAP.slice(0, 9));
   const currentSportId = ref<number>(
-    settingStore.settlePageInfo.matchType ?? SPORT_NAME_TYPE.football
+      settingStore.settleHistoryPageInfo.matchType ?? 1
   );
   const loading = ref(false);
 
@@ -144,7 +144,6 @@ export const useSettileHook = () => {
   //- 修改分类切换
   const changeNavType = v => {
     currentSportId.value = v;
-    console.log(3333333,v)
     matchStore.set_lagueList(0, v);
     settingStore.save_selttle_history_page_info({ page: null, matchType: null });
     onSearch('reload');

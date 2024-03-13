@@ -45,8 +45,7 @@ import { t } from '@/plugins/i18n';
 import SportTable from '../main/component/SportTable.vue';
 import { SPORT_LIST_MAP,SPORT_NAME_TYPE } from '../main/utils/map';
 import { handleTableWidth } from '@/utils/getTableWidth';
-defineOptions({ name: 'SETTLE_MAIN' });
-
+defineOptions({ name: 'SETTLE_SETTLE_HISTORY' });
 const currentSport = computed(() =>
   SPORT_LIST_MAP.find(item => item.value === currentSportId.value)
 );
