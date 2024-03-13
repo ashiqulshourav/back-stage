@@ -1,6 +1,6 @@
-const shell = require('shelljs');
 const { execSync } = require('child_process');
 const { isbuild } = require('yargs').argv;
+const shell = require('shelljs');
 
 const getBranch = () => {
   try {
