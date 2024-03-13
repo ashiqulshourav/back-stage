@@ -1,5 +1,6 @@
 <template>
   <div class="select-none">
+    <span style="display: none">{{ test }}</span>
     <img :src="bg" class="wave" />
     <div class="flex-c absolute right-5 top-3">
       <el-switch
@@ -144,11 +145,9 @@ const _loginRequest = async () => {
   }
 };
 
+const test = ref('');
 onMounted(() => {
-  console.log(
-    'index.vue文件 148==============行打印=',
-    import.meta.env.VITE_BUILD_TYPE
-  );
+  test.value = import.meta.env.VITE_BUILD_TYPE;
 });
 
 const { openResetDialog } = useResetPasswordHook();
