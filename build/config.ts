@@ -1,5 +1,6 @@
 const shell = require('shelljs');
 const { execSync } = require('child_process');
+const { isbuild } = require('yargs').argv;
 const getBranch = () => {
   try {
     const command = 'git rev-parse --abbrev-ref HEAD';
@@ -13,13 +14,14 @@ const getBranch = () => {
 
 const init = () => {
   const branchMap = {
-    dev: 'fat',
-    release: 'production',
-    uat: 'release'
+    dev: 'dev',
+    fat: 'fat',
+    uat: 'uat',
+    pro: 'pro'
   }
-  console.log('build.js文件 13==============行打印=', getBranch());
-  // shell.exec('rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build --mode dev');
-  shell.exec('rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build --mode production');
+  if (isbuild) {
+    shell.exec(`rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build --mode ${branchMap[getBranch()]}`);
+  }
 }
 
 init()
