@@ -12,6 +12,11 @@ const getBranch = () => {
 }
 
 const init = () => {
+  const branchMap = {
+    dev: 'dev',
+    release: 'production',
+    uat: 'release'
+  }
   console.log('build.js文件 13==============行打印=', getBranch());
   // shell.exec('rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build --mode dev');
   shell.exec('rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build --mode production');
