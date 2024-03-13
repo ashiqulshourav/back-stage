@@ -93,6 +93,7 @@
     "rollup-plugin-visualizer": "^5.9.2",
     "sass": "^1.63.6",
     "sass-loader": "^13.3.2",
+    "shelljs": "^0.8.5",
     "stylelint": "^15.9.0",
     "stylelint-config-html": "^1.1.0",
     "stylelint-config-recess-order": "^4.2.0",
