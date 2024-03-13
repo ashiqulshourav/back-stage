@@ -144,8 +144,9 @@ export const useSettileHook = () => {
   //- 修改分类切换
   const changeNavType = v => {
     currentSportId.value = v;
+    console.log(3333333,v)
     matchStore.set_lagueList(0, v);
-    settingStore.save_selttle_page_info({ page: null, matchType: null });
+    settingStore.save_selttle_history_page_info({ page: null, matchType: null });
     onSearch('reload');
   };
 
