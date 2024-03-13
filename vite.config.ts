@@ -82,7 +82,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
           assetFileNames: "static/[ext]/[name]-[hash].[ext]"
         }
       },
-      outDir: `dist${VITE_BUILD_BASE_URL}`,
+      outDir: `dist/dpgames-back-stage`,
     },
     define: {
       __INTLIFY_PROD_DEVTOOLS__: false,
