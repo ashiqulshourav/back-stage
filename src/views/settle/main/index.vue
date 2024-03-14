@@ -84,7 +84,7 @@ const renderColumnList = computed(() => {
     }
   ];
   const _ = [...columns];
-  _.splice(_.length - 3, 0, ...fillList);
+  _.splice(_.length - 2, 0, ...fillList);
   return _;
 });
 
