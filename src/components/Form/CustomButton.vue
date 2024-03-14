@@ -18,21 +18,21 @@
 </template>
 
 <script setup lang="ts">
-import { EpPropMergeType } from "element-plus/es/utils/vue/props/types";
+import { EpPropMergeType } from 'element-plus/es/utils/vue/props/types';
 
 withDefaults(
   defineProps<{
     icon?: Component | null;
     type?: EpPropMergeType<
       StringConstructor,
-      | ""
-      | "default"
-      | "primary"
-      | "success"
-      | "warning"
-      | "info"
-      | "danger"
-      | "text",
+      | ''
+      | 'default'
+      | 'primary'
+      | 'success'
+      | 'warning'
+      | 'info'
+      | 'danger'
+      | 'text',
       unknown
     >;
     link?: boolean;
@@ -43,16 +43,16 @@ withDefaults(
   }>(),
   {
     icon: null,
-    type: "primary",
+    type: 'primary',
     link: false,
     disabled: false,
     loading: null,
     circle: null
   }
 );
-const emit = defineEmits(["click"]);
+const emit = defineEmits(['click']);
 const btnClick = () => {
-  emit("click");
+  emit('click');
 };
 </script>
 

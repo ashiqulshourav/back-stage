@@ -79,7 +79,7 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 
 const { switchStyle } = usePublicHooks();
 
-const props = defineProps<{
+const { row } = defineProps<{
   row: UserMangerAPI.addSysAccountRes;
 }>();
 
@@ -100,7 +100,7 @@ const getRoleList = async () => {
 };
 
 const ruleFormRef = ref<FormInstance>();
-const newFormInline = reactive(props.row);
+const newFormInline = reactive(row);
 
 const closeDialog = () => {
   emits('closeDialog');
