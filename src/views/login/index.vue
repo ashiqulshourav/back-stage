@@ -1,6 +1,6 @@
 <template>
   <div class="select-none">
-    <span style="display: none">123{{ test }}</span>
+    <span style="display: none">aaa{{ test }}</span>
     <img :src="bg" class="wave" />
     <div class="flex-c absolute right-5 top-3">
       <el-switch

@@ -79,7 +79,7 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
           assetFileNames: "static/[ext]/[name]-[hash].[ext]"
         }
       },
-      outDir: `dist/dpgames-back-stage`,
+      // outDir: `dist/dpgames-back-stage`,
     },
     define: {
       __INTLIFY_PROD_DEVTOOLS__: false,
