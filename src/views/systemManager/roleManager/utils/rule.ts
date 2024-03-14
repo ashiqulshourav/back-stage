@@ -21,6 +21,9 @@ const formRules = reactive(<FormRules>{
       trigger: "blur"
     }
   ],
+  comment: [
+    { required: true, message: t("备注不能为空") },
+  ],
 });
 
 export { formRules };
