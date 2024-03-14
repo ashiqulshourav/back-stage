@@ -16,7 +16,7 @@ const getBranch = () => {
 const init = () => {
   if (isbuild) {
     console.log('config.ts文件 18==============行打印=', getBranch());
-    shell.exec(`rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build --mode ${getBranch()}`);
+    // shell.exec(`rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build --mode ${getBranch()}`);
   } else {
     shell.exec(`vite --mode ${getBranch()}`);
   }
