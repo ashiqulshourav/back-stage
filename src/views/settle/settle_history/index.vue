@@ -43,7 +43,7 @@ import SportTypeNav from '../main/component/SportTypeNav.vue';
 import { useSettileHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import SportTable from '../main/component/SportTable.vue';
-import { SPORT_LIST_MAP,SPORT_NAME_TYPE } from '../main/utils/map';
+import { SPORT_LIST_MAP, SPORT_NAME_TYPE } from '../main/utils/map';
 import { handleTableWidth } from '@/utils/getTableWidth';
 defineOptions({ name: 'SETTLE_SETTLE_HISTORY' });
 const currentSport = computed(() =>
@@ -74,8 +74,10 @@ const renderColumnList = computed(() => {
         currentSport.value.value != SPORT_NAME_TYPE.basketball
     }
   ];
-  columns.splice(columns.length - 3, 0, ...fillList);
-  return columns;
+  const _ = [...columns];
+  _.splice(_.length - 3, 0, ...fillList);
+  _.splice(_.length - 2, 1);
+  return _;
 });
 
 const {

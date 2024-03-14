@@ -71,11 +71,7 @@ const baseColumns: TableColumnList = [
       ),
     headerRenderer: d => handleTableWidth(d, t('全场结算'))
   },
-  {
-    label: t('未结算'),
-    prop: 'unSettlementEvents',
-    headerRenderer: d => handleTableWidth(d, t('未结算'))
-  },
+  
   {
     label: t('操作'),
     slot: 'operation',

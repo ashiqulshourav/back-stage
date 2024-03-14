@@ -75,10 +75,17 @@ const renderColumnList = computed(() => {
       hide: () =>
         currentSport.value.value != SPORT_NAME_TYPE.football &&
         currentSport.value.value != SPORT_NAME_TYPE.basketball
+    },
+    {
+      label: t('未结算'),
+      prop: 'unSettlementEvents',
+      headerRenderer: d => handleTableWidth(d, t('未结算')),
+      hide: () => currentSport.value.value != SPORT_NAME_TYPE.football
     }
   ];
-  columns.splice(columns.length - 3, 0, ...fillList);
-  return columns;
+  const _ = [...columns];
+  _.splice(_.length - 3, 0, ...fillList);
+  return _;
 });
 
 const {
