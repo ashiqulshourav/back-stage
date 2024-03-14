@@ -81,9 +81,9 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('锁盘控制'), 'auto')
   },
   {
-    label: t('结算盘口'),
+    label: t('操作'),
     fixed: 'right',
     slot: 'operation',
-    minWidth: getLan() === 'zh' ? 160 : 200
+    minWidth: getLan() === 'zh' ? 200 : 300
   }
 ];
