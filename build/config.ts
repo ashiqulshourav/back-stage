@@ -14,11 +14,11 @@ const getBranch = () => {
 }
 
 const init = () => {
-  if (isbuild) {
-    shell.exec(`rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build --mode ${getBranch()}`);
-  } else {
-    shell.exec(`vite --mode ${getBranch()}`);
-  }
+  // if (isbuild) {
+  //   shell.exec(`rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build --mode ${getBranch()}`);
+  // } else {
+  //   shell.exec(`vite --mode ${getBranch()}`);
+  // }
 }
 
 init()
