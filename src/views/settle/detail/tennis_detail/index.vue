@@ -144,10 +144,18 @@
               >
                 <!-- -比分 -->
                 <template #secondT1="{ row: childRow }">
-                  <Score :row="childRow" type="secondT1" />
+                  <Score
+                    :row="childRow"
+                    type="secondT1"
+                    :parentRow="parentRow"
+                  />
                 </template>
                 <template #secondT2="{ row: childRow }">
-                  <Score :row="childRow" type="secondT2" />
+                  <Score
+                    :row="childRow"
+                    type="secondT2"
+                    :parentRow="parentRow"
+                  />
                 </template>
 
                 <!-- -数据商 -->
