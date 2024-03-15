@@ -190,7 +190,7 @@
                       renderObj.reSettleStatus === 1
                     "
                     :row="childRow"
-                    :list="parentRow.childEvents"
+                    :data="parentRow"
                     :childIndex="childIndex"
                     @deleteChildItem="
                       deleteChildItem(parentRow, childIndex, parentIndex)
