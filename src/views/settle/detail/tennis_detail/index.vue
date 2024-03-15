@@ -10,7 +10,7 @@
       <template #title>
         <div class="flex items-center">
           <div
-            class="mt-2 cursor-pointer"
+            class="cursor-pointer"
             v-if="
               !renderObj.fullSettlementStatus || renderObj.reSettleStatus === 1
             "
@@ -40,6 +40,23 @@
                 {{ t('新增盘') }}
               </el-button>
             </div>
+          </div>
+          <div v-if="renderObj.fullSettlementStatus === 1">
+            <el-button
+              @click="openSecondSettleClick"
+              type="primary"
+              size="small"
+              v-if="renderObj.reSettleStatus === 0"
+              >{{ t('开启二次结算') }}</el-button
+            >
+            <el-button
+              class="ml-2"
+              @click="confirmSecondSettleClick"
+              type="warning"
+              size="small"
+              v-else
+              >{{ t('确认二次结算') }}</el-button
+            >
           </div>
         </div>
       </template>
@@ -81,6 +98,22 @@
                 {{
                   parentRow.isCanResetSettle ? t('重新结算') : t('开启重新结算')
                 }}
+              </el-button>
+            </template>
+            <template v-else-if="renderObj.reSettleStatus === 1">
+              <el-button
+                @click="saveResetPan(parentRow)"
+                type="primary"
+                size="small"
+                >{{ t('保存') }}</el-button
+              >
+              <el-button
+                class="reset-margin"
+                type="danger"
+                size="small"
+                @click="deleteMatchEvent(parentRow)"
+              >
+                {{ t('删除') }}
               </el-button>
             </template>
             <span v-else>-</span>
@@ -145,7 +178,8 @@
                     v-if="
                       (renderObj.fullSettlementStatus === 0 &&
                         !(parentRow.id === null)) ||
-                      parentRow.isCanResetSettle
+                      parentRow.isCanResetSettle ||
+                      renderObj.reSettleStatus === 1
                     "
                     :row="childRow"
                     :list="parentRow.childEvents"
@@ -158,7 +192,11 @@
                 </template>
               </pure-table>
               <el-button
-                v-if="parentRow.id !== null || parentRow.isCanResetSettle"
+                v-if="
+                  parentRow.id !== null ||
+                  parentRow.isCanResetSettle ||
+                  renderObj.reSettleStatus === 1
+                "
                 class="mt-2"
                 type="primary"
                 size="small"
@@ -215,6 +253,10 @@ const {
   allSettleLoading,
   changeSettleType,
   resetMatchEvent,
-  deleteChildItem
+  deleteChildItem,
+  openSecondSettleClick,
+  confirmSecondSettleClick,
+  deleteMatchEvent,
+  saveResetPan
 } = useTennisDetailHook();
 </script>

@@ -494,7 +494,9 @@ declare namespace SattleDataAPI {
   type manualSettlementFullTimeResType = COMMON.BASE_RES_TYPE<null>
   type basketballCancelMatchEventResType = COMMON.BASE_RES_TYPE<null>
   type open2ndSettlementStatusResType = COMMON.BASE_RES_TYPE<null>
+  type tenantOpen2ndSettlementStatusResType = COMMON.BASE_RES_TYPE<null>
   type basketballOpen2ndSettlementStatusResType = COMMON.BASE_RES_TYPE<null>
+  type tenantConfirm2ndSettlementResType = COMMON.BASE_RES_TYPE<null>
 
   type addBasketballEventV2ReqType = {
     eventTime: string | number | Date;
@@ -517,6 +519,28 @@ declare namespace SattleDataAPI {
       matchPeriodId: number | string;
       t1: number | string;
       t2: number | string;
+    }[]
+  }
+
+  type tenantConfirm2ndSettlementReqType = {
+    matchId: number;
+    cancelFirstNumList: number[];
+    newEventList: {
+      matchId: number;
+      _tempDate?: number;
+      firstNum: string | number;
+      childEvents: {
+        eventTime?: number;
+        firstNum?: number | string;
+        firstT1?: number;
+        firstT2?: number;
+        homeAway?: string;
+        matchId?: number;
+        matchPeriodId?: number | string;
+        secondNum?: number;
+        secondT1?: number | string;
+        secondT2?: number | string;
+      }[]
     }[]
   }
 }
