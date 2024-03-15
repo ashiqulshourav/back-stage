@@ -48,11 +48,8 @@ const calculateTheScoreOfThePlate = () => {
   let s1 = 0;
   let s2 = 0;
   props.parentRow.childEvents.forEach(item => {
-    if (item.secondT1 > item.secondT2) {
-      s1 += 1;
-    } else if (item.secondT1 < item.secondT2) {
-      s2 += 1;
-    }
+    if (item.secondT1 > item.secondT2) s1 += 1;
+    else if (item.secondT1 < item.secondT2) s2 += 1;
   });
   props.parentRow.t1 = s1;
   props.parentRow.t2 = s2;

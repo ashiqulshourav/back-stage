@@ -44,11 +44,8 @@ const deleteChildItem = () => {
   let s1 = 0;
   let s2 = 0;
   props.data.childEvents.forEach(item => {
-    if (item.secondT1 > item.secondT2) {
-      s1 += 1;
-    } else if (item.secondT1 < item.secondT2) {
-      s2 += 1;
-    }
+    if (item.secondT1 > item.secondT2) s1 += 1;
+    else if (item.secondT1 < item.secondT2) s2 += 1;
   });
   props.data.t1 = s1;
   props.data.t2 = s2;

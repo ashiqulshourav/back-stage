@@ -28,7 +28,6 @@ module.exports = {
     const parser = this.parser;
     const content = fs.readFileSync(file.path, enc);
     parser.parseFuncFromString(content, { list: ['t', 't'] }, (key, options) => {
-      console.log('i18next-scaner.config.ts文件 31==============行打印=', key, options);
       options.defaultValue = key;
       // let hashKey = `k${crc32(key).toString(16)}`;
       let hashKey = `k${crc32.str(key).toString(16)}`;

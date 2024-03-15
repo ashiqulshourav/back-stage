@@ -1,7 +1,6 @@
 import { message } from '@/utils/message';
 import { childColumns } from './tableColumnList';
 import { SearchFormType } from './type';
-// import { compareTime } from '@/utils/formatDate';
 import { ElMessageBox } from 'element-plus';
 import { NEW_ROW_TYPE } from './map';
 
@@ -14,6 +13,7 @@ export function useNewBasketBallHook() {
   const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
     history.state.params as SattleDataAPI.getSettlementDataList
   );
+  const { matchId } = renderObj;
   const form = ref<SearchFormType>({} as SearchFormType);
   const balanceLoading = reactive<{ half: boolean; all: boolean }>({
     half: false,
@@ -85,7 +85,7 @@ export function useNewBasketBallHook() {
 
     const params: SattleDataAPI.addBasketballEventV2ReqType = {
       eventTime: 1,
-      matchId: renderObj.matchId,
+      matchId,
       matchPeriodId: row.matchPeriodId,
       t1: +row.t1,
       t2: +row.t2
@@ -107,9 +107,7 @@ export function useNewBasketBallHook() {
 
   //- 初始化联赛
   const initMatchData = async () => {
-    const res = await API.getPreSaleInfo({
-      matchId: +renderObj.matchId
-    });
+    const res = await API.getPreSaleInfo({ matchId });
     if (res.code) return message(res.msg, { type: 'error' });
     Object.assign(renderObj, res.data);
     getEventList();
@@ -119,9 +117,7 @@ export function useNewBasketBallHook() {
   const getEventList = async () => {
     loopTimer.value && clearInterval(loopTimer.value);
     loading.value = true;
-    const res = await API.getNewBasketballEvents({
-      matchId: renderObj.matchId
-    });
+    const res = await API.getNewBasketballEvents({ matchId });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
     res.data.forEach(item => {
@@ -154,9 +150,7 @@ export function useNewBasketBallHook() {
         center: true
       }
     ).then(async () => {
-      const res = await API.setManualMatchStatus({
-        matchId: renderObj.matchId
-      });
+      const res = await API.setManualMatchStatus({ matchId });
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if (res.code) return;
       loopTimer.value && clearInterval(loopTimer.value);
@@ -185,7 +179,7 @@ export function useNewBasketBallHook() {
       }).then(async () => {
         const res = await API.reSettleMatchEvent({
           id: row.id,
-          matchId: renderObj.matchId,
+          matchId,
           matchPeriodId: row.matchPeriodId,
           t1: row.t1,
           t2: row.t2
@@ -208,7 +202,7 @@ export function useNewBasketBallHook() {
     }).then(async () => {
       const res = await API.basketBallCancelMatchEvent({
         id: row.id,
-        matchId: row.matchId
+        matchId
       });
       message(res.msg, { type: res.code ? 'error' : 'success' });
       getEventList();
@@ -216,6 +210,7 @@ export function useNewBasketBallHook() {
   };
 
   //- 全场结算事件
+  const router = useRouter();
   const allSettleBtnClick = async () => {
     ElMessageBox.confirm('确定要全场结算么?', t('警告'), {
       dangerouslyUseHTMLString: true,
@@ -223,11 +218,9 @@ export function useNewBasketBallHook() {
       cancelButtonText: t('取消'),
       center: true
     }).then(async () => {
-      const res = await API.v2ManualSettlementFullTime({
-        matchId: renderObj.matchId
-      });
+      const res = await API.v2ManualSettlementFullTime({ matchId });
       message(res.msg, { type: res.code ? 'error' : 'success' });
-      initMatchData();
+      router.go(-1);
     });
   };
 
@@ -239,7 +232,7 @@ export function useNewBasketBallHook() {
     cancelEventIds: [],
     deleteEventIds: [],
     newEventList: [],
-    matchId: history.state.params.matchId
+    matchId
   } as SattleDataAPI.confirm2ndSettlementReqType);
 
   //- 开启二次结算
@@ -318,7 +311,7 @@ export function useNewBasketBallHook() {
       ) < 0
     ) {
       confirmParams.newEventList.push({
-        matchId: renderObj.matchId,
+        matchId,
         eventCode: row.eventCode,
         eventTime: 1,
         homeAway: row.homeAway,

@@ -40,7 +40,16 @@
                   v-for="(item, index) in row.arr"
                   :key="index"
                 >
-                  <span>{{ item.handicap }}</span>
+                  <template v-if="item.handicap.length > 20">
+                    <el-tooltip
+                      effect="dark"
+                      :content="item.handicap"
+                      placement="top-start"
+                    >
+                      <span>{{ item.handicap }}</span>
+                    </el-tooltip>
+                  </template>
+                  <span v-else>{{ item.handicap }}</span>
                   <span class="ml-3">{{ item.odds }}</span>
                 </el-radio>
               </el-radio-group>

@@ -215,8 +215,8 @@ declare namespace SattleDataAPI {
     awayTeamId: number;
     inningNum: number;
     setNum: number;
-    t1: number | string;
-    t2: number | string;
+    firstT1: number | string;
+    firstT2: number | string;
     sourceType: number;
     settleTimes: number;
     settleType: number;
@@ -342,7 +342,27 @@ declare namespace SattleDataAPI {
     childEvents: ChildEvent[];
   }
 
-  type volleyballData = SnookerEventsResData;
+  type volleyballData = {
+    awayTeamId: number | string;
+    canceled: number | string;
+    createdAt: number | string;
+    createdBy: string;
+    eventTime: number | string;
+    homeTeamId: number | string;
+    id: number | string;
+    matchId: number | string;
+    matchPeriodId: number | string;
+    settleTimes: number | string;
+    settleType: number | string;
+    sourceType: number | string;
+    firstT1: number | string;
+    firstT2: number | string;
+    updatedAt: number | string;
+    updatedBy: number | string;
+    firstNum: number | string;
+    isEdit: boolean;
+  };
+
   type HockeyEventData = CommonEventData & { matchPeriod?: string };
   type BoxingEventData = CommonEventData & { matchPeriod?: string };
   type DartsEventData = CommonEventData & { matchPeriod?: string };
@@ -379,6 +399,7 @@ declare namespace SattleDataAPI {
   type getRugbyEventRes = COMMON.BASE_RES_TYPE<rugbyData[]>;
   type getMatchEventsRes = COMMON.BASE_RES_TYPE<MatchEventsList[]>;
   type cancelBetOrderResType = COMMON.BASE_RES_TYPE<null>;
+  type volleyReSettleMatchEventResType = COMMON.BASE_RES_TYPE<null>;
 
   type getSettlementHistoryParams = {
     isSale?: number;
@@ -431,6 +452,15 @@ declare namespace SattleDataAPI {
     t1: number | string;
     t2: number | string;
     gameRule: string;
+  };
+  type VolleyballReq = {
+    eventTime: number;
+    matchId: number;
+    matchPeriodId: number | string;
+    firstT1: number | string;
+    firstT2: number | string;
+    firstNum: number | string;
+    id?: number | string;
   };
   type BadmintonEventReq = {
     eventTime: number | string | Date;
@@ -513,12 +543,12 @@ declare namespace SattleDataAPI {
     newEventList: {
       matchId: number;
       _tempDate?: number;
-      eventCode: string | number;
+      eventCode?: string | number;
       eventTime: number | string | Date;
-      homeAway: string;
+      homeAway?: string;
       matchPeriodId: number | string;
-      t1: number | string;
-      t2: number | string;
+      t1?: number | string;
+      t2?: number | string;
     }[]
   }
 

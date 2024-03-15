@@ -217,6 +217,7 @@ export function useTennisDetailHook() {
   };
 
   //- 全场结算
+  const router = useRouter();
   const allSettleBtnClick = async () => {
     let s1 = 0;
     let s2 = 0;
@@ -248,8 +249,8 @@ export function useTennisDetailHook() {
           t2: s2
         });
         allSettleLoading.value = false;
-        if (res.code) return message(res.msg, { type: 'error' });
-        getMatchDetail();
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        if (!res.code) router.go(-1);
       } catch (error) {
         allSettleLoading.value = false;
       }

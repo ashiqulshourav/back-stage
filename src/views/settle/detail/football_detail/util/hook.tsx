@@ -206,7 +206,7 @@ export function useFootball() {
       getMatchDetail();
     });
   };
-
+  const router = useRouter();
   //-全场 + 上半场结算
   const settlementFunction = async (matchId: number, type: 'half' | 'all') => {
     try {
@@ -218,8 +218,12 @@ export function useFootball() {
       balanceLoading[type] = false;
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if (res.code) return;
-      getChildrenData();
-      getMatchDetail();
+      if (type === 'half') {
+        getChildrenData();
+        getMatchDetail();
+      } else {
+        router.go(-1);
+      }
     } catch (error) {
       balanceLoading[type] = false;
     }
