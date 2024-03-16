@@ -123,13 +123,28 @@ declare namespace SattleDataAPI {
   //   updatedBy?: string;
   //   uuid?: string;
   // };
-  type HandballEvent = CommonEventData & {
-    inningNum: number;
-    isEdit?: boolean;
-    homeTeamName?: any;
-    awayTeamName?: any;
-    matchPeriod?: string;
+
+  type HandballEvent = {
+    awayTeamId: number | string;
+    canceled: number | string;
+    createdAt: number | string;
+    createdBy: string;
+    eventTime: number | string;
+    homeTeamId: number | string;
+    id: number | string;
+    matchId: number | string;
+    matchPeriodId: number | string;
+    settleTimes: number | string;
+    settleType: number | string;
+    sourceType: number | string;
+    firstT1: number | string;
+    firstT2: number | string;
+    updatedAt: number | string;
+    updatedBy: number | string;
+    firstNum: number | string;
+    isEdit: boolean;
   };
+
   type IceHockeyEvent = HandballEvent;
   type CricketEvent = HandballEvent;
 
@@ -229,6 +244,7 @@ declare namespace SattleDataAPI {
     inningEvents?: any[];
     t1Error: boolean;
     t2Error: boolean;
+    matchPeriodId?: number;
     eventTimeError: boolean;
   };
 

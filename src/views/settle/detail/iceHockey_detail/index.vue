@@ -9,8 +9,38 @@
 
     <PureTableBar :columns="columns" @refresh="onSearch()">
       <template #title>
-        <div>
-          <h2>{{ t('赛果结算') }}</h2>
+        <div class="flex item-center">
+          <el-button
+            type="primary"
+            size="small"
+            @click="addEventRow"
+            v-if="
+              renderObj.fullSettlementStatus === 0 ||
+              renderObj.reSettleStatus === 1
+            "
+          >
+            {{ t('新增局') }}</el-button
+          >
+          <div
+            v-if="renderObj.fullSettlementStatus === 1"
+            class="flex item-center"
+          >
+            <el-button
+              @click="openSecondSettleClick"
+              type="primary"
+              size="small"
+              v-if="renderObj.reSettleStatus === 0"
+              >{{ t('开启二次结算') }}</el-button
+            >
+            <el-button
+              @click="confirmSecondSettleClick"
+              type="warning"
+              v-else
+              class="ml-2"
+              size="small"
+              >{{ t('确认二次结算') }}</el-button
+            >
+          </div>
         </div>
       </template>
 
@@ -30,44 +60,26 @@
         >
           <!-- -比分 -->
           <template #t1="{ row }">
-            <Score :row="row" type="t1" :errorType="row.t1Error" />
+            <Score :row="row" type="firstT1" :errorType="row.t1Error" />
           </template>
           <template #t2="{ row }">
-            <Score :row="row" type="t2" :errorType="row.t2Error" />
-          </template>
-          <template #inningNum>
-            <!-- {{boardType === 'INNING' ? t('节') : t('上/下半场') }} -->
-            {{ t('局') }}
-          </template>
-          <!-- -结算时间 -->
-          <template #eventTime="{ row, index }">
-            <EventTime
-              :row="row"
-              :index="index"
-              :dataList="dataList"
-              :errorType="row.eventTimeError"
-            />
+            <Score :row="row" type="firstT2" :errorType="row.t2Error" />
           </template>
 
           <!-- -局按钮 -->
           <template #operation="{ row, index }">
             <ChildOperation
               :row="row"
+              :renderObj="renderObj"
               :childIndex="index"
               @deleteChildItem="() => dataList.pop()"
+              @resetBtnClick="resetBtnClick"
               @settlementHandicap="settlementHandicap(row)"
             />
           </template>
         </pure-table>
       </template>
     </PureTableBar>
-    <template v-if="renderObj.fullSettlementStatus !== 1 && checkNoMore()">
-      <div class="mt-4">
-        <el-button type="primary" @click="addEventRow">
-          {{ dataList.length == 3 ? t('新增加时赛') : t('新增局') }}</el-button
-        >
-      </div>
-    </template>
   </div>
 </template>
 
@@ -78,7 +90,6 @@ import DetiltTitle from './component/DetailTitle.vue';
 import { useDetailHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import Score from './component/Score.vue';
-import EventTime from './component/EventTime.vue';
 import ChildOperation from './component/ChildOperation.vue';
 
 defineOptions({ name: 'SETTLE_ICEHOCKEY_DETAIL' });
@@ -89,12 +100,13 @@ const {
   loading,
   columns,
   dataList,
-  // boardType,
   addEventRow,
   settlementHandicap,
   allSettleBtnClick,
   renderObj,
   allSettleLoading,
-  checkNoMore
+  openSecondSettleClick,
+  confirmSecondSettleClick,
+  resetBtnClick
 } = useDetailHook();
 </script>

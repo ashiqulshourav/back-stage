@@ -80,6 +80,7 @@ export function useVolleballHook() {
     const { firstT1, firstT2, firstNum } = row;
     if (firstT1 === '' || firstT2 === '')
       return message(t('比分不能为空'), { type: 'error' });
+
     ElMessageBox.confirm(
       `
       <div class="text-center">

@@ -1,18 +1,16 @@
 import dayjs from 'dayjs';
 export const MATCH_PERIOD_TYPES = {
-  Q1: t('第一局'),
-  Q2: t('第二局'),
-  Q3: t('第三局'),
-  OT: t('加时赛')
-  // HT: t('上半场'),
-  // FT: t('下半场')
+  40: t('加时赛'),
+  1: t('第一局'),
+  2: t('第二局')
 };
 export const MATCH_PERIOD = {
   INNING: {
     1: 'Q1',
     2: 'Q2',
     3: 'Q3',
-    4: 'OT'
+    4: 'Q4',
+    5: 'OT'
   },
   HT: {
     1: 'HT',
@@ -22,9 +20,8 @@ export const MATCH_PERIOD = {
 };
 export const columns: TableColumnList = [
   {
-    headerSlot: 'inningNum',
-    formatter: ({ inningNum, gameRule }) =>
-      MATCH_PERIOD_TYPES[MATCH_PERIOD[gameRule][inningNum]] ?? '-'
+    label: t('局'),
+    formatter: ({ matchPeriodId }) => MATCH_PERIOD_TYPES[matchPeriodId] ?? '-'
   },
   {
     headerRenderer: () => history.state.params.homeTeamNameCn ?? '_',
@@ -33,10 +30,6 @@ export const columns: TableColumnList = [
   {
     headerRenderer: () => history.state.params.awayTeamNameCn ?? '_',
     slot: 't2'
-  },
-  {
-    label: t('结算时间'),
-    slot: 'eventTime'
   },
   {
     label: t('操作人'),
