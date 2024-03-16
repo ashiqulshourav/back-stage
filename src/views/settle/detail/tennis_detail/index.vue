@@ -9,44 +9,31 @@
     <PureTableBar :columns="columns" @refresh="onSearch()">
       <template #title>
         <div class="flex items-center">
-          <div
-            class="cursor-pointer"
-            v-if="
-              !renderObj.fullSettlementStatus || renderObj.reSettleStatus === 1
-            "
-          >
+          <div v-if="isSettlePage || isReSettle">
             <el-button
-              v-if="
-                renderObj.settlementType === 1 && renderObj.reSettleStatus !== 1
-              "
+              v-if="isAutoSettleType && !isReSettle"
               class="ml-1 reset-margin"
               @click="changeSettleType"
               >{{ t('开启人工结算') }}</el-button
             >
             <div
               class="flex items-center"
-              v-if="
-                renderObj.settlementType !== 1 || renderObj.reSettleStatus === 1
-              "
+              v-if="renderObj.settlementType !== 1 || isReSettle"
             >
               <span class="mr-3 text-[var(--el-color-danger)] text-sm"
-                >{{
-                  renderObj.reSettleStatus === 1
-                    ? t('重新结算中')
-                    : t('人工结算中')
-                }}...</span
+                >{{ isReSettle ? t('重新结算中') : t('人工结算中') }}...</span
               >
               <el-button @click="addEventRow" size="small" type="primary">
                 {{ t('新增盘') }}
               </el-button>
             </div>
           </div>
-          <div v-if="renderObj.fullSettlementStatus === 1">
+          <div v-if="isHistoryPage">
             <el-button
               @click="openSecondSettleClick"
               type="primary"
               size="small"
-              v-if="renderObj.reSettleStatus === 0"
+              v-if="!isReSettle"
               >{{ t('开启二次结算') }}</el-button
             >
             <el-button
@@ -79,7 +66,7 @@
           :header-cell-style="tableHeaderStyle"
         >
           <template #operation="{ row: parentRow }">
-            <template v-if="renderObj.fullSettlementStatus === 0">
+            <template v-if="isSettlePage">
               <el-button
                 v-if="parentRow.id !== null"
                 @click="settlementHandicap(parentRow)"
@@ -100,7 +87,7 @@
                 }}
               </el-button>
             </template>
-            <template v-else-if="renderObj.reSettleStatus === 1">
+            <template v-else-if="isReSettle">
               <el-button
                 @click="saveResetPan(parentRow)"
                 type="primary"
@@ -184,10 +171,9 @@
                 >
                   <ChildOperation
                     v-if="
-                      (renderObj.fullSettlementStatus === 0 &&
-                        !(parentRow.id === null)) ||
+                      (!isHistoryPage && !(parentRow.id === null)) ||
                       parentRow.isCanResetSettle ||
-                      renderObj.reSettleStatus === 1
+                      isReSettle
                     "
                     :row="childRow"
                     :data="parentRow"
@@ -203,7 +189,7 @@
                 v-if="
                   parentRow.id !== null ||
                   parentRow.isCanResetSettle ||
-                  renderObj.reSettleStatus === 1
+                  isReSettle
                 "
                 class="mt-2"
                 type="primary"
@@ -243,6 +229,15 @@ const canSettlement = (list: SattleDataAPI.ChildEvent[]) => {
     return item.secondT1 !== '' && item.secondT2 !== '' && !item.isEdit;
   });
 };
+
+//- 历史界面
+const isHistoryPage = computed(() => renderObj.fullSettlementStatus === 1);
+//- 结算界面
+const isSettlePage = computed(() => renderObj.fullSettlementStatus !== 1);
+//- 自动结算
+const isAutoSettleType = computed(() => renderObj.settlementType === 1);
+//- 开启重新结算状态
+const isReSettle = computed(() => renderObj.reSettleStatus === 1);
 
 const {
   onSearch,

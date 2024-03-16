@@ -51,9 +51,7 @@
           :loading="loading"
           :size="size"
           :row-key="row => row.inningNum"
-          :adaptiveConfig="{
-            offsetBottom: 60
-          }"
+          :adaptiveConfig="{ offsetBottom: 60 }"
           :data="dataList"
           :columns="dynamicColumns"
           :header-cell-style="tableHeaderStyle"

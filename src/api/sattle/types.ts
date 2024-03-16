@@ -59,29 +59,6 @@ declare namespace SattleDataAPI {
     updatedAt?: string;
   };
 
-  type BasketballEvent = {
-    awayTeamId?: number;
-    canceled?: number | boolean;
-    createdAt?: number;
-    eventTime?: string | number | Date;
-    homeTeamId?: number;
-    eventCode?: string | number;
-    extraInfo?: string;
-    homeAway?: string;
-    id?: number;
-    matchId?: number;
-    matchPeriod?: string;
-    settleTimes?: number;
-    settleType?: number;
-    sourceType?: number;
-    t1?: number | string;
-    t2?: number | string;
-    updatedAt?: number;
-    updatedBy?: number;
-    uuid?: string;
-    gameRule?: 'INNING' | 'HT';
-  };
-
   type MatchEventParams = {
     canceled?: number;
     eventCode?: string | number;
@@ -101,28 +78,6 @@ declare namespace SattleDataAPI {
     gameRule?: string;
     inningNum?: number;
   };
-  // type MatchEvent = {
-  //   awayTeamId?: number;
-  //   canceled?: number | boolean;
-  //   createdAt?: number;
-  //   createdBy?: string;
-  //   eventTime?: string | number | Date;
-  //   homeTeamId?: number;
-  //   eventCode?: string | number;
-  //   extraInfo?: string;
-  //   homeAway?: string;
-  //   id?: number;
-  //   matchId?: number;
-  //   matchPeriod?: string;
-  //   settleTimes?: number;
-  //   settleType?: number;
-  //   sourceType?: number;
-  //   t1?: number | string;
-  //   t2?: number | string;
-  //   updatedAt?: number;
-  //   updatedBy?: string;
-  //   uuid?: string;
-  // };
 
   type HandballEvent = {
     awayTeamId: number | string;
@@ -416,6 +371,7 @@ declare namespace SattleDataAPI {
   type getMatchEventsRes = COMMON.BASE_RES_TYPE<MatchEventsList[]>;
   type cancelBetOrderResType = COMMON.BASE_RES_TYPE<null>;
   type volleyReSettleMatchEventResType = COMMON.BASE_RES_TYPE<null>;
+  type MatchIDType = { matchId: number }
 
   type getSettlementHistoryParams = {
     isSale?: number;

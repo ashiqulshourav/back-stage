@@ -7,7 +7,6 @@ export function useDetailHook() {
   const dataList = reactive<SattleDataAPI.HandballEvent[]>([]);
   const allSettleLoading = ref(false);
   const loading = ref(true);
-  const boardType = ref('HT');
   const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
     history.state.params as SattleDataAPI.getSettlementDataList
   );
@@ -236,7 +235,6 @@ export function useDetailHook() {
     loading,
     columns,
     dataList,
-    boardType,
     addEventRow,
     settlementHandicap,
     allSettleBtnClick,
