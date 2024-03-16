@@ -2,7 +2,8 @@ import dayjs from 'dayjs';
 export const MATCH_PERIOD_TYPES = {
   40: t('加时赛'),
   1: t('第一局'),
-  2: t('第二局')
+  2: t('第二局'),
+  3: t('第三局')
 };
 export const MATCH_PERIOD = {
   INNING: {

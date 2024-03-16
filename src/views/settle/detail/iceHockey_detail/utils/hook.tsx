@@ -45,7 +45,7 @@ export function useDetailHook() {
 
     const params: Partial<SattleDataAPI.volleyballData> = {
       matchId,
-      matchPeriodId: dataList.length > 1 ? 40 : dataList.length + 1,
+      matchPeriodId: dataList.length > 2 ? 40 : dataList.length + 1,
       isEdit: false,
       firstT1: '',
       firstT2: '',
