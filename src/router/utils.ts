@@ -189,10 +189,10 @@ function handleAsyncRoutes(routeList) {
 
 //- 清洗后端返回数据
 const transformItem = (item: UserAPI.RouterResData) => {
-  if (item.enName === 'settle' || item.enName === 'settle_history') {
-    const s = item.childResourceList[0].childResourceList;
-    item.childResourceList.push(...s)
-  }
+  // if (item.enName === 'settle' || item.enName === 'settle_history') {
+  //   const s = item.childResourceList[0].childResourceList;
+  //   item.childResourceList.push(...s)
+  // }
   const baseItem = {
     path: item.path,
     name: item.path.slice(1).split('/').join('_').toUpperCase(),

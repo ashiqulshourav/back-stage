@@ -55,7 +55,7 @@
               size="small"
               @click="
                 $router.push(
-                  `/esportsSettlement/esportsSettlementDetail/${row.matchId}`
+                  `/settle/esportsSettlement/esportsSettlementDetail/${row.matchId}`
                 )
               "
             >

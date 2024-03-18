@@ -15,9 +15,8 @@
       @handleCurrentChange="handleCurrentChange"
     >
       <template #default="{ row }">
-        <!-- todo -->
-        <!-- v-auth="['DETAIL']" -->
         <el-button
+          v-auth="['DETAIL']"
           class="reset-margin"
           type="primary"
           size="small"
