@@ -39,6 +39,26 @@
             />
           </el-select>
         </el-form-item>
+        <el-form-item :label="`${t('注单状态')}:`" prop="settleStatus">
+          <el-select
+              v-model="form.settleStatus"
+              clearable
+              class="!w-[150px]"
+          >
+            <el-option
+                label="全部"
+                value=""
+            />
+            <el-option
+                label="已结算"
+                :value="1"
+            />
+            <el-option
+                label="未结算"
+                :value="0"
+            />
+          </el-select>
+        </el-form-item>
 
         <el-form-item :label="`${t('联赛中文名')}:`" prop="leagueNameCn">
           <el-input

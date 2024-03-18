@@ -64,15 +64,15 @@ export enum EBetResultType {
   FLAT_MATCH_ROLLBACK = 51,
 }
 
-// export const getViewOddFn = (od: number, type: EOddType, currentOddType: number) => {
-//   if (type === EOddType.ML) {
-//     od = Number(truncateDecimals(-(1 / od), 2));
-//   }
-//   if (type !== EOddType.EUROPE) {
-//     return truncateDecimals(Number(currentOddType === EOddType.EUROPE ? addDecimals(od, 1) : od), 2);
-//   }
-//   return truncateDecimals(od, 2);
-// };
+export const getViewOddFn = (od: number, type: EOddType, currentOddType: number) => {
+  if (type === EOddType.ML) {
+    od = Number(truncateDecimals(-(1 / od), 2));
+  }
+  if (type !== EOddType.EUROPE) {
+    return truncateDecimals(Number(currentOddType === EOddType.EUROPE ? addDecimals(od, 1) : od), 2);
+  }
+  return truncateDecimals(od, 2);
+};
 
 export const BET_RESULT_TYPE_MAP: { [key in EBetResultType]: string } = {
   [EBetResultType.NO_RESULT]: '无结果',
@@ -170,11 +170,10 @@ export const useSportFormatDetail = (row) => {
   const secondLine = row.leagueNameCn;
   const thirdLine = `${row.homeTeamNameCn} vs ${row.awayTeamNameCn}`;
   const fifthLine = `玩法: ${playMap[row.kindsCode] ?? row.betItemName ?? '-'}`;
-  const odd=getViewOddFn(row.oddFinally,row.marketTypeFinally,row.marketType)
   const oddName=  getBetTeamType(row || {} as Detail)
   const isvisiable=isVisiableSecondText(row.betHandicap, row.betN, row.kindsCode)
   const oddName2=getBetHandiCapAtBetting(row.betHandicap, row.sportId)
-  const fourthLine = `${oddName}  ${isvisiable?oddName2:''} @${odd} (${markeTypeMap[row.marketType]})`;
+  const fourthLine = `${oddName}  ${isvisiable?oddName2:''}`;
   return [firstLine, secondLine, thirdLine, fourthLine, fifthLine,score];
 }
 // 盘口类型, OU:欧盘,1; HK:香港盘,2; ML:马来盘,3; ID:印尼盘,4; US:美式盘,5; GB:英式盘,6;

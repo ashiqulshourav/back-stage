@@ -8,9 +8,7 @@ import { Detail, getBetTeamType, playMap,markeTypeMap } from "@/utils/formatMatc
 import dayjs from 'dayjs';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { ElMessageBox } from "element-plus";
-import { useUserStore } from "@/store/user";
-export function useLeague(settleStatus:number) {
-  const userStore = useUserStore();
+export function useLeague() {
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const loading = ref(true);
   const totalInfo = reactive<BetOrderAPI.otherDataType>(
@@ -39,7 +37,8 @@ export function useLeague(settleStatus:number) {
     beginTimeStart: '',
     beginTimeEnd: '',
     settleTimeStart: '',
-    settleTimeEnd: ''
+    settleTimeEnd: '',
+    settleStatus:''
   });
 
   function handleTableWidthChange(val: number) {
@@ -58,11 +57,12 @@ export function useLeague(settleStatus:number) {
 
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
-/*    try {
+    try {
       loading.value = true;
-      const res: BetOrderAPI.BetOrderResType = await API.getOrderList({
-        ...removeEmptyStringKeys({ ...form,tenantId:userStore.userInfo.tenantId}),
-        settleStatus,
+
+      console.log(11111,form)
+      const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList({
+        ...removeEmptyStringKeys(form),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
@@ -82,7 +82,7 @@ export function useLeague(settleStatus:number) {
         .scroll(0, 0);
     } catch (error) {
       loading.value = false;
-    }*/
+    }
   }
 
   const resetForm = formEl => {
@@ -95,12 +95,7 @@ export function useLeague(settleStatus:number) {
 
   //- 导出excel表格
   const exportFile = async () => {
-    const res = await API.orderListDownLoad({
-      ...removeEmptyStringKeys({ ...form,tenantId:userStore.userInfo.tenantId }),
-      settleStatus: 0,
-      pageSize: pagination.pageSize,
-      pageNum: pagination.currentPage
-    });
+    const res = await API.bettingCenterList(removeEmptyStringKeys(form));
 
     const r = res.data.map((item:any,i) => {
 

@@ -1,6 +1,4 @@
 <template>
-  <div>1111111</div>
-  <div>{{Test()}}</div>
   <div class="main">
     <SearchForm
       :form="form"
@@ -10,7 +8,7 @@
     />
 
     <PureTableBar
-      :title="t('已结算注单列表')"
+      title=""
       :columns="columns"
       class="relative"
       @refresh="onSearch('reload')"
@@ -36,7 +34,7 @@
              <span>{{row.index}}</span>
           </template>
           <template #userMessage="{ row }">
-            <div class="item_line">
+            <div class="item_line" v-copy="row.userId">
               <span>用户ID：</span>{{row.userId}}
             </div>
             <div class="item_line">
@@ -66,6 +64,12 @@
               <div class="item_line">{{useSportFormatDetail(item)[3]}}</div>
               <div class="item_line">注单号: {{row.id}}</div>
               <div class="item_line">投注时间 {{dayjs(item.createTime ?? Date.now()).format("YYYY-MM-DD HH:mm:ss")}}</div>
+            </div>
+          </template>
+          <template #odd="{ row }">
+            <div class="match_item"  v-for="item in row.combineOrderDetails" :key="item">
+                <div>{{getViewOddFn(item.oddFinally,item.marketTypeFinally,item.marketType)}}</div>
+                <div>{{markeTypeMap[item.marketType]}}</div>
               <div class="item_line">
                 <span :class="[EBetResultType.WIN, EBetResultType.WIN_HALF].includes(item?.betResult)?'win':'lose'"> {{BET_RESULT_TYPE_MAP[item?.betResult]}}</span>
               </div>
@@ -112,11 +116,10 @@ import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 
 import {
-  Test,
   formatSeriesType,
   useSportFormatDetail,
   BET_RESULT_TYPE_MAP,
-  EBetResultType,
+  EBetResultType, getViewOddFn, markeTypeMap,
 } from "@/utils/formatMatch";
 // import { usePublicHooks } from '@/hooks';
 import dayjs from "dayjs";
@@ -135,7 +138,7 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   exportFile
-} = useLeague(1);
+} = useLeague();
 </script>
 
 <style lang="scss">
