@@ -5,19 +5,15 @@
       @allSettleBtnClick="allSettleBtnClick"
       :renderObj="renderObj"
       :allSettleLoading="allSettleLoading"
+      :hideAllSettleBtn="isAutoSettleType && !hasAuth('FULLSETTLE')"
     />
     <PureTableBar :columns="columns" @refresh="onSearch()">
       <template #title>
         <div class="flex items-center">
-          <div
-            class="mt-2 cursor-pointer"
-            v-if="
-              !renderObj.fullSettlementStatus || renderObj.reSettleStatus === 1
-            "
-          >
+          <div v-if="isSettlePage || isReSettle">
             <el-button
               v-if="
-                renderObj.settlementType === 1 && renderObj.reSettleStatus !== 1
+                isAutoSettleType && !isReSettle && hasAuth('ENABLEMANUALSETTLE')
               "
               class="ml-1 reset-margin"
               @click="changeSettleType"
@@ -25,21 +21,37 @@
             >
             <div
               class="flex items-center"
-              v-if="
-                renderObj.settlementType !== 1 || renderObj.reSettleStatus === 1
-              "
+              v-if="renderObj.settlementType !== 1 || isReSettle"
             >
               <span class="mr-3 text-[var(--el-color-danger)] text-sm"
-                >{{
-                  renderObj.reSettleStatus === 1
-                    ? t('重新结算中')
-                    : t('人工结算中')
-                }}...</span
+                >{{ isReSettle ? t('重新结算中') : t('人工结算中') }}...</span
               >
-              <el-button @click="addEventRow" size="small" type="primary">
+              <el-button
+                @click="addEventRow"
+                size="small"
+                type="primary"
+                v-if="hasAuth('ADDNEWPLATEGAME')"
+              >
                 {{ t('新增盘') }}
               </el-button>
             </div>
+          </div>
+          <div v-if="isHistoryPage">
+            <el-button
+              @click="openSecondSettleClick"
+              type="primary"
+              size="small"
+              v-if="!isReSettle"
+              >{{ t('开启二次结算') }}</el-button
+            >
+            <el-button
+              class="ml-2"
+              @click="confirmSecondSettleClick"
+              type="warning"
+              size="small"
+              v-else
+              >{{ t('确认二次结算') }}</el-button
+            >
           </div>
         </div>
       </template>
@@ -62,7 +74,7 @@
           :header-cell-style="tableHeaderStyle"
         >
           <template #operation="{ row: parentRow }">
-            <template v-if="renderObj.fullSettlementStatus === 0">
+            <template v-if="isSettlePage">
               <el-button
                 v-if="parentRow.id !== null"
                 @click="settlementHandicap(parentRow)"
@@ -75,12 +87,32 @@
                 class="reset-margin"
                 type="primary"
                 size="small"
-                v-if="renderObj.settlementType === 2 && parentRow.id === null"
+                v-if="
+                  renderObj.settlementType === 2 &&
+                  parentRow.id === null &&
+                  hasAuth('ENABLERECALCULATIONANDSETTLE')
+                "
                 @click="resetMatchEvent(parentRow)"
               >
                 {{
                   parentRow.isCanResetSettle ? t('重新结算') : t('开启重新结算')
                 }}
+              </el-button>
+            </template>
+            <template v-else-if="isReSettle">
+              <el-button
+                @click="saveResetPan(parentRow)"
+                type="primary"
+                size="small"
+                >{{ t('保存') }}</el-button
+              >
+              <el-button
+                class="reset-margin"
+                type="danger"
+                size="small"
+                @click="deleteMatchEvent(parentRow)"
+              >
+                {{ t('删除') }}
               </el-button>
             </template>
             <span v-else>-</span>
@@ -111,10 +143,18 @@
               >
                 <!-- -比分 -->
                 <template #secondT1="{ row: childRow }">
-                  <Score :row="childRow" type="secondT1" />
+                  <Score
+                    :row="childRow"
+                    type="secondT1"
+                    :parentRow="parentRow"
+                  />
                 </template>
                 <template #secondT2="{ row: childRow }">
-                  <Score :row="childRow" type="secondT2" />
+                  <Score
+                    :row="childRow"
+                    type="secondT2"
+                    :parentRow="parentRow"
+                  />
                 </template>
 
                 <!-- -数据商 -->
@@ -143,12 +183,12 @@
                 >
                   <ChildOperation
                     v-if="
-                      (renderObj.fullSettlementStatus === 0 &&
-                        !(parentRow.id === null)) ||
-                      parentRow.isCanResetSettle
+                      (!isHistoryPage && !(parentRow.id === null)) ||
+                      parentRow.isCanResetSettle ||
+                      isReSettle
                     "
                     :row="childRow"
-                    :list="parentRow.childEvents"
+                    :data="parentRow"
                     :childIndex="childIndex"
                     @deleteChildItem="
                       deleteChildItem(parentRow, childIndex, parentIndex)
@@ -158,7 +198,11 @@
                 </template>
               </pure-table>
               <el-button
-                v-if="parentRow.id !== null || parentRow.isCanResetSettle"
+                v-if="
+                  parentRow.id !== null ||
+                  parentRow.isCanResetSettle ||
+                  isReSettle
+                "
                 class="mt-2"
                 type="primary"
                 size="small"
@@ -181,6 +225,7 @@ import { useTennisDetailHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import Score from './component/Score.vue';
 import ChildOperation from './component/ChildOperation.vue';
+import { hasAuth } from '@/router/utils';
 
 defineOptions({ name: 'SETTLE_DETAIL_TENNIS_DETAIL' });
 
@@ -197,6 +242,15 @@ const canSettlement = (list: SattleDataAPI.ChildEvent[]) => {
     return item.secondT1 !== '' && item.secondT2 !== '' && !item.isEdit;
   });
 };
+
+//- 历史界面
+const isHistoryPage = computed(() => renderObj.fullSettlementStatus === 1);
+//- 结算界面
+const isSettlePage = computed(() => renderObj.fullSettlementStatus !== 1);
+//- 自动结算
+const isAutoSettleType = computed(() => renderObj.settlementType === 1);
+//- 开启重新结算状态
+const isReSettle = computed(() => renderObj.reSettleStatus === 1);
 
 const {
   onSearch,
@@ -215,6 +269,10 @@ const {
   allSettleLoading,
   changeSettleType,
   resetMatchEvent,
-  deleteChildItem
+  deleteChildItem,
+  openSecondSettleClick,
+  confirmSecondSettleClick,
+  deleteMatchEvent,
+  saveResetPan
 } = useTennisDetailHook();
 </script>

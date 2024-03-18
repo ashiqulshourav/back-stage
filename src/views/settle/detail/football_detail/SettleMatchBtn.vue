@@ -1,7 +1,7 @@
 <template>
   <div class="flex">
     <CustomButton
-      v-if="!parentRow.halfSettlementStatus"
+      v-if="!parentRow.halfSettlementStatus && hasAuth('FIRSTHALFSETTLE')"
       type="primary"
       :btn-text="t('上半场结算')"
       :loading="balanceLoading.half"
@@ -9,7 +9,11 @@
       @click="settlementFunction(parentRow.matchId, 'half')"
     />
     <CustomButton
-      v-if="parentRow.halfSettlementStatus && !parentRow.fullSettlementStatus"
+      v-if="
+        parentRow.halfSettlementStatus &&
+        !parentRow.fullSettlementStatus &&
+        hasAuth('FULLSETTLE')
+      "
       type="danger"
       :btn-text="t('全场结算')"
       :loading="balanceLoading.all"
@@ -22,6 +26,7 @@
 <script setup lang="ts">
 import CustomButton from '@/components/Form/CustomButton.vue';
 import { t } from '@/plugins/i18n';
+import { hasAuth } from '@/router/utils';
 
 defineProps<{
   balanceLoading: any;

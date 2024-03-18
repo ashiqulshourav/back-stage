@@ -23,7 +23,7 @@ const props = defineProps<{
 watch(
   () => props.row,
   row => {
-    if (row.isEdit && props.type === 't1' && row.t1 === '')
+    if (row.isEdit && props.type === 'firstT1' && row.firstT1 === '')
       inputRef.value.focus();
   },
   {

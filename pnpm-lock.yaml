@@ -24,7 +24,7 @@ dependencies:
     specifier: ^1.4.0
     version: 1.4.0
   dayjs:
-    specifier: ^1.11.8
+    specifier: ^1.11.8 
     version: 1.11.8
   echarts:
     specifier: ^5.4.2

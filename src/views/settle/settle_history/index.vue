@@ -1,86 +1,99 @@
 <template>
   <div class="main">
-    <SearchForm :form="form" @resetForm="resetForm" @onSearch="onSearch" />
+    <SearchForm @onSearch="onSearch" :form="form" />
     <SportTypeNav
-      @changeCurrentComponentName="changeCurrentComponentName"
+      @changeNavType="changeNavType"
       :currentSportId="currentSportId"
     />
-    <component
-      :is="currentComponentName.name"
-      ref="componentStrName"
-      :form="form"
-    ></component>
+    <SportTable
+      :dataList="dataList"
+      :currentSport="currentSport"
+      :columns="renderColumnList"
+      :pagination="pagination"
+      :loading="loading"
+      @handleTableWidthChange="handleTableWidthChange"
+      @handleCurrentChange="handleCurrentChange"
+    >
+      <template #default="{ row }">
+        <el-button
+          v-auth="['DETAIL']"
+          class="reset-margin"
+          type="primary"
+          size="small"
+          @click="goDetailPage(row)"
+        >
+          {{ t('结算详情') }}
+        </el-button>
+        <el-button
+          v-if="row.isShowCancelBtn"
+          type="danger"
+          size="small"
+          :disabled="row.cancelOrderTimes > 0"
+          @click="cancelClick(row)"
+          >{{ t('取消比赛') }}</el-button
+        >
+      </template>
+    </SportTable>
   </div>
 </template>
 
-<script setup lang="ts">
-import SearchForm from './component/SearchForm.vue';
-import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
-import SportTypeNav from './component/SportTypeNav.vue';
-import FootBall from './component/FootBall/index.vue';
-import BasketBall from './component/Basketball/index.vue';
-import Tennis from './component/Tennis/index.vue';
-import Handball from './component/Handball/index.vue';
-import Volleyball from './component/Volleyball/index.vue';
-import IceHockey from './component/IceHockey/index.vue';
-import PingPong from './component/PingPong/index.vue';
-import Badminton from './component/Badminton/index.vue';
-import Billiards from './component/Billiards/index.vue';
-import { useSettingStoreHook } from '@/store/settings';
-import { useMatchStore } from '@/store/match';
-import { SearchFormType } from './utils/type';
-
-
+<script setup lang="tsx">
+import SearchForm from '../main/component/SearchForm.vue';
+import SportTypeNav from '../main/component/SportTypeNav.vue';
+import { useSettileHook } from './utils/hook';
+import { t } from '@/plugins/i18n';
+import SportTable from '../main/component/SportTable.vue';
+import { SPORT_LIST_MAP, SPORT_NAME_TYPE } from '../main/utils/map';
+import { handleTableWidth } from '@/utils/getTableWidth';
 defineOptions({ name: 'SETTLE_SETTLE_HISTORY' });
-const componentStrName = ref<any>('FootBall');
-const settingStore = useSettingStoreHook();
-const currentSportId = ref<number>(
-  settingStore.settleHistoryPageInfo.matchType ?? 1
+const currentSport = computed(() =>
+  SPORT_LIST_MAP.find(item => item.value === currentSportId.value)
 );
 
-const form = reactive<SearchFormType>({
-  leagueId: '',
-  matchId: '',
-  status: '',
-  startTime: '',
-  endTime: ''
+const renderColumnList = computed(() => {
+  const fillList = [
+    {
+      label: t('是否中立场地'),
+      prop: 'isNeutral',
+      formatter: ({ isNeutral }) => (isNeutral ? t('是') : t('否')),
+      headerRenderer: d => handleTableWidth(d, t('是否中立场地')),
+      hide: () => currentSport.value.value != 1
+    },
+    {
+      label: t('上半场结算'),
+      prop: 'halfSettlementStatus',
+      formatter: ({ halfSettlementStatus }) =>
+        halfSettlementStatus === 0 ? (
+          t('未结算')
+        ) : (
+          <el-text type="danger">{t('已结算')}</el-text>
+        ),
+      headerRenderer: d => handleTableWidth(d, t('上半场结算')),
+      hide: () =>
+        currentSport.value.value != SPORT_NAME_TYPE.football &&
+        currentSport.value.value != SPORT_NAME_TYPE.basketball
+    }
+  ];
+  const _ = [...columns];
+  _.splice(_.length - 2, 0, ...fillList);
+  // _.splice(_.length - 2, 1);
+  return _;
 });
-const comoMap = {
-  FootBall,
-  BasketBall,
-  Tennis,
-  Volleyball,
-    Handball,
-    IceHockey,
-    PingPong,
-  Badminton,
-  Billiards
 
-};
-const matchStore = useMatchStore();
-const comType = SPORT_ID_MAP.find(item => {
-  return item.value === (settingStore.settleHistoryPageInfo.matchType ?? 1);
-}).type;
-const currentComponentName = reactive({
-  name: markRaw(comoMap[comType])
-});
-const changeCurrentComponentName = (_: { value: number; type: string }) => {
-  currentComponentName.name = markRaw(comoMap[_.type]);
-  currentSportId.value = _.value;
-  matchStore.set_lagueList(0, _.value);
-  settingStore.save_selttle_history_page_info({ page: null, matchType: null });
-  form.leagueId = '';
-};
-//- 搜索相关
-const onSearch = val => {
-  componentStrName.value.filterData(val, form);
-};
-
-const resetForm = formEl => {
-  if (!formEl) return;
-  formEl.resetFields();
-  onSearch('reload');
-};
+const {
+  changeNavType,
+  form,
+  onSearch,
+  columns,
+  dataList,
+  pagination,
+  handleTableWidthChange,
+  handleCurrentChange,
+  goDetailPage,
+  currentSportId,
+  cancelClick,
+  loading
+} = useSettileHook();
 </script>
 
 <style lang="scss">

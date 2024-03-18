@@ -71,18 +71,19 @@ import { type FormInstance } from 'element-plus';
 import { searchFormType } from '../utils/types';
 import dayjs from 'dayjs';
 
-const props = defineProps<{
+const { form } = defineProps<{
   loading: boolean;
   form: searchFormType;
 }>();
+
 const selectDate = ref('');
 const formRef = ref();
 const emits = defineEmits(['onSearch']);
 
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
-  props.form.startCreatedAt = '';
-  props.form.endCreatedAt = '';
+  form.startCreatedAt = '';
+  form.endCreatedAt = '';
   selectDate.value = '';
   search();
 };
@@ -93,15 +94,13 @@ const search = () => {
 
 const changeDate = t => {
   if (!t) {
-    props.form.startCreatedAt = '';
-    props.form.endCreatedAt = '';
+    form.startCreatedAt = '';
+    form.endCreatedAt = '';
   } else {
-    props.form.startCreatedAt = dayjs(t[0])
+    form.startCreatedAt = dayjs(t[0])
       .startOf('day')
       .format('YYYY-MM-DD HH:mm:ss');
-    props.form.endCreatedAt = dayjs(t[1])
-      .endOf('day')
-      .format('YYYY-MM-DD HH:mm:ss');
+    form.endCreatedAt = dayjs(t[1]).endOf('day').format('YYYY-MM-DD HH:mm:ss');
   }
   search();
 };

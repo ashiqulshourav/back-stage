@@ -5,6 +5,7 @@
       @allSettleBtnClick="allSettleBtnClick"
       :renderObj="renderObj"
       :allSettleLoading="allSettleLoading"
+      :hide-all-settle-btn="renderObj.settlementType === 1"
     />
 
     <PureTableBar :columns="columns" @refresh="onSearch()">
@@ -14,10 +15,30 @@
             @click="addEventRow"
             size="small"
             type="primary"
-            v-if="renderObj.fullSettlementStatus === 0"
+            v-if="
+              (renderObj.fullSettlementStatus === 0 ||
+                renderObj.reSettleStatus === 1) &&
+              hasAuth('ADDNEWPLATEGAME')
+            "
             >{{ t('新增局') }}</el-button
           >
-          <span></span>
+          <div v-if="renderObj.fullSettlementStatus === 1">
+            <el-button
+              @click="openSecondSettleClick"
+              type="primary"
+              size="small"
+              v-if="renderObj.reSettleStatus === 0"
+              >{{ t('开启二次结算') }}</el-button
+            >
+            <el-button
+              @click="confirmSecondSettleClick"
+              type="warning"
+              v-else
+              class="ml-2"
+              size="small"
+              >{{ t('确认二次结算') }}</el-button
+            >
+          </div>
         </div>
       </template>
 
@@ -27,7 +48,7 @@
           align-whole="center"
           :loading="loading"
           :size="size"
-          :row-key="row => row.inningNum"
+          :row-key="row => row.firstNum"
           adaptive
           :adaptiveConfig="{ offsetBottom: 60 }"
           :data="dataList"
@@ -36,29 +57,20 @@
         >
           <!-- -比分 -->
           <template #t1="{ row }">
-            <Score :row="row" type="t1" :errorType="row.t1Error" />
+            <Score :row="row" type="firstT1" :errorType="row.t1Error" />
           </template>
           <template #t2="{ row }">
-            <Score :row="row" type="t2" :errorType="row.t2Error" />
-          </template>
-
-          <!-- -结算时间 -->
-          <template #eventTime="{ row, index }">
-            <EventTime
-              :row="row"
-              :index="index"
-              :dataList="dataList"
-              :errorType="row.eventTimeError"
-              :beginTime="renderObj.beginTimeLong"
-            />
+            <Score :row="row" type="firstT2" :errorType="row.t2Error" />
           </template>
 
           <!-- -局按钮 -->
           <template #operation="{ row, index }">
             <ChildOperation
               :row="row"
+              :renderObj="renderObj"
               :childIndex="index"
               @deleteChildItem="() => dataList.pop()"
+              @resetBtnClick="resetBtnClick"
               @settlementHandicap="settlementHandicap(row)"
             />
           </template>
@@ -72,11 +84,11 @@
 import { usePublicHooks } from '@/hooks';
 import { PureTableBar } from '@/components/RePureTableBar';
 import DetiltTitle from '../../component/Settle_detail_title.vue';
-import { useBilliardsHook } from './utils/hook';
+import { useVolleballHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import Score from './component/Score.vue';
-import EventTime from './component/EventTime.vue';
 import ChildOperation from './component/ChildOperation.vue';
+import { hasAuth } from '@/router/utils';
 
 defineOptions({ name: 'SETTLE_DETAIL_VOLLEBALL_DETAIL' });
 const { tableHeaderStyle } = usePublicHooks();
@@ -90,6 +102,9 @@ const {
   settlementHandicap,
   allSettleBtnClick,
   renderObj,
-  allSettleLoading
-} = useBilliardsHook();
+  allSettleLoading,
+  resetBtnClick,
+  openSecondSettleClick,
+  confirmSecondSettleClick
+} = useVolleballHook();
 </script>

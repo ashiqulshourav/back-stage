@@ -1,5 +1,6 @@
 <template>
   <div class="select-none">
+    <span style="display: none">aaa{{ test }}</span>
     <img :src="bg" class="wave" />
     <div class="flex-c absolute right-5 top-3">
       <el-switch
@@ -41,6 +42,16 @@
                 show-password
                 v-model="ruleForm.password"
                 :placeholder="t('输入密码')"
+                :prefix-icon="useRenderIcon(Lock)"
+              />
+            </el-form-item>
+
+            <el-form-item :prop="buildType === 'pro' ? 'ukeyPassword' : 'none'">
+              <el-input
+                clearable
+                maxlength="30"
+                v-model.trim="ruleForm.ukeyPassword"
+                :placeholder="t('请输入U盾密码')"
                 :prefix-icon="useRenderIcon(Lock)"
               />
             </el-form-item>
@@ -94,9 +105,11 @@ const { dataTheme, dataThemeChange } = useDataThemeChange();
 dataThemeChange();
 const { title } = useNav();
 const userStore = useUserStore();
+const buildType = import.meta.env.VITE_BUILD_TYPE;
 const ruleForm = reactive({
   username: '',
-  password: ''
+  password: '',
+  ukeyPassword: ''
 });
 
 const onLogin = async (formEl: FormInstance | undefined) => {
@@ -118,13 +131,13 @@ const _loginRequest = async () => {
   try {
     const res: UserAPI.Login = await API.login({
       name: ruleForm.username,
-      pwd: getMD5(ruleForm.password)
+      pwd: getMD5(ruleForm.password),
+      ukeyPassword: ruleForm.ukeyPassword
     });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
     //- 第一次登录强制弹出充值密码弹窗
     userStore.setUserInfo(res.data);
-
     if (ruleForm.password === '123456') {
       ruleForm.password = '';
       return openResetDialog();
@@ -143,6 +156,11 @@ const _loginRequest = async () => {
     loading.value = false;
   }
 };
+
+const test = ref('');
+onMounted(() => {
+  test.value = import.meta.env.VITE_BUILD_TYPE;
+});
 
 const { openResetDialog } = useResetPasswordHook();
 </script>

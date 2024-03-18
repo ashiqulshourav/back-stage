@@ -26,6 +26,7 @@
         </el-button>
         <el-button
           v-if="row.isShowCancelBtn"
+          v-auth="['CANCELMATCH']"
           type="danger"
           size="small"
           :disabled="row.cancelOrderTimes > 0"
@@ -75,10 +76,17 @@ const renderColumnList = computed(() => {
       hide: () =>
         currentSport.value.value != SPORT_NAME_TYPE.football &&
         currentSport.value.value != SPORT_NAME_TYPE.basketball
+    },
+    {
+      label: t('未结算'),
+      prop: 'unSettlementEvents',
+      headerRenderer: d => handleTableWidth(d, t('未结算')),
+      hide: () => currentSport.value.value != SPORT_NAME_TYPE.football
     }
   ];
-  columns.splice(columns.length - 3, 0, ...fillList);
-  return columns;
+  const _ = [...columns];
+  _.splice(_.length - 2, 0, ...fillList);
+  return _;
 });
 
 const {

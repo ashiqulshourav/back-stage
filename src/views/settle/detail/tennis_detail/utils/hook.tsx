@@ -13,8 +13,9 @@ export function useTennisDetailHook() {
   const t2Score = ref(0);
   const loopTimer = ref<NodeJS.Timeout>();
   const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
-    {} as SattleDataAPI.getSettlementDataList
+    history.state.params as SattleDataAPI.getSettlementDataList
   );
+  const { matchId } = history.state.params;
 
   //- 展开关闭局列表
   const expandChange = (
@@ -40,17 +41,14 @@ export function useTennisDetailHook() {
   const onSearch = async () => {
     loopTimer.value && clearInterval(loopTimer.value);
     try {
-      const res = await API.getTennisEvents({
-        matchId: history.state.params.matchId
-      });
+      const res = await API.getTennisEvents({ matchId });
       childloading.value = false;
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
-      res.data.forEach(item => {
-        item.isCanResetSettle = false;
-      });
+      res.data.forEach(item => (item.isCanResetSettle = false));
       dataList.length = 0;
       dataList.push(...res.data);
+      if (renderObj.reSettleStatus === 1) saveCanceList();
 
       //- 自动结算开启轮询
       if (renderObj.settlementType === 1 && !renderObj.fullSettlementStatus) {
@@ -77,9 +75,7 @@ export function useTennisDetailHook() {
         center: true
       }
     ).then(async () => {
-      const res = await API.setManualMatchStatus({
-        matchId: renderObj.matchId
-      });
+      const res = await API.setManualMatchStatus({ matchId });
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if (res.code) return;
       loopTimer.value && clearInterval(loopTimer.value);
@@ -106,7 +102,7 @@ export function useTennisDetailHook() {
           firstT1: 0,
           firstT2: 0,
           homeAway: '',
-          matchId: history.state.params.matchId,
+          matchId,
           matchPeriodId: (dataList.length + 1) * 100 + 1,
           secondNum: 1,
           secondT1: '',
@@ -123,7 +119,6 @@ export function useTennisDetailHook() {
     const noEmpty = parentRow.childEvents.every(item => {
       return item.secondT1 !== '' && item.secondT2 !== '' && !item.isEdit;
     });
-
     if (!noEmpty)
       return message(t('请先完成并保存之前的事件'), { type: 'error' });
 
@@ -133,7 +128,7 @@ export function useTennisDetailHook() {
       firstT1: 0,
       firstT2: 0,
       homeAway: '',
-      matchId: history.state.params.matchId,
+      matchId,
       matchPeriodId: dataList.length * 100 + parentRow.childEvents.length + 1,
       secondNum: parentRow.childEvents.length + 1,
       secondT1: '',
@@ -162,7 +157,7 @@ export function useTennisDetailHook() {
     const { secondT1, secondT2 } =
       parentRow.childEvents[parentRow.childEvents.length - 1];
 
-    if (!secondT1 || !secondT2)
+    if (secondT1 === '' || secondT2 === '')
       return message(t('请先完成并保存事件'), { type: 'error' });
 
     getScore();
@@ -206,7 +201,7 @@ export function useTennisDetailHook() {
         eventTime: 1,
         firstNum: parentRow.firstNum,
         homeAway: t1Score.value > t2Score.value ? 'home' : 'away',
-        matchId: parentRow.matchId,
+        matchId: matchId,
         t1: t1Score.value,
         t2: t2Score.value
       };
@@ -222,6 +217,7 @@ export function useTennisDetailHook() {
   };
 
   //- 全场结算
+  const router = useRouter();
   const allSettleBtnClick = async () => {
     let s1 = 0;
     let s2 = 0;
@@ -248,24 +244,23 @@ export function useTennisDetailHook() {
       try {
         allSettleLoading.value = true;
         const res = await API.manualSettlementFullTime({
-          matchId: history.state.params.matchId,
+          matchId,
           t1: s1,
           t2: s2
         });
         allSettleLoading.value = false;
-        if (res.code) return message(res.msg, { type: 'error' });
-        getMatchDetail();
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        if (!res.code) router.go(-1);
       } catch (error) {
         allSettleLoading.value = false;
       }
     });
   };
 
-  //- 获取比赛详情
+  //- 获取单个比赛详情
   const getMatchDetail = async () => {
-    const res = await API.getPreSaleInfo({
-      matchId: history.state.params.matchId
-    });
+    const { matchId } = history.state.params;
+    const res = await API.getPreSaleInfo({ matchId });
     if (res.code) return message(res.msg, { type: 'error' });
     Object.assign(renderObj, res.data);
   };
@@ -297,7 +292,7 @@ export function useTennisDetailHook() {
           firstT1: f1,
           firstT2: f2,
           homeAway: f1 > f2 ? 'home' : 'away',
-          matchId: item.matchId,
+          matchId,
           matchPeriodId: row.matchPeriodId + index + 1,
           secondT1: item.secondT1,
           secondT2: item.secondT2
@@ -315,11 +310,107 @@ export function useTennisDetailHook() {
       };
       const res = await API.TennisReSettleMatchEvent(params);
       message(res.msg, { type: res.code ? 'error' : 'success' });
+      if (!res.code) onSearch();
+    });
+  };
+
+  /*
+   * 二次结算逻辑start
+   */
+
+  const confirmParams =
+    reactive<SattleDataAPI.tenantConfirm2ndSettlementReqType>({
+      cancelFirstNumList: [],
+      newEventList: [],
+      matchId
+    } as SattleDataAPI.tenantConfirm2ndSettlementReqType);
+
+  //- 开启二次结算
+  const openSecondSettleClick = async () => {
+    const { matchId } = renderObj;
+    const res = await API.open2ndSettlementStatus({ matchId });
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    if (!res.code) getMatchDetail();
+    saveCanceList();
+  };
+
+  //- 二次结算发送后端
+  const confirmSecondSettleClick = async () => {
+    ElMessageBox.confirm(
+      <div class="text-center pl-2 pr-2">
+        {t(
+          '本场比赛已结算完毕，重新结算将会影响所有关联的已结算注单，进行重新下发赛果，是否确认二次结算?'
+        )}
+      </div>,
+      t('警告'),
+      {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: t('确认'),
+        cancelButtonText: t('取消'),
+        center: true
+      }
+    ).then(async () => {
+      confirmParams.newEventList = dataList.map(item => {
+        let f1 = 0;
+        let f2 = 0;
+        const childEvents = item.childEvents.map(item => {
+          +item.secondT1 > +item.secondT2 ? f1++ : f2++;
+          item.firstT1 = f1;
+          item.firstT2 = f2;
+          (item.homeAway = f1 > f2 ? 'home' : 'away'), delete item['isEdit'];
+          return item;
+        });
+        return {
+          matchId: matchId,
+          firstNum: item.firstNum,
+          childEvents
+        };
+      });
+      const res = await API.tenantConfirm2ndSettlement(confirmParams);
+      message(res.msg, { type: res.code ? 'error' : 'success' });
       if (!res.code) {
+        confirmParams.cancelFirstNumList = [];
+        confirmParams.newEventList = [];
+        getMatchDetail();
         onSearch();
       }
     });
   };
+
+  //- 保存删除事件
+  const saveCanceList = () => {
+    if (dataList.length < 1) return;
+    confirmParams.cancelFirstNumList.length = 0;
+    confirmParams.cancelFirstNumList.push(
+      ...dataList.map(item => item.firstNum)
+    );
+  };
+
+  //- 删除当前盘
+  const deleteMatchEvent = row => {
+    ElMessageBox.confirm(t('确定要删除当前盘及局事件么?'), t('警告'), {
+      dangerouslyUseHTMLString: true,
+      confirmButtonText: t('确认'),
+      cancelButtonText: t('取消'),
+      center: true
+    }).then(async () => {
+      const i = dataList.findIndex(_ => _.firstNum === row.firstNum);
+      dataList.splice(i, 1);
+    });
+  };
+
+  //- 保存重新结算盘事件
+  const saveResetPan = (parentRow: SattleDataAPI.TennisEventsData) => {
+    const { secondT1, secondT2 } =
+      parentRow.childEvents[parentRow.childEvents.length - 1];
+    if (secondT1 === '' || secondT2 === '')
+      return message(t('请先完成并保存事件'), { type: 'error' });
+    else return message(t('重新结算盘事件保存成功'), { type: 'success' });
+  };
+
+  /*
+   * 二次结算逻辑end
+   */
 
   onMounted(() => {
     getMatchDetail();
@@ -349,6 +440,10 @@ export function useTennisDetailHook() {
     allSettleLoading,
     changeSettleType,
     resetMatchEvent,
-    deleteChildItem
+    deleteChildItem,
+    openSecondSettleClick,
+    confirmSecondSettleClick,
+    deleteMatchEvent,
+    saveResetPan
   };
 }

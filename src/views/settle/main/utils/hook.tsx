@@ -84,12 +84,12 @@ export const useSettileHook = () => {
 
   //- 跳转详情页面
   const router = useRouter();
+
   const goDetailPage = row => {
     settingStore.save_selttle_page_info({
       page: pagination.currentPage,
       matchType: currentSportId.value
     });
-
     const params = JSON.parse(JSON.stringify(row));
     router.push({
       name: SPORT_LIST_MAP.find(item => item.value === currentSportId.value)

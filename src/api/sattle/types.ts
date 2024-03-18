@@ -59,29 +59,6 @@ declare namespace SattleDataAPI {
     updatedAt?: string;
   };
 
-  type BasketballEvent = {
-    awayTeamId?: number;
-    canceled?: number | boolean;
-    createdAt?: number;
-    eventTime?: string | number | Date;
-    homeTeamId?: number;
-    eventCode?: string | number;
-    extraInfo?: string;
-    homeAway?: string;
-    id?: number;
-    matchId?: number;
-    matchPeriod?: string;
-    settleTimes?: number;
-    settleType?: number;
-    sourceType?: number;
-    t1?: number | string;
-    t2?: number | string;
-    updatedAt?: number;
-    updatedBy?: number;
-    uuid?: string;
-    gameRule?: 'INNING' | 'HT';
-  };
-
   type MatchEventParams = {
     canceled?: number;
     eventCode?: string | number;
@@ -101,35 +78,28 @@ declare namespace SattleDataAPI {
     gameRule?: string;
     inningNum?: number;
   };
-  // type MatchEvent = {
-  //   awayTeamId?: number;
-  //   canceled?: number | boolean;
-  //   createdAt?: number;
-  //   createdBy?: string;
-  //   eventTime?: string | number | Date;
-  //   homeTeamId?: number;
-  //   eventCode?: string | number;
-  //   extraInfo?: string;
-  //   homeAway?: string;
-  //   id?: number;
-  //   matchId?: number;
-  //   matchPeriod?: string;
-  //   settleTimes?: number;
-  //   settleType?: number;
-  //   sourceType?: number;
-  //   t1?: number | string;
-  //   t2?: number | string;
-  //   updatedAt?: number;
-  //   updatedBy?: string;
-  //   uuid?: string;
-  // };
-  type HandballEvent = CommonEventData & {
-    inningNum: number;
-    isEdit?: boolean;
-    homeTeamName?: any;
-    awayTeamName?: any;
-    matchPeriod?: string;
+
+  type HandballEvent = {
+    awayTeamId: number | string;
+    canceled: number | string;
+    createdAt: number | string;
+    createdBy: string;
+    eventTime: number | string;
+    homeTeamId: number | string;
+    id: number | string;
+    matchId: number | string;
+    matchPeriodId: number | string;
+    settleTimes: number | string;
+    settleType: number | string;
+    sourceType: number | string;
+    firstT1: number | string;
+    firstT2: number | string;
+    updatedAt: number | string;
+    updatedBy: number | string;
+    firstNum: number | string;
+    isEdit: boolean;
   };
+
   type IceHockeyEvent = HandballEvent;
   type CricketEvent = HandballEvent;
 
@@ -215,8 +185,8 @@ declare namespace SattleDataAPI {
     awayTeamId: number;
     inningNum: number;
     setNum: number;
-    t1: number | string;
-    t2: number | string;
+    firstT1: number | string;
+    firstT2: number | string;
     sourceType: number;
     settleTimes: number;
     settleType: number;
@@ -229,6 +199,7 @@ declare namespace SattleDataAPI {
     inningEvents?: any[];
     t1Error: boolean;
     t2Error: boolean;
+    matchPeriodId?: number;
     eventTimeError: boolean;
   };
 
@@ -342,7 +313,27 @@ declare namespace SattleDataAPI {
     childEvents: ChildEvent[];
   }
 
-  type volleyballData = SnookerEventsResData;
+  type volleyballData = {
+    awayTeamId: number | string;
+    canceled: number | string;
+    createdAt: number | string;
+    createdBy: string;
+    eventTime: number | string;
+    homeTeamId: number | string;
+    id: number | string;
+    matchId: number | string;
+    matchPeriodId: number | string;
+    settleTimes: number | string;
+    settleType: number | string;
+    sourceType: number | string;
+    firstT1: number | string;
+    firstT2: number | string;
+    updatedAt: number | string;
+    updatedBy: number | string;
+    firstNum: number | string;
+    isEdit: boolean;
+  };
+
   type HockeyEventData = CommonEventData & { matchPeriod?: string };
   type BoxingEventData = CommonEventData & { matchPeriod?: string };
   type DartsEventData = CommonEventData & { matchPeriod?: string };
@@ -379,6 +370,8 @@ declare namespace SattleDataAPI {
   type getRugbyEventRes = COMMON.BASE_RES_TYPE<rugbyData[]>;
   type getMatchEventsRes = COMMON.BASE_RES_TYPE<MatchEventsList[]>;
   type cancelBetOrderResType = COMMON.BASE_RES_TYPE<null>;
+  type volleyReSettleMatchEventResType = COMMON.BASE_RES_TYPE<null>;
+  type MatchIDType = { matchId: number }
 
   type getSettlementHistoryParams = {
     isSale?: number;
@@ -431,6 +424,15 @@ declare namespace SattleDataAPI {
     t1: number | string;
     t2: number | string;
     gameRule: string;
+  };
+  type VolleyballReq = {
+    eventTime: number;
+    matchId: number;
+    matchPeriodId: number | string;
+    firstT1: number | string;
+    firstT2: number | string;
+    firstNum: number | string;
+    id?: number | string;
   };
   type BadmintonEventReq = {
     eventTime: number | string | Date;
@@ -494,7 +496,9 @@ declare namespace SattleDataAPI {
   type manualSettlementFullTimeResType = COMMON.BASE_RES_TYPE<null>
   type basketballCancelMatchEventResType = COMMON.BASE_RES_TYPE<null>
   type open2ndSettlementStatusResType = COMMON.BASE_RES_TYPE<null>
+  type tenantOpen2ndSettlementStatusResType = COMMON.BASE_RES_TYPE<null>
   type basketballOpen2ndSettlementStatusResType = COMMON.BASE_RES_TYPE<null>
+  type tenantConfirm2ndSettlementResType = COMMON.BASE_RES_TYPE<null>
 
   type addBasketballEventV2ReqType = {
     eventTime: string | number | Date;
@@ -511,12 +515,34 @@ declare namespace SattleDataAPI {
     newEventList: {
       matchId: number;
       _tempDate?: number;
-      eventCode: string | number;
+      eventCode?: string | number;
       eventTime: number | string | Date;
-      homeAway: string;
+      homeAway?: string;
       matchPeriodId: number | string;
-      t1: number | string;
-      t2: number | string;
+      t1?: number | string;
+      t2?: number | string;
+    }[]
+  }
+
+  type tenantConfirm2ndSettlementReqType = {
+    matchId: number;
+    cancelFirstNumList: number[];
+    newEventList: {
+      matchId: number;
+      _tempDate?: number;
+      firstNum: string | number;
+      childEvents: {
+        eventTime?: number;
+        firstNum?: number | string;
+        firstT1?: number;
+        firstT2?: number;
+        homeAway?: string;
+        matchId?: number;
+        matchPeriodId?: number | string;
+        secondNum?: number;
+        secondT1?: number | string;
+        secondT2?: number | string;
+      }[]
     }[]
   }
 }

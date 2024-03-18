@@ -37,6 +37,14 @@
       </el-select>
     </el-form-item>
 
+    <el-form-item :label="t('U盾序列号')" prop="ukeyCode">
+      <el-input
+        v-model.trim="newFormInline.ukeyCode"
+        maxlength="30"
+        :placeholder="t('请输入U盾序列号')"
+      />
+    </el-form-item>
+
     <el-form-item :label="t('备注')" prop="comment">
       <el-input
         type="textarea"
@@ -79,7 +87,7 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 
 const { switchStyle } = usePublicHooks();
 
-const props = defineProps<{
+const { row } = defineProps<{
   row: UserMangerAPI.addSysAccountRes;
 }>();
 
@@ -100,7 +108,7 @@ const getRoleList = async () => {
 };
 
 const ruleFormRef = ref<FormInstance>();
-const newFormInline = reactive(props.row);
+const newFormInline = reactive(row);
 
 const closeDialog = () => {
   emits('closeDialog');

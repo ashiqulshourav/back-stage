@@ -25,7 +25,7 @@ import { t } from '@/plugins/i18n';
 import { message } from '@/utils/message';
 const props = defineProps<{
   row: SattleDataAPI.ChildEvent;
-  list: SattleDataAPI.ChildEvent[];
+  data: SattleDataAPI.TennisEventsData;
   childIndex: number;
 }>();
 
@@ -39,7 +39,17 @@ const saveCurrentMatch = () => {
 
 const emits = defineEmits(['deleteChildItem']);
 
-const deleteChildItem = () => emits('deleteChildItem');
+const deleteChildItem = () => {
+  emits('deleteChildItem');
+  let s1 = 0;
+  let s2 = 0;
+  props.data.childEvents.forEach(item => {
+    if (item.secondT1 > item.secondT2) s1 += 1;
+    else if (item.secondT1 < item.secondT2) s2 += 1;
+  });
+  props.data.t1 = s1;
+  props.data.t2 = s2;
+};
 </script>
 
 <style scoped></style>
