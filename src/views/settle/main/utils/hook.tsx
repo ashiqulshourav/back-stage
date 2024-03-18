@@ -58,7 +58,7 @@ export const useSettileHook = () => {
             options.footerButtons[1].loading = true;
             const res = await API.cancelBetOrder(params);
             options.footerButtons[1].loading = false;
-            
+
             message(res.msg, {
               type: res.code ? 'error' : 'success'
             });

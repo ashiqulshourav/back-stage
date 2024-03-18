@@ -27,7 +27,10 @@
             <!-- -开启人工结算 -->
             <div class="cursor-pointer">
               <el-button
-                v-if="renderObj.settlementType === 1"
+                v-if="
+                  renderObj.settlementType === 1 &&
+                  hasAuth('ENABLEMANUALSETTLE')
+                "
                 class="ml-1 reset-margin"
                 @click="changeSettleType"
                 >{{ t('开启人工结算') }}</el-button
@@ -210,6 +213,7 @@
               <IconifyIconOffline
                 class="cursor-pointer"
                 width="25px"
+                v-if="hasAuth('ADDEVENTSMANUAL')"
                 icon="icon_circle_fill"
                 @click="addChildRow(item.tableList, item.type)"
               />
@@ -239,6 +243,7 @@ import { useFootball } from './util/hook';
 import { usePublicHooks } from '@/hooks';
 import Delete from '@iconify-icons/ep/delete';
 import { MatchEventRowType, MatchEventType } from './util/type';
+import { hasAuth } from '@/router/utils';
 
 const { tableHeaderStyle } = usePublicHooks();
 

@@ -43,7 +43,6 @@
 <script setup lang="ts">
 import ElTreeLine from '@/components/ReTreeLine';
 import { t } from '@/plugins/i18n';
-import { useUserStore } from '@/store/user';
 import { message } from '@/utils/message';
 
 defineOptions({ name: 'menuTree' });

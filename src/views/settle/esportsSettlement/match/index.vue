@@ -49,20 +49,20 @@
 
           <template #operation="{ row }: EsportMatchRowType">
             <el-button
-              v-auth="['DETAIL']"
+              v-if="hasAuth('DETAIL')"
               class="reset-margin"
               type="primary"
               size="small"
               @click="
                 $router.push(
-                  `/esportsSettlement/esportsSettlementDetail/${row.matchId}`
+                  `/settle/esportsSettlement/esportsSettlementDetail/${row.matchId}`
                 )
               "
             >
               {{ t('结算详情') }}
             </el-button>
             <el-button
-              v-if="row.isShowCancelBtn"
+              v-if="row.isShowCancelBtn && hasAuth('CANCELMATCH')"
               type="danger"
               size="small"
               :disabled="row.cancelOrderTimes > 0"
@@ -84,6 +84,7 @@ import { columns } from './component/TableColumnList';
 import SearchForm from './component/SearchForm.vue';
 import { EsportMatchRowType } from './utils/types';
 import { usePublicHooks } from '@/hooks';
+import { hasAuth } from '@/router/utils';
 
 defineOptions({ name: 'ESPORTSSETTLEMENT' });
 const { tableHeaderStyle } = usePublicHooks();

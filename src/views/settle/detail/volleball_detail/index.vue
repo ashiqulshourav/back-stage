@@ -5,6 +5,7 @@
       @allSettleBtnClick="allSettleBtnClick"
       :renderObj="renderObj"
       :allSettleLoading="allSettleLoading"
+      :hide-all-settle-btn="renderObj.settlementType === 1"
     />
 
     <PureTableBar :columns="columns" @refresh="onSearch()">
@@ -15,8 +16,9 @@
             size="small"
             type="primary"
             v-if="
-              renderObj.fullSettlementStatus === 0 ||
-              renderObj.reSettleStatus === 1
+              (renderObj.fullSettlementStatus === 0 ||
+                renderObj.reSettleStatus === 1) &&
+              hasAuth('ADDNEWPLATEGAME')
             "
             >{{ t('新增局') }}</el-button
           >
@@ -86,6 +88,7 @@ import { useVolleballHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import Score from './component/Score.vue';
 import ChildOperation from './component/ChildOperation.vue';
+import { hasAuth } from '@/router/utils';
 
 defineOptions({ name: 'SETTLE_DETAIL_VOLLEBALL_DETAIL' });
 const { tableHeaderStyle } = usePublicHooks();

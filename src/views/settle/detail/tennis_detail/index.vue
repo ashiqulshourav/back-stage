@@ -5,13 +5,16 @@
       @allSettleBtnClick="allSettleBtnClick"
       :renderObj="renderObj"
       :allSettleLoading="allSettleLoading"
+      :hideAllSettleBtn="isAutoSettleType && !hasAuth('FULLSETTLE')"
     />
     <PureTableBar :columns="columns" @refresh="onSearch()">
       <template #title>
         <div class="flex items-center">
           <div v-if="isSettlePage || isReSettle">
             <el-button
-              v-if="isAutoSettleType && !isReSettle"
+              v-if="
+                isAutoSettleType && !isReSettle && hasAuth('ENABLEMANUALSETTLE')
+              "
               class="ml-1 reset-margin"
               @click="changeSettleType"
               >{{ t('开启人工结算') }}</el-button
@@ -23,7 +26,12 @@
               <span class="mr-3 text-[var(--el-color-danger)] text-sm"
                 >{{ isReSettle ? t('重新结算中') : t('人工结算中') }}...</span
               >
-              <el-button @click="addEventRow" size="small" type="primary">
+              <el-button
+                @click="addEventRow"
+                size="small"
+                type="primary"
+                v-if="hasAuth('ADDNEWPLATEGAME')"
+              >
                 {{ t('新增盘') }}
               </el-button>
             </div>
@@ -79,7 +87,11 @@
                 class="reset-margin"
                 type="primary"
                 size="small"
-                v-if="renderObj.settlementType === 2 && parentRow.id === null"
+                v-if="
+                  renderObj.settlementType === 2 &&
+                  parentRow.id === null &&
+                  hasAuth('ENABLERECALCULATIONANDSETTLE')
+                "
                 @click="resetMatchEvent(parentRow)"
               >
                 {{
@@ -212,6 +224,7 @@ import { useTennisDetailHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import Score from './component/Score.vue';
 import ChildOperation from './component/ChildOperation.vue';
+import { hasAuth } from '@/router/utils';
 
 defineOptions({ name: 'SETTLE_DETAIL_TENNIS_DETAIL' });
 

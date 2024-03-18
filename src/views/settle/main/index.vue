@@ -26,6 +26,7 @@
         </el-button>
         <el-button
           v-if="row.isShowCancelBtn"
+          v-auth="['CANCELMATCH']"
           type="danger"
           size="small"
           :disabled="row.cancelOrderTimes > 0"
