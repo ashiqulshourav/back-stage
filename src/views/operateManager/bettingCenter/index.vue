@@ -75,6 +75,15 @@
               </div>
             </div>
           </template>
+          <template #operation="{ row }">
+            <el-button
+                class="reset-margin"
+                :disabled="row.settleTimes!==0"
+                @click="handleCancel(row)"
+            >
+              {{ t('取消') }}
+            </el-button>
+          </template>
         </pure-table>
         <div
           class="bottom_content absolute bottom-7 flex max-w-[50%] items-center text-sm flex-wrap"
@@ -105,6 +114,7 @@
           </div>
         </div>
       </template>
+
     </PureTableBar>
   </div>
 </template>
@@ -137,7 +147,8 @@ const {
   handleTableWidthChange,
   handleCurrentChange,
   handleSelectionChange,
-  exportFile
+  exportFile,
+  handleCancel,
 } = useLeague();
 </script>
 

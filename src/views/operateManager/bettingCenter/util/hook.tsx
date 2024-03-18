@@ -38,7 +38,10 @@ export function useLeague() {
     beginTimeEnd: '',
     settleTimeStart: '',
     settleTimeEnd: '',
-    settleStatus:''
+    settleStatus:'',
+    isInplay:'',
+    seriesType:'',
+
   });
 
   function handleTableWidthChange(val: number) {
@@ -157,7 +160,6 @@ export function useLeague() {
     });
   };
   const handleCancel =(data:any)=>{
-
     return new Promise<boolean>((resolve, reject) => {
       ElMessageBox.confirm(
         t('确定取消注单吗？'),

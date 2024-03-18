@@ -43,7 +43,7 @@
           <el-select
               v-model="form.settleStatus"
               clearable
-              class="!w-[150px]"
+              class="!w-[100px]"
           >
             <el-option
                 label="全部"
@@ -59,6 +59,46 @@
             />
           </el-select>
         </el-form-item>
+        <el-form-item :label="`${t('投注阶段')}:`" prop="isInplay">
+          <el-select
+              v-model="form.isInplay"
+              clearable
+              class="!w-[100px]"
+          >
+            <el-option
+                label="全部"
+                value=""
+            />
+            <el-option
+                label="滚球"
+                :value="1"
+            />
+            <el-option
+                label="早盘"
+                :value="0"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="`${t('过关类型')}:`" prop="seriesType">
+          <el-select
+              v-model="form.seriesType"
+              clearable
+              class="!w-[100px]"
+          >
+            <el-option
+                label="全部"
+                value=""
+            />
+            <el-option
+                label="单关"
+                :value="1"
+            />
+            <el-option
+                label="串关"
+                :value="2"
+            />
+          </el-select>
+        </el-form-item>
 
         <el-form-item :label="`${t('联赛中文名')}:`" prop="leagueNameCn">
           <el-input
@@ -69,17 +109,6 @@
             class="!w-[150px]"
           />
         </el-form-item>
-
-        <!-- <el-form-item :label="`${t('联赛英文名')}:`" prop="leagueNameEn">
-          <el-input
-            v-model="form.leagueNameEn"
-            :placeholder="t('联赛英文名')"
-            clearable
-            v-enter="search"
-            class="!w-[150px]"
-          />
-        </el-form-item> -->
-
         <el-form-item :label="`${t('主队')}:`" prop="homeTeamNameCn">
           <el-input
             v-model="form.homeTeamNameCn"

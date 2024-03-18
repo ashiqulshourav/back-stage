@@ -9,5 +9,8 @@ export const bettingCenter = {
     betItemId?: number | string;
     sportId?: string | number;
   }) => http.request<RoleAPI.allPermissionResType>("post", "/bet-center/list", { data }),
+  orderCancel: (data: {
+    orderId: number;
+  }) => http.request<BetOrderAPI.BetOrderResType>("post", "/bet-center/cancel", { data }),
 
 };

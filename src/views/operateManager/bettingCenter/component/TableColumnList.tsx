@@ -55,7 +55,6 @@ export const columns: TableColumnList = [
     minWidth: 50,
     formatter: ({ profitAmount }) => (profitAmount ? profitAmount.toFixed(2) : 0)
   },
-
   {
     label: t('操作'),
     slot: 'operation',
