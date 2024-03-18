@@ -137,7 +137,7 @@ export function useVolleballHook() {
       dataList.some(item => !item.id) ||
       Math.abs(s1 - s2) < 1
     ) {
-      return message(t('缺少盘事件'), { type: 'error' });
+      return message(t('缺少事件'), { type: 'error' });
     }
     ElMessageBox.confirm(
       `

@@ -242,7 +242,7 @@ export const sattleData = {
       { data }
     ),
   //-斯诺克新增事件（按局）
-  addSnookerEvent: (data: SattleDataAPI.SnookerEventReq) =>
+  addSnookerEvent: (data: SattleDataAPI.VolleyballReq) =>
     request<SattleDataAPI.addTennisEventResType>(
       'post',
       '/snooker/v1/addSnookerEvent',
@@ -277,7 +277,7 @@ export const sattleData = {
 
   //-斯诺克结算事件列表
   getSnookerEvents: (data: SattleDataAPI.MatchIDType) =>
-    request<SattleDataAPI.getSnookerEventsResType>(
+    request<SattleDataAPI.getVolleyballEventsResType>(
       'post',
       '/snooker/v1/getSnookerEvents',
       { data }
@@ -296,6 +296,13 @@ export const sattleData = {
     request<SattleDataAPI.volleyReSettleMatchEventResType>(
       'post',
       '/volleyball/v1/reSettleMatchEvent',
+      { data }
+    ),
+  //- 斯诺克结算管理重新结算
+  snookerReSettleMatchEvent: (data: SattleDataAPI.VolleyballReq) =>
+    request<SattleDataAPI.volleyReSettleMatchEventResType>(
+      'post',
+      '/snooker/v1/reSettleMatchEvent',
       { data }
     ),
   //- 手球结算管理重新结算
@@ -341,15 +348,14 @@ export const sattleData = {
       { data }
     ),
 
-  //-排球全场结算（按盘）
+  //-排球全场结算（按局）
   volleyballManualSettlementFullTime: (data: SattleDataAPI.MatchIDType) =>
     request<SattleDataAPI.manualSettlementFullTimeRestType>(
       'post',
       '/volleyball/v1/manualSettlementFullTime',
       { data }
     ),
-
-  //-斯诺克全场结算（按盘）
+  //-斯诺克全场结算（按局）
   snookerManualSettlementFullTime: (data: SattleDataAPI.MatchIDType) =>
     request<SattleDataAPI.manualSettlementFullTimeRestType>(
       'post',
@@ -446,6 +452,9 @@ export const sattleData = {
   //- 排球开启二次结算
   volleyballOpen2ndSettlementStatus: (data: SattleDataAPI.MatchIDType) => request<SattleDataAPI.basketballOpen2ndSettlementStatusResType>(
     'post', '/volleyball/v1/open2ndSettlementStatus', { data }),
+  // //- 斯诺克开启二次结算
+  snookerOpen2ndSettlementStatus: (data: SattleDataAPI.MatchIDType) => request<SattleDataAPI.basketballOpen2ndSettlementStatusResType>(
+    'post', '/snooker/v1/open2ndSettlementStatus', { data }),
 
   //- 手球开启二次结算
   handballOpen2ndSettlementStatus: (data: SattleDataAPI.MatchIDType) => request<SattleDataAPI.basketballOpen2ndSettlementStatusResType>(
@@ -462,6 +471,9 @@ export const sattleData = {
   //- 排球确认二次结算
   volleyballConfirm2ndSettlement: (data: SattleDataAPI.confirm2ndSettlementReqType) => request<SattleDataAPI.open2ndSettlementStatusResType>(
     'post', '/volleyball/v1/confirm2ndSettlement', { data }),
+  //- 斯诺克确认二次结算
+  snookerConfirm2ndSettlement: (data: SattleDataAPI.confirm2ndSettlementReqType) => request<SattleDataAPI.open2ndSettlementStatusResType>(
+    'post', '/snooker/v1/confirm2ndSettlement', { data }),
 
   //- 手球确认重新结算
   handballConfirm2ndSettlement: (data: SattleDataAPI.confirm2ndSettlementReqType) => request<SattleDataAPI.open2ndSettlementStatusResType>(
