@@ -35,7 +35,18 @@ const loginRules = reactive(<FormRules>{
       trigger: "blur"
     }
   ],
-
+  ukeyPassword: [
+    {
+      validator: (_, value, callback) => {
+        if (value === "") {
+          callback(new Error(t("U盾密码不能为空")));
+        } else {
+          callback();
+        }
+      },
+      trigger: "blur"
+    }
+  ],
 });
 
 export { loginRules };

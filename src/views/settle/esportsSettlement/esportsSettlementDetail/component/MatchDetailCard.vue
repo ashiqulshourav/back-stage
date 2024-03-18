@@ -22,7 +22,7 @@
           type="primary"
           :disabled="renderObj.isSale === 0"
           @click="closeSettle"
-          v-if="renderList.length - 1 === index"
+          v-if="renderList.length - 1 === index && hasAuth('CLOSEDSALE')"
           >{{ t('关闭开售') }}</el-button
         >
       </el-col>
@@ -32,6 +32,7 @@
 
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
+import { hasAuth } from '@/router/utils';
 import { ESPORT_ID_MAP, ESPORT_MATCH_STATUS } from '@/utils/maps/sports_map';
 
 const props = defineProps<{

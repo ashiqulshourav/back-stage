@@ -6,6 +6,7 @@ import {
   HANDICAP_STATUS
 } from '@/utils/maps/sports_map';
 import { getLan } from '@/utils/utilFn';
+import { hasAuth } from '@/router/utils';
 
 export const columns: TableColumnList = [
   {

@@ -5,6 +5,7 @@
       @allSettleBtnClick="allSettleBtnClick"
       :renderObj="renderObj"
       :allSettleLoading="loading"
+      :hideAllSettleBtn="!hasAuth('FULLSETTLE')"
     />
     <PureTableBar :columns="childColumns" @refresh="reloadTable">
       <template #title>
@@ -17,7 +18,10 @@
               @click="openSecondSettleClick"
               type="primary"
               size="small"
-              v-if="renderObj.reSettleStatus === 0"
+              v-if="
+                renderObj.reSettleStatus === 0 &&
+                hasAuth('ENABLERECALCULATIONANDSETTLE')
+              "
               >{{ t('开启二次结算') }}</el-button
             >
             <el-button
@@ -140,7 +144,9 @@
         >
           <el-button
             v-if="
-              renderObj.settlementType === 1 && renderObj.reSettleStatus !== 1
+              renderObj.settlementType === 1 &&
+              renderObj.reSettleStatus !== 1 &&
+              hasAuth('ENABLEMANUALSETTLE')
             "
             class="ml-1 reset-margin"
             @click="changeSettleType"
@@ -185,6 +191,7 @@ import { usePublicHooks } from '@/hooks';
 import Delete from '@iconify-icons/ep/delete';
 import { MatchEventRowType } from './utils/type';
 import DetiltTitle from '../../component/Settle_detail_title.vue';
+import { hasAuth } from '@/router/utils';
 
 defineOptions({ name: 'SETTLE_DETAIL_NEW_BASKETBALL_DETAIL' });
 

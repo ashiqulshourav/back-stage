@@ -59,6 +59,7 @@
             <template #operaction="{ row }">
               <template v-if="row.win === null">
                 <el-button
+                  v-if="hasAuth('CONFIRMSETTLE')"
                   :disabled="row.win !== null"
                   size="small"
                   :type="row.win === null ? 'primary' : 'info'"
@@ -68,6 +69,7 @@
                 <el-button
                   :disabled="row.win !== null"
                   size="small"
+                  v-if="hasAuth('CANCELHANDICAP')"
                   type="danger"
                   @click="manualSettleESportHandicapClick(row, 'cancel')"
                   >{{ t('取消盘口') }}</el-button
@@ -78,7 +80,7 @@
                 <div v-else>
                   <el-button
                     size="small"
-                    v-if="row.isEdit === false"
+                    v-if="row.isEdit === false && hasAuth('RESETTLEMENT')"
                     @click="row.isEdit = true"
                     type="danger"
                     >{{ t('重新结算') }}</el-button
@@ -87,11 +89,13 @@
                     <el-button
                       size="small"
                       type="primary"
+                      v-if="hasAuth('RESETTLEMENT')"
                       @click="row.isEdit = false"
                       >{{ t('取消') }}</el-button
                     >
                     <el-button
                       size="small"
+                      v-if="hasAuth('RESETTLEMENT')"
                       type="danger"
                       @click="resetManualSettleESportHandicapClick(row)"
                       >{{ t('确认二次结算') }}</el-button
@@ -115,6 +119,7 @@ import BtnGroup from './component/BtnGroup.vue';
 import { usePublicHooks } from '@/hooks';
 import { columns } from './utils/TableColumnList';
 import { t } from '@/plugins/i18n';
+import { hasAuth } from '@/router/utils';
 
 defineOptions({ name: 'ESPORTSSETTLEMENTDETAIL' });
 

@@ -11,7 +11,7 @@
     </template>
     <template v-else>
       <el-button
-        v-if="row.settleTimes < 1"
+        v-if="row.settleTimes < 1 && hasAuth('CONFIRMSETTLE')"
         class="reset-margin"
         link
         type="danger"
@@ -27,7 +27,9 @@
         {{ t('确认结算') }}
       </el-button>
       <el-button
-        v-if="isShowCancelBtn && +row.t1 + +row.t2 !== 0"
+        v-if="
+          isShowCancelBtn && +row.t1 + +row.t2 !== 0 && hasAuth('CANCELSETTLE')
+        "
         class="reset-margin"
         link
         type="danger"
@@ -54,6 +56,7 @@
 <script setup lang="ts">
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import { t } from '@/plugins/i18n';
+import { hasAuth } from '@/router/utils';
 
 const props = defineProps<{
   row: SattleDataAPI.MatchEventsList;

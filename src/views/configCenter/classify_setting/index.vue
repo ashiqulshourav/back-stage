@@ -45,7 +45,7 @@
             <el-button
               class="reset-margin"
               link
-              v-auth="['DELETE']"
+              v-if="hasAuth('DELETE')"
               type="danger"
               :size="size"
               :icon="useRenderIcon('Delete')"
