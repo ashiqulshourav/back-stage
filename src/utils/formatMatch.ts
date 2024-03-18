@@ -3,6 +3,8 @@ import { PLAY_MATCH } from '@/utils/maps/sports_map';
 import {addDecimals,truncateDecimals} from './math';
 import {EHandicapType, EOddType, ESportType, } from '@/core/constants/enum/sport';
 import { TOrder} from '@/core/services/Table';
+import {useMatchStore} from "@/store/match";
+import {useI18n} from "vue-i18n";
 
 export const Test = ()=>{
   return 222
@@ -19,6 +21,15 @@ export const parseMatchScore = (s: string) => {
   } else {
     return '-';
   }
+}
+
+// 国家显示
+export const parseCountry = (countryId: number) => {
+  const matchStore = useMatchStore();
+  const { locale } = useI18n();
+  const country = matchStore.countryList.find(_ => _.countryId === countryId);
+  if (!country) return '-';
+  return (locale.value === 'zh' ? country?.countryNameCn : country?.countryNameEn)
 }
 // 获取结算时主队比分
 export const getHomeSettleScore = (s: string) => {
