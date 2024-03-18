@@ -39,15 +39,19 @@
     "
   >
     <el-button
-      v-if="!row.isEdit"
+      v-if="!row.isEdit && hasAuth('RECALCULATIONANDSETTLE')"
       size="small"
       type="primary"
       @click="resetClick"
       >{{ t('开启重新结算') }}</el-button
     >
-    <el-button v-else size="small" type="primary" @click="resetBtnClick">{{
-      t('重新结算')
-    }}</el-button>
+    <el-button
+      v-else-if="hasAuth('RECALCULATIONANDSETTLE')"
+      size="small"
+      type="primary"
+      @click="resetBtnClick"
+      >{{ t('重新结算') }}</el-button
+    >
   </template>
   <span v-else>--</span>
 </template>
@@ -55,6 +59,7 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import { message } from '@/utils/message';
+import { hasAuth } from '@/router/utils';
 const props = defineProps<{
   row: SattleDataAPI.InningEvent;
   childIndex: number;

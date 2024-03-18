@@ -159,7 +159,9 @@
                     type="danger"
                     :size="size"
                     v-if="
-                      !row.isBackEndReturnData && renderObj.reSettleStatus === 0
+                      !row.isBackEndReturnData &&
+                      renderObj.reSettleStatus === 0 &&
+                      hasAuth('CONFIRMSETTLE')
                     "
                     :disabled="!row.isSave || row.isEdit"
                     :icon="useRenderIcon('uploadIcon')"
@@ -172,7 +174,7 @@
                     link
                     type="primary"
                     :size="size"
-                    v-if="!row.isBackEndReturnData"
+                    v-if="!row.isBackEndReturnData && hasAuth('CANCELSETTLE')"
                     :icon="useRenderIcon(Delete)"
                     @click="cancelItem(item.tableList, row)"
                   >
