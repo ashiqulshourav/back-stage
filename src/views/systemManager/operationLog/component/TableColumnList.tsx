@@ -1,65 +1,68 @@
-import { t } from "@/plugins/i18n";
-import { handleTableWidth } from "@/utils/getTableWidth";
-import {ORDER_STATUS_MAP} from '@/core/constants/enum/sport/orderTypes'
+import dayjs from 'dayjs';
+import { t } from '@/plugins/i18n';
+import { handleTableWidth } from '@/utils/getTableWidth';
 
 export const columns: TableColumnList = [
   {
-    label: t("序号"),
-    slot: 'index',
-    align:'left',
-
+    label: 'ID',
+    prop: 'id'
   },
   {
-    label: t("用户信息"),
-    slot: 'userMessage',
-    minWidth: 100,
-    align:'left',
+    label: t('创建时间'),
+    prop: 'createdAt',
+    formatter: ({ createdAt }) =>
+      `${dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss')}`,
+    headerRenderer: d => handleTableWidth(d, t('创建时间'), 'auto'),
+    minWidth: 160
   },
   {
-    label: t("赛事信息"),
-    slot: 'matchMessage',
-    minWidth: 120,
-    align:'left',
+    label: t('操作人Ip'),
+    prop: 'operateIp',
+    headerRenderer: d => handleTableWidth(d, t('操作人Ip'))
   },
   {
-    label: t("注单详情"),
-    slot: 'betDetail',
-    minWidth: 120,
-    align:'left',
-  },
-
-  {
-    label: t("状态"),
-    prop: "",
-    minWidth: 50,
-    align:'left',
-    formatter: ({ status }) =>{
-      return  ORDER_STATUS_MAP[status]??''
-    },
+    label: t('操作记录'),
+    prop: 'operateLog',
+    minWidth: 200,
+    headerRenderer: d => handleTableWidth(d, t('操作记录'), 'auto')
   },
   {
-    label: t("赔率"),
-    slot: "odd",
-    minWidth: 50,
-    align:'left',
+    label: t('操作日志菜单'),
+    prop: 'operateMenu',
+    headerRenderer: d => handleTableWidth(d, t('操作日志菜单'), 'auto'),
+    minWidth: 160
   },
   {
-    label: t("投注额"),
-    prop: "productAmountTotal",
-    minWidth: 50,
-    formatter: ({ productAmountTotal }) => (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
+    label: t('接口响应时长'),
+    headerRenderer: d => handleTableWidth(d, t('接口响应时长')),
+    prop: 'operateTime'
   },
   {
-    label: t("输赢"),
-    prop: "profitAmount",
-    minWidth: 50,
-    formatter: ({ profitAmount }) => (profitAmount ? profitAmount.toFixed(2) : 0)
+    label: t('操作类型'),
+    headerRenderer: d => handleTableWidth(d, t('操作类型')),
+    prop: 'operateType'
   },
   {
-    label: t('操作'),
-    slot: 'operation',
-    minWidth: 50,
-    align:'left',
-    headerRenderer: d => handleTableWidth(d, t('操作'), 'auto'),
+    label: t('请求参数'),
+    slot: 'requestLog',
+    headerRenderer: d => handleTableWidth(d, t('请求参数'))
+  },
+  {
+    label: t('更新时间'),
+    prop: 'updatedAt',
+    headerRenderer: d => handleTableWidth(d, t('更新时间'), 'auto'),
+    formatter: ({ updatedAt }) =>
+      `${dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss')}`,
+    minWidth: 160
+  },
+  {
+    label: t('操作人id'),
+    headerRenderer: d => handleTableWidth(d, t('操作人id')),
+    prop: 'userId'
+  },
+  {
+    label: t('操作用户名'),
+    headerRenderer: d => handleTableWidth(d, t('操作用户名')),
+    prop: 'userName'
   }
-]
+];
