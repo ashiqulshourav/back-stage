@@ -56,11 +56,15 @@ export function useBilliardsHook() {
       return message(t('请先完成并保存事件'), { type: 'error' });
     }
     if (
-      (Number(t1) < 0 || Number(t2) < 0) ||
+      Number(t1) < 0 ||
+      Number(t2) < 0 ||
       t1 === t2 ||
-      (t1 as number >= 10 && t2 as number >= 10 && Math.abs(Number(t1) - Number(t2)) !== 2) ||
+      ((t1 as number) >= 10 &&
+        (t2 as number) >= 10 &&
+        Math.abs(Number(t1) - Number(t2)) !== 2) ||
       (Number(t1) < 11 && Number(t2) < 11) ||
-      ((Number(t1) > 11 && Number(t2) < 10) || (Number(t2) > 11 && Number(t1) < 10)) 
+      (Number(t1) > 11 && Number(t2) < 10) ||
+      (Number(t2) > 11 && Number(t1) < 10)
     ) {
       return message(t('无效分数'), { type: 'error' });
     }
@@ -122,7 +126,7 @@ export function useBilliardsHook() {
     ) {
       return message(t('请先完成盘结算'), { type: 'error' });
     }
-    
+
     ElMessageBox.confirm(
       `
       <div class="text-center">
@@ -161,8 +165,8 @@ export function useBilliardsHook() {
     Object.assign(renderObj, res.data);
   };
 
-  onMounted(() => {
-    getMatchDetail();
+  onMounted(async () => {
+    await getMatchDetail();
     onSearch();
   });
   const checkNoMore = () => {
@@ -175,7 +179,7 @@ export function useBilliardsHook() {
       return false;
     }
     return true;
-  }
+  };
   return {
     onSearch,
     loading,

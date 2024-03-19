@@ -25,8 +25,7 @@ export function useBilliardsHook() {
 
   //- 新增局
   const addEventRow = () => {
-    
-    if ((dataList.length > 0 && !dataList[dataList.length - 1].id))
+    if (dataList.length > 0 && !dataList[dataList.length - 1].id)
       return message(t('请先结算之前的局赛事'), { type: 'error' });
     const params: Partial<SattleDataAPI.rugbyData> = {
       eventTime: '',
@@ -43,7 +42,7 @@ export function useBilliardsHook() {
   //- 结算局事件
   const settlementHandicap = async (row: SattleDataAPI.rugbyData) => {
     const { eventTime, t1, t2, inningNum } = row;
-    if (!eventTime || !t1 || !t2 ) {
+    if (!eventTime || !t1 || !t2) {
       return message(t('请先完成并保存事件'), { type: 'error' });
     }
     let s1 = 0;
@@ -51,11 +50,11 @@ export function useBilliardsHook() {
     dataList.forEach(item => {
       s1 += item.t1 as number;
       s2 += item.t2 as number;
-    })
+    });
     if (
-      t1 as number < 0 ||
-      t2 as number < 0 ||
-      (inningNum === 40 && s1 ===s2)
+      (t1 as number) < 0 ||
+      (t2 as number) < 0 ||
+      (inningNum === 40 && s1 === s2)
     ) {
       return message(t('无效值'), { type: 'error' });
     }
@@ -111,7 +110,7 @@ export function useBilliardsHook() {
     dataList.forEach(item => {
       s1 += item.t1 as number;
       s2 += item.t2 as number;
-    })
+    });
     if (
       dataList.length < 2 ||
       dataList.some(item => !item.id) ||
@@ -156,9 +155,8 @@ export function useBilliardsHook() {
     if (res.code) return message(res.msg, { type: 'error' });
     Object.assign(renderObj, res.data);
   };
-
-  onMounted(() => {
-    getMatchDetail();
+  onMounted(async () => {
+    await getMatchDetail();
     onSearch();
   });
   const noMore = () => {
@@ -167,15 +165,12 @@ export function useBilliardsHook() {
     dataList.forEach(item => {
       s1 += item.t1 as number;
       s2 += item.t2 as number;
-    })
-    if (
-      dataList.length === 3 ||
-      (dataList.length === 2 && s1 !== s2)
-    ) {
+    });
+    if (dataList.length === 3 || (dataList.length === 2 && s1 !== s2)) {
       return true;
-      }
+    }
     return false;
-  }
+  };
   return {
     onSearch,
     loading,

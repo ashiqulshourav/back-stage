@@ -56,12 +56,15 @@ export function useBilliardsHook() {
       return message(t('请先完成并保存事件'), { type: 'error' });
     }
     if (
-      (t1 < 0 || t2 < 0) ||
+      t1 < 0 ||
+      t2 < 0 ||
       t1 === t2 ||
       (t1 >= 20 && t2 >= 20 && Math.abs(t1 - t2) !== 2) ||
       (t1 < 21 && t2 < 21) ||
-      ((t1 > 21 && t2 < 20) || (t2 > 21 && t1 < 20)) ||
-      (t1 > 30 || t2 > 30)
+      (t1 > 21 && t2 < 20) ||
+      (t2 > 21 && t1 < 20) ||
+      t1 > 30 ||
+      t2 > 30
     ) {
       return message(t('无效分数'), { type: 'error' });
     }
@@ -172,10 +175,9 @@ export function useBilliardsHook() {
       return true;
     }
     return false;
-
-  }
-  onMounted(() => {
-    getMatchDetail();
+  };
+  onMounted(async () => {
+    await getMatchDetail();
     onSearch();
   });
 

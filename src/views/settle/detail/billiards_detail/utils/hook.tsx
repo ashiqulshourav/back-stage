@@ -156,11 +156,10 @@ export function useBilliardsHook() {
     Object.assign(renderObj, res.data);
   };
 
-  onMounted(() => {
-    getMatchDetail();
+  onMounted(async () => {
+    await getMatchDetail();
     onSearch();
   });
-
   return {
     onSearch,
     loading,

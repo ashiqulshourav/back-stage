@@ -230,8 +230,8 @@ export function useVolleballHook() {
     });
   };
 
-  onMounted(() => {
-    getMatchDetail();
+  onMounted(async () => {
+    await getMatchDetail();
     onSearch();
   });
 
