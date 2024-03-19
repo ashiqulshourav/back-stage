@@ -59,11 +59,11 @@
           <template #betDetail="{ row }">
             <div class="match_item"  v-for="item in row.combineOrderDetails" :key="item">
               <div class="item_line">
-                {{`${useSportFormatDetail(item)[4]}  ${item.isInplay===1?'滚球':'早盘'}`}}
+                {{`${useSportFormatDetail(item)[4]}`}}
               </div>
-              <div class="item_line">{{useSportFormatDetail(item)[3]}}</div>
+            <div class="item_line">{{useSportFormatDetail(item)[3]}}</div>
               <div class="item_line cursor-pointer" v-copy="row.id">注单号: {{row.id}}</div>
-              <div class="item_line">投注时间 {{dayjs(row.createTime ?? Date.now()).format("YYYY-MM-DD HH:mm:ss")}}</div>
+              <div class="item_line">投注时间 {{row.createTime ?dayjs(row.createTime).format("YYYY-MM-DD HH:mm:ss"):''}}</div>
             </div>
           </template>
           <template #odd="{ row }">
@@ -89,7 +89,7 @@
             </el-button>
           </template>
         </pure-table>
-        <div
+<!--        <div
           class="bottom_content absolute bottom-7 flex max-w-[50%] items-center text-sm flex-wrap"
         >
           <div>
@@ -116,7 +116,7 @@
               }}</span
             >
           </div>
-        </div>
+        </div>-->
       </template>
 
     </PureTableBar>
