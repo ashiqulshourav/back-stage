@@ -95,7 +95,7 @@
             />
             <el-option
                 label="串关"
-                :value="2"
+                :value="0"
             />
           </el-select>
         </el-form-item>
@@ -149,16 +149,8 @@
           />
         </el-form-item>
 
-        <el-form-item :prop="selectDateType.valueOf()===1?'beginTime':'createTimeStart'" :label="`${t('')}`">
-          <el-select
-            v-model="selectDateType"
-            :placeholder="t('')"
-            class="!w-[150px]"
-            @change="changeSelectDateType"
-          >
-            <el-option :label="t('开赛时间')" :value="1" />
-            <el-option :label="t('下注时间')" :value="2" />
-          </el-select>
+        <el-form-item :prop="selectDateType.valueOf()===1?'beginTime':'createTimeStart'" :label="`${t('下注时间')}`">
+
           <el-date-picker
             :type="dateRangetType"
             v-model="selectDate"
@@ -245,56 +237,17 @@ const resetForm = (formEl: FormInstance | undefined) => {
 };
 
 const changeDate = t => {
-  if (selectDateType.value===1) {
+
+  if (!t) {
     props.form.createTimeStart = '';
     props.form.createTimeEnd = '';
-    if (!t) {
-      props.form.beginTimeStart = '';
-      props.form.beginTimeEnd = '';
-    } else {
-      props.form.beginTimeStart = dayjs(t[0]).startOf('day').valueOf();
-      props.form.beginTimeEnd = dayjs(t[1]).endOf('day').valueOf();
-    }
-  }else{
-    props.form.beginTimeStart = '';
-    props.form.beginTimeEnd = '';
-    if (!t) {
-      props.form.createTimeStart = '';
-      props.form.createTimeEnd = '';
-    } else {
-      props.form.createTimeStart = dayjs(t[0]).startOf('day').valueOf();
-      props.form.createTimeEnd = dayjs(t[1]).endOf('day').valueOf();
-    }
+  } else {
+    props.form.createTimeStart = dayjs(t[0]).startOf('day').valueOf();
+    props.form.createTimeEnd = dayjs(t[1]).endOf('day').valueOf();
   }
+
   search();
 };
-
-const changeSelectDateType =(dateType:number)=>{
-  selectDateType.value=dateType;
-  if(selectDateType.value===1){ // 1 开赛时间 2 下注时间
-    if(props.form.createTimeStart){
-      props.form.beginTimeStart =props.form.createTimeStart;
-      props.form.createTimeStart =''
-    }
-    if(props.form.createTimeEnd){
-      props.form.beginTimeEnd =props.form.createTimeEnd
-      props.form.createTimeEnd =''
-    }
-
-  }else { // 改为 2 下注时间
-    if(props.form.beginTimeStart){
-      props.form.createTimeStart =props.form.beginTimeStart;
-      props.form.beginTimeStart =''
-    }
-    if(props.form.beginTimeEnd){
-      props.form.createTimeEnd =props.form.beginTimeEnd
-      props.form.beginTimeEnd =''
-    }
-  }
-
-}
-
-
 const chagenMatchType = (type: 0 | 1 | 2) => {
   props.form.sportId = '';
   //- 电竞比赛 =1
