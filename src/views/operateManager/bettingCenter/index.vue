@@ -53,7 +53,7 @@
               <div class="item_line">{{item.homeTeamNameCn}} vs {{item.awayTeamNameCn}}</div>
               <div class="item_line">{{item.sportNameCn}}/{{item.leagueNameCn}}</div>
               <div class="item_line cursor-pointer" v-copy="item.matchId">赛事ID {{item.matchId}}</div>
-              <div class="item_line">开赛时间 {{dayjs(item.beginTime ?? Date.now()).format("YYYY-MM-DD HH:mm:ss")}}</div>
+              <div class="item_line">开赛时间 {{item.beginTime?dayjs(item.beginTime ?? Date.now()).format("YYYY-MM-DD HH:mm:ss"):'-'}}</div>
             </div>
           </template>
           <template #betDetail="{ row }">
@@ -63,7 +63,7 @@
               </div>
               <div class="item_line">{{useSportFormatDetail(item)[3]}}</div>
               <div class="item_line cursor-pointer" v-copy="row.id">注单号: {{row.id}}</div>
-              <div class="item_line">投注时间 {{dayjs(row.createTime ?? Date.now()).format("YYYY-MM-DD HH:mm:ss")}}</div>
+              <div class="item_line">投注时间 {{row.createTime?dayjs(row.createTime ?? Date.now()).format("YYYY-MM-DD HH:mm:ss"):'-'}}</div>
             </div>
           </template>
           <template #odd="{ row }">
@@ -131,11 +131,11 @@ import {
   BET_RESULT_TYPE_MAP,
   EBetResultType, getViewOddFn, markeTypeMap,
 } from "@/utils/formatMatch";
-// import { usePublicHooks } from '@/hooks';
+import { usePublicHooks } from '@/hooks';
 import dayjs from "dayjs";
 
 defineOptions({ name: 'bettingCenter' });
-// const { tableHeaderStyle } = usePublicHooks();
+const { tableHeaderStyle } = usePublicHooks();
 
 const {
   loading,
