@@ -23,8 +23,8 @@ export function useLeague() {
   const form = reactive<searchFormType>({
     sportId: '',
     userIdOrName: '',
-    createTimeStart: dayjs().startOf('month').valueOf(),
-    createTimeEnd: dayjs().endOf('day').valueOf(),
+    timeStart: dayjs().startOf('month').valueOf(),
+    timeEnd: dayjs().endOf('day').valueOf(),
     orderId: '',
     leagueId: '',
     matchId: '',
@@ -34,6 +34,7 @@ export function useLeague() {
     isInplay:'',
     seriesType:'',
     category:'',
+    timeType:1
   });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -64,7 +65,6 @@ export function useLeague() {
       dataList.map((item:any,index:number)=>{
         item.index=index+1;
       })
-      console.log(2222,dataList)
       dataList.push(...res.data.pageData);
       pagination.total = res.data.count;
       pagination.pageSize = res.data.pageSize;

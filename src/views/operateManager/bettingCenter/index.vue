@@ -89,7 +89,7 @@
             </el-button>
           </template>
         </pure-table>
-<!--        <div
+        <div
           class="bottom_content absolute bottom-7 flex max-w-[50%] items-center text-sm flex-wrap"
         >
           <div>
@@ -116,7 +116,7 @@
               }}</span
             >
           </div>
-        </div>-->
+        </div>
       </template>
 
     </PureTableBar>

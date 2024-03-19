@@ -229,8 +229,6 @@ const dateRangetType = computed(() => {
 const emits = defineEmits(['onSearch', 'exportFile']);
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
-  // props.form.createTimeStart = '';
-  // props.form.createTimeEnd = '';
   selectDate.value = '';
   gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
   search();
@@ -242,8 +240,8 @@ const changeDate = t => {
     props.form.createTimeStart = '';
     props.form.createTimeEnd = '';
   } else {
-    props.form.createTimeStart = dayjs(t[0]).startOf('day').valueOf();
-    props.form.createTimeEnd = dayjs(t[1]).endOf('day').valueOf();
+    props.form.timeStart = dayjs(t[0]).startOf('day').valueOf();
+    props.form.timeEnd = dayjs(t[1]).endOf('day').valueOf();
   }
 
   search();

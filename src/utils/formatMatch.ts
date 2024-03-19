@@ -184,7 +184,6 @@ export const useSportFormatDetail = (row) => {
   const isvisiable=isVisiableSecondText(row.betHandicap, row.betN, row.kindsCode)
   const oddName2=getBetHandiCapAtBetting(row.betHandicap, row.sportId)
   const fourthLine = `${oddName}  ${isvisiable?oddName2:''}`;
-  console.log(333 ,fourthLine)
   return [firstLine, secondLine, thirdLine, fourthLine, fifthLine,score];
 }
 // 盘口类型, OU:欧盘,1; HK:香港盘,2; ML:马来盘,3; ID:印尼盘,4; US:美式盘,5; GB:英式盘,6;

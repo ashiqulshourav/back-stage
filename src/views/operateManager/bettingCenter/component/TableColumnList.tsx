@@ -5,7 +5,7 @@ import {ORDER_STATUS_MAP} from '@/core/constants/enum/sport/orderTypes'
 export const columns: TableColumnList = [
   {
     label: t("序号"),
-    slot: 'index',
+    prop: 'index',
     align:'left',
 
   },
