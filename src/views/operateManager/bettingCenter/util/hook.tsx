@@ -53,8 +53,6 @@ export function useLeague() {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       loading.value = true;
-
-      console.log(11111,form)
       const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList({
         ...removeEmptyStringKeys(form),
         pageSize: pagination.pageSize,
