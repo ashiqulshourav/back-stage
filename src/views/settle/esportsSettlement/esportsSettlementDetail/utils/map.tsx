@@ -41,6 +41,7 @@ export const SPORT_LEVEL_LIST = [
   { currentPage: 1, pageSize: 100, key: 'r2', list: [] },
   { currentPage: 1, pageSize: 100, key: 'r3', list: [] },
   { currentPage: 1, pageSize: 100, key: 'r4', list: [] },
+  { currentPage: 1, pageSize: 100, key: 'r5', list: [] },
   { currentPage: 1, pageSize: 100, key: 'r6', list: [] },
   { currentPage: 1, pageSize: 100, key: 'r7', list: [] },
   { currentPage: 1, pageSize: 100, key: 'r8', list: [] },
