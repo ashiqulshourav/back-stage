@@ -47,7 +47,9 @@
           :placeholder="t('请选择联赛')"
         >
           <el-option
-            v-for="item in serachList"
+            v-for="item in form.category === 0
+              ? matchStore.sportLeagueList
+              : matchStore.esportLeagueList"
             :key="item.leagueId"
             :label="item.leagueNameCn"
             :value="item.leagueId"
@@ -62,14 +64,7 @@
           class="!w-[280px]"
           :placeholder="t('请选择联赛')"
         >
-          <el-option
-            v-for="item in form.category === 0
-              ? matchStore.sportLeagueList
-              : matchStore.esportLeagueList"
-            :key="item.leagueId"
-            :label="item.leagueNameCn"
-            :value="item.leagueId"
-          />
+         
         </el-select>
       </el-form-item> -->
 
@@ -181,7 +176,8 @@ import { formatNumber } from '@/utils/formatNumber';
 import {
   ESPORT_ID_MAP,
   SPORT_ID_MAP,
-  SPORT_CATEGORY
+  SPORT_CATEGORY,
+  LeagueClassifyType
 } from '@/utils/maps/sports_map';
 
 const formRef = ref();
@@ -190,7 +186,6 @@ const selectIndex = ref(-1);
 const matchStore = useMatchStore();
 const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
 const searchLoading = ref(false);
-const serachList = reactive([]);
 
 const props = withDefaults(
   defineProps<{
@@ -203,10 +198,13 @@ const props = withDefaults(
 
 const remoteMethod = async query => {
   if (query !== '') {
-    console.log('SearchForm.vue文件 206==============行打印=', props.form);
-    console.log('SearchForm.vue文件 208==============行打印=', query);
+    matchStore.set_lagueList(
+      props.form.category as LeagueClassifyType,
+      props.form.sportId,
+      query
+    );
   } else {
-    serachList.length = 0;
+    matchStore.reset_lagueList();
   }
   // const
 };
@@ -217,9 +215,9 @@ const remoteMethod = async query => {
   { val: t('滚球赛事'), num: 3 }
 ]; */
 
-onMounted(() => {
-  matchStore.set_lagueList(0, 1);
-});
+// onMounted(() => {
+//   matchStore.set_lagueList(0, 1);
+// });
 
 const changeDate = t => {
   if (!t) {
@@ -261,11 +259,11 @@ const chagenMatchType = (type: 0 | 1 | 2) => {
   props.form.sportId = '';
   //- 电竞比赛 =1
   gameClassify.value = type === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
-  matchStore.set_lagueList(type, props.form.sportId);
+  // matchStore.set_lagueList(type, props.form.sportId);
 };
 //- 赛种联赛筛选
 const chagenDetailMatchType = val => {
-  matchStore.set_lagueList(props.form.category as number, val);
+  // matchStore.set_lagueList(props.form.category as number, val);
 };
 
 const nextDayArr = computed(() => {

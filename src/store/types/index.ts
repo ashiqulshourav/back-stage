@@ -57,5 +57,6 @@ export type MatchType = {
   countryList: MetadataAPI.getCountryListType[];
   settleRequestLoading: boolean;
   sportId: number;
+  matchSearchLoading: boolean;
 
 };

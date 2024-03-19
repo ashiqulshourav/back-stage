@@ -10,7 +10,7 @@ declare namespace MetadataAPI {
     leagueNameEn?: string;
     level?: number;
     category?: number;
-    sportId?: number;
+    sportId?: number | string;
     leagueTagsId?: ConfigCenterDataAPI.LeagueTagType[];
   };
   type updateLeagueParamsType = {
