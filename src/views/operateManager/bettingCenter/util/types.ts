@@ -15,5 +15,9 @@ export type searchFormType = {
   leagueNameEn: string;
   leagueNameCn: string;
   category: string | number;
+  seriesType:number|string;
+  settleStatus:number;
+  isInplay:number;
   [key: string]: any;
+
 }

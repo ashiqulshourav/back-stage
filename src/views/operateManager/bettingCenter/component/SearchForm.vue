@@ -100,10 +100,10 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item :label="`${t('联赛中文名')}:`" prop="leagueNameCn">
+        <el-form-item :label="`${t('联赛ID')}:`" prop="leagueId">
           <el-input
-            v-model="form.leagueNameCn"
-            :placeholder="t('联赛中文名')"
+            v-model="form.leagueId"
+            :placeholder="t('联赛ID')"
             clearable
             v-enter="search"
             class="!w-[150px]"
@@ -177,7 +177,7 @@
           </el-button>
         </el-form-item>
       </div>
-      <div class="mr-3">
+<!--      <div class="mr-3">
         <el-button
           type="primary"
           :icon="useRenderIcon('exportFill')"
@@ -186,7 +186,7 @@
         >
           {{ t('导出报表') }}
         </el-button>
-      </div>
+      </div>-->
     </div>
   </el-form>
 </template>

@@ -41,6 +41,7 @@ export function useLeague() {
     settleStatus:'',
     isInplay:'',
     seriesType:'',
+    leagueId:''
 
   });
 
