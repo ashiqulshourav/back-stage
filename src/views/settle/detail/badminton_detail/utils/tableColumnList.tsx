@@ -1,10 +1,10 @@
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 
 export const columns: TableColumnList = [
   {
     label: t('局'),
     prop: 'inningNum',
-    formatter: ({inningNum}) => t(`第${inningNum}局`)
+    type: 'index'
   },
   {
     headerRenderer: () => history.state.params.homeTeamNameCn ?? '_',
@@ -13,10 +13,6 @@ export const columns: TableColumnList = [
   {
     headerRenderer: () => history.state.params.awayTeamNameCn ?? '_',
     slot: 't2'
-  },
-  {
-    label: t('结算时间'),
-    slot: 'eventTime'
   },
   {
     label: t('操作人'),
