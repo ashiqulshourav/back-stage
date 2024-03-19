@@ -70,7 +70,7 @@
             <div class="match_item"  v-for="item in row.combineOrderDetails" :key="item">
                 <div>{{getViewOddFn(item.oddFinally,item.marketTypeFinally,item.marketType)}}</div>
                 <div>{{markeTypeMap[item.marketType]}}</div>
-              <div class="item_line">
+              <div class="item_line" v-if="BET_RESULT_TYPE_MAP[item?.betResult]">
                 <span :class="[EBetResultType.WIN, EBetResultType.WIN_HALF].includes(item?.betResult)?'win':'lose'"> {{BET_RESULT_TYPE_MAP[item?.betResult]}}</span>
               </div>
             </div>
@@ -78,8 +78,8 @@
           <template #operation="{ row }">
             <el-button
                 class="reset-margin"
-                :disabled="row.settleTimes!==0"
                 @click="handleCancel(row)"
+                v-if="row.settleTimes===0"
             >
               {{ t('取消') }}
             </el-button>
@@ -131,11 +131,11 @@ import {
   BET_RESULT_TYPE_MAP,
   EBetResultType, getViewOddFn, markeTypeMap,
 } from "@/utils/formatMatch";
-// import { usePublicHooks } from '@/hooks';
+import { usePublicHooks } from '@/hooks';
 import dayjs from "dayjs";
 
 defineOptions({ name: 'bettingCenter' });
-// const { tableHeaderStyle } = usePublicHooks();
+const { tableHeaderStyle } = usePublicHooks();
 
 const {
   loading,

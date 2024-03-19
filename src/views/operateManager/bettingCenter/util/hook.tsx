@@ -28,22 +28,13 @@ export function useLeague() {
     orderId: '',
     leagueId: '',
     matchId: '',
-    category: ' ',
     awayTeamNameCn: '',
     homeTeamNameCn: '',
-    leagueNameEn: '',
-    leagueNameCn: '',
-    beginTimeStart: '',
-    beginTimeEnd: '',
-    settleTimeStart: '',
-    settleTimeEnd: '',
     settleStatus:'',
     isInplay:'',
     seriesType:'',
-    leagueId:''
-
+    category:'',
   });
-
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
     onSearch();
@@ -68,7 +59,7 @@ export function useLeague() {
         ...removeEmptyStringKeys(form),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
-      });
+      } as any);
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;

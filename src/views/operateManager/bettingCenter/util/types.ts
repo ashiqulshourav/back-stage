@@ -1,9 +1,9 @@
 
 export type searchFormType = {
+  pageSize?:number|string;
+  pageNum?:number|string;
   sportId: string;
   userIdOrName: string;
-  beginTimeStart?: number | string;
-  beginTimeEnd?: number | string;
   createTimeStart: number | string;
   createTimeEnd: number | string;
   orderId: string;
@@ -11,12 +11,9 @@ export type searchFormType = {
   matchId: string;
   awayTeamNameCn: string;
   homeTeamNameCn: string;
-  leagueNameEn: string;
-  leagueNameCn: string;
-  category: string | number;
   seriesType:number|string;
-  settleStatus:number;
-  isInplay:number;
+  settleStatus:number|string;
+  isInplay:number|string;
+  category:string|number;
   [key: string]: any;
-
 }
