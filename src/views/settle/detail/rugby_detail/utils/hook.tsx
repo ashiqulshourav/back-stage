@@ -1,6 +1,6 @@
 import { message } from '@/utils/message';
 import { t } from '@/plugins/i18n';
-import { columns } from './tableColumnList';
+import { MATCH_PERIOD_TYPES, columns } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
 
 export function useVolleballHook() {
@@ -19,7 +19,7 @@ export function useVolleballHook() {
 
   // - 获取事件列表
   const onSearch = async () => {
-    const res = await API.getHockeyEvents({ matchId });
+    const res = await API.getRugbyEvents({ matchId });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
     dataList.length = 0;
@@ -36,7 +36,7 @@ export function useVolleballHook() {
         !item.isEdit
       );
     });
-    if (!noEmpty) return message(t('请先结算之前的局赛事'), { type: 'error' });
+    if (!noEmpty) return message(t('请先完成之前事件结算'), { type: 'error' });
 
     const params: Partial<SattleDataAPI.volleyballData> = {
       matchId,
@@ -58,7 +58,7 @@ export function useVolleballHook() {
       center: true
     }).then(async () => {
       loading.value = true;
-      const res = await API.hockeyReSettleMatchEvent({
+      const res = await API.rugbyReSettleMatchEvent({
         matchId,
         id: row.id,
         matchPeriodId: row.matchPeriodId,
@@ -75,7 +75,7 @@ export function useVolleballHook() {
 
   //- 结算局事件
   const settlementHandicap = async (row: SattleDataAPI.TennisEventsData) => {
-    const { firstT1, firstT2, firstNum } = row;
+    const { firstT1, firstT2, matchPeriodId } = row;
     if (firstT1 === '' || firstT2 === '')
       return message(t('比分不能为空'), { type: 'error' });
 
@@ -87,7 +87,7 @@ export function useVolleballHook() {
               history.state.params.homeTeamNameCn ?? '_'
             }</span>
             <span class="font-bold">VS</span>
-            <span class="w-[45%]">${
+            <span class="w-[45%] flex-shrink-0">${
               history.state.params.awayTeamNameCn ?? '_'
             }</span>
          </div>
@@ -95,7 +95,7 @@ export function useVolleballHook() {
           <div>${t('手动结算后无法回退，请再次确定结果')}</div>
       </div>
       `,
-      `${t('结算第')}${firstNum}${t('局')}`,
+      `${t('结算')} ${MATCH_PERIOD_TYPES[matchPeriodId]}`,
       {
         dangerouslyUseHTMLString: true,
         confirmButtonText: t('确认结算'),
@@ -113,7 +113,7 @@ export function useVolleballHook() {
         firstNum: row.firstNum
       };
       try {
-        const res = await API.addHockeyEvent(params);
+        const res = await API.addRugbyEvent(params);
         loading.value = false;
         message(res.msg, { type: res.code ? 'error' : 'success' });
         if (!res.code) onSearch();
@@ -146,7 +146,7 @@ export function useVolleballHook() {
     ).then(async () => {
       try {
         allSettleLoading.value = true;
-        const res = await API.allHockeySettlement({ matchId });
+        const res = await API.allRugbySettlement({ matchId });
         allSettleLoading.value = false;
         message(res.msg, { type: res.code ? 'error' : 'success' });
         if (!res.code) router.go(-1);
@@ -168,7 +168,7 @@ export function useVolleballHook() {
    */
   //- 开启二次结算（二次结算按钮）
   const openSecondSettleClick = async () => {
-    const res = await API.hockeyOpen2ndSettlementStatus({ matchId });
+    const res = await API.rugbyOpen2ndSettlementStatus({ matchId });
     message(res.msg, { type: res.code ? 'error' : 'success' });
     if (!res.code) {
       getMatchDetail();
@@ -209,7 +209,7 @@ export function useVolleballHook() {
           firstNum: item.firstNum
         };
       });
-      const res = await API.hockeyConfirm2ndSettlement(confirmParams);
+      const res = await API.rugbyConfirm2ndSettlement(confirmParams);
       if (res.code) return message(res.msg, { type: 'error' });
       confirmParams.cancelEventIds = [];
       confirmParams.newEventList = [];
