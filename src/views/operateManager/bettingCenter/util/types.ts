@@ -9,7 +9,6 @@ export type searchFormType = {
   orderId: string;
   leagueId: string;
   matchId: string;
-  agentId: number;
   awayTeamNameCn: string;
   homeTeamNameCn: string;
   leagueNameEn: string;

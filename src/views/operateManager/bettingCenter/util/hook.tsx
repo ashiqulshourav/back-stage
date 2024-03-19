@@ -28,7 +28,6 @@ export function useLeague() {
     orderId: '',
     leagueId: '',
     matchId: '',
-    agentId: 1,
     category: ' ',
     awayTeamNameCn: '',
     homeTeamNameCn: '',
