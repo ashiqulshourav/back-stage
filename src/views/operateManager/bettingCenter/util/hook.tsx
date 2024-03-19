@@ -64,6 +64,7 @@ export function useLeague() {
       dataList.map((item:any,index:number)=>{
         item.index=index+1;
       })
+      console.log(2222,dataList)
       dataList.push(...res.data.pageData);
       pagination.total = res.data.count;
       pagination.pageSize = res.data.pageSize;

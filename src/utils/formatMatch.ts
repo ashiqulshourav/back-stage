@@ -6,9 +6,6 @@ import { TOrder} from '@/core/services/Table';
 import {useMatchStore} from "@/store/match";
 import {useI18n} from "vue-i18n";
 
-export const Test = ()=>{
-  return 222
-}
 // 解析当前比分
 export const parseMatchScore = (s: string) => {
   const match = s.match(/H(\d+)A(\d+)/);
@@ -150,7 +147,7 @@ export const isVisiableSecondText = (betHandicap: string, betN: string, kc: stri
   if (betN) return false;
   if (kc && kc.endsWith('_TG')) return false;
   // 只有数字才显示
-  const temp = Number(betHandicap.split('/')[0]);
+  const temp = Number(betHandicap?.split('/')?.[0]);
   if (!isNaN(temp) && isFinite(temp)) return true;
   return false;
 };
@@ -181,10 +178,13 @@ export const useSportFormatDetail = (row) => {
   const secondLine = row.leagueNameCn;
   const thirdLine = `${row.homeTeamNameCn} vs ${row.awayTeamNameCn}`;
   const fifthLine = `玩法: ${row.betItemName??playMap[row.kindsCode] ?? '-'}`;
+
+  console.log(222 ,fifthLine)
   const oddName=  getBetTeamType(row || {} as Detail)
   const isvisiable=isVisiableSecondText(row.betHandicap, row.betN, row.kindsCode)
   const oddName2=getBetHandiCapAtBetting(row.betHandicap, row.sportId)
   const fourthLine = `${oddName}  ${isvisiable?oddName2:''}`;
+  console.log(333 ,fourthLine)
   return [firstLine, secondLine, thirdLine, fourthLine, fifthLine,score];
 }
 // 盘口类型, OU:欧盘,1; HK:香港盘,2; ML:马来盘,3; ID:印尼盘,4; US:美式盘,5; GB:英式盘,6;
@@ -288,7 +288,7 @@ export const assertHomeAwayScore = (scoreString:string) => {
 type TeamType = 'home' | 'away' | undefined;
 export const getOrderBetTypeAtBetting = (order:TOrder)=>{
   const {betTeam, orderName, teams, kc} = order;
-  const lname = betTeam.toLowerCase();
+  const lname = betTeam?.toLowerCase();
   if (['FT_TTS'].includes(order.kc)) {
     if (betTeam ==='Draw') return '无进球';
     return orderName==='Last'? `最后进球/${order.betName}`:`首个进球/${order.betName}`;
