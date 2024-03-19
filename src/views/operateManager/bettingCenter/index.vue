@@ -34,13 +34,13 @@
              <span>{{row.index}}</span>
           </template>
           <template #userMessage="{ row }">
-            <div class="item_line" v-copy="row.userId">
+            <div class="item_line cursor-pointer" v-copy="row.userId">
               <span>用户ID：</span>{{row.userId}}
             </div>
-            <div class="item_line">
+            <div class="item_line cursor-pointer" v-copy="row.userName">
               <span>用户名：</span>{{row.userName}}
             </div>
-            <div class="item_line">
+            <div class="item_line cursor-pointer" v-copy="row.tenantCode">
               <span>商户编号：</span>{{row.tenantCode}}
             </div>
             <div  v-if="row.combineOrderDetails.length>1" class="item_line">
@@ -52,7 +52,7 @@
             <div class="match_item"  v-for="item in row.combineOrderDetails" :key="item">
               <div class="item_line">{{item.homeTeamNameCn}} vs {{item.awayTeamNameCn}}</div>
               <div class="item_line">{{item.sportNameCn}}/{{item.leagueNameCn}}</div>
-              <div class="item_line">赛事ID {{item.matchId}}</div>
+              <div class="item_line cursor-pointer" v-copy="item.matchId">赛事ID {{item.matchId}}</div>
               <div class="item_line">开赛时间 {{dayjs(item.beginTime ?? Date.now()).format("YYYY-MM-DD HH:mm:ss")}}</div>
             </div>
           </template>
@@ -62,7 +62,7 @@
                 {{`${useSportFormatDetail(item)[4]}  ${item.isInplay===1?'滚球':'早盘'}`}}
               </div>
               <div class="item_line">{{useSportFormatDetail(item)[3]}}</div>
-              <div class="item_line">注单号: {{row.id}}</div>
+              <div class="item_line cursor-pointer" v-copy="row.id">注单号: {{row.id}}</div>
               <div class="item_line">投注时间 {{dayjs(item.createTime ?? Date.now()).format("YYYY-MM-DD HH:mm:ss")}}</div>
             </div>
           </template>
