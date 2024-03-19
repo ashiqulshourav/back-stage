@@ -15,8 +15,8 @@
             size="small"
             @click="addEventRow"
             v-if="
-              renderObj.fullSettlementStatus === 0 ||
-              renderObj.reSettleStatus === 1
+              (renderObj.fullSettlementStatus === 0 ||
+              renderObj.reSettleStatus === 1) && hasAuth('ADDNEWPLATEGAME')
             "
           >
             {{ t('新增局') }}</el-button
@@ -89,6 +89,7 @@ import { useDetailHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import Score from './component/Score.vue';
 import ChildOperation from './component/ChildOperation.vue';
+import { hasAuth } from '@/router/utils';
 
 defineOptions({ name: 'SETTLE_ICEHOCKEY_DETAIL' });
 const { tableHeaderStyle } = usePublicHooks();

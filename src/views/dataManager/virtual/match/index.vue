@@ -7,6 +7,7 @@
     >
       <template #buttons>
         <el-button
+          v-auth="['INSERT']"
           v-if="hasAuth('INSERT')"
           type="primary"
           :icon="useRenderIcon(AddFill)"

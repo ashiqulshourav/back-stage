@@ -23,6 +23,7 @@
 
       <el-col :span="5" v-if="!hideAllSettleBtn">
         <el-button
+          v-if="hasAuth('FULLSETTLE')"
           :type="renderObj.fullSettlementStatus === 1 ? 'danger' : 'primary'"
           :loading="allSettleLoading"
           :disabled="renderObj.fullSettlementStatus === 1"
@@ -42,6 +43,7 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+import { hasAuth } from '@/router/utils';
 
 const props = withDefaults(
   defineProps<{

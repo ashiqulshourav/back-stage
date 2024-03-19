@@ -23,6 +23,7 @@
 
     <el-form-item>
       <el-button
+      v-auth="['QUERY']"
         type="primary"
         :icon="useRenderIcon(SearchIcon)"
         :loading="loading"
