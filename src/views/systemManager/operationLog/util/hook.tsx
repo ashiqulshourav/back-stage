@@ -28,23 +28,13 @@ export function useLeague() {
     orderId: '',
     leagueId: '',
     matchId: '',
-    agentId: 1,
-    category: ' ',
     awayTeamNameCn: '',
     homeTeamNameCn: '',
-    leagueNameEn: '',
-    leagueNameCn: '',
-    beginTimeStart: '',
-    beginTimeEnd: '',
-    settleTimeStart: '',
-    settleTimeEnd: '',
     settleStatus:'',
     isInplay:'',
     seriesType:'',
-    leagueId:''
-
+    category:'',
   });
-
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
     onSearch();
@@ -63,13 +53,11 @@ export function useLeague() {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       loading.value = true;
-
-      console.log(11111,form)
-      const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList({
+      const res : BetOrderAPI.BetOrderResType = await API.bettingCenterList({
         ...removeEmptyStringKeys(form),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
-      });
+      } as any);
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;

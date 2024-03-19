@@ -31,123 +31,59 @@
           @page-current-change="handleCurrentChange"
         >
           <template #index="{ row }">
-            <span>{{ row.index }}</span>
+             <span>{{row.index}}</span>
           </template>
           <template #userMessage="{ row }">
             <div class="item_line cursor-pointer" v-copy="row.userId">
-              <span>{{ t('用户ID：') }}</span
-              >{{ row.userId }}
+              <span>用户ID：</span>{{row.userId}}
             </div>
             <div class="item_line cursor-pointer" v-copy="row.userName">
-              <span>{{ t('用户名：') }}</span
-              >{{ row.userName }}
+              <span>用户名：</span>{{row.userName}}
             </div>
             <div class="item_line cursor-pointer" v-copy="row.tenantCode">
-              <span>{{ t('商户编号：') }}</span
-              >{{ row.tenantCode }}
+              <span>商户编号：</span>{{row.tenantCode}}
             </div>
-            <div v-if="row.combineOrderDetails.length > 1" class="item_line">
-              {{ String(row.seriesType).slice(-3) === '001' ? '串关' : '复式' }}
-              <span class="ml-2">{{
-                formatSeriesType(
-                  row?.seriesType,
-                  row.combineOrderDetails.length
-                )
-              }}</span>
+            <div  v-if="row.combineOrderDetails.length>1" class="item_line">
+             {{String(row.seriesType).slice(-3) ==='001'?'串关':'复式'}}
+              <span class="ml-2">{{formatSeriesType(row?.seriesType,row.combineOrderDetails.length)}}</span>
             </div>
           </template>
           <template #matchMessage="{ row }">
-            <div
-              class="match_item"
-              v-for="item in row.combineOrderDetails"
-              :key="item"
-            >
-              <div class="item_line">
-                {{ item.homeTeamNameCn }} vs {{ item.awayTeamNameCn }}
-              </div>
-              <div class="item_line">
-                {{ item.sportNameCn }}/{{ item.leagueNameCn }}
-              </div>
-              <div class="item_line cursor-pointer" v-copy="item.matchId">
-                {{ t('赛事ID') }} {{ item.matchId }}
-              </div>
-              <div class="item_line">
-                {{ t('开赛时间') }}
-                {{
-                  item.beginTime
-                    ? dayjs(item.beginTime ?? Date.now()).format(
-                        'YYYY-MM-DD HH:mm:ss'
-                      )
-                    : '-'
-                }}
-              </div>
+            <div class="match_item"  v-for="item in row.combineOrderDetails" :key="item">
+              <div class="item_line">{{item.homeTeamNameCn}} vs {{item.awayTeamNameCn}}</div>
+              <div class="item_line">{{item.sportNameCn}}/{{item.leagueNameCn}}</div>
+              <div class="item_line cursor-pointer" v-copy="item.matchId">赛事ID {{item.matchId}}</div>
+              <div class="item_line">开赛时间 {{dayjs(item.beginTime ?? Date.now()).format("YYYY-MM-DD HH:mm:ss")}}</div>
             </div>
           </template>
           <template #betDetail="{ row }">
-            <div
-              class="match_item"
-              v-for="item in row.combineOrderDetails"
-              :key="item"
-            >
+            <div class="match_item"  v-for="item in row.combineOrderDetails" :key="item">
               <div class="item_line">
-                {{
-                  `${useSportFormatDetail(item)[4]}  ${
-                    item.isInplay === 1 ? t('滚球') : t('早盘')
-                  }`
-                }}
+                {{`${useSportFormatDetail(item)[4]}  ${item.isInplay===1?'滚球':'早盘'}`}}
               </div>
-              <div class="item_line">{{ useSportFormatDetail(item)[3] }}</div>
-              <div class="item_line cursor-pointer" v-copy="row.id">
-                {{ t('注单号:') }} {{ row.id }}
-              </div>
-              <div class="item_line">
-                {{ t('投注时间') }}
-                {{
-                  row.createTime
-                    ? dayjs(row.createTime ?? Date.now()).format(
-                        'YYYY-MM-DD HH:mm:ss'
-                      )
-                    : '-'
-                }}
-              </div>
+              <div class="item_line">{{useSportFormatDetail(item)[3]}}</div>
+              <div class="item_line cursor-pointer" v-copy="row.id">注单号: {{row.id}}</div>
+              <div class="item_line">投注时间 {{dayjs(row.createTime ?? Date.now()).format("YYYY-MM-DD HH:mm:ss")}}</div>
             </div>
           </template>
           <template #odd="{ row }">
-            <div
-              class="match_item"
-              v-for="item in row.combineOrderDetails"
-              :key="item"
-            >
-              <div>
-                {{
-                  getViewOddFn(
-                    item.oddFinally,
-                    item.marketTypeFinally,
-                    item.marketType
-                  )
-                }}
-              </div>
-              <div>{{ markeTypeMap[item.marketType] }}</div>
-              <div class="item_line">
-                <span
-                  :class="
-                    [EBetResultType.WIN, EBetResultType.WIN_HALF].includes(
-                      item?.betResult
-                    )
-                      ? 'win'
-                      : 'lose'
-                  "
-                >
-                  {{ BET_RESULT_TYPE_MAP[item?.betResult] }}</span
-                >
+            <div class="match_item"  v-for="item in row.combineOrderDetails" :key="item">
+                <div>{{getViewOddFn(item.oddFinally,item.marketTypeFinally,item.marketType)}}</div>
+                <div>{{markeTypeMap[item.marketType]}}</div>
+              <div class="item_line" v-if="BET_RESULT_TYPE_MAP[item?.betResult]">
+                <span :class="[EBetResultType.WIN, EBetResultType.WIN_HALF].includes(item?.betResult)?'win':'lose'"> {{BET_RESULT_TYPE_MAP[item?.betResult]}}</span>
               </div>
             </div>
           </template>
+          <template #profitAmount="{ row }">
+            <span v-if="row.profitAmount" :class="row.profitAmount>0?'win':'lose'">{{row.profitAmount.toFixed(2)}}</span>
+            <span v-else>0</span>
+          </template>
           <template #operation="{ row }">
             <el-button
-              class="reset-margin"
-              :disabled="row.settleTimes !== 0"
-              @click="handleCancel(row)"
+                class="reset-margin"
+                @click="handleCancel(row)"
+                v-if="row.settleTimes===0"
             >
               {{ t('取消') }}
             </el-button>
@@ -182,6 +118,7 @@
           </div>
         </div>
       </template>
+
     </PureTableBar>
   </div>
 </template>
@@ -196,12 +133,10 @@ import {
   formatSeriesType,
   useSportFormatDetail,
   BET_RESULT_TYPE_MAP,
-  EBetResultType,
-  getViewOddFn,
-  markeTypeMap
-} from '@/utils/formatMatch';
+  EBetResultType, getViewOddFn, markeTypeMap,
+} from "@/utils/formatMatch";
 import { usePublicHooks } from '@/hooks';
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
@@ -217,7 +152,7 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   exportFile,
-  handleCancel
+  handleCancel,
 } = useLeague();
 </script>
 
@@ -236,36 +171,36 @@ const {
     }
   }
 }
-.match_item {
+.match_item{
   margin-bottom: 5px;
   height: 120px;
   position: relative;
-  &:last-child {
+  &:last-child{
     margin-bottom: 0;
   }
 }
-.item_line {
+.item_line{
   text-align: left;
 }
-.isInplay {
+.isInplay{
   position: absolute;
   right: 10px;
   top: 10px;
 }
-.win {
+.win{
   padding: 2px 4px;
+  font-style: normal;
+  font-weight: 400;
   border-radius: 4px;
-  border: 0.5px solid #f85454;
-  background: #dd5454;
-  color: #fff;
+  color: #dd5454;
+
 }
-.lose {
+.lose{
   padding: 2px 4px;
-  font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: 16px;
-  border-radius: 4px;
-  border: 0.5px solid #dbdbdb;
+
+  color: green;
 }
 </style>
