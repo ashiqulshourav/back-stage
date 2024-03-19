@@ -39,9 +39,13 @@
       @click="resetClick"
       >{{ t('开启重新结算') }}</el-button
     >
-    <el-button v-else-if="hasAuth('RECALCULATIONANDSETTLE')" size="small" type="primary" @click="resetBtnClick">{{
-      t('重新结算')
-    }}</el-button>
+    <el-button
+      v-else-if="hasAuth('RECALCULATIONANDSETTLE')"
+      size="small"
+      type="primary"
+      @click="resetBtnClick"
+      >{{ t('重新结算') }}</el-button
+    >
   </template>
   <span v-else>--</span>
 </template>

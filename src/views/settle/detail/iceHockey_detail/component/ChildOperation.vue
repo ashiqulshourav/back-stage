@@ -35,6 +35,7 @@
     <el-button
       v-if="!row.isEdit && hasAuth('RECALCULATIONANDSETTLE')"
       size="small"
+      v-auth="['RECALCULATIONANDSETTLE']"
       type="primary"
       @click="resetClick"
       >{{ t('开启重新结算') }}</el-button

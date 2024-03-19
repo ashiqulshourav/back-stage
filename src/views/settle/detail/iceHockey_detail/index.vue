@@ -18,6 +18,7 @@
               (renderObj.fullSettlementStatus === 0 ||
               renderObj.reSettleStatus === 1) && hasAuth('ADDNEWPLATEGAME')
             "
+            v-auth="['ADDNEWPLATEGAME']"
           >
             {{ t('新增局') }}</el-button
           >

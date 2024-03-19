@@ -5,6 +5,7 @@
       @allSettleBtnClick="allSettleBtnClick"
       :renderObj="renderObj"
       :allSettleLoading="allSettleLoading"
+      :hideAllSettleBtn="!hasAuth('FULLSETTLE')"
     />
 
     <PureTableBar :columns="columns" @refresh="onSearch()">

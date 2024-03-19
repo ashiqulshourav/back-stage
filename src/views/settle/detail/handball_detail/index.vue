@@ -19,6 +19,7 @@
               renderObj.reSettleStatus === 1) &&
               hasAuth('ADDNEWPLATEGAME')
             "
+            v-auth="['ADDEDFIRSTHALF']"
           >
             {{
               dataList.length == 2 ? t('新增加时赛') : t('新增上/下半场')
