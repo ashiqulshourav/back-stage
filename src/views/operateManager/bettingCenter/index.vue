@@ -83,7 +83,7 @@
             <el-button
                 class="reset-margin"
                 @click="handleCancel(row)"
-                v-if="row.settleTimes===0"
+                v-if="row.billStatus===0"
             >
               {{ t('取消') }}
             </el-button>
