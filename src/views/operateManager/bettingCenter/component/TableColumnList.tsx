@@ -50,10 +50,9 @@ export const columns: TableColumnList = [
     formatter: ({ productAmountTotal }) => (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
   },
   {
-    label: t("输赢"),
-    prop: "profitAmount",
+    label: t("用户输赢"),
+    slot: "profitAmount",
     minWidth: 50,
-    formatter: ({ profitAmount }) => (profitAmount ? profitAmount.toFixed(2) : 0)
   },
   {
     label: t('操作'),

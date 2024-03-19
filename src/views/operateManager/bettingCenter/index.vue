@@ -75,6 +75,10 @@
               </div>
             </div>
           </template>
+          <template #profitAmount="{ row }">
+            <span v-if="row.profitAmount" :class="row.profitAmount>0?'win':'lose'">{{row.profitAmount.toFixed(2)}}</span>
+            <span v-else>0</span>
+          </template>
           <template #operation="{ row }">
             <el-button
                 class="reset-margin"
@@ -185,18 +189,18 @@ const {
 }
 .win{
   padding: 2px 4px;
+  font-style: normal;
+  font-weight: 400;
   border-radius: 4px;
-  border: 0.5px solid #f85454;
-  background: #dd5454;
-  color: #fff;
+  color: #dd5454;
+
 }
 .lose{
   padding: 2px 4px;
-  font-size: 12px;
   font-style: normal;
   font-weight: 400;
   line-height: 16px;
-  border-radius: 4px;
-  border: 0.5px solid #dbdbdb;
+
+  color: green;
 }
 </style>
