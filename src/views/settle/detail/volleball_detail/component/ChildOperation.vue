@@ -33,7 +33,7 @@
     "
   >
     <el-button
-      v-if="!row.isEdit"
+      v-if="!row.isEdit && hasAuth('RECALCULATIONANDSETTLE')"
       size="small"
       type="primary"
       @click="resetClick"
@@ -49,6 +49,8 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import { message } from '@/utils/message';
+import { hasAuth } from '@/router/utils';
+
 const props = defineProps<{
   row: SattleDataAPI.InningEvent;
   childIndex: number;

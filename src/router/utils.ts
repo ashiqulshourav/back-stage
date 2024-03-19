@@ -222,16 +222,18 @@ function initRouter() {
   if (getConfig()?.CachingAsyncRoutes) {
     const key = "async-routes";
     const asyncRouteList = storageSession().getItem(key) as any;
-    if (asyncRouteList && asyncRouteList?.length > 0) {
-      return new Promise(resolve => {
-        handleAsyncRoutes(asyncRouteList);
-        resolve(router);
-      });
-    } else {
+    // if (asyncRouteList && asyncRouteList?.length > 0) {
+    //   return new Promise(resolve => {
+    //     handleAsyncRoutes(asyncRouteList);
+    //     resolve(router);
+    //   });
+    // }
+    // else {
       return new Promise((resolve, reject) => {
         const userStore = useUserStore();
         API.getRouter({
-          id: userStore.userInfo.id
+          // id: userStore.userInfo.id
+          id: 21
         }).then(({ data }: { data: UserAPI.RouterResData[] }) => {
           if (!data.length) {
             reject(t('请联系上级进行用户角色权限设置'))
@@ -245,7 +247,8 @@ function initRouter() {
         });
       });
     }
-  } else {
+// } 
+  else {
     return new Promise(resolve => {
       const userInfo = storageSession().getItem<DataInfo<{ id: number; name: string; resources: null }>>(sessionKey);
       const permissionRoute = [];

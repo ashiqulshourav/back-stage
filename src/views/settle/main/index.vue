@@ -16,7 +16,7 @@
     >
       <template #default="{ row }">
         <el-button
-          v-auth="['DETAIL']"
+          v-if="hasAuth('DETAIL')"
           class="reset-margin"
           type="primary"
           size="small"
@@ -25,8 +25,7 @@
           {{ t('结算详情') }}
         </el-button>
         <el-button
-          v-if="row.isShowCancelBtn"
-          v-auth="['CANCELMATCH']"
+          v-if="row.isShowCancelBtn && hasAuth('CANCELMATCH')"
           type="danger"
           size="small"
           :disabled="row.cancelOrderTimes > 0"
@@ -47,6 +46,8 @@ import SportTable from './component/SportTable.vue';
 import { SPORT_LIST_MAP } from './utils/map';
 import { handleTableWidth } from '@/utils/getTableWidth';
 import { SPORT_NAME_TYPE } from './utils/map';
+import { hasAuth } from '@/router/utils';
+
 
 defineOptions({ name: 'SETTLE_MAIN' });
 

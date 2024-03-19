@@ -43,6 +43,7 @@
           >
             <el-switch
               v-model="row.status"
+              v-if="hasAuth('UPDATESTATUS')"
               :size="size"
               inline-prompt
               class="pure-datatheme"
@@ -54,7 +55,7 @@
           </template>
           <template #resetPassword="{ row }">
             <el-button
-              v-auth="['USERMANAGERUPDATEPROFILE']"
+              v-if = "hasAuth('USERMANAGERUPDATEPROFILE')"
               class="reset-margin"
               type="primary"
               size="small"

@@ -34,6 +34,7 @@
               v-model="row.status"
               :size="size"
               inline-prompt
+              v-if="hasAuth('ROLEMANAGERUPDATESTATUS')"
               class="pure-datatheme"
               :active-text="t('开启')"
               :inactive-text="t('关闭')"

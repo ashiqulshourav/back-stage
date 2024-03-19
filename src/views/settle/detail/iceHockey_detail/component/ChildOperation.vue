@@ -35,11 +35,17 @@
     <el-button
       v-if="!row.isEdit"
       size="small"
+      v-auth="['RECALCULATIONANDSETTLE']"
       type="primary"
       @click="resetClick"
       >{{ t('开启重新结算') }}</el-button
     >
-    <el-button v-else size="small" type="primary" @click="resetBtnClick">{{
+    <el-button 
+      v-else size="small" 
+      v-auth="['RECALCULATIONANDSETTLE']"
+      type="primary" 
+      @click="resetBtnClick"
+    >{{
       t('重新结算')
     }}</el-button>
   </template>

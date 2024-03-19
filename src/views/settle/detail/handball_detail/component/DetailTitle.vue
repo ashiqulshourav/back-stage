@@ -25,6 +25,7 @@
         <el-button
           :type="renderObj.fullSettlementStatus === 1 ? 'danger' : 'primary'"
           :disabled="renderObj.fullSettlementStatus === 1"
+          v-if="hasAuth('FULLSETTLE')"
           @click="allSettleBtnClick"
           >{{
             renderObj.fullSettlementStatus === 1 ? t('结算完成') : t('全场结算')
@@ -38,6 +39,7 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+import { hasAuth } from '@/router/utils';
 
 const props = defineProps<{
   renderObj: SattleDataAPI.getSettlementDataList;
