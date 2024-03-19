@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { PLAY_MATCH } from '@/utils/maps/sports_map';
+import { PLAY_MATCH2 } from '@/utils/maps/sports_map';
 import {addDecimals,truncateDecimals} from './math';
 import {EHandicapType, EOddType, ESportType, } from '@/core/constants/enum/sport';
 import { TOrder} from '@/core/services/Table';
@@ -171,7 +171,7 @@ export const useSportFormatDetail = (row) => {
   } else {
     const type = row.betHomeOrAway ? row.betHomeOrAway : row.betHandicap;
     score =
-        PLAY_MATCH(row.kindsCode, row.homeTeamNameCn, row.awayTeamNameCn)[
+        PLAY_MATCH2(row.kindsCode, row.homeTeamNameCn, row.awayTeamNameCn)[
             type
             ] ?? row.betHandicap ?? '-';
   }
@@ -180,7 +180,7 @@ export const useSportFormatDetail = (row) => {
   )}`;
   const secondLine = row.leagueNameCn;
   const thirdLine = `${row.homeTeamNameCn} vs ${row.awayTeamNameCn}`;
-  const fifthLine = `玩法: ${playMap[row.kindsCode] ?? row.betItemName ?? '-'}`;
+  const fifthLine = `玩法: ${row.betItemName??playMap[row.kindsCode] ?? '-'}`;
   const oddName=  getBetTeamType(row || {} as Detail)
   const isvisiable=isVisiableSecondText(row.betHandicap, row.betN, row.kindsCode)
   const oddName2=getBetHandiCapAtBetting(row.betHandicap, row.sportId)
