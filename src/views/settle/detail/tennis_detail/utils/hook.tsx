@@ -412,11 +412,10 @@ export function useTennisDetailHook() {
    * 二次结算逻辑end
    */
 
-  onMounted(() => {
-    getMatchDetail();
+  onMounted(async () => {
+    await getMatchDetail();
     onSearch();
   });
-
   onUnmounted(() => {
     loopTimer.value && clearInterval(loopTimer.value);
   });

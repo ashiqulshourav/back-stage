@@ -36,6 +36,7 @@
           </template>
         </pure-table>
       </template>
+
     </PureTableBar>
   </div>
 </template>

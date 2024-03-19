@@ -32,7 +32,9 @@ export const useMatchStore = defineStore('MATCHSTATE', {
       } else {
         listType = 'esportLeagueList';
       }
+      this.matchSearchLoading = true;
       const res: MetadataAPI.LeagueListRes = await API.getLeagueList(params);
+      this.matchSearchLoading = false;
       this[listType] = res.data.list;
     },
     reset_lagueList() {

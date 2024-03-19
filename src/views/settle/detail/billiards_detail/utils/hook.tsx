@@ -234,7 +234,6 @@ export function useBilliardsHook() {
     getMatchDetail();
     onSearch();
   });
-
   return {
     onSearch,
     loading,

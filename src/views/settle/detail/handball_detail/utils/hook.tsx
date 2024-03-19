@@ -224,8 +224,8 @@ export function useDetailHook() {
       onSearch();
     });
   };
-  onMounted(() => {
-    getMatchDetail();
+  onMounted(async () => {
+    await getMatchDetail();
     onSearch();
   });
 

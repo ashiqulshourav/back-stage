@@ -23,7 +23,6 @@
           v-model="form.sportId"
           :placeholder="t('游戏种类')"
           clearable
-          @change="chagenDetailMatchType"
           class="!w-[150px]"
         >
           <el-option
@@ -45,6 +44,7 @@
           :remote-method="remoteMethod"
           class="!w-[280px]"
           :placeholder="t('请选择联赛')"
+          :loading="matchStore.matchSearchLoading"
         >
           <el-option
             v-for="item in form.category === 0
@@ -56,18 +56,6 @@
           />
         </el-select>
       </el-form-item>
-      <!-- <el-form-item :label="`${t('联赛')}:`" prop="leagueId">
-        <el-select
-          v-model="form.leagueId"
-          filterable
-          clearable
-          class="!w-[280px]"
-          :placeholder="t('请选择联赛')"
-        >
-         
-        </el-select>
-      </el-form-item> -->
-
       <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
         <el-input
           v-model="form.matchId"
@@ -173,6 +161,7 @@ import dayjs from 'dayjs';
 import { disableDate } from '@/utils/formatDate';
 import { useMatchStore } from '@/store/match';
 import { formatNumber } from '@/utils/formatNumber';
+import { debounce } from '@pureadmin/utils';
 import {
   ESPORT_ID_MAP,
   SPORT_ID_MAP,
@@ -196,7 +185,7 @@ const props = withDefaults(
   {}
 );
 
-const remoteMethod = async query => {
+const remoteMethod = debounce(async query => {
   if (query !== '') {
     matchStore.set_lagueList(
       props.form.category as LeagueClassifyType,
@@ -206,8 +195,7 @@ const remoteMethod = async query => {
   } else {
     matchStore.reset_lagueList();
   }
-  // const
-};
+}, 500);
 
 /* const selectTypeList = [
   { val: t('开售管理'), num: 1 },
@@ -259,11 +247,6 @@ const chagenMatchType = (type: 0 | 1 | 2) => {
   props.form.sportId = '';
   //- 电竞比赛 =1
   gameClassify.value = type === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
-  // matchStore.set_lagueList(type, props.form.sportId);
-};
-//- 赛种联赛筛选
-const chagenDetailMatchType = val => {
-  // matchStore.set_lagueList(props.form.category as number, val);
 };
 
 const nextDayArr = computed(() => {
