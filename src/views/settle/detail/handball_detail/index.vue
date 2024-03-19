@@ -15,9 +15,11 @@
             size="small"
             @click="addEventRow"
             v-if="
-              renderObj.fullSettlementStatus === 0 ||
-              renderObj.reSettleStatus === 1
+              (renderObj.fullSettlementStatus === 0 ||
+              renderObj.reSettleStatus === 1) &&
+              hasAuth('ADDNEWPLATEGAME')
             "
+            v-auth="['ADDEDFIRSTHALF']"
           >
             {{
               dataList.length == 2 ? t('新增加时赛') : t('新增上/下半场')
@@ -96,6 +98,7 @@ import { useDetailHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import Score from './component/Score.vue';
 import ChildOperation from './component/ChildOperation.vue';
+import { hasAuth } from '@/router/utils';
 
 defineOptions({ name: 'SETTLE_HANDBALL_DETAIL' });
 const { tableHeaderStyle } = usePublicHooks();

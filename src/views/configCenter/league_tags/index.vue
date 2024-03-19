@@ -41,6 +41,7 @@
         >
           <template #operation="{ row }">
             <el-button
+              v-if="hasAuth('UPDATE')"
               class="reset-margin"
               link
               type="primary"
@@ -51,6 +52,7 @@
               {{ t('编辑') }}
             </el-button>
             <el-button
+              v-if="hasAuth('DELETE')"
               class="reset-margin"
               link
               type="danger"

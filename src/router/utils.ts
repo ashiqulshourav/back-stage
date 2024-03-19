@@ -243,7 +243,8 @@ function initRouter() {
         });
       });
     }
-  } else {
+  }
+  else {
     return new Promise(resolve => {
       const userInfo = storageSession().getItem<DataInfo<{ id: number; name: string; resources: null }>>(sessionKey);
       const permissionRoute = [];
