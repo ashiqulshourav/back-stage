@@ -6,7 +6,7 @@ export default {
   path: "/",
   name: "Home",
   component: Layout,
-  redirect: "/metadata/league",
+  redirect: "/dataManager/sport/league",
   meta: {
     icon: "homeFilled",
     title: '主页',

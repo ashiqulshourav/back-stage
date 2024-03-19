@@ -29,6 +29,7 @@
           <el-option
             :label="item.label"
             :value="item.value"
+            :loading="searchLoading"
             v-for="item in gameClassify"
             :key="item.value"
           />
@@ -36,6 +37,24 @@
       </el-form-item>
 
       <el-form-item :label="`${t('联赛')}:`" prop="leagueId">
+        <el-select
+          v-model="form.leagueId"
+          clearable
+          filterable
+          remote
+          :remote-method="remoteMethod"
+          class="!w-[280px]"
+          :placeholder="t('请选择联赛')"
+        >
+          <el-option
+            v-for="item in serachList"
+            :key="item.leagueId"
+            :label="item.leagueNameCn"
+            :value="item.leagueId"
+          />
+        </el-select>
+      </el-form-item>
+      <!-- <el-form-item :label="`${t('联赛')}:`" prop="leagueId">
         <el-select
           v-model="form.leagueId"
           filterable
@@ -52,7 +71,7 @@
             :value="item.leagueId"
           />
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
 
       <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
         <el-input
@@ -170,6 +189,8 @@ const emits = defineEmits(['onSearch', 'changeMatchCondition']);
 const selectIndex = ref(-1);
 const matchStore = useMatchStore();
 const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
+const searchLoading = ref(false);
+const serachList = reactive([]);
 
 const props = withDefaults(
   defineProps<{
@@ -179,6 +200,16 @@ const props = withDefaults(
   }>(),
   {}
 );
+
+const remoteMethod = async query => {
+  if (query !== '') {
+    console.log('SearchForm.vue文件 206==============行打印=', props.form);
+    console.log('SearchForm.vue文件 208==============行打印=', query);
+  } else {
+    serachList.length = 0;
+  }
+  // const
+};
 
 /* const selectTypeList = [
   { val: t('开售管理'), num: 1 },
