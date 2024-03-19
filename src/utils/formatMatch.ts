@@ -320,6 +320,5 @@ export const getOrderBetTypeAtBetting = (order:TOrder)=>{
   if (betTeam !== orderName && ['home', 'away'].includes(lname)) {
     return teams[lname as TeamType].name;
   }
-
   return orderName;
 };

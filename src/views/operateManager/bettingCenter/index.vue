@@ -63,7 +63,7 @@
               </div>
               <div class="item_line">{{useSportFormatDetail(item)[3]}}</div>
               <div class="item_line cursor-pointer" v-copy="row.id">注单号: {{row.id}}</div>
-              <div class="item_line">投注时间 {{dayjs(item.createTime ?? Date.now()).format("YYYY-MM-DD HH:mm:ss")}}</div>
+              <div class="item_line">投注时间 {{dayjs(row.createTime ?? Date.now()).format("YYYY-MM-DD HH:mm:ss")}}</div>
             </div>
           </template>
           <template #odd="{ row }">
