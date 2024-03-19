@@ -48,6 +48,8 @@ class PureHttp {
           config.beforeRequestCallback(config);
           return config;
         }
+
+
         if (PureHttp.initConfig.beforeRequestCallback) {
           PureHttp.initConfig.beforeRequestCallback(config);
           return config;
@@ -58,6 +60,9 @@ class PureHttp {
           const token: string = storageSession().getItem(TokenKey) ?? '';
           if (token) {
             config.headers["Accesstoken"] = token;
+          }
+          if(config.url.includes('/bet-center/cancel')){
+            config.data=config.data.orderIds
           }
           if (addAcceptLanguageList.includes(config.url)) {
             const lan: { locale: string } = storageLocal().getItem('responsive-locale') ?? { locale: 'zh' }

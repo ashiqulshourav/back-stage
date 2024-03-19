@@ -179,7 +179,6 @@ export const useSportFormatDetail = (row) => {
   const thirdLine = `${row.homeTeamNameCn} vs ${row.awayTeamNameCn}`;
   const fifthLine = `玩法: ${row.betItemName??playMap[row.kindsCode] ?? '-'}`;
 
-  console.log(222 ,fifthLine)
   const oddName=  getBetTeamType(row || {} as Detail)
   const isvisiable=isVisiableSecondText(row.betHandicap, row.betN, row.kindsCode)
   const oddName2=getBetHandiCapAtBetting(row.betHandicap, row.sportId)
