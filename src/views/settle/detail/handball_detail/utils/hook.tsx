@@ -47,7 +47,7 @@ export function useDetailHook() {
       isEdit: false,
       firstT1: '',
       firstT2: '',
-      firstNum: dataList.length + 1
+      firstNum: dataList.length > 1 ? 40 : dataList.length + 1
     };
     dataList.push(params as SattleDataAPI.volleyballData);
   };

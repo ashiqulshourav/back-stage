@@ -16,10 +16,9 @@
             @click="addEventRow"
             v-if="
               (renderObj.fullSettlementStatus === 0 ||
-              renderObj.reSettleStatus === 1) &&
-              hasAuth('ADDNEWPLATEGAME')
+                renderObj.reSettleStatus === 1) &&
+              hasAuth('ADDEDFIRSTHALF')
             "
-            v-auth="['ADDEDFIRSTHALF']"
           >
             {{
               dataList.length == 2 ? t('新增加时赛') : t('新增上/下半场')

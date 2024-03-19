@@ -65,19 +65,19 @@ export const SPORT_LIST_MAP: sport_list_map_type[] = [
     linkName: 'SETTLE_DETAIL_PINGPONG_DETAIL'
   },
   {
-    label: t('英式橄榄球'),
-    value: SPORT_NAME_TYPE.rugby,
-    linkName: 'SETTLE_HOCKEY_DETAIL'
-  },
-  {
     label: t('板球'),
     value: SPORT_NAME_TYPE.cricket,
-    linkName: 'SETTLE_CRICKET_DETAIL'
+    linkName: 'SETTLE_DETAIL_CRICKET_DETAIL'
   },
   {
     label: t('曲棍球'),
     value: SPORT_NAME_TYPE.hockey,
-    linkName: 'SETTLE_DETAIL_FOOTBALL_DETAIL'
+    linkName: 'SETTLE_DETAIL_FIELD_HOCKEY'
+  },
+  {
+    label: t('英式橄榄球'),
+    value: SPORT_NAME_TYPE.rugby,
+    linkName: 'SETTLE_DETAIL_RUGBY_DETAIL'
   },
   {
     label: t('飞镖'),

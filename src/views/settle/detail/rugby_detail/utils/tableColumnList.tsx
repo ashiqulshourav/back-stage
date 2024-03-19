@@ -1,17 +1,14 @@
-import dayjs from "dayjs";
-export const MATCH_PERIOD = {
+import { getLan } from '@/utils/utilFn';
+import dayjs from 'dayjs';
+export const MATCH_PERIOD_TYPES = {
+  40: t('加时赛'),
   1: t('上半场'),
-  2: t('下半场'),
-  40: t('加时赛')
-}
-
+  2: t('下半场')
+};
 export const columns: TableColumnList = [
   {
-    label: t('场'),
-    prop: 'inningNum',
-    formatter: ({inningNum}) => {
-      return MATCH_PERIOD[inningNum];
-    }
+    headerSlot: 'inningNum',
+    formatter: ({ matchPeriodId }) => MATCH_PERIOD_TYPES[matchPeriodId] ?? '-'
   },
   {
     headerRenderer: () => history.state.params.homeTeamNameCn ?? '_',
@@ -20,10 +17,6 @@ export const columns: TableColumnList = [
   {
     headerRenderer: () => history.state.params.awayTeamNameCn ?? '_',
     slot: 't2'
-  },
-  {
-    label: t('结算时间'),
-    slot: 'eventTime'
   },
   {
     label: t('操作人'),
@@ -46,6 +39,6 @@ export const columns: TableColumnList = [
   {
     label: t('操作'),
     slot: 'operation',
-    width: 260
+    minWidth: getLan() === 'zh' ? 200 : 300
   }
 ];

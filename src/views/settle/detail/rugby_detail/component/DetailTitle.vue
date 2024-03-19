@@ -1,13 +1,6 @@
 <template>
   <div class="bg-bg_color w-[99/100] pl-8 pb-3 pt-[12px]">
-     <div class="text-center font-bold text-2xl mb-3 relative">
-      <span>{{ t('盘口详情') }}</span>
-      <IconifyIconOffline
-        icon="cancelIcon"
-        class="absolute right-4 top-1 cursor-pointer"
-        @click="$router.go(-1)"
-      />
-    </div>
+    <div class="text-center font-bold text-2xl mb-3">{{ t('盘口详情') }}</div>
     <el-row :gutter="20">
       <el-col
         class="mb-2"
