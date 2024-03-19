@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite --mode fat",
     "build:dpgames-back-stage": "rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build --mode fat",
-    "build:dev": "node build/config.ts --isbuild=run",
+    "build:dev": "rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build --mode fat",
     "preview": "vite preview",
     "preview:build": "pnpm build && vite preview",
     "typecheck": "tsc --noEmit && vue-tsc --noEmit --skipLibCheck",
