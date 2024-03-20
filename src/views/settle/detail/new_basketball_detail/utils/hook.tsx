@@ -28,7 +28,7 @@ export function useNewBasketBallHook() {
         isSettle) &&
       renderObj.reSettleStatus !== 1
     ) {
-      message('请先完成之前的事件结算', { type: 'error' });
+      message(t('请先完成之前的事件结算'), { type: 'error' });
     } else {
       const tempList = {
         settleTimes: 0,
