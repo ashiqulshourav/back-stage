@@ -320,3 +320,14 @@ export const getOrderBetTypeAtBetting = (order:TOrder)=>{
   }
   return orderName;
 };
+
+//计算串关的总赔率，非复试
+export const calculateSeriesTypeTotal = (list:any)=>{
+  let oddTotal =1
+   list.forEach((item:{oddFinally:number,marketTypeFinally:EOddType,marketType:number})=>{
+     //先转换为欧洲盘再计算
+     oddTotal*= Number(getViewOddFn(item.oddFinally,item.marketTypeFinally,EOddType.EUROPE))
+  })
+  return truncateDecimals(oddTotal, 2)
+}
+

@@ -82,6 +82,7 @@
           <template #billStatus="{ row }">
             <div >{{ row.billStatus === 1 ? "已结算" : "未结算" }}</div>
             <div >{{ row.settleTime ? dayjs(row.settleTime).format('YYYY-MM-DD HH:mm:ss'):'' }}</div>
+            <div v-if="String(row.seriesType).slice(-3) ==='001'" >总赔率：{{String(row.seriesType).slice(-3) ==='001'?calculateSeriesTypeTotal(row.combineOrderDetails):'' }}</div>
           </template>
           <template #operation="{ row }">
             <el-button
@@ -137,7 +138,7 @@ import {
   formatSeriesType,
   useSportFormatDetail,
   BET_RESULT_TYPE_MAP,
-  EBetResultType, getViewOddFn, markeTypeMap,
+  EBetResultType, getViewOddFn, markeTypeMap,calculateSeriesTypeTotal
 } from "@/utils/formatMatch";
 import { usePublicHooks } from '@/hooks';
 import dayjs from "dayjs";
