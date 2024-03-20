@@ -79,6 +79,10 @@
             <span v-if="row.profitAmount" :class="row.profitAmount>0?'win':'lose'">{{row.profitAmount.toFixed(2)}}</span>
             <span v-else>0</span>
           </template>
+          <template #billStatus="{ row }">
+            <div >{{ row.billStatus === 1 ? "已结算" : "未结算" }}</div>
+            <div >{{ row.settleTime ? dayjs(row.settleTime).format('YYYY-MM-DD HH:mm:ss'):'' }}</div>
+          </template>
           <template #operation="{ row }">
             <el-button
                 class="reset-margin"
@@ -172,15 +176,20 @@ const {
   }
 }
 .match_item{
-  margin-bottom: 5px;
-  height: 120px;
+  margin-bottom: 10px;
   position: relative;
+  height: 100px;
+
   &:last-child{
     margin-bottom: 0;
   }
 }
 .item_line{
   text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 250px;
 }
 .isInplay{
   position: absolute;

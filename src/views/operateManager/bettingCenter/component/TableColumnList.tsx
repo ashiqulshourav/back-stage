@@ -1,6 +1,6 @@
 import { t } from "@/plugins/i18n";
 import { handleTableWidth } from "@/utils/getTableWidth";
-import {ORDER_STATUS_MAP} from '@/core/constants/enum/sport/orderTypes'
+import dayjs from "dayjs";
 
 export const columns: TableColumnList = [
   {
@@ -18,24 +18,21 @@ export const columns: TableColumnList = [
   {
     label: t("赛事信息"),
     slot: 'matchMessage',
-    minWidth: 120,
+    minWidth: 100,
     align:'left',
   },
   {
     label: t("注单详情"),
     slot: 'betDetail',
-    minWidth: 120,
+    minWidth: 100,
     align:'left',
   },
 
   {
     label: t("状态"),
-    prop: "",
+    slot: "billStatus",
     minWidth: 50,
     align:'left',
-    formatter: ({ billStatus }) =>{
-      return  billStatus===1?"已结算":"未结算"
-    },
   },
   {
     label: t("赔率"),
