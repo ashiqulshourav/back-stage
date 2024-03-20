@@ -337,3 +337,17 @@ export const calculateSeriesTypeTotalBets = (seriesType:number)=>{
   const arr=str?.split('00')||[];
   return arr.length>0?arr[1]:''
 }
+
+
+// 获取比分
+export const displayHomeAwayScore = (scoreString:string, sprotId?: ESportType) => {
+  if (sprotId > 33) return '';
+  if (sprotId === ESportType.TENNIS || sprotId === ESportType.VOLLEYBALL) return '';
+  const [home, away] = assertHomeAwayScore(scoreString);
+  return `[${home}-${away}]`
+};
+
+export const getIsInplay = (type:number)=>{
+  return type===1?t('滚球'):t('早盘')
+}
+

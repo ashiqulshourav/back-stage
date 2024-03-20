@@ -34,7 +34,7 @@
              <span>{{row.index}}</span>
           </template>
           <template #userMessage="{ row }">
-            <div class="item_line cursor-pointer" v-copy="row.userId">
+            <div class="item_line cursor-pointer" v-copy="row.userId" ondblclick="copy('用户ID:'+row.userId)">
               <span>用户ID：</span>{{row.userId}}
             </div>
             <div class="item_line cursor-pointer" v-copy="row.userName">
@@ -60,18 +60,21 @@
           <template #betDetail="{ row }">
             <div class="match_item"  v-for="item in row.combineOrderDetails" :key="item">
               <div class="item_line">
-                {{`${useSportFormatDetail(item)[4]}`}}
+                {{`${useSportFormatDetail(item)[4]} ${getIsInplay(item.isInplay)}`}}
+
+                {{item.isInplay==1?displayHomeAwayScore(item.scoreBenchmark,item.sportId):''}}
               </div>
             <div class="item_line">{{useSportFormatDetail(item)[3]}}</div>
               <div class="item_line cursor-pointer" v-copy="row.id">注单号: {{row.id}}</div>
               <div class="item_line">投注时间：{{row.createTime ?dayjs(row.createTime).format("YYYY-MM-DD HH:mm:ss"):''}}</div>
+              <div class="item_line" v-if="row.billStatus === 1&&item.settleScore">赛果：{{displayHomeAwayScore(item.settleScore,item.sportId)}}</div>
             </div>
           </template>
           <template #odd="{ row }">
             <div class="match_item"  v-for="item in row.combineOrderDetails" :key="item">
                 <div>{{getViewOddFn(item.oddFinally,item.marketTypeFinally,item.marketType)}}</div>
                 <div>{{markeTypeMap[item.marketType]}}</div>
-              <div class="item_line" v-if="BET_RESULT_TYPE_MAP[item?.betResult]">
+              <div  v-if="BET_RESULT_TYPE_MAP[item?.betResult]">
                 <span :class="[EBetResultType.WIN, EBetResultType.WIN_HALF].includes(item?.betResult)?'win':'lose'"> {{BET_RESULT_TYPE_MAP[item?.betResult]}}</span>
               </div>
             </div>
@@ -139,7 +142,13 @@ import {
   formatSeriesType,
   useSportFormatDetail,
   BET_RESULT_TYPE_MAP,
-  EBetResultType, getViewOddFn, markeTypeMap, calculateSeriesTypeTotal, calculateSeriesTypeTotalBets
+  EBetResultType,
+  getViewOddFn,
+  markeTypeMap,
+  calculateSeriesTypeTotal,
+  calculateSeriesTypeTotalBets,
+  displayHomeAwayScore,
+  getIsInplay,
 } from "@/utils/formatMatch";
 import { usePublicHooks } from '@/hooks';
 import dayjs from "dayjs";
@@ -180,8 +189,6 @@ const {
 .match_item{
   margin-bottom: 10px;
   position: relative;
-  height: 100px;
-
   &:last-child{
     margin-bottom: 0;
   }

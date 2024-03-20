@@ -8,6 +8,7 @@ import { Detail, getBetTeamType, playMap,markeTypeMap } from "@/utils/formatMatc
 import dayjs from 'dayjs';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { ElMessageBox } from "element-plus";
+import { copyTextToClipboard } from '@pureadmin/utils';
 export function useLeague() {
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const loading = ref(true);
@@ -34,7 +35,7 @@ export function useLeague() {
     isInplay:'',
     seriesType:'',
     category:'',
-    timeType:1
+    timeType:1,
   });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -65,6 +66,7 @@ export function useLeague() {
       dataList.map((item:any,index:number)=>{
         item.index=index+1;
       })
+      console.log(111,dataList)
       dataList.push(...res.data.pageData);
       pagination.total = res.data.count;
       pagination.pageSize = res.data.pageSize;
@@ -174,6 +176,15 @@ export function useLeague() {
     });
   }
 
+  const copy = (str:string)=>{
+    const success = copyTextToClipboard(str);
+    success
+      ? message(`$${str}成功`, { type: 'success' })
+      : message(t('复制失败'), { type: 'error' });
+  }
+
+
+
   //- 切换比赛类型
   onMounted(() => {
     onSearch();
@@ -192,5 +203,6 @@ export function useLeague() {
     handleSelectionChange,
     exportFile,
     handleCancel,
+    copy
   };
 }
