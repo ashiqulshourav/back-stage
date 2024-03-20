@@ -1,6 +1,5 @@
 import { t } from "@/plugins/i18n";
 import { handleTableWidth } from "@/utils/getTableWidth";
-import dayjs from "dayjs";
 
 export const columns: TableColumnList = [
   {
@@ -38,24 +37,25 @@ export const columns: TableColumnList = [
     label: t("赔率"),
     slot: "odd",
     minWidth: 50,
-    align:'left',
+    align:'center',
   },
   {
     label: t("投注额"),
     prop: "productAmountTotal",
     minWidth: 50,
+    align:'center',
     formatter: ({ productAmountTotal }) => (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
   },
   {
     label: t("用户输赢"),
     slot: "profitAmount",
     minWidth: 50,
+    align:'center',
   },
   {
     label: t('操作'),
     slot: 'operation',
     minWidth: 50,
-    align:'left',
-    headerRenderer: d => handleTableWidth(d, t('操作'), 'auto'),
+    align:'center',
   }
 ]
