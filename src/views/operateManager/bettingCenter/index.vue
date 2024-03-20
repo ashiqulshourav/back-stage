@@ -40,8 +40,8 @@
             <div class="item_line cursor-pointer" v-copy="row.userName">
               <span>用户名：</span>{{row.userName}}
             </div>
-            <div class="item_line cursor-pointer" v-copy="row.tenantCode">
-              <span>商户编号：</span>{{row.tenantCode}}
+            <div class="item_line cursor-pointer" v-copy="row.tenantId">
+              <span>商户ID：</span>{{row.tenantId}}
             </div>
             <div  v-if="row.combineOrderDetails.length>1" class="item_line mt-2 color_blue">
              {{String(row.seriesType).slice(-3) ==='001'?'串关':'复式'}}
@@ -81,7 +81,7 @@
           </template>
           <template #profitAmount="{ row }">
             <span v-if="row.profitAmount" :class="row.profitAmount>0?'win':'lose'">{{row.profitAmount.toFixed(2)}}</span>
-            <span v-else>0</span>
+            <span v-else>-</span>
           </template>
           <template #billStatus="{ row }">
             <div >{{ row.billStatus === 1 ? "已结算" : "未结算" }}</div>

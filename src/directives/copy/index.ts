@@ -11,7 +11,6 @@ interface CopyEl extends HTMLElement {
 export const copy: Directive = {
   mounted(el: CopyEl, binding: DirectiveBinding) {
     const { value } = binding;
-    console.log(3333333333,binding)
     if (value) {
       el.copyValue = value;
       const arg = binding.arg ?? 'dblclick';

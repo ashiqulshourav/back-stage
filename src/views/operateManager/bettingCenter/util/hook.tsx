@@ -19,6 +19,7 @@ export function useLeague() {
     total: 0,
     pageSize: 10,
     currentPage: 1,
+    pageSizes:[10,20,50,100,200],
     background: true
   });
   const form = reactive<searchFormType>({
@@ -63,15 +64,16 @@ export function useLeague() {
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
-      dataList.map((item:any,index:number)=>{
-        item.index=index+1;
-      })
-      console.log(111,dataList)
-      dataList.push(...res.data.pageData);
-      pagination.total = res.data.count;
-      pagination.pageSize = res.data.pageSize;
-      pagination.currentPage = res.data.pageNum;
-      Object.assign(totalInfo, res.data.otherData);
+      if (res.data !== null) {
+        dataList.push(...res.data.pageData);
+        dataList.map((item: any, index) => {
+          item.index = index + 1
+        })
+        pagination.total = res.data.count;
+        pagination.pageSize = res.data.pageSize;
+        pagination.currentPage = res.data.pageNum;
+        Object.assign(totalInfo, res.data.otherData);
+      }
       document
         .querySelector('.table_container .el-scrollbar__wrap')
         .scroll(0, 0);

@@ -204,9 +204,7 @@ import {
   ESPORT_ID_MAP,
   SPORT_CATEGORY
 } from '@/utils/maps/sports_map';
-import { searchFormType } from '../utils/types';
-import {hasAuth} from "@/router/utils";
-
+import { searchFormType } from '../util/types';
 const props = defineProps<{
   loading: boolean;
   form: searchFormType;
