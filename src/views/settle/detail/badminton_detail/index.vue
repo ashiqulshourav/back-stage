@@ -78,6 +78,7 @@ import { t } from '@/plugins/i18n';
 import Score from './component/Score.vue';
 import EventTime from './component/EventTime.vue';
 import ChildOperation from './component/ChildOperation.vue';
+import { hasAuth } from '@/router/utils';
 
 defineOptions({ name: 'SETTLE_BADMINTON_DETAIL' });
 const { tableHeaderStyle } = usePublicHooks();
