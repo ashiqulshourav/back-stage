@@ -70,9 +70,6 @@ export function useNewBasketBallHook() {
       return message(t('请输入完整的内容'), { type: 'error' });
     }
 
-    if (renderObj.reSettleStatus === 1 && type === 'save')
-      return confirmResetMatchEvent(row, false);
-
     if (type === 'save') {
       if (row.t1 === row.t2 && row.matchPeriodId === 40) {
         message(t('结束局比分不能为平局'), { type: 'error' });
@@ -237,9 +234,7 @@ export function useNewBasketBallHook() {
 
   //- 开启二次结算
   const openSecondSettleClick = async () => {
-    const res = await API.basketballOpen2ndSettlementStatus({
-      matchId: renderObj.matchId
-    });
+    const res = await API.basketballOpen2ndSettlementStatus({ matchId });
     message(res.msg, { type: res.code ? 'error' : 'success' });
     if (!res.code) initMatchData();
   };
@@ -260,7 +255,18 @@ export function useNewBasketBallHook() {
         center: true
       }
     ).then(async () => {
-      confirmParams.newEventList.forEach(item => delete item._tempDate);
+      confirmParams.newEventList = eventList.map(item => {
+        return {
+          matchId,
+          eventCode: item.eventCode,
+          eventTime: 1,
+          homeAway: item.homeAway,
+          matchPeriodId: item.matchPeriodId,
+          t1: item.t1,
+          t2: item.t2
+        };
+      });
+
       const res = await API.basketballConfirm2ndSettlement(confirmParams);
       if (res.code) return message(res.msg, { type: 'error' });
       confirmParams.cancelEventIds = [];
@@ -284,48 +290,40 @@ export function useNewBasketBallHook() {
   };
 
   //- 取消当前编辑行
-  const cancelItem = (row: SattleDataAPI.newBasketballEventsList) => {
+  const cancelItem = (_row: SattleDataAPI.newBasketballEventsList) =>
     eventList.pop();
-    const index = confirmParams.newEventList.findIndex(
-      item => item.matchPeriodId === row.matchPeriodId
-    );
-    if (index >= 0) {
-      confirmParams.newEventList.splice(index, 1);
-    }
-  };
 
   //- 直接在原事件上进行修改
   const confirmResetMatchEvent = (
-    row: SattleDataAPI.newBasketballEventsList,
-    isDelete?: boolean
+    row: SattleDataAPI.newBasketballEventsList
   ) => {
     if ((row.t1 as string) === '' || (row.t2 as string) === '')
       return message(t('比分不能为空'), { type: 'error' });
     row.isEdit = false;
-    !confirmParams.cancelEventIds.includes(row.id) &&
-      isDelete &&
-      confirmParams.cancelEventIds.push(row.id);
-    if (
-      confirmParams.newEventList.findIndex(
-        item => item._tempDate === row._tempDate
-      ) < 0
-    ) {
-      confirmParams.newEventList.push({
-        matchId,
-        eventCode: row.eventCode,
-        eventTime: 1,
-        homeAway: row.homeAway,
-        _tempDate: row._tempDate,
-        matchPeriodId: row.matchPeriodId,
-        t1: row.t1,
-        t2: row.t2
-      });
-    }
+    // !confirmParams.cancelEventIds.includes(row.id) &&
+    //   isDelete &&
+    //   confirmParams.cancelEventIds.push(row.id);
+    // if (
+    //   confirmParams.newEventList.findIndex(
+    //     item => item._tempDate === row._tempDate
+    //   ) < 0
+    // ) {
+    //   confirmParams.newEventList.push({
+    //     matchId,
+    //     eventCode: row.eventCode,
+    //     eventTime: 1,
+    //     homeAway: row.homeAway,
+    //     _tempDate: row._tempDate,
+    //     matchPeriodId: row.matchPeriodId,
+    //     t1: row.t1,
+    //     t2: row.t2
+    //   });
+    // }
   };
 
   //- 历史记录-删除事件
   const deletMatchevent = (
-    row: SattleDataAPI.newBasketballEventsList,
+    _row: SattleDataAPI.newBasketballEventsList,
     index: number
   ) => {
     ElMessageBox.confirm(t('确定要删除该事件么'), t('警告'), {
@@ -334,13 +332,13 @@ export function useNewBasketBallHook() {
       center: true
     }).then(async () => {
       eventList.splice(index, 1);
-      confirmParams.deleteEventIds.push(row.id);
-      const i = confirmParams.newEventList.findIndex(
-        item => item.matchPeriodId === row.matchPeriodId
-      );
-      if (i >= 0) {
-        confirmParams.newEventList.splice(index, 1);
-      }
+      // confirmParams.deleteEventIds.push(row.id);
+      // const i = confirmParams.newEventList.findIndex(
+      //   item => item.matchPeriodId === row.matchPeriodId
+      // );
+      // if (i >= 0) {
+      //   confirmParams.newEventList.splice(index, 1);
+      // }
     });
   };
 
