@@ -5,7 +5,7 @@ import {ORDER_STATUS_MAP} from '@/core/constants/enum/sport/orderTypes'
 export const columns: TableColumnList = [
   {
     label: t("序号"),
-    slot: 'index',
+    prop: 'index',
     align:'left',
 
   },
@@ -33,8 +33,8 @@ export const columns: TableColumnList = [
     prop: "",
     minWidth: 50,
     align:'left',
-    formatter: ({ status }) =>{
-      return  ORDER_STATUS_MAP[status]??''
+    formatter: ({ billStatus }) =>{
+      return  billStatus===1?"已结算":"未结算"
     },
   },
   {

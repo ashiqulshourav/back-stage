@@ -23,8 +23,8 @@ export function useLeague() {
   const form = reactive<searchFormType>({
     sportId: '',
     userIdOrName: '',
-    createTimeStart: dayjs().startOf('month').valueOf(),
-    createTimeEnd: dayjs().endOf('day').valueOf(),
+    timeStart: dayjs().startOf('month').valueOf(),
+    timeEnd: dayjs().endOf('day').valueOf(),
     orderId: '',
     leagueId: '',
     matchId: '',
@@ -34,6 +34,7 @@ export function useLeague() {
     isInplay:'',
     seriesType:'',
     category:'',
+    timeType:1
   });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;

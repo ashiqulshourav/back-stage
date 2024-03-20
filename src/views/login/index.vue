@@ -45,7 +45,7 @@
                 :prefix-icon="useRenderIcon(Lock)"
               />
             </el-form-item>
-
+            <!-- 
             <el-form-item :prop="buildType === 'pro' ? 'ukeyPassword' : 'none'">
               <el-input
                 clearable
@@ -54,7 +54,7 @@
                 :placeholder="t('请输入U盾密码')"
                 :prefix-icon="useRenderIcon(Lock)"
               />
-            </el-form-item>
+            </el-form-item> -->
 
             <el-button
               class="w-full mt-4"
@@ -108,8 +108,8 @@ const userStore = useUserStore();
 const buildType = import.meta.env.VITE_BUILD_TYPE;
 const ruleForm = reactive({
   username: '',
-  password: '',
-  ukeyPassword: ''
+  password: ''
+  // ukeyPassword: ''
 });
 
 const onLogin = async (formEl: FormInstance | undefined) => {
@@ -131,8 +131,8 @@ const _loginRequest = async () => {
   try {
     const res: UserAPI.Login = await API.login({
       name: ruleForm.username,
-      pwd: getMD5(ruleForm.password),
-      ukeyPassword: ruleForm.ukeyPassword
+      pwd: getMD5(ruleForm.password)
+      // ukeyPassword: ruleForm.ukeyPassword
     });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });

@@ -59,11 +59,11 @@
           <template #betDetail="{ row }">
             <div class="match_item"  v-for="item in row.combineOrderDetails" :key="item">
               <div class="item_line">
-                {{`${useSportFormatDetail(item)[4]}  ${item.isInplay===1?'滚球':'早盘'}`}}
+                {{`${useSportFormatDetail(item)[4]}`}}
               </div>
-              <div class="item_line">{{useSportFormatDetail(item)[3]}}</div>
+            <div class="item_line">{{useSportFormatDetail(item)[3]}}</div>
               <div class="item_line cursor-pointer" v-copy="row.id">注单号: {{row.id}}</div>
-              <div class="item_line">投注时间 {{dayjs(row.createTime ?? Date.now()).format("YYYY-MM-DD HH:mm:ss")}}</div>
+              <div class="item_line">投注时间 {{row.createTime ?dayjs(row.createTime).format("YYYY-MM-DD HH:mm:ss"):''}}</div>
             </div>
           </template>
           <template #odd="{ row }">
@@ -83,7 +83,7 @@
             <el-button
                 class="reset-margin"
                 @click="handleCancel(row)"
-                v-if="row.settleTimes===0"
+                v-if="row.billStatus===0"
             >
               {{ t('取消') }}
             </el-button>

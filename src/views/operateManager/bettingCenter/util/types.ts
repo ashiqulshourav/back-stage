@@ -4,8 +4,8 @@ export type searchFormType = {
   pageNum?:number|string;
   sportId: string;
   userIdOrName: string;
-  createTimeStart: number | string;
-  createTimeEnd: number | string;
+  timeStart: number | string;
+  timeEnd: number | string;
   orderId: string;
   leagueId: string;
   matchId: string;
@@ -16,4 +16,5 @@ export type searchFormType = {
   isInplay:number|string;
   category:string|number;
   [key: string]: any;
+  timeType:number
 }
