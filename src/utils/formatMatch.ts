@@ -331,3 +331,9 @@ export const calculateSeriesTypeTotal = (list:any)=>{
   return truncateDecimals(oddTotal, 2)
 }
 
+
+export const calculateSeriesTypeTotalBets = (seriesType:number)=>{
+  const str = seriesType&&seriesType.toString()
+  const arr=str?.split('00')||[];
+  return arr.length>0?arr[1]:''
+}

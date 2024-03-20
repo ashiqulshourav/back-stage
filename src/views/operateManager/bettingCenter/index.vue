@@ -43,9 +43,10 @@
             <div class="item_line cursor-pointer" v-copy="row.tenantCode">
               <span>商户编号：</span>{{row.tenantCode}}
             </div>
-            <div  v-if="row.combineOrderDetails.length>1" class="item_line">
+            <div  v-if="row.combineOrderDetails.length>1" class="item_line mt-2 color_blue">
              {{String(row.seriesType).slice(-3) ==='001'?'串关':'复式'}}
-              <span class="ml-2">{{formatSeriesType(row?.seriesType,row.combineOrderDetails.length)}}</span>
+              <span >{{formatSeriesType(row?.seriesType,row.combineOrderDetails.length)}}</span>
+              <span class="ml-1" >总计：{{`${calculateSeriesTypeTotalBets(row?.seriesType)}注 每注：${row.orderAmount}`}}</span>
             </div>
           </template>
           <template #matchMessage="{ row }">
@@ -53,7 +54,7 @@
               <div class="item_line">{{item.homeTeamNameCn}} vs {{item.awayTeamNameCn}}</div>
               <div class="item_line">{{item.sportNameCn}}/{{item.leagueNameCn}}</div>
               <div class="item_line cursor-pointer" v-copy="item.matchId">赛事ID {{item.matchId}}</div>
-              <div class="item_line">开赛时间 {{dayjs(item.beginTime ?? Date.now()).format("YYYY-MM-DD HH:mm:ss")}}</div>
+              <div class="item_line">开赛时间：{{dayjs(item.beginTime ?? Date.now()).format("YYYY-MM-DD HH:mm:ss")}}</div>
             </div>
           </template>
           <template #betDetail="{ row }">
@@ -63,7 +64,7 @@
               </div>
             <div class="item_line">{{useSportFormatDetail(item)[3]}}</div>
               <div class="item_line cursor-pointer" v-copy="row.id">注单号: {{row.id}}</div>
-              <div class="item_line">投注时间 {{row.createTime ?dayjs(row.createTime).format("YYYY-MM-DD HH:mm:ss"):''}}</div>
+              <div class="item_line">投注时间：{{row.createTime ?dayjs(row.createTime).format("YYYY-MM-DD HH:mm:ss"):''}}</div>
             </div>
           </template>
           <template #odd="{ row }">
@@ -82,7 +83,7 @@
           <template #billStatus="{ row }">
             <div >{{ row.billStatus === 1 ? "已结算" : "未结算" }}</div>
             <div >{{ row.settleTime ? dayjs(row.settleTime).format('YYYY-MM-DD HH:mm:ss'):'' }}</div>
-            <div v-if="String(row.seriesType).slice(-3) ==='001'" >总赔率：{{String(row.seriesType).slice(-3) ==='001'?calculateSeriesTypeTotal(row.combineOrderDetails):'' }}</div>
+            <div v-if="String(row.seriesType).slice(-3) ==='001'" >总赔率:{{String(row.seriesType).slice(-3) ==='001'?calculateSeriesTypeTotal(row.combineOrderDetails):'' }}</div>
           </template>
           <template #operation="{ row }">
             <el-button
@@ -98,15 +99,15 @@
           class="bottom_content absolute bottom-7 flex max-w-[50%] items-center text-sm flex-wrap"
         >
           <div>
-            <label>{{ t('总计:') }}</label>
+            <label>{{ t('总计：') }}</label>
             <span>{{ totalInfo?.thisPageBetCount ?? 0 }}{{ t('单') }}</span>
           </div>
           <div>
-            <label>{{ t('用户数:') }}</label>
+            <label>{{ t('用户数：') }}</label>
             <span>{{ totalInfo?.thisPageBetUserCount ?? 0 }}{{ t('人') }}</span>
           </div>
           <div>
-            <label>{{ t('总计投注额:') }}</label>
+            <label>{{ t('总计投注额：') }}</label>
             <span class="ml-1">
               {{
                 totalInfo?.thisPageBetTotalAmount?.toFixed(2) ?? '0.00'
@@ -114,7 +115,7 @@
             >
           </div>
           <div>
-            <label>{{ t('总输赢:') }}</label>
+            <label>{{ t('总输赢：') }}</label>
             <span class="ml-1">
               {{
                 totalInfo?.thisPageBetTotalProfitAmount?.toFixed(2) ?? '0.00'
@@ -138,7 +139,7 @@ import {
   formatSeriesType,
   useSportFormatDetail,
   BET_RESULT_TYPE_MAP,
-  EBetResultType, getViewOddFn, markeTypeMap,calculateSeriesTypeTotal
+  EBetResultType, getViewOddFn, markeTypeMap, calculateSeriesTypeTotal, calculateSeriesTypeTotalBets
 } from "@/utils/formatMatch";
 import { usePublicHooks } from '@/hooks';
 import dayjs from "dayjs";
@@ -212,5 +213,9 @@ const {
   line-height: 16px;
 
   color: green;
+}
+.color_blue{
+  color: blue;
+  font-size: 12px;
 }
 </style>
