@@ -37,13 +37,13 @@
       </el-select>
     </el-form-item>
 
-    <!-- <el-form-item :label="t('U盾序列号')" prop="ukeyCode">
+    <el-form-item :label="t('U盾序列号')" prop="ukeyCode">
       <el-input
         v-model.trim="newFormInline.ukeyCode"
         maxlength="30"
         :placeholder="t('请输入U盾序列号')"
       />
-    </el-form-item> -->
+    </el-form-item>
 
     <el-form-item :label="t('备注')" prop="comment">
       <el-input
