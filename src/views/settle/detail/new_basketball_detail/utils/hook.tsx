@@ -52,7 +52,6 @@ export function useNewBasketBallHook() {
     const requireDdata = {
       t1: row.t1,
       t2: row.t2
-      // eventTime: row.eventTime
     };
     return !Object.keys(requireDdata).every(key => {
       return key === 't1' || key === 't2'
@@ -258,9 +257,8 @@ export function useNewBasketBallHook() {
       confirmParams.newEventList = eventList.map(item => {
         return {
           matchId,
-          eventCode: item.eventCode,
+          eventCode: item.eventCode ?? 'score',
           eventTime: 1,
-          homeAway: item.homeAway,
           matchPeriodId: item.matchPeriodId,
           t1: item.t1,
           t2: item.t2
@@ -300,25 +298,6 @@ export function useNewBasketBallHook() {
     if ((row.t1 as string) === '' || (row.t2 as string) === '')
       return message(t('比分不能为空'), { type: 'error' });
     row.isEdit = false;
-    // !confirmParams.cancelEventIds.includes(row.id) &&
-    //   isDelete &&
-    //   confirmParams.cancelEventIds.push(row.id);
-    // if (
-    //   confirmParams.newEventList.findIndex(
-    //     item => item._tempDate === row._tempDate
-    //   ) < 0
-    // ) {
-    //   confirmParams.newEventList.push({
-    //     matchId,
-    //     eventCode: row.eventCode,
-    //     eventTime: 1,
-    //     homeAway: row.homeAway,
-    //     _tempDate: row._tempDate,
-    //     matchPeriodId: row.matchPeriodId,
-    //     t1: row.t1,
-    //     t2: row.t2
-    //   });
-    // }
   };
 
   //- 历史记录-删除事件
@@ -332,13 +311,6 @@ export function useNewBasketBallHook() {
       center: true
     }).then(async () => {
       eventList.splice(index, 1);
-      // confirmParams.deleteEventIds.push(row.id);
-      // const i = confirmParams.newEventList.findIndex(
-      //   item => item.matchPeriodId === row.matchPeriodId
-      // );
-      // if (i >= 0) {
-      //   confirmParams.newEventList.splice(index, 1);
-      // }
     });
   };
 

@@ -3,7 +3,6 @@ import type { PaginationProps } from '@pureadmin/table';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { message } from '@/utils/message';
 import { useSettingStoreHook } from '@/store/settings';
-import { useMatchStore } from '@/store/match';
 import { SearchFormType } from './type';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { columns } from './tableColumnList';
@@ -11,7 +10,6 @@ import { SPORT_LIST_MAP, SPORT_NAME_TYPE } from './map';
 
 export const useSettileHook = () => {
   const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
-  const matchStore = useMatchStore();
   const settingStore = useSettingStoreHook();
   const classifyNavList = reactive(SPORT_ID_MAP.slice(0, 9));
   const currentSportId = ref<number>(

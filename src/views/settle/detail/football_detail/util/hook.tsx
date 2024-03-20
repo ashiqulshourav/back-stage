@@ -301,7 +301,6 @@ export function useFootball() {
 
   //- 获取比赛详情
   const getMatchDetail = async () => {
-    console.log('hook.tsx文件 304==============行打印=', history.state.params);
     const res = await API.getPreSaleInfo({
       matchId: history.state.params.matchId
     });

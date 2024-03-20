@@ -460,8 +460,18 @@ export const sattleData = {
   /* 
   * 篮球结算新版接口
    */
+
   getNewBasketballEvents: (data: SattleDataAPI.MatchIDType) => request<SattleDataAPI.newBasketballEventsResType>(
     'post', '/basketball/v2/getBasketballEvents', { data }),
+
+  //- 美式足球事件列表
+  getAmericanFootballEvents: (data: SattleDataAPI.MatchIDType) => request<SattleDataAPI.newBasketballEventsResType>(
+    'post', '/americanFootball/v1/getAmericanFootballEvents', { data }),
+
+
+  //- 美式足球手动新增事件
+  addAmericanFootballEvent: (data: SattleDataAPI.addBasketballEventV2ReqType) => request<SattleDataAPI.newBasketballEventsResType>(
+    'post', '/americanFootball/v1/addAmericanFootballEvent', { data }),
 
   //- 篮球手动新增事件
   addBasketballEventV2: (data: SattleDataAPI.addBasketballEventV2ReqType) => request<SattleDataAPI.newBasketballEventsResType>(
@@ -469,6 +479,10 @@ export const sattleData = {
   //- 篮球全场结算
   v2ManualSettlementFullTime: (data: SattleDataAPI.MatchIDType) => request<SattleDataAPI.manualSettlementFullTimeResType>(
     'post', '/basketball/v2/manualSettlementFullTime', { data }),
+
+  //- 美式足球全场结算
+  americanManualSettlementFullTime: (data: SattleDataAPI.MatchIDType) => request<SattleDataAPI.manualSettlementFullTimeResType>(
+    'post', '/americanFootball/v1/manualSettlementFullTime', { data }),
 
   //- 篮球针对事件重新结算
   reSettleMatchEvent: (data: {
@@ -479,6 +493,16 @@ export const sattleData = {
     t2: number | string;
   }) => request<SattleDataAPI.basketballCancelMatchEventResType>(
     'post', '/basketball/v1/reSettleMatchEvent', { data }),
+
+  //- 美式足球重新结算
+  americanReSettleMatchEvent: (data: {
+    matchId: number;
+    id: number;
+    matchPeriodId: number;
+    t1: number | string;
+    t2: number | string;
+  }) => request<SattleDataAPI.basketballCancelMatchEventResType>(
+    'post', '/americanFootball/v1/reSettleMatchEvent', { data }),
 
   //- 篮球取消结算事件
   basketBallCancelMatchEvent: (data: {

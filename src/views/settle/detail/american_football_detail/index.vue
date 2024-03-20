@@ -1,96 +1,253 @@
 <template>
-  <div class="main tennis_container">
+  <div class="main">
     <!-- -盘口详情 -->
     <DetiltTitle
       @allSettleBtnClick="allSettleBtnClick"
       :renderObj="renderObj"
-      :allSettleLoading="allSettleLoading"
+      :allSettleLoading="loading"
+      :hideAllSettleBtn="!hasAuth('FULLSETTLE')"
     />
-
-    <PureTableBar :columns="columns" @refresh="onSearch()">
+    <PureTableBar :columns="childColumns" @refresh="reloadTable">
       <template #title>
-        <div class="flex items-center">
-          <el-button
-            @click="addEventRow"
-            size="small"
-            type="primary"
-            v-if="renderObj.fullSettlementStatus === 0"
-            >{{ t('新增局') }}</el-button
-          >
-          <span></span>
+        <div class="flex items-center text-sm">
+          <span class="mr-2">
+            {{ baseTitle }}
+          </span>
+          <div v-if="renderObj.fullSettlementStatus === 1">
+            <el-button
+              @click="openSecondSettleClick"
+              type="primary"
+              size="small"
+              v-if="
+                renderObj.reSettleStatus === 0 &&
+                hasAuth('ENABLERECALCULATIONANDSETTLE')
+              "
+              >{{ t('开启二次结算') }}</el-button
+            >
+            <el-button
+              @click="confirmSecondSettleClick"
+              type="warning"
+              v-else
+              size="small"
+              >{{ t('确认二次结算') }}</el-button
+            >
+          </div>
         </div>
       </template>
-
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
-          class="table_container"
           align-whole="center"
+          :row-key="row => row.id"
+          :data="eventList"
           :loading="loading"
-          :size="size"
-          :row-key="row => row.inningNum"
-          adaptive
-          :adaptiveConfig="{
-            offsetBottom: 60
-          }"
-          :data="dataList"
           :columns="dynamicColumns"
+          :row-class-name="tableRowClassName"
+          :size="size"
+          table-layout="auto"
+          border
           :header-cell-style="tableHeaderStyle"
         >
-          <!-- -比分 -->
-          <template #t1="{ row }">
-            <Score :row="row" type="t1" :errorType="row.t1Error" />
-          </template>
-          <template #t2="{ row }">
-            <Score :row="row" type="t2" :errorType="row.t2Error" />
+          <!-- - 比分 -->
+          <template #score="{ row }: MatchEventRowType">
+            <div class="flex justify-center items-center">
+              <Score :row="row" type="t1" :renderObj="renderObj" />
+              <span class="ml-1 mr-1 font-bold leading-[2]">:</span>
+              <Score :row="row" type="t2" :renderObj="renderObj" />
+            </div>
           </template>
 
-          <!-- -结算时间 -->
-          <template #eventTime="{ row, index }">
-            <EventTime
+          <!-- -事件生成时间 -->
+          <template #eventTime="{ row, index }: MatchEventRowType">
+            <MatchTime
               :row="row"
               :index="index"
-              :dataList="dataList"
-              :errorType="row.eventTimeError"
+              :beginTime="renderObj.beginTimeLong"
+              :dataList="eventList"
             />
           </template>
 
-          <!-- -局按钮 -->
-          <template #operation="{ row, index }">
-            <ChildOperation
-              :row="row"
-              :childIndex="index"
-              @deleteChildItem="() => dataList.pop()"
-              @settlementHandicap="settlementHandicap(row)"
-            />
+          <!-- -操作 -->
+          <template #operation="{ row, index }: MatchEventRowType">
+            <div
+              class="flex items-center justify-center"
+              v-if="
+                !renderObj.fullSettlementStatus ||
+                renderObj.reSettleStatus === 1
+              "
+            >
+              <template v-if="row.id">
+                <BackEndBtnGroupCom
+                  :row="row"
+                  :dataList="eventList"
+                  :index="index"
+                  @resetMatchEvent="resetMatchEvent"
+                  :renderObj="renderObj"
+                  @cancelMatchEvent="cancelMatchEvent"
+                  @confirmResetMatchEvent="confirmResetMatchEvent"
+                  @deletMatchevent="deletMatchevent"
+                />
+              </template>
+              <template v-else>
+                <FrontBtnGroupCom
+                  :size="size"
+                  :row="row"
+                  :renderObj="renderObj"
+                  @handleChildrenData="handleChildrenData(row, 'save')"
+                />
+              </template>
+              <el-button
+                class="reset-margin"
+                link
+                type="danger"
+                :size="size"
+                v-if="!row.id && renderObj.reSettleStatus === 0"
+                :disabled="!row.isSave || row.isEdit"
+                :icon="useRenderIcon('uploadIcon')"
+                @click="handleChildrenData(row, 'upload')"
+              >
+                {{ t('确认结算') }}
+              </el-button>
+              <el-button
+                class="reset-margin"
+                link
+                type="primary"
+                :size="size"
+                v-if="!row.id"
+                :icon="useRenderIcon(Delete)"
+                @click="cancelItem(row)"
+              >
+                {{ t('取消') }}
+              </el-button>
+            </div>
+            <div v-else>-</div>
+          </template>
+
+          <!-- -数据商 -->
+          <template #dataSourceCode="{ row }: MatchEventRowType">
+            <div v-if="row.id && row.settleType === 0">
+              <el-text
+                v-for="(_, index) in eventQuotientList"
+                :key="index"
+                :type="row[_.type] === 1 ? 'primary' : 'info'"
+                :class="['!text-xs', index === 1 && '!mr-2 !ml-2']"
+                >{{ _.val }}</el-text
+              >
+            </div>
+            <span v-else>-</span>
           </template>
         </pure-table>
+        <div
+          class="mt-2 cursor-pointer"
+          v-if="
+            !renderObj.fullSettlementStatus || renderObj.reSettleStatus === 1
+          "
+        >
+          <!-- <el-button
+            v-if="
+              renderObj.settlementType === 1 &&
+              renderObj.reSettleStatus !== 1 &&
+              hasAuth('ENABLEMANUALSETTLE')
+            "
+            class="ml-1 reset-margin"
+            @click="changeSettleType"
+            >{{ t('开启人工结算') }}</el-button
+          > -->
+          <!-- v-if="
+              renderObj.settlementType !== 1 || renderObj.reSettleStatus === 1 -->
+          <div class="flex items-center">
+            <span class="mr-3 text-[var(--el-color-danger)]"
+              >{{
+                renderObj.reSettleStatus === 1
+                  ? t('重新结算中')
+                  : t('新增事件')
+              }}...</span
+            >
+            <IconifyIconOffline
+              width="25px"
+              icon="icon_circle_fill"
+              @click="addChildRow"
+            />
+          </div>
+        </div>
       </template>
     </PureTableBar>
   </div>
 </template>
 
 <script setup lang="ts">
-import { usePublicHooks } from '@/hooks';
 import { PureTableBar } from '@/components/RePureTableBar';
-import DetiltTitle from '../../component/Settle_detail_title.vue';
-import { useBilliardsHook } from './utils/hook';
-import { t } from '@/plugins/i18n';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import { MATH_RULE } from '@/utils/maps/sports_map';
+import BackEndBtnGroupCom from './component/BackEndBtnGroup.vue';
+import FrontBtnGroupCom from './component/FrontBtnGroup.vue';
+import MatchTime from './component/MatchTime.vue';
 import Score from './component/Score.vue';
-import EventTime from './component/EventTime.vue';
-import ChildOperation from './component/ChildOperation.vue';
+import { t } from '@/plugins/i18n';
+import { useAmericanFootballHook } from './utils/hook';
+import { usePublicHooks } from '@/hooks';
+import Delete from '@iconify-icons/ep/delete';
+import { MatchEventRowType } from './utils/type';
+import DetiltTitle from '../../component/Settle_detail_title.vue';
+import { hasAuth } from '@/router/utils';
 
-defineOptions({ name: 'SETTLE_AMERICANFOOTBALL_DETAIL' });
-const { tableHeaderStyle } = usePublicHooks();
+defineOptions({ name: 'SETTLE_DETAIL_NEW_BASKETBALL_DETAIL' });
 
 const {
-  onSearch,
   loading,
-  columns,
-  dataList,
-  addEventRow,
-  settlementHandicap,
-  allSettleBtnClick,
+  childColumns,
+  addChildRow,
+  handleChildrenData,
+  reloadTable,
+  // changeSettleType,
+  cancelMatchEvent,
+  eventList,
   renderObj,
-  allSettleLoading
-} = useBilliardsHook();
+  allSettleBtnClick,
+  openSecondSettleClick,
+  confirmSecondSettleClick,
+  cancelItem,
+  resetMatchEvent,
+  confirmResetMatchEvent,
+  deletMatchevent
+} = useAmericanFootballHook();
+
+const { tableHeaderStyle } = usePublicHooks();
+
+const eventQuotientList = [
+  { type: 'xjFlag', val: t('188数据') },
+  { type: 'psFlag', val: t('熊猫数据') },
+  { type: 'vsFlag', val: t('播控数据') }
+];
+
+//- 人工结算是否需要加时赛 暂时不添加验证
+/* const isShowSettleBen = computed(() => {
+  if (
+    eventList[eventList.length - 1]?.matchPeriodId === 40 &&
+    eventList[eventList.length - 1]?.id
+  ) {
+    return false;
+  }
+  let homeScore = 0;
+  let awayScore = 0;
+  const matchType = renderObj.periodType;
+  if (matchType === eventList.length) {
+    eventList.forEach(item => {
+      homeScore += +item.t1;
+      awayScore += +item.t2;
+    });
+    return homeScore === awayScore;
+  }
+  return true;
+}); */
+
+//- 取消事件置灰
+const tableRowClassName = ({ row }: MatchEventRowType) =>
+  row.canceled === 1 ? 'pure-warning-row' : '';
+
+const baseTitle = computed(() => {
+  return MATH_RULE.basketBall.find(item => item.key === renderObj.periodType)
+    ?.val;
+});
 </script>
+
+<style scoped></style>
