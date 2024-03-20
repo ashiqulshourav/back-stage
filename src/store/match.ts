@@ -9,11 +9,10 @@ export const useMatchStore = defineStore('MATCHSTATE', {
     countryList: [],
     sportId: 1,
     matchSearchLoading: false,
-    settleRequestLoading: false,   //- 结算页面searchLoading
+    settleRequestLoading: false,
 
   }),
   actions: {
-    //- 设置联赛供搜索使用 体育 + 电子竞技
     async set_lagueList(
       category: LeagueClassifyType,
       sportId: number | string,
@@ -35,7 +34,11 @@ export const useMatchStore = defineStore('MATCHSTATE', {
       this.matchSearchLoading = true;
       const res: MetadataAPI.LeagueListRes = await API.getLeagueList(params);
       this.matchSearchLoading = false;
-      this[listType] = res.data.list;
+      if (res.code) {
+        this.reset_lagueList();
+      } else {
+        this[listType] = res.data.list;
+      }
     },
     reset_lagueList() {
       this.sportLeagueList.length = []
@@ -48,6 +51,11 @@ export const useMatchStore = defineStore('MATCHSTATE', {
         pageSize: 9999
       });
       this.countryList = res.data.list;
+    },
+
+    search_league_list(query: string, currentSportId: number | string, category: LeagueClassifyType = 0) {
+      if (query !== '') this.set_lagueList(category, currentSportId, query)
+      else this.reset_lagueList()
     },
     set_settleRequestLoading(_: boolean) {
       this.settleRequestLoading = _;

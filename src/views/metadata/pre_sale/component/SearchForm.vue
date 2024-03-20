@@ -24,6 +24,7 @@
           :placeholder="t('游戏种类')"
           clearable
           class="!w-[150px]"
+          @change="search"
         >
           <el-option
             :label="item.label"
@@ -41,7 +42,18 @@
           clearable
           filterable
           remote
-          :remote-method="remoteMethod"
+          @change="search"
+          :remote-method="
+            debounce(
+              query =>
+                matchStore.search_league_list(
+                  query,
+                  form.sportId,
+                  form.category as LeagueClassifyType
+                ),
+              1000
+            )
+          "
           class="!w-[280px]"
           :placeholder="t('请选择联赛')"
           :loading="matchStore.matchSearchLoading"
@@ -56,6 +68,7 @@
           />
         </el-select>
       </el-form-item>
+
       <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
         <el-input
           v-model="form.matchId"
@@ -185,28 +198,6 @@ const props = withDefaults(
   {}
 );
 
-const remoteMethod = debounce(async query => {
-  if (query !== '') {
-    matchStore.set_lagueList(
-      props.form.category as LeagueClassifyType,
-      props.form.sportId,
-      query
-    );
-  } else {
-    matchStore.reset_lagueList();
-  }
-}, 500);
-
-/* const selectTypeList = [
-  { val: t('开售管理'), num: 1 },
-  { val: t('早盘赛事'), num: 2 },
-  { val: t('滚球赛事'), num: 3 }
-]; */
-
-// onMounted(() => {
-//   matchStore.set_lagueList(0, 1);
-// });
-
 const changeDate = t => {
   if (!t) {
     props.form.startTime = '';
@@ -245,8 +236,8 @@ const search = () => {
 
 const chagenMatchType = (type: 0 | 1 | 2) => {
   props.form.sportId = '';
-  //- 电竞比赛 =1
   gameClassify.value = type === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
+  search();
 };
 
 const nextDayArr = computed(() => {

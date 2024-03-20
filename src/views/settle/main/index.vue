@@ -1,6 +1,10 @@
 <template>
   <div class="main">
-    <SearchForm @onSearch="onSearch" :form="form" />
+    <SearchForm
+      @onSearch="onSearch"
+      :form="form"
+      :currentSportId="currentSportId"
+    />
     <SportTypeNav
       @changeNavType="changeNavType"
       :currentSportId="currentSportId"
@@ -47,7 +51,6 @@ import { SPORT_LIST_MAP } from './utils/map';
 import { handleTableWidth } from '@/utils/getTableWidth';
 import { SPORT_NAME_TYPE } from './utils/map';
 import { hasAuth } from '@/router/utils';
-
 
 defineOptions({ name: 'SETTLE_MAIN' });
 

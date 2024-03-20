@@ -8,10 +8,19 @@
     <el-form-item :label="`${t('联赛')}:`" prop="leagueId">
       <el-select
         v-model="form.leagueId"
-        filterable
-        class="!w-[280px]"
         clearable
+        filterable
+        remote
+        @change="searchVal"
+        :remote-method="
+          debounce(
+            query => matchStore.search_league_list(query, currentSportId),
+            1000
+          )
+        "
+        class="!w-[280px]"
         :placeholder="t('请选择联赛')"
+        :loading="matchStore.matchSearchLoading"
       >
         <el-option
           v-for="item in matchStore.sportLeagueList"
@@ -100,16 +109,14 @@ import { SearchFormType } from '../utils/type';
 import { useMatchStore } from '@/store/match';
 import dayjs from 'dayjs';
 import { formatNumber } from '@/utils/formatNumber';
+import { debounce } from '@pureadmin/utils';
 const formRef = ref();
 const matchStore = useMatchStore();
 const time = ref('');
 
-onMounted(() => {
-  matchStore.set_lagueList(0, 1);
-});
-
 const props = defineProps<{
   form: SearchFormType;
+  currentSportId: number;
 }>();
 
 const changeDate = t => {
