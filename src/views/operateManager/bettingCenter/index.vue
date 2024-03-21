@@ -71,7 +71,7 @@
             </div>
           </template>
           <template #odd="{ row }">
-            <div class="match_item"  v-for="item in row.combineOrderDetails" :key="item.id">
+            <div class="match_item odd_item"  v-for="item in row.combineOrderDetails" :key="item.id">
                 <div>{{getViewOddFn(item.oddFinally,item.marketTypeFinally,item.marketType)}}</div>
                 <div>{{markeTypeMap[item.marketType]}}</div>
               <div  v-if="BET_RESULT_TYPE_MAP[item?.betResult]">
@@ -234,5 +234,8 @@ const {
   width: 80px;
   color: #FFF;
   border-radius: 4px;
+}
+.odd_item{
+  min-height: 100px;
 }
 </style>
