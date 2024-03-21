@@ -233,7 +233,7 @@ export function useAmericanFootballHook() {
 
   //- 开启二次结算
   const openSecondSettleClick = async () => {
-    const res = await API.basketballOpen2ndSettlementStatus({ matchId });
+    const res = await API.americanFootballOpen2ndSettlementStatus({ matchId });
     message(res.msg, { type: res.code ? 'error' : 'success' });
     if (!res.code) initMatchData();
   };
@@ -265,7 +265,7 @@ export function useAmericanFootballHook() {
         };
       });
 
-      const res = await API.basketballConfirm2ndSettlement(confirmParams);
+      const res = await API.americanFootballConfirm2ndSettlement(confirmParams);
       if (res.code) return message(res.msg, { type: 'error' });
       confirmParams.cancelEventIds = [];
       confirmParams.newEventList = [];

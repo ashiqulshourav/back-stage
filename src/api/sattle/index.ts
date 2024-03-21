@@ -530,6 +530,9 @@ export const sattleData = {
   //- 篮球开启二次结算
   basketballOpen2ndSettlementStatus: (data: SattleDataAPI.MatchIDType) => request<SattleDataAPI.basketballOpen2ndSettlementStatusResType>(
     'post', '/basketball/v1/open2ndSettlementStatus', { data }),
+  //- 美式足球开启二次结算
+  americanFootballOpen2ndSettlementStatus: (data: SattleDataAPI.MatchIDType) => request<SattleDataAPI.basketballOpen2ndSettlementStatusResType>(
+    'post', '/americanFootball/v1/open2ndSettlementStatus', { data }),
   //- 排球开启二次结算
   volleyballOpen2ndSettlementStatus: (data: SattleDataAPI.MatchIDType) => request<SattleDataAPI.basketballOpen2ndSettlementStatusResType>(
     'post', '/volleyball/v1/open2ndSettlementStatus', { data }),
@@ -564,6 +567,9 @@ export const sattleData = {
   //- 篮球确认二次结算
   basketballConfirm2ndSettlement: (data: SattleDataAPI.confirm2ndSettlementReqType) => request<SattleDataAPI.open2ndSettlementStatusResType>(
     'post', '/basketball/v1/confirm2ndSettlement', { data }),
+  //- 美式足球确认二次结算
+  americanFootballConfirm2ndSettlement: (data: SattleDataAPI.confirm2ndSettlementReqType) => request<SattleDataAPI.open2ndSettlementStatusResType>(
+    'post', '/americanFootball/v1/confirm2ndSettlement', { data }),
   //- 排球确认二次结算
   volleyballConfirm2ndSettlement: (data: SattleDataAPI.confirm2ndSettlementReqType) => request<SattleDataAPI.open2ndSettlementStatusResType>(
     'post', '/volleyball/v1/confirm2ndSettlement', { data }),
