@@ -30,14 +30,15 @@ export function useLeague() {
     orderId: '',
     leagueId: '',
     matchId: '',
-    awayTeamNameCn: '',
-    homeTeamNameCn: '',
+    awayTeamName: '',
+    homeTeamName: '',
     status:[],
     isInplay:'',
     seriesType:'',
     category:'',
     timeType:1,
-      leagueName:''
+    leagueName:'',
+    tenantIds:[],
   });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -83,6 +84,10 @@ export function useLeague() {
       loading.value = false;
     }
   }
+
+  // const getTenantList =()=>{
+  //
+  // }
 
   const resetForm = formEl => {
     if (!formEl) return;
@@ -180,11 +185,12 @@ export function useLeague() {
     });
   }
 
-  const copy = (str:string)=>{
-    const success = copyTextToClipboard(str);
-    success
-      ? message(`$${str}成功`, { type: 'success' })
-      : message(t('复制失败'), { type: 'error' });
+  const copyText = (str:string)=>{
+    console.log(3333333,str)
+    // const success = copyTextToClipboard(str);
+    // success
+    //   ? message(`$${str}成功`, { type: 'success' })
+    //   : message(t('复制失败'), { type: 'error' });
   }
 const getStatus = (status,billStatus,betResult)=>{
     let obj = {status:2,bgColor:''}
@@ -229,7 +235,7 @@ const getStatus = (status,billStatus,betResult)=>{
     handleSelectionChange,
     exportFile,
     handleCancel,
-    copy,
+    copyText,
     getStatus
   };
 }

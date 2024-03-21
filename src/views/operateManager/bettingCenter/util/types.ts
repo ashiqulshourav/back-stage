@@ -9,15 +9,16 @@ export type searchFormType = {
   orderId: string;
   leagueId: string;
   matchId: string;
-  awayTeamNameCn: string;
-  homeTeamNameCn: string;
+  awayTeamName: string;
+  homeTeamName: string;
   seriesType:number|string;
   status:any;
   isInplay:number|string;
   category:string|number;
   [key: string]: any;
   timeType:number;
-  leagueName:string
+  leagueName:string;
+  tenantIds:any
 }
 
 export enum betStatus {

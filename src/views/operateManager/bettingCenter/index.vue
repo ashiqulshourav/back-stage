@@ -1,5 +1,6 @@
 <template>
   <div class="main">
+      <div onclick="()=>copyText('test')">test</div>
     <SearchForm
       :form="form"
       :loading="loading"
@@ -89,7 +90,7 @@
             <div v-if="String(row.seriesType).slice(-3) ==='001'" >总赔率:{{String(row.seriesType).slice(-3) ==='001'?calculateSeriesTypeTotal(row.combineOrderDetails):'' }}</div>
           </template>
           <template #operation="{ row }">
-            <el-button
+            <el-button v-auth="['DETAIL']"
                 class="reset-margin"
                 @click="handleCancel(row)"
                 v-if="row.billStatus===0"
@@ -129,6 +130,7 @@
       </template>
 
     </PureTableBar>
+
   </div>
 </template>
 <script setup lang="ts">
@@ -150,10 +152,8 @@ import {
   displayHomeAwayScore,
   getIsInplay,
 } from "@/utils/formatMatch";
-import {betStatus, betStatusMap,} from './util/types'
+import {betStatusMap} from './util/types'
 import { usePublicHooks } from '@/hooks';
-
-
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
 
@@ -170,6 +170,7 @@ const {
   exportFile,
   handleCancel,
   getStatus,
+    copyText
 } = useLeague();
 </script>
 

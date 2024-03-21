@@ -7,6 +7,16 @@
   >
     <div class="flex">
       <div>
+        <el-form-item :label="`${t('商户ID')}:`" prop="tenantIds">
+          <el-select class="min-w100"
+                     :placeholder="t('请选择商户ID，多选项')"
+                     multiple
+                     v-model="form.tenantIds"
+                     clearable
+          >
+<!--            <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="item[0]" :key="item[0]" />-->
+          </el-select>
+        </el-form-item>
         <el-form-item :label="`${t('赛事类型')}:`" prop="category">
           <el-select
             v-model="form.category"
@@ -23,6 +33,7 @@
             />
           </el-select>
         </el-form-item>
+
 
         <el-form-item :label="`${t('游戏种类')}:`" prop="sportId">
           <el-select
@@ -49,6 +60,16 @@
               <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="item[0]" :key="item[0]" />
           </el-select>
         </el-form-item>
+<!--        <el-form-item :label="`${t('投注结果')}:`" prop="settleStatus">
+          <el-select class="min-w100"
+                     :placeholder="t('请选择')"
+                     multiple
+                     v-model="form.betResult"
+                     clearable
+          >
+            <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="item[0]" :key="item[0]" />
+          </el-select>
+        </el-form-item>-->
         <el-form-item :label="`${t('投注阶段')}:`" prop="isInplay">
           <el-select
               v-model="form.isInplay"
@@ -108,18 +129,18 @@
               class="!w-[150px]"
           />
         </el-form-item>
-        <el-form-item :label="`${t('主队')}:`" prop="homeTeamNameCn">
+        <el-form-item :label="`${t('主队')}:`" prop="homeTeamName">
           <el-input
-            v-model="form.homeTeamNameCn"
+            v-model="form.homeTeamName"
             :placeholder="t('主队名称')"
             clearable
             v-enter="search"
             class="!w-[150px]"
           />
         </el-form-item>
-        <el-form-item :label="`${t('客队')}:`" prop="awayTeamNameCn">
+        <el-form-item :label="`${t('客队')}:`" prop="awayTeamName">
           <el-input
-            v-model="form.awayTeamNameCn"
+            v-model="form.awayTeamName"
             :placeholder="t('客队名称')"
             clearable
             v-enter="search"
@@ -236,13 +257,12 @@ const resetForm = (formEl: FormInstance | undefined) => {
 const changeDate = t => {
 
   if (!t) {
-    props.form.createTimeStart = '';
-    props.form.createTimeEnd = '';
+    props.form.timeStart = '';
+    props.form.timeEnd = '';
   } else {
     props.form.timeStart = dayjs(t[0]).startOf('day').valueOf();
     props.form.timeEnd = dayjs(t[1]).endOf('day').valueOf();
   }
-
   search();
 };
 const chagenMatchType = (type: 0 | 1 | 2) => {
