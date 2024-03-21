@@ -28,7 +28,7 @@ export const columns: TableColumnList = [
 
   {
     label: t("状态"),
-    slot: "billStatus",
+    slot: "status",
     minWidth: 50,
     align:'left',
   },

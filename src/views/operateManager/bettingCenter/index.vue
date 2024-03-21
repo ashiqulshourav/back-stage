@@ -84,7 +84,7 @@
             <span v-else>-</span>
           </template>
           <template #status="{ row }">
-            <div >{{ betStatus[row.status]}}</div>
+            <div :style="{background:getStatus(row.status,row.billStatus,row.combineOrderDetails[0].betResult).bgColor}" class="status_btn mb-1">{{ betStatusMap[getStatus(row.status,row.billStatus,row.combineOrderDetails[0].betResult).status]}}</div>
             <div >{{ row.settleTime ? dayjs(row.settleTime).format('YYYY-MM-DD HH:mm:ss'):'' }}</div>
             <div v-if="String(row.seriesType).slice(-3) ==='001'" >总赔率:{{String(row.seriesType).slice(-3) ==='001'?calculateSeriesTypeTotal(row.combineOrderDetails):'' }}</div>
           </template>
@@ -137,7 +137,7 @@ import { useLeague } from './util/hook';
 import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
-
+import dayjs from "dayjs";
 import {
   formatSeriesType,
   useSportFormatDetail,
@@ -149,11 +149,10 @@ import {
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
   getIsInplay,
-  betStatus,
-  betStatusMap,
 } from "@/utils/formatMatch";
+import {betStatus, betStatusMap,} from './util/types'
 import { usePublicHooks } from '@/hooks';
-import dayjs from "dayjs";
+
 
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
@@ -170,6 +169,7 @@ const {
   handleSelectionChange,
   exportFile,
   handleCancel,
+  getStatus,
 } = useLeague();
 </script>
 
@@ -226,5 +226,13 @@ const {
 .color_blue{
   color: blue;
   font-size: 12px;
+}
+.status_btn{
+  text-align: center;
+  height: 25px;
+  line-height: 25px;
+  width: 80px;
+  color: #FFF;
+  border-radius: 4px;
 }
 </style>

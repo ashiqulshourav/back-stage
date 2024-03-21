@@ -184,6 +184,34 @@ export function useLeague() {
       ? message(`$${str}成功`, { type: 'success' })
       : message(t('复制失败'), { type: 'error' });
   }
+const getStatus = (status,billStatus,betResult)=>{
+
+    let obj = {status:2,bgColor:''}
+  console.log(11111,obj)
+   if(status===0&&billStatus===0){
+     obj={status:3,bgColor:'#FFC53D'}
+   }else if(status===1&&billStatus===1){
+     obj={status:4,bgColor:'#40A9FF'}
+   }else if(status===0){
+     obj={status:2,bgColor:'#FFC53D'}
+   }else if(status===6){
+     obj={status:4,bgColor:'#FFC53D'}
+   }else if(status==2){
+     obj.status=6
+     obj={status:6,bgColor:'#E54752'}
+   }else if(status===4){
+     obj={status:7,bgColor:'#F57582'}
+   }else if(status===5){
+     obj={status:8,bgColor:'#FFC53D'}
+   }else if(status===1&&billStatus===1&&(betResult===21||betResult===22)){
+     obj={status:8,bgColor:'#F57582'}
+   }
+
+  console.log(3333,obj)
+   return obj
+
+
+}
 
 
 
@@ -205,6 +233,7 @@ export function useLeague() {
     handleSelectionChange,
     exportFile,
     handleCancel,
-    copy
+    copy,
+    getStatus
   };
 }

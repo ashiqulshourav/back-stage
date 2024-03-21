@@ -213,7 +213,7 @@ const dateRangetType = computed(() => {
   };
   return o[dateType.value];
 });
-import {  betStatusMap} from "@/utils/formatMatch";
+import {  betStatusMap} from "../util/types";
 
 console.log(1111,Object.entries(betStatusMap))
 
