@@ -14,6 +14,6 @@ export const bettingCenter = {
   }) => http.request<BetOrderAPI.BetOrderResType>("post", "/bet-center/cancel", { data }),
   getTenantList: (data: {
     orderId: number;
-  }) => http.request<BetOrderAPI.BetOrderResType>("post", "/bet-center/getTenantList", { data }),
+  }) => http.request("post", "/bet-center/getTenantList", { data }),
 
 };

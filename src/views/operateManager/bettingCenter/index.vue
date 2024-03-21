@@ -1,6 +1,5 @@
 <template>
   <div class="main">
-      <div onclick="()=>copyText('test')">test</div>
     <SearchForm
       :form="form"
       :loading="loading"
@@ -35,7 +34,7 @@
              <span>{{row.index}}</span>
           </template>
           <template #userMessage="{ row }">
-            <div class="item_line cursor-pointer" v-copy="row.userId" ondblclick="copy('用户ID:'+row.userId)">
+            <div class="item_line cursor-pointer" v-copy="row.userId" >
               <span>用户ID：</span>{{row.userId}}
             </div>
             <div class="item_line cursor-pointer" v-copy="row.userName">
@@ -170,7 +169,6 @@ const {
   exportFile,
   handleCancel,
   getStatus,
-    copyText
 } = useLeague();
 </script>
 

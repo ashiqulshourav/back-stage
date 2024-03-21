@@ -8,9 +8,9 @@ import { Detail, getBetTeamType, playMap,markeTypeMap } from "@/utils/formatMatc
 import dayjs from 'dayjs';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { ElMessageBox } from "element-plus";
-import { copyTextToClipboard } from '@pureadmin/utils';
 export function useLeague() {
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
+  const tenantList = reactive<{id:number,name:string,tenantCode:string}>([]);
   const loading = ref(true);
   const totalInfo = reactive<BetOrderAPI.otherDataType>(
     {} as BetOrderAPI.otherDataType
@@ -85,9 +85,13 @@ export function useLeague() {
     }
   }
 
-  // const getTenantList =()=>{
-  //
-  // }
+  const getTenantList = async ()=>{
+    const res =  await API.getTenantList({})
+    dataList.length = 0;
+    if(res.data?.data?.length){
+      tenantList.push(...res.data.data);
+    }
+  }
 
   const resetForm = formEl => {
     if (!formEl) return;
@@ -100,9 +104,7 @@ export function useLeague() {
   //- 导出excel表格
   const exportFile = async () => {
     const res = await API.bettingCenterList(removeEmptyStringKeys(form));
-
     const r = res.data.map((item:any,i) => {
-
       const arr = [];
       const data={...item,...item?.combineOrderDetails[0]}
       columns.forEach((column:{prop:string}) => {
@@ -184,14 +186,6 @@ export function useLeague() {
         .catch(reject);
     });
   }
-
-  const copyText = (str:string)=>{
-    console.log(3333333,str)
-    // const success = copyTextToClipboard(str);
-    // success
-    //   ? message(`$${str}成功`, { type: 'success' })
-    //   : message(t('复制失败'), { type: 'error' });
-  }
 const getStatus = (status,billStatus,betResult)=>{
     let obj = {status:2,bgColor:''}
    if(status===0&&billStatus===0){
@@ -220,11 +214,13 @@ const getStatus = (status,billStatus,betResult)=>{
   //- 切换比赛类型
   onMounted(() => {
     onSearch();
+    getTenantList();
   });
 
   return {
     loading,
     dataList,
+    tenantList,
     pagination,
     form,
     totalInfo,
@@ -235,7 +231,7 @@ const getStatus = (status,billStatus,betResult)=>{
     handleSelectionChange,
     exportFile,
     handleCancel,
-    copyText,
-    getStatus
+    getStatus,
+
   };
 }

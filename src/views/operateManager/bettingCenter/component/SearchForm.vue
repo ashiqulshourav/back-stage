@@ -14,7 +14,7 @@
                      v-model="form.tenantIds"
                      clearable
           >
-<!--            <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="item[0]" :key="item[0]" />-->
+            <el-option v-for="item in tenantList" :label="item.name" :value="item.id" :key="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('赛事类型')}:`" prop="category">
@@ -222,6 +222,7 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import type { FormInstance } from 'element-plus';
 import dayjs from 'dayjs';
 import { formatNumber } from '@/utils/formatNumber';
+const {tenantList} = useLeague();
 import {
   SPORT_ID_MAP,
   ESPORT_ID_MAP,
@@ -245,6 +246,7 @@ const dateRangetType = computed(() => {
   return o[dateType.value];
 });
 import {  betStatusMap} from "../util/types";
+import {useLeague} from "@/views/operateManager/bettingCenter/util/hook";
 
 const emits = defineEmits(['onSearch', 'exportFile']);
 const resetForm = (formEl: FormInstance | undefined) => {
