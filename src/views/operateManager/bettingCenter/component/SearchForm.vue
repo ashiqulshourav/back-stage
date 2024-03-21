@@ -7,6 +7,16 @@
   >
     <div class="flex">
       <div>
+        <el-form-item :label="`${t('商户ID')}:`" prop="tenantIds">
+          <el-select class="min-w100"
+                     :placeholder="t('请选择商户ID，多选项')"
+                     multiple
+                     v-model="form.tenantIds"
+                     clearable
+          >
+            <el-option v-for="item in tenantList" :label="`${item.name}(id: ${item.id})`" :value="item.id" :key="item.id" />
+          </el-select>
+        </el-form-item>
         <el-form-item :label="`${t('赛事类型')}:`" prop="category">
           <el-select
             v-model="form.category"
@@ -24,6 +34,7 @@
           </el-select>
         </el-form-item>
 
+
         <el-form-item :label="`${t('游戏种类')}:`" prop="sportId">
           <el-select
             v-model="form.sportId"
@@ -40,25 +51,25 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('注单状态')}:`" prop="settleStatus">
-          <el-select
-              v-model="form.settleStatus"
+          <el-select class="min-w100"
+                  :placeholder="t('请选择状态，多选项')"
+            multiple
+              v-model="form.status"
               clearable
-              class="!w-[100px]"
           >
-            <el-option
-                label="全部"
-                value=""
-            />
-            <el-option
-                label="已结算"
-                :value="1"
-            />
-            <el-option
-                label="未结算"
-                :value="0"
-            />
+              <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="item[0]" :key="item[0]" />
           </el-select>
         </el-form-item>
+<!--        <el-form-item :label="`${t('投注结果')}:`" prop="settleStatus">
+          <el-select class="min-w100"
+                     :placeholder="t('请选择')"
+                     multiple
+                     v-model="form.betResult"
+                     clearable
+          >
+            <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="item[0]" :key="item[0]" />
+          </el-select>
+        </el-form-item>-->
         <el-form-item :label="`${t('投注阶段')}:`" prop="isInplay">
           <el-select
               v-model="form.isInplay"
@@ -109,18 +120,27 @@
             class="!w-[150px]"
           />
         </el-form-item>
-        <el-form-item :label="`${t('主队')}:`" prop="homeTeamNameCn">
+        <el-form-item :label="`${t('联赛名')}:`" prop="leagueName">
           <el-input
-            v-model="form.homeTeamNameCn"
+              v-model="form.leagueName"
+              :placeholder="t('联赛名')"
+              clearable
+              v-enter="search"
+              class="!w-[150px]"
+          />
+        </el-form-item>
+        <el-form-item :label="`${t('主队')}:`" prop="homeTeamName">
+          <el-input
+            v-model="form.homeTeamName"
             :placeholder="t('主队名称')"
             clearable
             v-enter="search"
             class="!w-[150px]"
           />
         </el-form-item>
-        <el-form-item :label="`${t('客队')}:`" prop="awayTeamNameCn">
+        <el-form-item :label="`${t('客队')}:`" prop="awayTeamName">
           <el-input
-            v-model="form.awayTeamNameCn"
+            v-model="form.awayTeamName"
             :placeholder="t('客队名称')"
             clearable
             v-enter="search"
@@ -148,9 +168,12 @@
             class="!w-[200px]"
           />
         </el-form-item>
-
-        <el-form-item :prop="selectDateType.valueOf()===1?'beginTime':'createTimeStart'" :label="`${t('下注时间')}`">
-
+        <el-form-item prop="selectDateT">
+          <el-select v-model="form.timeType"  class="!w-[110px]">
+            <el-option  :label="t('注单时间')" :value="1"  />
+            <el-option  :label="t('结算时间')" :value="2"  />
+            <el-option  :label="t('比赛时间')" :value="3"  />
+          </el-select>
           <el-date-picker
             :type="dateRangetType"
             v-model="selectDate"
@@ -199,14 +222,13 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import type { FormInstance } from 'element-plus';
 import dayjs from 'dayjs';
 import { formatNumber } from '@/utils/formatNumber';
+const {tenantList} = useLeague();
 import {
   SPORT_ID_MAP,
   ESPORT_ID_MAP,
   SPORT_CATEGORY
 } from '@/utils/maps/sports_map';
-import { searchFormType } from '../utils/types';
-import {hasAuth} from "@/router/utils";
-
+import { searchFormType } from '../util/types';
 const props = defineProps<{
   loading: boolean;
   form: searchFormType;
@@ -215,9 +237,7 @@ const props = defineProps<{
 const formRef = ref();
 const selectDate = ref('');
 const dateType = ref(1);
-const selectDateType = ref(2); // 1 开赛时间 2 下注时间
 const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
-
 const dateRangetType = computed(() => {
   const o = {
     1: 'daterange',
@@ -225,6 +245,8 @@ const dateRangetType = computed(() => {
   };
   return o[dateType.value];
 });
+import {  betStatusMap} from "../util/types";
+import {useLeague} from "@/views/operateManager/bettingCenter/util/hook";
 
 const emits = defineEmits(['onSearch', 'exportFile']);
 const resetForm = (formEl: FormInstance | undefined) => {
@@ -237,13 +259,12 @@ const resetForm = (formEl: FormInstance | undefined) => {
 const changeDate = t => {
 
   if (!t) {
-    props.form.createTimeStart = '';
-    props.form.createTimeEnd = '';
+    props.form.timeStart = '';
+    props.form.timeEnd = '';
   } else {
     props.form.timeStart = dayjs(t[0]).startOf('day').valueOf();
     props.form.timeEnd = dayjs(t[1]).endOf('day').valueOf();
   }
-
   search();
 };
 const chagenMatchType = (type: 0 | 1 | 2) => {
@@ -264,6 +285,9 @@ const exportFile = () => {
 <style scoped lang="scss">
 :deep(.el-dropdown-menu__item i) {
   margin: 0;
+}
+.min-w100{
+  min-width: 100px;
 }
 .search-form {
   :deep(.el-form-item) {
