@@ -89,10 +89,10 @@
             <div v-if="String(row.seriesType).slice(-3) ==='001'" >总赔率:{{String(row.seriesType).slice(-3) ==='001'?calculateSeriesTypeTotal(row.combineOrderDetails):'' }}</div>
           </template>
           <template #operation="{ row }">
-            <el-button v-auth="['DETAIL']"
+            <el-button
                 class="reset-margin"
                 @click="handleCancel(row)"
-                v-if="row.billStatus===0"
+                v-if="row.billStatus===0&&hasAuth('DETAIL')"
             >
               {{ t('取消') }}
             </el-button>
@@ -139,6 +139,7 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from "dayjs";
+import { hasAuth } from '@/router/utils';
 import {
   formatSeriesType,
   useSportFormatDetail,
