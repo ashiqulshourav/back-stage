@@ -83,8 +83,8 @@
             <span v-if="row.profitAmount" :class="row.profitAmount>0?'win':'lose'">{{row.profitAmount.toFixed(2)}}</span>
             <span v-else>-</span>
           </template>
-          <template #billStatus="{ row }">
-            <div >{{ row.billStatus === 1 ? "已结算" : "未结算" }}</div>
+          <template #status="{ row }">
+            <div >{{ betStatus[row.status]}}</div>
             <div >{{ row.settleTime ? dayjs(row.settleTime).format('YYYY-MM-DD HH:mm:ss'):'' }}</div>
             <div v-if="String(row.seriesType).slice(-3) ==='001'" >总赔率:{{String(row.seriesType).slice(-3) ==='001'?calculateSeriesTypeTotal(row.combineOrderDetails):'' }}</div>
           </template>
@@ -149,6 +149,8 @@ import {
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
   getIsInplay,
+  betStatus,
+  betStatusMap,
 } from "@/utils/formatMatch";
 import { usePublicHooks } from '@/hooks';
 import dayjs from "dayjs";

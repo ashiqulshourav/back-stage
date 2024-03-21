@@ -41,22 +41,11 @@
         </el-form-item>
         <el-form-item :label="`${t('注单状态')}:`" prop="settleStatus">
           <el-select
-              v-model="form.settleStatus"
+            multiple
+              v-model="form.status"
               clearable
-              class="!w-[100px]"
           >
-            <el-option
-                label="全部"
-                value=""
-            />
-            <el-option
-                label="已结算"
-                :value="1"
-            />
-            <el-option
-                label="未结算"
-                :value="0"
-            />
+              <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="item[0]" :key="item[0]" />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('投注阶段')}:`" prop="isInplay">
@@ -216,9 +205,7 @@ const props = defineProps<{
 const formRef = ref();
 const selectDate = ref('');
 const dateType = ref(1);
-const selectDateType = ref(2); // 1 开赛时间 2 下注时间
 const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
-const timeType = ref(1); //时间类型 1: 注单时间 2: 结算时间 3: 比赛时间")
 const dateRangetType = computed(() => {
   const o = {
     1: 'daterange',
@@ -226,6 +213,11 @@ const dateRangetType = computed(() => {
   };
   return o[dateType.value];
 });
+import {  betStatusMap} from "@/utils/formatMatch";
+
+console.log(1111,Object.entries(betStatusMap))
+
+
 
 const emits = defineEmits(['onSearch', 'exportFile']);
 const resetForm = (formEl: FormInstance | undefined) => {

@@ -12,7 +12,7 @@ export type searchFormType = {
   awayTeamNameCn: string;
   homeTeamNameCn: string;
   seriesType:number|string;
-  settleStatus:number|string;
+  status:any;
   isInplay:number|string;
   category:string|number;
   [key: string]: any;
