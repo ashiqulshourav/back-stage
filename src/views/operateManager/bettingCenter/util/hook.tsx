@@ -185,7 +185,7 @@ export function useLeague() {
     });
   }
 const getStatus = (status,billStatus,betResult)=>{
-    let obj = {status:2,bgColor:''}
+    let obj = {status:-1,bgColor:''}
    if(status===0&&billStatus===0){
      obj={status:3,bgColor:'#FFC53D'}
    }else if(status===1&&billStatus===1){
@@ -195,7 +195,6 @@ const getStatus = (status,billStatus,betResult)=>{
    }else if(status===6){
      obj={status:4,bgColor:'#FFC53D'}
    }else if(status==2){
-     obj.status=6
      obj={status:6,bgColor:'#E54752'}
    }else if(status===4){
      obj={status:7,bgColor:'#F57582'}

@@ -92,7 +92,7 @@
             <el-button
                 class="reset-margin"
                 @click="handleCancel(row)"
-                v-if="row.billStatus===0&&hasAuth('cancelBet')"
+                v-if="row.billStatus===0&&hasAuth('CANCELBET')"
             >
               {{ t('取消') }}
             </el-button>
