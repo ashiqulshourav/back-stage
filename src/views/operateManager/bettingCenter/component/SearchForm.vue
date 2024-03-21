@@ -168,7 +168,7 @@
             class="!w-[200px]"
           />
         </el-form-item>
-        <el-form-item prop="selectDateT">
+        <el-form-item prop="timeType">
           <el-select v-model="form.timeType"  class="!w-[110px]">
             <el-option  :label="t('注单时间')" :value="1"  />
             <el-option  :label="t('结算时间')" :value="2"  />
