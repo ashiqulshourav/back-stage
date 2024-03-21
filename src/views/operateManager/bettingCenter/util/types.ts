@@ -16,7 +16,8 @@ export type searchFormType = {
   isInplay:number|string;
   category:string|number;
   [key: string]: any;
-  timeType:number
+  timeType:number;
+  leagueName:string
 }
 
 export enum betStatus {

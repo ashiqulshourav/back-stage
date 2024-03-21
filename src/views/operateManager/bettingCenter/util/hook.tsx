@@ -37,6 +37,7 @@ export function useLeague() {
     seriesType:'',
     category:'',
     timeType:1,
+      leagueName:''
   });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -58,6 +59,7 @@ export function useLeague() {
       loading.value = true;
       const res : BetOrderAPI.BetOrderResType = await API.bettingCenterList({
         ...removeEmptyStringKeys(form),
+        status:form.status.length?form.status:[2,3,4,5,6,7,8],
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       } as any);
@@ -185,9 +187,7 @@ export function useLeague() {
       : message(t('复制失败'), { type: 'error' });
   }
 const getStatus = (status,billStatus,betResult)=>{
-
     let obj = {status:2,bgColor:''}
-  console.log(11111,obj)
    if(status===0&&billStatus===0){
      obj={status:3,bgColor:'#FFC53D'}
    }else if(status===1&&billStatus===1){
@@ -206,11 +206,7 @@ const getStatus = (status,billStatus,betResult)=>{
    }else if(status===1&&billStatus===1&&(betResult===21||betResult===22)){
      obj={status:8,bgColor:'#F57582'}
    }
-
-  console.log(3333,obj)
    return obj
-
-
 }
 
 

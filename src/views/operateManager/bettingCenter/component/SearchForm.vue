@@ -99,6 +99,15 @@
             class="!w-[150px]"
           />
         </el-form-item>
+        <el-form-item :label="`${t('联赛名')}:`" prop="leagueName">
+          <el-input
+              v-model="form.leagueName"
+              :placeholder="t('联赛名')"
+              clearable
+              v-enter="search"
+              class="!w-[150px]"
+          />
+        </el-form-item>
         <el-form-item :label="`${t('主队')}:`" prop="homeTeamNameCn">
           <el-input
             v-model="form.homeTeamNameCn"
