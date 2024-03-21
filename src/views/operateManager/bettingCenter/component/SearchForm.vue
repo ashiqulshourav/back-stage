@@ -51,7 +51,7 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('注单状态')}:`" prop="settleStatus">
-          <el-select
+          <el-select class="min-w100"
                   :placeholder="t('请选择状态，多选项')"
             multiple
               v-model="form.status"
