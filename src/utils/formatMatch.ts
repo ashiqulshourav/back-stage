@@ -108,6 +108,8 @@ export const BET_RESULT_TYPE_MAP: { [key in EBetResultType]: string } = {
 
 
 
+
+
 export const playMap = {
   FT_OU: t('全场大小'),
   HT_OU: t('半场大小'),
@@ -320,3 +322,34 @@ export const getOrderBetTypeAtBetting = (order:TOrder)=>{
   }
   return orderName;
 };
+
+//计算串关的总赔率，非复试
+export const calculateSeriesTypeTotal = (list:any)=>{
+  let oddTotal =1
+   list.forEach((item:{oddFinally:number,marketTypeFinally:EOddType,marketType:number})=>{
+     //先转换为欧洲盘再计算
+     oddTotal*= Number(getViewOddFn(item.oddFinally,item.marketTypeFinally,EOddType.EUROPE))
+  })
+  return truncateDecimals(oddTotal, 2)
+}
+
+
+export const calculateSeriesTypeTotalBets = (seriesType:number)=>{
+  const str = seriesType&&seriesType.toString()
+  const arr=str?.split('00')||[];
+  return arr.length>0?arr[1]:''
+}
+
+
+// 获取比分
+export const displayHomeAwayScore = (scoreString:string, sprotId?: ESportType) => {
+  if (sprotId > 33) return '';
+  if (sprotId === ESportType.TENNIS || sprotId === ESportType.VOLLEYBALL) return '';
+  const [home, away] = assertHomeAwayScore(scoreString);
+  return `[${home}-${away}]`
+};
+
+export const getIsInplay = (type:number)=>{
+  return type===1?t('滚球'):t('早盘')
+}
+

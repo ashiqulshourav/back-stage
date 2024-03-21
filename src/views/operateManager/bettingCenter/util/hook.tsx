@@ -10,6 +10,7 @@ import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { ElMessageBox } from "element-plus";
 export function useLeague() {
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
+  const tenantList = reactive<{id:number,name:string,tenantCode:string}>([]);
   const loading = ref(true);
   const totalInfo = reactive<BetOrderAPI.otherDataType>(
     {} as BetOrderAPI.otherDataType
@@ -18,6 +19,7 @@ export function useLeague() {
     total: 0,
     pageSize: 10,
     currentPage: 1,
+    pageSizes:[10,20,50,100,200],
     background: true
   });
   const form = reactive<searchFormType>({
@@ -28,13 +30,15 @@ export function useLeague() {
     orderId: '',
     leagueId: '',
     matchId: '',
-    awayTeamNameCn: '',
-    homeTeamNameCn: '',
-    settleStatus:'',
+    awayTeamName: '',
+    homeTeamName: '',
+    status:[],
     isInplay:'',
     seriesType:'',
     category:'',
-    timeType:1
+    timeType:1,
+    leagueName:'',
+    tenantIds:[],
   });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -56,25 +60,36 @@ export function useLeague() {
       loading.value = true;
       const res : BetOrderAPI.BetOrderResType = await API.bettingCenterList({
         ...removeEmptyStringKeys(form),
+        status:form.status.length?form.status:[2,3,4,5,6,7,8],
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       } as any);
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
-      dataList.map((item:any,index:number)=>{
-        item.index=index+1;
-      })
-      dataList.push(...res.data.pageData);
-      pagination.total = res.data.count;
-      pagination.pageSize = res.data.pageSize;
-      pagination.currentPage = res.data.pageNum;
-      Object.assign(totalInfo, res.data.otherData);
+      if (res.data !== null) {
+        dataList.push(...res.data.pageData);
+        dataList.map((item: any, index) => {
+          item.index = index + 1
+        })
+        pagination.total = res.data.count;
+        pagination.pageSize = res.data.pageSize;
+        pagination.currentPage = res.data.pageNum;
+        Object.assign(totalInfo, res.data.otherData);
+      }
       document
         .querySelector('.table_container .el-scrollbar__wrap')
         .scroll(0, 0);
     } catch (error) {
       loading.value = false;
+    }
+  }
+
+  const getTenantList = async ()=>{
+    const res =  await API.getTenantList({})
+    dataList.length = 0;
+    if(res.data?.data?.length){
+      tenantList.push(...res.data.data);
     }
   }
 
@@ -84,14 +99,10 @@ export function useLeague() {
     onSearch();
   };
 
-
-
   //- 导出excel表格
   const exportFile = async () => {
     const res = await API.bettingCenterList(removeEmptyStringKeys(form));
-
     const r = res.data.map((item:any,i) => {
-
       const arr = [];
       const data={...item,...item?.combineOrderDetails[0]}
       columns.forEach((column:{prop:string}) => {
@@ -173,15 +184,41 @@ export function useLeague() {
         .catch(reject);
     });
   }
+const getStatus = (status,billStatus,betResult)=>{
+    let obj = {status:2,bgColor:''}
+   if(status===0&&billStatus===0){
+     obj={status:3,bgColor:'#FFC53D'}
+   }else if(status===1&&billStatus===1){
+     obj={status:4,bgColor:'#40A9FF'}
+   }else if(status===0){
+     obj={status:2,bgColor:'#FFC53D'}
+   }else if(status===6){
+     obj={status:4,bgColor:'#FFC53D'}
+   }else if(status==2){
+     obj.status=6
+     obj={status:6,bgColor:'#E54752'}
+   }else if(status===4){
+     obj={status:7,bgColor:'#F57582'}
+   }else if(status===5){
+     obj={status:8,bgColor:'#FFC53D'}
+   }else if(status===1&&billStatus===1&&(betResult===21||betResult===22)){
+     obj={status:8,bgColor:'#F57582'}
+   }
+   return obj
+}
+
+
 
   //- 切换比赛类型
   onMounted(() => {
     onSearch();
+    getTenantList();
   });
 
   return {
     loading,
     dataList,
+    tenantList,
     pagination,
     form,
     totalInfo,
@@ -192,5 +229,7 @@ export function useLeague() {
     handleSelectionChange,
     exportFile,
     handleCancel,
+    getStatus,
+
   };
 }
