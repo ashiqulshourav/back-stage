@@ -29,10 +29,9 @@ export enum betStatus {
   betFail = 7,
   eventAbnormal = 8,
   reserveFail = 9,
-
 }
 export const betStatusMap ={
-  [betStatus.confirm]: t('全部'),
+  [betStatus.all]: t('全部'),
   [betStatus.confirm]: t('确认中'),
   [betStatus.unsettlementBet]: '未结算',
   [betStatus.settlementBet]: t('已结算'),

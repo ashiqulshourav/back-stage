@@ -32,7 +32,7 @@ export function useLeague() {
     matchId: '',
     awayTeamNameCn: '',
     homeTeamNameCn: '',
-    status:[1],
+    status:[],
     isInplay:'',
     seriesType:'',
     category:'',

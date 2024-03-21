@@ -40,7 +40,8 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('注单状态')}:`" prop="settleStatus">
-          <el-select
+          <el-select class="min-w100"
+                  :placeholder="t('请选择状态，多选项')"
             multiple
               v-model="form.status"
               clearable
@@ -215,10 +216,6 @@ const dateRangetType = computed(() => {
 });
 import {  betStatusMap} from "../util/types";
 
-console.log(1111,Object.entries(betStatusMap))
-
-
-
 const emits = defineEmits(['onSearch', 'exportFile']);
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
@@ -257,6 +254,9 @@ const exportFile = () => {
 <style scoped lang="scss">
 :deep(.el-dropdown-menu__item i) {
   margin: 0;
+}
+.min-w100{
+  min-width: 100px;
 }
 .search-form {
   :deep(.el-form-item) {
