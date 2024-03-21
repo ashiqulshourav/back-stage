@@ -14,7 +14,7 @@
                      v-model="form.tenantIds"
                      clearable
           >
-            <el-option v-for="item in tenantList" :label="item.name" :value="item.id" :key="item.id" />
+            <el-option v-for="item in tenantList" :label="`${item.name}(id: ${item.id})`" :value="item.id" :key="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('赛事类型')}:`" prop="category">
@@ -51,7 +51,7 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('注单状态')}:`" prop="settleStatus">
-          <el-select class="min-w100"
+          <el-select
                   :placeholder="t('请选择状态，多选项')"
             multiple
               v-model="form.status"

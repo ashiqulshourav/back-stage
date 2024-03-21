@@ -50,7 +50,7 @@
             </div>
           </template>
           <template #matchMessage="{ row }">
-            <div class="match_item"  v-for="item in row.combineOrderDetails" :key="item">
+            <div class="match_item"  v-for="item in row.combineOrderDetails" :key="item.betItemId">
               <div class="item_line">{{item.homeTeamNameCn}} vs {{item.awayTeamNameCn}}</div>
               <div class="item_line">{{item.sportNameCn}}/{{item.leagueNameCn}}</div>
               <div class="item_line cursor-pointer" v-copy="item.matchId">赛事ID {{item.matchId}}</div>
@@ -58,7 +58,7 @@
             </div>
           </template>
           <template #betDetail="{ row }">
-            <div class="match_item"  v-for="item in row.combineOrderDetails" :key="item">
+            <div class="match_item"  v-for="item in row.combineOrderDetails" :key="item.betItemId">
               <div class="item_line">
                 {{`${useSportFormatDetail(item)[4]} ${getIsInplay(item.isInplay)}`}}
 
@@ -71,7 +71,7 @@
             </div>
           </template>
           <template #odd="{ row }">
-            <div class="match_item"  v-for="item in row.combineOrderDetails" :key="item">
+            <div class="match_item"  v-for="item in row.combineOrderDetails" :key="item.id">
                 <div>{{getViewOddFn(item.oddFinally,item.marketTypeFinally,item.marketType)}}</div>
                 <div>{{markeTypeMap[item.marketType]}}</div>
               <div  v-if="BET_RESULT_TYPE_MAP[item?.betResult]">
