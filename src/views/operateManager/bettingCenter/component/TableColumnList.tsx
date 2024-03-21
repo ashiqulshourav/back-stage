@@ -1,5 +1,4 @@
 import { t } from "@/plugins/i18n";
-import { handleTableWidth } from "@/utils/getTableWidth";
 
 export const columns: TableColumnList = [
   {

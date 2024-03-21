@@ -148,9 +148,12 @@
             class="!w-[200px]"
           />
         </el-form-item>
-
-        <el-form-item :prop="selectDateType.valueOf()===1?'beginTime':'createTimeStart'" :label="`${t('下注时间')}`">
-
+        <el-form-item prop="selectDateT">
+          <el-select v-model="form.timeType"  class="!w-[110px]">
+            <el-option  :label="t('注单时间')" :value="1"  />
+            <el-option  :label="t('结算时间')" :value="2"  />
+            <el-option  :label="t('比赛时间')" :value="3"  />
+          </el-select>
           <el-date-picker
             :type="dateRangetType"
             v-model="selectDate"
@@ -215,7 +218,7 @@ const selectDate = ref('');
 const dateType = ref(1);
 const selectDateType = ref(2); // 1 开赛时间 2 下注时间
 const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
-
+const timeType = ref(1); //时间类型 1: 注单时间 2: 结算时间 3: 比赛时间")
 const dateRangetType = computed(() => {
   const o = {
     1: 'daterange',
