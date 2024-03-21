@@ -148,7 +148,7 @@
           />
         </el-form-item>
 
-        <el-form-item :label="`${t('会员账号')}:`" prop="userName">
+        <el-form-item :label="`${t('会员账号')}:`" prop="userIdOrName">
           <el-input
             v-model="form.userIdOrName"
             :placeholder="t('请输入会员账号/ID')"
