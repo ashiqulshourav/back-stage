@@ -45,7 +45,6 @@
                 :prefix-icon="useRenderIcon(Lock)"
               />
             </el-form-item>
-
             <el-form-item :prop="buildType === 'pro' ? 'ukeyPassword' : 'none'">
               <el-input
                 clearable
