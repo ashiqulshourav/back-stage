@@ -33,8 +33,6 @@
             />
           </el-select>
         </el-form-item>
-
-
         <el-form-item :label="`${t('游戏种类')}:`" prop="sportId">
           <el-select
             v-model="form.sportId"
@@ -60,16 +58,7 @@
               <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="item[0]" :key="item[0]" />
           </el-select>
         </el-form-item>
-<!--        <el-form-item :label="`${t('投注结果')}:`" prop="settleStatus">
-          <el-select class="min-w100"
-                     :placeholder="t('请选择')"
-                     multiple
-                     v-model="form.betResult"
-                     clearable
-          >
-            <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="item[0]" :key="item[0]" />
-          </el-select>
-        </el-form-item>-->
+
         <el-form-item :label="`${t('投注阶段')}:`" prop="isInplay">
           <el-select
               v-model="form.isInplay"
@@ -124,6 +113,15 @@
           <el-input
               v-model="form.leagueName"
               :placeholder="t('联赛名')"
+              clearable
+              v-enter="search"
+              class="!w-[150px]"
+          />
+        </el-form-item>
+        <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
+          <el-input
+              v-model="form.matchId"
+              :placeholder="t('赛事ID')"
               clearable
               v-enter="search"
               class="!w-[150px]"

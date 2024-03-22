@@ -18,7 +18,7 @@ export type searchFormType = {
   [key: string]: any;
   timeType:number;
   leagueName:string;
-  tenantIds:any
+  tenantIds:any ;
 }
 
 export enum betStatus {

@@ -208,9 +208,9 @@ const getStatus = (status,billStatus,betResult)=>{
    return obj
 }
 
-    function copyTest(str:string,tip:string){
-        console.log(1111,str)
-        const success = copyTextToClipboard(str);
+function copyTest(str:string,tip:string){
+        if(!str) return;
+        const success = copyTextToClipboard(str.toString());
         success
             ? message(t('复制{value}成功!',{value:tip||str||''}), { type: 'success' })
             : message(t('复制失败'), { type: 'error' });
