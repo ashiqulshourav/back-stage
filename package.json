@@ -3,8 +3,8 @@
   "version": "4.5.0",
   "private": true,
   "scripts": {
-    "dev": "vite --mode pro",
-    "build:dpgames-back-stage": "rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build --mode pro",
+    "dev": "vite --mode fat",
+    "build:dpgames-back-stage": "rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build --mode fat",
     "build:dev": "rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build --mode dev",
     "preview": "vite preview",
     "preview:build": "pnpm build && vite preview",
