@@ -8,6 +8,8 @@ import { Detail, getBetTeamType, playMap,markeTypeMap } from "@/utils/formatMatc
 import dayjs from 'dayjs';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { ElMessageBox } from "element-plus";
+import {copyTextToClipboard} from "@pureadmin/utils";
+import {t} from "@/plugins/i18n";
 export function useLeague() {
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<{id:number,name:string,tenantCode:string}>([]);
@@ -206,7 +208,13 @@ const getStatus = (status,billStatus,betResult)=>{
    return obj
 }
 
-
+    function copyTest(str:string,tip:string){
+        console.log(1111,str)
+        const success = copyTextToClipboard(str);
+        success
+            ? message(t('复制{value}成功!',{value:tip||str||''}), { type: 'success' })
+            : message(t('复制失败'), { type: 'error' });
+    }
 
   //- 切换比赛类型
   onMounted(() => {
@@ -229,6 +237,6 @@ const getStatus = (status,billStatus,betResult)=>{
     exportFile,
     handleCancel,
     getStatus,
-
+      copyTest
   };
 }
