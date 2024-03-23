@@ -177,7 +177,7 @@ export function useLeague() {
               str=data.seriesType===1?'单关':'串关';
               break;
           case 'tenantName':  //单关 串关
-            str=tenantObj[data.tenantId].name??''
+            str=(tenantObj[data.tenantId]).name??''
             break;
           default:
             str = data[column.prop as string]
@@ -199,7 +199,7 @@ export function useLeague() {
     };
 
     utils.book_append_sheet(workBook, workSheet, '数据报表');
-    writeFile(workBook, '未结算注单.xlsx');
+    writeFile(workBook, '赛程_注单中心.xlsx');
     message(t('导出成功'), {
       type: 'success'
     });
