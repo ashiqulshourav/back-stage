@@ -8,6 +8,10 @@ export const columns: TableColumnList = [
     prop: 'tenantId',
   },
   {
+    label: t('商户编码'),
+    prop: 'tenantCode',
+  },
+  {
     label: t('商户名称'),
     prop: 'tenantId',
   },
@@ -24,6 +28,10 @@ export const columns: TableColumnList = [
     prop: 'id',
   },
   {
+    label: t('赛事ID'),
+    prop: 'matchId',
+  },
+  {
     label: t('赛种'),
     prop: 'sportNameCn',
   },
@@ -37,6 +45,10 @@ export const columns: TableColumnList = [
   },
   {
     label: t('过关类型'),
+    prop: 'isSeriesType',
+  },
+  {
+    label: t('串关类型'),
     prop: 'seriesType',
   },
   {
@@ -60,8 +72,12 @@ export const columns: TableColumnList = [
     prop: 'settleTime',
   },
   {
+    label: t('下注时比分'),
+    prop: 'scoreBenchmark',
+  },
+  {
     label: t('赛果比分'),
-    prop: 'sportId',
+    prop: 'settleScore',
   },
   {
     label: t('赔率类型'),
@@ -81,15 +97,19 @@ export const columns: TableColumnList = [
   },
   {
     label: t('结算状态'),
-    prop: '',
+    prop: 'billStatus',
   },
   {
     label: t('是否二次结算'),
-    prop: '',
+    prop: 'isSettlementAgain',
+  },
+  {
+    label: t('投注结果'),
+    prop: 'betResult',
   },
   {
     label: t('注单状态'),
-    prop: '',
+    prop: 'status',
   },
   {
     label: t('用户币种'),

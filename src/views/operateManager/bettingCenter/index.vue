@@ -64,8 +64,7 @@
           <template #betDetail="{ row }">
             <div class="match_item"  v-for="item in row.combineOrderDetails" :key="item.betItemId">
               <div class="item_line">
-                {{`${useSportFormatDetail(item)[4]} ${getIsInplay(item.isInplay)}`}}
-
+                {{`玩法：${useSportFormatDetail(item)[4]} ${getIsInplay(item.isInplay)}`}}
                 {{item.isInplay==1?displayHomeAwayScore(item.scoreBenchmark,item.sportId):''}}
               </div>
             <div class="item_line">{{useSportFormatDetail(item)[3]}}</div>

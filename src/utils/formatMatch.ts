@@ -247,7 +247,7 @@ export const useSportFormatDetail = (row) => {
   )}`;
   const secondLine = row.leagueNameCn;
   const thirdLine = `${row.homeTeamNameCn} vs ${row.awayTeamNameCn}`;
-  const fifthLine = `玩法:${getPlayNameByKc({code: row.kindsCode, name: row.betItemName, ctid: row.betItemCTID, sportId: row.sportId})??'-'}`;
+  const fifthLine = `${getPlayNameByKc({code: row.kindsCode, name: row.betItemName, ctid: row.betItemCTID, sportId: row.sportId})??'-'}`;
 
   const oddName=  getBetTeamType(row || {} as Detail)
   const isvisiable=isVisiableSecondText(row.betHandicap, row.betN, row.kindsCode)
@@ -414,7 +414,10 @@ export const displayHomeAwayScore = (scoreString:string, sprotId?: ESportType) =
   if (sprotId > 33) return '';
   if (sprotId === ESportType.TENNIS || sprotId === ESportType.VOLLEYBALL) return '';
   const [home, away] = assertHomeAwayScore(scoreString);
-  return `[${home}-${away}]`
+  if(home===undefined||away===undefined){
+    return ''
+  }
+  return `${home}-${away}`
 };
 
 export const getIsInplay = (type:number)=>{

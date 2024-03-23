@@ -1,10 +1,18 @@
 import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
-import { searchFormType } from './types';
+import {betStatusMap, searchFormType} from './types';
 import { columns } from './exportTableColumnList';
 import { utils, writeFile } from 'xlsx';
-import { Detail, getBetTeamType, playMap,markeTypeMap } from "@/utils/formatMatch";
+import {
+  Detail,
+  getBetTeamType,
+  playMap,
+  markeTypeMap,
+  useSportFormatDetail,
+  getIsInplay,
+  displayHomeAwayScore, BET_RESULT_TYPE_MAP, formatSeriesType
+} from "@/utils/formatMatch";
 import dayjs from 'dayjs';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { ElMessageBox } from "element-plus";
@@ -103,8 +111,9 @@ export function useLeague() {
 
   //- 导出excel表格
   const exportFile = async () => {
-    const res = await API.bettingCenterList(removeEmptyStringKeys(form));
-    const r = res.data.map((item:any,i) => {
+    const res = await API.bettingCenterList(removeEmptyStringKeys({...form,pageNum:1,pageSize:10000}));
+
+    const r = res.data.pageData.map((item:any,i) => {
       const arr = [];
       const data={...item,...item?.combineOrderDetails[0]}
       columns.forEach((column:{prop:string}) => {
@@ -119,14 +128,14 @@ export function useLeague() {
           case 'createTime':
             str = dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss');
             break;
+          case 'settleTime':
+            str = dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss');
+            break;
           case 'index':
             str = (i+1).toString()
             break;
           case 'playType':
-            str=`${playMap[data.kindsCode] ?? data.betItemName ?? '-'}`
-            break;
-          case 'seriesType':
-            str = data.seriesType===1?'单关':'串关'
+            str=useSportFormatDetail(data)[4]
             break;
           case 'betName':
             str= getBetTeamType(data || {} as Detail)
@@ -137,6 +146,33 @@ export function useLeague() {
           case 'marketType':
             str= markeTypeMap[data.marketType]
             break;
+          case 'isSettlementAgain':
+            str = data.isSettlementAgain===1?'是':'否'
+            break;
+          case 'status':
+            str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult).status]
+            break;
+          case 'billStatus':
+            str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult).status]
+            break;
+          case 'settleScore':
+            str=displayHomeAwayScore(data.settleScore,data.sportId)
+            break;
+          case 'betResult':
+            str=BET_RESULT_TYPE_MAP[data.betResult]
+            break;
+          case 'scoreBenchmark':
+            str=displayHomeAwayScore(data.scoreBenchmark,data.sportId)
+            break;
+          case 'seriesType':
+            if(data.combineOrderDetails.length>1){
+              str=String(data.seriesType).slice(-3) ==='001'?'串关':'复式'
+              str+=' '+formatSeriesType(data?.seriesType,data.combineOrderDetails.length)
+            }
+            break;
+          case 'isSeriesType':  //单关 串关
+              str=data.seriesType===1?'单关':'串关';
+              break;
           default:
             str = data[column.prop as string]
         }

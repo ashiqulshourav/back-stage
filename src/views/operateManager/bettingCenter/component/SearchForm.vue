@@ -196,18 +196,15 @@
           >
             {{ t('重置') }}
           </el-button>
+            <el-button
+              type="primary"
+              :icon="useRenderIcon('exportFill')"
+              @click="exportFile()"
+            >
+              {{ t('导出报表') }}
+            </el-button>
         </el-form-item>
       </div>
-<!--      <div class="mr-3">
-        <el-button
-          type="primary"
-          :icon="useRenderIcon('exportFill')"
-          @click="exportFile()"
-          v-if="hasAuth('DOWNLOAD')"
-        >
-          {{ t('导出报表') }}
-        </el-button>
-      </div>-->
     </div>
   </el-form>
 </template>
@@ -255,7 +252,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
 };
 
 const changeDate = t => {
-
+  console.log(11111,t)
   if (!t) {
     props.form.timeStart = '';
     props.form.timeEnd = '';
