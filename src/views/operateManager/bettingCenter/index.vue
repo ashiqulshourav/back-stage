@@ -12,6 +12,7 @@
       title=""
       :columns="columns"
       class="relative"
+      :isShowHeader="false"
       @refresh="onSearch('reload')"
     >
       <template v-slot="{ size, dynamicColumns }">

@@ -252,7 +252,6 @@ const resetForm = (formEl: FormInstance | undefined) => {
 };
 
 const changeDate = t => {
-  console.log(11111,t)
   if (!t) {
     props.form.timeStart = '';
     props.form.timeEnd = '';

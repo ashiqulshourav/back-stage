@@ -29,7 +29,12 @@ const props = {
   columns: {
     type: Array as PropType<TableColumnList>,
     default: () => []
+  },
+  isShowHeader:{
+    type: Boolean,
+    default: true,
   }
+
 };
 
 export default defineComponent({
@@ -208,11 +213,10 @@ export default defineComponent({
         />
       )
     };
-
     return () => (
       <>
         <div {...attrs} class="w-[99/100] mt-2 px-2 pb-2 bg-bg_color">
-          <div class="flex justify-between w-full h-[60px] p-4">
+          <div v-if="props.isShowHeader" class="flex justify-between w-full h-[50px] p-4">
             {slots?.title ? (
               slots.title()
             ) : (
