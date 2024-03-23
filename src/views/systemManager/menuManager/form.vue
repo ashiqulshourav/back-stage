@@ -24,6 +24,7 @@
 
     <el-form-item :label="t('菜单类型')" prop="type">
       <el-select
+        placeholder="导航左侧菜单显示/详情页面非菜单展示/按钮为页面权限"
         v-model="newFormInline.type"
         clearable
         :disabled="!!newFormInline.id"
@@ -32,7 +33,7 @@
           v-for="item in Object.entries(TYPE_NAME)"
           :key="item[0]"
           :label="item[1]"
-          :value="item[0]"
+          :value="+item[0]"
         />
       </el-select>
     </el-form-item>
@@ -105,11 +106,9 @@ const closeDialog = () => {
   emits('closeDialog');
 };
 
-/* 传,roleName,status,comment */
 const confirmClick = () => {
   ruleFormRef.value.validate(async v => {
     const requestAPI = newFormInline.id ? 'menuUpdate' : 'menuInsert';
-    console.log('form.vue文件 108==============行打印=', newFormInline);
     if (v) {
       if (!newFormInline.id) delete newFormInline.id;
       const res = await API[requestAPI](newFormInline);

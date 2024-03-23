@@ -66,11 +66,8 @@ onMounted(() => {
 });
 
 const closeDialog = () => emits('closeDialog');
-
 const initTreeList = async () => {
-  const res = await API.allPermissionList({
-    roleId: props.roleId
-  });
+  const res = await API.allPermissionList({ roleId: props.roleId });
   if (res.code) return message(res.msg, { type: 'error' });
   menusData.length = 0;
   menusData.push(...res.data);

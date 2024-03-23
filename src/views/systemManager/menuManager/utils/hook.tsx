@@ -1,25 +1,12 @@
 import { message } from '@/utils/message';
 import editForm from '../form.vue';
-import { usePublicHooks } from '@/hooks';
 import { columns } from '../component/TableColumnList';
 import { addDialog, closeDialog } from '@/components/ReDialog';
-import { SearchFormType } from './types';
-import { ElMessageBox } from 'element-plus';
 
 export function useRoleHook() {
   const dataList = reactive<RoleAPI.ChildResourceList[]>([]);
   const loading = ref(true);
-  const switchLoadMap = ref({});
-  const { switchStyle } = usePublicHooks();
   const parentList = reactive<Partial<RoleAPI.ChildResourceList>[]>([]);
-
-  const form = reactive<SearchFormType>({
-    name: '',
-    createdBy: '',
-    status: ' ',
-    startCreatedAt: '',
-    endCreatedAt: ''
-  });
 
   //- 初始化
   const onSearch = async () => {
@@ -31,9 +18,31 @@ export function useRoleHook() {
       dataList.length = 0;
       dataList.push(...res.data);
       filterParentList(dataList);
+      checkHasQueryRole();
     } catch (error) {
       loading.value = false;
     }
+  };
+
+  //- 查询是否有query
+  const checkHasQueryRole = () => {
+    parentList.forEach(item => {
+      const index = item.childResourceList.findIndex(
+        _ => _.enName === 'query' || _.type === 0
+      );
+      if (index < 0) {
+        const params = {
+          name: '页面查看',
+          enName: 'query',
+          type: 1,
+          parentId: item.id,
+          sort: 1,
+          path: '/query',
+          routerPath: '/query'
+        };
+        API.menuInsert(params);
+      }
+    });
   };
 
   const filterParentList = (list: RoleAPI.ChildResourceList[]) => {
@@ -44,7 +53,8 @@ export function useRoleHook() {
         parentList.push({
           id: item.id,
           name: item.name,
-          enName: item.enName
+          enName: item.enName,
+          childResourceList: item.childResourceList
         });
       }
     });
@@ -78,35 +88,6 @@ export function useRoleHook() {
         })
     });
   }
-
-  //- 删除角色
-  const handleDelete = (row: RoleAPI.querySysAccountListData) => {
-    if (row.userCount > 0) {
-      ElMessageBox.confirm(t('角色底下还有用户，不可删除'), t('操作无效'), {
-        confirmButtonText: t('朕知道了'),
-        showCancelButton: false,
-        center: true
-      });
-    } else {
-      ElMessageBox.confirm(
-        `<div class="text-center">
-       <p>${'确定要删除角色'}${row.name}</br></p>
-      <p>${t('角色删除后不可恢复')}</p>
-      </div>`,
-        t('警告'),
-        {
-          confirmButtonText: t('提交'),
-          cancelButtonText: t('取消'),
-          center: true,
-          dangerouslyUseHTMLString: true
-        }
-      ).then(async () => {
-        const res = await API.deleteRole({ roleId: row.id });
-        message(res.msg, { type: res.code ? 'error' : 'success' });
-        if (!res.code) onSearch();
-      });
-    }
-  };
 
   onMounted(() => {
     onSearch();
