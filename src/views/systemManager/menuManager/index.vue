@@ -47,7 +47,7 @@ import { useRoleHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 
-defineOptions({ name: 'CLIENTMANAGER_VENUEACCESSCONTROL_REGIONWHITELIST' });
+defineOptions({ name: 'SYSTEMMANAGER_MENUMANAGER' });
 const { tableHeaderStyle } = usePublicHooks();
 
 const { loading, columns, dataList, onSearch, openRoleDialog } = useRoleHook();
