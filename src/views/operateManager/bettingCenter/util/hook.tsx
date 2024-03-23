@@ -1,7 +1,7 @@
 import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
-import {betStatusMap, searchFormType} from './types';
+import {betStatus, betStatusMap, searchFormType} from './types';
 import { columns } from './exportTableColumnList';
 import { utils, writeFile } from 'xlsx';
 import {
@@ -230,22 +230,22 @@ export function useLeague() {
   }
 const getStatus = (status,billStatus,betResult)=>{
     let obj = {status:-1,bgColor:''}
-   if(status===0&&billStatus===0){
-     obj={status:3,bgColor:'#FFC53D'}
-   }else if(status===1&&billStatus===1){
-     obj={status:4,bgColor:'#40A9FF'}
-   }else if(status===0){
-     obj={status:2,bgColor:'#FFC53D'}
-   }else if(status===6){
-     obj={status:4,bgColor:'#FFC53D'}
-   }else if(status==2){
-     obj={status:6,bgColor:'#E54752'}
-   }else if(status===4){
-     obj={status:7,bgColor:'#F57582'}
-   }else if(status===5){
-     obj={status:8,bgColor:'#FFC53D'}
-   }else if(status===1&&billStatus===1&&(betResult===21||betResult===22)){
-     obj={status:8,bgColor:'#F57582'}
+   if(status===0&&billStatus===0){  // 未结算
+     obj={status:betStatus.unsettlementBet,bgColor:'#FFC53D'}
+   }else if(status===1&&billStatus===1){// 已结算
+     obj={status:betStatus.settlementBet,bgColor:'#40A9FF'}
+   }else if(status===0){   // 确认中
+     obj={status:betStatus.confirm,bgColor:'#FFC53D'}
+   }else if(status===6){ // 待审核
+     obj={status:betStatus.PendingApprove,bgColor:'#FFC53D'}
+   }else if(status==2){   // 注单无效
+     obj={status:betStatus.betInvalid,bgColor:'#E54752'}
+   }else if(status===4){  // 投注失败
+     obj={status:betStatus.betFail,bgColor:'#F57582'}
+   }else if(status===5){  // 赛事异常
+     obj={status:betStatus.eventAbnormal,bgColor:'#FFC53D'}
+   }else if(status===1&&billStatus===1&&(betResult===21||betResult===22)){  // 预约失败
+     obj={status:betStatus.reserveFail,bgColor:'#F57582'}
    }
    return obj
 }
