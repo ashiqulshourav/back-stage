@@ -44,7 +44,7 @@ addIcon("sale", sale);
 addIcon("settle", moneyDollarCircleFill);
 addIcon("esportsSettlement", moneyDollarCircleFill);
 addIcon("metadata", metadata);
-addIcon("systemManager", settle);
+// addIcon("systemManager", settle);
 addIcon("operateManager", operateManager);
 addIcon("systemManager", OperationLog);
 addIcon("operationLog1", OperationLog);
