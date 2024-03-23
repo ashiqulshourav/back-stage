@@ -7,10 +7,8 @@ import { utils, writeFile } from 'xlsx';
 import {
   Detail,
   getBetTeamType,
-  playMap,
   markeTypeMap,
   useSportFormatDetail,
-  getIsInplay,
   displayHomeAwayScore, BET_RESULT_TYPE_MAP, formatSeriesType
 } from "@/utils/formatMatch";
 import dayjs from 'dayjs';
@@ -20,7 +18,8 @@ import {copyTextToClipboard} from "@pureadmin/utils";
 import {t} from "@/plugins/i18n";
 export function useLeague() {
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
-  const tenantList = reactive<{id:number,name:string,tenantCode:string}>([]);
+  const tenantList = reactive<any>([]);
+  const tenantObj = reactive<any>({});
   const loading = ref(true);
   const totalInfo = reactive<BetOrderAPI.otherDataType>(
     {} as BetOrderAPI.otherDataType
@@ -96,10 +95,14 @@ export function useLeague() {
   }
 
   const getTenantList = async ()=>{
-    const res =  await API.getTenantList({})
+    const res =  await API.getTenantList()
     dataList.length = 0;
     if(res.data?.data?.length){
       tenantList.push(...res.data.data);
+      // 将数组根据id转换为对象
+      tenantList.map((item)=>{
+        tenantObj[item.id] = item;
+      })
     }
   }
 
@@ -173,6 +176,9 @@ export function useLeague() {
           case 'isSeriesType':  //单关 串关
               str=data.seriesType===1?'单关':'串关';
               break;
+          case 'tenantName':  //单关 串关
+            str=tenantObj[data.tenantId].name??''
+            break;
           default:
             str = data[column.prop as string]
         }
@@ -254,8 +260,8 @@ function copyTest(str:string,tip:string){
 
   //- 切换比赛类型
   onMounted(() => {
-    onSearch();
     getTenantList();
+    onSearch();
   });
 
   return {

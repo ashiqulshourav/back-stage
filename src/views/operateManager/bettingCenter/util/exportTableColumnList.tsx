@@ -13,7 +13,7 @@ export const columns: TableColumnList = [
   },
   {
     label: t('商户名称'),
-    prop: 'tenantId',
+    prop: 'tenantName',
   },
   {
     label: t('用户名'),
