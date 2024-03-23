@@ -34,16 +34,6 @@
             >
               {{ t('编辑') }}
             </el-button>
-            <el-button
-              v-if="hasAuth('ROLEMANAGERDELETE')"
-              class="reset-margin"
-              link
-              type="danger"
-              size="large"
-              @click="handleDelete(row)"
-            >
-              {{ t('删除') }}
-            </el-button>
           </template>
         </pure-table>
       </template>
@@ -56,13 +46,11 @@ import { PureTableBar } from '@/components/RePureTableBar';
 import { useRoleHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
-import { hasAuth } from '@/router/utils';
 
 defineOptions({ name: 'CLIENTMANAGER_VENUEACCESSCONTROL_REGIONWHITELIST' });
 const { tableHeaderStyle } = usePublicHooks();
 
-const { loading, columns, dataList, onSearch, openRoleDialog, handleDelete } =
-  useRoleHook();
+const { loading, columns, dataList, onSearch, openRoleDialog } = useRoleHook();
 </script>
 
 <style scoped lang="scss">

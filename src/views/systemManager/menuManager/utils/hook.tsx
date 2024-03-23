@@ -113,14 +113,10 @@ export function useRoleHook() {
   });
 
   return {
-    form,
     loading,
-    switchStyle,
     columns,
     dataList,
-    switchLoadMap,
     onSearch,
-    openRoleDialog,
-    handleDelete
+    openRoleDialog
   };
 }
