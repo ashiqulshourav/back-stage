@@ -28,7 +28,7 @@ export function useRoleHook() {
   const checkHasQueryRole = () => {
     parentList.forEach(item => {
       const index = item.childResourceList.findIndex(
-        _ => _.enName === 'query' || _.type === 0
+        _ => _.enName === 'query' || _.type === 0 || _.type === 2
       );
       if (index < 0) {
         const params = {
@@ -49,7 +49,7 @@ export function useRoleHook() {
     list.forEach(item => {
       if (item.childResourceList.length > 0)
         filterParentList(item.childResourceList);
-      if (item.type === 0) {
+      if (item.type === 0 || item.type === 2) {
         parentList.push({
           id: item.id,
           name: item.name,

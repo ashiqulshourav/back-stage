@@ -39,11 +39,11 @@ export const columns: TableColumnList = [
     align: 'left',
     headerRenderer: d => handleTableWidth(d, t('后端路径'))
   },
-  {
-    label: t('父级ID'),
-    prop: 'parentId',
-    headerRenderer: d => handleTableWidth(d, t('父级ID'))
-  },
+  // {
+  //   label: t('父级ID'),
+  //   prop: 'parentId',
+  //   headerRenderer: d => handleTableWidth(d, t('父级ID'))
+  // },
   {
     label: t('菜单排序'),
     prop: 'sort',
@@ -73,11 +73,11 @@ export const columns: TableColumnList = [
     minWidth: 200,
     headerRenderer: d => handleTableWidth(d, t('修改时间'), 'auto')
   },
-  {
-    label: t('修改人'),
-    prop: 'updatedBy',
-    headerRenderer: d => handleTableWidth(d, t('修改人'), 'auto')
-  },
+  // {
+  //   label: t('修改人'),
+  //   prop: 'updatedBy',
+  //   headerRenderer: d => handleTableWidth(d, t('修改人'), 'auto')
+  // },
   {
     label: t('操作'),
     slot: 'operation',

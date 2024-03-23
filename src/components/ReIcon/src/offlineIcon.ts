@@ -42,7 +42,7 @@ import configCenter from '@iconify-icons/ri/settings-3-line';
 addIcon("dataManager", dataManager);
 addIcon("sale", sale);
 addIcon("settle", moneyDollarCircleFill);
-addIcon("esportsSettlement", moneyDollarCircleFill);
+// addIcon("esportsSettlement", moneyDollarCircleFill);
 addIcon("metadata", metadata);
 // addIcon("systemManager", settle);
 addIcon("operateManager", operateManager);
