@@ -237,13 +237,13 @@ const getStatus = (status,billStatus,betResult)=>{
    }else if(status===0){   // 确认中
      obj={status:betStatus.confirm,bgColor:'#FFC53D'}
    }else if(status===6){ // 待审核
-     obj={status:betStatus.PendingApprove,bgColor:'#FFC53D'}
+     obj={status:betStatus.PendingApprove,bgColor:'#F88D48'}
    }else if(status==2){   // 注单无效
      obj={status:betStatus.betInvalid,bgColor:'#E54752'}
    }else if(status===4){  // 投注失败
      obj={status:betStatus.betFail,bgColor:'#F57582'}
    }else if(status===5){  // 赛事异常
-     obj={status:betStatus.eventAbnormal,bgColor:'#FFC53D'}
+     obj={status:betStatus.eventAbnormal,bgColor:'#F88D48'}
    }else if(status===1&&billStatus===1&&(betResult===21||betResult===22)){  // 预约失败
      obj={status:betStatus.reserveFail,bgColor:'#F57582'}
    }
