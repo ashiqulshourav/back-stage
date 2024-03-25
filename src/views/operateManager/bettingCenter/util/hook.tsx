@@ -198,8 +198,8 @@ export function useLeague() {
         seriesType: form.seriesType > 2 ? 2 : form.seriesType
       }),
       status: form.status?.length ? form.status : [2, 3, 4, 5, 6, 7, 8],
-      pageSize: pagination.pageSize,
-      pageNum: pagination.currentPage
+      pageNum: pagination.currentPage,
+      pageSize: pagination.pageSize
     } as any);
     const r = res.data.pageData.map((item: any, i) => {
       const arr = [];
