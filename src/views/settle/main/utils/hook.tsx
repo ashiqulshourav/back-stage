@@ -7,6 +7,7 @@ import { SearchFormType } from './type';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { columns } from './tableColumnList';
 import { SPORT_LIST_MAP, SPORT_NAME_TYPE } from './map';
+import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 
 export const useSettileHook = () => {
   const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
@@ -24,10 +25,15 @@ export const useSettileHook = () => {
     startTime: '',
     endTime: ''
   });
+  const { openPasswordInput } = usePasswordInputHook();
 
   //- 取消注单
-  const cancelClick = row => {
+  const cancelClick = async row => {
     const remark = ref('');
+
+    openPasswordInput();
+    return;
+
     addDialog({
       title: t('取消比赛'),
       width: '20%',

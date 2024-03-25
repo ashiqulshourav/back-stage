@@ -1,0 +1,26 @@
+import { addDialog, closeDialog } from '@/components/ReDialog';
+import PasswordInput from '@/components/PasswordInput/index.vue';
+
+export const usePasswordInputHook = () => {
+  const resetFormRef = ref();
+
+  const openPasswordInput = () => {
+    addDialog({
+      title: t('请输入U盾密码'),
+      class: 'reset_dialog',
+      width: '25%',
+      center: true,
+      closeOnClickModal: false,
+      hideFooter: true,
+      contentRenderer: ({ options, index }) =>
+        h(PasswordInput, {
+          ref: resetFormRef,
+          onCloseDialog: (_: boolean) => {
+            closeDialog(options, index);
+          }
+        })
+    });
+  };
+
+  return { openPasswordInput };
+};
