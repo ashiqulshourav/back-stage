@@ -8,7 +8,7 @@ export const REGEXP_PWD =
 
 export const REGEXP_EMAIL = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
-const NAME_REG = /^[a-zA-Z][a-zA-Z0-9]{5,19}$/;
+const NAME_REG = /^[a-zA-Z0-9_]{6,20}$/;
 
 const formRules = reactive(<FormRules>{
   name: [

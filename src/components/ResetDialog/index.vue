@@ -15,7 +15,7 @@
         <el-input
           clearable
           show-password
-          v-model="resetForm.oldPassword"
+          v-model.trim="resetForm.oldPassword"
           :placeholder="t('请输入旧密码')"
         />
       </el-form-item>
@@ -28,8 +28,8 @@
         <el-input
           clearable
           show-password
-          v-model="resetForm.newPassword"
-          :placeholder="t('请输入8个字符，包含英文数字')"
+          v-model.trim="resetForm.newPassword"
+          :placeholder="t('至少8个英文大小写+数字或特殊符号')"
         />
       </el-form-item>
 
@@ -41,7 +41,7 @@
         <el-input
           clearable
           show-password
-          v-model="resetForm.confirmPassword"
+          v-model.trim="resetForm.confirmPassword"
           :placeholder="t('请再次输入新密码')"
         />
       </el-form-item>
@@ -107,7 +107,9 @@ const resetPasswordRules = reactive({
         if (value === '') {
           callback(new Error(t('新密码不能为空')));
         } else if (!REGEXP_PWD.test(value)) {
-          callback(new Error(t('密码至少8个字符，包括字母和数字')));
+          callback(
+            new Error(t('密码至少8个字符，包括英文大小写、数字和特殊符号'))
+          );
         } else {
           callback();
         }
