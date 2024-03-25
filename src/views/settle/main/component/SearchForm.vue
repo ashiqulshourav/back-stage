@@ -81,7 +81,6 @@
 
     <el-form-item>
       <el-button
-        v-auth="['QUERY']"
         type="primary"
         :icon="useRenderIcon(icon_serch)"
         :loading="matchStore.settleRequestLoading"
@@ -90,7 +89,6 @@
         {{ t('筛选') }}
       </el-button>
       <el-button
-        v-auth="['QUERY']"
         :icon="useRenderIcon(icon_refresh)"
         @click="resetForm(formRef)"
       >

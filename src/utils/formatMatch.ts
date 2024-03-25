@@ -39,6 +39,74 @@ export const getAwaySettleScore = (s: string) => {
   return parseInt(match[2], 10);
 }
 
+export const getPlayNameByKc = ({code, name, ctid, sportId}: {code: string, name?: string, ctid?: number, sportId?: number}) => {
+  if (ctid !== undefined && name !== undefined && ctid !== 0) return name;
+  switch (code) {
+    case 'FT_OU':
+      switch (sportId) {
+        case 5:
+          return '总局数';
+        default:
+          return '全场大小';
+      };
+    case 'HT_OU':
+      return '半场大小';
+    case 'FT_OE':
+      return '全场单双';
+    case 'FT_HF':
+      return '半场 / 全场';
+    case 'HT_OE':
+      return '单双-上半场';
+    case 'FT_AH':
+      switch (sportId) {
+        case 6:
+          return '全场让盘';
+        case 23:
+          return '全场让分';
+        case 5:
+        case 19:
+          return '全场让局';
+        default:
+          return '全场让球';
+      };
+    case 'HT_AH':
+      return '半场让球';
+    case 'FT_1X2':
+    case 'FT_ML':
+      return '全场独赢';
+    case 'HT_1X2':
+    case 'HT_ML':
+      return '半场独赢';
+    case 'FT_CS':
+      return '全场波胆';
+    case 'HT_CS':
+      return '波胆-上半场';
+    case 'BothTeamsToScore':
+      return '双方进球';
+    case 'FTS_AH':
+      return '全场让局';
+    case 'FTS_OU':
+      return '总局数';
+    case 'FT_XX':
+      return '全场总分';
+    case 'Winner_1X2':
+      return '独赢1X2';
+    case 'Winner':
+      return '全场独赢';
+    case 'PT_AH':
+      return '让分';
+    case 'PT_OU':
+      switch (sportId) {
+        case 19:
+          return '全场总分';
+        default:
+          return '总分大小';
+      }
+    default:
+      return name;
+  }
+};
+
 export const markeTypeMap = {
   1: t('欧洲盘'),
   2: t('香港盘'),
@@ -105,6 +173,8 @@ export const BET_RESULT_TYPE_MAP: { [key in EBetResultType]: string } = {
   [EBetResultType.AUTO_CANCEL]: '预约失效',
   [EBetResultType.FLAT_MATCH_ROLLBACK]: '走水', // 比分回滚取消结算返还金额,算走水
 };
+
+
 
 
 
@@ -177,7 +247,7 @@ export const useSportFormatDetail = (row) => {
   )}`;
   const secondLine = row.leagueNameCn;
   const thirdLine = `${row.homeTeamNameCn} vs ${row.awayTeamNameCn}`;
-  const fifthLine = `玩法: ${row.betItemName??playMap[row.kindsCode] ?? '-'}`;
+  const fifthLine = `玩法:${getPlayNameByKc({code: row.kindsCode, name: row.betItemName, ctid: row.betItemCTID, sportId: row.sportId})??'-'}`;
 
   const oddName=  getBetTeamType(row || {} as Detail)
   const isvisiable=isVisiableSecondText(row.betHandicap, row.betN, row.kindsCode)
@@ -320,3 +390,34 @@ export const getOrderBetTypeAtBetting = (order:TOrder)=>{
   }
   return orderName;
 };
+
+//计算串关的总赔率，非复试
+export const calculateSeriesTypeTotal = (list:any)=>{
+  let oddTotal =1
+   list.forEach((item:{oddFinally:number,marketTypeFinally:EOddType,marketType:number})=>{
+     //先转换为欧洲盘再计算
+     oddTotal*= Number(getViewOddFn(item.oddFinally,item.marketTypeFinally,EOddType.EUROPE))
+  })
+  return truncateDecimals(oddTotal, 2)
+}
+
+
+export const calculateSeriesTypeTotalBets = (seriesType:number)=>{
+  const str = seriesType&&seriesType.toString()
+  const arr=str?.split('00')||[];
+  return arr.length>0?arr[1]:''
+}
+
+
+// 获取比分
+export const displayHomeAwayScore = (scoreString:string, sprotId?: ESportType) => {
+  if (sprotId > 33) return '';
+  if (sprotId === ESportType.TENNIS || sprotId === ESportType.VOLLEYBALL) return '';
+  const [home, away] = assertHomeAwayScore(scoreString);
+  return `[${home}-${away}]`
+};
+
+export const getIsInplay = (type:number)=>{
+  return type===1?t('滚球'):t('早盘')
+}
+
