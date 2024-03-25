@@ -1,75 +1,44 @@
-// import { MATCH_PERIOD_TYPES } from '@/utils/maps/sports_map';
+import { handleTableWidth } from '@/utils/getTableWidth';
+import { getLan } from '@/utils/utilFn';
 import dayjs from 'dayjs';
+
 export const columns: TableColumnList = [
   {
-    label: t('节'),
-    prop: 'matchPeriod',
-    slot: 'matchPeriod',
-    width: '100px',
-    headerRenderer: () => {
-      return t('节');
-    },
-    formatter: ({ matchPeriod }) => {
-      // return MATCH_PERIOD_TYPES[matchPeriod];
-    }
-  },
-  {
+    label: t('局'),
+    prop: 'inningNum',
+    type: 'index',
     minWidth: 100,
-    prop: 't1',
-    slot: 't1',
-    headerSlot: 'header_t1',
-    headerRenderer: () => {
-      return history.state.params.homeTeamNameCn
-        ? history.state.params.homeTeamNameCn
-        : '-';
-    }
+    headerRenderer: d => handleTableWidth(d, t('局'))
   },
   {
-    prop: 't2',
-    slot: 't2',
-    headerRenderer: () => {
-      return history.state.params.awayTeamNameCn
-        ? history.state.params.awayTeamNameCn
-        : '-';
-    }
+    headerRenderer: () => history.state.params.homeTeamNameCn ?? '_',
+    slot: 't1'
   },
-
   {
-    label: t('结算时间'),
-    minWidth: 150,
-    prop: 'eventTime',
-    slot: 'eventTime',
-    formatter: ({ eventTime }) => {
-      console.log(dayjs(eventTime).format('HH:mm:ss'));
-      return dayjs(eventTime).format('HH:mm:ss');
-    }
+    headerRenderer: () => history.state.params.awayTeamNameCn ?? '_',
+    slot: 't2'
   },
   {
     label: t('操作人'),
-    minWidth: 100,
-    prop: 'createdBy',
     formatter: ({ createdBy }) => {
-      return createdBy ? createdBy : '-';
+      return createdBy ? createdBy : '_';
     }
   },
   {
     label: t('状态'),
-    minWidth: 100,
-    prop: 'settleType',
-    formatter: ({ settleType }) => {
-      return settleType === '0'
-        ? t('自动结算')
-        : settleType === 1
-        ? t('⼈⼯結算')
-        : '-';
+    formatter: () => {
+      return t('人工结算');
+    }
+  },
+  {
+    label: t('确认时间'),
+    formatter: ({ id, updatedAt }) => {
+      return id ? dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss') : '_';
     }
   },
   {
     label: t('操作'),
-    minWidth: 100,
     slot: 'operation',
-    formatter() {
-      return '-';
-    }
+    minWidth: getLan() === 'zh' ? 200 : 300
   }
 ];

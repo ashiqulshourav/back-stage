@@ -2,6 +2,7 @@ import { message } from '@/utils/message';
 import { t } from '@/plugins/i18n';
 import { columns, MATCH_PERIOD_TYPES } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
+import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 
 export function useDetailHook() {
   const dataList = reactive<SattleDataAPI.HandballEvent[]>([]);
@@ -105,6 +106,7 @@ export function useDetailHook() {
 
   //- 全场结算
   const router = useRouter();
+  const { openPasswordInput } = usePasswordInputHook();
   const allSettleBtnClick = async () => {
     let s1 = 0;
     const scoreList = dataList.map(item => [item.firstT1, item.firstT2]);
@@ -112,7 +114,7 @@ export function useDetailHook() {
       s1 += Number(item[0]) - Number(item[1]);
     });
     if (dataList.length < 2 || dataList.some(item => !item.id) || s1 === 0) {
-      return message(t('请先完成上/下半场或附加赛结算'), { type: 'error' });
+      return message(t('请先完局结算'), { type: 'error' });
     }
     ElMessageBox.confirm(
       `
@@ -129,6 +131,8 @@ export function useDetailHook() {
         center: true
       }
     ).then(async () => {
+      const r = await openPasswordInput();
+      if (!r) return;
       try {
         allSettleLoading.value = true;
         const res = await API.allIceHockeySettlement({ matchId });
@@ -207,6 +211,8 @@ export function useDetailHook() {
         center: true
       }
     ).then(async () => {
+      const r = await openPasswordInput();
+      if (!r) return;
       confirmParams.newEventList = dataList.map(item => {
         return {
           matchId: +item.matchId,

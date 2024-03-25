@@ -6,6 +6,7 @@ import { usePublicHooks } from '@/hooks';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 
 export function useEsportSettlement() {
   const dataList = reactive<EsportsSettlementAPI.ESportMatchList[]>([]);
@@ -68,9 +69,13 @@ export function useEsportSettlement() {
       .catch(() => (row.handicapStatus = row.handicapStatus === 0 ? 1 : 0));
   }
 
-  //- 取消注单
-  const cancelClick = row => {
+  const { openPasswordInput } = usePasswordInputHook();
+
+  //- 取消比赛
+  const cancelClick = async row => {
     const remark = ref('');
+    const r = await openPasswordInput();
+    if (!r) return;
     addDialog({
       title: t('取消比赛'),
       width: '20%',

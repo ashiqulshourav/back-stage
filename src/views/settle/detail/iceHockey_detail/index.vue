@@ -16,7 +16,8 @@
             @click="addEventRow"
             v-if="
               (renderObj.fullSettlementStatus === 0 ||
-              renderObj.reSettleStatus === 1) && hasAuth('ADDNEWPLATEGAME')
+                renderObj.reSettleStatus === 1) &&
+              hasAuth('ADDNEWPLATEGAME')
             "
             v-auth="['ADDNEWPLATEGAME']"
           >

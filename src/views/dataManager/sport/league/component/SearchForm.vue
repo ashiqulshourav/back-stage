@@ -108,7 +108,6 @@
     </el-form-item>
     <el-form-item>
       <el-button
-        v-auth="['QUERY']"
         type="primary"
         :icon="useRenderIcon(SearchIcon)"
         :loading="loading"
@@ -116,11 +115,7 @@
       >
         {{ t('筛选') }}
       </el-button>
-      <el-button
-        v-auth="['QUERY']"
-        :icon="useRenderIcon(RefreshIcon)"
-        @click="resetForm(formRef)"
-      >
+      <el-button :icon="useRenderIcon(RefreshIcon)" @click="resetForm(formRef)">
         {{ t('重置') }}
       </el-button>
     </el-form-item>

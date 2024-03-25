@@ -125,7 +125,7 @@ export function useUserManager() {
   const handleDelete = async (row: UserMangerAPI.querySysAccountListData) => {
     ElMessageBox.confirm(
       `<div class="text-center">
-       <p>${'确定要删除用户账号'}${row.name}</br></p>
+       <p>${t('确定要删除用户账号')}${row.name}</br></p>
       <p>${t('账号删除后不可恢复')}</p>
       </div>`,
       t('警告'),
@@ -144,11 +144,12 @@ export function useUserManager() {
   };
 
   //- 重置密码
+
   const resetPasswordClick = async (
     row: UserMangerAPI.querySysAccountListData
   ) => {
     ElMessageBox.confirm(
-      `${'确定要重置'}${row.name}${t('的密码？')}</br>${t(
+      `${t('确定要重置{user}的密码？', { user: row.name })}</br>${t(
         '重置后的密码为:123456'
       )}`,
       t('警告'),

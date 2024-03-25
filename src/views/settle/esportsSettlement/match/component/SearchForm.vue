@@ -4,10 +4,19 @@
       <el-form-item :label="`${t('联赛')}:`" prop="leagueId">
         <el-select
           v-model="form.leagueId"
-          filterable
           clearable
-          class="!w-[310px]"
+          filterable
+          remote
+          @change="search"
+          :remote-method="
+            debounce(
+              query => matchStore.search_league_list(query, form.sportId, 1),
+              1000
+            )
+          "
+          class="!w-[280px]"
           :placeholder="t('请选择联赛')"
+          :loading="matchStore.matchSearchLoading"
         >
           <el-option
             v-for="item in matchStore.esportLeagueList"
@@ -94,7 +103,6 @@
 
       <el-form-item>
         <el-button
-          v-auth="['QUERY']"
           type="primary"
           :icon="useRenderIcon(Search)"
           :loading="loading"
@@ -102,11 +110,7 @@
         >
           {{ t('筛选') }}
         </el-button>
-        <el-button
-          v-auth="['QUERY']"
-          :icon="useRenderIcon(Refresh)"
-          @click="resetForm(formRef)"
-        >
+        <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
           {{ t('重置') }}
         </el-button>
       </el-form-item>
@@ -130,6 +134,7 @@ import {
   HANDICAP_STATUS,
   ESPORT_MATCH_STATUS
 } from '@/utils/maps/sports_map';
+import { debounce } from '@pureadmin/utils';
 
 const formRef = ref();
 const emits = defineEmits(['onSearch', 'changeMatchCondition']);
@@ -143,11 +148,6 @@ const props = withDefaults(
   }>(),
   {}
 );
-
-onMounted(() => {
-  const matchStore = useMatchStore();
-  matchStore.set_lagueList(1);
-});
 
 const changeDate = t => {
   if (!t) {

@@ -1,12 +1,15 @@
 <template>
   <div class="score_main">
+    <!-- -->
     <el-input
-      :class="[errorType && 'error_color']"
-      :disabled="!row.isEdit"
+      v-if="row.isEdit || !row.id"
       v-model="row[type]"
       ref="inputRef"
-      :formatter="v => formatChinese(v, 4)"
+      :disabled="!row.isEdit"
+      :placeholder="scorePlaceHolderData[type]"
+      :formatter="v => formatChinese(v, 3)"
     />
+    <span v-else>{{ type == 't1' ? row.t1 : row.t2 }}</span>
   </div>
 </template>
 
@@ -15,10 +18,15 @@ import { formatChinese } from '@/utils/formatNumber';
 const inputRef = ref();
 
 const props = defineProps<{
-  row: SattleDataAPI.volleyballData;
+  row: SattleDataAPI.newBasketballEventsList;
   type: string;
-  errorType: boolean;
+  renderObj: SattleDataAPI.getSettlementDataList;
 }>();
+
+const scorePlaceHolderData = {
+  home: t('请输入主队比分'),
+  away: t('请输入客队比分')
+};
 
 watch(
   () => props.row,
@@ -36,21 +44,5 @@ watch(
 .score_main {
   display: flex;
   align-items: center;
-  :deep() {
-    .is-disabled {
-      .el-input__wrapper {
-        background-color: transparent;
-        box-shadow: none;
-        .el-input__inner {
-          text-align: center;
-        }
-      }
-    }
-    .error_color {
-      .el-input__wrapper {
-        box-shadow: 0 0 0 1px var(--el-color-danger) inset !important;
-      }
-    }
-  }
 }
 </style>

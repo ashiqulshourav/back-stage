@@ -35,26 +35,10 @@ export const SPORT_LIST_MAP: sport_list_map_type[] = [
     linkName: 'SETTLE_DETAIL_TENNIS_DETAIL'
   },
   {
-    label: t('冰球'),
-    value: SPORT_NAME_TYPE.iceHockey,
-    linkName: 'SETTLE_DETAIL_ICEHOCKEY_DETAIL'
-  },
-  {
-    label: t('手球'),
-    value: SPORT_NAME_TYPE.handball,
-    linkName: 'SETTLE_DETAIL_HANDBALL_DETAIL'
-  },
-  {
-    label: t('排球'),
-    value: SPORT_NAME_TYPE.volleyball,
-    linkName: 'SETTLE_DETAIL_VOLLEBALL_DETAIL'
-  },
-  {
     label: t('斯诺克/台球'),
     value: SPORT_NAME_TYPE.billiards,
     linkName: 'SETTLE_DETAIL_BILLIARDS_DETAIL'
   },
-
   {
     label: t('羽毛球'),
     value: SPORT_NAME_TYPE.badminton,
@@ -66,19 +50,29 @@ export const SPORT_LIST_MAP: sport_list_map_type[] = [
     linkName: 'SETTLE_DETAIL_PINGPONG_DETAIL'
   },
   {
-    label: t('英式橄榄球'),
-    value: SPORT_NAME_TYPE.rugby,
-    linkName: 'SETTLE_HOCKEY_DETAIL'
+    label: t('排球'),
+    value: SPORT_NAME_TYPE.volleyball,
+    linkName: 'SETTLE_DETAIL_VOLLEBALL_DETAIL'
   },
   {
-    label: t('板球'),
-    value: SPORT_NAME_TYPE.cricket,
-    linkName: 'SETTLE_CRICKET_DETAIL'
+    label: t('冰球'),
+    value: SPORT_NAME_TYPE.iceHockey,
+    linkName: 'SETTLE_DETAIL_ICEHOCKEY_DETAIL'
+  },
+  {
+    label: t('手球'),
+    value: SPORT_NAME_TYPE.handball,
+    linkName: 'SETTLE_DETAIL_HANDBALL_DETAIL'
   },
   {
     label: t('曲棍球'),
     value: SPORT_NAME_TYPE.hockey,
-    linkName: 'SETTLE_DETAIL_FOOTBALL_DETAIL'
+    linkName: 'SETTLE_DETAIL_FIELD_HOCKEY'
+  },
+  {
+    label: t('美式足球'),
+    value: SPORT_NAME_TYPE.american_football,
+    linkName: 'SETTLE_DETAIL_AMERICAN_FOOTBALL_DETAIL'
   },
   {
     label: t('飞镖'),
@@ -86,15 +80,21 @@ export const SPORT_LIST_MAP: sport_list_map_type[] = [
     linkName: 'SETTLE_DETAIL_FOOTBALL_DETAIL'
   },
   {
+    label: t('英式橄榄球'),
+    value: SPORT_NAME_TYPE.rugby,
+    linkName: 'SETTLE_DETAIL_RUGBY_DETAIL'
+  },
+  {
+    label: t('板球'),
+    value: SPORT_NAME_TYPE.cricket,
+    linkName: 'SETTLE_DETAIL_CRICKET_DETAIL'
+  },
+  {
     label: t('拳击/格斗'),
     value: SPORT_NAME_TYPE.boxing,
     linkName: 'SETTLE_DETAIL_FOOTBALL_DETAIL'
-  },
-  {
-    label: t('美式足球'),
-    value: SPORT_NAME_TYPE.american_football,
-    linkName: 'SETTLE_DETAIL_FOOTBALL_DETAIL'
   }
+
   // { label: t('特别项目'), value: 7, type: 'SpecialProjects' },
   // { label: t('电子竞技'), value: 4, type: 'FootBall' },
 ];

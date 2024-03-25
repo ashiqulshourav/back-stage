@@ -49,7 +49,13 @@
           </span>
         </div>
       </el-col>
-      <el-col :span="5" v-if="renderObj.fullSettlementStatus === 1">
+      <el-col
+        :span="5"
+        v-if="
+          renderObj.fullSettlementStatus === 1 &&
+          hasAuth('ENABLERECALCULATIONANDSETTLE')
+        "
+      >
         <el-button
           @click="openSecondSettleClick"
           type="primary"
@@ -71,6 +77,7 @@
 
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
+import { hasAuth } from '@/router/utils';
 
 const props = defineProps<{
   renderObj: SattleDataAPI.getSettlementDataList;

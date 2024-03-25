@@ -15,10 +15,6 @@ export const columns: TableColumnList = [
     slot: 't2'
   },
   {
-    label: t('结算时间'),
-    slot: 'eventTime'
-  },
-  {
     label: t('操作人'),
     formatter: ({ createdBy }) => {
       return createdBy ? createdBy : '_';

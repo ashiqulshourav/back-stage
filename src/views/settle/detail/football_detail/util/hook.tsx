@@ -4,6 +4,7 @@ import { childColumns, yellow_red_column, columns } from '../tableColumnList';
 import { MatchEventType, SPORT_TYPE, TempListType } from './type';
 import { ElMessageBox } from 'element-plus';
 import { YELLOW_OR_RED } from '@/utils/maps/sports_map';
+import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 
 export function useFootball() {
   const dataList = reactive<SattleDataAPI.ChildrenDataList[]>([
@@ -207,8 +208,14 @@ export function useFootball() {
     });
   };
   const router = useRouter();
+  const { openPasswordInput } = usePasswordInputHook();
   //-全场 + 上半场结算
   const settlementFunction = async (matchId: number, type: 'half' | 'all') => {
+    if (type !== 'half') {
+      const r = await openPasswordInput();
+      if (!r) return;
+    }
+
     try {
       balanceLoading[type] = true;
       const res = await API[
@@ -301,7 +308,6 @@ export function useFootball() {
 
   //- 获取比赛详情
   const getMatchDetail = async () => {
-    console.log('hook.tsx文件 304==============行打印=', history.state.params);
     const res = await API.getPreSaleInfo({
       matchId: history.state.params.matchId
     });
@@ -344,6 +350,8 @@ export function useFootball() {
         center: true
       }
     ).then(async () => {
+      const r = await openPasswordInput();
+      if (!r) return;
       confirmParams.newEventList.forEach(item => delete item._tempDate);
       const res = await API.confirm2ndSettlement(confirmParams);
       message(res.msg, { type: res.code ? 'error' : 'success' });

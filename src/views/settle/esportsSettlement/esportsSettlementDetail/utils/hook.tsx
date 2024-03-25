@@ -3,6 +3,8 @@ import { ElMessageBox } from 'element-plus';
 import { usePublicHooks } from '@/hooks';
 import { SPORT_LEVEL_LIST_TYPE } from './type';
 import { SPORT_LEVEL_LIST } from './map';
+import { usePasswordInputHook } from '@/hooks/passwordInputHook';
+
 export function useEsportsSettlement() {
   const route = useRoute();
   const dataList = reactive<SaleDataAPI.PreSaleList[]>([]);
@@ -131,6 +133,7 @@ export function useEsportsSettlement() {
   };
 
   //- 确认二次结算
+  const { openPasswordInput } = usePasswordInputHook();
   const resetManualSettleESportHandicapClick = async (
     row: EsportsSettlementAPI.BetItemsMapData
   ) => {
@@ -145,6 +148,8 @@ export function useEsportsSettlement() {
       dangerouslyUseHTMLString: true,
       draggable: true
     }).then(async () => {
+      const r = await openPasswordInput();
+      if (!r) return;
       const params = {
         matchId: row.matchId,
         betResultItems: row.arr.map((item, index) => {

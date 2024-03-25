@@ -23,12 +23,13 @@
           v-model="form.sportId"
           :placeholder="t('游戏种类')"
           clearable
-          @change="chagenDetailMatchType"
           class="!w-[150px]"
+          @change="search"
         >
           <el-option
             :label="item.label"
             :value="item.value"
+            :loading="searchLoading"
             v-for="item in gameClassify"
             :key="item.value"
           />
@@ -38,10 +39,24 @@
       <el-form-item :label="`${t('联赛')}:`" prop="leagueId">
         <el-select
           v-model="form.leagueId"
-          filterable
           clearable
+          filterable
+          remote
+          @change="search"
+          :remote-method="
+            debounce(
+              query =>
+                matchStore.search_league_list(
+                  query,
+                  form.sportId,
+                  form.category as LeagueClassifyType
+                ),
+              1000
+            )
+          "
           class="!w-[280px]"
           :placeholder="t('请选择联赛')"
+          :loading="matchStore.matchSearchLoading"
         >
           <el-option
             v-for="item in form.category === 0
@@ -128,7 +143,6 @@
 
       <el-form-item>
         <el-button
-          v-auth="['QUERY']"
           type="primary"
           :icon="useRenderIcon(Search)"
           :loading="loading"
@@ -136,11 +150,7 @@
         >
           {{ t('筛选') }}
         </el-button>
-        <el-button
-          v-auth="['QUERY']"
-          :icon="useRenderIcon(Refresh)"
-          @click="resetForm(formRef)"
-        >
+        <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
           {{ t('重置') }}
         </el-button>
       </el-form-item>
@@ -159,10 +169,12 @@ import dayjs from 'dayjs';
 import { disableDate } from '@/utils/formatDate';
 import { useMatchStore } from '@/store/match';
 import { formatNumber } from '@/utils/formatNumber';
+import { debounce } from '@pureadmin/utils';
 import {
   ESPORT_ID_MAP,
   SPORT_ID_MAP,
-  SPORT_CATEGORY
+  SPORT_CATEGORY,
+  LeagueClassifyType
 } from '@/utils/maps/sports_map';
 
 const formRef = ref();
@@ -170,6 +182,7 @@ const emits = defineEmits(['onSearch', 'changeMatchCondition']);
 const selectIndex = ref(-1);
 const matchStore = useMatchStore();
 const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
+const searchLoading = ref(false);
 
 const props = withDefaults(
   defineProps<{
@@ -179,16 +192,6 @@ const props = withDefaults(
   }>(),
   {}
 );
-
-/* const selectTypeList = [
-  { val: t('开售管理'), num: 1 },
-  { val: t('早盘赛事'), num: 2 },
-  { val: t('滚球赛事'), num: 3 }
-]; */
-
-onMounted(() => {
-  matchStore.set_lagueList(0, 1);
-});
 
 const changeDate = t => {
   if (!t) {
@@ -228,13 +231,8 @@ const search = () => {
 
 const chagenMatchType = (type: 0 | 1 | 2) => {
   props.form.sportId = '';
-  //- 电竞比赛 =1
   gameClassify.value = type === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
-  matchStore.set_lagueList(type, props.form.sportId);
-};
-//- 赛种联赛筛选
-const chagenDetailMatchType = val => {
-  matchStore.set_lagueList(props.form.category as number, val);
+  search();
 };
 
 const nextDayArr = computed(() => {

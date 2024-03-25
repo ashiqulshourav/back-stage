@@ -1,6 +1,10 @@
 <template>
   <div class="main">
-    <SearchForm @onSearch="onSearch" :form="form" />
+    <SearchForm
+      @onSearch="onSearch"
+      :form="form"
+      :currentSportId="currentSportId"
+    />
     <SportTypeNav
       @changeNavType="changeNavType"
       :currentSportId="currentSportId"

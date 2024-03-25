@@ -1,120 +1,102 @@
-import { columns } from './tableColumnList';
-import { ElMessageBox, dayjs } from 'element-plus';
-// import { MATCH_PERIOD_TYPES } from '@/utils/maps/sports_map';
 import { message } from '@/utils/message';
+import { t } from '@/plugins/i18n';
+import { columns } from './tableColumnList';
+import { ElMessageBox } from 'element-plus';
+import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 
-export function useDetailHook() {
-  const dataList = reactive<SattleDataAPI.CricketEvent[]>([]);
-  const currentMatch = reactive<SattleDataAPI.getSettlementDataList>(
-    {} as SattleDataAPI.getSettlementDataList
+export function useCricketHook() {
+  const dataList = reactive<SattleDataAPI.volleyballData[]>([]);
+  const allSettleLoading = ref(false);
+  const loading = ref(true);
+  const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
+    history.state.params as SattleDataAPI.getSettlementDataList
   );
+  const { matchId } = renderObj;
+  const confirmParams = reactive<SattleDataAPI.confirm2ndSettlementReqType>({
+    cancelEventIds: [],
+    newEventList: [],
+    matchId
+  } as SattleDataAPI.confirm2ndSettlementReqType);
 
-  // const isFourRound = ref(true);
-  const matchId = ref(history.state.params.matchId);
-  const isEdit = ref(false);
-  const timestamps = ref(0);
-
+  // - 获取事件列表
   const onSearch = async () => {
-    getCurrentMatchDetail();
-    const res: SattleDataAPI.getCricketEventRes = await API.getCricketEvents({
-      matchId: matchId.value
+    const res = await API.getCricketEvents({ matchId });
+    loading.value = false;
+    if (res.code) return message(res.msg, { type: 'error' });
+    dataList.length = 0;
+    dataList.push(...res.data);
+    if (renderObj.reSettleStatus === 1) saveCanceList();
+  };
+
+  //- 手动添加局
+  const addEventRow = () => {
+    const noEmpty = dataList.every(item => {
+      return (
+        item.firstT1.toString() !== '' &&
+        item.firstT2.toString() !== '' &&
+        !item.isEdit
+      );
     });
-    if (!res.code) {
-      dataList.length = 0;
-      dataList.push(...res.data);
-    }
+    if (!noEmpty) return message(t('请先结算之前的局赛事'), { type: 'error' });
+
+    const params: Partial<SattleDataAPI.volleyballData> = {
+      matchId,
+      matchPeriodId: dataList.length + 1,
+      isEdit: false,
+      firstT1: '',
+      firstT2: '',
+      firstNum: dataList.length + 1
+    };
+    dataList.push(params as SattleDataAPI.volleyballData);
   };
 
-  //- 获取当前展开行结算列表
+  //- 开启重新结算
+  const resetBtnClick = async (row: SattleDataAPI.volleyballData) => {
+    ElMessageBox.confirm(t('确定要重新结算该事件么？'), {
+      dangerouslyUseHTMLString: true,
+      confirmButtonText: t('确认结算'),
+      cancelButtonText: t('取消'),
+      center: true
+    }).then(async () => {
+      loading.value = true;
+      const res = await API.cricketReSettleMatchEvent({
+        matchId,
+        id: row.id,
+        matchPeriodId: row.matchPeriodId,
+        firstT1: row.firstT1,
+        firstT2: row.firstT2,
+        firstNum: row.firstNum,
+        eventTime: 1
+      });
+      loading.value = false;
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if (!res.code) onSearch();
+    });
+  };
 
-  const getCurrentMatchDetail = async () => {
-    const res: SattleDataAPI.getSettlementListRes = await API.getSettlementList(
-      { matchId: matchId.value }
-    );
-    if (!res.code) {
-      Object.assign(currentMatch, res.data.list[0]);
-    }
-  };
-  const validation = (NewEvent: SattleDataAPI.CricketEvent) => {
-    if (
-      !NewEvent.eventTime ||
-      NewEvent.eventTime <= dataList[dataList.length - 1]?.eventTime
-    ) {
-      message(t('无效时间'), { type: 'error' });
-      return false;
-    }
-    if (
-      Number(NewEvent.t1) < 0 ||
-      Number(NewEvent.t2) < 0 ||
-      Number(NewEvent.t1) > 300 ||
-      Number(NewEvent.t2) > 300
-    ) {
-      message(t('无效值'), { type: 'error' });
-      return false;
-    }
-    return true;
-  };
-  const getCorrectTime = (tmp: number | string | Date) => {
-    const day = new Date(tmp);
-    day.setFullYear(1970, 0, 1);
-    const currenTime = new Date(currentMatch.beginTime);
-    return currenTime.getTime() + day.getTime() + 28800000;
-  };
-  const setNewEvent = async (NewEvent: SattleDataAPI.CricketEvent) => {
-    NewEvent.eventTime = getCorrectTime(timestamps.value);
-    console.log(dayjs(NewEvent.eventTime).format('YYYY-MM-DD HH:mm:ss'));
-    if (validation(NewEvent)) {
-      ElMessageBox.confirm(
-        `<p class='text-center'>${currentMatch.homeTeamNameCn || '-'} VS ${
-          currentMatch.awayTeamNameCn || '-'
-        } <br />
-          <p class="text-center text-2xl text-bold w-full">${NewEvent.t1} : ${
-          NewEvent.t2
-        }</p>
-          ⼿动结算后无法回退，请再次确认比分</p>
-          `,
-        // `結算第${MATCH_PERIOD_TYPES[NewEvent.matchPeriod]}节`,
-        {
-          dangerouslyUseHTMLString: true,
-          confirmButtonText: t('确认结算'),
-          cancelButtonText: t('取消'),
-          center: true
-        }
-      )
-        .then(async () => {
-          const res: MetadataAPI.AddSportEventRes = await API.addCricketEvent({
-            matchId: NewEvent.matchId,
-            eventTime: NewEvent.eventTime,
-            t1: Number(NewEvent.t1),
-            t2: Number(Number(NewEvent.t2)),
-            matchPeriod: NewEvent.matchPeriod,
-            canceled: 0
-          });
-          if (res.code) message(res.msg, { type: 'error' });
-          else {
-            NewEvent.t1 = 0;
-            NewEvent.t2 = 0;
-            NewEvent.matchPeriod = '';
-            await onSearch();
-            isEdit.value = false;
-          }
-        })
-        .catch(() => {
-          isEdit.value = false;
-        });
-    }
-  };
-  const allSettleBtnClick = () => {
-    if (
-      dataList[dataList.length - 1]?.t1 === dataList[dataList.length - 1]?.t2 ||
-      dataList.length < 2
-    ) {
-      message(t('请先完成结算'), { type: 'error' });
-      return;
-    }
+  //- 结算局事件
+  const settlementHandicap = async (row: SattleDataAPI.TennisEventsData) => {
+    const { firstT1, firstT2, firstNum } = row;
+    if (firstT1 === '' || firstT2 === '')
+      return message(t('比分不能为空'), { type: 'error' });
+
     ElMessageBox.confirm(
-      t('手动确认结算全场比赛后，即开启结算全场比赛玩法，结算后无法回退。'),
-      t('确认结算全场比赛'),
+      `
+      <div class="text-center">
+          <div class="flex  justify-between">
+            <span class="w-[45%]">${
+              history.state.params.homeTeamNameCn ?? '_'
+            }</span>
+            <span class="font-bold">VS</span>
+            <span class="w-[45%]">${
+              history.state.params.awayTeamNameCn ?? '_'
+            }</span>
+         </div>
+          <div>${firstT1} ： ${firstT2}</div>
+          <div>${t('手动结算后无法回退，请再次确定结果')}</div>
+      </div>
+      `,
+      `${t('结算第')}${firstNum}${t('局')}`,
       {
         dangerouslyUseHTMLString: true,
         confirmButtonText: t('确认结算'),
@@ -122,23 +104,145 @@ export function useDetailHook() {
         center: true
       }
     ).then(async () => {
-      const res = await API.allCricketSettlement({ matchId: matchId.value });
-      if (res.code) {
-        message(res.msg, { type: 'error' });
-      } else {
-        onSearch();
+      loading.value = true;
+      const params = {
+        eventTime: 1,
+        matchId,
+        matchPeriodId: row.matchPeriodId,
+        firstT1: row.firstT1,
+        firstT2: row.firstT2,
+        firstNum: row.firstNum
+      };
+      try {
+        const res = await API.addCricketEvent(params);
+        loading.value = false;
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        if (!res.code) onSearch();
+      } catch (error) {
+        loading.value = false;
       }
     });
   };
+
+  const { openPasswordInput } = usePasswordInputHook();
+  //- 全场结算
+  const router = useRouter();
+  const allSettleBtnClick = async () => {
+    if (dataList.length < 1) {
+      return message(t('缺少事件'), { type: 'error' });
+    }
+    ElMessageBox.confirm(
+      `
+      <div class="text-center">
+          <div>${t('手动确认比赛结束后，即开始结算')}</div>
+          <div>${t('全场比赛玩法，结算后无法回退。')}</div>
+      </div>
+      `,
+      t('确认比赛结算'),
+      {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: t('确认结算'),
+        cancelButtonText: t('取消'),
+        center: true
+      }
+    ).then(async () => {
+      const r = await openPasswordInput();
+      if (!r) return;
+      try {
+        allSettleLoading.value = true;
+        const res = await API.cricketManualSettlementFullTime({ matchId });
+        allSettleLoading.value = false;
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        if (!res.code) router.go(-1);
+      } catch (error) {
+        allSettleLoading.value = false;
+      }
+    });
+  };
+
+  //- 获取比赛详情
+  const getMatchDetail = async () => {
+    const res = await API.getPreSaleInfo({
+      matchId: history.state.params.matchId
+    });
+    if (res.code) return message(res.msg, { type: 'error' });
+    Object.assign(renderObj, res.data);
+  };
+
+  /*
+   * 二次结算逻辑开始
+   */
+  //- 开启二次结算（二次结算按钮）
+  const openSecondSettleClick = async () => {
+    const res = await API.cricketOpen2ndSettlementStatus({ matchId });
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    if (!res.code) {
+      getMatchDetail();
+      saveCanceList();
+    }
+  };
+
+  //- 保存删除事件
+  const saveCanceList = () => {
+    if (dataList.length < 1) return;
+    confirmParams.cancelEventIds.length = 0;
+    confirmParams.cancelEventIds.push(...dataList.map(item => +item.id));
+  };
+
+  //- 二次结算发送后端
+  const confirmSecondSettleClick = async () => {
+    ElMessageBox.confirm(
+      <div class="text-center pl-2 pr-2">
+        {t(
+          '本场比赛已结算完毕，重新结算将会影响所有关联的已结算注单，进行重新下发赛果，是否确认二次结算?'
+        )}
+      </div>,
+      t('警告'),
+      {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: t('确认'),
+        cancelButtonText: t('取消'),
+        center: true
+      }
+    ).then(async () => {
+      const r = await openPasswordInput();
+      if (!r) return;
+      confirmParams.newEventList = dataList.map(item => {
+        return {
+          matchId: +item.matchId,
+          eventTime: 1,
+          matchPeriodId: item.matchPeriodId,
+          firstT1: item.firstT1,
+          firstT2: item.firstT2,
+          firstNum: item.firstNum
+        };
+      });
+      const res = await API.cricketConfirm2ndSettlement(confirmParams);
+      if (res.code) return message(res.msg, { type: 'error' });
+      confirmParams.cancelEventIds = [];
+      confirmParams.newEventList = [];
+      getMatchDetail();
+      onSearch();
+    });
+  };
+
+  onMounted(() => {
+    getMatchDetail();
+    onSearch();
+  });
+
   return {
     onSearch,
-    isEdit,
+    loading,
     columns,
     dataList,
-    currentMatch,
-    timestamps,
-    getCurrentMatchDetail,
-    setNewEvent,
-    allSettleBtnClick
+    addEventRow,
+    settlementHandicap,
+    allSettleBtnClick,
+    renderObj,
+    allSettleLoading,
+    resetBtnClick,
+    openSecondSettleClick,
+    confirmSecondSettleClick
   };
 }
