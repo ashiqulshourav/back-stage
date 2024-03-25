@@ -207,6 +207,7 @@
             <el-button
               type="primary"
               :icon="useRenderIcon('exportFill')"
+              v-if="hasAuth('EXPORT')"
               @click="exportFile()"
             >
               {{ t('导出报表') }}
@@ -251,6 +252,7 @@ const dateRangetType = computed(() => {
 import {  betStatusMap,seriesTypesSingle,seriesTypesDuplex} from "../util/types";
 
 import {useLeague} from "@/views/operateManager/bettingCenter/util/hook";
+import {hasAuth} from "@/router/utils";
 
 const emits = defineEmits(['onSearch', 'exportFile']);
 const resetForm = (formEl: FormInstance | undefined) => {
