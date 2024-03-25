@@ -30,6 +30,7 @@
         link
         type="primary"
         size="small"
+        v-if="!row.isEdit"
         @click="row.isEdit = true"
       >
         {{ t('编辑') }}
@@ -37,6 +38,7 @@
       <el-button
         class="reset-margin"
         link
+        v-if="row.isEdit"
         type="primary"
         size="small"
         @click="confirmResetMatchEvent(row, true)"
