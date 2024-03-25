@@ -6,7 +6,8 @@ export const usePasswordInputHook = () => {
 
   const openPasswordInput = () => {
     return new Promise<boolean>(resolve => {
-      addDialog({
+      resolve(true);
+      /*    addDialog({
         title: t('请输入U盾密码'),
         class: 'reset_dialog',
         width: '25%',
@@ -23,7 +24,7 @@ export const usePasswordInputHook = () => {
               }, 300);
             }
           })
-      });
+      }); */
     });
   };
 
