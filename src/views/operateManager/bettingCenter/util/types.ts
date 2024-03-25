@@ -11,7 +11,7 @@ export type searchFormType = {
   matchId: string;
   awayTeamName: string;
   homeTeamName: string;
-  seriesType:number|string;
+  seriesType:number;
   status:any;
   isInplay:number|string;
   category:string|number;

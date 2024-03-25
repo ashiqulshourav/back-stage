@@ -239,8 +239,8 @@
                 background: getStatus(
                   row.status,
                   row.billStatus,
-                  row.combineOrderDetails[0].betResult
-                ).bgColor
+                  row.combineOrderDetails[0]?.betResult
+                )?.bgColor
               }"
               class="status_btn mb-1"
             >
