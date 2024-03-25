@@ -198,7 +198,6 @@ const {
   addChildRow,
   handleChildrenData,
   reloadTable,
-  // changeSettleType,
   cancelMatchEvent,
   eventList,
   renderObj,

@@ -25,11 +25,14 @@ export const useSettileHook = () => {
     startTime: '',
     endTime: ''
   });
-  // const { openPasswordInput } = usePasswordInputHook();
+  const { openPasswordInput } = usePasswordInputHook();
 
   //- 取消注单
   const cancelClick = async row => {
     const remark = ref('');
+
+    const r = await openPasswordInput();
+    if (!r) return;
 
     addDialog({
       title: t('取消比赛'),

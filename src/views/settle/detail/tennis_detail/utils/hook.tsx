@@ -2,6 +2,7 @@ import { message } from '@/utils/message';
 import { t } from '@/plugins/i18n';
 import { columns, childColumns } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
+import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 
 export function useTennisDetailHook() {
   const dataList = reactive<SattleDataAPI.TennisEventsData[]>([]);
@@ -216,6 +217,7 @@ export function useTennisDetailHook() {
     });
   };
 
+  const { openPasswordInput } = usePasswordInputHook();
   //- 全场结算
   const router = useRouter();
   const allSettleBtnClick = async () => {
@@ -242,6 +244,8 @@ export function useTennisDetailHook() {
       }
     ).then(async () => {
       try {
+        const r = await openPasswordInput();
+        if (!r) return;
         allSettleLoading.value = true;
         const res = await API.manualSettlementFullTime({
           matchId,
@@ -350,6 +354,8 @@ export function useTennisDetailHook() {
         center: true
       }
     ).then(async () => {
+      const r = await openPasswordInput();
+      if (!r) return;
       confirmParams.newEventList = dataList.map(item => {
         let f1 = 0;
         let f2 = 0;

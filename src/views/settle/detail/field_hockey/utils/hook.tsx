@@ -2,6 +2,7 @@ import { message } from '@/utils/message';
 import { t } from '@/plugins/i18n';
 import { columns } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
+import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 
 export function useVolleballHook() {
   const dataList = reactive<SattleDataAPI.volleyballData[]>([]);
@@ -125,6 +126,7 @@ export function useVolleballHook() {
 
   //- 全场结算
   const router = useRouter();
+  const { openPasswordInput } = usePasswordInputHook();
   const allSettleBtnClick = async () => {
     if (dataList.length < 1) {
       return message(t('缺少事件'), { type: 'error' });
@@ -144,6 +146,8 @@ export function useVolleballHook() {
         center: true
       }
     ).then(async () => {
+      const r = await openPasswordInput();
+      if (!r) return;
       try {
         allSettleLoading.value = true;
         const res = await API.allHockeySettlement({ matchId });
@@ -199,6 +203,8 @@ export function useVolleballHook() {
         center: true
       }
     ).then(async () => {
+      const r = await openPasswordInput();
+      if (!r) return;
       confirmParams.newEventList = dataList.map(item => {
         return {
           matchId: +item.matchId,

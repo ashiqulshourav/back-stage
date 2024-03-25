@@ -41,4 +41,8 @@ export const roleData = {
     roleId: number,
     resourceList: number[]
   }) => http.request<RoleAPI.allPermissionResType>("post", "/kmg/matchRole/v1/updateRoleResource", { data }),
+  //- 验证U盾是否通过校验
+  getAuth: (data: {
+    ukeyPassword: string
+  }) => http.request<RoleAPI.getAuthResType>("post", "/kmg/matchUser/getAuth", { data }),
 };

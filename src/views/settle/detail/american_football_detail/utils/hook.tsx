@@ -3,6 +3,7 @@ import { childColumns } from './tableColumnList';
 import { SearchFormType } from './type';
 import { ElMessageBox } from 'element-plus';
 import { NEW_ROW_TYPE } from './map';
+import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 
 export function useAmericanFootballHook() {
   const eventList = reactive<SattleDataAPI.newBasketballEventsList[]>([]);
@@ -207,6 +208,7 @@ export function useAmericanFootballHook() {
 
   //- 全场结算事件
   const router = useRouter();
+  const { openPasswordInput } = usePasswordInputHook();
   const allSettleBtnClick = async () => {
     ElMessageBox.confirm('确定要全场结算么?', t('警告'), {
       dangerouslyUseHTMLString: true,
@@ -214,6 +216,8 @@ export function useAmericanFootballHook() {
       cancelButtonText: t('取消'),
       center: true
     }).then(async () => {
+      const r = await openPasswordInput();
+      if (!r) return;
       const res = await API.americanManualSettlementFullTime({ matchId });
       message(res.msg, { type: res.code ? 'error' : 'success' });
       router.go(-1);
@@ -254,6 +258,8 @@ export function useAmericanFootballHook() {
         center: true
       }
     ).then(async () => {
+      const r = await openPasswordInput();
+      if (!r) return;
       confirmParams.newEventList = eventList.map(item => {
         return {
           matchId,

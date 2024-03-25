@@ -2,6 +2,7 @@ import { message } from '@/utils/message';
 import { t } from '@/plugins/i18n';
 import { columns, MATCH_PERIOD_TYPES } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
+import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 
 export function useDetailHook() {
   const dataList = reactive<SattleDataAPI.HandballEvent[]>([]);
@@ -101,7 +102,7 @@ export function useDetailHook() {
       }
     });
   };
-
+  const { openPasswordInput } = usePasswordInputHook();
   //- 全场结算
   const router = useRouter();
   const allSettleBtnClick = async () => {
@@ -128,6 +129,8 @@ export function useDetailHook() {
         center: true
       }
     ).then(async () => {
+      const r = await openPasswordInput();
+      if (!r) return;
       try {
         allSettleLoading.value = true;
         const res = await API.allHandballSettlement({ matchId });
@@ -206,6 +209,8 @@ export function useDetailHook() {
         center: true
       }
     ).then(async () => {
+      const r = await openPasswordInput();
+      if (!r) return;
       confirmParams.newEventList = dataList.map(item => {
         return {
           matchId: +item.matchId,

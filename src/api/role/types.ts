@@ -82,4 +82,5 @@ declare namespace RoleAPI {
   type updateUserPwdResType = COMMON.BASE_RES_TYPE<any>;
   type updateStatusByIdResType = COMMON.BASE_RES_TYPE<null>;
   type allPermissionResType = COMMON.BASE_RES_TYPE<allPermission[]>;
+  type getAuthResType = COMMON.BASE_RES_TYPE<null>;
 }
