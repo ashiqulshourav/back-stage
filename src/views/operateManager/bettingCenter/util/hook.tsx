@@ -79,7 +79,6 @@ export function useLeague() {
     try {
       loading.value = true;
       // 对于串关类型的选择处理
-
       let seriesDetails: any = [];
       if (form.seriesType == 2) {
         if (form.seriesDetailsSingle.length) {
@@ -116,7 +115,7 @@ export function useLeague() {
           seriesDetails: seriesDetails,
           seriesType: form.seriesType > 2 ? 2 : form.seriesType
         }),
-        status: form.status.length ? form.status : [2, 3, 4, 5, 6, 7, 8],
+        status: form.status?.length ? form.status : [2, 3, 4, 5, 6, 7, 8],
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       } as any);
@@ -161,9 +160,47 @@ export function useLeague() {
 
   //- 导出excel表格
   const exportFile = async () => {
-    const res = await API.bettingCenterList(
-      removeEmptyStringKeys({ ...form, pageNum: 1, pageSize: 10000 })
-    );
+    // 对于串关类型的选择处理
+    let seriesDetails: any = [];
+    if (form.seriesType == 2) {
+      if (form.seriesDetailsSingle.length) {
+        form.seriesDetailsSingle.map((item: any) => {
+          seriesDetails.push(...seriesTypesSingle[item].list);
+        });
+      } else {
+        for (let item in seriesTypesSingle) {
+          seriesDetails.push(...seriesTypesSingle[item].list);
+        }
+      }
+    } else if (form.seriesType == 3) {
+      if (form.seriesDetailsDuplex.length) {
+        form.seriesDetailsDuplex.map((item: any) => {
+          seriesDetails.push(...seriesTypesDuplex[item].list);
+        });
+      } else {
+        for (let item in seriesTypesDuplex) {
+          seriesDetails.push(...seriesTypesDuplex[item].list);
+        }
+      }
+    } else {
+      seriesDetails = '';
+    }
+    if (seriesDetails.length > 1) {
+      seriesDetails = [...new Set(seriesDetails)];
+    }
+
+    const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList({
+      ...removeEmptyStringKeys({
+        ...form,
+        seriesDetailsSingle: '',
+        seriesDetailsDuplex: '',
+        seriesDetails: seriesDetails,
+        seriesType: form.seriesType > 2 ? 2 : form.seriesType
+      }),
+      status: form.status?.length ? form.status : [2, 3, 4, 5, 6, 7, 8],
+      pageSize: pagination.pageSize,
+      pageNum: pagination.currentPage
+    } as any);
     const r = res.data.pageData.map((item: any, i) => {
       const arr = [];
       const data = { ...item, ...item?.combineOrderDetails[0] };
@@ -176,13 +213,13 @@ export function useLeague() {
                 ?.label ?? data.sportNameCn;
             break;
           case 'beginTime':
-            str = dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss');
+            str = data.beginTime?dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss'):'-';
             break;
           case 'createTime':
-            str = dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss');
+            str = data.createTime?dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss'):'-';
             break;
           case 'settleTime':
-            str = dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss');
+            str = data.settleTime?dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss'):'-';
             break;
           case 'index':
             str = (i + 1).toString();
@@ -205,13 +242,13 @@ export function useLeague() {
           case 'status':
             str =
               betStatusMap[
-                getStatus(data.status, data.billStatus, data.betResult).status
+                getStatus(data.status, data.billStatus, data.betResult)?.status
               ];
             break;
           case 'billStatus':
             str =
               betStatusMap[
-                getStatus(data.status, data.billStatus, data.betResult).status
+                getStatus(data.status, data.billStatus, data.betResult)?.status
               ];
             break;
           case 'settleScore':
