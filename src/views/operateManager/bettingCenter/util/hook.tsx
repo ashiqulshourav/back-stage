@@ -71,7 +71,7 @@ export function useLeague() {
       loading.value = true;
       // 对于串关类型的选择处理
 
-        let seriesDetails=[];
+        let seriesDetails:any=[];
          if(form.seriesType==2){
             if(form.seriesDetailsSingle.length){
                 form.seriesDetailsSingle.map((item:any)=>{
@@ -94,20 +94,18 @@ export function useLeague() {
                }
            }
 
-        }
+        }else {
+             seriesDetails=''
+         }
          if(seriesDetails.length>1){
              seriesDetails= [...new Set(seriesDetails)]
          }
 
-        console.log(333333,seriesDetails)
-
       const res : BetOrderAPI.BetOrderResType = await API.bettingCenterList({
-        ...removeEmptyStringKeys({...form,seriesDetailsSingle:'',seriesDetailsDuplex:'',seriesDetails:seriesDetails}),
+        ...removeEmptyStringKeys({...form,seriesDetailsSingle:'',seriesDetailsDuplex:'',seriesDetails:seriesDetails,seriesType:form.seriesType>2?2:form.seriesType}),
         status:form.status.length?form.status:[2,3,4,5,6,7,8],
-          seriesType:form.seriesType===1?1:2,
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage,
-
       } as any);
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
