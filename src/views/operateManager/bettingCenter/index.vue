@@ -1,4 +1,5 @@
 <template>
+
   <div class="main">
     <SearchForm
       :form="form"
@@ -11,6 +12,7 @@
       title=""
       :columns="columns"
       class="relative"
+      :isShowHeader="false"
       @refresh="onSearch('reload')"
     >
       <template v-slot="{ size, dynamicColumns }">
@@ -34,14 +36,14 @@
              <span>{{row.index}}</span>
           </template>
           <template #userMessage="{ row }">
-            <div class="item_line cursor-pointer" v-copy="row.userId" >
-              <span>用户ID：</span>{{row.userId}}
+            <div class="item_line cursor-pointer" @dblclick="copyTest(row.userId,t('用户ID：{value}',{value:row.userId}))"  >
+              <span>{{t('用户ID：')}}</span>{{row.userId}}
             </div>
-            <div class="item_line cursor-pointer" v-copy="row.userName">
-              <span>用户名：</span>{{row.userName}}
+            <div class="item_line cursor-pointer" @dblclick="copyTest(row.userName,t('用户名：{value}',{value:row.userName}))">
+              <span>{{t('用户名：')}}</span>{{row.userName}}
             </div>
-            <div class="item_line cursor-pointer" v-copy="row.tenantId">
-              <span>商户ID：</span>{{row.tenantId}}
+            <div class="item_line cursor-pointer" @dblclick="copyTest(row.tenantId,t('商户ID：{value}',{value:row.tenantId}))">
+              <span>{{t('商户ID：')}}</span>{{row.tenantId}}
             </div>
             <div  v-if="row.combineOrderDetails.length>1" class="item_line mt-2 color_blue">
              {{String(row.seriesType).slice(-3) ==='001'?'串关':'复式'}}
@@ -51,23 +53,25 @@
           </template>
           <template #matchMessage="{ row }">
             <div class="match_item"  v-for="item in row.combineOrderDetails" :key="item.betItemId">
-              <div class="item_line">{{item.homeTeamNameCn}} vs {{item.awayTeamNameCn}}</div>
-              <div class="item_line">{{item.sportNameCn}}/{{item.leagueNameCn}}</div>
-              <div class="item_line cursor-pointer" v-copy="item.matchId">赛事ID {{item.matchId}}</div>
-              <div class="item_line">开赛时间：{{dayjs(item.beginTime ?? Date.now()).format("YYYY-MM-DD HH:mm:ss")}}</div>
+              <div class="item_line">
+                  <span class="cursor-pointer" @dblclick="copyTest(item.homeTeamNameCn,t('主队：{value}',{value:item.homeTeamNameCn}))">{{item.homeTeamNameCn}}</span>
+                  vs
+                  <span class="cursor-pointer" @dblclick="copyTest(item.awayTeamNameCn,t('客队：{value}',{value:item.awayTeamNameCn}))">{{item.awayTeamNameCn}}</span></div>
+              <div class="item_line cursor-pointer" @dblclick="copyTest(item.leagueNameCn,t('联赛名：{value}',{value:item.leagueNameCn}))" >{{item.sportNameCn}}/{{item.leagueNameCn}}</div>
+              <div class="item_line cursor-pointer" @dblclick="copyTest(item.matchId,t('赛事ID：{value}',{value:item.matchId}))"  > {{t('赛事ID:')}} {{item.matchId}}</div>
+              <div class="item_line">{{t('开赛时间:')}}{{dayjs(item.beginTime ?? Date.now()).format("MM-DD HH:mm:ss")}}</div>
             </div>
           </template>
           <template #betDetail="{ row }">
             <div class="match_item"  v-for="item in row.combineOrderDetails" :key="item.betItemId">
               <div class="item_line">
-                {{`${useSportFormatDetail(item)[4]} ${getIsInplay(item.isInplay)}`}}
-
+                {{`玩法：${useSportFormatDetail(item)[4]} ${getIsInplay(item.isInplay)}`}}
                 {{item.isInplay==1?displayHomeAwayScore(item.scoreBenchmark,item.sportId):''}}
               </div>
             <div class="item_line">{{useSportFormatDetail(item)[3]}}</div>
-              <div class="item_line cursor-pointer" v-copy="row.id">注单号: {{row.id}}</div>
-              <div class="item_line">投注时间：{{row.createTime ?dayjs(row.createTime).format("YYYY-MM-DD HH:mm:ss"):''}}</div>
-              <div class="item_line" v-if="row.billStatus === 1&&item.settleScore">赛果：{{displayHomeAwayScore(item.settleScore,item.sportId)}}</div>
+              <div class="item_line cursor-pointer" @dblclick="copyTest(row.id,t('注单号：{value}',{value:row.id}))" >{{t('注单号:')}} {{row.id}}</div>
+              <div class="item_line">{{t('投注时间:')}}{{row.createTime ?dayjs(row.createTime).format("MM-DD HH:mm:ss"):''}}</div>
+              <div class="item_line" v-if="row.billStatus === 1&&item.settleScore">{{t('赛果：')}}{{displayHomeAwayScore(item.settleScore,item.sportId)}}</div>
             </div>
           </template>
           <template #odd="{ row }">
@@ -85,8 +89,8 @@
           </template>
           <template #status="{ row }">
             <div :style="{background:getStatus(row.status,row.billStatus,row.combineOrderDetails[0].betResult).bgColor}" class="status_btn mb-1">{{ betStatusMap[getStatus(row.status,row.billStatus,row.combineOrderDetails[0].betResult).status]}}</div>
-            <div >{{ row.settleTime ? dayjs(row.settleTime).format('YYYY-MM-DD HH:mm:ss'):'' }}</div>
-            <div v-if="String(row.seriesType).slice(-3) ==='001'" >总赔率:{{String(row.seriesType).slice(-3) ==='001'?calculateSeriesTypeTotal(row.combineOrderDetails):'' }}</div>
+            <div >{{ row.settleTime ? dayjs(row.settleTime).format('MM-DD HH:mm:ss'):'' }}</div>
+            <div v-if="String(row.seriesType).slice(-3) ==='001'" >{{t('总赔率:')}}{{String(row.seriesType).slice(-3) ==='001'?calculateSeriesTypeTotal(row.combineOrderDetails):'' }}</div>
           </template>
           <template #operation="{ row }">
             <el-button
@@ -127,7 +131,6 @@
           </div>
         </div>
       </template>
-
     </PureTableBar>
 
   </div>
@@ -170,6 +173,7 @@ const {
   exportFile,
   handleCancel,
   getStatus,
+    copyTest,
 } = useLeague();
 </script>
 
