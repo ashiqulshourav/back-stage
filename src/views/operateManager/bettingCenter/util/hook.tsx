@@ -1,7 +1,7 @@
 import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
-import {betStatus, betStatusMap, searchFormType} from './types';
+import {betStatus, betStatusMap, searchFormType, seriesTypesSingle,seriesTypesDuplex} from './types';
 import { columns } from './exportTableColumnList';
 import { utils, writeFile } from 'xlsx';
 import {
@@ -48,6 +48,8 @@ export function useLeague() {
     timeType:1,
     leagueName:'',
     tenantIds:[],
+    seriesDetailsSingle:[],
+    seriesDetailsDuplex:[],
   });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -67,11 +69,45 @@ export function useLeague() {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       loading.value = true;
+      // 对于串关类型的选择处理
+
+        let seriesDetails=[];
+         if(form.seriesType==2){
+            if(form.seriesDetailsSingle.length){
+                form.seriesDetailsSingle.map((item:any)=>{
+                    seriesDetails.push(...(seriesTypesSingle[item].list))
+                })
+            }else {
+                for (let item in seriesTypesSingle){
+                    seriesDetails.push(...(seriesTypesSingle[item].list))
+                }
+            }
+
+        }else if(form.seriesType==3) {
+           if(form.seriesDetailsDuplex.length){
+               form.seriesDetailsDuplex.map((item:any)=>{
+                   seriesDetails.push(...(seriesTypesDuplex[item].list))
+               })
+           }else {
+               for (let item in seriesTypesDuplex){
+                   seriesDetails.push(...(seriesTypesDuplex[item].list))
+               }
+           }
+
+        }
+         if(seriesDetails.length>1){
+             seriesDetails= [...new Set(seriesDetails)]
+         }
+
+        console.log(333333,seriesDetails)
+
       const res : BetOrderAPI.BetOrderResType = await API.bettingCenterList({
-        ...removeEmptyStringKeys(form),
+        ...removeEmptyStringKeys({...form,seriesDetailsSingle:'',seriesDetailsDuplex:'',seriesDetails:seriesDetails}),
         status:form.status.length?form.status:[2,3,4,5,6,7,8],
+          seriesType:form.seriesType===1?1:2,
         pageSize: pagination.pageSize,
-        pageNum: pagination.currentPage
+        pageNum: pagination.currentPage,
+
       } as any);
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
@@ -115,7 +151,6 @@ export function useLeague() {
   //- 导出excel表格
   const exportFile = async () => {
     const res = await API.bettingCenterList(removeEmptyStringKeys({...form,pageNum:1,pageSize:10000}));
-
     const r = res.data.pageData.map((item:any,i) => {
       const arr = [];
       const data={...item,...item?.combineOrderDetails[0]}

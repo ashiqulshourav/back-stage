@@ -80,26 +80,33 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('过关类型')}:`" prop="seriesType">
-          <el-select
-              v-model="form.seriesType"
-              clearable
-              class="!w-[100px]"
-          >
-            <el-option
-                label="全部"
-                value=""
-            />
-            <el-option
-                label="单关"
-                :value="1"
-            />
-            <el-option
-                label="串关"
-                :value="0"
-            />
+          <el-select v-model="form.seriesType" clearable class="!w-[100px]" >
+            <el-option  label="全部" value="" />
+            <el-option label="单关" :value="1" />
+            <el-option label="单式串关" :value="2" />
+            <el-option label="复试串关"  :value="3" />
           </el-select>
         </el-form-item>
-
+        <el-form-item v-if="form.seriesType===2" :label="`${t('单式串关类型')}:`" prop="seriesDetails">
+          <el-select class="min-w100"
+                     :placeholder="t('请选择串关类型')"
+                     multiple
+                     v-model="form.seriesDetailsSingle"
+                     clearable
+          >
+            <el-option v-for="item in seriesTypesSingle " :label="item.name" :value="item.value" :key="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item v-if="form.seriesType===3" :label="`${t('复试串关类型')}:`" prop="seriesDetails">
+          <el-select class="min-w100"
+                     :placeholder="t('请选择串关类型')"
+                     multiple
+                     v-model="form.seriesDetailsDuplex"
+                     clearable
+          >
+            <el-option v-for="item in seriesTypesDuplex" :label="item.name" :value="item.value" :key="item.value" />
+          </el-select>
+        </el-form-item>
         <el-form-item :label="`${t('联赛ID')}:`" prop="leagueId">
           <el-input
             v-model="form.leagueId"
@@ -181,6 +188,7 @@
           />
         </el-form-item>
 
+
         <el-form-item>
           <el-button
             type="primary"
@@ -240,7 +248,8 @@ const dateRangetType = computed(() => {
   };
   return o[dateType.value];
 });
-import {  betStatusMap} from "../util/types";
+import {  betStatusMap,seriesTypesSingle,seriesTypesDuplex} from "../util/types";
+
 import {useLeague} from "@/views/operateManager/bettingCenter/util/hook";
 
 const emits = defineEmits(['onSearch', 'exportFile']);
