@@ -32,7 +32,6 @@ import Delete from '@iconify-icons/ep/delete';
 /** //-菜单icon */
 import dataManager from "@iconify-icons/ri/vip-crown-2-line";
 import sale from "@iconify-icons/ri/store-2-fill";
-import settle from "@iconify-icons/ri/folder-2-fill";
 import moneyDollarCircleFill from '@iconify-icons/ri/money-cny-circle-line';
 import metadata from "@iconify-icons/ep/monitor";
 import operateManager from "@iconify-icons/ep/files";
