@@ -15,6 +15,7 @@ import { TokenKey } from '@/utils/auth';
 import { storageLocal, storageSession } from '@pureadmin/utils';
 import { useUserStore } from '@/store/user';
 import { addAcceptLanguageList } from './helper';
+import { message } from '../message';
 
 const defaultConfig: AxiosRequestConfig = {
   baseURL: '/match',
@@ -61,8 +62,8 @@ class PureHttp {
           if (token) {
             config.headers["Accesstoken"] = token;
           }
-          if(config.url.includes('/bet-center/cancel')){
-            config.data=config.data.orderIds
+          if (config.url.includes('/bet-center/cancel')) {
+            config.data = config.data.orderIds
           }
           if (addAcceptLanguageList.includes(config.url)) {
             const lan: { locale: string } = storageLocal().getItem('responsive-locale') ?? { locale: 'zh' }
@@ -84,9 +85,7 @@ class PureHttp {
     instance.interceptors.response.use(
       (response: PureHttpResponse) => {
         const $config = response.config;
-        // close progress bar animation
         NProgress.done();
-        // 优先判断post/get等方法是否传入回调，否则执行初始化设置等回调
         if (typeof $config.beforeResponseCallback === 'function') {
           $config.beforeResponseCallback(response);
           return response.data;
@@ -94,6 +93,10 @@ class PureHttp {
         if (PureHttp.initConfig.beforeResponseCallback) {
           PureHttp.initConfig.beforeResponseCallback(response);
           return response.data;
+        }
+        if (response.data.code === 10110) {
+          message(response.data.msg, { type: 'error' })
+          return useUserStore().logOut();
         }
         return response.data;
       },

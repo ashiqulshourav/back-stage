@@ -6,3 +6,8 @@ export type SearchFormType = {
   startCreatedAt: string;
   endCreatedAt: string;
 }
+
+export enum NameData {
+  admin = 'admin',
+  adminId = 1
+}

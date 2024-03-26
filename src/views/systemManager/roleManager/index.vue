@@ -38,6 +38,7 @@
               class="pure-datatheme"
               :active-text="t('开启')"
               :inactive-text="t('关闭')"
+              :disabled="row.disabled"
               :before-change="() => updateUserStatus(row)"
               :style="switchStyle"
             />
@@ -48,6 +49,7 @@
               link
               type="primary"
               :size="size"
+              :disabled="row.disabled"
               @click="openRoleSettingDialog(row.id)"
             >
               {{ t('权限设置') }}
@@ -58,6 +60,7 @@
               link
               type="primary"
               :size="size"
+              :disabled="row.disabled"
               @click="openRoleDialog(t('编辑角色'), row)"
             >
               {{ t('编辑') }}
@@ -68,6 +71,7 @@
               link
               type="danger"
               :size="size"
+              :disabled="row.disabled"
               @click="handleDelete(row)"
             >
               {{ t('删除') }}
@@ -87,7 +91,7 @@ import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 import { hasAuth } from '@/router/utils';
 
-defineOptions({ name: 'MEMBER' });
+defineOptions({ name: 'SYSTEMMANAGER_ROLEMANAGER' });
 const { tableHeaderStyle } = usePublicHooks();
 const { switchStyle } = usePublicHooks();
 

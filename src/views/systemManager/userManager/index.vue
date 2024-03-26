@@ -26,10 +26,7 @@
           :columns="dynamicColumns"
           :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
           :paginationSmall="size === 'small' ? true : false"
-          :header-cell-style="{
-            background: 'var(--el-fill-color-light)',
-            color: 'var(--el-text-color-primary)'
-          }"
+          :header-cell-style="tableHeaderStyle"
           @selection-change="handleSelectionChange"
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
@@ -49,15 +46,17 @@
               class="pure-datatheme"
               :active-text="t('开启')"
               :inactive-text="t('关闭')"
+              :disabled="row.disabled"
               :before-change="() => updateUserStatus(row)"
               :style="switchStyle"
             />
           </template>
           <template #resetPassword="{ row }">
             <el-button
-              v-if = "hasAuth('USERMANAGERUPDATEPROFILE')"
+              v-if="hasAuth('USERMANAGERUPDATEPROFILE')"
               class="reset-margin"
               type="primary"
+              :disabled="row.disabled"
               size="small"
               @click="resetPasswordClick(row)"
             >
@@ -70,6 +69,7 @@
               class="reset-margin"
               link
               type="primary"
+              :disabled="row.disabled"
               :size="size"
               @click="openDialog(t('编辑账号'), row)"
             >
@@ -79,6 +79,7 @@
               v-if="hasAuth('USERMANAGERDELETE')"
               @click="handleDelete(row)"
               class="reset-margin"
+              :disabled="row.disabled"
               link
               type="danger"
               :size="size"
@@ -94,16 +95,16 @@
 
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
-// import Delete from '@iconify-icons/ep/delete';
-// import AddFill from '@iconify-icons/ri/add-circle-line';
 import { useUserManager } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 import { hasAuth } from '@/router/utils';
+
 const { switchStyle } = usePublicHooks();
-defineOptions({ name: 'USERMANAGER' });
+const { tableHeaderStyle } = usePublicHooks();
+defineOptions({ name: 'SYSTEMMANAGER_USERMANAGER' });
 
 const {
   loading,

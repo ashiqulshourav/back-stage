@@ -43,6 +43,7 @@ declare namespace UserMangerAPI {
     roleName: string;
     createdBy: string;
     lastLoginIp?: any;
+    disabled: boolean;
   }
 
   type querySysAccountListInfo = {

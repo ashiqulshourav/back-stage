@@ -24,6 +24,7 @@ declare namespace RoleAPI {
     createdBy: string;
     comment?: any;
     userCount: number;
+    disabled: boolean; // 非超级管理员隐藏按钮
     userList: string[];
   }
 
