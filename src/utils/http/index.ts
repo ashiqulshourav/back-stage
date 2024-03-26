@@ -95,8 +95,11 @@ class PureHttp {
           return response.data;
         }
         if (response.data.code === 10110) {
-          message(response.data.msg, { type: 'error' })
-          return useUserStore().logOut();
+          return message(response.data.msg, {
+            type: 'error', onClose() {
+              useUserStore().logOut();
+            }
+          })
         }
         return response.data;
       },
