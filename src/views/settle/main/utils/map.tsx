@@ -35,26 +35,10 @@ export const SPORT_LIST_MAP: sport_list_map_type[] = [
     linkName: 'SETTLE_DETAIL_TENNIS_DETAIL'
   },
   {
-    label: t('冰球'),
-    value: SPORT_NAME_TYPE.iceHockey,
-    linkName: 'SETTLE_DETAIL_ICEHOCKEY_DETAIL'
-  },
-  {
-    label: t('手球'),
-    value: SPORT_NAME_TYPE.handball,
-    linkName: 'SETTLE_DETAIL_HANDBALL_DETAIL'
-  },
-  {
-    label: t('排球'),
-    value: SPORT_NAME_TYPE.volleyball,
-    linkName: 'SETTLE_DETAIL_VOLLEBALL_DETAIL'
-  },
-  {
     label: t('斯诺克/台球'),
     value: SPORT_NAME_TYPE.billiards,
     linkName: 'SETTLE_DETAIL_BILLIARDS_DETAIL'
   },
-
   {
     label: t('羽毛球'),
     value: SPORT_NAME_TYPE.badminton,
@@ -64,6 +48,21 @@ export const SPORT_LIST_MAP: sport_list_map_type[] = [
     label: t('乒乓球'),
     value: SPORT_NAME_TYPE.pingpong,
     linkName: 'SETTLE_DETAIL_PINGPONG_DETAIL'
+  },
+  {
+    label: t('排球'),
+    value: SPORT_NAME_TYPE.volleyball,
+    linkName: 'SETTLE_DETAIL_VOLLEBALL_DETAIL'
+  },
+  {
+    label: t('冰球'),
+    value: SPORT_NAME_TYPE.iceHockey,
+    linkName: 'SETTLE_DETAIL_ICEHOCKEY_DETAIL'
+  },
+  {
+    label: t('手球'),
+    value: SPORT_NAME_TYPE.handball,
+    linkName: 'SETTLE_DETAIL_HANDBALL_DETAIL'
   },
   {
     label: t('板球'),
@@ -89,12 +88,12 @@ export const SPORT_LIST_MAP: sport_list_map_type[] = [
     label: t('飞镖'),
     value: SPORT_NAME_TYPE.darts,
     linkName: 'SETTLE_DETAIL_FOOTBALL_DETAIL'
-  },
-  {
-    label: t('拳击/格斗'),
-    value: SPORT_NAME_TYPE.boxing,
-    linkName: 'SETTLE_DETAIL_FOOTBALL_DETAIL'
   }
+  // {
+  //   label: t('拳击/格斗'),
+  //   value: SPORT_NAME_TYPE.boxing,
+  //   linkName: 'SETTLE_DETAIL_FOOTBALL_DETAIL'
+  // }
 
   // { label: t('特别项目'), value: 7, type: 'SpecialProjects' },
   // { label: t('电子竞技'), value: 4, type: 'FootBall' },
