@@ -717,6 +717,9 @@
   "k-71b919f7": "Incorrect path format",
   "k-2850244b": "Back-end path cannot be empty",
   "k77a9a7ff": "接单状态",
-  "k500dd599": "已确认",
-  "k42c04fbe": "已拒接"
+  "k-c4c851b": "确认注单",
+  "k-16d6cee1": "拒接注单",
+  "k-17912220": "已接单",
+  "k2286556e": "待确认",
+  "k4d729288": "已拒单"
 }

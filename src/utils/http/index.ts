@@ -50,7 +50,6 @@ class PureHttp {
           return config;
         }
 
-
         if (PureHttp.initConfig.beforeRequestCallback) {
           PureHttp.initConfig.beforeRequestCallback(config);
           return config;

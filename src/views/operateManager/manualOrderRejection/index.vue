@@ -5,6 +5,7 @@
       :loading="loading"
       @on-search="onSearch"
       @exportFile="exportFile"
+      :tenantList="tenantList"
     />
 
     <PureTableBar
@@ -92,7 +93,7 @@
             </div>
           </template>
 
-          <template #matchMessage="{ row }" v-if="row?.combineOrderDetails">
+          <template #matchMessage="{ row }">
             <div
               class="match_item"
               v-for="item in row.combineOrderDetails"
@@ -203,7 +204,14 @@
                 v-for="item in row.combineOrderDetails"
                 :key="item.betItemId"
               >
-                {{ getVal(row.billStatus, row.status, item.betResult) }}
+                {{
+                  getVal(
+                    row.billStatus,
+                    row.status,
+                    item.betResult,
+                    item.settleStatus
+                  )
+                }}
               </div>
             </div>
           </template>
@@ -283,14 +291,32 @@
               }}
             </div>
           </template>
+
           <template #operation="{ row }">
-            <el-button
-              class="reset-margin"
-              @click="handleCancel(row)"
-              v-if="row.billStatus === 0 && hasAuth('CANCELBET')"
+            <div
+              v-if="
+                row.combineOrderDetails.findIndex(
+                  item => item.settleStatus === 3
+                ) > -1
+              "
             >
-              {{ t('取消') }}
-            </el-button>
+              <el-button
+                size="small"
+                class="reset-margin"
+                @click="confirmBetClick(row)"
+                type="primary"
+              >
+                {{ t('确认注单') }}
+              </el-button>
+              <el-button
+                size="small"
+                class="reset-margin"
+                @click="refuseBetClick(row)"
+                type="danger"
+              >
+                {{ t('拒接注单') }}
+              </el-button>
+            </div>
           </template>
         </pure-table>
 
@@ -326,14 +352,13 @@
     </PureTableBar>
   </div>
 </template>
-<script setup lang="tsx">
+<script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useLeague } from './util/hook';
 import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
-import { hasAuth } from '@/router/utils';
 import {
   formatSeriesType,
   useSportFormatDetail,
@@ -351,17 +376,20 @@ import { usePublicHooks } from '@/hooks';
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
 
-const getVal = (s1, s2, s3) => {
+const getVal = (s1, s2, s3, s4) => {
+  let val = '-';
   switch (true) {
     case s1 === 0 && s2 === 0 && s3 === 0:
-      return <el-text type="info">{t('已确认')}</el-text>;
-    case s1 === 0 && s2 === 3 && s3 === 0:
-      return <el-text type="primary">{t('确认中')}</el-text>;
+      val = t('已接单');
+      break;
+    case s4 === 3:
+      val = t('待确认');
+      break;
     case s1 === 1 && s2 === 4 && s3 === 61:
-      return <el-text type="danger">{t('已拒接')}</el-text>;
-    default:
-      return '-';
+      val = t('已拒单');
+      break;
   }
+  return val;
 };
 
 const {
@@ -375,9 +403,11 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   exportFile,
-  handleCancel,
   getStatus,
-  copyTest
+  copyTest,
+  tenantList,
+  confirmBetClick,
+  refuseBetClick
 } = useLeague();
 </script>
 

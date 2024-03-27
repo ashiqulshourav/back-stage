@@ -256,7 +256,6 @@ import {
   seriesTypesDuplex
 } from '../util/types';
 
-import { useLeague } from '@/views/operateManager/bettingCenter/util/hook';
 import { hasAuth } from '@/router/utils';
 const props = defineProps<{
   loading: boolean;

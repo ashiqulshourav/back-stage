@@ -374,6 +374,37 @@ export function useLeague() {
       : message(t('复制失败'), { type: 'error' });
   }
 
+  //- 取消注单
+  const refuseBetClick = row => {
+    const list = [];
+
+    ElMessageBox.confirm(`${t('确定要拒接注单么?')} `, '警告', {
+      type: 'warning',
+      center: true
+    }).then(async () => {
+      row.combineOrderDetails.forEach(item => {
+        if (item.settleStatus === 3) list.push(item.detailId);
+      });
+      const res = await API.riskCancel(list);
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if (!res.code) onSearch();
+    });
+  };
+  //- 确认注单
+  const confirmBetClick = async row => {
+    const list = [];
+    ElMessageBox.confirm(`${t('是否确定当前注单么?')} `, '警告', {
+      center: true
+    }).then(async () => {
+      row.combineOrderDetails.forEach(item => {
+        if (item.settleStatus === 3) list.push(item.detailId);
+      });
+      const res = await API.riskConfirm(list);
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if (!res.code) onSearch();
+    });
+  };
+
   //- 切换比赛类型
   onMounted(() => {
     getTenantList1();
@@ -395,6 +426,8 @@ export function useLeague() {
     exportFile,
     handleCancel,
     getStatus,
-    copyTest
+    copyTest,
+    confirmBetClick,
+    refuseBetClick
   };
 }
