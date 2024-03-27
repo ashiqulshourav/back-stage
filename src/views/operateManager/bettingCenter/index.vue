@@ -4,6 +4,7 @@
       :form="form"
       :loading="loading"
       @on-search="onSearch"
+      :tenantList="tenantList"
       @exportFile="exportFile"
     />
 
@@ -350,7 +351,9 @@ const {
   exportFile,
   handleCancel,
   getStatus,
-  copyTest
+  copyTest,
+  tenantList
+
 } = useLeague();
 </script>
 
