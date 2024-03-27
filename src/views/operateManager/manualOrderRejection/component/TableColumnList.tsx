@@ -1,10 +1,12 @@
 import { t } from '@/plugins/i18n';
+import { handleTableWidth } from '@/utils/getTableWidth';
 
 export const columns: TableColumnList = [
   {
     label: t('序号'),
-    prop: 'index',
-    align: 'left'
+    type: 'index',
+    headerRenderer: d => handleTableWidth(d, t('序号'), 'auto'),
+    minWidth: 100
   },
   {
     label: t('用户信息'),
@@ -25,16 +27,14 @@ export const columns: TableColumnList = [
     align: 'left'
   },
   {
-    label: t('接单状态'),
+    label: t('接拒状态'),
     slot: 'orderAcceptanceStatus',
     minWidth: 100,
     className: 'postion'
   },
   {
     label: t('状态'),
-    slot: 'status',
-    minWidth: 50,
-    align: 'left'
+    slot: 'status'
   },
   {
     label: t('赔率'),

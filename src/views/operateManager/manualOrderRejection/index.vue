@@ -32,9 +32,6 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
-          <template #index="{ row }">
-            <span>{{ row.index }}</span>
-          </template>
           <template #userMessage="{ row }">
             <div
               class="item_line cursor-pointer"
@@ -255,40 +252,42 @@
             <span v-else>-</span>
           </template>
           <template #status="{ row }">
-            <div
-              :style="{
-                background: getStatus(
-                  row.status,
-                  row.billStatus,
-                  row.combineOrderDetails[0]?.betResult
-                )?.bgColor
-              }"
-              class="status_btn mb-1"
-            >
-              {{
-                betStatusMap[
-                  getStatus(
+            <div class="flex justify-center flex-col items-center">
+              <div
+                :style="{
+                  background: getStatus(
                     row.status,
                     row.billStatus,
-                    row.combineOrderDetails[0].betResult
-                  ).status
-                ]
-              }}
-            </div>
-            <div>
-              {{
-                row.settleTime
-                  ? dayjs(row.settleTime).format('MM-DD HH:mm:ss')
-                  : ''
-              }}
-            </div>
-            <div v-if="String(row.seriesType).slice(-3) === '001'">
-              {{ t('总赔率:')
-              }}{{
-                String(row.seriesType).slice(-3) === '001'
-                  ? calculateSeriesTypeTotal(row.combineOrderDetails)
-                  : ''
-              }}
+                    row.combineOrderDetails[0]?.betResult
+                  )?.bgColor
+                }"
+                class="status_btn mb-1"
+              >
+                {{
+                  betStatusMap[
+                    getStatus(
+                      row.status,
+                      row.billStatus,
+                      row.combineOrderDetails[0].betResult
+                    ).status
+                  ]
+                }}
+              </div>
+              <div>
+                {{
+                  row.settleTime
+                    ? dayjs(row.settleTime).format('MM-DD HH:mm:ss')
+                    : ''
+                }}
+              </div>
+              <div v-if="String(row.seriesType).slice(-3) === '001'">
+                {{ t('总赔率:')
+                }}{{
+                  String(row.seriesType).slice(-3) === '001'
+                    ? calculateSeriesTypeTotal(row.combineOrderDetails)
+                    : ''
+                }}
+              </div>
             </div>
           </template>
 

@@ -42,22 +42,23 @@ export function useLeague() {
     background: true
   });
   const form = reactive<searchFormType>({
+    tenantIds: [],
+    queryType: 0,
+    leagueId: '',
+    leagueName: '',
+    matchId: '',
+    homeTeamName: '',
+    awayTeamName: '',
     sportId: '',
     userIdOrName: '',
     timeStart: dayjs().startOf('month').valueOf(),
     timeEnd: dayjs().endOf('day').valueOf(),
     orderId: '',
-    leagueId: '',
-    matchId: '',
-    awayTeamName: '',
-    homeTeamName: '',
     status: [],
     isInplay: '',
     seriesType: '',
     category: '',
     timeType: 1,
-    leagueName: '',
-    tenantIds: [],
     seriesDetailsSingle: [],
     seriesDetailsDuplex: []
   });
@@ -108,7 +109,7 @@ export function useLeague() {
         seriesDetails = [...new Set(seriesDetails)];
       }
 
-      const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList({
+      const res: BetOrderAPI.BetOrderResType = await API.betcenterRisk({
         ...removeEmptyStringKeys({
           ...form,
           seriesDetailsSingle: '',
@@ -116,7 +117,7 @@ export function useLeague() {
           seriesDetails: seriesDetails,
           seriesType: +form.seriesType > 2 ? 2 : form.seriesType
         }),
-        status: form.status?.length ? form.status : [2, 3, 4, 5, 6, 7, 8],
+        // status: form.status?.length ? form.status : [2, 3, 4, 5, 6, 7, 8],
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       } as any);
