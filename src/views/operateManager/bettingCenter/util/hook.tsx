@@ -97,6 +97,7 @@ export function useLeague() {
       seriesDetails= [...new Set(seriesDetails)]
     }
     return  {
+      // @ts-ignore
       ...removeEmptyStringKeys({...form,seriesDetailsSingle:'',seriesDetailsDuplex:'',seriesDetails:seriesDetails,seriesType:form.seriesType>2?2:form.seriesType}),
       status:form.status.length?form.status:[2,3,4,5,6,7,8],
       pageSize: pagination.pageSize,
@@ -155,7 +156,7 @@ export function useLeague() {
 
   //- 导出excel表格
   const exportFile = async () => {
-    const res = await API.bettingCenterList(formatParams({pageNum:1,pageSize:10000}) as searchFormType);
+    const res: BetOrderAPI.BetOrderResType  = await API.bettingCenterList(formatParams({pageNum:1,pageSize:10000}) as searchFormType);
     const r = res.data.pageData.map((item:any,i) => {
       const arr = [];
       const data={...item,...item?.combineOrderDetails[0]}

@@ -72,6 +72,7 @@ declare namespace BetOrderAPI {
     groupCount: null;
     pageData: BetOrderList[];
     otherData: otherDataType
+
   }
 
   type settleReqType = {
