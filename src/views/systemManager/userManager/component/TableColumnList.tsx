@@ -31,9 +31,7 @@ export const columns: TableColumnList = [
     prop: 'roleName',
     minWidth: 150,
     headerRenderer: d => handleTableWidth(d, t('U盾序列号')),
-    formatter: ({ ukeyCode }): string => {
-      return ukeyCode ?? '-';
-    }
+    formatter: ({ ukeyCode }): string => ukeyCode ?? '-'
   },
   {
     label: t('创建时间'),
@@ -61,9 +59,7 @@ export const columns: TableColumnList = [
     label: t('备注信息'),
     prop: 'comment',
     minWidth: 150,
-    formatter: ({ comment }): string => {
-      return comment ?? '-';
-    }
+    formatter: ({ comment }): string => comment ?? '-'
   },
   {
     label: t('启用状态'),
@@ -74,7 +70,8 @@ export const columns: TableColumnList = [
     label: t('重置密码'),
     prop: 'resetPassword',
     slot: 'resetPassword',
-    minWidth: 150
+    minWidth: 150,
+    headerRenderer: d => handleTableWidth(d, t('重置密码'))
   },
   {
     label: t('操作'),

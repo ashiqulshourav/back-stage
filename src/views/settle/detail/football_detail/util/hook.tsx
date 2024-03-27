@@ -207,6 +207,7 @@ export function useFootball() {
       getMatchDetail();
     });
   };
+
   const router = useRouter();
   const { openPasswordInput } = usePasswordInputHook();
   //-全场 + 上半场结算
@@ -260,8 +261,8 @@ export function useFootball() {
       });
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if (res.code) return;
+      await getMatchDetail();
       getChildrenData();
-      getMatchDetail();
       loopTimer.value && clearInterval(loopTimer.value);
     });
   };

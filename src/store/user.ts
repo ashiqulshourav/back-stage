@@ -30,7 +30,6 @@ export const useUserStore = defineStore('USERSTATE', {
       resetRouter();
       this.userInfo = {};
       window.location.reload();
-      // router.push("/login");
     },
     setUserInfo(_: UserAPI.LoginData) {
       this.userInfo = Object.assign(this.userInfo, _)
