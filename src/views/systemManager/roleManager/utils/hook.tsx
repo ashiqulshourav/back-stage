@@ -6,8 +6,9 @@ import { columns } from '../component/TableColumnList';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import RoleTree from '../component/RoleTree.vue';
-import { SearchFormType } from './types';
+import { NameData, SearchFormType } from './types';
 import { ElMessageBox } from 'element-plus';
+import { useUserStore } from '@/store/user';
 
 export function useRoleHook() {
   const dataList = reactive<RoleAPI.querySysAccountListData[]>([]);
@@ -41,6 +42,7 @@ export function useRoleHook() {
 
   //- 初始化
   const onSearch = async (type?: string) => {
+    const userStore = useUserStore();
     try {
       if (type === 'reload') pagination.currentPage = 1;
       loading.value = true;
@@ -54,6 +56,13 @@ export function useRoleHook() {
       res.data.list.forEach(item => (item.status = !!item.status));
       dataList.length = 0;
       dataList.push(...res.data.list);
+      dataList.forEach(item => {
+        if (item.id === NameData.adminId) {
+          item.disabled = userStore.userInfo.name !== NameData.admin;
+        } else {
+          item.disabled = false;
+        }
+      });
       pagination.total = res.data.total;
     } catch (error) {
       loading.value = false;

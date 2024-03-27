@@ -116,6 +116,7 @@ export const markeTypeMap = {
   6: t('英式盘')
 };
 
+
 export enum EBetResultType {
   NO_RESULT = 0,
   FLAT = 2,
@@ -423,4 +424,3 @@ export const displayHomeAwayScore = (scoreString:string, sprotId?: ESportType) =
 export const getIsInplay = (type:number)=>{
   return type===1?t('滚球'):t('早盘')
 }
-

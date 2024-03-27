@@ -41,7 +41,7 @@ declare namespace BetOrderAPI {
     "tenantId": string;
     "tenantCode": string;
     "orderAmount": number;
-    "productAmountTotal":string;
+    "productAmountTotal": string;
     "profitAmount": null;
     "settleAmount": null;
     "createTime": string;
@@ -49,11 +49,11 @@ declare namespace BetOrderAPI {
     "updateUser": string;
     "settleTime": null;
     "settleTimes": number;
-    "status":number;
+    "status": number;
     "billStatus": number;
     "seriesType": number;
-    combineOrderDetails:Detail[];
-    isSettlementAgain:number
+    combineOrderDetails: Detail[];
+    isSettlementAgain: number
   }
 
 
@@ -88,4 +88,5 @@ declare namespace BetOrderAPI {
   type BetOrderResType = COMMON.BASE_RES_TYPE<BetOrderData>
   type orderListDownLoadResType = COMMON.BASE_RES_TYPE<BetOrderList[]>
   type StatusResType = COMMON.BASE_RES_TYPE<null>
+  type betCenterCancelResType = COMMON.BASE_RES_TYPE<null>
 }

@@ -5,6 +5,7 @@
     type="default"
     :size="size"
     :icon="useRenderIcon(EditPen)"
+    v-if="!row.isEdit"
     @click="row.isEdit = true"
   >
     {{ t('编辑') }}
@@ -12,6 +13,7 @@
   <el-button
     class="reset-margin"
     link
+    v-if="row.isEdit"
     type="primary"
     :size="size"
     :icon="useRenderIcon('saveIcon')"

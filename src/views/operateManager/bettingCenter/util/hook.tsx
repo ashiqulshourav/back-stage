@@ -4,7 +4,7 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import {betStatus, betStatusMap, searchFormType, seriesTypesSingle,seriesTypesDuplex} from './types';
 import { columns } from './exportTableColumnList';
 import { utils, writeFile } from 'xlsx';
-
+import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 import {
   Detail,
   getBetTeamType,
@@ -66,53 +66,24 @@ export function useLeague() {
     console.log('handleSelectionChange', val);
   }
 
-  const formatParams = (privateparams={}) =>{
-    let seriesDetails:any=[];
-    if(form.seriesType==2){
-      if(form.seriesDetailsSingle.length){
-        form.seriesDetailsSingle.map((item:any)=>{
-          seriesDetails.push(...(seriesTypesSingle[item].list))
-        })
-      }else {
-        for (let item in seriesTypesSingle){
-          seriesDetails.push(...(seriesTypesSingle[item].list))
-        }
-      }
-
-    }else if(form.seriesType==3) {
-      if(form.seriesDetailsDuplex.length){
-        form.seriesDetailsDuplex.map((item:any)=>{
-          seriesDetails.push(...(seriesTypesDuplex[item].list))
-        })
-      }else {
-        for (let item in seriesTypesDuplex){
-          seriesDetails.push(...(seriesTypesDuplex[item].list))
-        }
-      }
-
-    }else {
-      seriesDetails=''
-    }
-    if(seriesDetails.length>1){
-      seriesDetails= [...new Set(seriesDetails)]
-    }
-    return  {
-      // @ts-ignore
-      ...removeEmptyStringKeys({...form,seriesDetailsSingle:'',seriesDetailsDuplex:'',seriesDetails:seriesDetails,seriesType:form.seriesType>2?2:form.seriesType}),
-      status:form.status.length?form.status:[2,3,4,5,6,7,8],
-      pageSize: pagination.pageSize,
-      pageNum: pagination.currentPage,
-      ...privateparams
-    }
-  }
-
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       loading.value = true;
       // 对于串关类型的选择处理
 
-      const res : BetOrderAPI.BetOrderResType = await API.bettingCenterList(formatParams({}) as searchFormType);
+      const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList({
+        ...removeEmptyStringKeys({
+          ...form,
+          seriesDetailsSingle: '',
+          seriesDetailsDuplex: '',
+          seriesDetails: seriesDetails,
+          seriesType: +form.seriesType > 2 ? 2 : form.seriesType
+        }),
+        status: form.status?.length ? form.status : [2, 3, 4, 5, 6, 7, 8],
+        pageSize: pagination.pageSize,
+        pageNum: pagination.currentPage
+      } as any);
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
@@ -154,8 +125,48 @@ export function useLeague() {
 
   //- 导出excel表格
   const exportFile = async () => {
-    const res: BetOrderAPI.BetOrderResType  = await API.bettingCenterList(formatParams({pageNum:1,pageSize:10000}) as searchFormType);
-    const r = res.data.pageData.map((item:any,i) => {
+    // 对于串关类型的选择处理
+    let seriesDetails: any = [];
+    if (form.seriesType == 2) {
+      if (form.seriesDetailsSingle.length) {
+        form.seriesDetailsSingle.map((item: any) => {
+          seriesDetails.push(...seriesTypesSingle[item].list);
+        });
+      } else {
+        for (let item in seriesTypesSingle) {
+          seriesDetails.push(...seriesTypesSingle[item].list);
+        }
+      }
+    } else if (form.seriesType == 3) {
+      if (form.seriesDetailsDuplex.length) {
+        form.seriesDetailsDuplex.map((item: any) => {
+          seriesDetails.push(...seriesTypesDuplex[item].list);
+        });
+      } else {
+        for (let item in seriesTypesDuplex) {
+          seriesDetails.push(...seriesTypesDuplex[item].list);
+        }
+      }
+    } else {
+      seriesDetails = '';
+    }
+    if (seriesDetails.length > 1) {
+      seriesDetails = [...new Set(seriesDetails)];
+    }
+
+    const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList({
+      ...removeEmptyStringKeys({
+        ...form,
+        seriesDetailsSingle: '',
+        seriesDetailsDuplex: '',
+        seriesDetails: seriesDetails,
+        seriesType: +form.seriesType > 2 ? 2 : form.seriesType
+      }),
+      status: form.status?.length ? form.status : [2, 3, 4, 5, 6, 7, 8],
+      pageNum: 1,
+      pageSize: 10000
+    } as any);
+    const r = res.data.pageData.map((item: any, i) => {
       const arr = [];
       const data={...item,...item?.combineOrderDetails[0]}
       columns.forEach((column:{prop:string}) => {
@@ -165,13 +176,19 @@ export function useLeague() {
             str = SPORT_ID_MAP.find(_ => +_.value === +data[column.prop as string]) ?.label ?? data.sportNameCn;
             break;
           case 'beginTime':
-            str = dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss');
+            str = data.beginTime
+              ? dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss')
+              : '-';
             break;
           case 'createTime':
-            str = dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss');
+            str = data.createTime
+              ? dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss')
+              : '-';
             break;
           case 'settleTime':
-            str = dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss');
+            str = data.settleTime
+              ? dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss')
+              : '-';
             break;
           case 'index':
             str = (i+1).toString()
