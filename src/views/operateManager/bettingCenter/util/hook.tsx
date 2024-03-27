@@ -113,8 +113,6 @@ export function useLeague() {
       // 对于串关类型的选择处理
 
       const res : BetOrderAPI.BetOrderResType = await API.bettingCenterList(formatParams({}) as searchFormType);
-
-      console.log(33333,res)
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
