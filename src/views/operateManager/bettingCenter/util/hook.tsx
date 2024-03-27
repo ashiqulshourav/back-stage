@@ -113,7 +113,7 @@ export function useLeague() {
           seriesDetailsSingle: '',
           seriesDetailsDuplex: '',
           seriesDetails: seriesDetails,
-          seriesType: form.seriesType > 2 ? 2 : form.seriesType
+          seriesType: +form.seriesType > 2 ? 2 : form.seriesType
         }),
         status: form.status?.length ? form.status : [2, 3, 4, 5, 6, 7, 8],
         pageSize: pagination.pageSize,
@@ -195,7 +195,7 @@ export function useLeague() {
         seriesDetailsSingle: '',
         seriesDetailsDuplex: '',
         seriesDetails: seriesDetails,
-        seriesType: form.seriesType > 2 ? 2 : form.seriesType
+        seriesType: +form.seriesType > 2 ? 2 : form.seriesType
       }),
       status: form.status?.length ? form.status : [2, 3, 4, 5, 6, 7, 8],
       pageNum: 1,
