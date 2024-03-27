@@ -113,7 +113,7 @@ export function useLeague() {
           seriesDetailsSingle: '',
           seriesDetailsDuplex: '',
           seriesDetails: seriesDetails,
-          seriesType: form.seriesType > 2 ? 2 : form.seriesType
+          seriesType: +form.seriesType > 2 ? 2 : form.seriesType
         }),
         status: form.status?.length ? form.status : [2, 3, 4, 5, 6, 7, 8],
         pageSize: pagination.pageSize,
@@ -195,7 +195,7 @@ export function useLeague() {
         seriesDetailsSingle: '',
         seriesDetailsDuplex: '',
         seriesDetails: seriesDetails,
-        seriesType: form.seriesType > 2 ? 2 : form.seriesType
+        seriesType: +form.seriesType > 2 ? 2 : form.seriesType
       }),
       status: form.status?.length ? form.status : [2, 3, 4, 5, 6, 7, 8],
       pageNum: 1,
@@ -213,13 +213,19 @@ export function useLeague() {
                 ?.label ?? data.sportNameCn;
             break;
           case 'beginTime':
-            str = data.beginTime?dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss'):'-';
+            str = data.beginTime
+              ? dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss')
+              : '-';
             break;
           case 'createTime':
-            str = data.createTime?dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss'):'-';
+            str = data.createTime
+              ? dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss')
+              : '-';
             break;
           case 'settleTime':
-            str = data.settleTime?dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss'):'-';
+            str = data.settleTime
+              ? dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss')
+              : '-';
             break;
           case 'index':
             str = (i + 1).toString();

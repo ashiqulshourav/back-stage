@@ -4,6 +4,7 @@
       :form="form"
       :loading="loading"
       @on-search="onSearch"
+      :tenantList="tenantList"
       @exportFile="exportFile"
     />
 
@@ -157,16 +158,23 @@
               :key="item.betItemId"
             >
               <div class="item_line">
-                {{
-                  `玩法：${useSportFormatDetail(item)[4]} ${getIsInplay(
-                    item.isInplay
-                  )}`
-                }}
-                {{
-                  item.isInplay == 1
-                    ? displayHomeAwayScore(item.scoreBenchmark, item.sportId)
-                    : ''
-                }}
+
+                <el-tooltip class="item" effect="dark" :content="`${useSportFormatDetail(item)[4]} ${getIsInplay(item.isInplay)} ${
+                    item.isInplay == 1
+                        ? displayHomeAwayScore(item.scoreBenchmark, item.sportId)
+                        : ''
+                  }`" placement="top-start">
+                  {{
+                    `玩法：${useSportFormatDetail(item)[4]} ${getIsInplay(
+                        item.isInplay
+                    )}`
+                  }}
+                  {{
+                    item.isInplay == 1
+                        ? displayHomeAwayScore(item.scoreBenchmark, item.sportId)
+                        : ''
+                  }}
+                </el-tooltip>
               </div>
               <div class="item_line">{{ useSportFormatDetail(item)[3] }}</div>
               <div
@@ -350,7 +358,9 @@ const {
   exportFile,
   handleCancel,
   getStatus,
-  copyTest
+  copyTest,
+  tenantList
+
 } = useLeague();
 </script>
 

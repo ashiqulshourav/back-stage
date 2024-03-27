@@ -7,6 +7,8 @@ import { reactive, ref, onMounted, h } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { searchFormType } from './types';
 import { getMD5 } from '@/utils/caypto';
+import { NameData } from '../../roleManager/utils/types';
+import { useUserStore } from '@/store/user';
 
 export function useUserManager() {
   const dataList = reactive<UserMangerAPI.querySysAccountListData[]>([]);
@@ -43,6 +45,7 @@ export function useUserManager() {
 
   //- 初始化
   async function onSearch(type?: string) {
+    const userStore = useUserStore();
     if (type === 'reload') pagination.currentPage = 1;
     try {
       loading.value = true;
@@ -56,6 +59,13 @@ export function useUserManager() {
       res.data.list.forEach(item => (item.status = !!item.status));
       dataList.length = 0;
       dataList.push(...res.data.list);
+      dataList.forEach(item => {
+        if (item.name === NameData.admin) {
+          item.disabled = userStore.userInfo.name !== NameData.admin;
+        } else {
+          item.disabled = false;
+        }
+      });
       pagination.total = res.data.total;
     } catch (error) {
       loading.value = false;

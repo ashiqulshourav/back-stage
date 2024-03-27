@@ -1,15 +1,18 @@
 <template>
   <div class="score_main">
-    <!-- -->
-    <el-input
-      v-if="row.isEdit || !row.id"
-      v-model="row[type]"
-      ref="inputRef"
-      :disabled="!row.isEdit"
-      :placeholder="scorePlaceHolderData[type]"
-      :formatter="v => formatChinese(v, 3)"
-    />
-    <span v-else>{{ type == 't1' ? row.t1 : row.t2 }}</span>
+    <div class="w-14 h-8" v-if="row.isEdit || !row.id">
+      <el-input
+        v-model="row[type]"
+        ref="inputRef"
+        :disabled="!row.isEdit"
+        :placeholder="scorePlaceHolderData[type]"
+        :formatter="v => formatChinese(v, 3)"
+      />
+    </div>
+
+    <div v-else class="h-8 flex items-center">
+      {{ type == 't1' ? row.t1 : row.t2 }}
+    </div>
   </div>
 </template>
 

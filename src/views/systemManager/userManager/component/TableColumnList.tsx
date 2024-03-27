@@ -30,14 +30,14 @@ export const columns: TableColumnList = [
     label: t('U盾序列号'),
     prop: 'roleName',
     minWidth: 150,
-    formatter: ({ ukeyCode }): string => {
-      return ukeyCode ?? '-';
-    }
+    headerRenderer: d => handleTableWidth(d, t('U盾序列号')),
+    formatter: ({ ukeyCode }): string => ukeyCode ?? '-'
   },
   {
     label: t('创建时间'),
     minWidth: 200,
-    prop: 'createdAt'
+    prop: 'createdAt',
+    headerRenderer: d => handleTableWidth(d, t('创建时间'))
   },
   {
     label: t('上次登录时间'),
@@ -47,9 +47,8 @@ export const columns: TableColumnList = [
   {
     label: t('上次登录IP'),
     prop: 'lastLoginIp',
-    formatter: ({ lastLoginIp }): string => {
-      return lastLoginIp ?? '-';
-    }
+    formatter: ({ lastLoginIp }): string => lastLoginIp ?? '-',
+    headerRenderer: d => handleTableWidth(d, t('上次登录IP'))
   },
   {
     label: t('创建人'),
@@ -60,19 +59,19 @@ export const columns: TableColumnList = [
     label: t('备注信息'),
     prop: 'comment',
     minWidth: 150,
-    formatter: ({ comment }): string => {
-      return comment ?? '-';
-    }
+    formatter: ({ comment }): string => comment ?? '-'
   },
   {
     label: t('启用状态'),
-    slot: 'openStatus'
+    slot: 'openStatus',
+    headerRenderer: d => handleTableWidth(d, t('启用状态'))
   },
   {
     label: t('重置密码'),
     prop: 'resetPassword',
     slot: 'resetPassword',
-    minWidth: 150
+    minWidth: 150,
+    headerRenderer: d => handleTableWidth(d, t('重置密码'))
   },
   {
     label: t('操作'),

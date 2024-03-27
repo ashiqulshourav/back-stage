@@ -65,6 +65,11 @@ export const SPORT_LIST_MAP: sport_list_map_type[] = [
     linkName: 'SETTLE_DETAIL_HANDBALL_DETAIL'
   },
   {
+    label: t('板球'),
+    value: SPORT_NAME_TYPE.cricket,
+    linkName: 'SETTLE_DETAIL_CRICKET_DETAIL'
+  },
+  {
     label: t('曲棍球'),
     value: SPORT_NAME_TYPE.hockey,
     linkName: 'SETTLE_DETAIL_FIELD_HOCKEY'
@@ -78,22 +83,12 @@ export const SPORT_LIST_MAP: sport_list_map_type[] = [
     label: t('飞镖'),
     value: SPORT_NAME_TYPE.darts,
     linkName: 'SETTLE_DETAIL_FOOTBALL_DETAIL'
-  },
-  {
-    label: t('英式橄榄球'),
-    value: SPORT_NAME_TYPE.rugby,
-    linkName: 'SETTLE_DETAIL_RUGBY_DETAIL'
-  },
-  {
-    label: t('板球'),
-    value: SPORT_NAME_TYPE.cricket,
-    linkName: 'SETTLE_DETAIL_CRICKET_DETAIL'
-  },
-  {
-    label: t('拳击/格斗'),
-    value: SPORT_NAME_TYPE.boxing,
-    linkName: 'SETTLE_DETAIL_FOOTBALL_DETAIL'
   }
+  // {
+  //   label: t('拳击/格斗'),
+  //   value: SPORT_NAME_TYPE.boxing,
+  //   linkName: 'SETTLE_DETAIL_FOOTBALL_DETAIL'
+  // }
 
   // { label: t('特别项目'), value: 7, type: 'SpecialProjects' },
   // { label: t('电子竞技'), value: 4, type: 'FootBall' },

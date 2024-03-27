@@ -14,7 +14,7 @@
                      v-model="form.tenantIds"
                      clearable
           >
-            <el-option v-for="item in tenantList" :label="item.name" :value="item.id" :key="item.id" />
+            <el-option v-for="item in props.tenantList" :label="item.name" :value="item.id" :key="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('赛事类型')}:`" prop="category">
@@ -226,7 +226,6 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import type { FormInstance } from 'element-plus';
 import dayjs from 'dayjs';
 import { formatNumber } from '@/utils/formatNumber';
-const {tenantList} = useLeague();
 import {
   SPORT_ID_MAP,
   ESPORT_ID_MAP,
@@ -236,6 +235,7 @@ import { searchFormType } from '../util/types';
 const props = defineProps<{
   loading: boolean;
   form: searchFormType;
+  tenantList:[]
 }>();
 
 const formRef = ref();
@@ -251,7 +251,7 @@ const dateRangetType = computed(() => {
 });
 import {  betStatusMap,seriesTypesSingle,seriesTypesDuplex} from "../util/types";
 
-import {useLeague} from "@/views/operateManager/bettingCenter/util/hook";
+// import {useLeague} from "@/views/operateManager/bettingCenter/util/hook";
 import {hasAuth} from "@/router/utils";
 
 const emits = defineEmits(['onSearch', 'exportFile']);
