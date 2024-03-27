@@ -4,6 +4,7 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import {betStatus, betStatusMap, searchFormType, seriesTypesSingle,seriesTypesDuplex} from './types';
 import { columns } from './exportTableColumnList';
 import { utils, writeFile } from 'xlsx';
+
 import {
   Detail,
   getBetTeamType,
@@ -65,48 +66,54 @@ export function useLeague() {
     console.log('handleSelectionChange', val);
   }
 
+  const formatParams = (privateparams={}) =>{
+    let seriesDetails:any=[];
+    if(form.seriesType==2){
+      if(form.seriesDetailsSingle.length){
+        form.seriesDetailsSingle.map((item:any)=>{
+          seriesDetails.push(...(seriesTypesSingle[item].list))
+        })
+      }else {
+        for (let item in seriesTypesSingle){
+          seriesDetails.push(...(seriesTypesSingle[item].list))
+        }
+      }
+
+    }else if(form.seriesType==3) {
+      if(form.seriesDetailsDuplex.length){
+        form.seriesDetailsDuplex.map((item:any)=>{
+          seriesDetails.push(...(seriesTypesDuplex[item].list))
+        })
+      }else {
+        for (let item in seriesTypesDuplex){
+          seriesDetails.push(...(seriesTypesDuplex[item].list))
+        }
+      }
+
+    }else {
+      seriesDetails=''
+    }
+    if(seriesDetails.length>1){
+      seriesDetails= [...new Set(seriesDetails)]
+    }
+    return  {
+      ...removeEmptyStringKeys({...form,seriesDetailsSingle:'',seriesDetailsDuplex:'',seriesDetails:seriesDetails,seriesType:form.seriesType>2?2:form.seriesType}),
+      status:form.status.length?form.status:[2,3,4,5,6,7,8],
+      pageSize: pagination.pageSize,
+      pageNum: pagination.currentPage,
+      ...privateparams
+    }
+  }
+
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       loading.value = true;
       // 对于串关类型的选择处理
 
-        let seriesDetails:any=[];
-         if(form.seriesType==2){
-            if(form.seriesDetailsSingle.length){
-                form.seriesDetailsSingle.map((item:any)=>{
-                    seriesDetails.push(...(seriesTypesSingle[item].list))
-                })
-            }else {
-                for (let item in seriesTypesSingle){
-                    seriesDetails.push(...(seriesTypesSingle[item].list))
-                }
-            }
+      const res : BetOrderAPI.BetOrderResType = await API.bettingCenterList(formatParams({}) as searchFormType);
 
-        }else if(form.seriesType==3) {
-           if(form.seriesDetailsDuplex.length){
-               form.seriesDetailsDuplex.map((item:any)=>{
-                   seriesDetails.push(...(seriesTypesDuplex[item].list))
-               })
-           }else {
-               for (let item in seriesTypesDuplex){
-                   seriesDetails.push(...(seriesTypesDuplex[item].list))
-               }
-           }
-
-        }else {
-             seriesDetails=''
-         }
-         if(seriesDetails.length>1){
-             seriesDetails= [...new Set(seriesDetails)]
-         }
-
-      const res : BetOrderAPI.BetOrderResType = await API.bettingCenterList({
-        ...removeEmptyStringKeys({...form,seriesDetailsSingle:'',seriesDetailsDuplex:'',seriesDetails:seriesDetails,seriesType:form.seriesType>2?2:form.seriesType}),
-        status:form.status.length?form.status:[2,3,4,5,6,7,8],
-        pageSize: pagination.pageSize,
-        pageNum: pagination.currentPage,
-      } as any);
+      console.log(33333,res)
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
@@ -148,7 +155,7 @@ export function useLeague() {
 
   //- 导出excel表格
   const exportFile = async () => {
-    const res = await API.bettingCenterList(removeEmptyStringKeys({...form,pageNum:1,pageSize:10000}));
+    const res = await API.bettingCenterList(formatParams({pageNum:1,pageSize:10000}) as searchFormType);
     const r = res.data.pageData.map((item:any,i) => {
       const arr = [];
       const data={...item,...item?.combineOrderDetails[0]}

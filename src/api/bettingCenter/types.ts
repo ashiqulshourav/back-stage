@@ -1,70 +1,62 @@
 declare namespace BetOrderAPI {
 
   type Detail = {
-    betResult: string;
-    betHandicap: string;
-    sportNameCn: string;
-    leagueNameCn: string;
-    awayTeamNameCn: string;
-    marketType: string;
-    homeTeamNameCn: string;
-    kindsCode: string;
-    oddFinally: string;
-    sportId: string;
-    beginTime: string;
-    betHomeOrAway: string;
-    betItemId: string;
-    settleScore: string;
-    scoreBenchmark?: string;
+    "isInplay": number;
+    "marketType": number;
+    "oddValue": number;
+    "marketTypeFinally": number;
+    "oddFinally": number;
+    "sportId": number;
+    "sportNameCn": string;
+    "sportNameEn": string;
+    "matchId": number;
+    "matchNameCn": string;
+    "matchNameEn": string;
+    "homeTeamNameCn": string;
+    "homeTeamNameEn": string;
+    "awayTeamNameCn": string;
+    "awayTeamNameEn": string;
+    "scoreBenchmark": string;
+    "settleScore": string;
+    "betItemCTID": number;
+    "beginTime": string;
+    "leagueId": number;
+    "leagueNameCn": string;
+    "leagueNameEn": null;
+    "betItemId": number;
+    "betItemName": string;
+    "betHandicap": string;
+    "betHomeOrAway": string;
+    "kindsCode": string;
+    "kindsName": string;
+    "betResult": string;
+    "category": number;
+    "betN": string
   }
-
-
 
   type BetOrderList = {
-    id: string;
-    userId: string;
-    userName: string;
-    orderAmount: number;
-    profitAmount?: any;
-    settleAmount?: any;
-    createTime: string;
-    updateTime?: any;
-    updateUser?: any;
-    settleTime?: any;
-    settleTimes: number;
-    status: number;
-    billStatus: number;
-    seriesType: number;
-    isInplay: number;
-    marketType: number;
-    oddValue?: any;
-    marketTypeFinally: number;
-    oddFinally: number;
-    sportId: number;
-    sportNameCn: string;
-    sportNameEn: string;
-    matchId: number;
-    matchNameCn: string;
-    matchNameEn: string;
-    homeTeamNameCn: string;
-    homeTeamNameEn: string;
-    awayTeamNameCn: string;
-    awayTeamNameEn: string;
-    scoreBenchmark: string;
-    settleScore?: any;
-    betItemCTID: number;
-    beginTime: string;
-    leagueId: number;
-    leagueNameCn: string;
-    leagueNameEn: string;
-    betItemId: number;
-    betItemName: string;
-    betHandicap: string;
-    betHomeOrAway: string;
-    kindsCode: string;
-    betResult?: any;
-    category: number;
+    "id": string;
+    "userId": string;
+    "userName": string;
+    "tenantId": string;
+    "tenantCode": string;
+    "orderAmount": number;
+    "productAmountTotal":string;
+    "profitAmount": null;
+    "settleAmount": null;
+    "createTime": string;
+    "updateTime": string;
+    "updateUser": string;
+    "settleTime": null;
+    "settleTimes": number;
+    "status":number;
+    "billStatus": number;
+    "seriesType": number;
+    combineOrderDetails:Detail[];
+    isSettlementAgain:number
   }
+
+
 
   type otherDataType = {
     thisPageBetTotalProfitAmount: number;
