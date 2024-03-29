@@ -75,4 +75,15 @@ const changeSwitch = val => {
     display: none;
   }
 }
+.el-select__wrapper.is-disabled {
+  background: transparent;
+  text-align: center;
+  box-shadow: none;
+  .el-select__selected-item {
+    color: var(--el-input-text-color, var(--el-text-color-regular));
+  }
+  .el-select__icon {
+    display: none;
+  }
+}
 </style>
