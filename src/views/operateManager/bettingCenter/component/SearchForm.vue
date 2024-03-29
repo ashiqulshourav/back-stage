@@ -48,13 +48,13 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item :label="`${t('注单状态')}:`" prop="settleStatus">
+        <el-form-item :label="`${t('注单状态')}:`" prop="queryType">
           <el-select class="min-w100"
                   :placeholder="t('请选择状态')"
               v-model="form.queryType"
               clearable
           >
-              <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="item[0]" :key="item[0]" />
+              <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
           </el-select>
         </el-form-item>
 
