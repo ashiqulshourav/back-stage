@@ -11,10 +11,10 @@ export const columns: TableColumnList = [
     label: t('商户编码'),
     prop: 'tenantCode',
   },
-  {
-    label: t('商户名称'),
-    prop: 'tenantName',
-  },
+  // {
+  //   label: t('商户名称'),
+  //   prop: 'tenantName',
+  // },
   {
     label: t('用户名'),
     prop: 'userName',
