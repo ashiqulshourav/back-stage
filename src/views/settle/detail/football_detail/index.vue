@@ -1,19 +1,13 @@
 <template>
   <div class="main">
-    <DetiltTitle
-      @allSettleBtnClick="void"
-      :renderObj="renderObj"
-      :allSettleLoading="allSettleLoading"
-      :hideAllSettleBtn="true"
-      :isFootBallTitle="true"
-    >
+    <FootballDetail :renderObj="renderObj" :allSettleLoading="allSettleLoading">
       <Score
         :renderObj="renderObj"
         :dataList="dataList"
         @openSecondSettleClick="openSecondSettleClick"
         @confirmSecondSettleClick="confirmSecondSettleClick"
       />
-    </DetiltTitle>
+    </FootballDetail>
     <PureTableBar @refresh="reloadTable" :columns="childColumns">
       <template #title>
         <div class="flex items-center">
@@ -103,7 +97,12 @@
 
               <!-- -比赛阶段 -->
               <template #matchPeriodId="{ row, index }: MatchEventRowType">
-                <MatchStage :row="row" :item="item" :index="index" />
+                <MatchStage
+                  :row="row"
+                  :item="item"
+                  :index="index"
+                  :matchType="idx < 3 ? 0 : idx < 6 ? 1 : 2"
+                />
               </template>
 
               <!-- -事件来源 -->
@@ -230,7 +229,8 @@
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-import DetiltTitle from '../../component/Settle_detail_title.vue';
+// import DetiltTitle from '../../component/Settle_detail_title.vue';
+import FootballDetail from './FootballDetail.vue';
 import BackEndBtnGroupCom from './BackEndBtnGroup.vue';
 import FrontBtnGroupCom from './FrontBtnGroup.vue';
 import CountDownBtn from './CountDownBtn.vue';

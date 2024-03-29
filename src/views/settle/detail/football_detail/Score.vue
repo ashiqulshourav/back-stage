@@ -1,9 +1,9 @@
 <template>
-  <div class="mt-1">
+  <div class="mt-1 mr-5 text-sm bg-gray-100">
     <el-row :gutter="20">
-      <el-col :span="5">
+      <el-col :span="4">
         <div class="flex item-center text-sm">
-          <span>{{ t('目前比分') }}: </span>
+          <span>{{ t('目前比分') }}： </span>
           <span>
             {{
               dataList[0].tableList[dataList[0].tableList.length - 1]?.t1 ?? 0
@@ -15,27 +15,27 @@
           </span>
         </div>
       </el-col>
-      <el-col :span="9">
-        <div class="flex text-sm">
-          <div class="flex">
-            <span>{{ t('目前红牌') }}：</span>
-            <el-text type="danger">{{ getCurrentCard.home.red ?? 0 }}</el-text>
-            <span>-</span>
-            <el-text type="danger">{{ getCurrentCard.away.red ?? 0 }}</el-text>
-          </div>
-          <div class="flex ml-3">
-            <span class="text-sm">{{ t('目前黄牌') }}：</span>
-            <el-text type="primary">{{
-              getCurrentCard.home.yellow ?? 0
-            }}</el-text>
-            <span class="2">-</span>
-            <el-text type="primary">{{
-              getCurrentCard.away.yellow ?? 0
-            }}</el-text>
-          </div>
+      <el-col :span="4">
+        <div class="flex">
+          <span>{{ t('目前红牌') }}：</span>
+          <el-text type="danger">{{ getCurrentCard.home.red ?? 0 }}</el-text>
+          <span>-</span>
+          <el-text type="danger">{{ getCurrentCard.away.red ?? 0 }}</el-text>
         </div>
       </el-col>
-      <el-col :span="5">
+      <el-col :span="4">
+        <div class="flex ml-3">
+          <span>{{ t('目前黄牌') }}：</span>
+          <el-text type="primary">{{
+            getCurrentCard.home.yellow ?? 0
+          }}</el-text>
+          <span class="2">-</span>
+          <el-text type="primary">{{
+            getCurrentCard.away.yellow ?? 0
+          }}</el-text>
+        </div>
+      </el-col>
+      <el-col :span="4">
         <div class="flex text-sm">
           <span>{{ t('目前角球') }}：</span>
           <span>

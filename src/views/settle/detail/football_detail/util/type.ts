@@ -21,12 +21,19 @@ export type TempListType = {
   redOrYellow?: number;
 };
 
-
 export enum MatchEventType {
   Goal = 'goal',
   YellowRedCard = 'yellow_red_card',
   Corner = 'corner',
   MatchStatus = 'match_status'
+}
+
+export enum MatchTimeType {
+  regular_season_first_half = 6, //- 常规赛上半场
+  regular_season_first_all = 7, //- 常规赛下半场
+  extraTimeFirstHalf = 41, //- 加时赛上半场
+  extraTimeFirstAll = 42, //- 加时赛下半场
+  PSO = 50,  //- 点球大战
 }
 
 export enum SPORT_TYPE {
