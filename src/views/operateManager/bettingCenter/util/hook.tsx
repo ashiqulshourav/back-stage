@@ -307,8 +307,8 @@ function copyTest(str:string,tip:string){
 
   //- 切换比赛类型
   onMounted(() => {
-    getTenantList();
     onSearch();
+    getTenantList();
   });
 
   return {
