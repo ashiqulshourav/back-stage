@@ -59,13 +59,13 @@ export const useSettileHook = () => {
                 SPORT_ID_MAP.find(item => item.value === row.sportId)?.label ??
                 t('电竞')
             };
-            
+
             options.footerButtons[1].loading = true;
             const res = await API.cancelBetOrder(params);
             options.footerButtons[1].loading = false;
 
             closeDialog(options, index);
-            if (!res.code) {
+            if (!res.code && res.code !== undefined) {
               onSearch();
               message(res.msg, { type: 'success' });
             }

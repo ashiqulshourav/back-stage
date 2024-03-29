@@ -14,6 +14,7 @@ declare namespace RoleAPI {
     createdBy?: string;
     startCreatedAt?: string;
     endCreatedAt?: string;
+    status?: number;
   }
 
   type querySysAccountListData = {
