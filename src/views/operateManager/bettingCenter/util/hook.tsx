@@ -52,6 +52,10 @@ export function useLeague() {
     seriesDetailsSingle:[],
     seriesDetailsDuplex:[],
     queryType:1,
+    minBetAmount:'',
+    maxBetAmount:'',
+    minProfitAmount:'',
+    maxProfitAmount:'',
   });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -214,9 +218,12 @@ export function useLeague() {
           case 'isSeriesType':  //单关 串关
               str=data.seriesType===1?'单关':'串关';
               break;
-          case 'tenantName':  //单关 串关
-            str=(tenantObj[data.tenantId]).name??''
+          case 'tenantName':  //商户名称
+            str=(tenantObj[data.tenantId]).tenantName??''
             break;
+          case 'tenantCode':  //商户编码
+              str=(tenantObj[data.tenantId]).name??''
+              break;
           default:
             str = data[column.prop as string]
         }
@@ -319,6 +326,7 @@ function copyTest(str:string,tip:string){
     exportFile,
     handleCancel,
     getStatus,
-      copyTest
+      copyTest,
+    tenantObj,
   };
 }
