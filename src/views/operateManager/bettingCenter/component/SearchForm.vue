@@ -50,7 +50,7 @@
         </el-form-item>
         <el-form-item :label="`${t('注单状态')}:`" prop="settleStatus">
           <el-select class="min-w100"
-                  :placeholder="t('请选择状态，多选项')"
+                  :placeholder="t('请选择状态')"
               v-model="form.queryType"
               clearable
           >

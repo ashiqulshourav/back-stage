@@ -268,7 +268,7 @@ export function useLeague() {
   }
 const getStatus = (status,billStatus,betResult)=>{
     let obj = {status:-1,bgColor:''}
-   if(status===0&&billStatus===0&&betResult===20){  // 未结算
+   if(status===0&&billStatus===0){  // 未结算
      obj={status:betStatus.unsettlementBet,bgColor:'#FFC53D'}
    }else if(status===1&&billStatus===1){// 已结算
      obj={status:betStatus.settlementBet,bgColor:'#40A9FF'}
@@ -284,7 +284,7 @@ const getStatus = (status,billStatus,betResult)=>{
      obj={status:betStatus.eventAbnormal,bgColor:'#F88D48'}
    }else if(status===4&&billStatus===1&&betResult===61){  // 封控拒单
        obj={status:betStatus.riskReject,bgColor:'#F88D48'}
-   }else if(status===1&&billStatus===1&&(betResult===21||betResult===22)){  // 预约失败
+   }else if(status===1&&billStatus===1&&(betResult===21)){  // 预约失败
        obj={status:betStatus.reserveFail,bgColor:'#F57582'}
    }
    return obj
