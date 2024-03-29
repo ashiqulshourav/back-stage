@@ -12,13 +12,14 @@ export type searchFormType = {
   awayTeamName: string;
   homeTeamName: string;
   seriesType:number|string;
-  status:any;
+  // status:any;
   isInplay:number|string;
   category:string|number;
   [key: string]: any;
   timeType:number;
   leagueName:string;
   tenantIds:any ;
+  queryType:number;
 }
 
 export enum betStatus {
@@ -30,7 +31,8 @@ export enum betStatus {
   betInvalid = 6,
   betFail = 7,
   eventAbnormal = 8,
-  reserveFail = 9,
+  riskReject = 9,
+  reserveFail = 10,
 }
 export const betStatusMap ={
   [betStatus.all]: t('全部'),
@@ -41,6 +43,7 @@ export const betStatusMap ={
   [betStatus.betInvalid]: t('注单无效'),
   [betStatus.betFail]: t('投注失败'),
   [betStatus.eventAbnormal]: t('赛事异常'),
+  [betStatus.riskReject]: t('封控拒单'),
   [betStatus.reserveFail]: t('预约失败'),
 }
 

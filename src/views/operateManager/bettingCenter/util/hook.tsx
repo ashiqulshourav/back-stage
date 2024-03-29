@@ -42,7 +42,7 @@ export function useLeague() {
     matchId: '',
     awayTeamName: '',
     homeTeamName: '',
-    status:[],
+    // status:[],
     isInplay:'',
     seriesType:'',
     category:'',
@@ -51,6 +51,7 @@ export function useLeague() {
     tenantIds:[],
     seriesDetailsSingle:[],
     seriesDetailsDuplex:[],
+    queryType:1,
   });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -99,7 +100,6 @@ export function useLeague() {
     return  {
       // @ts-ignore
       ...removeEmptyStringKeys({...form,seriesDetailsSingle:'',seriesDetailsDuplex:'',seriesDetails:seriesDetails,seriesType:form.seriesType>2?2:form.seriesType}),
-      status:form.status.length?form.status:[2,3,4,5,6,7,8],
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage,
       ...privateparams
@@ -111,7 +111,6 @@ export function useLeague() {
     try {
       loading.value = true;
       // 对于串关类型的选择处理
-
       const res : BetOrderAPI.BetOrderResType = await API.bettingCenterList(formatParams({}) as searchFormType);
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
@@ -269,22 +268,24 @@ export function useLeague() {
   }
 const getStatus = (status,billStatus,betResult)=>{
     let obj = {status:-1,bgColor:''}
-   if(status===0&&billStatus===0){  // 未结算
+   if(status===0&&billStatus===0&&betResult===20){  // 未结算
      obj={status:betStatus.unsettlementBet,bgColor:'#FFC53D'}
    }else if(status===1&&billStatus===1){// 已结算
      obj={status:betStatus.settlementBet,bgColor:'#40A9FF'}
-   }else if(status===0){   // 确认中
+   }else if(status===3){   // 待确认
      obj={status:betStatus.confirm,bgColor:'#FFC53D'}
    }else if(status===6){ // 待审核
      obj={status:betStatus.PendingApprove,bgColor:'#F88D48'}
-   }else if(status==2){   // 注单无效
+   }else if(status==2&&billStatus===1&&(betResult===22||betResult===23)){   // 注单无效
      obj={status:betStatus.betInvalid,bgColor:'#E54752'}
    }else if(status===4){  // 投注失败
      obj={status:betStatus.betFail,bgColor:'#F57582'}
    }else if(status===5){  // 赛事异常
      obj={status:betStatus.eventAbnormal,bgColor:'#F88D48'}
+   }else if(status===4&&billStatus===1&&betResult===61){  // 封控拒单
+       obj={status:betStatus.riskReject,bgColor:'#F88D48'}
    }else if(status===1&&billStatus===1&&(betResult===21||betResult===22)){  // 预约失败
-     obj={status:betStatus.reserveFail,bgColor:'#F57582'}
+       obj={status:betStatus.reserveFail,bgColor:'#F57582'}
    }
    return obj
 }

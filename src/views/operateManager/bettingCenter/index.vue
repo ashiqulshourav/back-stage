@@ -6,6 +6,7 @@
       :loading="loading"
       @on-search="onSearch"
       @exportFile="exportFile"
+      :tenantList="tenantList"
     />
 
     <PureTableBar
@@ -174,6 +175,7 @@ const {
   handleCancel,
   getStatus,
     copyTest,
+  tenantList,
 } = useLeague();
 </script>
 
