@@ -101,7 +101,8 @@ const roleList = reactive<RoleAPI.querySysAccountListData[]>([]);
 const getRoleList = async () => {
   const res = await API.querySysAccountList({
     pageNum: 1,
-    pageSize: 9999
+    pageSize: 9999,
+    status: 1
   });
   roleList.length = 0;
   roleList.push(...res.data.list);
