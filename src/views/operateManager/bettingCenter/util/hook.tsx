@@ -52,6 +52,10 @@ export function useLeague() {
     seriesDetailsSingle:[],
     seriesDetailsDuplex:[],
     queryType:1,
+    minBetAmount:'',
+    maxBetAmount:'',
+    minProfitAmount:'',
+    maxProfitAmount:'',
   });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;

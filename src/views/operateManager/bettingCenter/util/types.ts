@@ -20,6 +20,10 @@ export type searchFormType = {
   leagueName:string;
   tenantIds:any ;
   queryType:number;
+  minBetAmount:number|string;
+  maxBetAmount:number|string;
+  minProfitAmount:number|string;
+  maxProfitAmount:number|string;
 }
 
 export enum betStatus {
