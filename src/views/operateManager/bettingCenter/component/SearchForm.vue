@@ -14,7 +14,7 @@
                      v-model="form.tenantIds"
                      clearable
           >
-            <el-option v-for="item in props.tenantList" :label="item.name" :value="item.id" :key="item.id" />
+            <el-option v-for="(item in tenantList" :label="item.name" :value="item.id" :key="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('赛事类型')}:`" prop="category">
@@ -51,8 +51,7 @@
         <el-form-item :label="`${t('注单状态')}:`" prop="settleStatus">
           <el-select class="min-w100"
                   :placeholder="t('请选择状态，多选项')"
-            multiple
-              v-model="form.status"
+              v-model="form.queryType"
               clearable
           >
               <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="item[0]" :key="item[0]" />
@@ -235,7 +234,7 @@ import { searchFormType } from '../util/types';
 const props = defineProps<{
   loading: boolean;
   form: searchFormType;
-  tenantList:[]
+    tenantList:[]
 }>();
 
 const formRef = ref();
@@ -250,8 +249,6 @@ const dateRangetType = computed(() => {
   return o[dateType.value];
 });
 import {  betStatusMap,seriesTypesSingle,seriesTypesDuplex} from "../util/types";
-
-// import {useLeague} from "@/views/operateManager/bettingCenter/util/hook";
 import {hasAuth} from "@/router/utils";
 
 const emits = defineEmits(['onSearch', 'exportFile']);
