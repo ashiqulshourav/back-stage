@@ -169,7 +169,7 @@ export function useFootball() {
     });
   };
 
-  //- 新增事件
+  //- 新增事件(发送后端)
   const handleChildrenData = async (
     row: SattleDataAPI.MatchEventsList,
     type: 'save' | 'upload'
@@ -180,51 +180,50 @@ export function useFootball() {
     if (type === 'save') {
       row.isSave = true;
       row.isEdit = false;
-      if (renderObj.reSettleStatus === 1) return saveSecondMathList(row);
-      return;
+      if (renderObj.reSettleStatus === 1) saveSecondMathList(row);
+    } else {
+      if (((type === 'upload' && !row.isSave) || row.isEdit) && !row.id)
+        return message(t('请先保存事件'), { type: 'error' });
+
+      //- 单独处理红黄牌
+      const eventCode =
+        row.eventCode === 'yellow_red_card'
+          ? row.redOrYellow === 1
+            ? 'yellow_card'
+            : 'red_card'
+          : row.eventCode;
+
+      const params: SattleDataAPI.MatchEventParams = {
+        eventCode,
+        eventTime: row.eventTime,
+        homeAway: row.homeAway,
+        matchId,
+        matchPeriodId: +row.matchPeriodId,
+        t1: +row.t1,
+        t2: +row.t2,
+        id: row.id ?? null,
+        canceled: 0,
+        player1Name: row.player1Name,
+        dataSourceCode: 'SK',
+        sourceType: 1,
+        sportId: SPORT_TYPE.football
+      };
+
+      ElMessageBox.confirm(t('确定要增加一条事件么?'), t('警告'), {
+        confirmButtonText: t('确认'),
+        cancelButtonText: t('取消'),
+        center: true
+      }).then(async () => {
+        childloading.value = true;
+        const res = await API.addMatchEvent(params);
+        childloading.value = false;
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        if (res.code) return;
+        row.isEdit = false;
+        getChildrenData();
+        getMatchDetail();
+      });
     }
-
-    if (((type === 'upload' && !row.isSave) || row.isEdit) && !row.id)
-      return message(t('请先保存事件'), { type: 'error' });
-
-    //- 单独处理红黄牌
-    const eventCode =
-      row.eventCode === 'yellow_red_card'
-        ? row.redOrYellow === 1
-          ? 'yellow_card'
-          : 'red_card'
-        : row.eventCode;
-
-    const params: SattleDataAPI.MatchEventParams = {
-      canceled: 0,
-      eventCode,
-      eventTime: row.eventTime,
-      homeAway: row.homeAway,
-      matchId: renderObj.matchId,
-      matchPeriodId: +row.matchPeriodId,
-      player1Name: row.player1Name,
-      dataSourceCode: 'SK',
-      sourceType: 1,
-      sportId: SPORT_TYPE.football,
-      t1: +row.t1,
-      t2: +row.t2,
-      id: row.id ?? null
-    };
-
-    ElMessageBox.confirm(t('确定要增加一条事件么?'), t('警告'), {
-      confirmButtonText: t('确认'),
-      cancelButtonText: t('取消'),
-      center: true
-    }).then(async () => {
-      childloading.value = true;
-      const res = await API.addMatchEvent(params);
-      childloading.value = false;
-      message(res.msg, { type: res.code ? 'error' : 'success' });
-      if (res.code) return;
-      row.isEdit = false;
-      getChildrenData();
-      getMatchDetail();
-    });
   };
 
   const router = useRouter();
@@ -256,9 +255,7 @@ export function useFootball() {
     }
   };
 
-  const reloadTable = async () => {
-    getChildrenData();
-  };
+  const reloadTable = () => getChildrenData();
 
   //- 自动结算转手动结算
   const changeSettleType = async () => {
