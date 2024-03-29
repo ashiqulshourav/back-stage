@@ -179,7 +179,7 @@
               v-model="form.minBetAmount"
               :placeholder="t('最小投注额')"
               clearable
-              class="!w-[100px]"
+              class="!w-[110px]"
           />
         </el-form-item>
         <el-form-item :label="`${t('')}-`" prop="maxBetAmount" class="arrange2">
@@ -187,7 +187,7 @@
               v-model="form.maxBetAmount"
               :placeholder="t('最大投注额')"
               clearable
-              class="!w-[100px]"
+              class="!w-[110px]"
           />
         </el-form-item>
         <el-form-item :label="`${t('用户输赢金额')}:`" prop="minProfitAmount">
@@ -195,7 +195,7 @@
               v-model="form.minProfitAmount"
               :placeholder="t('最小输赢金额')"
               clearable
-              class="!w-[100px]"
+              class="!w-[110px]"
           />
         </el-form-item>
         <el-form-item :label="`${t('')}-`" prop="maxProfitAmount" class="arrange2">
@@ -203,7 +203,7 @@
               v-model="form.maxProfitAmount"
               :placeholder="t('最大输赢金额')"
               clearable
-              class="!w-[100px]"
+              class="!w-[110px]"
           />
         </el-form-item>
         <el-form-item prop="timeType">
