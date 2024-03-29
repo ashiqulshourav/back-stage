@@ -75,6 +75,11 @@ export const SPORT_LIST_MAP: sport_list_map_type[] = [
     linkName: 'SETTLE_DETAIL_FIELD_HOCKEY'
   },
   {
+    label: t('英式橄榄球'),
+    value: SPORT_NAME_TYPE.rugby,
+    linkName: 'SETTLE_DETAIL_RUGBY_DETAIL'
+  },
+  {
     label: t('美式足球'),
     value: SPORT_NAME_TYPE.american_football,
     linkName: 'SETTLE_DETAIL_AMERICAN_FOOTBALL_DETAIL'
