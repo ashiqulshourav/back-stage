@@ -40,7 +40,7 @@ export enum betStatus {
 }
 export const betStatusMap ={
   [betStatus.all]: t('全部'),
-  [betStatus.confirm]: t('确认中'),
+  // [betStatus.confirm]: t('确认中'),
   [betStatus.unsettlementBet]: '未结算',
   [betStatus.settlementBet]: t('已结算'),
   [betStatus.PendingApprove]: t('待审核'),
