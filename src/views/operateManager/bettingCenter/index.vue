@@ -43,11 +43,11 @@
             <div class="item_line cursor-pointer" @dblclick="copyTest(row.userName,t('用户名：{value}',{value:row.userName}))">
               <span>{{t('用户名：')}}</span>{{row.userName}}
             </div>
-            <div class="item_line cursor-pointer" @dblclick="copyTest(tenantObj[row.tenantId]?.tenantName,t('商户名：{value}',{value:tenantObj[row.tenantId]?.tenantName}))">
-                <span>{{t('商户名：')}}</span>{{tenantObj[row.tenantId]?.tenantName}}
-            </div>
+<!--            <div class="item_line cursor-pointer" @dblclick="copyTest(tenantObj[row.tenantId]?.tenantName,t('商户名：{value}',{value:tenantObj[row.tenantId]?.tenantName}))">-->
+<!--                <span>{{t('商户名：')}}</span>{{tenantObj[row.tenantId]?.tenantName}}-->
+<!--            </div>-->
             <div class="item_line cursor-pointer" @dblclick="copyTest(row.tenantId,t('商户ID：{value}',{value:row.tenantId}))">
-              <span>{{t('商户编码：')}}</span>{{tenantObj[row.tenantId]?.name}}
+              <span>{{ t('商户ID：') }}</span >{{ row.tenantId }}
             </div>
             <div  v-if="row.combineOrderDetails.length>1" class="item_line mt-2 color_blue">
              {{String(row.seriesType).slice(-3) ==='001'?'串关':'复式'}}
