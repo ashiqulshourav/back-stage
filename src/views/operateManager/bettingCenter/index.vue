@@ -44,7 +44,7 @@
               <span>{{t('用户名：')}}</span>{{row.userName}}
             </div>
             <div class="item_line cursor-pointer" @dblclick="copyTest(row.tenantId,t('商户ID：{value}',{value:row.tenantId}))">
-              <span>{{t('商户ID：')}}</span>{{row.tenantId}}
+              <span>{{t('商户编码：')}}</span>{{tenantObj[row.tenantId]?.name}}
             </div>
             <div  v-if="row.combineOrderDetails.length>1" class="item_line mt-2 color_blue">
              {{String(row.seriesType).slice(-3) ==='001'?'串关':'复式'}}
@@ -176,6 +176,7 @@ const {
   getStatus,
     copyTest,
   tenantList,
+  tenantObj,
 } = useLeague();
 </script>
 
