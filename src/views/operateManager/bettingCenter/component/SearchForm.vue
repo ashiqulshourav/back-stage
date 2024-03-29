@@ -14,7 +14,7 @@
                      v-model="form.tenantIds"
                      clearable
           >
-            <el-option v-for="(item in tenantList" :label="item.tenantName" :value="item.id" :key="item.id" />
+            <el-option v-for="(item in tenantList" :label="item.name" :value="item.id" :key="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('赛事类型')}:`" prop="category">
