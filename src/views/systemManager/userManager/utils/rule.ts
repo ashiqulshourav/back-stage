@@ -16,7 +16,7 @@ const formRules = reactive(<FormRules>{
       validator: (_, value, callback) => {
         if (value === "") {
           callback(new Error(t("账户名称不能为空")));
-        } else if (!NAME_REG.test(value)) {
+        } else if (!NAME_REG.test(value) && value !== 'admin') {
           callback(new Error(t("账号名称格式不正确")));
         } else {
           callback();

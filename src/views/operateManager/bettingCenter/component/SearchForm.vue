@@ -7,14 +7,14 @@
   >
     <div class="flex">
       <div>
-        <el-form-item :label="`${t('商户ID')}:`" prop="tenantIds">
+        <el-form-item :label="`${t('商户名')}:`" prop="tenantIds">
           <el-select class="min-w100"
                      :placeholder="t('请选择商户ID，多选项')"
                      multiple
                      v-model="form.tenantIds"
                      clearable
           >
-            <el-option v-for="item in props.tenantList" :label="item.name" :value="item.id" :key="item.id" />
+            <el-option v-for="(item in tenantList" :label="item.tenantName" :value="item.id" :key="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('赛事类型')}:`" prop="category">
@@ -48,14 +48,13 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item :label="`${t('注单状态')}:`" prop="settleStatus">
+        <el-form-item :label="`${t('注单状态')}:`" prop="queryType">
           <el-select class="min-w100"
-                  :placeholder="t('请选择状态，多选项')"
-            multiple
-              v-model="form.status"
+                  :placeholder="t('请选择状态')"
+              v-model="form.queryType"
               clearable
           >
-              <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="item[0]" :key="item[0]" />
+              <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
           </el-select>
         </el-form-item>
 
@@ -173,6 +172,40 @@
             class="!w-[200px]"
           />
         </el-form-item>
+
+
+        <el-form-item :label="`${t('投注额')}:`" prop="minBetAmount">
+          <el-input
+              v-model="form.minBetAmount"
+              :placeholder="t('最小投注额')"
+              clearable
+              class="!w-[100px]"
+          />
+        </el-form-item>
+        <el-form-item :label="`${t('')}-`" prop="maxBetAmount" class="arrange2">
+          <el-input
+              v-model="form.maxBetAmount"
+              :placeholder="t('最大投注额')"
+              clearable
+              class="!w-[100px]"
+          />
+        </el-form-item>
+        <el-form-item :label="`${t('用户输赢金额')}:`" prop="minProfitAmount">
+          <el-input
+              v-model="form.minProfitAmount"
+              :placeholder="t('最小输赢金额')"
+              clearable
+              class="!w-[100px]"
+          />
+        </el-form-item>
+        <el-form-item :label="`${t('')}-`" prop="maxProfitAmount" class="arrange2">
+          <el-input
+              v-model="form.maxProfitAmount"
+              :placeholder="t('最大输赢金额')"
+              clearable
+              class="!w-[100px]"
+          />
+        </el-form-item>
         <el-form-item prop="timeType">
           <el-select v-model="form.timeType"  class="!w-[110px]">
             <el-option  :label="t('注单时间')" :value="1"  />
@@ -180,15 +213,13 @@
             <el-option  :label="t('比赛时间')" :value="3"  />
           </el-select>
           <el-date-picker
-            :type="dateRangetType"
-            v-model="selectDate"
-            :start-placeholder="dayjs().startOf('month').format('YYYY-MM-DD')"
-            :end-placeholder="dayjs().endOf('day').format('YYYY-MM-DD')"
-            @change="changeDate"
+              :type="dateRangetType"
+              v-model="selectDate"
+              :start-placeholder="dayjs().startOf('month').format('YYYY-MM-DD')"
+              :end-placeholder="dayjs().endOf('day').format('YYYY-MM-DD')"
+              @change="changeDate"
           />
         </el-form-item>
-
-
         <el-form-item>
           <el-button
             type="primary"
@@ -235,7 +266,7 @@ import { searchFormType } from '../util/types';
 const props = defineProps<{
   loading: boolean;
   form: searchFormType;
-  tenantList:[]
+    tenantList:[]
 }>();
 
 const formRef = ref();
@@ -250,8 +281,6 @@ const dateRangetType = computed(() => {
   return o[dateType.value];
 });
 import {  betStatusMap,seriesTypesSingle,seriesTypesDuplex} from "../util/types";
-
-// import {useLeague} from "@/views/operateManager/bettingCenter/util/hook";
 import {hasAuth} from "@/router/utils";
 
 const emits = defineEmits(['onSearch', 'exportFile']);
@@ -298,5 +327,8 @@ const exportFile = () => {
   :deep(.el-form-item) {
     margin-bottom: 12px;
   }
+}
+.arrange2{
+  margin-left: -25px;
 }
 </style>

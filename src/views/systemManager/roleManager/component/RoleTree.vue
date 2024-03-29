@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col">
+  <div class="flex flex-col" v-loading="loading">
     <div>
       <el-checkbox
         v-model="selectAll"
@@ -25,9 +25,7 @@
         <el-tree-line :node="node" :showLabelLine="true">
           <template v-slot:node-label>
             <div class="flex items-center">
-              <span class="text-sm font-bold">
-                {{ data.name }}
-              </span>
+              <span class="text-sm font-bold"> {{ data.name }} </span>
             </div>
           </template>
         </el-tree-line>
@@ -50,6 +48,7 @@ const treeRef = ref();
 const selectAll = ref(false);
 const emits = defineEmits(['closeDialog']);
 const defaultKeyList = reactive<number[]>([]);
+const loading = ref(false);
 
 const dataProps = {
   value: 'id',
@@ -57,7 +56,7 @@ const dataProps = {
 };
 const menusData = reactive<RoleAPI.ChildResourceList[]>([]);
 
-const props = defineProps<{
+const { roleId } = defineProps<{
   roleId: number;
 }>();
 
@@ -66,8 +65,11 @@ onMounted(() => {
 });
 
 const closeDialog = () => emits('closeDialog');
+
 const initTreeList = async () => {
-  const res = await API.allPermissionList({ roleId: props.roleId });
+  loading.value = true;
+  const res = await API.allPermissionList({ roleId });
+  loading.value = false;
   if (res.code) return message(res.msg, { type: 'error' });
   menusData.length = 0;
   menusData.push(...res.data);
@@ -106,13 +108,11 @@ const saveRole = async () => {
     .map(item => item.id);
 
   const res = await API.updateRoleResource({
-    roleId: props.roleId,
+    roleId,
     resourceList
   });
   message(res.msg, { type: res.code ? 'error' : 'success' });
-  if (!res.code) {
-    closeDialog();
-  }
+  if (!res.code) closeDialog();
 };
 
 //- 获取所有的子节点
@@ -152,6 +152,7 @@ const handleCheckChange = () => {
   }
   .role_tree {
     max-height: 600px;
+    min-height: 600px;
     overflow-y: auto;
   }
 }
