@@ -104,6 +104,13 @@
             >
               {{ t('取消') }}
             </el-button>
+            <el-button
+              class="reset-margin"
+              @click="switchDialog(true,row)"
+              v-if="specialCountFlag(row.status,row.billStatus,row.combineOrderDetails[0].betResult)"
+            >
+              {{ t('特殊结算') }}
+            </el-button>
           </template>
         </pure-table>
         <div
@@ -137,7 +144,9 @@
       </template>
     </PureTableBar>
 
+
   </div>
+
 </template>
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
@@ -159,7 +168,7 @@ import {
   displayHomeAwayScore,
   getIsInplay,
 } from "@/utils/formatMatch";
-import {betStatusMap} from './util/types'
+import { betStatusMap} from './util/types'
 import { usePublicHooks } from '@/hooks';
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
@@ -177,9 +186,10 @@ const {
   exportFile,
   handleCancel,
   getStatus,
-    copyTest,
+  copyTest,
   tenantList,
-  tenantObj,
+  specialCountFlag,
+  switchDialog,
 } = useLeague();
 </script>
 

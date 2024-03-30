@@ -4,6 +4,9 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import {betStatus, betStatusMap, searchFormType, seriesTypesSingle,seriesTypesDuplex} from './types';
 import { columns } from './exportTableColumnList';
 import { utils, writeFile } from 'xlsx';
+import { addDialog, closeDialog } from '@/components/ReDialog';
+import editMatch from "../component/editMatch.vue";
+import { reactive, ref, onMounted, h } from 'vue';
 
 import {
   Detail,
@@ -21,6 +24,7 @@ export function useLeague() {
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<any>([]);
   const tenantObj = reactive<any>({});
+  const UDialogFlag =  ref<Boolean>(false);
   const loading = ref(true);
   const totalInfo = reactive<BetOrderAPI.otherDataType>(
     {} as BetOrderAPI.otherDataType
@@ -297,6 +301,65 @@ const getStatus = (status,billStatus,betResult)=>{
    return obj
 }
 
+const specialCountFlag = (status,billStatus,betResult):boolean=>{
+  return getStatus(status,billStatus,betResult).status===betStatus.unsettlementBet||
+    getStatus(status,billStatus,betResult).status===betStatus.settlementBet||
+    getStatus(status,billStatus,betResult).status===betStatus.eventAbnormal
+}
+    const uDialogRef = ref();
+const switchDialog = (flag:boolean,row)=>{
+    UDialogFlag.value=flag;
+   handleEditResult(row)
+    // if(flag){
+    //   return new Promise<boolean>(resolve => {
+    //     resolve(true);
+    //     addDialog({
+    //       title: t('请输入U盾密码'),
+    //       class: 'reset_dialog',
+    //       width: '25%',
+    //       center: true,
+    //       closeOnClickModal: false,
+    //       hideFooter: true,
+    //       contentRenderer: ({ options, index }) =>
+    //           h(PasswordInput, {
+    //             ref: uDialogRef,
+    //             onCloseDialog: (_: boolean) => {
+    //               closeDialog(options, index);
+    //               setTimeout(() => {
+    //
+    //                 resolve(_);
+    //               }, 300);
+    //             }
+    //           })
+    //     });
+    //   });
+    //   handleEditResult(row)
+    //
+    // }
+}
+
+  const editDialogRef = ref();
+const handleEditResult = (row)=>{
+  addDialog({
+    title: t(''),
+    class: 'reset_dialog',
+    width: row.combineOrderDetails.length>1?'60%':'25%',
+    center: true,
+    closeOnClickModal: false,
+    hideFooter: true,
+    contentRenderer: ({ options, index }) =>
+        h(editMatch, {
+          ref: editDialogRef,
+          row: {...row,...row.combineOrderDetails[0]},
+          onCloseDialog: (_: boolean) => {
+            closeDialog(options, index);
+
+          }
+        })
+  });
+}
+
+
 function copyTest(str:string,tip:string){
         if(!str) return;
         const success = copyTextToClipboard(str.toString());
@@ -326,7 +389,10 @@ function copyTest(str:string,tip:string){
     exportFile,
     handleCancel,
     getStatus,
-      copyTest,
+    copyTest,
     tenantObj,
+    specialCountFlag,
+    UDialogFlag,
+    switchDialog,
   };
 }
