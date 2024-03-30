@@ -8,7 +8,7 @@
         @confirmSecondSettleClick="confirmSecondSettleClick"
       />
     </FootballDetail>
-    <PureTableBar @refresh="reloadTable" :columns="childColumns">
+    <PureTableBar @refresh="reloadTable" :columns="columns">
       <template #title>
         <div class="flex items-center">
           <template v-if="!renderObj.fullSettlementStatus">
@@ -204,7 +204,7 @@
             >
               <span
                 class="mr-3 text-[var(--el-color-danger)] cursor-pointer"
-                @click="addChildRow(item.tableList, item.type)"
+                @click="addChildRow(item.tableList, item.type, selectTabIndex)"
                 >{{
                   renderObj.reSettleStatus === 1
                     ? t('重新结算中')
@@ -216,7 +216,7 @@
                 width="25px"
                 v-if="hasAuth('ADDEVENTSMANUAL')"
                 icon="icon_circle_fill"
-                @click="addChildRow(item.tableList, item.type)"
+                @click="addChildRow(item.tableList, item.type, selectTabIndex)"
               />
             </div>
           </el-tab-pane>
@@ -268,6 +268,7 @@ const teamChangeEvent = (
   if (!row.homeAway) return;
   const isHome = row.homeAway === 'home';
   const isYellowRedCard = type === MatchEventType.YellowRedCard;
+
   if (childIndex === 0) {
     row.t1 = isHome ? 1 : 0;
     row.t2 = isHome ? 0 : 1;
@@ -306,7 +307,9 @@ const teamChangeEvent = (
   }
 };
 
-const changeTab = () => {
+const selectTabIndex = ref('0');
+const changeTab = (n: string) => {
+  selectTabIndex.value = n;
   const resizeEvent = new Event('resize');
   window.dispatchEvent(resizeEvent);
 };
@@ -333,6 +336,12 @@ const {
   confirmSecondSettleClick,
   cancelItem
 } = useFootball();
+
+//- 点球不显示时间
+const columns = computed(() => {
+  childColumns[3].hide = selectTabIndex.value === '6';
+  return childColumns;
+});
 </script>
 
 <style lang="scss"></style>

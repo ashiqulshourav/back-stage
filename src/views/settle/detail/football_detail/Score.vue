@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-1 mr-5 text-sm bg-gray-100">
+  <div class="mt-1 mr-5 text-sm bg-gray-100 dark:bg-[#ffffff1f]">
     <el-row :gutter="20">
       <el-col :span="4">
         <div class="flex item-center text-sm">

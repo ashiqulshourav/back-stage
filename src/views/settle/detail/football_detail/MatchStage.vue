@@ -1,18 +1,30 @@
 <template>
-  <el-select
-    :class="[row.canceled === 1 && 'canceled', '!w-[150px]']"
-    :disabled="!row.isEdit"
-    @change="changeSwitch"
-    v-model="row.matchPeriodId"
-    :placeholder="t('请选择')"
-  >
-    <el-option
-      v-for="(item, index) in matchStatusList"
-      :key="index"
-      :label="item.val"
-      :value="item.code"
-    />
-  </el-select>
+  <template v-if="row.matchPeriodId === 50">
+    <div class="flex item-center justify-center w-full">
+      <span>{{ t('第') }}</span>
+      <span
+        class="pl-2 ml-2 mr-2 pr-2 bg-[#dcdfe6] dark:bg-[#303030] rounded-sm"
+        >{{ index + 1 }}</span
+      >
+      <span>{{ t('轮') }}</span>
+    </div>
+  </template>
+  <template v-else>
+    <el-select
+      :class="[row.canceled === 1 && 'canceled', '!w-[150px]']"
+      :disabled="!row.isEdit"
+      @change="changeSwitch"
+      v-model="row.matchPeriodId"
+      :placeholder="row.isEdit ? t('请选择') : '-'"
+    >
+      <el-option
+        v-for="(item, index) in matchStatusList"
+        :key="index"
+        :label="item.val"
+        :value="item.code"
+      />
+    </el-select>
+  </template>
 </template>
 
 <script setup lang="ts">

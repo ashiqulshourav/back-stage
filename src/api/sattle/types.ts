@@ -37,6 +37,9 @@ declare namespace SattleDataAPI {
     t: number;
     isSettleStatus: boolean;
     isShowCount: boolean;
+    firstNum?: number;
+    firstT1?: number;
+    firstT2?: number;
   };
 
   type CommonEventData = {
@@ -77,6 +80,9 @@ declare namespace SattleDataAPI {
     id?: number;
     gameRule?: string;
     inningNum?: number;
+    firstNum?: number;
+    firstT1?: number;
+    firstT2?: number;
   };
 
   type HandballEvent = {
@@ -515,6 +521,9 @@ declare namespace SattleDataAPI {
     newEventList: {
       matchId: number;
       _tempDate?: number;
+      firstNum?: number;
+      firstT1?: number;
+      firstT2?: number;
       eventCode?: string | number;
       eventTime: number | string | Date;
       homeAway?: string;

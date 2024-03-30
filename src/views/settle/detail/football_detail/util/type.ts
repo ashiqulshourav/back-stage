@@ -11,7 +11,7 @@ export type FormProps = {
 export type TempListType = {
   eventTime: number | string;
   homeAway: null;
-  matchPeriodId: null;
+  matchPeriodId: null | number;
   // player1Name: null,
   _tempDate?: number,
   isBackEndReturnData: false;
