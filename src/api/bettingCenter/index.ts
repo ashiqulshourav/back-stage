@@ -9,7 +9,7 @@ export const bettingCenter = {
     orderId: number;
   }) => http.request<any>("post", "/bet-center/cancel", { data }),
   //- 特殊结算
-  betSettle:  (data: number[]) => http.request<BetOrderAPI.betCenterCancelResType>("post", "/bet-center/settle", { data }),
+  betSettle:  (data: number[]) => http.request<BetOrderAPI.betCenterCancelResType>("post", "/bet-settle/settle", { data }),
   getTenantList: () => http.request<any>("post", "/bet-center/getTenantList", {}),
   //- 拒绝注单
   riskCancel: (data: number[]) => http.request<BetOrderAPI.betCenterCancelResType>("post", "/bet-center/risk/cancel", { data }),

@@ -26,7 +26,7 @@
     <div class="mt-5">
       <el-text  type="primary">{{t('请选择注单的投注结果')}}</el-text>
       <ul class="mt-2 cursor-pointer">
-         <li class="result_item" @click="selectBetResult(0,item.value)" v-for="item in resultList">{{item.title}}</li>
+         <li v-for="item in resultList" :class="`result_item ${item?.value===newRow.combineOrderDetails[0].betResult?'result_item_active':''}`" @click="selectBetResult(0,item.value)" >{{item.title}}</li>
       </ul>
     </div>
   </div>
@@ -71,7 +71,7 @@
           </template>
           <template #matchResult="{ row }">
             <ul >
-              <li onclick="" class="result_item" @click="selectBetResult(row.index,item.value)" v-for="item in resultList">{{item.title}}</li>
+              <li v-for="item in resultList" :class="`result_item ${item?.value===row.betResult?'result_item_active':''}`" @click="selectBetResult(0,item.value)">{{item.title}}</li>
             </ul>
           </template>
         </pure-table>
@@ -97,7 +97,8 @@ const { row } = defineProps<{
   row: BetOrderAPI.Detail&BetOrderAPI.BetOrderList;
 }>();
 
-const newRow =ref<BetOrderAPI.Detail&BetOrderAPI.BetOrderList>(formatRow() as BetOrderAPI.Detail&BetOrderAPI.BetOrderList)
+const newRow =ref<BetOrderAPI.Detail&BetOrderAPI.BetOrderList>(formatRow() as BetOrderAPI.Detail&BetOrderAPI.BetOrderList);
+const emits = defineEmits(['closeDialog']);
 const selectBetResult = (index:number,betResult:number)=>{
   // @ts-ignore
   newRow.value.combineOrderDetails[index].betResult= betResult;
@@ -148,7 +149,7 @@ const  editColumnList=[ {
    align:'left',
 }]
 const closeDialog = ()=>{
-
+  emits('closeDialog');
 }
 const confirmClick = ()=>{
   ElMessageBox.confirm(
@@ -168,19 +169,21 @@ const confirmClick = ()=>{
       }
   )
       .then(async () => {
-        const betOrderDetailEventDTOS= newRow.value.combineOrderDetails.map((item:BetOrderAPI.Detail)=>{
+        const betOrderDetails= newRow.value.combineOrderDetails.map((item:BetOrderAPI.Detail)=>{
           const detailId:string = item.detailId;
-          const settleScore:string= 'H'+item.betResultHomeScore+'A'+item.betResultHomeScore;
+          const settleScore:string= 'H'+item.betResultHomeScore+'A'+item.betResultAwayScore;
           return{detailId,settleScore,betResult:item.betResult}
         })
-
         const params:any = {
-          detailId:newRow.value.id,
-          betOrderDetailEventDTOS,
+          id:newRow.value.id,
+          betOrderDetails,
         }
         console.log(2222,params)
         API.betSettle(params).then((res)=>{
           console.log(11111111,res)
+          if(res.code===0){
+
+          }
         })
 
 
@@ -213,31 +216,38 @@ const confirmClick = ()=>{
   border-radius: 4px;
   margin-right: 10px;
   font-size: 12px;
-  &:nth-child(1){
-    color: red;
-    background: rgb(255,220,224);
-    border: 1px solid rgb(255,220,224);
-  }
-  &:nth-child(2){
-    color: #FFF;
-    background:rgb(167,167,167);
-    border: 1px solid rgb(167,167,167);
-  }
-  &:nth-child(3){
-    color: red;
+  //color: blue;
     background: #FFF;
-    border: 1px solid red;
-  }
-  &:nth-child(4){
-    color: green;
-    background: #FFF;
-    border: 1px solid green;
-  }
-  &:nth-child(5){
-    color: blue;
-    background: #FFF;
+    border: 1px solid #CCC;
+  &.result_item_active{
     border: 1px solid blue;
+    color: blue;
   }
+  //&:nth-child(1){
+  //  color: red;
+  //  background: rgb(255,220,224);
+  //  border: 1px solid rgb(255,220,224);
+  //}
+  //&:nth-child(2){
+  //  color: #FFF;
+  //  background:rgb(167,167,167);
+  //  border: 1px solid rgb(167,167,167);
+  //}
+  //&:nth-child(3){
+  //  color: red;
+  //  background: #FFF;
+  //  border: 1px solid red;
+  //}
+  //&:nth-child(4){
+  //  color: green;
+  //  background: #FFF;
+  //  border: 1px solid green;
+  //}
+  //&:nth-child(5){
+  //  color: blue;
+  //  background: #FFF;
+  //  border: 1px solid blue;
+  //}
 }
 .confirm_title{
   font-size: 16px;
