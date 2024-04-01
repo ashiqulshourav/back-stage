@@ -307,7 +307,6 @@ const specialCountFlag = (status,billStatus,betResult):boolean=>{
     getStatus(status,billStatus,betResult).status===betStatus.settlementBet||
     getStatus(status,billStatus,betResult).status===betStatus.eventAbnormal
 }
-    const uDialogRef = ref();
 const switchDialog = (flag:boolean,row)=>{
     UDialogFlag.value=flag;
    handleEditResult(row)
