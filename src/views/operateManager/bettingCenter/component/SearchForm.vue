@@ -13,6 +13,7 @@
                      multiple
                      v-model="form.tenantIds"
                      clearable
+                     @change="search"
           >
             <el-option v-for="(item in tenantList" :label="item.name" :value="item.id" :key="item.id" />
           </el-select>
@@ -39,7 +40,9 @@
             :placeholder="t('游戏种类')"
             clearable
             class="!w-[150px]"
+            @change="search"
           >
+            <el-option :label="t('全部')" :value="' '" />
             <el-option
               :label="item.label"
               :value="item.value"
@@ -53,6 +56,7 @@
                   :placeholder="t('请选择状态')"
               v-model="form.queryType"
               clearable
+                     @change="search"
           >
               <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
           </el-select>
@@ -63,6 +67,7 @@
               v-model="form.isInplay"
               clearable
               class="!w-[100px]"
+              @change="search"
           >
             <el-option
                 label="全部"
@@ -79,7 +84,7 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('过关类型')}:`" prop="seriesType">
-          <el-select v-model="form.seriesType" clearable class="!w-[100px]" >
+          <el-select v-model="form.seriesType" clearable class="!w-[100px]" @change="search" >
             <el-option  label="全部" value="" />
             <el-option label="单关" :value="1" />
             <el-option label="单式串关" :value="2" />
@@ -101,6 +106,7 @@
                      :placeholder="t('请选择串关类型')"
                      multiple
                      v-model="form.seriesDetailsDuplex"
+                     @change="search"
                      clearable
           >
             <el-option v-for="item in seriesTypesDuplex" :label="item.name" :value="item.value" :key="item.value" />
@@ -180,6 +186,7 @@
               :placeholder="t('最小投注额')"
               clearable
               class="!w-[110px]"
+              v-enter="search"
           />
         </el-form-item>
         <el-form-item :label="`${t('')}-`" prop="maxBetAmount" class="arrange2">
@@ -188,6 +195,7 @@
               :placeholder="t('最大投注额')"
               clearable
               class="!w-[110px]"
+              v-enter="search"
           />
         </el-form-item>
         <el-form-item :label="`${t('用户输赢金额')}:`" prop="minProfitAmount">
@@ -196,6 +204,7 @@
               :placeholder="t('最小输赢金额')"
               clearable
               class="!w-[110px]"
+              v-enter="search"
           />
         </el-form-item>
         <el-form-item :label="`${t('')}-`" prop="maxProfitAmount" class="arrange2">
@@ -204,10 +213,11 @@
               :placeholder="t('最大输赢金额')"
               clearable
               class="!w-[110px]"
+              v-enter="search"
           />
         </el-form-item>
         <el-form-item prop="timeType">
-          <el-select v-model="form.timeType"  class="!w-[110px]">
+          <el-select v-model="form.timeType"  class="!w-[110px]" @change="search">
             <el-option  :label="t('注单时间')" :value="1"  />
             <el-option  :label="t('结算时间')" :value="2"  />
             <el-option  :label="t('比赛时间')" :value="3"  />
@@ -305,6 +315,7 @@ const chagenMatchType = (type: 0 | 1 | 2) => {
   props.form.sportId = '';
   //- 电竞比赛 =1
   gameClassify.value = type === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
+  search()
 };
 
 const search = () => {
