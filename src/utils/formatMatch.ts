@@ -5,8 +5,6 @@ import {EHandicapType, EOddType, ESportType, } from '@/core/constants/enum/sport
 import { TOrder} from '@/core/services/Table';
 import {useMatchStore} from "@/store/match";
 import {useI18n} from "vue-i18n";
-import Enum from "@/core/constants/enum";
-import {string} from "vue-types";
 
 // 解析当前比分
 export const parseMatchScore = (s: string) => {
