@@ -343,7 +343,7 @@ const handleEditResult = (row)=>{
   addDialog({
     title: t(''),
     class: 'reset_dialog',
-    width: row.combineOrderDetails.length>1?'60%':'25%',
+    width: row.combineOrderDetails.length>1?'75%':'500px',
     center: true,
     closeOnClickModal: false,
     hideFooter:true,

@@ -1,32 +1,32 @@
 <template>
   <div v-if="newRow.combineOrderDetails?.length===1">
     <div class="mt-5">
-      <el-text type="primary" >赛事信息</el-text>
+      <el-text type="primary" >{{t('赛事信息')}}</el-text>
     </div>
     <div class="mt-1">{{newRow.combineOrderDetails[0].sportNameCn}}/{{newRow.combineOrderDetails[0].leagueNameCn}}</div>
     <div class="mt-1">{{t('赛事ID:')}} {{newRow.combineOrderDetails[0].matchId}}</div>
     <div class="mt-1">{{t('开赛时间:')}}{{dayjs(newRow.combineOrderDetails[0].beginTime ?? Date.now()).format("MM-DD HH:mm:ss")}}</div>
     <div class="mt-5">
-      <el-text class="mt-5" type="primary">赛果比分</el-text>
+      <el-text class="mt-5" type="primary">{{t('赛果比分')}}</el-text>
     </div>
     <div class="result_wrap mt-5">
       <div class="result_l">
         <div>{{ newRow.combineOrderDetails[0].homeTeamNameCn }}</div>
         <div  class="mt-2 flex max-w-full justify-center">
-          <input class="mr-1 text-center"  v-model="newRow.combineOrderDetails[0].settleHomeScore"  type="number"  />
+          <input class="mr-1 text-center"  v-model="newRow.combineOrderDetails[0].betResultHomeScore"  type="number"  />
         </div>
       </div>
       <div class="result_r">
         <div>{{ newRow.combineOrderDetails[0].awayTeamNameCn }}</div>
         <div  class="mt-2 flex max-w-full justify-center">
-          <input class="mr-1 text-center" v-model="newRow.combineOrderDetails[0].settleAwayScore"  type="number"  />
+          <input class="mr-1 text-center" v-model="newRow.combineOrderDetails[0].betResultAwayScore"  type="number"  />
         </div>
       </div>
     </div>
     <div class="mt-5">
-      <el-text  type="primary">请选择注单的投注结果</el-text>
+      <el-text  type="primary">{{t('请选择注单的投注结果')}}</el-text>
       <ul class="mt-2 cursor-pointer">
-         <li class="result_item" v-for="item in resultList">{{item.title}}</li>
+         <li class="result_item" @click="selectBetResult(0,item.value)" v-for="item in resultList">{{item.title}}</li>
       </ul>
     </div>
   </div>
@@ -58,20 +58,20 @@
               <div class="result_l">
                 <div>{{ row.homeTeamNameCn }}</div>
                 <div  class="mt-2 flex max-w-full justify-center">
-                  <input class="mr-1 text-center"  v-model="row.settleHomeScore"  type="number"  />
+                  <input class="mr-1 text-center"  v-model="row.betResultHomeScore"  type="number"  />
                 </div>
               </div>
               <div class="result_r">
                 <div>{{ row.awayTeamNameCn }}</div>
                 <div  class="mt-2 flex max-w-full justify-center">
-                  <input class="mr-1 text-center" v-model="row.settleAwayScore"  type="number"  />
+                  <input class="mr-1 text-center" v-model="row.betResultAwayScore"  type="number"  />
                 </div>
               </div>
             </div>
           </template>
           <template #matchResult="{ row }">
             <ul >
-              <li class="result_item" v-for="item in resultList">{{item.title}}</li>
+              <li onclick="" class="result_item" @click="selectBetResult(row.index,item.value)" v-for="item in resultList">{{item.title}}</li>
             </ul>
           </template>
         </pure-table>
@@ -90,38 +90,43 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import dayjs from "dayjs";
-import {displayHomeAwayScore,} from "@/utils/formatMatch";
+import {BET_RESULT_TYPE_MAP, displayHomeAwayScore, EBetResultType,} from "@/utils/formatMatch";
 import {PureTableBar} from "@/components/RePureTableBar";
+import {ElMessageBox} from "element-plus";
 const { row } = defineProps<{
   row: BetOrderAPI.Detail&BetOrderAPI.BetOrderList;
 }>();
 
 const newRow =ref<BetOrderAPI.Detail&BetOrderAPI.BetOrderList>(formatRow() as BetOrderAPI.Detail&BetOrderAPI.BetOrderList)
+const selectBetResult = (index:number,betResult:number)=>{
+  // @ts-ignore
+  newRow.value.combineOrderDetails[index].betResult= betResult;
+}
 function formatRow (){
   // @ts-ignore
-   row.combineOrderDetails?.map((item:BetOrderAPI.Detail)=>{
-       item.settleHomeScore = displayHomeAwayScore(row.settleScore,row.sportId,'seprate','home');
-       item.settleAwayScore = displayHomeAwayScore(row.settleScore,row.sportId,'seprate','away');
+   row.combineOrderDetails?.map((item:BetOrderAPI.Detail,index:number)=>{
+       item.betResultHomeScore = displayHomeAwayScore(item.settleScore,row.sportId,'seprate','home');
+       item.betResultAwayScore = displayHomeAwayScore(item.settleScore,row.sportId,'seprate','away');
+       item.index= index;
        return item
      })
-
   return row
 }
 const resultList=[
   {
-    value:1,title:t('赢'),bgColor:'',color:''
+    value:EBetResultType.WIN,title:BET_RESULT_TYPE_MAP[EBetResultType.WIN]
   },
   {
-    value:2,title:t('输'),bgColor:'',color:''
+    value:EBetResultType.LOSE,title:BET_RESULT_TYPE_MAP[EBetResultType.LOSE]
   },
   {
-    value:3,title:t('赢半'),bgColor:'',color:''
+    value:EBetResultType.WIN_HALF,title:BET_RESULT_TYPE_MAP[EBetResultType.WIN_HALF]
   },
   {
-    value:4,title:t('输半'),bgColor:'',color:''
+    value:EBetResultType.LOSE_HALF,title:BET_RESULT_TYPE_MAP[EBetResultType.LOSE_HALF]
   },
   {
-    value:5,title:t('走水'),bgColor:'',color:''
+    value:EBetResultType.FLAT,title:BET_RESULT_TYPE_MAP[EBetResultType.FLAT]
   },
 ]
 const  editColumnList=[ {
@@ -146,6 +151,44 @@ const closeDialog = ()=>{
 
 }
 const confirmClick = ()=>{
+  ElMessageBox.confirm(
+      `
+    <div class="text-center">
+        <div class="confirm_title text-base font-semibold">${t('您确定要更改此注单的投注结果？')}</div>
+        <div class="confirm_content text-sm ml-2 mt-4">${t('重要提示：')}</div>
+        <div class="confirm_content text-sm  ml-2 mt-2 mb-4">${t('重新结算操作会影响派彩经手动修改投注结果的注单，无法再使用程序二次结算。')}</div>
+    </div>
+    `,
+      t(`操作提示`),
+      {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: t('确认'),
+        cancelButtonText: t('取消'),
+        center: true
+      }
+  )
+      .then(async () => {
+        const betOrderDetailEventDTOS= newRow.value.combineOrderDetails.map((item:BetOrderAPI.Detail)=>{
+          const detailId:string = item.detailId;
+          const settleScore:string= 'H'+item.betResultHomeScore+'A'+item.betResultHomeScore;
+          return{detailId,settleScore,betResult:item.betResult}
+        })
+
+        const params:any = {
+          detailId:newRow.value.id,
+          betOrderDetailEventDTOS,
+        }
+        console.log(2222,params)
+        API.betSettle(params).then((res)=>{
+          console.log(11111111,res)
+        })
+
+
+      })
+      .catch(() => {
+
+      });
+
 
 }
 
@@ -195,5 +238,16 @@ const confirmClick = ()=>{
     background: #FFF;
     border: 1px solid blue;
   }
+}
+.confirm_title{
+  font-size: 16px;
+}
+.confirm_content{
+  font-size: 14px;
+  text-align: left;
+  width: 80%;
+}
+input{
+  border: 1px solid #9ca3af;
 }
 </style>

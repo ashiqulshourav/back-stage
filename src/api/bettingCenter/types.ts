@@ -32,8 +32,10 @@ declare namespace BetOrderAPI {
     "betResult": string;
     "category": number;
     "betN": string;
-    settleHomeScore?:string;
-    settleAwayScore?:string;
+    betResultHomeScore?:string;
+    betResultAwayScore?:string;
+    detailId:string;
+    index?:number
   }
 
   type BetOrderList = {

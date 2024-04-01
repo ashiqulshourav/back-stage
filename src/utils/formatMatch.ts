@@ -142,17 +142,6 @@ export enum EBetResultType {
   HANDLE_CANCEL = 23,
   FLAT_MATCH_ROLLBACK = 51,
 }
-
-export const getViewOddFn = (od: number, type: EOddType, currentOddType: number) => {
-  if (type === EOddType.ML) {
-    od = Number(truncateDecimals(-(1 / od), 2));
-  }
-  if (type !== EOddType.EUROPE) {
-    return truncateDecimals(Number(currentOddType === EOddType.EUROPE ? addDecimals(od, 1) : od), 2);
-  }
-  return truncateDecimals(od, 2);
-};
-
 export const BET_RESULT_TYPE_MAP: { [key in EBetResultType]: string } = {
   [EBetResultType.NO_RESULT]: '无结果',
   [EBetResultType.FLAT]: '走水',
@@ -176,6 +165,18 @@ export const BET_RESULT_TYPE_MAP: { [key in EBetResultType]: string } = {
   [EBetResultType.AUTO_CANCEL]: '预约失效',
   [EBetResultType.FLAT_MATCH_ROLLBACK]: '走水', // 比分回滚取消结算返还金额,算走水
 };
+
+export const getViewOddFn = (od: number, type: EOddType, currentOddType: number) => {
+  if (type === EOddType.ML) {
+    od = Number(truncateDecimals(-(1 / od), 2));
+  }
+  if (type !== EOddType.EUROPE) {
+    return truncateDecimals(Number(currentOddType === EOddType.EUROPE ? addDecimals(od, 1) : od), 2);
+  }
+  return truncateDecimals(od, 2);
+};
+
+
 
 
 
@@ -420,13 +421,15 @@ export const displayHomeAwayScore = (scoreString:string, sprotId?: ESportType,ty
   if (sprotId > 33) return '';
   if (sprotId === ESportType.TENNIS || sprotId === ESportType.VOLLEYBALL) return '';
   const [home, away] = assertHomeAwayScore(scoreString);
+
+  console.log(22222,scoreString,home, away)
   if(home===undefined||away===undefined){
     return ''
   }
   if(type&&witchTeam){
-    if(witchTeam===TeamName.home){
+    if(witchTeam==='home'){
       return home
-    }else if(witchTeam===TeamName.away){
+    }else if(witchTeam==='away'){
       return away
     }
 
