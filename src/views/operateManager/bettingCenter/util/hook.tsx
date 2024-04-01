@@ -350,10 +350,10 @@ const handleEditResult = (row)=>{
     contentRenderer: ({ options, index }) =>
         h(editMatch, {
           ref: editDialogRef,
-          row: row,
-          onSearch:onSearch,
+          row: JSON.parse(JSON.stringify(row)),
           onCloseDialog: (_: boolean) => {
             closeDialog(options, index);
+            onSearch()
           }
         }),
   });

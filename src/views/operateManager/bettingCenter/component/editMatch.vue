@@ -71,7 +71,7 @@
           </template>
           <template #matchResult="{ row }">
             <ul >
-              <li v-for="item in resultList" :class="`result_item ${item?.value===row.betResult?'result_item_active':''}`" @click="selectBetResult(0,item.value)">{{item.title}}</li>
+              <li v-for="item in resultList" :class="`result_item ${item?.value===row.betResult?'result_item_active':''}`" @click="selectBetResult(row.index,item.value)">{{item.title}}</li>
             </ul>
           </template>
         </pure-table>
@@ -96,7 +96,7 @@ import {ElMessageBox} from "element-plus";
 const { row } = defineProps<{
   row: BetOrderAPI.Detail&BetOrderAPI.BetOrderList;
 }>();
-const emits = defineEmits(['onSearch','closeDialog']);
+const emits = defineEmits(['closeDialog']);
 const newRow =ref<BetOrderAPI.Detail&BetOrderAPI.BetOrderList>(formatRow() as BetOrderAPI.Detail&BetOrderAPI.BetOrderList);
 const selectBetResult = (index:number,betResult:number)=>{
   // @ts-ignore
@@ -110,7 +110,7 @@ function formatRow (){
        item.index= index;
        return item
      })
-  return row
+  return Object.assign({},{...row})
 }
 const resultList=[
   {
@@ -180,7 +180,6 @@ const confirmClick = ()=>{
         API.betSettle(params).then((res)=>{
           if(res.code===0){
             emits('closeDialog');
-            emits('onSearch', ...['reload']);
           }
         }).catch(()=>{
 
