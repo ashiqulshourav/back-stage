@@ -96,9 +96,8 @@ import {ElMessageBox} from "element-plus";
 const { row } = defineProps<{
   row: BetOrderAPI.Detail&BetOrderAPI.BetOrderList;
 }>();
-
+const emits = defineEmits(['onSearch','closeDialog']);
 const newRow =ref<BetOrderAPI.Detail&BetOrderAPI.BetOrderList>(formatRow() as BetOrderAPI.Detail&BetOrderAPI.BetOrderList);
-const emits = defineEmits(['closeDialog']);
 const selectBetResult = (index:number,betResult:number)=>{
   // @ts-ignore
   newRow.value.combineOrderDetails[index].betResult= betResult;
@@ -178,18 +177,18 @@ const confirmClick = ()=>{
           id:newRow.value.id,
           betOrderDetails,
         }
-        console.log(2222,params)
         API.betSettle(params).then((res)=>{
-          console.log(11111111,res)
           if(res.code===0){
-
+            emits('closeDialog');
+            emits('onSearch', ...['reload']);
           }
-        })
+        }).catch(()=>{
 
+        })
 
       })
       .catch(() => {
-
+        emits('closeDialog');
       });
 
 

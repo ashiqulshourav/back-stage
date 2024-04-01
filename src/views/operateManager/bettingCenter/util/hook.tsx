@@ -351,6 +351,7 @@ const handleEditResult = (row)=>{
         h(editMatch, {
           ref: editDialogRef,
           row: row,
+          onSearch:onSearch,
           onCloseDialog: (_: boolean) => {
             closeDialog(options, index);
           }
