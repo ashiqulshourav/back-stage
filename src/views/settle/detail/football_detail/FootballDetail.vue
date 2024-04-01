@@ -42,7 +42,7 @@ const renderList = computed(() => {
     {
       title: t('联赛'),
       val: _?.leagueNameCn ?? history.state.params?.leagueNameCn,
-      span: 5
+      span: 4
     },
     { title: t('开赛时间'), val: _?.beginTime, span: 4 },
     {
@@ -62,7 +62,7 @@ const renderList = computed(() => {
       }</span> <span class="ml-1 mr-1 font-bold">VS</span> <span>${
         _?.awayTeamNameCn ?? '_'
       }</span>`,
-      span: 6
+      span: 7
     },
     {
       title: t('结算状态'),
