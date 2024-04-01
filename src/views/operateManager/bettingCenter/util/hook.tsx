@@ -127,6 +127,7 @@ export function useLeague() {
         dataList.push(...res.data.pageData);
         dataList.map((item: any, index) => {
           item.index = index + 1
+
         })
         pagination.total = res.data.count;
         pagination.pageSize = res.data.pageSize;
@@ -346,16 +347,15 @@ const handleEditResult = (row)=>{
     width: row.combineOrderDetails.length>1?'60%':'25%',
     center: true,
     closeOnClickModal: false,
-    hideFooter: true,
+    hideFooter:true,
     contentRenderer: ({ options, index }) =>
         h(editMatch, {
           ref: editDialogRef,
-          row: {...row,...row.combineOrderDetails[0]},
+          row: row,
           onCloseDialog: (_: boolean) => {
             closeDialog(options, index);
-
           }
-        })
+        }),
   });
 }
 

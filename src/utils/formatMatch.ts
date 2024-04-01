@@ -5,6 +5,8 @@ import {EHandicapType, EOddType, ESportType, } from '@/core/constants/enum/sport
 import { TOrder} from '@/core/services/Table';
 import {useMatchStore} from "@/store/match";
 import {useI18n} from "vue-i18n";
+import Enum from "@/core/constants/enum";
+import {string} from "vue-types";
 
 // 解析当前比分
 export const parseMatchScore = (s: string) => {
@@ -409,14 +411,25 @@ export const calculateSeriesTypeTotalBets = (seriesType:number)=>{
   return arr.length>0?arr[1]:''
 }
 
-
+// enum TeamType {
+//   home='home',
+//   away='away'
+// }
 // 获取比分
-export const displayHomeAwayScore = (scoreString:string, sprotId?: ESportType) => {
+export const displayHomeAwayScore = (scoreString:string, sprotId?: ESportType,type?:string,witchTeam?:TeamType) => {
   if (sprotId > 33) return '';
   if (sprotId === ESportType.TENNIS || sprotId === ESportType.VOLLEYBALL) return '';
   const [home, away] = assertHomeAwayScore(scoreString);
   if(home===undefined||away===undefined){
     return ''
+  }
+  if(type&&witchTeam){
+    if(witchTeam===TeamName.home){
+      return home
+    }else if(witchTeam===TeamName.away){
+      return away
+    }
+
   }
   return `${home}-${away}`
 };
