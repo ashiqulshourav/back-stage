@@ -419,8 +419,6 @@ export const displayHomeAwayScore = (scoreString:string, sprotId?: ESportType,ty
   if (sprotId > 33) return '';
   if (sprotId === ESportType.TENNIS || sprotId === ESportType.VOLLEYBALL) return '';
   const [home, away] = assertHomeAwayScore(scoreString);
-
-  console.log(22222,scoreString,home, away)
   if(home===undefined||away===undefined){
     return ''
   }

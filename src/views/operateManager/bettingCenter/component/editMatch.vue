@@ -93,6 +93,7 @@ import dayjs from "dayjs";
 import {BET_RESULT_TYPE_MAP, displayHomeAwayScore, EBetResultType,} from "@/utils/formatMatch";
 import {PureTableBar} from "@/components/RePureTableBar";
 import {ElMessageBox} from "element-plus";
+import {message} from "@/utils/message";
 const { row } = defineProps<{
   row: BetOrderAPI.Detail&BetOrderAPI.BetOrderList;
 }>();
@@ -180,9 +181,12 @@ const confirmClick = ()=>{
         API.betSettle(params).then((res)=>{
           if(res.code===0){
             emits('closeDialog');
+              message(t('该笔注单的赛果比分、投注结果已修正'), { type: 'success' });
+          }else {
+              message(res.msg, { type: 'warning' });
           }
-        }).catch(()=>{
-
+        }).catch((res)=>{
+            message(res.msg, { type: 'warning' });
         })
 
       })

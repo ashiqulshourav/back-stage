@@ -29,7 +29,7 @@ declare namespace BetOrderAPI {
     "betHomeOrAway": string;
     "kindsCode": string;
     "kindsName": string;
-    "betResult": string;
+    "betResult": number;
     "category": number;
     "betN": string;
     betResultHomeScore?:string;
