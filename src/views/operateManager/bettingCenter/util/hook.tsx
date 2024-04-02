@@ -7,6 +7,7 @@ import { utils, writeFile } from 'xlsx';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import editMatch from "../component/editMatch.vue";
 import { reactive, ref, onMounted, h } from 'vue';
+import PasswordInput from '@/components/PasswordInput/index.vue';
 
 import {
   Detail,
@@ -26,6 +27,7 @@ export function useLeague() {
   const tenantObj = reactive<any>({});
   const UDialogFlag =  ref<Boolean>(false);
   const loading = ref(true);
+  const uDialogRef = ref(null)
   const totalInfo = reactive<BetOrderAPI.otherDataType>(
     {} as BetOrderAPI.otherDataType
   );
@@ -307,35 +309,32 @@ const specialCountFlag = (status,billStatus,betResult):boolean=>{
     getStatus(status,billStatus,betResult).status===betStatus.settlementBet||
     getStatus(status,billStatus,betResult).status===betStatus.eventAbnormal
 }
+
 const switchDialog = (flag:boolean,row)=>{
     UDialogFlag.value=flag;
-   handleEditResult(row)
-    // if(flag){
-    //   return new Promise<boolean>(resolve => {
-    //     resolve(true);
-    //     addDialog({
-    //       title: t('请输入U盾密码'),
-    //       class: 'reset_dialog',
-    //       width: '25%',
-    //       center: true,
-    //       closeOnClickModal: false,
-    //       hideFooter: true,
-    //       contentRenderer: ({ options, index }) =>
-    //           h(PasswordInput, {
-    //             ref: uDialogRef,
-    //             onCloseDialog: (_: boolean) => {
-    //               closeDialog(options, index);
-    //               setTimeout(() => {
-    //
-    //                 resolve(_);
-    //               }, 300);
-    //             }
-    //           })
-    //     });
-    //   });
-    //   handleEditResult(row)
-    //
-    // }
+
+    if(flag){
+      handleEditResult(row)
+      // addDialog({
+      //   title: t('请输入U盾密码'),
+      //   class: 'reset_dialog',
+      //   width: '25%',
+      //   center: true,
+      //   closeOnClickModal: false,
+      //   hideFooter: true,
+      //   contentRenderer: ({ options, index }) =>
+      //       h(PasswordInput, {
+      //         ref: uDialogRef,
+      //         onCloseDialog: (_: boolean) => {
+      //           closeDialog(options, index);
+      //           setTimeout(() => {
+      //             handleEditResult(row)
+      //           }, 300);
+      //         }
+      //       })
+      // });
+
+    }
 }
 
   const editDialogRef = ref();
