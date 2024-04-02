@@ -4,9 +4,10 @@ interface FormProps {
 }
 
 export type searchFormType = {
-  text: string;
-  sportId?: number;
-  category?: number;
+  id: string;
+  tenantId?: number;
+  limitLevel?: number;
+  tenantCode?: number;
 }
 
 export type { FormProps };

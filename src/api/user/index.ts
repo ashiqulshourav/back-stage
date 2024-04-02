@@ -16,5 +16,4 @@ export const user = {
   operateUserList: (data: { type: number }) => http.request<UserAPI.RouterResType>("post", "/operate/userList", { data }),
   //- 修改用户等级限额
   updateUserLevelLimit: (data: UserAPI.updateLimmitReqType[]) => http.request<UserAPI.updateUserLevelLimitResType>("post", "/userLevelLimit/v1/updateUserLevelLimit", { data }),
-
 };

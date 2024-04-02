@@ -122,7 +122,7 @@ export function userPlayerListHook() {
       loading.value = true;
       const res: ConfigCenterDataAPI.ListLeagueTagRes =
         await API.operateUserList({
-          ...removeEmptyStringKeys(form),
+          // ...removeEmptyStringKeys(form),
           pageSize: pagination.pageSize,
           pageNum: pagination.currentPage
         });

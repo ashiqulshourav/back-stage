@@ -31,7 +31,7 @@
       <el-form-item prop="sportId">
         <el-select
           v-model="form.sportId"
-          :placeholder="t('所有商户')"
+          :placeholder="t('所属商户')"
           clearable
           class="!w-[150px]"
         >
@@ -44,14 +44,30 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="`${t('标签名称')}:`" prop="text">
+      <el-form-item prop="text">
         <el-input
           v-model="form.text"
-          :placeholder="t('标签名称')"
+          :placeholder="t('可输入商户编码或ID')"
           v-enter="search"
           clearable
           class="!w-[150px]"
         />
+      </el-form-item>
+
+      <el-form-item prop="sportId">
+        <el-select
+          v-model="form.limitLevel"
+          :placeholder="t('限额等级')"
+          clearable
+          class="!w-[150px]"
+        >
+          <el-option
+            :label="item.levelLimit"
+            :value="item.levelLimit"
+            v-for="item in sportLimmitList"
+            :key="item.levelLimit"
+          />
+        </el-select>
       </el-form-item>
 
       <el-form-item>
@@ -90,6 +106,7 @@ const buttonRef = ref();
 const emits = defineEmits(['onSearch']);
 const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
 const idList = reactive<string[]>([]);
+const sportLimmitList = reactive<UserAPI.UserLevelLimitListRes[]>([]);
 
 const props = withDefaults(
   defineProps<{
@@ -113,13 +130,26 @@ watch(
   }
 );
 
+onMounted(() => {
+  initTenantList();
+  getLimmitLevelList();
+});
+
+const getLimmitLevelList = async () => {
+  const res = await API.getUserLevelLimitList({ type: 0 });
+  if (res.code) return;
+  sportLimmitList.length = 0;
+  sportLimmitList.push(...res.data);
+};
+
+const initTenantList = async () => {
+  const res = await API.getTenantList();
+  console.log('SearchForm.vue文件 122==============行打印=', res);
+};
+
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
   gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
-  emits('onSearch', ...['reload']);
-};
-
-const search = () => {
   emits('onSearch', ...['reload']);
 };
 

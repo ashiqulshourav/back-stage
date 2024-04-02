@@ -1,7 +1,6 @@
 <template>
   <div class="main">
     <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
-
     <PureTableBar
       :title="t('用户列表')"
       :columns="columns"
