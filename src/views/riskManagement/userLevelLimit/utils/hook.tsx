@@ -62,7 +62,7 @@ export function useClassifySettingHook() {
       center: true
     }).then(async () => {
       loading.value = true;
-      const res = await API.updateUserLevelLimit({ list: sportList });
+      const res = await API.updateUserLevelLimit({ list: sportList, type: 0 });
       loading.value = false;
       isEditSport.value = false;
       message(res.msg, { type: res.code ? 'error' : 'success' });
@@ -75,7 +75,7 @@ export function useClassifySettingHook() {
       center: true
     }).then(async () => {
       loading.value = true;
-      const res = await API.updateUserLevelLimit({ list: eSportList });
+      const res = await API.updateUserLevelLimit({ list: eSportList, type: 1 });
       loading.value = false;
       isEditSport.value = false;
       message(res.msg, { type: res.code ? 'error' : 'success' });
