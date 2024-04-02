@@ -22,7 +22,9 @@ export const user = {
     limittenantCodeLevel?: number | string;
   }) => http.request<UserAPI.operateUserListReqType>("post", "/operate/userList", { data }),
   //- 修改用户等级限额
-  updateUserLevelLimit: (data: UserAPI.updateLimmitReqType[]) => http.request<UserAPI.updateUserLevelLimitResType>("post", "/userLevelLimit/v1/updateUserLevelLimit", { data }),
+  updateUserLevelLimit: (data: {
+    list: UserAPI.updateLimmitReqType[]
+  }) => http.request<UserAPI.updateUserLevelLimitResType>("post", "/userLevelLimit/v1/updateUserLevelLimit", { data }),
   //- 用户权限下拉框
   getLimitListDropDownBox: () => http.request<UserAPI.userBaseResType>("get", "/userLevelLimit/v1/getLimitListDropDownBox", {}),
   //- 修改用户限额
