@@ -25,8 +25,8 @@
     </div>
     <div class="mt-5">
       <el-text  type="primary">{{t('请选择注单的投注结果')}}</el-text>
-      <ul class="mt-2 cursor-pointer">
-         <li v-for="item in resultList" :class="`result_item ${item?.value===newRow.combineOrderDetails[0].betResult?'result_item_active':''}`" @click="selectBetResult(0,item.value)" >{{item.title}}</li>
+      <ul class="mt-2 ">
+         <li v-for="item in resultList" :class="`result_item ${item?.value===data.combineOrderDetails[0].betResult?'result_item_disable':item.value===newRow.combineOrderDetails[0].betResult?'result_item_active cursor-pointer':'cursor-pointer'}`" @click="selectBetResult(0,item.value,item?.value===data.combineOrderDetails[0].betResult)" >{{item.title}}</li>
       </ul>
     </div>
   </div>
@@ -43,7 +43,7 @@
             table-layout="auto"
             class="table_container"
             adaptive
-            :data="row.combineOrderDetails"
+            :data="newRow.combineOrderDetails"
             :columns="dynamicColumns"
         >
           <template #matchMessage="{ row }">
@@ -71,7 +71,7 @@
           </template>
           <template #matchResult="{ row }">
             <ul >
-              <li v-for="item in resultList" :class="`result_item ${item?.value===row.betResult?'result_item_active':''}`" @click="selectBetResult(row.index,item.value)">{{item.title}}</li>
+              <li v-for="item in resultList" :class="`result_item ${item?.value===data.combineOrderDetails[row.index].betResult?'result_item_disable':item?.value===row.betResult?'result_item_active cursor-pointer':'cursor-pointer'}`" @click="selectBetResult(row.index,item.value,item?.value===data.combineOrderDetails[row.index].betResult)">{{item.title}}</li>
             </ul>
           </template>
         </pure-table>
@@ -94,24 +94,26 @@ import {BET_RESULT_TYPE_MAP, displayHomeAwayScore, EBetResultType,} from "@/util
 import {PureTableBar} from "@/components/RePureTableBar";
 import {ElMessageBox} from "element-plus";
 import {message} from "@/utils/message";
-const { row } = defineProps<{
-  row: BetOrderAPI.Detail&BetOrderAPI.BetOrderList;
+const { data } = defineProps<{
+  data: BetOrderAPI.Detail&BetOrderAPI.BetOrderList;
 }>();
 const emits = defineEmits(['closeDialog']);
 const newRow =ref<BetOrderAPI.Detail&BetOrderAPI.BetOrderList>(formatRow() as BetOrderAPI.Detail&BetOrderAPI.BetOrderList);
-const selectBetResult = (index:number,betResult:number)=>{
+const selectBetResult = (index:number,betResult:number,isDisable:boolean)=>{
+  if (isDisable) return
   // @ts-ignore
   newRow.value.combineOrderDetails[index].betResult= betResult;
 }
 function formatRow (){
   // @ts-ignore
-   row.combineOrderDetails?.map((item:BetOrderAPI.Detail,index:number)=>{
-       item.betResultHomeScore = displayHomeAwayScore(item.settleScore,row.sportId,'seprate','home');
-       item.betResultAwayScore = displayHomeAwayScore(item.settleScore,row.sportId,'seprate','away');
+   data.combineOrderDetails?.map((item:BetOrderAPI.Detail,index:number)=>{
+       item.betResultHomeScore = displayHomeAwayScore(item.settleScore,data.sportId,'seprate','home');
+       item.betResultAwayScore = displayHomeAwayScore(item.settleScore,data.sportId,'seprate','away');
        item.index= index;
        return item
      })
-  return Object.assign({},{...row})
+
+  return JSON.parse(JSON.stringify(data))
 }
 const resultList=[
   {
@@ -225,31 +227,11 @@ const confirmClick = ()=>{
     border: 1px solid blue;
     color: blue;
   }
-  //&:nth-child(1){
-  //  color: red;
-  //  background: rgb(255,220,224);
-  //  border: 1px solid rgb(255,220,224);
-  //}
-  //&:nth-child(2){
-  //  color: #FFF;
-  //  background:rgb(167,167,167);
-  //  border: 1px solid rgb(167,167,167);
-  //}
-  //&:nth-child(3){
-  //  color: red;
-  //  background: #FFF;
-  //  border: 1px solid red;
-  //}
-  //&:nth-child(4){
-  //  color: green;
-  //  background: #FFF;
-  //  border: 1px solid green;
-  //}
-  //&:nth-child(5){
-  //  color: blue;
-  //  background: #FFF;
-  //  border: 1px solid blue;
-  //}
+  &.result_item_disable{
+    border: 1px solid lightgray;
+    //color: blue;
+    background: lightgray;
+  }
 }
 .confirm_title{
   font-size: 16px;
