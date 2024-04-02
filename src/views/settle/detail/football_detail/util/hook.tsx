@@ -59,11 +59,29 @@ export function useFootball() {
   const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
     history.state.params as SattleDataAPI.getSettlementDataList
   );
+  const overTimeStatus = ref(false);
+  const penaltyKickStatus = ref(false);
   const { matchId } = history.state.params;
   const balanceLoading = reactive<{ half: boolean; all: boolean }>({
     half: false,
     all: false
   });
+
+  const recordList = ref<string[][]>([
+    [
+      `${t('比分')}: -`,
+      `${t('红牌')}: -`,
+      `${t('黄牌')}: -`,
+      `${t('角球')}: -`
+    ],
+    [
+      `${t('比分')}: -`,
+      `${t('红牌')}: -`,
+      `${t('黄牌')}: -`,
+      `${t('角球')}: -`
+    ],
+    [`${t('比分')}: -`]
+  ]);
 
   //- 人工结算新增一行
   const addChildRow = (tableList, type, index) => {
@@ -94,6 +112,12 @@ export function useFootball() {
   //- 当前行编辑
   const editChild = (row: SattleDataAPI.MatchEventsList) => (row.isEdit = true);
 
+  //- 重新加载赛事事件列表
+  const reloadTable = (isReloadALl = false) => {
+    if (isReloadALl) getMatchDetail();
+    getChildrenData();
+  };
+
   //- 赛事列表获取
   const getChildrenData = async () => {
     childloading.value = true;
@@ -101,6 +125,50 @@ export function useFootball() {
     childloading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
     childDataTotal.value = 0;
+    overTimeStatus.value = res.data.overTimeStatus;
+    penaltyKickStatus.value = res.data.penaltyKickStatus;
+    console.log(
+      'hook.tsx文件 130==============行打印=',
+      renderObj.fullSettlementStatus
+    );
+    recordList.value = [
+      [
+        `${t('比分')}: ${res.data.normalTimeScore}`,
+        `${t('红牌')}: ${res.data.normalTimeRedCard}`,
+        `${t('黄牌')}: ${res.data.normalTimeYellowCard}`,
+        `${t('角球')}: ${res.data.normalTimeCorner}`
+      ],
+      [
+        `${t('比分')}: ${
+          overTimeStatus.value || renderObj.fullSettlementStatus === 1
+            ? res.data.overTimeScore
+            : '-'
+        }`,
+        `${t('红牌')}: ${
+          overTimeStatus.value || renderObj.fullSettlementStatus === 1
+            ? res.data.overTimeRedCard
+            : '-'
+        }`,
+        `${t('黄牌')}: ${
+          overTimeStatus.value || renderObj.fullSettlementStatus === 1
+            ? res.data.overTimeYellowCard
+            : '-'
+        }`,
+        `${t('角球')}: ${
+          overTimeStatus.value || renderObj.fullSettlementStatus === 1
+            ? res.data.overTimeCorner
+            : '-'
+        }`
+      ],
+      [
+        `${t('比分')}: ${
+          penaltyKickStatus.value || renderObj.fullSettlementStatus === 1
+            ? res.data.penaltyKick
+            : '-'
+        }`
+      ]
+    ];
+
     dataList.forEach((item: SaleDataAPI.ChildrenDataList) => {
       item.tableList = res.data[item.key];
       childDataTotal.value += item.tableList?.length;
@@ -258,8 +326,6 @@ export function useFootball() {
       balanceLoading[type] = false;
     }
   };
-
-  const reloadTable = () => getChildrenData();
 
   //- 自动结算转手动结算
   const changeSettleType = async () => {
@@ -478,6 +544,9 @@ export function useFootball() {
     openSecondSettleClick,
     saveCancelEventIds,
     confirmSecondSettleClick,
-    cancelItem
+    cancelItem,
+    recordList,
+    overTimeStatus,
+    penaltyKickStatus
   };
 }

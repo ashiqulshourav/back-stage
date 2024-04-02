@@ -54,6 +54,15 @@ export enum SPORT_TYPE {
   cricket = 13
 }
 
+export enum SETTLE_BUTTON_TYPE {
+  normal_half = 0,
+  normal_all = 31,
+  over_half = 100,
+  over_all = 33,
+  penalty_kick = 110,
+  close = 120,
+}
+
 export type parentRowType = {
   row: SattleDataAPI.getSettlementDataList;
   index?: number;

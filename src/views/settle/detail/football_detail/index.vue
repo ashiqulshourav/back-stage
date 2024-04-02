@@ -2,10 +2,16 @@
   <div class="main">
     <FootballDetail :renderObj="renderObj" :allSettleLoading="allSettleLoading">
       <Score
+        v-for="(item, index) in recordArr"
+        :key="index"
         :renderObj="renderObj"
-        :dataList="dataList"
+        :data="item"
+        :index="index"
+        v-model:overTimeStatus="overTimeStatus"
+        v-model:penaltyKickStatus="penaltyKickStatus"
         @openSecondSettleClick="openSecondSettleClick"
         @confirmSecondSettleClick="confirmSecondSettleClick"
+        @reloadEventList="reloadTable"
       />
     </FootballDetail>
     <PureTableBar @refresh="reloadTable" :columns="columns">
@@ -17,6 +23,10 @@
               :parentRow="renderObj"
               :childDataTotal="childDataTotal"
               @settlementFunction="settlementFunction"
+              :matchId="renderObj.matchId"
+              @reloadTable="reloadTable"
+              :overTimeStatus="overTimeStatus"
+              :penaltyKickStatus="penaltyKickStatus"
             />
             <!-- -开启人工结算 -->
             <div class="cursor-pointer">
@@ -212,9 +222,9 @@
                 }}...</span
               >
               <IconifyIconOffline
+                v-if="hasAuth('ADDEVENTSMANUAL')"
                 class="cursor-pointer"
                 width="25px"
-                v-if="hasAuth('ADDEVENTSMANUAL')"
                 icon="icon_circle_fill"
                 @click="addChildRow(item.tableList, item.type, selectTabIndex)"
               />
@@ -334,8 +344,27 @@ const {
   openSecondSettleClick,
   saveCancelEventIds,
   confirmSecondSettleClick,
-  cancelItem
+  cancelItem,
+  recordList,
+  overTimeStatus,
+  penaltyKickStatus
 } = useFootball();
+
+const recordArr = computed(() => {
+  return [
+    { keyStr: t('常规赛果'), isOpen: true, list: recordList.value[0] },
+    {
+      keyStr: t('加时赛赛果'),
+      isOpen: overTimeStatus.value,
+      list: recordList.value[1]
+    },
+    {
+      keyStr: t('点球大战赛果'),
+      isOpen: penaltyKickStatus.value,
+      list: recordList.value[2]
+    }
+  ];
+});
 
 //- 点球不显示时间
 const columns = computed(() => {
