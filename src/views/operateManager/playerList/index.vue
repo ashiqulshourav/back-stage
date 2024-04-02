@@ -60,7 +60,7 @@
 import { PureTableBar } from '@/components/RePureTableBar';
 import Delete from '@iconify-icons/ep/delete';
 import EditPen from '@iconify-icons/ep/edit-pen';
-import { useLeagueTagsHook } from './utils/hook';
+import { userPlayerListHook } from './utils/hook';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
@@ -82,7 +82,7 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   form
-} = useLeagueTagsHook();
+} = userPlayerListHook();
 </script>
 
 <style>

@@ -10,7 +10,7 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import { t } from '@/plugins/i18n';
 import { Delete } from '@element-plus/icons-vue';
 
-export function useLeagueTagsHook() {
+export function userPlayerListHook() {
   const formRef = ref();
   const dataList = reactive<ConfigCenterDataAPI.LeagueTagType[]>([]);
   const loading = ref(true);
@@ -121,7 +121,7 @@ export function useLeagueTagsHook() {
     try {
       loading.value = true;
       const res: ConfigCenterDataAPI.ListLeagueTagRes =
-        await API.getUserLevelLimitList({
+        await API.operateUserList({
           ...removeEmptyStringKeys(form),
           pageSize: pagination.pageSize,
           pageNum: pagination.currentPage

@@ -17,6 +17,7 @@ import Monitor from "@iconify-icons/ep/monitor";
 import Files from "@iconify-icons/ep/files";
 import systemManager from "@iconify-icons/ri/history-line";
 import OperationLog from "@iconify-icons/icon-park-outline/log";
+
 import icon_circle_fill from '@iconify-icons/ri/add-circle-fill';
 import uploadIcon from '@iconify-icons/ri/upload-2-fill';
 import cancelIcon from '@iconify-icons/ri/close-circle-fill';
@@ -49,6 +50,7 @@ addIcon("systemManager", OperationLog);
 addIcon("operationLog1", OperationLog);
 addIcon("menuTree", menuTree);
 addIcon("configCenter", configCenter);
+addIcon("riskManagement", sale);
 /* 菜单icon结束 */
 
 addIcon("homeFilled", HomeFilled);

@@ -7,42 +7,31 @@
           :placeholder="t('可输入1-50个用户ID,用空格进行分割')"
           clearable
           ref="buttonRef"
+          :formatter="formatterTxt"
           class="!w-[260px]"
         />
         <el-popover
           ref="popoverRef"
           :virtual-ref="buttonRef"
           trigger="click"
+          width="260px"
           virtual-triggering
         >
-          <div class="flex flex-start max-w-96">
-            <span class="el-tag mr-2" v-for="item in idList" :key="item"
-              >item</span
+          <div class="flex flex-start w-full flex-wrap">
+            <span
+              class="el-tag mr-2 mb-1"
+              v-for="item in idList.filter(_ => _ !== '')"
+              :key="item"
+              >{{ item }}</span
             >
           </div>
         </el-popover>
-
-        <!-- <el-popover
-          placement="bottom"
-          title="标题"
-          width="200"
-          trigger="click"
-          content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
-        >
-          <el-input
-            v-model="form.text"
-            :placeholder="t('可输入1-50个用户ID')"
-            v-enter="search"
-            clearable
-            class="!w-[150px]"
-          />
-        </el-popover> -->
       </el-form-item>
 
-      <el-form-item :label="`${t('游戏种类')}:`" prop="sportId">
+      <el-form-item prop="sportId">
         <el-select
           v-model="form.sportId"
-          :placeholder="t('游戏种类')"
+          :placeholder="t('所有商户')"
           clearable
           class="!w-[150px]"
         >
@@ -110,10 +99,17 @@ const props = withDefaults(
   {}
 );
 
+const formatterTxt = v => {
+  const l = new Set(v.split(','));
+  idList.length = 0;
+  idList.push(...(Array.from(l) as string[]));
+  return v;
+};
+
 watch(
   () => props.form.text,
   val => {
-    console.log('SearchForm.vue文件 114==============行打印=', val);
+    // console.log('SearchForm.vue文件 114==============行打印=', val);
   }
 );
 

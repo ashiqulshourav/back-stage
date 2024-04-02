@@ -10,6 +10,11 @@ export const user = {
   //- 退出登录
   loginOut: (data: { id: number, name: string }) => http.request<UserAPI.RouterResType>("post", "/kmg/auth/loginOut", { data }),
 
-  //- 获取用户列表
-  getUserLevelLimitList: (data: { id: number, name: string }) => http.request<UserAPI.RouterResType>("post", "/userLevelLimit/v1/getUserLevelLimitList", { data }),
+  //- 用户等级限额列表
+  getUserLevelLimitList: (data: { type: number }) => http.request<UserAPI.UserLevelLimitListResData>("post", "/userLevelLimit/v1/getUserLevelLimitList", { data }),
+  //- 用户列表
+  operateUserList: (data: { type: number }) => http.request<UserAPI.RouterResType>("post", "/operate/userList", { data }),
+  //- 修改用户等级限额
+  updateUserLevelLimit: (data: UserAPI.updateLimmitReqType[]) => http.request<UserAPI.updateUserLevelLimitResType>("post", "/userLevelLimit/v1/updateUserLevelLimit", { data }),
+
 };
