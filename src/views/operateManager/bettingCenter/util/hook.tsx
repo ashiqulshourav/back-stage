@@ -315,24 +315,27 @@ const switchDialog = (flag:boolean,row)=>{
 
     if(flag){
       handleEditResult(row)
-      // addDialog({
-      //   title: t('请输入U盾密码'),
-      //   class: 'reset_dialog',
-      //   width: '25%',
-      //   center: true,
-      //   closeOnClickModal: false,
-      //   hideFooter: true,
-      //   contentRenderer: ({ options, index }) =>
-      //       h(PasswordInput, {
-      //         ref: uDialogRef,
-      //         onCloseDialog: (_: boolean) => {
-      //           closeDialog(options, index);
-      //           setTimeout(() => {
-      //             handleEditResult(row)
-      //           }, 300);
-      //         }
-      //       })
-      // });
+      if(0){
+        addDialog({
+          title: t('请输入U盾密码'),
+          class: 'reset_dialog',
+          width: '25%',
+          center: true,
+          closeOnClickModal: false,
+          hideFooter: true,
+          contentRenderer: ({ options, index }) =>
+              h(PasswordInput, {
+                ref: uDialogRef,
+                onCloseDialog: (_: boolean) => {
+                  closeDialog(options, index);
+                  setTimeout(() => {
+                    handleEditResult(row)
+                  }, 300);
+                }
+              })
+        });
+      }
+
 
     }
 }
