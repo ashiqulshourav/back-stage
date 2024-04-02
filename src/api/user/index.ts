@@ -9,4 +9,31 @@ export const user = {
   getRouter: (data: { id: number }) => http.request<UserAPI.RouterResType>("post", "/kmg/matchRole/v1/getResourcelist", { data }),
   //- 退出登录
   loginOut: (data: { id: number, name: string }) => http.request<UserAPI.RouterResType>("post", "/kmg/auth/loginOut", { data }),
+
+  //- 用户等级限额列表
+  getUserLevelLimitList: (data: { type: number }) => http.request<UserAPI.UserLevelLimitListResData>("post", "/userLevelLimit/v1/getUserLevelLimitList", { data }),
+  //- 用户列表
+  operateUserList: (data: {
+    pageSize: number;
+    pageNum: number;
+    ids?: string[];
+    tenantIds?: number | string | string[];
+    limitLevel?: number | string;
+    limittenantCodeLevel?: number | string;
+  }) => http.request<UserAPI.operateUserListReqType>("post", "/operate/userList", { data }),
+  //- 修改用户等级限额
+  updateUserLevelLimit: (data: UserAPI.updateLimmitReqType[]) => http.request<UserAPI.updateUserLevelLimitResType>("post", "/userLevelLimit/v1/updateUserLevelLimit", { data }),
+  //- 用户权限下拉框
+  getLimitListDropDownBox: () => http.request<UserAPI.userBaseResType>("get", "/userLevelLimit/v1/getLimitListDropDownBox", {}),
+  //- 修改用户限额
+  operateUpdateUser: (data: {
+    id: number | string;
+    name: string;
+    isFreeze: boolean | number;
+    limitLevel: number;
+    singleBetLimit: number | string;
+    singleEventCompensationLimit: number | string;
+    remark: string;
+  }) => http.request<UserAPI.userBaseResType>("post", "/operate/updateUser", { data }),
+
 };

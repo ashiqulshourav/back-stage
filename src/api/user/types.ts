@@ -62,5 +62,57 @@ declare namespace UserAPI {
     childResourceList: ChildResourceList[];
   }
 
+
+  type UserLevelLimitListRes = {
+    id?: number;
+    levelLimit: number;
+    productAmountTotalLimit: number;
+    maxWinAmountLimit: number;
+    userSingleGamePay: number;
+    singleMatchPay: number;
+    bunchMatchPay: number;
+    championDailyPay: number;
+    type?: number;
+  }
+
+  type UserLevelLimitListResData = COMMON.BASE_RES_TYPE<UserLevelLimitListRes[]>
+
   type RouterResType = COMMON.BASE_RES_TYPE<RouterResData[]>
+  type updateUserLevelLimitResType = COMMON.BASE_RES_TYPE<null>
+  type userBaseResType = COMMON.BASE_RES_TYPE<string[]>
+
+
+  type operateUserList = {
+    id: string;
+    userName: string;
+    nickName?: any;
+    createdAt: string;
+    tenantId: number;
+    tenantName: string;
+    tenantCode: string;
+    isFreeze?: any;
+    limitLevel?: number;
+  }
+
+  type operateUserData = {
+    count: number;
+    groupCount?: any;
+    pageNum: number;
+    pageSize: number;
+    pageData: operateUserList[];
+  }
+
+  type operateUserListReqType = COMMON.BASE_RES_TYPE<operateUserData>
+
+  type updateLimmitReqType = {
+    id?: number;
+    levelLimit: number;
+    productAmountTotalLimit: number;
+    maxWinAmountLimit: number;
+    userSingleGamePay: number;
+    singleMatchPay: number;
+    bunchMatchPay: number;
+    championDailyPay: number,
+    type?: number;
+  }
 }
