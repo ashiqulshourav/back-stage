@@ -1,20 +1,20 @@
 <template>
   <div class="main">
-    <DetiltTitle
-      @allSettleBtnClick="void"
-      :renderObj="renderObj"
-      :allSettleLoading="allSettleLoading"
-      :hideAllSettleBtn="true"
-      :isFootBallTitle="true"
-    >
+    <FootballDetail :renderObj="renderObj" :allSettleLoading="allSettleLoading">
       <Score
+        v-for="(item, index) in recordArr"
+        :key="index"
         :renderObj="renderObj"
-        :dataList="dataList"
+        :data="item"
+        :index="index"
+        v-model:overTimeStatus="overTimeStatus"
+        v-model:penaltyKickStatus="penaltyKickStatus"
         @openSecondSettleClick="openSecondSettleClick"
         @confirmSecondSettleClick="confirmSecondSettleClick"
+        @reloadEventList="reloadTable"
       />
-    </DetiltTitle>
-    <PureTableBar @refresh="reloadTable" :columns="childColumns">
+    </FootballDetail>
+    <PureTableBar @refresh="reloadTable" :columns="columns">
       <template #title>
         <div class="flex items-center">
           <template v-if="!renderObj.fullSettlementStatus">
@@ -23,6 +23,10 @@
               :parentRow="renderObj"
               :childDataTotal="childDataTotal"
               @settlementFunction="settlementFunction"
+              :matchId="renderObj.matchId"
+              @reloadTable="reloadTable"
+              :overTimeStatus="overTimeStatus"
+              :penaltyKickStatus="penaltyKickStatus"
             />
             <!-- -开启人工结算 -->
             <div class="cursor-pointer">
@@ -103,7 +107,12 @@
 
               <!-- -比赛阶段 -->
               <template #matchPeriodId="{ row, index }: MatchEventRowType">
-                <MatchStage :row="row" :item="item" :index="index" />
+                <MatchStage
+                  :row="row"
+                  :item="item"
+                  :index="index"
+                  :matchType="idx < 3 ? 0 : idx < 6 ? 1 : 2"
+                />
               </template>
 
               <!-- -事件来源 -->
@@ -205,7 +214,7 @@
             >
               <span
                 class="mr-3 text-[var(--el-color-danger)] cursor-pointer"
-                @click="addChildRow(item.tableList, item.type)"
+                @click="addChildRow(item.tableList, item.type, selectTabIndex)"
                 >{{
                   renderObj.reSettleStatus === 1
                     ? t('重新结算中')
@@ -213,11 +222,11 @@
                 }}...</span
               >
               <IconifyIconOffline
+                v-if="hasAuth('ADDEVENTSMANUAL')"
                 class="cursor-pointer"
                 width="25px"
-                v-if="hasAuth('ADDEVENTSMANUAL')"
                 icon="icon_circle_fill"
-                @click="addChildRow(item.tableList, item.type)"
+                @click="addChildRow(item.tableList, item.type, selectTabIndex)"
               />
             </div>
           </el-tab-pane>
@@ -230,7 +239,8 @@
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-import DetiltTitle from '../../component/Settle_detail_title.vue';
+// import DetiltTitle from '../../component/Settle_detail_title.vue';
+import FootballDetail from './FootballDetail.vue';
 import BackEndBtnGroupCom from './BackEndBtnGroup.vue';
 import FrontBtnGroupCom from './FrontBtnGroup.vue';
 import CountDownBtn from './CountDownBtn.vue';
@@ -268,6 +278,7 @@ const teamChangeEvent = (
   if (!row.homeAway) return;
   const isHome = row.homeAway === 'home';
   const isYellowRedCard = type === MatchEventType.YellowRedCard;
+
   if (childIndex === 0) {
     row.t1 = isHome ? 1 : 0;
     row.t2 = isHome ? 0 : 1;
@@ -306,7 +317,9 @@ const teamChangeEvent = (
   }
 };
 
-const changeTab = () => {
+const selectTabIndex = ref('0');
+const changeTab = (n: string) => {
+  selectTabIndex.value = n;
   const resizeEvent = new Event('resize');
   window.dispatchEvent(resizeEvent);
 };
@@ -331,8 +344,33 @@ const {
   openSecondSettleClick,
   saveCancelEventIds,
   confirmSecondSettleClick,
-  cancelItem
+  cancelItem,
+  recordList,
+  overTimeStatus,
+  penaltyKickStatus
 } = useFootball();
+
+const recordArr = computed(() => {
+  return [
+    { keyStr: t('常规赛果'), isOpen: true, list: recordList.value[0] },
+    {
+      keyStr: t('加时赛赛果'),
+      isOpen: overTimeStatus.value,
+      list: recordList.value[1]
+    },
+    {
+      keyStr: t('点球大战赛果'),
+      isOpen: penaltyKickStatus.value,
+      list: recordList.value[2]
+    }
+  ];
+});
+
+//- 点球不显示时间
+const columns = computed(() => {
+  childColumns[3].hide = selectTabIndex.value === '6';
+  return childColumns;
+});
 </script>
 
 <style lang="scss"></style>

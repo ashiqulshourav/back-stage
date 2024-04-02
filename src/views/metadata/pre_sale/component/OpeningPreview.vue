@@ -157,7 +157,10 @@ onMounted(() => {
       0: { formatList: [], value: t('进球玩法') },
       1: { formatList: [], value: t('角球玩法') },
       2: { formatList: [], value: t('罚牌玩法') },
-      3: { formatList: [], value: t('其他玩法') }
+      3: { formatList: [], value: t('加时赛进球') },
+      4: { formatList: [], value: t('加时赛角球') },
+      5: { formatList: [], value: t('点球大战') },
+      6: { formatList: [], value: t('点球大战-独赢') }
     });
   } else {
     Object.assign(mData, {

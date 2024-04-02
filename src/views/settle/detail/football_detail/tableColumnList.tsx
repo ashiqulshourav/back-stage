@@ -180,10 +180,6 @@ export const childColumns: TableColumnList = [
     label: t('事件来源'),
     slot: 'homeAway'
   },
-  // {
-  //   label: t('1号球员名称'),
-  //   slot: 'player1Name'
-  // },
   {
     label: t('操作'),
     slot: 'operation'

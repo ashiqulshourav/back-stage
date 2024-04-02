@@ -9,21 +9,45 @@ import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 export function useFootball() {
   const dataList = reactive<SattleDataAPI.ChildrenDataList[]>([
     {
-      val: t('足球进球'),
+      val: t('常规赛进球'),
       type: MatchEventType.Goal,
       key: 'matchScoreRecordList',
       tableList: []
     },
     {
-      val: t('红黄牌'),
+      val: t('常规赛罚牌'),
       type: MatchEventType.YellowRedCard,
       key: 'penaltyCardRecordList',
       tableList: []
     },
     {
-      val: t('角球'),
+      val: t('常规赛角球'),
       type: MatchEventType.Corner,
       key: 'cornerRecordList',
+      tableList: []
+    },
+    {
+      val: t('加时赛进球'),
+      type: MatchEventType.Goal,
+      key: 'overTimeScoreRecordList',
+      tableList: []
+    },
+    {
+      val: t('加时赛罚牌'),
+      type: MatchEventType.YellowRedCard,
+      key: 'overTimeCardRecordList',
+      tableList: []
+    },
+    {
+      val: t('加时赛角球'),
+      type: MatchEventType.Corner,
+      key: 'overTimeCornerRecordList',
+      tableList: []
+    },
+    {
+      val: t('点球大战'),
+      type: MatchEventType.Goal,
+      key: 'penaltyKickRecordList',
       tableList: []
     }
   ]);
@@ -35,13 +59,32 @@ export function useFootball() {
   const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
     history.state.params as SattleDataAPI.getSettlementDataList
   );
+  const overTimeStatus = ref(false);
+  const penaltyKickStatus = ref(false);
+  const { matchId } = history.state.params;
   const balanceLoading = reactive<{ half: boolean; all: boolean }>({
     half: false,
     all: false
   });
 
+  const recordList = ref<string[][]>([
+    [
+      `${t('比分')}: -`,
+      `${t('红牌')}: -`,
+      `${t('黄牌')}: -`,
+      `${t('角球')}: -`
+    ],
+    [
+      `${t('比分')}: -`,
+      `${t('红牌')}: -`,
+      `${t('黄牌')}: -`,
+      `${t('角球')}: -`
+    ],
+    [`${t('比分')}: -`]
+  ]);
+
   //- 人工结算新增一行
-  const addChildRow = (tableList, type) => {
+  const addChildRow = (tableList, type, index) => {
     const isSettle = tableList.some(item => item.settleTimes === 0);
     if (
       ((tableList.length !== 0 &&
@@ -52,9 +95,9 @@ export function useFootball() {
       message(t('请先完成之前的事件结算'), { type: 'error' });
     } else {
       const tempList: TempListType = {
-        eventTime: '',
+        eventTime: index === '6' ? 1 : '',
         homeAway: null,
-        matchPeriodId: null,
+        matchPeriodId: index === '6' ? 50 : null,
         isBackEndReturnData: false,
         _tempDate: Date.now(),
         t1: null,
@@ -69,25 +112,73 @@ export function useFootball() {
   //- 当前行编辑
   const editChild = (row: SattleDataAPI.MatchEventsList) => (row.isEdit = true);
 
+  //- 重新加载赛事事件列表
+  const reloadTable = (isReloadALl = false) => {
+    if (isReloadALl) getMatchDetail();
+    getChildrenData();
+  };
+
   //- 赛事列表获取
   const getChildrenData = async () => {
     childloading.value = true;
-    const res = await API.getMatchEvents({
-      matchId: history.state.params.matchId
-    });
+    const res = await API.getMatchEvents({ matchId });
     childloading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
     childDataTotal.value = 0;
+    overTimeStatus.value = res.data.overTimeStatus;
+    penaltyKickStatus.value = res.data.penaltyKickStatus;
+    console.log(
+      'hook.tsx文件 130==============行打印=',
+      renderObj.fullSettlementStatus
+    );
+    recordList.value = [
+      [
+        `${t('比分')}: ${res.data.normalTimeScore}`,
+        `${t('红牌')}: ${res.data.normalTimeRedCard}`,
+        `${t('黄牌')}: ${res.data.normalTimeYellowCard}`,
+        `${t('角球')}: ${res.data.normalTimeCorner}`
+      ],
+      [
+        `${t('比分')}: ${
+          overTimeStatus.value || renderObj.fullSettlementStatus === 1
+            ? res.data.overTimeScore
+            : '-'
+        }`,
+        `${t('红牌')}: ${
+          overTimeStatus.value || renderObj.fullSettlementStatus === 1
+            ? res.data.overTimeRedCard
+            : '-'
+        }`,
+        `${t('黄牌')}: ${
+          overTimeStatus.value || renderObj.fullSettlementStatus === 1
+            ? res.data.overTimeYellowCard
+            : '-'
+        }`,
+        `${t('角球')}: ${
+          overTimeStatus.value || renderObj.fullSettlementStatus === 1
+            ? res.data.overTimeCorner
+            : '-'
+        }`
+      ],
+      [
+        `${t('比分')}: ${
+          penaltyKickStatus.value || renderObj.fullSettlementStatus === 1
+            ? res.data.penaltyKick
+            : '-'
+        }`
+      ]
+    ];
+
     dataList.forEach((item: SaleDataAPI.ChildrenDataList) => {
       item.tableList = res.data[item.key];
-      childDataTotal.value += item.tableList.length;
-      if (item.tableList.length) {
+      childDataTotal.value += item.tableList?.length;
+      if (item.tableList?.length) {
         item.tableList.forEach((_, index) => {
           _.createdAt = new Date(_.createdAt).getTime() + 1000 * 60 * 5;
           _.isEdit = false;
           _.isSave = false;
           _.isShowCount = false;
-          _.matchId = history.state.params.matchId;
+          _.matchId = matchId;
           _.t = res.ts;
           _.isBackEndReturnData = true;
           if (item.type === 'yellow_red_card') {
@@ -140,72 +231,71 @@ export function useFootball() {
       homeAway: row.homeAway
     };
     return !Object.keys(requireDdata).every(key => {
-      return key === 't1' || key === 't2'
+      return key === 't1' || key === 't2' || key === 'eventTime'
         ? parseInt(requireDdata[key]) >= 0
         : requireDdata[key];
     });
   };
 
-  //- 新增事件
+  //- 新增事件(发送后端)
   const handleChildrenData = async (
     row: SattleDataAPI.MatchEventsList,
     type: 'save' | 'upload'
   ) => {
-    if (isTheFormComplete(row)) {
+    if (isTheFormComplete(row))
       return message(t('请输入完整的内容'), { type: 'error' });
-    }
 
     if (type === 'save') {
       row.isSave = true;
       row.isEdit = false;
-      if (renderObj.reSettleStatus === 1) {
-        return saveSecondMathList(row);
+      if (renderObj.reSettleStatus === 1) saveSecondMathList(row);
+    } else {
+      if (((type === 'upload' && !row.isSave) || row.isEdit) && !row.id)
+        return message(t('请先保存事件'), { type: 'error' });
+
+      //- 单独处理红黄牌
+      const eventCode =
+        row.eventCode === 'yellow_red_card'
+          ? row.redOrYellow === 1
+            ? 'yellow_card'
+            : 'red_card'
+          : row.eventCode;
+
+      const params: SattleDataAPI.MatchEventParams = {
+        eventCode,
+        eventTime: row.eventTime,
+        homeAway: row.homeAway,
+        matchId,
+        matchPeriodId: +row.matchPeriodId,
+        t1: +row.t1,
+        t2: +row.t2,
+        id: row.id ?? null
+        // canceled: 0,
+        // player1Name: row.player1Name,
+        // dataSourceCode: 'SK',
+        // sourceType: 1,
+        // sportId: SPORT_TYPE.football
+      };
+      if (row.matchPeriodId === 50) {
+        params.firstNum = row.firstNum;
+        params.firstT1 = row.firstT1;
+        params.firstT2 = row.firstT2;
       }
-      return;
+      ElMessageBox.confirm(t('确定要增加一条事件么?'), t('警告'), {
+        confirmButtonText: t('确认'),
+        cancelButtonText: t('取消'),
+        center: true
+      }).then(async () => {
+        childloading.value = true;
+        const res = await API.addMatchEvent(params);
+        childloading.value = false;
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        if (res.code) return;
+        row.isEdit = false;
+        getChildrenData();
+        getMatchDetail();
+      });
     }
-
-    if (((type === 'upload' && !row.isSave) || row.isEdit) && !row.id) {
-      return message(t('请先保存事件'), { type: 'error' });
-    }
-
-    //- 单独处理红黄牌
-    const eventCode =
-      row.eventCode === 'yellow_red_card'
-        ? row.redOrYellow === 1
-          ? 'yellow_card'
-          : 'red_card'
-        : row.eventCode;
-
-    const params: SattleDataAPI.MatchEventParams = {
-      canceled: 0,
-      eventCode,
-      eventTime: row.eventTime,
-      homeAway: row.homeAway,
-      matchId: renderObj.matchId,
-      matchPeriodId: +row.matchPeriodId,
-      player1Name: row.player1Name,
-      dataSourceCode: 'SK',
-      sourceType: 1,
-      sportId: SPORT_TYPE.football,
-      t1: +row.t1,
-      t2: +row.t2,
-      id: row.id ?? null
-    };
-
-    ElMessageBox.confirm(t('确定要增加一条事件么?'), t('警告'), {
-      confirmButtonText: t('确认'),
-      cancelButtonText: t('取消'),
-      center: true
-    }).then(async () => {
-      childloading.value = true;
-      const res = await API.addMatchEvent(params);
-      childloading.value = false;
-      message(res.msg, { type: res.code ? 'error' : 'success' });
-      if (res.code) return;
-      row.isEdit = false;
-      getChildrenData();
-      getMatchDetail();
-    });
   };
 
   const router = useRouter();
@@ -235,10 +325,6 @@ export function useFootball() {
     } catch (error) {
       balanceLoading[type] = false;
     }
-  };
-
-  const reloadTable = async () => {
-    getChildrenData();
   };
 
   //- 自动结算转手动结算
@@ -394,16 +480,24 @@ export function useFootball() {
             : 'red_card'
           : row.eventCode;
 
-      confirmParams.newEventList.push({
-        matchId: renderObj.matchId,
-        eventCode,
-        eventTime: row.eventTime,
-        homeAway: row.homeAway,
-        _tempDate: row._tempDate,
-        matchPeriodId: row.matchPeriodId,
-        t1: row.t1,
-        t2: row.t2
-      });
+      const params: SattleDataAPI.confirm2ndSettlementReqType['newEventList'][0] =
+        {
+          matchId: renderObj.matchId,
+          eventCode,
+          eventTime: row.eventTime,
+          homeAway: row.homeAway,
+          _tempDate: row._tempDate,
+          matchPeriodId: row.matchPeriodId,
+          t1: row.t1,
+          t2: row.t2
+        };
+
+      if (row.matchPeriodId === 50) {
+        params.firstNum = row.firstNum;
+        params.firstT1 = row.firstT1;
+        params.firstT2 = row.firstT2;
+      }
+      confirmParams.newEventList.push(params);
     }
   };
 
@@ -426,6 +520,7 @@ export function useFootball() {
   onUnmounted(() => {
     loopTimer.value && clearInterval(loopTimer.value);
   });
+
   return {
     childloading,
     columns,
@@ -449,6 +544,9 @@ export function useFootball() {
     openSecondSettleClick,
     saveCancelEventIds,
     confirmSecondSettleClick,
-    cancelItem
+    cancelItem,
+    recordList,
+    overTimeStatus,
+    penaltyKickStatus
   };
 }
