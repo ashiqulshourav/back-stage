@@ -1,72 +1,58 @@
-import {
-  ESPORT_ID_MAP,
-  SPORT_ID_MAP,
-  SPORT_CATEGORY
-} from '@/utils/maps/sports_map';
+import dayjs from 'dayjs';
 
 export const columns: TableColumnList = [
   {
     label: t('序号'),
-    prop: 'id',
+    type: 'index',
     minWidth: 100
   },
   {
     label: t('用户名'),
-    prop: 'category',
+    prop: 'userName',
     minWidth: 150,
-    formatter: ({ category }) =>
-      SPORT_CATEGORY.find(item => item.value === category)?.label ?? '-'
   },
   {
     label: t('用户ID'),
-    prop: 'sportId',
-    formatter: ({ sportId, category }): string => {
-      const arr = category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
-      return arr.find(_ => _.value === sportId)?.label ?? '-';
-    },
+    prop: 'id',
     minWidth: 150
   },
   {
     label: t('所属商户'),
-    prop: 'text',
+    prop: 'tenantName',
+    minWidth: 150
+  },
+  {
+    label: t('商户编码'),
+    prop: 'tenantCode',
     minWidth: 150
   },
   {
     label: t('限额等级'),
-    prop: 'text',
+    prop: 'limitLevel',
+    minWidth: 150
+  },
+  {
+    label: t('账号是否冻结'),
+    prop: 'isFreeze',
+    formatter({ isFreeze }) {
+      return isFreeze === 0 ? t("冻结") : t('正常')
+    },
     minWidth: 150
   },
   {
     label: t('注册日期'),
-    prop: 'text',
-    minWidth: 150
-  },
-  {
-    label: t('最后投注时间'),
-    prop: 'text',
-    minWidth: 150
-  },
-  {
-    label: t('投注额'),
-    prop: 'text',
-    minWidth: 150
-  }, {
-    label: t('用户输赢金额'),
-    prop: 'text',
-    minWidth: 150
-  }, {
-    label: t('用户盈利率'),
-    prop: 'text',
-    minWidth: 150
-  },
-  {
-    label: t('单均'),
-    prop: 'text',
-    minWidth: 150
+    prop: 'createdAt',
+    formatter({ createdAt }) {
+      return dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss')
+    },
+    minWidth: 250
   },
   {
     label: t('备注'),
-    prop: 'text',
+    prop: 'remark',
+    formatter({ remark }) {
+      return remark ?? '-'
+    },
     minWidth: 150
   },
   {

@@ -27,26 +27,14 @@
         >
           <template #operation="{ row }">
             <el-button
-              v-if="hasAuth('UPDATE')"
               class="reset-margin"
               link
               type="primary"
               :size="size"
               :icon="useRenderIcon(EditPen)"
-              @click="openDialog(t('编辑标签'), row)"
+              @click="openDialog(t('用户设置'), row)"
             >
               {{ t('编辑') }}
-            </el-button>
-            <el-button
-              v-if="hasAuth('DELETE')"
-              class="reset-margin"
-              link
-              type="danger"
-              :size="size"
-              :icon="useRenderIcon(Delete)"
-              @click="handleDelete(row)"
-            >
-              {{ t('删除') }}
             </el-button>
           </template>
         </pure-table>
@@ -57,14 +45,12 @@
 
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
-import Delete from '@iconify-icons/ep/delete';
 import EditPen from '@iconify-icons/ep/edit-pen';
 import { userPlayerListHook } from './utils/hook';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
-import { hasAuth } from '@/router/utils';
 import { usePublicHooks } from '@/hooks';
 
 defineOptions({ name: 'CONFIGCENTER_LEAGUE_TAGS' });
@@ -75,7 +61,6 @@ const {
   dataList,
   pagination,
   onSearch,
-  handleDelete,
   openDialog,
   handleTableWidthChange,
   handleCurrentChange,

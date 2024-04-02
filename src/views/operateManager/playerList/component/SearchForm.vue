@@ -1,9 +1,9 @@
 <template>
   <div class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]">
     <el-form ref="formRef" :inline="true" :model="form">
-      <el-form-item prop="category">
+      <el-form-item prop="id">
         <el-input
-          v-model="form.text"
+          v-model="form.ids as string"
           :placeholder="t('可输入1-50个用户ID,用空格进行分割')"
           clearable
           ref="buttonRef"
@@ -28,33 +28,34 @@
         </el-popover>
       </el-form-item>
 
-      <el-form-item prop="sportId">
+      <el-form-item prop="tenantId">
         <el-select
-          v-model="form.sportId"
+          v-model="form.tenantIds"
           :placeholder="t('所属商户')"
           clearable
-          class="!w-[150px]"
+          multiple
+          class="!min-w-[150px]"
         >
           <el-option
-            :label="item.label"
-            :value="item.value"
-            v-for="item in gameClassify"
-            :key="item.value"
+            :label="item.tenantName"
+            :value="item.id"
+            v-for="item in tenantList"
+            :key="item.name"
           />
         </el-select>
       </el-form-item>
 
-      <el-form-item prop="text">
+      <el-form-item prop="tenantCode">
         <el-input
-          v-model="form.text"
+          v-model="form.tenantCode"
           :placeholder="t('可输入商户编码或ID')"
           v-enter="search"
           clearable
-          class="!w-[150px]"
+          class="!w-[220px]"
         />
       </el-form-item>
 
-      <el-form-item prop="sportId">
+      <el-form-item prop="limitLevel">
         <el-select
           v-model="form.limitLevel"
           :placeholder="t('限额等级')"
@@ -62,10 +63,10 @@
           class="!w-[150px]"
         >
           <el-option
-            :label="item.levelLimit"
-            :value="item.levelLimit"
+            :label="item"
+            :value="item"
             v-for="item in sportLimmitList"
-            :key="item.levelLimit"
+            :key="item"
           />
         </el-select>
       </el-form-item>
@@ -94,27 +95,17 @@ import Search from '@iconify-icons/ep/search';
 import Refresh from '@iconify-icons/ep/refresh';
 import type { FormInstance } from 'element-plus';
 import { searchFormType } from '../utils/types';
-import {
-  ESPORT_ID_MAP,
-  SPORT_ID_MAP,
-  SPORT_CATEGORY
-} from '@/utils/maps/sports_map';
 
-// const time = ref('');
 const formRef = ref();
 const buttonRef = ref();
 const emits = defineEmits(['onSearch']);
-const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
 const idList = reactive<string[]>([]);
-const sportLimmitList = reactive<UserAPI.UserLevelLimitListRes[]>([]);
+const sportLimmitList = reactive<string[]>([]);
 
-const props = withDefaults(
-  defineProps<{
-    loading: boolean;
-    form: searchFormType;
-  }>(),
-  {}
-);
+const props = defineProps<{
+  loading: boolean;
+  form: searchFormType;
+}>();
 
 const formatterTxt = v => {
   const l = new Set(v.split(','));
@@ -123,40 +114,34 @@ const formatterTxt = v => {
   return v;
 };
 
-watch(
-  () => props.form.text,
-  val => {
-    // console.log('SearchForm.vue文件 114==============行打印=', val);
-  }
-);
-
 onMounted(() => {
   initTenantList();
   getLimmitLevelList();
 });
 
 const getLimmitLevelList = async () => {
-  const res = await API.getUserLevelLimitList({ type: 0 });
+  const res = await API.getLimitListDropDownBox();
   if (res.code) return;
   sportLimmitList.length = 0;
   sportLimmitList.push(...res.data);
 };
 
+const tenantList = reactive([]);
 const initTenantList = async () => {
   const res = await API.getTenantList();
-  console.log('SearchForm.vue文件 122==============行打印=', res);
+  if (res.code) return;
+  tenantList.length = 0;
+  tenantList.push(...res.data.data);
 };
 
 const resetForm = (formEl: FormInstance | undefined) => {
+  props.form.ids = '';
   formEl.resetFields();
-  gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
   emits('onSearch', ...['reload']);
 };
 
-const changeMatchType = (type: 0 | 1 | 2) => {
-  props.form.sportId = undefined;
-  //- 电竞比赛 =1
-  gameClassify.value = type === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
+const search = () => {
+  props.form.ids = idList.filter(item => item !== '');
   emits('onSearch', ...['reload']);
 };
 </script>
