@@ -21,10 +21,7 @@
           :columns="dynamicColumns"
           :pagination="pagination"
           :paginationSmall="size === 'small' ? true : false"
-          :header-cell-style="{
-            background: 'var(--el-fill-color-light)',
-            color: 'var(--el-text-color-primary)'
-          }"
+          :header-cell-style="tableHeaderStyle"
           @selection-change="handleSelectionChange"
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
@@ -69,8 +66,10 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import { hasAuth } from '@/router/utils';
+import { usePublicHooks } from '@/hooks';
 
 defineOptions({ name: 'CONFIGCENTER_LEAGUE_TAGS' });
+const { tableHeaderStyle } = usePublicHooks();
 
 const {
   loading,

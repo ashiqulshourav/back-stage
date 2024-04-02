@@ -3,7 +3,7 @@ import { message } from '@/utils/message';
 import { FormItemProps } from 'element-plus';
 import { addDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
-import { reactive, ref, onMounted, h } from 'vue';
+import { reactive, ref, h } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { searchFormType } from './types';
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -121,7 +121,7 @@ export function useLeagueTagsHook() {
     try {
       loading.value = true;
       const res: ConfigCenterDataAPI.ListLeagueTagRes =
-        await API.getLeagueTagList({
+        await API.getUserLevelLimitList({
           ...removeEmptyStringKeys(form),
           pageSize: pagination.pageSize,
           pageNum: pagination.currentPage
@@ -234,9 +234,9 @@ export function useLeagueTagsHook() {
     message(res.msg, { type: res.code ? 'error' : 'success' });
   };
 
-  // onMounted(() => {
-  //   onSearch();
-  // });
+  onMounted(() => {
+    onSearch();
+  });
 
   return {
     loading,

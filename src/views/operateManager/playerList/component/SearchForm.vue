@@ -1,21 +1,42 @@
 <template>
   <div class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]">
     <el-form ref="formRef" :inline="true" :model="form">
-      <el-form-item :label="`${t('赛事类型')}:`" prop="category">
-        <el-select
-          v-model="form.category"
-          :placeholder="t('赛事类型')"
+      <el-form-item prop="category">
+        <el-input
+          v-model="form.text"
+          :placeholder="t('可输入1-50个用户ID,用空格进行分割')"
           clearable
-          class="!w-[150px]"
-          @change="changeMatchType"
+          ref="buttonRef"
+          class="!w-[260px]"
+        />
+        <el-popover
+          ref="popoverRef"
+          :virtual-ref="buttonRef"
+          trigger="click"
+          virtual-triggering
         >
-          <el-option
-            :label="item.label"
-            :value="item.value"
-            v-for="item in SPORT_CATEGORY"
-            :key="item.value"
+          <div class="flex flex-start max-w-96">
+            <span class="el-tag mr-2" v-for="item in idList" :key="item"
+              >item</span
+            >
+          </div>
+        </el-popover>
+
+        <!-- <el-popover
+          placement="bottom"
+          title="标题"
+          width="200"
+          trigger="click"
+          content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+        >
+          <el-input
+            v-model="form.text"
+            :placeholder="t('可输入1-50个用户ID')"
+            v-enter="search"
+            clearable
+            class="!w-[150px]"
           />
-        </el-select>
+        </el-popover> -->
       </el-form-item>
 
       <el-form-item :label="`${t('游戏种类')}:`" prop="sportId">
@@ -76,8 +97,10 @@ import {
 
 // const time = ref('');
 const formRef = ref();
+const buttonRef = ref();
 const emits = defineEmits(['onSearch']);
 const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
+const idList = reactive<string[]>([]);
 
 const props = withDefaults(
   defineProps<{
@@ -87,9 +110,12 @@ const props = withDefaults(
   {}
 );
 
-onMounted(() => {
-  emits('onSearch', ...['reload']);
-});
+watch(
+  () => props.form.text,
+  val => {
+    console.log('SearchForm.vue文件 114==============行打印=', val);
+  }
+);
 
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
@@ -119,4 +145,3 @@ const changeMatchType = (type: 0 | 1 | 2) => {
   }
 }
 </style>
-@/utils/formatDate

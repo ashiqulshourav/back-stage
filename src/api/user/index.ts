@@ -9,4 +9,7 @@ export const user = {
   getRouter: (data: { id: number }) => http.request<UserAPI.RouterResType>("post", "/kmg/matchRole/v1/getResourcelist", { data }),
   //- 退出登录
   loginOut: (data: { id: number, name: string }) => http.request<UserAPI.RouterResType>("post", "/kmg/auth/loginOut", { data }),
+
+  //- 获取用户列表
+  getUserLevelLimitList: (data: { id: number, name: string }) => http.request<UserAPI.RouterResType>("post", "/userLevelLimit/v1/getUserLevelLimitList", { data }),
 };
