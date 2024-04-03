@@ -30,6 +30,7 @@ declare namespace SaleDataAPI {
     allHandicaps: number;
     leagueNameCn: string;
     handicapStatus: number;
+    overTimeAndPenaltyKickStatus?: boolean;
   };
 
   type ChildrenDataList = {

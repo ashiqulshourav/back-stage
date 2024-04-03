@@ -59,6 +59,7 @@ export const columns: TableColumnList = [
   {
     label: t('操作'),
     slot: 'operation',
+    className: 'postion',
     minWidth: 50,
     align: 'center'
   }

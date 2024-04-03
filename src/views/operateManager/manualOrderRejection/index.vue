@@ -7,7 +7,6 @@
       @exportFile="exportFile"
       :tenantList="tenantList"
     />
-
     <PureTableBar
       title=""
       :columns="columns"
@@ -292,29 +291,32 @@
           </template>
 
           <template #operation="{ row }">
-            <div
-              v-if="
-                row.combineOrderDetails.findIndex(
-                  item => item.settleStatus === 3
-                ) > -1
-              "
-            >
-              <el-button
-                size="small"
-                class="reset-margin"
-                @click="confirmBetClick(row)"
-                type="primary"
+            <div class="h-full">
+              <div
+                v-for="item in row.combineOrderDetails"
+                :key="item.betItemId"
               >
-                {{ t('确认注单') }}
-              </el-button>
-              <el-button
-                size="small"
-                class="reset-margin"
-                @click="refuseBetClick(row)"
-                type="danger"
-              >
-                {{ t('拒接注单') }}
-              </el-button>
+                <div
+                  class="flex item-center flex-col"
+                  v-if="item => item.settleStatus === 3"
+                >
+                  <el-button
+                    size="small"
+                    @click="confirmBetClick(item.detailId)"
+                    type="primary"
+                  >
+                    {{ t('确认注单') }}
+                  </el-button>
+                  <el-button
+                    class="!ml-0 mt-2"
+                    size="small"
+                    @click="refuseBetClick(item.detailId)"
+                    type="danger"
+                  >
+                    {{ t('拒接注单') }}
+                  </el-button>
+                </div>
+              </div>
             </div>
           </template>
         </pure-table>

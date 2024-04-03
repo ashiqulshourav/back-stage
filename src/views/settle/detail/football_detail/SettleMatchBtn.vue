@@ -5,7 +5,7 @@
       type="primary"
       :btn-text="currentSettleType.txt"
       :loading="balanceLoading.half"
-      :disabled="!childDataTotal || currentSettleType.disabled"
+      :disabled="currentSettleType.disabled"
       @click="settleClick"
     />
     <CustomButton

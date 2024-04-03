@@ -122,7 +122,8 @@ export function usePreSale() {
           matchName: row?.matchName ?? '',
           beginTime: row?.beginTime ?? '',
           level: row?.level ?? '',
-          countryId: row?.countryId ?? ''
+          countryId: row?.countryId ?? '',
+          overTimeAndPenaltyKickStatus:row?.overTimeAndPenaltyKickStatus ?? ''
         }
       },
       width: '40%',
