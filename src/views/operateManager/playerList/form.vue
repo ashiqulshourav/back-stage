@@ -114,6 +114,8 @@ const props = defineProps<{
     name: string;
     isFreeze: boolean | number;
     limitLevel: number;
+    singleBetLimit: number;
+    singleEventCompensationLimit: number;
   };
 }>();
 
@@ -122,8 +124,6 @@ const emits = defineEmits(['closeDialog']);
 const ruleFormRef = ref<FormInstance>();
 const newFormInline = reactive({
   ...props.row,
-  singleBetLimit: 0,
-  singleEventCompensationLimit: 0,
   remark: ''
 });
 

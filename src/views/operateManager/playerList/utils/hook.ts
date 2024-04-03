@@ -1,17 +1,12 @@
 import editForm from '../form.vue';
 import { message } from '@/utils/message';
-import { FormItemProps } from 'element-plus';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, h } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { searchFormType } from './types';
-import { ElMessage, ElMessageBox } from 'element-plus';
-import { t } from '@/plugins/i18n';
-import { Delete } from '@element-plus/icons-vue';
 
 export function userPlayerListHook() {
-  const formRef = ref();
   const dataList = reactive<UserAPI.operateUserList[]>([]);
   const loading = ref(true);
   const pagination = reactive<PaginationProps>({
@@ -22,6 +17,7 @@ export function userPlayerListHook() {
   });
   const form = reactive<searchFormType>({
     ids: '',
+    usernames: '',
     tenantIds: '',
     tenantCode: '',
     limitLevel: ''
@@ -67,6 +63,15 @@ export function userPlayerListHook() {
     onSearch();
   };
 
+  /* 
+  maxWinAmountLimit
+: 
+400000
+productAmountTotalLimit
+: 
+200000
+   */
+
   function openDialog(title: string, row?: UserAPI.operateUserList) {
     addDialog({
       title,
@@ -80,7 +85,9 @@ export function userPlayerListHook() {
             id: row.id,
             name: row.userName,
             isFreeze: row.isFreeze !== 0,
-            limitLevel: row?.limitLevel ?? 4
+            limitLevel: row?.limitLevel ?? 4,
+            singleBetLimit: row?.productAmountTotalLimit ?? 0,
+            singleEventCompensationLimit: row?.maxWinAmountLimit ?? 0,
           },
           onCloseDialog: (closeType?: string) => {
             if (closeType) onSearch();

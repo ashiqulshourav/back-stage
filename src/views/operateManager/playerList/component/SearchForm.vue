@@ -1,13 +1,14 @@
 <template>
   <div class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]">
     <el-form ref="formRef" :inline="true" :model="form">
-      <el-form-item prop="id">
+      <el-form-item prop="ids">
         <el-input
           v-model="form.ids as string"
-          :placeholder="t('可输入1-50个用户ID,用空格进行分割')"
+          :placeholder="t('可输入1-50个用户ID,用逗号进行分割')"
           clearable
           ref="buttonRef"
           :formatter="formatterTxt"
+          :disabled="idList.length > 50"
           class="!w-[260px]"
         />
         <el-popover
@@ -21,6 +22,34 @@
             <span
               class="el-tag mr-2 mb-1"
               v-for="item in idList.filter(_ => _ !== '')"
+              :key="item"
+              >{{ item }}</span
+            >
+          </div>
+        </el-popover>
+      </el-form-item>
+
+      <el-form-item prop="usernames">
+        <el-input
+          v-model="form.usernames as string"
+          :placeholder="t('可输入1-50个用户名,用逗号进行分割')"
+          clearable
+          ref="buttonRef1"
+          :formatter="formatterUserNames"
+          :disabled="userIds.length > 50"
+          class="!w-[260px]"
+        />
+        <el-popover
+          ref="popoverRef1"
+          :virtual-ref="buttonRef1"
+          trigger="click"
+          width="260px"
+          virtual-triggering
+        >
+          <div class="flex flex-start w-full flex-wrap">
+            <span
+              class="el-tag mr-2 mb-1"
+              v-for="item in userIds.filter(_ => _ !== '')"
               :key="item"
               >{{ item }}</span
             >
@@ -48,7 +77,7 @@
       <el-form-item prop="tenantCode">
         <el-input
           v-model="form.tenantCode"
-          :placeholder="t('可输入商户编码或ID')"
+          :placeholder="t('请输入商户编码')"
           v-enter="search"
           clearable
           class="!w-[220px]"
@@ -98,8 +127,10 @@ import { searchFormType } from '../utils/types';
 
 const formRef = ref();
 const buttonRef = ref();
+const buttonRef1 = ref();
 const emits = defineEmits(['onSearch']);
 const idList = reactive<string[]>([]);
+const userIds = reactive<string[]>([]);
 const sportLimmitList = reactive<string[]>([]);
 
 const props = defineProps<{
@@ -111,6 +142,13 @@ const formatterTxt = v => {
   const l = new Set(v.split(','));
   idList.length = 0;
   idList.push(...(Array.from(l) as string[]));
+  return v;
+};
+
+const formatterUserNames = v => {
+  const l = new Set(v.split(','));
+  userIds.length = 0;
+  userIds.push(...(Array.from(l) as string[]));
   return v;
 };
 
@@ -142,6 +180,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
 
 const search = () => {
   props.form.ids = idList.filter(item => item !== '');
+  props.form.usernames = userIds.filter(item => item !== '');
   emits('onSearch', ...['reload']);
 };
 </script>

@@ -83,6 +83,8 @@ declare namespace UserAPI {
 
 
   type operateUserList = {
+    maxWinAmountLimit: number;
+    productAmountTotalLimit: number;
     id: string;
     userName: string;
     nickName?: any;

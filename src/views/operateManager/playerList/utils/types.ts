@@ -5,6 +5,7 @@ interface FormProps {
 
 export type searchFormType = {
   ids: string | number | string[];
+  usernames: string | number | string[];
   tenantIds?: number | string | string[];
   limitLevel?: number | string;
   tenantCode?: number | string;
