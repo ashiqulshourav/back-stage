@@ -123,7 +123,7 @@ export function usePreSale() {
           beginTime: row?.beginTime ?? '',
           level: row?.level ?? '',
           countryId: row?.countryId ?? '',
-          overTimeAndPenaltyKickStatus:row?.overTimeAndPenaltyKickStatus ?? ''
+          overTimeAndPenaltyKickStatus: row?.overTimeAndPenaltyKickStatus ?? ''
         }
       },
       width: '40%',
@@ -189,6 +189,43 @@ export function usePreSale() {
     onSearch('reload');
   };
 
+  //- 开启关闭加时赛点球大战
+  const changeOverTimeStatus = ({
+    row
+  }: {
+    row: SaleDataAPI.PreSaleList;
+    index: number;
+  }) => {
+    ElMessageBox.confirm(
+      row.isSale
+        ? t(`确定要开启加时赛/点球大战么?`)
+        : t('确定要关闭加时赛/点球大战么？'),
+      t('系统提示'),
+      {
+        confirmButtonText: t('确定'),
+        cancelButtonText: t('取消'),
+        type: 'warning',
+        center: true,
+        dangerouslyUseHTMLString: true,
+        draggable: true
+      }
+    )
+      .then(async () => {
+        const res = await API.updateMatch({
+          overTimeAndPenaltyKickStatus: row.overTimeAndPenaltyKickStatus,
+          matchId: row.matchId
+        });
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        if (!res.code) onSearch();
+      })
+      .catch(
+        () =>
+          (row.overTimeAndPenaltyKickStatus = row.overTimeAndPenaltyKickStatus
+            ? false
+            : true)
+      );
+  };
+
   onMounted(() => {
     onSearch();
   });
@@ -212,6 +249,7 @@ export function usePreSale() {
     changeMatchCondition,
     locakMatch,
     selectLockcList,
-    unLocakMatch
+    unLocakMatch,
+    changeOverTimeStatus
   };
 }

@@ -21,15 +21,6 @@
         :placeholder="t('赛事名称')"
       />
     </el-form-item>
-
-    <el-form-item :label="`${t('是否开始点球和加时赛')}:`" prop="matchName">
-      <el-input
-        maxLength="30"
-        v-model="newFormInline.matchName"
-        :placeholder="t('赛事名称')"
-      />
-    </el-form-item>
-
     <el-form-item :label="`${t('比赛时间')}:`" prop="beginTime">
       <el-date-picker
         v-model="newFormInline.beginTime"
@@ -55,8 +46,7 @@ const props = withDefaults(defineProps<TeamFormProps>(), {
     matchName: '',
     level: 0,
     beginTime: '',
-    countryId: -1,
-    overTimeAndPenaltyKickStatus: false
+    countryId: -1
   })
 });
 

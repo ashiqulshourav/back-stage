@@ -75,11 +75,12 @@ declare namespace SaleDataAPI {
   };
 
   type UpdateMatchParamsType = {
-    beginTime: string;
-    level: number;
-    matchId: number;
-    matchName: string;
-    sportId: string;
+    beginTime?: string;
+    level?: number;
+    matchId?: number;
+    matchName?: string;
+    sportId?: string;
+    overTimeAndPenaltyKickStatus?: boolean;
   };
 
   type getBetItemsListDataType = {

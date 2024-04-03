@@ -32,7 +32,7 @@ export function useClassifySettingHook() {
   //- 新增体育限额
   const addSportItem = () => {
     sportList.push({
-      levelLimit: sportList[sportList.length - 1].levelLimit + 1,
+      levelLimit: (sportList[sportList.length - 1]?.levelLimit ?? 0) + 1,
       productAmountTotalLimit: 0,
       maxWinAmountLimit: 0,
       userSingleGamePay: 0,
@@ -45,7 +45,7 @@ export function useClassifySettingHook() {
   //- 新增电竞体育限额
   const addESportItem = () => {
     eSportList.push({
-      levelLimit: sportList[sportList.length - 1].levelLimit + 1,
+      levelLimit: (eSportList[eSportList.length - 1]?.levelLimit ?? 0) + 1,
       productAmountTotalLimit: 0,
       maxWinAmountLimit: 0,
       userSingleGamePay: 0,
