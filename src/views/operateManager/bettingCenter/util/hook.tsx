@@ -119,9 +119,17 @@ export function useLeague() {
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     try {
+      const params:searchFormType= formatParams({}) as searchFormType
+      if(params.maxBetAmount<params.minBetAmount){
+          message(t('请检查投注额，最小值不能大于最大值'), { type: 'warning' });
+          return
+      }
+      if(params.maxProfitAmount<params.minProfitAmount){
+          message(t('请检查用户输赢，最小值不能大于最大值'), { type: 'warning' });
+          return
+      }
       loading.value = true;
-      // 对于串关类型的选择处理
-      const res : BetOrderAPI.BetOrderResType = await API.bettingCenterList(formatParams({}) as searchFormType);
+      const res : BetOrderAPI.BetOrderResType = await API.bettingCenterList(params);
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
