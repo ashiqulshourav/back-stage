@@ -72,7 +72,7 @@
                 {{`玩法：${useSportFormatDetail(item)[4]} ${getIsInplay(item.isInplay)}`}}
                 {{item.isInplay==1?displayHomeAwayScore(item.scoreBenchmark,item.sportId):''}}
               </div>
-            <div class="item_line">{{useSportFormatDetail(item)[3]}}</div>
+            <div class="item_line">{{useSportFormatDetail(item)[3]}} @{{getViewOddFn(item.oddFinally,item.marketTypeFinally,item.marketType)}}</div>
               <div class="item_line cursor-pointer" @dblclick="copyTest(row.id,t('注单号：{value}',{value:row.id}))" >{{t('注单号:')}} {{row.id}}</div>
               <div class="item_line">{{t('投注时间:')}}{{row.createTime ?dayjs(row.createTime).format("MM-DD HH:mm:ss"):''}}</div>
               <div class="item_line" v-if="row.billStatus === 1&&item.settleScore">{{t('赛果：')}}{{displayHomeAwayScore(item.settleScore,item.sportId)}}</div>

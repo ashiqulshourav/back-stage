@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "vite --mode fat",
+    "fat": "vite --mode fat",
     "uat": "vite --mode uat",
+    "pro": "vite --mode pro",
     "build:dpgames-back-stage": "rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build --mode fat",
     "build:dev": "rimraf dist && NODE_OPTIONS=--max-old-space-size=8192 vite build --mode dev",
     "preview": "vite preview",
