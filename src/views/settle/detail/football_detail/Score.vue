@@ -61,6 +61,7 @@ const props = defineProps<{
   renderObj: SattleDataAPI.getSettlementDataList;
   data: { keyStr: string; isOpen: boolean; list: string[] };
   index: number;
+  dataList: SattleDataAPI.ChildrenDataList[];
   overTimeStatus: boolean;
   penaltyKickStatus: boolean;
 }>();
@@ -89,6 +90,25 @@ const updateStatus = async (index: number) => {
     strVal = props.overTimeStatus
       ? t('确定要关闭加时赛么?')
       : t('确定要开启加时赛么?');
+
+    if (props.overTimeStatus) {
+      const d = props.dataList
+        .slice(3)
+        .map(item => item.tableList)
+        .flat();
+      if (d.length) {
+        return ElMessageBox.confirm(
+          t('关闭前请取消加时赛结算事件?'),
+          t('不能关闭加时赛'),
+          {
+            type: 'warning',
+            showCancelButton: false,
+            confirmButtonText: t('确认'),
+            center: true
+          }
+        );
+      }
+    }
   } else {
     strVal = props.penaltyKickStatus
       ? t('确定要关闭点球大战么?')

@@ -62,10 +62,6 @@ export function useFootball() {
   const overTimeStatus = ref(false);
   const penaltyKickStatus = ref(false);
   const { matchId } = history.state.params;
-  const balanceLoading = reactive<{ half: boolean; all: boolean }>({
-    half: false,
-    all: false
-  });
 
   const recordList = ref<string[][]>([
     [
@@ -84,17 +80,38 @@ export function useFootball() {
   ]);
 
   //- 检测加时赛状态
-  const checkOverTimeStatus = (type, index) => {
-    console.log('hook.tsx文件 88==============行打印=', type, index);
+  const checkOverTimeStatus = async (type, index) => {
+    return new Promise(resolve => {
+      const idsArr = [3, 4, 5];
+      if (idsArr.includes(+index)) {
+        ElMessageBox.confirm(t('新增加时赛事件请先开启加时赛开关'), t('警告'), {
+          confirmButtonText: t('确认'),
+          cancelButtonText: t('取消'),
+          center: true
+        }).then(async () => {
+          const res = await API.setOverTimeStatus({
+            matchId,
+            overTimeStatus: true
+          });
+          message(res.msg, { type: res.code ? 'error' : 'success' });
+          resolve(!res.code);
+        });
+        //- 加时赛
+      } else {
+        //- 点球
+      }
+    });
   };
 
   //- 人工结算新增一行
-  const addChildRow = (tableList, type, index) => {
+  const addChildRow = async (tableList, type, index) => {
     if (index > 2) {
-      checkOverTimeStatus(type, index);
+      if (!overTimeStatus.value) {
+        const r = await checkOverTimeStatus(type, index);
+        r && getChildrenData();
+        return;
+      }
     }
-    return;
-
     const isSettle = tableList.some(item => item.settleTimes === 0);
     if (
       ((tableList.length !== 0 &&
@@ -304,34 +321,7 @@ export function useFootball() {
     }
   };
 
-  const router = useRouter();
   const { openPasswordInput } = usePasswordInputHook();
-  //-全场 + 上半场结算
-  const settlementFunction = async (matchId: number, type: 'half' | 'all') => {
-    if (type !== 'half') {
-      const r = await openPasswordInput();
-      if (!r) return;
-    }
-
-    try {
-      balanceLoading[type] = true;
-      const res = await API[
-        type === 'half' ? 'firstHalfSettlement' : 'allSettlement'
-      ]({ matchId });
-
-      balanceLoading[type] = false;
-      message(res.msg, { type: res.code ? 'error' : 'success' });
-      if (res.code) return;
-      if (type === 'half') {
-        getChildrenData();
-        getMatchDetail();
-      } else {
-        router.go(-1);
-      }
-    } catch (error) {
-      balanceLoading[type] = false;
-    }
-  };
 
   //- 自动结算转手动结算
   const changeSettleType = async () => {
@@ -536,8 +526,6 @@ export function useFootball() {
     getChildrenData,
     addChildRow,
     editChild,
-    balanceLoading,
-    settlementFunction,
     handleChildrenData,
     childDataTotal,
     reloadTable,

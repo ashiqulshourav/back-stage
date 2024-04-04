@@ -7,6 +7,7 @@
         :renderObj="renderObj"
         :data="item"
         :index="index"
+        :dataList="dataList"
         v-model:overTimeStatus="overTimeStatus"
         v-model:penaltyKickStatus="penaltyKickStatus"
         @openSecondSettleClick="openSecondSettleClick"
@@ -19,10 +20,8 @@
         <div class="flex items-center">
           <template v-if="!renderObj.fullSettlementStatus">
             <SettleMatchBtn
-              :balanceLoading="balanceLoading"
               :parentRow="renderObj"
               :childDataTotal="childDataTotal"
-              @settlementFunction="settlementFunction"
               :matchId="renderObj.matchId"
               @reloadTable="reloadTable"
               :overTimeStatus="overTimeStatus"
@@ -330,8 +329,6 @@ const {
   addChildRow,
   cancelMatchEvent,
   editChild,
-  balanceLoading,
-  settlementFunction,
   handleChildrenData,
   childDataTotal,
   reloadTable,
