@@ -67,7 +67,7 @@
             :formatter="v => formatNumber(v, 13)"
           />
         </el-form-item>
-        <el-form-item :label="`${t('单注赛事赔付限额')}:`" prop="isFreeze">
+        <el-form-item :label="`${t('单场赛事赔付限额')}:`" prop="isFreeze">
           <el-input
             v-model="newFormInline.singleEventCompensationLimit"
             :formatter="v => formatNumber(v, 13)"

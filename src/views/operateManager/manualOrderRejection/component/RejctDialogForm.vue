@@ -1,7 +1,7 @@
 <template>
   <div class="reject_form">
     <div class="font-bold text-[16px]">
-      {{ t('请选择据单原因') }}
+      {{ t('请选择拒单原因') }}
     </div>
     <el-radio-group v-model="rejectVal" @change="change" class="flex flex-col">
       <el-radio
