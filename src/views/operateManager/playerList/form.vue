@@ -182,9 +182,9 @@ const confirmClick = () => {
     type: 'warning',
     center: true
   }).then(async () => {
-    !newFormInline.singleBetLimit && (newFormInline.singleBetLimit = 0);
+    !newFormInline.singleBetLimit && (newFormInline.singleBetLimit = null);
     !newFormInline.singleEventCompensationLimit &&
-      (newFormInline.singleEventCompensationLimit = 0);
+      (newFormInline.singleEventCompensationLimit = null);
     newFormInline.isFreeze = +newFormInline.isFreeze;
     const res = await API.operateUpdateUser(newFormInline);
     message(res.msg, { type: res.code ? 'error' : 'success' });

@@ -34,8 +34,8 @@ export const user = {
     name: string;
     isFreeze: boolean | number;
     limitLevel: number;
-    singleBetLimit: number | string;
-    singleEventCompensationLimit: number | string;
+    singleBetLimit: number | string|null;
+    singleEventCompensationLimit: number | string|null;
     remark: string;
   }) => http.request<UserAPI.userBaseResType>("post", "/operate/updateUser", { data }),
 
