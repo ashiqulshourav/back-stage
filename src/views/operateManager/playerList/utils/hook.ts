@@ -63,12 +63,12 @@ export function userPlayerListHook() {
     onSearch();
   };
 
-  /* 
+  /*
   maxWinAmountLimit
-: 
+:
 400000
 productAmountTotalLimit
-: 
+:
 200000
    */
 
@@ -86,8 +86,8 @@ productAmountTotalLimit
             name: row.userName,
             isFreeze: row.isFreeze !== 0,
             limitLevel: row?.limitLevel ?? 4,
-            singleBetLimit: row?.productAmountTotalLimit ?? 0,
-            singleEventCompensationLimit: row?.maxWinAmountLimit ?? 0,
+            singleBetLimit: row?.productAmountTotalLimit ,
+            singleEventCompensationLimit: row?.maxWinAmountLimit ,
           },
           onCloseDialog: (closeType?: string) => {
             if (closeType) onSearch();

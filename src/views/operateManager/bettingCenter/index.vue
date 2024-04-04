@@ -97,20 +97,19 @@
             <div v-if="String(row.seriesType).slice(-3) ==='001'" >{{t('总赔率:')}}{{String(row.seriesType).slice(-3) ==='001'?calculateSeriesTypeTotal(row.combineOrderDetails):'' }}</div>
           </template>
           <template #operation="{ row }">
-            <el-button
-                class="reset-margin"
+
+              <el-button  class="mb-1 w-100"
                 @click="handleCancel(row)"
                 v-if="row.billStatus===0&&hasAuth('CANCELBET')"
-            >
-              {{ t('取消') }}
-            </el-button>
-            <el-button
-              class="reset-margin"
-              @click="switchDialog(true,row)"
-              v-if="specialCountFlag(row.status,row.billStatus,row.combineOrderDetails[0].betResult)"
-            >
-              {{ t('特殊结算') }}
-            </el-button>
+              >
+                {{ t('取消') }}
+              </el-button>
+              <el-button  class="mb-1 w-100"
+                @click="switchDialog(true,row)"
+                v-if="specialCountFlag(row.status,row.billStatus,row.combineOrderDetails[0].betResult)&&hasAuth('specialSettlement'.toUpperCase())"
+              >
+                {{ t('特殊结算') }}
+              </el-button>
           </template>
         </pure-table>
         <div
@@ -143,8 +142,6 @@
         </div>
       </template>
     </PureTableBar>
-
-
   </div>
 
 </template>
@@ -257,5 +254,9 @@ const {
 }
 .odd_item{
   min-height: 100px;
+}
+
+.operate{
+  width: 100px;
 }
 </style>
