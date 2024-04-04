@@ -168,7 +168,7 @@ import { disableDate } from '@/utils/formatDate';
 import { useMatchStore } from '@/store/match';
 import { formatNumber } from '@/utils/formatNumber';
 import { debounce } from '@pureadmin/utils';
-import CustomDate from '@/components/Form/CustomDate.vue';
+import CustomDate from '@/components/Form/Custom_date.vue';
 
 import {
   ESPORT_ID_MAP,
