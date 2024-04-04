@@ -144,7 +144,6 @@ export function useLeague() {
 
   const getTenantList1 = async () => {
     const res = await API.getTenantList();
-    dataList.length = 0;
     if (res.data?.data?.length) {
       tenantList.push(...res.data.data);
       // 将数组根据id转换为对象

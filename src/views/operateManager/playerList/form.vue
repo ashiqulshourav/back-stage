@@ -67,7 +67,7 @@
             :formatter="v => formatNumber(v, 13)"
           />
         </el-form-item>
-        <el-form-item :label="`${t('单注赛事赔付限额')}:`" prop="isFreeze">
+        <el-form-item :label="`${t('单注赔付限额')}:`" prop="isFreeze">
           <el-input
             v-model="newFormInline.singleEventCompensationLimit"
             :formatter="v => formatNumber(v, 13)"
@@ -182,9 +182,9 @@ const confirmClick = () => {
     type: 'warning',
     center: true
   }).then(async () => {
-    !newFormInline.singleBetLimit && (newFormInline.singleBetLimit = 0);
+    !newFormInline.singleBetLimit && (newFormInline.singleBetLimit = null);
     !newFormInline.singleEventCompensationLimit &&
-      (newFormInline.singleEventCompensationLimit = 0);
+      (newFormInline.singleEventCompensationLimit = null);
     newFormInline.isFreeze = +newFormInline.isFreeze;
     const res = await API.operateUpdateUser(newFormInline);
     message(res.msg, { type: res.code ? 'error' : 'success' });

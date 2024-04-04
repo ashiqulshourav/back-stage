@@ -310,6 +310,7 @@
                   <el-button
                     class="!ml-0 mt-2"
                     size="small"
+                    :disabled="item.settleStatus === 1"
                     @click="refuseBetClick(item.detailId)"
                     type="danger"
                   >
@@ -386,7 +387,7 @@ const getVal = (s1, s2, s3, s4) => {
     case s4 === 3:
       val = t('待确认');
       break;
-    case s1 === 1 && s2 === 4 && s3 === 61:
+    case s3 === 61:
       val = t('已拒单');
       break;
   }

@@ -38,7 +38,7 @@ const props = withDefaults(
     isSingle: false,
     placeholder: t('请选择日期'),
     startPlaceholder: t('开始日期'),
-    endPlaceholder: t('结束如期')
+    endPlaceholder: t('结束日期')
   }
 );
 
