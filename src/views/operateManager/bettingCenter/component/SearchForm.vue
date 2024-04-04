@@ -222,13 +222,7 @@
             <el-option  :label="t('结算时间')" :value="2"  />
             <el-option  :label="t('比赛时间')" :value="3"  />
           </el-select>
-          <el-date-picker
-              :type="dateRangetType"
-              v-model="selectDate"
-              :start-placeholder="dayjs().startOf('month').format('YYYY-MM-DD')"
-              :end-placeholder="dayjs().endOf('day').format('YYYY-MM-DD')"
-              @change="changeDate"
-          />
+          <CustomDate v-model:val="selectDate" @changeDate="changeDate" />
         </el-form-item>
         <el-form-item>
           <el-button
@@ -283,15 +277,9 @@ const formRef = ref();
 const selectDate = ref('');
 const dateType = ref(1);
 const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
-const dateRangetType = computed(() => {
-  const o = {
-    1: 'daterange',
-    2: 'monthrange'
-  };
-  return o[dateType.value];
-});
 import {  betStatusMap,seriesTypesSingle,seriesTypesDuplex} from "../util/types";
 import {hasAuth} from "@/router/utils";
+import CustomDate from "@/components/Form/Custom_date.vue";
 
 const emits = defineEmits(['onSearch', 'exportFile']);
 const resetForm = (formEl: FormInstance | undefined) => {

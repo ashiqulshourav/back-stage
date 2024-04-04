@@ -60,7 +60,7 @@
           v-model="time"
           type="daterange"
           :start-placeholder="t('开始日期')"
-          :end-placeholder="t('结束如期')"
+          :end-placeholder="t('结束日期')"
           value-format="x"
           format="YYYY-MM-DD"
           @change="changeDate"
