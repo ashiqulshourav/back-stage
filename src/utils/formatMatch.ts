@@ -248,12 +248,8 @@ export const useSportFormatDetail = (row) => {
   )}`;
   const secondLine = row.leagueNameCn;
   const thirdLine = `${row.homeTeamNameCn} vs ${row.awayTeamNameCn}`;
+  const fourthLine =  row.betN? `${row.betN}`:`${row.betHomeOrAway} ${row.betHandicap}`;
   const fifthLine = `${getPlayNameByKc({code: row.kindsCode, name: row.betItemName, ctid: row.betItemCTID, sportId: row.sportId})??'-'}`;
-
-  const oddName=  getBetTeamType(row || {} as Detail)
-  const isvisiable=isVisiableSecondText(row.betHandicap, row.betN, row.kindsCode)
-  const oddName2=getBetHandiCapAtBetting(row.betHandicap, row.sportId)
-  const fourthLine = `${oddName}  ${isvisiable?oddName2:''}`;
   return [firstLine, secondLine, thirdLine, fourthLine, fifthLine,score];
 }
 // 盘口类型, OU:欧盘,1; HK:香港盘,2; ML:马来盘,3; ID:印尼盘,4; US:美式盘,5; GB:英式盘,6;
