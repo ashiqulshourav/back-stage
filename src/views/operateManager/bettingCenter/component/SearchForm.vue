@@ -15,7 +15,7 @@
                      clearable
                      @change="search"
           >
-            <el-option v-for="(item in tenantList" :label="item.name" :value="item.id" :key="item.id" />
+            <el-option v-for="item in tenantList" :label="item.name" :value="item.id" :key="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('赛事类型')}:`" prop="category">
@@ -275,7 +275,6 @@ const props = defineProps<{
 
 const formRef = ref();
 const selectDate = ref('');
-const dateType = ref(1);
 const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
 import {  betStatusMap,seriesTypesSingle,seriesTypesDuplex} from "../util/types";
 import {hasAuth} from "@/router/utils";
