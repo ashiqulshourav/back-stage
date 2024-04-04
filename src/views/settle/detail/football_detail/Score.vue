@@ -83,8 +83,9 @@ const switchModal = computed<boolean>({
 const updateStatus = async (index: number) => {
   if (props.renderObj.settlementType === 1) {
     message(t('自动结算下无法进行状态更改'), { type: 'error' });
-    return false;
+    return Promise.resolve(false);
   }
+
   let strVal = '';
   if (index === 1) {
     strVal = props.overTimeStatus
@@ -97,8 +98,8 @@ const updateStatus = async (index: number) => {
         .map(item => item.tableList)
         .flat();
       if (d.length) {
-        return ElMessageBox.confirm(
-          t('关闭前请取消加时赛结算事件?'),
+        ElMessageBox.confirm(
+          t('关闭前请取消加时赛结算事件'),
           t('不能关闭加时赛'),
           {
             type: 'warning',
@@ -107,6 +108,7 @@ const updateStatus = async (index: number) => {
             center: true
           }
         );
+        return Promise.reject();
       }
     }
   } else {
@@ -114,37 +116,36 @@ const updateStatus = async (index: number) => {
       ? t('确定要关闭点球大战么?')
       : t('确定要开启点球大战么?');
   }
-  return new Promise<boolean>((resolve, reject) => {
-    ElMessageBox.confirm(strVal, t('警告'), {
-      center: true,
-      type: 'warning'
-    })
-      .then(async () => {
-        const reqData =
-          index == 1
-            ? {
-                url: 'setOverTimeStatus',
-                params: {
-                  matchId: props.renderObj.matchId,
-                  overTimeStatus: !props.overTimeStatus
-                }
+
+  return ElMessageBox.confirm(strVal, t('警告'), {
+    center: true,
+    type: 'warning'
+  })
+    .then(async () => {
+      const reqData =
+        index == 1
+          ? {
+              url: 'setOverTimeStatus',
+              params: {
+                matchId: props.renderObj.matchId,
+                overTimeStatus: !props.overTimeStatus
               }
-            : {
-                url: 'setPenaltyKickStatus',
-                params: {
-                  matchId: props.renderObj.matchId,
-                  penaltyKickStatus: !props.penaltyKickStatus
-                }
-              };
-        const res = await API[reqData.url](reqData.params);
-        message(res.msg, { type: res.code ? 'error' : 'success' });
-        if (!res.code) {
-          resolve(true);
-          emits('reloadEventList');
-        }
-      })
-      .catch(reject);
-  });
+            }
+          : {
+              url: 'setPenaltyKickStatus',
+              params: {
+                matchId: props.renderObj.matchId,
+                penaltyKickStatus: !props.penaltyKickStatus
+              }
+            };
+      const res = await API[reqData.url](reqData.params);
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if (!res.code) {
+        emits('reloadEventList');
+        return Promise.resolve(true);
+      }
+    })
+    .catch(() => Promise.reject());
 };
 
 const openSecondSettleClick = () => {

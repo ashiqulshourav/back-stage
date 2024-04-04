@@ -80,7 +80,7 @@ export function useFootball() {
   ]);
 
   //- 检测加时赛状态
-  const checkOverTimeStatus = async (type, index) => {
+  const checkOverTimeStatus = async index => {
     return new Promise(resolve => {
       const idsArr = [3, 4, 5];
       if (idsArr.includes(+index)) {
@@ -97,20 +97,33 @@ export function useFootball() {
           resolve(!res.code);
         });
         //- 加时赛
-      } else {
+      } else if (index > 5) {
+        ElMessageBox.confirm(t('新增点球大战请先开启点球大战开关'), t('警告'), {
+          confirmButtonText: t('确认'),
+          cancelButtonText: t('取消'),
+          center: true
+        }).then(async () => {
+          const res = await API.setPenaltyKickStatus({
+            matchId,
+            penaltyKickStatus: true
+          });
+          message(res.msg, { type: res.code ? 'error' : 'success' });
+          resolve(!res.code);
+        });
         //- 点球
       }
     });
   };
 
   //- 人工结算新增一行
-  const addChildRow = async (tableList, type, index) => {
-    if (index > 2) {
-      if (!overTimeStatus.value) {
-        const r = await checkOverTimeStatus(type, index);
-        r && getChildrenData();
-        return;
-      }
+  const addChildRow = async (tableList, type, index, key) => {
+    if (
+      (+index === 6 && !penaltyKickStatus.value) ||
+      (index > 2 && !overTimeStatus.value && key !== 'penaltyKickRecordList')
+    ) {
+      const r = await checkOverTimeStatus(index);
+      r && getChildrenData();
+      return;
     }
     const isSettle = tableList.some(item => item.settleTimes === 0);
     if (
@@ -293,11 +306,6 @@ export function useFootball() {
         t1: +row.t1,
         t2: +row.t2,
         id: row.id ?? null
-        // canceled: 0,
-        // player1Name: row.player1Name,
-        // dataSourceCode: 'SK',
-        // sourceType: 1,
-        // sportId: SPORT_TYPE.football
       };
       if (row.matchPeriodId === 50) {
         params.firstNum = row.firstNum;

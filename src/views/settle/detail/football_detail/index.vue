@@ -213,7 +213,14 @@
             >
               <span
                 class="mr-3 text-[var(--el-color-danger)] cursor-pointer"
-                @click="addChildRow(item.tableList, item.type, selectTabIndex)"
+                @click="
+                  addChildRow(
+                    item.tableList,
+                    item.type,
+                    selectTabIndex,
+                    item.key
+                  )
+                "
                 >{{
                   renderObj.reSettleStatus === 1
                     ? t('重新结算中')
@@ -225,7 +232,14 @@
                 class="cursor-pointer"
                 width="25px"
                 icon="icon_circle_fill"
-                @click="addChildRow(item.tableList, item.type, selectTabIndex)"
+                @click="
+                  addChildRow(
+                    item.tableList,
+                    item.type,
+                    selectTabIndex,
+                    item.key
+                  )
+                "
               />
             </div>
           </el-tab-pane>
