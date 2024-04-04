@@ -198,7 +198,7 @@ export function useLeague() {
             str=useSportFormatDetail(data)[4]
             break;
           case 'betName':
-            str= getBetTeamType(data || {} as Detail)
+            str= useSportFormatDetail(data)[3]
             break;
           case 'teamName':
             str= `${data.homeTeamNameCn} vs ${data.awayTeamNameCn}`
