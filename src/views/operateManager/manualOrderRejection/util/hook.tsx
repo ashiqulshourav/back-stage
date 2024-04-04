@@ -11,6 +11,7 @@ import {
 import { columns } from './exportTableColumnList';
 import { utils, writeFile } from 'xlsx';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
+import RejctDialogForm from '../component/RejctDialogForm.vue';
 import {
   Detail,
   getBetTeamType,
@@ -25,6 +26,7 @@ import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { ElMessageBox } from 'element-plus';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
+import { addDialog, closeDialog } from '@/components/ReDialog';
 
 export function useLeague() {
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
@@ -375,41 +377,23 @@ export function useLeague() {
       : message(t('复制失败'), { type: 'error' });
   }
 
-  const rejectMap = [
-    { key: 'goal', val: t('进球风控') },
-    { key: 'penalty_reward', val: t('点球风控') },
-    { key: 'red_card', val: t('红牌风控') },
-    { key: 'other', val: t('其他') }
-  ];
-  const rejectVal = ref('goal');
-  const rejectHtml = (
-    <div>
-      <div class="font-bold">{t('请选择据单原因')}</div>
-      <el-radio-group v-model={rejectVal} onClick={change}>
-        {rejectMap.map(item => {
-          return (
-            <el-radio label={item.key} key={item.key}>
-              {item.val}
-            </el-radio>
-          );
-        })}
-      </el-radio-group>
-    </div>
-  );
-
-  const change = () => {
-    
-  }
-
   //- 风控拒单
   const refuseBetClick = detailId => {
-    ElMessageBox.confirm(rejectHtml, '警告', { center: true }).then(
-      async () => {
-        const res = await API.riskCancel([detailId]);
-        message(res.msg, { type: res.code ? 'error' : 'success' });
-        if (!res.code) onSearch();
-      }
-    );
+    addDialog({
+      title: t('警告'),
+      width: '15%',
+      closeOnClickModal: false,
+      center: true,
+      hideFooter: true,
+      contentRenderer: ({ options, index }) =>
+        h(RejctDialogForm, {
+          detailId,
+          onCloseDialog: (type?: 'reload') => {
+            closeDialog(options, index);
+            if (type) onSearch();
+          }
+        })
+    });
   };
 
   //- 确认注单
@@ -417,7 +401,7 @@ export function useLeague() {
     ElMessageBox.confirm(`${t('是否确定当前注单么?')} `, '警告', {
       center: true
     }).then(async () => {
-      const res = await API.riskConfirm([detailId]);
+      const res = await API.riskConfirm([{ detailId, status: 1 }]);
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if (!res.code) onSearch();
     });
