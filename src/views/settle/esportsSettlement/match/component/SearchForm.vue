@@ -130,7 +130,7 @@ import dayjs from 'dayjs';
 // import { disableDate } from '@/utils/formatDate';
 import { useMatchStore } from '@/store/match';
 import { formatNumber } from '@/utils/formatNumber';
-import CustomDate from '@/components/form/CustomDate.vue';
+import CustomDate from '@/components/Form/Custom_date.vue';
 
 import {
   ESPORT_ID_MAP,
