@@ -239,7 +239,6 @@
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-// import DetiltTitle from '../../component/Settle_detail_title.vue';
 import FootballDetail from './FootballDetail.vue';
 import BackEndBtnGroupCom from './BackEndBtnGroup.vue';
 import FrontBtnGroupCom from './FrontBtnGroup.vue';

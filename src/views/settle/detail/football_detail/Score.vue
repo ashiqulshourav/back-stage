@@ -80,6 +80,10 @@ const switchModal = computed<boolean>({
 
 //- 修改启用状态
 const updateStatus = async (index: number) => {
+  if (props.renderObj.settlementType === 1) {
+    message(t('自动结算下无法进行状态更改'), { type: 'error' });
+    return false;
+  }
   let strVal = '';
   if (index === 1) {
     strVal = props.overTimeStatus

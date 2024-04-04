@@ -83,8 +83,18 @@ export function useFootball() {
     [`${t('比分')}: -`]
   ]);
 
+  //- 检测加时赛状态
+  const checkOverTimeStatus = (type, index) => {
+    console.log('hook.tsx文件 88==============行打印=', type, index);
+  };
+
   //- 人工结算新增一行
   const addChildRow = (tableList, type, index) => {
+    if (index > 2) {
+      checkOverTimeStatus(type, index);
+    }
+    return;
+
     const isSettle = tableList.some(item => item.settleTimes === 0);
     if (
       ((tableList.length !== 0 &&
@@ -127,10 +137,6 @@ export function useFootball() {
     childDataTotal.value = 0;
     overTimeStatus.value = res.data.overTimeStatus;
     penaltyKickStatus.value = res.data.penaltyKickStatus;
-    console.log(
-      'hook.tsx文件 130==============行打印=',
-      renderObj.fullSettlementStatus
-    );
     recordList.value = [
       [
         `${t('比分')}: ${res.data.normalTimeScore}`,
