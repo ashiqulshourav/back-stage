@@ -21,7 +21,6 @@
           <template v-if="!renderObj.fullSettlementStatus">
             <SettleMatchBtn
               :parentRow="renderObj"
-              :childDataTotal="childDataTotal"
               :matchId="renderObj.matchId"
               @reloadTable="reloadTable"
               :overTimeStatus="overTimeStatus"
@@ -344,7 +343,6 @@ const {
   cancelMatchEvent,
   editChild,
   handleChildrenData,
-  childDataTotal,
   reloadTable,
   changeSettleType,
   advanceSettlement,

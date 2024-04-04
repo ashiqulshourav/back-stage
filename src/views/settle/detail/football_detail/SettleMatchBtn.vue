@@ -12,7 +12,7 @@
       type="danger"
       :btn-text="t('结算比赛')"
       :loading="btnLoading"
-      :disabled="!!parentRow.fullSettlementStatus || !childDataTotal"
+      :disabled="!!parentRow.fullSettlementStatus"
       @click="closeMatchClick"
     />
   </div>
@@ -27,7 +27,6 @@ import { ElMessageBox } from 'element-plus';
 
 const props = defineProps<{
   parentRow: SattleDataAPI.getSettlementDataList;
-  childDataTotal: number;
   matchId: number;
   overTimeStatus: boolean;
   penaltyKickStatus: boolean;

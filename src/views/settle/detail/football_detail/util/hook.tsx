@@ -53,7 +53,6 @@ export function useFootball() {
   ]);
   const childloading = ref(true);
   const switchLoadMap = ref({});
-  const childDataTotal = ref(0);
   const allSettleLoading = ref(false);
   const loopTimer = ref<NodeJS.Timeout>();
   const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
@@ -119,7 +118,10 @@ export function useFootball() {
   const addChildRow = async (tableList, type, index, key) => {
     if (
       (+index === 6 && !penaltyKickStatus.value) ||
-      (index > 2 && !overTimeStatus.value && key !== 'penaltyKickRecordList')
+      (index > 2 &&
+        !overTimeStatus.value &&
+        key !== 'penaltyKickRecordList' &&
+        renderObj.fullSettlementStatus === 0)
     ) {
       const r = await checkOverTimeStatus(index);
       r && getChildrenData();
@@ -164,7 +166,6 @@ export function useFootball() {
     const res = await API.getMatchEvents({ matchId });
     childloading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
-    childDataTotal.value = 0;
     overTimeStatus.value = res.data.overTimeStatus;
     penaltyKickStatus.value = res.data.penaltyKickStatus;
     recordList.value = [
@@ -207,7 +208,6 @@ export function useFootball() {
 
     dataList.forEach((item: SaleDataAPI.ChildrenDataList) => {
       item.tableList = res.data[item.key];
-      childDataTotal.value += item.tableList?.length;
       if (item.tableList?.length) {
         item.tableList.forEach((_, index) => {
           _.createdAt = new Date(_.createdAt).getTime() + 1000 * 60 * 5;
@@ -535,7 +535,6 @@ export function useFootball() {
     addChildRow,
     editChild,
     handleChildrenData,
-    childDataTotal,
     reloadTable,
     changeSettleType,
     cancelMatchEvent,
