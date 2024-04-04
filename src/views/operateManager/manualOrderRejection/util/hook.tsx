@@ -375,31 +375,48 @@ export function useLeague() {
       : message(t('复制失败'), { type: 'error' });
   }
 
-  //- 取消注单
-  const refuseBetClick = detailId => {
-    // const list = [];
+  const rejectMap = [
+    { key: 'goal', val: t('进球风控') },
+    { key: 'penalty_reward', val: t('点球风控') },
+    { key: 'red_card', val: t('红牌风控') },
+    { key: 'other', val: t('其他') }
+  ];
+  const rejectVal = ref('goal');
+  const rejectHtml = (
+    <div>
+      <div class="font-bold">{t('请选择据单原因')}</div>
+      <el-radio-group v-model={rejectVal} onClick={change}>
+        {rejectMap.map(item => {
+          return (
+            <el-radio label={item.key} key={item.key}>
+              {item.val}
+            </el-radio>
+          );
+        })}
+      </el-radio-group>
+    </div>
+  );
 
-    ElMessageBox.confirm(`${t('确定要拒接注单么?')} `, '警告', {
-      type: 'warning',
-      center: true
-    }).then(async () => {
-      // row.combineOrderDetails.forEach(item => {
-      //   if (item.settleStatus === 3) list.push(item.detailId);
-      // });
-      const res = await API.riskCancel([detailId]);
-      message(res.msg, { type: res.code ? 'error' : 'success' });
-      if (!res.code) onSearch();
-    });
+  const change = () => {
+    
+  }
+
+  //- 风控拒单
+  const refuseBetClick = detailId => {
+    ElMessageBox.confirm(rejectHtml, '警告', { center: true }).then(
+      async () => {
+        const res = await API.riskCancel([detailId]);
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        if (!res.code) onSearch();
+      }
+    );
   };
+
   //- 确认注单
   const confirmBetClick = async detailId => {
-    // const list = [];
     ElMessageBox.confirm(`${t('是否确定当前注单么?')} `, '警告', {
       center: true
     }).then(async () => {
-      // row.combineOrderDetails.forEach(item => {
-      //   if (item.settleStatus === 3) list.push(item.detailId);
-      // });
       const res = await API.riskConfirm([detailId]);
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if (!res.code) onSearch();

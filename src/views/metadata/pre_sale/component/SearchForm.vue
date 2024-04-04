@@ -116,15 +116,13 @@
           @click="changeSelectDate(index)"
           >{{ item }}</el-button
         >
-        <el-date-picker
-          class="ml-4"
-          v-model="form.startTime"
-          type="date"
+        <CustomDate
           :placeholder="t('其他日期')"
-          value-format="x"
-          format="YYYY-MM-DD"
-          :disabled-date="disableDate"
-          @change="changeDate"
+          :disableDate="disableDate"
+          v-model:val="form.startTime"
+          @changeDate="changeDate"
+          :isShowShortCuts="true"
+          :isSingle="true"
         />
       </el-form-item>
 
@@ -170,6 +168,8 @@ import { disableDate } from '@/utils/formatDate';
 import { useMatchStore } from '@/store/match';
 import { formatNumber } from '@/utils/formatNumber';
 import { debounce } from '@pureadmin/utils';
+import CustomDate from '@/components/Form/CustomDate.vue';
+
 import {
   ESPORT_ID_MAP,
   SPORT_ID_MAP,
