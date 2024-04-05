@@ -33,7 +33,7 @@
             addThousandSeparator(row.productAmountTotalLimit)
           }}</span>
           <el-input
-            :formatter="v => formatNumber(v, 13)"
+            :formatter="v => formatNumberAndFillZero(v, 13)"
             v-else
             v-model="row.productAmountTotalLimit"
           />
@@ -44,7 +44,7 @@
             addThousandSeparator(row.maxWinAmountLimit)
           }}</span>
           <el-input
-            :formatter="v => formatNumber(v, 13)"
+            :formatter="v => formatNumberAndFillZero(v, 13)"
             v-else
             v-model="row.maxWinAmountLimit"
           />
@@ -55,7 +55,7 @@
             addThousandSeparator(row.userSingleGamePay)
           }}</span>
           <el-input
-            :formatter="v => formatNumber(v, 13)"
+            :formatter="v => formatNumberAndFillZero(v, 13)"
             v-else
             v-model="row.userSingleGamePay"
           />
@@ -66,7 +66,7 @@
             addThousandSeparator(row.singleMatchPay)
           }}</span>
           <el-input
-            :formatter="v => formatNumber(v, 13)"
+            :formatter="v => formatNumberAndFillZero(v, 13)"
             v-else
             v-model="row.singleMatchPay"
           />
@@ -77,7 +77,7 @@
             addThousandSeparator(row.bunchMatchPay)
           }}</span>
           <el-input
-            :formatter="v => formatNumber(v, 13)"
+            :formatter="v => formatNumberAndFillZero(v, 13)"
             v-else
             v-model="row.bunchMatchPay"
           />
@@ -88,7 +88,7 @@
             addThousandSeparator(row.championDailyPay)
           }}</span>
           <el-input
-            :formatter="v => formatNumber(v, 13)"
+            :formatter="v => formatNumberAndFillZero(v, 13)"
             v-else
             v-model="row.championDailyPay"
           />
@@ -142,7 +142,7 @@
             addThousandSeparator(row.productAmountTotalLimit)
           }}</span>
           <el-input
-            :formatter="v => formatNumber(v, 13)"
+            :formatter="v => formatNumberAndFillZero(v, 13)"
             v-else
             v-model="row.productAmountTotalLimit"
           />
@@ -153,7 +153,7 @@
             addThousandSeparator(row.maxWinAmountLimit)
           }}</span>
           <el-input
-            :formatter="v => formatNumber(v, 13)"
+            :formatter="v => formatNumberAndFillZero(v, 13)"
             v-else
             v-model="row.maxWinAmountLimit"
           />
@@ -164,7 +164,7 @@
             addThousandSeparator(row.userSingleGamePay)
           }}</span>
           <el-input
-            :formatter="v => formatNumber(v, 13)"
+            :formatter="v => formatNumberAndFillZero(v, 13)"
             v-else
             v-model="row.userSingleGamePay"
           />
@@ -175,7 +175,7 @@
             addThousandSeparator(row.singleMatchPay)
           }}</span>
           <el-input
-            :formatter="v => formatNumber(v, 13)"
+            :formatter="v => formatNumberAndFillZero(v, 13)"
             v-else
             v-model="row.singleMatchPay"
           />
@@ -186,7 +186,7 @@
             addThousandSeparator(row.bunchMatchPay)
           }}</span>
           <el-input
-            :formatter="v => formatNumber(v, 13)"
+            :formatter="v => formatNumberAndFillZero(v, 13)"
             v-else
             v-model="row.bunchMatchPay"
           />
@@ -197,7 +197,7 @@
             addThousandSeparator(row.championDailyPay)
           }}</span>
           <el-input
-            :formatter="v => formatNumber(v, 13)"
+            :formatter="v => formatNumberAndFillZero(v, 13)"
             v-else
             v-model="row.championDailyPay"
           />
@@ -224,7 +224,10 @@
 import { useClassifySettingHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
-import { addThousandSeparator, formatNumber } from '@/utils/formatNumber';
+import {
+  addThousandSeparator,
+  formatNumberAndFillZero
+} from '@/utils/formatNumber';
 
 defineOptions({ name: 'CONFIGCENTER_CLASSIFY_SETTING' });
 const { tableHeaderStyleBlue } = usePublicHooks();

@@ -117,7 +117,9 @@ export function useFootball() {
   //- 人工结算新增一行
   const addChildRow = async (tableList, type, index, key) => {
     if (
-      (+index === 6 && !penaltyKickStatus.value) ||
+      (+index === 6 &&
+        !penaltyKickStatus.value &&
+        renderObj.fullSettlementStatus === 0) ||
       (index > 2 &&
         !overTimeStatus.value &&
         key !== 'penaltyKickRecordList' &&

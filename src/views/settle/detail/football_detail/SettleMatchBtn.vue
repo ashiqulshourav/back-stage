@@ -71,12 +71,6 @@ const currentSettleType = computed(() => {
       o.reqUrl = 'penaltyKickSettlement';
       o.disabled = !props.penaltyKickStatus;
       break;
-    case SETTLE_BUTTON_TYPE.penalty_kick:
-      o.txt = t('点球全场结算');
-      o.confirmTxt = t('确定要点球全场结算么？');
-      o.reqUrl = 'penaltyKickSettlement';
-      o.disabled = !props.penaltyKickStatus;
-      break;
     default:
       o.txt = t('点球全场结算');
       o.confirmTxt = t('确定要点球全场结算么？');
@@ -89,22 +83,38 @@ const currentSettleType = computed(() => {
 
 const emites = defineEmits(['reloadTable']);
 const router = useRouter();
-const closeMatchClick = () => {
-  ElMessageBox.confirm(t('是否立即结算比赛么？'), t('警告'), {
+
+const closeMatchClick = async () => {
+  const selttArr = [
+    'allSettlement',
+    'overTimeFullSettlement',
+    'penaltyKickSettlement'
+  ];
+  // if (selttArr.includes(currentSettleType.value.reqUrl)) {
+  //   if(currentSettleType.value.reqUrl === 'allSettlement')
+  // } else {
+  //   emites('reloadTable', true);
+  // }
+
+  btnLoading.value = true;
+  const res = await API.closeSaleStatus({ matchId: props.matchId });
+  btnLoading.value = false;
+  message(res.msg, { type: res.code ? 'error' : 'success' });
+  if (res.code) return;
+  router.go(-1);
+  /*  ElMessageBox.confirm(t('是否立即结算比赛么？'), t('警告'), {
     dangerouslyUseHTMLString: true,
     confirmButtonText: t('确认'),
     cancelButtonText: t('取消'),
     center: true
   }).then(async () => {
-    btnLoading.value = true;
-    const res = await API.closeSaleStatus({ matchId: props.matchId });
-    btnLoading.value = false;
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    if (res.code) return;
-    router.go(-1);
-  });
+    
+  }); */
 };
 
+//- 判断是否结算祛暗疮
+
+//- 比赛结算
 const settleClick = () => {
   ElMessageBox.confirm(currentSettleType.value.confirmTxt, t('警告'), {
     dangerouslyUseHTMLString: true,
@@ -117,7 +127,7 @@ const settleClick = () => {
     });
     message(res.msg, { type: res.code ? 'error' : 'success' });
     if (res.code) return;
-    emites('reloadTable', true);
+    closeMatchClick();
   });
 };
 </script>
