@@ -185,7 +185,9 @@ const confirmClick = () => {
     !newFormInline.singleBetLimit && (newFormInline.singleBetLimit = null);
     !newFormInline.singleEventCompensationLimit &&
       (newFormInline.singleEventCompensationLimit = null);
-    newFormInline.isFreeze = +newFormInline.isFreeze;
+
+    newFormInline.isFreeze = +!newFormInline.isFreeze;
+
     const res = await API.operateUpdateUser(newFormInline);
     message(res.msg, { type: res.code ? 'error' : 'success' });
     emits('closeDialog', res.code ? '' : 'reloadTable');
