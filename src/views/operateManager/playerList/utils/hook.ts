@@ -77,6 +77,7 @@ export function userPlayerListHook() {
             name: row.userName,
             isFreeze: row.isFreeze === 0,
             limitLevel: row?.limitLevel ?? 4,
+            remark: row?.remark ?? '',
             singleBetLimit: row?.productAmountTotalLimit,
             singleEventCompensationLimit: row?.maxWinAmountLimit,
           },

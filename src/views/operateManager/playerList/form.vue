@@ -75,7 +75,7 @@
         </el-form-item>
       </div>
 
-      <el-form-item :label="`${t('备注')}:`" prop="isFreeze">
+      <el-form-item :label="`${t('备注')}:`" prop="remark">
         <el-input
           v-model="newFormInline.remark"
           type="textarea"
@@ -115,6 +115,7 @@ const props = defineProps<{
     isFreeze: boolean | number;
     limitLevel: number;
     singleBetLimit: number;
+    remark: string;
     singleEventCompensationLimit: number;
   };
 }>();
@@ -123,8 +124,7 @@ const emits = defineEmits(['closeDialog']);
 
 const ruleFormRef = ref<FormInstance>();
 const newFormInline = reactive({
-  ...props.row,
-  remark: ''
+  ...props.row
 });
 
 const columns: TableColumnList = [
