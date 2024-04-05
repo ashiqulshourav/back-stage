@@ -10,8 +10,6 @@ import { reactive, ref, onMounted, h } from 'vue';
 import PasswordInput from '@/components/PasswordInput/index.vue';
 
 import {
-  Detail,
-  getBetTeamType,
   markeTypeMap,
   useSportFormatDetail,
   displayHomeAwayScore, BET_RESULT_TYPE_MAP, formatSeriesType
@@ -172,7 +170,7 @@ export function useLeague() {
 
   //- 导出excel表格
   const exportFile = async () => {
-    const res: BetOrderAPI.BetOrderResType  = await API.bettingCenterList(formatParams({pageNum:1,pageSize:10000}) as searchFormType);
+    const res: BetOrderAPI.BetOrderResType  = await API.bettingCenterList(formatParams({pageNum:1,pageSize:50000}) as searchFormType);
     const r = res.data.pageData.map((item:any,i) => {
       const arr = [];
       const data={...item,...item?.combineOrderDetails[0]}
@@ -210,10 +208,10 @@ export function useLeague() {
             str = data.isSettlementAgain===1?'是':'否'
             break;
           case 'status':
-            str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult).status]
+            str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult,data.isReserve).status]
             break;
           case 'billStatus':
-            str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult).status]
+            str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult,data.isReserve).status]
             break;
           case 'settleScore':
             str=displayHomeAwayScore(data.settleScore,data.sportId)
@@ -234,11 +232,11 @@ export function useLeague() {
               str=data.seriesType===1?'单关':'串关';
               break;
           case 'tenantName':  //商户名
-            str=(tenantObj[data.tenantId]).name??''
+            str=(tenantObj[data.tenantId]).tenantName??''
             break;
-          // case 'tenantCode':  //商户编码
-          //     str=(tenantObj[data.tenantId]).name??''
-          //     break;
+          case 'tenantCode':  //商户编码
+              str=(tenantObj[data.tenantId]).name??''
+              break;
           default:
             str = data[column.prop as string]
         }
@@ -264,8 +262,8 @@ export function useLeague() {
       type: 'success'
     });
   };
-  const handleCancel =(data:any)=>{
-    return new Promise<boolean>((resolve, reject) => {
+  const handleCancel = (data:any)=>{
+
       ElMessageBox.confirm(
         t('确定取消注单吗？'),
         t('警告'),
@@ -275,23 +273,42 @@ export function useLeague() {
         }
       )
         .then(async () => {
-          const params:any={orderIds:[data.id]}
-          const res= await API.orderCancel(params);
-          if (res.code) {
-            reject();
-          } else {
-            resolve(true);
-            onSearch();
-          }
-          message(res.msg, { type: res.code ? 'error' : 'success' });
+          addDialog({
+            title: t('请输入U盾密码'),
+            class: 'reset_dialog',
+            width: '25%',
+            center: true,
+            closeOnClickModal: false,
+            hideFooter: true,
+            contentRenderer: ({ options, index }) =>
+                h(PasswordInput, {
+                  ref: uDialogRef,
+                  onCloseDialog: (_: boolean) => {
+                    closeDialog(options, index);
+                    setTimeout(()=>{
+                      const params:any={orderIds:[data.id]}
+                      API.orderCancel(params).then((res)=>{
+                        if (res.code) {
+                        } else {
+                          onSearch();
+                        }
+                        message(res.msg, { type: res.code ? 'error' : 'success' });
+                      });
+                    },500)
+                  }
+                })
+          });
+
         })
-        .catch(reject);
-    });
   }
-const getStatus = (status,billStatus,betResult)=>{
+const getStatus = (status,billStatus,betResult,isReserve?)=>{
     let obj = {status:-1,bgColor:''}
    if(status===0&&billStatus===0){  // 未结算
-     obj={status:betStatus.unsettlementBet,bgColor:'#FFC53D'}
+      if(isReserve===1){ // 预约中
+        obj={status:betStatus.onReverse,bgColor:'#F57582'}
+      }else {
+        obj={status:betStatus.unsettlementBet,bgColor:'#FFC53D'}
+      }
    }else if(status===1&&billStatus===1){// 已结算
      obj={status:betStatus.settlementBet,bgColor:'#40A9FF'}
    }else if(status===3){   // 待确认
@@ -322,8 +339,6 @@ const switchDialog = (flag:boolean,row)=>{
     UDialogFlag.value=flag;
 
     if(flag){
-      handleEditResult(row)
-      if(0){
         addDialog({
           title: t('请输入U盾密码'),
           class: 'reset_dialog',
@@ -342,9 +357,6 @@ const switchDialog = (flag:boolean,row)=>{
                 }
               })
         });
-      }
-
-
     }
 }
 

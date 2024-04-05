@@ -37,6 +37,7 @@ export enum betStatus {
   eventAbnormal = 8,
   riskReject = 9,
   reserveFail = 10,
+  onReverse = 11,
 }
 export const betStatusMap ={
   [betStatus.all]: t('全部'),
@@ -49,6 +50,7 @@ export const betStatusMap ={
   [betStatus.eventAbnormal]: t('赛事异常'),
   [betStatus.riskReject]: t('风控拒单'),
   [betStatus.reserveFail]: t('预约失败'),
+  [betStatus.onReverse]: t('预约中'),
 }
 
 export const seriesTypesSingle = {

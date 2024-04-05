@@ -60,20 +60,11 @@
               <span>{{ t('用户名：') }}</span
               >{{ row.userName }}
             </div>
-            <!--            <div class="item_line cursor-pointer" @dblclick="copyTest(tenantObj[row.tenantId]?.tenantName,t('商户名：{value}',{value:tenantObj[row.tenantId]?.tenantName}))">-->
-            <!--                <span>{{t('商户名：')}}</span>{{tenantObj[row.tenantId]?.tenantName}}-->
-            <!--            </div>-->
-            <div
-              class="item_line cursor-pointer"
-              @dblclick="
-                copyTest(
-                  row.tenantId,
-                  t('商户ID：{value}', { value: row.tenantId })
-                )
-              "
-            >
-              <span>{{ t('商户ID：') }}</span
-              >{{ row.tenantId }}
+            <div class="item_line cursor-pointer" @dblclick="copyTest(tenantObj[row.tenantId]?.tenantName,t('商户名：{value}',{value:tenantObj[row.tenantId]?.tenantName}))">
+                <span>{{t('商户名：')}}</span>{{tenantObj[row.tenantId]?.tenantName}}
+            </div>
+            <div class="item_line cursor-pointer" @dblclick="copyTest(row.tenantId,t('商户编码：{value}',{value:row.tenantId}))">
+              <span>{{ t('商户编码：') }}</span >{{ tenantObj[row.tenantId]?.name }}
             </div>
             <div
               v-if="row.combineOrderDetails.length > 1"
@@ -246,41 +237,9 @@
             <span v-else>-</span>
           </template>
           <template #status="{ row }">
-            <div
-              :style="{
-                background: getStatus(
-                  row.status,
-                  row.billStatus,
-                  row.combineOrderDetails[0].betResult
-                ).bgColor
-              }"
-              class="status_btn mb-1"
-            >
-              {{
-                betStatusMap[
-                  getStatus(
-                    row.status,
-                    row.billStatus,
-                    row.combineOrderDetails[0].betResult
-                  ).status
-                ]
-              }}
-            </div>
-            <div>
-              {{
-                row.settleTime
-                  ? dayjs(row.settleTime).format('MM-DD HH:mm:ss')
-                  : ''
-              }}
-            </div>
-            <div v-if="String(row.seriesType).slice(-3) === '001'">
-              {{ t('总赔率:')
-              }}{{
-                String(row.seriesType).slice(-3) === '001'
-                  ? calculateSeriesTypeTotal(row.combineOrderDetails)
-                  : ''
-              }}
-            </div>
+            <div :style="{background:getStatus(row.status,row.billStatus,row.combineOrderDetails[0].betResult,row.isReserve).bgColor}" class="status_btn mb-1">{{ betStatusMap[getStatus(row.status,row.billStatus,row.combineOrderDetails[0].betResult,row.isReserve).status]}}</div>
+            <div >{{ row.settleTime ? dayjs(row.settleTime).format('MM-DD HH:mm:ss'):'' }}</div>
+            <div v-if="String(row.seriesType).slice(-3) ==='001'" >{{t('总赔率:')}}{{String(row.seriesType).slice(-3) ==='001'?calculateSeriesTypeTotal(row.combineOrderDetails):'' }}</div>
           </template>
           <template #operation="{ row }">
             <el-button
@@ -380,7 +339,8 @@ const {
   copyTest,
   tenantList,
   specialCountFlag,
-  switchDialog
+  switchDialog,
+  tenantObj
 } = useLeague();
 </script>
 
