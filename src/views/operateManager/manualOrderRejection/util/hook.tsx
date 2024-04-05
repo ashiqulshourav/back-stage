@@ -28,7 +28,7 @@ import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 
-export function useLeague() {
+export function useManualOrderRejectionHook() {
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<any>([]);
   const tenantObj = reactive<any>({});
@@ -160,7 +160,7 @@ export function useLeague() {
   };
 
   //- 导出excel表格
-  const exportFile = async () => {
+  /*   const exportFile = async () => {
     // 对于串关类型的选择处理
     let seriesDetails: any = [];
     if (form.seriesType == 2) {
@@ -308,7 +308,7 @@ export function useLeague() {
     message(t('导出成功'), {
       type: 'success'
     });
-  };
+  }; */
   const handleCancel = (data: any) => {
     return new Promise<boolean>((resolve, reject) => {
       ElMessageBox.confirm(t('确定取消注单吗？'), t('警告'), {
@@ -332,7 +332,8 @@ export function useLeague() {
         .catch(reject);
     });
   };
-  const getStatus = (status, billStatus, betResult) => {
+
+  /*   const getStatus = (status, billStatus, betResult) => {
     let obj = { status: -1, bgColor: '' };
     if (status === 0 && billStatus === 0) {
       // 未结算
@@ -364,7 +365,7 @@ export function useLeague() {
       obj = { status: betStatus.reserveFail, bgColor: '#F57582' };
     }
     return obj;
-  };
+  }; */
 
   function copyTest(str: string, tip: string) {
     if (!str) return;
@@ -424,9 +425,9 @@ export function useLeague() {
     handleTableWidthChange,
     handleCurrentChange,
     handleSelectionChange,
-    exportFile,
+    // exportFile,
     handleCancel,
-    getStatus,
+    // getStatus,
     copyTest,
     confirmBetClick,
     refuseBetClick

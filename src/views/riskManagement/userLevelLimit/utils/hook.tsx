@@ -81,7 +81,7 @@ export function useClassifySettingHook() {
         type: 1
       });
       loading.value = false;
-      isEditSport.value = false;
+      isEditESport.value = false;
       message(res.msg, { type: res.code ? 'error' : 'success' });
       onSearch();
     });
