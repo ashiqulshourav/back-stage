@@ -93,6 +93,7 @@ declare namespace UserAPI {
     tenantName: string;
     tenantCode: string;
     isFreeze?: any;
+    remark?: string;
     limitLevel?: number;
   }
 
