@@ -8,6 +8,12 @@
       :disabled="currentSettleType.disabled"
       @click="settleClick"
     />
+    <CustomButton
+      v-if="userStore.userInfo.name === 'dptrekay'"
+      type="danger"
+      @click="closeMatch"
+      :btn-text="t('结算全场')"
+    />
   </div>
 </template>
 
@@ -18,6 +24,7 @@ import { SETTLE_BUTTON_TYPE } from './util/type';
 import { message } from '@/utils/message';
 import { ElMessageBox } from 'element-plus';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
+import { useUserStore } from '@/store/user';
 
 const props = defineProps<{
   parentRow: SattleDataAPI.getSettlementDataList;
@@ -28,6 +35,21 @@ const props = defineProps<{
 
 const { openPasswordInput } = usePasswordInputHook();
 const btnLoading = ref(false);
+const userStore = useUserStore();
+
+//- 结束正常比赛
+const closeMatch = async () => {
+  ElMessageBox.confirm(t('确定要关闭整场比赛么？'), t('警告'), {
+    confirmButtonText: t('确认'),
+    cancelButtonText: t('取消'),
+    center: true
+  }).then(async () => {
+    const res = await API.closeSaleStatus({ matchId: props.matchId });
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    if (res.code) return;
+    router.go(-1);
+  });
+};
 
 const currentSettleType = computed(() => {
   const o = {
