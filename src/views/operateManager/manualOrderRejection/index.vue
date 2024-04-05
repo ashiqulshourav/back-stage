@@ -8,7 +8,7 @@
       :tenantList="tenantList"
     />
     <PureTableBar
-      title=""
+      :title="t('温馨提示：点击任一关的“拒接注单”按钮，即拒绝整个串关注单。')"
       :columns="columns"
       class="relative"
       :isShowHeader="false"
@@ -291,7 +291,7 @@
           </template>
 
           <template #operation="{ row }">
-            <div class="h-full">
+            <div class="h-full" v-if="form.queryType !== 1">
               <div
                 v-for="item in row.combineOrderDetails"
                 :key="item.betItemId"
@@ -319,6 +319,7 @@
                 </div>
               </div>
             </div>
+            <div v-else>-</div>
           </template>
         </pure-table>
 
