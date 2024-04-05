@@ -8,13 +8,6 @@
       :disabled="currentSettleType.disabled"
       @click="settleClick"
     />
-    <CustomButton
-      type="danger"
-      :btn-text="t('结算比赛')"
-      :loading="btnLoading"
-      :disabled="!!parentRow.fullSettlementStatus"
-      @click="closeMatchClick"
-    />
   </div>
 </template>
 
@@ -90,26 +83,24 @@ const closeMatchClick = async () => {
     'overTimeFullSettlement',
     'penaltyKickSettlement'
   ];
-  // if (selttArr.includes(currentSettleType.value.reqUrl)) {
-  //   if(currentSettleType.value.reqUrl === 'allSettlement')
-  // } else {
-  //   emites('reloadTable', true);
-  // }
-
-  btnLoading.value = true;
-  const res = await API.closeSaleStatus({ matchId: props.matchId });
-  btnLoading.value = false;
-  message(res.msg, { type: res.code ? 'error' : 'success' });
-  if (res.code) return;
-  router.go(-1);
-  /*  ElMessageBox.confirm(t('是否立即结算比赛么？'), t('警告'), {
-    dangerouslyUseHTMLString: true,
-    confirmButtonText: t('确认'),
-    cancelButtonText: t('取消'),
-    center: true
-  }).then(async () => {
-    
-  }); */
+  if (selttArr.includes(currentSettleType.value.reqUrl)) {
+    const type = currentSettleType.value.reqUrl;
+    if (
+      (type === 'allSettlement' && !props.overTimeStatus) ||
+      (type === 'overTimeFullSettlement' && !props.penaltyKickStatus) ||
+      type === 'penaltyKickSettlement'
+    ) {
+      btnLoading.value = true;
+      const res = await API.closeSaleStatus({ matchId: props.matchId });
+      btnLoading.value = false;
+      if (res.code) return;
+      router.go(-1);
+    } else {
+      emites('reloadTable', true);
+    }
+  } else {
+    emites('reloadTable', true);
+  }
 };
 
 //- 判断是否结算祛暗疮
