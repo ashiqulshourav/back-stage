@@ -210,10 +210,10 @@ export function useLeague() {
             str = data.isSettlementAgain===1?'是':'否'
             break;
           case 'status':
-            str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult).status]
+            str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult,data.isReserve).status]
             break;
           case 'billStatus':
-            str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult).status]
+            str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult,data.isReserve).status]
             break;
           case 'settleScore':
             str=displayHomeAwayScore(data.settleScore,data.sportId)
@@ -288,10 +288,15 @@ export function useLeague() {
         .catch(reject);
     });
   }
-const getStatus = (status,billStatus,betResult)=>{
+const getStatus = (status,billStatus,betResult,isReserve?)=>{
     let obj = {status:-1,bgColor:''}
    if(status===0&&billStatus===0){  // 未结算
-     obj={status:betStatus.unsettlementBet,bgColor:'#FFC53D'}
+      if(isReserve===1){ // 预约中
+        obj={status:betStatus.onReverse,bgColor:'#F57582'}
+      }else {
+        obj={status:betStatus.unsettlementBet,bgColor:'#FFC53D'}
+      }
+
    }else if(status===1&&billStatus===1){// 已结算
      obj={status:betStatus.settlementBet,bgColor:'#40A9FF'}
    }else if(status===3){   // 待确认
@@ -322,8 +327,6 @@ const switchDialog = (flag:boolean,row)=>{
     UDialogFlag.value=flag;
 
     if(flag){
-      handleEditResult(row)
-      if(0){
         addDialog({
           title: t('请输入U盾密码'),
           class: 'reset_dialog',
@@ -342,9 +345,6 @@ const switchDialog = (flag:boolean,row)=>{
                 }
               })
         });
-      }
-
-
     }
 }
 

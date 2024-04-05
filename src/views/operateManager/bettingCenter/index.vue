@@ -92,7 +92,7 @@
             <span v-else>-</span>
           </template>
           <template #status="{ row }">
-            <div :style="{background:getStatus(row.status,row.billStatus,row.combineOrderDetails[0].betResult).bgColor}" class="status_btn mb-1">{{ betStatusMap[getStatus(row.status,row.billStatus,row.combineOrderDetails[0].betResult).status]}}</div>
+            <div :style="{background:getStatus(row.status,row.billStatus,row.combineOrderDetails[0].betResult).bgColor}" class="status_btn mb-1">{{ betStatusMap[getStatus(row.status,row.billStatus,row.combineOrderDetails[0].betResult,row.isReserve).status]}}</div>
             <div >{{ row.settleTime ? dayjs(row.settleTime).format('MM-DD HH:mm:ss'):'' }}</div>
             <div v-if="String(row.seriesType).slice(-3) ==='001'" >{{t('总赔率:')}}{{String(row.seriesType).slice(-3) ==='001'?calculateSeriesTypeTotal(row.combineOrderDetails):'' }}</div>
           </template>
