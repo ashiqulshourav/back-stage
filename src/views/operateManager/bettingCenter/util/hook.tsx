@@ -232,11 +232,11 @@ export function useLeague() {
               str=data.seriesType===1?'单关':'串关';
               break;
           case 'tenantName':  //商户名
-            str=(tenantObj[data.tenantId]).name??''
+            str=(tenantObj[data.tenantId]).tenantName??''
             break;
-          // case 'tenantCode':  //商户编码
-          //     str=(tenantObj[data.tenantId]).name??''
-          //     break;
+          case 'tenantCode':  //商户编码
+              str=(tenantObj[data.tenantId]).name??''
+              break;
           default:
             str = data[column.prop as string]
         }

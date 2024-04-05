@@ -4,10 +4,6 @@ export const columns: TableColumnList = [
     prop: 'index',
   },
   {
-    label: t('商户ID'),
-    prop: 'tenantId',
-  },
-  {
     label: t('商户编码'),
     prop: 'tenantCode',
   },
