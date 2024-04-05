@@ -70,6 +70,7 @@
 
           <template #overTimeAndPenaltyKickStatus="{ row, index, props }">
             <el-switch
+              v-if="row.sportId === 1"
               :size="props.size === 'small' ? 'small' : 'default'"
               :loading="switchLoadMap[index]?.loading"
               v-model="row.overTimeAndPenaltyKickStatus"
@@ -79,6 +80,7 @@
               :style="switchStyle"
               @change="changeOverTimeStatus({ row, index })"
             />
+            <span v-else>-</span>
           </template>
 
           <template #saleHandicaps="{ row }: { row: SaleDataAPI.PreSaleList }">

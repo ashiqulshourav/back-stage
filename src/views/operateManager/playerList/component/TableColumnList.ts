@@ -35,7 +35,7 @@ export const columns: TableColumnList = [
     label: t('账号是否冻结'),
     prop: 'isFreeze',
     formatter({ isFreeze }) {
-      return isFreeze === 0 ? t("冻结") : t('正常')
+      return isFreeze === 1 ? t("冻结") : t('正常')
     },
     minWidth: 150
   },

@@ -108,6 +108,22 @@
         </el-select>
       </el-form-item>
 
+      <el-form-item
+        :label="`${t('加时点球开售状态')}:`"
+        prop="overTimeAndPenaltyKickStatus"
+      >
+        <el-select
+          class="!w-[150px]"
+          v-model="form.overTimeAndPenaltyKickStatus"
+          clearable
+          :placeholder="t('请选择')"
+          @change="search"
+        >
+          <el-option :label="t('开启')" :value="true" />
+          <el-option :label="t('关闭')" :value="false" />
+        </el-select>
+      </el-form-item>
+
       <el-form-item :label="`${t('比赛时间')}:`" prop="startTime">
         <el-button
           v-for="(item, index) in nextDayArr"

@@ -33,7 +33,8 @@ export function usePreSale() {
     leagueNameCn: '',
     leagueId: '',
     handicapStatus: '',
-    category: 0
+    category: 0,
+    overTimeAndPenaltyKickStatus: null
   });
 
   function changeSwitch({
