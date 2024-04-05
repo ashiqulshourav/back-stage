@@ -7,6 +7,7 @@
         :renderObj="renderObj"
         :data="item"
         :index="index"
+        :dataList="dataList"
         v-model:overTimeStatus="overTimeStatus"
         v-model:penaltyKickStatus="penaltyKickStatus"
         @openSecondSettleClick="openSecondSettleClick"
@@ -19,10 +20,7 @@
         <div class="flex items-center">
           <template v-if="!renderObj.fullSettlementStatus">
             <SettleMatchBtn
-              :balanceLoading="balanceLoading"
               :parentRow="renderObj"
-              :childDataTotal="childDataTotal"
-              @settlementFunction="settlementFunction"
               :matchId="renderObj.matchId"
               @reloadTable="reloadTable"
               :overTimeStatus="overTimeStatus"
@@ -214,7 +212,14 @@
             >
               <span
                 class="mr-3 text-[var(--el-color-danger)] cursor-pointer"
-                @click="addChildRow(item.tableList, item.type, selectTabIndex)"
+                @click="
+                  addChildRow(
+                    item.tableList,
+                    item.type,
+                    selectTabIndex,
+                    item.key
+                  )
+                "
                 >{{
                   renderObj.reSettleStatus === 1
                     ? t('重新结算中')
@@ -226,7 +231,14 @@
                 class="cursor-pointer"
                 width="25px"
                 icon="icon_circle_fill"
-                @click="addChildRow(item.tableList, item.type, selectTabIndex)"
+                @click="
+                  addChildRow(
+                    item.tableList,
+                    item.type,
+                    selectTabIndex,
+                    item.key
+                  )
+                "
               />
             </div>
           </el-tab-pane>
@@ -239,7 +251,6 @@
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-// import DetiltTitle from '../../component/Settle_detail_title.vue';
 import FootballDetail from './FootballDetail.vue';
 import BackEndBtnGroupCom from './BackEndBtnGroup.vue';
 import FrontBtnGroupCom from './FrontBtnGroup.vue';
@@ -331,10 +342,7 @@ const {
   addChildRow,
   cancelMatchEvent,
   editChild,
-  balanceLoading,
-  settlementFunction,
   handleChildrenData,
-  childDataTotal,
   reloadTable,
   changeSettleType,
   advanceSettlement,

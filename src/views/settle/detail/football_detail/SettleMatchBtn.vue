@@ -4,15 +4,15 @@
     <CustomButton
       type="primary"
       :btn-text="currentSettleType.txt"
-      :loading="balanceLoading.half"
+      :loading="btnLoading"
       :disabled="currentSettleType.disabled"
       @click="settleClick"
     />
     <CustomButton
       type="danger"
       :btn-text="t('结算比赛')"
-      :loading="balanceLoading.all"
-      :disabled="!!parentRow.fullSettlementStatus || !childDataTotal"
+      :loading="btnLoading"
+      :disabled="!!parentRow.fullSettlementStatus"
       @click="closeMatchClick"
     />
   </div>
@@ -26,13 +26,13 @@ import { message } from '@/utils/message';
 import { ElMessageBox } from 'element-plus';
 
 const props = defineProps<{
-  balanceLoading: any;
   parentRow: SattleDataAPI.getSettlementDataList;
-  childDataTotal: number;
   matchId: number;
   overTimeStatus: boolean;
   penaltyKickStatus: boolean;
 }>();
+
+const btnLoading = ref(false);
 
 const currentSettleType = computed(() => {
   const o = {
@@ -87,7 +87,7 @@ const currentSettleType = computed(() => {
   return o;
 });
 
-const emites = defineEmits(['settlementFunction', 'reloadTable']);
+const emites = defineEmits(['reloadTable']);
 const router = useRouter();
 const closeMatchClick = () => {
   ElMessageBox.confirm(t('是否立即结算比赛么？'), t('警告'), {
@@ -96,7 +96,9 @@ const closeMatchClick = () => {
     cancelButtonText: t('取消'),
     center: true
   }).then(async () => {
+    btnLoading.value = true;
     const res = await API.closeSaleStatus({ matchId: props.matchId });
+    btnLoading.value = false;
     message(res.msg, { type: res.code ? 'error' : 'success' });
     if (res.code) return;
     router.go(-1);

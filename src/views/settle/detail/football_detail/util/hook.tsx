@@ -53,7 +53,6 @@ export function useFootball() {
   ]);
   const childloading = ref(true);
   const switchLoadMap = ref({});
-  const childDataTotal = ref(0);
   const allSettleLoading = ref(false);
   const loopTimer = ref<NodeJS.Timeout>();
   const renderObj = reactive<SattleDataAPI.getSettlementDataList>(
@@ -62,10 +61,6 @@ export function useFootball() {
   const overTimeStatus = ref(false);
   const penaltyKickStatus = ref(false);
   const { matchId } = history.state.params;
-  const balanceLoading = reactive<{ half: boolean; all: boolean }>({
-    half: false,
-    all: false
-  });
 
   const recordList = ref<string[][]>([
     [
@@ -83,8 +78,55 @@ export function useFootball() {
     [`${t('比分')}: -`]
   ]);
 
+  //- 检测加时赛状态
+  const checkOverTimeStatus = async index => {
+    return new Promise(resolve => {
+      const idsArr = [3, 4, 5];
+      if (idsArr.includes(+index)) {
+        ElMessageBox.confirm(t('新增加时赛事件请先开启加时赛开关'), t('警告'), {
+          confirmButtonText: t('确认'),
+          cancelButtonText: t('取消'),
+          center: true
+        }).then(async () => {
+          const res = await API.setOverTimeStatus({
+            matchId,
+            overTimeStatus: true
+          });
+          message(res.msg, { type: res.code ? 'error' : 'success' });
+          resolve(!res.code);
+        });
+        //- 加时赛
+      } else if (index > 5) {
+        ElMessageBox.confirm(t('新增点球大战请先开启点球大战开关'), t('警告'), {
+          confirmButtonText: t('确认'),
+          cancelButtonText: t('取消'),
+          center: true
+        }).then(async () => {
+          const res = await API.setPenaltyKickStatus({
+            matchId,
+            penaltyKickStatus: true
+          });
+          message(res.msg, { type: res.code ? 'error' : 'success' });
+          resolve(!res.code);
+        });
+        //- 点球
+      }
+    });
+  };
+
   //- 人工结算新增一行
-  const addChildRow = (tableList, type, index) => {
+  const addChildRow = async (tableList, type, index, key) => {
+    if (
+      (+index === 6 && !penaltyKickStatus.value) ||
+      (index > 2 &&
+        !overTimeStatus.value &&
+        key !== 'penaltyKickRecordList' &&
+        renderObj.fullSettlementStatus === 0)
+    ) {
+      const r = await checkOverTimeStatus(index);
+      r && getChildrenData();
+      return;
+    }
     const isSettle = tableList.some(item => item.settleTimes === 0);
     if (
       ((tableList.length !== 0 &&
@@ -124,13 +166,8 @@ export function useFootball() {
     const res = await API.getMatchEvents({ matchId });
     childloading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
-    childDataTotal.value = 0;
     overTimeStatus.value = res.data.overTimeStatus;
     penaltyKickStatus.value = res.data.penaltyKickStatus;
-    console.log(
-      'hook.tsx文件 130==============行打印=',
-      renderObj.fullSettlementStatus
-    );
     recordList.value = [
       [
         `${t('比分')}: ${res.data.normalTimeScore}`,
@@ -171,7 +208,6 @@ export function useFootball() {
 
     dataList.forEach((item: SaleDataAPI.ChildrenDataList) => {
       item.tableList = res.data[item.key];
-      childDataTotal.value += item.tableList?.length;
       if (item.tableList?.length) {
         item.tableList.forEach((_, index) => {
           _.createdAt = new Date(_.createdAt).getTime() + 1000 * 60 * 5;
@@ -270,11 +306,6 @@ export function useFootball() {
         t1: +row.t1,
         t2: +row.t2,
         id: row.id ?? null
-        // canceled: 0,
-        // player1Name: row.player1Name,
-        // dataSourceCode: 'SK',
-        // sourceType: 1,
-        // sportId: SPORT_TYPE.football
       };
       if (row.matchPeriodId === 50) {
         params.firstNum = row.firstNum;
@@ -298,34 +329,7 @@ export function useFootball() {
     }
   };
 
-  const router = useRouter();
   const { openPasswordInput } = usePasswordInputHook();
-  //-全场 + 上半场结算
-  const settlementFunction = async (matchId: number, type: 'half' | 'all') => {
-    if (type !== 'half') {
-      const r = await openPasswordInput();
-      if (!r) return;
-    }
-
-    try {
-      balanceLoading[type] = true;
-      const res = await API[
-        type === 'half' ? 'firstHalfSettlement' : 'allSettlement'
-      ]({ matchId });
-
-      balanceLoading[type] = false;
-      message(res.msg, { type: res.code ? 'error' : 'success' });
-      if (res.code) return;
-      if (type === 'half') {
-        getChildrenData();
-        getMatchDetail();
-      } else {
-        router.go(-1);
-      }
-    } catch (error) {
-      balanceLoading[type] = false;
-    }
-  };
 
   //- 自动结算转手动结算
   const changeSettleType = async () => {
@@ -530,10 +534,7 @@ export function useFootball() {
     getChildrenData,
     addChildRow,
     editChild,
-    balanceLoading,
-    settlementFunction,
     handleChildrenData,
-    childDataTotal,
     reloadTable,
     changeSettleType,
     cancelMatchEvent,
