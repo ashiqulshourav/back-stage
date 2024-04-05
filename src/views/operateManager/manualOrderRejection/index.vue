@@ -1,10 +1,10 @@
 <template>
   <div class="main">
+    <!-- @exportFile="exportFile" -->
     <SearchForm
       :form="form"
       :loading="loading"
       @on-search="onSearch"
-      @exportFile="exportFile"
       :tenantList="tenantList"
     />
     <PureTableBar
@@ -20,7 +20,6 @@
           table-layout="auto"
           :loading="loading"
           :size="size"
-          class="table_container"
           adaptive
           :data="dataList"
           :columns="dynamicColumns"
@@ -200,14 +199,26 @@
                 v-for="item in row.combineOrderDetails"
                 :key="item.betItemId"
               >
-                {{
-                  getVal(
-                    row.billStatus,
-                    row.status,
-                    item.betResult,
-                    item.settleStatus
-                  )
-                }}
+                <span v-if="row.combineOrderDetails.length < 2">
+                  {{
+                    getVal(
+                      row.billStatus,
+                      row.status,
+                      item.betResult,
+                      item.settleStatus
+                    )
+                  }}
+                </span>
+                <span v-else>
+                  {{
+                    getVal1(
+                      row.billStatus,
+                      item.betResult,
+                      item.settleStatus,
+                      item
+                    )
+                  }}
+                </span>
               </div>
             </div>
           </template>
@@ -242,15 +253,15 @@
               </div>
             </div>
           </template>
-          <template #profitAmount="{ row }">
+          <!--   <template #profitAmount="{ row }">
             <span
               v-if="row.profitAmount"
               :class="row.profitAmount > 0 ? 'win' : 'lose'"
               >{{ row.profitAmount.toFixed(2) }}</span
             >
             <span v-else>-</span>
-          </template>
-          <template #status="{ row }">
+          </template> -->
+          <!--   <template #status="{ row }">
             <div class="flex justify-center flex-col items-center">
               <div
                 :style="{
@@ -288,7 +299,7 @@
                 }}
               </div>
             </div>
-          </template>
+          </template> -->
 
           <template #operation="{ row }">
             <div class="h-full" v-if="form.queryType !== 1">
@@ -298,7 +309,7 @@
               >
                 <div
                   class="flex item-center flex-col"
-                  v-if="item => item.settleStatus === 3"
+                  v-if="item.settleStatus === 3 && !item.rejectStatus"
                 >
                   <el-button
                     size="small"
@@ -357,7 +368,7 @@
 </template>
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
-import { useLeague } from './util/hook';
+import { useManualOrderRejectionHook } from './util/hook';
 import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
@@ -369,12 +380,12 @@ import {
   EBetResultType,
   getViewOddFn,
   markeTypeMap,
-  calculateSeriesTypeTotal,
+  // calculateSeriesTypeTotal,
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
   getIsInplay
 } from '@/utils/formatMatch';
-import { betStatusMap } from './util/types';
+// import { betStatusMap } from './util/types';
 import { usePublicHooks } from '@/hooks';
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
@@ -394,6 +405,22 @@ const getVal = (s1, s2, s3, s4) => {
   }
   return val;
 };
+const getVal1 = (billStatus, betResult, settleStatus, item) => {
+  let val = '-';
+  switch (true) {
+    case billStatus === 0 && betResult === 0 && settleStatus === 0:
+      val = t('已接单');
+      item.rejectStatus = true;
+      break;
+    case settleStatus === 3:
+      val = t('待确认');
+      break;
+    case betResult === 61 && settleStatus === 1:
+      val = t('已拒单');
+      break;
+  }
+  return val;
+};
 
 const {
   loading,
@@ -405,13 +432,13 @@ const {
   handleTableWidthChange,
   handleCurrentChange,
   handleSelectionChange,
-  exportFile,
-  getStatus,
+  // exportFile,
+  // getStatus,
   copyTest,
   tenantList,
   confirmBetClick,
   refuseBetClick
-} = useLeague();
+} = useManualOrderRejectionHook();
 </script>
 
 <style lang="scss">
