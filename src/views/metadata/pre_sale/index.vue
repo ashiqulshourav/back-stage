@@ -67,6 +67,22 @@
               @change="changeSwitch({ row, index })"
             />
           </template>
+
+          <template #overTimeAndPenaltyKickStatus="{ row, index, props }">
+            <el-switch
+              v-if="row.sportId === 1"
+              :size="props.size === 'small' ? 'small' : 'default'"
+              :loading="switchLoadMap[index]?.loading"
+              v-model="row.overTimeAndPenaltyKickStatus"
+              :active-value="true"
+              :inactive-value="false"
+              inline-prompt
+              :style="switchStyle"
+              @change="changeOverTimeStatus({ row, index })"
+            />
+            <span v-else>-</span>
+          </template>
+
           <template #saleHandicaps="{ row }: { row: SaleDataAPI.PreSaleList }">
             <span
               class="underline cursor-pointer"
@@ -151,6 +167,7 @@ const {
   changeMatchCondition,
   locakMatch,
   unLocakMatch,
-  selectLockcList
+  selectLockcList,
+  changeOverTimeStatus
 } = usePreSale();
 </script>

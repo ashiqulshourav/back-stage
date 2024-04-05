@@ -39,7 +39,13 @@
     </el-form-item>
 
     <el-form-item :label="t('上级菜单')" prop="parentId">
-      <el-select v-model="newFormInline.parentId" filterable clearable>
+      <el-select
+        v-model="newFormInline.parentId"
+        filterable
+        clearable
+        :disabled="newFormInline.parentId === 0 && !!newFormInline.id"
+      >
+        <el-option :value="0" :label="t('一级页面')"></el-option>
         <el-option
           v-for="item in parentList"
           :key="item.id"

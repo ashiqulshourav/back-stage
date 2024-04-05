@@ -85,18 +85,17 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('开赛时间'), 'auto'),
     width: 200
   },
-  /*  {
-    label: t('当前比分'),
-    prop: 'currentScore',
-    formatter: ({ currentScore }) =>
-      currentScore.replace(/H(\d+)A(\d+)/, '$1 - $2'),
-    headerRenderer: d => handleTableWidth(d, t('当前比分'), 'auto')
-  }, */
   {
     label: t('盘口状态'),
     prop: 'handicapStatus',
     headerRenderer: d => handleTableWidth(d, t('盘口状态'), 'auto'),
     formatter: ({ handicapStatus }): string => OPENING_STATUS[handicapStatus],
+    minWidth: 150
+  },
+  {
+    label: t('加时点球开售控制'),
+    slot: 'overTimeAndPenaltyKickStatus',
+    headerRenderer: d => handleTableWidth(d, t('加时点球开售控制'), 'auto'),
     minWidth: 150
   },
   {
@@ -112,12 +111,6 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('开售控制'), 'auto'),
     fixed: 'right'
   },
-  /*  {
-    label: t('开售状态'),
-    headerRenderer: d => handleTableWidth(d, t('开售状态'), 'auto'),
-    formatter: ({ isSale }) => (isSale ? t('已开售') : t('未开售'))
-  }, */
-
   {
     label: t('操作'),
     fixed: 'right',
