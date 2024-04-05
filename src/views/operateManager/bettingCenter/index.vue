@@ -19,6 +19,7 @@
         <pure-table
           align-whole="center"
           table-layout="auto"
+          showOverflowTooltip
           :loading="loading"
           :size="size"
           class="table_container"
@@ -190,7 +191,7 @@
               </div>
               <div
                 class="item_line"
-                v-if="row.billStatus === 1 && item.settleScore"
+                v-if="row.billStatus === 1 && item.settleScore&&!(displayHomeAwayScore(item.settleScore, item.sportId,'home')==''||displayHomeAwayScore(item.settleScore, item.sportId,'away')=='')"
               >
                 {{ t('赛果：')
                 }}{{ displayHomeAwayScore(item.settleScore, item.sportId) }}

@@ -409,20 +409,19 @@ export const calculateSeriesTypeTotalBets = (seriesType:number)=>{
 //   away='away'
 // }
 // 获取比分
-export const displayHomeAwayScore = (scoreString:string, sprotId?: ESportType,type?:string,witchTeam?:TeamType) => {
+export const displayHomeAwayScore = (scoreString:string, sprotId?: ESportType,witchTeam?:TeamType) => {
   if (sprotId > 33) return '';
   if (sprotId === ESportType.TENNIS || sprotId === ESportType.VOLLEYBALL) return '';
   const [home, away] = assertHomeAwayScore(scoreString);
   if(home===undefined||away===undefined){
     return ''
   }
-  if(type&&witchTeam){
+  if(witchTeam){
     if(witchTeam==='home'){
       return home
     }else if(witchTeam==='away'){
       return away
     }
-
   }
   return `${home}-${away}`
 };

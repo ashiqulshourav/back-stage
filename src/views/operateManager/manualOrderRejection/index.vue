@@ -19,6 +19,7 @@
           align-whole="center"
           table-layout="auto"
           :loading="loading"
+          showOverflowTooltip
           :size="size"
           adaptive
           :data="dataList"
@@ -178,7 +179,13 @@
                     : ''
                 }}
               </div>
-              <div class="item_line">{{ useSportFormatDetail(item)[3] }}</div>
+              <div class="item_line">{{ useSportFormatDetail(item)[3] }}  @{{
+                  getViewOddFn(
+                      item.oddFinally,
+                      item.marketTypeFinally,
+                      item.marketType
+                  )
+                }}</div>
               <div
                 class="item_line cursor-pointer"
                 @dblclick="
@@ -197,7 +204,7 @@
               </div>
               <div
                 class="item_line"
-                v-if="row.billStatus === 1 && item.settleScore"
+                v-if="row.billStatus === 1 && item.settleScore&&!(displayHomeAwayScore(item.settleScore, item.sportId,'home')==''||displayHomeAwayScore(item.settleScore, item.sportId,'away')=='')"
               >
                 {{ t('赛果：')
                 }}{{ displayHomeAwayScore(item.settleScore, item.sportId) }}

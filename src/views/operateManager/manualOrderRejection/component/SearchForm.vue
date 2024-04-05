@@ -207,18 +207,7 @@
           />
         </el-form-item>
         <el-form-item prop="timeType" :label="`${t('注单时间')}:`">
-          <!-- <el-select v-model="form.timeType" class="!w-[110px]">
-            <el-option :label="t('注单时间')" :value="1" />
-            <el-option :label="t('结算时间')" :value="2" />
-            <el-option :label="t('比赛时间')" :value="3" />
-          </el-select> -->
-          <el-date-picker
-            :type="dateRangetType"
-            v-model="selectDate"
-            :start-placeholder="dayjs().startOf('month').format('YYYY-MM-DD')"
-            :end-placeholder="dayjs().endOf('day').format('YYYY-MM-DD')"
-            @change="changeDate"
-          />
+          <CustomDate v-model:val="selectDate" @changeDate="changeDate" />
         </el-form-item>
 
         <el-form-item>
@@ -271,6 +260,7 @@ import { searchFormType } from '../util/types';
 } from '../util/types'; */
 
 import { hasAuth } from '@/router/utils';
+import CustomDate from "@/components/Form/Custom_date.vue";
 const props = defineProps<{
   loading: boolean;
   form: searchFormType;
