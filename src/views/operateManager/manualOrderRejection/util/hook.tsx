@@ -430,6 +430,7 @@ export function useManualOrderRejectionHook() {
     // getStatus,
     copyTest,
     confirmBetClick,
-    refuseBetClick
+    refuseBetClick,
+    tenantObj
   };
 }

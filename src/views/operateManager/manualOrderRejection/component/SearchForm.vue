@@ -7,7 +7,7 @@
   >
     <div class="flex">
       <div>
-        <el-form-item :label="`${t('商户ID')}:`" prop="tenantIds">
+        <el-form-item :label="`${t('商户名')}:`" prop="tenantIds">
           <el-select
             class="!min-w-[200px]"
             :placeholder="t('请选择商户ID，多选项')"
@@ -17,7 +17,7 @@
           >
             <el-option
               v-for="item in tenantList"
-              :label="item.name"
+              :label="item.tenantName"
               :value="item.id"
               :key="item.id"
             />

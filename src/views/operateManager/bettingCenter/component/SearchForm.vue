@@ -8,14 +8,15 @@
     <div class="flex">
       <div>
         <el-form-item :label="`${t('商户名')}:`" prop="tenantIds">
-          <el-select class="min-w100"
-                     :placeholder="t('请选择商户ID，多选项')"
+          <el-select
+              class="!min-w-[200px]"
+              :placeholder="t('请选择商户ID，多选项')"
                      multiple
                      v-model="form.tenantIds"
                      clearable
                      @change="search"
           >
-            <el-option v-for="item in tenantList" :label="item.name" :value="item.id" :key="item.id" />
+            <el-option v-for="item in tenantList" :label="item.tenantName" :value="item.id" :key="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('赛事类型')}:`" prop="category">
