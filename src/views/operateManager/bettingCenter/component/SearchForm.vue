@@ -223,9 +223,10 @@
             <el-option  :label="t('结算时间')" :value="2"  />
             <el-option  :label="t('比赛时间')" :value="3"  />
           </el-select>
-          <CustomDate v-model:val="selectDate" @changeDate="changeDate" />
+          <CustomDate v-model:val="selectDate"  :start-placeholder="dayjs().startOf('month').format('YYYY-MM-DD')" :end-placeholder="dayjs().startOf('day').format('YYYY-MM-DD')" @changeDate="changeDate" />
         </el-form-item>
         <el-form-item>
+
           <el-button
             type="primary"
             :icon="useRenderIcon(SearchIcon)"
