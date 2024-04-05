@@ -17,6 +17,7 @@ import { t } from '@/plugins/i18n';
 import { SETTLE_BUTTON_TYPE } from './util/type';
 import { message } from '@/utils/message';
 import { ElMessageBox } from 'element-plus';
+import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 
 const props = defineProps<{
   parentRow: SattleDataAPI.getSettlementDataList;
@@ -25,6 +26,7 @@ const props = defineProps<{
   penaltyKickStatus: boolean;
 }>();
 
+const { openPasswordInput } = usePasswordInputHook();
 const btnLoading = ref(false);
 
 const currentSettleType = computed(() => {
@@ -113,6 +115,17 @@ const settleClick = () => {
     cancelButtonText: t('取消'),
     center: true
   }).then(async () => {
+    const selttArr = [
+      'allSettlement',
+      'overTimeFullSettlement',
+      'penaltyKickSettlement'
+    ];
+
+    if (selttArr.includes(currentSettleType.value.reqUrl)) {
+      const r = await openPasswordInput();
+      if (!r) return;
+    }
+
     const res = await API[currentSettleType.value.reqUrl]({
       matchId: props.matchId
     });
