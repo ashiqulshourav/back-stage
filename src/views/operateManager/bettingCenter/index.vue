@@ -243,17 +243,20 @@
             <div v-if="String(row.seriesType).slice(-3) ==='001'" >{{t('总赔率:')}}{{String(row.seriesType).slice(-3) ==='001'?calculateSeriesTypeTotal(row.combineOrderDetails):'' }}</div>
           </template>
           <template #operation="{ row }">
-            <el-button
-              class="mb-1 w-100"
-              @click="handleCancel(row)"
-              v-if="row.billStatus === 0 && hasAuth('CANCELBET')"
-            >
-              {{ t('取消') }}
-            </el-button>
-            <el-button
-              class="mb-1 w-100"
-              @click="switchDialog(true, row)"
-              v-if="
+            <div>
+              <el-button
+                  class="mb-1 w-100"
+                  @click="handleCancel(row)"
+                  v-if="row.billStatus === 0 && hasAuth('CANCELBET')"
+              >
+                {{ t('取消') }}
+              </el-button>
+            </div>
+            <div>
+              <el-button
+                  class="mb-1 w-100"
+                  @click="switchDialog(true, row)"
+                  v-if="
                 specialCountFlag(
                   row.status,
                   row.billStatus,
@@ -262,9 +265,10 @@
                 row.isReserve !== 1 &&
                 hasAuth('specialSettlement'.toUpperCase())
               "
-            >
-              {{ t('特殊结算') }}
-            </el-button>
+              >
+                {{ t('特殊结算') }}
+              </el-button>
+            </div>
           </template>
         </pure-table>
         <div
