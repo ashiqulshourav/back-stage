@@ -46,7 +46,7 @@
             <div class="item_line cursor-pointer" @dblclick="copyTest(tenantObj[row.tenantId]?.tenantName,t('商户名：{value}',{value:tenantObj[row.tenantId]?.tenantName}))">
                 <span>{{t('商户名：')}}</span>{{tenantObj[row.tenantId]?.tenantName}}
             </div>
-            <div class="item_line cursor-pointer" @dblclick="copyTest(row.tenantId,t('商户ID：{value}',{value:row.tenantId}))">
+            <div class="item_line cursor-pointer" @dblclick="copyTest(row.tenantId,t('商户编码：{value}',{value:row.tenantId}))">
               <span>{{ t('商户编码：') }}</span >{{ tenantObj[row.tenantId]?.name }}
             </div>
             <div  v-if="row.combineOrderDetails.length>1" class="item_line mt-2 color_blue">
