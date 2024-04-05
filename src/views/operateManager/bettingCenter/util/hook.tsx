@@ -10,8 +10,6 @@ import { reactive, ref, onMounted, h } from 'vue';
 import PasswordInput from '@/components/PasswordInput/index.vue';
 
 import {
-  Detail,
-  getBetTeamType,
   markeTypeMap,
   useSportFormatDetail,
   displayHomeAwayScore, BET_RESULT_TYPE_MAP, formatSeriesType
@@ -172,7 +170,7 @@ export function useLeague() {
 
   //- 导出excel表格
   const exportFile = async () => {
-    const res: BetOrderAPI.BetOrderResType  = await API.bettingCenterList(formatParams({pageNum:1,pageSize:10000}) as searchFormType);
+    const res: BetOrderAPI.BetOrderResType  = await API.bettingCenterList(formatParams({pageNum:1,pageSize:50000}) as searchFormType);
     const r = res.data.pageData.map((item:any,i) => {
       const arr = [];
       const data={...item,...item?.combineOrderDetails[0]}
@@ -264,8 +262,8 @@ export function useLeague() {
       type: 'success'
     });
   };
-  const handleCancel =(data:any)=>{
-    return new Promise<boolean>((resolve, reject) => {
+  const handleCancel = (data:any)=>{
+
       ElMessageBox.confirm(
         t('确定取消注单吗？'),
         t('警告'),
@@ -275,18 +273,33 @@ export function useLeague() {
         }
       )
         .then(async () => {
-          const params:any={orderIds:[data.id]}
-          const res= await API.orderCancel(params);
-          if (res.code) {
-            reject();
-          } else {
-            resolve(true);
-            onSearch();
-          }
-          message(res.msg, { type: res.code ? 'error' : 'success' });
+          addDialog({
+            title: t('请输入U盾密码'),
+            class: 'reset_dialog',
+            width: '25%',
+            center: true,
+            closeOnClickModal: false,
+            hideFooter: true,
+            contentRenderer: ({ options, index }) =>
+                h(PasswordInput, {
+                  ref: uDialogRef,
+                  onCloseDialog: (_: boolean) => {
+                    closeDialog(options, index);
+                    setTimeout(()=>{
+                      const params:any={orderIds:[data.id]}
+                      API.orderCancel(params).then((res)=>{
+                        if (res.code) {
+                        } else {
+                          onSearch();
+                        }
+                        message(res.msg, { type: res.code ? 'error' : 'success' });
+                      });
+                    },500)
+                  }
+                })
+          });
+
         })
-        .catch(reject);
-    });
   }
 const getStatus = (status,billStatus,betResult,isReserve?)=>{
     let obj = {status:-1,bgColor:''}
@@ -296,7 +309,6 @@ const getStatus = (status,billStatus,betResult,isReserve?)=>{
       }else {
         obj={status:betStatus.unsettlementBet,bgColor:'#FFC53D'}
       }
-
    }else if(status===1&&billStatus===1){// 已结算
      obj={status:betStatus.settlementBet,bgColor:'#40A9FF'}
    }else if(status===3){   // 待确认
