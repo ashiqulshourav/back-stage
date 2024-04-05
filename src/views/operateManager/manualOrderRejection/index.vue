@@ -451,8 +451,6 @@ const {
   handleTableWidthChange,
   handleCurrentChange,
   handleSelectionChange,
-  // exportFile,
-  // getStatus,
   copyTest,
   tenantList,
   confirmBetClick,
@@ -485,9 +483,6 @@ const {
 }
 .item_line {
   text-align: left;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
   max-width: 250px;
 }
 .isInplay {

@@ -19,7 +19,6 @@
         <pure-table
           align-whole="center"
           table-layout="auto"
-          showOverflowTooltip
           :loading="loading"
           :size="size"
           class="table_container"
@@ -373,9 +372,6 @@ const {
 }
 .item_line {
   text-align: left;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
   max-width: 250px;
 }
 .isInplay {
