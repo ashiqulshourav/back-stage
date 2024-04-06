@@ -5,6 +5,7 @@ import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted, h } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { searchFormType } from './types';
+import { getQueryUrl } from '@/utils/getReqUrl';
 
 export function useLeague() {
   const dataList = reactive<MetadataAPI.LeagueList[]>([]);
@@ -44,11 +45,14 @@ export function useLeague() {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       loading.value = true;
-      const res: MetadataAPI.LeagueListRes = await API.getLeagueList({
-        ...removeEmptyStringKeys(form),
-        pageSize: pagination.pageSize,
-        pageNum: pagination.currentPage
-      });
+      const res: MetadataAPI.LeagueListRes = await API.getLeagueList(
+        {
+          ...removeEmptyStringKeys(form),
+          pageSize: pagination.pageSize,
+          pageNum: pagination.currentPage
+        },
+        getQueryUrl()
+      );
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;

@@ -1,11 +1,10 @@
 import { http } from "@/utils/http";
 
 export const metaData = {
-  //- 普通体育
-  getLeagueList: (data: MetadataAPI.LeagueListParams) => http.request<MetadataAPI.LeagueListRes>("post", "/league/v1/getLeagueList", { data }),
-
+  //- 普通体育联赛列表获取
+  getLeagueList: (data: MetadataAPI.LeagueListParams, url) => http.request<MetadataAPI.LeagueListRes>("post", url, { data }),
+  //- 联赛管理-修改
   updateLeague: (data: MetadataAPI.updateLeagueParamsType) => http.request<MetadataAPI.updateLeagueResType>("post", "/league/v1/updateLeague", { data }),
-
   //- 普通体育文件上传
   fileUpload: (data: any) => http.request<MetadataAPI.fileUploadResType>("post", "/upload/v1/fileUploadSportLogo", { data }),
   //- 电竞文件上传
