@@ -1,58 +1,34 @@
 <template>
-  <div class="mt-1">
+  <div
+    class="mt-1 mb-2 pt-1 pb-1 pl-1 mr-5 text-sm bg-gray-100 dark:bg-[#ffffff1f]"
+  >
     <el-row :gutter="20">
-      <el-col :span="5">
-        <div class="flex item-center text-sm">
-          <span>{{ t('目前比分') }}: </span>
-          <span>
-            {{
-              dataList[0].tableList[dataList[0].tableList.length - 1]?.t1 ?? 0
-            }}
-            -
-            {{
-              dataList[0].tableList[dataList[0].tableList.length - 1]?.t2 ?? 0
-            }}
-          </span>
+      <el-col :span="3">
+        <div class="flex items-center text-sm">
+          <el-switch
+            v-if="index > 0 && renderObj.fullSettlementStatus !== 1"
+            v-model="switchModal"
+            inline-prompt
+            class="mr-2 !h-auto"
+            :before-change="() => updateStatus(index)"
+          />
+          <span
+            :class="[
+              index === 0 && renderObj.fullSettlementStatus !== 1 && 'ml-12'
+            ]"
+            >{{ data.keyStr }}:</span
+          >
         </div>
       </el-col>
-      <el-col :span="9">
-        <div class="flex text-sm">
-          <div class="flex">
-            <span>{{ t('目前红牌') }}：</span>
-            <el-text type="danger">{{ getCurrentCard.home.red ?? 0 }}</el-text>
-            <span>-</span>
-            <el-text type="danger">{{ getCurrentCard.away.red ?? 0 }}</el-text>
-          </div>
-          <div class="flex ml-3">
-            <span class="text-sm">{{ t('目前黄牌') }}：</span>
-            <el-text type="primary">{{
-              getCurrentCard.home.yellow ?? 0
-            }}</el-text>
-            <span class="2">-</span>
-            <el-text type="primary">{{
-              getCurrentCard.away.yellow ?? 0
-            }}</el-text>
-          </div>
-        </div>
+      <el-col :span="4" v-for="(item, index) in data.list" :key="index">
+        <div class="flex item-center text-sm">{{ item }}</div>
       </el-col>
-      <el-col :span="5">
-        <div class="flex text-sm">
-          <span>{{ t('目前角球') }}：</span>
-          <span>
-            {{
-              dataList[2].tableList[dataList[2].tableList.length - 1]?.t1 ?? 0
-            }}
-            -
-            {{
-              dataList[2].tableList[dataList[2].tableList.length - 1]?.t2 ?? 0
-            }}
-          </span>
-        </div>
-      </el-col>
+
       <el-col
         :span="5"
         v-if="
           renderObj.fullSettlementStatus === 1 &&
+          index < 1 &&
           hasAuth('ENABLERECALCULATIONANDSETTLE')
         "
       >
@@ -78,16 +54,99 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import { hasAuth } from '@/router/utils';
+import { message } from '@/utils/message';
+import { ElMessageBox } from 'element-plus';
 
 const props = defineProps<{
   renderObj: SattleDataAPI.getSettlementDataList;
+  data: { keyStr: string; isOpen: boolean; list: string[] };
+  index: number;
   dataList: SattleDataAPI.ChildrenDataList[];
+  overTimeStatus: boolean;
+  penaltyKickStatus: boolean;
 }>();
 
 const emits = defineEmits([
   'openSecondSettleClick',
-  'confirmSecondSettleClick'
+  'confirmSecondSettleClick',
+  'reloadEventList'
 ]);
+
+const switchModal = computed<boolean>({
+  set(_v) {},
+  get() {
+    return props.index === 1 ? props.overTimeStatus : props.penaltyKickStatus;
+  }
+});
+
+//- 修改启用状态
+const updateStatus = async (index: number) => {
+  if (props.renderObj.settlementType === 1) {
+    message(t('自动结算下无法进行状态更改'), { type: 'error' });
+    return Promise.resolve(false);
+  }
+
+  let strVal = '';
+  if (index === 1) {
+    strVal = props.overTimeStatus
+      ? t('确定要关闭加时赛么?')
+      : t('确定要开启加时赛么?');
+
+    if (props.overTimeStatus) {
+      const d = props.dataList
+        .slice(3)
+        .map(item => item.tableList)
+        .flat();
+      if (d.length) {
+        ElMessageBox.confirm(
+          t('关闭前请取消加时赛结算事件'),
+          t('不能关闭加时赛'),
+          {
+            type: 'warning',
+            showCancelButton: false,
+            confirmButtonText: t('确认'),
+            center: true
+          }
+        );
+        return Promise.reject();
+      }
+    }
+  } else {
+    strVal = props.penaltyKickStatus
+      ? t('确定要关闭点球大战么?')
+      : t('确定要开启点球大战么?');
+  }
+
+  return ElMessageBox.confirm(strVal, t('警告'), {
+    center: true,
+    type: 'warning'
+  })
+    .then(async () => {
+      const reqData =
+        index == 1
+          ? {
+              url: 'setOverTimeStatus',
+              params: {
+                matchId: props.renderObj.matchId,
+                overTimeStatus: !props.overTimeStatus
+              }
+            }
+          : {
+              url: 'setPenaltyKickStatus',
+              params: {
+                matchId: props.renderObj.matchId,
+                penaltyKickStatus: !props.penaltyKickStatus
+              }
+            };
+      const res = await API[reqData.url](reqData.params);
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if (!res.code) {
+        emits('reloadEventList');
+        return Promise.resolve(true);
+      }
+    })
+    .catch(() => Promise.reject());
+};
 
 const openSecondSettleClick = () => {
   emits('openSecondSettleClick');
@@ -96,27 +155,6 @@ const openSecondSettleClick = () => {
 const confirmSecondSettleClick = () => {
   emits('confirmSecondSettleClick');
 };
-
-const getCurrentCard = computed(() => {
-  const data = {
-    home: {
-      red: 0,
-      yellow: 0
-    },
-    away: {
-      red: 0,
-      yellow: 0
-    }
-  };
-  props.dataList[1].tableList.forEach(item => {
-    if (item.homeAway === 'home') {
-      item.redOrYellow === 1 ? (data.home.yellow += 1) : (data.home.red += 1);
-    } else if (item.homeAway === 'away') {
-      item.redOrYellow === 1 ? (data.away.yellow += 1) : (data.away.red += 1);
-    }
-  });
-  return data;
-});
 </script>
 
 <style scoped></style>

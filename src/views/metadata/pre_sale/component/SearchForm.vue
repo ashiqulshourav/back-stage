@@ -108,6 +108,22 @@
         </el-select>
       </el-form-item>
 
+      <el-form-item
+        :label="`${t('加时点球开售状态')}:`"
+        prop="overTimeAndPenaltyKickStatus"
+      >
+        <el-select
+          class="!w-[150px]"
+          v-model="form.overTimeAndPenaltyKickStatus"
+          clearable
+          :placeholder="t('请选择')"
+          @change="search"
+        >
+          <el-option :label="t('开启')" :value="true" />
+          <el-option :label="t('关闭')" :value="false" />
+        </el-select>
+      </el-form-item>
+
       <el-form-item :label="`${t('比赛时间')}:`" prop="startTime">
         <el-button
           v-for="(item, index) in nextDayArr"
@@ -116,15 +132,13 @@
           @click="changeSelectDate(index)"
           >{{ item }}</el-button
         >
-        <el-date-picker
-          class="ml-4"
-          v-model="form.startTime"
-          type="date"
+        <CustomDate
           :placeholder="t('其他日期')"
-          value-format="x"
-          format="YYYY-MM-DD"
-          :disabled-date="disableDate"
-          @change="changeDate"
+          :disableDate="disableDate"
+          v-model:val="form.startTime"
+          @changeDate="changeDate"
+          :isShowShortCuts="true"
+          :isSingle="true"
         />
       </el-form-item>
 
@@ -170,6 +184,8 @@ import { disableDate } from '@/utils/formatDate';
 import { useMatchStore } from '@/store/match';
 import { formatNumber } from '@/utils/formatNumber';
 import { debounce } from '@pureadmin/utils';
+import CustomDate from '@/components/Form/Custom_date.vue';
+
 import {
   ESPORT_ID_MAP,
   SPORT_ID_MAP,

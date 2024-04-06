@@ -81,7 +81,7 @@ export function useRoleHook() {
             routerPath: row?.routerPath ?? ''
           },
           parentList: parentList,
-          onCloseDialog: (closeType?: string) => {
+          onCloseDialog: (closeType?: string) => {3
             if (closeType) onSearch();
             closeDialog(options, index);
           }

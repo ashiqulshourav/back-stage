@@ -24,6 +24,60 @@ export const sattleData = {
       { data }
     ),
 
+  //- 足球是否开启加时赛
+  setOverTimeStatus: (data: {
+    matchId: string;
+    overTimeStatus: boolean
+  }) =>
+    request<SattleDataAPI.getMatchEventsRes>(
+      'post',
+      '/event/v1/setOverTimeStatus',
+      { data }
+    ),
+
+  //- 足球是否开启点球
+  setPenaltyKickStatus: (data: {
+    matchId: string;
+    penaltyKickStatus: boolean
+  }) =>
+    request<SattleDataAPI.getMatchEventsRes>(
+      'post',
+      '/event/v1/setPenaltyKickStatus',
+      { data }
+    ),
+
+  //- 足球加时赛上半场结算
+  overTimeHalfSettlement: (data: { matchId: number; }) =>
+    request<SattleDataAPI.settleBaseResType>(
+      'post',
+      '/event/v1/overTimeHalfSettlement',
+      { data }
+    ),
+
+  //- 足球加时赛全场结算
+  overTimeFullSettlement: (data: { matchId: number }) =>
+    request<SattleDataAPI.settleBaseResType>(
+      'post',
+      '/event/v1/overTimeFullSettlement',
+      { data }
+    ),
+  //- 点球结算
+  penaltyKickSettlement: (data: { matchId: number }) =>
+    request<SattleDataAPI.settleBaseResType>(
+      'post',
+      '/event/v1/penaltyKickSettlement',
+      { data }
+    ),
+
+  //- 关闭结算状态
+
+  closeSaleStatus: (data: { matchId: number }) =>
+    request<SattleDataAPI.settleBaseResType>(
+      'post',
+      '/event/v1/closeSaleStatus',
+      { data }
+    ),
+
   getBasketballEvents: (data: SattleDataAPI.MatchIDType) =>
     request<SattleDataAPI.getBasketballEventRes>(
       'post',

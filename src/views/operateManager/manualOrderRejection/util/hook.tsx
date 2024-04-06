@@ -11,6 +11,7 @@ import {
 import { columns } from './exportTableColumnList';
 import { utils, writeFile } from 'xlsx';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
+import RejctDialogForm from '../component/RejctDialogForm.vue';
 import {
   Detail,
   getBetTeamType,
@@ -25,8 +26,9 @@ import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { ElMessageBox } from 'element-plus';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
+import { addDialog, closeDialog } from '@/components/ReDialog';
 
-export function useLeague() {
+export function useManualOrderRejectionHook() {
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<any>([]);
   const tenantObj = reactive<any>({});
@@ -142,7 +144,6 @@ export function useLeague() {
 
   const getTenantList1 = async () => {
     const res = await API.getTenantList();
-    dataList.length = 0;
     if (res.data?.data?.length) {
       tenantList.push(...res.data.data);
       // 将数组根据id转换为对象
@@ -159,7 +160,7 @@ export function useLeague() {
   };
 
   //- 导出excel表格
-  const exportFile = async () => {
+  /*   const exportFile = async () => {
     // 对于串关类型的选择处理
     let seriesDetails: any = [];
     if (form.seriesType == 2) {
@@ -307,7 +308,7 @@ export function useLeague() {
     message(t('导出成功'), {
       type: 'success'
     });
-  };
+  }; */
   const handleCancel = (data: any) => {
     return new Promise<boolean>((resolve, reject) => {
       ElMessageBox.confirm(t('确定取消注单吗？'), t('警告'), {
@@ -331,7 +332,8 @@ export function useLeague() {
         .catch(reject);
     });
   };
-  const getStatus = (status, billStatus, betResult) => {
+
+  /*   const getStatus = (status, billStatus, betResult) => {
     let obj = { status: -1, bgColor: '' };
     if (status === 0 && billStatus === 0) {
       // 未结算
@@ -363,7 +365,7 @@ export function useLeague() {
       obj = { status: betStatus.reserveFail, bgColor: '#F57582' };
     }
     return obj;
-  };
+  }; */
 
   function copyTest(str: string, tip: string) {
     if (!str) return;
@@ -375,32 +377,31 @@ export function useLeague() {
       : message(t('复制失败'), { type: 'error' });
   }
 
-  //- 取消注单
-  const refuseBetClick = row => {
-    const list = [];
-
-    ElMessageBox.confirm(`${t('确定要拒接注单么?')} `, '警告', {
-      type: 'warning',
-      center: true
-    }).then(async () => {
-      row.combineOrderDetails.forEach(item => {
-        if (item.settleStatus === 3) list.push(item.detailId);
-      });
-      const res = await API.riskCancel(list);
-      message(res.msg, { type: res.code ? 'error' : 'success' });
-      if (!res.code) onSearch();
+  //- 风控拒单
+  const refuseBetClick = detailId => {
+    addDialog({
+      title: t('警告'),
+      width: '15%',
+      closeOnClickModal: false,
+      center: true,
+      hideFooter: true,
+      contentRenderer: ({ options, index }) =>
+        h(RejctDialogForm, {
+          detailId,
+          onCloseDialog: (type?: 'reload') => {
+            closeDialog(options, index);
+            if (type) onSearch();
+          }
+        })
     });
   };
+
   //- 确认注单
-  const confirmBetClick = async row => {
-    const list = [];
+  const confirmBetClick = async detailId => {
     ElMessageBox.confirm(`${t('是否确定当前注单么?')} `, '警告', {
       center: true
     }).then(async () => {
-      row.combineOrderDetails.forEach(item => {
-        if (item.settleStatus === 3) list.push(item.detailId);
-      });
-      const res = await API.riskConfirm(list);
+      const res = await API.riskConfirm([{ detailId, status: 1 }]);
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if (!res.code) onSearch();
     });
@@ -424,11 +425,12 @@ export function useLeague() {
     handleTableWidthChange,
     handleCurrentChange,
     handleSelectionChange,
-    exportFile,
+    // exportFile,
     handleCancel,
-    getStatus,
+    // getStatus,
     copyTest,
     confirmBetClick,
-    refuseBetClick
+    refuseBetClick,
+    tenantObj
   };
 }

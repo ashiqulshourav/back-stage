@@ -30,7 +30,6 @@ export const useSettileHook = () => {
   //- 取消注单
   const cancelClick = async row => {
     const remark = ref('');
-
     const r = await openPasswordInput();
     if (!r) return;
 
@@ -49,9 +48,8 @@ export const useSettileHook = () => {
           loading: false,
           label: t('确认'),
           btnClick: async ({ dialog: { options, index } }) => {
-            if (!remark.value) {
+            if (!remark.value)
               return message(t('请输入取消原因'), { type: 'error' });
-            }
             const params = {
               remark: remark.value,
               matchId: row.matchId,

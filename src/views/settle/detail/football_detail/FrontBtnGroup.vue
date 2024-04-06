@@ -43,7 +43,7 @@ const emites = defineEmits(['editChild', 'handleChildrenData']);
 const editChild = row => emites('editChild', row);
 
 const handleChildrenData = () => {
-  if (props.index > 0) {
+  if (props.index > 0 && props.row.matchPeriodId !== 50) {
     if (props.list[props.index - 1].eventTime >= props.row.eventTime) {
       message(t('时间不能小于前一个事件发生时间'), { type: 'error' });
       props.row.eventTime = '';

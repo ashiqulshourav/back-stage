@@ -1,15 +1,14 @@
 <template>
   <div class="main">
+    <!-- @exportFile="exportFile" -->
     <SearchForm
       :form="form"
       :loading="loading"
       @on-search="onSearch"
-      @exportFile="exportFile"
       :tenantList="tenantList"
     />
-
     <PureTableBar
-      title=""
+      :title="t('温馨提示：点击任一关的“拒接注单”按钮，即拒绝整个串关注单。')"
       :columns="columns"
       class="relative"
       :isShowHeader="false"
@@ -20,8 +19,8 @@
           align-whole="center"
           table-layout="auto"
           :loading="loading"
+          showOverflowTooltip
           :size="size"
-          class="table_container"
           adaptive
           :data="dataList"
           :columns="dynamicColumns"
@@ -62,12 +61,24 @@
               @dblclick="
                 copyTest(
                   row.tenantId,
-                  t('商户ID：{value}', { value: row.tenantId })
+                  t('商户编码：{value}', { value: tenantObj[row.tenantId]?.name })
                 )
               "
             >
-              <span>{{ t('商户ID：') }}</span
-              >{{ row.tenantId }}
+              <span>{{ t('商户编码：') }}</span
+              >{{tenantObj[row.tenantId]?.name }}
+            </div>
+            <div
+                class="item_line cursor-pointer"
+                @dblclick="
+                copyTest(
+                  row.tenantId,
+                  t('商户名：{value}', { value: tenantObj[row.tenantId]?.tenantName })
+                )
+              "
+            >
+              <span>{{ t('商户名：') }}</span
+              >{{tenantObj[row.tenantId]?.tenantName }}
             </div>
             <div
               v-if="row.combineOrderDetails.length > 1"
@@ -168,7 +179,13 @@
                     : ''
                 }}
               </div>
-              <div class="item_line">{{ useSportFormatDetail(item)[3] }}</div>
+              <div class="item_line">{{ useSportFormatDetail(item)[3] }}  @{{
+                  getViewOddFn(
+                      item.oddFinally,
+                      item.marketTypeFinally,
+                      item.marketType
+                  )
+                }}</div>
               <div
                 class="item_line cursor-pointer"
                 @dblclick="
@@ -187,7 +204,7 @@
               </div>
               <div
                 class="item_line"
-                v-if="row.billStatus === 1 && item.settleScore"
+                v-if="row.billStatus === 1 && item.settleScore&&!(displayHomeAwayScore(item.settleScore, item.sportId,'home')==''||displayHomeAwayScore(item.settleScore, item.sportId,'away')=='')"
               >
                 {{ t('赛果：')
                 }}{{ displayHomeAwayScore(item.settleScore, item.sportId) }}
@@ -201,14 +218,26 @@
                 v-for="item in row.combineOrderDetails"
                 :key="item.betItemId"
               >
-                {{
-                  getVal(
-                    row.billStatus,
-                    row.status,
-                    item.betResult,
-                    item.settleStatus
-                  )
-                }}
+                <span v-if="row.combineOrderDetails.length < 2">
+                  {{
+                    getVal(
+                      row.billStatus,
+                      row.status,
+                      item.betResult,
+                      item.settleStatus
+                    )
+                  }}
+                </span>
+                <span v-else>
+                  {{
+                    getVal1(
+                      row.billStatus,
+                      item.betResult,
+                      item.settleStatus,
+                      item
+                    )
+                  }}
+                </span>
               </div>
             </div>
           </template>
@@ -243,15 +272,15 @@
               </div>
             </div>
           </template>
-          <template #profitAmount="{ row }">
+          <!--   <template #profitAmount="{ row }">
             <span
               v-if="row.profitAmount"
               :class="row.profitAmount > 0 ? 'win' : 'lose'"
               >{{ row.profitAmount.toFixed(2) }}</span
             >
             <span v-else>-</span>
-          </template>
-          <template #status="{ row }">
+          </template> -->
+          <!--   <template #status="{ row }">
             <div class="flex justify-center flex-col items-center">
               <div
                 :style="{
@@ -289,33 +318,38 @@
                 }}
               </div>
             </div>
-          </template>
+          </template> -->
 
           <template #operation="{ row }">
-            <div
-              v-if="
-                row.combineOrderDetails.findIndex(
-                  item => item.settleStatus === 3
-                ) > -1
-              "
-            >
-              <el-button
-                size="small"
-                class="reset-margin"
-                @click="confirmBetClick(row)"
-                type="primary"
+            <div class="h-full" v-if="form.queryType !== 1">
+              <div
+                v-for="item in row.combineOrderDetails"
+                :key="item.betItemId"
               >
-                {{ t('确认注单') }}
-              </el-button>
-              <el-button
-                size="small"
-                class="reset-margin"
-                @click="refuseBetClick(row)"
-                type="danger"
-              >
-                {{ t('拒接注单') }}
-              </el-button>
+                <div
+                  class="flex item-center flex-col"
+                  v-if="item.settleStatus === 3 && !item.rejectStatus"
+                >
+                  <el-button
+                    size="small"
+                    @click="confirmBetClick(item.detailId)"
+                    type="primary"
+                  >
+                    {{ t('确认注单') }}
+                  </el-button>
+                  <el-button
+                    class="!ml-0 mt-2"
+                    size="small"
+                    :disabled="item.settleStatus === 1"
+                    @click="refuseBetClick(item.detailId)"
+                    type="danger"
+                  >
+                    {{ t('拒接注单') }}
+                  </el-button>
+                </div>
+              </div>
             </div>
+            <div v-else>-</div>
           </template>
         </pure-table>
 
@@ -353,7 +387,7 @@
 </template>
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
-import { useLeague } from './util/hook';
+import { useManualOrderRejectionHook } from './util/hook';
 import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
@@ -365,12 +399,12 @@ import {
   EBetResultType,
   getViewOddFn,
   markeTypeMap,
-  calculateSeriesTypeTotal,
+  // calculateSeriesTypeTotal,
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
   getIsInplay
 } from '@/utils/formatMatch';
-import { betStatusMap } from './util/types';
+// import { betStatusMap } from './util/types';
 import { usePublicHooks } from '@/hooks';
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
@@ -384,7 +418,23 @@ const getVal = (s1, s2, s3, s4) => {
     case s4 === 3:
       val = t('待确认');
       break;
-    case s1 === 1 && s2 === 4 && s3 === 61:
+    case s3 === 61:
+      val = t('已拒单');
+      break;
+  }
+  return val;
+};
+const getVal1 = (billStatus, betResult, settleStatus, item) => {
+  let val = '-';
+  switch (true) {
+    case billStatus === 0 && betResult === 0 && settleStatus === 0:
+      val = t('已接单');
+      item.rejectStatus = true;
+      break;
+    case settleStatus === 3:
+      val = t('待确认');
+      break;
+    case betResult === 61 && settleStatus === 1:
       val = t('已拒单');
       break;
   }
@@ -401,13 +451,12 @@ const {
   handleTableWidthChange,
   handleCurrentChange,
   handleSelectionChange,
-  exportFile,
-  getStatus,
   copyTest,
   tenantList,
   confirmBetClick,
-  refuseBetClick
-} = useLeague();
+  refuseBetClick,
+  tenantObj
+} = useManualOrderRejectionHook();
 </script>
 
 <style lang="scss">
@@ -434,9 +483,6 @@ const {
 }
 .item_line {
   text-align: left;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
   max-width: 250px;
 }
 .isInplay {

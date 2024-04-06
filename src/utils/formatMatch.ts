@@ -140,17 +140,6 @@ export enum EBetResultType {
   HANDLE_CANCEL = 23,
   FLAT_MATCH_ROLLBACK = 51,
 }
-
-export const getViewOddFn = (od: number, type: EOddType, currentOddType: number) => {
-  if (type === EOddType.ML) {
-    od = Number(truncateDecimals(-(1 / od), 2));
-  }
-  if (type !== EOddType.EUROPE) {
-    return truncateDecimals(Number(currentOddType === EOddType.EUROPE ? addDecimals(od, 1) : od), 2);
-  }
-  return truncateDecimals(od, 2);
-};
-
 export const BET_RESULT_TYPE_MAP: { [key in EBetResultType]: string } = {
   [EBetResultType.NO_RESULT]: '无结果',
   [EBetResultType.FLAT]: '走水',
@@ -174,6 +163,18 @@ export const BET_RESULT_TYPE_MAP: { [key in EBetResultType]: string } = {
   [EBetResultType.AUTO_CANCEL]: '预约失效',
   [EBetResultType.FLAT_MATCH_ROLLBACK]: '走水', // 比分回滚取消结算返还金额,算走水
 };
+
+export const getViewOddFn = (od: number, type: EOddType, currentOddType: number) => {
+  if (type === EOddType.ML) {
+    od = Number(truncateDecimals(-(1 / od), 2));
+  }
+  if (type !== EOddType.EUROPE) {
+    return truncateDecimals(Number(currentOddType === EOddType.EUROPE ? addDecimals(od, 1) : od), 2);
+  }
+  return truncateDecimals(od, 2);
+};
+
+
 
 
 
@@ -289,17 +290,15 @@ export type Detail = {
 // 获取投注球队或其他玩法---------适用于已投注接口数据返回
 export const getBetTeamType = (info:Detail)=>{
   const {betHomeOrAway, betHandicap, kindsCode} = info;
-  const createOrderTmp = {
-    teams: {
-      home: {
-        name: info.homeTeamNameCn,
-      },
-      away: {
-        name: info.awayTeamNameCn,
-      },
+  const teams ={
+    home: {
+      name: info.homeTeamNameCn,
     },
-  };
-  return getOrderBetTypeAtBetting({betName: info.betN, betTeam: betHomeOrAway ?betHomeOrAway : betHandicap, orderName: betHandicap, ...createOrderTmp, kc: kindsCode} as any);
+    away: {
+      name: info.awayTeamNameCn,
+    },
+  }
+  return getOrderBetTypeAtBetting({betName: info.betN, betTeam: betHomeOrAway ?betHomeOrAway : betHandicap, orderName: betHandicap, teams, kc: kindsCode} as any);
 };
 
 // 转换 投注项名称
@@ -405,14 +404,24 @@ export const calculateSeriesTypeTotalBets = (seriesType:number)=>{
   return arr.length>0?arr[1]:''
 }
 
-
+// enum TeamType {
+//   home='home',
+//   away='away'
+// }
 // 获取比分
-export const displayHomeAwayScore = (scoreString:string, sprotId?: ESportType) => {
+export const displayHomeAwayScore = (scoreString:string, sprotId?: ESportType,witchTeam?:TeamType) => {
   if (sprotId > 33) return '';
   if (sprotId === ESportType.TENNIS || sprotId === ESportType.VOLLEYBALL) return '';
   const [home, away] = assertHomeAwayScore(scoreString);
   if(home===undefined||away===undefined){
     return ''
+  }
+  if(witchTeam){
+    if(witchTeam==='home'){
+      return home
+    }else if(witchTeam==='away'){
+      return away
+    }
   }
   return `${home}-${away}`
 };

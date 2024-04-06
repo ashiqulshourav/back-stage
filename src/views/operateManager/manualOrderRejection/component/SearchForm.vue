@@ -7,7 +7,7 @@
   >
     <div class="flex">
       <div>
-        <el-form-item :label="`${t('商户ID')}:`" prop="tenantIds">
+        <el-form-item :label="`${t('商户名')}:`" prop="tenantIds">
           <el-select
             class="!min-w-[200px]"
             :placeholder="t('请选择商户ID，多选项')"
@@ -17,7 +17,7 @@
           >
             <el-option
               v-for="item in tenantList"
-              :label="item.name"
+              :label="item.tenantName"
               :value="item.id"
               :key="item.id"
             />
@@ -207,18 +207,7 @@
           />
         </el-form-item>
         <el-form-item prop="timeType" :label="`${t('注单时间')}:`">
-          <!-- <el-select v-model="form.timeType" class="!w-[110px]">
-            <el-option :label="t('注单时间')" :value="1" />
-            <el-option :label="t('结算时间')" :value="2" />
-            <el-option :label="t('比赛时间')" :value="3" />
-          </el-select> -->
-          <el-date-picker
-            :type="dateRangetType"
-            v-model="selectDate"
-            :start-placeholder="dayjs().startOf('month').format('YYYY-MM-DD')"
-            :end-placeholder="dayjs().endOf('day').format('YYYY-MM-DD')"
-            @change="changeDate"
-          />
+          <CustomDate v-model:val="selectDate" @changeDate="changeDate" :start-placeholder="dayjs().startOf('month').format('YYYY-MM-DD')" :end-placeholder="dayjs().startOf('day').format('YYYY-MM-DD')" />
         </el-form-item>
 
         <el-form-item>
@@ -271,6 +260,7 @@ import { searchFormType } from '../util/types';
 } from '../util/types'; */
 
 import { hasAuth } from '@/router/utils';
+import CustomDate from "@/components/Form/Custom_date.vue";
 const props = defineProps<{
   loading: boolean;
   form: searchFormType;

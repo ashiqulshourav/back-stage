@@ -89,7 +89,7 @@
 
       <el-form-item :label="`${t('日期选择')}:`" prop="startTime">
         <!--  :disabled-date="disableDate" -->
-        <el-date-picker
+        <!-- <el-date-picker
           class="ml-4 !w-[260px]"
           v-model="time"
           :start-placeholder="t('开始日期')"
@@ -98,7 +98,8 @@
           value-format="x"
           format="YYYY-MM-DD"
           @change="changeDate"
-        />
+        /> -->
+        <CustomDate v-model:val="time" @changeDate="changeDate" />
       </el-form-item>
 
       <el-form-item>
@@ -126,9 +127,10 @@ import Refresh from '@iconify-icons/ep/refresh';
 import type { FormInstance } from 'element-plus';
 import { SearchFormType } from '../utils/types';
 import dayjs from 'dayjs';
-// import { disableDate } from '@/utils/formatDate';
 import { useMatchStore } from '@/store/match';
 import { formatNumber } from '@/utils/formatNumber';
+import CustomDate from '@/components/Form/Custom_date.vue';
+
 import {
   ESPORT_ID_MAP,
   HANDICAP_STATUS,
