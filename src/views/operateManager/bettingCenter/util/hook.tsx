@@ -303,29 +303,29 @@ export function useLeague() {
   }
 const getStatus = (status,billStatus,betResult,isReserve?)=>{
     let obj = {status:-1,bgColor:''}
-   if(status===0&&billStatus===0){  // 未结算
-      if(isReserve===1){ // 预约中
-        obj={status:betStatus.onReverse,bgColor:'#F57582'}
-      }else {
-        obj={status:betStatus.unsettlementBet,bgColor:'#FFC53D'}
-      }
-   }else if(status===1&&billStatus===1){// 已结算
-     obj={status:betStatus.settlementBet,bgColor:'#40A9FF'}
-   }else if(status===3){   // 待确认
-     obj={status:betStatus.confirm,bgColor:'#FFC53D'}
-   }else if(status===6){ // 待审核
-     obj={status:betStatus.PendingApprove,bgColor:'#F88D48'}
-   }else if(status==2&&billStatus===1&&(betResult===22||betResult===23)){   // 注单无效
-     obj={status:betStatus.betInvalid,bgColor:'#E54752'}
-   }else if(status===4){  // 投注失败
-     obj={status:betStatus.betFail,bgColor:'#F57582'}
-   }else if(status===5){  // 赛事异常
-     obj={status:betStatus.eventAbnormal,bgColor:'#F88D48'}
-   }else if(status===4&&billStatus===1&&betResult===61){  // 封控拒单
-       obj={status:betStatus.riskReject,bgColor:'#F88D48'}
-   }else if(status===1&&billStatus===1&&(betResult===21)){  // 预约失败
-       obj={status:betStatus.reserveFail,bgColor:'#F57582'}
-   }
+  if(status==2&&billStatus===1&&(betResult===22||betResult===23)){   // 注单无效
+    obj={status:betStatus.betInvalid,bgColor:'#E54752'}
+  }else if(status===1&&billStatus===1&&(betResult===21)){  // 预约失败
+    obj={status:betStatus.reserveFail,bgColor:'#F57582'}
+  }else if(status===0&&billStatus===0){  // 未结算
+    if(isReserve===1){ // 预约中
+      obj={status:betStatus.onReverse,bgColor:'#F57582'}
+    }else {
+      obj={status:betStatus.unsettlementBet,bgColor:'#FFC53D'}
+    }
+  }else if(status===1&&billStatus===1){// 已结算
+    obj={status:betStatus.settlementBet,bgColor:'#40A9FF'}
+  }else if(status===4&&billStatus===1&&betResult===61){  // 封控拒单
+    obj={status:betStatus.riskReject,bgColor:'#F88D48'}
+  }else if(status===3){   // 待确认
+    obj={status:betStatus.confirm,bgColor:'#FFC53D'}
+  }else if(status===6){ // 待审核
+    obj={status:betStatus.PendingApprove,bgColor:'#F88D48'}
+  }else  if(status===4){  // 投注失败
+    obj={status:betStatus.betFail,bgColor:'#F57582'}
+  }else if(status===5){  // 赛事异常
+    obj={status:betStatus.eventAbnormal,bgColor:'#F88D48'}
+  }
    return obj
 }
 
