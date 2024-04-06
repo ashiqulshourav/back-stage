@@ -35,6 +35,13 @@ export function usePublicHooks() {
     }
   })
 
+  const tableHeaderStyleBlue = computed(() => {
+    return {
+      background: 'var(--el-color-primary)',
+      color: 'white'
+    }
+  })
+
   return {
     /** 当前网页是否为`dark`模式 */
     isDark,
@@ -42,6 +49,7 @@ export function usePublicHooks() {
     switchStyle,
     /** 表现更鲜明的`el-tag`组件  */
     tagStyle,
-    tableHeaderStyle
+    tableHeaderStyle,
+    tableHeaderStyleBlue
   };
 }

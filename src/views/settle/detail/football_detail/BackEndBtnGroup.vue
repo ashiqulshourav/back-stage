@@ -28,7 +28,9 @@
       </el-button>
       <el-button
         v-if="
-          isShowCancelBtn && +row.t1 + +row.t2 !== 0 && hasAuth('CANCELSETTLE')
+          isShowCancelBtn &&
+          (+row.t1 + +row.t2 !== 0 || row.matchPeriodId === 50) &&
+          hasAuth('CANCELSETTLE')
         "
         class="reset-margin"
         link

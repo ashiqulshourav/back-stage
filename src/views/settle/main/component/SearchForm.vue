@@ -56,16 +56,7 @@
     </el-form-item>
 
     <el-form-item :label="`${t('比赛时间')}:`" prop="startTime">
-      <el-date-picker
-        class="ml-4"
-        v-model="time"
-        type="daterange"
-        :start-placeholder="t('开始日期')"
-        :end-placeholder="t('结束如期')"
-        value-format="x"
-        format="YYYY-MM-DD"
-        @change="changeDate"
-      />
+      <CustomDate v-model:val="time" @changeDate="changeDate" />
     </el-form-item>
 
     <el-form-item prop="endTime" class="!hidden">
@@ -108,6 +99,7 @@ import { useMatchStore } from '@/store/match';
 import dayjs from 'dayjs';
 import { formatNumber } from '@/utils/formatNumber';
 import { debounce } from '@pureadmin/utils';
+import CustomDate from '@/components/Form/Custom_date.vue';
 const formRef = ref();
 const matchStore = useMatchStore();
 const time = ref('');
