@@ -46,16 +46,16 @@ const formRules = reactive(<FormRules>{
       trigger: "blur"
     }
   ],
-  routerPath: [
-    { required: true, message: t("后端路径不能为空") },
-    {
-      validator: (_, value, callback) => {
-        if (!(value.startsWith('/'))) callback(new Error(t("path格式不正确")))
-        else callback()
-      },
-      trigger: "blur"
-    }
-  ],
+  // routerPath: [
+  //   { required: true, message: t("后端路径不能为空") },
+  //   {
+  //     validator: (_, value, callback) => {
+  //       if (!(value.startsWith('/'))) callback(new Error(t("path格式不正确")))
+  //       else callback()
+  //     },
+  //     trigger: "blur"
+  //   }
+  // ],
 });
 
 export { formRules };
