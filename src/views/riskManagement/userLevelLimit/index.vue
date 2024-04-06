@@ -10,7 +10,7 @@
           >{{ t('编辑') }}</el-button
         >
         <div class="flex items-center" v-else>
-          <el-button @click="isEditSport = false" type="info">{{
+          <el-button @click="cancelSportEdit" type="info">{{
             t('取消')
           }}</el-button>
           <el-button @click="confirmSportClick" type="primary">{{
@@ -117,7 +117,7 @@
           >{{ t('编辑') }}</el-button
         >
         <div class="flex items-center" v-else>
-          <el-button @click="isEditESport = false" type="info">{{
+          <el-button @click="cancelESportEdit" type="info">{{
             t('取消')
           }}</el-button>
           <el-button @click="confirmESportClick" type="primary">{{
@@ -244,7 +244,9 @@ const {
   confirmESportClick,
   addESportItem,
   delSportItem,
-  delESportItem
+  delESportItem,
+  cancelSportEdit,
+  cancelESportEdit
 } = useClassifySettingHook();
 </script>
 
