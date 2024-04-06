@@ -29,6 +29,7 @@
           clearable
           show-password
           v-model.trim="resetForm.newPassword"
+          maxlength="32"
           :placeholder="t('至少8个英文大小写+数字或特殊符号')"
         />
       </el-form-item>
@@ -41,7 +42,8 @@
         <el-input
           clearable
           show-password
-          v-model.trim="resetForm.confirmPassword"
+          v-model.trim="resetForm.confirmPassword"          
+          maxlength="32"
           :placeholder="t('请再次输入新密码')"
         />
       </el-form-item>
@@ -151,6 +153,15 @@ const resetPassword = async () => {
 const closeDialog = () => {
   emits('closeDialog');
 };
+
+watch(
+  () => resetForm.newPassword,
+  () => {
+    if (resetForm.confirmPassword) {
+      resetFormRef.value.validateField('confirmPassword');
+    }
+  }
+);
 </script>
 
 <style scoped></style>
