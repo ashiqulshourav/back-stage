@@ -5,7 +5,9 @@ import { ElMessageBox } from 'element-plus';
 
 export function useClassifySettingHook() {
   const sportList = reactive<UserAPI.UserLevelLimitListRes[]>([]);
+  const sourceSportList = reactive<UserAPI.UserLevelLimitListRes[]>([]);
   const eSportList = reactive<UserAPI.UserLevelLimitListRes[]>([]);
+  const eSportSourceList = reactive<UserAPI.UserLevelLimitListRes[]>([]);
   const isEditSport = ref(false);
   const isEditESport = ref(false);
   const loading = ref(true);
@@ -20,11 +22,15 @@ export function useClassifySettingHook() {
 
     if (resList[0].status === 'fulfilled' && !resList[0].value.code) {
       sportList.length = 0;
+      sourceSportList.length = 0;
       sportList.push(...resList[0].value.data);
+      sourceSportList.push(...resList[0].value.data);
     }
     if (resList[1].status === 'fulfilled' && !resList[1].value.code) {
       eSportList.length = 0;
+      eSportSourceList.length = 0;
       eSportList.push(...resList[1].value.data);
+      eSportSourceList.push(...resList[1].value.data);
     }
     loading.value = false;
   }
@@ -87,6 +93,19 @@ export function useClassifySettingHook() {
     });
   };
 
+  //- 体育编辑取消
+  const cancelSportEdit = () => {
+    isEditSport.value = false;
+    sportList.length = 0;
+    sportList.push(...sourceSportList);
+  };
+  //- 电竞编辑取消
+  const cancelESportEdit = () => {
+    isEditESport.value = false;
+    eSportList.length = 0;
+    eSportList.push(...eSportSourceList);
+  };
+
   //- 删除体育
   const delSportItem = () => {
     sportList.pop();
@@ -113,6 +132,8 @@ export function useClassifySettingHook() {
     confirmESportClick,
     addESportItem,
     delSportItem,
-    delESportItem
+    delESportItem,
+    cancelSportEdit,
+    cancelESportEdit
   };
 }

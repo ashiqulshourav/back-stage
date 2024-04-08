@@ -74,7 +74,6 @@
         />
       </el-form-item>
       <el-form-item :label="t('联赛标签')" prop="leagueTagsId">
-        <!-- <el-row> </el-row> -->
         <div v-bind:style="{ width: '100%' }">
           <el-checkbox
             v-model="checkAll"
@@ -114,9 +113,6 @@ import { t } from '@/plugins/i18n';
 import { useMatchStore } from '@/store/match';
 import { inputRestrictions } from '@/utils/formatNumber';
 import { message } from '@/utils/message';
-// import { useLeague } from './utils/hook';
-
-// const { form } = useLeague();
 const uploadFormFile = ref();
 const loading = ref(false);
 const matchStore = useMatchStore();

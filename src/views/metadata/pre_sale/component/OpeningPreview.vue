@@ -191,7 +191,8 @@ const getBetItemsList = async () => {
     } else if (props.matchInfo.sportId !== 1) {
       mData[0].formatList.push(item);
     } else {
-      mData[3].formatList.push(item);
+      if (item.ctid >= 12 && item.ctid <= 21) mData[0].formatList.push(item);
+      if (item.ctid >= 81 && item.ctid <= 83) mData[3].formatList.push(item);
     }
   });
 

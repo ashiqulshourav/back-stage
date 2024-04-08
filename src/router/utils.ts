@@ -188,21 +188,23 @@ function handleAsyncRoutes(routeList) {
 }
 
 //- 清洗后端返回数据
+
 const transformItem = (item: UserAPI.RouterResData) => {
-  // if (item.enName === 'settle' || item.enName === 'settle_history') {
-  //   const s = item.childResourceList[0].childResourceList;
-  //   item.childResourceList.push(...s)
-  // }
+  const loginName = JSON.parse(localStorage.getItem('USERSTATE'))?.userInfo?.name;
+  const meta = {
+    title: item.name,
+    enTitle: item.enName,
+    icon: item.enName,
+    rank: item.sort,
+    showLink: item.type !== 2
+  }
+  if ((import.meta.env.VITE_BUILD_TYPE === 'pro' || import.meta.env.VITE_BUILD_TYPE === 'uat') && item.enName === 'menuManager' && loginName !== 'armour') {
+    meta.showLink = false;
+  }
   const baseItem = {
     path: item.path,
     name: item.path.slice(1).split('/').join('_').toUpperCase(),
-    meta: {
-      title: item.name,
-      enTitle: item.enName,
-      icon: item.enName,
-      rank: item.sort,
-      showLink: item.type !== 2
-    }
+    meta
   };
 
   const hasChildrenWithZeroType = item.childResourceList.some(child => child.type === 0);

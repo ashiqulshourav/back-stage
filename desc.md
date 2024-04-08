@@ -133,3 +133,9 @@ import Search from '@iconify-icons/ep/search';
     {{ t('筛选') }}
   </el-button>
 ```
+
+### 环境变量获取
+
+```js
+import.meta.env.VITE_BUILD_TYPE === 'pro';
+```
