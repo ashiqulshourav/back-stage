@@ -15,6 +15,31 @@
       :isShowHeader="false"
       @refresh="onSearch('reload')"
     >
+      <template #title>
+        <div class="flex item-center ">
+          <el-button
+            type="danger"
+          >
+            {{ t('全部划单') }}
+          </el-button>
+          <el-button
+            type="primary"
+          >
+            {{ t('全部取消回滚') }}
+          </el-button>
+          <el-button
+            type="primary"
+          >
+            {{ t('全部通过') }}
+          </el-button>
+          <el-button
+            type="primary"
+          >
+            {{ t('导出注单') }}
+          </el-button>
+        </div>
+
+      </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"
@@ -32,9 +57,7 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
-          <template #index="{ row }">
-            <span>{{ row.index }}</span>
-          </template>
+
           <template #userMessage="{ row }">
             <div
               class="item_line cursor-pointer"
@@ -241,31 +264,29 @@
             <div >{{ row.settleTime ? dayjs(row.settleTime).format('MM-DD HH:mm:ss'):'' }}</div>
             <div v-if="String(row.seriesType).slice(-3) ==='001'" >{{t('总赔率:')}}{{String(row.seriesType).slice(-3) ==='001'?calculateSeriesTypeTotal(row.combineOrderDetails):'' }}</div>
           </template>
-          <template #operation="{ row }">
-            <div>
+          <template #cancel="{ row }">
+            <div  class="match_item cancel flex justify-between  items-center" v-for="item in row.combineOrderDetails"
+                 :key="item.betItemId"
+            >
+              <el-checkbox ></el-checkbox>
               <el-button
-                  class="mb-1 w-100"
-                  @click="handleCancel(row)"
-                  v-if="row.billStatus === 0 && hasAuth('CANCELBET')"
+                size="small"
+                type="danger"
               >
-                {{ t('取消') }}
+                {{ t('风控划单') }}
               </el-button>
             </div>
-            <div>
+          </template>
+          <template #approve="{ row }">
+            <div class="match_item approve flex justify-between  items-center"  v-for="item in row.combineOrderDetails"
+                  :key="item.betItemId"
+            >
+              <el-checkbox ></el-checkbox>
               <el-button
-                  class="mb-1 w-100"
-                  @click="switchDialog(true, row)"
-                  v-if="
-                specialCountFlag(
-                  row.status,
-                  row.billStatus,
-                  row.combineOrderDetails[0].betResult
-                ) &&
-                row.isReserve !== 1 &&
-                hasAuth('specialSettlement'.toUpperCase())
-              "
+                size="small"
+                type="primary"
               >
-                {{ t('特殊结算') }}
+                {{ t('审核通过') }}
               </el-button>
             </div>
           </template>
@@ -309,7 +330,6 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
-import { hasAuth } from '@/router/utils';
 import {
   formatSeriesType,
   useSportFormatDetail,
@@ -324,6 +344,7 @@ import {
 } from '@/utils/formatMatch';
 import { betStatusMap } from './util/types';
 import { usePublicHooks } from '@/hooks';
+import {hasAuth} from "@/router/utils";
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
 
@@ -406,8 +427,12 @@ const {
   color: #fff;
   border-radius: 4px;
 }
-.odd_item {
+.odd_item,.cancel,.approve {
   min-height: 100px;
+}
+.cancel,.approve {
+  border: 1px solid green;
+width: 100px;
 }
 
 .operate {
