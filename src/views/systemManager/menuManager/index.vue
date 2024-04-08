@@ -14,9 +14,11 @@
           size="large"
           show-overflow-tooltip
           row-key="id"
+          border
           adaptive
           :indent="32"
           :data="dataList"
+          @row-click="cellRowClick"
           :columns="dynamicColumns"
           :header-cell-style="tableHeaderStyle"
           :tree-props="{
@@ -43,14 +45,15 @@
 
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
-import { useRoleHook } from './utils/hook';
+import { useMenuManagerHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 
 defineOptions({ name: 'SYSTEMMANAGER_MENUMANAGER' });
 const { tableHeaderStyle } = usePublicHooks();
 
-const { loading, columns, dataList, onSearch, openRoleDialog } = useRoleHook();
+const { loading, columns, dataList, onSearch, openRoleDialog, cellRowClick } =
+  useMenuManagerHook();
 </script>
 
 <style scoped lang="scss">
@@ -66,9 +69,10 @@ const { loading, columns, dataList, onSearch, openRoleDialog } = useRoleHook();
 :deep {
   .first_table {
     .cell {
+      cursor: pointer;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
     }
   }
 }

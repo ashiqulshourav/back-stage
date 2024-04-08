@@ -3,7 +3,7 @@ import editForm from '../form.vue';
 import { columns } from '../component/TableColumnList';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 
-export function useRoleHook() {
+export function useMenuManagerHook() {
   const dataList = reactive<RoleAPI.ChildResourceList[]>([]);
   const loading = ref(true);
   const parentList = reactive<Partial<RoleAPI.ChildResourceList>[]>([]);
@@ -57,6 +57,7 @@ export function useRoleHook() {
           childResourceList: item.childResourceList
         });
       }
+      list.sort((a, b) => a.sort - b.sort);
     });
   };
 
@@ -81,13 +82,25 @@ export function useRoleHook() {
             routerPath: row?.routerPath ?? ''
           },
           parentList: parentList,
-          onCloseDialog: (closeType?: string) => {3
+          onCloseDialog: (closeType?: string) => {
+            3;
             if (closeType) onSearch();
             closeDialog(options, index);
           }
         })
     });
   }
+
+  const cellRowClick = (_row, _column, e) => {
+    if (
+      e.currentTarget.firstElementChild.firstElementChild.firstElementChild
+        .tagName === 'DIV'
+    ) {
+      e.currentTarget.firstElementChild.firstElementChild.firstElementChild.click();
+    } else {
+      e.currentTarget.firstElementChild.firstElementChild.firstElementChild.nextElementSibling.click();
+    }
+  };
 
   onMounted(() => {
     onSearch();
@@ -98,6 +111,7 @@ export function useRoleHook() {
     columns,
     dataList,
     onSearch,
-    openRoleDialog
+    openRoleDialog,
+    cellRowClick
   };
 }
