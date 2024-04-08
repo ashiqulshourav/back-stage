@@ -36,6 +36,16 @@
             >
               {{ t('编辑') }}
             </el-button>
+            <el-button
+              v-if="userStore.userInfo.name === 'armour'"
+              class="reset-margin"
+              link
+              type="danger"
+              size="large"
+              @click="delMenu(row.id)"
+            >
+              {{ t('删除') }}
+            </el-button>
           </template>
         </pure-table>
       </template>
@@ -48,12 +58,21 @@ import { PureTableBar } from '@/components/RePureTableBar';
 import { useMenuManagerHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
+import { useUserStore } from '@/store/user';
 
 defineOptions({ name: 'SYSTEMMANAGER_MENUMANAGER' });
 const { tableHeaderStyle } = usePublicHooks();
+const userStore = useUserStore();
 
-const { loading, columns, dataList, onSearch, openRoleDialog, cellRowClick } =
-  useMenuManagerHook();
+const {
+  loading,
+  columns,
+  dataList,
+  onSearch,
+  openRoleDialog,
+  cellRowClick,
+  delMenu
+} = useMenuManagerHook();
 </script>
 
 <style scoped lang="scss">

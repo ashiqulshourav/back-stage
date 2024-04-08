@@ -2,6 +2,7 @@ import { message } from '@/utils/message';
 import editForm from '../form.vue';
 import { columns } from '../component/TableColumnList';
 import { addDialog, closeDialog } from '@/components/ReDialog';
+import { ElMessageBox } from 'element-plus';
 
 export function useMenuManagerHook() {
   const dataList = reactive<RoleAPI.ChildResourceList[]>([]);
@@ -61,6 +62,23 @@ export function useMenuManagerHook() {
     });
   };
 
+  //- 删除菜单
+  const delMenu = (id: string) => {
+    ElMessageBox.confirm(t('确定要删除菜单么？'), t('警告'), {
+      confirmButtonText: t('确认'),
+      cancelButtonText: t('取消'),
+      center: true
+    })
+      .then(async () => {
+        const res = await API.menuDel({ id });
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        !res.code && onSearch();
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+
   //- 角色弹窗
   function openRoleDialog(title: string, row?: RoleAPI.ChildResourceList) {
     addDialog({
@@ -112,6 +130,7 @@ export function useMenuManagerHook() {
     dataList,
     onSearch,
     openRoleDialog,
-    cellRowClick
+    cellRowClick,
+    delMenu
   };
 }

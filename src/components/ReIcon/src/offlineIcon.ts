@@ -39,14 +39,16 @@ import operateManager from "@iconify-icons/ep/files";
 import menuTree from '@iconify-icons/ri/list-unordered';
 import configCenter from '@iconify-icons/ri/settings-3-line';
 
-addIcon("dataManager", dataManager);
+addIcon("dataSourceManager", dataManager);
 addIcon("sale", sale);
 addIcon("settle", moneyDollarCircleFill);
+addIcon("SportsOperationsManagement", metadata);
+addIcon("ESportOperateManager", metadata);
 // addIcon("esportsSettlement", moneyDollarCircleFill);
 addIcon("metadata", metadata);
 // addIcon("systemManager", settle);
 addIcon("operateManager", operateManager);
-addIcon("systemManager", OperationLog);
+addIcon("systemManager", dataManager);
 addIcon("operationLog1", OperationLog);
 addIcon("menuTree", menuTree);
 addIcon("configCenter", configCenter);
