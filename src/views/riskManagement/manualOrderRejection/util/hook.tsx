@@ -26,7 +26,7 @@ import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { ElMessageBox } from 'element-plus';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
-import { addDialog, closeDialog } from '@/components/ReDialog';
+import { addDialog, closeDialog } from '@/components/ReDialog/index';
 
 export function useManualOrderRejectionHook() {
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);

@@ -94,7 +94,6 @@ export const SPORT_LIST_MAP: sport_list_map_type[] = [
     value: SPORT_NAME_TYPE.boxing,
     linkName: 'SETTLE_DETAIL_FOOTBALL_DETAIL'
   }
-
   // { label: t('特别项目'), value: 7, type: 'SpecialProjects' },
   // { label: t('电子竞技'), value: 4, type: 'FootBall' },
 ];

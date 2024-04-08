@@ -181,13 +181,13 @@ export function useLeague() {
             str = SPORT_ID_MAP.find(_ => +_.value === +data[column.prop as string]) ?.label ?? data.sportNameCn;
             break;
           case 'beginTime':
-            str = dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss');
+            str = data.beginTime?dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss'):'';
             break;
           case 'createTime':
-            str = dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss');
+            str = data.createTime?dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss'):'';
             break;
           case 'settleTime':
-            str = dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss');
+            str = data.settleTime?dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss'):'';
             break;
           case 'index':
             str = (i+1).toString()
