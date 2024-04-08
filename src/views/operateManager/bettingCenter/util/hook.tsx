@@ -7,7 +7,7 @@ import { utils, writeFile } from 'xlsx';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import editMatch from "../component/editMatch.vue";
 import { reactive, ref, onMounted, h } from 'vue';
-import PasswordInput from '@/components/PasswordInput/index.vue';
+import {usePasswordInputHook} from "@/hooks/passwordInputHook";
 
 import {
   markeTypeMap,
@@ -20,12 +20,12 @@ import { ElMessageBox } from "element-plus";
 import {copyTextToClipboard} from "@pureadmin/utils";
 import {t} from "@/plugins/i18n";
 export function useLeague() {
+  const {openPasswordInput}= usePasswordInputHook()
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<any>([]);
   const tenantObj = reactive<any>({});
   const UDialogFlag =  ref<Boolean>(false);
   const loading = ref(true);
-  const uDialogRef = ref(null)
   const totalInfo = reactive<BetOrderAPI.otherDataType>(
     {} as BetOrderAPI.otherDataType
   );
@@ -273,31 +273,17 @@ export function useLeague() {
         }
       )
         .then(async () => {
-          addDialog({
-            title: t('请输入U盾密码'),
-            class: 'reset_dialog',
-            width: '25%',
-            center: true,
-            closeOnClickModal: false,
-            hideFooter: true,
-            contentRenderer: ({ options, index }) =>
-                h(PasswordInput, {
-                  ref: uDialogRef,
-                  onCloseDialog: (_: boolean) => {
-                    closeDialog(options, index);
-                    setTimeout(()=>{
-                      const params:any={orderIds:[data.id]}
-                      API.orderCancel(params).then((res)=>{
-                        if (res.code) {
-                        } else {
-                          onSearch();
-                        }
-                        message(res.msg, { type: res.code ? 'error' : 'success' });
-                      });
-                    },500)
-                  }
-                })
-          });
+
+          openPasswordInput().then(()=>{
+            const params:any={orderIds:[data.id]}
+            API.orderCancel(params).then((res)=>{
+              if (res.code) {
+              } else {
+                onSearch();
+              }
+              message(res.msg, { type: res.code ? 'error' : 'success' });
+            });
+          })
 
         })
   }
@@ -337,27 +323,11 @@ const specialCountFlag = (status,billStatus,betResult):boolean=>{
 
 const switchDialog = (flag:boolean,row)=>{
     UDialogFlag.value=flag;
-
-    if(flag){
-        addDialog({
-          title: t('请输入U盾密码'),
-          class: 'reset_dialog',
-          width: '25%',
-          center: true,
-          closeOnClickModal: false,
-          hideFooter: true,
-          contentRenderer: ({ options, index }) =>
-              h(PasswordInput, {
-                ref: uDialogRef,
-                onCloseDialog: (_: boolean) => {
-                  closeDialog(options, index);
-                  setTimeout(() => {
-                    handleEditResult(row)
-                  }, 300);
-                }
-              })
-        });
-    }
+  if(flag){
+    openPasswordInput().then(()=>{
+      handleEditResult(row)
+    })
+  }
 }
 
   const editDialogRef = ref();
