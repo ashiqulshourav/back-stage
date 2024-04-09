@@ -8,6 +8,7 @@ import { addDialog, closeDialog } from '@/components/ReDialog';
 import editMatch from "../component/editMatch.vue";
 import { reactive, ref, onMounted, h } from 'vue';
 import PasswordInput from '@/components/PasswordInput/index.vue';
+import {usePasswordInputHook} from "@/hooks/passwordInputHook";
 
 import {
   markeTypeMap,
@@ -20,6 +21,7 @@ import { ElMessageBox } from "element-plus";
 import {copyTextToClipboard} from "@pureadmin/utils";
 import {t} from "@/plugins/i18n";
 export function useLeague() {
+  const {openPasswordInput}= usePasswordInputHook()
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<any>([]);
   const tenantObj = reactive<any>({});
@@ -301,6 +303,23 @@ export function useLeague() {
 
         })
   }
+  const handleCancelAll =()=>{
+    openPasswordInput().then(()=>{
+
+    })
+  }
+
+  const handleCancelRollbackAll =()=>{
+    openPasswordInput().then(()=>{
+
+    })
+  }
+  const handleApproveAll =()=>{
+    openPasswordInput().then(()=>{
+
+    })
+  }
+
 const getStatus = (status,billStatus,betResult,isReserve?)=>{
     let obj = {status:-1,bgColor:''}
   if(status==2&&billStatus===1&&(betResult===22||betResult===23)){   // 注单无效
@@ -416,5 +435,8 @@ function copyTest(str:string,tip:string){
     specialCountFlag,
     UDialogFlag,
     switchDialog,
+    handleCancelAll,
+    handleCancelRollbackAll,
+    handleApproveAll,
   };
 }

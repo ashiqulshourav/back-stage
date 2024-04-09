@@ -19,21 +19,26 @@
         <div class="flex item-center ">
           <el-button
             type="danger"
+            @click="handleCancelAll"
           >
             {{ t('全部划单') }}
           </el-button>
           <el-button
             type="primary"
+            @click="handleCancelRollbackAll"
           >
             {{ t('全部取消回滚') }}
           </el-button>
           <el-button
             type="primary"
+            @click="handleCancelAll"
           >
             {{ t('全部通过') }}
+
           </el-button>
           <el-button
             type="primary"
+            @click="handleApproveAll"
           >
             {{ t('导出注单') }}
           </el-button>
@@ -359,12 +364,12 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   exportFile,
-  handleCancel,
   getStatus,
   copyTest,
   tenantList,
-  specialCountFlag,
-  switchDialog,
+  handleCancelAll,
+  handleCancelRollbackAll,
+  handleApproveAll,
   tenantObj
 } = useLeague();
 </script>
@@ -431,11 +436,10 @@ const {
   min-height: 100px;
 }
 .cancel,.approve {
-  border: 1px solid green;
 width: 100px;
 }
 
 .operate {
-  width: 100px;
+  width: 110px;
 }
 </style>

@@ -273,7 +273,6 @@ export function useLeague() {
         }
       )
         .then(async () => {
-
           openPasswordInput().then(()=>{
             const params:any={orderIds:[data.id]}
             API.orderCancel(params).then((res)=>{
@@ -284,7 +283,6 @@ export function useLeague() {
               message(res.msg, { type: res.code ? 'error' : 'success' });
             });
           })
-
         })
   }
 const getStatus = (status,billStatus,betResult,isReserve?)=>{
@@ -350,8 +348,6 @@ const handleEditResult = (row)=>{
         }),
   });
 }
-
-
 function copyTest(str:string,tip:string){
         if(!str) return;
         const success = copyTextToClipboard(str.toString());
