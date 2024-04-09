@@ -349,7 +349,6 @@ import {
 } from '@/utils/formatMatch';
 import { betStatusMap } from './util/types';
 import { usePublicHooks } from '@/hooks';
-import {hasAuth} from "@/router/utils";
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
 

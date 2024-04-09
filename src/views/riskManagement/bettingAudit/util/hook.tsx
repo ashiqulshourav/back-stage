@@ -134,15 +134,15 @@ export function useLeague() {
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
       if (res.data !== null) {
-        dataList.push(...res.data.pageData);
+        dataList.push(...res?.data?.pageData);
         dataList.map((item: any, index) => {
           item.index = index + 1
 
         })
-        pagination.total = res.data.count;
-        pagination.pageSize = res.data.pageSize;
-        pagination.currentPage = res.data.pageNum;
-        Object.assign(totalInfo, res.data.otherData);
+        pagination.total = res?.data?.count;
+        pagination.pageSize = res?.data?.pageSize;
+        pagination.currentPage = res?.data?.pageNum;
+        Object.assign(totalInfo, res?.data?.otherData);
       }
       document
         .querySelector('.table_container .el-scrollbar__wrap')
@@ -156,7 +156,7 @@ export function useLeague() {
     const res =  await API.getTenantList()
     dataList.length = 0;
     if(res.data?.data?.length){
-      tenantList.push(...res.data.data);
+      tenantList.push(...res?.data?.data);
       // 将数组根据id转换为对象
       tenantList.map((item)=>{
         tenantObj[item.id] = item;
@@ -183,13 +183,13 @@ export function useLeague() {
             str = SPORT_ID_MAP.find(_ => +_.value === +data[column.prop as string]) ?.label ?? data.sportNameCn;
             break;
           case 'beginTime':
-            str = data.beginTime?dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss'):'';
+            str = data.beginTime?dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss'):'';
             break;
           case 'createTime':
-            str = data.createTime?dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss'):'';
+            str = data.createTime?dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss'):'';
             break;
           case 'settleTime':
-            str = data.settleTime?dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss'):'';
+            str = data.settleTime?dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss'):'';
             break;
           case 'index':
             str = (i+1).toString()
@@ -210,10 +210,10 @@ export function useLeague() {
             str = data.isSettlementAgain===1?'是':'否'
             break;
           case 'status':
-            str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult,data.isReserve).status]
+            str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult,data.isReserve)?.status]
             break;
           case 'billStatus':
-            str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult,data.isReserve).status]
+            str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult,data.isReserve)?.status]
             break;
           case 'settleScore':
             str=displayHomeAwayScore(data.settleScore,data.sportId)
@@ -234,10 +234,10 @@ export function useLeague() {
               str=data.seriesType===1?'单关':'串关';
               break;
           case 'tenantName':  //商户名
-            str=(tenantObj[data.tenantId]).tenantName??''
+            str=(tenantObj[data.tenantId])?.tenantName??''
             break;
           case 'tenantCode':  //商户编码
-              str=(tenantObj[data.tenantId]).name??''
+              str=(tenantObj[data.tenantId])?.name??''
               break;
           default:
             str = data[column.prop as string]
@@ -349,9 +349,9 @@ const getStatus = (status,billStatus,betResult,isReserve?)=>{
 }
 
 const specialCountFlag = (status,billStatus,betResult):boolean=>{
-  return getStatus(status,billStatus,betResult).status===betStatus.unsettlementBet||
-    getStatus(status,billStatus,betResult).status===betStatus.settlementBet||
-    getStatus(status,billStatus,betResult).status===betStatus.eventAbnormal
+  return getStatus(status,billStatus,betResult)?.status===betStatus.unsettlementBet||
+    getStatus(status,billStatus,betResult)?.status===betStatus.settlementBet||
+    getStatus(status,billStatus,betResult)?.status===betStatus.eventAbnormal
 }
 
 const switchDialog = (flag:boolean,row)=>{
