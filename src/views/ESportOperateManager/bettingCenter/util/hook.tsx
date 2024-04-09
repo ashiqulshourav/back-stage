@@ -27,7 +27,7 @@ import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { ElMessageBox } from 'element-plus';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
-export function useLeague() {
+export function useESportBettingHook() {
   const { openPasswordInput } = usePasswordInputHook();
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<any>([]);
@@ -165,7 +165,6 @@ export function useLeague() {
 
   const getTenantList = async () => {
     const res = await API.getTenantList();
-    dataList.length = 0;
     if (res.data?.data?.length) {
       tenantList.push(...res?.data?.data);
       // 将数组根据id转换为对象
