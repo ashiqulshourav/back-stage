@@ -13,6 +13,7 @@ import { utils, writeFile } from 'xlsx';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import editMatch from '../component/editMatch.vue';
 import { reactive, ref, onMounted, h } from 'vue';
+import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 
 import {
   markeTypeMap,
@@ -23,16 +24,9 @@ import {
 } from '@/utils/formatMatch';
 import dayjs from 'dayjs';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
-<<<<<<< HEAD
 import { ElMessageBox } from 'element-plus';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
-=======
-import { ElMessageBox } from "element-plus";
-import {copyTextToClipboard} from "@pureadmin/utils";
-import {t} from "@/plugins/i18n";
-import {usePasswordInputHook} from "@/hooks/passwordInputHook";
->>>>>>> dccd1b4727007aed4ed4e094e11ba9cbf6160e5b
 export function useLeague() {
   const { openPasswordInput } = usePasswordInputHook();
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
@@ -40,10 +34,6 @@ export function useLeague() {
   const tenantObj = reactive<any>({});
   const UDialogFlag = ref<Boolean>(false);
   const loading = ref(true);
-<<<<<<< HEAD
-  const uDialogRef = ref(null);
-=======
->>>>>>> dccd1b4727007aed4ed4e094e11ba9cbf6160e5b
   const totalInfo = reactive<BetOrderAPI.otherDataType>(
     {} as BetOrderAPI.otherDataType
   );
@@ -128,7 +118,7 @@ export function useLeague() {
         seriesDetailsSingle: '',
         seriesDetailsDuplex: '',
         seriesDetails: seriesDetails,
-        seriesType: +form.seriesType > 2 ? 2 : form.seriesType
+        seriesType: form.seriesType > 2 ? 2 : form.seriesType
       }),
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage,
@@ -156,14 +146,14 @@ export function useLeague() {
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
       if (res.data !== null) {
-        dataList.push(...res.data.pageData);
+        dataList.push(...res?.data?.pageData);
         dataList.map((item: any, index) => {
           item.index = index + 1;
         });
-        pagination.total = res.data.count;
-        pagination.pageSize = res.data.pageSize;
-        pagination.currentPage = res.data.pageNum;
-        Object.assign(totalInfo, res.data.otherData);
+        pagination.total = res.data?.count;
+        pagination.pageSize = res.data?.pageSize;
+        pagination.currentPage = res.data?.pageNum;
+        Object.assign(totalInfo, res.data?.otherData);
       }
       document
         .querySelector('.table_container .el-scrollbar__wrap')
@@ -177,7 +167,7 @@ export function useLeague() {
     const res = await API.getTenantList();
     dataList.length = 0;
     if (res.data?.data?.length) {
-      tenantList.push(...res.data.data);
+      tenantList.push(...res?.data?.data);
       // 将数组根据id转换为对象
       tenantList.map(item => {
         tenantObj[item.id] = item;
@@ -209,17 +199,17 @@ export function useLeague() {
             break;
           case 'beginTime':
             str = data.beginTime
-              ? dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss')
+              ? dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss')
               : '';
             break;
           case 'createTime':
             str = data.createTime
-              ? dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss')
+              ? dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss')
               : '';
             break;
           case 'settleTime':
             str = data.settleTime
-              ? dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss')
+              ? dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss')
               : '';
             break;
           case 'index':
@@ -238,7 +228,7 @@ export function useLeague() {
             str = markeTypeMap[data.marketType];
             break;
           case 'isSettlementAgain':
-            str = data.isSettlementAgain === 2 ? '是' : '否';
+            str = data.isSettlementAgain === 1 ? '是' : '否';
             break;
           case 'status':
             str =
@@ -248,7 +238,7 @@ export function useLeague() {
                   data.billStatus,
                   data.betResult,
                   data.isReserve
-                ).status
+                )?.status
               ];
             break;
           case 'billStatus':
@@ -259,7 +249,7 @@ export function useLeague() {
                   data.billStatus,
                   data.betResult,
                   data.isReserve
-                ).status
+                )?.status
               ];
             break;
           case 'settleScore':
@@ -316,36 +306,20 @@ export function useLeague() {
       type: 'success'
     });
   };
-<<<<<<< HEAD
   const handleCancel = (data: any) => {
     ElMessageBox.confirm(t('确定取消注单吗？'), t('警告'), {
       center: true,
       type: 'warning'
     }).then(async () => {
-      addDialog({
-        title: t('请输入U盾密码'),
-        class: 'reset_dialog',
-        width: '25%',
-        center: true,
-        closeOnClickModal: false,
-        hideFooter: true,
-        contentRenderer: ({ options, index }) =>
-          h(PasswordInput, {
-            ref: uDialogRef,
-            onCloseDialog: (_: boolean) => {
-              closeDialog(options, index);
-              setTimeout(() => {
-                const params: any = { orderIds: [data.id] };
-                API.orderCancel(params).then(res => {
-                  if (res.code) {
-                  } else {
-                    onSearch();
-                  }
-                  message(res.msg, { type: res.code ? 'error' : 'success' });
-                });
-              }, 500);
-            }
-          })
+      openPasswordInput().then(() => {
+        const params: any = { orderIds: [data.id] };
+        API.orderCancel(params).then(res => {
+          if (res.code) {
+          } else {
+            onSearch();
+          }
+          message(res.msg, { type: res.code ? 'error' : 'success' });
+        });
       });
     });
   };
@@ -387,92 +361,29 @@ export function useLeague() {
     } else if (status === 5) {
       // 赛事异常
       obj = { status: betStatus.eventAbnormal, bgColor: '#F88D48' };
-=======
-  const handleCancel = (data:any)=>{
-
-    ElMessageBox.confirm(
-        t('确定取消注单吗？'),
-        t('警告'),
-        {
-          center: true,
-          type: 'warning'
-        }
-    )
-        .then(async () => {
-          openPasswordInput().then(()=>{
-            const params:any={orderIds:[data.id]}
-            API.orderCancel(params).then((res)=>{
-              if (res.code) {
-              } else {
-                onSearch();
-              }
-              message(res.msg, { type: res.code ? 'error' : 'success' });
-            });
-          })
-        })
-  }
-const getStatus = (status,billStatus,betResult,isReserve?)=>{
-    let obj = {status:-1,bgColor:''}
-  if(status==2&&billStatus===1&&(betResult===22||betResult===23)){   // 注单无效
-    obj={status:betStatus.betInvalid,bgColor:'#E54752'}
-  }else if(status===1&&billStatus===1&&(betResult===21)){  // 预约失败
-    obj={status:betStatus.reserveFail,bgColor:'#F57582'}
-  }else if(status===0&&billStatus===0){  // 未结算
-    if(isReserve===1){ // 预约中
-      obj={status:betStatus.onReverse,bgColor:'#F57582'}
-    }else {
-      obj={status:betStatus.unsettlementBet,bgColor:'#FFC53D'}
->>>>>>> dccd1b4727007aed4ed4e094e11ba9cbf6160e5b
     }
     return obj;
   };
 
   const specialCountFlag = (status, billStatus, betResult): boolean => {
     return (
-      getStatus(status, billStatus, betResult).status ===
+      getStatus(status, billStatus, betResult)?.status ===
         betStatus.unsettlementBet ||
-      getStatus(status, billStatus, betResult).status ===
+      getStatus(status, billStatus, betResult)?.status ===
         betStatus.settlementBet ||
-      getStatus(status, billStatus, betResult).status ===
+      getStatus(status, billStatus, betResult)?.status ===
         betStatus.eventAbnormal
     );
   };
 
-<<<<<<< HEAD
   const switchDialog = (flag: boolean, row) => {
     UDialogFlag.value = flag;
-
     if (flag) {
-      addDialog({
-        title: t('请输入U盾密码'),
-        class: 'reset_dialog',
-        width: '25%',
-        center: true,
-        closeOnClickModal: false,
-        hideFooter: true,
-        contentRenderer: ({ options, index }) =>
-          h(PasswordInput, {
-            ref: uDialogRef,
-            onCloseDialog: (_: boolean) => {
-              closeDialog(options, index);
-              setTimeout(() => {
-                handleEditResult(row);
-              }, 300);
-            }
-          })
+      openPasswordInput().then(() => {
+        handleEditResult(row);
       });
     }
   };
-=======
-  const switchDialog = (flag:boolean,row)=>{
-    UDialogFlag.value=flag;
-    if(flag){
-      openPasswordInput().then(()=>{
-        handleEditResult(row)
-      })
-    }
-  }
->>>>>>> dccd1b4727007aed4ed4e094e11ba9cbf6160e5b
 
   const editDialogRef = ref();
   const handleEditResult = row => {
@@ -494,7 +405,6 @@ const getStatus = (status,billStatus,betResult,isReserve?)=>{
         })
     });
   };
-
   function copyTest(str: string, tip: string) {
     if (!str) return;
     const success = copyTextToClipboard(str.toString());

@@ -13,7 +13,7 @@ import { utils, writeFile } from 'xlsx';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import editMatch from '../component/editMatch.vue';
 import { reactive, ref, onMounted, h } from 'vue';
-import PasswordInput from '@/components/PasswordInput/index.vue';
+import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 
 import {
   markeTypeMap,
@@ -27,14 +27,13 @@ import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { ElMessageBox } from 'element-plus';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
-export function useESportBettingHook() {
+export function useLeague() {
+  const { openPasswordInput } = usePasswordInputHook();
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<any>([]);
   const tenantObj = reactive<any>({});
   const UDialogFlag = ref<Boolean>(false);
   const loading = ref(true);
-  const uDialogRef = ref(null);
-
   const totalInfo = reactive<BetOrderAPI.otherDataType>(
     {} as BetOrderAPI.otherDataType
   );
@@ -119,7 +118,7 @@ export function useESportBettingHook() {
         seriesDetailsSingle: '',
         seriesDetailsDuplex: '',
         seriesDetails: seriesDetails,
-        seriesType: +form.seriesType > 2 ? 2 : form.seriesType
+        seriesType: form.seriesType > 2 ? 2 : form.seriesType
       }),
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage,
@@ -147,12 +146,14 @@ export function useESportBettingHook() {
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
       if (res.data !== null) {
-        dataList.push(...res.data.pageData);
+        dataList.push(...res?.data?.pageData);
         dataList.map((item: any, index) => {
           item.index = index + 1;
         });
-        pagination.total = res.data.count;
-        Object.assign(totalInfo, res.data.otherData);
+        pagination.total = res.data?.count;
+        pagination.pageSize = res.data?.pageSize;
+        pagination.currentPage = res.data?.pageNum;
+        Object.assign(totalInfo, res.data?.otherData);
       }
       document
         .querySelector('.table_container .el-scrollbar__wrap')
@@ -164,8 +165,10 @@ export function useESportBettingHook() {
 
   const getTenantList = async () => {
     const res = await API.getTenantList();
+    dataList.length = 0;
     if (res.data?.data?.length) {
-      tenantList.push(...res.data.data);
+      tenantList.push(...res?.data?.data);
+      // 将数组根据id转换为对象
       tenantList.map(item => {
         tenantObj[item.id] = item;
       });
@@ -196,17 +199,17 @@ export function useESportBettingHook() {
             break;
           case 'beginTime':
             str = data.beginTime
-              ? dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss')
+              ? dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss')
               : '';
             break;
           case 'createTime':
             str = data.createTime
-              ? dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss')
+              ? dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss')
               : '';
             break;
           case 'settleTime':
             str = data.settleTime
-              ? dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss')
+              ? dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss')
               : '';
             break;
           case 'index':
@@ -225,7 +228,7 @@ export function useESportBettingHook() {
             str = markeTypeMap[data.marketType];
             break;
           case 'isSettlementAgain':
-            str = data.isSettlementAgain === 2 ? '是' : '否';
+            str = data.isSettlementAgain === 1 ? '是' : '否';
             break;
           case 'status':
             str =
@@ -235,7 +238,7 @@ export function useESportBettingHook() {
                   data.billStatus,
                   data.betResult,
                   data.isReserve
-                ).status
+                )?.status
               ];
             break;
           case 'billStatus':
@@ -246,7 +249,7 @@ export function useESportBettingHook() {
                   data.billStatus,
                   data.betResult,
                   data.isReserve
-                ).status
+                )?.status
               ];
             break;
           case 'settleScore':
@@ -308,30 +311,15 @@ export function useESportBettingHook() {
       center: true,
       type: 'warning'
     }).then(async () => {
-      addDialog({
-        title: t('请输入U盾密码'),
-        class: 'reset_dialog',
-        width: '25%',
-        center: true,
-        closeOnClickModal: false,
-        hideFooter: true,
-        contentRenderer: ({ options, index }) =>
-          h(PasswordInput, {
-            ref: uDialogRef,
-            onCloseDialog: (_: boolean) => {
-              closeDialog(options, index);
-              setTimeout(() => {
-                const params: any = { orderIds: [data.id] };
-                API.orderCancel(params).then(res => {
-                  if (res.code) {
-                  } else {
-                    onSearch();
-                  }
-                  message(res.msg, { type: res.code ? 'error' : 'success' });
-                });
-              }, 500);
-            }
-          })
+      openPasswordInput().then(() => {
+        const params: any = { orderIds: [data.id] };
+        API.orderCancel(params).then(res => {
+          if (res.code) {
+          } else {
+            onSearch();
+          }
+          message(res.msg, { type: res.code ? 'error' : 'success' });
+        });
       });
     });
   };
@@ -379,36 +367,20 @@ export function useESportBettingHook() {
 
   const specialCountFlag = (status, billStatus, betResult): boolean => {
     return (
-      getStatus(status, billStatus, betResult).status ===
+      getStatus(status, billStatus, betResult)?.status ===
         betStatus.unsettlementBet ||
-      getStatus(status, billStatus, betResult).status ===
+      getStatus(status, billStatus, betResult)?.status ===
         betStatus.settlementBet ||
-      getStatus(status, billStatus, betResult).status ===
+      getStatus(status, billStatus, betResult)?.status ===
         betStatus.eventAbnormal
     );
   };
 
   const switchDialog = (flag: boolean, row) => {
     UDialogFlag.value = flag;
-
     if (flag) {
-      addDialog({
-        title: t('请输入U盾密码'),
-        class: 'reset_dialog',
-        width: '25%',
-        center: true,
-        closeOnClickModal: false,
-        hideFooter: true,
-        contentRenderer: ({ options, index }) =>
-          h(PasswordInput, {
-            ref: uDialogRef,
-            onCloseDialog: (_: boolean) => {
-              closeDialog(options, index);
-              setTimeout(() => {
-                handleEditResult(row);
-              }, 300);
-            }
-          })
+      openPasswordInput().then(() => {
+        handleEditResult(row);
       });
     }
   };
@@ -433,7 +405,6 @@ export function useESportBettingHook() {
         })
     });
   };
-
   function copyTest(str: string, tip: string) {
     if (!str) return;
     const success = copyTextToClipboard(str.toString());
