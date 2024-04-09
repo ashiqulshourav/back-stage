@@ -13,7 +13,6 @@ import { utils, writeFile } from 'xlsx';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import editMatch from '../component/editMatch.vue';
 import { reactive, ref, onMounted, h } from 'vue';
-import PasswordInput from '@/components/PasswordInput/index.vue';
 
 import {
   markeTypeMap,
@@ -24,16 +23,27 @@ import {
 } from '@/utils/formatMatch';
 import dayjs from 'dayjs';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+<<<<<<< HEAD
 import { ElMessageBox } from 'element-plus';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
+=======
+import { ElMessageBox } from "element-plus";
+import {copyTextToClipboard} from "@pureadmin/utils";
+import {t} from "@/plugins/i18n";
+import {usePasswordInputHook} from "@/hooks/passwordInputHook";
+>>>>>>> dccd1b4727007aed4ed4e094e11ba9cbf6160e5b
 export function useLeague() {
+  const { openPasswordInput } = usePasswordInputHook();
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<any>([]);
   const tenantObj = reactive<any>({});
   const UDialogFlag = ref<Boolean>(false);
   const loading = ref(true);
+<<<<<<< HEAD
   const uDialogRef = ref(null);
+=======
+>>>>>>> dccd1b4727007aed4ed4e094e11ba9cbf6160e5b
   const totalInfo = reactive<BetOrderAPI.otherDataType>(
     {} as BetOrderAPI.otherDataType
   );
@@ -306,6 +316,7 @@ export function useLeague() {
       type: 'success'
     });
   };
+<<<<<<< HEAD
   const handleCancel = (data: any) => {
     ElMessageBox.confirm(t('确定取消注单吗？'), t('警告'), {
       center: true,
@@ -376,6 +387,42 @@ export function useLeague() {
     } else if (status === 5) {
       // 赛事异常
       obj = { status: betStatus.eventAbnormal, bgColor: '#F88D48' };
+=======
+  const handleCancel = (data:any)=>{
+
+    ElMessageBox.confirm(
+        t('确定取消注单吗？'),
+        t('警告'),
+        {
+          center: true,
+          type: 'warning'
+        }
+    )
+        .then(async () => {
+          openPasswordInput().then(()=>{
+            const params:any={orderIds:[data.id]}
+            API.orderCancel(params).then((res)=>{
+              if (res.code) {
+              } else {
+                onSearch();
+              }
+              message(res.msg, { type: res.code ? 'error' : 'success' });
+            });
+          })
+        })
+  }
+const getStatus = (status,billStatus,betResult,isReserve?)=>{
+    let obj = {status:-1,bgColor:''}
+  if(status==2&&billStatus===1&&(betResult===22||betResult===23)){   // 注单无效
+    obj={status:betStatus.betInvalid,bgColor:'#E54752'}
+  }else if(status===1&&billStatus===1&&(betResult===21)){  // 预约失败
+    obj={status:betStatus.reserveFail,bgColor:'#F57582'}
+  }else if(status===0&&billStatus===0){  // 未结算
+    if(isReserve===1){ // 预约中
+      obj={status:betStatus.onReverse,bgColor:'#F57582'}
+    }else {
+      obj={status:betStatus.unsettlementBet,bgColor:'#FFC53D'}
+>>>>>>> dccd1b4727007aed4ed4e094e11ba9cbf6160e5b
     }
     return obj;
   };
@@ -391,6 +438,7 @@ export function useLeague() {
     );
   };
 
+<<<<<<< HEAD
   const switchDialog = (flag: boolean, row) => {
     UDialogFlag.value = flag;
 
@@ -415,6 +463,16 @@ export function useLeague() {
       });
     }
   };
+=======
+  const switchDialog = (flag:boolean,row)=>{
+    UDialogFlag.value=flag;
+    if(flag){
+      openPasswordInput().then(()=>{
+        handleEditResult(row)
+      })
+    }
+  }
+>>>>>>> dccd1b4727007aed4ed4e094e11ba9cbf6160e5b
 
   const editDialogRef = ref();
   const handleEditResult = row => {
