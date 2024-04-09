@@ -35,6 +35,7 @@ export const roleData = {
 
   //- 菜单页面数据修改
   menuUpdate: (data: Partial<RoleAPI.ChildResourceList>) => http.request<RoleAPI.allPermissionResType>("post", "/kmg/matchResource/v1/update", { data }),
+  
   //- 菜单页面数据删除
   menuDel: (data: { id: number | string }) => http.request<RoleAPI.DelMenuRes>("post", "/kmg/matchResource/v1/delete", { data }),
 

@@ -119,7 +119,7 @@ export function useESportBettingHook() {
         seriesDetailsSingle: '',
         seriesDetailsDuplex: '',
         seriesDetails: seriesDetails,
-        seriesType: form.seriesType > 2 ? 2 : form.seriesType
+        seriesType: +form.seriesType > 2 ? 2 : form.seriesType
       }),
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage,
@@ -152,8 +152,6 @@ export function useESportBettingHook() {
           item.index = index + 1;
         });
         pagination.total = res.data.count;
-        pagination.pageSize = res.data.pageSize;
-        pagination.currentPage = res.data.pageNum;
         Object.assign(totalInfo, res.data.otherData);
       }
       document
@@ -166,10 +164,8 @@ export function useESportBettingHook() {
 
   const getTenantList = async () => {
     const res = await API.getTenantList();
-    dataList.length = 0;
     if (res.data?.data?.length) {
       tenantList.push(...res.data.data);
-      // 将数组根据id转换为对象
       tenantList.map(item => {
         tenantObj[item.id] = item;
       });
@@ -229,7 +225,7 @@ export function useESportBettingHook() {
             str = markeTypeMap[data.marketType];
             break;
           case 'isSettlementAgain':
-            str = data.isSettlementAgain === 1 ? '是' : '否';
+            str = data.isSettlementAgain === 2 ? '是' : '否';
             break;
           case 'status':
             str =
@@ -278,10 +274,10 @@ export function useESportBettingHook() {
             str = data.seriesType === 1 ? '单关' : '串关';
             break;
           case 'tenantName': //商户名
-            str = tenantObj[data.tenantId].tenantName ?? '';
+            str = tenantObj[data.tenantId]?.tenantName ?? '';
             break;
           case 'tenantCode': //商户编码
-            str = tenantObj[data.tenantId].name ?? '';
+            str = tenantObj[data.tenantId]?.name ?? '';
             break;
           default:
             str = data[column.prop as string];

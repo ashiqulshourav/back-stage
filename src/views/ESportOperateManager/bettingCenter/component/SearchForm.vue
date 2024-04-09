@@ -24,22 +24,6 @@
             />
           </el-select>
         </el-form-item>
-        <!-- <el-form-item :label="`${t('赛事类型')}:`" prop="category">
-          <el-select
-            v-model="form.category"
-            :placeholder="t('赛事类型')"
-            class="!w-[150px]"
-            @change="chagenMatchType"
-          >
-            <el-option :label="t('全部')" :value="' '" />
-            <el-option
-              :label="item.label"
-              :value="item.value"
-              v-for="item in SPORT_CATEGORY"
-              :key="item.value"
-            />
-          </el-select>
-        </el-form-item> -->
         <el-form-item :label="`${t('游戏种类')}:`" prop="sportId">
           <el-select
             v-model="form.sportId"
@@ -301,11 +285,7 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import type { FormInstance } from 'element-plus';
 import dayjs from 'dayjs';
 import { formatNumber } from '@/utils/formatNumber';
-import {
-  SPORT_ID_MAP,
-  ESPORT_ID_MAP,
-  SPORT_CATEGORY
-} from '@/utils/maps/sports_map';
+import { SPORT_ID_MAP, ESPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { searchFormType } from '../util/types';
 const props = defineProps<{
   loading: boolean;
@@ -340,12 +320,6 @@ const changeDate = t => {
     props.form.timeStart = dayjs(t[0]).startOf('day').valueOf();
     props.form.timeEnd = dayjs(t[1]).endOf('day').valueOf();
   }
-  search();
-};
-const chagenMatchType = (type: 0 | 1 | 2) => {
-  props.form.sportId = '';
-  //- 电竞比赛 =1
-  gameClassify.value = type === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
   search();
 };
 
