@@ -51,7 +51,6 @@ export function useLeague() {
           pageSize: pagination.pageSize,
           pageNum: pagination.currentPage
         },
-        getQueryUrl()
       );
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
