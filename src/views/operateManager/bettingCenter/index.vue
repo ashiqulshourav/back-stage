@@ -246,15 +246,17 @@
               <el-button
                   class="mb-1 w-100"
                   @click="handleCancel(row)"
+                  type="danger"
                   v-if="row.billStatus === 0 && hasAuth('CANCELBET')"
               >
-                {{ t('取消') }}
+                {{ t('取消注单') }}
               </el-button>
             </div>
             <div>
               <el-button
                   class="mb-1 w-100"
                   @click="switchDialog(true, row)"
+                  type="primary"
                   v-if="
                 specialCountFlag(
                   row.status,
