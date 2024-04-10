@@ -76,8 +76,6 @@ declare namespace RoleAPI {
     childResourceList: ChildResourceList[];
   }
 
-
-
   type addSysAccountReqType = COMMON.BASE_RES_TYPE<null>;
   type querySysAccountListResType = COMMON.BASE_RES_TYPE<querySysAccountListInfo>;
   type deleteSysAccountResType = COMMON.BASE_RES_TYPE<any>;

@@ -18,6 +18,7 @@ export type SearchFormType = {
   endTime: string;
   handicapStatus: number | string;
   status: number | string;
+  category: number | string;
 }
 
 export type EsportMatchRowType = {

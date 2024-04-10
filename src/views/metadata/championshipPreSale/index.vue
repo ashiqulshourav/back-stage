@@ -68,30 +68,12 @@
             />
           </template>
 
-          <template #overTimeAndPenaltyKickStatus="{ row, index, props }">
-            <el-switch
-              v-if="row.sportId === 1"
-              :size="props.size === 'small' ? 'small' : 'default'"
-              :loading="switchLoadMap[index]?.loading"
-              v-model="row.overTimeAndPenaltyKickStatus"
-              :active-value="true"
-              :inactive-value="false"
-              inline-prompt
-              :style="switchStyle"
-              @change="changeOverTimeStatus({ row, index })"
-            />
-            <span v-else>-</span>
-          </template>
-
           <template #saleHandicaps="{ row }: { row: SaleDataAPI.PreSaleList }">
             <span
               class="underline cursor-pointer"
               @click="openInfoDialog(row.matchId, row)"
               >{{ row.saleHandicaps }}/{{ row.allHandicaps }}</span
             >
-          </template>
-          <template #isNeutral="{ row }">
-            {{ row.isNeutral === 0 ? t('中立') : t('非中立') }}
           </template>
           <template #operation="{ row }">
             <el-button
@@ -116,7 +98,7 @@
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import EditPen from '@iconify-icons/ep/edit-pen';
-import { usePreSale } from './utils/hook';
+import { useChampionshipPreSaleHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import { columns } from './component/TableColumnList';
 import SearchForm from './component/SearchForm.vue';
@@ -133,9 +115,6 @@ const openInfoDialog = (matchId: number, row: SaleDataAPI.PreSaleList) => {
       row.allHandicaps === 0 ? t('赛事盘口未开售!') : t('请先解锁当前赛事!'),
       { type: 'error' }
     );
-  else if (row.homeTeamNameCn === row.awayTeamNameCn) {
-    return message(t('暂不支持冠军玩法!'), { type: 'error' });
-  }
   addDialog({
     title: t('盘口预览'),
     props: { matchId, matchInfo: row },
@@ -167,7 +146,6 @@ const {
   changeMatchCondition,
   locakMatch,
   unLocakMatch,
-  selectLockcList,
-  changeOverTimeStatus
-} = usePreSale();
+  selectLockcList
+} =useChampionshipPreSaleHook();
 </script>

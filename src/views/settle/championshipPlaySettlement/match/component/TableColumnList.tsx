@@ -3,10 +3,11 @@ import dayjs from 'dayjs';
 import {
   ESPORT_ID_MAP,
   ESPORT_MATCH_STATUS,
-  HANDICAP_STATUS
+  HANDICAP_STATUS,
+  SPORT_ID_MAP
 } from '@/utils/maps/sports_map';
 import { getLan } from '@/utils/utilFn';
-import { hasAuth } from '@/router/utils';
+import { parseCountry } from '@/utils/formatMatch';
 
 export const columns: TableColumnList = [
   {
@@ -16,43 +17,35 @@ export const columns: TableColumnList = [
     minWidth: 100
   },
   {
-    label: t('联赛名称'),
-    prop: 'leagueNameCn',
-    headerRenderer: d => handleTableWidth(d, t('联赛名称'), 'auto'),
-    formatter: ({ leagueNameCn }) => leagueNameCn || '-',
-    align: 'left',
-    minWidth: 200
-  },
-  {
-    label: t('联赛ID'),
-    prop: 'leagueId',
-    headerRenderer: d => handleTableWidth(d, t('联赛ID'), 'auto')
-  },
-  {
-    label: t('游戏ID'),
-    prop: 'sportId',
-    minWidth: 150,
-    headerRenderer: d => handleTableWidth(d, t('游戏ID'), 'auto')
-  },
-  {
-    label: t('游戏名称'),
+    label: t('比赛名称'),
     prop: 'matchName',
-    minWidth: 200,
-    formatter: ({ sportId }) =>
-      ESPORT_ID_MAP.find(_ => _.value === sportId)?.label ?? '-'
+    headerRenderer: d => handleTableWidth(d, t('比赛名称'), 'auto'),
+    formatter: ({ matchName }) => matchName || '-',
+    align: 'left',
+    minWidth: 300
+  },
+  {
+    label: t('游戏种类'),
+    prop: 'sportId',
+    headerRenderer: d => handleTableWidth(d, t('游戏种类'), 'auto'),
+    formatter: ({ sportId, category }) => {
+      const arr = category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
+      return arr.find(_ => _.value === sportId)?.label ?? '-';
+    },
+    minWidth: 120
   },
   {
     label: t('赛事ID'),
     prop: 'matchId',
-    headerRenderer: d => handleTableWidth(d, t('赛事ID'), 'auto'),
-    minWidth: 140
+    minWidth: 120,
+    headerRenderer: d => handleTableWidth(d, t('赛事ID'), 'auto')
   },
   {
-    label: t('比赛队伍'),
-    slot: 'matchTeam',
+    label: t('国家地区'),
+    prop: 'matchTeam',
     minWidth: 260,
-    headerRenderer: d => handleTableWidth(d, t('比赛队伍'), 'auto'),
-    align: 'left'
+    headerRenderer: d => handleTableWidth(d, t('国家地区'), 'auto'),
+    formatter: ({ countryId }) => parseCountry(countryId)
   },
   {
     label: t('开赛时间'),
@@ -60,8 +53,7 @@ export const columns: TableColumnList = [
     formatter: ({ beginTimeLong }) =>
       dayjs(beginTimeLong).format('YYYY-MM-DD HH:mm:ss'),
     headerRenderer: d => handleTableWidth(d, t('开赛时间'), 'auto'),
-    minWidth: 160,
-    align: 'left'
+    minWidth: 160
   },
   {
     label: t('赛事状态'),
@@ -70,16 +62,10 @@ export const columns: TableColumnList = [
     formatter: ({ status }) => ESPORT_MATCH_STATUS[status] ?? '-'
   },
   {
-    label: t('锁盘状态'),
-    prop: 'handicapStatus',
-    headerRenderer: d => handleTableWidth(d, t('锁盘状态'), 'auto'),
-    formatter: ({ handicapStatus }): string => HANDICAP_STATUS[handicapStatus],
-    minWidth: 150
-  },
-  {
-    label: t('锁盘控制'),
-    slot: 'handicapStatus',
-    headerRenderer: d => handleTableWidth(d, t('锁盘控制'), 'auto')
+    label: t('开售状态'),
+    headerRenderer: d => handleTableWidth(d, t('开售状态'), 'auto'),
+    minWidth: 180,
+    formatter: ({ isSale }) => (isSale === 0 ? t('关闭') : t('开售'))
   },
   {
     label: t('操作'),

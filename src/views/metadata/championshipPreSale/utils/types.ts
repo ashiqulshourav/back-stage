@@ -18,7 +18,7 @@ export type SearchFormType = {
   endTime: string;
   handicapStatus: number | string;
   category: number | string;
-  overTimeAndPenaltyKickStatus: boolean | null;
+  overTimeAndPenaltyKickStatus?: boolean | null;
 }
 
 export type {

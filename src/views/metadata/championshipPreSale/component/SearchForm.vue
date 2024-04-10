@@ -1,10 +1,10 @@
 <template>
   <div class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]">
     <el-form ref="formRef" :inline="true" :model="form">
-      <el-form-item :label="`${t('赛事类型')}:`" prop="category">
+      <el-form-item :label="`${t('联赛类型')}:`" prop="category">
         <el-select
           v-model="form.category"
-          :placeholder="t('赛事类型')"
+          :placeholder="t('联赛类型')"
           clearable
           class="!w-[150px]"
           @change="chagenMatchType"
@@ -36,7 +36,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="`${t('联赛')}:`" prop="leagueId">
+      <el-form-item :label="`${t('比赛名称')}:`" prop="leagueId">
         <el-select
           v-model="form.leagueId"
           clearable
@@ -108,51 +108,8 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item
-        :label="`${t('加时点球开售状态')}:`"
-        prop="overTimeAndPenaltyKickStatus"
-      >
-        <el-select
-          class="!w-[150px]"
-          v-model="form.overTimeAndPenaltyKickStatus"
-          clearable
-          :placeholder="t('请选择')"
-          @change="search"
-        >
-          <el-option :label="t('开启')" :value="true" />
-          <el-option :label="t('关闭')" :value="false" />
-        </el-select>
-      </el-form-item>
-
-      <el-form-item :label="`${t('比赛时间')}:`" prop="startTime">
-        <el-button
-          v-for="(item, index) in nextDayArr"
-          :key="index"
-          :type="selectIndex === index ? 'primary' : ''"
-          @click="changeSelectDate(index)"
-          >{{ item }}</el-button
-        >
-        <CustomDate
-          :placeholder="t('其他日期')"
-          :disableDate="disableDate"
-          v-model:val="form.startTime"
-          @changeDate="changeDate"
-          :isShowShortCuts="true"
-          :isSingle="true"
-        />
-      </el-form-item>
-
-      <el-form-item prop="endTime" class="!hidden">
-        <el-date-picker
-          class="ml-4"
-          v-model="form.endTime"
-          type="date"
-          :placeholder="t('其他日期')"
-          value-format="x"
-          format="YYYY-MM-DD"
-          :disabled-date="disableDate"
-          @change="changeDate"
-        />
+      <el-form-item :label="`${t('联赛比赛时间')}:`" prop="startTime">
+        <CustomDate v-model:val="selectDate" @changeDate="changeDate" />
       </el-form-item>
 
       <el-form-item>
@@ -180,7 +137,6 @@ import Refresh from '@iconify-icons/ep/refresh';
 import type { FormInstance } from 'element-plus';
 import { SearchFormType } from '../utils/types';
 import dayjs from 'dayjs';
-import { disableDate } from '@/utils/formatDate';
 import { useMatchStore } from '@/store/match';
 import { formatNumber } from '@/utils/formatNumber';
 import { debounce } from '@pureadmin/utils';
@@ -195,10 +151,10 @@ import {
 
 const formRef = ref();
 const emits = defineEmits(['onSearch', 'changeMatchCondition']);
-const selectIndex = ref(-1);
 const matchStore = useMatchStore();
 const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
 const searchLoading = ref(false);
+const selectDate = ref('');
 
 const props = withDefaults(
   defineProps<{
@@ -213,32 +169,20 @@ const changeDate = t => {
   if (!t) {
     props.form.startTime = '';
     props.form.endTime = '';
-    selectIndex.value = -1;
   } else {
-    const d = dayjs(t).format('YYYY-MM-DD');
-    selectIndex.value = nextDayArr.value.findIndex(_ => _ === d);
-    props.form.startTime = dayjs(t).format('YYYY-MM-DD HH:mm:ss');
-    props.form.endTime = dayjs(t).endOf('day').format('YYYY-MM-DD HH:mm:ss');
+    props.form.startTime = dayjs(t[0]).format('YYYY-MM-DD HH:mm:ss');
+    props.form.endTime = dayjs(t[1]).endOf('day').format('YYYY-MM-DD HH:mm:ss');
   }
   search();
 };
 
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
-  selectIndex.value = -1;
+  selectDate.value = '';
+  props.form.startTime = '';
+  props.form.endTime = '';
   gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
   emits('onSearch', ...['reload']);
-};
-
-const changeSelectDate = (_: number) => {
-  selectIndex.value = _;
-  props.form.startTime = dayjs(nextDayArr.value[_])
-    .startOf('day')
-    .format('YYYY-MM-DD HH:mm:ss');
-  props.form.endTime = dayjs(nextDayArr.value[_])
-    .endOf('day')
-    .format('YYYY-MM-DD HH:mm:ss');
-  search();
 };
 
 const search = () => {
@@ -250,14 +194,6 @@ const chagenMatchType = (type: 0 | 1 | 2) => {
   gameClassify.value = type === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
   search();
 };
-
-const nextDayArr = computed(() => {
-  const nextDayList = [];
-  for (let i = 0; i < 5; i++) {
-    nextDayList.push(dayjs().add(i, 'day').format('YYYY-MM-DD'));
-  }
-  return nextDayList;
-});
 </script>
 
 <style scoped lang="scss">

@@ -1,7 +1,42 @@
 <template>
   <div class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]">
     <el-form ref="formRef" :inline="true" :model="form">
-      <el-form-item :label="`${t('联赛')}:`" prop="leagueId">
+      <el-form-item :label="`${t('联赛类型')}:`" prop="category">
+        <el-select
+          v-model="form.category"
+          :placeholder="t('联赛类型')"
+          clearable
+          class="!w-[150px]"
+          @change="chagenMatchType"
+        >
+          <el-option
+            :label="item.label"
+            :value="item.value"
+            v-for="item in SPORT_CATEGORY"
+            :key="item.value"
+          />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item :label="`${t('游戏种类')}:`" prop="sportId">
+        <el-select
+          v-model="form.sportId"
+          :placeholder="t('游戏种类')"
+          clearable
+          class="!w-[150px]"
+          @change="search"
+        >
+          <el-option
+            :label="item.label"
+            :value="item.value"
+            :loading="searchLoading"
+            v-for="item in gameClassify"
+            :key="item.value"
+          />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item :label="`${t('比赛名称')}:`" prop="leagueId">
         <el-select
           v-model="form.leagueId"
           clearable
@@ -10,7 +45,12 @@
           @change="search"
           :remote-method="
             debounce(
-              query => matchStore.search_league_list(query, form.sportId, 1),
+              query =>
+                matchStore.search_league_list(
+                  query,
+                  form.sportId,
+                  form.category as LeagueClassifyType
+                ),
               1000
             )
           "
@@ -19,7 +59,9 @@
           :loading="matchStore.matchSearchLoading"
         >
           <el-option
-            v-for="item in matchStore.esportLeagueList"
+            v-for="item in form.category === 0
+              ? matchStore.sportLeagueList
+              : matchStore.esportLeagueList"
             :key="item.leagueId"
             :label="item.leagueNameCn"
             :value="item.leagueId"
@@ -27,35 +69,31 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="`${t('游戏名称')}:`" prop="gameName">
-        <el-select
-          v-model="form.sportId"
-          filterable
-          clearable
-          class="!w-[210px]"
-          :placeholder="t('请选择游戏')"
-        >
-          <el-option
-            v-for="item in ESPORT_ID_MAP"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </el-form-item>
-
       <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
         <el-input
           v-model="form.matchId"
-          :placeholder="t('请输入赛事ID')"
+          :placeholder="t('赛事ID')"
           v-enter="search"
           clearable
           :formatter="v => formatNumber(v)"
-          class="!w-[180px]"
+          class="!w-[150px]"
         />
       </el-form-item>
 
-      <el-form-item :label="`${t('锁盘状态')}:`" prop="handicapStatus">
+      <el-form-item :label="`${t('开售状态')}:`" prop="isSale">
+        <el-select
+          class="!w-[150px]"
+          v-model="form.isSale"
+          clearable
+          :placeholder="t('请选择')"
+          @change="search"
+        >
+          <el-option :label="t('开售')" :value="1" />
+          <el-option :label="t('未开售')" :value="0" />
+        </el-select>
+      </el-form-item>
+      <!-- 
+      <el-form-item :label="`${t('盘口状态')}:`" prop="handicapStatus">
         <el-select
           class="!w-[150px]"
           v-model="form.handicapStatus"
@@ -63,13 +101,12 @@
           :placeholder="t('请选择')"
           @change="search"
         >
-          <el-option
-            :label="item"
-            :value="index"
-            v-for="(item, index) in HANDICAP_STATUS"
-          />
+          <el-option :label="t('未开售')" :value="0" />
+          <el-option :label="t('早盘')" :value="1" />
+          <el-option :label="t('滚球')" :value="2" />
+          <el-option :label="t('进行中')" :value="3" />
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
 
       <el-form-item :label="`${t('赛事状态')}:`" prop="status">
         <el-select
@@ -87,19 +124,8 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="`${t('日期选择')}:`" prop="startTime">
-        <!--  :disabled-date="disableDate" -->
-        <!-- <el-date-picker
-          class="ml-4 !w-[260px]"
-          v-model="time"
-          :start-placeholder="t('开始日期')"
-          :end-placeholder="t('结束如期')"
-          type="daterange"
-          value-format="x"
-          format="YYYY-MM-DD"
-          @change="changeDate"
-        /> -->
-        <CustomDate v-model:val="time" @changeDate="changeDate" />
+      <el-form-item :label="`${t('联赛比赛时间')}:`" prop="startTime">
+        <CustomDate v-model:val="selectDate" @changeDate="changeDate" />
       </el-form-item>
 
       <el-form-item>
@@ -129,19 +155,24 @@ import { SearchFormType } from '../utils/types';
 import dayjs from 'dayjs';
 import { useMatchStore } from '@/store/match';
 import { formatNumber } from '@/utils/formatNumber';
+import { debounce } from '@pureadmin/utils';
 import CustomDate from '@/components/Form/Custom_date.vue';
 
 import {
-  ESPORT_ID_MAP,
-  HANDICAP_STATUS,
-  ESPORT_MATCH_STATUS
+  SPORT_ID_MAP,
+  SPORT_CATEGORY,
+  LeagueClassifyType,
+  ESPORT_MATCH_STATUS,
+  ESPORT_ID_MAP
 } from '@/utils/maps/sports_map';
-import { debounce } from '@pureadmin/utils';
 
 const formRef = ref();
 const emits = defineEmits(['onSearch', 'changeMatchCondition']);
 const matchStore = useMatchStore();
-const time = ref('');
+const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
+const searchLoading = ref(false);
+const selectDate = ref('');
+
 const props = withDefaults(
   defineProps<{
     loading: boolean;
@@ -162,15 +193,23 @@ const changeDate = t => {
   search();
 };
 
-const resetForm = (_formEl: FormInstance | undefined) => {
-  Object.keys(props.form).forEach(key => (props.form[key] = ''));
-  time.value = '';
-  // formEl.resetFields();
+const resetForm = (formEl: FormInstance | undefined) => {
+  formEl.resetFields();
+  selectDate.value = '';
+  props.form.startTime = '';
+  props.form.endTime = '';
+  gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
   emits('onSearch', ...['reload']);
 };
 
 const search = () => {
   emits('onSearch', ...['reload']);
+};
+
+const chagenMatchType = (type: 0 | 1 | 2) => {
+  props.form.sportId = '';
+  gameClassify.value = type === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
+  search();
 };
 </script>
 
@@ -184,3 +223,4 @@ const search = () => {
   }
 }
 </style>
+@/utils/formatDate

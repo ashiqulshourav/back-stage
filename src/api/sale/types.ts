@@ -106,7 +106,70 @@ declare namespace SaleDataAPI {
     ctid: number;
   };
 
+  type HandicapList = {
+    betItemsId: number;
+    sportId: number;
+    leagueId: number;
+    matchId: number;
+    kindsCode: string;
+    betItemsName: string;
+    betItemsNameEn?: any;
+    sourceCode: string;
+    sourceBetItemsId: number;
+    sourceBetItemsMid: number;
+    homeOrAway: string;
+    handicap: string;
+    n: string;
+    handicapEn?: any;
+    odds: number;
+    isSale: number;
+    displayIndex: number;
+    handicapIndex: number;
+    handicapItemIndex: number;
+    oddsType: string;
+    handicapFilter?: any;
+    ctid: number;
+    win?: any;
+  }
+
+  type ChampionBetItemsListData = {
+    betItemsId?: any;
+    betItemList?: any;
+    sportId?: any;
+    leagueId?: any;
+    matchId: number;
+    matchIdList?: any;
+    kindsCode: string;
+    betItemsName: string;
+    betItemsNameEn?: any;
+    sourceCode?: any;
+    sourceBetItemsId?: any;
+    sourceBetItemsMid?: number;
+    homeOrAway?: any;
+    handicap?: any;
+    handicapEn?: any;
+    odds?: any;
+    isSale: number;
+    displayIndex?: any;
+    handicapIndex?: any;
+    handicapItemIndex?: any;
+    oddsType?: any;
+    handicapFilter?: any;
+    ctid?: any;
+    win?: any;
+    eventTime?: any;
+    pageSize: number;
+    pageNum: number;
+    id?: any;
+    settleStatus?: any;
+    updatedAt?: any;
+    handicapList: HandicapList[];
+  }
+
+
+
   type getBetItemsListResType = COMMON.BASE_RES_TYPE<getBetItemsListDataType[]>;
+  type getChampionBetItemsListResType = COMMON.BASE_RES_TYPE<ChampionBetItemsListData[]>;
   type saleBetItemsResType = COMMON.BASE_RES_TYPE<any>;
 
   type PreSaleListRes = COMMON.BASE_RES_TYPE<PreSaleListData>;

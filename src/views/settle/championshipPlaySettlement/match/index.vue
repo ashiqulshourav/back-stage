@@ -34,19 +34,6 @@
             <span>{{ row.awayTeamNameCn }}</span>
           </template>
 
-          <!-- -锁盘按钮 -->
-          <template #handicapStatus="{ row, index, props }">
-            <el-switch
-              :size="props.size === 'small' ? 'small' : 'default'"
-              v-model="row.handicapStatus"
-              :active-value="0"
-              :inactive-value="1"
-              inline-prompt
-              :style="switchStyle"
-              @change="changeSwitch({ row, index })"
-            />
-          </template>
-
           <template #operation="{ row }: EsportMatchRowType">
             <el-button
               v-if="hasAuth('CHAMPIONSHIPDETAILS')"
@@ -78,7 +65,7 @@
 
 <script setup lang="tsx">
 import { PureTableBar } from '@/components/RePureTableBar';
-import { useEsportSettlement } from './utils/hook';
+import { useChampionshipPlaySettlementHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import { columns } from './component/TableColumnList';
 import SearchForm from './component/SearchForm.vue';
@@ -97,11 +84,9 @@ const {
   handleTableWidthChange,
   handleCurrentChange,
   handleSelectionChange,
-  changeSwitch,
   searchForm,
-  switchStyle,
   matchCondition,
   changeMatchCondition,
   cancelClick
-} = useEsportSettlement();
+} = useChampionshipPlaySettlementHook();
 </script>

@@ -1,117 +1,66 @@
 <template>
-  <div class="flex flex-col pl-10 pr-10">
-    <div class="mb-3">
-      <span>{{ matchInfo.leagueNameCn }}</span>
-      <span class="ml-4">
-        {{ dayjs(matchInfo.beginTimeLong).format('YYYY-MM-DD HH:mm:ss') }}</span
-      >
-    </div>
+  <div class="flex flex-col pl-10 pr-10 min-h-96">
     <div class="mb-3 flex justify-between">
-      <span
-        >{{ matchInfo.homeTeamNameCn }} VS {{ matchInfo.awayTeamNameCn }}</span
-      >
-      <span
-        >{{ t('开售盘口/总盘口数:') }} {{ openLen }} /
-        {{ matchInfo.allHandicaps }}</span
-      >
+      <div>
+        <span>{{ matchInfo.leagueNameCn }}</span>
+        <span class="ml-4">
+          {{
+            dayjs(matchInfo.beginTimeLong).format('YYYY-MM-DD HH:mm:ss')
+          }}</span
+        >
+      </div>
+      <div class="mb-3 flex justify-between">
+        <span
+          >{{ t('开售盘口/总盘口数:') }} {{ matchInfo.saleHandicaps }} /
+          {{ matchInfo.allHandicaps }}</span
+        >
+      </div>
     </div>
+
     <el-tabs v-model="activeName" type="border-card">
       <el-tab-pane
-        :label="o.value"
+        :label="o.betItemsName"
         :name="index"
-        v-for="(o, index) in mData"
+        v-for="(o, index) in renderList"
         :key="index"
       >
-        <template v-if="o.formatList.length">
-          <el-collapse v-model="colActiveNames" @change="handleChange">
-            <el-collapse-item
-              :title="_[0][0].betItemsName"
-              :name="i"
-              v-for="(_, i) in o.formatList"
-              :key="i"
+        <div
+          :class="['flex items-center justify-between']"
+          v-if="o.handicapList.length"
+        >
+          <div class="flex-grow mb-1 w-1/4">
+            <el-button
+              class="text-center flex justify-between break_word w-1/5"
+              v-for="(d, idx) in o.handicapList"
+              :key="idx"
             >
-              <div
-                v-for="cItem in _"
-                :key="cItem.sourceBetItemsId"
-                class="flex items-center justify-between"
+              <span
+                class="text-ellipsis overflow-hidden whitespace-nowrap max-w-[60%]"
               >
-                <div class="flex flex-wrap flex-grow">
-                  <template
-                    v-if="
-                      cItem[0].sourceCode !== 'FT_CS' &&
-                      cItem[0].sourceCode !== 'HT_CS'
-                    "
-                  >
-                    <el-button
-                      class="flex-grow text-center flex justify-between w-1/4 mb-1 break_word"
-                      v-for="s in cItem"
-                      :key="s.sourceBetItemsId"
-                    >
-                      <span
-                        class="text-ellipsis overflow-hidden whitespace-nowrap max-w-[33%]"
-                        v-if="
-                          ['S1_AH', 'S2_AH', 'FTS_AH'].includes(s.sourceCode) &&
-                          matchInfo.sportId === 3
-                        "
-                      >
-                        {{ nameMap[s.homeOrAway] }}
-                      </span>
-                      <span v-else>
-                        {{
-                          s.n
-                            ? s.n
-                            : PLAY_MATCH(s.sourceCode)[
-                                s.homeOrAway || s.handicap
-                              ] ?? s.handicap
-                        }}
-                      </span>
-                      <span
-                        v-if="!PLAY_MATCH(s.sourceCode).hideMiddle && !s.n"
-                        >{{ s.handicap }}</span
-                      >
-                      <span>{{ s.odds.toFixed(2) }}</span>
-                    </el-button>
-                  </template>
-                  <template v-else>
-                    <el-button
-                      :class="[
-                        'flex-grow text-center flex justify-between w-1/4 flex-shrink ',
-                        s ? 'visible' : 'invisible'
-                      ]"
-                      v-for="(s, idx) in cItem"
-                      :key="idx"
-                    >
-                      <template v-if="s">
-                        <span>{{ s.handicap }}</span>
-                        <span>{{ s.odds.toFixed(2) }}</span>
-                      </template>
-                    </el-button>
-                  </template>
-                </div>
-
-                <div
-                  class="h-8 flex justify-center items-center cursor-pointer ml-3"
-                >
-                  <el-popconfirm
-                    :title="t('是否确认修改锁盘状态?')"
-                    @confirm="upateLockStatus(cItem)"
-                  >
-                    <template #reference>
-                      <IconifyIconOffline
-                        :icon="cItem[0].isSale === 2 ? 'unlock' : 'lock'"
-                      />
-                    </template>
-                  </el-popconfirm>
-                </div>
-              </div>
-            </el-collapse-item>
-          </el-collapse>
-        </template>
-        <template v-else>
-          <div v-loading="isLoading">
-            <el-empty :description="t('暂无数据')" :image-size="100" />
+                {{ d.handicap }}
+              </span>
+              <span>
+                {{ d.odds }}
+              </span>
+            </el-button>
           </div>
-        </template>
+          <div class="h-8 flex justify-center items-center cursor-pointer ml-3">
+            <el-popconfirm
+              :title="t('是否确认修改锁盘状态?')"
+              @confirm="upateLockStatus(o.handicapList)"
+            >
+              <template #reference>
+                <IconifyIconOffline
+                  style="font-size: 20px"
+                  :icon="o.handicapList[0].isSale === 2 ? 'unlock' : 'lock'"
+                />
+              </template>
+            </el-popconfirm>
+          </div>
+        </div>
+        <div v-else v-loading="isLoading">
+          <el-empty :description="t('暂无数据')" :image-size="100" />
+        </div>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -120,124 +69,45 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import { ref } from 'vue';
-import { PLAY_MATCH, transferBoDan } from '@/utils/maps/sports_map';
 import dayjs from 'dayjs';
 import { message } from '@/utils/message';
 
-const activeName = ref('0');
-const colActiveNames = ref([0]);
+const activeName = ref(0);
 const timer = ref();
-const openLen = ref(0);
 const isLoading = ref(true);
 
-interface IMData {
-  [key: number]: {
-    formatList: any[];
-    value: string;
-  };
-}
+const renderList = reactive<SaleDataAPI.ChampionBetItemsListData[]>([]);
 
 const props = withDefaults(
   defineProps<{ matchId: number; matchInfo: SaleDataAPI.PreSaleList }>(),
   {}
 );
 
-const nameMap = computed(() => {
-  return {
-    Home: props.matchInfo.homeTeamNameCn,
-    Away: props.matchInfo.awayTeamNameCn
-  };
-});
-
-const mData = reactive<IMData>({} as IMData);
-
 onMounted(() => {
-  if (props.matchInfo.sportId === 1) {
-    Object.assign(mData, {
-      0: { formatList: [], value: t('进球玩法') },
-      1: { formatList: [], value: t('角球玩法') },
-      2: { formatList: [], value: t('罚牌玩法') },
-      3: { formatList: [], value: t('加时赛进球') },
-      4: { formatList: [], value: t('加时赛角球') },
-      5: { formatList: [], value: t('点球大战') },
-      6: { formatList: [], value: t('点球大战-独赢') }
-    });
-  } else {
-    Object.assign(mData, {
-      0: { formatList: [], value: t('全部玩法') }
-    });
-  }
   getBetItemsList();
-  runGetBetItemsList();
 });
 
-const runGetBetItemsList = () => {
-  // timer.value = setInterval(getBetItemsList, 5000);
-};
-
+//- 获取冠军盘口列表
 const getBetItemsList = async () => {
   isLoading.value = true;
-  const res: SaleDataAPI.getBetItemsListResType = await API.getBetItemsList({
-    matchId: props.matchId
-  });
+  const res = await API.getChampionBetItemsList({ matchId: props.matchId });
   if (res.code) return;
-  Object.keys(mData).forEach(key => (mData[key].formatList.length = 0));
-  openLen.value = 0;
-  res.data.forEach(item => {
-    item.source_handicap = item.handicap;
-    item.isSale === 2 && (openLen.value += 1);
-    if (mData[item.ctid]) {
-      mData[item.ctid].formatList.push(item);
-    } else if (props.matchInfo.sportId !== 1) {
-      mData[0].formatList.push(item);
-    } else {
-      if (item.ctid >= 12 && item.ctid <= 21) mData[0].formatList.push(item);
-      if (item.ctid >= 81 && item.ctid <= 83) mData[3].formatList.push(item);
-    }
-  });
-
-  Object.values(mData).forEach(d => {
-    const o = {};
-    d.formatList
-      .sort((a, b) => a.displayIndex - b.displayIndex)
-      .forEach(item => {
-        if (!o[item.kindsCode]) o[item.kindsCode] = [];
-        o[item.kindsCode].push(item);
-      });
-    d.formatList = Object.values(o)
-      .map((_: SaleDataAPI.getBetItemsListDataType[]) => {
-        const o1 = {};
-        _.forEach((h: SaleDataAPI.getBetItemsListDataType) => {
-          if (!o1[h.sourceBetItemsMid]) o1[h.sourceBetItemsMid] = [];
-          o1[h.sourceBetItemsMid].push(h);
-        });
-        if (_[0].kindsCode === 'FT_CS' || _[0].kindsCode === 'HT_CS') {
-          const arr = transferBoDan(_);
-          const chunkSize = 3;
-          const result = Array.from(
-            { length: Math.ceil(arr.length / chunkSize) },
-            (_, i) => arr.slice(i * chunkSize, i * chunkSize + chunkSize)
-          );
-          return result;
-        } else {
-          return Object.values(o1);
-        }
-      })
-      .sort((a, b) => a.length - b.length);
-  });
+  if (res.data.length) {
+    renderList.length = 0;
+    renderList.push(...res.data);
+  }
   isLoading.value = false;
 };
 
 const emits = defineEmits(['reloadTable']);
-const upateLockStatus = async (
-  cItem: SaleDataAPI.getBetItemsListDataType[]
-) => {
+
+const upateLockStatus = async (cItem: SaleDataAPI.HandicapList[]) => {
   try {
     const params = {
       matchId: cItem[0].matchId,
       betItemList: cItem
         .filter(_ => _)
-        .map(_ => `${_.betItemsId}_${_.source_handicap}`)
+        .map(_ => `${_.betItemsId}_${_.handicap}`)
     };
     const res: SaleDataAPI.saleBetItemsResType =
       cItem[0].isSale === 2
@@ -252,15 +122,9 @@ const upateLockStatus = async (
   }
 };
 
-/* const handleClick = (tab: TabsPaneContext, event: Event) => {
-  // console.log(tab, event);
-}; */
-
 onUnmounted(() => {
   timer.value && clearInterval(timer.value);
 });
-
-const handleChange = () => {};
 </script>
 
 <style lang="scss" scoped>

@@ -8,7 +8,7 @@ import { usePublicHooks } from '@/hooks';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import dayJs from 'dayjs';
 
-export function usePreSale() {
+export function useChampionshipPreSaleHook() {
   const formRef = ref();
   const dataList = reactive<SaleDataAPI.PreSaleList[]>([]);
   const loading = ref(true);
@@ -33,8 +33,7 @@ export function usePreSale() {
     leagueNameCn: '',
     leagueId: '',
     handicapStatus: '',
-    category: 0,
-    overTimeAndPenaltyKickStatus: null
+    category: 0
   });
 
   function changeSwitch({
@@ -123,8 +122,7 @@ export function usePreSale() {
           matchName: row?.matchName ?? '',
           beginTime: row?.beginTime ?? '',
           level: row?.level ?? '',
-          countryId: row?.countryId ?? '',
-          overTimeAndPenaltyKickStatus: row?.overTimeAndPenaltyKickStatus ?? ''
+          countryId: row?.countryId ?? ''
         }
       },
       width: '40%',
@@ -155,6 +153,7 @@ export function usePreSale() {
     });
   };
 
+  //-更新开售状态
   const updateSaleList = async (curData, cb) => {
     const res = await API.updateMatch(curData);
     message(res.msg, { type: res.code ? 'error' : 'success' });
@@ -166,7 +165,7 @@ export function usePreSale() {
   const onSearch = async (type?: 'reload') => {
     if (type === 'reload') pagination.currentPage = 1;
     loading.value = true;
-    const res: SaleDataAPI.PreSaleListRes = await API.getPreSaleList({
+    const res: SaleDataAPI.PreSaleListRes = await API.getChampionPreSaleList({
       ...removeEmptyStringKeys(searchForm),
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage,
@@ -177,8 +176,6 @@ export function usePreSale() {
     dataList.length = 0;
     dataList.push(...res.data.list);
     pagination.total = res.data.total;
-    pagination.pageSize = res.data.pageSize;
-    pagination.currentPage = res.data.pageNum;
   };
   const resetForm = formEl => {
     if (!formEl) return;
@@ -188,43 +185,6 @@ export function usePreSale() {
   const changeMatchCondition = (n: number) => {
     matchCondition.value = n;
     onSearch('reload');
-  };
-
-  //- 开启关闭加时赛点球大战
-  const changeOverTimeStatus = ({
-    row
-  }: {
-    row: SaleDataAPI.PreSaleList;
-    index: number;
-  }) => {
-    ElMessageBox.confirm(
-      row.isSale
-        ? t(`确定要开启加时赛/点球大战么?`)
-        : t('确定要关闭加时赛/点球大战么？'),
-      t('系统提示'),
-      {
-        confirmButtonText: t('确定'),
-        cancelButtonText: t('取消'),
-        type: 'warning',
-        center: true,
-        dangerouslyUseHTMLString: true,
-        draggable: true
-      }
-    )
-      .then(async () => {
-        const res = await API.updateMatch({
-          overTimeAndPenaltyKickStatus: row.overTimeAndPenaltyKickStatus,
-          matchId: row.matchId
-        });
-        message(res.msg, { type: res.code ? 'error' : 'success' });
-        if (!res.code) onSearch();
-      })
-      .catch(
-        () =>
-          (row.overTimeAndPenaltyKickStatus = row.overTimeAndPenaltyKickStatus
-            ? false
-            : true)
-      );
   };
 
   onMounted(() => {
@@ -250,7 +210,6 @@ export function usePreSale() {
     changeMatchCondition,
     locakMatch,
     selectLockcList,
-    unLocakMatch,
-    changeOverTimeStatus
+    unLocakMatch
   };
 }

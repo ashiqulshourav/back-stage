@@ -8,11 +8,9 @@ import { addDialog, closeDialog } from '@/components/ReDialog';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 
-export function useEsportSettlement() {
+export function useChampionshipPlaySettlementHook() {
   const dataList = reactive<EsportsSettlementAPI.ESportMatchList[]>([]);
   const loading = ref(true);
-  const allSaleSatatus = ref(0);
-  const { switchStyle } = usePublicHooks();
   const matchCondition = ref(1);
   const selectLockcList = reactive<SaleDataAPI.PreSaleList[]>([]);
   const pagination = reactive<PaginationProps>({
@@ -31,43 +29,9 @@ export function useEsportSettlement() {
     leagueNameCn: '',
     leagueId: '',
     handicapStatus: '',
-    status: ''
+    status: '',
+    category: ''
   });
-
-  //- 锁盘switch点击
-  function changeSwitch({
-    row
-  }: {
-    row: SaleDataAPI.PreSaleList;
-    index: number;
-  }) {
-    ElMessageBox.confirm(
-      row.handicapStatus === 0
-        ? t(`确定要解锁选中的比赛么?`)
-        : t('确定要锁定选中比赛么?'),
-      t('系统提示'),
-      {
-        confirmButtonText: t('确定'),
-        cancelButtonText: t('取消'),
-        type: 'warning',
-        center: true,
-        dangerouslyUseHTMLString: true,
-        draggable: true
-      }
-    )
-      .then(async () => {
-        let res: EsportsSettlementAPI.lockESportHandicapResType;
-        const params = { matchId: row.matchId };
-        res =
-          row.handicapStatus === 1
-            ? await API.lockESportHandicap(params)
-            : await API.unLockESportHandicap(params);
-        if (res.code) return message(res.msg, { type: 'error' });
-        message(res.msg, { type: 'success' });
-        onSearch();
-      })
-      .catch(() => (row.handicapStatus = row.handicapStatus === 0 ? 1 : 0));
-  }
 
   const { openPasswordInput } = usePasswordInputHook();
 
@@ -147,7 +111,7 @@ export function useEsportSettlement() {
   const onSearch = async (type?: 'reload') => {
     if (type === 'reload') pagination.currentPage = 1;
     loading.value = true;
-    const res = await API.getESportMatchList({
+    const res = await API.getChampionSettlementList({
       ...removeEmptyStringKeys(searchForm),
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage
@@ -183,14 +147,10 @@ export function useEsportSettlement() {
     dataList,
     pagination,
     onSearch,
-    resetForm,
     handleTableWidthChange,
     handleCurrentChange,
     handleSelectionChange,
-    changeSwitch,
-    allSaleSatatus,
     searchForm,
-    switchStyle,
     matchCondition,
     changeMatchCondition,
     cancelClick
