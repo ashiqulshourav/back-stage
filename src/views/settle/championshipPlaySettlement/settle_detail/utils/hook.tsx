@@ -2,7 +2,6 @@ import { message } from '@/utils/message';
 import { ElMessageBox } from 'element-plus';
 import { usePublicHooks } from '@/hooks';
 import { SPORT_LEVEL_LIST_TYPE } from './type';
-import { SPORT_LEVEL_LIST } from './map';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 
 export function useEsportsSettlement() {
@@ -12,9 +11,16 @@ export function useEsportsSettlement() {
   const switchLoadMap = ref({});
   const { switchStyle } = usePublicHooks();
   const rList = reactive<SPORT_LEVEL_LIST_TYPE[]>([]);
+
   const renderObj = reactive<EsportsSettlementAPI.ESportMatchById>(
     {} as EsportsSettlementAPI.ESportMatchById
   );
+
+  const dataInfo = reactive<SattleDataAPI.getSettlementDataList>(
+    {} as SattleDataAPI.getSettlementDataList
+  );
+
+  const eventMatchList = reactive<EsportsSettlementAPI.ChampionEventList[]>([]);
 
   //- 分页点击
   const handleCurrentChange = (val: number, index) =>
@@ -28,64 +34,31 @@ export function useEsportsSettlement() {
   //- 获取详情数据
   const getEsportMatchInfo = async () => {
     loading.value = true;
-    const res = await API.getESportMatchById({
+    const res = await API.getChampionEvents({
       matchId: +route.params.matchId
     });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
-    const keyList = Object.keys(res.data.betItemsMap);
-    //- 清洗后端返回数据
-    if (keyList.length) {
-      res.data.betItemsMap.all = Object.values(res.data.betItemsMap).flat();
-      keyList.forEach((key: string) => {
-        const filterKey = key.replace(/^\["|"\]$/g, '');
-        res.data.betItemsMap[filterKey] = res.data.betItemsMap[key];
-        key !== 'all' && delete res.data.betItemsMap[key];
-      });
-    }
-    Object.assign(renderObj, res.data);
-    formatData();
-  };
-
-  //- 格式化数据
-  const formatData = () => {
-    SPORT_LEVEL_LIST.forEach(item => {
-      Object.keys(renderObj.betItemsMap).forEach(key => {
-        if (item.key === key) item.list = renderObj.betItemsMap[key];
-      });
+    res.data.forEach(item => {
+      if (item.settleStatus === 1) {
+        item.betOptions = item.handicapList.findIndex(item => item.win === 1);
+        item.oldBetOptions = item.betOptions;
+      } else {
+        item.betOptions = -1;
+      }
+      item.isEdit = false;
     });
-    rList.length = 0;
-    rList.push(...SPORT_LEVEL_LIST.filter(_ => _.list.length));
-
-    rList.forEach(item => {
-      const l = item.list;
-      l.sort((a: any, b: any) => a.displayIndex - b.displayIndex);
-      const o = {};
-      l.forEach(d => {
-        if (!o[d.sourceBetItemsMid]) o[d.sourceBetItemsMid] = [];
-        o[d.sourceBetItemsMid].push(d);
-      });
-      item.list.length = 0;
-      Object.values(o).forEach((arr: any[]) => {
-        const selectIndex = arr.findIndex(item => item.win === 1);
-        item.list.push({
-          betOptions: selectIndex,
-          oldBetOptions: selectIndex,
-          ...arr[0],
-          arr
-        });
-      });
-    });
+    eventMatchList.length = 0;
+    eventMatchList.push(...res.data);
   };
 
   //- 结算提交
   const manualSettleESportHandicapClick = async (
-    row: EsportsSettlementAPI.BetItemsMapData,
+    row: EsportsSettlementAPI.ChampionEventList,
     type?: 'cancel'
   ) => {
     if (row.betOptions < 0 && !type)
       return message(t('请先选择投注项'), { type: 'error' });
-
     ElMessageBox.confirm(
       type ? t('确认要取消盘口么?') : t('确认要结算该记录么?'),
       '系统提示',
@@ -100,16 +73,19 @@ export function useEsportsSettlement() {
     ).then(async () => {
       const params = {
         matchId: row.matchId,
-        betResultItems: row.arr.map((item, index) => {
+        betItemsName: row.handicapList[0].betItemsName,
+        betResultItems: row.handicapList.map((item, index) => {
           return {
             betItemId: item.betItemsId,
             betResult: type ? 18 : row.betOptions === index ? 4 : 3,
             handicap: item.handicap,
-            kindsCode: item.kindsCode
+            kindsCode: item.kindsCode,
+            n: item.n,
+            betItemsName: item.betItemsName
           };
         })
       };
-      const res = await API.manualSettleESportHandicap(params);
+      const res = await API.manualSettleChampionHandicap(params);
       if (res.code) return message(res.msg, { type: 'error' });
       getEsportMatchInfo();
     });
@@ -135,7 +111,7 @@ export function useEsportsSettlement() {
   //- 确认二次结算
   const { openPasswordInput } = usePasswordInputHook();
   const resetManualSettleESportHandicapClick = async (
-    row: EsportsSettlementAPI.BetItemsMapData
+    row: EsportsSettlementAPI.ChampionEventList
   ) => {
     if (row.oldBetOptions === row.betOptions)
       return message(t('结果未改变，请重新选择'), { type: 'error' });
@@ -152,12 +128,15 @@ export function useEsportsSettlement() {
       if (!r) return;
       const params = {
         matchId: row.matchId,
-        betResultItems: row.arr.map((item, index) => {
+        betItemsName: row.handicapList[0].betItemsName,
+        betResultItems: row.handicapList.map((item, index) => {
           return {
             betItemId: item.betItemsId,
             betResult: row.betOptions === index ? 4 : 3,
             handicap: item.handicap,
             id: item.id,
+            n: item.n,
+            betItemsName: item.betItemsName,
             kindsCode: item.kindsCode,
             sourceBetItemsMid: item.sourceBetItemsMid
           };
@@ -170,8 +149,15 @@ export function useEsportsSettlement() {
   };
 
   onMounted(() => {
+    getSiginMatchData();
     getEsportMatchInfo();
   });
+
+  const getSiginMatchData = async () => {
+    const res = await API.getPreSaleInfo({ matchId: +route.params.matchId });
+    if (res.code) return message(res.msg, { type: 'error' });
+    Object.assign(dataInfo, res.data);
+  };
 
   return {
     loading,
@@ -180,10 +166,13 @@ export function useEsportsSettlement() {
     handleCurrentChange,
     switchStyle,
     renderObj,
+    dataInfo,
     rList,
+    getEsportMatchInfo,
     manualSettleESportHandicapClick,
     handleTableWidthChange,
     resetManualSettleESportHandicapClick,
-    closeSettle
+    closeSettle,
+    eventMatchList
   };
 }

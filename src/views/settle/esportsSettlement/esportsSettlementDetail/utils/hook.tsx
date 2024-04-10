@@ -105,7 +105,8 @@ export function useEsportsSettlement() {
             betItemId: item.betItemsId,
             betResult: type ? 18 : row.betOptions === index ? 4 : 3,
             handicap: item.handicap,
-            kindsCode: item.kindsCode
+            kindsCode: item.kindsCode,
+            n: item.n
           };
         })
       };
@@ -158,6 +159,7 @@ export function useEsportsSettlement() {
             betResult: row.betOptions === index ? 4 : 3,
             handicap: item.handicap,
             id: item.id,
+            n: item.n,
             kindsCode: item.kindsCode,
             sourceBetItemsMid: item.sourceBetItemsMid
           };

@@ -369,7 +369,6 @@
   "k-1c4fd49f": "Are you confirm to proceed settlement",
   "k785c570f": "Settle No.",
   "k-1309ed57": "Settlement Confirmation",
-  "k-6af79d48": "Match Cancelled",
   "k-7a97ca55": "FT Settlement",
   "k45cb6080": "Settle",
   "k1fc42b6a": "Add New",
@@ -829,5 +828,6 @@
   "k6f408431": "联赛类型",
   "k-7546bc34": "比赛名称",
   "k-390124ff": "联赛比赛时间",
-  "k12387c4e": "确定要删除菜单么？"
+  "k12387c4e": "确定要删除菜单么？",
+  "k76941f83": "比赛开始时间"
 }

@@ -12,6 +12,9 @@ export const esportsSettlement = {
 
   getESportMatchById: (data: { matchId: number }) => http.request<EsportsSettlementAPI.getESportMatchByIdResType>("post", "/eSport/v1/getESportMatchById", { data }),
 
+  //- 获取冠军赛事信息列表
+  getChampionEvents: (data: { matchId: number }) => http.request<EsportsSettlementAPI.getChampionEventsResType>("post", "/championSettle/v1/getChampionEvents", { data }),
+
   manualSettleESportHandicap: (data: {
     matchId: number;
     betResultItems: {
@@ -21,6 +24,18 @@ export const esportsSettlement = {
       kindsCode: string;
     }[]
   }) => http.request<EsportsSettlementAPI.manualSettleESportHandicapResType>("post", "/eSport/v1/manualSettleESportHandicap", { data }),
+  //- 冠军玩法结算
+  manualSettleChampionHandicap: (data: {
+    matchId: number;
+    betItemsName: string;
+    betResultItems: {
+      betItemId: number;
+      betResult: number;
+      handicap: string;
+      kindsCode: string;
+      betItemsName: string;
+    }[]
+  }) => http.request<EsportsSettlementAPI.manualSettleESportHandicapResType>("post", "/championSettle/v1/manualSettleChampionHandicap", { data }),
   //- 重新结算
   eSportReSettlement: (data: {
     matchId: number;
