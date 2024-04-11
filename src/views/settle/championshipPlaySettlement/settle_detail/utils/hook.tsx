@@ -142,7 +142,7 @@ export function useEsportsSettlement() {
           };
         })
       };
-      const res = await API.eSportReSettlement(params);
+      const res = await API.reSettleChampionHandicap(params);
       if (res.code) return message(res.msg, { type: 'error' });
       getEsportMatchInfo();
     });

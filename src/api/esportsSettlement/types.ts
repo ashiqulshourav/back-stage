@@ -122,11 +122,6 @@ declare namespace EsportsSettlementAPI {
     n?: string;
   }
 
-  // type bettype = {
-  //   key: string;
-  //   list: BetItemsMapData[];
-  // }
-
   type BetItemsMap = {
     all?: BetItemsMapData[]
     r1?: BetItemsMapData[]

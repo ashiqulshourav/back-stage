@@ -47,4 +47,15 @@ export const esportsSettlement = {
       sourceBetItemsMid: number;
     }[]
   }) => http.request<EsportsSettlementAPI.manualSettleESportHandicapResType>("post", "/eSport/v1/reSettlement", { data }),
+  //- 冠军重新结算
+  reSettleChampionHandicap: (data: {
+    matchId: number;
+    betResultItems: {
+      betItemId: number;
+      betResult: number;
+      handicap: string;
+      kindsCode: string;
+      sourceBetItemsMid: number;
+    }[]
+  }) => http.request<EsportsSettlementAPI.manualSettleESportHandicapResType>("post", "/championSettle/v1/reSettleChampionHandicap", { data }),
 };
