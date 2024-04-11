@@ -22,7 +22,7 @@ import {t} from "@/plugins/i18n";
 export function useLeague() {
   const {openPasswordInput}= usePasswordInputHook()
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
-  const tenantList = reactive<any>([]);
+  const tenantList = reactive<{name:string;id:number;tenantName:string}[]>([]);
   const tenantObj = reactive<any>({});
   const UDialogFlag =  ref<Boolean>(false);
   const loading = ref(true);

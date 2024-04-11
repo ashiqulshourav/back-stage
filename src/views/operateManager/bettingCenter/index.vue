@@ -312,7 +312,7 @@ import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
 import { hasAuth} from '@/router/utils';
-import {addThousandSeparator} from '@/utils/formatNumber'
+import {addThousandSeparator} from '@/utils/formatNumber';
 import {
   formatSeriesType,
   useSportFormatDetail,
