@@ -1,4 +1,5 @@
 import { t } from "@/plugins/i18n";
+import {addThousandSeparator} from '@/utils/formatNumber'
 
 export const columns: TableColumnList = [
   {
@@ -43,13 +44,14 @@ export const columns: TableColumnList = [
     prop: "productAmountTotal",
     minWidth: 50,
     align:'center',
-    formatter: ({ productAmountTotal }) => (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
+    formatter: ({ productAmountTotal }) => addThousandSeparator(productAmountTotal.toFixed(2))  // (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
   },
   {
     label: t("用户输赢"),
     slot: "profitAmount",
     minWidth: 50,
     align:'center',
+    formatter: ({ profitAmount }) => addThousandSeparator(profitAmount.toFixed(2))
   },
   {
     label: t('操作'),
