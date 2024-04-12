@@ -34,11 +34,11 @@ export const columns: TableColumnList = [
     },
     minWidth: 120
   },
-  // {
-  //   label: t('联赛ID'),
-  //   prop: 'leagueId',
-  //   headerRenderer: d => handleTableWidth(d, t('联赛ID'), 'auto')
-  // },
+  {
+    label: t('联赛ID'),
+    prop: 'leagueId',
+    headerRenderer: d => handleTableWidth(d, t('联赛ID'), 'auto')
+  },
   {
     label: t('热门排序'),
     prop: 'level',

@@ -101,7 +101,6 @@ export function useMenuManagerHook() {
           },
           parentList: parentList,
           onCloseDialog: (closeType?: string) => {
-            3;
             if (closeType) onSearch();
             closeDialog(options, index);
           }
