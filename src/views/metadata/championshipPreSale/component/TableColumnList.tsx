@@ -18,9 +18,9 @@ export const columns: TableColumnList = [
     slot: 'lock'
   },
   {
-    label: t('联赛名称'),
+    label: t('比赛名称'),
     prop: 'matchName',
-    headerRenderer: d => handleTableWidth(d, t('联赛名称'), 'auto'),
+    headerRenderer: d => handleTableWidth(d, t('比赛名称'), 'auto'),
     align: 'left',
     minWidth: 200
   },

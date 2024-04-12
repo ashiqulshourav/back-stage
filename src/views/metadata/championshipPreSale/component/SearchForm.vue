@@ -1,10 +1,10 @@
 <template>
   <div class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]">
     <el-form ref="formRef" :inline="true" :model="form">
-      <el-form-item :label="`${t('联赛类型')}:`" prop="category">
+      <el-form-item :label="`${t('比赛类型')}:`" prop="category">
         <el-select
           v-model="form.category"
-          :placeholder="t('联赛类型')"
+          :placeholder="t('比赛类型')"
           clearable
           class="!w-[150px]"
           @change="chagenMatchType"
@@ -108,7 +108,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="`${t('联赛比赛时间')}:`" prop="startTime">
+      <el-form-item :label="`${t('比赛时间')}:`" prop="startTime">
         <CustomDate v-model:val="selectDate" @changeDate="changeDate" />
       </el-form-item>
 

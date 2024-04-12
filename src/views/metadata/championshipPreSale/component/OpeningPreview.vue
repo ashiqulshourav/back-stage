@@ -1,15 +1,22 @@
 <template>
   <div class="flex flex-col pl-10 pr-10 min-h-96">
-    <div class="mb-3 flex justify-between">
+    <div class="mb-2">
+      <span>{{ t('赛事ID') }}:</span>
+      <span>{{ matchId }}</span>
+    </div>
+    <div class="mb-2 flex justify-between">
       <div>
+        <span>{{ t('比赛名称') }}:</span>
         <span>{{ matchInfo.leagueNameCn }}</span>
-        <span class="ml-4">
+
+        <span class="ml-3">{{ t('比赛时间') }}:</span>
+        <span class="ml-1">
           {{
             dayjs(matchInfo.beginTimeLong).format('YYYY-MM-DD HH:mm:ss')
           }}</span
         >
       </div>
-      <div class="mb-3 flex justify-between">
+      <div class="mb-2 flex justify-between">
         <span
           >{{ t('开售盘口/总盘口数:') }} {{ matchInfo.saleHandicaps }} /
           {{ matchInfo.allHandicaps }}</span
@@ -30,12 +37,12 @@
         >
           <div class="flex-grow mb-1 w-1/4">
             <el-button
-              class="text-center flex justify-between break_word w-1/5"
+              class="text-center flex justify-between break_word w-[30%]"
               v-for="(d, idx) in o.handicapList"
               :key="idx"
             >
               <span
-                class="text-ellipsis overflow-hidden whitespace-nowrap max-w-[60%]"
+                class="text-ellipsis overflow-hidden whitespace-nowrap max-w-[90%]"
               >
                 {{ d.handicap }}
               </span>

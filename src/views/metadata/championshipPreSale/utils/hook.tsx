@@ -125,7 +125,7 @@ export function useChampionshipPreSaleHook() {
           countryId: row?.countryId ?? ''
         }
       },
-      width: '40%',
+      width: '50%',
       draggable: true,
       fullscreenIcon: true,
       closeOnClickModal: false,

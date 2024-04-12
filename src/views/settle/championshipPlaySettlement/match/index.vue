@@ -8,7 +8,7 @@
       @changeMatchCondition="changeMatchCondition"
     />
     <PureTableBar :columns="columns" @refresh="onSearch('reload')">
-      <template #title>{{ t('电竞赛事列表') }}</template>
+      <template #title>{{ t('冠军赛事列表') }}</template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           class="table_container"
@@ -27,11 +27,17 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
-          <!-- -比赛队伍 -->
-          <template #matchTeam="{ row }: EsportMatchRowType">
-            <span>{{ row.homeTeamNameCn }}</span>
-            <span class="font-bold mr-2 ml-2">VS</span>
-            <span>{{ row.awayTeamNameCn }}</span>
+          <!-- -锁盘按钮 -->
+          <!--  @change="() => changeSwitch({ row })" -->
+          <template #handicapStatus="{ row, props }">
+            <el-switch
+              :size="props.size"
+              v-model="row.handicapStatus"
+              :active-value="0"
+              :inactive-value="1"
+              inline-prompt
+              :style="switchStyle"
+            />
           </template>
 
           <template #operation="{ row }: EsportMatchRowType">
@@ -86,6 +92,8 @@ const {
   handleSelectionChange,
   searchForm,
   matchCondition,
+  switchStyle,
+  changeSwitch,
   changeMatchCondition,
   cancelClick
 } = useChampionshipPlaySettlementHook();

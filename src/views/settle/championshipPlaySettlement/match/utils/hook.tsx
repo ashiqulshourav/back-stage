@@ -12,6 +12,7 @@ export function useChampionshipPlaySettlementHook() {
   const dataList = reactive<EsportsSettlementAPI.ESportMatchList[]>([]);
   const loading = ref(true);
   const matchCondition = ref(1);
+  const { switchStyle } = usePublicHooks();
   const selectLockcList = reactive<SaleDataAPI.PreSaleList[]>([]);
   const pagination = reactive<PaginationProps>({
     total: 0,
@@ -127,16 +128,40 @@ export function useChampionshipPlaySettlementHook() {
     pagination.total = res.data.total;
   };
 
-  const resetForm = formEl => {
-    if (!formEl) return;
-    formEl.resetFields();
-    onSearch();
-  };
-
   const changeMatchCondition = (n: number) => {
     matchCondition.value = n;
     onSearch('reload');
   };
+
+  //- 锁盘switch点击
+  function changeSwitch({ row }: { row: SaleDataAPI.PreSaleList }) {
+    ElMessageBox.confirm(
+      row.handicapStatus === 0
+        ? t(`确定要解锁选中的比赛么?`)
+        : t('确定要锁定选中比赛么?'),
+      t('系统提示'),
+      {
+        confirmButtonText: t('确定'),
+        cancelButtonText: t('取消'),
+        type: 'warning',
+        center: true,
+        dangerouslyUseHTMLString: true,
+        draggable: true
+      }
+    )
+      .then(async () => {
+        let res: EsportsSettlementAPI.lockESportHandicapResType;
+        const params = { matchId: row.matchId };
+        res =
+          row.handicapStatus === 1
+            ? await API.lockESportHandicap(params)
+            : await API.unLockESportHandicap(params);
+        if (res.code) return message(res.msg, { type: 'error' });
+        message(res.msg, { type: 'success' });
+        onSearch();
+      })
+      .catch(() => (row.handicapStatus = row.handicapStatus === 0 ? 1 : 0));
+  }
 
   onMounted(() => {
     onSearch();
@@ -153,6 +178,8 @@ export function useChampionshipPlaySettlementHook() {
     searchForm,
     matchCondition,
     changeMatchCondition,
-    cancelClick
+    cancelClick,
+    switchStyle,
+    changeSwitch
   };
 }

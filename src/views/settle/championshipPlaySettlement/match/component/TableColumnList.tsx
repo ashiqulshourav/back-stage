@@ -35,6 +35,12 @@ export const columns: TableColumnList = [
     minWidth: 120
   },
   {
+    label: t('联赛ID'),
+    prop: 'leagueId',
+    minWidth: 120,
+    headerRenderer: d => handleTableWidth(d, t('联赛ID'), 'auto')
+  },
+  {
     label: t('赛事ID'),
     prop: 'matchId',
     minWidth: 120,
@@ -66,6 +72,20 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('开售状态'), 'auto'),
     minWidth: 180,
     formatter: ({ isSale }) => (isSale === 0 ? t('关闭') : t('开售'))
+  },
+  {
+    label: t('锁盘状态'),
+    prop: 'handicapStatus',
+    headerRenderer: d => handleTableWidth(d, t('锁盘状态'), 'auto'),
+    formatter: ({ handicapStatus }): string => {
+      return HANDICAP_STATUS[handicapStatus];
+    },
+    minWidth: 150
+  },
+  {
+    label: t('锁盘控制'),
+    slot: 'handicapStatus',
+    headerRenderer: d => handleTableWidth(d, t('锁盘控制'), 'auto')
   },
   {
     label: t('操作'),
