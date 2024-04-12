@@ -52,9 +52,14 @@ export const columns: TableColumnList = [
     align:'center',
   },
   {
-    label: t('操作'),
-    slot: 'operation',
-    minWidth: 50,
+    label: t('通过'),
+    slot: 'approve',
+    align:'center',
+    fixed:'right'
+  },
+  {
+    label: t('划单'),
+    slot: 'cancel',
     align:'center',
   }
 ]

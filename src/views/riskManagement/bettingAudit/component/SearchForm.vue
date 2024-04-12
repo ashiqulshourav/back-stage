@@ -52,14 +52,14 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item :label="`${t('注单状态')}:`" prop="queryType">
+        <el-form-item :label="`${t('风控状态')}:`" prop="queryType">
           <el-select class="min-w100"
                   :placeholder="t('请选择状态')"
               v-model="form.queryType"
               clearable
                      @change="search"
           >
-              <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
+              <el-option v-for="item in Object.entries(riskStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
           </el-select>
         </el-form-item>
 
@@ -122,15 +122,6 @@
             class="!w-[150px]"
           />
         </el-form-item>
-        <el-form-item :label="`${t('联赛名')}:`" prop="leagueName">
-          <el-input
-              v-model="form.leagueName"
-              :placeholder="t('联赛名')"
-              clearable
-              v-enter="search"
-              class="!w-[150px]"
-          />
-        </el-form-item>
         <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
           <el-input
               v-model="form.matchId"
@@ -140,25 +131,6 @@
               class="!w-[150px]"
           />
         </el-form-item>
-        <el-form-item :label="`${t('主队')}:`" prop="homeTeamName">
-          <el-input
-            v-model="form.homeTeamName"
-            :placeholder="t('主队名称')"
-            clearable
-            v-enter="search"
-            class="!w-[150px]"
-          />
-        </el-form-item>
-        <el-form-item :label="`${t('客队')}:`" prop="awayTeamName">
-          <el-input
-            v-model="form.awayTeamName"
-            :placeholder="t('客队名称')"
-            clearable
-            v-enter="search"
-            class="!w-[150px]"
-          />
-        </el-form-item>
-
         <el-form-item :label="`${t('会员账号')}:`" prop="userIdOrName">
           <el-input
             v-model="form.userIdOrName"
@@ -179,8 +151,6 @@
             class="!w-[200px]"
           />
         </el-form-item>
-
-
         <el-form-item :label="`${t('投注额')}:`" prop="minBetAmount">
           <el-input
               v-model="form.minBetAmount"
@@ -194,24 +164,6 @@
           <el-input
               v-model="form.maxBetAmount"
               :placeholder="t('最大投注额')"
-              clearable
-              class="!w-[110px]"
-              v-enter="search"
-          />
-        </el-form-item>
-        <el-form-item :label="`${t('用户输赢金额')}:`" prop="minProfitAmount">
-          <el-input
-              v-model="form.minProfitAmount"
-              :placeholder="t('最小输赢金额')"
-              clearable
-              class="!w-[110px]"
-              v-enter="search"
-          />
-        </el-form-item>
-        <el-form-item :label="`${t('')}-`" prop="maxProfitAmount" class="arrange2">
-          <el-input
-              v-model="form.maxProfitAmount"
-              :placeholder="t('最大输赢金额')"
               clearable
               class="!w-[110px]"
               v-enter="search"
@@ -268,7 +220,7 @@ import {
   ESPORT_ID_MAP,
   SPORT_CATEGORY
 } from '@/utils/maps/sports_map';
-import { searchFormType } from '../util/types';
+import { searchFormType} from '../util/types';
 const props = defineProps<{
   loading: boolean;
   form: searchFormType;
@@ -278,7 +230,7 @@ const props = defineProps<{
 const formRef = ref();
 const selectDate = ref('');
 const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
-import {  betStatusMap,seriesTypesSingle,seriesTypesDuplex} from "../util/types";
+import {  riskStatusMap,seriesTypesSingle,seriesTypesDuplex} from "../util/types";
 import {hasAuth} from "@/router/utils";
 import CustomDate from "@/components/Form/Custom_date.vue";
 
@@ -292,11 +244,11 @@ const resetForm = (formEl: FormInstance | undefined) => {
 
 const changeDate = t => {
   if (!t) {
-    props.form.timeStart = '';
-    props.form.timeEnd = '';
+    props.form.createTimeStart = '';
+    props.form.createTimeEnd = '';
   } else {
-    props.form.timeStart = dayjs(t[0]).startOf('day').valueOf();
-    props.form.timeEnd = dayjs(t[1]).endOf('day').valueOf();
+    props.form.createTimeStart = dayjs(t[0]).startOf('day').valueOf();
+    props.form.createTimeEnd = dayjs(t[1]).endOf('day').valueOf();
   }
   search();
 };

@@ -1,14 +1,12 @@
 import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
-import {betStatus, betStatusMap, searchFormType, seriesTypesSingle,seriesTypesDuplex} from './types';
+import {betStatus, betStatusMap, searchFormType, seriesTypesSingle, seriesTypesDuplex, riskStatusMap,riskStatus} from './types';
 import { columns } from './exportTableColumnList';
 import { utils, writeFile } from 'xlsx';
 import { addDialog, closeDialog } from '@/components/ReDialog';
-import editMatch from "../component/editMatch.vue";
 import { reactive, ref, onMounted, h } from 'vue';
-import PasswordInput from '@/components/PasswordInput/index.vue';
-
+import {usePasswordInputHook} from "@/hooks/passwordInputHook";
 import {
   markeTypeMap,
   useSportFormatDetail,
@@ -16,16 +14,17 @@ import {
 } from "@/utils/formatMatch";
 import dayjs from 'dayjs';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
-import { ElMessageBox } from "element-plus";
 import {copyTextToClipboard} from "@pureadmin/utils";
 import {t} from "@/plugins/i18n";
+import formDom from "../component/form.vue";
+import {ElMessageBox} from "element-plus";
 export function useLeague() {
+  const {openPasswordInput}= usePasswordInputHook()
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<any>([]);
   const tenantObj = reactive<any>({});
   const UDialogFlag =  ref<Boolean>(false);
   const loading = ref(true);
-  const uDialogRef = ref(null)
   const totalInfo = reactive<BetOrderAPI.otherDataType>(
     {} as BetOrderAPI.otherDataType
   );
@@ -39,14 +38,12 @@ export function useLeague() {
   const form = reactive<searchFormType>({
     sportId: '',
     userIdOrName: '',
-    timeStart: dayjs().startOf('month').valueOf(),
-    timeEnd: dayjs().endOf('day').valueOf(),
+    createTimeStart: dayjs().startOf('month').valueOf(),
+    createTimeEnd: dayjs().endOf('day').valueOf(),
+    riskStatus:'',
     orderId: '',
     leagueId: '',
     matchId: '',
-    awayTeamName: '',
-    homeTeamName: '',
-    // status:[],
     isInplay:'',
     seriesType:'',
     category:'',
@@ -58,8 +55,6 @@ export function useLeague() {
     queryType:1,
     minBetAmount:'',
     maxBetAmount:'',
-    minProfitAmount:'',
-    maxProfitAmount:'',
   });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -127,20 +122,20 @@ export function useLeague() {
           return
       }
       loading.value = true;
-      const res : BetOrderAPI.BetOrderResType = await API.bettingCenterList(params);
+      const res : BetOrderAPI.BetOrderResType = await API.bettingAuditList(params);
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
       if (res.data !== null) {
-        dataList.push(...res.data.pageData);
+        dataList.push(...res?.data?.pageData);
         dataList.map((item: any, index) => {
           item.index = index + 1
 
         })
-        pagination.total = res.data.count;
-        pagination.pageSize = res.data.pageSize;
-        pagination.currentPage = res.data.pageNum;
-        Object.assign(totalInfo, res.data.otherData);
+        pagination.total = res?.data?.count;
+        pagination.pageSize = res?.data?.pageSize;
+        pagination.currentPage = res?.data?.pageNum;
+        Object.assign(totalInfo, res?.data?.otherData);
       }
       document
         .querySelector('.table_container .el-scrollbar__wrap')
@@ -154,7 +149,7 @@ export function useLeague() {
     const res =  await API.getTenantList()
     dataList.length = 0;
     if(res.data?.data?.length){
-      tenantList.push(...res.data.data);
+      tenantList.push(...res?.data?.data);
       // 将数组根据id转换为对象
       tenantList.map((item)=>{
         tenantObj[item.id] = item;
@@ -181,13 +176,13 @@ export function useLeague() {
             str = SPORT_ID_MAP.find(_ => +_.value === +data[column.prop as string]) ?.label ?? data.sportNameCn;
             break;
           case 'beginTime':
-            str = data.beginTime?dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss'):'';
+            str = data.beginTime?dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss'):'';
             break;
           case 'createTime':
-            str = data.createTime?dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss'):'';
+            str = data.createTime?dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss'):'';
             break;
           case 'settleTime':
-            str = data.settleTime?dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss'):'';
+            str = data.settleTime?dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss'):'';
             break;
           case 'index':
             str = (i+1).toString()
@@ -208,10 +203,10 @@ export function useLeague() {
             str = data.isSettlementAgain===1?'是':'否'
             break;
           case 'status':
-            str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult,data.isReserve).status]
+            str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult,data.isReserve)?.status]
             break;
           case 'billStatus':
-            str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult,data.isReserve).status]
+            str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult,data.isReserve)?.status]
             break;
           case 'settleScore':
             str=displayHomeAwayScore(data.settleScore,data.sportId)
@@ -232,10 +227,10 @@ export function useLeague() {
               str=data.seriesType===1?'单关':'串关';
               break;
           case 'tenantName':  //商户名
-            str=(tenantObj[data.tenantId]).tenantName??''
+            str=(tenantObj[data.tenantId])?.tenantName??''
             break;
           case 'tenantCode':  //商户编码
-              str=(tenantObj[data.tenantId]).name??''
+              str=(tenantObj[data.tenantId])?.name??''
               break;
           default:
             str = data[column.prop as string]
@@ -262,45 +257,79 @@ export function useLeague() {
       type: 'success'
     });
   };
-  const handleCancel = (data:any)=>{
-
-      ElMessageBox.confirm(
-        t('确定取消注单吗？'),
-        t('警告'),
-        {
-          center: true,
-          type: 'warning'
-        }
-      )
-        .then(async () => {
-          addDialog({
-            title: t('请输入U盾密码'),
-            class: 'reset_dialog',
-            width: '25%',
-            center: true,
-            closeOnClickModal: false,
-            hideFooter: true,
-            contentRenderer: ({ options, index }) =>
-                h(PasswordInput, {
-                  ref: uDialogRef,
-                  onCloseDialog: (_: boolean) => {
-                    closeDialog(options, index);
-                    setTimeout(()=>{
-                      const params:any={orderIds:[data.id]}
-                      API.orderCancel(params).then((res)=>{
-                        if (res.code) {
-                        } else {
-                          onSearch();
-                        }
-                        message(res.msg, { type: res.code ? 'error' : 'success' });
-                      });
-                    },500)
-                  }
-                })
-          });
-
-        })
+  const handleCancel = (row:any,index:number)=>{
+    let data= {...row} //...row.combineOrderDetails[index]
+    data.combineOrderDetails = data.combineOrderDetails.filter((item,i)=>{
+      console.log(1111,item)
+      return i == index
+    })
+    openCancelDialog([data])
   }
+  const handleCancelAll = ()=>{
+    openCancelDialog(dataList)
+  }
+  const openCancelDialog = (list)=>{
+    addDialog({
+      title:'风控划单',
+      width: '30%',
+      hideFooter: true,
+      closeOnClickModal: false,
+      alignCenter: true,
+      contentRenderer: ({ options, index }) =>
+        h(formDom, {
+          list: list,
+          onCloseDialog: () => {
+            onSearch('reload');
+            closeDialog(options, index);
+          },
+        }),
+    });
+  }
+
+
+
+  const handleApprove = (row:any,index)=>{
+    let data= {...row} //...row.combineOrderDetails[index]
+    data.combineOrderDetails = data.combineOrderDetails.filter((item,i)=>{
+      console.log(1111,item)
+      return i == index
+    })
+    openApproveDialog([data])
+  }
+
+  const handleApproveAll =()=>{
+    openApproveDialog(dataList)
+  }
+
+  const openApproveDialog = (list)=>{
+    ElMessageBox.confirm(
+      t('确定审核通过吗？'),
+      t('警告'),
+      {
+        center: true,
+        type: 'warning'
+      }
+    ).then(()=>{
+      let param=[];
+      list.map((item:any)=>{
+        const details = item.combineOrderDetails.map((item)=>{
+          return {detailId:item.detailId,riskTimes: item.riskTimes,}
+        })
+        param.push({
+          orderId:item.id,
+          details:details,
+        })
+      })
+      console.log(4444,param)
+      API.bettingAuditConfirm(param).then((res)=>{
+        onSearch();
+        console.log(55555,res)
+      })
+    })
+  }
+
+
+
 const getStatus = (status,billStatus,betResult,isReserve?)=>{
     let obj = {status:-1,bgColor:''}
   if(status==2&&billStatus===1&&(betResult===22||betResult===23)){   // 注单无效
@@ -329,58 +358,12 @@ const getStatus = (status,billStatus,betResult,isReserve?)=>{
    return obj
 }
 
-const specialCountFlag = (status,billStatus,betResult):boolean=>{
-  return getStatus(status,billStatus,betResult).status===betStatus.unsettlementBet||
-    getStatus(status,billStatus,betResult).status===betStatus.settlementBet||
-    getStatus(status,billStatus,betResult).status===betStatus.eventAbnormal
-}
-
-const switchDialog = (flag:boolean,row)=>{
-    UDialogFlag.value=flag;
-
-    if(flag){
-        addDialog({
-          title: t('请输入U盾密码'),
-          class: 'reset_dialog',
-          width: '25%',
-          center: true,
-          closeOnClickModal: false,
-          hideFooter: true,
-          contentRenderer: ({ options, index }) =>
-              h(PasswordInput, {
-                ref: uDialogRef,
-                onCloseDialog: (_: boolean) => {
-                  closeDialog(options, index);
-                  setTimeout(() => {
-                    handleEditResult(row)
-                  }, 300);
-                }
-              })
-        });
+const getRiskStatus = (rStatus:number)=>{
+  let obj = {status:-1,bgColor:''}
+    if(rStatus===riskStatus.approve){
+      obj = {status:-1,bgColor:''}
     }
 }
-
-  const editDialogRef = ref();
-const handleEditResult = (row)=>{
-  addDialog({
-    title: t(''),
-    class: 'reset_dialog',
-    width: row.combineOrderDetails.length>1?'75%':'500px',
-    center: true,
-    closeOnClickModal: false,
-    hideFooter:true,
-    contentRenderer: ({ options, index }) =>
-        h(editMatch, {
-          ref: editDialogRef,
-          data: row,
-          onCloseDialog: (_: boolean) => {
-            closeDialog(options, index);
-            onSearch()
-          }
-        }),
-  });
-}
-
 
 function copyTest(str:string,tip:string){
         if(!str) return;
@@ -409,12 +392,14 @@ function copyTest(str:string,tip:string){
     handleCurrentChange,
     handleSelectionChange,
     exportFile,
-    handleCancel,
+
     getStatus,
     copyTest,
     tenantObj,
-    specialCountFlag,
     UDialogFlag,
-    switchDialog,
+    handleCancel,
+    handleApprove,
+    handleCancelAll,
+    handleApproveAll,
   };
 }
