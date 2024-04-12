@@ -205,7 +205,7 @@ export function useLeague() {
             str= markeTypeMap[data.marketType]
             break;
           case 'isSettlementAgain':
-            str = data.isSettlementAgain===1?'是':'否'
+            str = data.isSettlementAgain===2?'是':'否'
             break;
           case 'status':
             str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult,data.isReserve)?.status]
