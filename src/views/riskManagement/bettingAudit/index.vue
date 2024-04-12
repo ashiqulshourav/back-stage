@@ -15,7 +15,7 @@
       :isShowHeader="false"
       @refresh="onSearch('reload')"
     >
-      <template #title>
+<!--      <template #title>
         <div class="flex item-center ">
           <el-button
             type="danger"
@@ -25,26 +25,18 @@
           </el-button>
           <el-button
             type="primary"
-            @click="handleCancelRollbackAll"
-          >
-            {{ t('全部取消回滚') }}
-          </el-button>
-          <el-button
-            type="primary"
-            @click="handleCancelAll"
+            @click="handleApproveAll"
           >
             {{ t('全部通过') }}
 
           </el-button>
           <el-button
             type="primary"
-            @click="handleApproveAll"
           >
             {{ t('导出注单') }}
           </el-button>
         </div>
-
-      </template>
+      </template>-->
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"
@@ -269,27 +261,31 @@
             <div >{{ row.settleTime ? dayjs(row.settleTime).format('MM-DD HH:mm:ss'):'' }}</div>
             <div v-if="String(row.seriesType).slice(-3) ==='001'" >{{t('总赔率:')}}{{String(row.seriesType).slice(-3) ==='001'?calculateSeriesTypeTotal(row.combineOrderDetails):'' }}</div>
           </template>
-          <template #cancel="{ row }">
-            <div  class="match_item cancel flex justify-between  items-center" v-for="item in row.combineOrderDetails"
+          <template   #cancel="{ row }">
+            <div  class="match_item cancel flex justify-between  items-center" v-for="(item,index) in row.combineOrderDetails"
                  :key="item.betItemId"
             >
               <el-checkbox ></el-checkbox>
               <el-button
                 size="small"
                 type="danger"
+                v-if="item.riskStatus===2"
+                @click="handleCancel(row,index)"
               >
                 {{ t('风控划单') }}
               </el-button>
             </div>
           </template>
           <template #approve="{ row }">
-            <div class="match_item approve flex justify-between  items-center"  v-for="item in row.combineOrderDetails"
+            <div class="match_item approve flex justify-between  items-center"  v-for="(item,index) in row.combineOrderDetails"
                   :key="item.betItemId"
             >
               <el-checkbox ></el-checkbox>
               <el-button
+                v-if="item.riskStatus===2"
                 size="small"
                 type="primary"
+                @click="handleApprove(row,index)"
               >
                 {{ t('审核通过') }}
               </el-button>
@@ -366,8 +362,9 @@ const {
   getStatus,
   copyTest,
   tenantList,
+  handleCancel,
+  handleApprove,
   handleCancelAll,
-  handleCancelRollbackAll,
   handleApproveAll,
   tenantObj
 } = useLeague();
