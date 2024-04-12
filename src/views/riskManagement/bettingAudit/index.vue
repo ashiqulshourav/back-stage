@@ -21,13 +21,13 @@
             type="danger"
             @click="handleCancelAll"
           >
-            {{ t('全部划单') }}
+            {{ t('批量划单') }}
           </el-button>
           <el-button
             type="primary"
             @click="handleApproveAll"
           >
-            {{ t('全部通过') }}
+            {{ t('批量通过') }}
 
           </el-button>
           <el-button
@@ -215,6 +215,10 @@
                 {{ t('赛果：')
                 }}{{ displayHomeAwayScore(item.settleScore, item.sportId) }}
               </div>
+              <div v-if="item.riskStatus===riskStatus.reject">
+                取消原因:{{item.riskType}}
+              </div>
+              <div :style="{background:getRiskStatus(item.riskStatus).bgColor}" class="status_btn mb-1">{{getRiskStatus(item.riskStatus).label}}</div>
             </div>
           </template>
           <template #odd="{ row }">
@@ -246,6 +250,7 @@
                   {{ BET_RESULT_TYPE_MAP[item?.betResult] }}</span
                 >
               </div>
+
             </div>
           </template>
           <template #profitAmount="{ row }">
@@ -265,7 +270,7 @@
             <div  class="match_item cancel flex justify-between  items-center" v-for="(item,index) in row.combineOrderDetails"
                  :key="item.betItemId"
             >
-              <el-checkbox ></el-checkbox>
+<!--              <el-checkbox ></el-checkbox>-->
               <el-button
                 size="small"
                 type="danger"
@@ -280,7 +285,7 @@
             <div class="match_item approve flex justify-between  items-center"  v-for="(item,index) in row.combineOrderDetails"
                   :key="item.betItemId"
             >
-              <el-checkbox ></el-checkbox>
+<!--              <el-checkbox ></el-checkbox>-->
               <el-button
                 v-if="item.riskStatus===2"
                 size="small"
@@ -343,7 +348,7 @@ import {
   displayHomeAwayScore,
   getIsInplay
 } from '@/utils/formatMatch';
-import { betStatusMap } from './util/types';
+import {betStatusMap, riskStatus} from './util/types';
 import { usePublicHooks } from '@/hooks';
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
@@ -366,7 +371,8 @@ const {
   handleApprove,
   handleCancelAll,
   handleApproveAll,
-  tenantObj
+  tenantObj,
+  getRiskStatus,
 } = useLeague();
 </script>
 

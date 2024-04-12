@@ -52,7 +52,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item :label="`${t('风控状态')}:`" prop="queryType">
+        <el-form-item :label="`${t('风控状态')}:`" prop="riskStatus">
           <el-select class="min-w100"
                   :placeholder="t('请选择状态')"
               v-model="form.queryType"

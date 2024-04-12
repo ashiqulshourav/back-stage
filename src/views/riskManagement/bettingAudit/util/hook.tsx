@@ -40,7 +40,6 @@ export function useLeague() {
     userIdOrName: '',
     createTimeStart: dayjs().startOf('month').valueOf(),
     createTimeEnd: dayjs().endOf('day').valueOf(),
-    riskStatus:'',
     orderId: '',
     leagueId: '',
     matchId: '',
@@ -55,6 +54,7 @@ export function useLeague() {
     queryType:1,
     minBetAmount:'',
     maxBetAmount:'',
+    riskStatus:'',
   });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -285,9 +285,6 @@ export function useLeague() {
         }),
     });
   }
-
-
-
   const handleApprove = (row:any,index)=>{
     let data= {...row} //...row.combineOrderDetails[index]
     data.combineOrderDetails = data.combineOrderDetails.filter((item,i)=>{
@@ -359,10 +356,13 @@ const getStatus = (status,billStatus,betResult,isReserve?)=>{
 }
 
 const getRiskStatus = (rStatus:number)=>{
-  let obj = {status:-1,bgColor:''}
+  let obj = {label:'',bgColor:''}
     if(rStatus===riskStatus.approve){
-      obj = {status:-1,bgColor:''}
+      obj = {label:riskStatusMap[riskStatus.approve],bgColor:'#FFC53D'}
+    }else if(rStatus===riskStatus.reject){
+      obj = {label:riskStatusMap[riskStatus.reject],bgColor:'#F88D48'}
     }
+    return obj
 }
 
 function copyTest(str:string,tip:string){
@@ -392,7 +392,7 @@ function copyTest(str:string,tip:string){
     handleCurrentChange,
     handleSelectionChange,
     exportFile,
-
+    getRiskStatus,
     getStatus,
     copyTest,
     tenantObj,

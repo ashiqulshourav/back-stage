@@ -6,7 +6,6 @@ export type searchFormType = {
   userIdOrName: string;
   createTimeStart: number | string;
   createTimeEnd: number | string;
-  riskStatus:number;
   orderId: string;
   leagueId: string;
   matchId: string;
@@ -20,6 +19,7 @@ export type searchFormType = {
   queryType:number;
   minBetAmount:number|string;
   maxBetAmount:number|string;
+  riskStatus:number|string;
 }
 
 export enum betStatus {
