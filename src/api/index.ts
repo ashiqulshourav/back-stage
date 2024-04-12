@@ -1,17 +1,18 @@
-import { user } from "./user";
-import { metaData } from "./metadata";
-import { saleData } from "./sale";
-import { sattleData } from "./sattle";
-import { virtualData } from "./virtual";
-import { esportData } from "./esports";
-import { historyData } from "./history";
-import { operationLogData } from "./operationLog";
-import { esportsSettlement } from "./esportsSettlement";
-import { configCenterData } from "./configCenter";
-import { playMethodData } from "./playMethd";
-import { userMangerData } from "./userManger";
-import { roleData } from "./role";
-import { bettingCenter } from "./bettingCenter";
+import { user } from './user';
+import { metaData } from './metadata';
+import { saleData } from './sale';
+import { sattleData } from './sattle';
+import { virtualData } from './virtual';
+import { esportData } from './esports';
+import { historyData } from './history';
+import { operationLogData } from './operationLog';
+import { esportsSettlement } from './esportsSettlement';
+import { configCenterData } from './configCenter';
+import { playMethodData } from './playMethd';
+import { userMangerData } from './userManger';
+import { roleData } from './role';
+import { bettingCenter } from './bettingCenter';
+import { riskManagementData } from './riskManagement';
 
 export const API = {
   ...user,
@@ -27,5 +28,6 @@ export const API = {
   ...configCenterData,
   ...userMangerData,
   ...playMethodData,
-  ...bettingCenter
-}
+  ...bettingCenter,
+  ...riskManagementData
+};

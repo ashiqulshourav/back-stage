@@ -18,7 +18,7 @@ declare namespace COMMON {
     navigatepageNums?: number[];
     navigateFirstPage?: number;
     navigateLastPage?: number;
-    pageData:T[];
+    pageData?:T[];
   };
 
   type BASE_RES_TYPE<T = ListData> = {

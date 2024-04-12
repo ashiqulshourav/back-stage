@@ -221,3 +221,15 @@ input[type='number'] {
     margin: 0 auto;
   }
 }
+
+.el-text.risk-tag-red {
+  color: #a30014 !important;
+}
+
+.el-text.risk-tag-orange {
+  color: #ff5c00 !important;
+}
+
+.el-text.risk-tag-yellow {
+  color: #ff9900 !important;
+}
