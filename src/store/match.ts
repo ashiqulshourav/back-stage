@@ -10,7 +10,6 @@ export const useMatchStore = defineStore('MATCHSTATE', {
     sportId: 1,
     matchSearchLoading: false,
     settleRequestLoading: false,
-
   }),
   actions: {
     async set_lagueList(

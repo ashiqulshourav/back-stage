@@ -18,7 +18,7 @@
       </div>
       <div class="mb-2 flex justify-between">
         <span
-          >{{ t('开售盘口/总盘口数:') }} {{ matchInfo.saleHandicaps }} /
+          >{{ t('开售盘口/总盘口数:') }} {{ openLen }} /
           {{ matchInfo.allHandicaps }}</span
         >
       </div>
@@ -81,6 +81,7 @@ import { message } from '@/utils/message';
 
 const activeName = ref(0);
 const timer = ref();
+const openLen = ref(0);
 const isLoading = ref(true);
 
 const renderList = reactive<SaleDataAPI.ChampionBetItemsListData[]>([]);
@@ -99,10 +100,14 @@ const getBetItemsList = async () => {
   isLoading.value = true;
   const res = await API.getChampionBetItemsList({ matchId: props.matchId });
   if (res.code) return;
+  openLen.value = 0;
   if (res.data.length) {
     renderList.length = 0;
     renderList.push(...res.data);
   }
+  renderList.forEach(item => {
+    item.isSale === 2 && (openLen.value += 1);
+  });
   isLoading.value = false;
 };
 

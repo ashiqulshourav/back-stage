@@ -43,6 +43,7 @@
           filterable
           remote
           @change="search"
+          @focus="matchStore.reset_lagueList"
           :remote-method="
             debounce(
               query =>
@@ -92,21 +93,6 @@
           <el-option :label="t('未开售')" :value="0" />
         </el-select>
       </el-form-item>
-      <!-- 
-      <el-form-item :label="`${t('盘口状态')}:`" prop="handicapStatus">
-        <el-select
-          class="!w-[150px]"
-          v-model="form.handicapStatus"
-          clearable
-          :placeholder="t('请选择')"
-          @change="search"
-        >
-          <el-option :label="t('未开售')" :value="0" />
-          <el-option :label="t('早盘')" :value="1" />
-          <el-option :label="t('滚球')" :value="2" />
-          <el-option :label="t('进行中')" :value="3" />
-        </el-select>
-      </el-form-item> -->
 
       <el-form-item :label="`${t('赛事状态')}:`" prop="status">
         <el-select

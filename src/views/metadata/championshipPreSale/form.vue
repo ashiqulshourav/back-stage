@@ -25,6 +25,7 @@
       <el-date-picker
         v-model="newFormInline.beginTime"
         type="datetime"
+        :disabled="true"
         :placeholder="t('比赛时间')"
         value-format="x"
         format="YYYY-MM-DD HH:mm:ss"

@@ -151,11 +151,11 @@ export function useChampionshipPlaySettlementHook() {
     )
       .then(async () => {
         let res: EsportsSettlementAPI.lockESportHandicapResType;
-        const params = { matchId: row.matchId };
+        const params = { matchIdList: [row.matchId] };
         res =
           row.handicapStatus === 1
-            ? await API.lockESportHandicap(params)
-            : await API.unLockESportHandicap(params);
+            ? await API.saleBetItemsByMatchIds(params)
+            : await API.openBetItemsByMatchId(params);
         if (res.code) return message(res.msg, { type: 'error' });
         message(res.msg, { type: 'success' });
         onSearch();

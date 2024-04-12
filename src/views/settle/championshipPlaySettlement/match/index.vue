@@ -28,11 +28,11 @@
           @page-current-change="handleCurrentChange"
         >
           <!-- -锁盘按钮 -->
-          <!--  @change="() => changeSwitch({ row })" -->
           <template #handicapStatus="{ row, props }">
             <el-switch
               :size="props.size"
               v-model="row.handicapStatus"
+              @change="() => changeSwitch({ row })"
               :active-value="0"
               :inactive-value="1"
               inline-prompt

@@ -74,15 +74,6 @@ export const columns: TableColumnList = [
     formatter: ({ isSale }) => (isSale === 0 ? t('关闭') : t('开售'))
   },
   {
-    label: t('锁盘状态'),
-    prop: 'handicapStatus',
-    headerRenderer: d => handleTableWidth(d, t('锁盘状态'), 'auto'),
-    formatter: ({ handicapStatus }): string => {
-      return HANDICAP_STATUS[handicapStatus];
-    },
-    minWidth: 150
-  },
-  {
     label: t('锁盘控制'),
     slot: 'handicapStatus',
     headerRenderer: d => handleTableWidth(d, t('锁盘控制'), 'auto')
