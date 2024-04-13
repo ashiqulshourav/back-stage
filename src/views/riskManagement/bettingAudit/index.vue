@@ -302,7 +302,7 @@
         >
           <div>
             <label>{{ t('总计：') }}</label>
-            <span>{{ t('单') }}</span>
+            <span>{{addThousandSeparator(totalInfo.totalCount)}}{{ t('单') }}</span>
           </div>
           <div>
             <label>{{ t('用户数：') }}</label>
