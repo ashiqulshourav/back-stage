@@ -1,4 +1,4 @@
-import editForm from '../form.vue';
+// import editForm from '../form.vue';
 import { message } from '@/utils/message';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
@@ -9,6 +9,7 @@ import { searchFormType } from './types';
 export function userPlayerListHook() {
   const dataList = reactive<UserAPI.operateUserList[]>([]);
   const loading = ref(true);
+  const isEditUser = ref(false);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -41,12 +42,11 @@ export function userPlayerListHook() {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       loading.value = true;
-      const res =
-        await API.operateUserList({
-          ...removeEmptyStringKeys(form),
-          pageSize: pagination.pageSize,
-          pageNum: pagination.currentPage
-        });
+      const res = await API.operateUserList({
+        ...removeEmptyStringKeys(form),
+        pageSize: pagination.pageSize,
+        pageNum: pagination.currentPage
+      });
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
@@ -79,7 +79,7 @@ export function userPlayerListHook() {
             limitLevel: row?.limitLevel ?? 4,
             remark: row?.remark ?? '',
             singleBetLimit: row?.productAmountTotalLimit,
-            singleEventCompensationLimit: row?.maxWinAmountLimit,
+            singleEventCompensationLimit: row?.maxWinAmountLimit
           },
           onCloseDialog: (closeType?: string) => {
             if (closeType) onSearch();
@@ -96,6 +96,7 @@ export function userPlayerListHook() {
   return {
     loading,
     dataList,
+    isEditUser,
     pagination,
     onSearch,
     resetForm,

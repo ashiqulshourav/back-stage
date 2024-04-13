@@ -1,4 +1,3 @@
-
 interface FormProps {
   formInline: ConfigCenterDataAPI.LeagueTagType;
 }
@@ -9,6 +8,6 @@ export type searchFormType = {
   tenantIds?: number | string | string[];
   limitLevel?: number | string;
   tenantCode?: number | string;
-}
+};
 
 export type { FormProps };
