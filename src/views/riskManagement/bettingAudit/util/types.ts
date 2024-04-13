@@ -9,18 +9,13 @@ export type searchFormType = {
   orderId: string;
   leagueId: string;
   matchId: string;
-  awayTeamName: string;
-  homeTeamName: string;
   seriesType:number|string;
   isInplay:number|string;
   category:string|number;
   [key: string]: any;
-  leagueName:string;
   tenantIds:any ;
   minBetAmount:number|string;
   maxBetAmount:number|string;
-  minProfitAmount:number|string;
-  maxProfitAmount:number|string;
   riskStatus:number|string;
 }
 
