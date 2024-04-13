@@ -113,7 +113,6 @@ const closeDialog = () => {
 };
 
 const selectParentList = computed(() => {
-  console.log('form.vue文件 116==============行打印=', props.parentList);
   if (!selectVal.value) {
     return props.parentList;
   } else {

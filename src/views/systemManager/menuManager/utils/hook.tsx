@@ -51,11 +51,6 @@ export function useMenuManagerHook() {
       if (item.childResourceList.length > 0)
         filterParentList(item.childResourceList, item.name);
       if (item.type === 0 || item.type === 2) {
-        console.log(
-          'hook.tsx文件 54==============行打印=',
-          item.name,
-          parentName
-        );
         parentList.push({
           id: item.id,
           name: item.name,
@@ -64,8 +59,8 @@ export function useMenuManagerHook() {
           childResourceList: item.childResourceList
         });
       }
-      list.sort((a, b) => a.sort - b.sort);
     });
+    list.sort((a, b) => a.sort - b.sort);
   };
 
   //- 删除菜单
