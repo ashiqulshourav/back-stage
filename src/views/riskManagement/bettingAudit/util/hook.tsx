@@ -25,8 +25,8 @@ export function useLeague() {
   const tenantObj = reactive<any>({});
   const UDialogFlag =  ref<Boolean>(false);
   const loading = ref(true);
-  const totalInfo = reactive<BetOrderAPI.otherDataType>(
-    {} as BetOrderAPI.otherDataType
+  const totalInfo = reactive<BetOrderAPI.RiskOtherDataType>(
+    {} as BetOrderAPI.RiskOtherDataType
   );
   const pagination = reactive<PaginationProps>({
     total: 0,
@@ -46,12 +46,10 @@ export function useLeague() {
     isInplay:'',
     seriesType:'',
     category:'',
-    timeType:1,
     leagueName:'',
     tenantIds:[],
     seriesDetailsSingle:[],
     seriesDetailsDuplex:[],
-    queryType:1,
     minBetAmount:'',
     maxBetAmount:'',
     riskStatus:'',

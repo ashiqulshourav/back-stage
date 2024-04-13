@@ -4,26 +4,24 @@ export type searchFormType = {
   pageNum?:number|string;
   sportId: string;
   userIdOrName: string;
-  timeStart: number | string;
-  timeEnd: number | string;
+  createTimeStart: number | string;
+  createTimeEnd: number | string;
   orderId: string;
   leagueId: string;
   matchId: string;
   awayTeamName: string;
   homeTeamName: string;
   seriesType:number|string;
-  // status:any;
   isInplay:number|string;
   category:string|number;
   [key: string]: any;
-  timeType:number;
   leagueName:string;
   tenantIds:any ;
-  queryType:number;
   minBetAmount:number|string;
   maxBetAmount:number|string;
   minProfitAmount:number|string;
   maxProfitAmount:number|string;
+  riskStatus:number|string;
 }
 
 export enum betStatus {

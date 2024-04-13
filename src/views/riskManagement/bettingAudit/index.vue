@@ -302,17 +302,17 @@
         >
           <div>
             <label>{{ t('总计：') }}</label>
-            <span>{{ totalInfo?.thisPageBetCount ?? 0 }}{{ t('单') }}</span>
+            <span>{{ t('单') }}</span>
           </div>
           <div>
             <label>{{ t('用户数：') }}</label>
-            <span>{{ totalInfo?.thisPageBetUserCount ?? 0 }}{{ t('人') }}</span>
+            <span>{{ addThousandSeparator(totalInfo?.totalUserCount) ?? 0 }}{{ t('人') }}</span>
           </div>
           <div>
             <label>{{ t('总计投注额：') }}</label>
             <span class="ml-1">
               {{
-                totalInfo?.thisPageBetTotalAmount?.toFixed(2) ?? '0.00'
+                addThousandSeparator(totalInfo?.productAmountTotal?.toFixed(2) )?? '0.00'
               }}</span
             >
           </div>
@@ -320,7 +320,7 @@
             <label>{{ t('总输赢：') }}</label>
             <span class="ml-1">
               {{
-                totalInfo?.thisPageBetTotalProfitAmount?.toFixed(2) ?? '0.00'
+                addThousandSeparator(totalInfo?.profitTotal?.toFixed(2)) ?? '0.00'
               }}</span
             >
           </div>
@@ -336,6 +336,7 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
+import {addThousandSeparator} from '@/utils/formatNumber'
 import {
   formatSeriesType,
   useSportFormatDetail,
