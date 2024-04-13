@@ -270,7 +270,7 @@
             <div  class="match_item cancel flex justify-between  items-center" v-for="(item,index) in row.combineOrderDetails"
                  :key="item.betItemId"
             >
-<!--              <el-checkbox ></el-checkbox>-->
+              <el-checkbox  v-if="item.riskStatus===2&&hasAuth('REJECT')&&false"  @change="(data)=>selectReject(data,row.index-1,index)" ></el-checkbox>
               <el-button
                 size="small"
                 type="danger"
@@ -285,8 +285,9 @@
             <div class="match_item approve flex justify-between  items-center"  v-for="(item,index) in row.combineOrderDetails"
                   :key="item.betItemId"
             >
-<!--              <el-checkbox ></el-checkbox>-->
+              <el-checkbox  v-if="item.riskStatus===2&&hasAuth('REJECT')&&false" ></el-checkbox>
               <el-button
+                  @change="(data)=>selectApprove(data,row.index-1,index)"
                   v-if="item.riskStatus===2&&hasAuth('REJECT')"
                 size="small"
                 type="primary"
@@ -354,7 +355,6 @@ import { usePublicHooks } from '@/hooks';
 import {hasAuth} from "@/router/utils";
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
-
 const {
   loading,
   dataList,
@@ -371,10 +371,10 @@ const {
   tenantList,
   handleCancel,
   handleApprove,
-  handleCancelAll,
-  handleApproveAll,
   tenantObj,
   getRiskStatus,
+  selectReject,
+  selectApprove,
 } = useLeague();
 </script>
 
