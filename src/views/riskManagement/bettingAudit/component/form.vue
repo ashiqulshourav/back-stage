@@ -77,19 +77,14 @@ const closeDialog = () => {
 
 /* 传,roleName,status,comment */
 const confirmClick = () => {
-  console.log(3333,props.list)
-  console.log(44444,form.value.riskType)
-  let param=[];
-  props.list.map((item:any)=>{
-    const details = item.combineOrderDetails.map((item)=>{
-      return {detailId:item.detailId,riskTimes: item.riskTimes, riskType:form.value.riskType,}
+
+  const param=props.list.map((item:any)=>{
+    item.details.map((item2)=>{
+      item2.riskType=form.value.riskType
+      return item2
     })
-    param.push({
-      orderId:item.id,
-      details:details,
-    })
+   return item
   })
-  console.log(4444,param)
   ruleFormRef.value.validate(async v => {
     if(v){
       API.bettingAuditReject(param).then((res)=>{
@@ -97,7 +92,6 @@ const confirmClick = () => {
         console.log(555,res)
       })
     }
-
   })
 
 };

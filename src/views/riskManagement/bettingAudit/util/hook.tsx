@@ -268,15 +268,22 @@ export function useLeague() {
   const handleCancel = (row:any,index:number)=>{
     let data= {...row} //...row.combineOrderDetails[index]
     data.combineOrderDetails = data.combineOrderDetails.filter((item,i)=>{
-      console.log(1111,item)
       return i == index
     })
-    openCancelDialog([data])
+    const details = row.combineOrderDetails.map((item)=>{
+      return {detailId:item.detailId,riskTimes: item.riskTimes}
+    })
+    const list = [
+      {orderId: data.id,
+        details:details
+      }
+    ]
+    openCancelDialog(list)
   }
-  const handleCancelAll = ()=>{
-    openCancelDialog(dataList)
-  }
-  const openCancelDialog = (list)=>{
+
+  const openCancelDialog = async (list)=>{
+    const r= await openPasswordInput();
+    if (!r) return;
     addDialog({
       title:'风控划单',
       width: '30%',
@@ -294,23 +301,63 @@ export function useLeague() {
     });
   }
   const handleApprove = (row:any,index)=>{
-    const r= openPasswordInput();
-    if(!r){
-      return
-    }
     let data= {...row} //...row.combineOrderDetails[index]
     data.combineOrderDetails = data.combineOrderDetails.filter((item,i)=>{
       console.log(1111,item)
       return i == index
     })
-    openApproveDialog([data])
+    const details = row.combineOrderDetails.map((item)=>{
+      return {detailId:item.detailId,riskTimes: item.riskTimes}
+    })
+    const list = [
+      {orderId: data.id,
+        details:details
+      }
+    ]
+    openApproveDialog(list)
+  }
+  const handleApproveSome =()=>{
+    let obj={}
+    dataList.map((item)=>{
+       item.combineOrderDetails.map((match:any)=>{
+         if(match.approveSelected){
+           if(!obj[item.id]){
+             obj[item.id]={orderId:'',details:[]}
+             obj[item.id]['orderId']= item.id
+             obj[item.id]['details']= [{detailId: match.detailId, riskTimes: match.riskTimes}]
+           }else{
+             obj[item.id]['details'].push({detailId: match.detailId, riskTimes: match.riskTimes})
+           }
+         }
+       })
+    })
+    const list=Object.values(obj).map((value)=>{
+      return value
+    })
+    openApproveDialog(list)
+  }
+  const handleCancelSome = ()=>{
+    let obj={}
+    dataList.map((item)=>{
+      item.combineOrderDetails.map((match:any)=>{
+        if(match.rejectSelected){
+          if(!obj[item.id]){
+            obj[item.id]={orderId:'',details:[]}
+            obj[item.id]['orderId']= item.id
+            obj[item.id]['details']= [{detailId: match.detailId, riskTimes: match.riskTimes}]
+          }else{
+            obj[item.id]['details'].push({detailId: match.detailId, riskTimes: match.riskTimes})
+          }
+        }
+      })
+    })
+    const list=Object.values(obj).map((value)=>{
+      return value
+    })
+    openCancelDialog(list)
   }
 
-  const handleApproveAll =()=>{
-    openApproveDialog(dataList)
-  }
-
-  const openApproveDialog = (list)=>{
+  const openApproveDialog =  (list)=>{
     ElMessageBox.confirm(
       t('确定审核通过吗？'),
       t('警告'),
@@ -318,31 +365,16 @@ export function useLeague() {
         center: true,
         type: 'warning'
       }
-    ).then(()=>{
-      const r= openPasswordInput();
+    ).then(async ()=>{
+      const r= await openPasswordInput();
       if(!r){
         return
       }
-      let param=[];
-      list.map((item:any)=>{
-        const details = item.combineOrderDetails.map((item)=>{
-          return {detailId:item.detailId,riskTimes: item.riskTimes,}
-        })
-        param.push({
-          orderId:item.id,
-          details:details,
-        })
-      })
-      console.log(4444,param)
-      API.bettingAuditConfirm(param).then((res)=>{
+      API.bettingAuditConfirm(list).then((res)=>{
         onSearch();
-        console.log(55555,res)
       })
     })
   }
-
-
-
 const getStatus = (status,billStatus,betResult,isReserve?)=>{
     let obj = {status:-1,bgColor:''}
   if(status==2&&billStatus===1&&(betResult===22||betResult===23)){   // 注单无效
@@ -415,8 +447,8 @@ function copyTest(str:string,tip:string){
     UDialogFlag,
     handleCancel,
     handleApprove,
-    handleCancelAll,
-    handleApproveAll,
+    handleCancelSome,
+    handleApproveSome,
     selectReject,
     selectApprove,
   };

@@ -19,21 +19,16 @@
         <div class="flex item-center ">
           <el-button
             type="danger"
-            @click="handleCancelAll"
+            @click="handleCancelSome"
           >
             {{ t('批量划单') }}
           </el-button>
           <el-button
             type="primary"
-            @click="handleApproveAll"
+            @click="handleApproveSome"
           >
             {{ t('批量通过') }}
 
-          </el-button>
-          <el-button
-            type="primary"
-          >
-            {{ t('导出注单') }}
           </el-button>
         </div>
       </template>-->
@@ -270,7 +265,8 @@
             <div  class="match_item cancel flex justify-between  items-center" v-for="(item,index) in row.combineOrderDetails"
                  :key="item.betItemId"
             >
-              <el-checkbox  v-if="item.riskStatus===2&&hasAuth('REJECT')&&false"  @change="(data)=>selectReject(data,row.index-1,index)" ></el-checkbox>
+<!--              <el-checkbox :checked="item.rejectSelected"   @change="(data)=>selectReject(data,row.index-1,index)" ></el-checkbox>-->
+<!--              <el-checkbox  v-if="item.riskStatus===2&&hasAuth('REJECT')&&false"  @change="(data)=>selectReject(data,row.index-1,index)" ></el-checkbox>-->
               <el-button
                 size="small"
                 type="danger"
@@ -285,10 +281,11 @@
             <div class="match_item approve flex justify-between  items-center"  v-for="(item,index) in row.combineOrderDetails"
                   :key="item.betItemId"
             >
-              <el-checkbox  v-if="item.riskStatus===2&&hasAuth('REJECT')&&false" ></el-checkbox>
+<!--              <el-checkbox :checked="item.approveSelected" @change="(data)=>selectApprove(data,row.index-1,index)"  ></el-checkbox>-->
+<!--              <el-checkbox  v-if="item.riskStatus===2&&hasAuth('REJECT')&&false" ></el-checkbox>-->
               <el-button
                   @change="(data)=>selectApprove(data,row.index-1,index)"
-                  v-if="item.riskStatus===2&&hasAuth('REJECT')"
+                  v-if="item.riskStatus===2&&hasAuth('APPROVE')"
                 size="small"
                 type="primary"
                 @click="handleApprove(row,index)"
@@ -371,6 +368,8 @@ const {
   tenantList,
   handleCancel,
   handleApprove,
+  handleCancelSome,
+  handleApproveSome,
   tenantObj,
   getRiskStatus,
   selectReject,

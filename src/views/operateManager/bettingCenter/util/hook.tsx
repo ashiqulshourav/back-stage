@@ -262,7 +262,6 @@ export function useLeague() {
     });
   };
   const handleCancel = (data:any)=>{
-
       ElMessageBox.confirm(
         t('确定取消注单吗？'),
         t('警告'),
@@ -272,7 +271,7 @@ export function useLeague() {
         }
       )
         .then(async () => {
-          const r= openPasswordInput();
+          const r= await openPasswordInput();
           if(r){
             const params:any={orderIds:[data.id]}
             API.orderCancel(params).then((res)=>{
