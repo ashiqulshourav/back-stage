@@ -108,7 +108,12 @@ export const columns: TableColumnList = [
     prop: 'status',
   },
   {
+    label: t('风控状态'),
+    prop: 'riskStatus',
+  },
+  {
     label: t('用户币种'),
     prop: '',
   },
+
 ];

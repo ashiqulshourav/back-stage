@@ -32,7 +32,7 @@ export function useLeague() {
     total: 0,
     pageSize: 10,
     currentPage: 1,
-    pageSizes:[10,20,50,100,200],
+    pageSizes:[10,20,50,100,200,1000],
     background: true
   });
   const form = reactive<searchFormType>({
@@ -56,7 +56,12 @@ export function useLeague() {
     pagination.pageSize = val;
     onSearch();
   }
-
+  const selectReject = (flag,index,i)=>{
+    dataList[index].combineOrderDetails[i]['rejectSelected'] = flag
+  }
+  const selectApprove = (flag,index,i)=>{
+    dataList[index].combineOrderDetails[i]['approveSelected'] = flag
+  }
   function handleCurrentChange(val: number) {
     pagination.currentPage = val;
     onSearch();
@@ -109,11 +114,11 @@ export function useLeague() {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       const params:searchFormType= formatParams({}) as searchFormType
-      if(params.maxBetAmount<params.minBetAmount){
+      if(Number(params.maxBetAmount)<Number(params.minBetAmount)){
           message(t('请检查投注额，最小值不能大于最大值'), { type: 'warning' });
           return
       }
-      if(params.maxProfitAmount<params.minProfitAmount){
+      if(Number(params.maxProfitAmount)<Number(params.minProfitAmount)){
           message(t('请检查用户输赢，最小值不能大于最大值'), { type: 'warning' });
           return
       }
@@ -126,7 +131,10 @@ export function useLeague() {
         dataList.push(...res?.data?.pageData);
         dataList.map((item: any, index) => {
           item.index = index + 1
-
+           item.combineOrderDetails.map((item)=>{
+             item.rejectSelected = false;
+             item.approveSelected = false;
+           })
         })
         pagination.total = res?.data?.count;
         pagination.pageSize = res?.data?.pageSize;
@@ -143,7 +151,6 @@ export function useLeague() {
 
   const getTenantList = async ()=>{
     const res =  await API.getTenantList()
-    dataList.length = 0;
     if(res.data?.data?.length){
       tenantList.push(...res?.data?.data);
       // 将数组根据id转换为对象
@@ -228,6 +235,11 @@ export function useLeague() {
           case 'tenantCode':  //商户编码
               str=(tenantObj[data.tenantId])?.name??''
               break;
+          // case 'riskStatus':  //风控状态
+          //   str= getRiskStatus(item.riskStatus).label
+          //     if(item.riskType){
+          //     }
+          //   break;
           default:
             str = data[column.prop as string]
         }
@@ -282,6 +294,10 @@ export function useLeague() {
     });
   }
   const handleApprove = (row:any,index)=>{
+    const r= openPasswordInput();
+    if(!r){
+      return
+    }
     let data= {...row} //...row.combineOrderDetails[index]
     data.combineOrderDetails = data.combineOrderDetails.filter((item,i)=>{
       console.log(1111,item)
@@ -303,6 +319,10 @@ export function useLeague() {
         type: 'warning'
       }
     ).then(()=>{
+      const r= openPasswordInput();
+      if(!r){
+        return
+      }
       let param=[];
       list.map((item:any)=>{
         const details = item.combineOrderDetails.map((item)=>{
@@ -397,5 +417,7 @@ function copyTest(str:string,tip:string){
     handleApprove,
     handleCancelAll,
     handleApproveAll,
+    selectReject,
+    selectApprove,
   };
 }
