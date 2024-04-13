@@ -67,12 +67,12 @@ export const columns: TableColumnList = [
     minWidth: 180,
     formatter: ({ status }) => ESPORT_MATCH_STATUS[status] ?? '-'
   },
-  {
-    label: t('开售状态'),
-    headerRenderer: d => handleTableWidth(d, t('开售状态'), 'auto'),
-    minWidth: 180,
-    formatter: ({ isSale }) => (isSale === 0 ? t('关闭') : t('开售'))
-  },
+  // {
+  //   label: t('开售状态'),
+  //   headerRenderer: d => handleTableWidth(d, t('开售状态'), 'auto'),
+  //   minWidth: 180,
+  //   formatter: ({ isSale }) => (isSale === 0 ? t('关闭') : t('开售'))
+  // },
   {
     label: t('锁盘控制'),
     slot: 'handicapStatus',
