@@ -274,7 +274,7 @@
               <el-button
                 size="small"
                 type="danger"
-                v-if="item.riskStatus===2"
+                v-if="item.riskStatus===2&&hasAuth('REJECT')"
                 @click="handleCancel(row,index)"
               >
                 {{ t('风控划单') }}
@@ -287,7 +287,7 @@
             >
 <!--              <el-checkbox ></el-checkbox>-->
               <el-button
-                v-if="item.riskStatus===2"
+                  v-if="item.riskStatus===2&&hasAuth('REJECT')"
                 size="small"
                 type="primary"
                 @click="handleApprove(row,index)"
@@ -351,6 +351,7 @@ import {
 } from '@/utils/formatMatch';
 import {betStatusMap, riskStatus} from './util/types';
 import { usePublicHooks } from '@/hooks';
+import {hasAuth} from "@/router/utils";
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
 

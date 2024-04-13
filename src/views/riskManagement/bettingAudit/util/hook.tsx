@@ -44,7 +44,6 @@ export function useLeague() {
     leagueId: '',
     matchId: '',
     seriesType:'',
-    isInplay:'',
     category:'',
     tenantIds:[],
     seriesDetailsSingle:[],

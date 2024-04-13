@@ -63,28 +63,6 @@
               <el-option v-for="item in Object.entries(riskStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
           </el-select>
         </el-form-item>
-
-        <el-form-item :label="`${t('投注阶段')}:`" prop="isInplay">
-          <el-select
-              v-model="form.isInplay"
-              clearable
-              class="!w-[100px]"
-              @change="search"
-          >
-            <el-option
-                label="全部"
-                value=""
-            />
-            <el-option
-                label="滚球"
-                :value="1"
-            />
-            <el-option
-                label="早盘"
-                :value="0"
-            />
-          </el-select>
-        </el-form-item>
         <el-form-item :label="`${t('过关类型')}:`" prop="seriesType">
           <el-select v-model="form.seriesType" clearable class="!w-[100px]" @change="search" >
             <el-option  label="全部" value="" />

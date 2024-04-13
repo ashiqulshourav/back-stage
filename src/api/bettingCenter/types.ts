@@ -73,7 +73,7 @@ declare namespace BetOrderAPI {
     profitTotal: number;
     productAmountTotal: number;
     totalUserCount: number;
-    totalInfo:number;
+    totalCount:number;
   }
 
   type BetOrderData = {

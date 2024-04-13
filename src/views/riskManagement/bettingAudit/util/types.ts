@@ -10,7 +10,6 @@ export type searchFormType = {
   leagueId: string;
   matchId: string;
   seriesType:number|string;
-  isInplay:number|string;
   category:string|number;
   [key: string]: any;
   tenantIds:any ;
