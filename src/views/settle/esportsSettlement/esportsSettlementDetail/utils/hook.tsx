@@ -126,7 +126,7 @@ export function useEsportsSettlement() {
     }).then(async () => {
       const res = await API.updateSaleStatus({
         isSale: 0,
-        matchId: +route.params.matchId
+        matchId: renderObj.matchId
       });
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if (!res.code) getEsportMatchInfo();

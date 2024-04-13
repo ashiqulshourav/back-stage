@@ -93,7 +93,7 @@ export function useEsportsSettlement() {
 
   //- 开售状态修改
   const closeSettle = async () => {
-    ElMessageBox.confirm(t('确认要关闭开售状态吗？'), t('系统提示'), {
+    ElMessageBox.confirm(t('确认要关闭开售状态吗1？'), t('系统提示'), {
       confirmButtonText: t('确定'),
       cancelButtonText: t('取消'),
       type: 'warning',
@@ -101,7 +101,7 @@ export function useEsportsSettlement() {
     }).then(async () => {
       const res = await API.updateSaleStatus({
         isSale: 0,
-        matchId: renderObj.matchId
+        matchId: +route.params.matchId
       });
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if (!res.code) getEsportMatchInfo();
