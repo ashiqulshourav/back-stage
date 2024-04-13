@@ -27,7 +27,6 @@
         placeholder="导航左侧菜单显示/详情页面非菜单展示/按钮为页面权限"
         v-model="newFormInline.type"
         clearable
-        :disabled="!!newFormInline.id"
       >
         <el-option
           v-for="item in Object.entries(TYPE_NAME)"
@@ -43,13 +42,13 @@
         v-model="newFormInline.parentId"
         filterable
         clearable
-        :disabled="newFormInline.parentId === 0 && !!newFormInline.id"
+        :filter-method="filterMethod"
       >
         <el-option :value="0" :label="t('一级页面')"></el-option>
         <el-option
-          v-for="item in parentList"
+          v-for="item in selectParentList"
           :key="item.id"
-          :label="item.name"
+          :label="item.tableName"
           :value="item.id"
         />
       </el-select>
@@ -104,6 +103,7 @@ const props = defineProps<{
 }>();
 
 const emits = defineEmits(['closeDialog']);
+const selectVal = ref('');
 
 const ruleFormRef = ref<FormInstance>();
 const newFormInline = reactive(props.row);
@@ -111,6 +111,17 @@ const newFormInline = reactive(props.row);
 const closeDialog = () => {
   emits('closeDialog');
 };
+
+const selectParentList = computed(() => {
+  console.log('form.vue文件 116==============行打印=', props.parentList);
+  if (!selectVal.value) {
+    return props.parentList;
+  } else {
+    return props.parentList.filter(item => item.name.includes(selectVal.value));
+  }
+});
+
+const filterMethod = v => (selectVal.value = v);
 
 const confirmClick = () => {
   ruleFormRef.value.validate(async v => {
