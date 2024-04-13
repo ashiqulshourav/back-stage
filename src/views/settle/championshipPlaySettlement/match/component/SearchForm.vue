@@ -81,7 +81,7 @@
         />
       </el-form-item>
 
-      <el-form-item :label="`${t('开售状态')}:`" prop="isSale">
+      <!-- <el-form-item :label="`${t('开售状态')}:`" prop="isSale">
         <el-select
           class="!w-[150px]"
           v-model="form.isSale"
@@ -92,7 +92,7 @@
           <el-option :label="t('开售')" :value="1" />
           <el-option :label="t('未开售')" :value="0" />
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
 
       <el-form-item :label="`${t('赛事状态')}:`" prop="status">
         <el-select
