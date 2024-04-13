@@ -161,7 +161,7 @@ export function useLeague() {
 
   //- 导出excel表格
   const exportFile = async () => {
-    const res: BetOrderAPI.BetOrderResType  = await API.bettingCenterList(formatParams({pageNum:1,pageSize:50000}) as searchFormType);
+    const res: BetOrderAPI.BetOrderResType  = await API.bettingAuditList(formatParams({pageNum:1,pageSize:50000}) as searchFormType);
     const r = res.data.pageData.map((item:any,i) => {
       const arr = [];
       const data={...item,...item?.combineOrderDetails[0]}
@@ -248,7 +248,7 @@ export function useLeague() {
     };
 
     utils.book_append_sheet(workBook, workSheet, '数据报表');
-    writeFile(workBook, '赛程_注单中心.xlsx');
+    writeFile(workBook, '赛程_注单审核.xlsx');
     message(t('导出成功'), {
       type: 'success'
     });
