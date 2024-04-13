@@ -1,6 +1,6 @@
 <template>
   <el-form
-      ref="formRef"
+      ref="ruleFormRef"
       :inline="true"
       :model="form"
       :rules="formRules"
@@ -40,14 +40,13 @@ import {t} from "@/plugins/i18n";
 import {ref} from "vue";
 import {formatNumber} from "@/utils/formatNumber";
 import {formRules} from '../util/rule'
+import { FormInstance } from 'element-plus/es/components/form';
 
-
-const formRef = ref();
+const ruleFormRef = ref<FormInstance>();
 const form = ref({
   riskType:'',
   others:'',
 })
-const riskType = ref('');
 const emits = defineEmits(['closeDialog']);
 const props = defineProps<{
   list: BetOrderAPI.Detail&BetOrderAPI.BetOrderList[];
@@ -91,10 +90,16 @@ const confirmClick = () => {
     })
   })
   console.log(4444,param)
-  API.bettingAuditReject(param).then((res)=>{
-    emits('closeDialog');
-    console.log(555,res)
+  ruleFormRef.value.validate(async v => {
+    if(v){
+      API.bettingAuditReject(param).then((res)=>{
+        emits('closeDialog');
+        console.log(555,res)
+      })
+    }
+
   })
+
 };
 </script>
 
