@@ -4,12 +4,15 @@ export type searchFormType = {
   pageNum?:number|string;
   sportId: string;
   userIdOrName: string;
-  createTimeStart: number | string;
-  createTimeEnd: number | string;
+  timeStart: number | string;
+  timeEnd: number | string;
   orderId: string;
   leagueId: string;
   matchId: string;
+  awayTeamName: string;
+  homeTeamName: string;
   seriesType:number|string;
+  // status:any;
   isInplay:number|string;
   category:string|number;
   [key: string]: any;
@@ -19,7 +22,8 @@ export type searchFormType = {
   queryType:number;
   minBetAmount:number|string;
   maxBetAmount:number|string;
-  riskStatus:number|string;
+  minProfitAmount:number|string;
+  maxProfitAmount:number|string;
 }
 
 export enum betStatus {
@@ -48,21 +52,6 @@ export const betStatusMap ={
   [betStatus.reserveFail]: t('预约失败'),
   [betStatus.onReverse]: t('预约中'),
 }
-
-export enum riskStatus {
-  all = 1,
-  rejectBetting=2,
-  approve=104,
-  reject=204,
-
-}
-export const riskStatusMap ={
-  [betStatus.all]: t('全部'),
-  [riskStatus.rejectBetting]: '划单确认中',
-  [riskStatus.approve]: t('手动通过'),
-  [riskStatus.reject]: t('手动拒绝'),
-}
-
 
 export const seriesTypesSingle = {
   '2001':{value:'2001',name:'2串1',list:[2001]},
@@ -94,3 +83,18 @@ export const seriesTypesDuplex = {
   '10001013':{value:'10001013',name:'10串1013',list:[10001013]},
 }
 
+
+export enum riskStatus {
+  all = 1,
+  rejectBetting=2,
+  approve=104,
+  reject=204,
+
+}
+export const riskStatusMap ={
+  [riskStatus.all]: t('全部'),
+  // [betStatus.confirm]: t('确认中'),
+  [riskStatus.rejectBetting]: '划单确认中',
+  [riskStatus.approve]: t('手动通过'),
+  [riskStatus.reject]: t('手动拒绝'),
+}
