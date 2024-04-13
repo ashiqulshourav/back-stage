@@ -52,14 +52,17 @@ const teamChangeEvent = (...data) => {
         t2 = 1;
         break;
     }
-    if (index === 0) {
-      row.t1 = t1;
-      row.t2 = t2;
-    } else {
-      const prevRow = item.tableList[index - 1];
-      row.t1 = +prevRow.t1 + t1;
-      row.t2 = +prevRow.t2 + t2;
-    }
+
+    row.t1 = t1;
+    row.t2 = t2;
+    // if (index === 0) {
+    //   row.t1 = t1;
+    //   row.t2 = t2;
+    // } else {
+    //   const prevRow = item.tableList[index - 1];
+    //   row.t1 = +prevRow.t1 + t1;
+    //   row.t2 = +prevRow.t2 + t2;
+    // }
     row.firstNum = index + 1;
     row.firstT1 = t1;
     row.firstT2 = t2;
