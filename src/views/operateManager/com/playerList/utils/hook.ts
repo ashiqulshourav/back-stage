@@ -1,6 +1,6 @@
 import editForm from '../form.vue';
 import { message } from '@/utils/message';
-import { addDialog, closeDialog } from '@/components/ReDialog';
+import { addDialog, closeDialog } from '@/components/ReDialog/index';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, h } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';

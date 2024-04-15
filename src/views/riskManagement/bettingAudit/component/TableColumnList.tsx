@@ -28,13 +28,13 @@ export const columns: TableColumnList = [
   {
     label: t("赔率"),
     slot: "odd",
-    minWidth: 50,
+    minWidth: 100,
     align:'center',
   },
   {
     label: t("状态"),
     slot: "status",
-    minWidth: 50,
+    minWidth: 120,
     align:'left',
   },
 

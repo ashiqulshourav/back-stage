@@ -210,10 +210,7 @@
                 {{ t('赛果：')
                 }}{{ displayHomeAwayScore(item.settleScore, item.sportId) }}
               </div>
-              <div v-if="item.riskStatus===riskStatus.reject">
-                取消原因:{{item.riskType}}
-              </div>
-              <div :style="{background:getRiskStatus(item.riskStatus).bgColor}" class="status_btn mb-1">{{getRiskStatus(item.riskStatus).label}}</div>
+
             </div>
           </template>
           <template #odd="{ row }">
@@ -247,6 +244,7 @@
               </div>
 
             </div>
+
           </template>
           <template #profitAmount="{ row }">
             <span
@@ -257,9 +255,12 @@
             <span v-else>-</span>
           </template>
           <template #status="{ row }">
-            <div :style="{background:getStatus(row.status,row.billStatus,row.combineOrderDetails[0].betResult,row.isReserve).bgColor}" class="status_btn mb-1">{{ betStatusMap[getStatus(row.status,row.billStatus,row.combineOrderDetails[0].betResult,row.isReserve).status]}}</div>
-            <div >{{ row.settleTime ? dayjs(row.settleTime).format('MM-DD HH:mm:ss'):'' }}</div>
-            <div v-if="String(row.seriesType).slice(-3) ==='001'" >{{t('总赔率:')}}{{String(row.seriesType).slice(-3) ==='001'?calculateSeriesTypeTotal(row.combineOrderDetails):'' }}</div>
+            <div   class="match_item odd_item"  v-for="item in row.combineOrderDetails">
+              <div v-if="item.riskStatus===riskStatus.reject">
+                原因:{{item.riskType}}
+              </div>
+              <div :style="{background:getRiskStatus(item.riskStatus).bgColor}" class="status_btn mb-1">{{getRiskStatus(item.riskStatus).label}}</div>
+            </div>
           </template>
           <template   #cancel="{ row }">
             <div  class="match_item cancel flex justify-between  items-center" v-for="(item,index) in row.combineOrderDetails"
@@ -363,7 +364,6 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   exportFile,
-  getStatus,
   copyTest,
   tenantList,
   handleCancel,
