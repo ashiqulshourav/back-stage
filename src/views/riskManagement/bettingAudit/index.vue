@@ -397,7 +397,7 @@ watch( dataList,
         rejectSelectedCount.value = rejectCount
       }
       if(approveCount!==approveSelectedCount.value){
-        approveSelectedCount.value = rejectCount
+        approveSelectedCount.value = approveCount
       }
     },
     { deep: true }
