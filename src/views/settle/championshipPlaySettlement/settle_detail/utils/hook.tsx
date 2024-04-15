@@ -10,6 +10,7 @@ export function useEsportsSettlement() {
   const loading = ref(true);
   const switchLoadMap = ref({});
   const { switchStyle } = usePublicHooks();
+  const resetLoading = ref(false);
   const rList = reactive<SPORT_LEVEL_LIST_TYPE[]>([]);
 
   const renderObj = reactive<EsportsSettlementAPI.ESportMatchById>(
@@ -42,7 +43,6 @@ export function useEsportsSettlement() {
     res.data.forEach(item => {
       if (item.settleStatus === 1) {
         item.betOptions = item.handicapList.findIndex(item => item.win === 1);
-        item.oldBetOptions = item.betOptions;
       } else {
         item.betOptions = -1;
       }
@@ -116,8 +116,8 @@ export function useEsportsSettlement() {
   const resetManualSettleESportHandicapClick = async (
     row: EsportsSettlementAPI.ChampionEventList
   ) => {
-    if (row.oldBetOptions === row.betOptions)
-      return message(t('结果未改变，请重新选择'), { type: 'error' });
+    // if (row.oldBetOptions === row.betOptions)
+    //   return message(t('结果未改变，请重新选择'), { type: 'error' });
 
     ElMessageBox.confirm(t('确认要从新结算该记录么?'), '系统提示', {
       confirmButtonText: t('确认'),
@@ -145,7 +145,9 @@ export function useEsportsSettlement() {
           };
         })
       };
+      resetLoading.value = true;
       const res = await API.reSettleChampionHandicap(params);
+      resetLoading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       getEsportMatchInfo();
     });
@@ -176,6 +178,7 @@ export function useEsportsSettlement() {
     handleTableWidthChange,
     resetManualSettleESportHandicapClick,
     closeSettle,
-    eventMatchList
+    eventMatchList,
+    resetLoading
   };
 }
