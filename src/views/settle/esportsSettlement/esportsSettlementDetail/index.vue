@@ -97,6 +97,7 @@
                       size="small"
                       v-if="hasAuth('RESETTLEMENT')"
                       type="danger"
+                      :loading="resetLoading"
                       @click="resetManualSettleESportHandicapClick(row)"
                       >{{ t('确认二次结算') }}</el-button
                     >
@@ -178,7 +179,8 @@ const {
   manualSettleESportHandicapClick,
   handleTableWidthChange,
   closeSettle,
-  resetManualSettleESportHandicapClick
+  resetManualSettleESportHandicapClick,
+  resetLoading
 } = useEsportsSettlement();
 </script>
 
