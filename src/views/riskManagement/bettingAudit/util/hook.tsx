@@ -206,10 +206,7 @@ export function useLeague() {
             str = data.isSettlementAgain===2?'是':'否'
             break;
           case 'status':
-            str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult,data.isReserve)?.status]
-            break;
-          case 'billStatus':
-            str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult,data.isReserve)?.status]
+            // str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult,data.isReserve)?.status]
             break;
           case 'settleScore':
             str=displayHomeAwayScore(data.settleScore,data.sportId)
@@ -375,33 +372,6 @@ export function useLeague() {
       })
     })
   }
-const getStatus = (status,billStatus,betResult,isReserve?)=>{
-    let obj = {status:-1,bgColor:''}
-  if(status==2&&billStatus===1&&(betResult===22||betResult===23)){   // 注单无效
-    obj={status:betStatus.betInvalid,bgColor:'#E54752'}
-  }else if(status===1&&billStatus===1&&(betResult===21)){  // 预约失败
-    obj={status:betStatus.reserveFail,bgColor:'#F57582'}
-  }else if(status===0&&billStatus===0){  // 未结算
-    if(isReserve===1){ // 预约中
-      obj={status:betStatus.onReverse,bgColor:'#F57582'}
-    }else {
-      obj={status:betStatus.unsettlementBet,bgColor:'#FFC53D'}
-    }
-  }else if(status===1&&billStatus===1){// 已结算
-    obj={status:betStatus.settlementBet,bgColor:'#40A9FF'}
-  }else if(status===4&&billStatus===1&&betResult===61){  // 封控拒单
-    obj={status:betStatus.riskReject,bgColor:'#F88D48'}
-  }else if(status===3){   // 待确认
-    obj={status:betStatus.confirm,bgColor:'#FFC53D'}
-  }else if(status===6){ // 待审核
-    obj={status:betStatus.PendingApprove,bgColor:'#F88D48'}
-  }else  if(status===4){  // 投注失败
-    obj={status:betStatus.betFail,bgColor:'#F57582'}
-  }else if(status===5){  // 赛事异常
-    obj={status:betStatus.eventAbnormal,bgColor:'#F88D48'}
-  }
-   return obj
-}
 
 const getRiskStatus = (rStatus:number)=>{
   let obj = {label:'',bgColor:''}
@@ -409,6 +379,8 @@ const getRiskStatus = (rStatus:number)=>{
       obj = {label:riskStatusMap[riskStatus.approve],bgColor:'#FFC53D'}
     }else if(rStatus===riskStatus.reject){
       obj = {label:riskStatusMap[riskStatus.reject],bgColor:'#F88D48'}
+    }else if(rStatus===riskStatus.rejectBetting){
+      obj = {label:riskStatusMap[riskStatus.rejectBetting],bgColor:'#F88D48'}
     }
     return obj
 }
@@ -441,7 +413,6 @@ function copyTest(str:string,tip:string){
     handleSelectionChange,
     exportFile,
     getRiskStatus,
-    getStatus,
     copyTest,
     tenantObj,
     UDialogFlag,

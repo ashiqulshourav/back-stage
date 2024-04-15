@@ -4,7 +4,7 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import {betStatus, betStatusMap, searchFormType, seriesTypesSingle,seriesTypesDuplex} from './types';
 import { columns } from './exportTableColumnList';
 import { utils, writeFile } from 'xlsx';
-import { addDialog, closeDialog } from '@/components/ReDialog';
+import { addDialog, closeDialog } from '@/components/ReDialog/index';
 import editMatch from "../component/editMatch.vue";
 import { reactive, ref, onMounted, h } from 'vue';
 import {usePasswordInputHook} from "@/hooks/passwordInputHook";
