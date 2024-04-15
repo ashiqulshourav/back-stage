@@ -53,7 +53,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item :label="`${t('风控状态')}:`" prop="riskStatus">
+        <el-form-item :label="`${t('审核状态')}:`" prop="riskStatus">
           <el-select class="min-w100"
                   :placeholder="t('请选择状态')"
               v-model="form.riskStatus"
@@ -204,7 +204,7 @@ const props = defineProps<{
 const formRef = ref();
 const selectDate = ref('');
 const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
-import {  betStatusMap,riskStatusMap,seriesTypesSingle,seriesTypesDuplex} from "../util/types";
+import {  riskStatusMap,seriesTypesSingle,seriesTypesDuplex} from "../util/types";
 import {hasAuth} from "@/router/utils";
 import CustomDate from "@/components/Form/Custom_date.vue";
 import {formRules} from "@/views/configCenter/classify_setting/utils/rule";

@@ -58,8 +58,7 @@ export enum riskStatus {
 }
 export const riskStatusMap ={
   [riskStatus.all]: t('全部'),
-  // [betStatus.confirm]: t('确认中'),
-  [riskStatus.rejectBetting]: '划单确认中',
+  [riskStatus.rejectBetting]: '待审核',
   [riskStatus.approve]: t('手动通过'),
   [riskStatus.reject]: t('手动拒绝'),
 }
