@@ -11,12 +11,6 @@ declare namespace RiskManagementDataAPI {
     level?: number;
     name?: string;
   };
-  type LeagueTagListFetchProps = {
-    text?: string;
-    sportId?: number;
-    category?: number;
-    leagueId?: number;
-  };
   type RiskTagListType = COMMON.ListData<RiskTagType>;
   type RiskTagListRes = COMMON.BASE_RES_TYPE<RiskTagListType>;
   type RiskTagRes = COMMON.BASE_RES_TYPE<RiskTagType>;

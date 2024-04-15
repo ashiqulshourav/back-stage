@@ -12,7 +12,7 @@
           v-if="hasAuth('ADD')"
           type="primary"
           :icon="useRenderIcon(AddFill)"
-          @click="openDialog(t('新增标签'))"
+          @click="openDialog(t('新增风控标签'))"
         >
           {{ t('新增标签') }}
         </el-button>
@@ -83,7 +83,7 @@ import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import { hasAuth } from '@/router/utils';
 
-defineOptions({ name: 'RISK_MANAGEMENT_LEAGUE_TAGS' });
+defineOptions({ name: 'RISKMANAGEMENT_RISKTAGS' });
 
 const {
   loading,

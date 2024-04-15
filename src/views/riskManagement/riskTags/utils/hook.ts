@@ -14,7 +14,7 @@ import { useRouter } from 'vue-router';
 
 export function useTagsHook() {
   const formRef = ref();
-  const dataList = reactive<ConfigCenterDataAPI.LeagueTagType[]>([]);
+  const dataList = reactive<RiskManagementDataAPI.RiskTagType[]>([]);
   const loading = ref(true);
   const router = useRouter();
   const pagination = reactive<PaginationProps>({
@@ -182,7 +182,7 @@ export function useTagsHook() {
 
   const goToUserList = (tagId: number) => {
     router.push({
-      name: 'OPERATEMANAGER_PLAYERLIST',
+      name: 'OPERATEMANAGER_SPORTPLAYERLIST',
       query: {
         tagId
       }

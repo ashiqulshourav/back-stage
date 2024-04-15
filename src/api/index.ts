@@ -13,6 +13,7 @@ import { userMangerData } from './userManger';
 import { roleData } from './role';
 import { bettingCenter } from './bettingCenter';
 import { riskManagementData } from './riskManagement';
+import { operateManagementData } from './operateManagement';
 
 export const API = {
   ...user,
@@ -29,5 +30,6 @@ export const API = {
   ...userMangerData,
   ...playMethodData,
   ...bettingCenter,
-  ...riskManagementData
+  ...riskManagementData,
+  ...operateManagementData
 };
