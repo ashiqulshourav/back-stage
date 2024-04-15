@@ -13,6 +13,7 @@ npm-debug.log*
 tests/**/coverage/
 src/demo.md
 .vscode
+st.md
 
 # Editor directories and files
 .idea

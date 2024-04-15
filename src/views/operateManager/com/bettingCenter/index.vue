@@ -350,13 +350,13 @@
           </div>
           <div>
             <label>{{ t('用户数：') }}</label>
-            <span>{{ totalInfo?.thisPageBetUserCount ?? 0 }}{{ t('人') }}</span>
+            <span>{{ addThousandSeparator(totalInfo?.thisPageBetUserCount)?? 0 }}{{ t('人') }}</span>
           </div>
           <div>
             <label>{{ t('总计投注额：') }}</label>
             <span class="ml-1">
               {{
-                totalInfo?.thisPageBetTotalAmount?.toFixed(2) ?? '0.00'
+                addThousandSeparator(totalInfo?.thisPageBetTotalAmount?.toFixed(2)) ?? '0.00'
               }}</span
             >
           </div>
@@ -364,7 +364,7 @@
             <label>{{ t('总输赢：') }}</label>
             <span class="ml-1">
               {{
-                totalInfo?.thisPageBetTotalProfitAmount?.toFixed(2) ?? '0.00'
+                addThousandSeparator(totalInfo?.thisPageBetTotalProfitAmount?.toFixed(2)) ?? '0.00'
               }}</span
             >
           </div>
@@ -395,6 +395,7 @@ import {
 } from '@/utils/formatMatch';
 import { betStatusMap } from './util/types';
 import { usePublicHooks } from '@/hooks';
+import {addThousandSeparator} from "@/utils/formatNumber";
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
 

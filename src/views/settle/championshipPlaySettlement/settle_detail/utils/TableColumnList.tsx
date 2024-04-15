@@ -26,15 +26,20 @@ export const columns: TableColumnList = [
   },
   {
     label: t('结算状态'),
-    prop: 'win',
+    prop: 'settleStatus',
     width: 150,
-    formatter: ({ win }) => (win === null ? t('未结算') : t('已结算'))
+    formatter: ({ settleStatus }) =>
+      settleStatus === 0
+        ? t('未结算')
+        : settleStatus === 1
+        ? t('已结算')
+        : t('已取消')
   },
   {
     label: t('结算时间'),
     prop: 'eventTime',
     width: 220,
-    formatter: ({ eventTime }) =>
-      eventTime ? dayjs(eventTime).format('YYYY-MM-DD HH:mm:ss') : '-'
+    formatter: ({ updatedAt }) =>
+      updatedAt ? dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss') : '-'
   }
 ];

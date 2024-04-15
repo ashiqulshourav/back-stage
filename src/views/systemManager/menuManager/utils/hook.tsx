@@ -18,7 +18,7 @@ export function useMenuManagerHook() {
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
       dataList.push(...res.data);
-      filterParentList(dataList);
+      filterParentList(dataList, '一级页面');
       checkHasQueryRole();
     } catch (error) {
       loading.value = false;
@@ -46,20 +46,21 @@ export function useMenuManagerHook() {
     });
   };
 
-  const filterParentList = (list: RoleAPI.ChildResourceList[]) => {
+  const filterParentList = (list: RoleAPI.ChildResourceList[], parentName) => {
     list.forEach(item => {
       if (item.childResourceList.length > 0)
-        filterParentList(item.childResourceList);
+        filterParentList(item.childResourceList, item.name);
       if (item.type === 0 || item.type === 2) {
         parentList.push({
           id: item.id,
           name: item.name,
           enName: item.enName,
+          tableName: parentName + '-' + item.name,
           childResourceList: item.childResourceList
         });
       }
-      list.sort((a, b) => a.sort - b.sort);
     });
+    list.sort((a, b) => a.sort - b.sort);
   };
 
   //- 删除菜单

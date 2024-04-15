@@ -3,6 +3,7 @@
     ref="formRef"
     :inline="true"
     :model="form"
+    :rules="formRules"
     class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
   >
     <div class="flex">
@@ -60,28 +61,6 @@
                      @change="search"
           >
               <el-option v-for="item in Object.entries(riskStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item :label="`${t('投注阶段')}:`" prop="isInplay">
-          <el-select
-              v-model="form.isInplay"
-              clearable
-              class="!w-[100px]"
-              @change="search"
-          >
-            <el-option
-                label="全部"
-                value=""
-            />
-            <el-option
-                label="滚球"
-                :value="1"
-            />
-            <el-option
-                label="早盘"
-                :value="0"
-            />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('过关类型')}:`" prop="seriesType">
@@ -169,12 +148,7 @@
               v-enter="search"
           />
         </el-form-item>
-        <el-form-item prop="timeType">
-          <el-select v-model="form.timeType"  class="!w-[110px]" @change="search">
-            <el-option  :label="t('注单时间')" :value="1"  />
-            <el-option  :label="t('结算时间')" :value="2"  />
-            <el-option  :label="t('比赛时间')" :value="3"  />
-          </el-select>
+        <el-form-item :label="`${t('注单时间')}:`" >
           <CustomDate v-model:val="selectDate"  :start-placeholder="dayjs().startOf('month').format('YYYY-MM-DD')" :end-placeholder="dayjs().startOf('day').format('YYYY-MM-DD')" @changeDate="changeDate" />
         </el-form-item>
         <el-form-item>
@@ -230,9 +204,10 @@ const props = defineProps<{
 const formRef = ref();
 const selectDate = ref('');
 const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
-import {  riskStatusMap,seriesTypesSingle,seriesTypesDuplex} from "../util/types";
+import {  betStatusMap,riskStatusMap,seriesTypesSingle,seriesTypesDuplex} from "../util/types";
 import {hasAuth} from "@/router/utils";
 import CustomDate from "@/components/Form/Custom_date.vue";
+import {formRules} from "@/views/configCenter/classify_setting/utils/rule";
 
 const emits = defineEmits(['onSearch', 'exportFile']);
 const resetForm = (formEl: FormInstance | undefined) => {

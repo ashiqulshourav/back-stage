@@ -59,6 +59,7 @@ declare namespace RoleAPI {
     type: number;
     sort: number;
     resourceFlag: number;
+    tableName?: string;
     path: string;
     childResourceList: any[];
   }

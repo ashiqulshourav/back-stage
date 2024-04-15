@@ -378,9 +378,11 @@ export function useESportBettingHook() {
   const switchDialog = (flag: boolean, row) => {
     UDialogFlag.value = flag;
     if (flag) {
-      openPasswordInput().then(() => {
+
+      const r=  openPasswordInput();
+      if(r){
         handleEditResult(row);
-      });
+      }
     }
   };
 

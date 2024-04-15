@@ -4,7 +4,7 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import {betStatus, betStatusMap, searchFormType, seriesTypesSingle,seriesTypesDuplex} from './types';
 import { columns } from './exportTableColumnList';
 import { utils, writeFile } from 'xlsx';
-import { addDialog, closeDialog } from '@/components/ReDialog';
+import { addDialog, closeDialog } from '@/components/ReDialog/index';
 import editMatch from "../component/editMatch.vue";
 import { reactive, ref, onMounted, h } from 'vue';
 import {usePasswordInputHook} from "@/hooks/passwordInputHook";
@@ -118,11 +118,11 @@ export function useLeague() {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       const params:searchFormType= formatParams({}) as searchFormType
-      if(params.maxBetAmount<params.minBetAmount){
+      if(Number(params.maxBetAmount)<Number(params.minBetAmount)){
           message(t('请检查投注额，最小值不能大于最大值'), { type: 'warning' });
           return
       }
-      if(params.maxProfitAmount<params.minProfitAmount){
+      if(Number(params.maxProfitAmount)<Number(params.minProfitAmount)){
           message(t('请检查用户输赢，最小值不能大于最大值'), { type: 'warning' });
           return
       }
@@ -152,7 +152,6 @@ export function useLeague() {
 
   const getTenantList = async ()=>{
     const res =  await API.getTenantList()
-    dataList.length = 0;
     if(res.data?.data?.length){
       tenantList.push(...res?.data?.data);
       // 将数组根据id转换为对象
@@ -263,7 +262,6 @@ export function useLeague() {
     });
   };
   const handleCancel = (data:any)=>{
-
       ElMessageBox.confirm(
         t('确定取消注单吗？'),
         t('警告'),
@@ -273,7 +271,8 @@ export function useLeague() {
         }
       )
         .then(async () => {
-          openPasswordInput().then(()=>{
+          const r= await openPasswordInput();
+          if(r){
             const params:any={orderIds:[data.id]}
             API.orderCancel(params).then((res)=>{
               if (res.code) {
@@ -282,7 +281,7 @@ export function useLeague() {
               }
               message(res.msg, { type: res.code ? 'error' : 'success' });
             });
-          })
+          }
         })
   }
 const getStatus = (status,billStatus,betResult,isReserve?)=>{
@@ -319,12 +318,12 @@ const specialCountFlag = (status,billStatus,betResult):boolean=>{
     getStatus(status,billStatus,betResult)?.status===betStatus.eventAbnormal
 }
 
-const switchDialog = (flag:boolean,row)=>{
+const switchDialog = async (flag:boolean,row)=>{
     UDialogFlag.value=flag;
   if(flag){
-    openPasswordInput().then(()=>{
-      handleEditResult(row)
-    })
+    const r = await openPasswordInput();
+    if (!r) return;
+    handleEditResult(row)
   }
 }
 

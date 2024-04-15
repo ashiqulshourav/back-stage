@@ -1,5 +1,5 @@
 import { http } from "@/utils/http";
-import { searchFormType } from '@/views/operateManager/bettingCenter/util/types'
+import { searchFormType } from '@/views/operateManager/com/bettingCenter/util/types'
 
 export const bettingCenter = {
   //-结算中心列表

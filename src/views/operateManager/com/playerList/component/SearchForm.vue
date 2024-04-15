@@ -179,8 +179,10 @@ const resetForm = (formEl: FormInstance | undefined) => {
 };
 
 const search = () => {
-  props.form.ids = idList.filter(item => item !== '');
-  props.form.usernames = userIds.filter(item => item !== '');
+  props.form.ids = idList.filter(item => item !== '').map(item => item.trim());
+  props.form.usernames = userIds
+    .filter(item => item !== '')
+    .map(item => item.trim());
   emits('onSearch', ...['reload']);
 };
 </script>

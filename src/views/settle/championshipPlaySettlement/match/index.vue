@@ -8,7 +8,13 @@
       @changeMatchCondition="changeMatchCondition"
     />
     <PureTableBar :columns="columns" @refresh="onSearch('reload')">
-      <template #title>{{ t('冠军赛事列表') }}</template>
+      <template #title
+        >{{
+          ESPORT_ID_MAP.concat(SPORT_ID_MAP).find(
+            item => item.value === +searchForm.sportId
+          )?.label ?? ''
+        }}{{ t('结算列表') }}</template
+      >
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           class="table_container"
@@ -78,6 +84,7 @@ import SearchForm from './component/SearchForm.vue';
 import { EsportMatchRowType } from './utils/types';
 import { usePublicHooks } from '@/hooks';
 import { hasAuth } from '@/router/utils';
+import { ESPORT_ID_MAP, SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
 defineOptions({ name: 'ESPORTSSETTLEMENT' });
 const { tableHeaderStyle } = usePublicHooks();

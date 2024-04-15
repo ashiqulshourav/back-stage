@@ -1,7 +1,7 @@
 import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
-import {betStatus, betStatusMap, searchFormType, seriesTypesSingle, seriesTypesDuplex, riskStatusMap,riskStatus} from './types';
+import {searchFormType, seriesTypesSingle, seriesTypesDuplex, riskStatusMap,riskStatus} from './types';
 import { columns } from './exportTableColumnList';
 import { utils, writeFile } from 'xlsx';
 import { addDialog, closeDialog } from '@/components/ReDialog';
@@ -23,16 +23,16 @@ export function useLeague() {
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<any>([]);
   const tenantObj = reactive<any>({});
-  const UDialogFlag =  ref<Boolean>(false);
   const loading = ref(true);
-  const totalInfo = reactive<BetOrderAPI.otherDataType>(
-    {} as BetOrderAPI.otherDataType
+
+  const totalInfo = reactive<BetOrderAPI.RiskOtherDataType>(
+    {} as BetOrderAPI.RiskOtherDataType
   );
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
     currentPage: 1,
-    pageSizes:[10,20,50,100,200],
+    pageSizes:[10,20,50,100,200,1000],
     background: true
   });
   const form = reactive<searchFormType>({
@@ -43,15 +43,11 @@ export function useLeague() {
     orderId: '',
     leagueId: '',
     matchId: '',
-    isInplay:'',
     seriesType:'',
     category:'',
-    timeType:1,
-    leagueName:'',
     tenantIds:[],
     seriesDetailsSingle:[],
     seriesDetailsDuplex:[],
-    queryType:1,
     minBetAmount:'',
     maxBetAmount:'',
     riskStatus:'',
@@ -60,7 +56,12 @@ export function useLeague() {
     pagination.pageSize = val;
     onSearch();
   }
-
+  const selectReject = (flag,index,i)=>{
+    dataList[index].combineOrderDetails[i]['rejectSelected'] = flag
+  }
+  const selectApprove = (flag,index,i)=>{
+    dataList[index].combineOrderDetails[i]['approveSelected'] = flag
+  }
   function handleCurrentChange(val: number) {
     pagination.currentPage = val;
     onSearch();
@@ -113,11 +114,11 @@ export function useLeague() {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       const params:searchFormType= formatParams({}) as searchFormType
-      if(params.maxBetAmount<params.minBetAmount){
+      if(Number(params.maxBetAmount)<Number(params.minBetAmount)){
           message(t('请检查投注额，最小值不能大于最大值'), { type: 'warning' });
           return
       }
-      if(params.maxProfitAmount<params.minProfitAmount){
+      if(Number(params.maxProfitAmount)<Number(params.minProfitAmount)){
           message(t('请检查用户输赢，最小值不能大于最大值'), { type: 'warning' });
           return
       }
@@ -130,7 +131,10 @@ export function useLeague() {
         dataList.push(...res?.data?.pageData);
         dataList.map((item: any, index) => {
           item.index = index + 1
-
+           item.combineOrderDetails.map((item)=>{
+             item.rejectSelected = false;
+             item.approveSelected = false;
+           })
         })
         pagination.total = res?.data?.count;
         pagination.pageSize = res?.data?.pageSize;
@@ -147,7 +151,6 @@ export function useLeague() {
 
   const getTenantList = async ()=>{
     const res =  await API.getTenantList()
-    dataList.length = 0;
     if(res.data?.data?.length){
       tenantList.push(...res?.data?.data);
       // 将数组根据id转换为对象
@@ -165,7 +168,7 @@ export function useLeague() {
 
   //- 导出excel表格
   const exportFile = async () => {
-    const res: BetOrderAPI.BetOrderResType  = await API.bettingCenterList(formatParams({pageNum:1,pageSize:50000}) as searchFormType);
+    const res: BetOrderAPI.BetOrderResType  = await API.bettingAuditList(formatParams({pageNum:1,pageSize:50000}) as searchFormType);
     const r = res.data.pageData.map((item:any,i) => {
       const arr = [];
       const data={...item,...item?.combineOrderDetails[0]}
@@ -203,10 +206,7 @@ export function useLeague() {
             str = data.isSettlementAgain===2?'是':'否'
             break;
           case 'status':
-            str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult,data.isReserve)?.status]
-            break;
-          case 'billStatus':
-            str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult,data.isReserve)?.status]
+            // str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult,data.isReserve)?.status]
             break;
           case 'settleScore':
             str=displayHomeAwayScore(data.settleScore,data.sportId)
@@ -232,6 +232,11 @@ export function useLeague() {
           case 'tenantCode':  //商户编码
               str=(tenantObj[data.tenantId])?.name??''
               break;
+          // case 'riskStatus':  //风控状态
+          //   str= getRiskStatus(item.riskStatus).label
+          //     if(item.riskType){
+          //     }
+          //   break;
           default:
             str = data[column.prop as string]
         }
@@ -252,7 +257,7 @@ export function useLeague() {
     };
 
     utils.book_append_sheet(workBook, workSheet, '数据报表');
-    writeFile(workBook, '赛程_注单中心.xlsx');
+    writeFile(workBook, '赛程_注单审核.xlsx');
     message(t('导出成功'), {
       type: 'success'
     });
@@ -260,15 +265,22 @@ export function useLeague() {
   const handleCancel = (row:any,index:number)=>{
     let data= {...row} //...row.combineOrderDetails[index]
     data.combineOrderDetails = data.combineOrderDetails.filter((item,i)=>{
-      console.log(1111,item)
       return i == index
     })
-    openCancelDialog([data])
+    const details = row.combineOrderDetails.map((item)=>{
+      return {detailId:item.detailId,riskTimes: item.riskTimes}
+    })
+    const list = [
+      {orderId: data.id,
+        details:details
+      }
+    ]
+    openCancelDialog(list)
   }
-  const handleCancelAll = ()=>{
-    openCancelDialog(dataList)
-  }
-  const openCancelDialog = (list)=>{
+
+  const openCancelDialog = async (list)=>{
+    const r= await openPasswordInput();
+    if (!r) return;
     addDialog({
       title:'风控划单',
       width: '30%',
@@ -291,14 +303,58 @@ export function useLeague() {
       console.log(1111,item)
       return i == index
     })
-    openApproveDialog([data])
+    const details = row.combineOrderDetails.map((item)=>{
+      return {detailId:item.detailId,riskTimes: item.riskTimes}
+    })
+    const list = [
+      {orderId: data.id,
+        details:details
+      }
+    ]
+    openApproveDialog(list)
+  }
+  const handleApproveSome =()=>{
+    let obj={}
+    dataList.map((item)=>{
+       item.combineOrderDetails.map((match:any)=>{
+         if(match.approveSelected){
+           if(!obj[item.id]){
+             obj[item.id]={orderId:'',details:[]}
+             obj[item.id]['orderId']= item.id
+             obj[item.id]['details']= [{detailId: match.detailId, riskTimes: match.riskTimes}]
+           }else{
+             obj[item.id]['details'].push({detailId: match.detailId, riskTimes: match.riskTimes})
+           }
+         }
+       })
+    })
+    const list=Object.values(obj).map((value)=>{
+      return value
+    })
+    openApproveDialog(list)
+  }
+  const handleCancelSome = ()=>{
+    let obj={}
+    dataList.map((item)=>{
+      item.combineOrderDetails.map((match:any)=>{
+        if(match.rejectSelected){
+          if(!obj[item.id]){
+            obj[item.id]={orderId:'',details:[]}
+            obj[item.id]['orderId']= item.id
+            obj[item.id]['details']= [{detailId: match.detailId, riskTimes: match.riskTimes}]
+          }else{
+            obj[item.id]['details'].push({detailId: match.detailId, riskTimes: match.riskTimes})
+          }
+        }
+      })
+    })
+    const list=Object.values(obj).map((value)=>{
+      return value
+    })
+    openCancelDialog(list)
   }
 
-  const handleApproveAll =()=>{
-    openApproveDialog(dataList)
-  }
-
-  const openApproveDialog = (list)=>{
+  const openApproveDialog =  (list)=>{
     ElMessageBox.confirm(
       t('确定审核通过吗？'),
       t('警告'),
@@ -306,54 +362,20 @@ export function useLeague() {
         center: true,
         type: 'warning'
       }
-    ).then(()=>{
-      let param=[];
-      list.map((item:any)=>{
-        const details = item.combineOrderDetails.map((item)=>{
-          return {detailId:item.detailId,riskTimes: item.riskTimes,}
-        })
-        param.push({
-          orderId:item.id,
-          details:details,
-        })
-      })
-      console.log(4444,param)
-      API.bettingAuditConfirm(param).then((res)=>{
+    ).then(async ()=>{
+      const r= await openPasswordInput();
+      if(!r){
+        return
+      }
+      API.bettingAuditConfirm(list).then((res)=>{
+
+        console.log(333333,res)
         onSearch();
-        console.log(55555,res)
+        res.code===0?message(res.msg, { type: 'success' }):message(res.msg, { type: 'error' })
+
       })
     })
   }
-
-
-
-const getStatus = (status,billStatus,betResult,isReserve?)=>{
-    let obj = {status:-1,bgColor:''}
-  if(status==2&&billStatus===1&&(betResult===22||betResult===23)){   // 注单无效
-    obj={status:betStatus.betInvalid,bgColor:'#E54752'}
-  }else if(status===1&&billStatus===1&&(betResult===21)){  // 预约失败
-    obj={status:betStatus.reserveFail,bgColor:'#F57582'}
-  }else if(status===0&&billStatus===0){  // 未结算
-    if(isReserve===1){ // 预约中
-      obj={status:betStatus.onReverse,bgColor:'#F57582'}
-    }else {
-      obj={status:betStatus.unsettlementBet,bgColor:'#FFC53D'}
-    }
-  }else if(status===1&&billStatus===1){// 已结算
-    obj={status:betStatus.settlementBet,bgColor:'#40A9FF'}
-  }else if(status===4&&billStatus===1&&betResult===61){  // 封控拒单
-    obj={status:betStatus.riskReject,bgColor:'#F88D48'}
-  }else if(status===3){   // 待确认
-    obj={status:betStatus.confirm,bgColor:'#FFC53D'}
-  }else if(status===6){ // 待审核
-    obj={status:betStatus.PendingApprove,bgColor:'#F88D48'}
-  }else  if(status===4){  // 投注失败
-    obj={status:betStatus.betFail,bgColor:'#F57582'}
-  }else if(status===5){  // 赛事异常
-    obj={status:betStatus.eventAbnormal,bgColor:'#F88D48'}
-  }
-   return obj
-}
 
 const getRiskStatus = (rStatus:number)=>{
   let obj = {label:'',bgColor:''}
@@ -361,6 +383,8 @@ const getRiskStatus = (rStatus:number)=>{
       obj = {label:riskStatusMap[riskStatus.approve],bgColor:'#FFC53D'}
     }else if(rStatus===riskStatus.reject){
       obj = {label:riskStatusMap[riskStatus.reject],bgColor:'#F88D48'}
+    }else if(rStatus===riskStatus.rejectBetting){
+      obj = {label:riskStatusMap[riskStatus.rejectBetting],bgColor:'#F88D48'}
     }
     return obj
 }
@@ -393,13 +417,13 @@ function copyTest(str:string,tip:string){
     handleSelectionChange,
     exportFile,
     getRiskStatus,
-    getStatus,
     copyTest,
     tenantObj,
-    UDialogFlag,
     handleCancel,
     handleApprove,
-    handleCancelAll,
-    handleApproveAll,
+    handleCancelSome,
+    handleApproveSome,
+    selectReject,
+    selectApprove,
   };
 }

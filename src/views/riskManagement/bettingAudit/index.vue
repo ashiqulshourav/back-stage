@@ -15,28 +15,25 @@
       :isShowHeader="false"
       @refresh="onSearch('reload')"
     >
-<!--      <template #title>
+      <template #title>
         <div class="flex item-center ">
           <el-button
             type="danger"
-            @click="handleCancelAll"
+            v-if="rejectSelectedCount&&hasAuth('REJECTSOME')"
+            @click="handleCancelSome"
           >
             {{ t('批量划单') }}
           </el-button>
           <el-button
             type="primary"
-            @click="handleApproveAll"
+            v-if="approveSelectedCount&&hasAuth('APPROVESOME')"
+            @click="handleApproveSome"
           >
             {{ t('批量通过') }}
 
           </el-button>
-          <el-button
-            type="primary"
-          >
-            {{ t('导出注单') }}
-          </el-button>
         </div>
-      </template>-->
+      </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"
@@ -215,10 +212,7 @@
                 {{ t('赛果：')
                 }}{{ displayHomeAwayScore(item.settleScore, item.sportId) }}
               </div>
-              <div v-if="item.riskStatus===riskStatus.reject">
-                取消原因:{{item.riskType}}
-              </div>
-              <div :style="{background:getRiskStatus(item.riskStatus).bgColor}" class="status_btn mb-1">{{getRiskStatus(item.riskStatus).label}}</div>
+
             </div>
           </template>
           <template #odd="{ row }">
@@ -252,6 +246,7 @@
               </div>
 
             </div>
+
           </template>
           <template #profitAmount="{ row }">
             <span
@@ -262,19 +257,22 @@
             <span v-else>-</span>
           </template>
           <template #status="{ row }">
-            <div :style="{background:getStatus(row.status,row.billStatus,row.combineOrderDetails[0].betResult,row.isReserve).bgColor}" class="status_btn mb-1">{{ betStatusMap[getStatus(row.status,row.billStatus,row.combineOrderDetails[0].betResult,row.isReserve).status]}}</div>
-            <div >{{ row.settleTime ? dayjs(row.settleTime).format('MM-DD HH:mm:ss'):'' }}</div>
-            <div v-if="String(row.seriesType).slice(-3) ==='001'" >{{t('总赔率:')}}{{String(row.seriesType).slice(-3) ==='001'?calculateSeriesTypeTotal(row.combineOrderDetails):'' }}</div>
+            <div   class="match_item odd_item"  v-for="item in row.combineOrderDetails">
+              <div v-if="item.riskStatus===riskStatus.reject">
+                原因:{{item.riskType}}
+              </div>
+              <div :style="{background:getRiskStatus(item.riskStatus).bgColor}" class="status_btn mb-1">{{getRiskStatus(item.riskStatus).label}}</div>
+            </div>
           </template>
           <template   #cancel="{ row }">
             <div  class="match_item cancel flex justify-between  items-center" v-for="(item,index) in row.combineOrderDetails"
                  :key="item.betItemId"
             >
-<!--              <el-checkbox ></el-checkbox>-->
+              <el-checkbox v-if="item.riskStatus===2&&hasAuth('REJECTSOME')" :checked="item.rejectSelected"   @change="(data)=>selectReject(data,row.index-1,index)" ></el-checkbox>
               <el-button
                 size="small"
                 type="danger"
-                v-if="item.riskStatus===2"
+                v-if="item.riskStatus===2&&hasAuth('REJECT')"
                 @click="handleCancel(row,index)"
               >
                 {{ t('风控划单') }}
@@ -285,9 +283,10 @@
             <div class="match_item approve flex justify-between  items-center"  v-for="(item,index) in row.combineOrderDetails"
                   :key="item.betItemId"
             >
-<!--              <el-checkbox ></el-checkbox>-->
+              <el-checkbox v-if="item.riskStatus===2&&hasAuth('APPROVESOME')"  :checked="item.approveSelected" @change="(data)=>selectApprove(data,row.index-1,index)"  ></el-checkbox>
               <el-button
-                v-if="item.riskStatus===2"
+                  @change="(data)=>selectApprove(data,row.index-1,index)"
+                  v-if="item.riskStatus===2&&hasAuth('APPROVE')"
                 size="small"
                 type="primary"
                 @click="handleApprove(row,index)"
@@ -302,17 +301,17 @@
         >
           <div>
             <label>{{ t('总计：') }}</label>
-            <span>{{ totalInfo?.thisPageBetCount ?? 0 }}{{ t('单') }}</span>
+            <span>{{addThousandSeparator(totalInfo.totalCount)}}{{ t('单') }}</span>
           </div>
           <div>
             <label>{{ t('用户数：') }}</label>
-            <span>{{ totalInfo?.thisPageBetUserCount ?? 0 }}{{ t('人') }}</span>
+            <span>{{ addThousandSeparator(totalInfo?.totalUserCount) ?? 0 }}{{ t('人') }}</span>
           </div>
           <div>
             <label>{{ t('总计投注额：') }}</label>
             <span class="ml-1">
               {{
-                totalInfo?.thisPageBetTotalAmount?.toFixed(2) ?? '0.00'
+                addThousandSeparator(totalInfo?.productAmountTotal?.toFixed(2) )?? '0.00'
               }}</span
             >
           </div>
@@ -320,7 +319,7 @@
             <label>{{ t('总输赢：') }}</label>
             <span class="ml-1">
               {{
-                totalInfo?.thisPageBetTotalProfitAmount?.toFixed(2) ?? '0.00'
+                addThousandSeparator(totalInfo?.profitTotal?.toFixed(2)) ?? '0.00'
               }}</span
             >
           </div>
@@ -336,6 +335,7 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
+import {addThousandSeparator} from '@/utils/formatNumber'
 import {
   formatSeriesType,
   useSportFormatDetail,
@@ -343,16 +343,18 @@ import {
   EBetResultType,
   getViewOddFn,
   markeTypeMap,
-  calculateSeriesTypeTotal,
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
   getIsInplay
 } from '@/utils/formatMatch';
-import {betStatusMap, riskStatus} from './util/types';
+import { riskStatus} from './util/types';
 import { usePublicHooks } from '@/hooks';
+import {hasAuth} from "@/router/utils";
+import {ref} from "vue";
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
-
+const rejectSelectedCount = ref(0);
+const approveSelectedCount = ref(0);
 const {
   loading,
   dataList,
@@ -364,16 +366,42 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   exportFile,
-  getStatus,
   copyTest,
   tenantList,
   handleCancel,
   handleApprove,
-  handleCancelAll,
-  handleApproveAll,
+  handleCancelSome,
+  handleApproveSome,
   tenantObj,
   getRiskStatus,
+  selectReject,
+  selectApprove,
+
 } = useLeague();
+watch( dataList,
+    dataList => {
+      let rejectCount =0;
+      let approveCount = 0
+      dataList.map((item)=>{
+        item.combineOrderDetails.map((match:any)=>{
+          if(match.rejectSelected){
+            rejectCount+=rejectCount+1
+          }
+          if(match.approveSelected){
+            approveCount+=approveCount+1
+          }
+
+        })
+      })
+      if(rejectCount!==rejectSelectedCount.value){
+        rejectSelectedCount.value = rejectCount
+      }
+      if(approveCount!==approveSelectedCount.value){
+        approveSelectedCount.value = rejectCount
+      }
+    },
+    { deep: true }
+);
 </script>
 
 <style lang="scss">
