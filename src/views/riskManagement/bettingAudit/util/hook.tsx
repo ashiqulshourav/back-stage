@@ -1,7 +1,7 @@
 import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
-import {betStatus, betStatusMap, searchFormType, seriesTypesSingle, seriesTypesDuplex, riskStatusMap,riskStatus} from './types';
+import {searchFormType, seriesTypesSingle, seriesTypesDuplex, riskStatusMap,riskStatus} from './types';
 import { columns } from './exportTableColumnList';
 import { utils, writeFile } from 'xlsx';
 import { addDialog, closeDialog } from '@/components/ReDialog';
@@ -23,8 +23,8 @@ export function useLeague() {
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<any>([]);
   const tenantObj = reactive<any>({});
-  const UDialogFlag =  ref<Boolean>(false);
   const loading = ref(true);
+
   const totalInfo = reactive<BetOrderAPI.RiskOtherDataType>(
     {} as BetOrderAPI.RiskOtherDataType
   );
@@ -368,7 +368,11 @@ export function useLeague() {
         return
       }
       API.bettingAuditConfirm(list).then((res)=>{
+
+        console.log(333333,res)
         onSearch();
+        res.code===0?message(res.msg, { type: 'success' }):message(res.msg, { type: 'error' })
+
       })
     })
   }
@@ -415,7 +419,6 @@ function copyTest(str:string,tip:string){
     getRiskStatus,
     copyTest,
     tenantObj,
-    UDialogFlag,
     handleCancel,
     handleApprove,
     handleCancelSome,

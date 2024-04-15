@@ -15,23 +15,25 @@
       :isShowHeader="false"
       @refresh="onSearch('reload')"
     >
-<!--      <template #title>
+      <template #title>
         <div class="flex item-center ">
           <el-button
             type="danger"
+            v-if="rejectSelectedCount&&hasAuth('REJECTSOME')"
             @click="handleCancelSome"
           >
             {{ t('批量划单') }}
           </el-button>
           <el-button
             type="primary"
+            v-if="approveSelectedCount&&hasAuth('APPROVESOME')"
             @click="handleApproveSome"
           >
             {{ t('批量通过') }}
 
           </el-button>
         </div>
-      </template>-->
+      </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"
@@ -266,8 +268,7 @@
             <div  class="match_item cancel flex justify-between  items-center" v-for="(item,index) in row.combineOrderDetails"
                  :key="item.betItemId"
             >
-<!--              <el-checkbox :checked="item.rejectSelected"   @change="(data)=>selectReject(data,row.index-1,index)" ></el-checkbox>-->
-<!--              <el-checkbox  v-if="item.riskStatus===2&&hasAuth('REJECT')&&false"  @change="(data)=>selectReject(data,row.index-1,index)" ></el-checkbox>-->
+              <el-checkbox v-if="item.riskStatus===2&&hasAuth('REJECTSOME')" :checked="item.rejectSelected"   @change="(data)=>selectReject(data,row.index-1,index)" ></el-checkbox>
               <el-button
                 size="small"
                 type="danger"
@@ -282,8 +283,7 @@
             <div class="match_item approve flex justify-between  items-center"  v-for="(item,index) in row.combineOrderDetails"
                   :key="item.betItemId"
             >
-<!--              <el-checkbox :checked="item.approveSelected" @change="(data)=>selectApprove(data,row.index-1,index)"  ></el-checkbox>-->
-<!--              <el-checkbox  v-if="item.riskStatus===2&&hasAuth('REJECT')&&false" ></el-checkbox>-->
+              <el-checkbox v-if="item.riskStatus===2&&hasAuth('APPROVESOME')"  :checked="item.approveSelected" @change="(data)=>selectApprove(data,row.index-1,index)"  ></el-checkbox>
               <el-button
                   @change="(data)=>selectApprove(data,row.index-1,index)"
                   v-if="item.riskStatus===2&&hasAuth('APPROVE')"
@@ -343,16 +343,18 @@ import {
   EBetResultType,
   getViewOddFn,
   markeTypeMap,
-  calculateSeriesTypeTotal,
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
   getIsInplay
 } from '@/utils/formatMatch';
-import {betStatusMap, riskStatus} from './util/types';
+import { riskStatus} from './util/types';
 import { usePublicHooks } from '@/hooks';
 import {hasAuth} from "@/router/utils";
+import {ref} from "vue";
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
+const rejectSelectedCount = ref(0);
+const approveSelectedCount = ref(0);
 const {
   loading,
   dataList,
@@ -374,7 +376,32 @@ const {
   getRiskStatus,
   selectReject,
   selectApprove,
+
 } = useLeague();
+watch( dataList,
+    dataList => {
+      let rejectCount =0;
+      let approveCount = 0
+      dataList.map((item)=>{
+        item.combineOrderDetails.map((match:any)=>{
+          if(match.rejectSelected){
+            rejectCount+=rejectCount+1
+          }
+          if(match.approveSelected){
+            approveCount+=approveCount+1
+          }
+
+        })
+      })
+      if(rejectCount!==rejectSelectedCount.value){
+        rejectSelectedCount.value = rejectCount
+      }
+      if(approveCount!==approveSelectedCount.value){
+        approveSelectedCount.value = rejectCount
+      }
+    },
+    { deep: true }
+);
 </script>
 
 <style lang="scss">

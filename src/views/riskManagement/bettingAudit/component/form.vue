@@ -41,6 +41,7 @@ import {ref} from "vue";
 import {formatNumber} from "@/utils/formatNumber";
 import {formRules} from '../util/rule'
 import { FormInstance } from 'element-plus/es/components/form';
+import {message} from "@/utils/message";
 
 const ruleFormRef = ref<FormInstance>();
 const form = ref({
@@ -88,7 +89,11 @@ const confirmClick = () => {
   ruleFormRef.value.validate(async v => {
     if(v){
       API.bettingAuditReject(param).then((res)=>{
-        emits('closeDialog');
+        res.code===0?message(res.msg, { type: 'success' }):message(res.msg, { type: 'error' })
+        if(res.code===0){
+          emits('closeDialog');
+        }
+
         console.log(555,res)
       })
     }
