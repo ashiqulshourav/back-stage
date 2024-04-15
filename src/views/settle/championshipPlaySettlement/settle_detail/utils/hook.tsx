@@ -104,7 +104,10 @@ export function useEsportsSettlement() {
         matchId: +route.params.matchId
       });
       message(res.msg, { type: res.code ? 'error' : 'success' });
-      if (!res.code) getEsportMatchInfo();
+      if (!res.code) {
+        getEsportMatchInfo();
+        getSiginMatchData();
+      }
     });
   };
 
