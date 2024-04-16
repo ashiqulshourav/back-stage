@@ -29,7 +29,7 @@ export const columns: TableColumnList = [
   {
     label: t('盘口投注项'),
     slot: 'betOptions',
-    minWidth: 300
+    minWidth: 350
   },
   {
     label: t('操作'),

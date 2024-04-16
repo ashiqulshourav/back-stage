@@ -116,6 +116,7 @@ declare namespace EsportsSettlementAPI {
     pageNum: number;
     betOptions: number;
     oldBetOptions: number;
+    multipartBetOptions: [];
     eventTime: number;
     arr: BetItemsMapData[];
     isEdit: boolean;
