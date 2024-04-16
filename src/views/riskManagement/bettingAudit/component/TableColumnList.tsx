@@ -32,8 +32,8 @@ export const columns: TableColumnList = [
     align:'center',
   },
   {
-    label: t("状态"),
-    slot: "status",
+    label: t("风控状态"),
+    slot: "riskStatus",
     minWidth: 120,
     align:'left',
   },
