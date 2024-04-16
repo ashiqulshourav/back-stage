@@ -116,7 +116,9 @@ const selectParentList = computed(() => {
   if (!selectVal.value) {
     return props.parentList;
   } else {
-    return props.parentList.filter(item => item.name.includes(selectVal.value));
+    return props.parentList
+      .filter(item => item.name.includes(selectVal.value))
+      .map(item => item);
   }
 });
 

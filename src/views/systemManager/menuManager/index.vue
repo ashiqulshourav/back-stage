@@ -12,7 +12,6 @@
           table-layout="auto"
           :loading="loading"
           size="large"
-          show-overflow-tooltip
           row-key="id"
           border
           adaptive
@@ -37,9 +36,9 @@
               {{ t('编辑') }}
             </el-button>
             <el-button
-              v-if="userStore.userInfo.name === 'armour'"
               class="reset-margin"
               link
+              v-if="userStore.userInfo.name === 'armour'"
               type="danger"
               size="large"
               @click="delMenu(row.id)"

@@ -28,10 +28,8 @@ export function useMenuManagerHook() {
   //- 查询是否有query
   const checkHasQueryRole = () => {
     parentList.forEach(item => {
-      const index = item.childResourceList.findIndex(
-        _ => _.enName === 'query' || _.type === 0 || _.type === 2
-      );
-      if (index < 0) {
+      const index = item.childResourceList.findIndex(_ => _.enName === 'query');
+      if (index < 0 && !item.childResourceList.length) {
         const params = {
           name: '页面查看',
           enName: 'query',
