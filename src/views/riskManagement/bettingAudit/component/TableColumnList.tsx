@@ -32,7 +32,7 @@ export const columns: TableColumnList = [
     align:'center',
   },
   {
-    label: t("风控状态"),
+    label: t("审核状态"),
     slot: "riskStatus",
     minWidth: 120,
     align:'left',
