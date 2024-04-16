@@ -397,6 +397,7 @@ function copyTest(str:string,tip:string){
             : message(t('复制失败'), { type: 'error' });
     }
 
+
   //- 切换比赛类型
   onMounted(() => {
     onSearch();
