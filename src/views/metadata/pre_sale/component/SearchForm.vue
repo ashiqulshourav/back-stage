@@ -43,7 +43,7 @@
           filterable
           remote
           @change="search"
-           @focus="matchStore.reset_lagueList"
+          @focus="matchStore.reset_lagueList"
           :remote-method="
             debounce(
               query =>

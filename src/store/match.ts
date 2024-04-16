@@ -36,12 +36,12 @@ export const useMatchStore = defineStore('MATCHSTATE', {
       if (res.code) {
         this.reset_lagueList();
       } else {
-        this[listType] = res.data.list;
+        this[listType] = res.data.list ?? [];
       }
     },
     reset_lagueList() {
-      this.sportLeagueList.length = []
-      this.esportLeagueList.length = []
+      this.sportLeagueList.length = 0
+      this.esportLeagueList.length = 0;
     },
     async set_countryList() {
       if (this.countryList.length > 0) return;
