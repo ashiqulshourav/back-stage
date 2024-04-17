@@ -296,7 +296,12 @@
                 ]
               }}
             </div>
-            <div>
+            <div v-if=" getStatus(
+                    row.status,
+                    row.billStatus,
+                    row.combineOrderDetails[0].betResult,
+                    row.isReserve
+                  ).status===betStatus.settlementBet">
               {{
                 row.settleTime
                   ? dayjs(row.settleTime).format('MM-DD HH:mm:ss')
@@ -393,7 +398,7 @@ import {
   displayHomeAwayScore,
   getIsInplay
 } from '@/utils/formatMatch';
-import { betStatusMap } from './util/types';
+import {betStatus, betStatusMap} from './util/types';
 import { usePublicHooks } from '@/hooks';
 import {addThousandSeparator} from "@/utils/formatNumber";
 defineOptions({ name: 'bettingCenter' });
