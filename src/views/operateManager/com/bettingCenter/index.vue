@@ -355,13 +355,18 @@
           </div>
           <div>
             <label>{{ t('用户数：') }}</label>
-            <span>{{ addThousandSeparator(totalInfo?.thisPageBetUserCount)?? 0 }}{{ t('人') }}</span>
+            <span
+              >{{ addThousandSeparator(totalInfo?.thisPageBetUserCount) ?? 0
+              }}{{ t('人') }}</span
+            >
           </div>
           <div>
             <label>{{ t('总计投注额：') }}</label>
             <span class="ml-1">
               {{
-                addThousandSeparator(totalInfo?.thisPageBetTotalAmount?.toFixed(2)) ?? '0.00'
+                addThousandSeparator(
+                  totalInfo?.thisPageBetTotalAmount?.toFixed(2)
+                ) ?? '0.00'
               }}</span
             >
           </div>
@@ -369,7 +374,9 @@
             <label>{{ t('总输赢：') }}</label>
             <span class="ml-1">
               {{
-                addThousandSeparator(totalInfo?.thisPageBetTotalProfitAmount?.toFixed(2)) ?? '0.00'
+                addThousandSeparator(
+                  totalInfo?.thisPageBetTotalProfitAmount?.toFixed(2)
+                ) ?? '0.00'
               }}</span
             >
           </div>
@@ -380,7 +387,7 @@
 </template>
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
-import { useLeague } from './util/hook';
+import { useBettingCenterHook } from './util/hook';
 import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
@@ -400,7 +407,7 @@ import {
 } from '@/utils/formatMatch';
 import {betStatus, betStatusMap} from './util/types';
 import { usePublicHooks } from '@/hooks';
-import {addThousandSeparator} from "@/utils/formatNumber";
+import { addThousandSeparator } from '@/utils/formatNumber';
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
 
@@ -422,7 +429,7 @@ const {
   specialCountFlag,
   switchDialog,
   tenantObj
-} = useLeague();
+} = useBettingCenterHook();
 </script>
 
 <style lang="scss">

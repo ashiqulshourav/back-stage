@@ -69,8 +69,12 @@ export function useEsportsSettlement() {
       item.list.length = 0;
       Object.values(o).forEach((arr: any[]) => {
         const selectIndex = arr.findIndex(item => item.win === 1);
+        const multipartBetOptions = arr
+          .filter(item => item.win === 1)
+          .map((_, index) => index);
         item.list.push({
           betOptions: selectIndex,
+          multipartBetOptions,
           // oldBetOptions: selectIndex,
           ...arr[0],
           arr
@@ -79,12 +83,17 @@ export function useEsportsSettlement() {
     });
   };
 
+  //-
+  const multipBetResultCheck = (list, index) => {
+    return list.includes(index) ? 4 : 3;
+  };
+
   //- 结算提交
   const manualSettleESportHandicapClick = async (
     row: EsportsSettlementAPI.BetItemsMapData,
     type?: 'cancel'
   ) => {
-    if (row.betOptions < 0 && !type)
+    if (row.betOptions < 0 && !row.multipartBetOptions.length && !type)
       return message(t('请先选择投注项'), { type: 'error' });
 
     ElMessageBox.confirm(
@@ -104,7 +113,13 @@ export function useEsportsSettlement() {
         betResultItems: row.arr.map((item, index) => {
           return {
             betItemId: item.betItemsId,
-            betResult: type ? 18 : row.betOptions === index ? 4 : 3,
+            betResult: type
+              ? 18
+              : row.multipartBetOptions.length > 0
+              ? multipBetResultCheck(row.multipartBetOptions, index)
+              : row.betOptions === index
+              ? 4
+              : 3,
             handicap: item.handicap,
             kindsCode: item.kindsCode,
             n: item.n
@@ -152,13 +167,17 @@ export function useEsportsSettlement() {
     }).then(async () => {
       const r = await openPasswordInput();
       if (!r) return;
-
       const params = {
         matchId: row.matchId,
         betResultItems: row.arr.map((item, index) => {
           return {
             betItemId: item.betItemsId,
-            betResult: row.betOptions === index ? 4 : 3,
+            betResult:
+              row.multipartBetOptions.length > 0
+                ? multipBetResultCheck(row.multipartBetOptions, index)
+                : row.betOptions === index
+                ? 4
+                : 3,
             handicap: item.handicap,
             id: item.id,
             n: item.n,
