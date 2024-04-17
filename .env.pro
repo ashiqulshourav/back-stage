@@ -1,20 +1,16 @@
-# 线上环境平台打包路径
-# VITE_PUBLIC_PATH = "/kmgames-back-stage"
-VITE_PUBLIC_PATH = "/"
-VITE_HIDE_HOME = true
-# 线上环境路由历史模式（Hash模式传"hash"、HTML5模式传"h5"、Hash模式带base参数传"hash,base参数"、HTML5模式带base参数传"h5,base参数"）
-VITE_ROUTER_HISTORY = "hash"
+# 平台本地运行端口号
+VITE_PORT = 4003
 
-# 是否在打包时使用cdn替换本地库 替换 true 不替换 false
+# 开发环境读取配置文件路径
+VITE_PUBLIC_PATH = ./
+VITE_HIDE_HOME = true
+#VITE_API_BASE_URL = "http://172.31.64.13:19030/"
+#VITE_API_BASE_URL = "http://match.kmgfat.com/match/"
+#VITE_API_BASE_URL = "https://match.dpuat.com/match/"
+# 生产环境
+VITE_API_BASE_URL = "https://match.dppro6.com/match/"
+# 开发环境路由历史模式（Hash模式传"hash"、HTML5模式传"h5"、Hash模式带base参数传"hash,base参数"、HTML5模式带base参数传"h5,base参数"）
+VITE_ROUTER_HISTORY = "hash"
 VITE_CDN = false
 
-VITE_API_BASE_URL = "https://match.dptyadmin1.com/match/"
-
-# 是否启用gzip压缩或brotli压缩（分两种情况，删除原始文件和不删除原始文件）
-# 压缩时不删除原始文件的配置：gzip、brotli、both（同时开启 gzip 与 brotli 压缩）、none（不开启压缩，默认）
-# 压缩时删除原始文件的配置：gzip-clear、brotli-clear、both-clear（同时开启 gzip 与 brotli 压缩）、none（不开启压缩，默认）
-VITE_COMPRESSION = "none"
-
-VITE_BUILD_TYPE = "pro"
-
-VITE_BUILD_BASE_URL = "/dpgames-back-stage"
+VITE_BUILD_TYPE = "fat"

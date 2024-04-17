@@ -83,21 +83,8 @@ declare namespace BetOrderAPI {
     groupCount: null;
     pageData: BetOrderList[];
     otherData: otherDataType
-
-  }
-
-  type settleReqType = {
-    betItemId: string | number | null;
-    betResult: null | number | string;
-    awayTeamScore: null | number;
-    matchId: number | string;
-    handicap: string | number;
-    homeTeamScore: null | number;
-    settlementTimes: number | string;
   }
 
   type BetOrderResType = COMMON.BASE_RES_TYPE<BetOrderData>
-  type orderListDownLoadResType = COMMON.BASE_RES_TYPE<BetOrderList[]>
-  type StatusResType = COMMON.BASE_RES_TYPE<null>
   type betCenterCancelResType = COMMON.BASE_RES_TYPE<null>
 }

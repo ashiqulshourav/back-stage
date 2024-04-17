@@ -68,10 +68,16 @@ export function useEsportsSettlement() {
       });
       item.list.length = 0;
       Object.values(o).forEach((arr: any[]) => {
-        const selectIndex = arr.findIndex(item => item.win === 1);
-        const multipartBetOptions = arr
-          .filter(item => item.win === 1)
-          .map((_, index) => index);
+        const selectIndex = arr.findIndex(item => {
+          return item.win === 1;
+        });
+        const multipartBetOptions = [];
+        arr.forEach((item, index) => {
+          if (item.win === 1 && arr.length > 2) {
+            multipartBetOptions.push(index);
+          }
+        });
+
         item.list.push({
           betOptions: selectIndex,
           multipartBetOptions,

@@ -1,4 +1,5 @@
 import { addDialog, closeDialog } from '@/components/ReDialog';
+
 import PasswordInput from '@/components/PasswordInput/index.vue';
 
 export const usePasswordInputHook = () => {
