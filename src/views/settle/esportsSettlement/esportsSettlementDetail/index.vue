@@ -54,6 +54,7 @@
                   <span class="ml-3">{{ item.odds }}</span>
                 </el-radio>
               </el-radio-group>
+              
               <el-checkbox-group
                 v-else
                 class="bet_item"
