@@ -73,7 +73,7 @@ export function useEsportsSettlement() {
         });
         const multipartBetOptions = [];
         arr.forEach((item, index) => {
-          if (item.win === 1) {
+          if (item.win === 1 && arr.length > 2) {
             multipartBetOptions.push(index);
           }
         });
