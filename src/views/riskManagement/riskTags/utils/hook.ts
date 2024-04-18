@@ -3,13 +3,12 @@ import { message } from '@/utils/message';
 import { FormItemProps } from 'element-plus';
 import { addDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
-import { reactive, ref, onMounted, h } from 'vue';
+import { reactive, ref, h } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { searchFormType } from './types';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { t } from '@/plugins/i18n';
 import { Delete } from '@element-plus/icons-vue';
-import data from '@iconify-icons/ep/home-filled';
 import { useRouter } from 'vue-router';
 
 export function useTagsHook() {
@@ -92,12 +91,6 @@ export function useTagsHook() {
       loading.value = false;
     }
   }
-
-  // const resetForm = formEl => {
-  //   if (!formEl) return;
-  //   formEl.resetFields();
-  //   onSearch();
-  // };
 
   function openDialog(title: string, row?: RiskManagementDataAPI.RiskTagType) {
     addDialog({
@@ -189,16 +182,11 @@ export function useTagsHook() {
     });
   };
 
-  // onMounted(() => {
-  //   onSearch();
-  // });
-
   return {
     loading,
     dataList,
     pagination,
     onSearch,
-    // resetForm,
     openDialog,
     form,
     handleDelete,

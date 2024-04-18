@@ -6,17 +6,17 @@ export const riskManagementData = {
   getRiskTagList: (data: RiskManagementDataAPI.RiskTagListSearchProps) =>
     //   http.request<RiskManagementDataAPI.RiskTagListRes>(
     //     'post',
-    //     '/riskManagement/tags/list',
-    //     { data }
+    //     '/operateLabel/listByType',
+    //     { data: {...data, labelType: 1} }
     //   ),
     mockAPI.getRiskTagList(data),
 
   updateRiskTag: (data: RiskManagementDataAPI.RiskTagType) =>
     // http.request<RiskManagementDataAPI.RiskTagRes>(
     //   'post',
-    //   '/riskManagement/tags/update',
+    //   '/operateLabel/edit',
     //   {
-    //     data
+    //     data: {...data, labelType: 1}
     //   }
     // ),
     mockAPI.updateRiskTag(data),
@@ -24,9 +24,9 @@ export const riskManagementData = {
   createRiskTag: (data: RiskManagementDataAPI.RiskTagType) =>
     // http.request<RiskManagementDataAPI.RiskTagRes>(
     //   'post',
-    //   '/riskManagement/tags/create',
+    //   '/operateLabel/add',
     //   {
-    //     data
+    //     data: {...data, labelType: 1}
     //   }
     // ),
     mockAPI.createRiskTag(data),
@@ -34,7 +34,7 @@ export const riskManagementData = {
   deleteRiskTag: (data: RiskManagementDataAPI.RiskTagType) =>
     // http.request<
     //   COMMON.BASE_RES_TYPE<null | RiskManagementDataAPI.RiskTagType>
-    // >('post', '/riskManagement/tags/del', {
+    // >('post', '/operateLabel/del', {
     //   data
     // })
     mockAPI.deleteRiskTag(data)

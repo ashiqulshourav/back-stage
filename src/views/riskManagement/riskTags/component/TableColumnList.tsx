@@ -1,7 +1,4 @@
 import { RISK_TAG_LEVEL } from '@/utils/maps/tags_map';
-import { useTagsHook } from '../utils/hook';
-
-const { goToUserList } = useTagsHook();
 
 export const columns: TableColumnList = [
   {
@@ -37,7 +34,6 @@ export const columns: TableColumnList = [
   },
   {
     label: t('用户人数'),
-    // prop: 'userCount',
     minWidth: 150,
     slot: "userCount",
   },

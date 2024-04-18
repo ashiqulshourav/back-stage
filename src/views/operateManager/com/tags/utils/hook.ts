@@ -3,13 +3,12 @@ import { message } from '@/utils/message';
 import { FormItemProps } from 'element-plus';
 import { addDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
-import { reactive, ref, onMounted, h } from 'vue';
+import { reactive, ref, h } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { searchFormType } from './types';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { t } from '@/plugins/i18n';
 import { Delete } from '@element-plus/icons-vue';
-import data from '@iconify-icons/ep/home-filled';
 import { useRouter } from 'vue-router';
 
 export function useTagsHook() {
@@ -17,6 +16,7 @@ export function useTagsHook() {
   const dataList = reactive<OperateManagementDataAPI.OperateTagType[]>([]);
   const loading = ref(true);
   const router = useRouter();
+  const route = useRoute();
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -80,7 +80,8 @@ export function useTagsHook() {
         await API.getOperateTagList({
           ...removeEmptyStringKeys(form),
           pageSize: pagination.pageSize,
-          pageNum: pagination.currentPage
+          pageNum: pagination.currentPage,
+          category: route.path === '/operateManager/tags' ? 0 : 1
         });
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
@@ -92,12 +93,6 @@ export function useTagsHook() {
       loading.value = false;
     }
   }
-
-  // const resetForm = formEl => {
-  //   if (!formEl) return;
-  //   formEl.resetFields();
-  //   onSearch();
-  // };
 
   function openDialog(
     title: string,
@@ -137,7 +132,11 @@ export function useTagsHook() {
           if (valid) {
             if (row) {
               updateOperateTag(
-                { ...curData, id: row.id },
+                {
+                  ...curData,
+                  id: row.id,
+                  category: route.path === '/operateManager/tags' ? 0 : 1
+                },
                 () => chores(),
                 okButtonLoading,
                 okButtonText
@@ -146,7 +145,10 @@ export function useTagsHook() {
               // 实际开发先调用编辑接口，再进行下面操作
               // chores();
               createOperateTag(
-                { ...curData },
+                {
+                  ...curData,
+                  category: route.path === '/operateManager/tags' ? 0 : 1
+                },
                 () => chores(),
                 okButtonLoading,
                 okButtonText
@@ -195,23 +197,21 @@ export function useTagsHook() {
 
   const goToUserList = (tagId: number) => {
     router.push({
-      name: 'OPERATEMANAGER_ESPORTPLAYERLIST',
+      name:
+        route.path === '/operateManager/tags'
+          ? 'OPERATEMANAGER_SPORTPLAYERLIST'
+          : 'OPERATEMANAGER_ESPORTPLAYERLIST',
       query: {
         tagId
       }
     });
   };
 
-  // onMounted(() => {
-  //   onSearch();
-  // });
-
   return {
     loading,
     dataList,
     pagination,
     onSearch,
-    // resetForm,
     openDialog,
     form,
     handleDelete,

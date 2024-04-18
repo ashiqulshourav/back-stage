@@ -2,23 +2,23 @@ import { http } from '@/utils/http';
 import mockAPI from './mock';
 
 export const operateManagementData = {
-  //- 风控管理
+  //- 运营管理
   getOperateTagList: (
     data: OperateManagementDataAPI.OperateTagListSearchProps
   ) =>
     //   http.request<OperateManagementDataAPI.OperateTagListRes>(
     //     'post',
-    //     '/OperateManagement/tags/list',
-    //     { data }
+    //     '/operateLabel/listByType',
+    //     { data: {...data, labelType: 2} }
     //   ),
     mockAPI.getOperateTagList(data),
 
   updateOperateTag: (data: OperateManagementDataAPI.OperateTagType) =>
     // http.request<OperateManagementDataAPI.OperateTagRes>(
     //   'post',
-    //   '/OperateManagement/tags/update',
+    //   '/operateLabel/edit',
     //   {
-    //     data
+    //     data: {...data, labelType: 2}
     //   }
     // ),
     mockAPI.updateOperateTag(data),
@@ -26,9 +26,9 @@ export const operateManagementData = {
   createOperateTag: (data: OperateManagementDataAPI.OperateTagType) =>
     // http.request<OperateManagementDataAPI.OperateTagRes>(
     //   'post',
-    //   '/OperateManagement/tags/create',
+    //   '/operateLabel/add',
     //   {
-    //     data
+    //     data: {...data, labelType: 2}
     //   }
     // ),
     mockAPI.createOperateTag(data),
@@ -36,7 +36,7 @@ export const operateManagementData = {
   deleteOperateTag: (data: OperateManagementDataAPI.OperateTagType) =>
     // http.request<
     //   COMMON.BASE_RES_TYPE<null | OperateManagementDataAPI.OperateTagType>
-    // >('post', '/OperateManagement/tags/del', {
+    // >('post', '/operateLabel/del', {
     //   data
     // })
     mockAPI.deleteOperateTag(data)

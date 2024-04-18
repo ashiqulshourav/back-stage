@@ -5,11 +5,13 @@ declare namespace RiskManagementDataAPI {
     name?: string;
     userCount?: number;
     remark?: string;
+    labelType?: number;
   };
   type RiskTagListSearchProps = COMMON.ListFetchProps & {
     id?: number;
     level?: number;
     name?: string;
+    labelType?: number;
   };
   type RiskTagListType = COMMON.ListData<RiskTagType>;
   type RiskTagListRes = COMMON.BASE_RES_TYPE<RiskTagListType>;
