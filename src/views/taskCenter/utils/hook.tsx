@@ -73,6 +73,15 @@ export function useUserManager() {
   const getDownLoadUrl = (id:number)=>{
     API.getDownLoadUrl({ id: id }).then(res => {
       if(res.code === 0  ){
+        if (!res.data) {
+          message(t('下载失败'), { type: 'error' });
+        }
+        const downloadDom = document.createElement('a');
+        downloadDom.href = res.data;
+        // downloadDom.download=fileName //--不是必须 若需要【前端重命名文件夹】的话这句代码就需要
+        document.body.appendChild(downloadDom);
+        downloadDom.click();
+        document.body.removeChild(downloadDom);
       }else {
         message(res.msg, { type: 'error' });
       }
