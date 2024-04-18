@@ -12,7 +12,9 @@ import { playMethodData } from "./playMethd";
 import { userMangerData } from "./userManger";
 import { roleData } from "./role";
 import { bettingCenter } from "./bettingCenter";
-import {taskCenter} from "@/api/taskCenter";
+import { taskCenter } from '@/api/taskCenter';
+import { riskManagementData } from './riskManagement';
+import { operateManagementData } from './operateManagement';
 
 export const API = {
   ...user,
@@ -29,5 +31,7 @@ export const API = {
   ...userMangerData,
   ...playMethodData,
   ...bettingCenter,
-  ...taskCenter
-}
+  ...taskCenter,
+  ...riskManagementData,
+  ...operateManagementData
+};
