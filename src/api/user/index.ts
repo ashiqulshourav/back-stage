@@ -17,6 +17,7 @@ export const user = {
     pageSize: number;
     pageNum: number;
     ids?: string[];
+    venueType: number;
     tenantIds?: number | string | string[];
     limitLevel?: number | string;
     limittenantCodeLevel?: number | string;
@@ -34,8 +35,8 @@ export const user = {
     name: string;
     isFreeze: boolean | number;
     limitLevel: number;
-    singleBetLimit: number | string|null;
-    singleEventCompensationLimit: number | string|null;
+    singleBetLimit: number | string | null;
+    singleEventCompensationLimit: number | string | null;
     remark: string;
   }) => http.request<UserAPI.userBaseResType>("post", "/operate/updateUser", { data }),
 

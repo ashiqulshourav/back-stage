@@ -37,6 +37,8 @@ export function userPlayerListHook() {
     console.log('handleSelectionChange', val);
   }
 
+  //- 初始化数据请求
+  const route = useRoute()
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     try {
@@ -44,6 +46,7 @@ export function userPlayerListHook() {
       const res =
         await API.operateUserList({
           ...removeEmptyStringKeys(form),
+          venueType: route.path === '/operateManager/sportPlayerList' ? 0 : 1,
           pageSize: pagination.pageSize,
           pageNum: pagination.currentPage
         });
