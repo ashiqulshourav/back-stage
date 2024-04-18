@@ -4,11 +4,15 @@ import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted } from 'vue';
 import { searchFormType } from './types';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
+import {ElMessageBox} from "element-plus";
+import {t} from "@/plugins/i18n";
+import {usePasswordInputHook} from "@/hooks/passwordInputHook";
+
 
 export function useUserManager() {
   const dataList = reactive<TaskCenterAPI.ListItem[]>([]);
   const loading = ref(true);
-
+  const { openPasswordInput } = usePasswordInputHook();
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 20,
@@ -50,10 +54,18 @@ export function useUserManager() {
     onSearch();
   };
   const handleDelete = (id:number) => {
-    API.deleteTask({ id: id }).then(res => {
-      message(res.msg, { type: res.code === 0 ? 'success' : 'error' });
-      if (res.code === 0) {
-        onSearch();
+    ElMessageBox.confirm(t('确定删除任务？删除后不可复原'), t('警告'), {
+      center: true,
+      type: 'warning'
+    }).then(async () => {
+      const r = await openPasswordInput();
+      if (r) {
+        API.deleteTask({ id: id }).then(res => {
+          message(res.msg, { type: res.code === 0 ? 'success' : 'error' });
+          if (res.code === 0) {
+            onSearch();
+          }
+        });
       }
     });
   };
