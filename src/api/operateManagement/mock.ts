@@ -27,10 +27,10 @@ const getOperateTagList = (
         resolve({
           code: 0,
           data: {
-            list,
+            records: list,
             total: data.length,
-            pageSize,
-            pageNum
+            size: pageSize,
+            current: pageNum
           },
           msg: '成功获取标签目录'
         });
@@ -39,49 +39,61 @@ const getOperateTagList = (
   );
 };
 
-const updateOperateTag = (dataProp: OperateManagementDataAPI.OperateTagType) => {
-  return new Promise<OperateManagementDataAPI.OperateTagRes>((resolve, reject) => {
-    setTimeout(() => {
-      const { id } = dataProp;
-      if (data.findIndex(item => item.id === id) < 0) {
-        reject('There are no histories match');
-      }
-      data = data.map(item => (item.id === id ? dataProp : item));
-      resolve({
-        code: 0,
-        data: dataProp,
-        msg: '成功更新标签信息'
-      });
-    }, 1000);
-  });
+const updateOperateTag = (
+  dataProp: OperateManagementDataAPI.OperateTagType
+) => {
+  return new Promise<OperateManagementDataAPI.OperateTagRes>(
+    (resolve, reject) => {
+      setTimeout(() => {
+        const { id } = dataProp;
+        if (data.findIndex(item => item.id === id) < 0) {
+          reject('There are no histories match');
+        }
+        data = data.map(item => (item.id === id ? dataProp : item));
+        resolve({
+          code: 0,
+          data: dataProp,
+          msg: '成功更新标签信息'
+        });
+      }, 1000);
+    }
+  );
 };
-const createOperateTag = (dataProp: OperateManagementDataAPI.OperateTagType) => {
-  return new Promise<OperateManagementDataAPI.OperateTagRes>((resolve, reject) => {
-    setTimeout(() => {
-      const newData = { ...dataProp, id: data[data.length - 1].id + 1 };
-      data.push(newData);
-      // data = [newData, ...data];
-      resolve({
-        code: 0,
-        data: newData,
-        msg: '成功创建标签'
-      });
-    }, 1000);
-  });
+const createOperateTag = (
+  dataProp: OperateManagementDataAPI.OperateTagType
+) => {
+  return new Promise<OperateManagementDataAPI.OperateTagRes>(
+    (resolve, reject) => {
+      setTimeout(() => {
+        const newData = { ...dataProp, id: data[data.length - 1].id + 1 };
+        data.push(newData);
+        // data = [newData, ...data];
+        resolve({
+          code: 0,
+          data: newData,
+          msg: '成功创建标签'
+        });
+      }, 1000);
+    }
+  );
 };
 
-const deleteOperateTag = (dataProp: OperateManagementDataAPI.OperateTagType) => {
-  return new Promise<OperateManagementDataAPI.OperateTagRes>((resolve, reject) => {
-    setTimeout(() => {
-      const { id } = dataProp;
-      data = data.filter(item => item.id !== id);
-      resolve({
-        code: 0,
-        data: null,
-        msg: '成功删除标签'
-      });
-    }, 1000);
-  });
+const deleteOperateTag = (
+  dataProp: OperateManagementDataAPI.OperateTagType
+) => {
+  return new Promise<OperateManagementDataAPI.OperateTagRes>(
+    (resolve, reject) => {
+      setTimeout(() => {
+        const { id } = dataProp;
+        data = data.filter(item => item.id !== id);
+        resolve({
+          code: 0,
+          data: null,
+          msg: '成功删除标签'
+        });
+      }, 1000);
+    }
+  );
 };
 
 const mockAPI = {
