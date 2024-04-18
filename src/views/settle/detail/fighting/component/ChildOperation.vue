@@ -19,7 +19,7 @@
       size="small"
       type="primary"
       @click="settleJunClick"
-      >{{ t('结算局') }}</el-button
+      >{{ t('结算回合') }}</el-button
     >
     <el-button size="small" type="danger" @click="deleteChildItem">{{
       t('删除')

@@ -549,9 +549,9 @@ declare namespace SattleDataAPI {
     newEventList: {
       matchId: number;
       _tempDate?: number;
-      firstNum?: number;
-      firstT1?: number;
-      firstT2?: number;
+      firstNum?: number | string;
+      firstT1?: number | string;
+      firstT2?: number | string;
       eventCode?: string | number;
       eventTime: number | string | Date;
       homeAway?: string;

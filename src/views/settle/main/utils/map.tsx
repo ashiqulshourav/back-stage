@@ -15,7 +15,8 @@ export enum SPORT_NAME_TYPE {
   american_football = 16,
   handball = 11,
   iceHockey = 12,
-  cricket = 13
+  cricket = 13,
+  baseball = 18
 }
 
 export const SPORT_LIST_MAP: sport_list_map_type[] = [
@@ -88,6 +89,11 @@ export const SPORT_LIST_MAP: sport_list_map_type[] = [
     label: t('拳击/格斗'),
     value: SPORT_NAME_TYPE.boxing,
     linkName: 'SETTLE_DETAIL_FIGHTING'
+  },
+  {
+    label: t('棒球'),
+    value: SPORT_NAME_TYPE.baseball,
+    linkName: 'SETTLE_DETAIL_BASEBALL_DETAIL'
   },
   {
     label: t('飞镖'),

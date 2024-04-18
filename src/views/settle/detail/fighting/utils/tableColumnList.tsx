@@ -2,9 +2,10 @@ import dayjs from 'dayjs';
 
 export const columns: TableColumnList = [
   {
-    label: t('局'),
+    label: t('回合'),
     prop: 'inningNum',
-    type: 'index'
+    type: 'index',
+    minWidth: 100
   },
   {
     headerRenderer: () => history.state.params.homeTeamNameCn ?? '_',

@@ -17,9 +17,9 @@
             v-if="
               (renderObj.fullSettlementStatus === 0 ||
                 renderObj.reSettleStatus === 1) &&
-              hasAuth('ADDNEWPLATEGAME')
+              hasAuth('ADDEDFIRSTHALF')
             "
-            >{{ t('新增局') }}</el-button
+            >{{ t('新增回合') }}</el-button
           >
           <div v-if="renderObj.fullSettlementStatus === 1">
             <el-button

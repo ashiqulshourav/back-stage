@@ -20,9 +20,7 @@ export function useBilliardsHook() {
 
   // - 获取事件列表
   const onSearch = async () => {
-    const res = await API.getSnookerEvents({
-      matchId: history.state.params.matchId
-    });
+    const res = await API.getBoxingEvents({ matchId });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
     dataList.length = 0;
@@ -61,7 +59,7 @@ export function useBilliardsHook() {
       center: true
     }).then(async () => {
       loading.value = true;
-      const res = await API.snookerReSettleMatchEvent({
+      const res = await API.boxingReSettleMatchEvent({
         matchId,
         id: row.id,
         matchPeriodId: row.matchPeriodId,
@@ -98,7 +96,7 @@ export function useBilliardsHook() {
           <div>${t('手动结算后无法回退，请再次确定结果')}</div>
       </div>
       `,
-      `${t('结算第')}${firstNum}${t('局')}`,
+      `${t('结算第')}${firstNum}${t('回合')}`,
       {
         dangerouslyUseHTMLString: true,
         confirmButtonText: t('确认结算'),
@@ -116,7 +114,7 @@ export function useBilliardsHook() {
         firstNum: row.firstNum
       };
       try {
-        const res = await API.addSnookerEvent(params);
+        const res = await API.addBoxingEvent(params);
         loading.value = false;
         message(res.msg, { type: res.code ? 'error' : 'success' });
         if (!res.code) onSearch();
@@ -160,7 +158,7 @@ export function useBilliardsHook() {
       if (!r) return;
       try {
         allSettleLoading.value = true;
-        const res = await API.snookerManualSettlementFullTime({ matchId });
+        const res = await API.boxingManualSettlementFullTime({ matchId });
         allSettleLoading.value = false;
         message(res.msg, { type: res.code ? 'error' : 'success' });
         if (!res.code) router.go(-1);
@@ -184,7 +182,7 @@ export function useBilliardsHook() {
    */
   //- 开启二次结算（二次结算按钮）
   const openSecondSettleClick = async () => {
-    const res = await API.snookerOpen2ndSettlementStatus({ matchId });
+    const res = await API.boxingOpen2ndSettlementStatus({ matchId });
     message(res.msg, { type: res.code ? 'error' : 'success' });
     if (!res.code) {
       getMatchDetail();
@@ -227,7 +225,7 @@ export function useBilliardsHook() {
           firstNum: item.firstNum
         };
       });
-      const res = await API.snookerConfirm2ndSettlement(confirmParams);
+      const res = await API.boxingConfirm2ndSettlement(confirmParams);
       if (res.code) return message(res.msg, { type: 'error' });
       confirmParams.cancelEventIds = [];
       confirmParams.newEventList = [];
