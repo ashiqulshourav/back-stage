@@ -83,7 +83,7 @@
 import { usePublicHooks } from '@/hooks';
 import { PureTableBar } from '@/components/RePureTableBar';
 import DetiltTitle from '../../component/Settle_detail_title.vue';
-import { useBilliardsHook } from './utils/hook';
+import { useBaseballHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import Score from './component/Score.vue';
 import ChildOperation from './component/ChildOperation.vue';
@@ -105,5 +105,5 @@ const {
   resetBtnClick,
   openSecondSettleClick,
   confirmSecondSettleClick
-} = useBilliardsHook();
+} = useBaseballHook();
 </script>

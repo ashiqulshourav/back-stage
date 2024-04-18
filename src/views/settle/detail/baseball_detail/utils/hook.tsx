@@ -4,7 +4,7 @@ import { columns } from './tableColumnList';
 import { ElMessageBox } from 'element-plus';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 
-export function useBilliardsHook() {
+export function useBaseballHook() {
   const dataList = reactive<SattleDataAPI.volleyballData[]>([]);
   const allSettleLoading = ref(false);
   const loading = ref(true);
@@ -20,9 +20,7 @@ export function useBilliardsHook() {
 
   // - 获取事件列表
   const onSearch = async () => {
-    const res = await API.getSnookerEvents({
-      matchId: history.state.params.matchId
-    });
+    const res = await API.getBaseballEvents({ matchId });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
     dataList.length = 0;
@@ -61,7 +59,7 @@ export function useBilliardsHook() {
       center: true
     }).then(async () => {
       loading.value = true;
-      const res = await API.snookerReSettleMatchEvent({
+      const res = await API.baseballReSettleMatchEvent({
         matchId,
         id: row.id,
         matchPeriodId: row.matchPeriodId,
@@ -116,7 +114,7 @@ export function useBilliardsHook() {
         firstNum: row.firstNum
       };
       try {
-        const res = await API.addSnookerEvent(params);
+        const res = await API.addBaseballEvent(params);
         loading.value = false;
         message(res.msg, { type: res.code ? 'error' : 'success' });
         if (!res.code) onSearch();
@@ -134,11 +132,7 @@ export function useBilliardsHook() {
     let s2 = 0;
     const scoreList = dataList.map(item => [item.firstT1, item.firstT2]);
     scoreList.forEach(item => (item[0] > item[1] ? ++s1 : ++s2));
-    if (
-      dataList.length < 2 ||
-      dataList.some(item => !item.id) ||
-      Math.abs(s1 - s2) < 1
-    ) {
+    if (dataList.length < 2 || dataList.some(item => !item.id)) {
       return message(t('缺少事件'), { type: 'error' });
     }
     ElMessageBox.confirm(
@@ -160,7 +154,7 @@ export function useBilliardsHook() {
       if (!r) return;
       try {
         allSettleLoading.value = true;
-        const res = await API.snookerManualSettlementFullTime({ matchId });
+        const res = await API.baseballManualSettlementFullTime({ matchId });
         allSettleLoading.value = false;
         message(res.msg, { type: res.code ? 'error' : 'success' });
         if (!res.code) router.go(-1);
@@ -172,9 +166,7 @@ export function useBilliardsHook() {
 
   //- 获取比赛详情
   const getMatchDetail = async () => {
-    const res = await API.getPreSaleInfo({
-      matchId: history.state.params.matchId
-    });
+    const res = await API.getPreSaleInfo({ matchId });
     if (res.code) return message(res.msg, { type: 'error' });
     Object.assign(renderObj, res.data);
   };
@@ -184,7 +176,7 @@ export function useBilliardsHook() {
    */
   //- 开启二次结算（二次结算按钮）
   const openSecondSettleClick = async () => {
-    const res = await API.snookerOpen2ndSettlementStatus({ matchId });
+    const res = await API.baseballOpen2ndSettlementStatus({ matchId });
     message(res.msg, { type: res.code ? 'error' : 'success' });
     if (!res.code) {
       getMatchDetail();
@@ -227,7 +219,7 @@ export function useBilliardsHook() {
           firstNum: item.firstNum
         };
       });
-      const res = await API.snookerConfirm2ndSettlement(confirmParams);
+      const res = await API.baseballConfirm2ndSettlement(confirmParams);
       if (res.code) return message(res.msg, { type: 'error' });
       confirmParams.cancelEventIds = [];
       confirmParams.newEventList = [];
