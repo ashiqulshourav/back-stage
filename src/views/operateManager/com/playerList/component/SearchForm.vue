@@ -165,8 +165,11 @@ const getLimmitLevelList = async () => {
 };
 
 const tenantList = reactive([]);
+const route = useRoute();
 const initTenantList = async () => {
-  const res = await API.getTenantList();
+  const res = await API.getTenantList({
+    category: route.path === '/operateManager/sportPlayerList' ? 0 : 1
+  });
   if (res.code) return;
   tenantList.length = 0;
   tenantList.push(...res.data.data);

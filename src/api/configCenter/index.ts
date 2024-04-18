@@ -27,7 +27,7 @@ export const configCenterData = {
       }
     ),
   // mockAPI.updateLeagueTag(data),
-  createLeagueTag: (data: ConfigCenterDataAPI.LeagueTagType[]) =>
+  createLeagueTag: (data: ConfigCenterDataAPI.LeagueTagType) =>
     http.request<ConfigCenterDataAPI.LeagueTagRes>(
       'post',
       '/league/tag/create',
@@ -38,7 +38,7 @@ export const configCenterData = {
   // mockAPI.createLeagueTag(data),
   deleteLeagueTag: (data: ConfigCenterDataAPI.LeagueTagType) =>
     http.request<
-      COMMON.BASE_RES_TYPE<null | ConfigCenterDataAPI.LeagueTagType[]>
+      COMMON.BASE_RES_TYPE<null | ConfigCenterDataAPI.LeagueTagType>
     >('post', '/league/tag/del', {
       data
     }),
