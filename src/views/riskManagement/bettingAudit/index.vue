@@ -256,7 +256,7 @@
             >
             <span v-else>-</span>
           </template>
-          <template #status="{ row }">
+          <template #riskStatus="{ row }">
             <div   class="match_item odd_item"  v-for="item in row.combineOrderDetails">
               <div v-if="item.riskStatus===riskStatus.reject">
                 原因:{{item.riskType}}
