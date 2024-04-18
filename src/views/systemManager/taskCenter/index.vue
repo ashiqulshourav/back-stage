@@ -28,11 +28,13 @@
               type="primary"
               :size="size"
               :disabled="row.disabled"
+              @click="getDownLoadUrl(row.id)"
             >
-              <a :href="row.url" target="_self"> {{ t('下载') }}</a>
+              下载
+<!--              <a :href="row.url" target="_self"> {{ t('下载') }}</a>-->
             </el-button>
             <el-button
-              @click="handleDelete(row)"
+              @click="handleDelete(row.id)"
               class="reset-margin"
               link
               type="danger"
@@ -55,7 +57,6 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
-
 defineOptions({ name: 'taskCenter' });
 const { tableHeaderStyle } = usePublicHooks();
 
@@ -66,6 +67,7 @@ const {
   form,
   onSearch,
   handleCurrentChange,
-  handleDelete
+  handleDelete,
+  getDownLoadUrl,
 } = useUserManager();
 </script>

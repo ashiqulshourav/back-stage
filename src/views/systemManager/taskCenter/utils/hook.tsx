@@ -49,14 +49,23 @@ export function useUserManager() {
     formEl.resetFields();
     onSearch();
   };
-  const handleDelete = (row: { id: number }) => {
-    API.deleteTask({ id: row.id }).then(res => {
+  const handleDelete = (id:number) => {
+    API.deleteTask({ id: id }).then(res => {
       message(res.msg, { type: res.code === 0 ? 'success' : 'error' });
       if (res.code === 0) {
         onSearch();
       }
     });
   };
+
+  const getDownLoadUrl = (id:number)=>{
+    API.getDownLoadUrl({ id: id }).then(res => {
+      if(res.code === 0  ){
+      }else {
+        message(res.msg, { type: 'error' });
+      }
+    });
+  }
   onMounted(() => {
     onSearch();
   });
@@ -70,5 +79,6 @@ export function useUserManager() {
     form,
     handleCurrentChange,
     handleDelete,
+    getDownLoadUrl,
   };
 }
