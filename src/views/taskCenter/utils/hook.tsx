@@ -78,8 +78,6 @@ export function useUserManager() {
         }
         const downloadDom = document.createElement('a');
         downloadDom.href = res.data;
-        console.log(1111,res)
-        return
         // downloadDom.download=fileName //--不是必须 若需要【前端重命名文件夹】的话这句代码就需要
         document.body.appendChild(downloadDom);
         downloadDom.click();

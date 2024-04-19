@@ -369,7 +369,6 @@ export function useLeague() {
       API.bettingAuditConfirm(list).then((res)=>{
         onSearch();
         res.code===0?message(res.msg, { type: 'success' }):message(res.msg, { type: 'error' })
-
       })
     })
   }
