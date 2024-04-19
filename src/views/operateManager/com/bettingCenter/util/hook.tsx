@@ -14,7 +14,6 @@ import { addDialog, closeDialog } from '@/components/ReDialog/index';
 import editMatch from '../component/editMatch.vue';
 import { reactive, ref, onMounted, h } from 'vue';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
-
 import {
   markeTypeMap,
   useSportFormatDetail,
