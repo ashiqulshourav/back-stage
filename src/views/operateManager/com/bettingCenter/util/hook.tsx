@@ -26,6 +26,7 @@ import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { ElMessageBox } from 'element-plus';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
+import {riskStatus} from "@/views/riskManagement/bettingAudit/util/types";
 
 export function useBettingCenterHook() {
   const { openPasswordInput } = usePasswordInputHook();
@@ -420,6 +421,16 @@ export function useBettingCenterHook() {
       : message(t('复制失败'), { type: 'error' });
   }
 
+  const isShowCancel = (row)=>{
+    let flag = true
+    row.combineOrderDetails.map((item)=>{
+      if(item.riskStatus===riskStatus.rejectBetting||item.riskStatus===riskStatus.reject||item.riskStatus===riskStatus.approve){
+        flag = false
+      }
+    })
+    return flag
+  }
+
   //- 切换比赛类型
   onMounted(() => {
     onSearch();
@@ -445,6 +456,7 @@ export function useBettingCenterHook() {
     tenantObj,
     specialCountFlag,
     UDialogFlag,
-    switchDialog
+    switchDialog,
+    isShowCancel,
   };
 }

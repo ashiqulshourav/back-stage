@@ -322,7 +322,7 @@
               <el-button
                 class="mb-1 w-100"
                 @click="handleCancel(row)"
-                v-if="row.billStatus === 0 && hasAuth('CANCELBET')"
+                v-if="row.billStatus === 0&& isShowCancel(row) && hasAuth('CANCELBET')"
               >
                 {{ t('取消') }}
               </el-button>
@@ -428,7 +428,8 @@ const {
   tenantList,
   specialCountFlag,
   switchDialog,
-  tenantObj
+  tenantObj,
+  isShowCancel
 } = useBettingCenterHook();
 </script>
 

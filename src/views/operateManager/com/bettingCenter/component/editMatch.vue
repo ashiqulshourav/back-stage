@@ -293,7 +293,6 @@ const confirmClick = () => {
           return { detailId, settleScore, betResult: item.betResult };
         }
       );
-      return false;
       const params: any = {
         id: newRow.value.id,
         betOrderDetails
