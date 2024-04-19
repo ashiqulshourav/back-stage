@@ -267,7 +267,7 @@ export function useLeague() {
     data.combineOrderDetails = data.combineOrderDetails.filter((item,i)=>{
       return i == index
     })
-    const details = row.combineOrderDetails.map((item)=>{
+    const details = data.combineOrderDetails.map((item)=>{
       return {detailId:item.detailId,riskTimes: item.riskTimes}
     })
     const list = [
@@ -300,10 +300,9 @@ export function useLeague() {
   const handleApprove = (row:any,index)=>{
     let data= {...row} //...row.combineOrderDetails[index]
     data.combineOrderDetails = data.combineOrderDetails.filter((item,i)=>{
-      console.log(1111,item)
       return i == index
     })
-    const details = row.combineOrderDetails.map((item)=>{
+    const details = data.combineOrderDetails.map((item)=>{
       return {detailId:item.detailId,riskTimes: item.riskTimes}
     })
     const list = [
@@ -368,8 +367,6 @@ export function useLeague() {
         return
       }
       API.bettingAuditConfirm(list).then((res)=>{
-
-        console.log(333333,res)
         onSearch();
         res.code===0?message(res.msg, { type: 'success' }):message(res.msg, { type: 'error' })
 
