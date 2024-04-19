@@ -4,12 +4,12 @@ import mockAPI from './mock';
 export const riskManagementData = {
   //- 风控管理
   getRiskTagList: (data: RiskManagementDataAPI.RiskTagListSearchProps) =>
-    //   http.request<RiskManagementDataAPI.RiskTagListRes>(
-    //     'post',
-    //     '/operateLabel/listByType',
-    //     { data: {...data, labelType: 1} }
-    //   ),
-    mockAPI.getRiskTagList(data),
+    http.request<RiskManagementDataAPI.RiskTagListRes>(
+      'post',
+      '/operateLabel/listByType',
+      { data: { ...data, labelType: 1 } }
+    ),
+  // mockAPI.getRiskTagList(data),
 
   updateRiskTag: (data: RiskManagementDataAPI.RiskTagType) =>
     // http.request<RiskManagementDataAPI.RiskTagRes>(

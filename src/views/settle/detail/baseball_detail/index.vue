@@ -38,6 +38,9 @@
               >{{ t('确认二次结算') }}</el-button
             >
           </div>
+          <el-text type="danger" class="!ml-2">{{
+            t('依照顺序新增局并按顺序结算局')
+          }}</el-text>
         </div>
       </template>
 
@@ -107,3 +110,11 @@ const {
   confirmSecondSettleClick
 } = useBaseballHook();
 </script>
+
+<style lang="scss">
+.confirm_settle_dialog {
+  .el-message-box__btns {
+    justify-content: end;
+  }
+}
+</style>

@@ -124,17 +124,53 @@ export function useBaseballHook() {
     });
   };
 
+  const showErrorDialog = () => {
+    ElMessageBox.confirm(
+      <div>
+        <div class="font-bold">{t('未满足局数和比分要求')}</div>
+        <div>
+          {t('最少进行7局后任意一队领先10分，或最少进行5局后任意一队领先15分')}
+        </div>
+      </div>,
+      t('错误提示'),
+      {
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: t('确定'),
+        type: 'error',
+        customClass: 'confirm_settle_dialog',
+        showCancelButton: false
+      }
+    );
+  };
+
+  // * 是否可以全场结算判断
+  const hasItPassedTheFullSettlementInspection = () => {
+    let s1 = 0;
+    let s2 = 0;
+    dataList.forEach(item => {
+      s1 += +item.firstT1;
+      s2 += +item.firstT2;
+    });
+    const len = dataList.length;
+    if (len < 5) {
+      message(t('缺少事件'), { type: 'error' });
+      return false;
+    }
+    if (
+      (len < 7 && len >= 5 && Math.abs(s1 - s2) < 15) ||
+      (len < 9 && len >= 7 && Math.abs(s1 - s2) < 10)
+    ) {
+      showErrorDialog();
+      return false;
+    }
+    return true;
+  };
+
   //- 全场结算
   const router = useRouter();
   const { openPasswordInput } = usePasswordInputHook();
   const allSettleBtnClick = async () => {
-    let s1 = 0;
-    let s2 = 0;
-    const scoreList = dataList.map(item => [item.firstT1, item.firstT2]);
-    scoreList.forEach(item => (item[0] > item[1] ? ++s1 : ++s2));
-    if (dataList.length < 2 || dataList.some(item => !item.id)) {
-      return message(t('缺少事件'), { type: 'error' });
-    }
+    if (!hasItPassedTheFullSettlementInspection()) return;
     ElMessageBox.confirm(
       `
       <div class="text-center">

@@ -6,12 +6,12 @@ export const operateManagementData = {
   getOperateTagList: (
     data: OperateManagementDataAPI.OperateTagListSearchProps
   ) =>
-    //   http.request<OperateManagementDataAPI.OperateTagListRes>(
-    //     'post',
-    //     '/operateLabel/listByType',
-    //     { data: {...data, labelType: 2} }
-    //   ),
-    mockAPI.getOperateTagList(data),
+    http.request<OperateManagementDataAPI.OperateTagListRes>(
+      'post',
+      '/operateLabel/listByType',
+      { data: { ...data, labelType: 2 } }
+    ),
+  // mockAPI.getOperateTagList(data),
 
   updateOperateTag: (data: OperateManagementDataAPI.OperateTagType) =>
     // http.request<OperateManagementDataAPI.OperateTagRes>(

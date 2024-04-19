@@ -15,7 +15,13 @@ declare namespace OperateManagementDataAPI {
     category?: number;
     labelType?: number;
   };
-  type OperateTagListType = COMMON.ListData<OperateTagType>;
+  type OperateTagListType = {
+    records: OperateTagType[];
+    total: number;
+    size?: number;
+    current?: number;
+    pages?: number;
+  };
   type OperateTagListRes = COMMON.BASE_RES_TYPE<OperateTagListType>;
   type OperateTagRes = COMMON.BASE_RES_TYPE<OperateTagType>;
 }
