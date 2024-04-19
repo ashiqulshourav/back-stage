@@ -86,9 +86,9 @@ export function useTagsHook() {
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
-      dataList.push(...res.data.list);
+      dataList.push(...res.data.records);
       pagination.total = res.data.total;
-      pagination.pageSize = res.data.pageSize;
+      pagination.pageSize = res.data.size;
     } catch (error) {
       loading.value = false;
     }
