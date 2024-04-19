@@ -58,15 +58,12 @@ export function useUserManager() {
       center: true,
       type: 'warning'
     }).then(async () => {
-      const r = await openPasswordInput();
-      if (r) {
-        API.deleteTask({ id: id }).then(res => {
-          message(res.msg, { type: res.code === 0 ? 'success' : 'error' });
-          if (res.code === 0) {
-            onSearch();
-          }
-        });
-      }
+      API.deleteTask({ id: id }).then(res => {
+        message(res.msg, { type: res.code === 0 ? 'success' : 'error' });
+        if (res.code === 0) {
+          onSearch();
+        }
+      });
     });
   };
 
