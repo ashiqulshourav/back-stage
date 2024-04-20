@@ -55,7 +55,9 @@ import { usePublicHooks } from '@/hooks';
 
 defineOptions({ name: 'CONFIGCENTER_LEAGUE_TAGS' });
 const { tableHeaderStyle } = usePublicHooks();
-
+const props = defineProps<{
+  venueType:number;
+}>();
 const {
   loading,
   dataList,
@@ -66,7 +68,7 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   form
-} = userPlayerListHook();
+} = userPlayerListHook(props.venueType);
 </script>
 
 <style>

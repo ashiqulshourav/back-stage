@@ -6,7 +6,7 @@ import { reactive, ref, h } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { searchFormType } from './types';
 
-export function userPlayerListHook() {
+export function userPlayerListHook(venueType) {
   const dataList = reactive<UserAPI.operateUserList[]>([]);
   const loading = ref(true);
   const pagination = reactive<PaginationProps>({
@@ -38,7 +38,7 @@ export function userPlayerListHook() {
   }
 
   //- 初始化数据请求
-  const route = useRoute()
+
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     try {
@@ -46,7 +46,7 @@ export function userPlayerListHook() {
       const res =
         await API.operateUserList({
           ...removeEmptyStringKeys(form),
-          venueType: route.path === '/operateManager/sportPlayerList' ? 0 : 1,
+          venueType:venueType,
           pageSize: pagination.pageSize,
           pageNum: pagination.currentPage
         });
