@@ -78,6 +78,7 @@ export function useTagsHook() {
       const res: RiskManagementDataAPI.RiskTagListRes =
         await API.getRiskTagList({
           ...removeEmptyStringKeys(form),
+          id: form.id ? Number(form.id) : undefined,
           pageSize: pagination.pageSize,
           pageNum: pagination.currentPage
         });

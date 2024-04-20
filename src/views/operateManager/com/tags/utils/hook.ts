@@ -79,6 +79,7 @@ export function useTagsHook() {
       const res: OperateManagementDataAPI.OperateTagListRes =
         await API.getOperateTagList({
           ...removeEmptyStringKeys(form),
+          id: form.id ? Number(form.id) : undefined,
           pageSize: pagination.pageSize,
           pageNum: pagination.currentPage,
           category: route.path === '/operateManager/tags' ? 0 : 1
