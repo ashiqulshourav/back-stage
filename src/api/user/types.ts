@@ -5,17 +5,17 @@ declare namespace UserAPI {
     id: number;
     status: number;
     isAdmin: number;
-  }
+  };
 
-  type Login = COMMON.BASE_RES_TYPE<LoginData>
-  type LoginResType = COMMON.BASE_RES_TYPE<LoginData>
+  type Login = COMMON.BASE_RES_TYPE<LoginData>;
+  type LoginResType = COMMON.BASE_RES_TYPE<LoginData>;
 
   type Meta = {
     title?: string;
     icon?: string;
     rank?: number;
     roles?: string[];
-  }
+  };
 
   type RouterChildren = {
     path: string;
@@ -24,7 +24,7 @@ declare namespace UserAPI {
     childResourceList?: any[];
     sort?: string | number;
     meta: Meta;
-  }
+  };
 
   type RouterData = {
     path: string;
@@ -34,7 +34,7 @@ declare namespace UserAPI {
     childResourceList?: any[];
     sort?: string | number;
     children?: RouterChildren[];
-  }
+  };
 
   type ChildResourceList = {
     id: number;
@@ -47,7 +47,7 @@ declare namespace UserAPI {
     resourceFlag: number;
     path: string;
     childResourceList: any[];
-  }
+  };
 
   type RouterResData = {
     id: number;
@@ -60,8 +60,7 @@ declare namespace UserAPI {
     resourceFlag: number;
     path: string;
     childResourceList: ChildResourceList[];
-  }
-
+  };
 
   type UserLevelLimitListRes = {
     id?: number;
@@ -73,18 +72,41 @@ declare namespace UserAPI {
     bunchMatchPay: number;
     championDailyPay: number;
     type?: number;
-  }
+  };
+  type GetLabelList = {
+    riskControlLabelList: labelType[];
+    attributeLabelList: labelType[];
+  };
+  type GetLabelListRes = BASE_RES_TYPE<GetLabelList>;
+  type UserLevelLimitListResData = COMMON.BASE_RES_TYPE<
+    UserLevelLimitListRes[]
+  >;
 
-  type UserLevelLimitListResData = COMMON.BASE_RES_TYPE<UserLevelLimitListRes[]>
+  type RouterResType = COMMON.BASE_RES_TYPE<RouterResData[]>;
+  type updateUserLevelLimitResType = COMMON.BASE_RES_TYPE<null>;
+  type userBaseResType = COMMON.BASE_RES_TYPE<string[]>;
 
-  type RouterResType = COMMON.BASE_RES_TYPE<RouterResData[]>
-  type updateUserLevelLimitResType = COMMON.BASE_RES_TYPE<null>
-  type userBaseResType = COMMON.BASE_RES_TYPE<string[]>
-
+  type labelType = {
+    id: number;
+    labelType: number;
+    level: number;
+    name: string;
+    remark: number;
+    createdAt: string;
+    updatedAt: string;
+  };
+  type recordType = {
+    id: number;
+    userId: number;
+    labeltype: number;
+    labelName: string;
+    opt: string;
+    createdBy: string;
+    updatedAt: string;
+    createdAt: string;
+  };
 
   type operateUserList = {
-    maxWinAmountLimit: number;
-    productAmountTotalLimit: number;
     id: string;
     userName: string;
     nickName?: any;
@@ -95,7 +117,11 @@ declare namespace UserAPI {
     isFreeze?: any;
     remark?: string;
     limitLevel?: number;
-  }
+    maxWinAmountLimit: number;
+    productAmountTotalLimit: number;
+    attributeLabelList: labelType[];
+    riskControlLabelList: labelType[];
+  };
 
   type operateUserData = {
     count: number;
@@ -103,9 +129,14 @@ declare namespace UserAPI {
     pageNum: number;
     pageSize: number;
     pageData: operateUserList[];
+  };
+  
+  type getRecordListData = {
+    records: recordType[];
+    total: number;
   }
-
-  type operateUserListReqType = COMMON.BASE_RES_TYPE<operateUserData>
+  type getRecordListDataRes = COMMON.BASE_RES_TYPE<getRecordListData>;
+  type operateUserListReqType = COMMON.BASE_RES_TYPE<operateUserData>;
 
   type updateLimmitReqType = {
     id?: number;
@@ -115,7 +146,7 @@ declare namespace UserAPI {
     userSingleGamePay: number;
     singleMatchPay: number;
     bunchMatchPay: number;
-    championDailyPay: number,
+    championDailyPay: number;
     type?: number;
-  }
+  };
 }
