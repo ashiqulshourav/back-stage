@@ -39,7 +39,7 @@
           @page-current-change="handleCurrentChange"
         >
           <template #userCount="{ row }">
-            <el-link @click="goToUserList(row.id)">{{ row.userCount }}</el-link>
+            <el-link @click="goToUserList(row)">{{ row.count }}</el-link>
           </template>
           <template #operation="{ row }">
             <el-button

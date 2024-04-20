@@ -14,7 +14,6 @@ import { addDialog, closeDialog } from '@/components/ReDialog/index';
 import editMatch from '../component/editMatch.vue';
 import { reactive, ref, onMounted, h } from 'vue';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
-
 import {
   markeTypeMap,
   useSportFormatDetail,
@@ -27,6 +26,7 @@ import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { ElMessageBox } from 'element-plus';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
+import {riskStatus} from "@/views/riskManagement/bettingAudit/util/types";
 
 export function useBettingCenterHook() {
   const { openPasswordInput } = usePasswordInputHook();
@@ -42,9 +42,9 @@ export function useBettingCenterHook() {
   );
   const pagination = reactive<PaginationProps>({
     total: 0,
-    pageSize: 10,
+    pageSize: 20,
     currentPage: 1,
-    pageSizes: [10, 20, 50, 100, 200, 50000],
+    pageSizes: [ 20, 50, 100, 200,500,1000,5000],
     background: true
   });
   const form = reactive<searchFormType>({
@@ -227,7 +227,9 @@ export function useBettingCenterHook() {
             str = useSportFormatDetail(data)[3];
             break;
           case 'teamName':
-            str = `${data.homeTeamNameCn} vs ${data.awayTeamNameCn}`;
+            if(data.kindsCode!== 'Outright'){
+              str = `${data.homeTeamNameCn} vs ${data.awayTeamNameCn}`;
+            }
             break;
           case 'marketType':
             str = markeTypeMap[data.marketType];
@@ -421,6 +423,16 @@ export function useBettingCenterHook() {
       : message(t('复制失败'), { type: 'error' });
   }
 
+  const isShowCancel = (row)=>{
+    let flag = true
+    row.combineOrderDetails.map((item)=>{
+      if(item.riskStatus===riskStatus.rejectBetting||item.riskStatus===riskStatus.reject||item.riskStatus===riskStatus.approve){
+        flag = false
+      }
+    })
+    return flag
+  }
+
   //- 切换比赛类型
   onMounted(() => {
     onSearch();
@@ -446,6 +458,7 @@ export function useBettingCenterHook() {
     tenantObj,
     specialCountFlag,
     UDialogFlag,
-    switchDialog
+    switchDialog,
+    isShowCancel,
   };
 }

@@ -60,6 +60,7 @@
               clearable
                      @change="search"
           >
+            <el-option  label="全部" value=" "  />
               <el-option v-for="item in Object.entries(riskStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
           </el-select>
         </el-form-item>

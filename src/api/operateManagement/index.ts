@@ -14,30 +14,30 @@ export const operateManagementData = {
   // mockAPI.getOperateTagList(data),
 
   updateOperateTag: (data: OperateManagementDataAPI.OperateTagType) =>
-    // http.request<OperateManagementDataAPI.OperateTagRes>(
-    //   'post',
-    //   '/operateLabel/edit',
-    //   {
-    //     data: {...data, labelType: 2}
-    //   }
-    // ),
-    mockAPI.updateOperateTag(data),
+    http.request<OperateManagementDataAPI.OperateTagRes>(
+      'post',
+      '/operateLabel/edit',
+      {
+        data: { ...data, labelType: 2 }
+      }
+    ),
+  // mockAPI.updateOperateTag(data),
 
   createOperateTag: (data: OperateManagementDataAPI.OperateTagType) =>
-    // http.request<OperateManagementDataAPI.OperateTagRes>(
-    //   'post',
-    //   '/operateLabel/add',
-    //   {
-    //     data: {...data, labelType: 2}
-    //   }
-    // ),
-    mockAPI.createOperateTag(data),
+    http.request<OperateManagementDataAPI.OperateTagRes>(
+      'post',
+      '/operateLabel/add',
+      {
+        data: { ...data, labelType: 2 }
+      }
+    ),
+  // mockAPI.createOperateTag(data),
 
   deleteOperateTag: (data: OperateManagementDataAPI.OperateTagType) =>
-    // http.request<
-    //   COMMON.BASE_RES_TYPE<null | OperateManagementDataAPI.OperateTagType>
-    // >('post', '/operateLabel/del', {
-    //   data
-    // })
-    mockAPI.deleteOperateTag(data)
+    http.request<
+      COMMON.BASE_RES_TYPE<null | OperateManagementDataAPI.OperateTagType>
+    >('post', '/operateLabel/del', {
+      data
+    })
+  // mockAPI.deleteOperateTag(data)
 };

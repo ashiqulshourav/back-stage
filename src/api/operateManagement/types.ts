@@ -4,7 +4,7 @@ declare namespace OperateManagementDataAPI {
     labelType?: number;
     level?: number;
     name?: string;
-    userCount?: number;
+    count?: number;
     remark?: string;
     category?: number;
   };

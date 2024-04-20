@@ -3,7 +3,7 @@ declare namespace RiskManagementDataAPI {
     id?: number;
     level?: number;
     name?: string;
-    userCount?: number;
+    count?: number;
     remark?: string;
     labelType?: number;
   };
