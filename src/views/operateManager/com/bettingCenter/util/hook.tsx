@@ -42,9 +42,9 @@ export function useBettingCenterHook() {
   );
   const pagination = reactive<PaginationProps>({
     total: 0,
-    pageSize: 10,
+    pageSize: 20,
     currentPage: 1,
-    pageSizes: [10, 20, 50, 100, 200, 50000],
+    pageSizes: [ 20, 50, 100, 200,500,1000,5000],
     background: true
   });
   const form = reactive<searchFormType>({
@@ -227,7 +227,9 @@ export function useBettingCenterHook() {
             str = useSportFormatDetail(data)[3];
             break;
           case 'teamName':
-            str = `${data.homeTeamNameCn} vs ${data.awayTeamNameCn}`;
+            if(data.kindsCode!== 'Outright'){
+              str = `${data.homeTeamNameCn} vs ${data.awayTeamNameCn}`;
+            }
             break;
           case 'marketType':
             str = markeTypeMap[data.marketType];

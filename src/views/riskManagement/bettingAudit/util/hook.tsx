@@ -197,7 +197,9 @@ export function useLeague() {
             str= useSportFormatDetail(data)[3]
             break;
           case 'teamName':
-            str= `${data.homeTeamNameCn} vs ${data.awayTeamNameCn}`
+            if(data.kindsCode!== 'Outright'){
+              str = `${data.homeTeamNameCn} vs ${data.awayTeamNameCn}`;
+            }
             break;
           case 'marketType':
             str= markeTypeMap[data.marketType]

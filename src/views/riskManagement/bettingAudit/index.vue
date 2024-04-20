@@ -109,7 +109,7 @@
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <div class="item_line">
+              <div v-if="item.kindsCode!== 'Outright'" class="item_line">
                 <span
                   class="cursor-pointer"
                   @dblclick="
