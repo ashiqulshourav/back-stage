@@ -48,7 +48,7 @@ export function useTagsHook() {
             done();
             ElMessage({
               type: 'success',
-              message: `${row.text}标签成功删除`
+              message: `${row.name}标签成功删除`
             });
             onSearch();
           } else {
@@ -195,14 +195,15 @@ export function useTagsHook() {
     message(res.msg, { type: res.code ? 'error' : 'success' });
   };
 
-  const goToUserList = (tagId: number) => {
+  const goToUserList = (row: OperateManagementDataAPI.OperateTagType) => {
     router.push({
       name:
         route.path === '/operateManager/tags'
           ? 'OPERATEMANAGER_SPORTPLAYERLIST'
           : 'OPERATEMANAGER_ESPORTPLAYERLIST',
       query: {
-        tagId
+        tagId: row.id,
+        labelType: row.labelType
       }
     });
   };

@@ -12,30 +12,30 @@ export const riskManagementData = {
   // mockAPI.getRiskTagList(data),
 
   updateRiskTag: (data: RiskManagementDataAPI.RiskTagType) =>
-    // http.request<RiskManagementDataAPI.RiskTagRes>(
-    //   'post',
-    //   '/operateLabel/edit',
-    //   {
-    //     data: {...data, labelType: 1}
-    //   }
-    // ),
-    mockAPI.updateRiskTag(data),
+    http.request<RiskManagementDataAPI.RiskTagRes>(
+      'post',
+      '/operateLabel/edit',
+      {
+        data: { ...data, labelType: 1 }
+      }
+    ),
+  // mockAPI.updateRiskTag(data),
 
   createRiskTag: (data: RiskManagementDataAPI.RiskTagType) =>
-    // http.request<RiskManagementDataAPI.RiskTagRes>(
-    //   'post',
-    //   '/operateLabel/add',
-    //   {
-    //     data: {...data, labelType: 1}
-    //   }
-    // ),
-    mockAPI.createRiskTag(data),
+    http.request<RiskManagementDataAPI.RiskTagRes>(
+      'post',
+      '/operateLabel/add',
+      {
+        data: { ...data, labelType: 1 }
+      }
+    ),
+  // mockAPI.createRiskTag(data),
 
   deleteRiskTag: (data: RiskManagementDataAPI.RiskTagType) =>
-    // http.request<
-    //   COMMON.BASE_RES_TYPE<null | RiskManagementDataAPI.RiskTagType>
-    // >('post', '/operateLabel/del', {
-    //   data
-    // })
-    mockAPI.deleteRiskTag(data)
+    http.request<
+      COMMON.BASE_RES_TYPE<null | RiskManagementDataAPI.RiskTagType>
+    >('post', '/operateLabel/del', {
+      data
+    })
+  // mockAPI.deleteRiskTag(data)
 };
