@@ -31,7 +31,8 @@ export const user = {
   operateUserList: (data: {
     pageSize: number;
     pageNum: number;
-    ids?: string[] | number[];
+    ids?: string[];
+    venueType: number;
     tenantIds?: number | string | string[];
     limitLevel?: number | string;
     limittenantCodeLevel?: number | string;

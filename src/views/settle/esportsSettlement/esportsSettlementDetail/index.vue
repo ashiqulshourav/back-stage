@@ -28,15 +28,16 @@
           >
             <!-- - 盘口投注项 -->
             <template #betOptions="{ row }">
-              <el-radio-group class="bet_item" v-model="row.betOptions">
+              <el-radio-group
+                class="bet_item"
+                v-model="row.betOptions"
+                v-if="row.arr.length === 2"
+              >
                 <el-radio
                   :disabled="row.win != null && row.isEdit === false"
                   :label="index"
                   border
-                  :class="[
-                    row.arr.length > 2 && 'mb-1',
-                    `item_${row.arr.length}`
-                  ]"
+                  :class="[`item_${row.arr.length}`]"
                   v-for="(item, index) in row.arr"
                   :key="index"
                 >
@@ -53,6 +54,33 @@
                   <span class="ml-3">{{ item.odds }}</span>
                 </el-radio>
               </el-radio-group>
+              
+              <el-checkbox-group
+                v-else
+                class="bet_item"
+                v-model="row.multipartBetOptions"
+              >
+                <el-checkbox
+                  :disabled="row.win != null && row.isEdit === false"
+                  :label="index"
+                  border
+                  :class="['mb-1', `item_${row.arr.length}`]"
+                  v-for="(item, index) in row.arr"
+                  :key="index"
+                >
+                  <template v-if="item.handicap.length > 20">
+                    <el-tooltip
+                      effect="dark"
+                      :content="item.handicap"
+                      placement="top-start"
+                    >
+                      <span>{{ item.handicap }}</span>
+                    </el-tooltip>
+                  </template>
+                  <span v-else>{{ item.handicap }}</span>
+                  <span class="ml-3">{{ item.odds }}</span>
+                </el-checkbox>
+              </el-checkbox-group>
             </template>
 
             <!-- - 操作 -->
@@ -97,6 +125,7 @@
                       size="small"
                       v-if="hasAuth('RESETTLEMENT')"
                       type="danger"
+                      :loading="resetLoading"
                       @click="resetManualSettleESportHandicapClick(row)"
                       >{{ t('确认二次结算') }}</el-button
                     >
@@ -178,7 +207,8 @@ const {
   manualSettleESportHandicapClick,
   handleTableWidthChange,
   closeSettle,
-  resetManualSettleESportHandicapClick
+  resetManualSettleESportHandicapClick,
+  resetLoading
 } = useEsportsSettlement();
 </script>
 
@@ -192,21 +222,48 @@ const {
   }
 }
 
+.el-checkbox-group {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  label {
+    width: 48%;
+    margin-right: 0;
+    :deep() {
+      .el-checkbox__label {
+        display: flex !important;
+        flex-grow: 1;
+        span:first-child {
+          max-width: 120px;
+          overflow: hidden;
+          flex-grow: 1;
+          font-size: 12px;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+    &.item_3 {
+      width: 30%;
+    }
+  }
+}
+
 .bet_item {
   &.el-radio-group {
     display: flex;
     justify-content: space-between;
     label {
-      width: 45%;
+      width: 48%;
       margin-right: 0;
       :deep() {
         .el-radio__label {
           display: flex !important;
           flex-grow: 1;
           span:first-child {
-            max-width: 150px;
+            max-width: 120px;
             overflow: hidden;
             flex-grow: 1;
+            font-size: 12px;
             text-overflow: ellipsis;
           }
         }

@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <div class="main">
     <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
     <PureTableBar
@@ -589,3 +590,11 @@ const {
   row-gap: 1rem;
 }
 </style>
+=======
+  <PlayerList></PlayerList>
+</template>
+
+<script setup lang="ts">
+import PlayerList from '../com/playerList/index.vue';
+</script>
+>>>>>>> 1238645815b8a9f9549579f8f6433da079160193

@@ -12,6 +12,7 @@ export function useEsportsSettlement() {
   const switchLoadMap = ref({});
   const { switchStyle } = usePublicHooks();
   const rList = reactive<SPORT_LEVEL_LIST_TYPE[]>([]);
+  const resetLoading = ref(false);
   const renderObj = reactive<EsportsSettlementAPI.ESportMatchById>(
     {} as EsportsSettlementAPI.ESportMatchById
   );
@@ -67,10 +68,20 @@ export function useEsportsSettlement() {
       });
       item.list.length = 0;
       Object.values(o).forEach((arr: any[]) => {
-        const selectIndex = arr.findIndex(item => item.win === 1);
+        const selectIndex = arr.findIndex(item => {
+          return item.win === 1;
+        });
+        const multipartBetOptions = [];
+        arr.forEach((item, index) => {
+          if (item.win === 1 && arr.length > 2) {
+            multipartBetOptions.push(index);
+          }
+        });
+
         item.list.push({
           betOptions: selectIndex,
-          oldBetOptions: selectIndex,
+          multipartBetOptions,
+          // oldBetOptions: selectIndex,
           ...arr[0],
           arr
         });
@@ -78,12 +89,17 @@ export function useEsportsSettlement() {
     });
   };
 
+  //-
+  const multipBetResultCheck = (list, index) => {
+    return list.includes(index) ? 4 : 3;
+  };
+
   //- 结算提交
   const manualSettleESportHandicapClick = async (
     row: EsportsSettlementAPI.BetItemsMapData,
     type?: 'cancel'
   ) => {
-    if (row.betOptions < 0 && !type)
+    if (row.betOptions < 0 && !row.multipartBetOptions.length && !type)
       return message(t('请先选择投注项'), { type: 'error' });
 
     ElMessageBox.confirm(
@@ -103,9 +119,16 @@ export function useEsportsSettlement() {
         betResultItems: row.arr.map((item, index) => {
           return {
             betItemId: item.betItemsId,
-            betResult: type ? 18 : row.betOptions === index ? 4 : 3,
+            betResult: type
+              ? 18
+              : row.multipartBetOptions.length > 0
+              ? multipBetResultCheck(row.multipartBetOptions, index)
+              : row.betOptions === index
+              ? 4
+              : 3,
             handicap: item.handicap,
-            kindsCode: item.kindsCode
+            kindsCode: item.kindsCode,
+            n: item.n
           };
         })
       };
@@ -137,8 +160,8 @@ export function useEsportsSettlement() {
   const resetManualSettleESportHandicapClick = async (
     row: EsportsSettlementAPI.BetItemsMapData
   ) => {
-    if (row.oldBetOptions === row.betOptions)
-      return message(t('结果未改变，请重新选择'), { type: 'error' });
+    // if (row.oldBetOptions === row.betOptions)
+    //   return message(t('结果未改变，请重新选择'), { type: 'error' });
 
     ElMessageBox.confirm(t('确认要从新结算该记录么?'), '系统提示', {
       confirmButtonText: t('确认'),
@@ -155,15 +178,23 @@ export function useEsportsSettlement() {
         betResultItems: row.arr.map((item, index) => {
           return {
             betItemId: item.betItemsId,
-            betResult: row.betOptions === index ? 4 : 3,
+            betResult:
+              row.multipartBetOptions.length > 0
+                ? multipBetResultCheck(row.multipartBetOptions, index)
+                : row.betOptions === index
+                ? 4
+                : 3,
             handicap: item.handicap,
             id: item.id,
+            n: item.n,
             kindsCode: item.kindsCode,
             sourceBetItemsMid: item.sourceBetItemsMid
           };
         })
       };
+      resetLoading.value = true;
       const res = await API.eSportReSettlement(params);
+      resetLoading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       getEsportMatchInfo();
     });
@@ -184,6 +215,7 @@ export function useEsportsSettlement() {
     manualSettleESportHandicapClick,
     handleTableWidthChange,
     resetManualSettleESportHandicapClick,
-    closeSettle
+    closeSettle,
+    resetLoading
   };
 }

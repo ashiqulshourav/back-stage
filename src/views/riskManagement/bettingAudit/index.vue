@@ -15,6 +15,25 @@
       :isShowHeader="false"
       @refresh="onSearch('reload')"
     >
+      <template #title>
+        <div class="flex item-center ">
+          <el-button
+            type="danger"
+            v-if="rejectSelectedCount&&hasAuth('REJECTSOME')"
+            @click="handleCancelSome"
+          >
+            {{ t('批量划单') }}
+          </el-button>
+          <el-button
+            type="primary"
+            v-if="approveSelectedCount&&hasAuth('APPROVESOME')"
+            @click="handleApproveSome"
+          >
+            {{ t('批量通过') }}
+
+          </el-button>
+        </div>
+      </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"
@@ -32,9 +51,7 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
-          <template #index="{ row }">
-            <span>{{ row.index }}</span>
-          </template>
+
           <template #userMessage="{ row }">
             <div
               class="item_line cursor-pointer"
@@ -92,7 +109,7 @@
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <div class="item_line">
+              <div v-if="item.kindsCode!== 'Outright'" class="item_line">
                 <span
                   class="cursor-pointer"
                   @dblclick="
@@ -195,6 +212,7 @@
                 {{ t('赛果：')
                 }}{{ displayHomeAwayScore(item.settleScore, item.sportId) }}
               </div>
+
             </div>
           </template>
           <template #odd="{ row }">
@@ -226,7 +244,9 @@
                   {{ BET_RESULT_TYPE_MAP[item?.betResult] }}</span
                 >
               </div>
+
             </div>
+
           </template>
           <template #profitAmount="{ row }">
             <span
@@ -236,36 +256,42 @@
             >
             <span v-else>-</span>
           </template>
-          <template #status="{ row }">
-            <div :style="{background:getStatus(row.status,row.billStatus,row.combineOrderDetails[0].betResult,row.isReserve).bgColor}" class="status_btn mb-1">{{ betStatusMap[getStatus(row.status,row.billStatus,row.combineOrderDetails[0].betResult,row.isReserve).status]}}</div>
-            <div >{{ row.settleTime ? dayjs(row.settleTime).format('MM-DD HH:mm:ss'):'' }}</div>
-            <div v-if="String(row.seriesType).slice(-3) ==='001'" >{{t('总赔率:')}}{{String(row.seriesType).slice(-3) ==='001'?calculateSeriesTypeTotal(row.combineOrderDetails):'' }}</div>
+          <template #riskStatus="{ row }">
+            <div   class="match_item odd_item"  v-for="item in row.combineOrderDetails">
+              <div v-if="item.riskStatus===riskStatus.reject"> 原因:{{item.riskType}}</div>
+              <div  class="mb-1">冻结时间：{{row.updateTime?dayjs(row.updateTime).format('YYYY-MM-DD HH:mm:ss'):''}}</div>
+              <div :style="{background:getRiskStatus(item.riskStatus).bgColor}" class="status_btn mb-1">{{getRiskStatus(item.riskStatus).label}}</div>
+
+            </div>
           </template>
-          <template #operation="{ row }">
-            <div>
+          <template   #cancel="{ row }">
+            <div  class="match_item cancel flex justify-between  items-center" v-for="(item,index) in row.combineOrderDetails"
+                 :key="item.betItemId"
+            >
+              <el-checkbox v-if="item.riskStatus===2&&hasAuth('REJECTSOME')" :checked="item.rejectSelected"   @change="(data)=>selectReject(data,row.index-1,index)" ></el-checkbox>
               <el-button
-                  class="mb-1 w-100"
-                  @click="handleCancel(row)"
-                  v-if="row.billStatus === 0 && hasAuth('CANCELBET')"
+                size="small"
+                type="danger"
+                v-if="item.riskStatus===2&&hasAuth('REJECT')"
+                @click="handleCancel(row,index)"
               >
-                {{ t('取消') }}
+                {{ t('风控划单') }}
               </el-button>
             </div>
-            <div>
+          </template>
+          <template #approve="{ row }">
+            <div class="match_item approve flex justify-between  items-center"  v-for="(item,index) in row.combineOrderDetails"
+                  :key="item.betItemId"
+            >
+              <el-checkbox v-if="item.riskStatus===2&&hasAuth('APPROVESOME')"  :checked="item.approveSelected" @change="(data)=>selectApprove(data,row.index-1,index)"  ></el-checkbox>
               <el-button
-                  class="mb-1 w-100"
-                  @click="switchDialog(true, row)"
-                  v-if="
-                specialCountFlag(
-                  row.status,
-                  row.billStatus,
-                  row.combineOrderDetails[0].betResult
-                ) &&
-                row.isReserve !== 1 &&
-                hasAuth('specialSettlement'.toUpperCase())
-              "
+                  @change="(data)=>selectApprove(data,row.index-1,index)"
+                  v-if="item.riskStatus===2&&hasAuth('APPROVE')"
+                size="small"
+                type="primary"
+                @click="handleApprove(row,index)"
               >
-                {{ t('特殊结算') }}
+                {{ t('审核通过') }}
               </el-button>
             </div>
           </template>
@@ -275,17 +301,17 @@
         >
           <div>
             <label>{{ t('总计：') }}</label>
-            <span>{{ totalInfo?.thisPageBetCount ?? 0 }}{{ t('单') }}</span>
+            <span>{{addThousandSeparator(totalInfo.totalCount)}}{{ t('单') }}</span>
           </div>
           <div>
             <label>{{ t('用户数：') }}</label>
-            <span>{{ totalInfo?.thisPageBetUserCount ?? 0 }}{{ t('人') }}</span>
+            <span>{{ addThousandSeparator(totalInfo?.totalUserCount) ?? 0 }}{{ t('人') }}</span>
           </div>
           <div>
             <label>{{ t('总计投注额：') }}</label>
             <span class="ml-1">
               {{
-                totalInfo?.thisPageBetTotalAmount?.toFixed(2) ?? '0.00'
+                addThousandSeparator(totalInfo?.productAmountTotal?.toFixed(2) )?? '0.00'
               }}</span
             >
           </div>
@@ -293,7 +319,7 @@
             <label>{{ t('总输赢：') }}</label>
             <span class="ml-1">
               {{
-                totalInfo?.thisPageBetTotalProfitAmount?.toFixed(2) ?? '0.00'
+                addThousandSeparator(totalInfo?.profitTotal?.toFixed(2)) ?? '0.00'
               }}</span
             >
           </div>
@@ -309,7 +335,7 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
-import { hasAuth } from '@/router/utils';
+import {addThousandSeparator} from '@/utils/formatNumber'
 import {
   formatSeriesType,
   useSportFormatDetail,
@@ -317,16 +343,18 @@ import {
   EBetResultType,
   getViewOddFn,
   markeTypeMap,
-  calculateSeriesTypeTotal,
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
   getIsInplay
 } from '@/utils/formatMatch';
-import { betStatusMap } from './util/types';
+import { riskStatus} from './util/types';
 import { usePublicHooks } from '@/hooks';
+import {hasAuth} from "@/router/utils";
+import {ref} from "vue";
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
-
+const rejectSelectedCount = ref(0);
+const approveSelectedCount = ref(0);
 const {
   loading,
   dataList,
@@ -338,14 +366,42 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   exportFile,
-  handleCancel,
-  getStatus,
   copyTest,
   tenantList,
-  specialCountFlag,
-  switchDialog,
-  tenantObj
+  handleCancel,
+  handleApprove,
+  handleCancelSome,
+  handleApproveSome,
+  tenantObj,
+  getRiskStatus,
+  selectReject,
+  selectApprove,
+
 } = useLeague();
+watch( dataList,
+    dataList => {
+      let rejectCount =0;
+      let approveCount = 0
+      dataList.map((item)=>{
+        item.combineOrderDetails.map((match:any)=>{
+          if(match.rejectSelected){
+            rejectCount+=rejectCount+1
+          }
+          if(match.approveSelected){
+            approveCount+=approveCount+1
+          }
+
+        })
+      })
+      if(rejectCount!==rejectSelectedCount.value){
+        rejectSelectedCount.value = rejectCount
+      }
+      if(approveCount!==approveSelectedCount.value){
+        approveSelectedCount.value = approveCount
+      }
+    },
+    { deep: true }
+);
 </script>
 
 <style lang="scss">
@@ -406,11 +462,14 @@ const {
   color: #fff;
   border-radius: 4px;
 }
-.odd_item {
+.odd_item,.cancel,.approve {
   min-height: 100px;
+}
+.cancel,.approve {
+width: 100px;
 }
 
 .operate {
-  width: 100px;
+  width: 110px;
 }
 </style>

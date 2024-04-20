@@ -119,4 +119,3 @@ const changeMatchType = (type: 0 | 1 | 2) => {
   }
 }
 </style>
-@/utils/formatDate

@@ -59,6 +59,7 @@ declare namespace RoleAPI {
     type: number;
     sort: number;
     resourceFlag: number;
+    tableName?: string;
     path: string;
     childResourceList: any[];
   }
@@ -76,13 +77,12 @@ declare namespace RoleAPI {
     childResourceList: ChildResourceList[];
   }
 
-
-
   type addSysAccountReqType = COMMON.BASE_RES_TYPE<null>;
   type querySysAccountListResType = COMMON.BASE_RES_TYPE<querySysAccountListInfo>;
   type deleteSysAccountResType = COMMON.BASE_RES_TYPE<any>;
   type updateUserPwdResType = COMMON.BASE_RES_TYPE<any>;
   type updateStatusByIdResType = COMMON.BASE_RES_TYPE<null>;
   type allPermissionResType = COMMON.BASE_RES_TYPE<allPermission[]>;
+  type DelMenuRes = COMMON.BASE_RES_TYPE<null>;
   type getAuthResType = COMMON.BASE_RES_TYPE<null>;
 }

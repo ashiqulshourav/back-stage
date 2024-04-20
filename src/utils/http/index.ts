@@ -95,6 +95,7 @@ class PureHttp {
         }
         if (response.data.code === 10110) {
           return message(response.data.msg, {
+            duration: 1000,
             type: 'error', onClose() {
               useUserStore().logOut();
             }

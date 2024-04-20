@@ -8,7 +8,8 @@ export const columns: TableColumnList = [
     prop: 'name',
     className: 'first_table',
     headerRenderer: d => handleTableWidth(d, t('菜单中文名'), 'auto'),
-    minWidth: 200,
+    minWidth: 150,
+    fixed: 'left',
     formatter({ name }) {
       return <div class="min-w-20 text-left">{name}</div>;
     }
@@ -18,7 +19,8 @@ export const columns: TableColumnList = [
     prop: 'enName',
     minWidth: 150,
     headerRenderer: d => handleTableWidth(d, t('菜单英文名')),
-    formatter: ({ enName }) => enName
+    formatter: ({ enName }) => enName,
+
   },
   {
     label: t('菜单类型'),
@@ -55,7 +57,7 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('菜单展示')),
     formatter: ({ type }) => {
       return (
-        <el-text type={type === 1 ? 'danger' : 'info'}>
+        <el-text type={type !== 0 ? 'danger' : 'info'}>
           {type === 0 ? t('是') : t('否')}
         </el-text>
       );
@@ -81,6 +83,7 @@ export const columns: TableColumnList = [
   {
     label: t('操作'),
     slot: 'operation',
-    width: 180
+    width: 180,
+    fixed: 'right',
   }
 ];

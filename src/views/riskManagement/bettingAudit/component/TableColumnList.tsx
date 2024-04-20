@@ -25,19 +25,19 @@ export const columns: TableColumnList = [
     minWidth: 100,
     align:'left',
   },
-
-  {
-    label: t("状态"),
-    slot: "status",
-    minWidth: 50,
-    align:'left',
-  },
   {
     label: t("赔率"),
     slot: "odd",
-    minWidth: 50,
+    minWidth: 100,
     align:'center',
   },
+  {
+    label: t("审核状态"),
+    slot: "riskStatus",
+    minWidth: 180,
+    align:'left',
+  },
+
   {
     label: t("投注额"),
     prop: "productAmountTotal",
@@ -52,9 +52,14 @@ export const columns: TableColumnList = [
     align:'center',
   },
   {
-    label: t('操作'),
-    slot: 'operation',
-    minWidth: 50,
+    label: t('通过'),
+    slot: 'approve',
+    align:'center',
+    fixed:'right'
+  },
+  {
+    label: t('划单'),
+    slot: 'cancel',
     align:'center',
   }
 ]

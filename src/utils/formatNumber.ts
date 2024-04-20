@@ -34,5 +34,8 @@ export const inputRestrictions = (val, min: number = MIN, max: number = MAX) => 
 }
 
 export const addThousandSeparator = (num, separator = ",") => {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, separator);
+  if(num===null){
+    return ''
+  }
+  return num?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, separator);
 }

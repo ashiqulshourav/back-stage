@@ -116,15 +116,12 @@ declare namespace EsportsSettlementAPI {
     pageNum: number;
     betOptions: number;
     oldBetOptions: number;
+    multipartBetOptions: [];
     eventTime: number;
     arr: BetItemsMapData[];
     isEdit: boolean;
+    n?: string;
   }
-
-  // type bettype = {
-  //   key: string;
-  //   list: BetItemsMapData[];
-  // }
 
   type BetItemsMap = {
     all?: BetItemsMapData[]
@@ -173,6 +170,72 @@ declare namespace EsportsSettlementAPI {
     betItemsMap: BetItemsMap;
   }
 
+  export interface HandicapList {
+    betItemsId: number;
+    sportId: number;
+    leagueId: number;
+    matchId: number;
+    kindsCode: string;
+    betItemsName: string;
+    betItemsNameEn?: any;
+    sourceCode: string;
+    sourceBetItemsId: number;
+    sourceBetItemsMid: number;
+    homeOrAway: string;
+    handicap: string;
+    n: string;
+    handicapEn?: any;
+    odds: number;
+    isSale: number;
+    displayIndex: number;
+    handicapIndex: number;
+    handicapItemIndex: number;
+    oddsType: string;
+    handicapFilter?: any;
+    ctid: number;
+    win?: any;
+    id: number;
+  }
+
+  type ChampionEventList = {
+    betItemsId?: any;
+    betItemList?: any;
+    sportId?: any;
+    leagueId?: any;
+    matchId: number;
+    matchIdList?: any;
+    kindsCode: string;
+    betItemsName: string;
+    betItemsNameEn?: any;
+    sourceCode?: any;
+    sourceBetItemsId?: any;
+    sourceBetItemsMid?: number;
+    homeOrAway?: any;
+    handicap?: any;
+    handicapEn?: any;
+    odds?: any;
+    isSale: number;
+    displayIndex?: any;
+    handicapIndex?: any;
+    handicapItemIndex?: any;
+    oddsType?: any;
+    handicapFilter?: any;
+    ctid?: any;
+    n?: any;
+    win?: any;
+    eventTime?: any;
+    pageSize: number;
+    pageNum: number;
+    id?: any;
+    settleStatus: number;
+    updatedAt?: any;
+    betOptions: number;
+    oldBetOptions: number;
+    isEdit: boolean;
+    handicapList: HandicapList[];
+  }
+
   type getESportMatchByIdResType = COMMON.BASE_RES_TYPE<ESportMatchById>
   type manualSettleESportHandicapResType = COMMON.BASE_RES_TYPE<any>
+  type getChampionEventsResType = COMMON.BASE_RES_TYPE<ChampionEventList[]>
 }

@@ -14,9 +14,11 @@
           size="large"
           show-overflow-tooltip
           row-key="id"
+          border
           adaptive
           :indent="32"
           :data="dataList"
+          @row-click="cellRowClick"
           :columns="dynamicColumns"
           :header-cell-style="tableHeaderStyle"
           :tree-props="{
@@ -34,6 +36,16 @@
             >
               {{ t('编辑') }}
             </el-button>
+            <el-button
+              v-if="userStore.userInfo.name === 'armour'"
+              class="reset-margin"
+              link
+              type="danger"
+              size="large"
+              @click="delMenu(row.id)"
+            >
+              {{ t('删除') }}
+            </el-button>
           </template>
         </pure-table>
       </template>
@@ -43,14 +55,24 @@
 
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
-import { useRoleHook } from './utils/hook';
+import { useMenuManagerHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
+import { useUserStore } from '@/store/user';
 
 defineOptions({ name: 'SYSTEMMANAGER_MENUMANAGER' });
 const { tableHeaderStyle } = usePublicHooks();
+const userStore = useUserStore();
 
-const { loading, columns, dataList, onSearch, openRoleDialog } = useRoleHook();
+const {
+  loading,
+  columns,
+  dataList,
+  onSearch,
+  openRoleDialog,
+  cellRowClick,
+  delMenu
+} = useMenuManagerHook();
 </script>
 
 <style scoped lang="scss">
@@ -66,9 +88,10 @@ const { loading, columns, dataList, onSearch, openRoleDialog } = useRoleHook();
 :deep {
   .first_table {
     .cell {
+      cursor: pointer;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
     }
   }
 }
