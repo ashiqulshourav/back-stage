@@ -15,7 +15,6 @@ import LockUnlockFill from "@iconify-icons/ri/lock-unlock-line";
 import LockFill from "@iconify-icons/ri/lock-fill";
 import Monitor from "@iconify-icons/ep/monitor";
 import Files from "@iconify-icons/ep/files";
-import systemManager from "@iconify-icons/ri/history-line";
 import OperationLog from "@iconify-icons/icon-park-outline/log";
 
 import icon_circle_fill from '@iconify-icons/ri/add-circle-fill';
@@ -38,6 +37,7 @@ import metadata from "@iconify-icons/ep/monitor";
 import operateManager from "@iconify-icons/ep/files";
 import menuTree from '@iconify-icons/ri/list-unordered';
 import configCenter from '@iconify-icons/ri/settings-3-line';
+import cloudLine from '@iconify-icons/ri/cloud-line';
 
 addIcon("dataSourceManager", dataManager);
 addIcon("sale", sale);
@@ -53,6 +53,7 @@ addIcon("operationLog1", OperationLog);
 addIcon("menuTree", menuTree);
 addIcon("configCenter", configCenter);
 addIcon("riskManagement", sale);
+addIcon('taskCenter', cloudLine);
 /* 菜单icon结束 */
 
 addIcon("homeFilled", HomeFilled);

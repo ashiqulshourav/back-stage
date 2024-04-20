@@ -6,7 +6,6 @@
       :renderObj="renderObj"
       :allSettleLoading="allSettleLoading"
     />
-
     <PureTableBar :columns="columns" @refresh="onSearch()">
       <template #title>
         <div class="flex items-center">
