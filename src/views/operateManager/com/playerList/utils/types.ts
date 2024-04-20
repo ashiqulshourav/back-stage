@@ -25,7 +25,7 @@ export type updateUserFormType = {
 };
 
 export type recordFormType = {
-  id: number;
+  id: string;
   labelType: number;
   offset: string;
 }

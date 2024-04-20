@@ -28,7 +28,7 @@ import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
 import {riskStatus} from "@/views/riskManagement/bettingAudit/util/types";
 
-export function useBettingCenterHook() {
+export function useBettingCenterHook(category:number,venueType:number) {
   const { openPasswordInput } = usePasswordInputHook();
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<
@@ -86,7 +86,6 @@ export function useBettingCenterHook() {
     console.log('handleSelectionChange', val);
   }
 
-  const route = useRoute();
   const formatParams = (privateparams = {}) => {
     let seriesDetails: any = [];
     if (form.seriesType == 2) {
@@ -122,7 +121,7 @@ export function useBettingCenterHook() {
         seriesDetailsDuplex: '',
         seriesDetails: seriesDetails,
         seriesType: +form.seriesType > 2 ? 2 : form.seriesType,
-        category: route.path === '/operateManager/sportBettingCenter' ? 0 : 1
+        category: category,venueType:venueType,
       }),
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage,
@@ -168,11 +167,11 @@ export function useBettingCenterHook() {
   }
 
   const getTenantList = async () => {
-    const res = await API.getTenantList({
-      category: route.path === '/operateManager/sportBettingCenter' ? 0 : 1
+    const res = await API.queryTenantList({
+      category:category
     });
-    if (res.data?.data?.length) {
-      tenantList.push(...res?.data?.data);
+    if (res.data?.length) {
+      tenantList.push(...res?.data);
       // 将数组根据id转换为对象
       tenantList.map(item => {
         tenantObj[item.id] = item;

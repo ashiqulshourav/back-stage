@@ -6,7 +6,7 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { addLabelsType, recordFormType, searchFormType, updateUserFormType } from './types';
 import { ElMessage } from 'element-plus';
 
-export function userPlayerListHook() {
+export function userPlayerListHook(venueType) {
   const dataList = reactive<UserAPI.operateUserList[]>([]);
   const selectedDataList = reactive<UserAPI.operateUserList[]>([]);
   const recordList = reactive<UserAPI.recordType[]>([]);
@@ -77,7 +77,7 @@ export function userPlayerListHook() {
   };
 
   const handleUserLabelDel = async (
-    id: number[],
+    id: string[],
     labelId: number[],
   ) => {
     if (id.length === 0 || labelId.length === 0) {
@@ -95,12 +95,12 @@ export function userPlayerListHook() {
     } 
   };
   
-  const handleAddRiskLabels = (ids: number[]) => {
+  const handleAddRiskLabels = (ids: string[]) => {
     dispatchAddLabels(ids, addLabelForms.risk);
     addLabelForms.risk.length = 0;
   }
 
-  const handleAddAttrLabels = (ids: number[]) => {
+  const handleAddAttrLabels = (ids: string[]) => {
     dispatchAddLabels(ids, addLabelForms.attr);
     addLabelForms.attr.length = 0;
 
@@ -137,7 +137,7 @@ export function userPlayerListHook() {
     isMultiLabelDel.value = false;
   }
 
-  const dispatchAddLabels = async (id: number[], labelId: number[]) => {
+  const dispatchAddLabels = async (id: string[], labelId: number[]) => {
     if (id.length === 0 || labelId.length === 0) {
       return;
     }
@@ -181,11 +181,13 @@ export function userPlayerListHook() {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       loading.value = true;
-      const res = await API.operateUserList({
-        ...removeEmptyStringKeys(form),
-        pageSize: pagination.pageSize,
-        pageNum: pagination.currentPage
-      });
+      const res =
+        await API.operateUserList({
+          ...removeEmptyStringKeys(form),
+          venueType:venueType,
+          pageSize: pagination.pageSize,
+          pageNum: pagination.currentPage
+        });
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;

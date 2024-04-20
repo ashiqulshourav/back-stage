@@ -578,7 +578,7 @@ const {
   handleSelectionChange,
   handleAddRiskLabels,
   handleAddAttrLabels,
-} = userPlayerListHook();
+} = userPlayerListHook(props.category);
 </script>
 
 <style>

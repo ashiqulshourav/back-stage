@@ -41,7 +41,7 @@ export const user = {
       data
     }),
   addLabels: (data: {
-    id: number[],
+    id: string[],
     labelId: number[]
   }) => http.request<UserAPI.updateUserLevelLimitResType>('post', '/operate/updateUserLabelAdd', {
       data
@@ -51,7 +51,7 @@ export const user = {
   }) =>
     http.request<UserAPI.GetLabelListRes>('get', '/operate/getLabelList', {params: data}),
   //- 修改用户等级限额
-  updateUserLabelDel: (data: { id: number[]; labelId: number[] }) =>
+  updateUserLabelDel: (data: { id: string[]; labelId: number[] }) =>
     http.request<UserAPI.updateUserLevelLimitResType>(
       'post',
       '/operate/updateUserLabelDel',

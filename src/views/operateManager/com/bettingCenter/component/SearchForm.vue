@@ -271,6 +271,7 @@ import {
 import { searchFormType } from '../util/types';
 const props = defineProps<{
   loading: boolean;
+  category:number;
   form: searchFormType;
     tenantList:[]
 }>();
