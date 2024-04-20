@@ -6,7 +6,7 @@ export const columns: TableColumnList = [
     label: t('序号'),
     type: 'index',
     headerRenderer: d => handleTableWidth(d, t('序号'), 'auto'),
-    minWidth: 100
+    minWidth: 50
   },
   {
     label: t('用户信息'),

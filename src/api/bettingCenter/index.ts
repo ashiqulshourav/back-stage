@@ -11,7 +11,7 @@ export const bettingCenter = {
   //- 特殊结算
   betSettle: (data: number[]) => http.request<BetOrderAPI.betCenterCancelResType>("post", "/bet-settle/settle", { data }),
   getTenantList: (data: {
-    category: number;
+    category?: number;
   }) => http.request<any>("post", "/bet-center/getTenantList", { data }),
   queryTenantList: (data: {
     category: number;

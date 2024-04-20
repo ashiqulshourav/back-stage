@@ -58,5 +58,6 @@ export const columns: TableColumnList = [
     slot: 'operation',
     minWidth: 50,
     align:'center',
+    fixed:"right"
   }
 ]
