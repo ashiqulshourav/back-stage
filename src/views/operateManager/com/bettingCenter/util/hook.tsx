@@ -358,10 +358,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
       obj = { status: betStatus.riskReject, bgColor: '#F88D48' };
     } else if (status === 3) {
       // 待确认
-      obj = { status: betStatus.confirm, bgColor: '#FFC53D' };
-    } else if (status === 6) {
-      // 待审核
-      obj = { status: betStatus.PendingApprove, bgColor: '#F88D48' };
+      obj = { status: betStatus.PendingApprove, bgColor: '#FFC53D' };
     } else if (status === 4) {
       // 投注失败
       obj = { status: betStatus.betFail, bgColor: '#F57582' };
