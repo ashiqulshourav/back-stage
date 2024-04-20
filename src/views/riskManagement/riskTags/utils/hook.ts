@@ -47,7 +47,7 @@ export function useTagsHook() {
             done();
             ElMessage({
               type: 'success',
-              message: `${row.text}标签成功删除`
+              message: `${row.name}标签成功删除`
             });
             onSearch();
           } else {
@@ -78,6 +78,7 @@ export function useTagsHook() {
       const res: RiskManagementDataAPI.RiskTagListRes =
         await API.getRiskTagList({
           ...removeEmptyStringKeys(form),
+          id: form.id ? Number(form.id) : undefined,
           pageSize: pagination.pageSize,
           pageNum: pagination.currentPage
         });
@@ -173,11 +174,12 @@ export function useTagsHook() {
     message(res.msg, { type: res.code ? 'error' : 'success' });
   };
 
-  const goToUserList = (tagId: number) => {
+  const goToUserList = (row: RiskManagementDataAPI.RiskTagType) => {
     router.push({
       name: 'OPERATEMANAGER_SPORTPLAYERLIST',
       query: {
-        tagId
+        tagId:row.id,
+        labelType: row.labelType
       }
     });
   };
