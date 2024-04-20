@@ -28,7 +28,7 @@ export function useBilliardsHook() {
     if (renderObj.reSettleStatus === 1) saveCanceList();
   };
 
-  //- 手动添加局
+  //- 手动添加回合
   const addEventRow = () => {
     const noEmpty = dataList.every(item => {
       return (
@@ -37,7 +37,7 @@ export function useBilliardsHook() {
         !item.isEdit
       );
     });
-    if (!noEmpty) return message(t('请先结算之前的局赛事'), { type: 'error' });
+    if (!noEmpty) return message(t('请先结算之前的事件'), { type: 'error' });
 
     const params: Partial<SattleDataAPI.volleyballData> = {
       matchId,
@@ -45,6 +45,7 @@ export function useBilliardsHook() {
       isEdit: false,
       firstT1: '',
       firstT2: '',
+      secondNum: null,
       firstNum: dataList.length + 1
     };
     dataList.push(params as SattleDataAPI.volleyballData);
@@ -66,7 +67,9 @@ export function useBilliardsHook() {
         firstT1: row.firstT1,
         firstT2: row.firstT2,
         firstNum: row.firstNum,
-        eventTime: 1
+        eventTime: 1,
+        secondNum: row.secondNum,
+        homeAway: getWinner(row)
       });
       loading.value = false;
       message(res.msg, { type: res.code ? 'error' : 'success' });
@@ -74,8 +77,8 @@ export function useBilliardsHook() {
     });
   };
 
-  //- 结算局事件
-  const settlementHandicap = async (row: SattleDataAPI.TennisEventsData) => {
+  //- 结算回合事件
+  const settlementHandicap = async (row: SattleDataAPI.volleyballData) => {
     const { firstT1, firstT2, firstNum } = row;
     if (firstT1 === '' || firstT2 === '')
       return message(t('比分不能为空'), { type: 'error' });
@@ -101,7 +104,8 @@ export function useBilliardsHook() {
         dangerouslyUseHTMLString: true,
         confirmButtonText: t('确认结算'),
         cancelButtonText: t('取消'),
-        center: true
+        center: true,
+        customClass: 'settle_confirm_dialog'
       }
     ).then(async () => {
       loading.value = true;
@@ -111,7 +115,9 @@ export function useBilliardsHook() {
         matchPeriodId: row.matchPeriodId,
         firstT1: row.firstT1,
         firstT2: row.firstT2,
-        firstNum: row.firstNum
+        firstNum: row.firstNum,
+        secondNum: row.secondNum,
+        homeAway: getWinner(row)
       };
       try {
         const res = await API.addBoxingEvent(params);
@@ -122,6 +128,15 @@ export function useBilliardsHook() {
         loading.value = false;
       }
     });
+  };
+
+  //- 获取获胜方
+  const getWinner = (row: SattleDataAPI.volleyballData) => {
+    return row.firstT1 > row.firstT2
+      ? 'home'
+      : row.firstT1 < row.firstT2
+      ? 'away'
+      : '';
   };
 
   //- 全场结算
@@ -222,7 +237,9 @@ export function useBilliardsHook() {
           matchPeriodId: item.matchPeriodId,
           firstT1: item.firstT1,
           firstT2: item.firstT2,
-          firstNum: item.firstNum
+          firstNum: item.firstNum,
+          secondNum: item.secondNum,
+          homeAway: getWinner(item)
         };
       });
       const res = await API.boxingConfirm2ndSettlement(confirmParams);

@@ -22,7 +22,11 @@ export const columns: TableColumnList = [
     }
   },
   {
-    label: t('状态'),
+    label: t('赛果状态'),
+    slot: 'secondNum'
+  },
+  {
+    label: t('结算状态'),
     formatter: () => {
       return t('人工结算');
     }
@@ -35,6 +39,7 @@ export const columns: TableColumnList = [
   },
   {
     label: t('操作'),
-    slot: 'operation'
+    slot: 'operation',
+    minWidth: 200
   }
 ];

@@ -191,6 +191,12 @@ input[type='number'] {
   -moz-appearance: textfield;
 }
 
+.settle_confirm_dialog {
+  .el-message-box__message {
+    width: 100%;
+  }
+}
+
 .el-message-box {
   .el-message-box__btns {
     display: flex;
@@ -235,13 +241,13 @@ input[type='number'] {
 }
 
 .el-text.risk-tag-blue {
-  color: #1891FF !important;
+  color: #1891ff !important;
 }
 
 .el-text.risk-tag-green {
-  color: #19BE6B !important;
+  color: #19be6b !important;
 }
 
 .el-text.risk-tag-black-blue {
-  color: #2E4050 !important;
+  color: #2e4050 !important;
 }

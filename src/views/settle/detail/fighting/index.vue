@@ -6,7 +6,6 @@
       :renderObj="renderObj"
       :allSettleLoading="allSettleLoading"
     />
-
     <PureTableBar :columns="columns" @refresh="onSearch()">
       <template #title>
         <div class="flex items-center">
@@ -62,6 +61,21 @@
             <Score :row="row" type="firstT2" :errorType="row.t2Error" />
           </template>
 
+          <template #secondNum="{ row }">
+            <el-select
+              :disabled="!row.isEdit"
+              v-model="row.secondNum"
+              :placeholder="t('请选择赛果状态')"
+            >
+              <el-option
+                v-for="item in matchResultList"
+                :label="item.val"
+                :value="item.key"
+                :key="item.key"
+              />
+            </el-select>
+          </template>
+
           <!-- -局按钮 -->
           <template #operation="{ row, index }">
             <ChildOperation
@@ -91,6 +105,13 @@ import { hasAuth } from '@/router/utils';
 
 defineOptions({ name: 'SETTLE_DETAIL_FIGHTING' });
 const { tableHeaderStyle } = usePublicHooks();
+
+const matchResultList: { key: number; val: string }[] = [
+  { key: 0, val: '常规平局' },
+  { key: 1, val: '常规胜负' },
+  { key: 2, val: 'KO或犯规' },
+  { key: 3, val: '投降' }
+];
 
 const {
   onSearch,

@@ -57,7 +57,10 @@ const props = defineProps<{
 
 const isShowSettleBtn = computed(() => {
   return (
-    props.row.firstT1 !== '' && props.row.firstT2 !== '' && !props.row.isEdit
+    props.row.firstT1 !== '' &&
+    props.row.firstT2 !== '' &&
+    props.row.secondNum !== null &&
+    !props.row.isEdit
   );
 });
 
@@ -79,6 +82,8 @@ const saveItem = () => {
     case !props.row.firstT2:
       errMsg = t('客队比分不能为空');
       props.row.t2Error = true;
+    case props.row.secondNum === null:
+      errMsg = t('赛果状态不能为空');
       break;
   }
   if (!errMsg) {
