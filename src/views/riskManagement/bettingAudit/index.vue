@@ -258,10 +258,10 @@
           </template>
           <template #riskStatus="{ row }">
             <div   class="match_item odd_item"  v-for="item in row.combineOrderDetails">
-              <div v-if="item.riskStatus===riskStatus.reject">
-                原因:{{item.riskType}}
-              </div>
+              <div v-if="item.riskStatus===riskStatus.reject"> 原因:{{item.riskType}}</div>
+              <div  class="mb-1">冻结时间：{{row.updateTime?dayjs(row.updateTime).format('YYYY-MM-DD HH:mm:ss'):''}}</div>
               <div :style="{background:getRiskStatus(item.riskStatus).bgColor}" class="status_btn mb-1">{{getRiskStatus(item.riskStatus).label}}</div>
+
             </div>
           </template>
           <template   #cancel="{ row }">

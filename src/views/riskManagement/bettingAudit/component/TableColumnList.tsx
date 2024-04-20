@@ -34,7 +34,7 @@ export const columns: TableColumnList = [
   {
     label: t("审核状态"),
     slot: "riskStatus",
-    minWidth: 120,
+    minWidth: 180,
     align:'left',
   },
 

@@ -139,6 +139,8 @@ export enum EBetResultType {
   AUTO_CANCEL = 22,
   HANDLE_CANCEL = 23,
   FLAT_MATCH_ROLLBACK = 51,
+  RISK_REJECT = 61
+
 }
 export const BET_RESULT_TYPE_MAP: { [key in EBetResultType]: string } = {
   [EBetResultType.NO_RESULT]: '无结果',
@@ -162,6 +164,7 @@ export const BET_RESULT_TYPE_MAP: { [key in EBetResultType]: string } = {
   [EBetResultType.HANDLE_CANCEL]: '注单取消',
   [EBetResultType.AUTO_CANCEL]: '预约失效',
   [EBetResultType.FLAT_MATCH_ROLLBACK]: '走水', // 比分回滚取消结算返还金额,算走水
+  [EBetResultType.RISK_REJECT]:'风控拒单'
 };
 
 export const getViewOddFn = (od: number, type: EOddType, currentOddType: number) => {
