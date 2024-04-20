@@ -13,6 +13,9 @@ export const bettingCenter = {
   getTenantList: (data: {
     category: number;
   }) => http.request<any>("post", "/bet-center/getTenantList", { data }),
+  queryTenantList: (data: {
+    category: number;
+  }) => http.request<any>("post", "/bet-center/queryTenant", { data }),
   //- 拒绝注单
   riskCancel: (data: { detailId: number; status: number, riskType: string }[]) => http.request<BetOrderAPI.betCenterCancelResType>("post", "/bet-center/risk/cancel", { data }),
   //- 确认注单

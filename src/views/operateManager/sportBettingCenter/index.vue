@@ -1,5 +1,5 @@
 <template>
-  <BettingCenter></BettingCenter>
+  <BettingCenter :category="0"></BettingCenter>
 </template>
 
 <script setup lang="ts">

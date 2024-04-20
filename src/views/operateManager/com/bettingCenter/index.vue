@@ -6,6 +6,7 @@
       @on-search="onSearch"
       @exportFile="exportFile"
       :tenantList="tenantList"
+      :category="0"
     />
 
     <PureTableBar
@@ -405,12 +406,14 @@ import {
   displayHomeAwayScore,
   getIsInplay
 } from '@/utils/formatMatch';
-import {betStatus, betStatusMap} from './util/types';
+import {betStatus, betStatusMap, searchFormType} from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
+const props = defineProps<{
+  category: number;
+}>();
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
-
 const {
   loading,
   dataList,
@@ -430,7 +433,7 @@ const {
   switchDialog,
   tenantObj,
   isShowCancel
-} = useBettingCenterHook();
+} = useBettingCenterHook(props.category);
 </script>
 
 <style lang="scss">
