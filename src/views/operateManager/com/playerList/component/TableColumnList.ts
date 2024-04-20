@@ -14,9 +14,6 @@ export const columns: TableColumnList = [
     label: t('所属商户'),
     prop: 'tenantName',
     minWidth: 150,
-    formatter: () => {
-      return '-';
-    }
   },
   {
     label: t('风控标签'),

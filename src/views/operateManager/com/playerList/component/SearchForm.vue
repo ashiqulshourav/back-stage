@@ -142,21 +142,21 @@
       <el-row class="flex justify-between">
         <el-col :span="12">
           <el-form-item prop="" label="日期范围选择:">
-            <CustomDate v-model:val="form.timeVal" placeholder="" />
+            <CustomDate val="form.timeVal" placeholder="" />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" class="!w-[120px]" @click="search"
+            <el-button v-if="hasAuth('QUERY')" type="primary" class="!w-[120px]" @click="search"
               >搜索</el-button
             >
-            <el-button class="!w-[100px]" @click="resetForm(formRef)"
+            <el-button v-if="hasAuth('QUERY')" class="!w-[100px]" @click="resetForm(formRef)"
               >重置</el-button
             >
           </el-form-item>
         </el-col>
         <el-col :span="12" class="flex justify-end">
           <el-form-item>
-            <el-button type="primary">批量编辑标签</el-button>
-            <el-button type="primary">导出用户列表</el-button>
+            <el-button v-if="hasAuth('EXPORT')" type="primary">批量编辑标签</el-button>
+            <el-button v-if="hasAuth('EXPORT')" type="primary">导出用户列表</el-button>
           </el-form-item>
         </el-col>
       </el-row>
@@ -251,6 +251,7 @@ import { ref, reactive, onMounted } from 'vue';
 import { t } from '@/plugins/i18n';
 import { searchFormType } from '../utils/types';
 import CustomDate from '@/components/Form/Custom_date.vue';
+import { hasAuth } from '@/router/utils';
 
 import type { FormInstance } from 'element-plus';
 
