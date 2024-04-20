@@ -246,7 +246,6 @@ export function userPlayerListHook(venueType) {
   };
 
   onMounted(() => {
-    console.log(route.query.tagId);
     if (route.query.tagId) {
       let labelType: any = route.query.labelType as string; 
       labelType = Number(labelType);
