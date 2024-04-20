@@ -16,7 +16,6 @@ import LockFill from "@iconify-icons/ri/lock-fill";
 import Monitor from "@iconify-icons/ep/monitor";
 import Files from "@iconify-icons/ep/files";
 import OperationLog from "@iconify-icons/icon-park-outline/log";
-
 import icon_circle_fill from '@iconify-icons/ri/add-circle-fill';
 import uploadIcon from '@iconify-icons/ri/upload-2-fill';
 import cancelIcon from '@iconify-icons/ri/close-circle-fill';
@@ -29,7 +28,6 @@ import deleteBin_5Line from '@iconify-icons/ri/delete-bin-5-line';
 import loading from '@iconify-icons/ri/loader-2-line';
 import EditPen from '@iconify-icons/ep/edit-pen';
 import Delete from '@iconify-icons/ep/delete';
-/** //-菜单icon */
 import dataManager from "@iconify-icons/ri/vip-crown-2-line";
 import sale from "@iconify-icons/ri/store-2-fill";
 import moneyDollarCircleFill from '@iconify-icons/ri/money-cny-circle-line';
@@ -44,9 +42,7 @@ addIcon("sale", sale);
 addIcon("settle", moneyDollarCircleFill);
 addIcon("SportsOperationsManagement", metadata);
 addIcon("ESportOperateManager", metadata);
-// addIcon("esportsSettlement", moneyDollarCircleFill);
 addIcon("metadata", metadata);
-// addIcon("systemManager", settle);
 addIcon("operateManager", operateManager);
 addIcon("systemManager", dataManager);
 addIcon("operationLog1", OperationLog);
@@ -54,8 +50,6 @@ addIcon("menuTree", menuTree);
 addIcon("configCenter", configCenter);
 addIcon("riskManagement", sale);
 addIcon('taskCenter', cloudLine);
-/* 菜单icon结束 */
-
 addIcon("homeFilled", HomeFilled);
 addIcon("informationLine", InformationLine);
 addIcon("lollipop", Lollipop);
