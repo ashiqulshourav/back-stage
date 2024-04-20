@@ -12,19 +12,28 @@ export const columns: TableColumnList = [
   },
   {
     label: t('所属商户'),
-    prop: 'userName',
-    minWidth: 150
+    prop: 'tenantName',
+    minWidth: 150,
+    formatter: () => {
+      return '-';
+    }
   },
-
   {
     label: t('风控标签'),
-    prop: 'tenantName',
-    minWidth: 150
+    slot: 'riskControlLabel',
+    width: 350
   },
   {
     label: t('属性标签'),
-    prop: 'tenantCode',
-    minWidth: 150
+    slot: 'attributeLabel',
+    width: 350,
+  },
+  {
+    label: t('特殊限额'),
+    minWidth: 150,
+    formatter: () => {
+      return '-';
+    }
   },
   {
     label: t('最后下注时间'),
@@ -42,3 +51,22 @@ export const columns: TableColumnList = [
     slot: 'operation'
   }
 ];
+
+export const recordColumns: TableColumnList = [
+  {
+    label: t('标签名称'),
+    prop: 'labelName',
+  },
+  {
+    label: t('动作'),
+    prop: 'opt',
+  },
+  {
+    label: t('操作人'),
+    prop: 'createdBy',
+  },
+  {
+    label: t('修改时间'),
+    prop: 'updatedAt',
+  },
+]

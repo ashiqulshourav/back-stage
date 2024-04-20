@@ -3,65 +3,138 @@
     <el-form
       label-width="110"
       ref="formRef"
+      v-model="form"
       label-position="right"
       :inline="true"
       :model="form"
     >
       <el-row class="flex justify-between">
         <el-form-item prop="ids" :label="t('用户ID： ')">
-          <el-input
-            :placeholder="t('可输入1-50个用户ID,用逗号进行分割')"
-            clearable
-            class="!w-[160px]"
+          <el-select
+            v-model="form.ids"
+            multiple
+            allow-create
+            filterable
+            default-first-option
+            :reserve-keyword="false"
+            placeholder="可输入1-50个用户ID，逗号隔开"
+            class="!w-[260px] customInput"
           />
         </el-form-item>
-        <el-form-item prop="" :label="t('商户:')">
-          <el-select clearable class="!w-[200px]" />
+        <el-form-item prop="tenantId" :label="t('商户:')">
+          <el-select
+            v-model="form.tenantIds"
+            :placeholder="t('所属商户')"
+            clearable
+            multiple
+            class="!min-w-[150px]"
+          >
+            <el-option
+              :label="item.tenantName"
+              :value="item.id"
+              v-for="item in tenantList"
+              :key="item.name"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item prop="" :label="t('风控标签:')">
-          <el-select multiple clearable class="!w-[300px]" />
+          <el-select
+            multiple
+            clearable
+            class="!w-[250px]"
+            v-model="form.riskControlLabelList"
+          >
+            <el-option
+              v-for="label in riskControlList"
+              :key="label.id"
+              :label="label.name"
+              :value="label.id"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item prop="" :label="t('属性标签:')">
-          <el-select multiple clearable class="!w-[300px]" />
+          <el-select
+            multiple
+            clearable
+            class="!w-[250px]"
+            v-model="form.attributeLabelList"
+          >
+            <el-option
+              v-for="label in attributeList"
+              :key="label.id"
+              :label="label.name"
+              :value="label.id"
+            />
+          </el-select>
         </el-form-item>
       </el-row>
       <el-row class="flex justify-between">
-        <el-form-item prop="ids" :label="t('投注额: ')" class="w-1/4">
+        <el-form-item prop="ids" :label="t('投注额: ')" class="!w-[370px]">
           <el-row class="flex justify-between">
             <el-col :span="11">
-              <el-input :placeholder="t('')" clearable class="w-full" />
+              <el-input
+                disabled
+                :placeholder="t('')"
+                clearable
+                class="w-full"
+              />
             </el-col>
             <el-col :span="1">
               <p>{{ t('-') }}</p>
             </el-col>
             <el-col :span="11">
-              <el-input :placeholder="t('')" clearable class="w-full" />
+              <el-input
+                disabled
+                :placeholder="t('')"
+                clearable
+                class="w-full"
+              />
             </el-col>
           </el-row>
         </el-form-item>
-        <el-form-item prop="ids" :label="t('平台输赢: ')" class="w-1/4">
+        <el-form-item prop="ids" :label="t('平台输赢: ')" class="!w-[370px]">
           <el-row class="flex justify-between">
             <el-col :span="11">
-              <el-input :placeholder="t('')" clearable class="w-full" />
+              <el-input
+                disabled
+                :placeholder="t('')"
+                clearable
+                class="w-full"
+              />
             </el-col>
             <el-col :span="1">
               <p>{{ t('-') }}</p>
             </el-col>
             <el-col :span="11">
-              <el-input class="w-full" :placeholder="t('')" clearable />
+              <el-input
+                disabled
+                :placeholder="t('')"
+                clearable
+                class="w-full"
+              />
             </el-col>
           </el-row>
         </el-form-item>
-        <el-form-item prop="ids" :label="t('盈利额: ')" class="w-1/4">
+        <el-form-item prop="ids" :label="t('盈利额: ')" class="!w-[370px]">
           <el-row class="flex justify-between">
             <el-col :span="11">
-              <el-input :placeholder="t('')" clearable class="w-full" />
+              <el-input
+                disabled
+                :placeholder="t('')"
+                clearable
+                class="w-full"
+              />
             </el-col>
             <el-col :span="1">
               <p>{{ t('-') }}</p>
             </el-col>
             <el-col :span="11">
-              <el-input :placeholder="t('')" clearable class="w-full" />
+              <el-input
+                disabled
+                :placeholder="t('')"
+                clearable
+                class="w-full"
+              />
             </el-col>
           </el-row>
         </el-form-item>
@@ -69,11 +142,15 @@
       <el-row class="flex justify-between">
         <el-col :span="12">
           <el-form-item prop="" label="日期范围选择:">
-            <CustomDate placeholder="" />
+            <CustomDate v-model:val="form.timeVal" placeholder="" />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" class="!w-[120px]">搜索</el-button>
-            <el-button class="!w-[100px]">重置</el-button>
+            <el-button type="primary" class="!w-[120px]" @click="search"
+              >搜索</el-button
+            >
+            <el-button class="!w-[100px]" @click="resetForm(formRef)"
+              >重置</el-button
+            >
           </el-form-item>
         </el-col>
         <el-col :span="12" class="flex justify-end">
@@ -163,83 +240,65 @@
         >
           {{ t('筛选') }}
         </el-button>
-        <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
-          {{ t('重置') }}
-        </el-button>
+        
       </el-form-item> -->
     </el-form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import { t } from '@/plugins/i18n';
 import { searchFormType } from '../utils/types';
 import CustomDate from '@/components/Form/Custom_date.vue';
 
-// import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-// import Search from '@iconify-icons/ep/search';
-// import Refresh from '@iconify-icons/ep/refresh';
-// import type { FormInstance } from 'element-plus';
+import type { FormInstance } from 'element-plus';
 
-const formRef = ref();
-// const buttonRef = ref();
-// const buttonRef1 = ref();
-// const emits = defineEmits(['onSearch']);
-// const idList = reactive<string[]>([]);
-// const userIds = reactive<string[]>([]);
-// const sportLimmitList = reactive<string[]>([]);
+const formRef = ref<FormInstance | undefined>();
+const emits = defineEmits(['onSearch']);
 
 const props = defineProps<{
   loading: boolean;
   form: searchFormType;
 }>();
+const form = ref(props.form);
 
-// const formatterTxt = v => {
-//   const l = new Set(v.split(','));
-//   idList.length = 0;
-//   idList.push(...(Array.from(l) as string[]));
-//   return v;
-// };
+onMounted(() => {
+  initTenantList();
+  initRiskControlList();
+});
 
-// const formatterUserNames = v => {
-//   const l = new Set(v.split(','));
-//   userIds.length = 0;
-//   userIds.push(...(Array.from(l) as string[]));
-//   return v;
-// };
+const tenantList = reactive([]);
 
-// onMounted(() => {
-//   initTenantList();
-//   getLimmitLevelList();
-// });
+const initTenantList = async () => {
+  const res = await API.getTenantList();
+  if (res.code) return;
+  tenantList.length = 0;
+  tenantList.push(...res.data.data);
+};
 
-// const getLimmitLevelList = async () => {
-//   const res = await API.getLimitListDropDownBox();
-//   if (res.code) return;
-//   sportLimmitList.length = 0;
-//   sportLimmitList.push(...res.data);
-// };
+const riskControlList = reactive([]);
+const attributeList = reactive([]);
+const initRiskControlList = async () => {
+  const res = await API.getLabelList({
+    category: 0
+  });
+  riskControlList.length = 0;
+  riskControlList.push(...res.data.riskControlLabelList);
+  attributeList.length = 0;
+  attributeList.push(...res.data.attributeLabelList);
+};
 
-// const tenantList = reactive([]);
-// const initTenantList = async () => {
-//   const res = await API.getTenantList();
-//   if (res.code) return;
-//   tenantList.length = 0;
-//   tenantList.push(...res.data.data);
-// };
+const resetForm = (formEl: FormInstance | undefined) => {
+  formEl.resetFields();
+  emits('onSearch', ...['reload']);
+};
 
-// const resetForm = (formEl: FormInstance | undefined) => {
-//   props.form.ids = '';
-//   formEl.resetFields();
-//   emits('onSearch', ...['reload']);
-// };
-
-// const search = () => {
-//   props.form.ids = idList.filter(item => item !== '');
-//   props.form.usernames = userIds.filter(item => item !== '');
-//   emits('onSearch', ...['reload']);
-// };
+const search = () => {
+  // props.form.ids = idList.filter(item => item !== '');
+  // props.form.usernames = userIds.filter(item => item !== '');
+  emits('onSearch', ...['reload']);
+};
 </script>
 
 <style lang="scss">
@@ -256,5 +315,13 @@ const props = defineProps<{
 }
 .el-form-item__label {
   font-weight: 700;
+}
+.customInput {
+  .el-select-dropdown {
+    display: none;
+  }
+  .el-select__suffix {
+    display: none;
+  }
 }
 </style>
