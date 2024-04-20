@@ -32,7 +32,7 @@ export const user = {
     pageSize: number;
     pageNum: number;
     ids?: string[];
-    venueType: number;
+    venueType?: number;
     tenantIds?: number | string | string[];
     limitLevel?: number | string;
     limittenantCodeLevel?: number | string;
