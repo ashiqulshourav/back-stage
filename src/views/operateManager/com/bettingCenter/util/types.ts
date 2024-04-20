@@ -28,10 +28,9 @@ export type searchFormType = {
 
 export enum betStatus {
   all = 1,
-  confirm = 2,
+  PendingApprove = 2,
   unsettlementBet = 3,
   settlementBet = 4,
-  PendingApprove = 5,
   betInvalid = 6,
   betFail = 7,
   eventAbnormal = 8,
@@ -41,7 +40,6 @@ export enum betStatus {
 }
 export const betStatusMap ={
   [betStatus.all]: t('全部'),
-  // [betStatus.confirm]: t('确认中'),
   [betStatus.unsettlementBet]: '未结算',
   [betStatus.settlementBet]: t('已结算'),
   [betStatus.PendingApprove]: t('待审核'),
