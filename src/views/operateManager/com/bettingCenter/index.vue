@@ -406,11 +406,12 @@ import {
   displayHomeAwayScore,
   getIsInplay
 } from '@/utils/formatMatch';
-import {betStatus, betStatusMap, searchFormType} from './util/types';
+import {betStatus, betStatusMap} from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
 const props = defineProps<{
   category: number;
+  venueType:number;
 }>();
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
@@ -433,7 +434,7 @@ const {
   switchDialog,
   tenantObj,
   isShowCancel
-} = useBettingCenterHook(props.category);
+} = useBettingCenterHook(props.category,props.venueType);
 </script>
 
 <style lang="scss">

@@ -28,7 +28,7 @@ import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
 import {riskStatus} from "@/views/riskManagement/bettingAudit/util/types";
 
-export function useBettingCenterHook(category:number) {
+export function useBettingCenterHook(category:number,venueType:number) {
   const { openPasswordInput } = usePasswordInputHook();
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<
@@ -86,7 +86,6 @@ export function useBettingCenterHook(category:number) {
     console.log('handleSelectionChange', val);
   }
 
-  const route = useRoute();
   const formatParams = (privateparams = {}) => {
     let seriesDetails: any = [];
     if (form.seriesType == 2) {
@@ -122,7 +121,7 @@ export function useBettingCenterHook(category:number) {
         seriesDetailsDuplex: '',
         seriesDetails: seriesDetails,
         seriesType: +form.seriesType > 2 ? 2 : form.seriesType,
-        category: category
+        category: category,venueType:venueType,
       }),
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage,
