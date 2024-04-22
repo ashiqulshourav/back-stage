@@ -188,16 +188,18 @@ const selectBetResult = (
 function formatRow() {
   // @ts-ignore
   data.combineOrderDetails?.map((item: BetOrderAPI.Detail, index: number) => {
+
+    if(item.betResult==EBetResultType.FLAT_MATCH_ROLLBACK||item.betResult==EBetResultType.RISK_REJECT){
+      item.betResult=EBetResultType.FLAT
+    }
     item.betResultHomeScore = displayHomeAwayScore(
       item.settleScore,
       data.sportId,
-      'seprate',
       'home'
     );
     item.betResultAwayScore = displayHomeAwayScore(
       item.settleScore,
       data.sportId,
-      'seprate',
       'away'
     );
     item.index = index;
