@@ -4,7 +4,7 @@ import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { addLabelsType, recordFormType, searchFormType, updateUserFormType } from './types';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 
 export function userPlayerListHook(venueType) {
   const dataList = reactive<UserAPI.operateUserList[]>([]);
@@ -15,7 +15,6 @@ export function userPlayerListHook(venueType) {
   const isOpenRecord = ref(false);
   const isMultiLabelAdd = ref(false);
   const isMultiLabelDel = ref(false);
-  const isOperationSuccess = ref(false);
   const route = useRoute();
   const isAddLabel = reactive<{
     risk: boolean,
@@ -91,6 +90,17 @@ export function userPlayerListHook(venueType) {
     if (id.length === 0 || labelId.length === 0) {
       return;
     }
+    if (id.length === 1) {
+      ElMessageBox.confirm(`${t("您确定要删除吗?")} `, '系统提示', { type: 'warning', center: true }).then( async () => {
+        dispatchDelLabels(id, labelId);
+      });
+    }
+    
+  };
+  const dispatchDelLabels = async (
+    id: string[],
+    labelId: number[],
+  ) => {  
     try {
       const res = await API.updateUserLabelDel({ id, labelId });
       if (res.code) return message(res.msg, { type: 'error' });
@@ -101,18 +111,22 @@ export function userPlayerListHook(venueType) {
     } catch (error) {
       console.log(error);
     } 
-  };
-  
+  }
+
   const handleAddRiskLabels = (ids: string[]) => {
-    dispatchAddLabels(ids, addLabelForms.risk);
-    addLabelForms.risk.length = 0;
-    isAddLabel.risk = false;
+    ElMessageBox.confirm(`${t("您确定要增加吗?")} `, '系统提示', { type: 'warning', center: true }).then(() => {
+      dispatchAddLabels(ids, addLabelForms.risk);
+      addLabelForms.risk.length = 0;
+      isAddLabel.risk = false;
+    });
   }
 
   const handleAddAttrLabels = (ids: string[]) => {
-    dispatchAddLabels(ids, addLabelForms.attr);
-    addLabelForms.attr.length = 0;
-    isAddLabel.attr = false;
+    ElMessageBox.confirm(`${t("您确定要增加吗?")} `, '系统提示', { type: 'warning', center: true }).then(() => {
+      dispatchAddLabels(ids, addLabelForms.attr);
+      addLabelForms.attr.length = 0;
+      isAddLabel.attr = false;
+    });
   }
 
   const handleMultiAddLabels = () => {
@@ -120,14 +134,14 @@ export function userPlayerListHook(venueType) {
     selectedDataList.forEach(item => {
       ids.push(item.id);
     })
-    dispatchAddLabels(ids, addLabelForms.risk);
-    dispatchAddLabels(ids, addLabelForms.attr);
-    ElMessage.success("Operation successful");
-    addLabelForms.risk.length = 0;
-    addLabelForms.attr.length = 0;
-
-    isOperationSuccess.value = true;
-    isMultiLabelAdd.value = false;
+    ElMessageBox.confirm(`${t("您确定要增加吗?")} `, '系统提示', { type: 'warning', center: true }).then(() => {
+      dispatchAddLabels(ids, addLabelForms.risk);
+      dispatchAddLabels(ids, addLabelForms.attr);
+      ElMessage.success("Operation successful");
+      addLabelForms.risk.length = 0;
+      addLabelForms.attr.length = 0;
+      isMultiLabelAdd.value = false;
+    });
   }
 
   const handleMultiDelLabels = async () => {
@@ -135,15 +149,14 @@ export function userPlayerListHook(venueType) {
     selectedDataList.forEach(item => {
       ids.push(item.id);
     })
-    handleUserLabelDel(ids, addLabelForms.risk);
-    handleUserLabelDel(ids, addLabelForms.attr);
-    ElMessage.success("Operation successful");
-
-    addLabelForms.risk.length = 0;
-    addLabelForms.attr.length = 0;
-
-    isOperationSuccess.value = true;
-    isMultiLabelDel.value = false;
+    ElMessageBox.confirm(`${t("您确定要删除吗？")} `, '系统提示', { type: 'warning', center: true }).then(() => {
+      dispatchDelLabels(ids, addLabelForms.risk);
+      dispatchDelLabels(ids, addLabelForms.attr);
+      ElMessage.success("Operation successful");
+      addLabelForms.risk.length = 0;
+      addLabelForms.attr.length = 0;
+      isMultiLabelDel.value = false;
+    });
   }
 
   const dispatchAddLabels = async (id: string[], labelId: number[]) => {
@@ -156,10 +169,10 @@ export function userPlayerListHook(venueType) {
       if (!res.data) {
         return message("Operation failed", { type: 'error' });
       }
-      if (id.length === 1)
-        ElMessage.success(res.msg);
       dispatchGetUserLabels();
       onSearch();
+      if (id.length === 1)
+        ElMessage.success(res.msg);
     } catch (error) {
       console.log(error);
     }
@@ -278,7 +291,6 @@ export function userPlayerListHook(venueType) {
     isAddLabel,
     isMultiLabelAdd,
     isMultiLabelDel,
-    isOperationSuccess,
     recordPagination,
     pagination,
     onSearch,

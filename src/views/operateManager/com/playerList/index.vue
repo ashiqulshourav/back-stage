@@ -499,18 +499,6 @@
         </div>
       </template>
     </el-dialog>
-    <el-dialog v-model="isOperationSuccess" class="divide-y divide-slate-200" width="800">
-      <template #title>
-        <p class="pl-5 font-medium">{{t('企业实名认证')}}</p>
-      </template>
-      <div class="p-20">
-        <p class="text-xl font-bold text-center">{{t('您已成功提交企业认证信息')}}</p>
-        <p class="text-center mt-4">{{t('我们将尽快完成资料审核，请耐心等候')}}!</p>
-        <div class="flex justify-center mt-8">
-          <el-button v-if="hasAuth('SETTING')" type="primary" class="mx-auto p-4 w-40" @click="isOperationSuccess = false">{{t('确定')}}</el-button>
-        </div>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -560,7 +548,6 @@ const {
   isAddLabel,
   isMultiLabelAdd,
   isMultiLabelDel,
-  isOperationSuccess,
   handelOpenRecord,
   handleMultiAddLabels,
   handleMultiDelLabels,
