@@ -1,5 +1,3 @@
-import { RISK_TAG_LEVEL } from '@/utils/maps/tags_map';
-
 export const columns: TableColumnList = [
   {
     label: t('标签ID'),

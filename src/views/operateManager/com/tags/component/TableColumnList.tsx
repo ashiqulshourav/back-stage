@@ -1,8 +1,3 @@
-import { OPERATE_TAG_LEVEL } from '@/utils/maps/tags_map';
-import { useTagsHook } from '../utils/hook';
-
-const { goToUserList } = useTagsHook();
-
 export const columns: TableColumnList = [
   {
     label: t('标签ID'),
