@@ -149,16 +149,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
       if (res.data !== null) {
-        let list = res?.data?.pageData;
-        list= list.map((row)=>{
-          let riskStatus:number = -1;
-          row.combineOrderDetails.map((item2)=>{
-            if (item2.riskStatus===2) riskStatus = 2
-          })
-          row.riskStatus=riskStatus
-          return row
-        })
-        dataList.push(...list);
+        dataList.push(...res?.data?.pageData);
         dataList.map((item: any, index) => {
           item.index = index + 1;
         });
@@ -339,11 +330,9 @@ export function useBettingCenterHook(category:number,venueType:number) {
       }
     });
   };
-  const getStatus = (status:number, billStatus:number, betResult:number, isReserve?:number,riskStatus?:number) => {
+  const getStatus = (status:number, billStatus:number, betResult:number, isReserve?:number) => {
     let obj = { status: -1, bgColor: '' };
-    if(riskStatus===2){
-      obj = { status: betStatus.PendingApprove, bgColor: '#F57582' }; //待审核
-    }else if (
+    if (
       status == 2 &&
       billStatus === 1 &&
       (betResult === 22 || betResult === 23)
@@ -433,7 +422,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
   const isShowCancel = (row)=>{
     let flag = true
     row.combineOrderDetails.map((item)=>{
-      if(item.riskStatus===riskStatus.rejectBetting||item.riskStatus===riskStatus.reject||item.riskStatus===riskStatus.approve){
+      if(item.riskStatus===riskStatus.rejectBetting||item.riskStatus===riskStatus.reject||item.riskStatus===riskStatus.approve||item.riskStatus===riskStatus.autoReject){
         flag = false
       }
     })

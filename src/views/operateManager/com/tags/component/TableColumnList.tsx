@@ -33,14 +33,14 @@ export const columns: TableColumnList = [
       switch (level) {
         case 1:
           return (
-            <el-text class="risk-tag-red" style="">
+            <el-text class="risk-tag-blue" style="">
               {name}
             </el-text>
           );
         case 2:
-          return <el-text class="risk-tag-orange">{name}</el-text>;
+          return <el-text class="risk-tag-green">{name}</el-text>;
         case 3:
-          return <el-text class="risk-tag-yellow">{name}</el-text>;
+          return <el-text class="risk-tag-black-blue">{name}</el-text>;
         default:
           return '-';
       }
