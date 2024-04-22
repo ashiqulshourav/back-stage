@@ -8,8 +8,8 @@
       :inline="true"
       :model="form"
     >
-      <el-row class="flex justify-between">
-        <el-form-item prop="ids" :label="t('用户ID： ')">
+      <el-row class="flex justify-between items-center">
+        <el-form-item prop="ids" :label="t('用户ID： ')" class="items-center">
           <el-select
             v-model="form.ids"
             multiple
@@ -21,13 +21,13 @@
             class="!w-[260px] customInput"
           />
         </el-form-item>
-        <el-form-item prop="tenantId" :label="t('商户:')">
+        <el-form-item prop="tenantId" :label="t('商户:')" class="items-center">
           <el-select
             v-model="form.tenantIds"
             :placeholder="t('所属商户')"
             clearable
             multiple
-            class="!min-w-[150px]"
+            class="!w-[150px]"
           >
             <el-option
               :label="item.tenantName"
@@ -37,7 +37,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item prop="" :label="t('风控标签:')">
+        <el-form-item prop="" :label="t('风控标签:')" class="items-center">
           <el-select
             multiple
             clearable
@@ -52,7 +52,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item prop="" :label="t('属性标签:')">
+        <el-form-item prop="" :label="t('属性标签:')" class="items-center">
           <el-select
             multiple
             clearable
@@ -68,7 +68,7 @@
           </el-select>
         </el-form-item>
       </el-row>
-      <el-row class="flex justify-between">
+      <el-row class="flex justify-between items-center" >
         <el-form-item prop="ids" :label="t('投注额: ')" class="!w-[370px]">
           <el-row class="flex justify-between">
             <el-col :span="11">
@@ -279,16 +279,16 @@ const initTenantList = async () => {
   tenantList.push(...res.data.data);
 };
 
-const riskControlList = reactive([]);
-const attributeList = reactive([]);
+const riskControlList = reactive<UserAPI.labelType[]>([]);
+const attributeList = reactive<UserAPI.labelType[]>([]);
 const initRiskControlList = async () => {
   const res = await API.getLabelList({
     category: props.category
   });
   riskControlList.length = 0;
-  Object.assign(riskControlList, res.data.riskControlLabelList);
+  riskControlList.push(...res.data.riskControlLabelList);
   attributeList.length = 0;
-  Object.assign(attributeList, res.data.attributeLabelList);
+  attributeList.push(...res.data.attributeLabelList);
 };
 
 const resetForm = (formEl: FormInstance | undefined) => {
