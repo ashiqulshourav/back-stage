@@ -228,13 +228,9 @@
           </p>
         </el-form-item>
         <el-form-item prop="" :label="t('风控标签: ')">
-          <el-row class="flex  w-full items-center">
-            <el-col :span="12">
-              <p>{{t('每个用户最多添加20个风控标签')}}</p>
-            </el-col>
-            <el-col :span="12">
-              <p class="text-primary text-right cursor-pointer" @click="handelOpenRecord(1)">{{t('风控标签修改记录')}}>></p>
-            </el-col>
+          <el-row class="flex  w-full items-center justify-between">
+            <p>{{t('每个用户最多添加20个风控标签')}}</p>
+            <p class="text-primary text-right cursor-pointer" @click="handelOpenRecord(1)">{{t('风控标签修改记录')}}>></p>
           </el-row>
           <el-row :gutter="20" class="mt-2 w-full">
             <el-col v-for="label in riskLabels" :key="label.id" :span="6">
@@ -297,13 +293,9 @@
           </el-row>
         </el-form-item>
         <el-form-item prop="" :label="t('属性标签:') ">
-          <el-row class="flex  w-full items-center">
-            <el-col :span="12">
-              <p>{{t('每个用户最多添加20个风控标签')}}</p>
-            </el-col>
-            <el-col :span="12">
-              <p class="text-primary text-right cursor-pointer" @click="handelOpenRecord(2)">{{t('属性标签修改记录')}}>></p>
-            </el-col>
+          <el-row class="flex  w-full items-center justify-between">
+            <p>{{t('每个用户最多添加20个风控标签')}}</p>
+            <p class="text-primary text-right cursor-pointer" @click="handelOpenRecord(2)">{{t('属性标签修改记录')}}>></p>
           </el-row>
           <el-row :gutter="20" class="mt-2 w-full">
             <el-col v-for="label in attributeLabels" :key="label.id" :span="6">
