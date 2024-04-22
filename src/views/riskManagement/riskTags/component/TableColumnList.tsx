@@ -1,5 +1,3 @@
-import { RISK_TAG_LEVEL } from '@/utils/maps/tags_map';
-
 export const columns: TableColumnList = [
   {
     label: t('标签ID'),
@@ -30,12 +28,28 @@ export const columns: TableColumnList = [
   {
     label: t('标签名称'),
     prop: 'name',
-    minWidth: 150
+    minWidth: 150,
+    formatter: ({ level, name }) => {
+      switch (level) {
+        case 1:
+          return (
+            <el-text class="risk-tag-red" style="">
+              {name}
+            </el-text>
+          );
+        case 2:
+          return <el-text class="risk-tag-orange">{name}</el-text>;
+        case 3:
+          return <el-text class="risk-tag-yellow">{name}</el-text>;
+        default:
+          return '-';
+      }
+    }
   },
   {
     label: t('用户人数'),
     minWidth: 150,
-    slot: "userCount",
+    slot: 'userCount'
   },
   {
     label: t('备注'),

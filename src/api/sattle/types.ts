@@ -208,6 +208,7 @@ declare namespace SattleDataAPI {
     t2Error: boolean;
     matchPeriodId?: number;
     eventTimeError: boolean;
+    secondNum?: number;
   };
 
   type BasketBallEventsData = {
@@ -333,12 +334,13 @@ declare namespace SattleDataAPI {
     settleTimes: number | string;
     settleType: number | string;
     sourceType: number | string;
-    firstT1: number | string;
-    firstT2: number | string;
+    firstT1: string;
+    firstT2: string;
     updatedAt: number | string;
     updatedBy: number | string;
     firstNum: number | string;
     isEdit: boolean;
+    secondNum?: number | null | string;
   };
 
   type HockeyEventData = CommonEventData & { matchPeriod?: string };
@@ -467,6 +469,8 @@ declare namespace SattleDataAPI {
     firstT2: number | string;
     firstNum: number | string;
     id?: number | string;
+    secondNum?: number | string | null;
+    homeAway?: string;
   };
   type BadmintonEventReq = {
     eventTime: number | string | Date;
@@ -545,13 +549,13 @@ declare namespace SattleDataAPI {
   type confirm2ndSettlementReqType = {
     matchId: number;
     cancelEventIds: number[];
-    deleteEventIds: number[];
+    deleteEventIds?: number[];
     newEventList: {
       matchId: number;
       _tempDate?: number;
-      firstNum?: number;
-      firstT1?: number;
-      firstT2?: number;
+      firstNum?: number | string;
+      firstT1?: number | string;
+      firstT2?: number | string;
       eventCode?: string | number;
       eventTime: number | string | Date;
       homeAway?: string;

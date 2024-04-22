@@ -1,16 +1,39 @@
 import { t } from '@/plugins/i18n';
 
 /*
-  足球：半自動結算(v) ＋ 滚球重新結算（） + 取消事件 (v) ＋ 历史二次結算(v)
-  籃球：半自動結算(v) ＋ 滚球重新結算(v) + 取消事件 (v) ＋ 历史二次結算(v)
-  網球：半自動結算（）
-  排球：手動結算(v)
-  台球：手動結算(v)
-  手球：手動結算(v)
-  冰球：手動結算(v)
-  羽毛球：手動結算(v)
-  乒乓球：手動結算(v)
-  電競：手動結算(v) ＋  历史二次結算(v) + 取消
+1	足球
+2	篮球
+3	网球
+4	电子竞技
+5	斯诺克/台球
+6	排球
+7	特别项目
+8	飞镖
+9	橄榄球
+10	拳击/格斗
+11	手球
+12	冰球
+13	板球
+14	金融投注
+15	彩票
+16	美式足球
+17	高尔夫球
+18	棒球
+19	羽毛球
+20	选美大赛
+21	赛车
+22	沙滩足球
+23	乒乓球
+24	垒球
+25	室内足球
+26	沙滩排球
+27	冬季运动
+28	曲棍球
+29	自行车
+30	体操
+31	田径
+32	更多运动
+33	水上运动
  */
 
 export const SPORT_ID_MAP = [
@@ -27,6 +50,7 @@ export const SPORT_ID_MAP = [
   { label: t('板球'), value: 13, type: 'Cricket' },
   { label: t('曲棍球'), value: 28, type: 'Hockey' },
   { label: t('飞镖'), value: 8, type: 'Darts' },
+  { label: t('棒球'), value: 18, type: 'Baseball' },
   { label: t('拳击/格斗'), value: 10, type: 'Boxing' },
   { label: t('美式足球'), value: 16, type: 'AmericanFootball' },
   // { label: t('特别项目'), value: 7, type: 'SpecialProjects' },
