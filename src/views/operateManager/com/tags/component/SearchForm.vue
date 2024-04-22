@@ -80,6 +80,7 @@ onMounted(() => {
 });
 
 const resetForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
   formEl.resetFields();
   emits('onSearch', ...['reload']);
 };

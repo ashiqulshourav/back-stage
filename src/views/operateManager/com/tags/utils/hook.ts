@@ -1,6 +1,6 @@
 import editForm from '../form.vue';
 import { message } from '@/utils/message';
-import { FormItemProps } from 'element-plus';
+// import { FormItemProps } from 'element-plus';
 import { addDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, h } from 'vue';
@@ -29,7 +29,7 @@ export function useTagsHook() {
     name: ''
   });
 
-  function handleDelete(row) {
+  function handleDelete(row: OperateManagementDataAPI.OperateTagType) {
     ElMessageBox.confirm(
       h('p', `是否删除${row.name}标签，一旦被删除将无法恢复`),
       t('标签分类'),
@@ -68,7 +68,7 @@ export function useTagsHook() {
     onSearch();
   }
 
-  function handleSelectionChange(val) {
+  function handleSelectionChange(val:any) {
     console.log('handleSelectionChange', val);
   }
 
@@ -89,7 +89,7 @@ export function useTagsHook() {
       dataList.length = 0;
       dataList.push(...res.data.records);
       pagination.total = res.data.total;
-      pagination.pageSize = res.data.size;
+      pagination.pageSize = res.data.size as number;
     } catch (error) {
       loading.value = false;
     }
@@ -121,7 +121,8 @@ export function useTagsHook() {
         okButtonText = null
       ) => {
         const FormRef = formRef.value.getRef();
-        const curData = options.props.formInline as FormItemProps;
+        const curData: OperateManagementDataAPI.OperateTagType = options.props
+          .formInline;
         function chores() {
           // message(`您${title}了标签名称为${curData.name}的这条数据`, {
           //   type: "success"
@@ -129,7 +130,7 @@ export function useTagsHook() {
           done(); // 关闭弹框
           onSearch(); // 刷新表格数据
         }
-        FormRef.validate(async valid => {
+        FormRef.validate(async (valid:boolean) => {
           if (valid) {
             if (row) {
               updateOperateTag(
@@ -162,10 +163,10 @@ export function useTagsHook() {
   }
 
   const updateOperateTag = async (
-    curData,
-    cb,
-    okButtonLoading,
-    okButtonText
+    curData: OperateManagementDataAPI.OperateTagType,
+    cb: () => void,
+    okButtonLoading: any,
+    okButtonText: any
   ) => {
     if (okButtonLoading) okButtonLoading.value = true;
     if (okButtonText) okButtonText.value = t('编辑中');
@@ -179,10 +180,10 @@ export function useTagsHook() {
   };
 
   const createOperateTag = async (
-    curData,
-    cb,
-    okButtonLoading,
-    okButtonText
+    curData: OperateManagementDataAPI.OperateTagType,
+    cb: () => void,
+    okButtonLoading: any,
+    okButtonText: any
   ) => {
     if (okButtonLoading) okButtonLoading.value = true;
     if (okButtonText) okButtonText.value = t('创建中');
