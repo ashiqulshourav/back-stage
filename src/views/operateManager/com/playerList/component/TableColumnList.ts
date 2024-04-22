@@ -65,5 +65,9 @@ export const recordColumns: TableColumnList = [
   {
     label: t('修改时间'),
     prop: 'updatedAt',
+    formatter({ updatedAt }) {
+      return dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss');
+    },
   },
+  
 ]
