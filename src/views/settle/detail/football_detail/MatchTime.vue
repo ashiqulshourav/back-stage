@@ -1,7 +1,11 @@
 <template>
   <span class="text-sm" v-if="row.isBackEndReturnData">
-    {{ row.eventTime == 1 ? '00' : padZero(parseInt(+row.eventTime / 60)) }}:{{
-      row.eventTime == 1 ? '00' : padZero(+row.eventTime % 60)
+    {{
+      row.eventTime == 1
+        ? '00'
+        : padZero(parseInt(+(row.eventTime as number) / 60))
+    }}:{{
+      row.eventTime == 1 ? '00' : padZero(+(row.eventTime as number) % 60)
     }}
   </span>
   <div class="flex" v-else>
@@ -12,7 +16,8 @@
       class="mr-2"
       v-model="minuteNum"
       :disabled="!row.isEdit"
-      :formatter="v => inputRestrictions(v, 0, 150)"
+      :formatter="(v:string) => inputRestrictions(v, 0, 150)"
+      @change="changeTime($event, 'firstTime')"
     />
     <el-input
       type="number"
@@ -21,7 +26,8 @@
       class="ml-2"
       :disabled="!row.isEdit"
       v-model="secondNum"
-      :formatter="v => inputRestrictions(v, 0, 59)"
+      @change="changeTime($event, 'secondTime')"
+      :formatter="(v:string) => inputRestrictions(v, 0, 59)"
     />
   </div>
 </template>
@@ -39,31 +45,40 @@ const props = defineProps<
   }
 >();
 const emits = defineEmits(['changeEventTime']);
-const secondNum = ref<number>(null);
-const minuteNum = ref<number>(null);
+const secondNum = ref<number | null>(null);
+const minuteNum = ref<number | null>(null);
 
-watch(
-  () => secondNum.value,
-  () => {
-    if (!minuteNum.value) {
-      minuteNum.value = 0;
-    }
-    if (minuteNum.value !== null && secondNum.value !== null) {
-      const r = minuteNum.value * 60 + +secondNum.value;
-      props.row.eventTime = r;
-    }
-  }
-);
-watch(
-  () => minuteNum.value,
-  () => {
-    if (!secondNum.value) {
-      secondNum.value = 0;
-    }
-    if (minuteNum.value !== null && secondNum.value !== null) {
-      const r = minuteNum.value * 60 + +secondNum.value;
-      props.row.eventTime = r;
-    }
-  }
-);
+// watch(
+//   () => secondNum.value,
+//   () => {
+//     if (!minuteNum.value) {
+//       minuteNum.value = 0;
+//     }
+//     if (minuteNum.value !== null && secondNum.value !== null) {
+//       const r = minuteNum.value * 60 + +secondNum.value;
+//       props.row.eventTime = r;
+//     }
+//   }
+// );
+// watch(
+//   () => minuteNum.value,
+//   () => {
+//     if (!secondNum.value) {
+//       secondNum.value = 0;
+//     }
+//     if (minuteNum.value !== null && secondNum.value !== null) {
+//       const r = minuteNum.value * 60 + +secondNum.value;
+//       props.row.eventTime = r;
+//     }
+//   }
+// );
+
+const changeTime = (v: string, type: string) => {
+  if (!minuteNum.value) minuteNum.value = 0;
+  if (!secondNum.value) secondNum.value = 0;
+  type === 'firstTime' ? (minuteNum.value = +v) : (secondNum.value = +v);
+  const r = minuteNum.value * 60 + +secondNum.value;
+  console.log('MatchTime.vue文件 81==============行打印=', r);
+  props.row.eventTime = r;
+};
 </script>

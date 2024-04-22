@@ -31,8 +31,15 @@ export function useTagsHook() {
 
   function handleDelete(row: OperateManagementDataAPI.OperateTagType) {
     ElMessageBox.confirm(
-      h('p', `是否删除${row.name}标签，一旦被删除将无法恢复`),
-      t('标签分类'),
+      h('div', null, [
+        h(
+          'div',
+          { style: 'font-weight: 600; font-size: 18px' },
+          t('确认删除标签') + '?'
+        ),
+        h('div', null, t('标签删除后不能修复'))
+      ]),
+      t('操作确认'),
       {
         showCancelButton: true,
         cancelButtonText: t('取消'),
@@ -43,12 +50,12 @@ export function useTagsHook() {
         beforeClose: async (action, instance, done) => {
           if (action === 'confirm') {
             instance.confirmButtonLoading = true;
-            instance.confirmButtonText = '删除中...';
+            instance.confirmButtonText = t('删除中') + '...';
             await API.deleteOperateTag(row);
             done();
             ElMessage({
               type: 'success',
-              message: `${row.name}标签成功删除`
+              message: `${row.name}` + t('标签成功删除')
             });
             onSearch();
           } else {
