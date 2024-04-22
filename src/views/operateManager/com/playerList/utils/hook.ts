@@ -64,16 +64,24 @@ export function userPlayerListHook(venueType) {
 
   function handleSelectionChange(val) {
     selectedDataList.length = 0;
-    Object.assign(selectedDataList, val);
+    selectedDataList.push(...val);
   }
 
   const handleUpdateUser = (row: UserAPI.operateUserList) => {
-    isEditUser.value = true;
+    if (addLabelForms.attr)
+      addLabelForms.attr.length = 0;
+    if (addLabelForms.risk)
+      addLabelForms.risk.length = 0;
+    isAddLabel.attr = false;
+    isAddLabel.risk = false;
     Object.assign(updateUserForm, row);
-    riskLabels.length = 0;
-    Object.assign(riskLabels, row.riskControlLabelList);
     attributeLabels.length = 0;
-    Object.assign(attributeLabels, row.attributeLabelList);
+    if (row.attributeLabelList)
+      attributeLabels.push(...row.attributeLabelList);
+    riskLabels.length = 0;
+    if (row.riskControlLabelList)
+      riskLabels.push(...row.riskControlLabelList);
+    isEditUser.value = true;
   };
 
   const handleUserLabelDel = async (
@@ -98,12 +106,13 @@ export function userPlayerListHook(venueType) {
   const handleAddRiskLabels = (ids: string[]) => {
     dispatchAddLabels(ids, addLabelForms.risk);
     addLabelForms.risk.length = 0;
+    isAddLabel.risk = false;
   }
 
   const handleAddAttrLabels = (ids: string[]) => {
     dispatchAddLabels(ids, addLabelForms.attr);
     addLabelForms.attr.length = 0;
-
+    isAddLabel.attr = false;
   }
 
   const handleMultiAddLabels = () => {
@@ -144,6 +153,9 @@ export function userPlayerListHook(venueType) {
     try {
       const res = await API.addLabels({id, labelId});
       if (res.code) return message(res.msg, { type: 'error' });
+      if (!res.data) {
+        return message("Operation failed", { type: 'error' });
+      }
       if (id.length === 1)
         ElMessage.success(res.msg);
       dispatchGetUserLabels();
@@ -162,9 +174,9 @@ export function userPlayerListHook(venueType) {
       });
       if (res.code) return message(res.msg, { type: 'error' });
       riskLabels.length = 0;
-      Object.assign(riskLabels, res.data.pageData[0].riskControlLabelList);
+      riskLabels.push(...res.data.pageData[0].riskControlLabelList);
       attributeLabels.length = 0;
-      Object.assign(attributeLabels, res.data.pageData[0].attributeLabelList);
+      attributeLabels.push(...res.data.pageData[0].attributeLabelList);
     } catch (error) {
       console.log(error);
     }
@@ -191,7 +203,7 @@ export function userPlayerListHook(venueType) {
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
-      Object.assign(dataList, res.data.pageData);
+      dataList.push(...res.data.pageData);
       pagination.total = res.data.count;
     } catch (error) {
       loading.value = false;

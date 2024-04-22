@@ -8,8 +8,8 @@
       :inline="true"
       :model="form"
     >
-      <el-row class="flex justify-between">
-        <el-form-item prop="ids" :label="t('用户ID： ')">
+      <el-row class="flex justify-between items-center">
+        <el-form-item prop="ids" :label="t('用户ID： ')" class="items-center">
           <el-select
             v-model="form.ids"
             multiple
@@ -21,13 +21,13 @@
             class="!w-[260px] customInput"
           />
         </el-form-item>
-        <el-form-item prop="tenantId" :label="t('商户:')">
+        <el-form-item prop="tenantId" :label="t('商户:')" class="items-center">
           <el-select
             v-model="form.tenantIds"
             :placeholder="t('所属商户')"
             clearable
             multiple
-            class="!min-w-[150px]"
+            class="!w-[150px]"
           >
             <el-option
               :label="item.tenantName"
@@ -37,7 +37,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item prop="" :label="t('风控标签:')">
+        <el-form-item prop="" :label="t('风控标签:')" class="items-center">
           <el-select
             multiple
             clearable
@@ -52,7 +52,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item prop="" :label="t('属性标签:')">
+        <el-form-item prop="" :label="t('属性标签:')" class="items-center">
           <el-select
             multiple
             clearable
@@ -68,7 +68,7 @@
           </el-select>
         </el-form-item>
       </el-row>
-      <el-row class="flex justify-between">
+      <el-row class="flex justify-between items-center" >
         <el-form-item prop="ids" :label="t('投注额: ')" class="!w-[370px]">
           <el-row class="flex justify-between">
             <el-col :span="11">
@@ -160,88 +160,6 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <!-- <el-form-item prop="usernames">
-        <el-input
-          v-model="form.usernames as string"
-          :placeholder="t('可输入1-50个用户名,用逗号进行分割')"
-          clearable
-          ref="buttonRef1"
-          :formatter="formatterUserNames"
-          :disabled="userIds.length > 50"
-          class="!w-[260px]"
-        />
-        <el-popover
-          ref="popoverRef1"
-          :virtual-ref="buttonRef1"
-          trigger="click"
-          width="260px"
-          virtual-triggering
-        >
-          <div class="flex flex-start w-full flex-wrap">
-            <span
-              class="el-tag mr-2 mb-1"
-              v-for="item in userIds.filter(_ => _ !== '')"
-              :key="item"
-              >{{ item }}</span
-            >
-          </div>
-        </el-popover>
-      </el-form-item>
-
-      <el-form-item prop="tenantId">
-        <el-select
-          v-model="form.tenantIds"
-          :placeholder="t('所属商户')"
-          clearable
-          multiple
-          class="!min-w-[150px]"
-        >
-          <el-option
-            :label="item.tenantName"
-            :value="item.id"
-            v-for="item in tenantList"
-            :key="item.name"
-          />
-        </el-select>
-      </el-form-item>
-
-      <el-form-item prop="tenantCode">
-        <el-input
-          v-model="form.tenantCode"
-          :placeholder="t('请输入商户编码')"
-          v-enter="search"
-          clearable
-          class="!w-[220px]"
-        />
-      </el-form-item>
-
-      <el-form-item prop="limitLevel">
-        <el-select
-          v-model="form.limitLevel"
-          :placeholder="t('限额等级')"
-          clearable
-          class="!w-[150px]"
-        >
-          <el-option
-            :label="item"
-            :value="item"
-            v-for="item in sportLimmitList"
-            :key="item"
-          />
-        </el-select>
-      </el-form-item>
-
-      <el-form-item>
-        <el-button
-          type="primary"
-          :icon="useRenderIcon(Search)"
-          :loading="loading"
-          @click="search"
-        >
-          {{ t('筛选') }}
-        </el-button>
-        
-      </el-form-item> -->
     </el-form>
   </div>
 </template>
@@ -279,16 +197,16 @@ const initTenantList = async () => {
   tenantList.push(...res.data.data);
 };
 
-const riskControlList = reactive([]);
-const attributeList = reactive([]);
+const riskControlList = reactive<UserAPI.labelType[]>([]);
+const attributeList = reactive<UserAPI.labelType[]>([]);
 const initRiskControlList = async () => {
   const res = await API.getLabelList({
     category: props.category
   });
   riskControlList.length = 0;
-  Object.assign(riskControlList, res.data.riskControlLabelList);
+  riskControlList.push(...res.data.riskControlLabelList);
   attributeList.length = 0;
-  Object.assign(attributeList, res.data.attributeLabelList);
+  attributeList.push(...res.data.attributeLabelList);
 };
 
 const resetForm = (formEl: FormInstance | undefined) => {
@@ -297,8 +215,6 @@ const resetForm = (formEl: FormInstance | undefined) => {
 };
 
 const search = () => {
-  // props.form.ids = idList.filter(item => item !== '');
-  // props.form.usernames = userIds.filter(item => item !== '');
   emits('onSearch', ...['reload']);
 };
 </script>

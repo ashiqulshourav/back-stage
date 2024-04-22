@@ -1,10 +1,11 @@
 import { useNav } from "@/layout/hooks/useNav";
 import { TableColumnRenderer } from "@pureadmin/table";
 
-export const handleTableWidth = (d: TableColumnRenderer, label: string, type?: 'auto') => {
+export const handleTableWidth = (d: TableColumnRenderer, label: string, type?: 'auto', isOperation?: boolean): string => {
   const { $storage } = useNav();
   if ((type && $storage.locale.locale === 'zh') || d.column.width) return label;
-  d.column.width = getColumnWidth(d.column.label) < 150 ? 150 : getColumnWidth(d.column.label);
+  d.column.width = isOperation ? 50 + getColumnWidth(d.column.label as string) : getColumnWidth(d.column.label as string);
+  return ''
 }
 
 export const getColumnWidth = (strs: string) => {

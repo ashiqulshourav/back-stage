@@ -97,15 +97,6 @@ export const sattleData = {
       '/iceHockey/v1/getIceHockeyEvents',
       { data }
     ),
-
-
-  getBoxingEvents: (data: SattleDataAPI.MatchIDType) =>
-    request<SattleDataAPI.getBoxingEventRes>(
-      'post',
-      '/boxing/v1/getBoxingEvents',
-      { data }
-    ),
-
   getDartsEvents: (data: SattleDataAPI.MatchIDType) =>
     request<SattleDataAPI.getDartsEventRes>(
       'post',
@@ -178,16 +169,6 @@ export const sattleData = {
       '/cricket/v1/manualSettlementFullTime',
       { data }
     ),
-
-
-
-  addBoxingEvent: (data: SattleDataAPI.MatchEventParams) =>
-    request<MetadataAPI.AddBoxingEventRes>(
-      'post',
-      '/boxing/v1/addBoxingEvent',
-      { data }
-    ),
-
   addDartsEvent: (data: SattleDataAPI.MatchEventParams) =>
     request<MetadataAPI.AddDartsEventRes>(
       'post',
@@ -291,6 +272,21 @@ export const sattleData = {
       '/snooker/v1/addSnookerEvent',
       { data }
     ),
+  //-棒球新增事件（按局）
+  addBaseballEvent: (data: SattleDataAPI.VolleyballReq) =>
+    request<SattleDataAPI.addTennisEventResType>(
+      'post',
+      '/baseball/v1/addBaseballEvent',
+      { data }
+    ),
+
+  //-格斗结算 
+  addBoxingEvent: (data: SattleDataAPI.VolleyballReq) =>
+    request<SattleDataAPI.addTennisEventResType>(
+      'post',
+      '/boxing/v1/addBoxingEvent',
+      { data }
+    ),
 
   //-羽毛球新增事件（按局）
   addBadmintonballEvent: (data: SattleDataAPI.VolleyballReq) =>
@@ -321,6 +317,20 @@ export const sattleData = {
     request<SattleDataAPI.getVolleyballEventsResType>(
       'post',
       '/snooker/v1/getSnookerEvents',
+      { data }
+    ),
+  //-棒球结算事件列表
+  getBaseballEvents: (data: SattleDataAPI.MatchIDType) =>
+    request<SattleDataAPI.getVolleyballEventsResType>(
+      'post',
+      '/baseball/v1/getBaseballEvents',
+      { data }
+    ),
+  //-格斗结算事件列表
+  getBoxingEvents: (data: SattleDataAPI.MatchIDType) =>
+    request<SattleDataAPI.getVolleyballEventsResType>(
+      'post',
+      '/boxing/v1/getBoxingEvents',
       { data }
     ),
   //-羽毛球结算事件列表
@@ -401,6 +411,20 @@ export const sattleData = {
       '/snooker/v1/reSettleMatchEvent',
       { data }
     ),
+  //- 棒球结算管理重新结算
+  baseballReSettleMatchEvent: (data: SattleDataAPI.VolleyballReq) =>
+    request<SattleDataAPI.volleyReSettleMatchEventResType>(
+      'post',
+      '/baseball/v1/reSettleMatchEvent',
+      { data }
+    ),
+  //- 格斗结算管理重新结算
+  boxingReSettleMatchEvent: (data: SattleDataAPI.VolleyballReq) =>
+    request<SattleDataAPI.volleyReSettleMatchEventResType>(
+      'post',
+      '/boxing/v1/reSettleMatchEvent',
+      { data }
+    ),
   //- 羽毛球结算管理重新结算
   badmintonReSettleMatchEvent: (data: SattleDataAPI.VolleyballReq) =>
     request<SattleDataAPI.volleyReSettleMatchEventResType>(
@@ -469,12 +493,25 @@ export const sattleData = {
       '/rugby/v1/manualSettlementFullTime',
       { data }
     ),
-
   //-斯诺克全场结算（按局）
   snookerManualSettlementFullTime: (data: SattleDataAPI.MatchIDType) =>
     request<SattleDataAPI.manualSettlementFullTimeRestType>(
       'post',
       '/snooker/v1/manualSettlementFullTime',
+      { data }
+    ),
+  //- 棒球全场结算（按局）
+  baseballManualSettlementFullTime: (data: SattleDataAPI.MatchIDType) =>
+    request<SattleDataAPI.manualSettlementFullTimeRestType>(
+      'post',
+      '/baseball/v1/manualSettlementFullTime',
+      { data }
+    ),
+  //-格斗全场结算（按局）
+  boxingManualSettlementFullTime: (data: SattleDataAPI.MatchIDType) =>
+    request<SattleDataAPI.manualSettlementFullTimeRestType>(
+      'post',
+      '/boxing/v1/manualSettlementFullTime',
       { data }
     ),
   //-羽毛球全场结算（按局）
@@ -602,6 +639,12 @@ export const sattleData = {
   //- 斯诺克开启二次结算
   snookerOpen2ndSettlementStatus: (data: SattleDataAPI.MatchIDType) => request<SattleDataAPI.basketballOpen2ndSettlementStatusResType>(
     'post', '/snooker/v1/open2ndSettlementStatus', { data }),
+  //-  棒球开启二次结算
+  baseballOpen2ndSettlementStatus: (data: SattleDataAPI.MatchIDType) => request<SattleDataAPI.basketballOpen2ndSettlementStatusResType>(
+    'post', '/baseball/v1/open2ndSettlementStatus', { data }),
+  //- 格斗开启二次结算
+  boxingOpen2ndSettlementStatus: (data: SattleDataAPI.MatchIDType) => request<SattleDataAPI.basketballOpen2ndSettlementStatusResType>(
+    'post', '/boxing/v1/open2ndSettlementStatus', { data }),
   //- 羽毛球开启二次结算
   badmintonOpen2ndSettlementStatus: (data: SattleDataAPI.MatchIDType) => request<SattleDataAPI.basketballOpen2ndSettlementStatusResType>(
     'post', '/badminton/v1/open2ndSettlementStatus', { data }),
@@ -639,6 +682,12 @@ export const sattleData = {
   //- 斯诺克确认二次结算
   snookerConfirm2ndSettlement: (data: SattleDataAPI.confirm2ndSettlementReqType) => request<SattleDataAPI.open2ndSettlementStatusResType>(
     'post', '/snooker/v1/confirm2ndSettlement', { data }),
+  //- 棒球认二次结算
+  baseballConfirm2ndSettlement: (data: SattleDataAPI.confirm2ndSettlementReqType) => request<SattleDataAPI.open2ndSettlementStatusResType>(
+    'post', '/baseball/v1/confirm2ndSettlement', { data }),
+  //- 格斗确认二次结算
+  boxingConfirm2ndSettlement: (data: SattleDataAPI.confirm2ndSettlementReqType) => request<SattleDataAPI.open2ndSettlementStatusResType>(
+    'post', '/boxing/v1/confirm2ndSettlement', { data }),
   //- 羽毛球确认二次结算
   badmintonConfirm2ndSettlement: (data: SattleDataAPI.confirm2ndSettlementReqType) => request<SattleDataAPI.open2ndSettlementStatusResType>(
     'post', '/badminton/v1/confirm2ndSettlement', { data }),
