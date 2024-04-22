@@ -39,11 +39,10 @@
           <el-select
             v-model="form.sportId"
             :placeholder="t('游戏种类')"
-            clearable
             class="!w-[150px]"
             @change="search"
           >
-            <el-option :label="t('全部')" :value="' '" />
+            <el-option :label="t('全部')" :value="''" />
             <el-option
               :label="item.label"
               :value="item.value"
@@ -56,7 +55,6 @@
           <el-select class="min-w100"
                   :placeholder="t('请选择状态')"
               v-model="form.queryType"
-              clearable
                      @change="search"
           >
               <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
@@ -271,7 +269,6 @@ import {
 import { searchFormType } from '../util/types';
 const props = defineProps<{
   loading: boolean;
-  category:number;
   form: searchFormType;
     tenantList:[]
 }>();

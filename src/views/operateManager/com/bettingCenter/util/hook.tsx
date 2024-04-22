@@ -121,7 +121,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
         seriesDetailsDuplex: '',
         seriesDetails: seriesDetails,
         seriesType: +form.seriesType > 2 ? 2 : form.seriesType,
-        category: category,venueType:venueType,
+        venueType:venueType,
       }),
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage,
@@ -330,7 +330,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
       }
     });
   };
-  const getStatus = (status, billStatus, betResult, isReserve?) => {
+  const getStatus = (status:number, billStatus:number, betResult:number, isReserve?:number) => {
     let obj = { status: -1, bgColor: '' };
     if (
       status == 2 &&

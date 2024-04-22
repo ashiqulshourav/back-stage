@@ -6,7 +6,6 @@
       @on-search="onSearch"
       @exportFile="exportFile"
       :tenantList="tenantList"
-      :category="0"
     />
 
     <PureTableBar
