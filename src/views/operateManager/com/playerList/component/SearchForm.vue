@@ -188,7 +188,7 @@ onMounted(() => {
   initRiskControlList();
 });
 
-const tenantList = reactive([]);
+const tenantList = reactive<any>([]);
 
 const initTenantList = async () => {
   const res = await API.getTenantList({category: props.category});
@@ -210,7 +210,7 @@ const initRiskControlList = async () => {
 };
 
 const resetForm = (formEl: FormInstance | undefined) => {
-  formEl.resetFields();
+  formEl?.resetFields();
   emits('onSearch', ...['reload']);
 };
 
