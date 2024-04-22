@@ -8,10 +8,9 @@ export const columns: TableColumnList = [
     prop: 'name',
     className: 'first_table',
     headerRenderer: d => handleTableWidth(d, t('菜单中文名'), 'auto'),
-    minWidth: 150,
     fixed: 'left',
     formatter({ name }) {
-      return <div class="min-w-20 text-left">{name}</div>;
+      return <div class="min-w-48 text-left">{name}</div>;
     }
   },
   {
@@ -19,13 +18,12 @@ export const columns: TableColumnList = [
     prop: 'enName',
     minWidth: 150,
     headerRenderer: d => handleTableWidth(d, t('菜单英文名')),
-    formatter: ({ enName }) => enName,
-
+    formatter: ({ enName }) => enName
   },
   {
     label: t('菜单类型'),
     prop: 'type',
-    minWidth: 220,
+    width: 220,
     headerRenderer: d => handleTableWidth(d, t('菜单类型')),
     formatter: ({ type }) => TYPE_NAME[type] ?? '-'
   },
@@ -66,13 +64,13 @@ export const columns: TableColumnList = [
   {
     label: t('建立时间'),
     prop: 'createdAt',
-    minWidth: 200,
+    width: 260,
     headerRenderer: d => handleTableWidth(d, t('建立时间'), 'auto')
   },
   {
     label: t('修改时间'),
     prop: 'updatedAt',
-    minWidth: 200,
+    width: 260,
     headerRenderer: d => handleTableWidth(d, t('修改时间'), 'auto')
   },
   // {
@@ -84,6 +82,6 @@ export const columns: TableColumnList = [
     label: t('操作'),
     slot: 'operation',
     width: 180,
-    fixed: 'right',
+    fixed: 'right'
   }
 ];

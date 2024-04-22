@@ -8,23 +8,23 @@ const EN_NAME_REG = /^[\u4e00-\u9fa5a-zA-Z\_]{2,32}$/;
 const formRules = reactive(<FormRules>{
   name: [
     { required: true, message: t("菜单名称不能为空") },
-    {
-      validator: (_, value, callback) => {
-        if (!NAME_REG.test(value)) callback(new Error(t("菜单名称格式不正确")))
-        else callback()
-      },
-      trigger: "blur"
-    }
+    /*  {
+       validator: (_, value, callback) => {
+         if (!NAME_REG.test(value)) callback(new Error(t("菜单名称格式不正确")))
+         else callback()
+       },
+       trigger: "blur"
+     } */
   ],
   enName: [
     { required: true, message: t("菜单英文名不能为空") },
-    {
+    /* {
       validator: (_, value, callback) => {
         if (!EN_NAME_REG.test(value)) callback(new Error(t("菜单英文名格式不正确")))
         else callback()
       },
       trigger: "blur"
-    }
+    } */
   ],
   type: [
     { required: true, message: t("菜单类型不能为空") },
