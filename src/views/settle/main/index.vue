@@ -52,12 +52,13 @@ import { handleTableWidth } from '@/utils/getTableWidth';
 import { SPORT_NAME_TYPE } from './utils/map';
 import { hasAuth } from '@/router/utils';
 import { TableColumnRenderer } from '@pureadmin/table';
+import { sport_list_map_type } from './utils/type';
 
 defineOptions({ name: 'SETTLE_MAIN' });
 
 const currentSport = computed(() =>
   SPORT_LIST_MAP.find(item => item.value === currentSportId.value)
-);
+) as ComputedRef<sport_list_map_type>;
 
 const renderColumnList = computed(() => {
   const fillList = [
