@@ -23,6 +23,7 @@
           :loading="loading"
           :size="size"
           adaptive
+          border
           :default-sort="{ prop: 'level', order: 'descending' }"
           :data="dataList"
           :columns="dynamicColumns"
@@ -49,7 +50,7 @@
               >
                 <el-row :gutter="20">
                   <el-col
-                    v-for="(label, index) in row.riskControlLabelList"
+                    v-for="(label, index) in row.riskControlLabelList.slice(0, 6)"
                     :key="label.id"
                     :span="8"
                   >
@@ -583,7 +584,7 @@ const {
 } = userPlayerListHook(props.category);
 </script>
 
-<style>
+<style lang="scss">
 .el-message-box .el-message-box__btns {
   display: flex;
   flex-direction: row;
@@ -594,5 +595,14 @@ const {
 }
 .el-row {
   row-gap: 1rem;
+}
+.el-table--border .el-table__cell {
+  border-right: var(--el-table-border);;
+  border-right-width: 2px;
+
+}
+.el-table td.el-table__cell, .el-table th.el-table__cell.is-leaf {
+  border-bottom: var(--el-table-border);;
+  border-bottom-width: 2px;
 }
 </style>
