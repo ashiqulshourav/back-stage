@@ -195,7 +195,7 @@
                   v-if="row.isBackEndReturnData && row.settleType === 0"
                   v-for="(_, index) in eventQuotientList"
                   :key="index"
-                  :type="row[_.type] === 1 ? 'primary' : 'info'"
+                  :type="row[_.type as ('xjFlag' | 'psFlag' | 'vsFlag')] === 1 ? 'primary' : 'info'"
                   :class="['!text-xs', index === 1 && '!mr-2 !ml-2']"
                   >{{ _.val }}</el-text
                 >
@@ -303,11 +303,12 @@ const teamChangeEvent = (
       }
     }
   } else {
-    const prevRow = childrenData[childIndex - 1];
+    const prevRow: SattleDataAPI.MatchEventsList = childrenData[childIndex - 1];
     const t1Increment = isHome ? 1 : 0;
     const t2Increment = isHome ? 0 : 1;
     row.t1 = +prevRow.t1 + t1Increment;
     row.t2 = +prevRow.t2 + t2Increment;
+
     if (isYellowRedCard) {
       if (row.redOrYellow === 2) {
         row.t1R = +(prevRow.t1R ?? 0) + t1Increment;

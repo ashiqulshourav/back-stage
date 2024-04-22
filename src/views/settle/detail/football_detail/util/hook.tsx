@@ -79,7 +79,7 @@ export function useFootball() {
   ]);
 
   //- 检测加时赛状态
-  const checkOverTimeStatus = async index => {
+  const checkOverTimeStatus = async (index: number) => {
     return new Promise(resolve => {
       const idsArr = [3, 4, 5];
       if (idsArr.includes(+index)) {
@@ -115,17 +115,22 @@ export function useFootball() {
   };
 
   //- 人工结算新增一行
-  const addChildRow = async (tableList, type, index, key) => {
+  const addChildRow = async (
+    tableList,
+    type: 'goal' | 'yellow_red_card' | 'corner',
+    index: string,
+    key: string
+  ) => {
     if (
       (+index === 6 &&
         !penaltyKickStatus.value &&
         renderObj.fullSettlementStatus === 0) ||
-      (index > 2 &&
+      (+index > 2 &&
         !overTimeStatus.value &&
         key !== 'penaltyKickRecordList' &&
         renderObj.fullSettlementStatus === 0)
     ) {
-      const r = await checkOverTimeStatus(index);
+      const r = await checkOverTimeStatus(+index);
       r && getChildrenData();
       return;
     }

@@ -7,7 +7,7 @@ export default defineComponent({
   components: { IconifyIcon },
   props: {
     icon: {
-      default: null
+      default: '',
     }
   },
   render() {
