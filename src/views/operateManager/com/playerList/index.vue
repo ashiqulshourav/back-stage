@@ -9,7 +9,7 @@
         <div>
           <p v-if="selectedDataList.length === 0">{{t('用户列表')}}</p>
           <div v-else class="flex gap-3 items-center">
-            <p>{{ t(`已选择${selectedDataList.length}个用户`) }}</p>
+            <p>{{ t('已选择') + selectedDataList.length + t('个用户') }}</p>
             <el-button v-if="hasAuth('SETTING')" type="primary" @click="isMultiLabelAdd = true">{{t('添加标签')}}</el-button>
             <el-button v-if="hasAuth('SETTING')" type="warning" @click="isMultiLabelDel = true">{{t('删除标签')}}</el-button>
           </div>
@@ -301,7 +301,7 @@
               <p>{{t('每个用户最多添加20个风控标签')}}</p>
             </el-col>
             <el-col :span="12">
-              <p class="text-primary text-right cursor-pointer" v-if="hasAuth('SETTING')" @click="handelOpenRecord(1)">{{t('风控标签修改记录')}}>></p>
+              <p class="text-primary text-right cursor-pointer" @click="handelOpenRecord(2)">{{t('属性标签修改记录')}}>></p>
             </el-col>
           </el-row>
           <el-row :gutter="20" class="mt-2 w-full">
@@ -458,7 +458,7 @@
         <p class="pl-5 font-medium">{{t('删除标签')}}</p>
       </template>
       <el-form label-width="160" class="mt-4 py-5">
-        <el-form-item :label="t('用户数量:')">{{ t(`已选择${selectedDataList.length}个用户`) }}</el-form-item>
+        <el-form-item :label="t('用户数量:')">{{ t('已选择') + selectedDataList.length + t('个用户') }}</el-form-item>
         <el-form-item :label="t('删除风控标签:')">
           <el-select
             multiple
@@ -531,16 +531,16 @@ const props = defineProps<{
   category: number;
 }>();
 
-const riskControlList = reactive([]);
-const attributeList = reactive([]);
+const riskControlList = reactive<UserAPI.labelType[]>([]);
+const attributeList = reactive<UserAPI.labelType[]>([]);
 const initRiskControlList = async () => {
   const res = await API.getLabelList({
     category: props.category
   });
   riskControlList.length = 0;
-  Object.assign(riskControlList, res.data.riskControlLabelList);
+  riskControlList.push(...res.data.riskControlLabelList);
   attributeList.length = 0;
-  Object.assign(attributeList, res.data.attributeLabelList);
+  attributeList.push(...res.data.attributeLabelList);
 };
 
 onMounted(() => {
