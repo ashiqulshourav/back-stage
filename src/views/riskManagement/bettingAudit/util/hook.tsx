@@ -383,6 +383,8 @@ const getRiskStatus = (rStatus:number)=>{
       obj = {label:riskStatusMap[riskStatus.reject],bgColor:'#F88D48'}
     }else if(rStatus===riskStatus.rejectBetting){
       obj = {label:riskStatusMap[riskStatus.rejectBetting],bgColor:'#F88D48'}
+    }else if(rStatus===riskStatus.autoReject){
+      obj = {label:riskStatusMap[riskStatus.autoReject],bgColor:'#F88D48'}
     }
     return obj
 }
