@@ -51,6 +51,7 @@ import { SPORT_LIST_MAP } from './utils/map';
 import { handleTableWidth } from '@/utils/getTableWidth';
 import { SPORT_NAME_TYPE } from './utils/map';
 import { hasAuth } from '@/router/utils';
+import { TableColumnRenderer } from '@pureadmin/table';
 
 defineOptions({ name: 'SETTLE_MAIN' });
 
@@ -63,29 +64,33 @@ const renderColumnList = computed(() => {
     {
       label: t('是否中立场地'),
       prop: 'isNeutral',
-      formatter: ({ isNeutral }) => (isNeutral ? t('是') : t('否')),
-      headerRenderer: d => handleTableWidth(d, t('是否中立场地')),
-      hide: () => currentSport.value.value != 1
+      formatter: ({ isNeutral }: { isNeutral: boolean }) =>
+        isNeutral ? t('是') : t('否'),
+      headerRenderer: (d: TableColumnRenderer) =>
+        handleTableWidth(d, t('是否中立场地')),
+      hide: () => currentSport.value?.value != 1
     },
     {
       label: t('上半场结算'),
       prop: 'halfSettlementStatus',
-      formatter: ({ halfSettlementStatus }) =>
+      formatter: ({ halfSettlementStatus }: { halfSettlementStatus: number }) =>
         halfSettlementStatus === 0 ? (
           t('未结算')
         ) : (
           <el-text type="danger">{t('已结算')}</el-text>
         ),
-      headerRenderer: d => handleTableWidth(d, t('上半场结算')),
+      headerRenderer: (d: TableColumnRenderer) =>
+        handleTableWidth(d, t('上半场结算')),
       hide: () =>
-        currentSport.value.value != SPORT_NAME_TYPE.football &&
-        currentSport.value.value != SPORT_NAME_TYPE.basketball
+        currentSport.value?.value != SPORT_NAME_TYPE.football &&
+        currentSport.value?.value != SPORT_NAME_TYPE.basketball
     },
     {
       label: t('未结算'),
       prop: 'unSettlementEvents',
-      headerRenderer: d => handleTableWidth(d, t('未结算')),
-      hide: () => currentSport.value.value != SPORT_NAME_TYPE.football
+      headerRenderer: (d: TableColumnRenderer) =>
+        handleTableWidth(d, t('未结算')),
+      hide: () => currentSport.value?.value != SPORT_NAME_TYPE.football
     }
   ];
   const _ = [...columns];
