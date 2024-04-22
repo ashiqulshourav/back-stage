@@ -46,7 +46,7 @@ export function useTagsHook() {
         confirmButtonText: t('确认'),
         type: 'warning',
         icon: markRaw(Delete),
-        center: true,
+        // center: true,
         beforeClose: async (action, instance, done) => {
           if (action === 'confirm') {
             instance.confirmButtonLoading = true;
@@ -75,7 +75,7 @@ export function useTagsHook() {
     onSearch();
   }
 
-  function handleSelectionChange(val:any) {
+  function handleSelectionChange(val: any) {
     console.log('handleSelectionChange', val);
   }
 
@@ -128,8 +128,8 @@ export function useTagsHook() {
         okButtonText = null
       ) => {
         const FormRef = formRef.value.getRef();
-        const curData: OperateManagementDataAPI.OperateTagType = options.props
-          .formInline;
+        const curData: OperateManagementDataAPI.OperateTagType =
+          options.props.formInline;
         function chores() {
           // message(`您${title}了标签名称为${curData.name}的这条数据`, {
           //   type: "success"
@@ -137,7 +137,7 @@ export function useTagsHook() {
           done(); // 关闭弹框
           onSearch(); // 刷新表格数据
         }
-        FormRef.validate(async (valid:boolean) => {
+        FormRef.validate(async (valid: boolean) => {
           if (valid) {
             if (row) {
               updateOperateTag(
