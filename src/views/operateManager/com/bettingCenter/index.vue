@@ -280,7 +280,7 @@
                   row.status,
                   row.billStatus,
                   row.combineOrderDetails[0].betResult,
-                  row.isReserve
+                  row.isReserve,
                 ).bgColor
               }"
               class="status_btn mb-1"
@@ -291,7 +291,7 @@
                     row.status,
                     row.billStatus,
                     row.combineOrderDetails[0].betResult,
-                    row.isReserve
+                    row.isReserve,
                   ).status
                 ]
               }}

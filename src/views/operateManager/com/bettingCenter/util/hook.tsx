@@ -82,7 +82,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
     onSearch();
   }
 
-  function handleSelectionChange(val) {
+  function handleSelectionChange(val:number) {
     console.log('handleSelectionChange', val);
   }
 
@@ -159,8 +159,8 @@ export function useBettingCenterHook(category:number,venueType:number) {
         Object.assign(totalInfo, res.data?.otherData);
       }
       document
-        .querySelector('.table_container .el-scrollbar__wrap')
-        .scroll(0, 0);
+        ?.querySelector('.table_container .el-scrollbar__wrap')
+        ?.scroll(0, 0);
     } catch (error) {
       loading.value = false;
     }
@@ -179,7 +179,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
     }
   };
 
-  const resetForm = formEl => {
+  const resetForm = (formEl:any) => {
     if (!formEl) return;
     formEl.resetFields();
     onSearch();
@@ -231,7 +231,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
             }
             break;
           case 'marketType':
-            str = markeTypeMap[data.marketType];
+            str = markeTypeMap[data.marketType as keyof typeof markeTypeMap];
             break;
           case 'isSettlementAgain':
             str = data.isSettlementAgain === 2 ? '是' : '否';
@@ -244,7 +244,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
                   data.billStatus,
                   data.betResult,
                   data.isReserve
-                )?.status
+                )?.status as keyof typeof betStatusMap
               ];
             break;
           case 'billStatus':
@@ -255,14 +255,14 @@ export function useBettingCenterHook(category:number,venueType:number) {
                   data.billStatus,
                   data.betResult,
                   data.isReserve
-                )?.status
+                )?.status as keyof typeof betStatusMap
               ];
             break;
           case 'settleScore':
             str = displayHomeAwayScore(data.settleScore, data.sportId);
             break;
           case 'betResult':
-            str = BET_RESULT_TYPE_MAP[data.betResult];
+            str = BET_RESULT_TYPE_MAP[data.betResult as keyof typeof BET_RESULT_TYPE_MAP];
             break;
           case 'scoreBenchmark':
             str = displayHomeAwayScore(data.scoreBenchmark, data.sportId);
@@ -369,7 +369,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
     return obj;
   };
 
-  const specialCountFlag = (status, billStatus, betResult): boolean => {
+  const specialCountFlag = (status:number, billStatus:number, betResult:number): boolean => {
     return (
       getStatus(status, billStatus, betResult)?.status ===
         betStatus.unsettlementBet ||
@@ -380,7 +380,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
     );
   };
 
-  const switchDialog = async (flag: boolean, row) => {
+  const switchDialog = async (flag: boolean, row:any) => {
     UDialogFlag.value = flag;
     if (flag) {
       const r = await openPasswordInput();
@@ -390,7 +390,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
   };
 
   const editDialogRef = ref();
-  const handleEditResult = row => {
+  const handleEditResult =( row:any) => {
     addDialog({
       title: t(''),
       class: 'reset_dialog',
@@ -422,7 +422,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
   const isShowCancel = (row)=>{
     let flag = true
     row.combineOrderDetails.map((item)=>{
-      if(item.riskStatus===riskStatus.rejectBetting||item.riskStatus===riskStatus.reject||item.riskStatus===riskStatus.approve){
+      if(item.riskStatus===riskStatus.rejectBetting||item.riskStatus===riskStatus.reject||item.riskStatus===riskStatus.approve||item.riskStatus===riskStatus.autoReject){
         flag = false
       }
     })

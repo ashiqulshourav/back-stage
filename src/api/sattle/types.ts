@@ -19,8 +19,8 @@ declare namespace SattleDataAPI {
     player2Id?: number;
     sourceType?: number;
     sportId?: number;
-    t1?: number | string;
-    t2?: number | string;
+    t1: number | string;
+    t2: number | string;
     isEdit?: boolean;
     t1Y?: number;
     t2Y?: number;
