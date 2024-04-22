@@ -6,5 +6,5 @@ import { t } from '@/plugins/i18n';
 export const formRules = reactive(<FormRules>{
   name: [{ required: true, message: t('标签名称不能为空'), trigger: 'blur' }],
   level: [{ required: true, message: t('标签级别不能为空'), trigger: 'blur' }],
-  remark: [{ required: true, message: t('备注不能为空'), trigger: 'blur' }]
+  // remark: [{ required: true, message: t('备注不能为空'), trigger: 'blur' }]
 });
