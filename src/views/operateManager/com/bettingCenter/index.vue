@@ -29,7 +29,7 @@
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
           @selection-change="handleSelectionChange"
-          @page-size-change="handleTableWidthChange"
+          @page-size-change="handlePageSizeChange"
           @page-current-change="handleCurrentChange"
         >
           <template #index="{ row }">
@@ -421,7 +421,7 @@ const {
   totalInfo,
   form,
   onSearch,
-  handleTableWidthChange,
+  handlePageSizeChange,
   handleCurrentChange,
   handleSelectionChange,
   exportFile,

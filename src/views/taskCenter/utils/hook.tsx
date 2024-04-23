@@ -9,7 +9,7 @@ import {t} from "@/plugins/i18n";
 import {usePasswordInputHook} from "@/hooks/passwordInputHook";
 
 
-export function useUserManager() {
+export function useTaskCenter() {
   const dataList = reactive<TaskCenterAPI.ListItem[]>([]);
   const loading = ref(true);
   const { openPasswordInput } = usePasswordInputHook();
@@ -25,6 +25,10 @@ export function useUserManager() {
   });
   function handleCurrentChange(val: number) {
     pagination.currentPage = val;
+    onSearch();
+  }
+  function handlePageSizeChange(val: number) {
+    pagination.pageSize = val;
     onSearch();
   }
 
@@ -98,5 +102,6 @@ export function useUserManager() {
     handleCurrentChange,
     handleDelete,
     getDownLoadUrl,
+    handlePageSizeChange
   };
 }

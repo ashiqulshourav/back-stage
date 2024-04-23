@@ -72,7 +72,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
     minProfitAmount: '',
     maxProfitAmount: ''
   });
-  function handleTableWidthChange(val: number) {
+  function handlePageSizeChange(val: number) {
     pagination.pageSize = val;
     onSearch();
   }
@@ -444,7 +444,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
     totalInfo,
     onSearch,
     resetForm,
-    handleTableWidthChange,
+    handlePageSizeChange,
     handleCurrentChange,
     handleSelectionChange,
     exportFile,

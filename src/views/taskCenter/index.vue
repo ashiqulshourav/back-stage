@@ -20,6 +20,7 @@
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
           @page-current-change="handleCurrentChange"
+          @page-size-change="handlePageSizeChange"
         >
           <template #operation="{ row }">
             <el-button
@@ -52,7 +53,7 @@
 
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
-import { useUserManager } from './utils/hook';
+import { useTaskCenter } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
@@ -69,5 +70,6 @@ const {
   handleCurrentChange,
   handleDelete,
   getDownLoadUrl,
-} = useUserManager();
+  handlePageSizeChange
+} = useTaskCenter();
 </script>
