@@ -13,10 +13,13 @@ export type searchFormType = {
   venueType?: number;
   offset?: number;
   timeVal?: string | number;
+  beginTime?: string;
+  endTime?: string;
 };
 
 export type updateUserFormType = {
   id: string;
+  userName?: string;
   limitLevel: number;
   isFreeze: number;
   singleBetLimit: number;
@@ -28,10 +31,10 @@ export type recordFormType = {
   id: string;
   labelType: number;
   offset: string;
-}
+};
 
 export type addLabelsType = {
-  risk: number[],
-  attr: number[]
-}
+  risk: number[];
+  attr: number[];
+};
 // export type { FormProps };

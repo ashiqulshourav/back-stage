@@ -22,7 +22,7 @@ import dayjs from 'dayjs';
 
 const props = withDefaults(
   defineProps<{
-    val: string | number;
+    val: string | number | string[];
     placeholder?: string;
     format?: string;
     disableDate?: null | Function;

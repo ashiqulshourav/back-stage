@@ -1,17 +1,29 @@
 <template>
   <div class="main">
-    <SearchForm :form="form" :category="props.category" :loading="loading" @on-search="onSearch" />
-    <PureTableBar
-      :columns="columns"
-      @refresh="onSearch('reload')"
-    >
+    <SearchForm
+      :form="form"
+      :category="props.category"
+      :loading="loading"
+      @on-search="onSearch"
+    />
+    <PureTableBar :columns="columns" @refresh="onSearch('reload')">
       <template #title>
         <div>
-          <p v-if="selectedDataList.length === 0">{{t('用户列表')}}</p>
+          <p v-if="selectedDataList.length === 0">{{ t('用户列表') }}</p>
           <div v-else class="flex gap-3 items-center">
             <p>{{ t('已选择') + selectedDataList.length + t('个用户') }}</p>
-            <el-button v-if="hasAuth('SETTING')" type="primary" @click="isMultiLabelAdd = true">{{t('添加标签')}}</el-button>
-            <el-button v-if="hasAuth('SETTING')" type="warning" @click="isMultiLabelDel = true">{{t('删除标签')}}</el-button>
+            <el-button
+              v-if="hasAuth('SETTING')"
+              type="primary"
+              @click="isMultiLabelAdd = true"
+              >{{ t('添加标签') }}</el-button
+            >
+            <el-button
+              v-if="hasAuth('SETTING')"
+              type="warning"
+              @click="isMultiLabelDel = true"
+              >{{ t('删除标签') }}</el-button
+            >
           </div>
         </div>
       </template>
@@ -50,7 +62,10 @@
               >
                 <el-row :gutter="20">
                   <el-col
-                    v-for="(label, index) in row.riskControlLabelList.slice(0, 6)"
+                    v-for="(label, index) in row.riskControlLabelList.slice(
+                      0,
+                      6
+                    )"
                     :key="label.id"
                     :span="8"
                   >
@@ -182,11 +197,12 @@
           </template>
           <template #operation="{ row }">
             <el-button
+              v-if="hasAuth('SETTING')"
               class="reset-margin"
               link
               type="primary"
-              v-if="hasAuth('SETTING')"
               :size="size"
+              :icon="useRenderIcon(EditPen)"
               @click="handleUpdateUser(row)"
             >
               {{ t('编辑') }}
@@ -195,45 +211,37 @@
         </pure-table>
       </template>
     </PureTableBar>
-    <el-dialog v-model="isEditUser" class="divide-y divide-slate-200" width="800">
+    <el-dialog
+      v-model="isEditUser"
+      class="divide-y divide-slate-200"
+      width="800"
+    >
       <template #title>
-        <p class="pl-5 font-medium">{{t('用户编辑')}}</p>
+        <p class="pl-5 font-medium">{{ t('用户编辑') }}</p>
       </template>
       <el-form class="p-5 max-h-[600px] overflow-y-scroll" label-width="160">
-        <el-form-item prop="" :label="t('用户ID:') ">
+        <el-form-item prop="" :label="t('用户ID:')">
           <el-input disabled v-model="updateUserForm.id" />
         </el-form-item>
-        <el-form-item prop="" :label="t('所属商户:')">
+        <el-form-item prop="" :label="t('用户名:')">
+          <el-input disabled v-model="updateUserForm.userName" />
+        </el-form-item>
+        <!-- <el-form-item prop="" :label="t('所属商户:')">
           <el-input disabled />
-        </el-form-item>
-        <el-form-item prop="" :label="t('账号启用:') ">
-          <el-switch
-            inline-prompt
-            v-model="updateUserForm.isFreeze"
-            active-text="o"
-            inactive-text="p"
-            :active-value="1"
-            :inactive-value="0"
-            size="large"
-          />
-        </el-form-item>
-        <el-form-item prop="" :label="t('特殊限额:') ">
-          <el-select v-model="updateUserForm.limitLevel">
-            <el-option label="hi" value="hi" />
-          </el-select>
-        </el-form-item>
-        <el-form-item prop="" :label="t('最后下注时间:') ">
-          <p>
-            {{ dayjs(updateUserForm.createdAt).format('YYYY-MM-DD HH:mm:ss') }}
-          </p>
-        </el-form-item>
+        </el-form-item> -->
+        <el-text>{{ t('用户标签') }}</el-text>
         <el-form-item prop="" :label="t('风控标签: ')">
-          <el-row class="flex  w-full items-center">
+          <el-row class="flex w-full items-center">
             <el-col :span="12">
-              <p>{{t('每个用户最多添加20个风控标签')}}</p>
+              <p>{{ t('每个用户最多添加20个风控标签') }}</p>
             </el-col>
             <el-col :span="12">
-              <p class="text-primary text-right cursor-pointer" @click="handelOpenRecord(1)">{{t('风控标签修改记录')}}>></p>
+              <p
+                class="text-primary text-right cursor-pointer"
+                @click="handelOpenRecord(1)"
+              >
+                {{ t('风控标签修改记录') }}>>
+              </p>
             </el-col>
           </el-row>
           <el-row :gutter="20" class="mt-2 w-full">
@@ -261,9 +269,7 @@
                     )}`"
                     class="w-1/2 rounded-lg"
                     v-if="hasAuth('SETTING')"
-                    @click="
-                      handleUserLabelDel([updateUserForm.id], [label.id])
-                    "
+                    @click="handleUserLabelDel([updateUserForm.id], [label.id])"
                   />
                 </el-col>
               </el-row>
@@ -271,7 +277,14 @@
           </el-row>
           <el-row class="mt-2 w-full" v-if="!isAddLabel.risk">
             <el-col class="flex justify-end">
-              <el-button v-if="hasAuth('SETTING')" :icon="Plus" type="primary" @click="isAddLabel.risk = true" class="text-primary">添加标签</el-button>
+              <el-button
+                v-if="hasAuth('SETTING')"
+                :icon="Plus"
+                type="primary"
+                @click="isAddLabel.risk = true"
+                class="text-primary"
+                >添加标签</el-button
+              >
             </el-col>
           </el-row>
           <el-row class="mt-2 w-full" v-else>
@@ -282,27 +295,43 @@
                 filterable
                 v-model="addLabelForms.risk"
               >
-              <el-option
-                v-for="label in riskControlList"
-                :key="label.id"
-                :label="label.name"
-                :value="Number(label.id)"
-              />
-            </el-select>
+                <el-option
+                  v-for="label in riskControlList"
+                  :key="label.id"
+                  :label="label.name"
+                  :value="Number(label.id)"
+                />
+              </el-select>
             </el-col>
             <el-col :span="10" class="flex justify-end">
-              <el-button v-if="hasAuth('SETTING')" type="primary" @click="handleAddRiskLabels([updateUserForm.id])" class="w-1/3">{{t('添加')}}</el-button>
-              <el-button v-if="hasAuth('SETTING')" class="w-1/3" @click="isAddLabel.risk = false">{{t('取消')}}</el-button>
+              <el-button
+                v-if="hasAuth('SETTING')"
+                type="primary"
+                @click="handleAddRiskLabels([updateUserForm.id])"
+                class="w-1/3"
+                >{{ t('添加') }}</el-button
+              >
+              <el-button
+                v-if="hasAuth('SETTING')"
+                class="w-1/3"
+                @click="isAddLabel.risk = false"
+                >{{ t('取消') }}</el-button
+              >
             </el-col>
           </el-row>
         </el-form-item>
-        <el-form-item prop="" :label="t('属性标签:') ">
-          <el-row class="flex  w-full items-center">
+        <el-form-item prop="" :label="t('属性标签:')">
+          <el-row class="flex w-full items-center">
             <el-col :span="12">
-              <p>{{t('每个用户最多添加20个风控标签')}}</p>
+              <p>{{ t('每个用户最多添加20个风控标签') }}</p>
             </el-col>
             <el-col :span="12">
-              <p class="text-primary text-right cursor-pointer" @click="handelOpenRecord(2)">{{t('属性标签修改记录')}}>></p>
+              <p
+                class="text-primary text-right cursor-pointer"
+                @click="handelOpenRecord(2)"
+              >
+                {{ t('属性标签修改记录') }}>>
+              </p>
             </el-col>
           </el-row>
           <el-row :gutter="20" class="mt-2 w-full">
@@ -330,9 +359,7 @@
                       label.level,
                       'risk'
                     )}`"
-                    @click="
-                      handleUserLabelDel([updateUserForm.id], [label.id])
-                    "
+                    @click="handleUserLabelDel([updateUserForm.id], [label.id])"
                   />
                 </el-col>
               </el-row>
@@ -340,7 +367,14 @@
           </el-row>
           <el-row class="mt-2 w-full" v-if="!isAddLabel.attr">
             <el-col class="flex justify-end">
-              <el-button v-if="hasAuth('SETTING')" :icon="Plus" type="primary" @click="isAddLabel.attr = true" class="text-primary">{{t('添加标签')}}</el-button>
+              <el-button
+                v-if="hasAuth('SETTING')"
+                :icon="Plus"
+                type="primary"
+                @click="isAddLabel.attr = true"
+                class="text-primary"
+                >{{ t('添加标签') }}</el-button
+              >
             </el-col>
           </el-row>
           <el-row class="mt-2 w-full" v-else>
@@ -351,31 +385,81 @@
                 filterable
                 v-model="addLabelForms.attr"
               >
-              <el-option
-                v-for="label in attributeList"
-                :key="label.id"
-                :label="label.name"
-                :value="Number(label.id)"
-              />
-            </el-select>
+                <el-option
+                  v-for="label in attributeList"
+                  :key="label.id"
+                  :label="label.name"
+                  :value="Number(label.id)"
+                />
+              </el-select>
             </el-col>
             <el-col :span="10" class="flex justify-end">
-              <el-button v-if="hasAuth('SETTING')" type="primary" @click="handleAddAttrLabels([updateUserForm.id])" class="w-1/3">{{t('添加')}}</el-button>
-              <el-button v-if="hasAuth('SETTING')" class="w-1/3" @click="isAddLabel.risk = false">{{t('取消')}}</el-button>
+              <el-button
+                v-if="hasAuth('SETTING')"
+                type="primary"
+                @click="handleAddAttrLabels([updateUserForm.id])"
+                class="w-1/3"
+                >{{ t('添加') }}</el-button
+              >
+              <el-button
+                v-if="hasAuth('SETTING')"
+                class="w-1/3"
+                @click="isAddLabel.risk = false"
+                >{{ t('取消') }}</el-button
+              >
             </el-col>
           </el-row>
+        </el-form-item>
+        <el-text>{{ t('风控措施') }}</el-text>
+        <el-form-item prop="" :label="t('账号启用:')">
+          <el-switch
+            inline-prompt
+            v-model="updateUserForm.isFreeze"
+            active-text="o"
+            inactive-text="p"
+            :active-value="1"
+            :inactive-value="0"
+            size="large"
+          />
+        </el-form-item>
+        <el-form-item prop="" :label="t('特殊限额:')">
+          <el-select v-model="updateUserForm.limitLevel">
+            <el-option label="hi" value="hi" />
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="" :label="t('最后下注时间:')">
+          <p>
+            {{ dayjs(updateUserForm.createdAt).format('YYYY-MM-DD HH:mm:ss') }}
+          </p>
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="pr-5">
-          <el-button v-if="hasAuth('SETTING')" @click="isEditUser = false">{{t('取消')}}</el-button>
-          <el-button v-if="hasAuth('SETTING')" @click="isEditUser = false" type="primary">{{t('保存')}}</el-button>
+          <el-button v-if="hasAuth('SETTING')" @click="isEditUser = false">{{
+            t('取消')
+          }}</el-button>
+          <el-button
+            v-if="hasAuth('SETTING')"
+            @click="isEditUser = false"
+            type="primary"
+            >{{ t('保存') }}</el-button
+          >
         </div>
       </template>
     </el-dialog>
-    <el-dialog v-model="isOpenRecord" class="divide-y divide-slate-200" width="800">
+    <el-dialog
+      v-model="isOpenRecord"
+      class="divide-y divide-slate-200"
+      width="800"
+    >
       <template #title>
-        <p class="pl-5 font-medium">{{recordForm.labelType === 1 ? t('用户风控标签修改记录') : t("属性标签修改记录")}}</p>
+        <p class="pl-5 font-medium">
+          {{
+            recordForm.labelType === 1
+              ? t('用户风控标签修改记录')
+              : t('属性标签修改记录')
+          }}
+        </p>
       </template>
       <PureTableBar
         :title="t(`用户ID：${updateUserForm.id}`)"
@@ -402,19 +486,30 @@
           >
           </pure-table>
         </template>
-      </PureTableBar> 
+      </PureTableBar>
       <template #footer>
         <div class="pr-5">
-          <el-button v-if="hasAuth('SETTING')" type="primary" @click="isOpenRecord = false">{{t('确定')}}</el-button>
+          <el-button
+            v-if="hasAuth('SETTING')"
+            type="primary"
+            @click="isOpenRecord = false"
+            >{{ t('确定') }}</el-button
+          >
         </div>
       </template>
     </el-dialog>
-    <el-dialog v-model="isMultiLabelAdd" class="divide-y divide-slate-200" width="800">
+    <el-dialog
+      v-model="isMultiLabelAdd"
+      class="divide-y divide-slate-200"
+      width="800"
+    >
       <template #title>
-        <p class="pl-5 font-medium">{{t('添加标签')}}</p>
+        <p class="pl-5 font-medium">{{ t('添加标签') }}</p>
       </template>
       <el-form label-width="160" class="mt-4 py-5">
-        <el-form-item :label="t('用户数量:')">{{ t(`已选择${selectedDataList.length}个用户`) }}</el-form-item>
+        <el-form-item :label="t('用户数量:')">{{
+          t(`已选择${selectedDataList.length}个用户`)
+        }}</el-form-item>
         <el-form-item :label="t('添加风控标签: ')">
           <el-select
             multiple
@@ -422,7 +517,7 @@
             filterable
             v-model="addLabelForms.risk"
             class="!w-[400px]"
-            >
+          >
             <el-option
               v-for="label in riskControlList"
               :key="label.id"
@@ -438,7 +533,7 @@
             filterable
             v-model="addLabelForms.attr"
             class="!w-[400px]"
-            >
+          >
             <el-option
               v-for="label in attributeList"
               :key="label.id"
@@ -450,16 +545,27 @@
       </el-form>
       <template #footer>
         <div class="pr-5 flex justify-center">
-          <el-button v-if="hasAuth('SETTING')" type="primary" @click="handleMultiAddLabels">{{t('保存并添加')}}</el-button>
+          <el-button
+            v-if="hasAuth('SETTING')"
+            type="primary"
+            @click="handleMultiAddLabels"
+            >{{ t('保存并添加') }}</el-button
+          >
         </div>
       </template>
     </el-dialog>
-    <el-dialog v-model="isMultiLabelDel" class="divide-y divide-slate-200" width="800">
+    <el-dialog
+      v-model="isMultiLabelDel"
+      class="divide-y divide-slate-200"
+      width="800"
+    >
       <template #title>
-        <p class="pl-5 font-medium">{{t('删除标签')}}</p>
+        <p class="pl-5 font-medium">{{ t('删除标签') }}</p>
       </template>
       <el-form label-width="160" class="mt-4 py-5">
-        <el-form-item :label="t('用户数量:')">{{ t('已选择') + selectedDataList.length + t('个用户') }}</el-form-item>
+        <el-form-item :label="t('用户数量:')">{{
+          t('已选择') + selectedDataList.length + t('个用户')
+        }}</el-form-item>
         <el-form-item :label="t('删除风控标签:')">
           <el-select
             multiple
@@ -467,7 +573,7 @@
             filterable
             v-model="addLabelForms.risk"
             class="!w-[400px]"
-            >
+          >
             <el-option
               v-for="label in riskControlList"
               :key="label.id"
@@ -483,7 +589,7 @@
             filterable
             v-model="addLabelForms.attr"
             class="!w-[400px]"
-            >
+          >
             <el-option
               v-for="label in attributeList"
               :key="label.id"
@@ -495,7 +601,12 @@
       </el-form>
       <template #footer>
         <div class="pr-5 flex justify-center">
-          <el-button v-if="hasAuth('SETTING')" type="primary" @click="handleMultiDelLabels">{{t('保存并删除')}}</el-button>
+          <el-button
+            v-if="hasAuth('SETTING')"
+            type="primary"
+            @click="handleMultiDelLabels"
+            >{{ t('保存并删除') }}</el-button
+          >
         </div>
       </template>
     </el-dialog>
@@ -512,6 +623,8 @@ import { usePublicHooks } from '@/hooks';
 import { Plus, Close } from '@element-plus/icons-vue';
 import dayjs from 'dayjs';
 import { hasAuth } from '@/router/utils';
+import EditPen from '@iconify-icons/ep/edit-pen';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 
 defineOptions({ name: 'OPERATEMANAGERSPORTPLAYERLIST' });
 const { tableHeaderStyle } = usePublicHooks();
@@ -534,7 +647,7 @@ const initRiskControlList = async () => {
 
 onMounted(() => {
   initRiskControlList();
-})
+});
 const {
   loading,
   form,
@@ -567,7 +680,7 @@ const {
   handleRecordTableWidthChange,
   handleSelectionChange,
   handleAddRiskLabels,
-  handleAddAttrLabels,
+  handleAddAttrLabels
 } = userPlayerListHook(props.category);
 </script>
 
@@ -584,12 +697,12 @@ const {
   row-gap: 1rem;
 }
 .el-table--border .el-table__cell {
-  border-right: var(--el-table-border);;
+  border-right: var(--el-table-border);
   border-right-width: 2px;
-
 }
-.el-table td.el-table__cell, .el-table th.el-table__cell.is-leaf {
-  border-bottom: var(--el-table-border);;
+.el-table td.el-table__cell,
+.el-table th.el-table__cell.is-leaf {
+  border-bottom: var(--el-table-border);
   border-bottom-width: 2px;
 }
 </style>
