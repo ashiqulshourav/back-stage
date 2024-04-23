@@ -92,7 +92,7 @@ import { usePermissionStoreHook } from '@/store/permission';
 import LanguageNav from '@/components/LanguageNav/index.vue';
 import { useUserStore } from '@/store/user';
 import { t } from '@/plugins/i18n';
-import { useResetPasswordHook } from '@/hooks/resetPasswordHook';
+// import { useResetPasswordHook } from '@/hooks/resetPasswordHook';
 import { getMD5 } from '@/utils/caypto';
 
 defineOptions({ name: 'Login' });
@@ -136,12 +136,8 @@ const _loginRequest = async () => {
     });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
-    
-    if (!isValidPassword(ruleForm.password)) {
-      ruleForm.password = '';
-      openResetDialog();
-    }else {
-      //- 第一次登录强制弹出充值密码弹窗
+
+    //- 第一次登录强制弹出充值密码弹窗
       userStore.setUserInfo(res.data);
       initRouter()
         .then(() => {
@@ -151,14 +147,29 @@ const _loginRequest = async () => {
         .catch(err => {
           message(err, { type: 'error' });
         });
-    }
+    
+    // if (!isValidPassword(ruleForm.password)) {
+    //   ruleForm.password = '';
+    //   openResetDialog();
+    // }else {
+    //   //- 第一次登录强制弹出充值密码弹窗
+    //   userStore.setUserInfo(res.data);
+    //   initRouter()
+    //     .then(() => {
+    //       message(t('登录成功'), { type: 'success' });
+    //       router.push(getTopMenu(true).path);
+    //     })
+    //     .catch(err => {
+    //       message(err, { type: 'error' });
+    //     });
+    // }
   } catch (error) {
     message(error.message, { type: 'error' });
     loading.value = false;
   }
 };
 
-const { openResetDialog, isValidPassword } = useResetPasswordHook();
+// const { openResetDialog, isValidPassword } = useResetPasswordHook();
 </script>
 
 <style scoped>
@@ -170,3 +181,4 @@ const { openResetDialog, isValidPassword } = useResetPasswordHook();
   padding: 0;
 }
 </style>
+lo
