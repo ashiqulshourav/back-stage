@@ -410,7 +410,7 @@
             </el-col>
           </el-row>
         </el-form-item>
-        <el-text>{{ t('风控措施') }}</el-text>
+        <el-text size="large" tag="b">{{ t('风控措施') }}</el-text>
         <el-form-item prop="" :label="t('账号启用:')">
           <el-switch
             inline-prompt
@@ -422,11 +422,59 @@
             size="large"
           />
         </el-form-item>
-        <el-form-item prop="" :label="t('特殊限额:')">
-          <el-select v-model="updateUserForm.limitLevel">
-            <el-option label="hi" value="hi" />
+        <el-form-item :label="t('限额设置')" prop="type">
+          <el-select v-model="updateUserForm.limitLevel" clearable>
+            <el-option
+              v-for="item in limitList"
+              :key="item.levelLimit"
+              :label="item.levelLimit"
+              :value="item.levelLimit"
+            />
           </el-select>
         </el-form-item>
+        <el-form-item
+          ><pure-table
+            maxHeight="500"
+            align-whole="center"
+            size="small"
+            border
+            :data="tableData"
+            :columns="limitColumns"
+            :header-cell-style="tableHeaderStyleBlue"
+          >
+          </pure-table
+        ></el-form-item>
+
+        <el-text size="large" tag="b">{{ t('特殊限额') }}</el-text>
+        <div class="flex item-center">
+          <el-form-item :label="`${t('单注限额')}:`" class="mr-4">
+            <el-input
+              v-model="updateUserForm.singleBetLimit"
+              :formatter="v => formatNumber(v, 13)"
+            />
+          </el-form-item>
+          <el-form-item :label="`${t('单注赔付限额')}:`">
+            <el-input
+              v-model="updateUserForm.singleEventCompensationLimit"
+              :formatter="v => formatNumber(v, 13)"
+            />
+          </el-form-item>
+          <!-- <el-form-item
+            :label="`${t('单场赛事累计赔付限额(不分早盘滚球)')}:`"
+            class="mr-4"
+          >
+            <el-input
+              v-model="updateUserForm.userSingleGamePay"
+              :formatter="v => formatNumber(v, 13)"
+            />
+          </el-form-item>
+          <el-form-item :label="`${t('串关单日累计赔付限额(不分早盘滚球)')}:`">
+            <el-input
+              v-model="updateUserForm.bunchMatchPay"
+              :formatter="v => formatNumber(v, 13)"
+            />
+          </el-form-item> -->
+        </div>
         <el-form-item prop="" :label="t('最后下注时间:')">
           <p>
             {{ dayjs(updateUserForm.createdAt).format('YYYY-MM-DD HH:mm:ss') }}
@@ -645,8 +693,52 @@ const initRiskControlList = async () => {
   attributeList.push(...res.data.attributeLabelList);
 };
 
+const limitList = reactive<UserAPI.UserLevelLimitListRes[]>([]);
+
+const { tableHeaderStyleBlue } = usePublicHooks();
+
+const limitColumns: TableColumnList = [
+  {
+    label: t('单注限额'),
+    prop: 'productAmountTotalLimit'
+  },
+  {
+    label: t('单注赔付'),
+    prop: 'maxWinAmountLimit'
+  },
+  {
+    label: t('单场赛事累计赔付限额(不分早盘滚球)'),
+    prop: 'userSingleGamePay'
+  },
+  // {
+  //   label: t('单关单日累计赔付'),
+  //   prop: 'singleMatchPay'
+  // },
+  {
+    label: t('串关单日累计赔付限额(不分早盘滚球)'),
+    prop: 'bunchMatchPay'
+  }
+  // {
+  //   label: t('冠军单日累计赔付'),
+  //   prop: 'championDailyPay'
+  // }
+];
+
+const tableData = computed(() => {
+  return limitList.filter(
+    item => item.levelLimit === updateUserForm.limitLevel
+  );
+});
+
+const initLimitList = async () => {
+  const res = await API.getUserLevelLimitList({ type: 0 });
+  limitList.length = 0;
+  limitList.push(...res.data);
+};
+
 onMounted(() => {
   initRiskControlList();
+  initLimitList();
 });
 const {
   loading,
