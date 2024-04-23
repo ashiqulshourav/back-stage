@@ -29,7 +29,7 @@
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
           @selection-change="handleSelectionChange"
-          @page-size-change="handleTableWidthChange"
+          @page-size-change="handlePageSizeChange"
           @page-current-change="handleCurrentChange"
         >
           <template #index="{ row }">
@@ -292,7 +292,8 @@
                     row.billStatus,
                     row.combineOrderDetails[0].betResult,
                     row.isReserve,
-                  ).status
+                      row.riskStatus
+                  ).status as keyof typeof betStatusMap
                 ]
               }}
             </div>
@@ -421,7 +422,7 @@ const {
   totalInfo,
   form,
   onSearch,
-  handleTableWidthChange,
+  handlePageSizeChange,
   handleCurrentChange,
   handleSelectionChange,
   exportFile,
