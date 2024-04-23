@@ -21,7 +21,9 @@ export const columns: TableColumnList = [
   {
     label: t('文件大小'),
     prop: 'fileSize',
-    minWidth: 150
+    minWidth: 150,
+    formatter: ({ fileSize }): string =>
+      fileSize ? String(fileSize / 1024).slice(0, 4) + "KB" : ''
   },
   {
     label: t('页面来源'),
