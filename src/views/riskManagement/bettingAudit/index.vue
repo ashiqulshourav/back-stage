@@ -109,7 +109,7 @@
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <div class="item_line">
+              <div v-if="item.kindsCode!== 'Outright'" class="item_line">
                 <span
                   class="cursor-pointer"
                   @dblclick="
@@ -258,10 +258,10 @@
           </template>
           <template #riskStatus="{ row }">
             <div   class="match_item odd_item"  v-for="item in row.combineOrderDetails">
-              <div v-if="item.riskStatus===riskStatus.reject">
-                原因:{{item.riskType}}
-              </div>
+              <div v-if="item.riskStatus===riskStatus.reject"> 原因:{{item.riskType}}</div>
+              <div v-if="item.riskStatus===riskStatus.reject||item.riskStatus===riskStatus.approve||item.riskStatus===riskStatus.rejectBetting||item.riskStatus===riskStatus.autoReject" class="mb-1">{{(item.riskStatus===riskStatus.reject||item.riskStatus===riskStatus.approve||item.riskStatus===riskStatus.autoReject) ?'审核时间':'冻结时间'}}：{{row.updateTime?dayjs(row.updateTime).format('YYYY-MM-DD HH:mm:ss'):''}}</div>
               <div :style="{background:getRiskStatus(item.riskStatus).bgColor}" class="status_btn mb-1">{{getRiskStatus(item.riskStatus).label}}</div>
+
             </div>
           </template>
           <template   #cancel="{ row }">

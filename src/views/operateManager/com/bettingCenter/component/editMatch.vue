@@ -157,7 +157,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="tsx">
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
 import {
@@ -168,6 +168,7 @@ import {
 import { PureTableBar } from '@/components/RePureTableBar';
 import { ElMessageBox } from 'element-plus';
 import { message } from '@/utils/message';
+import {riskStatus} from '@/views/riskManagement/bettingAudit/util/types'
 const { data } = defineProps<{
   data: BetOrderAPI.Detail & BetOrderAPI.BetOrderList;
 }>();
@@ -187,16 +188,18 @@ const selectBetResult = (
 function formatRow() {
   // @ts-ignore
   data.combineOrderDetails?.map((item: BetOrderAPI.Detail, index: number) => {
+
+    if(item.betResult==EBetResultType.FLAT_MATCH_ROLLBACK||item.betResult==EBetResultType.RISK_REJECT){
+      item.betResult=EBetResultType.FLAT
+    }
     item.betResultHomeScore = displayHomeAwayScore(
       item.settleScore,
       data.sportId,
-      'seprate',
       'home'
     );
     item.betResultAwayScore = displayHomeAwayScore(
       item.settleScore,
       data.sportId,
-      'seprate',
       'away'
     );
     item.index = index;
@@ -251,18 +254,30 @@ const closeDialog = () => {
   emits('closeDialog');
 };
 const confirmClick = () => {
+
+  let isRisk = false;
+
+  newRow.value.combineOrderDetails.map((item:{riskStatus:number})=>{
+    if(item.riskStatus === riskStatus.rejectBetting){
+      isRisk=true
+    }
+  })
   ElMessageBox.confirm(
-    `
+
     <div class="text-center">
-        <div class="confirm_title text-base font-semibold">${t(
+        <div class="confirm_title text-base font-semibold">{t(
           '您确定要更改此注单的投注结果？'
         )}</div>
-        <div class="confirm_content text-sm ml-2 mt-4">${t('重要提示：')}</div>
-        <div class="confirm_content text-sm  ml-2 mt-2 mb-4">${t(
+        <div class="confirm_content text-sm ml-2 mt-4">{t('重要提示：')}</div>
+        <div class="confirm_content text-sm  ml-2 mt-2 mb-4">{t(
           '重新结算操作会影响派彩经手动修改投注结果的注单，无法再使用程序二次结算。'
         )}</div>
+      {isRisk&&<div class="text-lg font-extrabold confirm_content text-sm  ml-2 mt-2 mb-4 text-red-500">{t(
+          '此笔注单正在风控审核中，是否确认结算？'
+      )}</div>}
+
     </div>
-    `,
+    ,
     t(`操作提示`),
     {
       dangerouslyUseHTMLString: true,

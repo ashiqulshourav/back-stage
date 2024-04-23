@@ -19,7 +19,6 @@
           align-whole="center"
           table-layout="auto"
           :loading="loading"
-          showOverflowTooltip
           :size="size"
           adaptive
           :data="dataList"
@@ -107,7 +106,7 @@
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <div class="item_line">
+              <div v-if="item.kindsCode!== 'Outright'"  class="item_line">
                 <span
                   class="cursor-pointer"
                   @dblclick="
@@ -272,54 +271,6 @@
               </div>
             </div>
           </template>
-          <!--   <template #profitAmount="{ row }">
-            <span
-              v-if="row.profitAmount"
-              :class="row.profitAmount > 0 ? 'win' : 'lose'"
-              >{{ row.profitAmount.toFixed(2) }}</span
-            >
-            <span v-else>-</span>
-          </template> -->
-          <!--   <template #status="{ row }">
-            <div class="flex justify-center flex-col items-center">
-              <div
-                :style="{
-                  background: getStatus(
-                    row.status,
-                    row.billStatus,
-                    row.combineOrderDetails[0]?.betResult
-                  )?.bgColor
-                }"
-                class="status_btn mb-1"
-              >
-                {{
-                  betStatusMap[
-                    getStatus(
-                      row.status,
-                      row.billStatus,
-                      row.combineOrderDetails[0].betResult
-                    ).status
-                  ]
-                }}
-              </div>
-              <div>
-                {{
-                  row.settleTime
-                    ? dayjs(row.settleTime).format('MM-DD HH:mm:ss')
-                    : ''
-                }}
-              </div>
-              <div v-if="String(row.seriesType).slice(-3) === '001'">
-                {{ t('总赔率:')
-                }}{{
-                  String(row.seriesType).slice(-3) === '001'
-                    ? calculateSeriesTypeTotal(row.combineOrderDetails)
-                    : ''
-                }}
-              </div>
-            </div>
-          </template> -->
-
           <template #operation="{ row }">
             <div class="h-full" v-if="form.queryType !== 1">
               <div
@@ -521,22 +472,7 @@ const {
   min-height: 100px;
 }
 
-.postion {
-  position: relative;
-  .h-full {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    flex-direction: column;
-    & > div {
-      flex-grow: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  }
+.operate {
+  width: 100px;
 }
 </style>

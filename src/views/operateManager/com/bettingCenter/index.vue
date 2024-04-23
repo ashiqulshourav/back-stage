@@ -29,7 +29,7 @@
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
           @selection-change="handleSelectionChange"
-          @page-size-change="handleTableWidthChange"
+          @page-size-change="handlePageSizeChange"
           @page-current-change="handleCurrentChange"
         >
           <template #index="{ row }">
@@ -114,7 +114,7 @@
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <div class="item_line">
+              <div v-if="item.kindsCode!== 'Outright'" class="item_line">
                 <span
                   class="cursor-pointer"
                   @dblclick="
@@ -280,7 +280,7 @@
                   row.status,
                   row.billStatus,
                   row.combineOrderDetails[0].betResult,
-                  row.isReserve
+                  row.isReserve,
                 ).bgColor
               }"
               class="status_btn mb-1"
@@ -291,8 +291,9 @@
                     row.status,
                     row.billStatus,
                     row.combineOrderDetails[0].betResult,
-                    row.isReserve
-                  ).status
+                    row.isReserve,
+                      row.riskStatus
+                  ).status as keyof typeof betStatusMap
                 ]
               }}
             </div>
@@ -322,7 +323,7 @@
               <el-button
                 class="mb-1 w-100"
                 @click="handleCancel(row)"
-                v-if="row.billStatus === 0 && hasAuth('CANCELBET')"
+                v-if="row.billStatus === 0&& isShowCancel(row) && hasAuth('CANCELBET')"
               >
                 {{ t('取消') }}
               </el-button>
@@ -408,9 +409,12 @@ import {
 import {betStatus, betStatusMap} from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
+const props = defineProps<{
+  category: number;
+  venueType:number;
+}>();
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
-
 const {
   loading,
   dataList,
@@ -418,7 +422,7 @@ const {
   totalInfo,
   form,
   onSearch,
-  handleTableWidthChange,
+  handlePageSizeChange,
   handleCurrentChange,
   handleSelectionChange,
   exportFile,
@@ -428,8 +432,9 @@ const {
   tenantList,
   specialCountFlag,
   switchDialog,
-  tenantObj
-} = useBettingCenterHook();
+  tenantObj,
+  isShowCancel
+} = useBettingCenterHook(props.category,props.venueType);
 </script>
 
 <style lang="scss">
