@@ -292,7 +292,8 @@
                     row.billStatus,
                     row.combineOrderDetails[0].betResult,
                     row.isReserve,
-                  ).status
+                      row.riskStatus
+                  ).status as keyof typeof betStatusMap
                 ]
               }}
             </div>
