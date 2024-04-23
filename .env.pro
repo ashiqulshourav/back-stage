@@ -13,4 +13,4 @@ VITE_API_BASE_URL = "https://match.dppro6.com/match/"
 VITE_ROUTER_HISTORY = "hash"
 VITE_CDN = false
 
-VITE_BUILD_TYPE = "fat"
+VITE_BUILD_TYPE = "pro"
