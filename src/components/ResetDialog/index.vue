@@ -15,11 +15,21 @@
         <el-input
           clearable
           show-password
-          v-model.trim="resetForm.oldPassword"
+          v-model="resetForm.oldPassword"
           :placeholder="t('请输入旧密码')"
         />
       </el-form-item>
 
+      <el-form-item
+        prop="providePassword"
+        :label="`${t('提供密码')}:`"
+        label-width="100"
+      >
+        <div class="flex gap-5 justify-between">
+          <p class="w-[100px]">{{ providePassword }}</p>
+          <el-radio-button @click="getNewPassword">O</el-radio-button>
+        </div>
+      </el-form-item>
       <el-form-item
         prop="newPassword"
         :label="`${t('新密码')}:`"
@@ -28,8 +38,7 @@
         <el-input
           clearable
           show-password
-          v-model.trim="resetForm.newPassword"
-          maxlength="32"
+          v-model="resetForm.newPassword"
           :placeholder="t('至少8个英文大小写+数字或特殊符号')"
         />
       </el-form-item>
@@ -42,8 +51,7 @@
         <el-input
           clearable
           show-password
-          v-model.trim="resetForm.confirmPassword"          
-          maxlength="32"
+          v-model="resetForm.confirmPassword"
           :placeholder="t('请再次输入新密码')"
         />
       </el-form-item>
@@ -63,12 +71,19 @@ import { useUserStore } from '@/store/user';
 import { getMD5 } from '@/utils/caypto';
 import { message } from '@/utils/message';
 import { IResetForm } from '@/views/login/utils/type';
-import { REGEXP_PWD } from './rule';
+import { REGEXP_PWD } from '@/views/tenantManager/whiteManager/utils/rule';
 import { FormInstance } from 'element-plus/es/components/form';
+import { useResetPasswordHook } from '@/hooks/resetPasswordHook';
 
 const resetFormRef = ref<FormInstance>();
 const isDisabled = ref(true);
 const userStore = useUserStore();
+const { generateRandomPassword } = useResetPasswordHook();
+const providePassword = ref(generateRandomPassword());
+
+const getNewPassword = () => {
+  providePassword.value = generateRandomPassword();
+};
 
 const resetForm = reactive<IResetForm>({
   oldPassword: '',
@@ -136,32 +151,26 @@ const resetPasswordRules = reactive({
 });
 
 const resetPassword = async () => {
-  resetFormRef.value.validate(async e => {
-    if (e) {
-      const res = await API.updatePwd({
-        id: userStore.userInfo.id,
-        pwd: getMD5(resetForm.oldPassword),
-        newPwd: getMD5(resetForm.newPassword)
-      });
-      if (res.code) return message(res.msg, { type: 'error' });
-      else message(t('修改成功，请重新登录'), { type: 'success' });
-      closeDialog();
-    }
+  const res = await API.updatePwd({
+    id: userStore.userInfo.id,
+    pwd: getMD5(resetForm.oldPassword),
+    newPwd: getMD5(resetForm.newPassword)
   });
+  if (res.code) return message(res.msg, { type: 'error' });
+  else
+    message(t('修改成功，请重新登录'), {
+      type: 'success',
+      duration: 1000,
+      onClose: () => {
+        closeDialog();
+        userStore.logOut();
+      }
+    });
 };
 
 const closeDialog = () => {
   emits('closeDialog');
 };
-
-watch(
-  () => resetForm.newPassword,
-  () => {
-    if (resetForm.confirmPassword) {
-      resetFormRef.value.validateField('confirmPassword');
-    }
-  }
-);
 </script>
 
 <style scoped></style>
