@@ -24,7 +24,7 @@ const props = defineProps<{
 const emits = defineEmits(['changeNavType']);
 const matchStore = useMatchStore();
 const renderList = computed(() => {
-  return SPORT_LIST_MAP.slice(0, 13);
+  return SPORT_LIST_MAP.slice(0, 15);
 });
 
 const changeType = (_: sport_list_map_type) => {
