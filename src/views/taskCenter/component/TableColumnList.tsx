@@ -21,7 +21,9 @@ export const columns: TableColumnList = [
   {
     label: t('文件大小'),
     prop: 'fileSize',
-    minWidth: 150
+    minWidth: 150,
+    formatter: ({ fileSize }): string =>
+      fileSize ? String(fileSize / 1024).slice(0, 4) + "KB" : ''
   },
   {
     label: t('页面来源'),
@@ -32,7 +34,7 @@ export const columns: TableColumnList = [
     label: t('状态'),
     minWidth: 200,
     prop: 'status',
-    formatter: ({ status }): string => statusMap[status]
+    formatter: ({ status }): string => statusMap[status as keyof typeof statusMap]
   },
   {
     label: t('操作人'),

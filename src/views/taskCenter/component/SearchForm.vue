@@ -46,7 +46,7 @@ const props = defineProps<{
 const emits = defineEmits(['onSearch']);
 
 const resetForm = (formEl: FormInstance | undefined) => {
-  formEl.resetFields();
+  formEl?.resetFields();
   search();
 };
 
