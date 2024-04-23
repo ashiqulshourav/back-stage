@@ -4,9 +4,9 @@ import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { addLabelsType, recordFormType, searchFormType, updateUserFormType } from './types';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessage, ElMessageBox, FormInstance } from 'element-plus';
 
-export function userPlayerListHook(venueType) {
+export function userPlayerListHook(venueType: number) {
   const dataList = reactive<UserAPI.operateUserList[]>([]);
   const selectedDataList = reactive<UserAPI.operateUserList[]>([]);
   const recordList = reactive<UserAPI.recordType[]>([]);
@@ -61,7 +61,7 @@ export function userPlayerListHook(venueType) {
     onSearchRecord();
   }
 
-  function handleSelectionChange(val) {
+  function handleSelectionChange(val: UserAPI.operateUserList[]) {
     selectedDataList.length = 0;
     selectedDataList.push(...val);
   }
@@ -130,7 +130,7 @@ export function userPlayerListHook(venueType) {
   }
 
   const handleMultiAddLabels = () => {
-    let ids = [];
+    let ids:string[] = [];
     selectedDataList.forEach(item => {
       ids.push(item.id);
     })
@@ -145,7 +145,7 @@ export function userPlayerListHook(venueType) {
   }
 
   const handleMultiDelLabels = async () => {
-    let ids = [];
+    let ids:string[] = [];
     selectedDataList.forEach(item => {
       ids.push(item.id);
     })
@@ -242,7 +242,7 @@ export function userPlayerListHook(venueType) {
     }
   }
 
-  const resetForm = formEl => {
+  const resetForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return;
     formEl.resetFields();
     onSearch();
@@ -276,7 +276,7 @@ export function userPlayerListHook(venueType) {
       labelType = Number(labelType);
       let tagId: any = route.query.tagId as string; 
       tagId = Number(tagId);
-      labelType === 1 ? form.riskControlLabelList.push(tagId) : form.attributeLabelList.push(tagId);
+      labelType === 1 ? form.riskControlLabelList?.push(tagId) : form.attributeLabelList?.push(tagId);
     }
     onSearch();
   });

@@ -175,7 +175,7 @@ onMounted(() => {
   initRiskControlList();
 });
 
-const tenantList = reactive([]);
+const tenantList = reactive<any>([]);
 
 const initTenantList = async () => {
   const res = await API.getTenantList({ category: props.category });
