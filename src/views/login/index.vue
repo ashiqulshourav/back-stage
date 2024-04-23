@@ -1,6 +1,5 @@
 <template>
   <div class="select-none">
-    <span style="display: none">aaa{{ test }}</span>
     <img :src="bg" class="wave" />
     <div class="flex-c absolute right-5 top-3">
       <el-switch
@@ -30,7 +29,8 @@
             <el-form-item prop="username">
               <el-input
                 clearable
-                v-model="ruleForm.username"
+                v-model.trim="ruleForm.username"
+                maxlength="30"
                 :placeholder="t('输入您的用户名')"
                 :prefix-icon="useRenderIcon(User)"
               />
@@ -40,11 +40,12 @@
               <el-input
                 clearable
                 show-password
-                v-model="ruleForm.password"
+                v-model.trim="ruleForm.password"
                 :placeholder="t('输入密码')"
                 :prefix-icon="useRenderIcon(Lock)"
               />
             </el-form-item>
+
             <el-form-item :prop="buildType === 'pro' ? 'ukeyPassword' : 'none'">
               <el-input
                 clearable
@@ -71,7 +72,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="tsx">
 import { message } from '@/utils/message';
 import { loginRules } from './utils/rule';
 import { useNav } from '@/layout/hooks/useNav';
@@ -91,8 +92,8 @@ import { usePermissionStoreHook } from '@/store/permission';
 import LanguageNav from '@/components/LanguageNav/index.vue';
 import { useUserStore } from '@/store/user';
 import { t } from '@/plugins/i18n';
-import { getMD5 } from '@/utils/caypto';
 import { useResetPasswordHook } from '@/hooks/resetPasswordHook';
+import { getMD5 } from '@/utils/caypto';
 
 defineOptions({ name: 'Login' });
 const router = useRouter();
@@ -104,13 +105,13 @@ const { dataTheme, dataThemeChange } = useDataThemeChange();
 dataThemeChange();
 const { title } = useNav();
 const userStore = useUserStore();
-const buildType = import.meta.env.VITE_BUILD_TYPE;
 const ruleForm = reactive({
   username: '',
   password: '',
   ukeyPassword: ''
 });
-
+// 使用环境变量进行环境区分
+const buildType = import.meta.env.VITE_BUILD_TYPE;
 const onLogin = async (formEl: FormInstance | undefined) => {
   loading.value = true;
   if (!formEl) return;
@@ -128,40 +129,36 @@ const _loginRequest = async () => {
   usePermissionStoreHook().handleWholeMenus([]);
   addPathMatch();
   try {
-    const res: UserAPI.Login = await API.login({
+    const res = await API.login({
       name: ruleForm.username,
       pwd: getMD5(ruleForm.password),
       ukeyPassword: ruleForm.ukeyPassword
     });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
-    //- 第一次登录强制弹出充值密码弹窗
-    userStore.setUserInfo(res.data);
-    if (ruleForm.password === '123456') {
+    
+    if (!isValidPassword(ruleForm.password)) {
       ruleForm.password = '';
-      return openResetDialog();
+      openResetDialog();
+    }else {
+      //- 第一次登录强制弹出充值密码弹窗
+      userStore.setUserInfo(res.data);
+      initRouter()
+        .then(() => {
+          message(t('登录成功'), { type: 'success' });
+          router.push(getTopMenu(true).path);
+        })
+        .catch(err => {
+          message(err, { type: 'error' });
+        });
     }
-
-    initRouter()
-      .then(() => {
-        message(t('登录成功'), { type: 'success' });
-        router.push(getTopMenu(true).path);
-      })
-      .catch(err => {
-        message(err, { type: 'error' });
-      });
   } catch (error) {
     message(error.message, { type: 'error' });
     loading.value = false;
   }
 };
 
-const test = ref('');
-onMounted(() => {
-  test.value = import.meta.env.VITE_BUILD_TYPE;
-});
-
-const { openResetDialog } = useResetPasswordHook();
+const { openResetDialog, isValidPassword } = useResetPasswordHook();
 </script>
 
 <style scoped>
