@@ -179,7 +179,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
     }
   };
 
-  const resetForm = (formEl:any) => {
+  const resetForm = (formEl:FormInstance) => {
     if (!formEl) return;
     formEl.resetFields();
     onSearch();

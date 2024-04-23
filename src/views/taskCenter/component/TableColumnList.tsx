@@ -32,7 +32,7 @@ export const columns: TableColumnList = [
     label: t('状态'),
     minWidth: 200,
     prop: 'status',
-    formatter: ({ status }): string => statusMap[status]
+    formatter: ({ status }): string => statusMap[status as keyof typeof statusMap]
   },
   {
     label: t('操作人'),

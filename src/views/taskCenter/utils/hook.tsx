@@ -5,14 +5,11 @@ import { reactive, ref, onMounted } from 'vue';
 import { searchFormType } from './types';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import {ElMessageBox} from "element-plus";
+import { type FormInstance } from 'element-plus';
 import {t} from "@/plugins/i18n";
-import {usePasswordInputHook} from "@/hooks/passwordInputHook";
-
-
 export function useTaskCenter() {
   const dataList = reactive<TaskCenterAPI.ListItem[]>([]);
   const loading = ref(true);
-  const { openPasswordInput } = usePasswordInputHook();
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 20,
@@ -52,7 +49,7 @@ export function useTaskCenter() {
     }
   }
 
-  const resetForm = formEl => {
+  const resetForm = (formEl:FormInstance) => {
     if (!formEl) return;
     formEl.resetFields();
     onSearch();

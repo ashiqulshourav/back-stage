@@ -32,7 +32,6 @@
               @click="getDownLoadUrl(row.id)"
             >
               下载
-<!--              <a :href="row.url" target="_self"> {{ t('下载') }}</a>-->
             </el-button>
             <el-button
               @click="handleDelete(row.id)"
