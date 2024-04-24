@@ -24,8 +24,7 @@
           @selection-change="handleSelectionChange"
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
-        >
-        </pure-table>
+        />
       </template>
     </PureTableBar>
   </div>
