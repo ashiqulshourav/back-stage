@@ -18,7 +18,7 @@ export function useMenuManagerHook() {
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
       dataList.push(...res.data);
-      filterParentList(dataList);
+      filterParentList(dataList, '一级页面');
       checkHasQueryRole();
     } catch (error) {
       loading.value = false;
@@ -28,10 +28,8 @@ export function useMenuManagerHook() {
   //- 查询是否有query
   const checkHasQueryRole = () => {
     parentList.forEach(item => {
-      const index = item.childResourceList.findIndex(
-        _ => _.enName === 'query' || _.type === 0 || _.type === 2
-      );
-      if (index < 0 && item.childResourceList.length === 0) {
+      const index = item.childResourceList.findIndex(_ => _.enName === 'query');
+      if (index < 0 && !item.childResourceList.length) {
         const params = {
           name: '页面查看',
           enName: 'query',
@@ -46,20 +44,21 @@ export function useMenuManagerHook() {
     });
   };
 
-  const filterParentList = (list: RoleAPI.ChildResourceList[]) => {
+  const filterParentList = (list: RoleAPI.ChildResourceList[], parentName) => {
     list.forEach(item => {
       if (item.childResourceList.length > 0)
-        filterParentList(item.childResourceList);
+        filterParentList(item.childResourceList, item.name);
       if (item.type === 0 || item.type === 2) {
         parentList.push({
           id: item.id,
           name: item.name,
           enName: item.enName,
+          tableName: parentName + '-' + item.name,
           childResourceList: item.childResourceList
         });
       }
-      list.sort((a, b) => +a.sort - +b.sort);
     });
+    list.sort((a, b) => a.sort - b.sort);
   };
 
   //- 删除菜单

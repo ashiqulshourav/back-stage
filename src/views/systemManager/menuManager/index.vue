@@ -12,12 +12,12 @@
           table-layout="auto"
           :loading="loading"
           size="large"
-          show-overflow-tooltip
           row-key="id"
+          border
           adaptive
           :indent="32"
-          @row-click="cellRowClick"
           :data="dataList"
+          @row-click="cellRowClick"
           :columns="dynamicColumns"
           :header-cell-style="tableHeaderStyle"
           :tree-props="{
@@ -35,8 +35,8 @@
             >
               {{ t('编辑') }}
             </el-button>
+            <!--  v-if="userStore.userInfo.name === 'armour'" -->
             <el-button
-              v-if="userStore.userInfo.name === 'armour'"
               class="reset-margin"
               link
               type="danger"
@@ -57,11 +57,9 @@ import { PureTableBar } from '@/components/RePureTableBar';
 import { useMenuManagerHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
-import { useUserStore } from '@/store/user';
 
-defineOptions({ name: 'SYSTEMCONFIG_MENUMANAGER' });
+defineOptions({ name: 'SYSTEMMANAGER_MENUMANAGER' });
 const { tableHeaderStyle } = usePublicHooks();
-const userStore = useUserStore();
 
 const {
   loading,
@@ -69,8 +67,8 @@ const {
   dataList,
   onSearch,
   openRoleDialog,
-  delMenu,
-  cellRowClick
+  cellRowClick,
+  delMenu
 } = useMenuManagerHook();
 </script>
 

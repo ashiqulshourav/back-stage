@@ -23,9 +23,12 @@
     </el-form-item>
 
     <el-form-item :label="t('菜单类型')" prop="type">
-      <el-select v-model="newFormInline.type" clearable>
+      <el-select
+        placeholder="导航左侧菜单显示/详情页面非菜单展示/按钮为页面权限"
+        v-model="newFormInline.type"
+        clearable
+      >
         <el-option
-          :disabled="!!newFormInline.id"
           v-for="item in Object.entries(TYPE_NAME)"
           :key="item[0]"
           :label="item[1]"
@@ -39,13 +42,13 @@
         v-model="newFormInline.parentId"
         filterable
         clearable
-        :disabled="newFormInline.parentId === 0 && !!newFormInline.id"
+        :filter-method="filterMethod"
       >
         <el-option :value="0" :label="t('一级页面')"></el-option>
         <el-option
-          v-for="item in parentList"
+          v-for="item in selectParentList"
           :key="item.id"
-          :label="item.name"
+          :label="item.tableName"
           :value="item.id"
         />
       </el-select>
@@ -77,49 +80,61 @@
     </el-form-item>
 
     <div class="flex justify-end">
-      <el-button @click="closeDialog">{{ t('取消') }}</el-button>
+      <el-button @click="closeDialog">{{ t("取消") }}</el-button>
       <el-button type="primary" @click="confirmClick">{{
-        t('提交')
+        t("提交")
       }}</el-button>
     </div>
   </el-form>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { formRules } from './utils/rule';
-import { t } from '@/plugins/i18n';
-import { FormInstance } from 'element-plus/es/components/form';
-import { message } from '@/utils/message';
-import { TYPE_NAME } from './utils/map';
-import { inputRestrictions } from '@/utils/formatNumber';
+import { ref } from "vue"
+import { formRules } from "./utils/rule"
+import { t } from "@/plugins/i18n"
+import { FormInstance } from "element-plus/es/components/form"
+import { message } from "@/utils/message"
+import { TYPE_NAME } from "./utils/map"
+import { inputRestrictions } from "@/utils/formatNumber"
 
 const props = defineProps<{
-  row: Partial<RoleAPI.ChildResourceList>;
-  parentList: Partial<RoleAPI.ChildResourceList>[];
-}>();
+  row: Partial<RoleAPI.ChildResourceList>
+  parentList: Partial<RoleAPI.ChildResourceList>[]
+}>()
 
-const emits = defineEmits(['closeDialog']);
+const emits = defineEmits(["closeDialog"])
+const selectVal = ref("")
 
-const ruleFormRef = ref<FormInstance>();
-const newFormInline = reactive(props.row);
+const ruleFormRef = ref<FormInstance>()
+const newFormInline = reactive(props.row)
 
 const closeDialog = () => {
-  emits('closeDialog');
-};
+  emits("closeDialog")
+}
 
-/* 传,roleName,status,comment */
+const selectParentList = computed(() => {
+  if (!selectVal.value) {
+    return props.parentList
+  } else {
+    return props.parentList
+      .filter(item => item.name.includes(selectVal.value))
+      .map(item => item)
+  }
+})
+
+const filterMethod = v => (selectVal.value = v)
+
 const confirmClick = () => {
   ruleFormRef.value.validate(async v => {
-    const requestAPI = newFormInline.id ? 'menuUpdate' : 'menuInsert';
+    const requestAPI = newFormInline.id ? "menuUpdate" : "menuInsert"
     if (v) {
-      if (!newFormInline.id) delete newFormInline.id;
-      const res = await API[requestAPI](newFormInline);
-      message(res.msg, { type: res.code ? 'error' : 'success' });
-      emits('closeDialog', res.code ? '' : 'reloadTable');
+      if (!newFormInline.id) delete newFormInline.id
+      const res = await API[requestAPI](newFormInline)
+      message(res.msg, { type: res.code ? "error" : "success" })
+      emits("closeDialog", res.code ? "" : "reloadTable")
     }
-  });
-};
+  })
+}
 </script>
 
 <style lang="scss"></style>
