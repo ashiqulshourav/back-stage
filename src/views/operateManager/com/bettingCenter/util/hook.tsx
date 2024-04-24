@@ -256,7 +256,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
                   data.isReserve,
                   data.riskStatus,
                   data.isSpecialSettle
-                )?.status as keyof typeof betStatusMap
+                )?.status
               ];
             break;
           case 'billStatus':
@@ -269,7 +269,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
                   data.isReserve,
                   data.riskStatus,
                   data.isSpecialSettle
-                )?.status as keyof typeof betStatusMap
+                )?.status
               ];
             break;
           case 'settleScore':
