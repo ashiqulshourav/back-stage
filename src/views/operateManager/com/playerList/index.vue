@@ -4,6 +4,8 @@
       :form="form"
       :category="props.category"
       :loading="loading"
+      :labelList="labelList"
+      :tenantList="tenantList"
       @on-search="onSearch"
     />
     <PureTableBar :columns="columns" @refresh="onSearch('reload')">
@@ -15,13 +17,13 @@
             <el-button
               v-if="hasAuth('SETTING')"
               type="primary"
-              @click="isMultiLabelAdd = true"
+              @click="openMultiModal(false)"
               >{{ t('添加标签') }}</el-button
             >
             <el-button
               v-if="hasAuth('SETTING')"
               type="warning"
-              @click="isMultiLabelDel = true"
+              @click="openMultiModal(true)"
               >{{ t('删除标签') }}</el-button
             >
           </div>
@@ -52,43 +54,27 @@
               class="items-center"
               :gutter="20"
             >
-              <el-col
-                :span="
-                  row.riskControlLabelList &&
-                  row.riskControlLabelList.length > 6
-                    ? 20
-                    : 24
-                "
-              >
-                <el-row :gutter="20">
+              <el-col :span="row.riskControlLabelList?.length > 6 ? 20 : 24">
+                <el-row :gutter="5">
                   <el-col
-                    v-for="(label, index) in row.riskControlLabelList.slice(
-                      0,
-                      6
-                    )"
+                    v-for="label in row.riskControlLabelList.slice(0, 6)"
                     :key="label.id"
                     :span="8"
+                    class="custom"
                   >
-                    <p
-                      v-if="index < 6"
+                    <el-tag
                       :style="`background-color: ${getLabelColor(
                         label.level,
                         'risk'
                       )}`"
-                      class="rounded-lg py-1 text-white"
+                      class="rounded-lg w-full py-1"
                     >
                       {{ label.name }}
-                    </p>
+                    </el-tag>
                   </el-col>
                 </el-row>
               </el-col>
-              <el-col
-                :span="4"
-                v-if="
-                  row.riskControlLabelList &&
-                  row.riskControlLabelList.length > 6
-                "
-              >
+              <el-col :span="4" v-if="row.riskControlLabelList?.length > 6">
                 <el-popover
                   placement="top-end"
                   :width="300"
@@ -105,17 +91,18 @@
                       <el-col
                         v-for="label in row.riskControlLabelList"
                         :key="label.id"
+                        class="custom"
                         :span="8"
                       >
-                        <div
+                        <el-tag
                           :style="`background-color: ${getLabelColor(
                             label.level,
                             'risk'
                           )}`"
-                          class="rounded-lg py-1 text-white text-center"
+                          class="rounded-lg w-full py-1 text-white text-center"
                         >
                           {{ label.name }}
-                        </div>
+                        </el-tag>
                       </el-col>
                     </el-row>
                   </template>
@@ -129,29 +116,23 @@
               class="items-center"
               :gutter="20"
             >
-              <el-col
-                :span="
-                  row.attributeLabelList && row.attributeLabelList.length > 6
-                    ? 20
-                    : 24
-                "
-              >
-                <el-row :gutter="20">
+              <el-col :span="row.attributeLabelList?.length > 6 ? 20 : 24">
+                <el-row :gutter="5">
                   <el-col
-                    v-for="(label, index) in row.attributeLabelList"
+                    v-for="label in row.attributeLabelList.slice(0, 6)"
                     :key="label.id"
                     :span="8"
+                    class="custom"
                   >
-                    <p
-                      v-if="index < 6"
+                    <el-tag
                       :style="`background-color: ${getLabelColor(
                         label.level,
                         'risk'
                       )}`"
-                      class="rounded-lg py-1 text-white"
+                      class="rounded-lg w-full py-1"
                     >
                       {{ label.name }}
-                    </p>
+                    </el-tag>
                   </el-col>
                 </el-row>
               </el-col>
@@ -178,16 +159,17 @@
                         v-for="label in row.attributeLabelList"
                         :key="label.id"
                         :span="8"
+                        class="custom"
                       >
-                        <div
+                        <el-tag
                           :style="`background-color: ${getLabelColor(
                             label.level,
                             'risk'
                           )}`"
-                          class="rounded-lg py-1 text-white text-center"
+                          class="rounded-lg w-full py-1 text-white text-center"
                         >
                           {{ label.name }}
-                        </div>
+                        </el-tag>
                       </el-col>
                     </el-row>
                   </template>
@@ -211,453 +193,37 @@
         </pure-table>
       </template>
     </PureTableBar>
-    <el-dialog
-      v-model="isEditUser"
-      class="divide-y divide-slate-200"
-      width="800"
-    >
-      <template #title>
-        <p class="pl-5 font-medium">{{ t('用户编辑') }}</p>
-      </template>
-      <el-form class="p-5 max-h-[600px] overflow-y-scroll" label-width="160">
-        <el-form-item prop="" :label="t('用户ID:')">
-          <el-input disabled v-model="updateUserForm.id" />
-        </el-form-item>
-        <el-form-item prop="" :label="t('用户名:')">
-          <el-input disabled v-model="updateUserForm.userName" />
-        </el-form-item>
-        <!-- <el-form-item prop="" :label="t('所属商户:')">
-          <el-input disabled />
-        </el-form-item> -->
-        <el-text>{{ t('用户标签') }}</el-text>
-        <el-form-item prop="" :label="t('风控标签: ')">
-          <el-row class="flex w-full items-center">
-            <el-col :span="12">
-              <p>{{ t('每个用户最多添加20个风控标签') }}</p>
-            </el-col>
-            <el-col :span="12">
-              <p
-                class="text-primary text-right cursor-pointer"
-                @click="handelOpenRecord(1)"
-              >
-                {{ t('风控标签修改记录') }}>>
-              </p>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20" class="mt-2 w-full">
-            <el-col v-for="label in riskLabels" :key="label.id" :span="6">
-              <el-row :gutter="2" class="items-center">
-                <el-col :span="20">
-                  <div
-                    :style="`background-color: ${getLabelColor(
-                      label.level,
-                      'risk'
-                    )}`"
-                    class="rounded text-white text-center"
-                  >
-                    <p>
-                      {{ label.name }}
-                    </p>
-                  </div>
-                </el-col>
-                <el-col :span="4">
-                  <el-button
-                    :icon="Close"
-                    :style="`background-color: ${getLabelColor(
-                      label.level,
-                      'risk'
-                    )}`"
-                    class="w-1/2 rounded-lg"
-                    v-if="hasAuth('SETTING')"
-                    @click="handleUserLabelDel([updateUserForm.id], [label.id])"
-                  />
-                </el-col>
-              </el-row>
-            </el-col>
-          </el-row>
-          <el-row class="mt-2 w-full" v-if="!isAddLabel.risk">
-            <el-col class="flex justify-end">
-              <el-button
-                v-if="hasAuth('SETTING')"
-                :icon="Plus"
-                type="primary"
-                @click="isAddLabel.risk = true"
-                class="text-primary"
-                >添加标签</el-button
-              >
-            </el-col>
-          </el-row>
-          <el-row class="mt-2 w-full" v-else>
-            <el-col :span="14">
-              <el-select
-                multiple
-                clearable
-                filterable
-                v-model="addLabelForms.risk"
-              >
-                <el-option
-                  v-for="label in riskControlList"
-                  :key="label.id"
-                  :label="label.name"
-                  :value="Number(label.id)"
-                />
-              </el-select>
-            </el-col>
-            <el-col :span="10" class="flex justify-end">
-              <el-button
-                v-if="hasAuth('SETTING')"
-                type="primary"
-                @click="handleAddRiskLabels([updateUserForm.id])"
-                class="w-1/3"
-                >{{ t('添加') }}</el-button
-              >
-              <el-button
-                v-if="hasAuth('SETTING')"
-                class="w-1/3"
-                @click="isAddLabel.risk = false"
-                >{{ t('取消') }}</el-button
-              >
-            </el-col>
-          </el-row>
-        </el-form-item>
-        <el-form-item prop="" :label="t('属性标签:')">
-          <el-row class="flex w-full items-center">
-            <el-col :span="12">
-              <p>{{ t('每个用户最多添加20个风控标签') }}</p>
-            </el-col>
-            <el-col :span="12">
-              <p
-                class="text-primary text-right cursor-pointer"
-                @click="handelOpenRecord(2)"
-              >
-                {{ t('属性标签修改记录') }}>>
-              </p>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20" class="mt-2 w-full">
-            <el-col v-for="label in attributeLabels" :key="label.id" :span="6">
-              <el-row :gutter="1" class="items-center">
-                <el-col :span="20">
-                  <div
-                    :style="`background-color: ${getLabelColor(
-                      label.level,
-                      'risk'
-                    )}`"
-                    class="rounded text-white text-center"
-                  >
-                    <p>
-                      {{ label.name }}
-                    </p>
-                  </div>
-                </el-col>
-                <el-col :span="4">
-                  <el-button
-                    :icon="Close"
-                    class="w-1/2"
-                    v-if="hasAuth('SETTING')"
-                    :style="`background-color: ${getLabelColor(
-                      label.level,
-                      'risk'
-                    )}`"
-                    @click="handleUserLabelDel([updateUserForm.id], [label.id])"
-                  />
-                </el-col>
-              </el-row>
-            </el-col>
-          </el-row>
-          <el-row class="mt-2 w-full" v-if="!isAddLabel.attr">
-            <el-col class="flex justify-end">
-              <el-button
-                v-if="hasAuth('SETTING')"
-                :icon="Plus"
-                type="primary"
-                @click="isAddLabel.attr = true"
-                class="text-primary"
-                >{{ t('添加标签') }}</el-button
-              >
-            </el-col>
-          </el-row>
-          <el-row class="mt-2 w-full" v-else>
-            <el-col :span="14">
-              <el-select
-                multiple
-                clearable
-                filterable
-                v-model="addLabelForms.attr"
-              >
-                <el-option
-                  v-for="label in attributeList"
-                  :key="label.id"
-                  :label="label.name"
-                  :value="Number(label.id)"
-                />
-              </el-select>
-            </el-col>
-            <el-col :span="10" class="flex justify-end">
-              <el-button
-                v-if="hasAuth('SETTING')"
-                type="primary"
-                @click="handleAddAttrLabels([updateUserForm.id])"
-                class="w-1/3"
-                >{{ t('添加') }}</el-button
-              >
-              <el-button
-                v-if="hasAuth('SETTING')"
-                class="w-1/3"
-                @click="isAddLabel.risk = false"
-                >{{ t('取消') }}</el-button
-              >
-            </el-col>
-          </el-row>
-        </el-form-item>
-        <el-text size="large" tag="b">{{ t('风控措施') }}</el-text>
-        <el-form-item prop="" :label="t('账号启用:')">
-          <el-switch
-            inline-prompt
-            v-model="updateUserForm.isFreeze"
-            active-text="o"
-            inactive-text="p"
-            :active-value="1"
-            :inactive-value="0"
-            size="large"
-          />
-        </el-form-item>
-        <el-form-item :label="t('限额设置')" prop="type">
-          <el-select v-model="updateUserForm.limitLevel" clearable>
-            <el-option
-              v-for="item in limitList"
-              :key="item.levelLimit"
-              :label="item.levelLimit"
-              :value="item.levelLimit"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          ><pure-table
-            maxHeight="500"
-            align-whole="center"
-            size="small"
-            border
-            :data="tableData"
-            :columns="limitColumns"
-            :header-cell-style="tableHeaderStyleBlue"
-          >
-          </pure-table
-        ></el-form-item>
-
-        <el-text size="large" tag="b">{{ t('特殊限额') }}</el-text>
-        <div class="flex item-center">
-          <el-form-item :label="`${t('单注限额')}:`" class="mr-4">
-            <el-input
-              v-model="updateUserForm.singleBetLimit"
-              :formatter="v => formatNumber(v, 13)"
-            />
-          </el-form-item>
-          <el-form-item :label="`${t('单注赔付限额')}:`">
-            <el-input
-              v-model="updateUserForm.singleEventCompensationLimit"
-              :formatter="v => formatNumber(v, 13)"
-            />
-          </el-form-item>
-          <!-- <el-form-item
-            :label="`${t('单场赛事累计赔付限额(不分早盘滚球)')}:`"
-            class="mr-4"
-          >
-            <el-input
-              v-model="updateUserForm.userSingleGamePay"
-              :formatter="v => formatNumber(v, 13)"
-            />
-          </el-form-item>
-          <el-form-item :label="`${t('串关单日累计赔付限额(不分早盘滚球)')}:`">
-            <el-input
-              v-model="updateUserForm.bunchMatchPay"
-              :formatter="v => formatNumber(v, 13)"
-            />
-          </el-form-item> -->
-        </div>
-        <el-form-item prop="" :label="t('最后下注时间:')">
-          <p>
-            {{ dayjs(updateUserForm.createdAt).format('YYYY-MM-DD HH:mm:ss') }}
-          </p>
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <div class="pr-5">
-          <el-button v-if="hasAuth('SETTING')" @click="isEditUser = false">{{
-            t('取消')
-          }}</el-button>
-          <el-button
-            v-if="hasAuth('SETTING')"
-            @click="isEditUser = false"
-            type="primary"
-            >{{ t('保存') }}</el-button
-          >
-        </div>
-      </template>
-    </el-dialog>
-    <el-dialog
-      v-model="isOpenRecord"
-      class="divide-y divide-slate-200"
-      width="800"
-    >
-      <template #title>
-        <p class="pl-5 font-medium">
-          {{
-            recordForm.labelType === 1
-              ? t('用户风控标签修改记录')
-              : t('属性标签修改记录')
-          }}
-        </p>
-      </template>
-      <PureTableBar
-        :title="t(`用户ID：${updateUserForm.id}`)"
-        :columns="recordColumns"
-        @refresh="onSearchRecord('reload')"
-      >
-        <template v-slot="{ size, dynamicColumns }">
-          <pure-table
-            class="table_container"
-            align-whole="center"
-            showOverflowTooltip
-            table-layout="auto"
-            :loading="loading"
-            :size="size"
-            :default-sort="{ prop: 'level', order: 'descending' }"
-            :data="recordList"
-            :columns="dynamicColumns"
-            :pagination="recordPagination"
-            :paginationSmall="size === 'small' ? true : false"
-            :header-cell-style="tableHeaderStyle"
-            @selection-change="handleSelectionChange"
-            @page-size-change="handleRecordTableWidthChange"
-            @page-current-change="handleRecordCurrentChange"
-          >
-          </pure-table>
-        </template>
-      </PureTableBar>
-      <template #footer>
-        <div class="pr-5">
-          <el-button
-            v-if="hasAuth('SETTING')"
-            type="primary"
-            @click="isOpenRecord = false"
-            >{{ t('确定') }}</el-button
-          >
-        </div>
-      </template>
-    </el-dialog>
-    <el-dialog
-      v-model="isMultiLabelAdd"
-      class="divide-y divide-slate-200"
-      width="800"
-    >
-      <template #title>
-        <p class="pl-5 font-medium">{{ t('添加标签') }}</p>
-      </template>
-      <el-form label-width="160" class="mt-4 py-5">
-        <el-form-item :label="t('用户数量:')">{{
-          t(`已选择${selectedDataList.length}个用户`)
-        }}</el-form-item>
-        <el-form-item :label="t('添加风控标签: ')">
-          <el-select
-            multiple
-            clearable
-            filterable
-            v-model="addLabelForms.risk"
-            class="!w-[400px]"
-          >
-            <el-option
-              v-for="label in riskControlList"
-              :key="label.id"
-              :label="label.name"
-              :value="Number(label.id)"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="t('添加属性标签:')">
-          <el-select
-            multiple
-            clearable
-            filterable
-            v-model="addLabelForms.attr"
-            class="!w-[400px]"
-          >
-            <el-option
-              v-for="label in attributeList"
-              :key="label.id"
-              :label="label.name"
-              :value="Number(label.id)"
-            />
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <div class="pr-5 flex justify-center">
-          <el-button
-            v-if="hasAuth('SETTING')"
-            type="primary"
-            @click="handleMultiAddLabels"
-            >{{ t('保存并添加') }}</el-button
-          >
-        </div>
-      </template>
-    </el-dialog>
-    <el-dialog
-      v-model="isMultiLabelDel"
-      class="divide-y divide-slate-200"
-      width="800"
-    >
-      <template #title>
-        <p class="pl-5 font-medium">{{ t('删除标签') }}</p>
-      </template>
-      <el-form label-width="160" class="mt-4 py-5">
-        <el-form-item :label="t('用户数量:')">{{
-          t('已选择') + selectedDataList.length + t('个用户')
-        }}</el-form-item>
-        <el-form-item :label="t('删除风控标签:')">
-          <el-select
-            multiple
-            clearable
-            filterable
-            v-model="addLabelForms.risk"
-            class="!w-[400px]"
-          >
-            <el-option
-              v-for="label in riskControlList"
-              :key="label.id"
-              :label="label.name"
-              :value="Number(label.id)"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="t('删除属性标签:')">
-          <el-select
-            multiple
-            clearable
-            filterable
-            v-model="addLabelForms.attr"
-            class="!w-[400px]"
-          >
-            <el-option
-              v-for="label in attributeList"
-              :key="label.id"
-              :label="label.name"
-              :value="Number(label.id)"
-            />
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <div class="pr-5 flex justify-center">
-          <el-button
-            v-if="hasAuth('SETTING')"
-            type="primary"
-            @click="handleMultiDelLabels"
-            >{{ t('保存并删除') }}</el-button
-          >
-        </div>
-      </template>
-    </el-dialog>
+    <EditUser
+      :isEditUser="isEditUser"
+      :labelList="labelList"
+      :userData="userData"
+      @on-close="handleCloseEditUser"
+      @on-open-record="openRecordList"
+      @on-del="dispatchLabelsDel"
+      @on-add="dispatchLabelsAdd"
+      @on-update-user="dispatchUpdateUser"
+    />
+    <RecordList
+      :isOpen="isOpenRecord"
+      :recordForm="recordForm"
+      :loading="loading"
+      :recordList="recordList"
+      :pagination="recordPagination"
+      @on-close="isOpenRecord = false"
+      @on-search="onSearchRecord"
+      @selection-change="handleSelectionChange"
+      @page-size-change="handleRecordTableWidthChange"
+      @page-current-change="handleRecordCurrentChange"
+    />
+    <MultiModal
+      :isOpen="isMultiModal"
+      :selectedDataList="selectedDataList"
+      :isDel="isMultiDel"
+      :labelList="labelList"
+      @on-close="isMultiModal = false"
+      @on-del="dispatchLabelsDel"
+      @on-add="dispatchLabelsAdd"
+    />
   </div>
 </template>
 
@@ -665,11 +231,13 @@
 import { PureTableBar } from '@/components/RePureTableBar';
 import { userPlayerListHook } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
-import { columns, recordColumns } from './component/TableColumnList';
+import EditUser from './component/EditUser.vue';
+import RecordList from './component/RecordList.vue';
+import MultiModal from './component/multiModal.vue';
+import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
-import { Plus, Close } from '@element-plus/icons-vue';
-import dayjs from 'dayjs';
+import { Plus } from '@element-plus/icons-vue';
 import { hasAuth } from '@/router/utils';
 import EditPen from '@iconify-icons/ep/edit-pen';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
@@ -681,98 +249,37 @@ const props = defineProps<{
   category: number;
 }>();
 
-const riskControlList = reactive<UserAPI.labelType[]>([]);
-const attributeList = reactive<UserAPI.labelType[]>([]);
-const initRiskControlList = async () => {
-  const res = await API.getLabelList({
-    category: props.category
-  });
-  riskControlList.length = 0;
-  riskControlList.push(...res.data.riskControlLabelList);
-  attributeList.length = 0;
-  attributeList.push(...res.data.attributeLabelList);
-};
-
-const limitList = reactive<UserAPI.UserLevelLimitListRes[]>([]);
-
-const { tableHeaderStyleBlue } = usePublicHooks();
-
-const limitColumns: TableColumnList = [
-  {
-    label: t('单注限额'),
-    prop: 'productAmountTotalLimit'
-  },
-  {
-    label: t('单注赔付'),
-    prop: 'maxWinAmountLimit'
-  },
-  {
-    label: t('单场赛事累计赔付限额(不分早盘滚球)'),
-    prop: 'userSingleGamePay'
-  },
-  // {
-  //   label: t('单关单日累计赔付'),
-  //   prop: 'singleMatchPay'
-  // },
-  {
-    label: t('串关单日累计赔付限额(不分早盘滚球)'),
-    prop: 'bunchMatchPay'
-  }
-  // {
-  //   label: t('冠军单日累计赔付'),
-  //   prop: 'championDailyPay'
-  // }
-];
-
-const tableData = computed(() => {
-  return limitList.filter(
-    item => item.levelLimit === updateUserForm.limitLevel
-  );
-});
-
-const initLimitList = async () => {
-  const res = await API.getUserLevelLimitList({ type: 0 });
-  limitList.length = 0;
-  limitList.push(...res.data);
-};
-
-onMounted(() => {
-  initRiskControlList();
-  initLimitList();
-});
 const {
   loading,
-  form,
-  updateUserForm,
-  recordForm,
-  addLabelForms,
   dataList,
+  labelList,
+  tenantList,
   selectedDataList,
   recordList,
+  userData,
   isEditUser,
-  isAddLabel,
-  isMultiLabelAdd,
-  isMultiLabelDel,
-  handelOpenRecord,
-  handleMultiAddLabels,
-  handleMultiDelLabels,
   isOpenRecord,
-  pagination,
+  openRecordList,
+  openMultiModal,
+  isMultiDel,
+  isMultiModal,
   recordPagination,
+  pagination,
   onSearch,
   onSearchRecord,
+  form,
+  recordForm,
   getLabelColor,
-  riskLabels,
-  attributeLabels,
-  handleUserLabelDel,
   handleUpdateUser,
   handleTableWidthChange,
   handleCurrentChange,
-  handleRecordCurrentChange,
   handleRecordTableWidthChange,
+  handleRecordCurrentChange,
   handleSelectionChange,
-  handleAddRiskLabels,
-  handleAddAttrLabels
+  handleCloseEditUser,
+  dispatchLabelsDel,
+  dispatchLabelsAdd,
+  dispatchUpdateUser
 } = userPlayerListHook(props.category);
 </script>
 
@@ -786,7 +293,7 @@ const {
   padding-right: 0;
 }
 .el-row {
-  row-gap: 1rem;
+  row-gap: 0.5rem;
 }
 .el-table--border .el-table__cell {
   border-right: var(--el-table-border);
@@ -796,5 +303,10 @@ const {
 .el-table th.el-table__cell.is-leaf {
   border-bottom: var(--el-table-border);
   border-bottom-width: 2px;
+}
+.custom {
+  .el-tag__content {
+    color: white;
+  }
 }
 </style>

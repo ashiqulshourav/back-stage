@@ -13,7 +13,7 @@
           class="!w-[260px] customInput"
         />
       </el-form-item>
-      <el-form-item prop="tenantId" :label="t('商户:')">
+      <el-form-item prop="tenantIds" :label="t('商户:')">
         <el-select
           v-model="form.tenantIds"
           :placeholder="t('所属商户')"
@@ -29,7 +29,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item prop="" :label="t('风控标签:')">
+      <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
         <el-select
           multiple
           clearable
@@ -37,14 +37,14 @@
           v-model="form.riskControlLabelList"
         >
           <el-option
-            v-for="label in riskControlList"
+            v-for="label in labelList.risk"
             :key="label.id"
             :label="label.name"
             :value="label.id"
           />
         </el-select>
       </el-form-item>
-      <el-form-item prop="" :label="t('属性标签:')">
+      <el-form-item prop="attributeLabelList" :label="t('属性标签:')">
         <el-select
           multiple
           clearable
@@ -52,7 +52,7 @@
           v-model="form.attributeLabelList"
         >
           <el-option
-            v-for="label in attributeList"
+            v-for="label in labelList.attr"
             :key="label.id"
             :label="label.name"
             :value="label.id"
@@ -64,61 +64,6 @@
         <Custom_date v-model:val="selectDate" @changeDate="changeDate" />
       </el-form-item>
 
-      <!-- <el-form-item prop="ids" :label="t('投注额: ')" class="!w-[370px]">
-        <el-row class="flex justify-between">
-          <el-col :span="11">
-            <el-input :placeholder="t('')" clearable class="w-full" />
-          </el-col>
-          <el-col :span="1">
-            <p>{{ t('-') }}</p>
-          </el-col>
-          <el-col :span="11">
-            <el-input :placeholder="t('')" clearable class="w-full" />
-          </el-col>
-        </el-row>
-      </el-form-item>
-      <el-form-item prop="ids" :label="t('平台输赢: ')" class="!w-[370px]">
-        <el-row class="flex justify-between">
-          <el-col :span="11">
-            <el-input :placeholder="t('')" clearable class="w-full" />
-          </el-col>
-          <el-col :span="1">
-            <p>{{ t('-') }}</p>
-          </el-col>
-          <el-col :span="11">
-            <el-input :placeholder="t('')" clearable class="w-full" />
-          </el-col>
-        </el-row>
-      </el-form-item>
-      <el-form-item prop="ids" :label="t('盈利额: ')" class="!w-[370px]">
-        <el-row class="flex justify-between">
-          <el-col :span="11">
-            <el-input :placeholder="t('')" clearable class="w-full" />
-          </el-col>
-          <el-col :span="1">
-            <p>{{ t('-') }}</p>
-          </el-col>
-          <el-col :span="11">
-            <el-input :placeholder="t('')" clearable class="w-full" />
-          </el-col>
-        </el-row>
-      </el-form-item> -->
-
-      <!-- <el-form-item>
-        <el-button
-          v-if="hasAuth('QUERY')"
-          type="primary"
-          class="!w-[120px]"
-          @click="search"
-          >搜索</el-button
-        >
-        <el-button
-          v-if="hasAuth('QUERY')"
-          class="!w-[100px]"
-          @click="resetForm(formRef)"
-          >重置</el-button
-        >
-      </el-form-item> -->
       <el-form-item>
         <el-button
           type="primary"
@@ -146,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
+import { ref } from 'vue';
 import { t } from '@/plugins/i18n';
 import { searchFormType } from '../utils/types';
 import Custom_date from '@/components/Form/Custom_date.vue';
@@ -155,7 +100,7 @@ import dayjs from 'dayjs';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import Search from '@iconify-icons/ep/search';
 import Refresh from '@iconify-icons/ep/refresh';
-
+import { labelListType, tenantType } from '../utils/types';
 import type { FormInstance } from 'element-plus';
 
 const formRef = ref<FormInstance | undefined>();
@@ -165,36 +110,13 @@ const props = defineProps<{
   loading: boolean;
   form: searchFormType;
   category: number;
+  labelList: labelListType;
+  tenantList: tenantType[];
 }>();
+
 const form = ref(props.form);
 
 const selectDate = ref<string[]>(['', '']);
-
-onMounted(() => {
-  initTenantList();
-  initRiskControlList();
-});
-
-const tenantList = reactive<any>([]);
-
-const initTenantList = async () => {
-  const res = await API.getTenantList({ category: props.category });
-  if (res.code) return;
-  tenantList.length = 0;
-  tenantList.push(...res.data.data);
-};
-
-const riskControlList = reactive<UserAPI.labelType[]>([]);
-const attributeList = reactive<UserAPI.labelType[]>([]);
-const initRiskControlList = async () => {
-  const res = await API.getLabelList({
-    category: props.category
-  });
-  riskControlList.length = 0;
-  riskControlList.push(...res.data.riskControlLabelList);
-  attributeList.length = 0;
-  attributeList.push(...res.data.attributeLabelList);
-};
 
 const changeDate = (t: string[]) => {
   if (!t) {
@@ -210,11 +132,11 @@ const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.resetFields();
   selectDate.value = ['', ''];
-  emits('onSearch', ...['reload']);
+  emits('onSearch', 'reload');
 };
 
 const search = () => {
-  emits('onSearch', ...['reload']);
+  emits('onSearch', 'reload');
 };
 </script>
 

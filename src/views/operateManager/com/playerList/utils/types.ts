@@ -1,7 +1,3 @@
-// interface FormProps {
-//   formInline: ConfigCenterDataAPI.LeagueTagType;
-// }
-
 export type searchFormType = {
   ids?: string | number | string[];
   usernames?: string | number | string[];
@@ -16,15 +12,22 @@ export type searchFormType = {
   beginTime?: string;
   endTime?: string;
 };
-
+export type specialLimitType = {
+  productAmountTotalLimit: number;
+  maxWinAmountLimit: number;
+  singleEventAccumulatedCompensationLimit: number;
+  seriesSingleDayCumulativeCompensationLimit: number;
+  percentageLimit?: number;
+};
 export type updateUserFormType = {
   id: string;
-  userName?: string;
-  limitLevel: number;
-  isFreeze: number;
-  singleBetLimit: number;
-  singleEventCompensationLimit: string;
-  createdAt: string | number;
+  limitLevel?: number;
+  isFreeze?: number;
+  remark?: string;
+  specialLimit: specialLimitType;
+  // singleBetLimit: number;
+  // singleEventCompensationLimit: string;
+  // createdAt: string | number;
 };
 
 export type recordFormType = {
@@ -37,4 +40,18 @@ export type addLabelsType = {
   risk: number[];
   attr: number[];
 };
+
+export type tenantType = {
+  category: number;
+  id: number;
+  name: string;
+  tenantCode: string;
+  tenantName: string;
+};
+
+export type labelListType = {
+  risk: UserAPI.labelType[];
+  attr: UserAPI.labelType[];
+};
+
 // export type { FormProps };

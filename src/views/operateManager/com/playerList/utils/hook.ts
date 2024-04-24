@@ -3,23 +3,36 @@ import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
-import { addLabelsType, recordFormType, searchFormType, updateUserFormType } from './types';
-import { ElMessage, ElMessageBox, FormInstance } from 'element-plus';
+import {
+  recordFormType,
+  searchFormType,
+  labelListType,
+  tenantType,
+  updateUserFormType
+} from './types';
+import { FormInstance } from 'element-plus';
 
 export function userPlayerListHook(venueType: number) {
+  const route = useRoute();
+  // data list
   const dataList = reactive<UserAPI.operateUserList[]>([]);
   const selectedDataList = reactive<UserAPI.operateUserList[]>([]);
+  const labelList = reactive<labelListType>({
+    risk: [],
+    attr: []
+  } as labelListType);
+  const tenantList = reactive<tenantType[]>([] as tenantType[]);
   const recordList = reactive<UserAPI.recordType[]>([]);
-  const loading = ref(true);
+  const userData = reactive<UserAPI.operateUserList>(
+    {} as UserAPI.operateUserList
+  );
+  // config variables
   const isEditUser = ref(false);
   const isOpenRecord = ref(false);
-  const isMultiLabelAdd = ref(false);
-  const isMultiLabelDel = ref(false);
-  const route = useRoute();
-  const isAddLabel = reactive<{
-    risk: boolean,
-    attr: boolean
-  }>({risk: false, attr: false});
+  const isMultiModal = ref(false);
+  const isMultiDel = ref(false);
+
+  const loading = ref(true);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -33,13 +46,10 @@ export function userPlayerListHook(venueType: number) {
     currentPage: 1,
     background: true
   });
-
+  //form data
   const form = reactive<searchFormType>({} as searchFormType);
-  const updateUserForm = reactive<updateUserFormType>({} as updateUserFormType);
+
   const recordForm = reactive<recordFormType>({} as recordFormType);
-  const addLabelForms = reactive<addLabelsType>({} as addLabelsType);
-  const riskLabels = reactive<UserAPI.labelType[]>([]);
-  const attributeLabels = reactive<UserAPI.labelType[]>([]);
 
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -67,152 +77,28 @@ export function userPlayerListHook(venueType: number) {
   }
 
   const handleUpdateUser = (row: UserAPI.operateUserList) => {
-    if (addLabelForms.attr)
-      addLabelForms.attr.length = 0;
-    if (addLabelForms.risk)
-      addLabelForms.risk.length = 0;
-    isAddLabel.attr = false;
-    isAddLabel.risk = false;
-    Object.assign(updateUserForm, row);
-    attributeLabels.length = 0;
-    if (row.attributeLabelList)
-      attributeLabels.push(...row.attributeLabelList);
-    riskLabels.length = 0;
-    if (row.riskControlLabelList)
-      riskLabels.push(...row.riskControlLabelList);
+    Object.assign(userData, row);
     isEditUser.value = true;
   };
 
-  const handleUserLabelDel = async (
-    id: string[],
-    labelId: number[],
-  ) => {
-    if (id.length === 0 || labelId.length === 0) {
-      return;
-    }
-    if (id.length === 1) {
-      ElMessageBox.confirm(`${t("您确定要删除吗?")} `, '系统提示', { type: 'warning', center: true }).then( async () => {
-        dispatchDelLabels(id, labelId);
-      });
-    }
-    
-  };
-  const dispatchDelLabels = async (
-    id: string[],
-    labelId: number[],
-  ) => {  
-    try {
-      const res = await API.updateUserLabelDel({ id, labelId });
-      if (res.code) return message(res.msg, { type: 'error' });
-      if(id.length === 1)
-        ElMessage.success(res.msg);
-      dispatchGetUserLabels();
-      onSearch();
-    } catch (error) {
-      console.log(error);
-    } 
-  }
-
-  const handleAddRiskLabels = (ids: string[]) => {
-    ElMessageBox.confirm(`${t("您确定要增加吗?")} `, '系统提示', { type: 'warning', center: true }).then(() => {
-      dispatchAddLabels(ids, addLabelForms.risk);
-      addLabelForms.risk.length = 0;
-      isAddLabel.risk = false;
-    });
-  }
-
-  const handleAddAttrLabels = (ids: string[]) => {
-    ElMessageBox.confirm(`${t("您确定要增加吗?")} `, '系统提示', { type: 'warning', center: true }).then(() => {
-      dispatchAddLabels(ids, addLabelForms.attr);
-      addLabelForms.attr.length = 0;
-      isAddLabel.attr = false;
-    });
-  }
-
-  const handleMultiAddLabels = () => {
-    let ids:string[] = [];
-    selectedDataList.forEach(item => {
-      ids.push(item.id);
-    })
-    ElMessageBox.confirm(`${t("您确定要增加吗?")} `, '系统提示', { type: 'warning', center: true }).then(() => {
-      dispatchAddLabels(ids, addLabelForms.risk);
-      dispatchAddLabels(ids, addLabelForms.attr);
-      ElMessage.success("Operation successful");
-      addLabelForms.risk.length = 0;
-      addLabelForms.attr.length = 0;
-      isMultiLabelAdd.value = false;
-    });
-  }
-
-  const handleMultiDelLabels = async () => {
-    let ids:string[] = [];
-    selectedDataList.forEach(item => {
-      ids.push(item.id);
-    })
-    ElMessageBox.confirm(`${t("您确定要删除吗？")} `, '系统提示', { type: 'warning', center: true }).then(() => {
-      dispatchDelLabels(ids, addLabelForms.risk);
-      dispatchDelLabels(ids, addLabelForms.attr);
-      ElMessage.success("Operation successful");
-      addLabelForms.risk.length = 0;
-      addLabelForms.attr.length = 0;
-      isMultiLabelDel.value = false;
-    });
-  }
-
-  const dispatchAddLabels = async (id: string[], labelId: number[]) => {
-    if (id.length === 0 || labelId.length === 0) {
-      return;
-    }
-    try {
-      const res = await API.addLabels({id, labelId});
-      if (res.code) return message(res.msg, { type: 'error' });
-      if (!res.data) {
-        return message("Operation failed", { type: 'error' });
-      }
-      dispatchGetUserLabels();
-      onSearch();
-      if (id.length === 1)
-        ElMessage.success(res.msg);
-    } catch (error) {
-      console.log(error);
-    }
-  }; 
-
-  const dispatchGetUserLabels = async () => {
-    try {
-      const res = await API.operateUserList({
-        ids: [updateUserForm.id],
-        pageSize: 10,
-        pageNum: 1,
-      });
-      if (res.code) return message(res.msg, { type: 'error' });
-      riskLabels.length = 0;
-      riskLabels.push(...res.data.pageData[0].riskControlLabelList);
-      attributeLabels.length = 0;
-      attributeLabels.push(...res.data.pageData[0].attributeLabelList);
-    } catch (error) {
-      console.log(error);
-    }
-  } 
-
   const handelOpenRecord = (labelType: number) => {
-    recordForm.id = updateUserForm.id;
+    recordForm.id = userData.id;
     recordForm.labelType = labelType;
-    onSearchRecord();
+    recordPagination.currentPage = 1;
+    onSearchRecord('reload');
     isOpenRecord.value = true;
-  }
+  };
 
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       loading.value = true;
-      const res =
-        await API.operateUserList({
-          ...removeEmptyStringKeys(form),
-          venueType:venueType,
-          pageSize: pagination.pageSize,
-          pageNum: pagination.currentPage
-        });
+      const res = await API.operateUserList({
+        ...removeEmptyStringKeys(form),
+        venueType: venueType,
+        pageSize: pagination.pageSize,
+        pageNum: pagination.currentPage
+      });
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
@@ -222,7 +108,7 @@ export function userPlayerListHook(venueType: number) {
       loading.value = false;
     }
   }
-  
+
   async function onSearchRecord(type?: string) {
     if (type === 'reload') recordPagination.currentPage = 1;
     try {
@@ -270,27 +156,138 @@ export function userPlayerListHook(venueType: number) {
     }
   };
 
+  // new part
+
+  const handleCloseEditUser = () => {
+    isEditUser.value = false;
+  };
+
+  const openRecordList = (id: string, labelType: number) => {
+    isOpenRecord.value = true;
+    recordForm.id = id;
+    recordForm.labelType = labelType;
+    onSearchRecord('reload');
+  };
+
+  const openMultiModal = (isDel: boolean) => {
+    isMultiDel.value = isDel;
+    isMultiModal.value = true;
+  };
+  //dispatch
+  const dispatchGetLabelList = async () => {
+    try {
+      const res = await API.getLabelList({
+        category: venueType
+      });
+      labelList.risk.length = 0;
+      labelList.risk.push(...res.data.riskControlLabelList);
+      labelList.attr.length = 0;
+      labelList.attr.push(...res.data.attributeLabelList);
+    } catch (error) {
+      return message(error as string, { type: 'error' });
+    }
+  };
+
+  const dispatchGetTenantList = async () => {
+    try {
+      const res = await API.getTenantList({ category: venueType });
+      if (res.code) return;
+      tenantList.length = 0;
+      tenantList.push(...res.data.data);
+    } catch (error) {
+      return message(error as string, { type: 'error' });
+    }
+  };
+
+  const dispatchGetUserLabels = async () => {
+    try {
+      const res = await API.operateUserList({
+        ids: [userData.id],
+        pageSize: 10,
+        pageNum: 1
+      });
+      if (res.code) return message(res.msg, { type: 'error' });
+      Object.assign(userData, res.data.pageData[0]);
+    } catch (error) {
+      return message(error as string, { type: 'error' });
+    }
+  };
+
+  const dispatchLabelsDel = async (id: string[], labelId: number[]) => {
+    try {
+      const res = await API.updateUserLabelDel({ id, labelId });
+      if (res.code) return message(res.msg, { type: 'error' });
+      if (!res.data) {
+        return message(res.msg, { type: 'success' });
+      }
+      dispatchGetUserLabels();
+      onSearch();
+    } catch (error) {
+      return message(error as string, { type: 'error' });
+    }
+  };
+
+  const dispatchLabelsAdd = async (id: string[], labelId: number[]) => {
+    try {
+      const res = await API.addLabels({ id, labelId });
+      if (res.code) return message(res.msg, { type: 'error' });
+      if (!res.data) {
+        return message(res.msg, { type: 'success' });
+      }
+      dispatchGetUserLabels();
+      onSearch();
+    } catch (error) {
+      return message(error as string, { type: 'success' });
+    }
+  };
+
+  const dispatchUpdateUser = async (form: updateUserFormType) => {
+    try {
+      loading.value = true;
+      const res = await API.operateUpdateUser({
+        ...removeEmptyStringKeys(form),
+        id: form.id,
+        specialLimit: form.specialLimit
+      });
+      loading.value = false;
+      if (res.code) return message(res.msg, { type: 'error' });
+      isEditUser.value = false;
+      message(res.msg, { type: 'success' });
+      onSearch();
+    } catch (error) {
+      loading.value = false;
+    }
+  };
+
   onMounted(() => {
     if (route.query.tagId) {
-      let labelType: any = route.query.labelType as string; 
-      labelType = Number(labelType);
-      let tagId: any = route.query.tagId as string; 
-      tagId = Number(tagId);
-      labelType === 1 ? form.riskControlLabelList?.push(tagId) : form.attributeLabelList?.push(tagId);
+      let labelType: any = route.query.labelType as string;
+      labelType = parseInt(labelType);
+      let tagId: any = route.query.tagId as string;
+      tagId = parseInt(tagId);
+      labelType === 1
+        ? form.riskControlLabelList?.push(tagId)
+        : form.attributeLabelList?.push(tagId);
     }
+    dispatchGetLabelList();
+    dispatchGetTenantList();
     onSearch();
   });
 
   return {
     loading,
     dataList,
+    labelList,
+    tenantList,
     selectedDataList,
     recordList,
+    userData,
     isEditUser,
     isOpenRecord,
-    isAddLabel,
-    isMultiLabelAdd,
-    isMultiLabelDel,
+    openRecordList,
+    openMultiModal,
+    isMultiDel,
+    isMultiModal,
     recordPagination,
     pagination,
     onSearch,
@@ -298,22 +295,17 @@ export function userPlayerListHook(venueType: number) {
     resetForm,
     form,
     recordForm,
-    riskLabels,
-    attributeLabels,
-    updateUserForm,
-    addLabelForms,
     getLabelColor,
     handleUpdateUser,
-    handleMultiAddLabels,
-    handleMultiDelLabels,
-    handleUserLabelDel,
     handleTableWidthChange,
     handelOpenRecord,
     handleCurrentChange,
     handleRecordTableWidthChange,
     handleRecordCurrentChange,
     handleSelectionChange,
-    handleAddRiskLabels,
-    handleAddAttrLabels
+    handleCloseEditUser,
+    dispatchLabelsDel,
+    dispatchLabelsAdd,
+    dispatchUpdateUser
   };
 }
