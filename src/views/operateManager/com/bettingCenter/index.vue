@@ -281,7 +281,8 @@
                   row.billStatus,
                   row.combineOrderDetails[0].betResult,
                   row.isReserve,
-                  row.riskStatus
+                  row.riskStatus,
+                  row.isSpecialSettle
                 ).bgColor
               }"
               class="status_btn mb-1"
@@ -293,7 +294,8 @@
                     row.billStatus,
                     row.combineOrderDetails[0].betResult,
                     row.isReserve,
-                      row.riskStatus
+                    row.riskStatus,
+                    row.isSpecialSettle
                   ).status as keyof typeof betStatusMap
                 ]
               }}
@@ -303,7 +305,8 @@
                     row.billStatus,
                     row.combineOrderDetails[0].betResult,
                     row.isReserve,
-                    row.riskStatus
+                    row.riskStatus,
+                    row.isSpecialSettle
                   ).status===betStatus.settlementBet">
               {{
                 row.settleTime
@@ -338,7 +341,10 @@
                   specialCountFlag(
                     row.status,
                     row.billStatus,
-                    row.combineOrderDetails[0].betResult
+                    row.combineOrderDetails[0].betResult,
+                    row.isReserve,
+                    row.riskStatus,
+                    row.isSpecialSettle,
                   ) &&
                   row.isReserve !== 1 &&
                   hasAuth('specialSettlement'.toUpperCase())
