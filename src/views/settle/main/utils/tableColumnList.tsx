@@ -8,7 +8,7 @@ const baseColumns: TableColumnList = [
     label: t('序号'),
     fixed: true,
     type: 'index',
-    minWidth: 100,
+    width: 100,
     headerRenderer: d => handleTableWidth(d, t('序号'))
   },
   {
@@ -58,7 +58,7 @@ const baseColumns: TableColumnList = [
     formatter: ({ status }) => {
       return MATCH_STATUS[status] ?? '-';
     },
-    headerRenderer: d => handleTableWidth(d, t('比赛状态'))
+    headerRenderer: d => handleTableWidth(d, t('比赛状态'), 'auto')
   },
   {
     label: t('全场结算'),
@@ -71,7 +71,7 @@ const baseColumns: TableColumnList = [
       ),
     headerRenderer: d => handleTableWidth(d, t('全场结算'))
   },
-  
+
   {
     label: t('操作'),
     slot: 'operation',

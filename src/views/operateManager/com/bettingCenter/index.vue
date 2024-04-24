@@ -29,7 +29,7 @@
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
           @selection-change="handleSelectionChange"
-          @page-size-change="handleTableWidthChange"
+          @page-size-change="handlePageSizeChange"
           @page-current-change="handleCurrentChange"
         >
           <template #index="{ row }">
@@ -281,6 +281,8 @@
                   row.billStatus,
                   row.combineOrderDetails[0].betResult,
                   row.isReserve,
+                  row.riskStatus,
+                  row.isSpecialSettle
                 ).bgColor
               }"
               class="status_btn mb-1"
@@ -292,7 +294,9 @@
                     row.billStatus,
                     row.combineOrderDetails[0].betResult,
                     row.isReserve,
-                  ).status
+                    row.riskStatus,
+                    row.isSpecialSettle
+                  ).status as keyof typeof betStatusMap
                 ]
               }}
             </div>
@@ -300,7 +304,9 @@
                     row.status,
                     row.billStatus,
                     row.combineOrderDetails[0].betResult,
-                    row.isReserve
+                    row.isReserve,
+                    row.riskStatus,
+                    row.isSpecialSettle
                   ).status===betStatus.settlementBet">
               {{
                 row.settleTime
@@ -331,16 +337,7 @@
               <el-button
                 class="mb-1 w-100"
                 @click="switchDialog(true, row)"
-                v-if="
-                  specialCountFlag(
-                    row.status,
-                    row.billStatus,
-                    row.combineOrderDetails[0].betResult
-                  ) &&
-                  row.isReserve !== 1 &&
-                  hasAuth('specialSettlement'.toUpperCase())
-                "
-              >
+                v-if=" hasAuth('specialSettlement'.toUpperCase())">
                 {{ t('特殊结算') }}
               </el-button>
             </div>
@@ -421,7 +418,7 @@ const {
   totalInfo,
   form,
   onSearch,
-  handleTableWidthChange,
+  handlePageSizeChange,
   handleCurrentChange,
   handleSelectionChange,
   exportFile,
@@ -429,7 +426,6 @@ const {
   getStatus,
   copyTest,
   tenantList,
-  specialCountFlag,
   switchDialog,
   tenantObj,
   isShowCancel

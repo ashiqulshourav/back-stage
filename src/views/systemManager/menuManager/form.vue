@@ -23,12 +23,9 @@
     </el-form-item>
 
     <el-form-item :label="t('菜单类型')" prop="type">
-      <el-select
-        placeholder="导航左侧菜单显示/详情页面非菜单展示/按钮为页面权限"
-        v-model="newFormInline.type"
-        clearable
-      >
+      <el-select v-model="newFormInline.type" clearable>
         <el-option
+          :disabled="!!newFormInline.id"
           v-for="item in Object.entries(TYPE_NAME)"
           :key="item[0]"
           :label="item[1]"
@@ -42,13 +39,13 @@
         v-model="newFormInline.parentId"
         filterable
         clearable
-        :filter-method="filterMethod"
+        :disabled="newFormInline.parentId === 0 && !!newFormInline.id"
       >
         <el-option :value="0" :label="t('一级页面')"></el-option>
         <el-option
-          v-for="item in selectParentList"
+          v-for="item in parentList"
           :key="item.id"
-          :label="item.tableName"
+          :label="item.name"
           :value="item.id"
         />
       </el-select>
@@ -103,7 +100,6 @@ const props = defineProps<{
 }>();
 
 const emits = defineEmits(['closeDialog']);
-const selectVal = ref('');
 
 const ruleFormRef = ref<FormInstance>();
 const newFormInline = reactive(props.row);
@@ -112,18 +108,7 @@ const closeDialog = () => {
   emits('closeDialog');
 };
 
-const selectParentList = computed(() => {
-  if (!selectVal.value) {
-    return props.parentList;
-  } else {
-    return props.parentList
-      .filter(item => item.name.includes(selectVal.value))
-      .map(item => item);
-  }
-});
-
-const filterMethod = v => (selectVal.value = v);
-
+/* 传,roleName,status,comment */
 const confirmClick = () => {
   ruleFormRef.value.validate(async v => {
     const requestAPI = newFormInline.id ? 'menuUpdate' : 'menuInsert';

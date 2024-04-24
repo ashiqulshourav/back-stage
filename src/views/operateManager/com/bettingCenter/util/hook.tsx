@@ -1,6 +1,7 @@
 import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
+import type { FormInstance } from 'element-plus';
 import {
   betStatus,
   betStatusMap,
@@ -72,7 +73,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
     minProfitAmount: '',
     maxProfitAmount: ''
   });
-  function handleTableWidthChange(val: number) {
+  function handlePageSizeChange(val: number) {
     pagination.pageSize = val;
     onSearch();
   }
@@ -149,7 +150,16 @@ export function useBettingCenterHook(category:number,venueType:number) {
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
       if (res.data !== null) {
-        dataList.push(...res?.data?.pageData);
+        let list = res?.data?.pageData||[];
+        list= list.map((row)=>{
+          let riskSt:number = -1;
+          row.combineOrderDetails.map((item2)=>{
+            if (item2.riskStatus===2) riskSt = 2
+          })
+          row.riskStatus = riskSt
+          return row
+        })
+        dataList.push(...list);
         dataList.map((item: any, index) => {
           item.index = index + 1;
         });
@@ -179,7 +189,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
     }
   };
 
-  const resetForm = (formEl:any) => {
+  const resetForm = (formEl:FormInstance) => {
     if (!formEl) return;
     formEl.resetFields();
     onSearch();
@@ -231,7 +241,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
             }
             break;
           case 'marketType':
-            str = markeTypeMap[data.marketType as keyof typeof markeTypeMap];
+            str = markeTypeMap[data.marketType];
             break;
           case 'isSettlementAgain':
             str = data.isSettlementAgain === 2 ? '是' : '否';
@@ -243,8 +253,10 @@ export function useBettingCenterHook(category:number,venueType:number) {
                   data.status,
                   data.billStatus,
                   data.betResult,
-                  data.isReserve
-                )?.status as keyof typeof betStatusMap
+                  data.isReserve,
+                  data.riskStatus,
+                  data.isSpecialSettle
+                )?.status
               ];
             break;
           case 'billStatus':
@@ -254,15 +266,17 @@ export function useBettingCenterHook(category:number,venueType:number) {
                   data.status,
                   data.billStatus,
                   data.betResult,
-                  data.isReserve
-                )?.status as keyof typeof betStatusMap
+                  data.isReserve,
+                  data.riskStatus,
+                  data.isSpecialSettle
+                )?.status
               ];
             break;
           case 'settleScore':
             str = displayHomeAwayScore(data.settleScore, data.sportId);
             break;
           case 'betResult':
-            str = BET_RESULT_TYPE_MAP[data.betResult as keyof typeof BET_RESULT_TYPE_MAP];
+            str = BET_RESULT_TYPE_MAP[data.betResult];
             break;
           case 'scoreBenchmark':
             str = displayHomeAwayScore(data.scoreBenchmark, data.sportId);
@@ -330,9 +344,14 @@ export function useBettingCenterHook(category:number,venueType:number) {
       }
     });
   };
-  const getStatus = (status:number, billStatus:number, betResult:number, isReserve?:number) => {
+  const getStatus = (status:number, billStatus:number, betResult:number, isReserve?:number,riskStatus?:number,isSpecialSettle:number) => {
     let obj = { status: -1, bgColor: '' };
-    if (
+    if(isSpecialSettle===1){
+      // 特殊结算也算已结算
+      obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
+    }else if(riskStatus===2){
+        obj = { status: betStatus.PendingApprove, bgColor: '#F57582' }; //待审核
+    }else if (
       status == 2 &&
       billStatus === 1 &&
       (betResult === 22 || betResult === 23)
@@ -368,18 +387,6 @@ export function useBettingCenterHook(category:number,venueType:number) {
     }
     return obj;
   };
-
-  const specialCountFlag = (status:number, billStatus:number, betResult:number): boolean => {
-    return (
-      getStatus(status, billStatus, betResult)?.status ===
-        betStatus.unsettlementBet ||
-      getStatus(status, billStatus, betResult)?.status ===
-        betStatus.settlementBet ||
-      getStatus(status, billStatus, betResult)?.status ===
-        betStatus.eventAbnormal
-    );
-  };
-
   const switchDialog = async (flag: boolean, row:any) => {
     UDialogFlag.value = flag;
     if (flag) {
@@ -444,7 +451,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
     totalInfo,
     onSearch,
     resetForm,
-    handleTableWidthChange,
+    handlePageSizeChange,
     handleCurrentChange,
     handleSelectionChange,
     exportFile,
@@ -452,7 +459,6 @@ export function useBettingCenterHook(category:number,venueType:number) {
     getStatus,
     copyTest,
     tenantObj,
-    specialCountFlag,
     UDialogFlag,
     switchDialog,
     isShowCancel,
