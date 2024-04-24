@@ -337,19 +337,7 @@
               <el-button
                 class="mb-1 w-100"
                 @click="switchDialog(true, row)"
-                v-if="
-                  specialCountFlag(
-                    row.status,
-                    row.billStatus,
-                    row.combineOrderDetails[0].betResult,
-                    row.isReserve,
-                    row.riskStatus,
-                    row.isSpecialSettle,
-                  ) &&
-                  row.isReserve !== 1 &&
-                  hasAuth('specialSettlement'.toUpperCase())
-                "
-              >
+                v-if=" hasAuth('specialSettlement'.toUpperCase())">
                 {{ t('特殊结算') }}
               </el-button>
             </div>
