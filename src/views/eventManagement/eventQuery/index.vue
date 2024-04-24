@@ -19,12 +19,14 @@
           :default-sort="{ prop: 'level', order: 'descending' }"
           :data="dataList"
           :columns="dynamicColumns"
-          :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
+          :pagination="{
+            ...pagination,
+            pageSizes: [20, 50, 100, 200, 500, 1000]
+          }"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
-          @selection-change="handleSelectionChange"
-          @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
+          @page-size-change="handlePageSizeChange"
         >
           <template #operation="{ row }">
             <el-button
@@ -63,10 +65,11 @@ const {
   onSearch,
   form,
   handleTableWidthChange,
-  handleCurrentChange,
   handleSelectionChange,
   // openDialog,
-  dataList
+  dataList,
+  handleCurrentChange,
+  handlePageSizeChange
 } = useEventQueryHook();
 </script>
 

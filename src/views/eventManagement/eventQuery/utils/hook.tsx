@@ -40,6 +40,10 @@ export function useEventQueryHook() {
     pagination.currentPage = val;
     onSearch();
   }
+  function handlePageSizeChange(val: number) {
+    pagination.pageSize = val;
+    onSearch();
+  }
 
   function handleSelectionChange(val) {
     console.log('handleSelectionChange', val);
@@ -82,6 +86,7 @@ export function useEventQueryHook() {
     handleCurrentChange,
     handleSelectionChange,
     // openDialog,
-    dataList
+    dataList,
+    handlePageSizeChange
   };
 }

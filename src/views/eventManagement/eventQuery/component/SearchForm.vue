@@ -101,8 +101,7 @@ const search = () => {
   emits('onSearch', ...['reload']);
 };
 
-const changeEventName = (e) => {
-  
+const changeEventName = e => {
   // props.form.eventName = '';
 };
 </script>
