@@ -387,17 +387,6 @@ export function useBettingCenterHook(category:number,venueType:number) {
     }
     return obj;
   };
-  const specialCountFlag = (status:number, billStatus:number, betResult:number,isReserve?:number,riskStatus?:number,isSpecialSettle:number): boolean => {
-    return (
-      getStatus(status, billStatus, betResult,isReserve,riskStatus,isSpecialSettle)?.status ===
-        betStatus.unsettlementBet ||
-      getStatus(status, billStatus, betResult,isReserve,riskStatus,isSpecialSettle)?.status ===
-        betStatus.settlementBet ||
-      getStatus(status, billStatus, betResult,isReserve,riskStatus,isSpecialSettle)?.status ===
-        betStatus.eventAbnormal
-    );
-  };
-
   const switchDialog = async (flag: boolean, row:any) => {
     UDialogFlag.value = flag;
     if (flag) {
@@ -470,7 +459,6 @@ export function useBettingCenterHook(category:number,venueType:number) {
     getStatus,
     copyTest,
     tenantObj,
-    specialCountFlag,
     UDialogFlag,
     switchDialog,
     isShowCancel,

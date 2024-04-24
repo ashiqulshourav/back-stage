@@ -426,7 +426,6 @@ const {
   getStatus,
   copyTest,
   tenantList,
-  specialCountFlag,
   switchDialog,
   tenantObj,
   isShowCancel
