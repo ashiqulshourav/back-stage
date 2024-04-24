@@ -1,6 +1,7 @@
 import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
+import type { FormInstance } from 'element-plus';
 import {
   betStatus,
   betStatusMap,
@@ -149,7 +150,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
       if (res.data !== null) {
-        let list = res?.data?.pageData;
+        let list = res?.data?.pageData||[];
         list= list.map((row)=>{
           let riskSt:number = -1;
           row.combineOrderDetails.map((item2)=>{
@@ -252,7 +253,9 @@ export function useBettingCenterHook(category:number,venueType:number) {
                   data.status,
                   data.billStatus,
                   data.betResult,
-                  data.isReserve
+                  data.isReserve,
+                  data.riskStatus,
+                  data.isSpecialSettle
                 )?.status as keyof typeof betStatusMap
               ];
             break;
@@ -263,7 +266,9 @@ export function useBettingCenterHook(category:number,venueType:number) {
                   data.status,
                   data.billStatus,
                   data.betResult,
-                  data.isReserve
+                  data.isReserve,
+                  data.riskStatus,
+                  data.isSpecialSettle
                 )?.status as keyof typeof betStatusMap
               ];
             break;
@@ -339,7 +344,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
       }
     });
   };
-  const getStatus = (status:number, billStatus:number, betResult:number, isReserve?:number,riskStatus?:number) => {
+  const getStatus = (status:number, billStatus:number, betResult:number, isReserve?:number,riskStatus?:number,isSpecialSettle:number) => {
     let obj = { status: -1, bgColor: '' };
     if(riskStatus===2){
       obj = { status: betStatus.PendingApprove, bgColor: '#F57582' }; //待审核
@@ -361,7 +366,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
       } else {
         obj = { status: betStatus.unsettlementBet, bgColor: '#FFC53D' };
       }
-    } else if (status === 1 && billStatus === 1) {
+    } else if ((status === 1 && billStatus === 1)||isSpecialSettle===1) {
       // 已结算
       obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
     } else if (status === 4 && billStatus === 1 && betResult === 61) {
@@ -379,14 +384,13 @@ export function useBettingCenterHook(category:number,venueType:number) {
     }
     return obj;
   };
-
-  const specialCountFlag = (status:number, billStatus:number, betResult:number): boolean => {
+  const specialCountFlag = (status:number, billStatus:number, betResult:number,isReserve?:number,riskStatus?:number,isSpecialSettle:number): boolean => {
     return (
-      getStatus(status, billStatus, betResult)?.status ===
+      getStatus(status, billStatus, betResult,isReserve,riskStatus,isSpecialSettle)?.status ===
         betStatus.unsettlementBet ||
-      getStatus(status, billStatus, betResult)?.status ===
+      getStatus(status, billStatus, betResult,isReserve,riskStatus,isSpecialSettle)?.status ===
         betStatus.settlementBet ||
-      getStatus(status, billStatus, betResult)?.status ===
+      getStatus(status, billStatus, betResult,isReserve,riskStatus,isSpecialSettle)?.status ===
         betStatus.eventAbnormal
     );
   };
