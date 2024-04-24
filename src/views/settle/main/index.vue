@@ -90,7 +90,7 @@ const renderColumnList = computed(() => {
       label: t('未结算'),
       prop: 'unSettlementEvents',
       headerRenderer: (d: TableColumnRenderer) =>
-        handleTableWidth(d, t('未结算')),
+        handleTableWidth(d, t('未结算'), 'auto'),
       hide: () => currentSport.value?.value != SPORT_NAME_TYPE.football
     }
   ];
