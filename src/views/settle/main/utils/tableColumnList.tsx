@@ -56,7 +56,7 @@ const baseColumns: TableColumnList = [
     label: t('比赛状态'),
     prop: 'status',
     formatter: ({ status }) => {
-      return MATCH_STATUS[status as keyof typeof MATCH_STATUS] ?? '-';
+      return MATCH_STATUS[status] ?? '-';
     },
     headerRenderer: d => handleTableWidth(d, t('比赛状态'), 'auto')
   },

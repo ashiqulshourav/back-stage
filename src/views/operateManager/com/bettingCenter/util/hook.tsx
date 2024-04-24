@@ -241,7 +241,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
             }
             break;
           case 'marketType':
-            str = markeTypeMap[data.marketType as keyof typeof markeTypeMap];
+            str = markeTypeMap[data.marketType];
             break;
           case 'isSettlementAgain':
             str = data.isSettlementAgain === 2 ? '是' : '否';
@@ -276,7 +276,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
             str = displayHomeAwayScore(data.settleScore, data.sportId);
             break;
           case 'betResult':
-            str = BET_RESULT_TYPE_MAP[data.betResult as keyof typeof BET_RESULT_TYPE_MAP];
+            str = BET_RESULT_TYPE_MAP[data.betResult];
             break;
           case 'scoreBenchmark':
             str = displayHomeAwayScore(data.scoreBenchmark, data.sportId);
