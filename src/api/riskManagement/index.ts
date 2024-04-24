@@ -36,6 +36,11 @@ export const riskManagementData = {
       COMMON.BASE_RES_TYPE<null | RiskManagementDataAPI.RiskTagType>
     >('post', '/operateLabel/del', {
       data
-    })
+    }),
+  // 单关限额列表 0足球 1篮球 2其他 3电竞
+  getGameLimitList: (gameType: number) =>
+    http.request<RiskManagementDataAPI.LimitRes>('post', '/betLimit/list', { data: { gameType } }),
+  //- 修改单关限额列表
+  updateLevelLimit: (data: RiskManagementDataAPI.LimitListType[]) => http.request<RiskManagementDataAPI.updateLevelLimitResType>("post", "/betLimit/update", { data }),
   // mockAPI.deleteRiskTag(data)
 };

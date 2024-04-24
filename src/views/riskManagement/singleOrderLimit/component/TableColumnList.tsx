@@ -1,44 +1,45 @@
 import { t } from '@/plugins/i18n';
 
+// 足球 篮球,其他赛种
 export const columns: TableColumnList = [
   {
     label: t('联赛等级'),
-    prop: 'levelLimit'
+    prop: 'leagueLevel'
   },
   {
-    label: t('单玩法累计期望赔付'),
-    slot: 'maxWinAmountLimit'
+    label: t('单用户单场累计赔付限额'),
+    slot: 'singleUserMaxWin'
   },
   {
     label: t('让球'),
     children: [
       {
         label: t('单玩法累计期望赔付'),
-        slot: 'maxWinAmountLimit'
+        slot: 'handicapSingleMaxWin'
       },
       {
-        label: t('全场让球-单注最高可投金额'),
+        label: t('全场-单注最高可投金额'),
         children: [
           {
             label: t('早盘'),
-            slot: 'userSingleGamePay'
+            slot: 'handicapWholeMaxBetMorning'
           },
           {
             label: t('滚球'),
-            slot: 'singleMatchPay'
+            slot: 'handicapWholeMaxBetRolling'
           },
         ]
       },
       {
-        label: t('半场让球-单注最高可投金额'),
+        label: t('半场-单注最高可投金额'),
         children: [
           {
             label: t('早盘'),
-            slot: 'userSingleGamePay'
+            slot: 'handicapHalfMaxBetMoring'
           },
           {
             label: t('滚球'),
-            slot: 'singleMatchPay'
+            slot: 'handicapHalfMaxBetRolling'
           },
         ]
       },
@@ -49,31 +50,31 @@ export const columns: TableColumnList = [
     children: [
       {
         label: t('单玩法累计期望赔付'),
-        slot: 'maxWinAmountLimit'
+        slot: 'bigsmallSingleMaxWin'
       },
       {
-        label: t('全场让球-单注最高可投金额'),
+        label: t('全场-单注最高可投金额'),
         children: [
           {
             label: t('早盘'),
-            slot: 'userSingleGamePay'
+            slot: 'bigsmallWholeMaxBetMoring'
           },
           {
             label: t('滚球'),
-            slot: 'singleMatchPay'
+            slot: 'bigsmallWholeMaxBetRolling'
           },
         ]
       },
       {
-        label: t('半场让球-单注最高可投金额'),
+        label: t('半场-单注最高可投金额'),
         children: [
           {
             label: t('早盘'),
-            slot: 'userSingleGamePay'
+            slot: 'bigsmallHalfMaxBetMoring'
           },
           {
             label: t('滚球'),
-            slot: 'singleMatchPay'
+            slot: 'bigsmallHalfMaxBetRolling'
           },
         ]
       },
@@ -84,31 +85,31 @@ export const columns: TableColumnList = [
     children: [
       {
         label: t('单玩法累计期望赔付'),
-        slot: 'maxWinAmountLimit'
+        slot: 'winSingleMaxWin'
       },
       {
-        label: t('全场让球-单注最高可投金额'),
+        label: t('全场-单注最高可投金额'),
         children: [
           {
             label: t('早盘'),
-            slot: 'userSingleGamePay'
+            slot: 'winWholeMaxBetMoring'
           },
           {
             label: t('滚球'),
-            slot: 'singleMatchPay'
+            slot: 'winWholeMaxBetRolling'
           },
         ]
       },
       {
-        label: t('半场让球-单注最高可投金额'),
+        label: t('半场-单注最高可投金额'),
         children: [
           {
             label: t('早盘'),
-            slot: 'userSingleGamePay'
+            slot: 'winHalfMaxBetMoring'
           },
           {
             label: t('滚球'),
-            slot: 'singleMatchPay'
+            slot: 'winHalfMaxBetRolling'
           },
         ]
       },
@@ -119,17 +120,73 @@ export const columns: TableColumnList = [
     children: [
       {
         label: t('单玩法累计期望赔付'),
-        slot: 'championDailyPay2'
+        slot: 'otherSingleMaxWin'
       },
       {
         label: t('早盘-单注最高可投金额'),
-        slot: 'championDailyPay2'
+        slot: 'otherMaxBetMoring'
       },
       {
         label: t('滚球-单注最高可投金额'),
-        slot: 'championDailyPay2'
+        slot: 'otherMaxBetRolling'
       },
     ]
   },
 
+];
+
+
+// 电竞
+export const columns2: TableColumnList = [
+  {
+    label: t('联赛等级'),
+    prop: 'leagueLevel'
+  },
+  {
+    label: t('单用户单场累计期望赔付'),
+    slot: 'singleUserMaxWin'
+  },
+  {
+    label: t('单玩法累计期望赔付'),
+    slot: 'esportSingleMaxWin'
+  },
+  {
+    label: t('全局-单注最高可投金额'),
+    children: [
+      {
+        label: t('早盘'),
+        slot: 'esportWholeMaxBetMoring'
+      },
+      {
+        label: t('滚球'),
+        slot: 'esportWholeMaxBetRolling'
+      },
+    ]
+  },
+  {
+    label: t('单局-单注最高可投金额'),
+    children: [
+      {
+        label: t('早盘'),
+        slot: 'esportSingleMaxBetMoring'
+      },
+      {
+        label: t('滚球'),
+        slot: 'esportSingleMaxBetRolling'
+      },
+    ]
+  },
+  {
+    label: t('回合-单注最高可投金额'),
+    children: [
+      {
+        label: t('早盘'),
+        slot: 'esportRoundMaxBetMoring'
+      },
+      {
+        label: t('滚球'),
+        slot: 'esportRoundMaxBetRolling'
+      },
+    ]
+  },
 ];
