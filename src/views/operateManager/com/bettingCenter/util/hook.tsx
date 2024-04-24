@@ -346,8 +346,11 @@ export function useBettingCenterHook(category:number,venueType:number) {
   };
   const getStatus = (status:number, billStatus:number, betResult:number, isReserve?:number,riskStatus?:number,isSpecialSettle:number) => {
     let obj = { status: -1, bgColor: '' };
-    if(riskStatus===2){
-      obj = { status: betStatus.PendingApprove, bgColor: '#F57582' }; //待审核
+    if(isSpecialSettle===1){
+      // 特殊结算也算已结算
+      obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
+    }else if(riskStatus===2){
+        obj = { status: betStatus.PendingApprove, bgColor: '#F57582' }; //待审核
     }else if (
       status == 2 &&
       billStatus === 1 &&
@@ -366,7 +369,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
       } else {
         obj = { status: betStatus.unsettlementBet, bgColor: '#FFC53D' };
       }
-    } else if ((status === 1 && billStatus === 1)||isSpecialSettle===1) {
+    } else if (status === 1 && billStatus === 1) {
       // 已结算
       obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
     } else if (status === 4 && billStatus === 1 && betResult === 61) {
