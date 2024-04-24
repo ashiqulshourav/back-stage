@@ -281,6 +281,7 @@
                   row.billStatus,
                   row.combineOrderDetails[0].betResult,
                   row.isReserve,
+                  row.riskStatus
                 ).bgColor
               }"
               class="status_btn mb-1"
@@ -301,7 +302,8 @@
                     row.status,
                     row.billStatus,
                     row.combineOrderDetails[0].betResult,
-                    row.isReserve
+                    row.isReserve,
+                    row.riskStatus
                   ).status===betStatus.settlementBet">
               {{
                 row.settleTime

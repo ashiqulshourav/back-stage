@@ -151,11 +151,11 @@ export function useBettingCenterHook(category:number,venueType:number) {
       if (res.data !== null) {
         let list = res?.data?.pageData;
         list= list.map((row)=>{
-          let riskStatus:number = -1;
+          let riskSt:number = -1;
           row.combineOrderDetails.map((item2)=>{
-            if (item2.riskStatus===2) riskStatus = 2
+            if (item2.riskStatus===2) riskSt = 2
           })
-          row.riskStatus=2
+          row.riskStatus = riskSt
           return row
         })
         dataList.push(...list);
