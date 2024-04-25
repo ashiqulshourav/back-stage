@@ -241,7 +241,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
             }
             break;
           case 'marketType':
-            str = markeTypeMap[data.marketType];
+            str = markeTypeMap[data.marketType  as keyof typeof markeTypeMap];
             break;
           case 'isSettlementAgain':
             str = data.isSettlementAgain === 2 ? '是' : '否';
@@ -256,7 +256,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
                   data.isReserve,
                   data.riskStatus,
                   data.isSpecialSettle
-                )?.status
+                )?.status as keyof typeof betStatusMap
               ];
             break;
           case 'billStatus':
@@ -269,7 +269,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
                   data.isReserve,
                   data.riskStatus,
                   data.isSpecialSettle
-                )?.status
+                )?.status as keyof typeof betStatusMap
               ];
             break;
           case 'settleScore':

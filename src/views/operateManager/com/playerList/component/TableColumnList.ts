@@ -13,7 +13,7 @@ export const columns: TableColumnList = [
   {
     label: t('所属商户'),
     prop: 'tenantName',
-    minWidth: 150,
+    minWidth: 150
   },
   {
     label: t('风控标签'),
@@ -23,7 +23,7 @@ export const columns: TableColumnList = [
   {
     label: t('属性标签'),
     slot: 'attributeLabel',
-    width: 350,
+    width: 350
   },
   {
     label: t('特殊限额'),
@@ -35,7 +35,7 @@ export const columns: TableColumnList = [
   {
     label: t('最后下注时间'),
     prop: 'createdAt',
-    formatter({ createdAt }) {
+    formatter({ createdAt }: { createdAt: string }) {
       return dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss');
     },
     minWidth: 250
@@ -52,22 +52,21 @@ export const columns: TableColumnList = [
 export const recordColumns: TableColumnList = [
   {
     label: t('标签名称'),
-    prop: 'labelName',
+    prop: 'labelName'
   },
   {
     label: t('动作'),
-    prop: 'opt',
+    prop: 'opt'
   },
   {
     label: t('操作人'),
-    prop: 'createdBy',
+    prop: 'createdBy'
   },
   {
     label: t('修改时间'),
     prop: 'updatedAt',
-    formatter({ updatedAt }) {
+    formatter({ updatedAt }: { updatedAt: string }) {
       return dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss');
-    },
-  },
-  
-]
+    }
+  }
+];

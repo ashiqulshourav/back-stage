@@ -104,11 +104,7 @@ export const columns: TableColumnList = [
     prop: 'betResult',
   },
   {
-    label: t('注单状态'),
-    prop: 'status',
-  },
-  {
-    label: t('风控状态'),
+    label: t('审核状态'),
     prop: 'riskStatus',
   },
   {
