@@ -36,7 +36,7 @@ export function useLeague() {
     onSearch();
   }
 
-  function handleSelectionChange(val) {
+  function handleSelectionChange(val: number) {
     console.log('handleSelectionChange', val);
   }
 
@@ -52,19 +52,12 @@ export function useLeague() {
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
-      // console.log("data", dataList)
       dataList.push(...res.data.list);
       pagination.total = res.data.total;
     } catch (error) {
       loading.value = false;
     }
   }
-
-  const resetForm = formEl => {
-    if (!formEl) return;
-    formEl.resetFields();
-    onSearch();
-  };
 
   async function openDialog(title: string, row?: MetadataAPI.LeagueList) {
     addDialog({
@@ -106,11 +99,10 @@ export function useLeague() {
     dataList,
     pagination,
     onSearch,
-    resetForm,
     openDialog,
-    form,
     handleTableWidthChange,
     handleCurrentChange,
-    handleSelectionChange
+    handleSelectionChange,
+    form
   };
 }

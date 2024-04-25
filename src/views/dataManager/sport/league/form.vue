@@ -22,6 +22,7 @@
           <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
         </el-upload>
       </el-form-item>
+
       <el-form-item :label="t('联赛ID')" prop="leagueId">
         <el-input
           v-model="newFormInline.leagueId"
@@ -36,7 +37,6 @@
           v-model="newFormInline.countryId"
           filterable
           clearable
-          class="!w-[280px]"
           :placeholder="t('请选择国家')"
         >
           <el-option
@@ -64,12 +64,11 @@
       </el-form-item>
       <el-form-item :label="t('热门排序')" prop="level">
         <el-input
-          :formatter="v => inputRestrictions(v)"
+          :formatter="(v:string) => inputRestrictions(v)"
           v-model="newFormInline.level"
           :placeholder="t('请输入1-200之间的数字')"
           type="number"
           clearable
-          class="!w-[200px]"
           v-enter="updateVal"
         />
       </el-form-item>

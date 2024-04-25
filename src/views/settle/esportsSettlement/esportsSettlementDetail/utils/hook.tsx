@@ -18,7 +18,7 @@ export function useEsportsSettlement() {
   );
 
   //- 分页点击
-  const handleCurrentChange = (val: number, index) =>
+  const handleCurrentChange = (val: number, index: number) =>
     (rList[index].currentPage = val);
 
   //- 每页显示条数改变
@@ -87,6 +87,7 @@ export function useEsportsSettlement() {
         });
       });
     });
+    console.log('hook.tsx文件 90==============行打印=', rList);
   };
 
   //-
