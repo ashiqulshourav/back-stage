@@ -6,7 +6,7 @@
       :columns="columns"
       @refresh="onSearch('reload')"
     >
-      <template v-slot="{ size, dynamicColumns }">
+      <template v-slot="{ size }">
         <pure-table
           class="table_container"
           align-whole="center"
@@ -51,6 +51,11 @@ const {
   handleSelectionChange,
   form
 } = bettingBalanceInquiryHook();
+
+const dynamicColumns = computed(() => {
+  columns[4].hide = form.id !== '' && form.userName === '' && dataList.length !== 0;
+  return columns;
+});
 </script>
 
 <style>

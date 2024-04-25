@@ -1,21 +1,23 @@
 <template>
   <div class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]">
     <el-form ref="formRef" :inline="true" :model="form">
-      <el-form-item prop="userName">
+      <el-form-item prop="id">
         <el-input
-          v-model="form.userName"
+          v-model="form.id"
           :placeholder="t('请输入用户名或用户ID')"
           clearable
+          v-on:clear="search"
           v-enter="search"
           class="!w-[260px]"
         />
       </el-form-item>
 
-      <el-form-item prop="id">
+      <el-form-item prop="userName">
         <el-input
-          v-model="form.id"
+          v-model="form.userName"
           :placeholder="t('请输入赛事ID')"
           clearable
+          v-on:clear="search"
           v-enter="search"
           class="!w-[260px]"
         />

@@ -1,6 +1,6 @@
 import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
-import { reactive, ref, h } from 'vue';
+import { reactive, ref } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { searchFormType } from './types';
 
@@ -39,7 +39,7 @@ export function bettingBalanceInquiryHook() {
       const res =
         await API.operateUserList({
           ...removeEmptyStringKeys(form),
-          ids: form.id ? Array(form.id) : [], //TODO: need to changed when API is available
+          ids: Array(form.id), //TODO: need to changed when API is available
           pageSize: pagination.pageSize,
           pageNum: pagination.currentPage
         });
