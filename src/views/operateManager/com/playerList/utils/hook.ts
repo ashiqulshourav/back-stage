@@ -6,7 +6,7 @@ import { reactive, ref, h } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { searchFormType } from './types';
 
-export function userPlayerListHook() {
+export function userPlayerListHook(venueType: number) {
   const dataList = reactive<UserAPI.operateUserList[]>([]);
   const loading = ref(true);
   const pagination = reactive<PaginationProps>({
@@ -45,7 +45,8 @@ export function userPlayerListHook() {
         await API.operateUserList({
           ...removeEmptyStringKeys(form),
           pageSize: pagination.pageSize,
-          pageNum: pagination.currentPage
+          pageNum: pagination.currentPage,
+          venueType
         });
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
