@@ -127,7 +127,7 @@
                     <el-tag
                       :style="`background-color: ${getLabelColor(
                         label.level,
-                        'risk'
+                        'attr'
                       )}`"
                       class="rounded-lg w-full py-1"
                     >
@@ -164,7 +164,7 @@
                         <el-tag
                           :style="`background-color: ${getLabelColor(
                             label.level,
-                            'risk'
+                            'attr'
                           )}`"
                           class="rounded-lg w-full py-1 text-white text-center"
                         >

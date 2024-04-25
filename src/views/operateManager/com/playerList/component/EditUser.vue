@@ -27,7 +27,6 @@
           <el-col
             v-for="label in userData.riskControlLabelList"
             :key="label.id"
-            class="custom"
             :span="6"
           >
             <el-row :gutter="2" class="items-center">
@@ -110,7 +109,7 @@
                 <el-tag
                   :style="`background-color: ${getLabelColor(
                     label.level,
-                    'risk'
+                    'attr'
                   )}`"
                   closable
                   @close="handleDeleteLabel(label.id)"
@@ -474,5 +473,10 @@ watch(
 .el-dialog {
   padding-left: 0;
   padding-right: 0;
+}
+.custom {
+  .el-tag .el-tag__close {
+    color: white;
+  }
 }
 </style>
