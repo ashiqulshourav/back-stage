@@ -180,9 +180,11 @@ export function userPlayerListHook(venueType: number) {
         category: venueType
       });
       labelList.risk.length = 0;
-      labelList.risk.push(...res.data.riskControlLabelList);
+      if (res.data.riskControlLabelList)
+        labelList.risk.push(...res.data.riskControlLabelList);
       labelList.attr.length = 0;
-      labelList.attr.push(...res.data.attributeLabelList);
+      if (res.data.attributeLabelList)
+        labelList.attr.push(...res.data.attributeLabelList);
     } catch (error) {
       return message(error as string, { type: 'error' });
     }
