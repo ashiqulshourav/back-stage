@@ -3,6 +3,7 @@ import editForm from '../form.vue';
 import { columns } from '../component/TableColumnList';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import { ElMessageBox } from 'element-plus';
+import { TableColumns } from '@pureadmin/table';
 
 export function useMenuManagerHook() {
   const dataList = reactive<RoleAPI.ChildResourceList[]>([]);
@@ -19,37 +20,15 @@ export function useMenuManagerHook() {
       dataList.length = 0;
       dataList.push(...res.data);
       filterParentList(dataList);
-      checkHasQueryRole();
     } catch (error) {
       loading.value = false;
     }
   };
 
-  //- 查询是否有query
-  const checkHasQueryRole = () => {
-    parentList.forEach(item => {
-      const index = item.childResourceList.findIndex(
-        _ => _.enName === 'query' || _.type === 0 || _.type === 2
-      );
-      if (index < 0 && item.childResourceList.length === 0) {
-        const params = {
-          name: '页面查看',
-          enName: 'query',
-          type: 1,
-          parentId: item.id,
-          sort: 1,
-          path: '/query',
-          routerPath: '/query'
-        };
-        API.menuInsert(params);
-      }
-    });
-  };
-
   const filterParentList = (list: RoleAPI.ChildResourceList[]) => {
     list.forEach(item => {
-      if (item.childResourceList.length > 0)
-        filterParentList(item.childResourceList);
+      if ((item.childResourceList as RoleAPI.ChildResourceList[]).length > 0)
+        filterParentList(item.childResourceList as RoleAPI.ChildResourceList[]);
       if (item.type === 0 || item.type === 2) {
         parentList.push({
           id: item.id,
@@ -58,7 +37,7 @@ export function useMenuManagerHook() {
           childResourceList: item.childResourceList
         });
       }
-      list.sort((a, b) => +a.sort - +b.sort);
+      list.sort((a, b) => +(a.sort as string) - +(b.sort as string));
     });
   };
 
@@ -108,14 +87,28 @@ export function useMenuManagerHook() {
     });
   }
 
-  const cellRowClick = (_row, _column, e) => {
-    if (
-      e.currentTarget.firstElementChild.firstElementChild.firstElementChild
-        .tagName === 'DIV'
-    ) {
-      e.currentTarget.firstElementChild.firstElementChild.firstElementChild.click();
-    } else {
-      e.currentTarget.firstElementChild.firstElementChild.firstElementChild.nextElementSibling.click();
+  const cellRowClick = (
+    _row: RoleAPI.ChildResourceList,
+    _column: TableColumns,
+    e: PointerEvent
+  ) => {
+    const target = e.currentTarget as HTMLElement;
+    const firstChild = target.firstElementChild as HTMLElement;
+    if (firstChild) {
+      const secondChild = firstChild.firstElementChild as HTMLElement;
+      if (secondChild) {
+        const thirdChild = secondChild.firstElementChild as HTMLElement;
+        if (thirdChild) {
+          if (thirdChild.tagName === 'DIV') {
+            thirdChild.click();
+          } else {
+            const nextSibling = thirdChild.nextElementSibling as HTMLElement;
+            if (nextSibling) {
+              nextSibling.click();
+            }
+          }
+        }
+      }
     }
   };
 
