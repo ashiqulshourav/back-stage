@@ -371,7 +371,7 @@
           <template #operation="{ row }">
             <div
               class="match_item approve flex justify-between items-center"
-              v-for="(item, index) in row.combineOrderDetails"
+              v-for="(item) in row.combineOrderDetails"
               :key="item.betItemId"
             >
               <div>
