@@ -217,11 +217,13 @@ export function userPlayerListHook(venueType: number) {
     try {
       const res = await API.updateUserLabelDel({ id, labelId });
       if (res.code) return message(res.msg, { type: 'error' });
-      if (!res.data) {
+      if (res.data) {
+        dispatchGetUserLabels();
+        onSearch();
         return message(res.msg, { type: 'success' });
+      } else {
+        return message('Operation failed', { type: 'error' });
       }
-      dispatchGetUserLabels();
-      onSearch();
     } catch (error) {
       return message(error as string, { type: 'error' });
     }
@@ -231,11 +233,13 @@ export function userPlayerListHook(venueType: number) {
     try {
       const res = await API.addLabels({ id, labelId });
       if (res.code) return message(res.msg, { type: 'error' });
-      if (!res.data) {
+      if (res.data) {
+        dispatchGetUserLabels();
+        onSearch();
         return message(res.msg, { type: 'success' });
+      } else {
+        return message('Operation failed', { type: 'error' });
       }
-      dispatchGetUserLabels();
-      onSearch();
     } catch (error) {
       return message(error as string, { type: 'success' });
     }
