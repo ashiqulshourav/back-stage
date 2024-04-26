@@ -8,6 +8,7 @@
           v-enter="search"
           clearable
           class="!w-[150px]"
+          :formatter="(v:string) => formatNumber(v, 20)"
         />
       </el-form-item>
 
@@ -62,6 +63,7 @@ import Refresh from '@iconify-icons/ep/refresh';
 import type { FormInstance } from 'element-plus';
 import { searchFormType } from '../utils/types';
 import { OPERATE_TAG_LEVEL } from '@/utils/maps/tags_map';
+import { formatNumber } from '@/utils/formatNumber';
 
 // const time = ref('');
 const formRef = ref();
