@@ -342,6 +342,20 @@
               </el-button>
             </div>
           </template>
+          <template #operationRemark="{ row }">
+              <div>
+                  <div>{{row.orderRemark}}</div>
+                  <div>
+                      <el-button
+                              size="small"
+                              type="primary"
+                              @click="editOrderRemark(row.id,row.orderRemark)"
+                      >
+                          {{ t('备注') }}
+                      </el-button>
+                  </div>
+              </div>
+          </template>
         </pure-table>
         <div
           class="bottom_content absolute bottom-7 flex max-w-[50%] items-center text-sm flex-wrap"
@@ -428,7 +442,8 @@ const {
   tenantList,
   switchDialog,
   tenantObj,
-  isShowCancel
+  isShowCancel,
+    editOrderRemark
 } = useBettingCenterHook(props.category,props.venueType);
 </script>
 

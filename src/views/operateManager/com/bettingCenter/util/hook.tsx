@@ -28,6 +28,7 @@ import { ElMessageBox } from 'element-plus';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
 import {riskStatus} from "@/views/riskManagement/bettingAudit/util/types";
+import editOrder from "../component/editOrder.vue";
 
 export function useBettingCenterHook(category:number,venueType:number) {
   const { openPasswordInput } = usePasswordInputHook();
@@ -435,6 +436,27 @@ export function useBettingCenterHook(category:number,venueType:number) {
     })
     return flag
   }
+    const editOrderRemark = (id:number,orderRemark:string)=>{
+
+        console.log(11111,id,orderRemark)
+        addDialog({
+            title: t('编辑备注'),
+            class: 'reset_dialog',
+            width: '500px',
+            center: true,
+            closeOnClickModal: false,
+            hideFooter: true,
+            contentRenderer: ({ options, index }) =>
+                h(editOrder, {
+                    ref: editDialogRef,
+                    data: {orderId:id,orderRemark},
+                    onCloseDialog: (_: boolean) => {
+                        closeDialog(options, index);
+                        onSearch();
+                    }
+                })
+        });
+    }
 
   //- 切换比赛类型
   onMounted(() => {
@@ -462,5 +484,6 @@ export function useBettingCenterHook(category:number,venueType:number) {
     UDialogFlag,
     switchDialog,
     isShowCancel,
+    editOrderRemark,
   };
 }
