@@ -58,6 +58,11 @@ export const columns: TableColumnList = [
     slot: 'operation',
     minWidth: 50,
     align:'center',
-    fixed:"right"
+  },
+  {
+    label: t('备注'),
+    slot: 'operationRemark',
+    align:'center',
+    minWidth: 50,
   }
 ]

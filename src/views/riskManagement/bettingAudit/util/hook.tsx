@@ -405,8 +405,6 @@ const editMatchDetailRemark = (orderDetailId:number,orderDetailRemark:string)=>{
         }
       })
   });
-
-
 }
 
 function copyTest(str:string,tip:string){

@@ -26,6 +26,7 @@ export const bettingCenter = {
   bettingAuditConfirm: (data: any) => http.request<any>("post", "/bet-center/manualConfirm", { data }),
   // 注单审核拒绝
   bettingAuditReject: (data: any) => http.request<any>("post", "/bet-center/manualReject", { data }),
-  // 编辑备注
-  editMatchDetailRemark: (data: {orderDetailId:number,remark:string}) => http.request<any>("post", "/bet-center/betOrderDetail/editRemark", { data }),
+
+  // 针对赛事编辑备注
+  editOrderRemark: (data: {orderId:number,remark:string}) => http.request<any>("post", "/bet-center/betOrder/editRemark", { data }),
 };

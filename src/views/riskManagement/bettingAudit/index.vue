@@ -386,7 +386,6 @@
                   </el-button>
                 </div>
               </div>
-
             </div>
           </template>
         </pure-table>

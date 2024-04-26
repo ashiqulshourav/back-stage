@@ -45,7 +45,7 @@
         <el-option
           v-for="item in parentList"
           :key="item.id"
-          :label="item.name"
+          :label="item.tableName"
           :value="item.id as number"
         />
       </el-select>
