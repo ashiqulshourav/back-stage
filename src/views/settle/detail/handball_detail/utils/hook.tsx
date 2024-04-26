@@ -75,8 +75,11 @@ export function useDetailHook() {
           <div>${t('手动结算后无法回退，请再次确定结果')}</div>
       </div>
       `,
-      `${t('结算')} ${MATCH_PERIOD_TYPES[matchPeriodId]}`,
+      `${t('结算')} ${
+        MATCH_PERIOD_TYPES[matchPeriodId as keyof typeof MATCH_PERIOD_TYPES]
+      }`,
       {
+        customClass: 'settle_confirm_dialog',
         dangerouslyUseHTMLString: true,
         confirmButtonText: t('确认结算'),
         cancelButtonText: t('取消'),
@@ -111,7 +114,7 @@ export function useDetailHook() {
     scoreList.forEach(item => {
       s1 += Number(item[0]) - Number(item[1]);
     });
-    if (dataList.length < 2 || dataList.some(item => !item.id) || s1 === 0) {
+    if (dataList.length < 2) {
       return message(t('请先完成上/下半场或附加赛结算'), { type: 'error' });
     }
     ElMessageBox.confirm(

@@ -54,7 +54,7 @@
                   <span class="ml-3">{{ item.odds }}</span>
                 </el-radio>
               </el-radio-group>
-              
+
               <el-checkbox-group
                 v-else
                 class="bet_item"
@@ -155,8 +155,8 @@ defineOptions({ name: 'ESPORTSSETTLEMENTDETAIL' });
 const { tableHeaderStyle } = usePublicHooks();
 const selectIndex = ref(0);
 
-const changeIndex = index => {
-  selectIndex.value = index;
+const changeIndex = (i: number) => {
+  selectIndex.value = i;
   rList.forEach(_ => (_.currentPage = 1));
 };
 

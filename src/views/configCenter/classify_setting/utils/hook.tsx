@@ -19,9 +19,7 @@ export function useClassifySettingHook() {
     onSearch();
   }
 
-  function handleSelectionChange(val) {
-    console.log('handleSelectionChange', val);
-  }
+  function handleSelectionChange() {}
 
   //- 初始化
   async function onSearch() {
@@ -33,7 +31,11 @@ export function useClassifySettingHook() {
     if (res.code) return message(res.msg, { type: 'error' });
     dataList.length = 0;
     dataList.push(...res.data);
-    document.querySelector('.table_container .el-scrollbar__wrap').scroll(0, 0);
+    (
+      document.querySelector(
+        '.table_container .el-scrollbar__wrap'
+      ) as HTMLDivElement
+    ).scroll(0, 0);
   }
 
   //- 删除分类
@@ -47,7 +49,8 @@ export function useClassifySettingHook() {
     }).then(async () => {
       const res = await API.deleteKindsCode({
         configValue: row.configValue,
-        sportName: SPORT_ID_MAP.find(item => item.value === row.sportId).label,
+        sportName:
+          SPORT_ID_MAP.find(item => item.value === row.sportId)?.label ?? '-',
         id: row.id
       });
       message(res.msg, { type: res.code ? 'error' : 'success' });
@@ -67,9 +70,9 @@ export function useClassifySettingHook() {
         h(editForm, {
           form: {
             sportId: searchForm.sportId,
-            sportName: SPORT_ID_MAP.find(
-              item => item.value === searchForm.sportId
-            ).label,
+            sportName:
+              SPORT_ID_MAP.find(item => item.value === searchForm.sportId)
+                ?.label ?? '-',
             id: row?.id ?? '',
             configValue: row?.configValue ?? '',
             tags: row?.tags ?? [],
