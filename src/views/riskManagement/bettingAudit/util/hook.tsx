@@ -234,16 +234,13 @@ export function useLeague() {
           case 'tenantCode':  //商户编码
               str=(tenantObj[data.tenantId])?.name??''
               break;
-          // case 'riskStatus':  //风控状态
-          //   str= getRiskStatus(item.riskStatus).label
-          //     if(item.riskType){
-          //     }
-          //   break;
+          case 'riskStatus':  //审核状态
+            str= getRiskStatus(data.riskStatus).label
+            break;
           default:
             str = data[column.prop as string]
         }
         arr.push(str);
-
       });
       return arr;
     });

@@ -12,12 +12,12 @@
           table-layout="auto"
           :loading="loading"
           size="large"
+          show-overflow-tooltip
           row-key="id"
-          border
           adaptive
           :indent="32"
-          :data="dataList"
           @row-click="cellRowClick"
+          :data="dataList"
           :columns="dynamicColumns"
           :header-cell-style="tableHeaderStyle"
           :tree-props="{
@@ -36,9 +36,9 @@
               {{ t('编辑') }}
             </el-button>
             <el-button
+              v-if="userStore.userInfo.name === 'armour'"
               class="reset-margin"
               link
-              v-if="userStore.userInfo.name === 'armour'"
               type="danger"
               size="large"
               @click="delMenu(row.id)"
@@ -59,7 +59,7 @@ import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 import { useUserStore } from '@/store/user';
 
-defineOptions({ name: 'SYSTEMMANAGER_MENUMANAGER' });
+defineOptions({ name: 'SYSTEMCONFIG_MENUMANAGER' });
 const { tableHeaderStyle } = usePublicHooks();
 const userStore = useUserStore();
 
@@ -69,8 +69,8 @@ const {
   dataList,
   onSearch,
   openRoleDialog,
-  cellRowClick,
-  delMenu
+  delMenu,
+  cellRowClick
 } = useMenuManagerHook();
 </script>
 

@@ -376,7 +376,6 @@ const {
   getRiskStatus,
   selectReject,
   selectApprove,
-
 } = useLeague();
 watch( dataList,
     dataList => {

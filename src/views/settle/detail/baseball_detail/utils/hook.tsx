@@ -143,7 +143,7 @@ export function useBaseballHook() {
     );
   };
 
-  // * 是否可以全场结算判断
+  // - 是否可以全场结算判断
   const hasItPassedTheFullSettlementInspection = () => {
     let s1 = 0;
     let s2 = 0;
@@ -153,7 +153,7 @@ export function useBaseballHook() {
     });
     const len = dataList.length;
     if (len < 5) {
-      message(t('缺少事件'), { type: 'error' });
+      showErrorDialog();
       return false;
     }
     if (
