@@ -46,7 +46,7 @@
           v-for="item in parentList"
           :key="item.id"
           :label="item.name"
-          :value="item.id"
+          :value="item.id as number"
         />
       </el-select>
     </el-form-item>
@@ -56,7 +56,7 @@
         v-model="newFormInline.sort"
         clearable
         :placeholder="t('请输入大于0的整数')"
-        :formatter="v => inputRestrictions(v, 1, 1000)"
+        :formatter="(v:string) => inputRestrictions(v, 1, 1000)"
       />
     </el-form-item>
 
@@ -77,61 +77,61 @@
     </el-form-item>
 
     <div class="flex justify-end">
-      <el-button @click="closeDialog">{{ t("取消") }}</el-button>
+      <el-button @click="closeDialog">{{ t('取消') }}</el-button>
       <el-button type="primary" @click="confirmClick">{{
-        t("提交")
+        t('提交')
       }}</el-button>
     </div>
   </el-form>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
-import { formRules } from "./utils/rule"
-import { t } from "@/plugins/i18n"
-import { FormInstance } from "element-plus/es/components/form"
-import { message } from "@/utils/message"
-import { TYPE_NAME } from "./utils/map"
-import { inputRestrictions } from "@/utils/formatNumber"
+import { ref } from 'vue';
+import { formRules } from './utils/rule';
+import { t } from '@/plugins/i18n';
+import { FormInstance } from 'element-plus/es/components/form';
+import { message } from '@/utils/message';
+import { TYPE_NAME } from './utils/map';
+import { inputRestrictions } from '@/utils/formatNumber';
 
 const props = defineProps<{
-  row: Partial<RoleAPI.ChildResourceList>
-  parentList: Partial<RoleAPI.ChildResourceList>[]
-}>()
+  row: Partial<RoleAPI.ChildResourceList>;
+  parentList: Partial<RoleAPI.ChildResourceList>[];
+}>();
 
-const emits = defineEmits(["closeDialog"])
-const selectVal = ref("")
+const emits = defineEmits(['closeDialog']);
+// const selectVal = ref('');
 
-const ruleFormRef = ref<FormInstance>()
-const newFormInline = reactive(props.row)
+const ruleFormRef = ref<FormInstance>();
+const newFormInline = reactive(props.row);
 
 const closeDialog = () => {
-  emits("closeDialog")
-}
+  emits('closeDialog');
+};
 
-const selectParentList = computed(() => {
-  if (!selectVal.value) {
-    return props.parentList
-  } else {
-    return props.parentList
-      .filter(item => item.name.includes(selectVal.value))
-      .map(item => item)
-  }
-})
+// const selectParentList = computed(() => {
+//   if (!selectVal.value) {
+//     return props.parentList;
+//   } else {
+//     return props.parentList
+//       .filter(item => item.name.includes(selectVal.value))
+//       .map(item => item);
+//   }
+// });
 
-const filterMethod = v => (selectVal.value = v)
+// const filterMethod = v => (selectVal.value = v);
 
 const confirmClick = () => {
-  ruleFormRef.value.validate(async v => {
-    const requestAPI = newFormInline.id ? "menuUpdate" : "menuInsert"
+  ruleFormRef.value?.validate(async v => {
+    const requestAPI = newFormInline.id ? 'menuUpdate' : 'menuInsert';
     if (v) {
-      if (!newFormInline.id) delete newFormInline.id
-      const res = await API[requestAPI](newFormInline)
-      message(res.msg, { type: res.code ? "error" : "success" })
-      emits("closeDialog", res.code ? "" : "reloadTable")
+      if (!newFormInline.id) delete newFormInline.id;
+      const res = await API[requestAPI](newFormInline);
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      emits('closeDialog', res.code ? '' : 'reloadTable');
     }
-  })
-}
+  });
+};
 </script>
 
 <style lang="scss"></style>

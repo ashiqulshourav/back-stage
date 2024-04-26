@@ -25,7 +25,6 @@
                  class="!w-[150px]"
       />
       </el-form-item>
-
     </el-form>
     <div class="flex justify-end">
       <el-button @click="closeDialog">{{ t('取消') }}</el-button>
@@ -78,7 +77,6 @@ const closeDialog = () => {
 
 /* 传,roleName,status,comment */
 const confirmClick = () => {
-
   const param=props.list.map((item:any)=>{
     item.details.map((item2)=>{
       item2.riskType=form.value.riskType
@@ -93,8 +91,6 @@ const confirmClick = () => {
         if(res.code===0){
           emits('closeDialog');
         }
-
-        console.log(555,res)
       })
     }
   })
