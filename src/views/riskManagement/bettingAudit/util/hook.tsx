@@ -18,6 +18,7 @@ import {copyTextToClipboard} from "@pureadmin/utils";
 import {t} from "@/plugins/i18n";
 import formDom from "../component/form.vue";
 import {ElMessageBox} from "element-plus";
+import editOrder from "../component/editOrder.vue";
 export function useLeague() {
   const {openPasswordInput}= usePasswordInputHook()
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
@@ -385,6 +386,28 @@ const getRiskStatus = (rStatus:number)=>{
     }
     return obj
 }
+  const editDialogRef = ref();
+const editMatchDetailRemark = (orderDetailId:number,orderDetailRemark:string)=>{
+  addDialog({
+    title: t('编辑备注'),
+    class: 'reset_dialog',
+    width: '500px',
+    center: true,
+    closeOnClickModal: false,
+    hideFooter: true,
+    contentRenderer: ({ options, index }) =>
+      h(editOrder, {
+        ref: editDialogRef,
+        data: {orderDetailId,orderDetailRemark},
+        onCloseDialog: (_: boolean) => {
+          closeDialog(options, index);
+          onSearch();
+        }
+      })
+  });
+
+
+}
 
 function copyTest(str:string,tip:string){
         if(!str) return;
@@ -393,7 +416,6 @@ function copyTest(str:string,tip:string){
             ? message(t('复制{value}成功!',{value:tip||str||''}), { type: 'success' })
             : message(t('复制失败'), { type: 'error' });
     }
-
 
   //- 切换比赛类型
   onMounted(() => {
@@ -423,5 +445,6 @@ function copyTest(str:string,tip:string){
     handleApproveSome,
     selectReject,
     selectApprove,
+    editMatchDetailRemark,
   };
 }
