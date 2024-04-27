@@ -247,6 +247,7 @@ const { tableHeaderStyle } = usePublicHooks();
 
 const props = defineProps<{
   category: number;
+  venueType: number;
 }>();
 
 const {
@@ -280,7 +281,7 @@ const {
   dispatchLabelsDel,
   dispatchLabelsAdd,
   dispatchUpdateUser
-} = userPlayerListHook(props.category);
+} = userPlayerListHook(props.category, props.venueType);
 </script>
 
 <style lang="scss">
