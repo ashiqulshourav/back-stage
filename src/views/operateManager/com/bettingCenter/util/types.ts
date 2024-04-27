@@ -24,6 +24,7 @@ export type searchFormType = {
   maxBetAmount:number|string;
   minProfitAmount:number|string;
   maxProfitAmount:number|string;
+  riskControlLabelList:number[]
 }
 
 export enum betStatus {

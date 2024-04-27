@@ -6,6 +6,7 @@
       @on-search="onSearch"
       @exportFile="exportFile"
       :tenantList="tenantList"
+      :riskLabelList="riskLabelList"
     />
 
     <PureTableBar
@@ -443,7 +444,8 @@ const {
   switchDialog,
   tenantObj,
   isShowCancel,
-    editOrderRemark
+  editOrderRemark,
+  riskLabelList
 } = useBettingCenterHook(props.category,props.venueType);
 </script>
 
