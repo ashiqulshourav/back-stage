@@ -119,6 +119,8 @@ declare namespace UserAPI {
     limitLevel?: number;
     maxWinAmountLimit: number;
     productAmountTotalLimit: number;
+    singleEventAccumulatedCompensationLimit: number;
+    seriesSingleDayCumulativeCompensationLimit: number;
     attributeLabelList: labelType[];
     riskControlLabelList: labelType[];
   };
@@ -130,11 +132,11 @@ declare namespace UserAPI {
     pageSize: number;
     pageData: operateUserList[];
   };
-  
+
   type getRecordListData = {
     records: recordType[];
     total: number;
-  }
+  };
   type getRecordListDataRes = COMMON.BASE_RES_TYPE<getRecordListData>;
   type operateUserListReqType = COMMON.BASE_RES_TYPE<operateUserData>;
 

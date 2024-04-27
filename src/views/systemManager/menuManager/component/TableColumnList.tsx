@@ -25,7 +25,7 @@ export const columns: TableColumnList = [
     prop: 'type',
     minWidth: 220,
     headerRenderer: d => handleTableWidth(d, t('菜单类型'), 'auto'),
-    formatter: ({ type }) => TYPE_NAME[type] ?? '-'
+    formatter: ({ type }) => TYPE_NAME[type as keyof typeof TYPE_NAME] ?? '-'
   },
   {
     label: t('前端路径'),
@@ -42,11 +42,13 @@ export const columns: TableColumnList = [
   {
     label: t('菜单排序'),
     prop: 'sort',
+    minWidth: 220,
     headerRenderer: d => handleTableWidth(d, t('菜单排序'), 'auto')
   },
   {
     label: t('菜单展示'),
     prop: 'type',
+    minWidth: 200,
     headerRenderer: d => handleTableWidth(d, t('菜单展示'), 'auto'),
     formatter: ({ type }) => {
       return (
@@ -67,11 +69,6 @@ export const columns: TableColumnList = [
     prop: 'updatedAt',
     minWidth: 200,
     headerRenderer: d => handleTableWidth(d, t('修改时间'), 'auto')
-  },
-  {
-    label: t('修改人'),
-    prop: 'updatedBy',
-    headerRenderer: d => handleTableWidth(d, t('修改人'), 'auto')
   },
   {
     label: t('操作'),

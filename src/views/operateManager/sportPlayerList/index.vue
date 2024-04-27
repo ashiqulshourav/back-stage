@@ -1,5 +1,5 @@
 <template>
-  <PlayerList :venueType="0" :category="0"></PlayerList>
+  <PlayerList :category="0" :venueType="0"></PlayerList>
 </template>
 
 <script setup lang="ts">

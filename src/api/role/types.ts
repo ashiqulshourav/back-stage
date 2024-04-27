@@ -51,17 +51,17 @@ declare namespace RoleAPI {
   }
 
   type ChildResourceList = {
-    id: number;
-    name: string;
-    enName: string;
-    routerPath: string;
-    parentId: number;
-    type: number;
-    sort: number;
-    resourceFlag: number;
+    id: number | string;
+    name?: string;
+    enName?: string;
+    routerPath?: string;
+    parentId?: number | string;
+    type?: number | string;
+    sort: number | string;
+    resourceFlag?: number;
     tableName?: string;
-    path: string;
-    childResourceList: any[];
+    path?: string;
+    childResourceList?: any[];
   }
 
   type allPermission = {

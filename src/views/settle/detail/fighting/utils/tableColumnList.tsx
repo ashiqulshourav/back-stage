@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { handleTableWidth } from '@/utils/getTableWidth';
 
 export const columns: TableColumnList = [
   {
@@ -23,16 +24,19 @@ export const columns: TableColumnList = [
   },
   {
     label: t('赛果状态'),
-    slot: 'secondNum'
+    slot: 'secondNum',
+    minWidth: 260
   },
   {
     label: t('结算状态'),
+    headerRenderer: d => handleTableWidth(d, t('锁盘'), 'auto'),
     formatter: () => {
       return t('人工结算');
     }
   },
   {
     label: t('确认时间'),
+    minWidth: 220,
     formatter: ({ id, updatedAt }) => {
       return id ? dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss') : '_';
     }

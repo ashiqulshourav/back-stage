@@ -1,13 +1,39 @@
-import editForm from '../form.vue';
+// import editForm from '../form.vue';
 import { message } from '@/utils/message';
-import { addDialog, closeDialog } from '@/components/ReDialog/index';
 import type { PaginationProps } from '@pureadmin/table';
-import { reactive, ref, h } from 'vue';
+import { reactive, ref, onMounted } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
-import { searchFormType } from './types';
+import {
+  recordFormType,
+  searchFormType,
+  labelListType,
+  tenantType,
+  updateUserFormType
+} from './types';
+import { FormInstance } from 'element-plus';
 
-export function userPlayerListHook(venueType: number) {
+export function userPlayerListHook(venueType: number, category: number) {
+  const route = useRoute();
+  // data list
   const dataList = reactive<UserAPI.operateUserList[]>([]);
+  const selectedDataList = reactive<UserAPI.operateUserList[]>([]);
+  const labelList = reactive<labelListType>({
+    risk: [],
+    attr: []
+  } as labelListType);
+  const tenantList = reactive<
+    { name: string; id: number; tenantName: string }[]
+  >([]);
+  const recordList = reactive<UserAPI.recordType[]>([]);
+  const userData = reactive<UserAPI.operateUserList>(
+    {} as UserAPI.operateUserList
+  );
+  // config variables
+  const isEditUser = ref(false);
+  const isOpenRecord = ref(false);
+  const isMultiModal = ref(false);
+  const isMultiDel = ref(false);
+
   const loading = ref(true);
   const pagination = reactive<PaginationProps>({
     total: 0,
@@ -15,13 +41,17 @@ export function userPlayerListHook(venueType: number) {
     currentPage: 1,
     background: true
   });
-  const form = reactive<searchFormType>({
-    ids: '',
-    usernames: '',
-    tenantIds: '',
-    tenantCode: '',
-    limitLevel: ''
+
+  const recordPagination = reactive<PaginationProps>({
+    total: 0,
+    pageSize: 10,
+    currentPage: 1,
+    background: true
   });
+  //form data
+  const form = reactive<searchFormType>({} as searchFormType);
+
+  const recordForm = reactive<recordFormType>({} as recordFormType);
 
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -33,21 +63,44 @@ export function userPlayerListHook(venueType: number) {
     onSearch();
   }
 
-  function handleSelectionChange(val) {
-    console.log('handleSelectionChange', val);
+  function handleRecordTableWidthChange(val: number) {
+    recordPagination.pageSize = val;
+    onSearchRecord();
   }
+
+  function handleRecordCurrentChange(val: number) {
+    recordPagination.currentPage = val;
+    onSearchRecord();
+  }
+
+  function handleSelectionChange(val: UserAPI.operateUserList[]) {
+    selectedDataList.length = 0;
+    selectedDataList.push(...val);
+  }
+
+  const handleUpdateUser = (row: UserAPI.operateUserList) => {
+    Object.assign(userData, row);
+    isEditUser.value = true;
+  };
+
+  const handelOpenRecord = (labelType: number) => {
+    recordForm.id = userData.id;
+    recordForm.labelType = labelType;
+    recordPagination.currentPage = 1;
+    onSearchRecord('reload');
+    isOpenRecord.value = true;
+  };
 
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       loading.value = true;
-      const res =
-        await API.operateUserList({
-          ...removeEmptyStringKeys(form),
-          pageSize: pagination.pageSize,
-          pageNum: pagination.currentPage,
-          venueType
-        });
+      const res = await API.operateUserList({
+        ...removeEmptyStringKeys(form),
+        venueType: venueType,
+        pageSize: pagination.pageSize,
+        pageNum: pagination.currentPage
+      });
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
@@ -58,52 +111,186 @@ export function userPlayerListHook(venueType: number) {
     }
   }
 
-  const resetForm = formEl => {
+  async function onSearchRecord(type?: string) {
+    if (type === 'reload') recordPagination.currentPage = 1;
+    try {
+      loading.value = true;
+      const res = await API.getLabelRecord({
+        ...removeEmptyStringKeys(recordForm),
+        pageSize: recordPagination.pageSize,
+        pageNum: recordPagination.currentPage
+      });
+      loading.value = false;
+      if (res.code) return message(res.msg, { type: 'error' });
+      recordList.length = 0;
+      recordList.push(...res.data.records);
+      recordPagination.total = res.data.total;
+    } catch (error) {
+      loading.value = false;
+    }
+  }
+
+  const resetForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return;
     formEl.resetFields();
     onSearch();
   };
 
-  function openDialog(title: string, row?: UserAPI.operateUserList) {
-    addDialog({
-      title,
-      width: '60%',
-      alignCenter: true,
-      closeOnClickModal: false,
-      hideFooter: true,
-      contentRenderer: ({ options, index }) =>
-        h(editForm, {
-          row: {
-            id: row.id,
-            name: row.userName,
-            isFreeze: row.isFreeze === 0,
-            limitLevel: row?.limitLevel ?? 4,
-            remark: row?.remark ?? '',
-            singleBetLimit: row?.productAmountTotalLimit,
-            singleEventCompensationLimit: row?.maxWinAmountLimit,
-          },
-          onCloseDialog: (closeType?: string) => {
-            if (closeType) onSearch();
-            closeDialog(options, index);
-          }
-        })
+  const getLabelColor = (label: number, type: string) => {
+    if (type === 'risk') {
+      switch (label) {
+        case 1:
+          return 'rgba(163, 0, 20, 1)';
+        case 2:
+          return 'rgba(255, 92, 0, 1)';
+        case 3:
+          return 'rgba(255, 153, 0, 1)';
+      }
+    } else {
+      switch (label) {
+        case 1:
+          return 'rgba(24, 145, 255, 1)';
+        case 2:
+          return 'rgba(25, 190, 107, 1)';
+        case 3:
+          return 'rgba(46, 64, 80, 1)';
+      }
+    }
+  };
+
+  // new part
+
+  const handleCloseEditUser = () => {
+    isEditUser.value = false;
+  };
+
+  const openRecordList = (id: string, labelType: number) => {
+    isOpenRecord.value = true;
+    recordForm.id = id;
+    recordForm.labelType = labelType;
+    onSearchRecord('reload');
+  };
+
+  const openMultiModal = (isDel: boolean) => {
+    isMultiDel.value = isDel;
+    isMultiModal.value = true;
+  };
+  const dispatchGetLabelList = async () => {
+    try {
+      const res = await API.getLabelList({
+        category: venueType
+      });
+      labelList.risk.length = 0;
+      if (res.data.riskControlLabelList)
+        labelList.risk.push(...res.data.riskControlLabelList);
+      labelList.attr.length = 0;
+      if (res.data.attributeLabelList)
+        labelList.attr.push(...res.data.attributeLabelList);
+    } catch (error) {
+      return message(error as string, { type: 'error' });
+    }
+  };
+
+  const dispatchGetTenantList = async () => {
+    const res = await API.queryTenantList({
+      category: category
     });
-  }
+    if (res.data?.length) {
+      tenantList.push(...res?.data);
+    }
+  };
+
+  const dispatchLabelsDel = async (id: string[], labelId: number[]) => {
+    try {
+      const res = await API.updateUserLabelDel({ id, labelId });
+      if (res.code) return message(res.msg, { type: 'error' });
+      onSearch();
+      if (id.length > 1) {
+        return message(res.msg, { type: 'success' });
+      }
+    } catch (error) {
+      return message(error as string, { type: 'error' });
+    }
+  };
+
+  const dispatchLabelsAdd = async (id: string[], labelId: number[]) => {
+    try {
+      const res = await API.addLabels({ id, labelId });
+      if (res.code) return message(res.msg, { type: 'error' });
+      onSearch();
+      if (id.length > 1) {
+        return message(res.msg, { type: 'success' });
+      }
+    } catch (error) {
+      return message(error as string, { type: 'success' });
+    }
+  };
+
+  const dispatchUpdateUser = async (form: updateUserFormType) => {
+    try {
+      loading.value = true;
+      const res = await API.operateUpdateUser({
+        ...removeEmptyStringKeys(form),
+        id: form.id,
+        specialLimit: form.specialLimit
+      });
+      loading.value = false;
+      if (res.code) return message(res.msg, { type: 'error' });
+      isEditUser.value = false;
+      message(res.msg, { type: 'success' });
+      onSearch();
+    } catch (error) {
+      loading.value = false;
+    }
+  };
 
   onMounted(() => {
+    if (route.query.tagId) {
+      let labelType: any = route.query.labelType as string;
+      labelType = parseInt(labelType);
+      let tagId: any = route.query.tagId as string;
+      tagId = parseInt(tagId);
+      labelType === 1
+        ? form.riskControlLabelList?.push(tagId)
+        : form.attributeLabelList?.push(tagId);
+    }
+    dispatchGetLabelList();
+    dispatchGetTenantList();
     onSearch();
   });
 
   return {
     loading,
     dataList,
+    labelList,
+    tenantList,
+    selectedDataList,
+    recordList,
+    userData,
+    isEditUser,
+    isOpenRecord,
+    openRecordList,
+    openMultiModal,
+    isMultiDel,
+    isMultiModal,
+    recordPagination,
     pagination,
     onSearch,
+    onSearchRecord,
     resetForm,
-    openDialog,
     form,
+    recordForm,
+    getLabelColor,
+    handleUpdateUser,
     handleTableWidthChange,
+    handelOpenRecord,
     handleCurrentChange,
-    handleSelectionChange
+    handleRecordTableWidthChange,
+    handleRecordCurrentChange,
+    handleSelectionChange,
+    handleCloseEditUser,
+    dispatchLabelsDel,
+    dispatchLabelsAdd,
+    dispatchUpdateUser
   };
 }

@@ -28,7 +28,7 @@ import { ElMessageBox } from 'element-plus';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
 import {riskStatus} from "@/views/riskManagement/bettingAudit/util/types";
-
+import editOrder from "../component/editOrder.vue";
 export function useBettingCenterHook(category:number,venueType:number) {
   const { openPasswordInput } = usePasswordInputHook();
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
@@ -36,6 +36,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
     { name: string; id: number; tenantName: string }[]
   >([]);
   const tenantObj = reactive<any>({});
+  const riskLabelList = reactive<UserAPI.labelType[]>([])
   const UDialogFlag = ref<Boolean>(false);
   const loading = ref(true);
   const totalInfo = reactive<BetOrderAPI.otherDataType>(
@@ -45,7 +46,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
     total: 0,
     pageSize: 20,
     currentPage: 1,
-    pageSizes: [ 20, 50, 100, 200,500,1000,5000],
+    pageSizes: [ 20, 50, 100, 200,500],
     background: true
   });
   const form = reactive<searchFormType>({
@@ -71,7 +72,8 @@ export function useBettingCenterHook(category:number,venueType:number) {
     minBetAmount: '',
     maxBetAmount: '',
     minProfitAmount: '',
-    maxProfitAmount: ''
+    maxProfitAmount: '',
+      riskControlLabelList:[],
   });
   function handlePageSizeChange(val: number) {
     pagination.pageSize = val;
@@ -193,28 +195,6 @@ export function useBettingCenterHook(category:number,venueType:number) {
     if (!formEl) return;
     formEl.resetFields();
     onSearch();
-  };
-
-  const getLabelColor = (level: number, type: string) => {
-    if (type === 'risk') {
-      switch (level) {
-        case 1:
-          return 'rgba(163, 0, 20, 1)';
-        case 2:
-          return 'rgba(255, 92, 0, 1)';
-        case 3:
-          return 'rgba(255, 153, 0, 1)';
-      }
-    } else {
-      switch (level) {
-        case 1:
-          return 'rgba(24, 145, 255, 1)';
-        case 2:
-          return 'rgba(25, 190, 107, 1)';
-        case 3:
-          return 'rgba(46, 64, 80, 1)';
-      }
-    }
   };
 
   //- 导出excel表格
@@ -457,11 +437,43 @@ export function useBettingCenterHook(category:number,venueType:number) {
     })
     return flag
   }
+    const editOrderRemark = (id:number,orderRemark:string)=>{
+        addDialog({
+            title: t('编辑备注'),
+            class: 'reset_dialog',
+            width: '500px',
+            center: true,
+            closeOnClickModal: false,
+            hideFooter: true,
+            contentRenderer: ({ options, index }) =>
+                h(editOrder, {
+                    ref: editDialogRef,
+                    data: {orderId:id,orderRemark},
+                    onCloseDialog: (_: boolean) => {
+                        closeDialog(options, index);
+                        onSearch();
+                    }
+                })
+        });
+    }
+    const getRiskLabelList = async () => {
+        try {
+            const res = await API.getLabelList({
+                category: venueType
+            });
+
+            if (res.data.riskControlLabelList)
+                riskLabelList.push(...res.data.riskControlLabelList);
+        } catch (error) {
+            return message(error as string, { type: 'error' });
+        }
+    };
 
   //- 切换比赛类型
   onMounted(() => {
     onSearch();
     getTenantList();
+      getRiskLabelList()
   });
 
   return {
@@ -484,6 +496,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
     UDialogFlag,
     switchDialog,
     isShowCancel,
-    getLabelColor
+    editOrderRemark,
+    riskLabelList,
   };
 }

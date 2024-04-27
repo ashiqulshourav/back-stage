@@ -12,9 +12,9 @@
           table-layout="auto"
           :loading="loading"
           size="large"
-          show-overflow-tooltip
           row-key="id"
           adaptive
+          border
           :indent="32"
           @row-click="cellRowClick"
           :data="dataList"

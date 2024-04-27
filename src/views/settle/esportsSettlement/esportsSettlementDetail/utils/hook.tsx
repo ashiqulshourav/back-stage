@@ -87,7 +87,6 @@ export function useEsportsSettlement() {
         item.list.push({
           betOptions: selectIndex,
           multipartBetOptions,
-          // oldBetOptions: selectIndex,
           ...arr[0],
           arr
         });
@@ -166,9 +165,6 @@ export function useEsportsSettlement() {
   const resetManualSettleESportHandicapClick = async (
     row: EsportsSettlementAPI.BetItemsMapData
   ) => {
-    // if (row.oldBetOptions === row.betOptions)
-    //   return message(t('结果未改变，请重新选择'), { type: 'error' });
-
     ElMessageBox.confirm(t('确认要从新结算该记录么?'), '系统提示', {
       confirmButtonText: t('确认'),
       cancelButtonText: t('取消'),

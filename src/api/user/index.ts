@@ -1,4 +1,5 @@
 import { http } from '@/utils/http';
+import { updateUserFormType } from '@/views/operateManager/com/playerList/utils/types';
 
 export const user = {
   //- 登录
@@ -40,16 +41,18 @@ export const user = {
     http.request<UserAPI.operateUserListReqType>('post', '/operate/userList', {
       data
     }),
-  addLabels: (data: {
-    id: string[],
-    labelId: number[]
-  }) => http.request<UserAPI.updateUserLevelLimitResType>('post', '/operate/updateUserLabelAdd', {
-      data
-  }), 
-  getLabelList: (data:{
-    category: number
-  }) =>
-    http.request<UserAPI.GetLabelListRes>('get', '/operate/getLabelList', {params: data}),
+  addLabels: (data: { id: string[]; labelId: number[] }) =>
+    http.request<UserAPI.updateUserLevelLimitResType>(
+      'post',
+      '/operate/updateUserLabelAdd',
+      {
+        data
+      }
+    ),
+  getLabelList: (data: { category: number }) =>
+    http.request<UserAPI.GetLabelListRes>('get', '/operate/getLabelList', {
+      params: data
+    }),
   //- 修改用户等级限额
   updateUserLabelDel: (data: { id: string[]; labelId: number[] }) =>
     http.request<UserAPI.updateUserLevelLimitResType>(
@@ -62,11 +65,15 @@ export const user = {
     pageNum: number;
     id?: number;
     labelType?: number;
-    offset?: number
+    offset?: number;
   }) =>
-    http.request<UserAPI.getRecordListDataRes>('post', '/operate/getLabelListUserRecord', {
-      data
-    }),
+    http.request<UserAPI.getRecordListDataRes>(
+      'post',
+      '/operate/getLabelListUserRecord',
+      {
+        data
+      }
+    ),
   updateUserLevelLimit: (data: {
     list: UserAPI.updateLimmitReqType[];
     type: number;
@@ -84,15 +91,7 @@ export const user = {
       {}
     ),
   //- 修改用户限额
-  operateUpdateUser: (data: {
-    id: number | string;
-    name: string;
-    isFreeze: boolean | number;
-    limitLevel: number;
-    singleBetLimit: number | string | null;
-    singleEventCompensationLimit: number | string | null;
-    remark: string;
-  }) =>
+  operateUpdateUser: (data: updateUserFormType) =>
     http.request<UserAPI.userBaseResType>('post', '/operate/updateUser', {
       data
     })

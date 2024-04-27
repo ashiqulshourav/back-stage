@@ -45,8 +45,8 @@
         <el-option
           v-for="item in parentList"
           :key="item.id"
-          :label="item.name"
-          :value="item.id"
+          :label="item.tableName"
+          :value="item.id as number"
         />
       </el-select>
     </el-form-item>
@@ -56,7 +56,7 @@
         v-model="newFormInline.sort"
         clearable
         :placeholder="t('请输入大于0的整数')"
-        :formatter="v => inputRestrictions(v, 1, 1000)"
+        :formatter="(v:string) => inputRestrictions(v, 1, 1000)"
       />
     </el-form-item>
 
@@ -100,6 +100,7 @@ const props = defineProps<{
 }>();
 
 const emits = defineEmits(['closeDialog']);
+// const selectVal = ref('');
 
 const ruleFormRef = ref<FormInstance>();
 const newFormInline = reactive(props.row);
@@ -108,9 +109,20 @@ const closeDialog = () => {
   emits('closeDialog');
 };
 
-/* 传,roleName,status,comment */
+// const selectParentList = computed(() => {
+//   if (!selectVal.value) {
+//     return props.parentList;
+//   } else {
+//     return props.parentList
+//       .filter(item => item.name.includes(selectVal.value))
+//       .map(item => item);
+//   }
+// });
+
+// const filterMethod = v => (selectVal.value = v);
+
 const confirmClick = () => {
-  ruleFormRef.value.validate(async v => {
+  ruleFormRef.value?.validate(async v => {
     const requestAPI = newFormInline.id ? 'menuUpdate' : 'menuInsert';
     if (v) {
       if (!newFormInline.id) delete newFormInline.id;

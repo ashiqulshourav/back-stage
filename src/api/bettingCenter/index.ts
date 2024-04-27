@@ -27,5 +27,6 @@ export const bettingCenter = {
   // 注单审核拒绝
   bettingAuditReject: (data: any) => http.request<any>("post", "/bet-center/manualReject", { data }),
 
-
+  // 针对赛事编辑备注
+  editOrderRemark: (data: {orderId:number,remark:string}) => http.request<any>("post", "/bet-center/betOrder/editRemark", { data }),
 };

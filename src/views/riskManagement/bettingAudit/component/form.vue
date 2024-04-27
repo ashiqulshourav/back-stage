@@ -21,11 +21,9 @@
                  v-model="form.others"
                  :placeholder="t('其它原因')"
                  clearable
-                 :formatter="v => formatNumber(v, 30)"
                  class="!w-[150px]"
       />
       </el-form-item>
-
     </el-form>
     <div class="flex justify-end">
       <el-button @click="closeDialog">{{ t('取消') }}</el-button>
@@ -38,13 +36,12 @@
 <script setup lang="ts">
 import {t} from "@/plugins/i18n";
 import {ref} from "vue";
-import {formatNumber} from "@/utils/formatNumber";
 import {formRules} from '../util/rule'
 import { FormInstance } from 'element-plus/es/components/form';
 import {message} from "@/utils/message";
 
 const ruleFormRef = ref<FormInstance>();
-const form = ref({
+const form = reactive({
   riskType:'',
   others:'',
 })
@@ -78,10 +75,9 @@ const closeDialog = () => {
 
 /* 传,roleName,status,comment */
 const confirmClick = () => {
-
   const param=props.list.map((item:any)=>{
     item.details.map((item2)=>{
-      item2.riskType=form.value.riskType
+      item2.riskType=form.riskType
       return item2
     })
    return item
@@ -93,12 +89,9 @@ const confirmClick = () => {
         if(res.code===0){
           emits('closeDialog');
         }
-
-        console.log(555,res)
       })
     }
   })
-
 };
 </script>
 
