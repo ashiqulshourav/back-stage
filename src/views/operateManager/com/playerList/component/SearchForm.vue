@@ -136,6 +136,7 @@ const sportLimmitList = reactive<string[]>([]);
 const props = defineProps<{
   loading: boolean;
   form: searchFormType;
+  category: number;
 }>();
 
 const formatterTxt = v => {
@@ -164,12 +165,16 @@ const getLimmitLevelList = async () => {
   sportLimmitList.push(...res.data);
 };
 
-const tenantList = reactive([]);
+const tenantList = reactive<{ name: string; id: number; tenantName: string }[]>(
+  []
+);
 const initTenantList = async () => {
-  const res = await API.getTenantList();
-  if (res.code) return;
-  tenantList.length = 0;
-  tenantList.push(...res.data.data);
+  const res = await API.queryTenantList({
+    category: props.category
+  });
+  if (res.data?.length) {
+    tenantList.push(...res?.data);
+  }
 };
 
 const resetForm = (formEl: FormInstance | undefined) => {

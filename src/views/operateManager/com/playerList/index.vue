@@ -1,6 +1,11 @@
 <template>
   <div class="main">
-    <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
+    <SearchForm
+      :form="form"
+      :loading="loading"
+      @on-search="onSearch"
+      :category="category"
+    />
     <PureTableBar
       :title="t('用户列表')"
       :columns="columns"
@@ -56,6 +61,11 @@ import { usePublicHooks } from '@/hooks';
 defineOptions({ name: 'CONFIGCENTER_LEAGUE_TAGS' });
 const { tableHeaderStyle } = usePublicHooks();
 
+const { venueType, category } = defineProps<{
+  venueType: number;
+  category: number;
+}>();
+
 const {
   loading,
   dataList,
@@ -66,7 +76,7 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   form
-} = userPlayerListHook();
+} = userPlayerListHook(venueType);
 </script>
 
 <style>
