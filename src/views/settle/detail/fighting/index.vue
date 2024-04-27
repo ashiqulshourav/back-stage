@@ -107,10 +107,13 @@ defineOptions({ name: 'SETTLE_DETAIL_FIGHTING' });
 const { tableHeaderStyle } = usePublicHooks();
 
 const matchResultList: { key: number; val: string }[] = [
-  { key: 0, val: '常规平局' },
-  { key: 1, val: '常规胜负' },
-  { key: 2, val: 'KO或犯规' },
-  { key: 3, val: '投降' }
+  { key: 100, val: t('主 通过判抉或技术判抉而胜出') },
+  { key: 101, val: t('客 通过判抉或技术判抉而胜出') },
+  { key: 102, val: t('主 通过击倒.技术击倒或对手被取消资格而胜出') },
+  { key: 103, val: t('客 通过击倒.技术击倒或对手被取消资格而胜出') },
+  { key: 104, val: t('主 通过对方降服而胜出') },
+  { key: 105, val: t('客 通过对方降服而胜出') },
+  { key: 106, val: t('平局或技术平局') }
 ];
 
 const {

@@ -29,7 +29,6 @@ import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
 import {riskStatus} from "@/views/riskManagement/bettingAudit/util/types";
 import editOrder from "../component/editOrder.vue";
-
 export function useBettingCenterHook(category:number,venueType:number) {
   const { openPasswordInput } = usePasswordInputHook();
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
@@ -37,6 +36,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
     { name: string; id: number; tenantName: string }[]
   >([]);
   const tenantObj = reactive<any>({});
+  const riskLabelList = reactive<UserAPI.labelType[]>([])
   const UDialogFlag = ref<Boolean>(false);
   const loading = ref(true);
   const totalInfo = reactive<BetOrderAPI.otherDataType>(
@@ -46,7 +46,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
     total: 0,
     pageSize: 20,
     currentPage: 1,
-    pageSizes: [ 20, 50, 100, 200,500,1000,5000],
+    pageSizes: [ 20, 50, 100, 200,500],
     background: true
   });
   const form = reactive<searchFormType>({
@@ -72,7 +72,8 @@ export function useBettingCenterHook(category:number,venueType:number) {
     minBetAmount: '',
     maxBetAmount: '',
     minProfitAmount: '',
-    maxProfitAmount: ''
+    maxProfitAmount: '',
+      riskControlLabelList:[],
   });
   function handlePageSizeChange(val: number) {
     pagination.pageSize = val;
@@ -437,8 +438,6 @@ export function useBettingCenterHook(category:number,venueType:number) {
     return flag
   }
     const editOrderRemark = (id:number,orderRemark:string)=>{
-
-        console.log(11111,id,orderRemark)
         addDialog({
             title: t('编辑备注'),
             class: 'reset_dialog',
@@ -457,11 +456,24 @@ export function useBettingCenterHook(category:number,venueType:number) {
                 })
         });
     }
+    const getRiskLabelList = async () => {
+        try {
+            const res = await API.getLabelList({
+                category: venueType
+            });
+
+            if (res.data.riskControlLabelList)
+                riskLabelList.push(...res.data.riskControlLabelList);
+        } catch (error) {
+            return message(error as string, { type: 'error' });
+        }
+    };
 
   //- 切换比赛类型
   onMounted(() => {
     onSearch();
     getTenantList();
+      getRiskLabelList()
   });
 
   return {
@@ -485,5 +497,6 @@ export function useBettingCenterHook(category:number,venueType:number) {
     switchDialog,
     isShowCancel,
     editOrderRemark,
+    riskLabelList,
   };
 }

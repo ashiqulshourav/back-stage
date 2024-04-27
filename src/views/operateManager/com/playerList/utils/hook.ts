@@ -12,7 +12,7 @@ import {
 } from './types';
 import { FormInstance } from 'element-plus';
 
-export function userPlayerListHook(venueType: number) {
+export function userPlayerListHook(venueType: number, category: number) {
   const route = useRoute();
   // data list
   const dataList = reactive<UserAPI.operateUserList[]>([]);
@@ -21,7 +21,9 @@ export function userPlayerListHook(venueType: number) {
     risk: [],
     attr: []
   } as labelListType);
-  const tenantList = reactive<tenantType[]>([] as tenantType[]);
+  const tenantList = reactive<
+    { name: string; id: number; tenantName: string }[]
+  >([]);
   const recordList = reactive<UserAPI.recordType[]>([]);
   const userData = reactive<UserAPI.operateUserList>(
     {} as UserAPI.operateUserList
@@ -173,7 +175,6 @@ export function userPlayerListHook(venueType: number) {
     isMultiDel.value = isDel;
     isMultiModal.value = true;
   };
-  //dispatch
   const dispatchGetLabelList = async () => {
     try {
       const res = await API.getLabelList({
@@ -191,13 +192,11 @@ export function userPlayerListHook(venueType: number) {
   };
 
   const dispatchGetTenantList = async () => {
-    try {
-      const res = await API.getTenantList({ category: venueType });
-      if (res.code) return;
-      tenantList.length = 0;
-      tenantList.push(...res.data.data);
-    } catch (error) {
-      return message(error as string, { type: 'error' });
+    const res = await API.queryTenantList({
+      category: category
+    });
+    if (res.data?.length) {
+      tenantList.push(...res?.data);
     }
   };
 

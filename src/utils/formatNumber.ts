@@ -11,7 +11,11 @@ export const formatNumberAndFillZero = (val: string, len?: number) => {
   if (val === '') return 0;
   return val.replace(/\D/g, '').replace(/^0{1,}/g, '').slice(0, len ?? MAX_INPUT_NUMBER_LENGTH)
 }
-
+export const formatNumberAndFillNull = (val: string, len?: number) => {
+  if (val === '0') return val;
+  if (val === '') return null;
+  return val.replace(/\D/g, '').replace(/^0{1,}/g, '').slice(0, len ?? MAX_INPUT_NUMBER_LENGTH)
+}
 
 //- 过滤中文跟空格
 export const formatChinese = (val: string, len?: number) => {

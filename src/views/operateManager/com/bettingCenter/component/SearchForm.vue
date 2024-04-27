@@ -19,6 +19,11 @@
             <el-option v-for="item in tenantList" :label="item.tenantName" :value="item.id" :key="item.id" />
           </el-select>
         </el-form-item>
+        <el-form-item  :label="`${t('风控标签')}:`" prop="riskControlLabelList">
+          <el-select v-model="form.riskControlLabelList" multiple clearable class="!w-[150px]">
+            <el-option v-for="item in riskLabelList" :label="t(item.name)" :value="item.id" />
+          </el-select>
+        </el-form-item>
         <el-form-item :label="`${t('赛事类型')}:`" prop="category">
           <el-select
             v-model="form.category"
@@ -269,6 +274,7 @@ import {
 import { searchFormType } from '../util/types';
 const props = defineProps<{
   loading: boolean;
+  riskLabelList:UserAPI.labelType[];
   form: searchFormType;
     tenantList:[]
 }>();
