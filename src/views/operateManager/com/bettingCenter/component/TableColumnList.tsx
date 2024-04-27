@@ -11,7 +11,7 @@ export const columns: TableColumnList = [
   {
     label: t('风控标签'),
     prop: 'riskControlLabel',
-    minWidth: 100,
+    minWidth: 200,
     align: 'left',
   },
   {
