@@ -84,7 +84,7 @@ const {
   }
 }
 
-:deep {
+:deep() {
   .first_table {
     .cell {
       cursor: pointer;

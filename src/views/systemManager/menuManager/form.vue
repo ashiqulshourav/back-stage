@@ -25,7 +25,6 @@
     <el-form-item :label="t('菜单类型')" prop="type">
       <el-select v-model="newFormInline.type" clearable>
         <el-option
-          :disabled="!!newFormInline.id"
           v-for="item in Object.entries(TYPE_NAME)"
           :key="item[0]"
           :label="item[1]"
