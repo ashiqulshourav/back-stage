@@ -71,7 +71,7 @@
     </el-form-item> -->
       <el-form-item :label="t('热门排序')" prop="level">
         <el-input
-          :formatter="v => inputRestrictions(v)"
+          :formatter="(v:string) => inputRestrictions(v)"
           v-model="newFormInline.level"
           :placeholder="t('请输入1-200之间的数字')"
           type="number"
@@ -79,6 +79,22 @@
           class="!w-[200px]"
           v-enter="updateVal"
         />
+      </el-form-item>
+
+      <el-form-item :label="t('联赛等级')" prop="riskLevel">
+        <el-select
+          v-model="newFormInline.riskLevel"
+          filterable
+          clearable
+          :placeholder="t('请选择联赛等级')"
+        >
+          <el-option
+            v-for="item in renderLevelList"
+            :key="item.league_level"
+            :label="item.league_level"
+            :value="item.league_level"
+          />
+        </el-select>
       </el-form-item>
       <!-- <el-form-item label="赛种" prop="sportId">
       <el-select v-model="newFormInline.sportId" :placeholder="t('赛种')">
@@ -112,6 +128,7 @@ import { t } from '@/plugins/i18n';
 import { inputRestrictions } from '@/utils/formatNumber';
 import { message } from '@/utils/message';
 import { Plus } from '@element-plus/icons-vue';
+import { UploadFile } from 'element-plus';
 
 const loading = ref(false);
 const props = withDefaults(defineProps<FormProps>(), {
@@ -130,7 +147,7 @@ const props = withDefaults(defineProps<FormProps>(), {
 const uploadFormFile = ref();
 const emits = defineEmits(['closeDialog']);
 const updateVal = () => {
-  ruleFormRef.value.validate(async valid => {
+  ruleFormRef.value.validate(async (valid: boolean) => {
     if (valid) {
       const res = await API.updateLeague(
         props.formInline as MetadataAPI.updateLeagueParamsType
@@ -143,17 +160,17 @@ const updateVal = () => {
 
 const ruleFormRef = ref();
 const newFormInline = ref(props.formInline);
-const imageUrl = ref<string>(newFormInline.value.leagueLogo);
+const imageUrl = ref<string>(newFormInline.value.leagueLogo as string);
 
-const onImgChange = file => {
+const onImgChange = (file: UploadFile) => {
   let name = file.name.slice(-3);
   let kb = 15360 * 1024;
   if (['png'].includes(name.toLowerCase())) {
-    if (file.size > kb) {
+    if ((file.size as number) > kb) {
       message(t('文件过大，请重新上传'), { type: 'error' });
     } else {
       uploadFormFile.value = file.raw;
-      imageUrl.value = URL.createObjectURL(file.raw);
+      imageUrl.value = URL.createObjectURL(file.raw as Blob | MediaSource);
     }
   } else {
     message(t('上传文件格式不匹配,请上传png格式文件'), {
@@ -163,7 +180,7 @@ const onImgChange = file => {
 };
 
 const confirmBtnClick = () => {
-  ruleFormRef.value.validate(async valid => {
+  ruleFormRef.value.validate(async (valid: boolean) => {
     if (valid) {
       loading.value = true;
       if (uploadFormFile.value) {
@@ -189,6 +206,22 @@ const updateEMatch = async () => {
 const cancelDialog = () => {
   emits('closeDialog');
 };
+
+onMounted(() => {
+  initLevelList();
+});
+
+const levelList = reactive<ConfigCenterDataAPI.leagueLevelList[]>([]);
+const initLevelList = async () => {
+  const res = await API.getLevelList();
+  if (res.code) return;
+  levelList.length = 0;
+  levelList.push(...res.data);
+};
+
+const renderLevelList = computed(() => {
+  return levelList.filter(item => item.game_type === 3);
+});
 </script>
 
 <style lang="scss">

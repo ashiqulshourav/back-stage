@@ -192,7 +192,7 @@ const isIndeterminate = ref(true);
 
 const handleCheckAllChange = (val: boolean) => {
   newFormInline.value.leagueTagsId = val
-    ? leagueTagsId.value.map((item: { id: any }) => item.id)
+    ? leagueTagsId.map((item: any) => item.id)
     : [];
   isIndeterminate.value = false;
 };
@@ -200,7 +200,7 @@ const handleCheckedTagIdsChange = (value: number[]) => {
   const checkedCount = value.length;
   checkAll.value = checkedCount === leagueTagsId.length;
   isIndeterminate.value =
-    checkedCount > 0 && checkedCount < leagueTagsId.value.length;
+    checkedCount > 0 && checkedCount < leagueTagsId.length;
 };
 
 onMounted(() => {
