@@ -36,7 +36,7 @@
         >
           <template #index="{ row }">
             <span>{{ row.index }}</span>
-          </template>          
+          </template>
           <template #userMessage="{ row }">
             <div
               class="item_line cursor-pointer"
@@ -116,7 +116,7 @@
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <div v-if="item.kindsCode!== 'Outright'" class="item_line">
+              <div v-if="item.kindsCode !== 'Outright'" class="item_line">
                 <span
                   class="cursor-pointer"
                   @dblclick="
@@ -170,69 +170,11 @@
             </div>
           </template>
           <template #riskControlLabel="{ row }">
-            <RiskControlLabelList :list="row.riskControlLabelList"/>
-            <!-- <el-row
-              v-if="row.riskControlLabelList"
-              class="items-center min-w-[200px]"
-              :gutter="20"
-            >
-              <el-col :span="row.riskControlLabelList?.length > 6 ? 20 : 24">
-                <el-row :gutter="5">
-                  <el-col
-                    v-for="label in row.riskControlLabelList
-                      .slice(0, 6)
-                      .sort((a, b) => a.level - b.level)"
-                    :key="label.id"
-                    class="custom"
-                  >
-                    <el-tag
-                      :style="`background-color: ${getLabelColor(
-                        label.level,
-                        'risk'
-                      )}`"
-                      class="rounded-lg w-full py-1"
-                    >
-                      {{ label.name }}
-                    </el-tag>
-                  </el-col>
-                </el-row>
-              </el-col>
-              <el-col :span="4" v-if="row.riskControlLabelList?.length > 6">
-                <el-popover
-                  placement="top-end"
-                  :width="300"
-                  trigger="hover"
-                  content="this is over"
-                >
-                  <template #reference>
-                    <el-button class="w-full"
-                      ><el-icon><Plus /></el-icon
-                    ></el-button>
-                  </template>
-                  <template #default>
-                    <el-row :gutter="5">
-                      <el-col
-                        v-for="label in row.riskControlLabelList.sort(
-                          (a, b) => a.level - b.level
-                        )"
-                        :key="label.id"
-                        class="custom"
-                      >
-                        <el-tag
-                          :style="`background-color: ${getLabelColor(
-                            label.level,
-                            'risk'
-                          )}`"
-                          class="rounded-lg w-full py-1 text-white text-center"
-                        >
-                          {{ label.name }}
-                        </el-tag>
-                      </el-col>
-                    </el-row>
-                  </template>
-                </el-popover>
-              </el-col>
-            </el-row> -->
+            <RiskControlLabelList
+              :list="row.riskControlLabelList"
+              :category="props.category"
+              :venueType="props.venueType"
+            />
           </template>
           <template #betDetail="{ row }">
             <div
@@ -367,14 +309,18 @@
                 ]
               }}
             </div>
-            <div v-if=" getStatus(
-                    row.status,
-                    row.billStatus,
-                    row.combineOrderDetails[0].betResult,
-                    row.isReserve,
-                    row.riskStatus,
-                    row.isSpecialSettle
-                  ).status===betStatus.settlementBet">
+            <div
+              v-if="
+                getStatus(
+                  row.status,
+                  row.billStatus,
+                  row.combineOrderDetails[0].betResult,
+                  row.isReserve,
+                  row.riskStatus,
+                  row.isSpecialSettle
+                ).status === betStatus.settlementBet
+              "
+            >
               {{
                 row.settleTime
                   ? dayjs(row.settleTime).format('MM-DD HH:mm:ss')
@@ -395,7 +341,11 @@
               <el-button
                 class="mb-1 w-100"
                 @click="handleCancel(row)"
-                v-if="row.billStatus === 0&& isShowCancel(row) && hasAuth('CANCELBET')"
+                v-if="
+                  row.billStatus === 0 &&
+                  isShowCancel(row) &&
+                  hasAuth('CANCELBET')
+                "
               >
                 {{ t('取消') }}
               </el-button>
@@ -404,24 +354,25 @@
               <el-button
                 class="mb-1 w-100"
                 @click="switchDialog(true, row)"
-                v-if=" hasAuth('specialSettlement'.toUpperCase())">
+                v-if="hasAuth('specialSettlement'.toUpperCase())"
+              >
                 {{ t('特殊结算') }}
               </el-button>
             </div>
           </template>
           <template #operationRemark="{ row }">
+            <div>
+              <div>{{ row.orderRemark }}</div>
               <div>
-                  <div>{{row.orderRemark}}</div>
-                  <div>
-                      <el-button
-                              size="small"
-                              type="primary"
-                              @click="editOrderRemark(row.id,row.orderRemark)"
-                      >
-                          {{ t('备注') }}
-                      </el-button>
-                  </div>
+                <el-button
+                  size="small"
+                  type="primary"
+                  @click="editOrderRemark(row.id, row.orderRemark)"
+                >
+                  {{ t('备注') }}
+                </el-button>
               </div>
+            </div>
           </template>
         </pure-table>
         <div
@@ -471,7 +422,6 @@ import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
 import RiskControlLabelList from './component/RiskControlLabelList.vue';
-import { Plus } from "@element-plus/icons-vue"
 import { hasAuth } from '@/router/utils';
 import {
   formatSeriesType,
@@ -485,12 +435,12 @@ import {
   displayHomeAwayScore,
   getIsInplay
 } from '@/utils/formatMatch';
-import {betStatus, betStatusMap} from './util/types';
+import { betStatus, betStatusMap } from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
 const props = defineProps<{
   category: number;
-  venueType:number;
+  venueType: number;
 }>();
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
@@ -513,9 +463,8 @@ const {
   tenantObj,
   isShowCancel,
   editOrderRemark,
-  riskLabelList,
-  getLabelColor
-} = useBettingCenterHook(props.category,props.venueType);
+  riskLabelList
+} = useBettingCenterHook(props.category, props.venueType);
 </script>
 
 <style lang="scss">
@@ -582,15 +531,5 @@ const {
 
 .operate {
   width: 100px;
-}
-.el-row {
-  row-gap: 0.5rem;
-}
-.custom {
-  flex: 0 0 0;
-  max-width: unset;
-  .el-tag__content {
-    color: white;
-  }
 }
 </style>
