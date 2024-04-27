@@ -35,6 +35,72 @@
           <template #index="{ row }">
             <span>{{ row.index }}</span>
           </template>
+
+          <template #riskControlLabel="{ row }">
+            <el-row
+              v-if="row.riskControlLabelList"
+              class="items-center"
+              :gutter="20"
+            >
+              <el-col :span="row.riskControlLabelList?.length > 5 ? 20 : 24">
+                <el-row :gutter="5">
+                  <el-col
+                    v-for="label in row.riskControlLabelList
+                      .slice(0, 5)
+                      .sort((a, b) => a.level - b.level)"
+                    :key="label.id"
+                    class="custom"
+                  >
+                    <el-tag
+                      :style="`background-color: ${getLabelColor(
+                        label.level,
+                        'risk'
+                      )}`"
+                      class="rounded-lg w-full py-1"
+                    >
+                      {{ label.name }}
+                    </el-tag>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="4" v-if="row.riskControlLabelList?.length > 5">
+                <el-popover
+                  placement="top-end"
+                  :width="400"
+                  trigger="hover"
+                  content="this is over"
+                >
+                  <template #reference>
+                    <el-button class="w-full"
+                      ><el-icon><Plus /></el-icon
+                    ></el-button>
+                  </template>
+                  <template #default>
+                    <el-row :gutter="5">
+                      <el-col
+                        v-for="label in row.riskControlLabelList.sort(
+                          (a, b) => a.level - b.level
+                        )"
+                        :key="label.id"
+                        class="custom"
+                      >
+                        <el-tag
+                          :style="`background-color: ${getLabelColor(
+                            label.level,
+                            'risk'
+                          )}`"
+                          class="rounded-lg w-full py-1 text-white text-center"
+                        >
+                          {{ label.name }}
+                        </el-tag>
+                      </el-col>
+                    </el-row>
+                  </template>
+                </el-popover>
+              </el-col>
+            </el-row>
+          </template>
+
           <template #userMessage="{ row }">
             <div
               class="item_line cursor-pointer"
@@ -114,7 +180,7 @@
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <div v-if="item.kindsCode!== 'Outright'" class="item_line">
+              <div v-if="item.kindsCode !== 'Outright'" class="item_line">
                 <span
                   class="cursor-pointer"
                   @dblclick="
@@ -300,14 +366,18 @@
                 ]
               }}
             </div>
-            <div v-if=" getStatus(
-                    row.status,
-                    row.billStatus,
-                    row.combineOrderDetails[0].betResult,
-                    row.isReserve,
-                    row.riskStatus,
-                    row.isSpecialSettle
-                  ).status===betStatus.settlementBet">
+            <div
+              v-if="
+                getStatus(
+                  row.status,
+                  row.billStatus,
+                  row.combineOrderDetails[0].betResult,
+                  row.isReserve,
+                  row.riskStatus,
+                  row.isSpecialSettle
+                ).status === betStatus.settlementBet
+              "
+            >
               {{
                 row.settleTime
                   ? dayjs(row.settleTime).format('MM-DD HH:mm:ss')
@@ -328,7 +398,11 @@
               <el-button
                 class="mb-1 w-100"
                 @click="handleCancel(row)"
-                v-if="row.billStatus === 0&& isShowCancel(row) && hasAuth('CANCELBET')"
+                v-if="
+                  row.billStatus === 0 &&
+                  isShowCancel(row) &&
+                  hasAuth('CANCELBET')
+                "
               >
                 {{ t('取消') }}
               </el-button>
@@ -337,7 +411,8 @@
               <el-button
                 class="mb-1 w-100"
                 @click="switchDialog(true, row)"
-                v-if=" hasAuth('specialSettlement'.toUpperCase())">
+                v-if="hasAuth('specialSettlement'.toUpperCase())"
+              >
                 {{ t('特殊结算') }}
               </el-button>
             </div>
@@ -402,12 +477,12 @@ import {
   displayHomeAwayScore,
   getIsInplay
 } from '@/utils/formatMatch';
-import {betStatus, betStatusMap} from './util/types';
+import { betStatus, betStatusMap } from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
 const props = defineProps<{
   category: number;
-  venueType:number;
+  venueType: number;
 }>();
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
@@ -428,8 +503,9 @@ const {
   tenantList,
   switchDialog,
   tenantObj,
-  isShowCancel
-} = useBettingCenterHook(props.category,props.venueType);
+  isShowCancel,
+  getLabelColor
+} = useBettingCenterHook(props.category, props.venueType);
 </script>
 
 <style lang="scss">

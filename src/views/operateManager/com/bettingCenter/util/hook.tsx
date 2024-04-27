@@ -195,6 +195,28 @@ export function useBettingCenterHook(category:number,venueType:number) {
     onSearch();
   };
 
+  const getLabelColor = (level: number, type: string) => {
+    if (type === 'risk') {
+      switch (level) {
+        case 1:
+          return 'rgba(163, 0, 20, 1)';
+        case 2:
+          return 'rgba(255, 92, 0, 1)';
+        case 3:
+          return 'rgba(255, 153, 0, 1)';
+      }
+    } else {
+      switch (level) {
+        case 1:
+          return 'rgba(24, 145, 255, 1)';
+        case 2:
+          return 'rgba(25, 190, 107, 1)';
+        case 3:
+          return 'rgba(46, 64, 80, 1)';
+      }
+    }
+  };
+
   //- 导出excel表格
   const exportFile = async () => {
     const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
@@ -462,5 +484,6 @@ export function useBettingCenterHook(category:number,venueType:number) {
     UDialogFlag,
     switchDialog,
     isShowCancel,
+    getLabelColor
   };
 }

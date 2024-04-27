@@ -9,6 +9,12 @@ export const columns: TableColumnList = [
 
   },
   {
+    label: t('风控标签'),
+    prop: 'riskControlLabel',
+    minWidth: 100,
+    align: 'left',
+  },
+  {
     label: t("用户信息"),
     slot: 'userMessage',
     minWidth: 100,
