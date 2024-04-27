@@ -23,21 +23,28 @@ export const columns: TableColumnList = [
   {
     label: t('游戏分类'),
     formatter: ({ sportId }) =>
-      ESPORT_ID_MAP.find(item => item.value === sportId)?.label
+      ESPORT_ID_MAP.find(item => item.value === sportId)?.label ?? '-'
   },
   {
     label: t('联赛中文名'),
     prop: 'leagueNameCn',
-    align: 'left'
+    align: 'left',
+    minWidth: 200
   },
   {
     label: t('联赛英文名'),
     prop: 'leagueNameEn',
-    align: 'left'
+    align: 'left',
+    minWidth: 200
   },
   {
     label: t('热门排序'),
     prop: 'level'
+  },
+  {
+    label: t('联赛等级'),
+    prop: 'riskLevel',
+    minWidth: 150
   },
   {
     label: t('操作'),

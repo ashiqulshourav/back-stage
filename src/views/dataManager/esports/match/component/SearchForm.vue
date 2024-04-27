@@ -9,7 +9,7 @@
       <el-form-item :label="`${t('联赛ID')}:`" prop="leagueId">
         <el-input
           v-model="form.leagueId"
-          :formatter="v => formatNumber(v, 10)"
+          :formatter="(v:string) => formatNumber(v, 10)"
           :placeholder="t('联赛ID')"
           clearable
           v-enter="search"
@@ -65,25 +65,16 @@
           />
         </el-select>
       </el-form-item>
+
       <el-form-item :label="`${t('188数据源联赛杯ID')}:`" prop="leagueId188Bet">
         <el-input
           v-model="form.leagueId188Bet"
           :placeholder="t('188数据源联赛杯ID')"
           clearable
-          :formatter="v => formatNumber(v)"
+          :formatter="(v:string) => formatNumber(v)"
           class="!w-[200px]"
         />
       </el-form-item>
-      <!-- <el-form-item :label="`${t('赛种')}:`" prop="sportId">
-        <el-select v-model="form.sportId" :placeholder="t('赛种')">
-          <el-option
-            :label="item.label"
-            :value="item.value"
-            v-for="item in SPORT_ID_MAP"
-            :key="item.value"
-          />
-        </el-select>
-      </el-form-item> -->
       <el-form-item>
         <el-button
           type="primary"
@@ -103,7 +94,6 @@
 
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
-// import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import Refresh from '@iconify-icons/ep/refresh';
 import Search from '@iconify-icons/ep/search';
@@ -122,7 +112,7 @@ const matchStore = useMatchStore();
 const formRef = ref<FormInstance>();
 const emits = defineEmits(['onSearch']);
 const resetForm = (formEl: FormInstance | undefined) => {
-  formEl.resetFields();
+  formEl?.resetFields();
   search();
 };
 

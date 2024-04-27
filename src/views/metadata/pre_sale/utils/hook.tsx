@@ -12,7 +12,6 @@ export function usePreSale() {
   const formRef = ref();
   const dataList = reactive<SaleDataAPI.PreSaleList[]>([]);
   const loading = ref(true);
-  const switchLoadMap = ref({});
   const allSaleSatatus = ref(0);
   const { switchStyle } = usePublicHooks();
   const matchCondition = ref(1);
@@ -78,7 +77,7 @@ export function usePreSale() {
     onSearch();
   }
 
-  function handleSelectionChange(slectList) {
+  function handleSelectionChange(slectList: SaleDataAPI.PreSaleList[]) {
     selectLockcList.length = 0;
     selectLockcList.push(...slectList);
   }
@@ -142,10 +141,10 @@ export function usePreSale() {
           done();
           onSearch();
         }
-        FormRef.validate(valid => {
+        FormRef.validate((valid: boolean) => {
           if (valid) {
             if (row) {
-              updateSaleList(curData, () => chores());
+              updateSaleList(curData, async () => chores());
             } else {
               chores();
             }
@@ -155,7 +154,10 @@ export function usePreSale() {
     });
   };
 
-  const updateSaleList = async (curData, cb) => {
+  const updateSaleList = async (
+    curData: SaleDataAPI.UpdateMatchParamsType,
+    cb: () => {}
+  ) => {
     const res = await API.updateMatch(curData);
     message(res.msg, { type: res.code ? 'error' : 'success' });
     if (res.code) return;
@@ -180,11 +182,7 @@ export function usePreSale() {
     pagination.pageSize = res.data.pageSize;
     pagination.currentPage = res.data.pageNum;
   };
-  const resetForm = formEl => {
-    if (!formEl) return;
-    formEl.resetFields();
-    onSearch();
-  };
+
   const changeMatchCondition = (n: number) => {
     matchCondition.value = n;
     onSearch('reload');
@@ -236,9 +234,7 @@ export function usePreSale() {
     dataList,
     pagination,
     onSearch,
-    resetForm,
     handleTableWidthChange,
-    switchLoadMap,
     handleCurrentChange,
     handleSelectionChange,
     openDialog,
