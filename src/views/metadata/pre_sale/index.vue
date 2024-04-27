@@ -58,7 +58,6 @@
           <template #isSale="{ row, index, props }">
             <el-switch
               :size="props.size === 'small' ? 'small' : 'default'"
-              :loading="switchLoadMap[index]?.loading"
               v-model="row.isSale"
               :active-value="1"
               :inactive-value="0"
@@ -72,7 +71,6 @@
             <el-switch
               v-if="row.sportId === 1"
               :size="props.size === 'small' ? 'small' : 'default'"
-              :loading="switchLoadMap[index]?.loading"
               v-model="row.overTimeAndPenaltyKickStatus"
               :active-value="true"
               :inactive-value="false"
@@ -158,7 +156,6 @@ const {
   handleTableWidthChange,
   handleCurrentChange,
   handleSelectionChange,
-  switchLoadMap,
   changeSwitch,
   openDialog,
   searchForm,

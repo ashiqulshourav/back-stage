@@ -41,6 +41,11 @@ export const columns: TableColumnList = [
     minWidth: 150
   },
   {
+    label: t('联赛等级'),
+    prop: 'riskLevel',
+    minWidth: 150
+  },
+  {
     label: t('赛种'),
     prop: 'sportId',
     formatter: ({ sportId, category }): string => {

@@ -473,7 +473,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
   onMounted(() => {
     onSearch();
     getTenantList();
-      getRiskLabelList()
+    getRiskLabelList()
   });
 
   return {

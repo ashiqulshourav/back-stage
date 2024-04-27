@@ -24,6 +24,7 @@
           :size="size"
           class="table_container"
           adaptive
+          :default-sort="{ prop: 'level', order: 'descending' }"
           :data="dataList"
           :columns="dynamicColumns"
           :pagination="pagination"
@@ -167,6 +168,9 @@
                 }}
               </div>
             </div>
+          </template>
+          <template #riskControlLabel="{ row }">
+            <RiskLabelList :list="row.riskControlLabelList" />
           </template>
           <template #betDetail="{ row }">
             <div
@@ -344,6 +348,8 @@
             </div>
           </template>
           <template #operationRemark="{ row }">
+
+
               <div>
                   <div>{{row.orderRemark}}</div>
                   <div>
@@ -404,6 +410,7 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
+import { Plus } from "@element-plus/icons-vue"
 import { hasAuth } from '@/router/utils';
 import {
   formatSeriesType,
@@ -420,6 +427,7 @@ import {
 import {betStatus, betStatusMap} from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
+import RiskLabelList from "./component/riskLabelList.vue";
 const props = defineProps<{
   category: number;
   venueType:number;
@@ -445,7 +453,7 @@ const {
   tenantObj,
   isShowCancel,
   editOrderRemark,
-  riskLabelList
+  riskLabelList,
 } = useBettingCenterHook(props.category,props.venueType);
 </script>
 
@@ -513,5 +521,15 @@ const {
 
 .operate {
   width: 100px;
+}
+.el-row {
+  row-gap: 0.5rem;
+}
+.custom {
+  flex: 0 0 0;
+  max-width: unset;
+  .el-tag__content {
+    color: white;
+  }
 }
 </style>
