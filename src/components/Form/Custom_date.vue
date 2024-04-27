@@ -2,7 +2,7 @@
   <div>
     <el-date-picker
       class="ml-4 !w-[260px]"
-      v-model="timeVal"
+      v-model="timeVal as any"
       :type="isSingle ? 'date' : 'daterange'"
       :placeholder="placeholder"
       value-format="x"
@@ -25,14 +25,14 @@ const props = withDefaults(
     val: string | number | string[];
     placeholder?: string;
     format?: string;
-    disableDate?: null | Function;
+    disableDate?: Function;
     isShowShortCuts?: boolean;
     isSingle?: boolean;
     startPlaceholder?: string;
     endPlaceholder?: string;
   }>(),
   {
-    disableDate: null,
+    disableDate: () => {},
     format: 'YYYY-MM-DD',
     isShowShortCuts: true,
     isSingle: false,
@@ -76,6 +76,29 @@ const shortcuts = !props.isShowShortCuts
       }
     ]
   : [
+      {
+        text: t('最近七日'),
+        value: () => {
+          const start7Days =
+            dayjs().subtract(7, 'day').startOf('day').format('YYYY-MM-DD') +
+            '00:00:00';
+          const end7Days =
+            dayjs().endOf('day').format('YYYY-MM-DD') + '23:59:59';
+          return [start7Days, end7Days];
+        }
+      },
+      {
+        text: t('最近三十日'),
+        value: () => {
+          const start30Days =
+            dayjs().subtract(30, 'day').startOf('day').format('YYYY-MM-DD') +
+            '00:00:00';
+          const end30Days =
+            dayjs().endOf('day').format('YYYY-MM-DD') + '23:59:59';
+          return [start30Days, end30Days];
+        }
+      },
+
       {
         text: t('上月'),
         value: () => {
@@ -127,7 +150,9 @@ const timeVal = computed({
   }
 });
 
-const changeDate = t => emits('changeDate', t);
+const changeDate = (t: number | number[]) => {
+  emits('changeDate', t);
+};
 </script>
 
 <style scoped></style>

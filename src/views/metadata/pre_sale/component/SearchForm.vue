@@ -76,7 +76,7 @@
           :placeholder="t('赛事ID')"
           v-enter="search"
           clearable
-          :formatter="v => formatNumber(v)"
+          :formatter="(v:string) => formatNumber(v)"
           class="!w-[150px]"
         />
       </el-form-item>
@@ -210,7 +210,9 @@ const props = withDefaults(
   {}
 );
 
-const changeDate = t => {
+const changeDate = (
+  t: string | number | Date | dayjs.Dayjs | null | undefined
+) => {
   if (!t) {
     props.form.startTime = '';
     props.form.endTime = '';
@@ -225,7 +227,7 @@ const changeDate = t => {
 };
 
 const resetForm = (formEl: FormInstance | undefined) => {
-  formEl.resetFields();
+  formEl?.resetFields();
   selectIndex.value = -1;
   gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
   emits('onSearch', ...['reload']);
