@@ -9,7 +9,6 @@ export const riskManagementData = {
       '/operateLabel/listByType',
       { data: { ...data, labelType: 1 } }
     ),
-  // mockAPI.getRiskTagList(data),
 
   updateRiskTag: (data: RiskManagementDataAPI.RiskTagType) =>
     http.request<RiskManagementDataAPI.RiskTagRes>(
@@ -19,7 +18,7 @@ export const riskManagementData = {
         data: { ...data, labelType: 1 }
       }
     ),
-  // mockAPI.updateRiskTag(data),
+
 
   createRiskTag: (data: RiskManagementDataAPI.RiskTagType) =>
     http.request<RiskManagementDataAPI.RiskTagRes>(
@@ -29,13 +28,13 @@ export const riskManagementData = {
         data: { ...data, labelType: 1 }
       }
     ),
-  // mockAPI.createRiskTag(data),
 
   deleteRiskTag: (data: RiskManagementDataAPI.RiskTagType) =>
     http.request<
       COMMON.BASE_RES_TYPE<null | RiskManagementDataAPI.RiskTagType>
     >('post', '/operateLabel/del', {
       data
-    })
-  // mockAPI.deleteRiskTag(data)
+    }),
+  // 针对赛事编辑备注
+  editMatchDetailRemark: (data: {orderDetailId:number,remark:string}) => http.request<any>("post", "/bet-center/betOrderDetail/editRemark", { data }),
 };

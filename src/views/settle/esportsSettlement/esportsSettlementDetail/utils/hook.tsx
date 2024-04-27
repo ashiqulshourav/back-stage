@@ -50,18 +50,24 @@ export function useEsportsSettlement() {
 
   //- 格式化数据
   const formatData = () => {
-    SPORT_LEVEL_LIST.forEach(item => {
+    //- 防止每次进行数据扩充
+    const tempList = JSON.parse(JSON.stringify(SPORT_LEVEL_LIST));
+    tempList.forEach((item: (typeof SPORT_LEVEL_LIST)[0]) => {
       Object.keys(renderObj.betItemsMap).forEach(key => {
-        if (item.key === key) item.list = renderObj.betItemsMap[key];
+        if (item.key === key)
+          (item.list as EsportsSettlementAPI.BetItemsMapData[]) =
+            renderObj.betItemsMap[key];
       });
     });
     rList.length = 0;
-    rList.push(...SPORT_LEVEL_LIST.filter(_ => _.list.length));
+    rList.push(
+      ...tempList.filter((_: (typeof SPORT_LEVEL_LIST)[0]) => _.list.length)
+    );
 
     rList.forEach(item => {
       const l = item.list;
       l.sort((a: any, b: any) => a.displayIndex - b.displayIndex);
-      const o = {};
+      const o: { [key: string]: any } = {};
       l.forEach(d => {
         if (!o[d.sourceBetItemsMid]) o[d.sourceBetItemsMid] = [];
         o[d.sourceBetItemsMid].push(d);
@@ -71,7 +77,7 @@ export function useEsportsSettlement() {
         const selectIndex = arr.findIndex(item => {
           return item.win === 1;
         });
-        const multipartBetOptions = [];
+        const multipartBetOptions: number[] = [];
         arr.forEach((item, index) => {
           if (item.win === 1 && arr.length > 2) {
             multipartBetOptions.push(index);
@@ -81,7 +87,6 @@ export function useEsportsSettlement() {
         item.list.push({
           betOptions: selectIndex,
           multipartBetOptions,
-          // oldBetOptions: selectIndex,
           ...arr[0],
           arr
         });
@@ -91,7 +96,7 @@ export function useEsportsSettlement() {
   };
 
   //-
-  const multipBetResultCheck = (list, index) => {
+  const multipBetResultCheck = (list: number[], index: number) => {
     return list.includes(index) ? 4 : 3;
   };
 
@@ -161,9 +166,6 @@ export function useEsportsSettlement() {
   const resetManualSettleESportHandicapClick = async (
     row: EsportsSettlementAPI.BetItemsMapData
   ) => {
-    // if (row.oldBetOptions === row.betOptions)
-    //   return message(t('结果未改变，请重新选择'), { type: 'error' });
-
     ElMessageBox.confirm(t('确认要从新结算该记录么?'), '系统提示', {
       confirmButtonText: t('确认'),
       cancelButtonText: t('取消'),

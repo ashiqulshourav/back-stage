@@ -1,5 +1,4 @@
 import { http } from '@/utils/http';
-import mockAPI from './mock';
 
 export const configCenterData = {
   //- 联赛标签
@@ -9,14 +8,14 @@ export const configCenterData = {
       '/league/tag/search',
       { data }
     ),
-  // mockAPI.getLeagueTagList(data),
+  //- 获取联赛等级列表
+  getLevelList: () => http.request<ConfigCenterDataAPI.leagueLevelResType>('post', '/betLimit/getLevel'),
 
   searchLeagueTagList: (id: number) =>
     http.request<ConfigCenterDataAPI.ListLeagueTagRes>(
       'get',
       '/league/tag/leagueToTagByTagId/' + id
     ),
-  // mockAPI.searchLeagueTagList(data),
 
   updateLeagueTag: (data: ConfigCenterDataAPI.LeagueTagType) =>
     http.request<ConfigCenterDataAPI.LeagueTagRes>(
@@ -26,7 +25,6 @@ export const configCenterData = {
         data
       }
     ),
-  // mockAPI.updateLeagueTag(data),
   createLeagueTag: (data: ConfigCenterDataAPI.LeagueTagType) =>
     http.request<ConfigCenterDataAPI.LeagueTagRes>(
       'post',
@@ -35,14 +33,12 @@ export const configCenterData = {
         data
       }
     ),
-  // mockAPI.createLeagueTag(data),
   deleteLeagueTag: (data: ConfigCenterDataAPI.LeagueTagType) =>
     http.request<
       COMMON.BASE_RES_TYPE<null | ConfigCenterDataAPI.LeagueTagType>
     >('post', '/league/tag/del', {
       data
     }),
-  // mockAPI.deleteLeagueTag(data)
   bulkDeleteLeagueTag: (data: number[]) =>
     http.request<COMMON.BASE_RES_TYPE<null>>(
       'post',

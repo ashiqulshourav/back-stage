@@ -12,7 +12,6 @@
           table-layout="auto"
           :loading="loading"
           size="large"
-          show-overflow-tooltip
           row-key="id"
           adaptive
           border

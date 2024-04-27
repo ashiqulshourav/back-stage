@@ -293,7 +293,7 @@
               class="match_item odd_item"
               v-for="item in row.combineOrderDetails"
             >
-              <div v-if="item.riskStatus === riskStatus.reject">
+              <div class="text-left" v-if="item.riskStatus === riskStatus.reject">
                 原因:{{ item.riskType }}
               </div>
               <div
@@ -366,6 +366,26 @@
               >
                 {{ t('审核通过') }}
               </el-button>
+            </div>
+          </template>
+          <template #operation="{ row }">
+            <div
+              class="match_item approve flex justify-between items-center"
+              v-for="(item) in row.combineOrderDetails"
+              :key="item.betItemId"
+            >
+              <div>
+                <div>{{item.orderDetailRemark}}</div>
+                <div>
+                  <el-button
+                    size="small"
+                    type="primary"
+                    @click="editMatchDetailRemark(item.detailId,item.orderDetailRemark)"
+                  >
+                    {{ t('编辑备注') }}
+                  </el-button>
+                </div>
+              </div>
             </div>
           </template>
         </pure-table>
@@ -457,7 +477,8 @@ const {
   tenantObj,
   getRiskStatus,
   selectReject,
-  selectApprove
+  selectApprove,
+  editMatchDetailRemark
 } = useLeague();
 watch(
   dataList,

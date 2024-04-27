@@ -36,7 +36,8 @@ declare namespace MetadataAPI {
     leagueLogo?: string;
     leagueId188Bet?: number | string;
     level: string | number;
-    riskLevel: number;
+    riskLevel?: number;
+    isEsportType?: boolean;
     leagueTagsId?: ConfigCenterDataAPI.LeagueTagType[];
   };
   type LeagueListData = {

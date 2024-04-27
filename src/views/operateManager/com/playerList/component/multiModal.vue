@@ -54,7 +54,7 @@
             v-if="hasAuth('SETTING')"
             type="primary"
             @click="handleConfirm"
-            >{{ t('保存并删除') }}</el-button
+            >{{ isDel ? t('保存并删除') : t('保存并添加') }}</el-button
           >
         </div>
       </template>

@@ -24,12 +24,7 @@
           </p>
         </el-row>
         <el-row :gutter="20" class="mt-2 w-full">
-          <el-col
-            v-for="label in userData.riskControlLabelList"
-            :key="label.id"
-            class="custom"
-            :span="6"
-          >
+          <el-col v-for="label in updatedLabels.risk" :key="label.id" :span="6">
             <el-row :gutter="2" class="items-center">
               <el-col :span="20" class="custom">
                 <el-tag
@@ -83,7 +78,7 @@
             <el-button
               v-if="hasAuth('SETTING')"
               class="w-1/3"
-              @click="isRiskLabelAdd = false"
+              @click="handleDelLabel('risk')"
               >{{ t('取消') }}</el-button
             >
           </el-col>
@@ -100,20 +95,16 @@
           </p>
         </el-row>
         <el-row :gutter="20" class="mt-2 w-full">
-          <el-col
-            v-for="label in userData.attributeLabelList"
-            :key="label.id"
-            :span="6"
-          >
+          <el-col v-for="label in updatedLabels.attr" :key="label.id" :span="6">
             <el-row :gutter="2" class="items-center">
               <el-col :span="20" class="custom">
                 <el-tag
                   :style="`background-color: ${getLabelColor(
                     label.level,
-                    'risk'
+                    'attr'
                   )}`"
                   closable
-                  @close="handleDeleteLabel(label.id)"
+                  @close="handleDeleteLabel(label.id, 'attr')"
                   class="rounded w-full text-white text-center"
                 >
                   <p>
@@ -151,14 +142,14 @@
             <el-button
               v-if="hasAuth('SETTING')"
               type="primary"
-              @click="handleAddLabel(labelForm.attr)"
+              @click="handleAddLabel(labelForm.attr, 'attr')"
               class="w-1/3"
               >{{ t('添加') }}</el-button
             >
             <el-button
               v-if="hasAuth('SETTING')"
               class="w-1/3"
-              @click="isAttrLabelAdd = false"
+              @click="handleDelLabel('attr')"
               >{{ t('取消') }}</el-button
             >
           </el-col>
@@ -248,8 +239,8 @@
       </el-form-item>
       <el-form-item :label="t('备注：')">
         <el-input
-          :formatter="(v: string) => formatNumber(v, 13)"
           placeholder="只能输入255个字符的内容"
+          maxLength="255"
           v-model="form.remark"
           type="textarea"
         />
@@ -337,8 +328,14 @@ const isRiskLabelAdd = ref(false);
 const isAttrLabelAdd = ref(false);
 const isSpecial = ref(false);
 const form = reactive<updateUserFormType>({} as updateUserFormType);
-
-const labelForm = reactive<addLabelsType>({} as addLabelsType);
+const updatedLabels = reactive<labelListType>({
+  attr: [],
+  risk: []
+});
+const labelForm = reactive<addLabelsType>({
+  attr: [],
+  risk: []
+});
 // computed
 const tableData = computed(() => {
   return limitList.filter(
@@ -378,28 +375,68 @@ const initLimitList = async () => {
   }
 };
 
-const handleDeleteLabel = (label: number) => {
-  ElMessageBox.confirm(`${t('您确定要删除吗?')} `, '系统提示', {
-    type: 'warning',
-    center: true
-  }).then(() => {
-    emits('onDel', [form.id], [label]);
-    if (labelForm.attr) labelForm.attr.length = 0;
-    if (labelForm.risk) labelForm.risk.length = 0;
-  });
+const handleDeleteLabel = (label: number, type = 'risk') => {
+  if (type === 'risk') {
+    const index = updatedLabels.risk.findIndex(
+      (item: UserAPI.labelType) => item.id === label
+    );
+    if (index !== -1) updatedLabels.risk.splice(index, 1);
+  } else {
+    const index = updatedLabels.attr.findIndex(
+      (item: UserAPI.labelType) => item.id === label
+    );
+    if (index !== -1) updatedLabels.attr.splice(index, 1);
+  }
+  // ElMessageBox.confirm(`${t('您确定要删除吗?')} `, '系统提示', {
+  //   type: 'warning',
+  //   center: true
+  // }).then(() => {
+  //   emits('onDel', [form.id], [label]);
+  //   if (labelForm.attr) labelForm.attr.length = 0;
+  //   if (labelForm.risk) labelForm.risk.length = 0;
+  // });
 };
 
-const handleAddLabel = (labels: number[]) => {
-  ElMessageBox.confirm(`${t('您确定要增加吗?')} `, '系统提示', {
-    type: 'warning',
-    center: true
-  }).then(() => {
-    emits('onAdd', [form.id], labels);
-    if (labelForm.attr) labelForm.attr.length = 0;
-    if (labelForm.risk) labelForm.risk.length = 0;
-    isAttrLabelAdd.value = false;
+const handleAddLabel = (labels: number[], type = 'risk') => {
+  if (type === 'risk') {
+    labels.forEach((id: number) => {
+      const index = updatedLabels.risk.findIndex(
+        (item: UserAPI.labelType) => item.id === id
+      );
+      if (index === -1) {
+        const tmp = props.labelList.risk.find(
+          (item: UserAPI.labelType) => item.id === id
+        );
+        if (tmp) updatedLabels.risk.push(tmp);
+      }
+    });
+    labelForm.risk.length = 0;
     isRiskLabelAdd.value = false;
-  });
+  } else {
+    labels.forEach((id: number) => {
+      const index = updatedLabels.attr.findIndex(
+        (item: UserAPI.labelType) => item.id === id
+      );
+      if (index === -1) {
+        const tmp = props.labelList.attr.find(
+          (item: UserAPI.labelType) => item.id === id
+        );
+        if (tmp) updatedLabels.attr.push(tmp);
+      }
+    });
+    labelForm.attr.length = 0;
+    isAttrLabelAdd.value = false;
+  }
+};
+
+const handleDelLabel = (type = 'risk') => {
+  if (type === 'risk') {
+    isRiskLabelAdd.value = false;
+    labelForm.risk.length = 0;
+  } else {
+    isAttrLabelAdd.value = false;
+    labelForm.attr.length = 0;
+  }
 };
 
 const handleUpdate = () => {
@@ -407,6 +444,41 @@ const handleUpdate = () => {
     type: 'warning',
     center: true
   }).then(() => {
+    const addedLabels = props.userData.riskControlLabelList
+      ? updatedLabels.risk.filter(
+          (item: UserAPI.labelType) =>
+            !props.userData.riskControlLabelList.includes(item)
+        )
+      : updatedLabels.risk;
+    if (props.userData.attributeLabelList) {
+      addedLabels.push(
+        ...updatedLabels.attr.filter(
+          (item: UserAPI.labelType) =>
+            !props.userData.attributeLabelList.includes(item)
+        )
+      );
+    } else {
+      addedLabels.push(...updatedLabels.attr);
+    }
+    const AddedIds: number[] = [];
+    addedLabels.forEach((item: UserAPI.labelType) => {
+      AddedIds.push(item.id);
+    });
+    if (AddedIds.length !== 0) emits('onAdd', [form.id], AddedIds);
+    const deletedLabels = props.userData.riskControlLabelList.filter(
+      (item: UserAPI.labelType) => !updatedLabels.risk.includes(item)
+    );
+    deletedLabels.push(
+      ...props.userData.attributeLabelList.filter(
+        (item: UserAPI.labelType) => !updatedLabels.attr.includes(item)
+      )
+    );
+    console.log(deletedLabels);
+    const deletedIds: number[] = [];
+    deletedLabels.forEach((item: UserAPI.labelType) => {
+      deletedIds.push(item.id);
+    });
+    if (deletedIds.length !== 0) emits('onDel', [form.id], deletedIds);
     if (isSpecial.value) {
       form.specialLimit.productAmountTotalLimit = parseInt(
         form.specialLimit.productAmountTotalLimit
@@ -437,7 +509,9 @@ onUpdated(() => {
     maxWinAmountLimit,
     productAmountTotalLimit,
     seriesSingleDayCumulativeCompensationLimit,
-    singleEventAccumulatedCompensationLimit
+    singleEventAccumulatedCompensationLimit,
+    riskControlLabelList,
+    attributeLabelList
   } = props.userData;
   form.id = id;
   form.isFreeze = isFreeze;
@@ -460,6 +534,18 @@ onUpdated(() => {
   } else {
     isSpecial.value = false;
   }
+  updatedLabels.risk.length = 0;
+  if (riskControlLabelList) {
+    updatedLabels.risk.push(...riskControlLabelList);
+  }
+  updatedLabels.attr.length = 0;
+  if (attributeLabelList) {
+    updatedLabels.attr.push(...attributeLabelList);
+  }
+  isRiskLabelAdd.value = false;
+  labelForm.risk.length = 0;
+  isAttrLabelAdd.value = false;
+  labelForm.attr.length = 0;
 });
 
 watch(
@@ -474,5 +560,14 @@ watch(
 .el-dialog {
   padding-left: 0;
   padding-right: 0;
+}
+.custom {
+  .el-tag .el-tag__close {
+    color: white;
+  }
+  .el-tag__content {
+    white-space: break-spaces;
+    overflow: hidden;
+  }
 }
 </style>

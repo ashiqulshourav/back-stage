@@ -127,7 +127,7 @@
                     <el-tag
                       :style="`background-color: ${getLabelColor(
                         label.level,
-                        'risk'
+                        'attr'
                       )}`"
                       class="rounded-lg w-full py-1"
                     >
@@ -164,7 +164,7 @@
                         <el-tag
                           :style="`background-color: ${getLabelColor(
                             label.level,
-                            'risk'
+                            'attr'
                           )}`"
                           class="rounded-lg w-full py-1 text-white text-center"
                         >
@@ -247,6 +247,7 @@ const { tableHeaderStyle } = usePublicHooks();
 
 const props = defineProps<{
   category: number;
+  venueType: number;
 }>();
 
 const {
@@ -280,7 +281,7 @@ const {
   dispatchLabelsDel,
   dispatchLabelsAdd,
   dispatchUpdateUser
-} = userPlayerListHook(props.category);
+} = userPlayerListHook(props.category, props.venueType);
 </script>
 
 <style lang="scss">

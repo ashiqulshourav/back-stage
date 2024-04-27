@@ -1,41 +1,5 @@
 import { t } from '@/plugins/i18n';
 
-/*
-1	足球
-2	篮球
-3	网球
-4	电子竞技
-5	斯诺克/台球
-6	排球
-7	特别项目
-8	飞镖
-9	橄榄球
-10	拳击/格斗
-11	手球
-12	冰球
-13	板球
-14	金融投注
-15	彩票
-16	美式足球
-17	高尔夫球
-18	棒球
-19	羽毛球
-20	选美大赛
-21	赛车
-22	沙滩足球
-23	乒乓球
-24	垒球
-25	室内足球
-26	沙滩排球
-27	冬季运动
-28	曲棍球
-29	自行车
-30	体操
-31	田径
-32	更多运动
-33	水上运动
- */
-
 export const SPORT_ID_MAP = [
   { label: t('足球'), value: 1, type: 'FootBall' },
   { label: t('篮球'), value: 2, type: 'BasketBall' },
@@ -182,7 +146,7 @@ export const MATCH_PERIOD = {
 };
 
 //- 玩法声明映射
-export const PLAY_MATCH = code => {
+export const PLAY_MATCH = (code: string) => {
   const t1 = [
     'Q1_OU',
     'Q2_OU',
@@ -272,7 +236,7 @@ export const PLAY_MATCH = code => {
   }
 };
 //- 玩法声明映射
-export const PLAY_MATCH2 = (code, home: string, away: string) => {
+export const PLAY_MATCH2 = (code: string, home: string, away: string) => {
   const t1 = ['Q1_OU', 'Q2_OU', 'Q3_OU', 'Q4_OU', 'HT_OU', 'S1_OU', 'S2_OU', 'S3_OU', 'S4_OU', 'FTS_OU', 'FT_OU', 'PT_OU']
   const t2 = ['HT_AH', 'FT_AH', 'FTS_AH', 'Q4_AH', 'Q3_AH', 'Q1_AH', 'Q2_AH', 'S1_AH', 'S2_AH', 'S3_AH', 'S4_AH', 'PT_AH']
   const t3 = ['FT_OE', 'HT_OE']

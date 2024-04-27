@@ -17,7 +17,7 @@
 
       <el-form-item :label="`${t('分类排序')}:`" prop="sort">
         <el-input
-          :formatter="v => inputRestrictions(v)"
+          :formatter="(v:string) => inputRestrictions(v)"
           v-model="formData.sort"
           type="number"
           :placeholder="t('请输入1-200之间的数字')"
@@ -60,7 +60,7 @@ const props = defineProps<{
     sportId: number;
     sportName: string;
     configValue: string;
-    tags: string[];
+    tags?: string[];
     id: number | string;
     sort: number | string;
   };
@@ -90,15 +90,15 @@ const closeDialog = () => {
 
 //- 新增玩法
 const addPlayMethod = async () => {
-  ruleFormRef.value.validate(async v => {
+  ruleFormRef.value?.validate(async v => {
     if (v) {
       btnLoading.value = true;
       const urlPath = formData.id ? 'updateKindsCode' : 'addKindsCode';
-      const params = { ...formData };
-      if ((params as typeof formData).tags.length === 0) {
+      const params: typeof formData = { ...formData };
+      if (params.tags?.length === 0) {
         delete params.tags;
       } else {
-        params.tags = params.tags.map(_ => _.split('|')[0]);
+        params.tags = params.tags?.map(_ => _.split('|')[0]);
       }
       const res = await API[urlPath](
         removeEmptyStringKeys(params) as PLayMethodAPI.KindsCodeRequestCode & {

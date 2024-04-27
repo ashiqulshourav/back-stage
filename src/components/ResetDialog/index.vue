@@ -82,7 +82,7 @@ const validateList = {
 };
 
 //表单校验
-const validate = (formItemProp, isValid) => {
+const validate = (formItemProp: keyof typeof validateList, isValid: any) => {
   validateList[formItemProp] = isValid;
   isDisabled.value = !Object.values(validateList).every(item => item);
 };
@@ -91,7 +91,7 @@ const validate = (formItemProp, isValid) => {
 const resetPasswordRules = reactive({
   oldPassword: [
     {
-      validator: (_, value, callback) => {
+      validator: (_: any, value: string, callback: (arg0?: Error) => void) => {
         if (value === '') {
           callback(new Error(t('旧密码不能为空')));
         } else {
@@ -103,7 +103,7 @@ const resetPasswordRules = reactive({
   ],
   newPassword: [
     {
-      validator: (_, value, callback) => {
+      validator: (_: any, value: string, callback: (arg0?: Error) => void) => {
         if (value === '') {
           callback(new Error(t('新密码不能为空')));
         } else if (!REGEXP_PWD.test(value)) {
@@ -119,7 +119,7 @@ const resetPasswordRules = reactive({
   ],
   confirmPassword: [
     {
-      validator: (_, value, callback) => {
+      validator: (_: any, value: string, callback: (arg0?: Error) => void) => {
         if (value === '') {
           callback(new Error(t('确认密码不能为空')));
         } else if (resetForm.newPassword !== value) {
@@ -134,7 +134,7 @@ const resetPasswordRules = reactive({
 });
 
 const resetPassword = async () => {
-  resetFormRef.value.validate(async e => {
+  resetFormRef.value?.validate(async e => {
     if (e) {
       const res = await API.updatePwd({
         id: userStore.userInfo.id,

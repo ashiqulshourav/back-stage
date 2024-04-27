@@ -72,6 +72,23 @@
           v-enter="updateVal"
         />
       </el-form-item>
+
+      <el-form-item :label="t('联赛等级')" prop="riskLevel">
+        <el-select
+          v-model="newFormInline.riskLevel"
+          filterable
+          clearable
+          :placeholder="t('请选择联赛等级')"
+        >
+          <el-option
+            v-for="item in renderLevelList"
+            :key="item.league_level"
+            :label="item.league_level"
+            :value="item.league_level"
+          />
+        </el-select>
+      </el-form-item>
+
       <el-form-item :label="t('联赛标签')" prop="leagueTagsId">
         <div v-bind:style="{ width: '100%' }">
           <el-checkbox
@@ -112,10 +129,13 @@ import { t } from '@/plugins/i18n';
 import { useMatchStore } from '@/store/match';
 import { inputRestrictions } from '@/utils/formatNumber';
 import { message } from '@/utils/message';
+import { UploadFile } from 'element-plus';
 const uploadFormFile = ref();
 const loading = ref(false);
 const matchStore = useMatchStore();
-const leagueTagsId = ref([]);
+const leagueTagsId = reactive<ConfigCenterDataAPI.LeagueTagListFetchProps[]>(
+  []
+);
 
 const props = withDefaults(defineProps<FormProps>(), {
   formInline: () => ({
@@ -127,13 +147,14 @@ const props = withDefaults(defineProps<FormProps>(), {
     leagueLogo: '',
     sportId: '',
     category: '',
+    isEsportType: false,
     leagueTagsId: []
   })
 });
 
 const emits = defineEmits(['reloadTable', 'closeDialog']);
 const updateVal = () => {
-  ruleFormRef.value.validate(async valid => {
+  ruleFormRef.value.validate(async (valid: any) => {
     if (valid) {
       const res = await API.updateLeague(
         props.formInline as MetadataAPI.updateLeagueParamsType
@@ -144,15 +165,15 @@ const updateVal = () => {
   });
 };
 
-const onImgChange = file => {
+const onImgChange = (file: UploadFile) => {
   let name = file.name.slice(-3);
   let kb = 10000 * 1024;
   if (['png'].includes(name.toLowerCase())) {
-    if (file.size > kb) {
+    if ((file.size as number) > kb) {
       message(t('文件过大，请重新上传'), { type: 'error' });
     } else {
       uploadFormFile.value = file.raw;
-      imageUrl.value = URL.createObjectURL(file.raw);
+      imageUrl.value = URL.createObjectURL(file.raw as Blob | MediaSource);
     }
   } else {
     message(t('上传文件格式不匹配,请上传png格式文件'), {
@@ -163,37 +184,73 @@ const onImgChange = file => {
 
 const ruleFormRef = ref();
 const newFormInline = ref(props.formInline);
-const imageUrl = ref<string>(newFormInline.value.leagueLogo);
+const imageUrl = ref<string>(newFormInline.value.leagueLogo as string);
+const levelList = reactive<ConfigCenterDataAPI.leagueLevelList[]>([]);
 
 const checkAll = ref(false);
 const isIndeterminate = ref(true);
 
 const handleCheckAllChange = (val: boolean) => {
   newFormInline.value.leagueTagsId = val
-    ? leagueTagsId.value.map(item => item.id)
+    ? leagueTagsId.value.map((item: { id: any }) => item.id)
     : [];
   isIndeterminate.value = false;
 };
 const handleCheckedTagIdsChange = (value: number[]) => {
   const checkedCount = value.length;
-  checkAll.value = checkedCount === leagueTagsId.value.length;
+  checkAll.value = checkedCount === leagueTagsId.length;
   isIndeterminate.value =
     checkedCount > 0 && checkedCount < leagueTagsId.value.length;
 };
-onMounted(async () => {
-  console.log('newFormInline', newFormInline);
-  const response = await API.getLeagueTagList({
-    category: parseInt(newFormInline.value.category),
+
+onMounted(() => {
+  initLeaguetags();
+  initLevelList();
+});
+
+//- 获取联赛等级列表
+const initLevelList = async () => {
+  const res = await API.getLevelList();
+  if (res.code) return;
+  levelList.length = 0;
+  levelList.push(...res.data);
+};
+
+const renderLevelList = computed(() => {
+  const sportidMap = { 1: 0, 2: 1 };
+
+  if (props.formInline.isEsportType) {
+    return levelList.filter(item => item.game_type === 3);
+  } else if (
+    sportidMap[props.formInline.sportId as keyof typeof sportidMap] === 0 ||
+    sportidMap[props.formInline.sportId as keyof typeof sportidMap] === 1
+  ) {
+    return levelList.filter(
+      item =>
+        item.game_type ===
+        sportidMap[props.formInline.sportId as keyof typeof sportidMap]
+    );
+  } else {
+    return levelList.filter(item => item.game_type === 2);
+  }
+});
+
+//- 获取联赛列表标签
+const initLeaguetags = async () => {
+  const res = await API.getLeagueTagList({
+    category: parseInt(newFormInline.value.category as string),
     sportId: parseInt(newFormInline.value.sportId)
   });
-  leagueTagsId.value = response.data.list;
-});
+  leagueTagsId.length = 0;
+  leagueTagsId.push(...res.data.list);
+};
+
 const cancelDialog = () => {
   emits('closeDialog');
 };
 
 const confirmBtnClick = () => {
-  ruleFormRef.value.validate(async valid => {
+  ruleFormRef.value.validate(async (valid: any) => {
     if (valid) {
       loading.value = true;
       if (uploadFormFile.value) {
