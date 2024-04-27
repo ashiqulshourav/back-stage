@@ -27,6 +27,7 @@ declare namespace RoleAPI {
     userCount: number;
     disabled: boolean; // 非超级管理员隐藏按钮
     userList: string[];
+    flag?: number;
   }
 
   type querySysAccountListInfo = {

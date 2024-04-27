@@ -93,7 +93,7 @@ import { useUserStore } from '@/store/user';
 import { t } from '@/plugins/i18n';
 import { getMD5 } from '@/utils/caypto';
 import { useResetPasswordHook } from '@/hooks/resetPasswordHook';
-
+import { REGEXP_PWD } from '@/components/ResetDialog/rule';
 defineOptions({ name: 'Login' });
 const router = useRouter();
 const loading = ref(false);
@@ -137,7 +137,7 @@ const _loginRequest = async () => {
     if (res.code) return message(res.msg, { type: 'error' });
     //- 第一次登录强制弹出充值密码弹窗
     userStore.setUserInfo(res.data);
-    if (ruleForm.password === '123456') {
+    if (!REGEXP_PWD.test(ruleForm.password) || res.data.flag === 1) {
       ruleForm.password = '';
       return openResetDialog();
     }

@@ -11,6 +11,7 @@ declare namespace UserMangerAPI {
     isAdmmin: number;
     ukeyCode: string;
     avatar: string;
+    flag?: number;
   };
 
   type querySysAccountListReqType = {
@@ -44,6 +45,7 @@ declare namespace UserMangerAPI {
     createdBy: string;
     lastLoginIp?: any;
     disabled: boolean;
+    flag?: number;
   }
 
   type querySysAccountListInfo = {

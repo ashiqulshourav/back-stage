@@ -5,6 +5,7 @@ declare namespace UserAPI {
     id: number;
     status: number;
     isAdmin: number;
+    flag: number;
   };
 
   type Login = COMMON.BASE_RES_TYPE<LoginData>;
