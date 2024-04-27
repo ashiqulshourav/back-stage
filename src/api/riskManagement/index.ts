@@ -36,5 +36,11 @@ export const riskManagementData = {
       data
     }),
   // 针对赛事编辑备注
-  editMatchDetailRemark: (data: {orderDetailId:number,remark:string}) => http.request<any>("post", "/bet-center/betOrderDetail/editRemark", { data }),
+  editMatchDetailRemark: (data: { orderDetailId: number, remark: string }) => http.request<any>("post", "/bet-center/betOrderDetail/editRemark", { data }),
+  // 单关限额列表 0足球 1篮球 2其他 3电竞
+  getGameLimitList: (gameType: number) =>
+    http.request<RiskManagementDataAPI.LimitRes>('post', '/betLimit/list', { data: { gameType } }),
+  //- 修改单关限额列表
+  updateLevelLimit: (data: RiskManagementDataAPI.LimitListType[]) => http.request<RiskManagementDataAPI.updateLevelLimitResType>("post", "/betLimit/update", { data }),
+  // mockAPI.deleteRiskTag(data)
 };

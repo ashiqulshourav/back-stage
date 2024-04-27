@@ -291,9 +291,13 @@
           <template #riskStatus="{ row }">
             <div
               class="match_item odd_item"
-              v-for="item in row.combineOrderDetails"
+              v-for="(item, idx) in row.combineOrderDetails"
+              :key="idx"
             >
-              <div class="text-left" v-if="item.riskStatus === riskStatus.reject">
+              <div
+                class="text-left"
+                v-if="item.riskStatus === riskStatus.reject"
+              >
                 原因:{{ item.riskType }}
               </div>
               <div
@@ -339,8 +343,8 @@
               <el-button
                 size="small"
                 type="danger"
-                v-if="item.riskStatus === 2 && hasAuth('REJECT')"
                 @click="handleCancel(row, index)"
+                v-if="item.riskStatus === 2 && hasAuth('REJECT')"
               >
                 {{ t('风控划单') }}
               </el-button>
@@ -371,16 +375,21 @@
           <template #operation="{ row }">
             <div
               class="match_item approve flex justify-between items-center"
-              v-for="(item) in row.combineOrderDetails"
+              v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
               <div>
-                <div>{{item.orderDetailRemark}}</div>
+                <div>{{ item.orderDetailRemark }}</div>
                 <div>
                   <el-button
                     size="small"
                     type="primary"
-                    @click="editMatchDetailRemark(item.detailId,item.orderDetailRemark)"
+                    @click="
+                      editMatchDetailRemark(
+                        item.detailId,
+                        item.orderDetailRemark
+                      )
+                    "
                   >
                     {{ t('编辑备注') }}
                   </el-button>
