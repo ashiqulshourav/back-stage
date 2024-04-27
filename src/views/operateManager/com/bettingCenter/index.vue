@@ -36,7 +36,7 @@
         >
           <template #index="{ row }">
             <span>{{ row.index }}</span>
-          </template>          
+          </template>
           <template #userMessage="{ row }">
             <div
               class="item_line cursor-pointer"
@@ -170,68 +170,7 @@
             </div>
           </template>
           <template #riskControlLabel="{ row }">
-            <el-row
-              v-if="row.riskControlLabelList"
-              class="items-center min-w-[200px]"
-              :gutter="20"
-            >
-              <el-col :span="row.riskControlLabelList?.length > 6 ? 20 : 24">
-                <el-row :gutter="5">
-                  <el-col
-                    v-for="label in row.riskControlLabelList
-                      .slice(0, 6)
-                      .sort((a, b) => a.level - b.level)"
-                    :key="label.id"
-                    class="custom"
-                  >
-                    <el-tag
-                      :style="`background-color: ${getLabelColor(
-                        label.level,
-                        'risk'
-                      )}`"
-                      class="rounded-lg w-full py-1"
-                    >
-                      {{ label.name }}
-                    </el-tag>
-                  </el-col>
-                </el-row>
-              </el-col>
-              <el-col :span="4" v-if="row.riskControlLabelList?.length > 6">
-                <el-popover
-                  placement="top-end"
-                  :width="300"
-                  trigger="hover"
-                  content="this is over"
-                >
-                  <template #reference>
-                    <el-button class="w-full"
-                      ><el-icon><Plus /></el-icon
-                    ></el-button>
-                  </template>
-                  <template #default>
-                    <el-row :gutter="5">
-                      <el-col
-                        v-for="label in row.riskControlLabelList.sort(
-                          (a, b) => a.level - b.level
-                        )"
-                        :key="label.id"
-                        class="custom"
-                      >
-                        <el-tag
-                          :style="`background-color: ${getLabelColor(
-                            label.level,
-                            'risk'
-                          )}`"
-                          class="rounded-lg w-full py-1 text-white text-center"
-                        >
-                          {{ label.name }}
-                        </el-tag>
-                      </el-col>
-                    </el-row>
-                  </template>
-                </el-popover>
-              </el-col>
-            </el-row>
+            <RiskLabelList :list="row.riskControlLabelList" />
           </template>
           <template #betDetail="{ row }">
             <div
@@ -409,6 +348,8 @@
             </div>
           </template>
           <template #operationRemark="{ row }">
+
+
               <div>
                   <div>{{row.orderRemark}}</div>
                   <div>
@@ -486,6 +427,7 @@ import {
 import {betStatus, betStatusMap} from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
+import RiskLabelList from "./component/riskLabelList.vue";
 const props = defineProps<{
   category: number;
   venueType:number;
@@ -512,7 +454,6 @@ const {
   isShowCancel,
   editOrderRemark,
   riskLabelList,
-  getLabelColor
 } = useBettingCenterHook(props.category,props.venueType);
 </script>
 
