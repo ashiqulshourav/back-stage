@@ -2,7 +2,7 @@
   <div>
     <el-date-picker
       class="ml-4 !w-[260px]"
-      v-model="timeVal as any"
+      v-model="timeVal"
       :type="isSingle ? 'date' : 'daterange'"
       :placeholder="placeholder"
       value-format="x"
