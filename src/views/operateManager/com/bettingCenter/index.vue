@@ -170,7 +170,8 @@
             </div>
           </template>
           <template #riskControlLabel="{ row }">
-            <el-row
+            <RiskControlLabelList :list="row.riskControlLabelList"/>
+            <!-- <el-row
               v-if="row.riskControlLabelList"
               class="items-center min-w-[200px]"
               :gutter="20"
@@ -231,7 +232,7 @@
                   </template>
                 </el-popover>
               </el-col>
-            </el-row>
+            </el-row> -->
           </template>
           <template #betDetail="{ row }">
             <div
@@ -469,6 +470,7 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
+import RiskControlLabelList from './component/RiskControlLabelList.vue';
 import { Plus } from "@element-plus/icons-vue"
 import { hasAuth } from '@/router/utils';
 import {
