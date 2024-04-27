@@ -201,30 +201,13 @@ export function userPlayerListHook(venueType: number) {
     }
   };
 
-  const dispatchGetUserLabels = async () => {
-    try {
-      const res = await API.operateUserList({
-        ids: [userData.id],
-        pageSize: 10,
-        pageNum: 1
-      });
-      if (res.code) return message(res.msg, { type: 'error' });
-      Object.assign(userData, res.data.pageData[0]);
-    } catch (error) {
-      return message(error as string, { type: 'error' });
-    }
-  };
-
   const dispatchLabelsDel = async (id: string[], labelId: number[]) => {
     try {
       const res = await API.updateUserLabelDel({ id, labelId });
       if (res.code) return message(res.msg, { type: 'error' });
-      if (res.data) {
-        dispatchGetUserLabels();
-        onSearch();
+      onSearch();
+      if (id.length > 1) {
         return message(res.msg, { type: 'success' });
-      } else {
-        return message('Operation failed', { type: 'error' });
       }
     } catch (error) {
       return message(error as string, { type: 'error' });
@@ -235,12 +218,9 @@ export function userPlayerListHook(venueType: number) {
     try {
       const res = await API.addLabels({ id, labelId });
       if (res.code) return message(res.msg, { type: 'error' });
-      if (res.data) {
-        dispatchGetUserLabels();
-        onSearch();
+      onSearch();
+      if (id.length > 1) {
         return message(res.msg, { type: 'success' });
-      } else {
-        return message('Operation failed', { type: 'error' });
       }
     } catch (error) {
       return message(error as string, { type: 'success' });
