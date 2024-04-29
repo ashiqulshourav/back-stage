@@ -2,6 +2,7 @@ import { message } from '@/utils/message';
 import { reactive, ref, onMounted } from 'vue';
 import { columns, columns2 } from '../component/TableColumnList';
 import { ElMessageBox } from 'element-plus';
+import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 
 export function useOrderLimitHook() {
   const sportList = reactive<RiskManagementDataAPI.LimitListType[]>([]);
@@ -10,6 +11,7 @@ export function useOrderLimitHook() {
   const isEditSport = ref(false);
   const currentSportId = ref(0);
   const loading = ref(true);
+  const { openPasswordInput } = usePasswordInputHook();
 
   // 初始化
   async function onSearch() {
@@ -85,7 +87,11 @@ export function useOrderLimitHook() {
     cancelSportEdit();
     onSearch();
   };
-
+  const toggle = async (flag: boolean) => {
+    const r = await openPasswordInput();
+    if (!r) return;
+    isEditSport.value = flag;
+  }
   onMounted(() => {
     onSearch();
   });
@@ -102,6 +108,7 @@ export function useOrderLimitHook() {
     delSportItem,
     cancelSportEdit,
     currentSportId,
-    changeType
+    toggle,
+    changeType,
   };
 }

@@ -15,7 +15,7 @@
         </div>
         <el-button
           v-if="!isEditSport"
-          @click="isEditSport = true"
+          @click="toggle(true)"
           type="primary"
           >{{ t('编辑') }}</el-button>
         <div class="flex items-center" v-else>
@@ -311,7 +311,7 @@
 </template>
 
 <script setup lang="ts">
-import { useOrderLimitHook } from './utils/hook';
+import { useOrderLimitHook} from './utils/hook';
 import { SPORT_LIST_MAP, SPORT_NAME_TYPE } from './utils/map';
 import CustomButton from '@/components/Form/CustomButton.vue';
 import { t } from '@/plugins/i18n';
@@ -335,7 +335,8 @@ const {
   delSportItem,
   cancelSportEdit,
   currentSportId,
-  changeType
+  changeType,
+  toggle
 } = useOrderLimitHook();
 </script>
 
