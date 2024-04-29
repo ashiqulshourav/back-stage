@@ -117,8 +117,6 @@
               <div>
                 <RiskLabelList
                   :list="row.riskControlLabelList"
-                  :category="props.category"
-                  :venueType="props.venueType"
                   :showNumber="1"
                 />
               </div>
