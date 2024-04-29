@@ -50,10 +50,10 @@ app.config.errorHandler = (err, vm, info) => {
   console.log('全局错误============:', err, vm, info);
 }
 
-getServerConfig(app).then(async config => {
+getServerConfig(app).then(async (config) => {
   app.use(router);
   await router.isReady();
-  injectResponsiveStorage(app, config);
+  injectResponsiveStorage(app, config as unknown as ServerConfigs);
   app
     .use(Table)
     .use(store)

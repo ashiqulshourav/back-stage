@@ -38,85 +38,89 @@
             <span>{{ row.index }}</span>
           </template>
           <template #userMessage="{ row }">
-            <div class="user_wrap">
-              <div class="user_left">
+            <div class="flex">
+              <div>
                 <div
                   class="item_line cursor-pointer"
                   @dblclick="
-                copyTest(
-                  row.userId,
-                  t('用户ID：{value}', { value: row.userId })
-                )
-              "
+                    copyTest(
+                      row.userId,
+                      t('用户ID：{value}', { value: row.userId })
+                    )
+                  "
                 >
-              <span>{{ t('用户ID：') }}</span
-              >{{ row.userId }}
+                  <span>{{ t('用户ID：') }}</span
+                  >{{ row.userId }}
                 </div>
                 <div
                   class="item_line cursor-pointer"
                   @dblclick="
-                copyTest(
-                  row.userName,
-                  t('用户名：{value}', { value: row.userName })
-                )
-              "
+                    copyTest(
+                      row.userName,
+                      t('用户名：{value}', { value: row.userName })
+                    )
+                  "
                 >
-              <span>{{ t('用户名：') }}</span
-              >{{ row.userName }}
+                  <span>{{ t('用户名：') }}</span
+                  >{{ row.userName }}
                 </div>
                 <div
                   class="item_line cursor-pointer"
                   @dblclick="
-                copyTest(
-                  tenantObj[row.tenantId]?.tenantName,
-                  t('商户名：{value}', {
-                    value: tenantObj[row.tenantId]?.tenantName
-                  })
-                )
-              "
+                    copyTest(
+                      tenantObj[row.tenantId]?.tenantName,
+                      t('商户名：{value}', {
+                        value: tenantObj[row.tenantId]?.tenantName
+                      })
+                    )
+                  "
                 >
-              <span>{{ t('商户名：') }}</span
-              >{{ tenantObj[row.tenantId]?.tenantName }}
+                  <span>{{ t('商户名：') }}</span
+                  >{{ tenantObj[row.tenantId]?.tenantName }}
                 </div>
                 <div
                   class="item_line cursor-pointer"
                   @dblclick="
-                copyTest(
-                  row.tenantId,
-                  t('商户编码：{value}', {
-                    value: tenantObj[row.tenantId]?.name
-                  })
-                )
-              "
+                    copyTest(
+                      row.tenantId,
+                      t('商户编码：{value}', {
+                        value: tenantObj[row.tenantId]?.name
+                      })
+                    )
+                  "
                 >
-              <span>{{ t('商户编码：') }}</span
-              >{{ tenantObj[row.tenantId]?.name }}
+                  <span>{{ t('商户编码：') }}</span
+                  >{{ tenantObj[row.tenantId]?.name }}
                 </div>
                 <div
                   v-if="row.combineOrderDetails.length > 1"
                   class="item_line mt-2 color_blue"
                 >
-                  {{ String(row.seriesType).slice(-3) === '001' ? '串关' : '复式' }}
+                  {{
+                    String(row.seriesType).slice(-3) === '001' ? '串关' : '复式'
+                  }}
                   <span>{{
-                      formatSeriesType(
-                        row?.seriesType,
-                        row.combineOrderDetails.length
-                      )
-                    }}</span>
+                    formatSeriesType(
+                      row?.seriesType,
+                      row.combineOrderDetails.length
+                    )
+                  }}</span>
                   <span class="ml-1"
-                  >总计：{{
-                      `${calculateSeriesTypeTotalBets(row?.seriesType)}注 每注：${
-                        row.orderAmount
-                      }`
+                    >总计：{{
+                      `${calculateSeriesTypeTotalBets(
+                        row?.seriesType
+                      )}注 每注：${row.orderAmount}`
                     }}</span
                   >
                 </div>
               </div>
-              <div class="user_right">
-                <RiskLabelList :list="row.riskControlLabelList" />
+              <div>
+                <RiskLabelList
+                  :list="row.riskControlLabelList"
+                  :showNumber="1"
+                />
               </div>
             </div>
-
           </template>
           <template #matchMessage="{ row }">
             <div
@@ -124,7 +128,7 @@
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <div v-if="item.kindsCode!== 'Outright'" class="item_line">
+              <div v-if="item.kindsCode !== 'Outright'" class="item_line">
                 <span
                   class="cursor-pointer"
                   @dblclick="
@@ -310,14 +314,18 @@
                 ]
               }}
             </div>
-            <div v-if=" getStatus(
-                    row.status,
-                    row.billStatus,
-                    row.combineOrderDetails[0].betResult,
-                    row.isReserve,
-                    row.riskStatus,
-                    row.isSpecialSettle
-                  ).status===betStatus.settlementBet">
+            <div
+              v-if="
+                getStatus(
+                  row.status,
+                  row.billStatus,
+                  row.combineOrderDetails[0].betResult,
+                  row.isReserve,
+                  row.riskStatus,
+                  row.isSpecialSettle
+                ).status === betStatus.settlementBet
+              "
+            >
               {{
                 row.settleTime
                   ? dayjs(row.settleTime).format('MM-DD HH:mm:ss')
@@ -338,7 +346,11 @@
               <el-button
                 class="mb-1 w-100"
                 @click="handleCancel(row)"
-                v-if="row.billStatus === 0&& isShowCancel(row) && hasAuth('CANCELBET')"
+                v-if="
+                  row.billStatus === 0 &&
+                  isShowCancel(row) &&
+                  hasAuth('CANCELBET')
+                "
               >
                 {{ t('取消') }}
               </el-button>
@@ -347,24 +359,25 @@
               <el-button
                 class="mb-1 w-100"
                 @click="switchDialog(true, row)"
-                v-if=" hasAuth('specialSettlement'.toUpperCase())">
+                v-if="hasAuth('specialSettlement'.toUpperCase())"
+              >
                 {{ t('特殊结算') }}
               </el-button>
             </div>
           </template>
           <template #operationRemark="{ row }">
+            <div>
+              <div>{{ row.orderRemark }}</div>
               <div>
-                  <div>{{row.orderRemark}}</div>
-                  <div>
-                      <el-button
-                              size="small"
-                              type="primary"
-                              @click="editOrderRemark(row.id,row.orderRemark)"
-                      >
-                          {{ t('备注') }}
-                      </el-button>
-                  </div>
+                <el-button
+                  size="small"
+                  type="primary"
+                  @click="editOrderRemark(row.id, row.orderRemark)"
+                >
+                  {{ t('备注') }}
+                </el-button>
               </div>
+            </div>
           </template>
         </pure-table>
         <div
@@ -413,7 +426,7 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
-import { Plus } from "@element-plus/icons-vue"
+import RiskLabelList from './component/riskLabelList.vue';
 import { hasAuth } from '@/router/utils';
 import {
   formatSeriesType,
@@ -427,13 +440,12 @@ import {
   displayHomeAwayScore,
   getIsInplay
 } from '@/utils/formatMatch';
-import {betStatus, betStatusMap} from './util/types';
+import { betStatus, betStatusMap } from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
-import RiskLabelList from "./component/riskLabelList.vue";
 const props = defineProps<{
   category: number;
-  venueType:number;
+  venueType: number;
 }>();
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
@@ -456,23 +468,16 @@ const {
   tenantObj,
   isShowCancel,
   editOrderRemark,
-  riskLabelList,
-} = useBettingCenterHook(props.category,props.venueType);
+  riskLabelList
+} = useBettingCenterHook(props.category, props.venueType);
 </script>
 
 <style lang="scss">
-.user_wrap{
-  display: flex;
-  justify-content: flex-start;
-  .user_right{
-     width: 100px;
-    margin-left: 10px;
-  }
-}
 .is-horizontal {
   display: block !important;
   height: 10px !important;
 }
+
 .bottom_content {
   & > div {
     margin-left: 10px;
@@ -531,15 +536,5 @@ const {
 
 .operate {
   width: 100px;
-}
-.el-row {
-  row-gap: 0.5rem;
-}
-.custom {
-  flex: 0 0 0;
-  max-width: unset;
-  .el-tag__content {
-    color: white;
-  }
 }
 </style>

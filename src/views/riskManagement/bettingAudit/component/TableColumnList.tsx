@@ -64,6 +64,6 @@ export const columns: TableColumnList = [
     label: t('备注'),
     slot: 'operation',
     align:'center',
-    minWidth: 50,
+    minWidth: 100,
   }
 ]
