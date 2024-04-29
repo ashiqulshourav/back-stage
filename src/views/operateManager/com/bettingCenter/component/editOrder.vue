@@ -8,10 +8,13 @@
   >
     <el-form-item  prop="other">
       <el-input
-                 v-model="newData.orderRemark"
-                 :placeholder="t('请输入备注')"
-                 clearable
-                 class="!w-[300px]"
+          :row="4"
+          v-model="newData.orderRemark"
+          :placeholder="t('请输入备注')"
+          clearable
+          class="!w-[400px]"
+          maxlength="255"
+          type="textarea"
       />
       </el-form-item>
     </el-form>

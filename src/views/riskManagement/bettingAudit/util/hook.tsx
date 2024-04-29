@@ -33,7 +33,7 @@ export function useLeague() {
     total: 0,
     pageSize: 10,
     currentPage: 1,
-    pageSizes:[10,20,50,100,200,1000],
+    pageSizes:[10,20,50,100,200,500],
     background: true
   });
   const form = reactive<searchFormType>({

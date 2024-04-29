@@ -351,6 +351,8 @@ export function useBettingCenterHook(category:number,venueType:number) {
     if(isSpecialSettle===1){
       // 特殊结算也算已结算
       obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
+    }else if(betResult==22){
+      obj = { status:22, bgColor: '#F57582' }; //预约取消
     }else if(riskStatus===2){
         obj = { status: betStatus.PendingApprove, bgColor: '#F57582' }; //待审核
     }else if (

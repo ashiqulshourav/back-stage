@@ -299,7 +299,7 @@
                   row.isSpecialSettle
                 ).bgColor
               }"
-              class="status_btn mb-1"
+              class="status_detail status_btn mb-1"
             >
               {{
                 betStatusMap[
@@ -492,6 +492,9 @@ const {
 }
 .bet_detail{
   min-width: 200px;
+}
+.status_detail{
+  width: 120px;
 }
 .match_item {
   margin-bottom: 10px;

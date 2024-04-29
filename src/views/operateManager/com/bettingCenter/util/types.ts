@@ -51,6 +51,7 @@ export const betStatusMap ={
   [betStatus.riskReject]: t('风控拒单'),
   [betStatus.reserveFail]: t('预约失败'),
   [betStatus.onReverse]: t('预约中'),
+  '22':t('预约取消')
 }
 
 export const seriesTypesSingle = {
