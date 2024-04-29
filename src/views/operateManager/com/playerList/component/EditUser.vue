@@ -283,6 +283,7 @@ const props = defineProps<{
   isEditUser: boolean;
   labelList: labelListType;
   userData: UserAPI.operateUserList;
+  category: number;
 }>();
 
 const { tableHeaderStyleBlue } = usePublicHooks();
@@ -367,7 +368,7 @@ const getLabelColor = (label: number, type: string) => {
 
 const initLimitList = async () => {
   try {
-    const res = await API.getUserLevelLimitList({ type: 0 });
+    const res = await API.getUserLevelLimitList({ type: props.category });
     limitList.length = 0;
     limitList.push(...res.data);
   } catch (error) {
