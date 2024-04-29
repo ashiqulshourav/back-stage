@@ -121,7 +121,6 @@
                   :venueType="props.venueType"
                   :showNumber="1"
                 />
-
               </div>
             </div>
           </template>
