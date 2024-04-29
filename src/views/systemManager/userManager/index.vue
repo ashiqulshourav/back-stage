@@ -58,7 +58,7 @@
               type="primary"
               :disabled="row.disabled"
               size="small"
-              @click="resetPasswordClick(row)"
+              @click="openPasswordResetDialog(row)"
             >
               {{ t('重置') }}
             </el-button>
@@ -117,7 +117,7 @@ const {
   handleSelectionChange,
   form,
   handleDelete,
-  resetPasswordClick,
+  openPasswordResetDialog,
   updateUserStatus
 } = useUserManager();
 </script>

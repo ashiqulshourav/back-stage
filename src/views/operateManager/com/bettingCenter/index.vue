@@ -24,6 +24,7 @@
           :size="size"
           class="table_container"
           adaptive
+          :default-sort="{ prop: 'level', order: 'descending' }"
           :data="dataList"
           :columns="dynamicColumns"
           :pagination="pagination"
@@ -37,33 +38,35 @@
             <span>{{ row.index }}</span>
           </template>
           <template #userMessage="{ row }">
-            <div
-              class="item_line cursor-pointer"
-              @dblclick="
+            <div class="user_wrap">
+              <div class="user_left">
+                <div
+                  class="item_line cursor-pointer"
+                  @dblclick="
                 copyTest(
                   row.userId,
                   t('用户ID：{value}', { value: row.userId })
                 )
               "
-            >
+                >
               <span>{{ t('用户ID：') }}</span
               >{{ row.userId }}
-            </div>
-            <div
-              class="item_line cursor-pointer"
-              @dblclick="
+                </div>
+                <div
+                  class="item_line cursor-pointer"
+                  @dblclick="
                 copyTest(
                   row.userName,
                   t('用户名：{value}', { value: row.userName })
                 )
               "
-            >
+                >
               <span>{{ t('用户名：') }}</span
               >{{ row.userName }}
-            </div>
-            <div
-              class="item_line cursor-pointer"
-              @dblclick="
+                </div>
+                <div
+                  class="item_line cursor-pointer"
+                  @dblclick="
                 copyTest(
                   tenantObj[row.tenantId]?.tenantName,
                   t('商户名：{value}', {
@@ -71,13 +74,13 @@
                   })
                 )
               "
-            >
+                >
               <span>{{ t('商户名：') }}</span
               >{{ tenantObj[row.tenantId]?.tenantName }}
-            </div>
-            <div
-              class="item_line cursor-pointer"
-              @dblclick="
+                </div>
+                <div
+                  class="item_line cursor-pointer"
+                  @dblclick="
                 copyTest(
                   row.tenantId,
                   t('商户编码：{value}', {
@@ -85,29 +88,35 @@
                   })
                 )
               "
-            >
+                >
               <span>{{ t('商户编码：') }}</span
               >{{ tenantObj[row.tenantId]?.name }}
+                </div>
+                <div
+                  v-if="row.combineOrderDetails.length > 1"
+                  class="item_line mt-2 color_blue"
+                >
+                  {{ String(row.seriesType).slice(-3) === '001' ? '串关' : '复式' }}
+                  <span>{{
+                      formatSeriesType(
+                        row?.seriesType,
+                        row.combineOrderDetails.length
+                      )
+                    }}</span>
+                  <span class="ml-1"
+                  >总计：{{
+                      `${calculateSeriesTypeTotalBets(row?.seriesType)}注 每注：${
+                        row.orderAmount
+                      }`
+                    }}</span
+                  >
+                </div>
+              </div>
+              <div class="user_right">
+                <RiskLabelList :list="row.riskControlLabelList" />
+              </div>
             </div>
-            <div
-              v-if="row.combineOrderDetails.length > 1"
-              class="item_line mt-2 color_blue"
-            >
-              {{ String(row.seriesType).slice(-3) === '001' ? '串关' : '复式' }}
-              <span>{{
-                formatSeriesType(
-                  row?.seriesType,
-                  row.combineOrderDetails.length
-                )
-              }}</span>
-              <span class="ml-1"
-                >总计：{{
-                  `${calculateSeriesTypeTotalBets(row?.seriesType)}注 每注：${
-                    row.orderAmount
-                  }`
-                }}</span
-              >
-            </div>
+
           </template>
           <template #matchMessage="{ row }">
             <div
@@ -404,6 +413,7 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
+import { Plus } from "@element-plus/icons-vue"
 import { hasAuth } from '@/router/utils';
 import {
   formatSeriesType,
@@ -420,6 +430,7 @@ import {
 import {betStatus, betStatusMap} from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
+import RiskLabelList from "./component/riskLabelList.vue";
 const props = defineProps<{
   category: number;
   venueType:number;
@@ -445,16 +456,23 @@ const {
   tenantObj,
   isShowCancel,
   editOrderRemark,
-  riskLabelList
+  riskLabelList,
 } = useBettingCenterHook(props.category,props.venueType);
 </script>
 
 <style lang="scss">
+.user_wrap{
+  display: flex;
+  justify-content: flex-start;
+  .user_right{
+     width: 100px;
+    margin-left: 10px;
+  }
+}
 .is-horizontal {
   display: block !important;
   height: 10px !important;
 }
-
 .bottom_content {
   & > div {
     margin-left: 10px;
@@ -513,5 +531,15 @@ const {
 
 .operate {
   width: 100px;
+}
+.el-row {
+  row-gap: 0.5rem;
+}
+.custom {
+  flex: 0 0 0;
+  max-width: unset;
+  .el-tag__content {
+    color: white;
+  }
 }
 </style>

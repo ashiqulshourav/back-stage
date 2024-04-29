@@ -11,7 +11,6 @@ export function useLeague() {
   const loading = ref(true);
   const switchLoadMap = ref({});
   const { switchStyle } = usePublicHooks();
-  const formRef = ref();
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -51,7 +50,11 @@ export function useLeague() {
     if (res.code) return message(res.msg, { type: 'error' });
     dataList.length = 0;
     dataList.push(...res.data.list);
-    document.querySelector('.table_container .el-scrollbar__wrap').scroll(0, 0);
+    (
+      document.querySelector(
+        '.table_container .el-scrollbar__wrap'
+      ) as HTMLDivElement
+    ).scroll(0, 0);
     pagination.total = res.data.total;
   }
 
@@ -65,7 +68,8 @@ export function useLeague() {
         formInline: {
           leagueId: row?.leagueId ?? '',
           leagueNameCn: row?.leagueNameCn ?? '',
-          leagueNameEn: row?.leagueNameEn ?? ''
+          leagueNameEn: row?.leagueNameEn ?? '',
+          riskLevel: row?.riskLevel ?? ''
         }
       },
       width: '40%',

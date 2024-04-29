@@ -11,7 +11,7 @@ export const columns: TableColumnList = [
   {
     label: t("用户信息"),
     slot: 'userMessage',
-    minWidth: 100,
+    minWidth: 300,
     align:'left',
   },
   {
@@ -20,6 +20,7 @@ export const columns: TableColumnList = [
     minWidth: 100,
     align:'left',
   },
+
   {
     label: t("注单详情"),
     slot: 'betDetail',

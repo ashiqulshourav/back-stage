@@ -26,6 +26,16 @@
       </el-select>
     </el-form-item>
 
+    <el-form-item :label="t('账号密码')" v-if="!row.id" prop="pwd">
+      <div class="flex w-full items-center justify-between">
+        <div>{{newFormInline.pwd}}</div>
+        <div class="flex items-center">
+          <el-button :icon="useRenderIcon(RefreshIcon)" @click="getPassword" />
+          <el-button type="primary" @click="copyPassword(newFormInline.pwd)">{{t(`复制默认密码`)}}</el-button>
+        </div>
+      </div>
+    </el-form-item>
+
     <el-form-item :label="t('所属角色')" prop="roleId">
       <el-select v-model="newFormInline.roleId" filterable clearable>
         <el-option
@@ -84,8 +94,14 @@ import { FormInstance } from 'element-plus/es/components/form';
 import { message } from '@/utils/message';
 import { depList } from './utils/map';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { useResetPasswordHook } from '@/hooks/resetPasswordHook';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import RefreshIcon from '@iconify-icons/ep/refresh';
+import { getMD5 } from '@/utils/caypto';
 
 const { switchStyle } = usePublicHooks();
+const { getNewPassword, copyPassword } = useResetPasswordHook();
+
 
 const { row } = defineProps<{
   row: UserMangerAPI.addSysAccountRes;
@@ -95,7 +111,15 @@ const emits = defineEmits(['closeDialog']);
 
 onMounted(() => {
   getRoleList();
+  if (!row.id) {
+    getPassword();
+  }
 });
+
+const getPassword = () => {
+  const res = getNewPassword();
+  newFormInline.pwd = res;
+};
 
 const roleList = reactive<RoleAPI.querySysAccountListData[]>([]);
 const getRoleList = async () => {
@@ -121,7 +145,11 @@ const confirmClick = () => {
     if (v) {
       const res = await API[requestAPI]({
         ...(removeEmptyStringKeys(
-          newFormInline
+          {
+            ...newFormInline,
+            pwd: !row.id ? getMD5(newFormInline.pwd) : row.pwd,
+            flag: !row.id ? 1 : ''
+          }
         ) as UserMangerAPI.addSysAccountRes),
         status: Number(newFormInline.status)
       });

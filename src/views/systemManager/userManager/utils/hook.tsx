@@ -6,9 +6,10 @@ import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted, h } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { searchFormType } from './types';
-import { getMD5 } from '@/utils/caypto';
+import ResetPassword from '../component/ResetPassword.vue';
 import { NameData } from '../../roleManager/utils/types';
 import { useUserStore } from '@/store/user';
+import { getMD5 } from '@/utils/caypto';
 
 export function useUserManager() {
   const dataList = reactive<UserMangerAPI.querySysAccountListData[]>([]);
@@ -100,9 +101,10 @@ export function useUserManager() {
             status: row?.status ?? true,
             avatar: row?.avatar ?? '',
             isAdmmin: row?.isAdmin ?? 1,
-            pwd: row?.pwd ?? getMD5('123456'),
+            pwd: row?.pwd ?? '',
             id: row?.id ?? '',
-            ukeyCode: row?.ukeyCode ?? ''
+            ukeyCode: row?.ukeyCode ?? '',
+            flag: row?.id ? row?.flag : 1
           },
           onCloseDialog: (
             closeType?: string,
@@ -117,7 +119,6 @@ export function useUserManager() {
                   <span>
                     {t('账号')}: {editFormRef.value?.newFormInline.name}
                   </span>
-                  <span>{t('密码')}: 123456</span>
                 </div>,
                 '',
                 {
@@ -156,11 +157,12 @@ export function useUserManager() {
   //- 重置密码
 
   const resetPasswordClick = async (
-    row: UserMangerAPI.querySysAccountListData
+    row: UserMangerAPI.querySysAccountListData,
+    password: string
   ) => {
     ElMessageBox.confirm(
-      `${t('确定要重置{user}的密码？', { user: row.name })}</br>${t(
-        '重置后的密码为:123456'
+      `${t(`确定要重置${row.name}的密码？`)}</br>${t(
+        `重置后的密码为:${password}`
       )}`,
       t('警告'),
       {
@@ -173,9 +175,33 @@ export function useUserManager() {
     ).then(async () => {
       const res = await API.updateUserPwd({
         id: row.id,
-        newPwd: getMD5('123456')
+        newPwd: getMD5(password),
       });
       message(res.msg, { type: res.code ? 'error' : 'success' });
+    });
+  };
+
+  const openPasswordResetDialog = (
+    row: UserMangerAPI.querySysAccountListData
+  ) => {
+    addDialog({
+      title: t('重置密码'),
+      class: 'reset_dialog',
+      width: '25%',
+      center: true,
+      hideFooter: true,
+      closeOnClickModal: false,
+      contentRenderer: ({ options, index }) =>
+        h(ResetPassword, {
+          name: row.name,
+          onCloseDialog: (_: boolean) => {
+            closeDialog(options, index);
+          },
+          onConfirmDialog: (password: string) => {
+            resetPasswordClick(row, password);
+            closeDialog(options, index);
+          }
+        })
     });
   };
 
@@ -227,6 +253,7 @@ export function useUserManager() {
     handleCurrentChange,
     handleSelectionChange,
     resetPasswordClick,
-    updateUserStatus
+    updateUserStatus,
+    openPasswordResetDialog 
   };
 }

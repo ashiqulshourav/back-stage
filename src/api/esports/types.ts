@@ -12,6 +12,7 @@ declare namespace ESportsAPI {
     leagueLogo: string;
     leagueId188Bet: number;
     level: number;
+    riskLevel: number;
   }
 
   type ESportsLeagueListDataType = {

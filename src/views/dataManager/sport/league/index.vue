@@ -30,7 +30,7 @@
               preview-teleported
               loading="lazy"
               :src="row.leagueLogo"
-              :preview-src-list="dataList.map(v => v.leagueLogo)"
+              :preview-src-list="dataList.map(v => v.leagueLogo) as string[]"
               :initial-index="index"
               fit="fill"
               class="!w-[80px] h-[30px]"

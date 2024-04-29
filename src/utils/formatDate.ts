@@ -13,12 +13,11 @@ export const dateGetSecond = (timestamp: Date) => {
   return totalSeconds;
 };
 
-export const padZero = (n) => {
+export const padZero = (n: number) => {
   return n < 10 ? '0' + n : n;
 }
 
 export const getSecondTime = (s1: any, s2: any) => {
-  // console.log('formatDate.ts文件 20==============行打印=', dayjs(s1).format('YYYY-MM-DD HH:mm:ss'), s2);
   return dateSetSecond(parseInt(new Date(s1).getTime() / 1000) -
     parseInt(new Date(s2).getTime() / 1000));
 }

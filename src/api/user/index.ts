@@ -6,7 +6,7 @@ export const user = {
   login: (data: { name: string; pwd: string; ukeyPassword: string }) =>
     http.request<UserAPI.Login>('post', '/kmg/auth/login', { data }),
   //- 修改密码
-  updatePwd: (data: { id: number; pwd: string; newPwd: string }) =>
+  updatePwd: (data: { id: number; pwd: string; newPwd: string, flag: number }) =>
     http.request<UserAPI.LoginResType>('post', '/kmg/matchUser/v1/updatePwd', {
       data
     }),

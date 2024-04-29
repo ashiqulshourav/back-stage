@@ -8,6 +8,8 @@ export const configCenterData = {
       '/league/tag/search',
       { data }
     ),
+  //- 获取联赛等级列表
+  getLevelList: () => http.request<ConfigCenterDataAPI.leagueLevelResType>('post', '/betLimit/getLevel'),
 
   searchLeagueTagList: (id: number) =>
     http.request<ConfigCenterDataAPI.ListLeagueTagRes>(
