@@ -4,7 +4,7 @@
     :inline="true"
     :model="form"
     :rules="formRules"
-    class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
+    class="search-form bg-bg_color w-[99/100] pt-[12px]"
   >
     <el-form-item prop="riskType">
       <el-radio-group :inline="true" v-model="form.riskType" class="flex">
@@ -18,14 +18,14 @@
       </el-radio-group>
     </el-form-item>
 
-    <el-form-item prop="other">
+    <el-form-item prop="other" class="w-full">
       <el-input
         :row="2"
         v-if="form.riskType === 'other'"
         v-model="form.others"
         :placeholder="t('其它原因')"
         clearable
-        class="!w-[150px]"
+        class="w-full"
         maxlength="255"
         type="textarea"
       />
