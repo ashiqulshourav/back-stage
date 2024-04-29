@@ -197,6 +197,7 @@
       :isEditUser="isEditUser"
       :labelList="labelList"
       :userData="userData"
+      :category="props.category"
       @on-close="handleCloseEditUser"
       @on-open-record="openRecordList"
       @on-del="dispatchLabelsDel"
