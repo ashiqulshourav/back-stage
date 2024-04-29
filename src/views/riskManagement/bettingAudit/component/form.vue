@@ -70,7 +70,7 @@ const closeDialog = () => {
 const confirmClick = () => {
   const param = props.list.map((item: any) => {
     item.details.map(item2 => {
-      item2.riskType = form.riskType + (form.others?`,原因：${form.others}`:'');
+      item2.riskType = form.riskType + (form.others?`,${form.others}`:'');
       return item2;
     });
     return item;
