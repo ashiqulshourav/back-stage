@@ -21,12 +21,6 @@ export const columns: TableColumnList = [
     align:'left',
   },
   {
-    label: t('风控标签'),
-    slot: 'riskControlLabel',
-    minWidth: 100,
-    align: 'left',
-  },
-  {
     label: t("注单详情"),
     slot: 'betDetail',
     minWidth: 100,
