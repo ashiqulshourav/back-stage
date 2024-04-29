@@ -21,7 +21,6 @@
     <el-form-item prop="other" class="w-full">
       <el-input
         :row="2"
-        v-if="form.riskType === 'other'"
         v-model="form.others"
         :placeholder="t('其它原因')"
         clearable

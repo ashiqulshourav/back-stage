@@ -344,7 +344,7 @@
                 size="small"
                 type="danger"
                 @click="handleCancel(row, index)"
-                v-if="item.riskStatus === 2 && hasAuth('REJECT')"
+                
               >
                 {{ t('风控划单') }}
               </el-button>
