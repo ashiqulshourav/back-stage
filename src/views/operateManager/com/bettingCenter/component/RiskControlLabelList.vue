@@ -1,25 +1,17 @@
 <template>
-  <el-row v-if="list" class="items-center min-w-[200px]" :gutter="20">
-    <el-col :span="list?.length > 6 ? 20 : 24">
-      <el-row :gutter="5">
-        <el-col
-          v-for="label in list.slice(0, 6).sort((a, b) => a.level - b.level)"
-          :key="label.id"
-          class="custom"
-        >
-          <el-tag
-            :style="`background-color: ${getLabelColor(label.level, 'risk')}`"
-            class="rounded-lg w-full py-1"
-          >
-            {{ label.name }}
-          </el-tag>
-        </el-col>
-      </el-row>
-    </el-col>
-    <el-col :span="4" v-if="list?.length > 6">
+  <div v-if="list" class="items-center flex flex-wrap px-1">
+    <div v-for="label in list.slice(0, 6).sort((a, b) => a.level - b.level)" :key="label.id" class="custom">
+      <el-tag
+        :style="`background-color: ${getLabelColor(label.level, 'risk')}`"
+        class="rounded-lg w-full py-1"
+      >
+        {{ label.name }}
+      </el-tag>
+    </div>
+    <div v-if="list?.length > 6">
       <el-popover
         placement="top-end"
-        :width="300"
+        :width="200"
         trigger="hover"
         content="this is over"
       >
@@ -29,8 +21,8 @@
           ></el-button>
         </template>
         <template #default>
-          <el-row :gutter="5">
-            <el-col
+          <div class="flex flex-wrap">
+            <div
               v-for="label in list.sort((a, b) => a.level - b.level)"
               :key="label.id"
               class="custom"
@@ -44,12 +36,12 @@
               >
                 {{ label.name }}
               </el-tag>
-            </el-col>
-          </el-row>
+            </div>
+          </div>
         </template>
       </el-popover>
-    </el-col>
-  </el-row>
+    </div>
+  </div>
 </template>
 
 <script setup lang="tsx">
@@ -66,14 +58,14 @@ const { getLabelColor } = useBettingCenterHook(category, venueType);
 </script>
 
 <style lang="scss">
-  .el-row {
-    row-gap: 0.5rem;
+.el-row {
+  row-gap: 0.5rem;
+}
+.custom {
+  flex: 0 0 0;
+  max-width: unset;
+  .el-tag__content {
+    color: white;
   }
-  .custom {
-    flex: 0 0 0;
-    max-width: unset;
-    .el-tag__content {
-      color: white;
-    }
-  }
+}
 </style>
