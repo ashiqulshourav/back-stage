@@ -115,7 +115,7 @@
                 </div>
               </div>
               <div>
-                <RiskControlLabelList
+                <RiskLabelList
                   :list="row.riskControlLabelList"
                   :category="props.category"
                   :venueType="props.venueType"
@@ -429,7 +429,7 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
-import RiskControlLabelList from './component/RiskControlLabelList.vue';
+import RiskLabelList from './component/riskLabelList.vue';
 import { hasAuth } from '@/router/utils';
 import {
   formatSeriesType,
