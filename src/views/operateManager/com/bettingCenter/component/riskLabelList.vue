@@ -1,70 +1,17 @@
 <template>
-      <el-row
-          v-if="list"
-          class="items-center min-w-[200px]"
-          :gutter="20"
-      >
-        <el-col :span="list?.length > 6 ? 20 : 24">
-          <el-row :gutter="5">
-            <el-col
-                v-for="label in list
-                      .slice(0, 6)
-                      .sort((a, b) => a.level - b.level)"
-                :key="label.id"
-                class="custom"
-            >
-              <el-tag
-                  :style="`background-color: ${getLabelColor(
+  <div class="wrap">
+      <div v-for="label in list"
+        :style="`background-color: ${getLabelColor(
                         label.level,
                         'risk'
                       )}`"
-                  class="rounded-lg w-full py-1"
-              >
-                {{ label.name }}
-              </el-tag>
-            </el-col>
-          </el-row>
-        </el-col>
-        <el-col :span="4" v-if="list?.length > 6">
-          <el-popover
-              placement="top-end"
-              :width="300"
-              trigger="hover"
-              content="this is over"
-          >
-            <template #reference>
-              <el-button class="w-full"
-              ><el-icon><Plus /></el-icon
-              ></el-button>
-            </template>
-            <template #default>
-              <el-row :gutter="5">
-                <el-col
-                    v-for="label in list.sort(
-                          (a, b) => a.level - b.level
-                        )"
-                    :key="label.id"
-                    class="custom"
-                >
-                  <el-tag
-                      :style="`background-color: ${getLabelColor(
-                            label.level,
-                            'risk'
-                          )}`"
-                      class="rounded-lg w-full py-1 text-white text-center"
-                  >
-                    {{ label.name }}
-                  </el-tag>
-                </el-col>
-              </el-row>
-            </template>
-          </el-popover>
-        </el-col>
-      </el-row>
+        class="risk_item"
+      >
+        {{ label.name }}
+      </div>
+  </div>
 </template>
 <script setup lang="ts">
-
-import {Plus} from "@element-plus/icons-vue";
 const {list} = defineProps<{
   list:UserAPI.labelType[]
 }>();
@@ -89,7 +36,22 @@ const getLabelColor = (level: number, type: string) => {
     }
   }
 };
-
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.wrap{
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  justify-items: flex-start;
+  .risk_item{
+    border-radius: 6px;
+    height: 25px;
+    line-height: 25px;
+    padding: 0 8px;
+    margin: 5px 0;
+  }
+}
+</style>
