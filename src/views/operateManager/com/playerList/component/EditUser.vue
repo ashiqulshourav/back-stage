@@ -26,7 +26,7 @@
         <el-row :gutter="20" class="mt-2 w-full">
           <el-col v-for="label in updatedLabels.risk" :key="label.id" :span="6">
             <el-row :gutter="2" class="items-center">
-              <el-col :span="20" class="custom">
+              <el-col :span="20" class="custom_tag">
                 <el-tag
                   :style="`background-color: ${getLabelColor(
                     label.level,
@@ -97,7 +97,7 @@
         <el-row :gutter="20" class="mt-2 w-full">
           <el-col v-for="label in updatedLabels.attr" :key="label.id" :span="6">
             <el-row :gutter="2" class="items-center">
-              <el-col :span="20" class="custom">
+              <el-col :span="20" class="custom_tag">
                 <el-tag
                   :style="`background-color: ${getLabelColor(
                     label.level,
@@ -560,14 +560,5 @@ watch(
 .el-dialog {
   padding-left: 0;
   padding-right: 0;
-}
-.custom {
-  .el-tag .el-tag__close {
-    color: white;
-  }
-  .el-tag__content {
-    white-space: break-spaces;
-    overflow: hidden;
-  }
 }
 </style>

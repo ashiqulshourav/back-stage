@@ -60,7 +60,7 @@
                     v-for="label in row.riskControlLabelList.slice(0, 6)"
                     :key="label.id"
                     :span="8"
-                    class="custom"
+                    class="custom_tag"
                   >
                     <el-tag
                       :style="`background-color: ${getLabelColor(
@@ -91,7 +91,7 @@
                       <el-col
                         v-for="label in row.riskControlLabelList"
                         :key="label.id"
-                        class="custom"
+                        class="custom_tag"
                         :span="8"
                       >
                         <el-tag
@@ -122,7 +122,7 @@
                     v-for="label in row.attributeLabelList.slice(0, 6)"
                     :key="label.id"
                     :span="8"
-                    class="custom"
+                    class="custom_tag"
                   >
                     <el-tag
                       :style="`background-color: ${getLabelColor(
@@ -159,7 +159,7 @@
                         v-for="label in row.attributeLabelList"
                         :key="label.id"
                         :span="8"
-                        class="custom"
+                        class="custom_tag"
                       >
                         <el-tag
                           :style="`background-color: ${getLabelColor(
@@ -305,8 +305,15 @@ const {
   border-bottom: var(--el-table-border);
   border-bottom-width: 2px;
 }
-.custom {
+.custom_tag {
   .el-tag__content {
+    color: white;
+  }
+  .el-tag__content {
+    white-space: break-spaces;
+    overflow: hidden;
+  }
+  .el-tag .el-tag__close {
     color: white;
   }
 }
