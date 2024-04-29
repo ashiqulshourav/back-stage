@@ -26,7 +26,7 @@
         <el-row :gutter="20" class="mt-2 w-full">
           <el-col v-for="label in updatedLabels.risk" :key="label.id" :span="6">
             <el-row :gutter="2" class="items-center">
-              <el-col :span="20" class="custom">
+              <el-col :span="20" class="custom_tag">
                 <el-tag
                   :style="`background-color: ${getLabelColor(
                     label.level,
@@ -97,7 +97,7 @@
         <el-row :gutter="20" class="mt-2 w-full">
           <el-col v-for="label in updatedLabels.attr" :key="label.id" :span="6">
             <el-row :gutter="2" class="items-center">
-              <el-col :span="20" class="custom">
+              <el-col :span="20" class="custom_tag">
                 <el-tag
                   :style="`background-color: ${getLabelColor(
                     label.level,
@@ -283,6 +283,7 @@ const props = defineProps<{
   isEditUser: boolean;
   labelList: labelListType;
   userData: UserAPI.operateUserList;
+  category: number;
 }>();
 
 const { tableHeaderStyleBlue } = usePublicHooks();
@@ -367,7 +368,7 @@ const getLabelColor = (label: number, type: string) => {
 
 const initLimitList = async () => {
   try {
-    const res = await API.getUserLevelLimitList({ type: 0 });
+    const res = await API.getUserLevelLimitList({ type: props.category });
     limitList.length = 0;
     limitList.push(...res.data);
   } catch (error) {
@@ -560,14 +561,5 @@ watch(
 .el-dialog {
   padding-left: 0;
   padding-right: 0;
-}
-.custom {
-  .el-tag .el-tag__close {
-    color: white;
-  }
-  .el-tag__content {
-    white-space: break-spaces;
-    overflow: hidden;
-  }
 }
 </style>
