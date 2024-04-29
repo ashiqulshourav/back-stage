@@ -20,12 +20,14 @@
 
     <el-form-item prop="other">
       <el-input
+        :row="2"
         v-if="form.riskType === 'other'"
         v-model="form.others"
         :placeholder="t('其它原因')"
         clearable
         class="!w-[150px]"
         maxlength="255"
+        type="textarea"
       />
     </el-form-item>
   </el-form>
