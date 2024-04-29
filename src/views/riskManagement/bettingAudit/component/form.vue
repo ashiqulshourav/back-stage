@@ -4,28 +4,29 @@
     :inline="true"
     :model="form"
     :rules="formRules"
-    class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
+    class="search-form bg-bg_color w-[99/100] pt-[12px]"
   >
     <el-form-item prop="riskType">
       <el-radio-group :inline="true" v-model="form.riskType" class="flex">
         <el-radio
-          :label="item.label"
-          v-for="(item, idx) in selectList"
-          :key="idx"
-          :value="item.value"
+          v-for="item in Object.values(selectObj)"
+          :label="item"
+          :key="item"
+          :value="item"
         >
         </el-radio>
       </el-radio-group>
     </el-form-item>
 
-    <el-form-item prop="other">
+    <el-form-item prop="other" class="w-full">
       <el-input
-        v-if="form.riskType === 'other'"
+        :row="2"
         v-model="form.others"
-        :placeholder="t('其它原因')"
+        :placeholder="t('原因')"
         clearable
-        class="!w-[150px]"
+        class="w-full"
         maxlength="255"
+        type="textarea"
       />
     </el-form-item>
   </el-form>
@@ -52,24 +53,14 @@ const props = defineProps<{
   list: BetOrderAPI.Detail & BetOrderAPI.BetOrderList[];
 }>();
 
-const selectList = [
-  {
-    label: '进球',
-    value: 'goal'
-  },
-  {
-    label: '红牌',
-    value: 'redCard'
-  },
-  {
-    label: '点球',
-    value: 'penaltyAwarded'
-  },
-  {
-    label: '其它',
-    value: 'other'
-  }
-];
+
+const selectObj={
+  goal:'进球',
+  redCard:'红牌',
+  penaltyAwarded:'点球',
+  other:'其它'
+}
+
 
 const closeDialog = () => {
   emits('closeDialog');
@@ -79,7 +70,7 @@ const closeDialog = () => {
 const confirmClick = () => {
   const param = props.list.map((item: any) => {
     item.details.map(item2 => {
-      item2.riskType = form.riskType;
+      item2.riskType = form.riskType + (form.others?`,${form.others}`:'');
       return item2;
     });
     return item;

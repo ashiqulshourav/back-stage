@@ -40,7 +40,7 @@ export function useUserManager() {
     onSearch();
   }
 
-  function handleSelectionChange(val) {
+  function handleSelectionChange(val: number) {
     console.log('handleSelectionChange', val);
   }
 
@@ -175,7 +175,7 @@ export function useUserManager() {
     ).then(async () => {
       const res = await API.updateUserPwd({
         id: row.id,
-        newPwd: getMD5(password),
+        newPwd: getMD5(password)
       });
       message(res.msg, { type: res.code ? 'error' : 'success' });
     });
@@ -254,6 +254,6 @@ export function useUserManager() {
     handleSelectionChange,
     resetPasswordClick,
     updateUserStatus,
-    openPasswordResetDialog 
+    openPasswordResetDialog
   };
 }

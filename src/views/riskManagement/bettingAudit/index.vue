@@ -344,7 +344,7 @@
                 size="small"
                 type="danger"
                 @click="handleCancel(row, index)"
-                v-if="item.riskStatus === 2 && hasAuth('REJECT')"
+                
               >
                 {{ t('风控划单') }}
               </el-button>
@@ -378,7 +378,7 @@
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <div>
+              <div class="operation_item">
                 <div>{{ item.orderDetailRemark }}</div>
                 <div>
                   <el-button
@@ -585,5 +585,8 @@ watch(
 
 .operate {
   width: 110px;
+}
+.operation_item{
+  width: 100px;
 }
 </style>
