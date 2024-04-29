@@ -336,11 +336,11 @@
               :key="item.betItemId"
             >
               <el-checkbox
-                v-if="item.riskStatus === 2 && hasAuth('REJECTSOME')"
+                v-if="item.riskStatus === riskStatus.rejectBetting && hasAuth('REJECT')"
                 :checked="item.rejectSelected"
                 @change="data => selectReject(data, row.index - 1, index)"
               ></el-checkbox>
-              <el-button
+              <el-button v-if="item.riskStatus === riskStatus.rejectBetting && hasAuth('REJECT')"
                 size="small"
                 type="danger"
                 @click="handleCancel(row, index)"
@@ -357,13 +357,13 @@
               :key="item.betItemId"
             >
               <el-checkbox
-                v-if="item.riskStatus === 2 && hasAuth('APPROVESOME')"
+                v-if="item.riskStatus === riskStatus.rejectBetting && hasAuth('APPROVE')"
                 :checked="item.approveSelected"
                 @change="data => selectApprove(data, row.index - 1, index)"
               ></el-checkbox>
               <el-button
                 @change="data => selectApprove(data, row.index - 1, index)"
-                v-if="item.riskStatus === 2 && hasAuth('APPROVE')"
+                v-if="item.riskStatus === riskStatus.rejectBetting && hasAuth('APPROVE')"
                 size="small"
                 type="primary"
                 @click="handleApprove(row, index)"
