@@ -1,5 +1,5 @@
 <template>
-  <div v-if="list" class="items-center flex flex-wrap px-2 mt-1">
+  <div v-if="list" class="items-center flex flex-wrap px-2 mt-1 gap-1">
     <div v-for="label in list.slice(0, showNumber).sort((a, b) => a.level - b.level)" :key="label.id" class="custom">
       <el-tag
         :style="`background-color: ${getLabelColor(label.level, 'risk')}`"
@@ -16,7 +16,7 @@
         content="this is over"
       >
         <template #reference>
-          <span class="py-1 px-2 border border-slate-300 text-slate-500 rounded-full ml-1 cursor-default">{{ list.length }}</span>
+          <span class="py-1 px-2 border border-slate-300 text-slate-500 rounded-full cursor-default">{{ list.length }}</span>
         </template>
         <template #default>
           <div class="flex flex-wrap">
