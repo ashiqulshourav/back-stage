@@ -52,7 +52,7 @@
         >
           <template #userMessage="{ row }">
             <div
-              class="item_line cursor-pointer"
+              class="user_detail item_line cursor-pointer"
               @dblclick="
                 copyTest(
                   row.userId,
@@ -124,8 +124,8 @@
             </div>
           </template>
           <template #matchMessage="{ row }">
-            <div
-              class="match_item"
+            <div class="match_item match_detail"
+
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -184,7 +184,7 @@
           </template>
           <template #betDetail="{ row }">
             <div
-              class="match_item"
+              class="match_item bet_detail"
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -251,7 +251,7 @@
           </template>
           <template #odd="{ row }">
             <div
-              class="match_item odd_item"
+              class="match_item odd_item odd_detail"
               v-for="item in row.combineOrderDetails"
               :key="item.id"
             >
@@ -344,7 +344,7 @@
                 size="small"
                 type="danger"
                 @click="handleCancel(row, index)"
-                
+
               >
                 {{ t('风控划单') }}
               </el-button>
@@ -529,6 +529,12 @@ watch(
       margin-left: 10px;
     }
   }
+}
+.user_detail,.match_detail,bet_detail{
+  min-width: 200px;
+}
+.odd_detail{
+  min-width: 80px;
 }
 .match_item {
   margin-bottom: 10px;

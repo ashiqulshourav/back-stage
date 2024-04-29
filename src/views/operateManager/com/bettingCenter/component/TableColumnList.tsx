@@ -17,7 +17,7 @@ export const columns: TableColumnList = [
   {
     label: t("赛事信息"),
     slot: 'matchMessage',
-    minWidth: 100,
+    minWidth: 200,
     align:'left',
   },
   {

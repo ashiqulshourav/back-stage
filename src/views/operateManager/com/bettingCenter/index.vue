@@ -124,7 +124,7 @@
           </template>
           <template #matchMessage="{ row }">
             <div
-              class="match_item"
+              class="match_item match_detail"
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -183,7 +183,7 @@
           </template>
           <template #betDetail="{ row }">
             <div
-              class="match_item"
+              class="match_item bet_detail"
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -487,6 +487,12 @@ const {
     }
   }
 }
+.match_detail{
+  min-width: 200px;
+}
+.bet_detail{
+  min-width: 200px;
+}
 .match_item {
   margin-bottom: 10px;
   position: relative;
@@ -531,6 +537,7 @@ const {
   border-radius: 4px;
 }
 .odd_item {
+  min-width: 80px;
   min-height: 100px;
 }
 
