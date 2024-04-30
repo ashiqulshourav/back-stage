@@ -391,6 +391,16 @@ export function useBettingCenterHook(category:number,venueType:number) {
     }
     return obj;
   };
+
+ const  getOddStatus = (betResult:number,riskSt:number)=>{
+    if(riskSt===riskStatus.reject||riskSt===riskStatus.autoReject){
+      return '无效注单'
+    }else {
+      return  BET_RESULT_TYPE_MAP[betResult] || ''
+    }
+ }
+
+
   const switchDialog = async (flag: boolean, row:any) => {
     UDialogFlag.value = flag;
     if (flag) {
@@ -500,5 +510,6 @@ export function useBettingCenterHook(category:number,venueType:number) {
     isShowCancel,
     editOrderRemark,
     riskLabelList,
+    getOddStatus,
   };
 }
