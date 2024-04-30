@@ -61,6 +61,7 @@ declare namespace UserAPI {
     resourceFlag: number;
     path: string;
     childResourceList: ChildResourceList[];
+    children?: ChildResourceList[];
   };
 
   type UserLevelLimitListRes = {

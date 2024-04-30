@@ -35,7 +35,7 @@ export function useMenuManagerHook() {
           item.childResourceList as RoleAPI.ChildResourceList[],
           item.name as string
         );
-      if (item.type === 0 || item.type === 2) {
+      if (item.type === 0 || item.type === 2 || item.type === 6) {
         parentList.push({
           id: item.id,
           name: item.name,

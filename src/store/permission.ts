@@ -14,7 +14,7 @@ export const usePermissionStore = defineStore({
     // 整体路由生成的菜单（静态、动态）
     wholeMenus: [],
     // 缓存页面keepAlive
-    cachePageList: []
+    cachePageList: [] as string[]
   }),
   actions: {
     /** 组装整体路由生成的菜单 */
@@ -22,7 +22,6 @@ export const usePermissionStore = defineStore({
       this.wholeMenus = filterNoPermissionTree(
         filterTree(ascending(this.constantMenus.concat(routes)))
       );
-      // console.log('permission.ts文件 25==============行打印=', this.wholeMenus);
     },
     cacheOperate({ mode, name }: cacheType) {
       const delIndex = this.cachePageList.findIndex(v => v === name);
@@ -31,13 +30,13 @@ export const usePermissionStore = defineStore({
           this.cachePageList = this.cachePageList.filter(v => v !== name);
           break;
         case "add":
-          this.cachePageList.push(name);
+          this.cachePageList.push(name as string);
           break;
         case "delete":
           delIndex !== -1 && this.cachePageList.splice(delIndex, 1);
           break;
       }
-      /** 监听缓存页面是否存在于标签页，不存在则删除 */
+
       debounce(() => {
         let cacheLength = this.cachePageList.length;
         const nameList = getKeyList(useMultiTagsStoreHook().multiTags, "name");
@@ -61,5 +60,6 @@ export const usePermissionStore = defineStore({
 });
 
 export function usePermissionStoreHook() {
+
   return usePermissionStore(store);
 }

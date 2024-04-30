@@ -148,9 +148,9 @@ function addPathMatch() {
   }
 }
 
-const translateLan = (list) => {
+const translateLan = (list: UserAPI.RouterResData[]) => {
   const lan = getLan() ?? 'zh';
-  list.forEach(item => {
+  list.forEach((item: UserAPI.RouterResData) => {
     if (item.children) translateLan(item.children)
     item.meta.title = lan === 'zh' ? item.meta.title : item.meta.enTitle
   })
@@ -158,7 +158,7 @@ const translateLan = (list) => {
 
 
 /** 处理动态路由（后端返回的路由） */
-function handleAsyncRoutes(routeList) {
+function handleAsyncRoutes(routeList: UserAPI.RouterResData[]) {
   translateLan(routeList);
   if (routeList.length === 0) {
     usePermissionStoreHook().handleWholeMenus(routeList);
@@ -190,12 +190,13 @@ function handleAsyncRoutes(routeList) {
 //- 清洗后端返回数据
 
 const transformItem = (item: UserAPI.RouterResData) => {
-  const loginName = JSON.parse(localStorage.getItem('USERSTATE'))?.userInfo?.name;
+  const loginName = JSON.parse(localStorage.getItem('USERSTATE') as string)?.userInfo?.name;
   const meta = {
     title: item.name,
     enTitle: item.enName,
     icon: item.enName,
     rank: item.sort,
+    keepAlive: true,
     showLink: item.type !== 2
   }
   if ((import.meta.env.VITE_BUILD_TYPE === 'pro' || import.meta.env.VITE_BUILD_TYPE === 'uat') && item.enName === 'menuManager' && loginName !== 'armour') {
