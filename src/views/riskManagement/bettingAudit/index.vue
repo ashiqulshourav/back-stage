@@ -35,7 +35,6 @@
       </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
-          align-whole="center"
           table-layout="auto"
           :loading="loading"
           :size="size"
@@ -124,8 +123,7 @@
             </div>
           </template>
           <template #matchMessage="{ row }">
-            <div class="match_item match_detail"
-
+            <div class=" match_detail match_item match_detail"
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -290,7 +288,7 @@
           </template>
           <template #riskStatus="{ row }">
             <div
-              class="match_item odd_item"
+              class="match_item odd_item riskStatus_detail"
               v-for="(item, idx) in row.combineOrderDetails"
               :key="idx"
             >
@@ -352,7 +350,7 @@
           </template>
           <template #approve="{ row }">
             <div
-              class="match_item approve flex justify-between items-center"
+              class="match_item approve_detail approve flex justify-between items-center"
               v-for="(item, index) in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -530,15 +528,19 @@ watch(
     }
   }
 }
-.user_detail,.match_detail,bet_detail{
-  min-width: 200px;
+.user_detail,.match_detail,.bet_detail{
+  min-width: 250px;
 }
 .odd_detail{
-  min-width: 80px;
+  min-width: 100px;
 }
+.riskStatus_detail{
+  width: 220px;
+ }
 .match_item {
   margin-bottom: 10px;
   position: relative;
+  text-align: left;
   &:last-child {
     margin-bottom: 0;
   }
