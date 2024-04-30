@@ -23,6 +23,7 @@
           :size="size"
           class="table_container"
           adaptive
+          :default-sort="{ prop: 'level', order: 'descending' }"
           :data="dataList"
           :columns="dynamicColumns"
           :pagination="pagination"
@@ -36,76 +37,88 @@
             <span>{{ row.index }}</span>
           </template>
           <template #userMessage="{ row }">
-            <div
-              class="item_line cursor-pointer"
-              @dblclick="
-                copyTest(
-                  row.userId,
-                  t('用户ID：{value}', { value: row.userId })
-                )
-              "
-            >
-              <span>{{ t('用户ID：') }}</span
-              >{{ row.userId }}
-            </div>
-            <div
-              class="item_line cursor-pointer"
-              @dblclick="
-                copyTest(
-                  row.userName,
-                  t('用户名：{value}', { value: row.userName })
-                )
-              "
-            >
-              <span>{{ t('用户名：') }}</span
-              >{{ row.userName }}
-            </div>
-            <div
-              class="item_line cursor-pointer"
-              @dblclick="
-                copyTest(
-                  tenantObj[row.tenantId]?.tenantName,
-                  t('商户名：{value}', {
-                    value: tenantObj[row.tenantId]?.tenantName
-                  })
-                )
-              "
-            >
-              <span>{{ t('商户名：') }}</span
-              >{{ tenantObj[row.tenantId]?.tenantName }}
-            </div>
-            <div
-              class="item_line cursor-pointer"
-              @dblclick="
-                copyTest(
-                  row.tenantId,
-                  t('商户编码：{value}', {
-                    value: tenantObj[row.tenantId]?.name
-                  })
-                )
-              "
-            >
-              <span>{{ t('商户编码：') }}</span
-              >{{ tenantObj[row.tenantId]?.name }}
-            </div>
-            <div
-              v-if="row.combineOrderDetails.length > 1"
-              class="item_line mt-2 color_blue"
-            >
-              {{ String(row.seriesType).slice(-3) === '001' ? '串关' : '复式' }}
-              <span>{{
-                formatSeriesType(
-                  row?.seriesType,
-                  row.combineOrderDetails.length
-                )
-              }}</span>
-              <span class="ml-1"
-                >总计：{{
-                  `${calculateSeriesTypeTotalBets(row?.seriesType)}注 每注：${
-                    row.orderAmount
-                  }`
-                }}</span
-              >
+            <div class="flex">
+              <div>
+                <div
+                  class="item_line cursor-pointer"
+                  @dblclick="
+                    copyTest(
+                      row.userId,
+                      t('用户ID：{value}', { value: row.userId })
+                    )
+                  "
+                >
+                  <span>{{ t('用户ID：') }}</span
+                  >{{ row.userId }}
+                </div>
+                <div
+                  class="item_line cursor-pointer"
+                  @dblclick="
+                    copyTest(
+                      row.userName,
+                      t('用户名：{value}', { value: row.userName })
+                    )
+                  "
+                >
+                  <span>{{ t('用户名：') }}</span
+                  >{{ row.userName }}
+                </div>
+                <div
+                  class="item_line cursor-pointer"
+                  @dblclick="
+                    copyTest(
+                      tenantObj[row.tenantId]?.tenantName,
+                      t('商户名：{value}', {
+                        value: tenantObj[row.tenantId]?.tenantName
+                      })
+                    )
+                  "
+                >
+                  <span>{{ t('商户名：') }}</span
+                  >{{ tenantObj[row.tenantId]?.tenantName }}
+                </div>
+                <div
+                  class="item_line cursor-pointer"
+                  @dblclick="
+                    copyTest(
+                      row.tenantId,
+                      t('商户编码：{value}', {
+                        value: tenantObj[row.tenantId]?.name
+                      })
+                    )
+                  "
+                >
+                  <span>{{ t('商户编码：') }}</span
+                  >{{ tenantObj[row.tenantId]?.name }}
+                </div>
+                <div
+                  v-if="row.combineOrderDetails.length > 1"
+                  class="item_line mt-2 color_blue"
+                >
+                  {{
+                    String(row.seriesType).slice(-3) === '001' ? '串关' : '复式'
+                  }}
+                  <span>{{
+                    formatSeriesType(
+                      row?.seriesType,
+                      row.combineOrderDetails.length
+                    )
+                  }}</span>
+                  <span class="ml-1"
+                    >总计：{{
+                      `${calculateSeriesTypeTotalBets(
+                        row?.seriesType
+                      )}注 每注：${row.orderAmount}`
+                    }}</span
+                  >
+                </div>
+              </div>
+              <div>
+                <RiskLabelList
+                  :list="row.riskControlLabelList"
+                  :showNumber="1"
+                />
+              </div>
             </div>
           </template>
           <template #matchMessage="{ row }">
@@ -419,6 +432,7 @@ import {
 import {betStatus, betStatusMap} from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
+import RiskLabelList from './component/riskLabelList.vue'
 const props = defineProps<{
   category: number;
   venueType:number;
