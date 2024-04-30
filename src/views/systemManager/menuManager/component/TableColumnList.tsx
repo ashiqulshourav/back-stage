@@ -53,7 +53,7 @@ export const columns: TableColumnList = [
     formatter: ({ type }) => {
       return (
         <el-text type={type === 1 ? 'danger' : 'info'}>
-          {type === 0 ? t('是') : t('否')}
+          {type === 0 || type === 6 ? t('是') : t('否')}
         </el-text>
       );
     }

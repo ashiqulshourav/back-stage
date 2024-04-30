@@ -8,8 +8,8 @@ const baseColumns: TableColumnList = [
     label: t('序号'),
     fixed: true,
     type: 'index',
-    width: 100,
-    headerRenderer: d => handleTableWidth(d, t('序号'))
+    minWidth: 100,
+    headerRenderer: d => handleTableWidth(d, t('序号'), 'auto')
   },
   {
     prop: 'leagueNameCn',
@@ -27,7 +27,8 @@ const baseColumns: TableColumnList = [
   {
     label: t('热门排序'),
     prop: 'level',
-    headerRenderer: d => handleTableWidth(d, t('热门排序'))
+    width: 130,
+    headerRenderer: d => handleTableWidth(d, t('热门排序'), 'auto')
   },
   {
     label: t('开赛时间'),
@@ -55,9 +56,9 @@ const baseColumns: TableColumnList = [
   {
     label: t('比赛状态'),
     prop: 'status',
-    formatter: ({ status }) => {
-      return MATCH_STATUS[status] ?? '-';
-    },
+    width: 150,
+    formatter: ({ status }) =>
+      MATCH_STATUS[status as keyof typeof MATCH_STATUS] ?? '-',
     headerRenderer: d => handleTableWidth(d, t('比赛状态'), 'auto')
   },
   {
