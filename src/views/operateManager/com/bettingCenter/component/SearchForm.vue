@@ -21,7 +21,7 @@
         </el-form-item>
         <el-form-item  :label="`${t('风控标签')}:`" prop="riskControlLabelList">
           <el-select v-model="form.riskControlLabelList" multiple clearable class="!w-[150px]">
-            <el-option v-for="item in riskLabelList" :label="t(item.name)" :value="item.id" />
+            <el-option v-for="item in riskLabelList" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('赛事类型')}:`" prop="category">
