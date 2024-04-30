@@ -25,7 +25,13 @@ export const columns: TableColumnList = [
     prop: 'type',
     minWidth: 220,
     headerRenderer: d => handleTableWidth(d, t('菜单类型'), 'auto'),
-    formatter: ({ type }) => TYPE_NAME[type as keyof typeof TYPE_NAME] ?? '-'
+    formatter: ({ type }) => {
+      return (
+        <el-text type={type === 6 ? 'danger' : 'primary'}>
+          {TYPE_NAME[type as keyof typeof TYPE_NAME] ?? '-'}
+        </el-text>
+      );
+    }
   },
   {
     label: t('前端路径'),

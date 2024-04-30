@@ -196,7 +196,7 @@ const transformItem = (item: UserAPI.RouterResData) => {
     enTitle: item.enName,
     icon: item.enName,
     rank: item.sort,
-    keepAlive: true,
+    keepAlive: item.type === 6,
     showLink: item.type !== 2
   }
   if ((import.meta.env.VITE_BUILD_TYPE === 'pro' || import.meta.env.VITE_BUILD_TYPE === 'uat') && item.enName === 'menuManager' && loginName !== 'armour') {
