@@ -3,5 +3,6 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ name: 'OPERATEMANAGER_SPORTBETTINGCENTER' });
 import BettingCenter from '../com/bettingCenter/index.vue';
 </script>
