@@ -74,7 +74,8 @@ export function useLeague() {
           sportId: row?.sportId ?? '',
           category: row?.category ?? '',
           leagueTagsId: row?.leagueTagsId ?? [],
-          isEsportType: form.category === 1
+          isEsportType: form.category === 1,
+          riskLevel: row?.riskLevel ?? ''
         }
       },
       width: '40%',

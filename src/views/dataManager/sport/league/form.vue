@@ -147,6 +147,7 @@ const props = withDefaults(defineProps<FormProps>(), {
     leagueLogo: '',
     sportId: '',
     category: '',
+    riskLevel: '',
     isEsportType: false,
     leagueTagsId: []
   })
