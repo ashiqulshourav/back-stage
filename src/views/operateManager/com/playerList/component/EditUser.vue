@@ -86,7 +86,7 @@
       </el-form-item>
       <el-form-item prop="" :label="t('属性标签:')">
         <el-row class="flex w-full items-center justify-between">
-          <p>{{ t('每个用户最多添加20个风控标签') }}</p>
+          <p>{{ t('每个用户最多添加20个属性标签') }}</p>
           <p
             @click="emits('onOpenRecord', form.id, 2)"
             class="text-primary text-right cursor-pointer"
@@ -189,23 +189,23 @@
       </el-form-item>
       <el-form-item>
         <el-radio-group v-model="isSpecial">
-          <el-radio class="w-full" :value="false">无</el-radio>
-          <el-radio class="w-full" :value="true">例外限额</el-radio>
+          <el-radio class="w-full" :value="false">{{ t('无') }}</el-radio>
+          <el-radio class="w-full" :value="true">{{ t('例外限额') }}</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item v-if="isSpecial">
         <el-row :gutter="5" class="w-full items-center">
           <el-col :span="6" class="text-center">
-            <el-text>单注投注限额</el-text>
+            <el-text>{{ t('单注投注限额') }}</el-text>
           </el-col>
           <el-col :span="6" class="text-center">
-            <el-text>单注赔付限额</el-text>
+            <el-text>{{ t('单注赔付限额') }}</el-text>
           </el-col>
           <el-col :span="6" class="text-center">
-            <el-text>单场赛事累计赔付限额 (不分早盘滚球)</el-text>
+            <el-text>{{ t('单场赛事累计赔付限额 (不分早盘滚球)') }}</el-text>
           </el-col>
           <el-col :span="6" class="text-center">
-            <el-text>串关单日累计赔付限额 (不分早盘滚球)</el-text>
+            <el-text>{{ t('串关单日累计赔付限额 (不分早盘滚球)') }}</el-text>
           </el-col>
           <el-col :span="6" class="text-center">
             <el-input
@@ -239,7 +239,7 @@
       </el-form-item>
       <el-form-item :label="t('备注：')">
         <el-input
-          placeholder="只能输入255个字符的内容"
+          :placeholder="t('只能输入255个字符的内容')"
           maxLength="255"
           v-model="form.remark"
           type="textarea"
