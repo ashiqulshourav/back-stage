@@ -187,7 +187,7 @@
           :header-cell-style="tableHeaderStyleBlue"
         />
       </el-form-item>
-      <el-form-item>
+      <el-form-item :label="t('特殊限额: ')">
         <el-radio-group v-model="isSpecial">
           <el-radio class="w-full" :value="false">{{ t('无') }}</el-radio>
           <el-radio class="w-full" :value="true">{{ t('例外限额') }}</el-radio>
