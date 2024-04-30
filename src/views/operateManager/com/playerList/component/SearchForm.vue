@@ -78,14 +78,14 @@
         </el-button>
       </el-form-item>
 
-      <el-form-item>
+      <!-- <el-form-item>
         <el-button v-if="hasAuth('EXPORT')" type="primary"
           >批量编辑标签</el-button
         >
         <el-button v-if="hasAuth('EXPORT')" type="primary"
           >导出用户列表</el-button
         >
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
   </div>
 </template>
