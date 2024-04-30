@@ -1,6 +1,6 @@
 <template>
   <PureTableBar
-    :title="currentSport.label + t('列表')"
+    :title="currentSport?.label + t('列表')"
     :columns="columns"
     @refresh="onSearch"
   >
@@ -40,7 +40,7 @@ defineProps<{
   columns: TableColumnList;
   dataList: SattleDataAPI.getSettlementDataList[];
   pagination: PaginationProps;
-  currentSport: sport_list_map_type;
+  currentSport?: sport_list_map_type;
   loading: boolean;
 }>();
 
@@ -52,6 +52,7 @@ const emites = defineEmits([
 
 const { tableHeaderStyle } = usePublicHooks();
 const onSearch = () => emites('onSearch', 'reload');
-const handleTableWidthChange = v => emites('handleTableWidthChange', v);
-const handleCurrentChange = v => emites('handleCurrentChange', v);
+const handleTableWidthChange = (v: number) =>
+  emites('handleTableWidthChange', v);
+const handleCurrentChange = (v: number) => emites('handleCurrentChange', v);
 </script>

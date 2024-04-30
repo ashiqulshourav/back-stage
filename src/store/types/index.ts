@@ -38,8 +38,8 @@ export type setType = {
     matchType: number;
   }
   settleHistoryPageInfo: {
-    page: number;
-    matchType: number;
+    page: number | null;
+    matchType: number | null;
   }
 };
 

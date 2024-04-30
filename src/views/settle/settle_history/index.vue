@@ -49,6 +49,7 @@ import { t } from '@/plugins/i18n';
 import SportTable from '../main/component/SportTable.vue';
 import { SPORT_LIST_MAP, SPORT_NAME_TYPE } from '../main/utils/map';
 import { handleTableWidth } from '@/utils/getTableWidth';
+import { TableColumnRenderer } from '@pureadmin/table';
 defineOptions({ name: 'SETTLE_SETTLE_HISTORY' });
 const currentSport = computed(() =>
   SPORT_LIST_MAP.find(item => item.value === currentSportId.value)
@@ -59,28 +60,30 @@ const renderColumnList = computed(() => {
     {
       label: t('是否中立场地'),
       prop: 'isNeutral',
-      formatter: ({ isNeutral }) => (isNeutral ? t('是') : t('否')),
-      headerRenderer: d => handleTableWidth(d, t('是否中立场地')),
-      hide: () => currentSport.value.value != 1
+      formatter: ({ isNeutral }: { isNeutral: boolean }) =>
+        isNeutral ? t('是') : t('否'),
+      headerRenderer: (d: TableColumnRenderer) =>
+        handleTableWidth(d, t('是否中立场地')),
+      hide: () => currentSport.value?.value != 1
     },
     {
       label: t('上半场结算'),
       prop: 'halfSettlementStatus',
-      formatter: ({ halfSettlementStatus }) =>
+      formatter: ({ halfSettlementStatus }: { halfSettlementStatus: number }) =>
         halfSettlementStatus === 0 ? (
           t('未结算')
         ) : (
           <el-text type="danger">{t('已结算')}</el-text>
         ),
-      headerRenderer: d => handleTableWidth(d, t('上半场结算')),
+      headerRenderer: (d: TableColumnRenderer) =>
+        handleTableWidth(d, t('上半场结算')),
       hide: () =>
-        currentSport.value.value != SPORT_NAME_TYPE.football &&
-        currentSport.value.value != SPORT_NAME_TYPE.basketball
+        currentSport.value?.value != SPORT_NAME_TYPE.football &&
+        currentSport.value?.value != SPORT_NAME_TYPE.basketball
     }
   ];
   const _ = [...columns];
   _.splice(_.length - 2, 0, ...fillList);
-  // _.splice(_.length - 2, 1);
   return _;
 });
 
