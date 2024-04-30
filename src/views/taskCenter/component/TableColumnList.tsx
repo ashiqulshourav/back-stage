@@ -39,7 +39,7 @@ export const columns: TableColumnList = [
   {
     label: t('操作人'),
     minWidth: 200,
-    prop: 'createdBy'
+    prop: 'updateBy'
   },
   {
     label: t('操作'),
