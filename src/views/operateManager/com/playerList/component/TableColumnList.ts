@@ -28,8 +28,25 @@ export const columns: TableColumnList = [
   {
     label: t('特殊限额'),
     minWidth: 150,
-    formatter: () => {
-      return '-';
+    formatter: ({
+      maxWinAmountLimit,
+      productAmountTotalLimit,
+      seriesSingleDayCumulativeCompensationLimit,
+      singleEventAccumulatedCompensationLimit
+    }: {
+      maxWinAmountLimit: number;
+      productAmountTotalLimit: number;
+      seriesSingleDayCumulativeCompensationLimit: number;
+      singleEventAccumulatedCompensationLimit: number;
+    }) => {
+      if (
+        maxWinAmountLimit ||
+        productAmountTotalLimit ||
+        seriesSingleDayCumulativeCompensationLimit ||
+        singleEventAccumulatedCompensationLimit
+      )
+        return t('例外限额');
+      else return t('无');
     }
   },
   {
