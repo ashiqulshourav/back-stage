@@ -128,10 +128,13 @@
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <div v-if="item.kindsCode !== 'Outright'" class="item_line">
+              <div v-if="item.kindsCode === 'Outright'" class="item_line" >
+                <span>冠军赛事</span>
+              </div>
+              <div   v-else class="item_line">
                 <span
-                  class="cursor-pointer"
-                  @dblclick="
+                    class="cursor-pointer"
+                    @dblclick="
                     copyTest(
                       item.homeTeamNameCn,
                       t('主队：{value}', { value: item.homeTeamNameCn })
@@ -141,8 +144,8 @@
                 >
                 vs
                 <span
-                  class="cursor-pointer"
-                  @dblclick="
+                    class="cursor-pointer"
+                    @dblclick="
                     copyTest(
                       item.awayTeamNameCn,
                       t('客队：{value}', { value: item.awayTeamNameCn })
@@ -432,7 +435,6 @@ import { hasAuth } from '@/router/utils';
 import {
   formatSeriesType,
   useSportFormatDetail,
-  BET_RESULT_TYPE_MAP,
   EBetResultType,
   getViewOddFn,
   markeTypeMap,
