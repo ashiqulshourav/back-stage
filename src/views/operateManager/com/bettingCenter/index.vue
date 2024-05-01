@@ -6,6 +6,7 @@
       @on-search="onSearch"
       @exportFile="exportFile"
       :tenantList="tenantList"
+      :riskLabelList="riskLabelList"
     />
 
     <PureTableBar
@@ -99,13 +100,13 @@
                     String(row.seriesType).slice(-3) === '001' ? '串关' : '复式'
                   }}
                   <span>{{
-                    formatSeriesType(
-                      row?.seriesType,
-                      row.combineOrderDetails.length
-                    )
-                  }}</span>
+                      formatSeriesType(
+                        row?.seriesType,
+                        row.combineOrderDetails.length
+                      )
+                    }}</span>
                   <span class="ml-1"
-                    >总计：{{
+                  >总计：{{
                       `${calculateSeriesTypeTotalBets(
                         row?.seriesType
                       )}注 每注：${row.orderAmount}`
@@ -123,11 +124,11 @@
           </template>
           <template #matchMessage="{ row }">
             <div
-              class="match_item"
+              class="match_item match_detail"
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <div v-if="item.kindsCode!== 'Outright'" class="item_line">
+              <div v-if="item.kindsCode !== 'Outright'" class="item_line">
                 <span
                   class="cursor-pointer"
                   @dblclick="
@@ -136,7 +137,7 @@
                       t('主队：{value}', { value: item.homeTeamNameCn })
                     )
                   "
-                  >{{ item.homeTeamNameCn }}</span
+                >{{ item.homeTeamNameCn }}</span
                 >
                 vs
                 <span
@@ -147,7 +148,7 @@
                       t('客队：{value}', { value: item.awayTeamNameCn })
                     )
                   "
-                  >{{ item.awayTeamNameCn }}</span
+                >{{ item.awayTeamNameCn }}</span
                 >
               </div>
               <div
@@ -182,7 +183,7 @@
           </template>
           <template #betDetail="{ row }">
             <div
-              class="match_item"
+              class="match_item bet_detail"
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -263,7 +264,7 @@
                 }}
               </div>
               <div>{{ markeTypeMap[item.marketType] }}</div>
-              <div v-if="getOddStatus(item?.betResult,item?.riskStatus)">
+              <div v-if="BET_RESULT_TYPE_MAP[item?.betResult]">
                 <span
                   :class="
                     [EBetResultType.WIN, EBetResultType.WIN_HALF].includes(
@@ -273,9 +274,8 @@
                       : 'lose'
                   "
                 >
-                  {{getOddStatus(item?.betResult,item?.riskStatus)}}
-                </span>
-
+                  {{ BET_RESULT_TYPE_MAP[item?.betResult] }}</span
+                >
               </div>
             </div>
           </template>
@@ -283,7 +283,7 @@
             <span
               v-if="row.profitAmount"
               :class="row.profitAmount > 0 ? 'win' : 'lose'"
-              >{{ row.profitAmount.toFixed(2) }}</span
+            >{{ row.profitAmount.toFixed(2) }}</span
             >
             <span v-else>-</span>
           </template>
@@ -299,7 +299,7 @@
                   row.isSpecialSettle
                 ).bgColor
               }"
-              class="status_btn mb-1"
+              class="status_detail status_btn mb-1"
             >
               {{
                 betStatusMap[
@@ -311,17 +311,21 @@
                     row.riskStatus,
                     row.isSpecialSettle
                   ).status as keyof typeof betStatusMap
-                ]
+                  ]
               }}
             </div>
-            <div v-if=" getStatus(
-                    row.status,
-                    row.billStatus,
-                    row.combineOrderDetails[0].betResult,
-                    row.isReserve,
-                    row.riskStatus,
-                    row.isSpecialSettle
-                  ).status===betStatus.settlementBet">
+            <div
+              v-if="
+                getStatus(
+                  row.status,
+                  row.billStatus,
+                  row.combineOrderDetails[0].betResult,
+                  row.isReserve,
+                  row.riskStatus,
+                  row.isSpecialSettle
+                ).status === betStatus.settlementBet
+              "
+            >
               {{
                 row.settleTime
                   ? dayjs(row.settleTime).format('MM-DD HH:mm:ss')
@@ -342,7 +346,11 @@
               <el-button
                 class="mb-1 w-100"
                 @click="handleCancel(row)"
-                v-if="row.billStatus === 0&& isShowCancel(row) && hasAuth('CANCELBET')"
+                v-if="
+                  row.billStatus === 0 &&
+                  isShowCancel(row) &&
+                  hasAuth('CANCELBET')
+                "
               >
                 {{ t('取消') }}
               </el-button>
@@ -351,7 +359,8 @@
               <el-button
                 class="mb-1 w-100"
                 @click="switchDialog(true, row)"
-                v-if=" row.status!==2&&hasAuth('specialSettlement'.toUpperCase())">
+                v-if="row.status!==2&&hasAuth('specialSettlement'.toUpperCase())"
+              >
                 {{ t('特殊结算') }}
               </el-button>
             </div>
@@ -361,9 +370,9 @@
               <div>{{ row.orderRemark }}</div>
               <div>
                 <el-button
-                    size="small"
-                    type="primary"
-                    @click="editOrderRemark(row.id, row.orderRemark)"
+                  size="small"
+                  type="primary"
+                  @click="editOrderRemark(row.id, row.orderRemark)"
                 >
                   {{ t('备注') }}
                 </el-button>
@@ -381,7 +390,7 @@
           <div>
             <label>{{ t('用户数：') }}</label>
             <span
-              >{{ addThousandSeparator(totalInfo?.thisPageBetUserCount) ?? 0
+            >{{ addThousandSeparator(totalInfo?.thisPageBetUserCount) ?? 0
               }}{{ t('人') }}</span
             >
           </div>
@@ -417,10 +426,12 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
+import RiskLabelList from './component/riskLabelList.vue';
 import { hasAuth } from '@/router/utils';
 import {
   formatSeriesType,
   useSportFormatDetail,
+  BET_RESULT_TYPE_MAP,
   EBetResultType,
   getViewOddFn,
   markeTypeMap,
@@ -429,13 +440,12 @@ import {
   displayHomeAwayScore,
   getIsInplay
 } from '@/utils/formatMatch';
-import {betStatus, betStatusMap} from './util/types';
+import { betStatus, betStatusMap } from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
-import RiskLabelList from './component/riskLabelList.vue'
 const props = defineProps<{
   category: number;
-  venueType:number;
+  venueType: number;
 }>();
 defineOptions({ name: 'bettingCenter' });
 const { tableHeaderStyle } = usePublicHooks();
@@ -457,9 +467,9 @@ const {
   switchDialog,
   tenantObj,
   isShowCancel,
-  getOddStatus,
-  editOrderRemark
-} = useBettingCenterHook(props.category,props.venueType);
+  editOrderRemark,
+  riskLabelList
+} = useBettingCenterHook(props.category, props.venueType);
 </script>
 
 <style lang="scss">
@@ -476,6 +486,15 @@ const {
       margin-left: 10px;
     }
   }
+}
+.match_detail{
+  min-width: 200px;
+}
+.bet_detail{
+  min-width: 200px;
+}
+.status_detail{
+  width: 120px;
 }
 .match_item {
   margin-bottom: 10px;
@@ -521,6 +540,7 @@ const {
   border-radius: 4px;
 }
 .odd_item {
+  min-width: 80px;
   min-height: 100px;
 }
 
