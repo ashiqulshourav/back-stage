@@ -278,7 +278,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
             str = displayHomeAwayScore(data.settleScore, data.sportId);
             break;
           case 'betResult':
-            str = BET_RESULT_TYPE_MAP[data.betResult];
+            str =  getOddStatus(data.betResult,data.riskStatus)
             break;
           case 'scoreBenchmark':
             str = displayHomeAwayScore(data.scoreBenchmark, data.sportId);
@@ -396,7 +396,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
     if(riskSt===riskStatus.reject||riskSt===riskStatus.autoReject){
       return '无效注单'
     }else {
-      return  BET_RESULT_TYPE_MAP[betResult] || ''
+      return  BET_RESULT_TYPE_MAP[betResult]  || ''
     }
  }
 

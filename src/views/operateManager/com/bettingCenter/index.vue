@@ -264,7 +264,7 @@
                 }}
               </div>
               <div>{{ markeTypeMap[item.marketType] }}</div>
-              <div v-if="BET_RESULT_TYPE_MAP[item?.betResult]">
+              <div v-if="getOddStatus(item?.betResult,item.riskStatus)">
                 <span
                   :class="
                     [EBetResultType.WIN, EBetResultType.WIN_HALF].includes(
@@ -274,7 +274,8 @@
                       : 'lose'
                   "
                 >
-                  {{ BET_RESULT_TYPE_MAP[item?.betResult] }}</span
+                  {{getOddStatus(item?.betResult,item.riskStatus)}}
+                </span
                 >
               </div>
             </div>
@@ -468,7 +469,8 @@ const {
   tenantObj,
   isShowCancel,
   editOrderRemark,
-  riskLabelList
+  riskLabelList,
+  getOddStatus
 } = useBettingCenterHook(props.category, props.venueType);
 </script>
 
