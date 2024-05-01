@@ -21,4 +21,28 @@ export const userMangerData = {
     id: number,
     status: number;
   }) => http.request<UserMangerAPI.updateStatusByIdResType>("post", "/kmg/matchUser/v1/updateStatusById", { data }),
+  //- 获取部门列表
+  querySubDept: (data: {}) => http.request<UserMangerAPI.querySubDeptResType>("post", "/tenantDepartment/querySubDept", { data }),
+  //- 上级部门列表
+  querySubDeptWithoutSelf: () => http.request<UserMangerAPI.querySubDeptWithoutSelfResType>("post", "/tenantDepartment/querySubDeptWithoutSelf", {}),
+  //- 新增部门
+  addDepartment: (data: UserMangerAPI.addDepartmentReqType) => http.request<UserMangerAPI.addDepartmentResType>("post", "/tenantDepartment/insert", { data }),
+  //- 修改部门
+  updateDepartment: (data: UserMangerAPI.addDepartmentReqType) => http.request<UserMangerAPI.updateDepartmentResType>("post", "/tenantDepartment/update", { data }),
+  //- 获取商户ID
+  configurableTenant: () => http.request<UserMangerAPI.configurableTenantResType>("post", "/tenantDepartment/configurableTenant", {}),
+  //- 查询部门用户
+  tenantDepartmentQueryOne: (data: { pageSize: number; pageNumber: number; id: number; name?: string; status?: string | number }) => http.request<UserMangerAPI.tenantDepartmentQueryResType>("post", "/tenantDepartment/queryOne", { data }),
+  //- 查询游客用户
+  queryGuset: (data: { id: number }) => http.request<UserMangerAPI.tenantDepartmentQueryResType>("post", "/tenantDepartment/queryGuset", { data }),
+  //- 移出部门
+  removeDeptAndRole: (data: { userId: number }) => http.request<UserMangerAPI.tenantDepartmentQueryResType>("post", "/tenantDepartment/removeDeptAndRole", { data }),
+  //- 查询角色清单
+  subRoleList: (data: { deptId?: number, includeSelf?: boolean }) => http.request<UserMangerAPI.subRoleListResType>("post", "/kmg/tenantRole/v1/subRoleList", { data }),
+  //- 用户配置部门角色
+  updateDeptAndRole: (data: { userId: number; id: number; roleId: number }) => http.request<UserMangerAPI.subRoleListResType>("post", "/tenantDepartment/updateDeptAndRole", { data }),
+  //- 部门开启关闭状态
+  udateDepStatus: (data: { id: number; }) => http.request<UserMangerAPI.udateDepStatusResType>("post", "/tenantDepartment/switchStatus", { data }),
+  //- 部门删除
+  deleteDepartment: (data: { id: number; }) => http.request<UserMangerAPI.udateDepStatusResType>("post", "/tenantDepartment/delete", { data }),
 };

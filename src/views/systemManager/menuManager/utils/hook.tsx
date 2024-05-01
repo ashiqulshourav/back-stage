@@ -102,17 +102,17 @@ export function useMenuManagerHook() {
     _column: TableColumns,
     e: PointerEvent
   ) => {
-    const target = e.currentTarget as HTMLElement;
-    const firstChild = target.firstElementChild as HTMLElement;
+    const target = e.currentTarget as ElRef;
+    const firstChild = target?.firstElementChild;
     if (firstChild) {
-      const secondChild = firstChild.firstElementChild as HTMLElement;
+      const secondChild = firstChild.firstElementChild as ElRef;
       if (secondChild) {
-        const thirdChild = secondChild.firstElementChild as HTMLElement;
+        const thirdChild = secondChild.firstElementChild as ElRef;
         if (thirdChild) {
           if (thirdChild.tagName === 'DIV') {
             thirdChild.click();
           } else {
-            const nextSibling = thirdChild.nextElementSibling as HTMLElement;
+            const nextSibling = thirdChild.nextElementSibling as ElRef;
             if (nextSibling) {
               nextSibling.click();
             }
