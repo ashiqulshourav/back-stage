@@ -82,9 +82,9 @@ const initTreeList = async () => {
 };
 
 //- 判断是否为半选中状态
-const filterHalfChecked = menusData => {
-  menusData.forEach(item => {
-    if (item.childResourceList.length) {
+const filterHalfChecked = (menusData: RoleAPI.ChildResourceList[]) => {
+  menusData.forEach((item: RoleAPI.ChildResourceList) => {
+    if (item.childResourceList?.length) {
       filterHalfChecked(item.childResourceList);
       item.resourceFlag = item.childResourceList.every(_ => _.resourceFlag);
     }
@@ -94,10 +94,10 @@ const filterHalfChecked = menusData => {
 //- 判断是否初始化被选中
 const checkIsInitSelected = (list: RoleAPI.ChildResourceList[]) => {
   list.forEach(item => {
-    if (item.childResourceList.length) {
+    if (item.childResourceList?.length) {
       checkIsInitSelected(item.childResourceList);
     }
-    if (!!item.resourceFlag) defaultKeyList.push(item.id);
+    if (!!item.resourceFlag) defaultKeyList.push(+item.id);
   });
 };
 
@@ -105,7 +105,7 @@ const checkIsInitSelected = (list: RoleAPI.ChildResourceList[]) => {
 const saveRole = async () => {
   const resourceList = treeRef
     .value!.getCheckedNodes(false, true)
-    .map(item => item.id);
+    .map((item: { id: number }) => item.id);
 
   const res = await API.updateRoleResource({
     roleId,
@@ -116,7 +116,7 @@ const saveRole = async () => {
 };
 
 //- 获取所有的子节点
-const getAllNodeKeys = node => {
+const getAllNodeKeys = (node: RoleAPI.ChildResourceList) => {
   let keys = [node.id];
   if (node.childResourceList && node.childResourceList.length > 0) {
     node.childResourceList.forEach(child => {
@@ -128,7 +128,7 @@ const getAllNodeKeys = node => {
 
 //- 全选按钮点击
 const checkAllClick = (status: boolean) => {
-  const allKeys = [];
+  const allKeys: any[] = [];
   menusData.forEach(node => {
     allKeys.push(...getAllNodeKeys(node));
   });
@@ -151,8 +151,8 @@ const handleCheckChange = () => {
     height: 32px;
   }
   .role_tree {
-    max-height: 600px;
-    min-height: 600px;
+    max-height: 700px;
+    min-height: 700px;
     overflow-y: auto;
   }
 }

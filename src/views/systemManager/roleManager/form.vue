@@ -72,7 +72,7 @@ const closeDialog = () => {
 
 /* 传,roleName,status,comment */
 const confirmClick = () => {
-  ruleFormRef.value.validate(async v => {
+  ruleFormRef.value?.validate(async v => {
     const requestAPI = newFormInline.roleId ? 'updateRole' : 'addRole';
     if (v) {
       const res = await API[requestAPI]({

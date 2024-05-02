@@ -49,7 +49,7 @@
               link
               type="primary"
               :size="size"
-              :disabled="row.disabled"
+              :disabled="row.disabled && userStore.userInfo.name !== 'armour'"
               @click="openRoleSettingDialog(row.id)"
             >
               {{ t('权限设置') }}
@@ -59,8 +59,8 @@
               class="reset-margin"
               link
               type="primary"
+              :disabled="row.disabled && userStore.userInfo.name !== 'armour'"
               :size="size"
-              :disabled="row.disabled"
               @click="openRoleDialog(t('编辑角色'), row)"
             >
               {{ t('编辑') }}
@@ -71,7 +71,7 @@
               link
               type="danger"
               :size="size"
-              :disabled="row.disabled"
+              :disabled="row.disabled && userStore.userInfo.name !== 'armour'"
               @click="handleDelete(row)"
             >
               {{ t('删除') }}
@@ -90,10 +90,12 @@ import SearchForm from './component/SearchForm.vue';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 import { hasAuth } from '@/router/utils';
+import { useUserStore } from '@/store/user';
 
 defineOptions({ name: 'SYSTEMMANAGER_ROLEMANAGER' });
 const { tableHeaderStyle } = usePublicHooks();
 const { switchStyle } = usePublicHooks();
+const userStore = useUserStore();
 
 const {
   loading,
