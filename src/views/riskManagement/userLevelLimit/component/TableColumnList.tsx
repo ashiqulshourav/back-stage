@@ -6,15 +6,15 @@ export const columns: TableColumnList = [
     prop: 'levelLimit'
   },
   {
-    label: t('单用户单注限额'),
+    label: t('单注限额'),
     slot: 'productAmountTotalLimit'
   },
   {
-    label: t('单用户单注赔付'),
+    label: t('单注赔付'),
     slot: 'maxWinAmountLimit'
   },
   {
-    label: t('单用户单场赛事赔付'),
+    label: t('单场赛事累计赔付'),
     slot: 'userSingleGamePay'
   },
   {

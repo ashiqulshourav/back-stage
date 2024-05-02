@@ -196,16 +196,16 @@
       <el-form-item v-if="isSpecial">
         <el-row :gutter="5" class="w-full items-center">
           <el-col :span="5" class="text-center">
-            <el-text>{{ t('单用户单注限额') }}</el-text>
+            <el-text>{{ t('单注限额') }}</el-text>
           </el-col>
           <el-col :span="5" class="text-center">
-            <el-text>{{ t('单用户单注赔付') }}</el-text>
+            <el-text>{{ t('单注赔付') }}</el-text>
           </el-col>
-          <el-col :span="7" class="text-center">
-            <el-text>{{ t('单用户单场赛事累计赔付(不分早盘滚球)') }}</el-text>
+          <el-col :span="6" class="text-center">
+            <el-text>{{ t('单场赛事累计赔付限额(不分早盘滚球)') }}</el-text>
           </el-col>
-          <el-col :span="5" class="text-center">
-            <el-text>{{ t('串关单日累计赔付(不分早盘滚球)') }}</el-text>
+          <el-col :span="6" class="text-center">
+            <el-text>{{ t('串关单日累计赔付限额(不分早盘滚球)') }}</el-text>
           </el-col>
           <el-col :span="5" class="text-center">
             <el-input
@@ -219,7 +219,7 @@
               :formatter="(v: string) => formatNumber(v, 13)"
             />
           </el-col>
-          <el-col :span="7" class="text-center">
+          <el-col :span="6" class="text-center">
             <el-input
               v-model="
                 form.specialLimit.singleEventAccumulatedCompensationLimit
@@ -227,7 +227,7 @@
               :formatter="(v: string) => formatNumber(v, 13)"
             />
           </el-col>
-          <el-col :span="5" class="text-center">
+          <el-col :span="6" class="text-center">
             <el-input
               v-model="
                 form.specialLimit.seriesSingleDayCumulativeCompensationLimit
@@ -299,15 +299,15 @@ const limitList = reactive<UserAPI.UserLevelLimitListRes[]>([]);
 
 const limitColumns: TableColumnList = [
   {
-    label: t('单用户单注限额'),
+    label: t('单注限额'),
     prop: 'productAmountTotalLimit'
   },
   {
-    label: t('单用户单注赔付'),
+    label: t('单注赔付'),
     prop: 'maxWinAmountLimit'
   },
   {
-    label: t('单用户单场赛事累计赔付(不分早盘滚球)'),
+    label: t('单场赛事累计赔付限额(不分早盘滚球)'),
     prop: 'userSingleGamePay'
   },
   // {
@@ -315,7 +315,7 @@ const limitColumns: TableColumnList = [
   //   prop: 'singleMatchPay'
   // },
   {
-    label: t('串关单日累计赔付(不分早盘滚球)'),
+    label: t('串关单日累计赔付限额(不分早盘滚球)'),
     prop: 'bunchMatchPay'
   }
   // {
