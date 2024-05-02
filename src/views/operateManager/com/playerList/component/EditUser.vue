@@ -196,10 +196,10 @@
       <el-form-item v-if="isSpecial">
         <el-row :gutter="5" class="w-full items-center">
           <el-col :span="5" class="text-center">
-            <el-text>{{ t('单注限额') }}</el-text>
+            <el-text>{{ t('单注投注限额') }}</el-text>
           </el-col>
           <el-col :span="5" class="text-center">
-            <el-text>{{ t('单注赔付') }}</el-text>
+            <el-text>{{ t('单注赔付限额') }}</el-text>
           </el-col>
           <el-col :span="7" class="text-center">
             <el-text>{{ t('单场赛事累计赔付限额(不分早盘滚球)') }}</el-text>
@@ -299,11 +299,11 @@ const limitList = reactive<UserAPI.UserLevelLimitListRes[]>([]);
 
 const limitColumns: TableColumnList = [
   {
-    label: t('单注限额'),
+    label: t('单注投注限额'),
     prop: 'productAmountTotalLimit'
   },
   {
-    label: t('单注赔付'),
+    label: t('单注赔付限额'),
     prop: 'maxWinAmountLimit'
   },
   {
