@@ -27,7 +27,7 @@ import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { ElMessageBox } from 'element-plus';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
-import { riskStatus } from '@/views/operateManager/sportBettingAudit/util/types';
+import { riskStatus } from '@/views/operateManager/com/bettingAudit/util/types';
 import editOrder from '../component/editOrder.vue';
 export function useBettingCenterHook(category: number, venueType: number) {
   const { openPasswordInput } = usePasswordInputHook();
