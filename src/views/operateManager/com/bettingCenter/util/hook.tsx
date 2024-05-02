@@ -27,9 +27,9 @@ import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { ElMessageBox } from 'element-plus';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
-import {riskStatus} from "@/views/riskManagement/bettingAudit/util/types";
+import { riskStatus } from "@/views/riskManagement/bettingAudit/util/types";
 import editOrder from "../component/editOrder.vue";
-export function useBettingCenterHook(category:number,venueType:number) {
+export function useBettingCenterHook(category: number, venueType: number) {
   const { openPasswordInput } = usePasswordInputHook();
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<
@@ -46,7 +46,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
     total: 0,
     pageSize: 20,
     currentPage: 1,
-    pageSizes: [ 20, 50, 100, 200,500],
+    pageSizes: [20, 50, 100, 200, 500],
     background: true
   });
   const form = reactive<searchFormType>({
@@ -73,7 +73,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
     maxBetAmount: '',
     minProfitAmount: '',
     maxProfitAmount: '',
-      riskControlLabelList:[],
+    riskControlLabelList: [],
   });
   function handlePageSizeChange(val: number) {
     pagination.pageSize = val;
@@ -85,7 +85,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
     onSearch();
   }
 
-  function handleSelectionChange(val:number) {
+  function handleSelectionChange(val: number) {
     console.log('handleSelectionChange', val);
   }
 
@@ -124,7 +124,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
         seriesDetailsDuplex: '',
         seriesDetails: seriesDetails,
         seriesType: +form.seriesType > 2 ? 2 : form.seriesType,
-        venueType:venueType,
+        venueType: venueType,
       }),
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage,
@@ -152,11 +152,11 @@ export function useBettingCenterHook(category:number,venueType:number) {
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
       if (res.data !== null) {
-        let list = res?.data?.pageData||[];
-        list= list.map((row)=>{
-          let riskSt:number = -1;
-          row.combineOrderDetails.map((item2)=>{
-            if (item2.riskStatus===2) riskSt = 2
+        let list = res?.data?.pageData || [];
+        list = list.map((row) => {
+          let riskSt: number = -1;
+          row.combineOrderDetails.map((item2) => {
+            if (item2.riskStatus === 2) riskSt = 2
           })
           row.riskStatus = riskSt
           return row
@@ -180,7 +180,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
 
   const getTenantList = async () => {
     const res = await API.queryTenantList({
-      category:category
+      category: category
     });
     if (res.data?.length) {
       tenantList.push(...res?.data);
@@ -191,7 +191,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
     }
   };
 
-  const resetForm = (formEl:FormInstance) => {
+  const resetForm = (formEl: FormInstance) => {
     if (!formEl) return;
     formEl.resetFields();
     onSearch();
@@ -199,9 +199,11 @@ export function useBettingCenterHook(category:number,venueType:number) {
 
   //- 导出excel表格
   const exportFile = async () => {
+    loading.value = true;
     const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
       formatParams({ pageNum: 1, pageSize: 50000 }) as searchFormType
     );
+    loading.value = false;
     const r = res.data.pageData.map((item: any, i) => {
       const arr = [];
       const data = { ...item, ...item?.combineOrderDetails[0] };
@@ -238,12 +240,12 @@ export function useBettingCenterHook(category:number,venueType:number) {
             str = useSportFormatDetail(data)[3];
             break;
           case 'teamName':
-            if(data.kindsCode!== 'Outright'){
+            if (data.kindsCode !== 'Outright') {
               str = `${data.homeTeamNameCn} vs ${data.awayTeamNameCn}`;
             }
             break;
           case 'marketType':
-            str = markeTypeMap[data.marketType  as keyof typeof markeTypeMap];
+            str = markeTypeMap[data.marketType as keyof typeof markeTypeMap];
             break;
           case 'isSettlementAgain':
             str = data.isSettlementAgain === 2 ? '是' : '否';
@@ -251,34 +253,34 @@ export function useBettingCenterHook(category:number,venueType:number) {
           case 'status':
             str =
               betStatusMap[
-                getStatus(
-                  data.status,
-                  data.billStatus,
-                  data.betResult,
-                  data.isReserve,
-                  data.riskStatus,
-                  data.isSpecialSettle
-                )?.status as keyof typeof betStatusMap
+              getStatus(
+                data.status,
+                data.billStatus,
+                data.betResult,
+                data.isReserve,
+                data.riskStatus,
+                data.isSpecialSettle
+              )?.status as keyof typeof betStatusMap
               ];
             break;
           case 'billStatus':
             str =
               betStatusMap[
-                getStatus(
-                  data.status,
-                  data.billStatus,
-                  data.betResult,
-                  data.isReserve,
-                  data.riskStatus,
-                  data.isSpecialSettle
-                )?.status as keyof typeof betStatusMap
+              getStatus(
+                data.status,
+                data.billStatus,
+                data.betResult,
+                data.isReserve,
+                data.riskStatus,
+                data.isSpecialSettle
+              )?.status as keyof typeof betStatusMap
               ];
             break;
           case 'settleScore':
             str = displayHomeAwayScore(data.settleScore, data.sportId);
             break;
           case 'betResult':
-            str =  getOddStatus(data.betResult,data.riskStatus)
+            str = getOddStatus(data.betResult, data.riskStatus)
             break;
           case 'scoreBenchmark':
             str = displayHomeAwayScore(data.scoreBenchmark, data.sportId);
@@ -328,6 +330,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
       type: 'success'
     });
   };
+
   const handleCancel = (data: any) => {
     ElMessageBox.confirm(t('确定取消注单吗？'), t('警告'), {
       center: true,
@@ -346,16 +349,16 @@ export function useBettingCenterHook(category:number,venueType:number) {
       }
     });
   };
-  const getStatus = (status:number, billStatus:number, betResult:number, isReserve?:number,riskStatus?:number,isSpecialSettle:number) => {
+  const getStatus = (status: number, billStatus: number, betResult: number, isReserve?: number, riskStatus?: number, isSpecialSettle: number) => {
     let obj = { status: -1, bgColor: '' };
-    if(isSpecialSettle===1){
+    if (isSpecialSettle === 1) {
       // 特殊结算也算已结算
       obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
-    }else if(betResult==22){
-      obj = { status:22, bgColor: '#F57582' }; //预约取消
-    }else if(riskStatus===2){
-        obj = { status: betStatus.PendingApprove, bgColor: '#F57582' }; //待审核
-    }else if (
+    } else if (betResult == 22) {
+      obj = { status: 22, bgColor: '#F57582' }; //预约取消
+    } else if (riskStatus === 2) {
+      obj = { status: betStatus.PendingApprove, bgColor: '#F57582' }; //待审核
+    } else if (
       status == 2 &&
       billStatus === 1 &&
       (betResult === 22 || betResult === 23)
@@ -392,16 +395,16 @@ export function useBettingCenterHook(category:number,venueType:number) {
     return obj;
   };
 
- const  getOddStatus = (betResult:number,riskSt:number)=>{
-    if(riskSt===riskStatus.reject||riskSt===riskStatus.autoReject){
+  const getOddStatus = (betResult: number, riskSt: number) => {
+    if (riskSt === riskStatus.reject || riskSt === riskStatus.autoReject) {
       return '无效注单'
-    }else {
-      return  BET_RESULT_TYPE_MAP[betResult]  || ''
+    } else {
+      return BET_RESULT_TYPE_MAP[betResult] || ''
     }
- }
+  }
 
 
-  const switchDialog = async (flag: boolean, row:any) => {
+  const switchDialog = async (flag: boolean, row: any) => {
     UDialogFlag.value = flag;
     if (flag) {
       const r = await openPasswordInput();
@@ -411,7 +414,7 @@ export function useBettingCenterHook(category:number,venueType:number) {
   };
 
   const editDialogRef = ref();
-  const handleEditResult =( row:any) => {
+  const handleEditResult = (row: any) => {
     addDialog({
       title: t(''),
       class: 'reset_dialog',
@@ -435,51 +438,51 @@ export function useBettingCenterHook(category:number,venueType:number) {
     const success = copyTextToClipboard(str.toString());
     success
       ? message(t('复制{value}成功!', { value: tip || str || '' }), {
-          type: 'success'
-        })
+        type: 'success'
+      })
       : message(t('复制失败'), { type: 'error' });
   }
 
-  const isShowCancel = (row)=>{
+  const isShowCancel = (row) => {
     let flag = true
-    row.combineOrderDetails.map((item)=>{
-      if(item.riskStatus===riskStatus.rejectBetting||item.riskStatus===riskStatus.reject||item.riskStatus===riskStatus.approve||item.riskStatus===riskStatus.autoReject){
+    row.combineOrderDetails.map((item) => {
+      if (item.riskStatus === riskStatus.rejectBetting || item.riskStatus === riskStatus.reject || item.riskStatus === riskStatus.approve || item.riskStatus === riskStatus.autoReject) {
         flag = false
       }
     })
     return flag
   }
-    const editOrderRemark = (id:number,orderRemark:string)=>{
-        addDialog({
-            title: t('编辑备注'),
-            class: 'reset_dialog',
-            width: '500px',
-            center: true,
-            closeOnClickModal: false,
-            hideFooter: true,
-            contentRenderer: ({ options, index }) =>
-                h(editOrder, {
-                    ref: editDialogRef,
-                    data: {orderId:id,orderRemark},
-                    onCloseDialog: (_: boolean) => {
-                        closeDialog(options, index);
-                        onSearch();
-                    }
-                })
-        });
-    }
-    const getRiskLabelList = async () => {
-        try {
-            const res = await API.getLabelList({
-                category: venueType
-            });
+  const editOrderRemark = (id: number, orderRemark: string) => {
+    addDialog({
+      title: t('编辑备注'),
+      class: 'reset_dialog',
+      width: '500px',
+      center: true,
+      closeOnClickModal: false,
+      hideFooter: true,
+      contentRenderer: ({ options, index }) =>
+        h(editOrder, {
+          ref: editDialogRef,
+          data: { orderId: id, orderRemark },
+          onCloseDialog: (_: boolean) => {
+            closeDialog(options, index);
+            onSearch();
+          }
+        })
+    });
+  }
+  const getRiskLabelList = async () => {
+    try {
+      const res = await API.getLabelList({
+        category: venueType
+      });
 
-            if (res.data.riskControlLabelList)
-                riskLabelList.push(...res.data.riskControlLabelList);
-        } catch (error) {
-            return message(error as string, { type: 'error' });
-        }
-    };
+      if (res.data.riskControlLabelList)
+        riskLabelList.push(...res.data.riskControlLabelList);
+    } catch (error) {
+      return message(error as string, { type: 'error' });
+    }
+  };
 
   //- 切换比赛类型
   onMounted(() => {
