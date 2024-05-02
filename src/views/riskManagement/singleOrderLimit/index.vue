@@ -302,9 +302,6 @@
         <el-button size="small" type="primary" @click="addSportItem">
           <span class="text-xs">+</span>
         </el-button>
-        <el-button size="small" type="primary" @click="delSportItem">
-          <span class="text-[16px]">-</span>
-        </el-button>
       </div>
     </div>
   </div>
