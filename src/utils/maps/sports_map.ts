@@ -21,6 +21,8 @@ export const SPORT_ID_MAP = [
   // { label: t('电子竞技'), value: 4, type: 'FootBall' },
 ];
 
+
+
 export const FULL_SPORT_ID_MAP = [
   { label: t('足球'), value: 1, type: 'FootBall' },
   { label: t('篮球'), value: 2, type: 'BasketBall' },
@@ -61,7 +63,7 @@ export const ESPORT_ID_MAP = [
   { value: 286, label: t('无畏契约') },
   { value: 287, label: t('MMA综合格斗') },
   { value: 288, label: t('绝地求生') },
-  { value: 289, label: t('穿越火线' )},
+  { value: 289, label: t('穿越火线') },
   { value: 290, label: t('守望先锋') },
   { value: 291, label: t('星际争霸II') },
   { value: 292, label: t('火箭联盟') },
