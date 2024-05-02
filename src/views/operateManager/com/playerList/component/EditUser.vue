@@ -579,10 +579,3 @@ watch(
   }
 );
 </script>
-
-<style lang="scss">
-.el-dialog {
-  padding-left: 0;
-  padding-right: 0;
-}
-</style>

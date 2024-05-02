@@ -237,10 +237,7 @@ const {
   display: flex;
   flex-direction: row;
 }
-.el-dialog {
-  padding-left: 0;
-  padding-right: 0;
-}
+
 .el-row {
   row-gap: 0.5rem;
 }
