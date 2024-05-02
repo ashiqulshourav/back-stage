@@ -53,7 +53,6 @@ import { searchFormType } from '../utils/types';
 
 const formRef = ref();
 const emits = defineEmits(['onSearch']);
-
 const props = defineProps<{
   loading: boolean;
   form: searchFormType;
