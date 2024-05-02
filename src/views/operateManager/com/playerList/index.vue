@@ -48,6 +48,9 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
+        <template #tenantCode="{ row }">
+          {{ tenantObj[row.tenantId]?.name }}
+        </template>
           <template #riskControlLabel="{ row }">
             <RiskLabelList :list="row.riskControlLabelList" :showNumber="10" />
           </template>
@@ -224,7 +227,8 @@ const {
   handleCloseEditUser,
   dispatchLabelsDel,
   dispatchLabelsAdd,
-  dispatchUpdateUser
+  dispatchUpdateUser,
+  tenantObj
 } = userPlayerListHook(props.category, props.venueType);
 </script>
 
