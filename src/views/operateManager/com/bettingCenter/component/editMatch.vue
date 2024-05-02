@@ -168,7 +168,7 @@ import {
 import { PureTableBar } from '@/components/RePureTableBar';
 import { ElMessageBox } from 'element-plus';
 import { message } from '@/utils/message';
-import { riskStatus } from '@/views/operateManager/sportBettingAudit/util/types';
+import { riskStatus } from '@/views/operateManager/com/bettingAudit/util/types';
 const { data } = defineProps<{
   data: BetOrderAPI.Detail & BetOrderAPI.BetOrderList;
 }>();
