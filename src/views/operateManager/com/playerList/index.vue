@@ -48,68 +48,13 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
-          <template #riskControlLabel="{ row }">
-            <el-row
-              v-if="row.riskControlLabelList"
-              class="items-center"
-              :gutter="20"
-            >
-              <el-col :span="row.riskControlLabelList?.length > 6 ? 20 : 24">
-                <el-row :gutter="5">
-                  <el-col
-                    v-for="label in row.riskControlLabelList.slice(0, 6)"
-                    :key="label.id"
-                    :span="8"
-                    class="custom_tag"
-                  >
-                    <el-tag
-                      :style="`background-color: ${getLabelColor(
-                        label.level,
-                        'risk'
-                      )}`"
-                      class="rounded-lg w-full py-1"
-                    >
-                      {{ label.name }}
-                    </el-tag>
-                  </el-col>
-                </el-row>
-              </el-col>
-              <el-col :span="4" v-if="row.riskControlLabelList?.length > 6">
-                <el-popover
-                  placement="top-end"
-                  :width="300"
-                  trigger="hover"
-                  content="this is over"
-                >
-                  <template #reference>
-                    <el-button v-if="hasAuth('SETTING')" class="w-full"
-                      ><el-icon><Plus /></el-icon
-                    ></el-button>
-                  </template>
-                  <template #default>
-                    <el-row :gutter="20">
-                      <el-col
-                        v-for="label in row.riskControlLabelList"
-                        :key="label.id"
-                        class="custom_tag"
-                        :span="8"
-                      >
-                        <el-tag
-                          :style="`background-color: ${getLabelColor(
-                            label.level,
-                            'risk'
-                          )}`"
-                          class="rounded-lg w-full py-1 text-white text-center"
-                        >
-                          {{ label.name }}
-                        </el-tag>
-                      </el-col>
-                    </el-row>
-                  </template>
-                </el-popover>
-              </el-col>
-            </el-row>
+          <template #tenantCode="{ row }">
+            {{ tenantObj[row.tenantId]?.name }}
           </template>
+          <template #riskControlLabel="{ row }">
+            <RiskLabelList :list="row.riskControlLabelList" :showNumber="10" />
+          </template>
+
           <template #attributeLabel="{ row }">
             <el-row
               v-if="row.attributeLabelList"
@@ -242,6 +187,7 @@ import { Plus } from '@element-plus/icons-vue';
 import { hasAuth } from '@/router/utils';
 import EditPen from '@iconify-icons/ep/edit-pen';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import RiskLabelList from '@/components/RiskLabelList/index.vue';
 
 defineOptions({ name: 'OPERATEMANAGERSPORTPLAYERLIST' });
 const { tableHeaderStyle } = usePublicHooks();
@@ -281,7 +227,8 @@ const {
   handleCloseEditUser,
   dispatchLabelsDel,
   dispatchLabelsAdd,
-  dispatchUpdateUser
+  dispatchUpdateUser,
+  tenantObj
 } = userPlayerListHook(props.category, props.venueType);
 </script>
 
