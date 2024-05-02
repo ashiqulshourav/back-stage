@@ -214,7 +214,8 @@
           </el-button>
           <el-button
             type="primary"
-            :icon="useRenderIcon('exportFill')"
+            :icon="useRenderIcon(Download)"
+              :loading="loading"
             v-if="hasAuth('EXPORT')"
             @click="exportFile()"
           >
@@ -230,6 +231,7 @@
 import { t } from '@/plugins/i18n';
 import SearchIcon from '@iconify-icons/ep/search';
 import RefreshIcon from '@iconify-icons/ep/refresh';
+import Download from '@iconify-icons/ep/download';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import type { FormInstance } from 'element-plus';
 import dayjs from 'dayjs';

@@ -200,9 +200,11 @@ export function useBettingCenterHook(category: number, venueType: number) {
 
   //- 导出excel表格
   const exportFile = async () => {
+    loading.value = true;
     const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
       formatParams({ pageNum: 1, pageSize: 50000,export:true}) as searchFormType
     );
+    loading.value = false;
     const r = res.data.pageData.map((item: any, i) => {
       const arr: any[] = [];
       const data = { ...item, ...item?.combineOrderDetails[0] };
@@ -252,27 +254,27 @@ export function useBettingCenterHook(category: number, venueType: number) {
           case 'status':
             str =
               betStatusMap[
-                getStatus(
-                  data.status,
-                  data.billStatus,
-                  data.betResult,
-                  data.isReserve,
-                  data.riskStatus,
-                  data.isSpecialSettle
-                )?.status as keyof typeof betStatusMap
+              getStatus(
+                data.status,
+                data.billStatus,
+                data.betResult,
+                data.isReserve,
+                data.riskStatus,
+                data.isSpecialSettle
+              )?.status as keyof typeof betStatusMap
               ];
             break;
           case 'billStatus':
             str =
               betStatusMap[
-                getStatus(
-                  data.status,
-                  data.billStatus,
-                  data.betResult,
-                  data.isReserve,
-                  data.riskStatus,
-                  data.isSpecialSettle
-                )?.status as keyof typeof betStatusMap
+              getStatus(
+                data.status,
+                data.billStatus,
+                data.betResult,
+                data.isReserve,
+                data.riskStatus,
+                data.isSpecialSettle
+              )?.status as keyof typeof betStatusMap
               ];
             break;
           case 'settleScore':
@@ -329,6 +331,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
       type: 'success'
     });
   };
+
   const handleCancel = (data: any) => {
     ElMessageBox.confirm(t('确定取消注单吗？'), t('警告'), {
       center: true,
@@ -442,8 +445,8 @@ export function useBettingCenterHook(category: number, venueType: number) {
     const success = copyTextToClipboard(str.toString());
     success
       ? message(t('复制{value}成功!', { value: tip || str || '' }), {
-          type: 'success'
-        })
+        type: 'success'
+      })
       : message(t('复制失败'), { type: 'error' });
   }
 
