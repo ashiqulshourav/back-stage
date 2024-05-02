@@ -73,7 +73,8 @@ export function useBettingCenterHook(category: number, venueType: number) {
     maxBetAmount: '',
     minProfitAmount: '',
     maxProfitAmount: '',
-    riskControlLabelList: []
+    riskControlLabelList: [],
+    venueType: venueType
   });
   function handlePageSizeChange(val: number) {
     pagination.pageSize = val;
@@ -93,22 +94,22 @@ export function useBettingCenterHook(category: number, venueType: number) {
     let seriesDetails: any = [];
     if (form.seriesType == 2) {
       if (form.seriesDetailsSingle.length) {
-        form.seriesDetailsSingle.map((item: any) => {
+        form.seriesDetailsSingle.map((item: keyof typeof seriesTypesSingle) => {
           seriesDetails.push(...seriesTypesSingle[item].list);
         });
       } else {
         for (let item in seriesTypesSingle) {
-          seriesDetails.push(...seriesTypesSingle[item].list);
+          seriesDetails.push(...seriesTypesSingle[item as keyof typeof seriesTypesSingle].list);
         }
       }
     } else if (form.seriesType == 3) {
       if (form.seriesDetailsDuplex.length) {
-        form.seriesDetailsDuplex.map((item: any) => {
-          seriesDetails.push(...seriesTypesDuplex[item].list);
+        form.seriesDetailsDuplex.map((item: keyof typeof seriesTypesSingle) => {
+          seriesDetails.push(...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list);
         });
       } else {
         for (let item in seriesTypesDuplex) {
-          seriesDetails.push(...seriesTypesDuplex[item].list);
+          seriesDetails.push(...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list);
         }
       }
     } else {
@@ -203,7 +204,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
       formatParams({ pageNum: 1, pageSize: 50000 }) as searchFormType
     );
     const r = res.data.pageData.map((item: any, i) => {
-      const arr = [];
+      const arr: any[] = [];
       const data = { ...item, ...item?.combineOrderDetails[0] };
       columns.forEach((column: { prop: string }) => {
         let str = '';
