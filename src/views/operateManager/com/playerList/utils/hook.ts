@@ -24,6 +24,7 @@ export function userPlayerListHook(venueType: number, category: number) {
   const tenantList = reactive<
     { name: string; id: number; tenantName: string }[]
   >([]);
+  const tenantObj = reactive<any>({});
   const recordList = reactive<UserAPI.recordType[]>([]);
   const userData = reactive<UserAPI.operateUserList>(
     {} as UserAPI.operateUserList
@@ -197,6 +198,10 @@ export function userPlayerListHook(venueType: number, category: number) {
     });
     if (res.data?.length) {
       tenantList.push(...res?.data);
+      // 将数组根据id转换为对象
+      tenantList.map(item => {
+        tenantObj[item.id] = item;
+      });
     }
   };
 
@@ -291,6 +296,7 @@ export function userPlayerListHook(venueType: number, category: number) {
     handleCloseEditUser,
     dispatchLabelsDel,
     dispatchLabelsAdd,
-    dispatchUpdateUser
+    dispatchUpdateUser,
+    tenantObj
   };
 }
