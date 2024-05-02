@@ -136,7 +136,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     try {
-      const params: searchFormType = formatParams({}) as searchFormType;
+      const params: searchFormType = formatParams({export:false}) as searchFormType;
       if (Number(params.maxBetAmount) < Number(params.minBetAmount)) {
         message(t('请检查投注额，最小值不能大于最大值'), { type: 'warning' });
         return;
@@ -201,7 +201,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
   //- 导出excel表格
   const exportFile = async () => {
     const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
-      formatParams({ pageNum: 1, pageSize: 50000 }) as searchFormType
+      formatParams({ pageNum: 1, pageSize: 50000,export:true}) as searchFormType
     );
     const r = res.data.pageData.map((item: any, i) => {
       const arr: any[] = [];
