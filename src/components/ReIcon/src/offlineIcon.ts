@@ -37,7 +37,6 @@ import menuTree from '@iconify-icons/ri/list-unordered';
 import configCenter from '@iconify-icons/ri/settings-3-line';
 import TaskCenterIcon from '@iconify-icons/ri/apps-fill';
 import Download from '@iconify-icons/ep/download';
-import Export from '@iconify-icons/ci/file-download';
 
 addIcon("dataSourceManager", dataManager);
 addIcon("sale", sale);
@@ -52,7 +51,6 @@ addIcon("menuTree", menuTree);
 addIcon("configCenter", configCenter);
 addIcon("riskManagement", sale);
 addIcon("taskCenter", TaskCenterIcon);
-addIcon("download", Download);
 
 /* 菜单icon结束 */
 
@@ -79,3 +77,4 @@ addIcon("editPen", EditPen);
 addIcon("deleteBin_5Line", deleteBin_5Line);
 addIcon("Delete", Delete);
 addIcon("loadingIcon", loading);
+addIcon("download", Download);

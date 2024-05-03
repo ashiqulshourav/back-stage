@@ -39,6 +39,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
   const riskLabelList = reactive<UserAPI.labelType[]>([])
   const UDialogFlag = ref<Boolean>(false);
   const loading = ref(true);
+  const downloading = ref(false)
   const totalInfo = reactive<BetOrderAPI.otherDataType>(
     {} as BetOrderAPI.otherDataType
   );
@@ -199,11 +200,11 @@ export function useBettingCenterHook(category: number, venueType: number) {
 
   //- 导出excel表格
   const exportFile = async () => {
-    loading.value = true;
+    downloading.value = true;
     const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
       formatParams({ pageNum: 1, pageSize: 50000 }) as searchFormType
     );
-    loading.value = false;
+    downloading.value = false;
     const r = res.data.pageData.map((item: any, i) => {
       const arr = [];
       const data = { ...item, ...item?.combineOrderDetails[0] };
@@ -514,5 +515,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
     editOrderRemark,
     riskLabelList,
     getOddStatus,
+    downloading,
   };
 }

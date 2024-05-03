@@ -7,6 +7,7 @@
       @exportFile="exportFile"
       :tenantList="tenantList"
       :riskLabelList="riskLabelList"
+      :downloading="downloading"
     />
 
     <PureTableBar
@@ -470,7 +471,8 @@ const {
   isShowCancel,
   editOrderRemark,
   riskLabelList,
-  getOddStatus
+  getOddStatus,
+  downloading
 } = useBettingCenterHook(props.category, props.venueType);
 </script>
 

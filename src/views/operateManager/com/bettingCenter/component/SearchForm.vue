@@ -244,15 +244,17 @@
           >
             {{ t('重置') }}
           </el-button>
-            <el-button
-              type="primary"
-              :icon="useRenderIcon(Download)"
-              :loading="loading"
-              v-if="hasAuth('EXPORT')"
-              @click="exportFile()"
-            >
-              {{ t('导出报表') }}
-            </el-button>
+          <el-button
+            type="primary"
+            v-if="hasAuth('EXPORT')"
+            @click="exportFile()"
+          >
+            <IconifyIconOffline
+              :icon="downloading ? 'loadingIcon' : 'download'"
+              :style="{marginRight: '6px', animation: downloading ? 'rotate 2s linear infinite' : 'none'}"
+            />
+            {{ t('导出报表') }}
+          </el-button>
         </el-form-item>
       </div>
     </div>
@@ -263,7 +265,6 @@
 import { t } from '@/plugins/i18n';
 import SearchIcon from '@iconify-icons/ep/search';
 import RefreshIcon from '@iconify-icons/ep/refresh';
-import Download from '@iconify-icons/ep/download';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import type { FormInstance } from 'element-plus';
 import dayjs from 'dayjs';
@@ -278,7 +279,8 @@ const props = defineProps<{
   loading: boolean;
   riskLabelList:UserAPI.labelType[];
   form: searchFormType;
-    tenantList:[]
+  tenantList: [];
+  downloading: boolean;
 }>();
 
 const formRef = ref();
