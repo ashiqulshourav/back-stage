@@ -1,108 +1,70 @@
 import { message } from '@/utils/message';
 import editForm from '../form.vue';
-import type { PaginationProps } from '@pureadmin/table';
-import { usePublicHooks } from '@/hooks';
 import { columns } from '../component/TableColumnList';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import RoleTree from '../component/RoleTree.vue';
-import { NameData, SearchFormType } from './types';
+import { SearchFormType } from './types';
 import { ElMessageBox } from 'element-plus';
-import { useUserStore } from '@/store/user';
 
 export function useRoleHook() {
-  const dataList = reactive<RoleAPI.querySysAccountListData[]>([]);
+  const dataList = reactive<RoleAPI.queryRoleList[]>([]);
   const loading = ref(true);
   const whiteFormRef = ref(true);
-  const switchLoadMap = ref({});
-  const { switchStyle } = usePublicHooks();
-  const pagination = reactive<PaginationProps>({
-    total: 0,
-    pageSize: 10,
-    currentPage: 1,
-    background: true
-  });
+  const expandRoeList = reactive<string[]>([]);
+
   const form = reactive<SearchFormType>({
     name: '',
     createdBy: '',
     status: ' ',
-    startCreatedAt: '',
-    endCreatedAt: ''
+    createFrom: '',
+    createEnd: ''
   });
 
-  const handleTableWidthChange = (val: number) => {
-    pagination.pageSize = val;
-    onSearch();
-  };
-
-  const handleCurrentChange = (val: number) => {
-    pagination.currentPage = val;
-    onSearch();
+  //- 改变状态类型
+  const changeStatusType = (list: RoleAPI.queryRoleList[]) => {
+    list.forEach(item => {
+      if (item.subRoleNodeList?.length) {
+        changeStatusType(item.subRoleNodeList);
+      }
+      item.status = !!item.status;
+    });
   };
 
   //- 初始化
-  const onSearch = async (type?: string) => {
-    const userStore = useUserStore();
+  const onSearch = async () => {
     try {
-      if (type === 'reload') pagination.currentPage = 1;
       loading.value = true;
       const res = await API.querySysAccountList({
-        ...removeEmptyStringKeys(form),
-        pageSize: pagination.pageSize,
-        pageNum: pagination.currentPage
+        ...removeEmptyStringKeys({
+          ...form
+        })
       });
+
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
-      res.data.list.forEach(item => (item.status = !!item.status));
+      changeStatusType(res.data);
       dataList.length = 0;
-      dataList.push(...res.data.list);
+      dataList.push(...res.data);
       dataList.forEach(item => {
-        if (item.id === NameData.adminId) {
-          item.disabled = userStore.userInfo.name !== NameData.admin;
-        } else {
-          item.disabled = false;
-        }
+        expandRoeList.push(item.id.toString());
       });
-      pagination.total = res.data.total;
     } catch (error) {
       loading.value = false;
     }
   };
 
-  const changeOpenStatus = async (row: RoleAPI.querySysAccountListData) => {
-    const res = await API.updateRoleStatus({
-      status: +row.status === 0 ? 1 : 0,
-      roleId: row.id
-    });
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    if (!res.code) onSearch();
-  };
-
   //- 修改启用状态
-  const updateUserStatus = async (row: RoleAPI.querySysAccountListData) => {
-    if (row.userCount > 0 && +row.status === 1) {
-      return ElMessageBox.confirm(
-        <div class="text-center">
-          {t(
-            '该角色下仍有{n}个用户,禁用此角色将导致这些用户无法访问系统。是否继续?',
-            { n: row.userCount }
-          )}
-        </div>,
-        t('操作提示'),
-        {
-          center: true,
-          type: 'warning'
-        }
-      )
-        .then(async () => {
-          await changeOpenStatus(row);
-          return Promise.resolve(true);
-        })
-        .catch(() => Promise.reject());
-    } else {
-      return ElMessageBox.confirm(
+  const updateUserStatus = async (row: RoleAPI.queryRoleList) => {
+    return new Promise<boolean>((resolve, reject) => {
+      ElMessageBox.confirm(
         +row.status === 1
-          ? t('确定要关闭当前角色么？')
+          ? row.userCount
+            ? t(
+                '该角色下仍有{n}个用户，禁用此角色将导致这些用户无法访问系统。是否继续?',
+                { n: row.userCount }
+              )
+            : t('确定要关闭当前角色么？')
           : t('确定开启当前角色么?'),
         t('警告'),
         {
@@ -111,18 +73,24 @@ export function useRoleHook() {
         }
       )
         .then(async () => {
-          changeOpenStatus(row);
-          return Promise.resolve(true);
+          const res = await API.updateRoleStatus({
+            status: +row.status === 0 ? 1 : 0,
+            roleId: row.id
+          });
+          if (res.code) {
+            reject();
+          } else {
+            resolve(true);
+            onSearch();
+          }
+          message(res.msg, { type: res.code ? 'error' : 'success' });
         })
-        .catch(() => Promise.reject());
-    }
+        .catch(reject);
+    });
   };
 
   //- 角色弹窗
-  function openRoleDialog(
-    title: string,
-    row?: RoleAPI.querySysAccountListData
-  ) {
+  function openRoleDialog(title: string, row?: RoleAPI.queryRoleList) {
     addDialog({
       title,
       width: '30%',
@@ -132,13 +100,16 @@ export function useRoleHook() {
       contentRenderer: ({ options, index }) =>
         h(editForm, {
           row: {
+            id: row?.id ?? '',
             roleName: row?.name ?? '',
             status: row?.status ?? true,
             comment: row?.comment ?? '',
-            roleId: row?.id ?? ''
+            roleId: row?.id ?? '',
+            dept: row?.dept ?? '',
+            parentId: row?.parentId ?? ''
           },
           onCloseDialog: (closeType?: string) => {
-            if (closeType) onSearch('reload');
+            if (closeType) onSearch();
             closeDialog(options, index);
           }
         })
@@ -146,36 +117,37 @@ export function useRoleHook() {
   }
 
   //- 删除角色
-  const handleDelete = (row: RoleAPI.querySysAccountListData) => {
-    if (row.userCount > 0) {
-      ElMessageBox.confirm(
-        t('角色底下还有{n}个用户不可删除!', { n: row.userCount }),
-        t('操作无效'),
-        {
-          confirmButtonText: t('朕知道了'),
-          showCancelButton: false,
-          center: true
-        }
-      );
-    } else {
-      ElMessageBox.confirm(
-        `<div class="text-center">
+  const handleDelete = (row: RoleAPI.queryRoleList) => {
+    ElMessageBox.confirm(
+      `<div class="text-center">
        <p>${t('确定要删除角色')}${row.name}</br></p>
       <p>${t('角色删除后不可恢复')}</p>
       </div>`,
-        t('警告'),
+      t('警告'),
+      {
+        confirmButtonText: t('提交'),
+        cancelButtonText: t('取消'),
+        center: true,
+        dangerouslyUseHTMLString: true
+      }
+    ).then(async () => {
+      const res = await API.deleteRole({ roleId: row.id });
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if (!res.code) onSearch();
+    });
+    /*   if (row.userCount > 0) {
+      ElMessageBox.confirm(
+        t("角色底下还有{n}个用户不可删除!", { n: row.userCount }),
+        t("操作无效"),
         {
-          confirmButtonText: t('提交'),
-          cancelButtonText: t('取消'),
-          center: true,
-          dangerouslyUseHTMLString: true
+          confirmButtonText: t("朕知道了"),
+          showCancelButton: false,
+          center: true
         }
-      ).then(async () => {
-        const res = await API.deleteRole({ roleId: row.id });
-        message(res.msg, { type: res.code ? 'error' : 'success' });
-        if (!res.code) onSearch();
-      });
-    }
+      )
+    } else {
+      
+    } */
   };
 
   //- 权限设置弹窗
@@ -204,16 +176,12 @@ export function useRoleHook() {
     loading,
     columns,
     dataList,
-    pagination,
-    onSearch,
-    handleTableWidthChange,
-    switchLoadMap,
-    handleCurrentChange,
-    openRoleDialog,
-    switchStyle,
     form,
+    onSearch,
+    openRoleDialog,
     openRoleSettingDialog,
     updateUserStatus,
-    handleDelete
+    handleDelete,
+    expandRoeList
   };
 }

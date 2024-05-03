@@ -32,117 +32,117 @@
       </template>
     </el-tree>
     <div class="flex justify-end">
-      <el-button @click="closeDialog">{{ t('取消') }}</el-button>
-      <el-button type="primary" @click="saveRole">{{ t('保存') }}</el-button>
+      <el-button @click="closeDialog">{{ t("取消") }}</el-button>
+      <el-button type="primary" @click="saveRole">{{ t("保存") }}</el-button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import ElTreeLine from '@/components/ReTreeLine';
-import { t } from '@/plugins/i18n';
-import { message } from '@/utils/message';
+import ElTreeLine from "@/components/ReTreeLine"
+import { t } from "@/plugins/i18n"
+import { message } from "@/utils/message"
 
-defineOptions({ name: 'menuTree' });
-const treeRef = ref();
-const selectAll = ref(false);
-const emits = defineEmits(['closeDialog']);
-const defaultKeyList = reactive<number[]>([]);
-const loading = ref(false);
+defineOptions({ name: "menuTree" })
+const treeRef = ref()
+const selectAll = ref(false)
+const emits = defineEmits(["closeDialog"])
+const defaultKeyList = reactive<number[]>([])
+const loading = ref(false)
 
 const dataProps = {
-  value: 'id',
-  children: 'childResourceList'
-};
-const menusData = reactive<RoleAPI.ChildResourceList[]>([]);
+  value: "id",
+  children: "childResourceList"
+}
+const menusData = reactive<RoleAPI.ChildResourceList[]>([])
 
 const { roleId } = defineProps<{
-  roleId: number;
-}>();
+  roleId: number
+}>()
 
 onMounted(() => {
-  initTreeList();
-});
+  initTreeList()
+})
 
-const closeDialog = () => emits('closeDialog');
+const closeDialog = () => emits("closeDialog")
 
 const initTreeList = async () => {
-  loading.value = true;
-  const res = await API.allPermissionList({ roleId });
-  loading.value = false;
-  if (res.code) return message(res.msg, { type: 'error' });
-  menusData.length = 0;
-  menusData.push(...res.data);
-  defaultKeyList.length = 0;
-  filterHalfChecked(menusData);
-  checkIsInitSelected(menusData);
+  loading.value = true
+  const res = await API.allPermissionList({ roleId })
+  loading.value = false
+  if (res.code) return message(res.msg, { type: "error" })
+  menusData.length = 0
+  menusData.push(...res.data)
+  defaultKeyList.length = 0
+  filterHalfChecked(menusData)
+  checkIsInitSelected(menusData)
   nextTick(() => {
-    treeRef.value!.setCheckedKeys(defaultKeyList);
-  });
-};
+    treeRef.value!.setCheckedKeys(defaultKeyList)
+  })
+}
 
 //- 判断是否为半选中状态
 const filterHalfChecked = menusData => {
   menusData.forEach(item => {
     if (item.childResourceList.length) {
-      filterHalfChecked(item.childResourceList);
-      item.resourceFlag = item.childResourceList.every(_ => _.resourceFlag);
+      filterHalfChecked(item.childResourceList)
+      item.resourceFlag = item.childResourceList.every(_ => _.resourceFlag)
     }
-  });
-};
+  })
+}
 
 //- 判断是否初始化被选中
 const checkIsInitSelected = (list: RoleAPI.ChildResourceList[]) => {
   list.forEach(item => {
     if (item.childResourceList.length) {
-      checkIsInitSelected(item.childResourceList);
+      checkIsInitSelected(item.childResourceList)
     }
-    if (!!item.resourceFlag) defaultKeyList.push(item.id);
-  });
-};
+    if (!!item.resourceFlag) defaultKeyList.push(item.id)
+  })
+}
 
 //- 保存选中内容
 const saveRole = async () => {
   const resourceList = treeRef
     .value!.getCheckedNodes(false, true)
-    .map(item => item.id);
+    .map(item => item.id)
 
   const res = await API.updateRoleResource({
     roleId,
     resourceList
-  });
-  message(res.msg, { type: res.code ? 'error' : 'success' });
-  if (!res.code) closeDialog();
-};
+  })
+  message(res.msg, { type: res.code ? "error" : "success" })
+  if (!res.code) closeDialog()
+}
 
 //- 获取所有的子节点
 const getAllNodeKeys = node => {
-  let keys = [node.id];
+  let keys = [node.id]
   if (node.childResourceList && node.childResourceList.length > 0) {
     node.childResourceList.forEach(child => {
-      keys = keys.concat(getAllNodeKeys(child));
-    });
+      keys = keys.concat(getAllNodeKeys(child))
+    })
   }
-  return keys;
-};
+  return keys
+}
 
 //- 全选按钮点击
 const checkAllClick = (status: boolean) => {
-  const allKeys = [];
+  const allKeys = []
   menusData.forEach(node => {
-    allKeys.push(...getAllNodeKeys(node));
-  });
-  treeRef.value!.setCheckedKeys(status ? allKeys : []);
-};
+    allKeys.push(...getAllNodeKeys(node))
+  })
+  treeRef.value!.setCheckedKeys(status ? allKeys : [])
+}
 
 const handleCheckChange = () => {
-  const keys = treeRef.value!.getCheckedKeys();
-  const allKeys = [];
+  const keys = treeRef.value!.getCheckedKeys()
+  const allKeys = []
   menusData.forEach(node => {
-    allKeys.push(...getAllNodeKeys(node));
-  });
-  selectAll.value = keys.length === allKeys.length;
-};
+    allKeys.push(...getAllNodeKeys(node))
+  })
+  selectAll.value = keys.length === allKeys.length
+}
 </script>
 
 <style lang="scss" scoped>

@@ -22,7 +22,6 @@
         :check-on-click-node="true"
         :check-strictly="true"
         :expand-on-click-node="false"
-        @change="selectChange"
         :props="{
           label: 'name',
           children: 'subNodeList',
@@ -30,25 +29,6 @@
         }"
       >
       </el-tree-select>
-    </el-form-item>
-
-    <el-form-item
-      :label="`${t('商户ID')}:`"
-      prop="tenantId"
-      v-if="isShowTenantId"
-    >
-      <el-select
-        :disabled="!!newFormInline.id"
-        v-model="newFormInline.tenantId"
-        :placeholder="t('请输入商户ID')"
-      >
-        <el-option
-          :label="item.name"
-          :value="item.id"
-          v-for="item in configurableTenantList"
-          :key="item.id"
-        />
-      </el-select>
     </el-form-item>
 
     <el-form-item :label="`${t('状态')}:`" prop="status">
@@ -73,97 +53,82 @@
     </el-form-item>
 
     <div class="flex justify-end">
-      <el-button @click="closeDialog">{{ t("取消") }}</el-button>
+      <el-button @click="closeDialog">{{ t('取消') }}</el-button>
       <el-button type="primary" @click="confirmClick">{{
-        t("确定")
+        t('确定')
       }}</el-button>
     </div>
   </el-form>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
-import { formRules } from "./utils/rule"
-import { t } from "@/plugins/i18n"
-import { usePublicHooks } from "@/hooks"
-import { FormInstance } from "element-plus/es/components/form"
-import { message } from "@/utils/message"
-import { removeEmptyStringKeys } from "@/utils/utilFn"
+import { ref } from 'vue';
+import { formRules } from './utils/rule';
+import { t } from '@/plugins/i18n';
+import { usePublicHooks } from '@/hooks';
+import { FormInstance } from 'element-plus/es/components/form';
+import { message } from '@/utils/message';
+import { removeEmptyStringKeys } from '@/utils/utilFn';
 
-const { switchStyle } = usePublicHooks()
+const { switchStyle } = usePublicHooks();
 
 const { row } = defineProps<{
-  row: UserMangerAPI.addDepartmentReqType
-}>()
+  row: UserMangerAPI.addDepartmentReqType;
+}>();
 
-const emits = defineEmits(["closeDialog"])
-const isShowTenantId = ref(false)
+const emits = defineEmits(['closeDialog']);
 const configurableTenantList = reactive<UserMangerAPI.configurableTenantData[]>(
   []
-)
+);
 
 onMounted(() => {
-  getPreDetartmentList()
-  getConfigurableTenant()
-})
-
-watch(
-  () => row,
-  () => {
-    if (row.parentId === 0) isShowTenantId.value = true
-  },
-  {
-    deep: true,
-    immediate: true
-  }
-)
+  getPreDetartmentList();
+});
 
 // - 获取商户ID列表
 const getConfigurableTenant = async () => {
-  const res = await API.configurableTenant()
-  if (res.code) return
-  configurableTenantList.length = 0
-  configurableTenantList.push(...res.data)
-}
+  const res = await API.configurableTenant();
+  if (res.code) return;
+  configurableTenantList.length = 0;
+  configurableTenantList.push(...res.data);
+};
 
-const departmentList = reactive<UserMangerAPI.querySubDeptWithoutSelfData[]>([])
+const departmentList = reactive<UserMangerAPI.querySubDeptWithoutSelfData[]>(
+  []
+);
 
 const getPreDetartmentList = async () => {
-  const res = await API.querySubDeptWithoutSelf()
-  if (res.code) return
-  departmentList.length = 0
-  departmentList.push(...res.data)
-}
+  const res = await API.querySubDeptWithoutSelf();
+  if (res.code) return;
+  departmentList.length = 0;
+  departmentList.push(...res.data);
+};
 
-const ruleFormRef = ref<FormInstance>()
-const newFormInline = reactive(row)
-newFormInline.status = !!newFormInline.status
+const ruleFormRef = ref<FormInstance>();
+const newFormInline = reactive(row);
+newFormInline.status = !!newFormInline.status;
 
 const closeDialog = () => {
-  emits("closeDialog")
-}
-
-const selectChange = (n: number) => {
-  isShowTenantId.value = n === 0
-}
+  emits('closeDialog');
+};
 
 const confirmClick = () => {
   ruleFormRef.value.validate(async v => {
-    const requestAPI = newFormInline.id ? "updateDepartment" : "addDepartment"
+    const requestAPI = newFormInline.id ? 'updateDepartment' : 'addDepartment';
     if (v) {
       const res = await API[requestAPI]({
         ...(removeEmptyStringKeys(
           newFormInline
         ) as UserMangerAPI.addDepartmentReqType),
         status: Number(newFormInline.status)
-      })
-      message(res.msg, { type: res.code ? "error" : "success" })
-      emits("closeDialog", res.code ? "" : "reloadTable")
+      });
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      emits('closeDialog', res.code ? '' : 'reloadTable');
     }
-  })
-}
+  });
+};
 
-defineExpose({ newFormInline })
+defineExpose({ newFormInline });
 </script>
 
 <style lang="scss"></style>
