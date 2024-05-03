@@ -30,7 +30,6 @@ export function useRiskControlHook({
 
   const dispatchGetLabelList = async () => {
     try {
-      console.log('hit');
       const res = await API.getLabelList({
         category: venueType
       });
@@ -51,8 +50,6 @@ export function useRiskControlHook({
     loading.value = true;
     const res = await API.getAutoLimitConfigList();
 
-    console.log({ res });
-
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
     riskControlList.length = 0;
@@ -68,7 +65,6 @@ export function useRiskControlHook({
   };
 
   const changeType = (id: number) => {
-    console.log('aa', id);
     currentRiskControlLabelId.value = id;
     if (currentRiskControlLabelId.value == 3) {
       cancelRiskControlsEdit();
