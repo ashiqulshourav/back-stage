@@ -86,13 +86,14 @@
           />
         </el-select>
 
-        <el-tag
-          v-else
-          :style="`background-color: ${getLabelColor(row.level, 'risk')}`"
-          class="rounded-lg w-full py-1 text-white text-center"
-        >
-          {{ row.lableName }}
-        </el-tag>
+        <div class="custom" v-else>
+          <el-tag
+            :style="`background-color: ${getLabelColor(row.level, 'attr')}`"
+            class="rounded-lg w-full py-1 text-white text-center"
+          >
+            <span class="text-white">{{ row.lableName }}</span>
+          </el-tag>
+        </div>
       </template>
     </pure-table>
 
@@ -145,4 +146,12 @@ onMounted(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.custom {
+  flex: 0 0 0;
+  max-width: unset;
+  .el-tag__content {
+    color: white;
+  }
+}
+</style>
