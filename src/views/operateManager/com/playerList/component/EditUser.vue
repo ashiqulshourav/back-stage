@@ -162,8 +162,8 @@
           inactive-color="#a6a6a6"
           active-text="开"
           inactive-text="关"
-          :active-value="1"
-          :inactive-value="0"
+          :active-value="0"
+          :inactive-value="1"
         />
       </el-form-item>
       <el-form-item :label="t('限额等级设置：')" prop="type">
