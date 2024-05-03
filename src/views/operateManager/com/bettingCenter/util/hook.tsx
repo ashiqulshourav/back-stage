@@ -314,10 +314,12 @@ export function useBettingCenterHook(category: number, venueType: number) {
       });
       return arr;
     });
-    const titleList = [];
-    columns.forEach(column => {
+    const titleList:string[] = [];
+    columns.forEach((column:{label:string}) => {
       titleList.push(column.label);
     });
+
+    console.log(11111,titleList)
     r.unshift(titleList);
     const workBook = utils.book_new();
     const workSheet = utils.aoa_to_sheet(r);
@@ -354,9 +356,9 @@ export function useBettingCenterHook(category: number, venueType: number) {
     status: number,
     billStatus: number,
     betResult: number,
-    isReserve?: number,
+    isReserve: number,
     riskStatus?: number,
-    isSpecialSettle: number
+    isSpecialSettle?: number
   ) => {
     let obj = { status: -1, bgColor: '' };
     if (isSpecialSettle === 1) {
@@ -407,7 +409,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     if (riskSt === riskStatus.reject || riskSt === riskStatus.autoReject) {
       return '无效注单';
     } else {
-      return BET_RESULT_TYPE_MAP[betResult] || '';
+      return BET_RESULT_TYPE_MAP[betResult as keyof typeof BET_RESULT_TYPE_MAP]  || '';
     }
   };
 
@@ -450,9 +452,9 @@ export function useBettingCenterHook(category: number, venueType: number) {
       : message(t('复制失败'), { type: 'error' });
   }
 
-  const isShowCancel = row => {
+  const isShowCancel = (row:BetOrderAPI.BetOrderList) => {
     let flag = true;
-    row.combineOrderDetails.map(item => {
+    row.combineOrderDetails.map((item: BetOrderAPI.Detail )=> {
       if (
         item.riskStatus === riskStatus.rejectBetting ||
         item.riskStatus === riskStatus.reject ||
