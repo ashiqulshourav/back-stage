@@ -125,10 +125,9 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item prop="" label="日期范围选择:">
+<!--      <el-form-item prop="" label="日期范围选择:">
         <Custom_date v-model:val="selectDate" @changeDate="changeDate" />
-      </el-form-item>
-
+      </el-form-item>-->
       <el-form-item>
         <el-button
           type="primary"
