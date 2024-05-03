@@ -1,4 +1,3 @@
-// import editForm from '../form.vue';
 import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted } from 'vue';
@@ -7,7 +6,6 @@ import {
   recordFormType,
   searchFormType,
   labelListType,
-  tenantType,
   updateUserFormType
 } from './types';
 import { FormInstance } from 'element-plus';

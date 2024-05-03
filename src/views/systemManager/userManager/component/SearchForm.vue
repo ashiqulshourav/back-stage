@@ -81,7 +81,7 @@ const formRef = ref();
 const emits = defineEmits(['onSearch']);
 
 const resetForm = (formEl: FormInstance | undefined) => {
-  formEl.resetFields();
+  formEl?.resetFields();
   form.startCreatedAt = '';
   form.endCreatedAt = '';
   selectDate.value = '';
@@ -92,7 +92,7 @@ const search = () => {
   emits('onSearch', ...['reload']);
 };
 
-const changeDate = t => {
+const changeDate = (t?: string[]) => {
   if (!t) {
     form.startCreatedAt = '';
     form.endCreatedAt = '';
