@@ -85,7 +85,14 @@
             :key="idx"
           />
         </el-select>
-        <span v-else> {{ row.lableName }}</span>
+
+        <el-tag
+          v-else
+          :style="`background-color: ${getLabelColor(row.level, 'risk')}`"
+          class="rounded-lg w-full py-1 text-white text-center"
+        >
+          {{ row.lableName }}
+        </el-tag>
       </template>
     </pure-table>
 
@@ -112,6 +119,7 @@ import {
   formatNumberWithLength
 } from '@/utils/formatNumber';
 import { labelListType } from '@/views/operateManager/com/playerList/utils/types';
+import { getLabelColor } from '@/components/RiskLabelList/utils';
 
 const sportLimmitList = reactive<string[]>([]);
 
