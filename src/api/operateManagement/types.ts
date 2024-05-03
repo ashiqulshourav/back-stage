@@ -22,6 +22,18 @@ declare namespace OperateManagementDataAPI {
     current?: number;
     pages?: number;
   };
+
+  type BetBalanceType = {
+    userName: string;
+    userId: string;
+    matchId: string;
+    matchMaxWinLimit: string;
+    seriesType1DayMaxLimit: string;
+    seriesType2DayMaxLimit: string;
+    championDayMaxLimit: string;
+  }
+
   type OperateTagListRes = COMMON.BASE_RES_TYPE<OperateTagListType>;
   type OperateTagRes = COMMON.BASE_RES_TYPE<OperateTagType>;
+  type BetBalanceRes = COMMON.BASE_RES_TYPE<BetBalanceType>;
 }

@@ -53,9 +53,10 @@ const {
 } = bettingBalanceInquiryHook();
 
 const dynamicColumns = computed(() => {
-  columns[4].hide = form.id !== '' && form.userName === '' && dataList.length !== 0;
+  columns[4].hide = form.userId !== '' && form.matchId === '' && dataList.length !== 0;
   return columns;
 });
+console.log('###dataList', dataList)
 </script>
 
 <style>
