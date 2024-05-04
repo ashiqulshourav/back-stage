@@ -90,8 +90,8 @@ export function useRiskControlHook({
           ...item,
           days: parseInt(item.days || 0),
           betcount: parseInt(item.betcount || 0),
-          profitAmout: parseInt(item.profitAmout || 0),
-          profitRate: parseInt(item.profitRate || 0)
+          profitAmout: parseInt(item.profiteAmout || 0),
+          profitRate: parseInt(item.profiteRate || 0)
         }));
 
       const res = await API.updateAutoLimitConfig([
@@ -111,11 +111,11 @@ export function useRiskControlHook({
       name: undefined,
       days: undefined,
       betcount: undefined,
-      profitAmout: undefined,
-      profitRate: undefined,
+      profiteAmout: undefined,
+      profiteRate: undefined,
       level: undefined,
       labelId: undefined,
-      labelName: undefined
+      lableName: undefined
     });
   };
 
@@ -129,6 +129,7 @@ export function useRiskControlHook({
     async () => {
       // 自动标签限额 - auto label limit
       if (currentRiskControlLabelId.value == 3) {
+        console.log('hit');
         await dispatchGetLabelList();
         await onSearch();
       }
