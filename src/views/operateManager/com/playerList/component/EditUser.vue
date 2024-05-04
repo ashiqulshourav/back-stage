@@ -162,8 +162,8 @@
           inactive-color="#a6a6a6"
           active-text="开"
           inactive-text="关"
-          :active-value="1"
-          :inactive-value="0"
+          :active-value="0"
+          :inactive-value="1"
         />
       </el-form-item>
       <el-form-item :label="t('限额等级设置：')" prop="type">
@@ -195,31 +195,31 @@
       </el-form-item>
       <el-form-item v-if="isSpecial">
         <el-row :gutter="5" class="w-full items-center">
-          <el-col :span="6" class="text-center">
+          <el-col :span="5" class="text-center">
             <el-text>{{ t('单注投注限额') }}</el-text>
           </el-col>
-          <el-col :span="6" class="text-center">
+          <el-col :span="5" class="text-center">
             <el-text>{{ t('单注赔付限额') }}</el-text>
           </el-col>
-          <el-col :span="6" class="text-center">
-            <el-text>{{ t('单场赛事累计赔付限额 (不分早盘滚球)') }}</el-text>
+          <el-col :span="7" class="text-center">
+            <el-text>{{ t('单场赛事累计赔付限额(不分早盘滚球)') }}</el-text>
           </el-col>
-          <el-col :span="6" class="text-center">
-            <el-text>{{ t('串关单日累计赔付限额 (不分早盘滚球)') }}</el-text>
+          <el-col :span="7" class="text-center">
+            <el-text>{{ t('串关单日累计赔付限额(不分早盘滚球)') }}</el-text>
           </el-col>
-          <el-col :span="6" class="text-center">
+          <el-col :span="5" class="text-center">
             <el-input
               v-model="form.specialLimit.productAmountTotalLimit"
               :formatter="(v: string) => formatNumber(v, 13)"
             />
           </el-col>
-          <el-col :span="6" class="text-center">
+          <el-col :span="5" class="text-center">
             <el-input
               v-model="form.specialLimit.maxWinAmountLimit"
               :formatter="(v: string) => formatNumber(v, 13)"
             />
           </el-col>
-          <el-col :span="6" class="text-center">
+          <el-col :span="7" class="text-center">
             <el-input
               v-model="
                 form.specialLimit.singleEventAccumulatedCompensationLimit
@@ -227,7 +227,7 @@
               :formatter="(v: string) => formatNumber(v, 13)"
             />
           </el-col>
-          <el-col :span="6" class="text-center">
+          <el-col :span="7" class="text-center">
             <el-input
               v-model="
                 form.specialLimit.seriesSingleDayCumulativeCompensationLimit
@@ -299,11 +299,11 @@ const limitList = reactive<UserAPI.UserLevelLimitListRes[]>([]);
 
 const limitColumns: TableColumnList = [
   {
-    label: t('单注限额'),
+    label: t('单注投注限额'),
     prop: 'productAmountTotalLimit'
   },
   {
-    label: t('单注赔付'),
+    label: t('单注赔付限额'),
     prop: 'maxWinAmountLimit'
   },
   {
@@ -474,12 +474,35 @@ const handleUpdate = () => {
         (item: UserAPI.labelType) => !updatedLabels.attr.includes(item)
       )
     );
-    console.log(deletedLabels);
     const deletedIds: number[] = [];
     deletedLabels.forEach((item: UserAPI.labelType) => {
       deletedIds.push(item.id);
     });
     if (deletedIds.length !== 0) emits('onDel', [form.id], deletedIds);
+    const { productAmountTotalLimit, maxWinAmountLimit, singleEventAccumulatedCompensationLimit, seriesSingleDayCumulativeCompensationLimit } = form.specialLimit;
+    if (isSpecial.value && (!productAmountTotalLimit || !maxWinAmountLimit || !singleEventAccumulatedCompensationLimit || !seriesSingleDayCumulativeCompensationLimit)) {
+      message(t('必须设置所有限额才能保存'), { type: 'error' });
+      return;
+    }
+    if (isSpecial.value && (productAmountTotalLimit && maxWinAmountLimit && singleEventAccumulatedCompensationLimit && seriesSingleDayCumulativeCompensationLimit)) {
+      const {productAmountTotalLimit:plimit,maxWinAmountLimit: maxlimit,userSingleGamePay,bunchMatchPay} = tableData.value[0];
+      if (productAmountTotalLimit> plimit) {
+        message(t('单注投注限额不能大于等级限额'), { type: 'error' });
+        return;
+      }
+      if (maxWinAmountLimit> maxlimit) {
+        message(t('单注赔付限额不能大于等级限额'), { type: 'error' });
+        return;
+      }
+      if (singleEventAccumulatedCompensationLimit> userSingleGamePay) {
+        message(t('单场赛事累计赔付限额不能大于等级限额'), { type: 'error' });
+        return;
+      }
+      if (seriesSingleDayCumulativeCompensationLimit> bunchMatchPay) {
+        message(t('串关单日累计赔付限额不能大于等级限额'), { type: 'error' });
+        return;
+      }
+    }
     if (isSpecial.value) {
       form.specialLimit.productAmountTotalLimit = parseInt(
         form.specialLimit.productAmountTotalLimit

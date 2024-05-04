@@ -15,36 +15,61 @@
       />
     </el-form-item>
 
-    <el-form-item :label="t('所属部门')" prop="dept">
-      <el-select v-model="newFormInline.dept" filterable clearable>
-        <el-option
-          v-for="item in depList"
-          :key="item.key"
-          :label="item.val"
-          :value="item.key.toString()"
-        />
-      </el-select>
+    <el-form-item
+      :label="`${t('所属部门')}:`"
+      prop="dept"
+      required
+      v-if="userStore.userInfo.isAdmin === 1"
+    >
+      <el-tree-select
+        v-model="newFormInline.dept"
+        :data="departmentList"
+        default-expand-all="all"
+        :check-on-click-node="true"
+        :check-strictly="true"
+        :expand-on-click-node="false"
+        @change="selectChange"
+        :props="{
+          label: 'name',
+          children: 'subNodeList',
+          value: 'id'
+        }"
+      >
+      </el-tree-select>
     </el-form-item>
 
     <el-form-item :label="t('账号密码')" v-if="!row.id" prop="pwd">
       <div class="flex w-full items-center justify-between">
-        <div>{{newFormInline.pwd}}</div>
+        <div>{{ newFormInline.pwd }}</div>
         <div class="flex items-center">
           <el-button :icon="useRenderIcon(RefreshIcon)" @click="getPassword" />
-          <el-button type="primary" @click="copyPassword(newFormInline.pwd)">{{t(`复制默认密码`)}}</el-button>
+          <el-button type="primary" @click="copyPassword(newFormInline.pwd)">{{
+            t(`复制默认密码`)
+          }}</el-button>
         </div>
       </div>
     </el-form-item>
 
-    <el-form-item :label="t('所属角色')" prop="roleId">
-      <el-select v-model="newFormInline.roleId" filterable clearable>
-        <el-option
-          :label="item.name"
-          :value="item.id"
-          v-for="item in roleList"
-          :key="item.id"
-        />
-      </el-select>
+    <el-form-item
+      :label="t('所属角色')"
+      prop="roleId"
+      required
+      v-if="newFormInline.dept || userStore.userInfo.isAdmin !== 1"
+    >
+      <el-tree-select
+        v-model="newFormInline.roleId"
+        :data="roleList"
+        default-expand-all="all"
+        :check-on-click-node="true"
+        :check-strictly="true"
+        :expand-on-click-node="false"
+        :props="{
+          label: 'name',
+          children: 'subRoleNodeList',
+          value: 'id'
+        }"
+      >
+      </el-tree-select>
     </el-form-item>
 
     <el-form-item :label="t('U盾序列号')" prop="ukeyCode">
@@ -92,16 +117,19 @@ import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 import { FormInstance } from 'element-plus/es/components/form';
 import { message } from '@/utils/message';
-import { depList } from './utils/map';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { useResetPasswordHook } from '@/hooks/resetPasswordHook';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import RefreshIcon from '@iconify-icons/ep/refresh';
 import { getMD5 } from '@/utils/caypto';
+import { useUserStore } from '@/store/user';
 
 const { switchStyle } = usePublicHooks();
 const { getNewPassword, copyPassword } = useResetPasswordHook();
-
+const departmentList = reactive<UserMangerAPI.querySubDeptWithoutSelfData[]>(
+  []
+);
+const userStore = useUserStore();
 
 const { row } = defineProps<{
   row: UserMangerAPI.addSysAccountRes;
@@ -110,26 +138,50 @@ const { row } = defineProps<{
 const emits = defineEmits(['closeDialog']);
 
 onMounted(() => {
-  getRoleList();
+  init();
   if (!row.id) {
     getPassword();
   }
 });
+
+//- 部门更改
+const selectChange = (v: number) => {
+  getRoleList(v);
+};
+
+const init = async () => {
+  if (userStore.userInfo.isAdmin === 1) {
+    await getDepList();
+  } else {
+    getRoleList();
+  }
+  if (row.id) getRoleList(+row.dept);
+};
+
+//- 获取部门列表
+const getDepList = async () => {
+  const res = await API.querySubDeptWithoutSelf();
+  if (res.code) return message(res.msg, { type: 'error' });
+  if (userStore.userInfo.isAdmin === 1) {
+    res.data = res.data[0].subNodeList;
+  }
+  departmentList.length = 0;
+
+  departmentList.push(...res.data);
+};
 
 const getPassword = () => {
   const res = getNewPassword();
   newFormInline.pwd = res;
 };
 
-const roleList = reactive<RoleAPI.querySysAccountListData[]>([]);
-const getRoleList = async () => {
-  const res = await API.querySysAccountList({
-    pageNum: 1,
-    pageSize: 9999,
-    status: 1
-  });
+//- 角色列表获取
+const roleList = reactive<UserMangerAPI.subRoleListData[]>([]);
+const getRoleList = async (deptId?: number) => {
+  const res = await API.subRoleList({ deptId });
+  if (res.code) return message(res.msg, { type: 'error' });
   roleList.length = 0;
-  roleList.push(...res.data.list);
+  roleList.push(...res.data);
 };
 
 const ruleFormRef = ref<FormInstance>();
@@ -140,17 +192,15 @@ const closeDialog = () => {
 };
 
 const confirmClick = () => {
-  ruleFormRef.value.validate(async v => {
+  ruleFormRef.value?.validate(async v => {
     const requestAPI = newFormInline.id ? 'updateSysAccount' : 'addSysAccount';
     if (v) {
       const res = await API[requestAPI]({
-        ...(removeEmptyStringKeys(
-          {
-            ...newFormInline,
-            pwd: !row.id ? getMD5(newFormInline.pwd) : row.pwd,
-            flag: !row.id ? 1 : ''
-          }
-        ) as UserMangerAPI.addSysAccountRes),
+        ...(removeEmptyStringKeys({
+          ...newFormInline,
+          pwd: !row.id ? getMD5(newFormInline.pwd) : row.pwd,
+          flag: !row.id ? 1 : ''
+        }) as UserMangerAPI.addSysAccountRes),
         status: Number(newFormInline.status)
       });
       message(res.msg, { type: res.code ? 'error' : 'success' });

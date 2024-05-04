@@ -2,7 +2,7 @@
   <div class="main">
     <SearchForm :loading="loading" @onSearch="onSearch" :form="form" />
 
-    <PureTableBar :columns="columns" @refresh="onSearch('reload')">
+    <PureTableBar :columns="columns" @refresh="onSearch">
       <template #title>
         <el-button
           v-if="hasAuth('ROLEMANAGERADD')"
@@ -20,25 +20,26 @@
           :loading="loading"
           :size="size"
           adaptive
-          :show-overflow-tooltip="{}"
+          border
+          :row-key="row => row.id"
+          :expand-row-keys="expandRoeList"
           :data="dataList"
           :columns="dynamicColumns"
-          :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
-          :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
-          @page-size-change="handleTableWidthChange"
-          @page-current-change="handleCurrentChange"
+          :indent="32"
+          :tree-props="{
+            children: 'subRoleNodeList',
+            hasChildren: 'hasChildren'
+          }"
         >
-          <template #status="{ row }: { row: RoleAPI.querySysAccountListData }">
+          <template #status="{ row }: { row: RoleAPI.queryRoleList }">
             <el-switch
               v-model="row.status"
               :size="size"
               inline-prompt
-              v-if="hasAuth('ROLEMANAGERUPDATESTATUS')"
               class="pure-datatheme"
               :active-text="t('开启')"
               :inactive-text="t('关闭')"
-              :disabled="row.disabled"
               :before-change="() => updateUserStatus(row)"
               :style="switchStyle"
             />
@@ -49,7 +50,7 @@
               link
               type="primary"
               :size="size"
-              :disabled="row.disabled"
+              :disabled="row.disabled && userStore.userInfo.name !== 'armour'"
               @click="openRoleSettingDialog(row.id)"
             >
               {{ t('权限设置') }}
@@ -59,8 +60,8 @@
               class="reset-margin"
               link
               type="primary"
+              :disabled="row.disabled && userStore.userInfo.name !== 'armour'"
               :size="size"
-              :disabled="row.disabled"
               @click="openRoleDialog(t('编辑角色'), row)"
             >
               {{ t('编辑') }}
@@ -71,7 +72,7 @@
               link
               type="danger"
               :size="size"
-              :disabled="row.disabled"
+              :disabled="row.disabled && userStore.userInfo.name !== 'armour'"
               @click="handleDelete(row)"
             >
               {{ t('删除') }}
@@ -90,24 +91,24 @@ import SearchForm from './component/SearchForm.vue';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 import { hasAuth } from '@/router/utils';
+import { useUserStore } from '@/store/user';
 
 defineOptions({ name: 'SYSTEMMANAGER_ROLEMANAGER' });
 const { tableHeaderStyle } = usePublicHooks();
 const { switchStyle } = usePublicHooks();
+const userStore = useUserStore();
 
 const {
   loading,
   columns,
   dataList,
-  pagination,
-  onSearch,
-  handleTableWidthChange,
-  handleCurrentChange,
   form,
+  onSearch,
   openRoleDialog,
   openRoleSettingDialog,
   updateUserStatus,
-  handleDelete
+  handleDelete,
+  expandRoeList
 } = useRoleHook();
 </script>
 
@@ -119,10 +120,5 @@ const {
   :deep(.el-form-item) {
     margin-bottom: 12px;
   }
-}
-
-.role_table_tip {
-  margin: 0 50px;
-  padding: 100px;
 }
 </style>

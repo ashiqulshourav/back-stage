@@ -125,10 +125,9 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item prop="" label="日期范围选择:">
+<!--      <el-form-item prop="" label="日期范围选择:">
         <Custom_date v-model:val="selectDate" @changeDate="changeDate" />
-      </el-form-item>
-
+      </el-form-item>-->
       <el-form-item>
         <el-button
           type="primary"
@@ -142,15 +141,6 @@
           {{ t('重置') }}
         </el-button>
       </el-form-item>
-
-      <!-- <el-form-item>
-        <el-button v-if="hasAuth('EXPORT')" type="primary"
-          >批量编辑标签</el-button
-        >
-        <el-button v-if="hasAuth('EXPORT')" type="primary"
-          >导出用户列表</el-button
-        >
-      </el-form-item> -->
     </el-form>
   </div>
 </template>
@@ -160,7 +150,6 @@ import { ref } from 'vue';
 import { t } from '@/plugins/i18n';
 import { searchFormType } from '../utils/types';
 import Custom_date from '@/components/Form/Custom_date.vue';
-import { hasAuth } from '@/router/utils';
 import dayjs from 'dayjs';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import Search from '@iconify-icons/ep/search';

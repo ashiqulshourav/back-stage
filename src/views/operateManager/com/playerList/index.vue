@@ -237,7 +237,6 @@ const {
   display: flex;
   flex-direction: row;
 }
-
 .el-row {
   row-gap: 0.5rem;
 }

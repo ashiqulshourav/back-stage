@@ -266,7 +266,7 @@
                   )
                 }}
               </div>
-              <div>{{ markeTypeMap[item.marketType] }}</div>
+              <div>{{ markeTypeMap[(item.marketType )as keyof typeof markeTypeMap] }}</div>
               <div v-if="getOddStatus(item?.betResult,item.riskStatus)">
                 <span
                   :class="

@@ -54,10 +54,10 @@
           :loading="loading"
           @click="search()"
         >
-          {{ t('查询') }}
+          {{ t("查询") }}
         </el-button>
         <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
-          {{ t('重置') }}
+          {{ t("重置") }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -65,48 +65,48 @@
 </template>
 
 <script setup lang="ts">
-import { t } from '@/plugins/i18n';
-import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-import Refresh from '@iconify-icons/ep/refresh';
-import Search from '@iconify-icons/ep/search';
-import type { FormInstance } from 'element-plus';
-import { SearchFormType } from '../utils/types';
-import dayjs from 'dayjs';
+import { t } from "@/plugins/i18n"
+import { useRenderIcon } from "@/components/ReIcon/src/hooks"
+import Refresh from "@iconify-icons/ep/refresh"
+import Search from "@iconify-icons/ep/search"
+import type { FormInstance } from "element-plus"
+import { SearchFormType } from "../utils/types"
+import dayjs from "dayjs"
 
 const props = defineProps<{
-  loading: boolean;
-  form: SearchFormType;
-}>();
+  loading: boolean
+  form: SearchFormType
+}>()
 
-const formRef = ref<FormInstance>();
-const selectDate = ref('');
-const emits = defineEmits(['onSearch']);
+const formRef = ref<FormInstance>()
+const selectDate = ref("")
+const emits = defineEmits(["onSearch"])
 const resetForm = (formEl: FormInstance | undefined) => {
-  formEl.resetFields();
-  selectDate.value = '';
-  props.form.startCreatedAt = '';
-  props.form.endCreatedAt = '';
-  search();
-};
+  formEl.resetFields()
+  selectDate.value = ""
+  props.form.createFrom = ""
+  props.form.createEnd = ""
+  search()
+}
 
 const search = () => {
-  emits('onSearch', ...['reload']);
-};
+  emits("onSearch", ...["reload"])
+}
 
 const changeDate = t => {
   if (!t) {
-    props.form.startCreatedAt = '';
-    props.form.endCreatedAt = '';
+    props.form.createFrom = ""
+    props.form.createEnd = ""
   } else {
-    props.form.startCreatedAt = dayjs(t[0])
-      .startOf('day')
-      .format('YYYY-MM-DD HH:mm:ss');
-    props.form.endCreatedAt = dayjs(t[1])
-      .endOf('day')
-      .format('YYYY-MM-DD HH:mm:ss');
+    props.form.createFrom = dayjs(t[0])
+      .startOf("day")
+      .format("YYYY-MM-DD HH:mm:ss")
+    props.form.createEnd = dayjs(t[1])
+      .endOf("day")
+      .format("YYYY-MM-DD HH:mm:ss")
   }
-  search();
-};
+  search()
+}
 </script>
 
 <style scoped></style>
