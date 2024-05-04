@@ -26,5 +26,5 @@ export const getLabelLevelByName = (
   labelList: labelListType,
   lableName: string
 ) => {
-  return labelList.risk.filter(label => label.name == lableName)[0].level;
+  return labelList.risk.find(label => label.name == lableName)?.level;
 };
