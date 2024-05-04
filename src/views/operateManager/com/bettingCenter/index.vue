@@ -364,7 +364,7 @@
               <el-button
                 class="mb-1 w-100"
                 @click="switchDialog(true, row)"
-                v-if="row.status!==2&&hasAuth('specialSettlement'.toUpperCase())"
+                v-if="!(row.status==2||row.isReserve === 1)&&hasAuth('specialSettlement'.toUpperCase())"
               >
                 {{ t('特殊结算') }}
               </el-button>
