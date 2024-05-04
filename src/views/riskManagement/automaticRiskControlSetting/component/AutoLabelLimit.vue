@@ -89,8 +89,7 @@
         <div class="custom" v-else>
           <el-tag
             :style="`background-color: ${getLabelColor(
-              labelList.risk.filter(label => label.name == row.lableName)[0]
-                .level,
+              getLabelLevelByName(labelList, row.lableName),
               'attr'
             )}`"
             class="rounded-lg w-full py-1 text-white text-center"
@@ -124,6 +123,7 @@ import {
 } from '@/utils/formatNumber';
 import { labelListType } from '@/views/operateManager/com/playerList/utils/types';
 import { getLabelColor } from '@/components/RiskLabelList/utils';
+import { getLabelLevelByName } from '@/components/RiskLabelList/utils';
 
 const sportLimmitList = reactive<string[]>([]);
 
