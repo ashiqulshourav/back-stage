@@ -125,7 +125,8 @@ export function useBettingCenterHook(category: number, venueType: number) {
         seriesDetailsDuplex: '',
         seriesDetails: seriesDetails,
         seriesType: +form.seriesType > 2 ? 2 : form.seriesType,
-        venueType: venueType
+        venueType: venueType,
+        category:venueType===0?form.category:1
       }),
       pageSize: pagination.pageSize,
       pageNum: pagination.currentPage,

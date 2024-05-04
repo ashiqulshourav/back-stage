@@ -7,6 +7,7 @@
       @exportFile="exportFile"
       :tenantList="tenantList"
       :riskLabelList="riskLabelList"
+      :venueType="props.venueType"
     />
 
     <PureTableBar

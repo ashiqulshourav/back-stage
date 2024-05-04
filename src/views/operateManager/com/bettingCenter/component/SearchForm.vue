@@ -24,7 +24,7 @@
             <el-option v-for="item in riskLabelList" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
-        <el-form-item :label="`${t('赛事类型')}:`" prop="category">
+        <el-form-item v-if="props.venueType===0"  :label="`${t('赛事类型')}:`" prop="category">
           <el-select
             v-model="form.category"
             :placeholder="t('赛事类型')"
@@ -278,7 +278,8 @@ const props = defineProps<{
   loading: boolean;
   riskLabelList:UserAPI.labelType[];
   form: searchFormType;
-    tenantList:[]
+  tenantList:[];
+  venueType:number
 }>();
 
 const formRef = ref();
@@ -290,7 +291,7 @@ import CustomDate from "@/components/Form/Custom_date.vue";
 
 const emits = defineEmits(['onSearch', 'exportFile']);
 const resetForm = (formEl: FormInstance | undefined) => {
-  formEl.resetFields();
+  formEl?.resetFields();
   selectDate.value = '';
   gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
   search();
