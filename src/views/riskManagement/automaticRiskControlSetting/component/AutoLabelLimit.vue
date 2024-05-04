@@ -89,7 +89,7 @@
         <div class="custom" v-else>
           <el-tag
             :style="`background-color: ${getLabelColor(
-              getLabelLevelByName(labelList, row.lableName),
+              getLabelLevelByName(labelList, row.lableName) || 0,
               'attr'
             )}`"
             class="rounded-lg w-full py-1 text-white text-center"
