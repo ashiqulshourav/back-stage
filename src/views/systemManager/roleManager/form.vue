@@ -77,95 +77,97 @@
     </el-form-item>
 
     <div class="flex justify-end">
-      <el-button @click="closeDialog">{{ t("取消") }}</el-button>
+      <el-button @click="closeDialog">{{ t('取消') }}</el-button>
       <el-button type="primary" @click="confirmClick">{{
-        t("确定")
+        t('确定')
       }}</el-button>
     </div>
   </el-form>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
-import { formRules } from "./utils/rule"
-import { t } from "@/plugins/i18n"
-import { usePublicHooks } from "@/hooks"
-import { FormInstance } from "element-plus/es/components/form"
-import { message } from "@/utils/message"
-import { removeEmptyStringKeys } from "@/utils/utilFn"
-import { useUserStore } from "@/store/user"
+import { ref } from 'vue';
+import { formRules } from './utils/rule';
+import { t } from '@/plugins/i18n';
+import { usePublicHooks } from '@/hooks';
+import { FormInstance } from 'element-plus';
+import { message } from '@/utils/message';
+import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { useUserStore } from '@/store/user';
 
-const { switchStyle } = usePublicHooks()
-const userStore = useUserStore()
+const { switchStyle } = usePublicHooks();
+const userStore = useUserStore();
 
 const props = defineProps<{
-  row: RoleAPI.addSysAccountRes
-}>()
+  row: RoleAPI.addSysAccountRes;
+}>();
 
-const departmentList = reactive<UserMangerAPI.querySubDeptWithoutSelfData[]>([])
-const roleList = reactive<UserMangerAPI.subRoleListData[]>([])
+const departmentList = reactive<UserMangerAPI.querySubDeptWithoutSelfData[]>(
+  []
+);
+const roleList = reactive<UserMangerAPI.subRoleListData[]>([]);
 
 onMounted(() => {
   if (userStore.userInfo.isAdmin === 1) {
-    querySubDeptWithoutSelf()
-    getRoleList(+props.row.dept)
+    querySubDeptWithoutSelf();
+    getRoleList(+props.row.dept);
   } else if (!props.row.id) {
-    getRoleList()
+    getRoleList();
   } else {
-    getRoleList(+props.row.dept)
+    getRoleList(+props.row.dept);
   }
-})
+});
 
 const changeDep = (v: number) => {
-  getRoleList(v)
-}
+  getRoleList(v);
+};
 
 //- 获取角色
 const getRoleList = async (deptId?: number) => {
-  const res = await API.subRoleList({ deptId, includeSelf: true })
-  if (res.code) return message(res.msg, { type: "error" })
-  roleList.length = 0
-  roleList.push(...res.data)
-}
+  const res = await API.subRoleList({ deptId, includeSelf: true });
+  if (res.code) return message(res.msg, { type: 'error' });
+  roleList.length = 0;
+  roleList.push(...res.data);
+};
 
 //- 获取部门
 const querySubDeptWithoutSelf = async () => {
-  const res = await API.querySubDeptWithoutSelf()
-  if (res.code) return
-  res.data = res.data[0].subNodeList
-  departmentList.length = 0
-  departmentList.push(...res.data)
-}
+  const res = await API.querySubDeptWithoutSelf();
+  if (res.code) return;
+  res.data = res.data[0].subNodeList;
+  departmentList.length = 0;
+  departmentList.push(...res.data);
+};
 
-const emits = defineEmits(["closeDialog"])
+const emits = defineEmits(['closeDialog']);
 
-const testChange = () => {}
+const testChange = () => {};
 
-const ruleFormRef = ref<FormInstance>()
-const newFormInline = reactive(props.row)
+const ruleFormRef = ref<FormInstance>();
+const newFormInline = reactive(props.row);
 
 const closeDialog = () => {
-  emits("closeDialog")
-}
+  emits('closeDialog');
+};
 
 /* 传,roleName,status,comment */
 const confirmClick = () => {
-  const userStore = useUserStore()
+  const userStore = useUserStore();
   ruleFormRef.value.validate(async v => {
-    const requestAPI = newFormInline.roleId ? "updateRole" : "addRole"
+    const requestAPI = newFormInline.roleId ? 'updateRole' : 'addRole';
     if (v) {
       const res = await API[requestAPI]({
         ...(removeEmptyStringKeys({
           ...newFormInline,
-          tenantId: newFormInline.roleId ? "" : userStore.userInfo.tenantId
+          tenantId: newFormInline.roleId ? '' : userStore.userInfo.tenantId
         }) as RoleAPI.addSysAccountRes),
         status: Number(newFormInline.status)
-      })
-      message(res.msg, { type: res.code ? "error" : "success" })
-      emits("closeDialog", res.code ? "" : "reloadTable")
+      });
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      emits('closeDialog', res.code ? '' : 'reloadTable');
     }
-  })
-}
+  });
+};
 </script>
 
 <style lang="scss"></style>
