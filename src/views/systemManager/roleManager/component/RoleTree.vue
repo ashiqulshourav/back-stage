@@ -83,7 +83,7 @@ const initTreeList = async () => {
 };
 
 //- 判断是否为半选中状态
-const filterHalfChecked = menusData => {
+const filterHalfChecked = (menusData: RoleAPI.ChildResourceList[]) => {
   menusData.forEach(item => {
     if (item.childResourceList.length) {
       filterHalfChecked(item.childResourceList);
@@ -106,7 +106,7 @@ const checkIsInitSelected = (list: RoleAPI.ChildResourceList[]) => {
 const saveRole = async () => {
   const resourceList = treeRef
     .value!.getCheckedNodes(false, true)
-    .map(item => item.id);
+    .map((item: { id: any }) => item.id);
 
   const res = await API.updateRoleResource({
     roleId,
@@ -117,7 +117,7 @@ const saveRole = async () => {
 };
 
 //- 获取所有的子节点
-const getAllNodeKeys = node => {
+const getAllNodeKeys = (node: RoleAPI.ChildResourceList) => {
   let keys = [node.id];
   if (node.childResourceList && node.childResourceList.length > 0) {
     node.childResourceList.forEach(child => {
@@ -129,7 +129,7 @@ const getAllNodeKeys = node => {
 
 //- 全选按钮点击
 const checkAllClick = (status: boolean) => {
-  const allKeys = [];
+  const allKeys: number[] = [];
   menusData.forEach(node => {
     allKeys.push(...getAllNodeKeys(node));
   });
