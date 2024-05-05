@@ -13,7 +13,11 @@
     :resetText="t('重置')"
     :searchLoading="loading"
     :rowProps="{ gutter: 10 }"
-    :colProps="{ xl: locale === 'zh' ? 5 : 8 }"
+    :colProps="{
+      xl: locale === 'zh' ? 5 : 8,
+      lg: 8,
+      md: 8
+    }"
   />
 </template>
 
