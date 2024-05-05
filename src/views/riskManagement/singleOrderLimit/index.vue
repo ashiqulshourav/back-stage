@@ -298,14 +298,6 @@
           }}</span>
         </template>
       </pure-table>
-      <div class="mt-2" v-if="isEditSport">
-        <el-button size="small" type="primary" @click="addSportItem">
-          <span class="text-xs">+</span>
-        </el-button>
-        <el-button size="small" type="primary" @click="delSportItem">
-          <span class="text-[16px]">-</span>
-        </el-button>
-      </div>
     </div>
   </div>
 </template>
@@ -330,9 +322,7 @@ const {
   columns2,
   sportList,
   isEditSport,
-  addSportItem,
   confirmSportClick,
-  delSportItem,
   cancelSportEdit,
   currentSportId,
   changeType,
