@@ -4,7 +4,11 @@ import { t } from '@/plugins/i18n';
 export const columns: TableColumnList = [
   {
     label: t('联赛等级'),
-    prop: 'leagueLevel'
+    prop: 'leagueLevel',
+    formatter: ({ leagueLevel }): string => {
+      return leagueLevel === -1 ? '未评级' : leagueLevel;
+
+    },
   },
   {
     label: t('单用户单场累计赔付限额'),
