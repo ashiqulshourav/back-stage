@@ -29,7 +29,7 @@ declare namespace RoleAPI {
     parentId: number;
     type: number;
     sort: number;
-    resourceFlag: number;
+    resourceFlag: number | boolean;
     path: string;
     tableName?: string;
     childResourceList: any[];
@@ -57,12 +57,11 @@ declare namespace RoleAPI {
     tenantId?: any;
     name: string;
     status: number | boolean;
-    createdAt?: any;
-    createdBy?: any;
-    comment?: any;
-
+    createdAt?: string;
+    createdBy?: string;
+    comment?: string | null;
     subRoleNodeList: queryRoleList[];
-    userCount?: any;
+    userCount?: number;
     userList?: any;
   }
 

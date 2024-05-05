@@ -18,6 +18,7 @@
           align-whole="center"
           table-layout="auto"
           :loading="loading"
+          showOverflowTooltip
           :size="size"
           adaptive
           border

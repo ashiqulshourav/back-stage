@@ -40,7 +40,7 @@
 import { t } from '@/plugins/i18n';
 import { ref } from 'vue';
 import { formRules } from '../util/rule';
-import { FormInstance } from 'element-plus/es/components/form';
+import { FormInstance } from 'element-plus';
 import { message } from '@/utils/message';
 
 const ruleFormRef = ref<FormInstance>();
@@ -53,14 +53,12 @@ const props = defineProps<{
   list: BetOrderAPI.Detail & BetOrderAPI.BetOrderList[];
 }>();
 
-
-const selectObj={
-  goal:'进球',
-  redCard:'红牌',
-  penaltyAwarded:'点球',
-  other:'其它'
-}
-
+const selectObj = {
+  goal: '进球',
+  redCard: '红牌',
+  penaltyAwarded: '点球',
+  other: '其它'
+};
 
 const closeDialog = () => {
   emits('closeDialog');
@@ -70,7 +68,7 @@ const closeDialog = () => {
 const confirmClick = () => {
   const param = props.list.map((item: any) => {
     item.details.map(item2 => {
-      item2.riskType = form.riskType + (form.others?`,${form.others}`:'');
+      item2.riskType = form.riskType + (form.others ? `,${form.others}` : '');
       return item2;
     });
     return item;

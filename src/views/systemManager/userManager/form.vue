@@ -115,7 +115,7 @@ import { ref } from 'vue';
 import { formRules } from './utils/rule';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
-import { FormInstance } from 'element-plus/es/components/form';
+import { FormInstance } from 'element-plus';
 import { message } from '@/utils/message';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { useResetPasswordHook } from '@/hooks/resetPasswordHook';

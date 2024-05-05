@@ -75,7 +75,7 @@ export function useRoleHook() {
         .then(async () => {
           const res = await API.updateRoleStatus({
             status: +row.status === 0 ? 1 : 0,
-            roleId: row.id
+            roleId: +row.id
           });
           if (res.code) {
             reject();
@@ -131,23 +131,10 @@ export function useRoleHook() {
         dangerouslyUseHTMLString: true
       }
     ).then(async () => {
-      const res = await API.deleteRole({ roleId: row.id });
+      const res = await API.deleteRole({ roleId: +row.id });
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if (!res.code) onSearch();
     });
-    /*   if (row.userCount > 0) {
-      ElMessageBox.confirm(
-        t("角色底下还有{n}个用户不可删除!", { n: row.userCount }),
-        t("操作无效"),
-        {
-          confirmButtonText: t("朕知道了"),
-          showCancelButton: false,
-          center: true
-        }
-      )
-    } else {
-      
-    } */
   };
 
   //- 权限设置弹窗
