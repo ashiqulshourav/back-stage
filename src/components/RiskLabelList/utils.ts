@@ -1,3 +1,5 @@
+import { labelListType } from '@/views/operateManager/com/playerList/utils/types';
+
 export const getLabelColor = (level: number, type: string) => {
   if (type === 'risk') {
     switch (level) {
@@ -18,4 +20,11 @@ export const getLabelColor = (level: number, type: string) => {
         return 'rgba(46, 64, 80, 1)';
     }
   }
+};
+
+export const getLabelLevelByName = (
+  labelList: labelListType,
+  lableName: string
+) => {
+  return labelList.risk.filter(label => label.name == lableName)[0].level;
 };
