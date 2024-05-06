@@ -7,7 +7,7 @@
   >
     <el-form-item :label="`${t('部门名称')}:`" prop="name">
       <el-input
-        v-model="form.name"
+        v-model.trim="form.name"
         :placeholder="t('请输入部门名称')"
         clearable
         maxlength="30"

@@ -8,7 +8,7 @@
   >
     <el-form-item :label="`${t('部门名称')}:`" prop="name" required>
       <el-input
-        v-model="newFormInline.name"
+        v-model.trim="newFormInline.name"
         clearable
         :placeholder="t('请输入部门名称')"
       />
@@ -45,7 +45,7 @@
     <el-form-item :label="`${t('备注')}:`" prop="comment">
       <el-input
         type="textarea"
-        v-model="newFormInline.comment"
+        v-model.trim="newFormInline.comment"
         maxlength="255"
         show-word-limit
         :placeholder="t('只能输入255个字符的内容')"
