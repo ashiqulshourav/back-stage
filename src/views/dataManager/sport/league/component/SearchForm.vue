@@ -11,13 +11,13 @@
     :defaultValues="defaultValue"
     :searchText="t('筛选')"
     :resetText="t('重置')"
-    :searchLoading="loading"
-    :rowProps="{ gutter: 10 }"
     :colProps="{
       xl: locale === 'zh' ? 5 : 8,
       lg: 8,
       md: 8
     }"
+    :searchLoading="loading"
+    :rowProps="{ gutter: 10 }"
   />
 </template>
 
@@ -41,7 +41,9 @@ import { useTranslationLang } from '@/layout/hooks/useTranslationLang';
 const props = defineProps<{
   loading: boolean;
   form: searchFormType;
+  levelList: ConfigCenterDataAPI.leagueLevelList[];
 }>();
+
 const { locale } = useTranslationLang();
 const selfForm = ref<FieldValues>(props.form);
 const defaultValue = ref<FieldValues>(JSON.parse(JSON.stringify(props.form)));
@@ -96,6 +98,36 @@ const columns: PlusColumn[] = [
       formatter: (v: string) => inputRestrictions(v),
       placeholder: t('请输入1-200之间的数字')
     }
+  },
+  {
+    label: t('联赛等级'),
+    prop: 'riskLevel',
+    valueType: 'select',
+    options: computed(() => {
+      const sportidMap = { 1: 0, 2: 1 };
+      let list = [];
+      if (props.form.category === 1) {
+        list = props.levelList.filter(item => item.game_type === 3);
+      } else if (
+        sportidMap[+props.form.sportId as keyof typeof sportidMap] === 0 ||
+        sportidMap[+props.form.sportId as keyof typeof sportidMap] === 1
+      ) {
+        list = props.levelList.filter(
+          item =>
+            item.game_type ===
+            sportidMap[+props.form.sportId as keyof typeof sportidMap]
+        );
+      } else {
+        list = props.levelList.filter(item => item.game_type === 2);
+      }
+      return list.map(item => ({
+        label: item.league_level === -1 ? t('未评级') : item.league_level,
+        value: item.league_level
+      }));
+    }),
+    hideInSearch: computed(() => {
+      return props.form.category !== 1 && props.form.sportId === '';
+    })
   },
   {
     label: t('联赛中文名'),

@@ -207,20 +207,8 @@ const cancelDialog = () => {
   emits('closeDialog');
 };
 
-onMounted(() => {
-  initLevelList();
-});
-
-const levelList = reactive<ConfigCenterDataAPI.leagueLevelList[]>([]);
-const initLevelList = async () => {
-  const res = await API.getLevelList();
-  if (res.code) return;
-  levelList.length = 0;
-  levelList.push(...res.data);
-};
-
 const renderLevelList = computed(() => {
-  return levelList.filter(item => item.game_type === 3);
+  return props.levelList.filter(item => item.game_type === 3);
 });
 </script>
 
