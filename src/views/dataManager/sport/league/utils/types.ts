@@ -1,5 +1,6 @@
 
 interface FormProps {
+  levelList: ConfigCenterDataAPI.leagueLevelList[];
   formInline: MetadataAPI.LeagueList;
 }
 
@@ -12,6 +13,8 @@ export type searchFormType = {
   leagueId188Bet: string;
   sportId: string;
   category: string | number;
+  riskLevel: string | number;
+
 }
 
 export type { FormProps };
