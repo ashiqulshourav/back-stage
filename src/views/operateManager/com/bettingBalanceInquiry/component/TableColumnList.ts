@@ -11,12 +11,12 @@ export const columns: TableColumnList = [
   },
   {
     label: t('用戶ID'),
-    prop: 'userId',
+    prop: 'userid',
     minWidth: 150
   },
   {
     label: t('所属商户'),
-    prop: 'matchId',
+    prop: 'tenantName',
     minWidth: 150
   },
   {
