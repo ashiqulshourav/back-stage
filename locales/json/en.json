@@ -537,10 +537,7 @@
   "k-348aa50f": "Are you sure you want to cancel the current event settlement result?",
   "k-45da4e2b": "New event saved successfully",
   "k-71545e88": "Operation prompt",
-  "k2158b99f": "Invalid operation",
-  "k33b47396": "Got it",
   "k-6251e239": "Are you sure you want to delete the role?",
-  "k-52ebed2": "Cannot delete the role as there are {n} users under it!",
   "k-1818d935": "Please contact your superior for user role permission settings.",
   "k-574ad6dd": "Close sales",
   "k-454cd6ba": "Are you sure you want to close the sales status?",
@@ -1042,5 +1039,6 @@
   "ke90feeb": "角色所属部门",
   "k-76384e6f": "请输入角色所属部门",
   "k-73d4f59": "上级角色",
-  "kdcb969a": "该角色下仍有{n}个用户，禁用此角色将导致这些用户无法访问系统。是否继续?"
+  "kdcb969a": "该角色下仍有{n}个用户，禁用此角色将导致这些用户无法访问系统。是否继续?",
+  "k-5b403837": "未评级"
 }

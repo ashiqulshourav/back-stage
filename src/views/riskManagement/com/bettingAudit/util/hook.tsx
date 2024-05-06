@@ -10,7 +10,7 @@ import {
 } from './types';
 import { columns } from './exportTableColumnList';
 import { utils, writeFile } from 'xlsx';
-import { addDialog, closeDialog } from '@/components/ReDialog';
+import { addDialog, closeDialog } from '@/components/ReDialog/index';
 import { reactive, ref, onMounted, h } from 'vue';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 import {
