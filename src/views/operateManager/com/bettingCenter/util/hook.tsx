@@ -144,43 +144,17 @@ export function useBettingCenterHook(category: number, venueType: number) {
       ...privateparams
     };
   };
-
-  const formatParamsForOrderId = (
-    privateparams = {},
-    order_id: number,
-    page: number
-  ) => {
-    return {
-      ...removeEmptyStringKeys({
-        queryType: form.queryType,
-        orderId: order_id || form.orderId,
-        seriesDetailsSingle: '',
-        seriesDetailsDuplex: '',
-        seriesType: +form.seriesType > 2 ? 2 : form.seriesType,
-        venueType: venueType,
-        category: venueType === 0 ? form.category : 1,
-        pageSize: pagination.pageSize,
-        pageNum: page || pagination.currentPage,
-        ...privateparams
-      })
-    };
-  };
-
-  async function getRowByOrderId(order_id: number) {
+  async function getRowByOrderId(orderId: number) {
     try {
-      const params: searchFormType = formatParamsForOrderId(
-        {
-          export: false
-        },
-        order_id,
-        1 // page Num = 1
-      ) as searchFormType;
+      const params: searchFormType = formatParams({
+        export: false,
+        orderId:orderId
+      }) as searchFormType;
 
       const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
         params
       );
       if (res.code) return message(res.msg, { type: 'error' });
-
       if (res.data !== null) {
         let list = res?.data?.pageData || [];
         list = list.map(row => {
@@ -192,10 +166,10 @@ export function useBettingCenterHook(category: number, venueType: number) {
           return row;
         });
 
-        dataList.map((item: any, index) => {
-          item.index = index + 1;
-
-          item.id == order_id ? Object.assign(item, list[0]) : item;
+        dataList.map((item: any) => {
+          if(item.id === orderId){
+            Object.assign(item, list[0])
+          }
         });
       }
     } catch (error) {

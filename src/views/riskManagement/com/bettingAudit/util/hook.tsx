@@ -165,6 +165,29 @@ export function useBettingAuditHook(venueType: number) {
       loading.value = false;
     }
   }
+  async function getRowByOrderId(orderId: string) {
+    try {
+      const params: searchFormType = formatParams({
+        export: false,
+        orderId:orderId
+      }) as searchFormType;
+
+      const res: BetOrderAPI.BetOrderResType = await API.bettingAuditList(
+          params
+      );
+      if (res.code) return message(res.msg, { type: 'error' });
+      if (res.data !== null) {
+        let list = res?.data?.pageData || [];
+        dataList.map((item: any) => {
+          if(item.id === orderId){
+            Object.assign(item, list[0])
+          }
+        });
+      }
+    } catch (error) {
+      loading.value = false;
+    }
+  }
 
   const getTenantList = async () => {
     const res = await API.queryTenantList({ category: venueType });
@@ -327,7 +350,7 @@ export function useBettingAuditHook(venueType: number) {
         })
     });
   };
-  const handleApprove = (row: any, index) => {
+  const handleApprove = (row: any, index:number) => {
     let data = { ...row }; //...row.combineOrderDetails[index]
     data.combineOrderDetails = data.combineOrderDetails.filter((item, i) => {
       return i == index;
@@ -425,6 +448,7 @@ export function useBettingAuditHook(venueType: number) {
   };
   const editDialogRef = ref();
   const editMatchDetailRemark = (
+      orderId:string,
     orderDetailId: number,
     orderDetailRemark: string
   ) => {
@@ -441,7 +465,8 @@ export function useBettingAuditHook(venueType: number) {
           data: { orderDetailId, orderDetailRemark },
           onCloseDialog: (_: boolean) => {
             closeDialog(options, index);
-            onSearch();
+            getRowByOrderId(orderId)
+            // onSearch();
           }
         })
     });

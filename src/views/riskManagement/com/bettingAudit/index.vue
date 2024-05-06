@@ -401,6 +401,7 @@
                     type="primary"
                     @click="
                       editMatchDetailRemark(
+                          row.id,
                         item.detailId,
                         item.orderDetailRemark
                       )
