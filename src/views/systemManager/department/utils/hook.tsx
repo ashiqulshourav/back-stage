@@ -68,7 +68,7 @@ export function useDepartmentHook() {
             id: row?.id ?? '',
             comment: row?.comment ?? '',
             parentId: row?.parentId ?? '',
-            status: row?.status ?? 0,
+            status: row?.status ?? 1,
             tenantId: row?.tenantId ?? ''
           },
           onCloseDialog: (closeType?: string) => {

@@ -124,3 +124,16 @@ const {
   updateUserStatus
 } = useDepartmentHook();
 </script>
+
+<style lang="scss" scoped>
+:deep {
+  .first_table {
+    .cell {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+  }
+}
+</style>
