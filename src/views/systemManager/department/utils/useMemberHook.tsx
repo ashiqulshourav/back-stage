@@ -54,6 +54,10 @@ export function useMemberHook(id: number, urlType: 'setting' | 'query') {
       pagination.total = res.data.total;
       dataList.length = 0;
       dataList.push(...res.data.list);
+      urlType === 'setting' &&
+        dataList.forEach(item => {
+          item.roleId = '';
+        });
     } catch (error) {
       loading.value = false;
     }
