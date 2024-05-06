@@ -399,47 +399,6 @@ const handleUpdate = () => {
   }).then(() => {
     if (!form.limitLevel)
       return message('您必须要设置限额等级。', { type: 'error' });
-    const addedLabels = props.userData.riskControlLabelList
-      ? updatedLabels.risk.filter(
-          (item: UserAPI.labelType) =>
-            !props.userData.riskControlLabelList.includes(item)
-        )
-      : updatedLabels.risk;
-    if (updatedLabels.risk.length > 20) {
-      return message('您不能添加超过20个的标签。', { type: 'error' });
-    }
-
-    if (props.userData.attributeLabelList) {
-      addedLabels.push(
-        ...updatedLabels.attr.filter(
-          (item: UserAPI.labelType) =>
-            !props.userData.attributeLabelList.includes(item)
-        )
-      );
-    } else {
-      addedLabels.push(...updatedLabels.attr);
-    }
-    if (updatedLabels.attr.length > 20) {
-      return message('您不能添加超过20个的标签。', { type: 'error' });
-    }
-    const AddedIds: number[] = [];
-    addedLabels.forEach((item: UserAPI.labelType) => {
-      AddedIds.push(item.id);
-    });
-    if (AddedIds.length !== 0) emits('onAdd', [form.id], AddedIds);
-    const deletedLabels = props.userData.riskControlLabelList.filter(
-      (item: UserAPI.labelType) => !updatedLabels.risk.includes(item)
-    );
-    deletedLabels.push(
-      ...props.userData.attributeLabelList.filter(
-        (item: UserAPI.labelType) => !updatedLabels.attr.includes(item)
-      )
-    );
-    const deletedIds: number[] = [];
-    deletedLabels.forEach((item: UserAPI.labelType) => {
-      deletedIds.push(item.id);
-    });
-    if (deletedIds.length !== 0) emits('onDel', [form.id], deletedIds);
     const {
       productAmountTotalLimit,
       maxWinAmountLimit,
@@ -486,6 +445,48 @@ const handleUpdate = () => {
         return;
       }
     }
+    const addedLabels = props.userData.riskControlLabelList
+      ? updatedLabels.risk.filter(
+          (item: UserAPI.labelType) =>
+            !props.userData.riskControlLabelList.includes(item)
+        )
+      : updatedLabels.risk;
+    if (updatedLabels.risk.length > 20) {
+      return message('您不能添加超过20个的标签。', { type: 'error' });
+    }
+
+    if (props.userData.attributeLabelList) {
+      addedLabels.push(
+        ...updatedLabels.attr.filter(
+          (item: UserAPI.labelType) =>
+            !props.userData.attributeLabelList.includes(item)
+        )
+      );
+    } else {
+      addedLabels.push(...updatedLabels.attr);
+    }
+    if (updatedLabels.attr.length > 20) {
+      return message('您不能添加超过20个的标签。', { type: 'error' });
+    }
+    const AddedIds: number[] = [];
+    addedLabels.forEach((item: UserAPI.labelType) => {
+      AddedIds.push(item.id);
+    });
+    if (AddedIds.length !== 0) emits('onAdd', [form.id], AddedIds);
+    const deletedLabels = props.userData.riskControlLabelList.filter(
+      (item: UserAPI.labelType) => !updatedLabels.risk.includes(item)
+    );
+    deletedLabels.push(
+      ...props.userData.attributeLabelList.filter(
+        (item: UserAPI.labelType) => !updatedLabels.attr.includes(item)
+      )
+    );
+    const deletedIds: number[] = [];
+    deletedLabels.forEach((item: UserAPI.labelType) => {
+      deletedIds.push(item.id);
+    });
+    if (deletedIds.length !== 0) emits('onDel', [form.id], deletedIds);
+    
     if (isSpecial.value) {
       form.specialLimit.productAmountTotalLimit = parseInt(
         form.specialLimit.productAmountTotalLimit
