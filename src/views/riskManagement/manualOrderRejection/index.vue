@@ -60,24 +60,28 @@
               @dblclick="
                 copyTest(
                   row.tenantId,
-                  t('商户编码：{value}', { value: tenantObj[row.tenantId]?.name })
+                  t('商户编码：{value}', {
+                    value: tenantObj[row.tenantId]?.name
+                  })
                 )
               "
             >
               <span>{{ t('商户编码：') }}</span
-              >{{tenantObj[row.tenantId]?.name }}
+              >{{ tenantObj[row.tenantId]?.name }}
             </div>
             <div
-                class="item_line cursor-pointer"
-                @dblclick="
+              class="item_line cursor-pointer"
+              @dblclick="
                 copyTest(
                   row.tenantId,
-                  t('商户名：{value}', { value: tenantObj[row.tenantId]?.tenantName })
+                  t('商户名：{value}', {
+                    value: tenantObj[row.tenantId]?.tenantName
+                  })
                 )
               "
             >
               <span>{{ t('商户名：') }}</span
-              >{{tenantObj[row.tenantId]?.tenantName }}
+              >{{ tenantObj[row.tenantId]?.tenantName }}
             </div>
             <div
               v-if="row.combineOrderDetails.length > 1"
@@ -106,7 +110,7 @@
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <div v-if="item.kindsCode!== 'Outright'"  class="item_line">
+              <div v-if="item.kindsCode !== 'Outright'" class="item_line">
                 <span
                   class="cursor-pointer"
                   @dblclick="
@@ -178,13 +182,15 @@
                     : ''
                 }}
               </div>
-              <div class="item_line">{{ useSportFormatDetail(item)[3] }}  @{{
+              <div class="item_line">
+                {{ useSportFormatDetail(item)[3] }} @{{
                   getViewOddFn(
-                      item.oddFinally,
-                      item.marketTypeFinally,
-                      item.marketType
+                    item.oddFinally,
+                    item.marketTypeFinally,
+                    item.marketType
                   )
-                }}</div>
+                }}
+              </div>
               <div
                 class="item_line cursor-pointer"
                 @dblclick="
@@ -203,7 +209,22 @@
               </div>
               <div
                 class="item_line"
-                v-if="row.billStatus === 1 && item.settleScore&&!(displayHomeAwayScore(item.settleScore, item.sportId,'home')==''||displayHomeAwayScore(item.settleScore, item.sportId,'away')=='')"
+                v-if="
+                  row.billStatus === 1 &&
+                  item.settleScore &&
+                  !(
+                    displayHomeAwayScore(
+                      item.settleScore,
+                      item.sportId,
+                      'home'
+                    ) == '' ||
+                    displayHomeAwayScore(
+                      item.settleScore,
+                      item.sportId,
+                      'away'
+                    ) == ''
+                  )
+                "
               >
                 {{ t('赛果：')
                 }}{{ displayHomeAwayScore(item.settleScore, item.sportId) }}
@@ -350,14 +371,13 @@ import {
   EBetResultType,
   getViewOddFn,
   markeTypeMap,
-  // calculateSeriesTypeTotal,
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
   getIsInplay
 } from '@/utils/formatMatch';
-// import { betStatusMap } from './util/types';
 import { usePublicHooks } from '@/hooks';
-defineOptions({ name: 'bettingCenter' });
+
+defineOptions({ name: 'RISKMANAGEMENT_MANUALORDERREJECTION' });
 const { tableHeaderStyle } = usePublicHooks();
 
 const getVal = (s1, s2, s3, s4) => {
