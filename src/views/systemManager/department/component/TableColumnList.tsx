@@ -5,7 +5,8 @@ export const columns: TableColumnList = [
   {
     label: t('部门名称'),
     prop: 'name',
-    className: 'first_table'
+    className: 'first_table',
+    minWidth: 240
   },
   {
     label: t('创建时间'),
