@@ -10,6 +10,7 @@ declare namespace ConfigCenterDataAPI {
     tagId?: number;
   };
   type LeagueTagListFetchProps = {
+    id?: number;
     text?: string;
     sportId?: number;
     category?: number;
@@ -19,8 +20,7 @@ declare namespace ConfigCenterDataAPI {
   type leagueLevelList = {
     league_level: number;
     game_type: number;
-  }
-
+  };
 
   type LeagueTagListType = COMMON.ListData<LeagueTagType>;
   type leagueLevelResType = COMMON.BASE_RES_TYPE<leagueLevelList[]>;
