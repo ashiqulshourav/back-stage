@@ -23,8 +23,15 @@
             {{ t('风控标签修改记录') }}>>
           </p>
         </el-row>
+
         <el-row :gutter="20" class="mt-2 w-full">
-          <el-col v-for="label in updatedLabels.risk" :key="label.id" :span="6">
+          <LabelListCom
+            @onClose="handleDeleteLabel"
+            :labels="updatedLabels.risk"
+            type="risk"
+          />
+
+          <!-- <el-col v-for="label in updatedLabels.risk" :key="label.id" :span="6">
             <el-row :gutter="2" class="items-center">
               <el-col :span="20" class="custom_tag">
                 <el-tag
@@ -42,7 +49,7 @@
                 </el-tag>
               </el-col>
             </el-row>
-          </el-col>
+          </el-col> -->
         </el-row>
         <el-row class="mt-2 w-full" v-if="!isRiskLabelAdd">
           <el-col class="flex justify-end">
@@ -95,7 +102,13 @@
           </p>
         </el-row>
         <el-row :gutter="20" class="mt-2 w-full">
-          <el-col v-for="label in updatedLabels.attr" :key="label.id" :span="6">
+          <LabelListCom
+            @onClose="handleDeleteLabel"
+            :labels="updatedLabels.attr"
+            type="attr"
+          />
+
+          <!-- <el-col v-for="label in updatedLabels.attr" :key="label.id" :span="6">
             <el-row :gutter="2" class="items-center">
               <el-col :span="20" class="custom_tag">
                 <el-tag
@@ -113,7 +126,7 @@
                 </el-tag>
               </el-col>
             </el-row>
-          </el-col>
+          </el-col> -->
         </el-row>
         <el-row class="mt-2 w-full" v-if="!isAttrLabelAdd">
           <el-col class="flex justify-end">
@@ -278,6 +291,7 @@ import {
   specialLimitType
 } from '../utils/types';
 import { formatNumber } from '@/utils/formatNumber';
+import LabelListCom from './LabelListCom.vue';
 
 const props = defineProps<{
   isEditUser: boolean;
@@ -343,28 +357,6 @@ const tableData = computed(() => {
     (item: UserAPI.UserLevelLimitListRes) => item.levelLimit === form.limitLevel
   );
 });
-
-const getLabelColor = (label: number, type: string) => {
-  if (type === 'risk') {
-    switch (label) {
-      case 1:
-        return 'rgba(163, 0, 20, 1)';
-      case 2:
-        return 'rgba(255, 92, 0, 1)';
-      case 3:
-        return 'rgba(255, 153, 0, 1)';
-    }
-  } else {
-    switch (label) {
-      case 1:
-        return 'rgba(24, 145, 255, 1)';
-      case 2:
-        return 'rgba(25, 190, 107, 1)';
-      case 3:
-        return 'rgba(46, 64, 80, 1)';
-    }
-  }
-};
 
 const initLimitList = async () => {
   try {
@@ -445,12 +437,35 @@ const handleUpdate = () => {
     type: 'warning',
     center: true
   }).then(() => {
+    if (!form.limitLevel)
+      return message('您必须要设置限额等级。', { type: 'error' });
+    if (isSpecial.value) {
+      form.specialLimit.productAmountTotalLimit = parseInt(
+        form.specialLimit.productAmountTotalLimit
+      );
+      form.specialLimit.maxWinAmountLimit = parseInt(
+        form.specialLimit.maxWinAmountLimit
+      );
+      form.specialLimit.singleEventAccumulatedCompensationLimit = parseInt(
+        form.specialLimit.singleEventAccumulatedCompensationLimit
+      );
+      form.specialLimit.seriesSingleDayCumulativeCompensationLimit = parseInt(
+        form.specialLimit.seriesSingleDayCumulativeCompensationLimit
+      );
+      emits('onUpdateUser', form);
+    } else {
+      emits('onUpdateUser', { ...form, specialLimit: null });
+    }
     const addedLabels = props.userData.riskControlLabelList
       ? updatedLabels.risk.filter(
           (item: UserAPI.labelType) =>
             !props.userData.riskControlLabelList.includes(item)
         )
       : updatedLabels.risk;
+    if (updatedLabels.risk.length > 20) {
+      return message('您不能添加超过20个的标签。', { type: 'error' });
+    }
+
     if (props.userData.attributeLabelList) {
       addedLabels.push(
         ...updatedLabels.attr.filter(
@@ -460,6 +475,9 @@ const handleUpdate = () => {
       );
     } else {
       addedLabels.push(...updatedLabels.attr);
+    }
+    if (updatedLabels.attr.length > 20) {
+      return message('您不能添加超过20个的标签。', { type: 'error' });
     }
     const AddedIds: number[] = [];
     addedLabels.forEach((item: UserAPI.labelType) => {
@@ -480,23 +498,6 @@ const handleUpdate = () => {
       deletedIds.push(item.id);
     });
     if (deletedIds.length !== 0) emits('onDel', [form.id], deletedIds);
-    if (isSpecial.value) {
-      form.specialLimit.productAmountTotalLimit = parseInt(
-        form.specialLimit.productAmountTotalLimit
-      );
-      form.specialLimit.maxWinAmountLimit = parseInt(
-        form.specialLimit.maxWinAmountLimit
-      );
-      form.specialLimit.singleEventAccumulatedCompensationLimit = parseInt(
-        form.specialLimit.singleEventAccumulatedCompensationLimit
-      );
-      form.specialLimit.seriesSingleDayCumulativeCompensationLimit = parseInt(
-        form.specialLimit.seriesSingleDayCumulativeCompensationLimit
-      );
-      emits('onUpdateUser', form);
-    } else {
-      emits('onUpdateUser', { ...form, specialLimit: null });
-    }
   });
 };
 

@@ -54,60 +54,11 @@
               class="items-center"
               :gutter="20"
             >
-              <el-col :span="row.riskControlLabelList?.length > 6 ? 20 : 24">
-                <el-row :gutter="5">
-                  <el-col
-                    v-for="label in row.riskControlLabelList.slice(0, 6)"
-                    :key="label.id"
-                    :span="8"
-                    class="custom_tag"
-                  >
-                    <el-tag
-                      :style="`background-color: ${getLabelColor(
-                        label.level,
-                        'risk'
-                      )}`"
-                      class="rounded-lg w-full py-1"
-                    >
-                      {{ label.name }}
-                    </el-tag>
-                  </el-col>
-                </el-row>
-              </el-col>
-              <el-col :span="4" v-if="row.riskControlLabelList?.length > 6">
-                <el-popover
-                  placement="top-end"
-                  :width="300"
-                  trigger="hover"
-                  content="this is over"
-                >
-                  <template #reference>
-                    <el-button v-if="hasAuth('SETTING')" class="w-full"
-                      ><el-icon><Plus /></el-icon
-                    ></el-button>
-                  </template>
-                  <template #default>
-                    <el-row :gutter="20">
-                      <el-col
-                        v-for="label in row.riskControlLabelList"
-                        :key="label.id"
-                        class="custom_tag"
-                        :span="8"
-                      >
-                        <el-tag
-                          :style="`background-color: ${getLabelColor(
-                            label.level,
-                            'risk'
-                          )}`"
-                          class="rounded-lg w-full py-1 text-white text-center"
-                        >
-                          {{ label.name }}
-                        </el-tag>
-                      </el-col>
-                    </el-row>
-                  </template>
-                </el-popover>
-              </el-col>
+              <LabelListCom
+                :labels="row.riskControlLabelList"
+                type="risk"
+                expand
+              />
             </el-row>
           </template>
           <template #attributeLabel="{ row }">
@@ -116,65 +67,11 @@
               class="items-center"
               :gutter="20"
             >
-              <el-col :span="row.attributeLabelList?.length > 6 ? 20 : 24">
-                <el-row :gutter="5">
-                  <el-col
-                    v-for="label in row.attributeLabelList.slice(0, 6)"
-                    :key="label.id"
-                    :span="8"
-                    class="custom_tag"
-                  >
-                    <el-tag
-                      :style="`background-color: ${getLabelColor(
-                        label.level,
-                        'attr'
-                      )}`"
-                      class="rounded-lg w-full py-1"
-                    >
-                      {{ label.name }}
-                    </el-tag>
-                  </el-col>
-                </el-row>
-              </el-col>
-              <el-col
-                :span="4"
-                v-if="
-                  row.attributeLabelList && row.attributeLabelList.length > 6
-                "
-              >
-                <el-popover
-                  placement="top-end"
-                  :width="300"
-                  trigger="hover"
-                  content="this is over"
-                >
-                  <template #reference>
-                    <el-button class="w-full"
-                      ><el-icon><Plus /></el-icon
-                    ></el-button>
-                  </template>
-                  <template #default>
-                    <el-row :gutter="20">
-                      <el-col
-                        v-for="label in row.attributeLabelList"
-                        :key="label.id"
-                        :span="8"
-                        class="custom_tag"
-                      >
-                        <el-tag
-                          :style="`background-color: ${getLabelColor(
-                            label.level,
-                            'attr'
-                          )}`"
-                          class="rounded-lg w-full py-1 text-white text-center"
-                        >
-                          {{ label.name }}
-                        </el-tag>
-                      </el-col>
-                    </el-row>
-                  </template>
-                </el-popover>
-              </el-col>
+              <LabelListCom
+                :labels="row.attributeLabelList"
+                type="attr"
+                expand
+              />
             </el-row>
           </template>
           <template #operation="{ row }">
@@ -238,10 +135,10 @@ import MultiModal from './component/multiModal.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
-import { Plus } from '@element-plus/icons-vue';
 import { hasAuth } from '@/router/utils';
 import EditPen from '@iconify-icons/ep/edit-pen';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import LabelListCom from './component/LabelListCom.vue';
 
 defineOptions({ name: 'OPERATEMANAGERSPORTPLAYERLIST' });
 const { tableHeaderStyle } = usePublicHooks();
@@ -271,7 +168,6 @@ const {
   onSearchRecord,
   form,
   recordForm,
-  getLabelColor,
   handleUpdateUser,
   handleTableWidthChange,
   handleCurrentChange,

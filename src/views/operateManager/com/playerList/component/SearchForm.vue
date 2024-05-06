@@ -3,54 +3,54 @@
     <el-form ref="formRef" v-model="form" :inline="true" :model="form">
       <el-form-item prop="ids" :label="t('用户ID： ')">
         <el-input
-            v-model="form.ids as string"
-            :placeholder="t('可输入1-50个用户ID,用逗号进行分割')"
-            clearable
-            ref="buttonRef"
-            :formatter="formatterTxt"
-            :disabled="idList.length > 50"
-            class="!w-[260px]"
+          v-model="form.ids as string"
+          :placeholder="t('可输入1-50个用户ID,用逗号进行分割')"
+          clearable
+          ref="buttonRef"
+          :formatter="formatterTxt"
+          :disabled="idList.length > 50"
+          class="!w-[260px]"
         />
         <el-popover
-            ref="popoverRef"
-            :virtual-ref="buttonRef"
-            trigger="click"
-            width="260px"
-            virtual-triggering
+          ref="popoverRef"
+          :virtual-ref="buttonRef"
+          trigger="click"
+          width="260px"
+          virtual-triggering
         >
           <div class="flex flex-start w-full flex-wrap">
             <span
-                class="el-tag mr-2 mb-1"
-                v-for="item in idList.filter(_ => _ !== '')"
-                :key="item"
-            >{{ item }}</span
+              class="el-tag mr-2 mb-1"
+              v-for="item in idList.filter(_ => _ !== '')"
+              :key="item"
+              >{{ item }}</span
             >
           </div>
         </el-popover>
       </el-form-item>
       <el-form-item prop="usernames" :label="t('用户名： ')">
         <el-input
-            v-model="form.usernames as string"
-            :placeholder="t('可输入1-50个用户名,用逗号进行分割')"
-            clearable
-            ref="buttonRef1"
-            :formatter="formatterUserNames"
-            :disabled="userIds.length > 50"
-            class="!w-[260px]"
+          v-model="form.usernames as string"
+          :placeholder="t('可输入1-50个用户名,用逗号进行分割')"
+          clearable
+          ref="buttonRef1"
+          :formatter="formatterUserNames"
+          :disabled="userIds.length > 50"
+          class="!w-[260px]"
         />
         <el-popover
-            ref="popoverRef1"
-            :virtual-ref="buttonRef1"
-            trigger="click"
-            width="260px"
-            virtual-triggering
+          ref="popoverRef1"
+          :virtual-ref="buttonRef1"
+          trigger="click"
+          width="260px"
+          virtual-triggering
         >
           <div class="flex flex-start w-full flex-wrap">
             <span
-                class="el-tag mr-2 mb-1"
-                v-for="item in userIds.filter(_ => _ !== '')"
-                :key="item"
-            >{{ item }}</span
+              class="el-tag mr-2 mb-1"
+              v-for="item in userIds.filter(_ => _ !== '')"
+              :key="item"
+              >{{ item }}</span
             >
           </div>
         </el-popover>
@@ -73,11 +73,11 @@
       </el-form-item>
       <el-form-item prop="tenantCode" :label="t('商户编码:')">
         <el-input
-            v-model="form.tenantCode"
-            :placeholder="t('请输入商户编码')"
-            v-enter="search"
-            clearable
-            class="!w-[120px]"
+          v-model="form.tenantCode"
+          :placeholder="t('请输入商户编码')"
+          v-enter="search"
+          clearable
+          class="!w-[120px]"
         />
       </el-form-item>
       <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
@@ -112,20 +112,20 @@
       </el-form-item>
       <el-form-item prop="limitLevel" :label="t('限额等级:')">
         <el-select
-            v-model="form.limitLevel"
-            :placeholder="t('限额等级')"
-            clearable
-            class="!w-[150px]"
+          v-model="form.limitLevel"
+          :placeholder="t('限额等级')"
+          clearable
+          class="!w-[150px]"
         >
           <el-option
-              :label="item"
-              :value="item"
-              v-for="item in sportLimmitList"
-              :key="item"
+            :label="item"
+            :value="item"
+            v-for="item in sportLimmitList"
+            :key="item"
           />
         </el-select>
       </el-form-item>
-      <el-form-item prop="" label="日期范围选择:">
+      <el-form-item prop="" :label="t('日期范围选择:')">
         <Custom_date v-model:val="selectDate" @changeDate="changeDate" />
       </el-form-item>
 
@@ -135,10 +135,15 @@
           :icon="useRenderIcon(Search)"
           :loading="loading"
           @click="search"
+          v-if="hasAuth('QUERY')"
         >
           {{ t('筛选') }}
         </el-button>
-        <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
+        <el-button
+          v-if="hasAuth('QUERY')"
+          :icon="useRenderIcon(Refresh)"
+          @click="resetForm(formRef)"
+        >
           {{ t('重置') }}
         </el-button>
       </el-form-item>
@@ -175,7 +180,6 @@ const emits = defineEmits(['onSearch']);
 const idList = reactive<string[]>([]);
 const userIds = reactive<string[]>([]);
 const sportLimmitList = reactive<string[]>([]);
-
 
 const props = defineProps<{
   loading: boolean;
@@ -226,8 +230,8 @@ const resetForm = (formEl: FormInstance | undefined) => {
 const search = () => {
   props.form.ids = idList.filter(item => item !== '').map(item => item.trim());
   props.form.usernames = userIds
-      .filter(item => item !== '')
-      .map(item => item.trim());
+    .filter(item => item !== '')
+    .map(item => item.trim());
   emits('onSearch', 'reload');
 };
 
