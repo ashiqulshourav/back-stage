@@ -91,7 +91,7 @@
           <el-option
             v-for="item in renderLevelList"
             :key="item.league_level"
-            :label="item.league_level"
+            :label="item.league_level < 0 ? t('未评级') : item.league_level"
             :value="item.league_level"
           />
         </el-select>
