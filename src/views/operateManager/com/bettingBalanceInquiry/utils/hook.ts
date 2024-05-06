@@ -5,7 +5,7 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { searchFormType } from './types';
 
 export function bettingBalanceInquiryHook() {
-  const dataList = reactive<UserAPI.operateUserList[]>([]); //TODO: api used need to be changed
+  const dataList = reactive<OperateManagementDataAPI.BetBalanceType[]>([]);
   const loading = ref(true);
   const pagination = reactive<PaginationProps>({
     total: 0,
@@ -14,8 +14,8 @@ export function bettingBalanceInquiryHook() {
     background: true
   });
   const form = reactive<searchFormType>({
-    id: '', //TODO: changed to userIdOrName if api is available
-    userName: '', //TODO: changed to matchId if api is available
+    userId: '',
+    matchId: '',
   });
 
   function handleTableWidthChange(val: number) {
@@ -37,18 +37,17 @@ export function bettingBalanceInquiryHook() {
     try {
       loading.value = true;
       const res =
-        await API.operateUserList({
+        await API.getBetBalance({
           ...removeEmptyStringKeys(form),
-          ids: Array(form.id), //TODO: need to changed when API is available
-          pageSize: pagination.pageSize,
-          pageNum: pagination.currentPage
+          userId: form.userId,
+          matchId: form.matchId,
         });
       loading.value = false;
-      if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
-      dataList.push(...res.data.pageData);
-      pagination.total = res.data.count;
-      pagination.pageSize = res.data.pageSize as number;
+      if (res.data !== null) {
+        dataList.push(res.data);
+      }
+      pagination.total = dataList.length
     } catch (error) {
       loading.value = false;
     }

@@ -3,8 +3,8 @@ interface FormProps {
 }
 
 export type searchFormType = {
-  id: string; //TODO: changed to userIdOrName if api is available
-  userName: string; //TODO: changed to matchId if api is available
+  userId: string;
+  matchId: string;
 }
 
 export type { FormProps };

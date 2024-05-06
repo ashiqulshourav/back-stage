@@ -3,7 +3,7 @@
     <el-form ref="formRef" :inline="true" :model="form">
       <el-form-item prop="id">
         <el-input
-          v-model="form.id"
+          v-model="form.userId"
           :placeholder="t('请输入用户名或用户ID')"
           clearable
           v-on:clear="search"
@@ -14,7 +14,7 @@
 
       <el-form-item prop="userName">
         <el-input
-          v-model="form.userName"
+          v-model="form.matchId"
           :placeholder="t('请输入赛事ID')"
           clearable
           v-on:clear="search"
@@ -53,15 +53,14 @@ import { searchFormType } from '../utils/types';
 
 const formRef = ref();
 const emits = defineEmits(['onSearch']);
-
 const props = defineProps<{
   loading: boolean;
   form: searchFormType;
 }>();
 
 const resetForm = (formEl: FormInstance | undefined) => {
-  props.form.id = ''; //TODO: changed to userIdOrName if api is available
-  props.form.userName = ''; //TODO: changed to matchId if api is available
+  props.form.userId = '';
+  props.form.matchId = '';
   formEl.resetFields();
   emits('onSearch', ...['reload']);
 };
