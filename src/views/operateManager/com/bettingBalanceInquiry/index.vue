@@ -6,7 +6,7 @@
       :columns="columns"
       @refresh="onSearch('reload')"
     >
-      <template v-slot="{ size, dynamicColumns }">
+      <template v-slot="{ size }">
         <pure-table
           class="table_container"
           align-whole="center"
@@ -24,8 +24,7 @@
           @selection-change="handleSelectionChange"
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
-        >
-        </pure-table>
+        />
       </template>
     </PureTableBar>
   </div>
@@ -52,6 +51,12 @@ const {
   handleSelectionChange,
   form
 } = bettingBalanceInquiryHook();
+
+const dynamicColumns = computed(() => {
+  columns[4].hide = form.userId !== '' && form.matchId === '' && dataList.length !== 0;
+  return columns;
+});
+console.log('###dataList', dataList)
 </script>
 
 <style>

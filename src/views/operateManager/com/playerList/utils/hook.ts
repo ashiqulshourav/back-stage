@@ -22,6 +22,7 @@ export function userPlayerListHook(venueType: number, category: number) {
   const tenantList = reactive<
     { name: string; id: number; tenantName: string }[]
   >([]);
+  const tenantObj = reactive<any>({});
   const recordList = reactive<UserAPI.recordType[]>([]);
   const userData = reactive<UserAPI.operateUserList>(
     {} as UserAPI.operateUserList
@@ -37,7 +38,8 @@ export function userPlayerListHook(venueType: number, category: number) {
     total: 0,
     pageSize: 10,
     currentPage: 1,
-    background: true
+    background: true,
+    pageSizes: [5, 10, 20, 50, 100]
   });
 
   const recordPagination = reactive<PaginationProps>({
@@ -134,28 +136,6 @@ export function userPlayerListHook(venueType: number, category: number) {
     onSearch();
   };
 
-  const getLabelColor = (label: number, type: string) => {
-    if (type === 'risk') {
-      switch (label) {
-        case 1:
-          return 'rgba(163, 0, 20, 1)';
-        case 2:
-          return 'rgba(255, 92, 0, 1)';
-        case 3:
-          return 'rgba(255, 153, 0, 1)';
-      }
-    } else {
-      switch (label) {
-        case 1:
-          return 'rgba(24, 145, 255, 1)';
-        case 2:
-          return 'rgba(25, 190, 107, 1)';
-        case 3:
-          return 'rgba(46, 64, 80, 1)';
-      }
-    }
-  };
-
   // new part
 
   const handleCloseEditUser = () => {
@@ -195,6 +175,10 @@ export function userPlayerListHook(venueType: number, category: number) {
     });
     if (res.data?.length) {
       tenantList.push(...res?.data);
+      // 将数组根据id转换为对象
+      tenantList.map(item => {
+        tenantObj[item.id] = item;
+      });
     }
   };
 
@@ -278,7 +262,6 @@ export function userPlayerListHook(venueType: number, category: number) {
     resetForm,
     form,
     recordForm,
-    getLabelColor,
     handleUpdateUser,
     handleTableWidthChange,
     handelOpenRecord,
@@ -289,6 +272,7 @@ export function userPlayerListHook(venueType: number, category: number) {
     handleCloseEditUser,
     dispatchLabelsDel,
     dispatchLabelsAdd,
-    dispatchUpdateUser
+    dispatchUpdateUser,
+    tenantObj
   };
 }

@@ -22,7 +22,8 @@ export function useOrderLimitHook() {
     sportList.length = 0;
     sourceSportList.length = 0;
     sportList.push(...res.data);
-    sourceSportList.push(...res.data);
+    const sourceData = JSON.parse(JSON.stringify(res.data));
+    sourceSportList.push(...sourceData);
     loading.value = false;
   }
   const addSportItem = () => {
@@ -57,8 +58,66 @@ export function useOrderLimitHook() {
       esportRoundMaxBetMoring: null,
     });
   }
+  const verifyValues = () => {
+    let flag = false;
+    const esportKeys = new Set([
+      'esportRoundMaxBetMoring',
+      'esportRoundMaxBetRolling',
+      'esportSingleMaxBetMoring',
+      'esportSingleMaxBetRolling',
+      'esportSingleMaxWin',
+      'singleUserMaxWin',
+      'esportWholeMaxBetMoring',
+      'esportWholeMaxBetRolling',
+    ]);
+    const sportKeys = new Set([
+      'bigsmallHalfMaxBetMoring',
+      'bigsmallHalfMaxBetRolling',
+      'bigsmallSingleMaxWin',
+      'bigsmallWholeMaxBetMoring',
+      'bigsmallWholeMaxBetRolling',
+      'handicapHalfMaxBetMoring',
+      'handicapHalfMaxBetRolling',
+      'handicapSingleMaxWin',
+      'handicapWholeMaxBetMorning',
+      'handicapWholeMaxBetRolling',
+      'otherMaxBetMoring',
+      'otherMaxBetRolling',
+      'singleUserMaxWin',
+      'winHalfMaxBetMoring',
+      'winHalfMaxBetRolling',
+      'winSingleMaxWin',
+      'winWholeMaxBetMoring',
+      'winWholeMaxBetRolling',
+    ]);
+    [...sportList].map(item => {
+      if (item.gameType === 3) {
+        esportKeys.forEach((key: keyof RiskManagementDataAPI.LimitListType) => {
+          if (flag) return;
+          if (!item[key] || Number(item[key]) === 0) {
+            flag = true;
+            return;
+          }
+        })
+      } else {
+        sportKeys.forEach((key: keyof RiskManagementDataAPI.LimitListType) => {
+          if (flag) return;
+          if (!item[key] || Number(item[key]) === 0) {
+            flag = true;
+            return;
+          }
+        })
+      }
+    })
+    return flag;
+  }
   // 等级；修改
   const confirmSportClick = () => {
+    const flag = verifyValues();
+    if (flag) {
+      message('限额字段必须填写及大于0', { type: 'error' });
+      return;
+    }
     ElMessageBox.confirm(t('确定要修改限额吗？'), t('警告'), {
       center: true
     }).then(async () => {
