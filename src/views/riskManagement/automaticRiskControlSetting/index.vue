@@ -15,7 +15,7 @@
         </div>
 
         <div v-if="currentRiskControlLabelId == 3">
-          <EditButton
+          <EditAutoLabelButton
             :currentRiskControlLabelId="currentRiskControlLabelId"
             :isEditRiskControls="isEditRiskControls"
             :toggle="toggle"
@@ -60,7 +60,7 @@ import {
   formatNumberWithLength
 } from '@/utils/formatNumber';
 import AutoLabelLimit from './component/AutoLabelLimit.vue';
-import EditButton from './component/EditButton.vue';
+import EditAutoLabelButton from './component/EditAutoLabelButton.vue';
 
 // :category="1" :venueType="1"
 const {

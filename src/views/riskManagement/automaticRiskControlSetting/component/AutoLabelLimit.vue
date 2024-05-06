@@ -88,7 +88,11 @@
 
         <div class="custom" v-else>
           <el-tag
-            :style="`background-color: ${getLabelColor(row.level, 'attr')}`"
+            :style="`background-color: ${getLabelColor(
+              labelList.risk.filter(label => label.name == row.lableName)[0]
+                .level,
+              'attr'
+            )}`"
             class="rounded-lg w-full py-1 text-white text-center"
           >
             <span class="text-white">{{ row.lableName }}</span>
