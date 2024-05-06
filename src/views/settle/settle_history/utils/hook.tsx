@@ -134,10 +134,8 @@ export const useSettileHook = () => {
       dataList.push(...res.data.list);
       pagination.total = res.data.total;
       (
-        document.querySelector(
-          '.table_container .el-scrollbar__wrap'
-        ) as HTMLElement
-      ).scroll(0, 0);
+        document.querySelector('.table_container .el-scrollbar__wrap') as ElRef
+      )?.scroll(0, 0);
     } catch (error) {
       loading.value = false;
     }

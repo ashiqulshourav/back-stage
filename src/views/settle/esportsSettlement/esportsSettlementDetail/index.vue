@@ -63,6 +63,7 @@
                 <el-checkbox
                   :disabled="row.win != null && row.isEdit === false"
                   :label="index"
+                  :value="index"
                   border
                   :class="['mb-1', `item_${row.arr.length}`]"
                   v-for="(item, index) in row.arr"

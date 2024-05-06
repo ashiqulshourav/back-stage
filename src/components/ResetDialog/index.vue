@@ -62,7 +62,7 @@ import { getMD5 } from '@/utils/caypto';
 import { message } from '@/utils/message';
 import { IResetForm } from '@/views/login/utils/type';
 import { REGEXP_PWD } from './rule';
-import { FormInstance } from 'element-plus/es/components/form';
+import { FormInstance } from 'element-plus';
 
 const resetFormRef = ref<FormInstance>();
 const isDisabled = ref(true);

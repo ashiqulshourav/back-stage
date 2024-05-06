@@ -48,6 +48,9 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
+          <template #tenantCode="{ row }">
+            {{ tenantObj[row.tenantId]?.name }}
+          </template>
           <template #riskControlLabel="{ row }">
             <el-row
               v-if="row.riskControlLabelList"
@@ -61,6 +64,7 @@
               />
             </el-row>
           </template>
+
           <template #attributeLabel="{ row }">
             <el-row
               v-if="row.attributeLabelList"
@@ -138,6 +142,7 @@ import { usePublicHooks } from '@/hooks';
 import { hasAuth } from '@/router/utils';
 import EditPen from '@iconify-icons/ep/edit-pen';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import RiskLabelList from '@/components/RiskLabelList/index.vue';
 import LabelListCom from './component/LabelListCom.vue';
 
 defineOptions({ name: 'OPERATEMANAGERSPORTPLAYERLIST' });
@@ -177,7 +182,8 @@ const {
   handleCloseEditUser,
   dispatchLabelsDel,
   dispatchLabelsAdd,
-  dispatchUpdateUser
+  dispatchUpdateUser,
+  tenantObj
 } = userPlayerListHook(props.category, props.venueType);
 </script>
 
@@ -185,10 +191,6 @@ const {
 .el-message-box .el-message-box__btns {
   display: flex;
   flex-direction: row;
-}
-.el-dialog {
-  padding-left: 0;
-  padding-right: 0;
 }
 .el-row {
   row-gap: 0.5rem;

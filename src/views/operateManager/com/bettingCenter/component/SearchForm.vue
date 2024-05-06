@@ -24,7 +24,7 @@
             <el-option v-for="item in riskLabelList" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
-        <el-form-item :label="`${t('赛事类型')}:`" prop="category">
+        <el-form-item v-if="props.venueType===0"  :label="`${t('赛事类型')}:`" prop="category">
           <el-select
             v-model="form.category"
             :placeholder="t('赛事类型')"
@@ -246,7 +246,8 @@
           </el-button>
             <el-button
               type="primary"
-              :icon="useRenderIcon('exportFill')"
+              :icon="useRenderIcon(Download)"
+              :loading="loading"
               v-if="hasAuth('EXPORT')"
               @click="exportFile()"
             >
@@ -262,6 +263,7 @@
 import { t } from '@/plugins/i18n';
 import SearchIcon from '@iconify-icons/ep/search';
 import RefreshIcon from '@iconify-icons/ep/refresh';
+import Download from '@iconify-icons/ep/download';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import type { FormInstance } from 'element-plus';
 import dayjs from 'dayjs';
@@ -276,19 +278,20 @@ const props = defineProps<{
   loading: boolean;
   riskLabelList:UserAPI.labelType[];
   form: searchFormType;
-    tenantList:[]
+  tenantList:[];
+  venueType:number
 }>();
 
 const formRef = ref();
 const selectDate = ref('');
-const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
+const gameClassify = ref<{ label: string; value: number }[]>(props.venueType===1?ESPORT_ID_MAP:SPORT_ID_MAP);
 import {  betStatusMap,seriesTypesSingle,seriesTypesDuplex} from "../util/types";
 import {hasAuth} from "@/router/utils";
 import CustomDate from "@/components/Form/Custom_date.vue";
 
 const emits = defineEmits(['onSearch', 'exportFile']);
 const resetForm = (formEl: FormInstance | undefined) => {
-  formEl.resetFields();
+  formEl?.resetFields();
   selectDate.value = '';
   gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
   search();

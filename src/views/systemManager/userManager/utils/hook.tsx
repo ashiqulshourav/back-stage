@@ -73,12 +73,6 @@ export function useUserManager() {
     }
   }
 
-  const resetForm = formEl => {
-    if (!formEl) return;
-    formEl.resetFields();
-    onSearch();
-  };
-
   const editFormRef = ref();
   //- 新增/修改账号弹窗
   function openDialog(
@@ -245,7 +239,6 @@ export function useUserManager() {
     pagination,
     // buttonClass,
     onSearch,
-    resetForm,
     openDialog,
     form,
     handleDelete,

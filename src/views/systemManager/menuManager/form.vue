@@ -83,7 +83,7 @@
 import { ref } from 'vue';
 import { formRules } from './utils/rule';
 import { t } from '@/plugins/i18n';
-import { FormInstance } from 'element-plus/es/components/form';
+import { FormInstance } from 'element-plus';
 import { message } from '@/utils/message';
 import { TYPE_NAME } from './utils/map';
 import { inputRestrictions } from '@/utils/formatNumber';
