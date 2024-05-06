@@ -10,6 +10,7 @@ export function useLeague() {
   const dataList = reactive<ESportsAPI.ESportsLeagueListArrType[]>([]);
   const loading = ref(true);
   const switchLoadMap = ref({});
+  const levelList = reactive<ConfigCenterDataAPI.leagueLevelList[]>([]);
   const { switchStyle } = usePublicHooks();
   const pagination = reactive<PaginationProps>({
     total: 0,
@@ -24,6 +25,7 @@ export function useLeague() {
     countryId: '',
     leagueId: '',
     leagueId188Bet: '',
+    riskLevel: '',
     sportId: ''
   });
 
@@ -49,7 +51,7 @@ export function useLeague() {
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
     dataList.length = 0;
-    dataList.push(...res.data.list);
+    dataList.push(...(res.data.list ?? []));
     (
       document.querySelector(
         '.table_container .el-scrollbar__wrap'
@@ -64,20 +66,19 @@ export function useLeague() {
   ) {
     addDialog({
       title,
-      props: {
-        formInline: {
-          leagueId: row?.leagueId ?? '',
-          leagueNameCn: row?.leagueNameCn ?? '',
-          leagueNameEn: row?.leagueNameEn ?? '',
-          riskLevel: row?.riskLevel ?? ''
-        }
-      },
       width: '40%',
       draggable: true,
       closeOnClickModal: false,
       hideFooter: true,
       contentRenderer: ({ options, index }) =>
         h(editForm, {
+          levelList,
+          formInline: {
+            leagueId: row?.leagueId ?? '',
+            leagueNameCn: row?.leagueNameCn ?? '',
+            leagueNameEn: row?.leagueNameEn ?? '',
+            riskLevel: row?.riskLevel ?? ''
+          },
           onCloseDialog: (params: string) => {
             closeDialog(options, index);
             params && onSearch();
@@ -86,8 +87,17 @@ export function useLeague() {
     });
   }
 
+  //- 获取联赛等级列表
+  const initLevelList = async () => {
+    const res = await API.getLevelList();
+    if (res.code) return;
+    levelList.length = 0;
+    levelList.push(...res.data);
+  };
+
   onMounted(() => {
     onSearch();
+    initLevelList();
   });
   return {
     loading,
@@ -100,6 +110,7 @@ export function useLeague() {
     handleCurrentChange,
     openDialog,
     switchStyle,
-    form
+    form,
+    levelList
   };
 }

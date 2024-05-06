@@ -186,7 +186,6 @@ const onImgChange = (file: UploadFile) => {
 const ruleFormRef = ref();
 const newFormInline = ref(props.formInline);
 const imageUrl = ref<string>(newFormInline.value.leagueLogo as string);
-const levelList = reactive<ConfigCenterDataAPI.leagueLevelList[]>([]);
 
 const checkAll = ref(false);
 const isIndeterminate = ref(true);
@@ -206,33 +205,23 @@ const handleCheckedTagIdsChange = (value: number[]) => {
 
 onMounted(() => {
   initLeaguetags();
-  initLevelList();
 });
-
-//- 获取联赛等级列表
-const initLevelList = async () => {
-  const res = await API.getLevelList();
-  if (res.code) return;
-  levelList.length = 0;
-  levelList.push(...res.data);
-};
 
 const renderLevelList = computed(() => {
   const sportidMap = { 1: 0, 2: 1 };
-
   if (props.formInline.isEsportType) {
-    return levelList.filter(item => item.game_type === 3);
+    return props.levelList.filter(item => item.game_type === 3);
   } else if (
     sportidMap[props.formInline.sportId as keyof typeof sportidMap] === 0 ||
     sportidMap[props.formInline.sportId as keyof typeof sportidMap] === 1
   ) {
-    return levelList.filter(
+    return props.levelList.filter(
       item =>
         item.game_type ===
         sportidMap[props.formInline.sportId as keyof typeof sportidMap]
     );
   } else {
-    return levelList.filter(item => item.game_type === 2);
+    return props.levelList.filter(item => item.game_type === 2);
   }
 });
 

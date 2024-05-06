@@ -26,11 +26,28 @@
           <el-option
             :label="item.label"
             :value="item.value"
-            v-for="item in ESPORT_ID_MAP.slice(0, 4)"
+            v-for="item in ESPORT_ID_MAP"
             :key="item.value"
           />
         </el-select>
       </el-form-item>
+
+      <el-form-item :label="`${t('联赛等级')}:`" prop="riskLevel">
+        <el-select
+          v-model="form.riskLevel"
+          :placeholder="t('联赛等级')"
+          clearable
+          class="!w-[150px]"
+        >
+          <el-option
+            :label="item.league_level === -1 ? t('未评级') : item.league_level"
+            :value="item.league_level"
+            v-for="item in renderLevelList"
+            :key="item.league_level"
+          />
+        </el-select>
+      </el-form-item>
+
       <el-form-item :label="`${t('联赛中文名')}:`" prop="leagueNameEn">
         <el-input
           v-model="form.leagueNameCn"
@@ -103,9 +120,10 @@ import { formatNumber } from '@/utils/formatNumber';
 import { useMatchStore } from '@/store/match';
 import { ESPORT_ID_MAP } from '@/utils/maps/sports_map';
 
-defineProps<{
+const props = defineProps<{
   loading: boolean;
   form: SearchFormType;
+  levelList: ConfigCenterDataAPI.leagueLevelList[];
 }>();
 
 const matchStore = useMatchStore();
@@ -115,6 +133,10 @@ const resetForm = (formEl: FormInstance | undefined) => {
   formEl?.resetFields();
   search();
 };
+
+const renderLevelList = computed(() => {
+  return props.levelList.filter(item => item.game_type === 3);
+});
 
 const search = () => {
   emits('onSearch', ...['reload']);
