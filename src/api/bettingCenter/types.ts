@@ -36,6 +36,9 @@ declare namespace BetOrderAPI {
     detailId: string;
     index?: number;
     riskStatus: number;
+    riskTimes:number;
+    rejectSelected:boolean;
+    approveSelected:boolean
   };
 
   type BetOrderList = {

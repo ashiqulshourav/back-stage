@@ -142,7 +142,6 @@ import { usePublicHooks } from '@/hooks';
 import { hasAuth } from '@/router/utils';
 import EditPen from '@iconify-icons/ep/edit-pen';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-import RiskLabelList from '@/components/RiskLabelList/index.vue';
 import LabelListCom from './component/LabelListCom.vue';
 
 defineOptions({ name: 'OPERATEMANAGER_SPORTPLAYERLIST' });
