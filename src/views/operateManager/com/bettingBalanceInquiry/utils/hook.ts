@@ -1,11 +1,11 @@
 import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
-import { reactive, ref, h } from 'vue';
+import { reactive, ref } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { searchFormType } from './types';
 
 export function bettingBalanceInquiryHook() {
-  const dataList = reactive<UserAPI.operateUserList[]>([]);
+  const dataList = reactive<UserAPI.operateUserList[]>([]); //TODO: api used need to be changed
   const loading = ref(true);
   const pagination = reactive<PaginationProps>({
     total: 0,
@@ -14,8 +14,8 @@ export function bettingBalanceInquiryHook() {
     background: true
   });
   const form = reactive<searchFormType>({
-    ids: '',
-    usernames: '',
+    id: '', //TODO: changed to userIdOrName if api is available
+    userName: '', //TODO: changed to matchId if api is available
   });
 
   function handleTableWidthChange(val: number) {
@@ -39,6 +39,7 @@ export function bettingBalanceInquiryHook() {
       const res =
         await API.operateUserList({
           ...removeEmptyStringKeys(form),
+          ids: Array(form.id), //TODO: need to changed when API is available
           pageSize: pagination.pageSize,
           pageNum: pagination.currentPage
         });
@@ -47,6 +48,7 @@ export function bettingBalanceInquiryHook() {
       dataList.length = 0;
       dataList.push(...res.data.pageData);
       pagination.total = res.data.count;
+      pagination.pageSize = res.data.pageSize as number;
     } catch (error) {
       loading.value = false;
     }
