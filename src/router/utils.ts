@@ -190,7 +190,7 @@ function handleAsyncRoutes(routeList: UserAPI.RouterResData[]) {
 //- 清洗后端返回数据
 
 const transformItem = (item: UserAPI.RouterResData) => {
-  const loginName = JSON.parse(localStorage.getItem('USERSTATE') as string)?.userInfo?.name;
+  // const loginName = JSON.parse(localStorage.getItem('USERSTATE') as string)?.userInfo?.name;
   const meta = {
     title: item.name,
     enTitle: item.enName,
@@ -199,16 +199,16 @@ const transformItem = (item: UserAPI.RouterResData) => {
     keepAlive: item.type === 6,
     showLink: item.type !== 2
   }
-  if ((import.meta.env.VITE_BUILD_TYPE === 'pro' || import.meta.env.VITE_BUILD_TYPE === 'uat') && item.enName === 'menuManager' && loginName !== 'armour') {
-    meta.showLink = false;
-  }
+  // if ((import.meta.env.VITE_BUILD_TYPE === 'pro' || import.meta.env.VITE_BUILD_TYPE === 'uat') && item.enName === 'menuManager' && loginName !== 'armour') {
+  //   meta.showLink = false;
+  // }
   const baseItem = {
     path: item.path,
     name: item.path.slice(1).split('/').join('_').toUpperCase(),
     meta
   };
 
-  const hasChildrenWithZeroType = item.childResourceList.some(child => child.type === 0);
+  const hasChildrenWithZeroType = item.childResourceList.some(child => child.type === 0 || child.type === 6);
   if (hasChildrenWithZeroType) {
     (baseItem as any).children = item.childResourceList.map(transformItem);
   } else {
@@ -241,6 +241,7 @@ function initRouter() {
             data = data.map(transformItem) as any;
             handleAsyncRoutes(cloneDeep(data));
             storageSession().setItem('async-routes', data);
+            console.log('utils.ts文件 244==============行打印=', data);
             resolve(router);
           }
         });

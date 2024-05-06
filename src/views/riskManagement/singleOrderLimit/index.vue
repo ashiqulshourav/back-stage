@@ -13,11 +13,9 @@
             @click="changeType(item.value)"
           />
         </div>
-        <el-button
-          v-if="!isEditSport"
-          @click="toggle(true)"
-          type="primary"
-          >{{ t('编辑') }}</el-button>
+        <el-button v-if="!isEditSport" @click="toggle(true)" type="primary">{{
+          t('编辑')
+        }}</el-button>
         <div class="flex items-center" v-else>
           <el-button @click="cancelSportEdit" type="info">{{
             t('取消')
@@ -34,7 +32,9 @@
         size="small"
         border
         :data="sportList"
-        :columns="currentSportId !== SPORT_NAME_TYPE.esport ? columns:columns2 "
+        :columns="
+          currentSportId !== SPORT_NAME_TYPE.esport ? columns : columns2
+        "
         :header-cell-style="tableHeaderStyleBlue"
       >
         <!-- 单用户单场累计赔付限额 -->
@@ -43,9 +43,7 @@
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.singleUserMaxWin"
           />
-          <span v-else>{{
-            addThousandSeparator(row.singleUserMaxWin)
-          }}</span>
+          <span v-else>{{ addThousandSeparator(row.singleUserMaxWin) }}</span>
         </template>
         <!-- 单玩法累计期望赔付 -->
         <template #handicapSingleMaxWin="{ row }">
@@ -127,7 +125,7 @@
             addThousandSeparator(row.bigsmallWholeMaxBetRolling)
           }}</span>
         </template>
-         <!-- 大小半场单注最高可投早盘 -->
+        <!-- 大小半场单注最高可投早盘 -->
         <template #bigsmallHalfMaxBetMoring="{ row }">
            <el-input v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
@@ -137,7 +135,7 @@
             addThousandSeparator(row.bigsmallHalfMaxBetMoring)
           }}</span>
         </template>
-         <!-- 大小半场单注最高可投滚球 -->
+        <!-- 大小半场单注最高可投滚球 -->
         <template #bigsmallHalfMaxBetRolling="{ row }">
            <el-input v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
@@ -147,17 +145,15 @@
             addThousandSeparator(row.bigsmallHalfMaxBetRolling)
           }}</span>
         </template>
-         <!-- 独赢单玩法累计赔付限额 -->
+        <!-- 独赢单玩法累计赔付限额 -->
         <template #winSingleMaxWin="{ row }">
            <el-input v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.winSingleMaxWin"
           />
-          <span v-else>{{
-            addThousandSeparator(row.winSingleMaxWin)
-          }}</span>
+          <span v-else>{{ addThousandSeparator(row.winSingleMaxWin) }}</span>
         </template>
-         <!-- 独赢全场单注最高可投早盘 -->
+        <!-- 独赢全场单注最高可投早盘 -->
         <template #winWholeMaxBetMoring="{ row }">
            <el-input v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
@@ -167,7 +163,7 @@
             addThousandSeparator(row.winWholeMaxBetMoring)
           }}</span>
         </template>
-         <!-- 独赢全场单注最高可投滚球 -->
+        <!-- 独赢全场单注最高可投滚球 -->
         <template #winWholeMaxBetRolling="{ row }">
            <el-input v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
@@ -177,7 +173,7 @@
             addThousandSeparator(row.winWholeMaxBetRolling)
           }}</span>
         </template>
-         <!-- 独赢半场单注最高可投早盘 -->
+        <!-- 独赢半场单注最高可投早盘 -->
         <template #winHalfMaxBetMoring="{ row }">
            <el-input v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
@@ -187,7 +183,7 @@
             addThousandSeparator(row.winHalfMaxBetMoring)
           }}</span>
         </template>
-         <!-- 独赢半场单注最高可投滚球 -->
+        <!-- 独赢半场单注最高可投滚球 -->
         <template #winHalfMaxBetRolling="{ row }">
            <el-input v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
@@ -197,25 +193,21 @@
             addThousandSeparator(row.winHalfMaxBetRolling)
           }}</span>
         </template>
-         <!-- 其他玩法单玩法累计赔付限额 -->
+        <!-- 其他玩法单玩法累计赔付限额 -->
         <template #otherSingleMaxWin="{ row }">
            <el-input v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.otherSingleMaxWin"
           />
-          <span v-else>{{
-            addThousandSeparator(row.otherSingleMaxWin)
-          }}</span>
+          <span v-else>{{ addThousandSeparator(row.otherSingleMaxWin) }}</span>
         </template>
-         <!-- 其他玩法全场单注最高可投早盘 -->
+        <!-- 其他玩法全场单注最高可投早盘 -->
         <template #otherMaxBetMoring="{ row }">
            <el-input v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.otherMaxBetMoring"
           />
-          <span v-else>{{
-            addThousandSeparator(row.otherMaxBetMoring)
-          }}</span>
+          <span v-else>{{ addThousandSeparator(row.otherMaxBetMoring) }}</span>
         </template>
         <!-- 其他玩法全场单注最高可投滚球 -->
         <template #otherMaxBetRolling="{ row }">
@@ -223,9 +215,7 @@
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.otherMaxBetRolling"
           />
-          <span v-else>{{
-            addThousandSeparator(row.otherMaxBetRolling)
-          }}</span>
+          <span v-else>{{ addThousandSeparator(row.otherMaxBetRolling) }}</span>
         </template>
         <!-- 电竞单玩法累计赔付 -->
         <template #esportSingleMaxWin="{ row }">
@@ -233,9 +223,7 @@
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.esportSingleMaxWin"
           />
-          <span v-else>{{
-            addThousandSeparator(row.esportSingleMaxWin)
-          }}</span>
+          <span v-else>{{ addThousandSeparator(row.esportSingleMaxWin) }}</span>
         </template>
         <!-- 电竞全局单注最高可投早盘 -->
         <template #esportWholeMaxBetMoring="{ row }">
@@ -303,7 +291,7 @@
 </template>
 
 <script setup lang="ts">
-import { useOrderLimitHook} from './utils/hook';
+import { useOrderLimitHook } from './utils/hook';
 import { SPORT_LIST_MAP, SPORT_NAME_TYPE } from './utils/map';
 import CustomButton from '@/components/Form/CustomButton.vue';
 import { t } from '@/plugins/i18n';
@@ -313,7 +301,7 @@ import {
   formatNumberAndFillNull
 } from '@/utils/formatNumber';
 
-defineOptions({ name: 'CONFIGCENTER_CLASSIFY_SETTING' });
+defineOptions({ name: 'RISKMANAGEMENT_SINGLEORDERLIMIT' });
 const { tableHeaderStyleBlue } = usePublicHooks();
 
 const {
