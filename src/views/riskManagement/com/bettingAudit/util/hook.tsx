@@ -224,7 +224,9 @@ export function useBettingAuditHook(venueType: number) {
             str = useSportFormatDetail(data)[3];
             break;
           case 'teamName':
-            if (data.kindsCode !== 'Outright') {
+            if(data.kindsCode?.include('Outright')||data.kindsCode?.include('Moutright')){
+              str = '冠军赛事';
+            } else {
               str = `${data.homeTeamNameCn} vs ${data.awayTeamNameCn}`;
             }
             break;

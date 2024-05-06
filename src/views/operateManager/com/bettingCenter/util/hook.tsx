@@ -242,9 +242,11 @@ export function useBettingCenterHook(category: number, venueType: number) {
             str = useSportFormatDetail(data)[3];
             break;
           case 'teamName':
-            if (data.kindsCode !== 'Outright') {
-              str = `${data.homeTeamNameCn} vs ${data.awayTeamNameCn}`;
-            }
+           if(data.kindsCode?.include('Outright')||data.kindsCode?.include('Moutright')){
+             str = '冠军赛事';
+           } else {
+             str = `${data.homeTeamNameCn} vs ${data.awayTeamNameCn}`;
+           }
             break;
           case 'marketType':
             str = markeTypeMap[data.marketType as keyof typeof markeTypeMap];
