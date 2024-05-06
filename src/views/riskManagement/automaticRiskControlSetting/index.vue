@@ -13,19 +13,15 @@
             @click="changeType(item.value)"
           />
         </div>
-        <el-button
-          v-if="!isEditRiskControls"
-          @click="toggle(true)"
-          type="primary"
-          >{{ t('编辑') }}</el-button
-        >
-        <div class="flex items-center" v-else>
-          <el-button @click="cancelRiskControlsEdit" type="info">{{
-            t('取消')
-          }}</el-button>
-          <el-button @click="confirmRiskControlsClick" type="primary">{{
-            t('确认')
-          }}</el-button>
+
+        <div v-if="currentRiskControlLabelId == 3">
+          <EditButton
+            :currentRiskControlLabelId="currentRiskControlLabelId"
+            :isEditRiskControls="isEditRiskControls"
+            :toggle="toggle"
+            :cancelRiskControlsEdit="cancelRiskControlsEdit"
+            :confirmRiskControlsClick="confirmRiskControlsClick"
+          />
         </div>
       </div>
 
@@ -64,6 +60,7 @@ import {
   formatNumberWithLength
 } from '@/utils/formatNumber';
 import AutoLabelLimit from './component/AutoLabelLimit.vue';
+import EditButton from './component/EditButton.vue';
 
 // :category="1" :venueType="1"
 const {
