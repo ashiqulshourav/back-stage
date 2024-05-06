@@ -1,21 +1,23 @@
 <template>
   <div class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]">
     <el-form ref="formRef" :inline="true" :model="form">
-      <el-form-item prop="ids">
+      <el-form-item prop="id">
         <el-input
-          v-model="form.ids"
+          v-model="form.userId"
           :placeholder="t('请输入用户名或用户ID')"
           clearable
+          v-on:clear="search"
           v-enter="search"
           class="!w-[260px]"
         />
       </el-form-item>
 
-      <el-form-item prop="usernames">
+      <el-form-item prop="userName">
         <el-input
-          v-model="form.usernames"
+          v-model="form.matchId"
           :placeholder="t('请输入赛事ID')"
           clearable
+          v-on:clear="search"
           v-enter="search"
           class="!w-[260px]"
         />
@@ -30,7 +32,10 @@
         >
           {{ t('搜索') }}
         </el-button>
-        <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
+        <el-button 
+          :icon="useRenderIcon(Refresh)" 
+          @click="resetForm(formRef)"
+        >
           {{ t('重置') }}
         </el-button>
       </el-form-item>
@@ -48,25 +53,19 @@ import { searchFormType } from '../utils/types';
 
 const formRef = ref();
 const emits = defineEmits(['onSearch']);
-const idList = reactive<string[]>([]);
-const userIds = reactive<string[]>([]);
-
 const props = defineProps<{
   loading: boolean;
   form: searchFormType;
 }>();
 
 const resetForm = (formEl: FormInstance | undefined) => {
-  props.form.ids = '';
+  props.form.userId = '';
+  props.form.matchId = '';
   formEl.resetFields();
   emits('onSearch', ...['reload']);
 };
 
 const search = () => {
-  props.form.ids = idList.filter(item => item !== '').map(item => item.trim());
-  props.form.usernames = userIds
-    .filter(item => item !== '')
-    .map(item => item.trim());
   emits('onSearch', ...['reload']);
 };
 </script>

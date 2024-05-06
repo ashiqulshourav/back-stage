@@ -3,8 +3,8 @@ interface FormProps {
 }
 
 export type searchFormType = {
-  ids: string | number;
-  usernames: string | number;
+  userId: string;
+  matchId: string;
 }
 
 export type { FormProps };

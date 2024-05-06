@@ -129,7 +129,3 @@ watch(
   }
 );
 </script>
-
-<style lang="scss">
-
-</style>
