@@ -129,7 +129,7 @@
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <div v-if="item.kindsCode?.includes('Outright')||item.kindsCode?.includes('Moutright')" class="item_line" >
+              <div v-if="item.kindsCode?.includes('Outright')||item.kindsCode?.includes('moutright')" class="item_line" >
                 <span>冠军赛事</span>
               </div>
               <div   v-else class="item_line">
