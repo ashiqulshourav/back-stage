@@ -112,7 +112,6 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 
-import { useRiskControlHook } from '../utils/hook';
 import { usePublicHooks } from '@/hooks';
 import {
   addThousandSeparator,
