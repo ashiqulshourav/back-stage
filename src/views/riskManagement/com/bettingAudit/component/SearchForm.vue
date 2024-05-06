@@ -251,7 +251,7 @@ const props = defineProps<{
 
 const formRef = ref();
 const selectDate = ref('');
-const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
+const gameClassify = ref<{ label: string; value: number }[]>(props.venueType===1?ESPORT_ID_MAP:SPORT_ID_MAP);
 import {
   riskStatusMap,
   seriesTypesSingle,
