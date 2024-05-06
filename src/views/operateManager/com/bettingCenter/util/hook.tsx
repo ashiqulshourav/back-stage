@@ -195,7 +195,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
         dataList.map((item: any, index) => {
           item.index = index + 1;
 
-          item.id == order_id ? (item.orderRemark = list[0].orderRemark) : item;
+          item.id == order_id ? Object.assign(item, list[0]) : item;
         });
       }
     } catch (error) {
