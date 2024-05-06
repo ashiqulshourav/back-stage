@@ -92,6 +92,7 @@ onMounted(() => {
 });
 
 const resetForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
   formEl.resetFields();
   gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
   emits('onSearch', ...['reload']);
