@@ -145,7 +145,7 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import RiskLabelList from '@/components/RiskLabelList/index.vue';
 import LabelListCom from './component/LabelListCom.vue';
 
-defineOptions({ name: 'OPERATEMANAGERSPORTPLAYERLIST' });
+defineOptions({ name: 'OPERATEMANAGER_SPORTPLAYERLIST' });
 const { tableHeaderStyle } = usePublicHooks();
 
 const props = defineProps<{

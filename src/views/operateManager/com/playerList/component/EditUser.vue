@@ -30,29 +30,9 @@
             :labels="updatedLabels.risk"
             type="risk"
           />
-
-          <!-- <el-col v-for="label in updatedLabels.risk" :key="label.id" :span="6">
-            <el-row :gutter="2" class="items-center">
-              <el-col :span="20" class="custom_tag">
-                <el-tag
-                  :style="`background-color: ${getLabelColor(
-                    label.level,
-                    'risk'
-                  )}`"
-                  closable
-                  class="rounded w-full text-white text-center"
-                  @close="handleDeleteLabel(label.id)"
-                >
-                  <p>
-                    {{ label.name }}
-                  </p>
-                </el-tag>
-              </el-col>
-            </el-row>
-          </el-col> -->
         </el-row>
         <el-row class="mt-2 w-full" v-if="!isRiskLabelAdd">
-          <el-col class="flex justify-end">
+          <el-col :span="24" class="!flex justify-end">
             <el-button
               v-if="hasAuth('SETTING')"
               :icon="Plus"
@@ -74,7 +54,7 @@
               />
             </el-select>
           </el-col>
-          <el-col :span="10" class="flex justify-end">
+          <el-col :span="10" class="!flex justify-end">
             <el-button
               v-if="hasAuth('SETTING')"
               type="primary"
@@ -107,29 +87,9 @@
             :labels="updatedLabels.attr"
             type="attr"
           />
-
-          <!-- <el-col v-for="label in updatedLabels.attr" :key="label.id" :span="6">
-            <el-row :gutter="2" class="items-center">
-              <el-col :span="20" class="custom_tag">
-                <el-tag
-                  :style="`background-color: ${getLabelColor(
-                    label.level,
-                    'attr'
-                  )}`"
-                  closable
-                  @close="handleDeleteLabel(label.id, 'attr')"
-                  class="rounded w-full text-white text-center"
-                >
-                  <p>
-                    {{ label.name }}
-                  </p>
-                </el-tag>
-              </el-col>
-            </el-row>
-          </el-col> -->
         </el-row>
         <el-row class="mt-2 w-full" v-if="!isAttrLabelAdd">
-          <el-col class="flex justify-end">
+          <el-col class="!flex justify-end">
             <el-button
               v-if="hasAuth('SETTING')"
               :icon="Plus"
@@ -151,7 +111,7 @@
               />
             </el-select>
           </el-col>
-          <el-col :span="10" class="flex justify-end">
+          <el-col :span="10" class="!flex justify-end">
             <el-button
               v-if="hasAuth('SETTING')"
               type="primary"
@@ -439,23 +399,6 @@ const handleUpdate = () => {
   }).then(() => {
     if (!form.limitLevel)
       return message('您必须要设置限额等级。', { type: 'error' });
-    if (isSpecial.value) {
-      form.specialLimit.productAmountTotalLimit = parseInt(
-        form.specialLimit.productAmountTotalLimit
-      );
-      form.specialLimit.maxWinAmountLimit = parseInt(
-        form.specialLimit.maxWinAmountLimit
-      );
-      form.specialLimit.singleEventAccumulatedCompensationLimit = parseInt(
-        form.specialLimit.singleEventAccumulatedCompensationLimit
-      );
-      form.specialLimit.seriesSingleDayCumulativeCompensationLimit = parseInt(
-        form.specialLimit.seriesSingleDayCumulativeCompensationLimit
-      );
-      emits('onUpdateUser', form);
-    } else {
-      emits('onUpdateUser', { ...form, specialLimit: null });
-    }
     const addedLabels = props.userData.riskControlLabelList
       ? updatedLabels.risk.filter(
           (item: UserAPI.labelType) =>
@@ -497,26 +440,48 @@ const handleUpdate = () => {
       deletedIds.push(item.id);
     });
     if (deletedIds.length !== 0) emits('onDel', [form.id], deletedIds);
-    const { productAmountTotalLimit, maxWinAmountLimit, singleEventAccumulatedCompensationLimit, seriesSingleDayCumulativeCompensationLimit } = form.specialLimit;
-    if (isSpecial.value && (!productAmountTotalLimit || !maxWinAmountLimit || !singleEventAccumulatedCompensationLimit || !seriesSingleDayCumulativeCompensationLimit)) {
+    const {
+      productAmountTotalLimit,
+      maxWinAmountLimit,
+      singleEventAccumulatedCompensationLimit,
+      seriesSingleDayCumulativeCompensationLimit
+    } = form.specialLimit;
+    if (
+      isSpecial.value &&
+      (!productAmountTotalLimit ||
+        !maxWinAmountLimit ||
+        !singleEventAccumulatedCompensationLimit ||
+        !seriesSingleDayCumulativeCompensationLimit)
+    ) {
       message(t('必须设置所有限额才能保存'), { type: 'error' });
       return;
     }
-    if (isSpecial.value && (productAmountTotalLimit && maxWinAmountLimit && singleEventAccumulatedCompensationLimit && seriesSingleDayCumulativeCompensationLimit)) {
-      const {productAmountTotalLimit:plimit,maxWinAmountLimit: maxlimit,userSingleGamePay,bunchMatchPay} = tableData.value[0];
-      if (productAmountTotalLimit> plimit) {
+    if (
+      isSpecial.value &&
+      productAmountTotalLimit &&
+      maxWinAmountLimit &&
+      singleEventAccumulatedCompensationLimit &&
+      seriesSingleDayCumulativeCompensationLimit
+    ) {
+      const {
+        productAmountTotalLimit: plimit,
+        maxWinAmountLimit: maxlimit,
+        userSingleGamePay,
+        bunchMatchPay
+      } = tableData.value[0];
+      if (productAmountTotalLimit > plimit) {
         message(t('单注投注限额不能大于等级限额'), { type: 'error' });
         return;
       }
-      if (maxWinAmountLimit> maxlimit) {
+      if (maxWinAmountLimit > maxlimit) {
         message(t('单注赔付限额不能大于等级限额'), { type: 'error' });
         return;
       }
-      if (singleEventAccumulatedCompensationLimit> userSingleGamePay) {
+      if (singleEventAccumulatedCompensationLimit > userSingleGamePay) {
         message(t('单场赛事累计赔付限额不能大于等级限额'), { type: 'error' });
         return;
       }
-      if (seriesSingleDayCumulativeCompensationLimit> bunchMatchPay) {
+      if (seriesSingleDayCumulativeCompensationLimit > bunchMatchPay) {
         message(t('串关单日累计赔付限额不能大于等级限额'), { type: 'error' });
         return;
       }
