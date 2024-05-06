@@ -215,3 +215,4 @@ export const columns2: TableColumnList = [
     ]
   },
 ];
+
