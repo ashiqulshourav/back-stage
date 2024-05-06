@@ -376,7 +376,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     ) {
       // 注单无效
       obj = { status: betStatus.betInvalid, bgColor: '#E54752' };
-    } else if (status === 1 && billStatus === 1 && betResult === 21) {
+    } else if (status === 2 && billStatus === 1 && betResult === 21) {
       // 预约失败
       obj = { status: betStatus.reserveFail, bgColor: '#F57582' };
     } else if (status === 0 && billStatus === 0) {
