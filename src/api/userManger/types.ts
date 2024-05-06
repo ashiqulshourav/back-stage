@@ -128,7 +128,7 @@ declare namespace UserMangerAPI {
     lastLoginTime: string;
     isAdmin: number;
     comment: string;
-    roleId: number;
+    roleId: number | string;
     roleName: string;
     roleLevel: string;
     lastLoginIp: string;
