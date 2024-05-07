@@ -351,8 +351,8 @@ export function useBettingCenterHook(category: number, venueType: number) {
             break;
           case 'teamName':
             if (
-              data.kindsCode?.include('Outright') ||
-              data.kindsCode?.include('Moutright')
+              data.kindsCodes?.includes('Outright') ||
+              data.kindsCodes?.includes('Moutright')
             ) {
               str = '冠军赛事';
             } else {
