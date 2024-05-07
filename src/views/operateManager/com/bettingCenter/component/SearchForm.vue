@@ -62,7 +62,6 @@
               v-model="form.queryType"
                      @change="search"
           >
-            <el-option label="全部" :value="1"  />
               <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
           </el-select>
         </el-form-item>
