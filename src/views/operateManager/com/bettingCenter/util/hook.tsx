@@ -146,10 +146,13 @@ export function useBettingCenterHook(category: number, venueType: number) {
   };
   async function getRowByOrderId(orderId: number) {
     try {
-      const params: searchFormType = formatParams({
-        export: false,
-        orderId:orderId
-      }) as searchFormType;
+      const params: searchFormType = formatParams(
+        {
+          export: false,
+          orderId: orderId
+        },
+        1 // reset pageNum
+      ) as searchFormType;
 
       const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
         params
@@ -167,8 +170,8 @@ export function useBettingCenterHook(category: number, venueType: number) {
         });
 
         dataList.map((item: any) => {
-          if(item.id === orderId){
-            Object.assign(item, list[0])
+          if (item.id === orderId) {
+            Object.assign(item, list[0]);
           }
         });
       }
@@ -197,43 +200,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
       })
     };
   };
-
-  async function getRowByOrderId(order_id: number) {
-    try {
-      const params: searchFormType = formatParamsForOrderId(
-        {
-          export: false
-        },
-        order_id,
-        1 // page Num = 1
-      ) as searchFormType;
-
-      const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
-        params
-      );
-      if (res.code) return message(res.msg, { type: 'error' });
-
-      if (res.data !== null) {
-        let list = res?.data?.pageData || [];
-        list = list.map(row => {
-          let riskSt: number = -1;
-          row.combineOrderDetails.map(item2 => {
-            if (item2.riskStatus === 2) riskSt = 2;
-          });
-          row.riskStatus = riskSt;
-          return row;
-        });
-
-        dataList.map((item: any, index) => {
-          item.index = index + 1;
-
-          item.id == order_id ? Object.assign(item, list[0]) : item;
-        });
-      }
-    } catch (error) {
-      loading.value = false;
-    }
-  }
 
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;

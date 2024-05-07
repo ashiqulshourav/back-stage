@@ -354,6 +354,7 @@
                 <el-button
                   size="small"
                   type="primary"
+                  link
                   @click="editOrderRemark(row.id, row.orderRemark)"
                 >
                   {{ t('备注') }}

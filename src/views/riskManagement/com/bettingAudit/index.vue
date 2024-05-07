@@ -402,6 +402,7 @@
                   <el-button
                     size="small"
                     type="primary"
+                    link
                     @click="
                       editMatchDetailRemark(
                         row.id,
