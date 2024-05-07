@@ -177,6 +177,64 @@ export function useBettingCenterHook(category: number, venueType: number) {
     }
   }
 
+  const formatParamsForOrderId = (
+    privateparams = {},
+    order_id: number,
+    page: number
+  ) => {
+    return {
+      ...removeEmptyStringKeys({
+        queryType: form.queryType,
+        orderId: order_id || form.orderId,
+        seriesDetailsSingle: '',
+        seriesDetailsDuplex: '',
+        seriesType: +form.seriesType > 2 ? 2 : form.seriesType,
+        venueType: venueType,
+        category: venueType === 0 ? form.category : 1,
+        pageSize: pagination.pageSize,
+        pageNum: page || pagination.currentPage,
+        ...privateparams
+      })
+    };
+  };
+
+  async function getRowByOrderId(order_id: number) {
+    try {
+      const params: searchFormType = formatParamsForOrderId(
+        {
+          export: false
+        },
+        order_id,
+        1 // page Num = 1
+      ) as searchFormType;
+
+      const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
+        params
+      );
+      if (res.code) return message(res.msg, { type: 'error' });
+
+      if (res.data !== null) {
+        let list = res?.data?.pageData || [];
+        list = list.map(row => {
+          let riskSt: number = -1;
+          row.combineOrderDetails.map(item2 => {
+            if (item2.riskStatus === 2) riskSt = 2;
+          });
+          row.riskStatus = riskSt;
+          return row;
+        });
+
+        dataList.map((item: any, index) => {
+          item.index = index + 1;
+
+          item.id == order_id ? Object.assign(item, list[0]) : item;
+        });
+      }
+    } catch (error) {
+      loading.value = false;
+    }
+  }
+
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     try {

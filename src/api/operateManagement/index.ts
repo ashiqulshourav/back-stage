@@ -38,6 +38,10 @@ export const operateManagementData = {
       COMMON.BASE_RES_TYPE<null | OperateManagementDataAPI.OperateTagType>
     >('post', '/operateLabel/del', {
       data
-    })
+    }),
   // mockAPI.deleteOperateTag(data)
+
+  getBetBalance: (data: { userId: string; matchId: string }) =>
+    http.request<OperateManagementDataAPI.BetBalanceRes>
+      ('post', '/operateBalance/canBetBalance', { data }),
 };
