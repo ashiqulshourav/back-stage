@@ -166,6 +166,75 @@ export function useBettingAuditHook(venueType: number) {
     }
   }
 
+    const formatParamsForOrderId = (privateparams = {}, order_id: number) => {
+      let seriesDetails: any = [];
+      if (form.seriesType == 2) {
+        if (form.seriesDetailsSingle.length) {
+          form.seriesDetailsSingle.map((item: any) => {
+            seriesDetails.push(...seriesTypesSingle[item].list);
+          });
+        } else {
+          for (let item in seriesTypesSingle) {
+            seriesDetails.push(...seriesTypesSingle[item].list);
+          }
+        }
+      } else if (form.seriesType == 3) {
+        if (form.seriesDetailsDuplex.length) {
+          form.seriesDetailsDuplex.map((item: any) => {
+            seriesDetails.push(...seriesTypesDuplex[item].list);
+          });
+        } else {
+          for (let item in seriesTypesDuplex) {
+            seriesDetails.push(...seriesTypesDuplex[item].list);
+          }
+        }
+      } else {
+        seriesDetails = '';
+      }
+      if (seriesDetails.length > 1) {
+        seriesDetails = [...new Set(seriesDetails)];
+      }
+      return {
+        // @ts-ignore
+        ...removeEmptyStringKeys({
+          ...form,
+          seriesDetailsSingle: '',
+          seriesDetailsDuplex: '',
+          seriesDetails: seriesDetails,
+          seriesType: form.seriesType > 2 ? 2 : form.seriesType
+        }),
+        pageSize: pagination.pageSize,
+        pageNum: pagination.currentPage,
+        ...privateparams
+      };
+    };
+
+  async function getRowByOrderId(order_id: number, type?: string) {
+    if (type === 'reload') pagination.currentPage = 1;
+    try {
+      const params: searchFormType = formatParams({}) as searchFormType;
+
+      const res: BetOrderAPI.BetOrderResType = await API.bettingAuditList({
+        ...params,
+        venueType
+      });
+      loading.value = false;
+      if (res.code) return message(res.msg, { type: 'error' });
+
+      if (res.data !== null) {
+        dataList.map((item: any, index) => {
+          item.index = index + 1;
+          item.combineOrderDetails.map(item => {
+            item.rejectSelected = false;
+            item.approveSelected = false;
+          });
+        });
+      }
+    } catch (error) {
+      loading.value = false;
+    }
+  }
+
   const getTenantList = async () => {
     const res = await API.queryTenantList({ category: venueType });
     if (res.data?.length) {
@@ -224,7 +293,10 @@ export function useBettingAuditHook(venueType: number) {
             str = useSportFormatDetail(data)[3];
             break;
           case 'teamName':
-            if(data.kindsCode?.includes('Outright')||data.kindsCode?.includes('moutright')){
+            if (
+              data.kindsCode?.includes('Outright') ||
+              data.kindsCode?.includes('moutright')
+            ) {
               str = '冠军赛事';
             } else {
               str = `${data.homeTeamNameCn} vs ${data.awayTeamNameCn}`;
