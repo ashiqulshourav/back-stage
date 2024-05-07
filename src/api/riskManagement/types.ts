@@ -29,7 +29,7 @@ declare namespace RiskManagementDataAPI {
     labelType?: number;
   };
   type LimitListType = {
-    leagueLevel?: null | number,
+    leagueLevel: number,
     sportId?: null | number,
     singleUserMaxWin?: null | number,
     gameType?: null | number,
