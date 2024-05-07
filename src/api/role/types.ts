@@ -4,7 +4,11 @@ declare namespace RoleAPI {
     roleId?: string | number;
     roleName: string;
     comment: string;
+    id?: string | number;
+    dept?: string | number;
+    parentId?: string | number;
     status: string | number | boolean;
+
   };
 
   type querySysAccountListReqType = {
@@ -14,55 +18,21 @@ declare namespace RoleAPI {
     createdBy?: string;
     startCreatedAt?: string;
     endCreatedAt?: string;
-    status?: number;
   }
 
-  type querySysAccountListData = {
-    id: number;
-    name: string;
-    status: number | boolean;
-    createdAt: string;
-    createdBy: string;
-    comment?: any;
-    userCount: number;
-    disabled: boolean; // 非超级管理员隐藏按钮
-    userList: string[];
-    flag?: number;
-  }
-
-  type querySysAccountListInfo = {
-    total: number;
-    list: querySysAccountListData[];
-    pageNum: number;
-    pageSize: number;
-    size: number;
-    startRow: number;
-    endRow: number;
-    pages: number;
-    prePage: number;
-    nextPage: number;
-    isFirstPage: boolean;
-    isLastPage: boolean;
-    hasPreviousPage: boolean;
-    hasNextPage: boolean;
-    navigatePages: number;
-    navigatepageNums?: any;
-    navigateFirstPage: number;
-    navigateLastPage: number;
-  }
 
   type ChildResourceList = {
-    id: number | string;
-    name?: string;
-    enName?: string;
-    routerPath?: string;
-    parentId?: number | string;
-    type?: number | string;
-    sort: number | string;
-    resourceFlag?: number;
+    id: number;
+    name: string;
+    enName: string;
+    routerPath: string;
+    parentId: number;
+    type: number;
+    sort: number;
+    resourceFlag: number | boolean;
+    path: string;
     tableName?: string;
-    path?: string;
-    childResourceList?: any[];
+    childResourceList: any[];
   }
 
   type allPermission = {
@@ -78,8 +48,26 @@ declare namespace RoleAPI {
     childResourceList: ChildResourceList[];
   }
 
+
+  type queryRoleList = {
+    id: number | string;
+    parentId: number | string;
+    level: number;
+    dept: number | string;
+    tenantId?: any;
+    name: string;
+    status: number | boolean;
+    createdAt?: string;
+    createdBy?: string;
+    comment?: string | null;
+    subRoleNodeList: queryRoleList[];
+    userCount?: number;
+    userList?: any;
+  }
+
+
   type addSysAccountReqType = COMMON.BASE_RES_TYPE<null>;
-  type querySysAccountListResType = COMMON.BASE_RES_TYPE<querySysAccountListInfo>;
+  type queryRoleListResType = COMMON.BASE_RES_TYPE<queryRoleList[]>;
   type deleteSysAccountResType = COMMON.BASE_RES_TYPE<any>;
   type updateUserPwdResType = COMMON.BASE_RES_TYPE<any>;
   type updateStatusByIdResType = COMMON.BASE_RES_TYPE<null>;

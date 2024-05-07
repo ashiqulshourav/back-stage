@@ -7,6 +7,7 @@
       @exportFile="exportFile"
       :tenantList="tenantList"
       :riskLabelList="riskLabelList"
+      :venueType="props.venueType"
     />
 
     <PureTableBar
@@ -128,10 +129,13 @@
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <div v-if="item.kindsCode !== 'Outright'" class="item_line">
+              <div v-if="item.kindsCode?.includes('Outright')||item.kindsCode?.includes('moutright')" class="item_line" >
+                <span>冠军赛事</span>
+              </div>
+              <div   v-else class="item_line">
                 <span
-                  class="cursor-pointer"
-                  @dblclick="
+                    class="cursor-pointer"
+                    @dblclick="
                     copyTest(
                       item.homeTeamNameCn,
                       t('主队：{value}', { value: item.homeTeamNameCn })
@@ -141,8 +145,8 @@
                 >
                 vs
                 <span
-                  class="cursor-pointer"
-                  @dblclick="
+                    class="cursor-pointer"
+                    @dblclick="
                     copyTest(
                       item.awayTeamNameCn,
                       t('客队：{value}', { value: item.awayTeamNameCn })
@@ -263,7 +267,7 @@
                   )
                 }}
               </div>
-              <div>{{ markeTypeMap[item.marketType] }}</div>
+              <div>{{ markeTypeMap[(item.marketType )as keyof typeof markeTypeMap] }}</div>
               <div v-if="getOddStatus(item?.betResult,item.riskStatus)">
                 <span
                   :class="
@@ -360,7 +364,7 @@
               <el-button
                 class="mb-1 w-100"
                 @click="switchDialog(true, row)"
-                v-if="row.status!==2&&hasAuth('specialSettlement'.toUpperCase())"
+                v-if="!(row.status==2||row.isReserve === 1)&&hasAuth('specialSettlement'.toUpperCase())"
               >
                 {{ t('特殊结算') }}
               </el-button>
@@ -373,6 +377,8 @@
                 <el-button
                   size="small"
                   type="primary"
+                  link
+                  :icon="useRenderIcon(EditPen)"
                   @click="editOrderRemark(row.id, row.orderRemark)"
                 >
                   {{ t('备注') }}
@@ -432,7 +438,6 @@ import { hasAuth } from '@/router/utils';
 import {
   formatSeriesType,
   useSportFormatDetail,
-  BET_RESULT_TYPE_MAP,
   EBetResultType,
   getViewOddFn,
   markeTypeMap,
@@ -444,6 +449,8 @@ import {
 import { betStatus, betStatusMap } from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
+import {useRenderIcon} from "@/components/ReIcon/src/hooks";
+import EditPen from "@iconify-icons/ep/edit-pen";
 const props = defineProps<{
   category: number;
   venueType: number;

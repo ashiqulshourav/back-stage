@@ -23,29 +23,16 @@
             {{ t('风控标签修改记录') }}>>
           </p>
         </el-row>
+
         <el-row :gutter="20" class="mt-2 w-full">
-          <el-col v-for="label in updatedLabels.risk" :key="label.id" :span="6">
-            <el-row :gutter="2" class="items-center">
-              <el-col :span="20" class="custom_tag">
-                <el-tag
-                  :style="`background-color: ${getLabelColor(
-                    label.level,
-                    'risk'
-                  )}`"
-                  closable
-                  class="rounded w-full text-white text-center"
-                  @close="handleDeleteLabel(label.id)"
-                >
-                  <p>
-                    {{ label.name }}
-                  </p>
-                </el-tag>
-              </el-col>
-            </el-row>
-          </el-col>
+          <LabelListCom
+            @onClose="handleDeleteLabel"
+            :labels="updatedLabels.risk"
+            type="risk"
+          />
         </el-row>
         <el-row class="mt-2 w-full" v-if="!isRiskLabelAdd">
-          <el-col class="flex justify-end">
+          <el-col :span="24" class="!flex justify-end">
             <el-button
               v-if="hasAuth('SETTING')"
               :icon="Plus"
@@ -67,7 +54,7 @@
               />
             </el-select>
           </el-col>
-          <el-col :span="10" class="flex justify-end">
+          <el-col :span="10" class="!flex justify-end">
             <el-button
               v-if="hasAuth('SETTING')"
               type="primary"
@@ -95,28 +82,14 @@
           </p>
         </el-row>
         <el-row :gutter="20" class="mt-2 w-full">
-          <el-col v-for="label in updatedLabels.attr" :key="label.id" :span="6">
-            <el-row :gutter="2" class="items-center">
-              <el-col :span="20" class="custom_tag">
-                <el-tag
-                  :style="`background-color: ${getLabelColor(
-                    label.level,
-                    'attr'
-                  )}`"
-                  closable
-                  @close="handleDeleteLabel(label.id, 'attr')"
-                  class="rounded w-full text-white text-center"
-                >
-                  <p>
-                    {{ label.name }}
-                  </p>
-                </el-tag>
-              </el-col>
-            </el-row>
-          </el-col>
+          <LabelListCom
+            @onClose="handleDeleteLabel"
+            :labels="updatedLabels.attr"
+            type="attr"
+          />
         </el-row>
         <el-row class="mt-2 w-full" v-if="!isAttrLabelAdd">
-          <el-col class="flex justify-end">
+          <el-col class="!flex justify-end">
             <el-button
               v-if="hasAuth('SETTING')"
               :icon="Plus"
@@ -138,7 +111,7 @@
               />
             </el-select>
           </el-col>
-          <el-col :span="10" class="flex justify-end">
+          <el-col :span="10" class="!flex justify-end">
             <el-button
               v-if="hasAuth('SETTING')"
               type="primary"
@@ -162,8 +135,8 @@
           inactive-color="#a6a6a6"
           active-text="开"
           inactive-text="关"
-          :active-value="1"
-          :inactive-value="0"
+          :active-value="0"
+          :inactive-value="1"
         />
       </el-form-item>
       <el-form-item :label="t('限额等级设置：')" prop="type">
@@ -195,31 +168,31 @@
       </el-form-item>
       <el-form-item v-if="isSpecial">
         <el-row :gutter="5" class="w-full items-center">
-          <el-col :span="6" class="text-center">
+          <el-col :span="5" class="text-center">
             <el-text>{{ t('单注投注限额') }}</el-text>
           </el-col>
-          <el-col :span="6" class="text-center">
+          <el-col :span="5" class="text-center">
             <el-text>{{ t('单注赔付限额') }}</el-text>
           </el-col>
-          <el-col :span="6" class="text-center">
-            <el-text>{{ t('单场赛事累计赔付限额 (不分早盘滚球)') }}</el-text>
+          <el-col :span="7" class="text-center">
+            <el-text>{{ t('单场赛事累计赔付限额(不分早盘滚球)') }}</el-text>
           </el-col>
-          <el-col :span="6" class="text-center">
-            <el-text>{{ t('串关单日累计赔付限额 (不分早盘滚球)') }}</el-text>
+          <el-col :span="7" class="text-center">
+            <el-text>{{ t('串关单日累计赔付限额(不分早盘滚球)') }}</el-text>
           </el-col>
-          <el-col :span="6" class="text-center">
+          <el-col :span="5" class="text-center">
             <el-input
               v-model="form.specialLimit.productAmountTotalLimit"
               :formatter="(v: string) => formatNumber(v, 13)"
             />
           </el-col>
-          <el-col :span="6" class="text-center">
+          <el-col :span="5" class="text-center">
             <el-input
               v-model="form.specialLimit.maxWinAmountLimit"
               :formatter="(v: string) => formatNumber(v, 13)"
             />
           </el-col>
-          <el-col :span="6" class="text-center">
+          <el-col :span="7" class="text-center">
             <el-input
               v-model="
                 form.specialLimit.singleEventAccumulatedCompensationLimit
@@ -227,7 +200,7 @@
               :formatter="(v: string) => formatNumber(v, 13)"
             />
           </el-col>
-          <el-col :span="6" class="text-center">
+          <el-col :span="7" class="text-center">
             <el-input
               v-model="
                 form.specialLimit.seriesSingleDayCumulativeCompensationLimit
@@ -278,6 +251,7 @@ import {
   specialLimitType
 } from '../utils/types';
 import { formatNumber } from '@/utils/formatNumber';
+import LabelListCom from './LabelListCom.vue';
 
 const props = defineProps<{
   isEditUser: boolean;
@@ -299,11 +273,11 @@ const limitList = reactive<UserAPI.UserLevelLimitListRes[]>([]);
 
 const limitColumns: TableColumnList = [
   {
-    label: t('单注限额'),
+    label: t('单注投注限额'),
     prop: 'productAmountTotalLimit'
   },
   {
-    label: t('单注赔付'),
+    label: t('单注赔付限额'),
     prop: 'maxWinAmountLimit'
   },
   {
@@ -343,28 +317,6 @@ const tableData = computed(() => {
     (item: UserAPI.UserLevelLimitListRes) => item.levelLimit === form.limitLevel
   );
 });
-
-const getLabelColor = (label: number, type: string) => {
-  if (type === 'risk') {
-    switch (label) {
-      case 1:
-        return 'rgba(163, 0, 20, 1)';
-      case 2:
-        return 'rgba(255, 92, 0, 1)';
-      case 3:
-        return 'rgba(255, 153, 0, 1)';
-    }
-  } else {
-    switch (label) {
-      case 1:
-        return 'rgba(24, 145, 255, 1)';
-      case 2:
-        return 'rgba(25, 190, 107, 1)';
-      case 3:
-        return 'rgba(46, 64, 80, 1)';
-    }
-  }
-};
 
 const initLimitList = async () => {
   try {
@@ -445,12 +397,64 @@ const handleUpdate = () => {
     type: 'warning',
     center: true
   }).then(() => {
+    if (!form.limitLevel)
+      return message('您必须要设置限额等级。', { type: 'error' });
+    const {
+      productAmountTotalLimit,
+      maxWinAmountLimit,
+      singleEventAccumulatedCompensationLimit,
+      seriesSingleDayCumulativeCompensationLimit
+    } = form.specialLimit;
+    if (
+      isSpecial.value &&
+      (!productAmountTotalLimit ||
+        !maxWinAmountLimit ||
+        !singleEventAccumulatedCompensationLimit ||
+        !seriesSingleDayCumulativeCompensationLimit)
+    ) {
+      message(t('必须设置所有限额才能保存'), { type: 'error' });
+      return;
+    }
+    if (
+      isSpecial.value &&
+      productAmountTotalLimit &&
+      maxWinAmountLimit &&
+      singleEventAccumulatedCompensationLimit &&
+      seriesSingleDayCumulativeCompensationLimit
+    ) {
+      const {
+        productAmountTotalLimit: plimit,
+        maxWinAmountLimit: maxlimit,
+        userSingleGamePay,
+        bunchMatchPay
+      } = tableData.value[0];
+      if (productAmountTotalLimit > plimit) {
+        message(t('单注投注限额不能大于等级限额'), { type: 'error' });
+        return;
+      }
+      if (maxWinAmountLimit > maxlimit) {
+        message(t('单注赔付限额不能大于等级限额'), { type: 'error' });
+        return;
+      }
+      if (singleEventAccumulatedCompensationLimit > userSingleGamePay) {
+        message(t('单场赛事累计赔付限额不能大于等级限额'), { type: 'error' });
+        return;
+      }
+      if (seriesSingleDayCumulativeCompensationLimit > bunchMatchPay) {
+        message(t('串关单日累计赔付限额不能大于等级限额'), { type: 'error' });
+        return;
+      }
+    }
     const addedLabels = props.userData.riskControlLabelList
       ? updatedLabels.risk.filter(
           (item: UserAPI.labelType) =>
             !props.userData.riskControlLabelList.includes(item)
         )
       : updatedLabels.risk;
+    if (updatedLabels.risk.length > 20) {
+      return message('您不能添加超过20个的标签。', { type: 'error' });
+    }
+
     if (props.userData.attributeLabelList) {
       addedLabels.push(
         ...updatedLabels.attr.filter(
@@ -460,6 +464,9 @@ const handleUpdate = () => {
       );
     } else {
       addedLabels.push(...updatedLabels.attr);
+    }
+    if (updatedLabels.attr.length > 20) {
+      return message('您不能添加超过20个的标签。', { type: 'error' });
     }
     const AddedIds: number[] = [];
     addedLabels.forEach((item: UserAPI.labelType) => {
@@ -474,12 +481,12 @@ const handleUpdate = () => {
         (item: UserAPI.labelType) => !updatedLabels.attr.includes(item)
       )
     );
-    console.log(deletedLabels);
     const deletedIds: number[] = [];
     deletedLabels.forEach((item: UserAPI.labelType) => {
       deletedIds.push(item.id);
     });
     if (deletedIds.length !== 0) emits('onDel', [form.id], deletedIds);
+    
     if (isSpecial.value) {
       form.specialLimit.productAmountTotalLimit = parseInt(
         form.specialLimit.productAmountTotalLimit
@@ -556,10 +563,3 @@ watch(
   }
 );
 </script>
-
-<style lang="scss">
-.el-dialog {
-  padding-left: 0;
-  padding-right: 0;
-}
-</style>

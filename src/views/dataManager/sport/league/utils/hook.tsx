@@ -9,6 +9,7 @@ import { searchFormType } from './types';
 export function useLeague() {
   const dataList = reactive<MetadataAPI.LeagueList[]>([]);
   const loading = ref(true);
+  const levelList = reactive<ConfigCenterDataAPI.leagueLevelList[]>([]);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -23,6 +24,7 @@ export function useLeague() {
     leagueId: '',
     leagueId188Bet: '',
     sportId: '',
+    riskLevel: '',
     category: 0
   });
 
@@ -39,6 +41,14 @@ export function useLeague() {
   function handleSelectionChange(val: number) {
     console.log('handleSelectionChange', val);
   }
+
+  //- 获取联赛等级列表
+  const initLevelList = async () => {
+    const res = await API.getLevelList();
+    if (res.code) return;
+    levelList.length = 0;
+    levelList.push(...res.data);
+  };
 
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
@@ -62,28 +72,27 @@ export function useLeague() {
   async function openDialog(title: string, row?: MetadataAPI.LeagueList) {
     addDialog({
       title,
-      props: {
-        formInline: {
-          leagueLogo: row?.leagueLogo ?? '',
-          leagueId: row?.leagueId ?? '',
-          countryId: row?.countryId ?? '',
-          leagueId188Bet: row?.leagueId188Bet ?? '',
-          leagueNameCn: row?.leagueNameCn ?? '',
-          leagueNameEn: row?.leagueNameEn ?? '',
-          level: row?.level ?? '',
-          sportId: row?.sportId ?? '',
-          category: row?.category ?? '',
-          leagueTagsId: row?.leagueTagsId ?? [],
-          isEsportType: form.category === 1,
-          riskLevel: row?.riskLevel ?? ''
-        }
-      },
       width: '40%',
       draggable: true,
       closeOnClickModal: false,
       hideFooter: true,
       contentRenderer: ({ options, index }) =>
         h(editForm, {
+          levelList,
+          formInline: {
+            leagueLogo: row?.leagueLogo ?? '',
+            leagueId: row?.leagueId ?? '',
+            countryId: row?.countryId ?? '',
+            leagueId188Bet: row?.leagueId188Bet ?? '',
+            leagueNameCn: row?.leagueNameCn ?? '',
+            leagueNameEn: row?.leagueNameEn ?? '',
+            level: row?.level ?? '',
+            sportId: row?.sportId ?? '',
+            category: row?.category ?? '',
+            leagueTagsId: row?.leagueTagsId ?? [],
+            isEsportType: form.category === 1,
+            riskLevel: row?.riskLevel ?? ''
+          },
           onCloseDialog: (params: string) => {
             closeDialog(options, index);
             params && onSearch();
@@ -94,6 +103,7 @@ export function useLeague() {
 
   onMounted(() => {
     onSearch();
+    initLevelList();
   });
 
   return {
@@ -102,6 +112,7 @@ export function useLeague() {
     pagination,
     onSearch,
     openDialog,
+    levelList,
     handleTableWidthChange,
     handleCurrentChange,
     handleSelectionChange,

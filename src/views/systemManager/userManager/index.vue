@@ -40,7 +40,7 @@
           >
             <el-switch
               v-model="row.status"
-              v-if="hasAuth('UPDATESTATUS')"
+              v-if="hasAuth('userManagerUpdate'.toUpperCase())"
               :size="size"
               inline-prompt
               class="pure-datatheme"

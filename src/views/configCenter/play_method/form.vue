@@ -36,6 +36,7 @@
                 v-for="(d, i) in Object.entries(item.configMap)"
                 :key="i"
                 :value="d[0]"
+                :label="d[0]"
                 >{{ d[0].split('|')[1] }}</el-checkbox
               >
             </el-checkbox-group>

@@ -11,7 +11,7 @@ export const columns: TableColumnList = [
   },
   {
     label: t('用戶ID'),
-    prop: 'id',
+    prop: 'userid',
     minWidth: 150
   },
   {
@@ -21,22 +21,22 @@ export const columns: TableColumnList = [
   },
   {
     label: t('单场赛事当日剩余可投注额度'),
-    prop: 'remainAmountSingleEvent',
+    prop: 'matchMaxWinLimit',
     minWidth: 150
   },
   {
     label: t('单关单日剩余可投额度'),
-    prop: 'remainAmountSingleLevel',
+    prop: 'seriesType1DayMaxLimit',
     minWidth: 150
   },
   {
     label: t('串关当日剩余可投额度'),
-    prop: 'remainAmountCollusionDay',
+    prop: 'seriesType2DayMaxLimit',
     minWidth: 150
   },
   {
     label: t('冠军当日剩余可投额度'),
-    prop: 'remainAmountWinnerDay',
+    prop: 'championDayMaxLimit',
     minWidth: 150
   }
 ];

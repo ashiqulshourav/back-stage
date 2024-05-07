@@ -77,7 +77,7 @@
             addThousandSeparator(row.bunchMatchPay)
           }}</span>
           <el-input
-            :formatter="v => formatNumberAndFillZero(v, 13)"
+            :formatter="(v:string) => formatNumberAndFillZero(v, 13)"
             v-else
             v-model="row.bunchMatchPay"
           />
@@ -88,7 +88,7 @@
             addThousandSeparator(row.championDailyPay)
           }}</span>
           <el-input
-            :formatter="v => formatNumberAndFillZero(v, 13)"
+            :formatter="(v:string) => formatNumberAndFillZero(v, 13)"
             v-else
             v-model="row.championDailyPay"
           />

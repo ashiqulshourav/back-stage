@@ -22,7 +22,7 @@ export const columns: TableColumnList = [
   },
   {
     label: t('商户编码'),
-    prop: 'tenantCode',
+    slot: 'tenantCode',
     minWidth: 150
   },
   {
