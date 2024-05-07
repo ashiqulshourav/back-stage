@@ -13,7 +13,6 @@ export type searchFormType = {
   awayTeamName?: string;
   homeTeamName?: string;
   seriesType: number | string;
-  // status:any;
   isInplay?: number | string;
   category: string | number;
   [key: string]: any;
@@ -30,7 +29,6 @@ export type searchFormType = {
 }
 
 export enum betStatus {
-  all = 1,
   PendingApprove = 2,
   unsettlementBet = 3,
   settlementBet = 4,
@@ -40,22 +38,21 @@ export enum betStatus {
   riskReject = 9,
   reserveFail = 10,
   onReverse = 11,
+  reverseCancel= 22
 }
+
 export const betStatusMap = {
-  [betStatus.all]: t('全部'),
   [betStatus.PendingApprove]: t('待审核'),
   [betStatus.unsettlementBet]: '未结算',
   [betStatus.settlementBet]: t('已结算'),
-  [betStatus.PendingApprove]: t('待审核'),
   [betStatus.betInvalid]: t('注单无效'),
   [betStatus.betFail]: t('投注失败'),
   [betStatus.eventAbnormal]: t('赛事异常'),
   [betStatus.riskReject]: t('风控拒单'),
   [betStatus.reserveFail]: t('预约失败'),
   [betStatus.onReverse]: t('预约中'),
-  '22': t('预约取消')
+  [betStatus.reverseCancel]: t('预约取消'),
 }
-
 export const seriesTypesSingle = {
   '2001': { value: '2001', name: '2串1', list: [2001] },
   '3001': { value: '3001', name: '3串1', list: [3001] },
