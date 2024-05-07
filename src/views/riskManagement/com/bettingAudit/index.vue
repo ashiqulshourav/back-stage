@@ -344,26 +344,20 @@
               v-for="(item, index) in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <!-- 
-
+              <el-checkbox
                 v-if="
                   item.riskStatus === riskStatus.rejectBetting &&
                   hasAuth('REJECT')
                 "
-             -->
-              <el-checkbox
                 :checked="item.rejectSelected"
                 @change="data => selectReject(data, row.index - 1, index)"
               ></el-checkbox>
 
-              <!-- 
-
-                  v-if="
+              <el-button
+                v-if="
                   item.riskStatus === riskStatus.rejectBetting &&
                   hasAuth('REJECT')
                 "
-               -->
-              <el-button
                 size="small"
                 type="danger"
                 @click="handleCancel(row, index)"

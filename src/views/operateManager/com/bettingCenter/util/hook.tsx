@@ -595,7 +595,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
         h(editOrder, {
           ref: editDialogRef,
           data: { orderId: id, orderRemark },
-          onCloseDialog: (_: boolean) => {
+          onCloseDialog: (value: string) => {
             closeDialog(options, index);
             //onSearch();
             getRowByOrderId(id);
