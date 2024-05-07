@@ -187,7 +187,7 @@ export function useUserManager() {
     addDialog({
       title: t('重置密码'),
       class: 'reset_dialog',
-      width: '25%',
+      width: '30%',
       center: true,
       hideFooter: true,
       closeOnClickModal: false,
