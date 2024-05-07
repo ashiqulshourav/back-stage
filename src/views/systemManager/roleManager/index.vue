@@ -63,6 +63,7 @@
               :disabled="row.disabled && userStore.userInfo.name !== 'armour'"
               :size="size"
               @click="openRoleDialog(t('编辑角色'), row)"
+              :icon="useRenderIcon(EditPen)"
             >
               {{ t('编辑') }}
             </el-button>
@@ -74,6 +75,7 @@
               :size="size"
               :disabled="row.disabled && userStore.userInfo.name !== 'armour'"
               @click="handleDelete(row)"
+              :icon="useRenderIcon(Delete)"
             >
               {{ t('删除') }}
             </el-button>
@@ -92,6 +94,9 @@ import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 import { hasAuth } from '@/router/utils';
 import { useUserStore } from '@/store/user';
+import Delete from '@iconify-icons/ep/delete';
+import EditPen from '@iconify-icons/ep/edit-pen';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 
 defineOptions({ name: 'SYSTEMMANAGER_ROLEMANAGER' });
 const { tableHeaderStyle } = usePublicHooks();
