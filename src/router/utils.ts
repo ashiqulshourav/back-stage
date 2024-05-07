@@ -241,7 +241,6 @@ function initRouter() {
             data = data.map(transformItem) as any;
             handleAsyncRoutes(cloneDeep(data));
             storageSession().setItem('async-routes', data);
-            console.log('utils.ts文件 244==============行打印=', data);
             resolve(router);
           }
         });

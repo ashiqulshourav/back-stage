@@ -25,7 +25,7 @@ import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
 import formDom from '../component/form.vue';
-import { ElMessageBox } from 'element-plus';
+import {ElMessageBox, FormInstance} from 'element-plus';
 import editOrder from '../component/editOrder.vue';
 
 export function useBettingAuditHook(venueType: number) {
@@ -66,7 +66,7 @@ export function useBettingAuditHook(venueType: number) {
     pagination.pageSize = val;
     onSearch();
   }
-  const selectReject = (flag, index, i) => {
+  const selectReject = (flag:boolean, index:number, i) => {
     dataList[index].combineOrderDetails[i]['rejectSelected'] = flag;
   };
   const selectApprove = (flag, index, i) => {
@@ -86,21 +86,21 @@ export function useBettingAuditHook(venueType: number) {
     if (form.seriesType == 2) {
       if (form.seriesDetailsSingle.length) {
         form.seriesDetailsSingle.map((item: any) => {
-          seriesDetails.push(...seriesTypesSingle[item].list);
+          seriesDetails.push(...seriesTypesSingle[item as keyof typeof seriesTypesSingle].list);
         });
       } else {
         for (let item in seriesTypesSingle) {
-          seriesDetails.push(...seriesTypesSingle[item].list);
+          seriesDetails.push(...seriesTypesSingle[item as keyof typeof seriesTypesSingle].list);
         }
       }
     } else if (form.seriesType == 3) {
       if (form.seriesDetailsDuplex.length) {
         form.seriesDetailsDuplex.map((item: any) => {
-          seriesDetails.push(...seriesTypesDuplex[item].list);
+          seriesDetails.push(...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list);
         });
       } else {
         for (let item in seriesTypesDuplex) {
-          seriesDetails.push(...seriesTypesDuplex[item].list);
+          seriesDetails.push(...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list);
         }
       }
     } else {
@@ -148,7 +148,7 @@ export function useBettingAuditHook(venueType: number) {
         dataList.push(...res?.data?.pageData);
         dataList.map((item: any, index) => {
           item.index = index + 1;
-          item.combineOrderDetails.map(item => {
+          item.combineOrderDetails.map((item:BetOrderAPI.Detail) => {
             item.rejectSelected = false;
             item.approveSelected = false;
           });
@@ -158,83 +158,28 @@ export function useBettingAuditHook(venueType: number) {
         pagination.currentPage = res?.data?.pageNum;
         Object.assign(totalInfo, res?.data?.otherData);
       }
-      document
-        .querySelector('.table_container .el-scrollbar__wrap')
-        .scroll(0, 0);
+      document.querySelector('.table_container .el-scrollbar__wrap')?.scroll(0, 0);
     } catch (error) {
       loading.value = false;
     }
   }
-
-  const formatParamsForOrderId = (privateparams = {}, order_id: number) => {
-    let seriesDetails: any = [];
-    if (form.seriesType == 2) {
-      if (form.seriesDetailsSingle.length) {
-        form.seriesDetailsSingle.map((item: any) => {
-          seriesDetails.push(...seriesTypesSingle[item].list);
-        });
-      } else {
-        for (let item in seriesTypesSingle) {
-          seriesDetails.push(...seriesTypesSingle[item].list);
-        }
-      }
-    } else if (form.seriesType == 3) {
-      if (form.seriesDetailsDuplex.length) {
-        form.seriesDetailsDuplex.map((item: any) => {
-          seriesDetails.push(...seriesTypesDuplex[item].list);
-        });
-      } else {
-        for (let item in seriesTypesDuplex) {
-          seriesDetails.push(...seriesTypesDuplex[item].list);
-        }
-      }
-    } else {
-      seriesDetails = '';
-    }
-    if (seriesDetails.length > 1) {
-      seriesDetails = [...new Set(seriesDetails)];
-    }
-    return {
-      // @ts-ignore
-      ...removeEmptyStringKeys({
-        ...form,
-        seriesDetailsSingle: '',
-        seriesDetailsDuplex: '',
-        seriesDetails: seriesDetails,
-        seriesType: form.seriesType > 2 ? 2 : form.seriesType
-      }),
-      pageSize: pagination.pageSize,
-      pageNum: pagination.currentPage,
-      ...privateparams
-    };
-  };
-
-  async function getRowByOrderId(order_id: number, type?: string) {
-    if (type === 'reload') pagination.currentPage = 1;
+  async function getRowByOrderId(orderId: string) {
     try {
-      const params: searchFormType = formatParamsForOrderId(
-        {},
-        order_id
-      ) as searchFormType;
+      const params: searchFormType = formatParams({
+        export: false,
+        orderId:orderId
+      }) as searchFormType;
 
-      const res: BetOrderAPI.BetOrderResType = await API.bettingAuditList({
-        ...params,
-        venueType
-      });
-      loading.value = false;
+      const res: BetOrderAPI.BetOrderResType = await API.bettingAuditList(
+          params
+      );
       if (res.code) return message(res.msg, { type: 'error' });
-
       if (res.data !== null) {
-        console.log('11', res.data);
-
-        dataList.map((item: any, index) => {
-          item.index = index + 1;
-          item.combineOrderDetails.map(item => {
-            item.rejectSelected = false;
-            item.approveSelected = false;
-          });
-
-          //item.id == order_id ? Object.assign(item, list[0]) : item;
+        let list = res?.data?.pageData || [];
+        dataList.map((item: any) => {
+          if(item.id === orderId){
+            Object.assign(item, list[0])
+          }
         });
       }
     } catch (error) {
@@ -253,9 +198,9 @@ export function useBettingAuditHook(venueType: number) {
     }
   };
 
-  const resetForm = formEl => {
+  const resetForm = (formEl: FormInstance) => {
     if (!formEl) return;
-    formEl.resetFields();
+    formEl?.resetFields();
     onSearch();
   };
 
@@ -300,17 +245,14 @@ export function useBettingAuditHook(venueType: number) {
             str = useSportFormatDetail(data)[3];
             break;
           case 'teamName':
-            if (
-              data.kindsCode?.includes('Outright') ||
-              data.kindsCode?.includes('moutright')
-            ) {
+            if(data.kindsCode?.includes('Outright')||data.kindsCode?.includes('moutright')){
               str = '冠军赛事';
             } else {
               str = `${data.homeTeamNameCn} vs ${data.awayTeamNameCn}`;
             }
             break;
           case 'marketType':
-            str = markeTypeMap[data.marketType];
+            str = markeTypeMap[data.marketType as keyof typeof markeTypeMap];
             break;
           case 'isSettlementAgain':
             str = data.isSettlementAgain === 2 ? '是' : '否';
@@ -322,7 +264,7 @@ export function useBettingAuditHook(venueType: number) {
             str = displayHomeAwayScore(data.settleScore, data.sportId);
             break;
           case 'betResult':
-            str = BET_RESULT_TYPE_MAP[data.betResult];
+            str = BET_RESULT_TYPE_MAP[data.betResult as keyof typeof BET_RESULT_TYPE_MAP];
             break;
           case 'scoreBenchmark':
             str = displayHomeAwayScore(data.scoreBenchmark, data.sportId);
@@ -358,8 +300,8 @@ export function useBettingAuditHook(venueType: number) {
       });
       return arr;
     });
-    const titleList = [];
-    columns.forEach(column => {
+    const titleList: string[] = [];
+    columns.forEach((column: { label: string }) => {
       titleList.push(column.label);
     });
     r.unshift(titleList);
@@ -377,10 +319,10 @@ export function useBettingAuditHook(venueType: number) {
   };
   const handleCancel = (row: any, index: number) => {
     let data = { ...row }; //...row.combineOrderDetails[index]
-    data.combineOrderDetails = data.combineOrderDetails.filter((item, i) => {
+    data.combineOrderDetails = data.combineOrderDetails.filter((item:BetOrderAPI.Detail, i:number) => {
       return i == index;
     });
-    const details = data.combineOrderDetails.map(item => {
+    const details = data.combineOrderDetails.map((item:BetOrderAPI.Detail) => {
       return { detailId: item.detailId, riskTimes: item.riskTimes };
     });
     const list = [{ orderId: data.id, details: details }];
@@ -406,7 +348,7 @@ export function useBettingAuditHook(venueType: number) {
         })
     });
   };
-  const handleApprove = (row: any, index) => {
+  const handleApprove = (row: any, index:number) => {
     let data = { ...row }; //...row.combineOrderDetails[index]
     data.combineOrderDetails = data.combineOrderDetails.filter((item, i) => {
       return i == index;
@@ -504,6 +446,7 @@ export function useBettingAuditHook(venueType: number) {
   };
   const editDialogRef = ref();
   const editMatchDetailRemark = (
+      orderId:string,
     orderDetailId: number,
     orderDetailRemark: string
   ) => {
@@ -520,7 +463,8 @@ export function useBettingAuditHook(venueType: number) {
           data: { orderDetailId, orderDetailRemark },
           onCloseDialog: (_: boolean) => {
             closeDialog(options, index);
-            onSearch();
+            getRowByOrderId(orderId)
+            // onSearch();
           }
         })
     });

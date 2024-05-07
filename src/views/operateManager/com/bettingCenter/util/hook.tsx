@@ -144,6 +144,38 @@ export function useBettingCenterHook(category: number, venueType: number) {
       ...privateparams
     };
   };
+  async function getRowByOrderId(orderId: number) {
+    try {
+      const params: searchFormType = formatParams({
+        export: false,
+        orderId:orderId
+      }) as searchFormType;
+
+      const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
+        params
+      );
+      if (res.code) return message(res.msg, { type: 'error' });
+      if (res.data !== null) {
+        let list = res?.data?.pageData || [];
+        list = list.map(row => {
+          let riskSt: number = -1;
+          row.combineOrderDetails.map(item2 => {
+            if (item2.riskStatus === 2) riskSt = 2;
+          });
+          row.riskStatus = riskSt;
+          return row;
+        });
+
+        dataList.map((item: any) => {
+          if(item.id === orderId){
+            Object.assign(item, list[0])
+          }
+        });
+      }
+    } catch (error) {
+      loading.value = false;
+    }
+  }
 
   const formatParamsForOrderId = (
     privateparams = {},
