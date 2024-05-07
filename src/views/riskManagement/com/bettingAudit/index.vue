@@ -402,7 +402,7 @@
                   <el-button
                     size="small"
                     type="primary"
-                    link
+                    :icon="useRenderIcon(EditPen)"
                     @click="
                       editMatchDetailRemark(
                         row.id,
@@ -411,7 +411,7 @@
                       )
                     "
                   >
-                    {{ t('编辑备注') }}
+                    {{ t('备注') }}
                   </el-button>
                 </div>
               </div>
@@ -482,6 +482,8 @@ import { riskStatus } from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { hasAuth } from '@/router/utils';
 import { ref } from 'vue';
+import {useRenderIcon} from "@/components/ReIcon/src/hooks";
+import EditPen from "@iconify-icons/ep/edit-pen";
 
 const { tableHeaderStyle } = usePublicHooks();
 const rejectSelectedCount = ref(0);
