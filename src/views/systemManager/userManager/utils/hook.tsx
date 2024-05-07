@@ -79,6 +79,12 @@ export function useUserManager() {
     title: string,
     row?: UserMangerAPI.querySysAccountListData
   ) {
+    if (row?.roleId === 999999999) {
+      return message(
+        t('禁止编辑临时部门与游客角色，请到部门管理之移入部门操作'),
+        { type: 'error' }
+      );
+    }
     addDialog({
       title,
       width: '30%',
