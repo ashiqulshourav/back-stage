@@ -11,25 +11,29 @@ export const columns: TableColumnList = [
   },
   {
     label: t('单用户单场累计赔付限额'),
-    slot: 'singleUserMaxWin'
+    slot: 'singleUserMaxWin',
+    width: 100,
   },
   {
     label: t('让球'),
     children: [
       {
         label: t('单玩法累计期望赔付'),
-        slot: 'handicapSingleMaxWin'
+        slot: 'handicapSingleMaxWin',
+        width: 100,
       },
       {
         label: t('全场-单注最高可投金额'),
         children: [
           {
             label: t('早盘'),
-            slot: 'handicapWholeMaxBetMorning'
+            slot: 'handicapWholeMaxBetMorning',
+            width: 100,
           },
           {
             label: t('滚球'),
-            slot: 'handicapWholeMaxBetRolling'
+            slot: 'handicapWholeMaxBetRolling',
+            width: 100,
           },
         ]
       },
@@ -38,11 +42,13 @@ export const columns: TableColumnList = [
         children: [
           {
             label: t('早盘'),
-            slot: 'handicapHalfMaxBetMoring'
+            slot: 'handicapHalfMaxBetMoring',
+            width: 100,
           },
           {
             label: t('滚球'),
-            slot: 'handicapHalfMaxBetRolling'
+            slot: 'handicapHalfMaxBetRolling',
+            width: 100,
           },
         ]
       },
@@ -53,18 +59,21 @@ export const columns: TableColumnList = [
     children: [
       {
         label: t('单玩法累计期望赔付'),
-        slot: 'bigsmallSingleMaxWin'
+        slot: 'bigsmallSingleMaxWin',
+        width: 100,
       },
       {
         label: t('全场-单注最高可投金额'),
         children: [
           {
             label: t('早盘'),
-            slot: 'bigsmallWholeMaxBetMoring'
+            slot: 'bigsmallWholeMaxBetMoring',
+            width: 100,
           },
           {
             label: t('滚球'),
-            slot: 'bigsmallWholeMaxBetRolling'
+            slot: 'bigsmallWholeMaxBetRolling',
+            width: 100,
           },
         ]
       },
@@ -73,11 +82,13 @@ export const columns: TableColumnList = [
         children: [
           {
             label: t('早盘'),
-            slot: 'bigsmallHalfMaxBetMoring'
+            slot: 'bigsmallHalfMaxBetMoring',
+            width: 100,
           },
           {
             label: t('滚球'),
-            slot: 'bigsmallHalfMaxBetRolling'
+            slot: 'bigsmallHalfMaxBetRolling',
+            width: 100,
           },
         ]
       },
@@ -88,18 +99,21 @@ export const columns: TableColumnList = [
     children: [
       {
         label: t('单玩法累计期望赔付'),
-        slot: 'winSingleMaxWin'
+        slot: 'winSingleMaxWin',
+        width: 100,
       },
       {
         label: t('全场-单注最高可投金额'),
         children: [
           {
             label: t('早盘'),
-            slot: 'winWholeMaxBetMoring'
+            slot: 'winWholeMaxBetMoring',
+            width: 100,
           },
           {
             label: t('滚球'),
-            slot: 'winWholeMaxBetRolling'
+            slot: 'winWholeMaxBetRolling',
+            width: 100,
           },
         ]
       },
@@ -108,11 +122,13 @@ export const columns: TableColumnList = [
         children: [
           {
             label: t('早盘'),
-            slot: 'winHalfMaxBetMoring'
+            slot: 'winHalfMaxBetMoring',
+            width: 100,
           },
           {
             label: t('滚球'),
-            slot: 'winHalfMaxBetRolling'
+            slot: 'winHalfMaxBetRolling',
+            width: 100,
           },
         ]
       },
@@ -123,15 +139,18 @@ export const columns: TableColumnList = [
     children: [
       {
         label: t('单玩法累计期望赔付'),
-        slot: 'otherSingleMaxWin'
+        slot: 'otherSingleMaxWin',
+        width: 100,
       },
       {
         label: t('早盘-单注最高可投金额'),
-        slot: 'otherMaxBetMoring'
+        slot: 'otherMaxBetMoring',
+        width: 100,
       },
       {
         label: t('滚球-单注最高可投金额'),
-        slot: 'otherMaxBetRolling'
+        slot: 'otherMaxBetRolling',
+        width: 100,
       },
     ]
   },
