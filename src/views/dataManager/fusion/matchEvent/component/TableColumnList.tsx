@@ -1,17 +1,26 @@
+import { ESPORT_ID_MAP, SPORT_ID_MAP } from '@/utils/maps/sports_map';
+import { getLan } from "@/utils/utilFn";
+
+const lan = getLan() ?? 'zh';
+
 export const columns: TableColumnList = [
   {
     label: t('赛种'),
     prop: 'sportId',
+    formatter: ({ sportId, category }): string => {
+      const arr = category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
+      return arr.find(_ => _.value === sportId)?.label ?? '-';
+    },
     minWidth: 100,
   },
   {
     label: t('赛事ID'),
-    slot: 'matchId',
+    prop: 'matchId',
     minWidth: 120,
   },
   {
     label: t('联赛'),
-    prop: 'league',
+    prop: lan === 'zh' ? 'leagueNameCn' : 'leagueNameEn',
     minWidth: 150,
   },
   {

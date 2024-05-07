@@ -8,6 +8,7 @@
     />
 
     <PureTableBar
+      :title="``"
       :columns="columns"
       @refresh="onSearch('reload')"
     >
@@ -29,26 +30,8 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
-          <template #leagueLogo="{ row, index }">
-            <el-image
-              preview-teleported
-              loading="lazy"
-              :src="row.leagueLogo"
-              :preview-src-list="dataList.map(v => v.leagueLogo) as string[]"
-              :initial-index="index"
-              fit="fill"
-              class="!w-[80px] h-[30px]"
-            >
-              <template #placeholder>
-                <div class="loading_container">
-                  <IconifyIconOffline icon="loadingIcon"></IconifyIconOffline>
-                </div>
-              </template>
-            </el-image>
-          </template>
           <template #operation="{ row }">
             <el-button
-              v-auth="['UPDATE']"
               class="reset-margin"
               link
               type="primary"
