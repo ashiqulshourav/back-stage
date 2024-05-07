@@ -4,7 +4,7 @@ export const columns: TableColumnList = [
   {
     label: t('序号'),
     type: 'index',
-    minWidth: 100,
+    width: 100,
     headerRenderer: d => handleTableWidth(d, t('序号'))
   },
   {

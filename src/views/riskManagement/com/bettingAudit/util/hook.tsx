@@ -461,7 +461,7 @@ export function useBettingAuditHook(venueType: number) {
         h(editOrder, {
           ref: editDialogRef,
           data: { orderDetailId, orderDetailRemark },
-          onCloseDialog: (_: boolean) => {
+          onCloseDialog: (value: string) => {
             closeDialog(options, index);
             getRowByOrderId(orderId)
             // onSearch();

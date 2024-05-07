@@ -41,7 +41,7 @@ declare namespace RiskManagementDataAPI {
     delFlag?: number; // 1是删除 其他则无感
   };
   type LimitListType = {
-    leagueLevel?: null | number,
+    leagueLevel: number,
     sportId?: null | number,
     singleUserMaxWin?: null | number,
     gameType?: null | number,
