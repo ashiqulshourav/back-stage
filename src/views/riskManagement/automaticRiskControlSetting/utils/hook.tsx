@@ -98,8 +98,9 @@ export function useRiskControlHook({
         ...transformPayload(riskControlList),
         ...transformPayload(delList)
       ]);
-      delList.length = 0;
       loading.value = false;
+      if (res.code) return message(res.msg, { type: 'error' });
+      delList.length = 0;
       isEditRiskControls.value = false;
       message(res.msg, { type: res.code ? 'error' : 'success' });
       onSearch();
