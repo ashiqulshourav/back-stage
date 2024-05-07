@@ -124,11 +124,13 @@ export function useOrderLimitHook() {
     }).then(async () => {
       loading.value = true;
       const list: any = [];
+      let dataType = new Set();
+      currentSportId.value === 3 ? (dataType = esportKeys) : (dataType = sportKeys)
       const existKey: { [key: number]: boolean } = {}
       sourceSportList.map((item) => {
         const sport = sportList.find((l) => item.leagueLevel === l.leagueLevel)
         if (sport === null || sport === undefined) return;
-        sportKeys.forEach((key: LimitListType) => {
+        dataType.forEach((key: LimitListType) => {
           const leagueLevel: number = sport.leagueLevel;
           if (existKey[leagueLevel]) return;
           if (item[key] !== sport[key]) {
