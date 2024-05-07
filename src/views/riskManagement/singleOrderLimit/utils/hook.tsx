@@ -3,7 +3,37 @@ import { reactive, ref, onMounted } from 'vue';
 import { columns, columns2 } from '../component/TableColumnList';
 import { ElMessageBox } from 'element-plus';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
-
+const esportKeys = new Set([
+  'esportRoundMaxBetMoring',
+  'esportRoundMaxBetRolling',
+  'esportSingleMaxBetMoring',
+  'esportSingleMaxBetRolling',
+  'esportSingleMaxWin',
+  'singleUserMaxWin',
+  'esportWholeMaxBetMoring',
+  'esportWholeMaxBetRolling',
+]);
+const sportKeys = new Set([
+  'bigsmallHalfMaxBetMoring',
+  'bigsmallHalfMaxBetRolling',
+  'bigsmallSingleMaxWin',
+  'bigsmallWholeMaxBetMoring',
+  'bigsmallWholeMaxBetRolling',
+  'handicapHalfMaxBetMoring',
+  'handicapHalfMaxBetRolling',
+  'handicapSingleMaxWin',
+  'handicapWholeMaxBetMorning',
+  'handicapWholeMaxBetRolling',
+  'otherMaxBetMoring',
+  'otherMaxBetRolling',
+  'singleUserMaxWin',
+  'winHalfMaxBetMoring',
+  'winHalfMaxBetRolling',
+  'winSingleMaxWin',
+  'winWholeMaxBetMoring',
+  'winWholeMaxBetRolling',
+]);
+type LimitListType = keyof RiskManagementDataAPI.LimitListType;
 export function useOrderLimitHook() {
   const sportList = reactive<RiskManagementDataAPI.LimitListType[]>([]);
   const sourceSportList = reactive<RiskManagementDataAPI.LimitListType[]>([]);
@@ -60,36 +90,7 @@ export function useOrderLimitHook() {
   }
   const verifyValues = () => {
     let flag = false;
-    const esportKeys = new Set([
-      'esportRoundMaxBetMoring',
-      'esportRoundMaxBetRolling',
-      'esportSingleMaxBetMoring',
-      'esportSingleMaxBetRolling',
-      'esportSingleMaxWin',
-      'singleUserMaxWin',
-      'esportWholeMaxBetMoring',
-      'esportWholeMaxBetRolling',
-    ]);
-    const sportKeys = new Set([
-      'bigsmallHalfMaxBetMoring',
-      'bigsmallHalfMaxBetRolling',
-      'bigsmallSingleMaxWin',
-      'bigsmallWholeMaxBetMoring',
-      'bigsmallWholeMaxBetRolling',
-      'handicapHalfMaxBetMoring',
-      'handicapHalfMaxBetRolling',
-      'handicapSingleMaxWin',
-      'handicapWholeMaxBetMorning',
-      'handicapWholeMaxBetRolling',
-      'otherMaxBetMoring',
-      'otherMaxBetRolling',
-      'singleUserMaxWin',
-      'winHalfMaxBetMoring',
-      'winHalfMaxBetRolling',
-      'winSingleMaxWin',
-      'winWholeMaxBetMoring',
-      'winWholeMaxBetRolling',
-    ]);
+
     [...sportList].map(item => {
       if (item.gameType === 3) {
         esportKeys.forEach((key: keyof RiskManagementDataAPI.LimitListType) => {
@@ -122,7 +123,22 @@ export function useOrderLimitHook() {
       center: true
     }).then(async () => {
       loading.value = true;
-      const res = await API.updateLevelLimit([...sportList, ...delList]);
+      const list: any = [];
+      const existKey: { [key: number]: boolean } = {}
+      sourceSportList.map((item) => {
+        const sport = sportList.find((l) => item.leagueLevel === l.leagueLevel)
+        if (sport === null || sport === undefined) return;
+        sportKeys.forEach((key: LimitListType) => {
+          const leagueLevel: number = sport.leagueLevel;
+          if (existKey[leagueLevel]) return;
+          if (item[key] !== sport[key]) {
+            list.push(sport);
+            existKey[leagueLevel] = true;
+            return;
+          }
+        })
+      })
+      const res = await API.updateLevelLimit(list);
       delList.length = 0;
       loading.value = false;
       isEditSport.value = false;
