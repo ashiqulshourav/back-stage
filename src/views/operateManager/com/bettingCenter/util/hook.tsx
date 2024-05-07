@@ -419,7 +419,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
     isSpecialSettle?: number
   ) => {
 
-    console.log(1111111,betResult,riskStatus)
     let obj = { status: -1, bgColor: '' };
     if (isSpecialSettle === 1) {
       // 特殊结算也算已结算
