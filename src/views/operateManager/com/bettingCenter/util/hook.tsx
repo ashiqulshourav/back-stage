@@ -367,7 +367,29 @@ export function useBettingCenterHook(category: number, venueType: number) {
             break;
           case 'status':
             str =
-              betStatusMap[data.displayStatus as keyof typeof betStatusMap];
+              betStatusMap[
+                getStatus(
+                  data.status,
+                  data.billStatus,
+                  data.betResult,
+                  data.isReserve,
+                  data.riskStatus,
+                  data.isSpecialSettle
+                )?.status as keyof typeof betStatusMap
+              ];
+            break;
+          case 'billStatus':
+            str =
+              betStatusMap[
+                getStatus(
+                  data.status,
+                  data.billStatus,
+                  data.betResult,
+                  data.isReserve,
+                  data.riskStatus,
+                  data.isSpecialSettle
+                )?.status as keyof typeof betStatusMap
+              ];
             break;
           case 'settleScore':
             str = displayHomeAwayScore(data.settleScore, data.sportId);
@@ -444,32 +466,58 @@ export function useBettingCenterHook(category: number, venueType: number) {
       }
     });
   };
-
-
-  const getBetStatusColor = (displayStatus:number)=>{
-    switch (displayStatus){
-      case betStatus.PendingApprove:
-        return '#F57582'
-      case betStatus.settlementBet:
-        return '#F57582';
-      case betStatus.unsettlementBet:
-        return '#FFC53D';
-      case betStatus.betInvalid:
-        return '#E54752';
-      case betStatus.eventAbnormal:
-        return '#F88D48';
-      case betStatus.riskReject:
-        return '#F88D48';
-      case betStatus.reserveFail:
-        return '#F57582';
-      case betStatus.onReverse:
-        return '#F57582';
-      case betStatus.reverseCancel:
-        return '#F57582';
-      default:
-         '#F57582';
+  const getStatus = (
+    status: number,
+    billStatus: number,
+    betResult: number,
+    isReserve: number,
+    riskStatus?: number,
+    isSpecialSettle?: number
+  ) => {
+    let obj = { status: -1, bgColor: '' };
+    if (isSpecialSettle === 1) {
+      // 特殊结算也算已结算
+      obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
+    } else if (betResult == 22) {
+      obj = { status: 22, bgColor: '#F57582' }; //预约取消
+    } else if (riskStatus === 2) {
+      obj = { status: betStatus.PendingApprove, bgColor: '#F57582' }; //待审核
+    } else if (
+      status == 2 &&
+      billStatus === 1 &&
+      (betResult === 22 || betResult === 23)
+    ) {
+      // 注单无效
+      obj = { status: betStatus.betInvalid, bgColor: '#E54752' };
+    } else if (status === 2 && billStatus === 1 && betResult === 21) {
+      // 预约失败
+      obj = { status: betStatus.reserveFail, bgColor: '#F57582' };
+    } else if (status === 0 && billStatus === 0) {
+      // 未结算
+      if (isReserve === 1) {
+        // 预约中
+        obj = { status: betStatus.onReverse, bgColor: '#F57582' };
+      } else {
+        obj = { status: betStatus.unsettlementBet, bgColor: '#FFC53D' };
+      }
+    } else if (status === 1 && billStatus === 1) {
+      // 已结算
+      obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
+    } else if (status === 4 && billStatus === 1 && betResult === 61) {
+      // 封控拒单
+      obj = { status: betStatus.riskReject, bgColor: '#F88D48' };
+    } else if (status === 3) {
+      // 待确认
+      obj = { status: betStatus.PendingApprove, bgColor: '#FFC53D' };
+    } else if (status === 4) {
+      // 投注失败
+      obj = { status: betStatus.betFail, bgColor: '#F57582' };
+    } else if (status === 5) {
+      // 赛事异常
+      obj = { status: betStatus.eventAbnormal, bgColor: '#F88D48' };
     }
-  }
+    return obj;
+  };
 
   const getOddStatus = (betResult: number, riskSt: number) => {
     if (riskSt === riskStatus.reject || riskSt === riskStatus.autoReject) {
@@ -547,7 +595,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
         h(editOrder, {
           ref: editDialogRef,
           data: { orderId: id, orderRemark },
-          onCloseDialog: (value: string) => {
+          onCloseDialog: (_: boolean) => {
             closeDialog(options, index);
             //onSearch();
             getRowByOrderId(id);
@@ -589,6 +637,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     handleSelectionChange,
     exportFile,
     handleCancel,
+    getStatus,
     copyTest,
     tenantObj,
     UDialogFlag,
@@ -596,7 +645,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
     isShowCancel,
     editOrderRemark,
     riskLabelList,
-    getOddStatus,
-    getBetStatusColor
+    getOddStatus
   };
 }

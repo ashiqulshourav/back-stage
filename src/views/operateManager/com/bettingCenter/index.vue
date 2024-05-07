@@ -295,17 +295,40 @@
           <template #status="{ row }">
             <div
               :style="{
-                background: getBetStatusColor(row.displayStatus)
+                background: getStatus(
+                  row.status,
+                  row.billStatus,
+                  row.combineOrderDetails[0].betResult,
+                  row.isReserve,
+                  row.riskStatus,
+                  row.isSpecialSettle
+                ).bgColor
               }"
               class="status_detail status_btn mb-1"
             >
               {{
-                betStatusMap[row.displayStatus as keyof  typeof betStatusMap] || '未定义'
+                betStatusMap[
+                  getStatus(
+                    row.status,
+                    row.billStatus,
+                    row.combineOrderDetails[0].betResult,
+                    row.isReserve,
+                    row.riskStatus,
+                    row.isSpecialSettle
+                  ).status as keyof typeof betStatusMap
+                  ]
               }}
             </div>
             <div
               v-if="
-                row.displayStatus === betStatus.settlementBet
+                getStatus(
+                  row.status,
+                  row.billStatus,
+                  row.combineOrderDetails[0].betResult,
+                  row.isReserve,
+                  row.riskStatus,
+                  row.isSpecialSettle
+                ).status === betStatus.settlementBet
               "
             >
               {{
@@ -450,8 +473,7 @@ const {
   isShowCancel,
   editOrderRemark,
   riskLabelList,
-  getOddStatus,
-  getBetStatusColor
+  getOddStatus
 } = useBettingCenterHook(props.category, props.venueType);
 </script>
 
