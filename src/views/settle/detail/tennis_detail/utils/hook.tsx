@@ -35,8 +35,7 @@ export function useTennisDetailHook() {
   //- 删除当前局
   const deleteChildItem = (
     row: SattleDataAPI.TennisEventsData,
-    index: number,
-    parIdx: number
+    index: number
   ) => {
     row.childEvents.splice(index, 1);
     // if (row.childEvents.length === 0) dataList.splice(parIdx, 1);
@@ -279,6 +278,8 @@ export function useTennisDetailHook() {
 
   //- 重新结算单事件
   const resetMatchEvent = async (row: SattleDataAPI.TennisEventsData) => {
+    if (!row.childEvents.length)
+      return message('缺少局信息', { type: 'error' });
     if (!row.isCanResetSettle) return (row.isCanResetSettle = true);
     const noEmpty = row.childEvents.every(item => {
       return item.secondT1 !== '' && item.secondT2 !== '' && !item.isEdit;

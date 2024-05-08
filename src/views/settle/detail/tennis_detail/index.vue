@@ -189,9 +189,7 @@
                     :row="childRow"
                     :data="parentRow"
                     :childIndex="childIndex"
-                    @deleteChildItem="
-                      deleteChildItem(parentRow, childIndex, parentIndex)
-                    "
+                    @deleteChildItem="deleteChildItem(parentRow, childIndex)"
                   />
                   <span v-else>-</span>
                 </template>
