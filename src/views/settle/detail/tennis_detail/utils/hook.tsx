@@ -295,7 +295,7 @@ export function useTennisDetailHook() {
           firstNum: item.firstNum,
           firstT1: f1,
           firstT2: f2,
-          secondNum: item.secondNum,
+          secondNum: index + 1,
           homeAway: f1 > f2 ? 'home' : 'away',
           matchId,
           matchPeriodId: row.matchPeriodId + index + 1,
