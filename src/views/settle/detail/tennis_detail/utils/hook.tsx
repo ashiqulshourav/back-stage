@@ -33,9 +33,15 @@ export function useTennisDetailHook() {
   };
 
   //- 删除当前局
-  const deleteChildItem = (row, index, parIdx) => {
+  const deleteChildItem = (
+    row: SattleDataAPI.TennisEventsData,
+    index: number,
+    parIdx: number
+  ) => {
     row.childEvents.splice(index, 1);
-    if (row.childEvents.length === 0) dataList.splice(parIdx, 1);
+    // if (row.childEvents.length === 0) dataList.splice(parIdx, 1);
+    // if (row.childEvents.length === 0 && renderObj.settlementType !== 2)
+    // dataList.splice(parIdx, 1);
   };
 
   // - 初始化
@@ -146,7 +152,9 @@ export function useTennisDetailHook() {
     const scoreList = l.childEvents.map(item => [item.secondT1, item.secondT2]);
     let s1 = 0;
     let s2 = 0;
-    scoreList.forEach(item => (+item[0] > +item[1] ? s1++ : s2++));
+    scoreList.forEach(item =>
+      +(item[0] as string) > +(item[1] as number) ? s1++ : s2++
+    );
     t1Score.value = s1;
     t2Score.value = s2;
   };
@@ -190,7 +198,7 @@ export function useTennisDetailHook() {
       let f1 = 0;
       let f2 = 0;
       const childEvents = parentRow.childEvents.map(item => {
-        +item.secondT1 > +item.secondT2 ? f1++ : f2++;
+        +(item.secondT1 as string) > +(item.secondT2 as string) ? f1++ : f2++;
         item.firstT1 = f1;
         item.firstT2 = f2;
         (item.homeAway = f1 > f2 ? 'home' : 'away'), delete item['isEdit'];
@@ -287,22 +295,26 @@ export function useTennisDetailHook() {
       getScore();
       let f1 = 0;
       let f2 = 0;
-      const childEvents = row.childEvents.map((item, index) => {
-        +item.secondT1 > +item.secondT2 ? f1++ : f2++;
-        delete item['isEdit'];
-        return {
-          eventTime: 1,
-          firstNum: item.firstNum,
-          firstT1: f1,
-          firstT2: f2,
-          secondNum: index + 1,
-          homeAway: f1 > f2 ? 'home' : 'away',
-          matchId,
-          matchPeriodId: row.matchPeriodId + index + 1,
-          secondT1: item.secondT1,
-          secondT2: item.secondT2
-        };
-      });
+      const childEvents = row.childEvents.map(
+        (item: SattleDataAPI.ChildEvent, index: number) => {
+          +(item?.secondT1 as string) > +(item?.secondT2 as string)
+            ? f1++
+            : f2++;
+          delete item['isEdit'];
+          return {
+            eventTime: 1,
+            firstNum: item.firstNum,
+            firstT1: f1,
+            firstT2: f2,
+            secondNum: index + 1,
+            homeAway: f1 > f2 ? 'home' : 'away',
+            matchId,
+            matchPeriodId: row.matchPeriodId + index + 1,
+            secondT1: item.secondT1,
+            secondT2: item.secondT2
+          };
+        }
+      );
       row.loading = true;
       const params = {
         childEvents,
@@ -361,7 +373,7 @@ export function useTennisDetailHook() {
         let f1 = 0;
         let f2 = 0;
         const childEvents = item.childEvents.map(item => {
-          +item.secondT1 > +item.secondT2 ? f1++ : f2++;
+          +(item.secondT1 as string) > +(item.secondT2 as string) ? f1++ : f2++;
           item.firstT1 = f1;
           item.firstT2 = f2;
           (item.homeAway = f1 > f2 ? 'home' : 'away'), delete item['isEdit'];
@@ -394,7 +406,7 @@ export function useTennisDetailHook() {
   };
 
   //- 删除当前盘
-  const deleteMatchEvent = row => {
+  const deleteMatchEvent = (row: SattleDataAPI.TennisEventsData) => {
     ElMessageBox.confirm(t('确定要删除当前盘及局事件么?'), t('警告'), {
       dangerouslyUseHTMLString: true,
       confirmButtonText: t('确认'),
