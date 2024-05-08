@@ -14,7 +14,7 @@ export const columns: TableColumnList = [
     prop: 'inningNum',
     type: 'index',
     minWidth: 100,
-    headerRenderer: d => handleTableWidth(d, t('盘'))
+    headerRenderer: d => handleTableWidth(d, t('盘'), 'auto')
   },
   {
     headerRenderer: () =>
