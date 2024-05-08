@@ -12,7 +12,7 @@ export function useRiskControlHook({
   venueType: number;
   category: number;
 }) {
-  const currentRiskControlLabelId = ref(0);
+  const currentRiskControlLabelId = ref(3);
   const loading = ref(false);
   const isEditRiskControls = ref(false);
   const labelList = reactive<labelListType>({
@@ -83,26 +83,20 @@ export function useRiskControlHook({
     }).then(async () => {
       loading.value = true;
 
-      const transformPayload = (
-        data: RiskManagementDataAPI.RiskControlTypes[]
-      ) =>
-        data.map(item => ({
-          ...item,
-          days: parseInt(item.days || 0),
-          betcount: parseInt(item.betcount || 0),
-          profitAmout: parseInt(item.profiteAmout || 0),
-          profitRate: parseInt(item.profiteRate || 0)
-        }));
-
       const res = await API.updateAutoLimitConfig([
-        ...transformPayload(riskControlList),
-        ...transformPayload(delList)
+        ...riskControlList,
+        ...delList
       ]);
-      delList.length = 0;
       loading.value = false;
       isEditRiskControls.value = false;
-      message(res.msg, { type: res.code ? 'error' : 'success' });
-      onSearch();
+      if (res.code) {        
+        return message(res.msg, { type: 'error' });
+      } else {
+        delList.length = 0;
+
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        onSearch();
+      }
     });
   };
 
@@ -135,6 +129,11 @@ export function useRiskControlHook({
       }
     }
   );
+
+  onMounted(async () => {
+    dispatchGetLabelList();
+    onSearch();
+  });
 
   return {
     currentRiskControlLabelId,

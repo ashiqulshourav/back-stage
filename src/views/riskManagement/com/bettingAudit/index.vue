@@ -129,7 +129,13 @@
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <div v-if="item.kindsCode?.includes('Outright')||item.kindsCode?.includes('moutright')"  class="item_line">
+              <div
+                v-if="
+                  item.kindsCode?.includes('Outright') ||
+                  item.kindsCode?.includes('moutright')
+                "
+                class="item_line"
+              >
                 <span>冠军赛事</span>
               </div>
               <div v-else class="item_line">
@@ -346,6 +352,7 @@
                 :checked="item.rejectSelected"
                 @change="data => selectReject(data, row.index - 1, index)"
               ></el-checkbox>
+
               <el-button
                 v-if="
                   item.riskStatus === riskStatus.rejectBetting &&
@@ -366,10 +373,6 @@
               :key="item.betItemId"
             >
               <el-checkbox
-                v-if="
-                  item.riskStatus === riskStatus.rejectBetting &&
-                  hasAuth('APPROVE')
-                "
                 :checked="item.approveSelected"
                 @change="data => selectApprove(data, row.index - 1, index)"
               ></el-checkbox>
@@ -399,14 +402,16 @@
                   <el-button
                     size="small"
                     type="primary"
+                    :icon="useRenderIcon(EditPen)"
                     @click="
                       editMatchDetailRemark(
+                        row.id,
                         item.detailId,
                         item.orderDetailRemark
                       )
                     "
                   >
-                    {{ t('编辑备注') }}
+                    {{ t('备注') }}
                   </el-button>
                 </div>
               </div>
@@ -477,6 +482,8 @@ import { riskStatus } from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { hasAuth } from '@/router/utils';
 import { ref } from 'vue';
+import {useRenderIcon} from "@/components/ReIcon/src/hooks";
+import EditPen from "@iconify-icons/ep/edit-pen";
 
 const { tableHeaderStyle } = usePublicHooks();
 const rejectSelectedCount = ref(0);

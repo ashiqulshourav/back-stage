@@ -79,6 +79,12 @@ export function useUserManager() {
     title: string,
     row?: UserMangerAPI.querySysAccountListData
   ) {
+    if (row?.roleId === 999999999) {
+      return message(
+        t('禁止编辑临时部门与游客角色，请到部门管理之移入部门操作'),
+        { type: 'error' }
+      );
+    }
     addDialog({
       title,
       width: '30%',
@@ -181,7 +187,7 @@ export function useUserManager() {
     addDialog({
       title: t('重置密码'),
       class: 'reset_dialog',
-      width: '25%',
+      width: '30%',
       center: true,
       hideFooter: true,
       closeOnClickModal: false,

@@ -8,6 +8,7 @@
       :tenantList="tenantList"
       :riskLabelList="riskLabelList"
       :venueType="props.venueType"
+      :downloading="downloading"
     />
 
     <PureTableBar
@@ -377,6 +378,8 @@
                 <el-button
                   size="small"
                   type="primary"
+                  link
+                  :icon="useRenderIcon(EditPen)"
                   @click="editOrderRemark(row.id, row.orderRemark)"
                 >
                   {{ t('备注') }}
@@ -447,6 +450,8 @@ import {
 import { betStatus, betStatusMap } from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
+import {useRenderIcon} from "@/components/ReIcon/src/hooks";
+import EditPen from "@iconify-icons/ep/edit-pen";
 const props = defineProps<{
   category: number;
   venueType: number;
@@ -473,7 +478,8 @@ const {
   isShowCancel,
   editOrderRemark,
   riskLabelList,
-  getOddStatus
+  getOddStatus,
+  downloading
 } = useBettingCenterHook(props.category, props.venueType);
 </script>
 
@@ -540,7 +546,8 @@ const {
   text-align: center;
   height: 25px;
   line-height: 25px;
-  width: 80px;
+  min-width: 80px;
+  padding: 0 8px;
   color: #fff;
   border-radius: 4px;
 }

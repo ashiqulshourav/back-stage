@@ -6,9 +6,7 @@ export const columns: TableColumnList = [
   {
     label: t('角色等级'),
     prop: 'level',
-    align: 'left',
-    headerRenderer: (d: TableColumnRenderer) =>
-      handleTableWidth(d, t('角色等级'), 'auto')
+    align: 'left'
   },
   {
     label: t('角色名称'),
@@ -18,9 +16,7 @@ export const columns: TableColumnList = [
   },
   {
     label: t('所属一级部门'),
-    prop: 'deptName',
-    headerRenderer: (d: TableColumnRenderer) =>
-      handleTableWidth(d, t('所属一级部门'), 'auto')
+    prop: 'deptName'
   },
   {
     label: t('创建时间'),
@@ -38,7 +34,7 @@ export const columns: TableColumnList = [
   },
   {
     label: t('使用人数'),
-    formatter: ({ userCount }: { userCount?: number }) => userCount ?? '-',
+    formatter: ({ userCount }: { userCount?: string }) => userCount ?? '-',
     headerRenderer: (d: TableColumnRenderer) =>
       handleTableWidth(d, t('使用人数'), 'auto')
   },

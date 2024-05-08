@@ -140,7 +140,7 @@ export function useMemberHook(id: number, urlType: 'setting' | 'query') {
   };
 
   const confirmClick = async (row: UserMangerAPI.tenantDepartmentQueryList) => {
-    if (!row.depID || !row.roleID) {
+    if (row.deptName === '' || row.roleId === '') {
       return message(t('关联的部门或角色不能为空'), { type: 'error' });
     }
     depArr.length = 0;
@@ -165,8 +165,8 @@ export function useMemberHook(id: number, urlType: 'setting' | 'query') {
     ).then(async () => {
       const res = await API.updateDeptAndRole({
         userId: row.id,
-        id: row.depID,
-        roleId: row.roleID
+        id: row.depID ? row.depID : +row.deptName,
+        roleId: row.roleID ? row.roleID : +row.roleId
       });
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if (!res.code) onSearch();
