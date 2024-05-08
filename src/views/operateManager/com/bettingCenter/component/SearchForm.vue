@@ -24,7 +24,7 @@
             <el-option v-for="item in riskLabelList" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
-        <el-form-item :label="`${t('赛事类型')}:`" prop="category">
+        <el-form-item v-if="props.venueType===0"  :label="`${t('赛事类型')}:`" prop="category">
           <el-select
             v-model="form.category"
             :placeholder="t('赛事类型')"
@@ -44,7 +44,7 @@
           <el-select
             v-model="form.sportId"
             :placeholder="t('游戏种类')"
-            class="!w-[150px]"
+            class="!w-[160px]"
             @change="search"
           >
             <el-option :label="t('全部')" :value="''" />
@@ -57,7 +57,7 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('注单状态')}:`" prop="queryType">
-          <el-select class="min-w100"
+          <el-select class="!w-[150px]"
                   :placeholder="t('请选择状态')"
               v-model="form.queryType"
                      @change="search"
@@ -279,20 +279,21 @@ const props = defineProps<{
   loading: boolean;
   riskLabelList:UserAPI.labelType[];
   form: searchFormType;
-  tenantList: [];
+  tenantList: []
+  venueType: number
   downloading: boolean;
 }>();
 
 const formRef = ref();
 const selectDate = ref('');
-const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
+const gameClassify = ref<{ label: string; value: number }[]>(props.venueType===1?ESPORT_ID_MAP:SPORT_ID_MAP);
 import {  betStatusMap,seriesTypesSingle,seriesTypesDuplex} from "../util/types";
 import {hasAuth} from "@/router/utils";
 import CustomDate from "@/components/Form/Custom_date.vue";
 
 const emits = defineEmits(['onSearch', 'exportFile']);
 const resetForm = (formEl: FormInstance | undefined) => {
-  formEl.resetFields();
+  formEl?.resetFields();
   selectDate.value = '';
   gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
   search();

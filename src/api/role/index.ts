@@ -9,7 +9,7 @@ export const roleData = {
   updateRole: (data: RoleAPI.addSysAccountRes) => http.request<RoleAPI.addSysAccountReqType>("post", "/kmg/matchRole/v1/update", { data }),
 
   //- 角色列表
-  querySysAccountList: (data: RoleAPI.querySysAccountListReqType) => http.request<RoleAPI.querySysAccountListResType>("post", "/kmg/matchRole/v1/list", { data }),
+  querySysAccountList: (data: RoleAPI.querySysAccountListReqType) => http.request<RoleAPI.queryRoleListResType>("post", "/kmg/matchRole/v1/list", { data }),
 
   //- 角色删除
   deleteRole: (data: {
@@ -35,7 +35,7 @@ export const roleData = {
 
   //- 菜单页面数据修改
   menuUpdate: (data: Partial<RoleAPI.ChildResourceList>) => http.request<RoleAPI.allPermissionResType>("post", "/kmg/matchResource/v1/update", { data }),
-  
+
   //- 菜单页面数据删除
   menuDel: (data: { id: number | string }) => http.request<RoleAPI.DelMenuRes>("post", "/kmg/matchResource/v1/delete", { data }),
 

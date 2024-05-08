@@ -1,5 +1,4 @@
 declare namespace BetOrderAPI {
-
   type Detail = {
     "isInplay": number;
     "marketType": number;
@@ -37,46 +36,48 @@ declare namespace BetOrderAPI {
     detailId:string;
     index?:number;
     riskStatus:number;
+    riskTimes:number;
+    rejectSelected:boolean;
+    approveSelected:boolean
   }
 
   type BetOrderList = {
-    "id": string;
-    "userId": string;
-    "userName": string;
-    "tenantId": string;
-    "tenantCode": string;
-    "orderAmount": number;
-    "productAmountTotal": string;
-    "profitAmount": null;
-    "settleAmount": null;
-    "createTime": string;
-    "updateTime": string;
-    "updateUser": string;
-    "settleTime": null;
-    "settleTimes": number;
-    "status": number;
-    "billStatus": number;
-    "seriesType": number;
+    id: string;
+    userId: string;
+    userName: string;
+    tenantId: string;
+    tenantCode: string;
+    orderAmount: number;
+    productAmountTotal: string;
+    profitAmount: null;
+    settleAmount: null;
+    createTime: string;
+    updateTime: string;
+    updateUser: string;
+    settleTime: null;
+    settleTimes: number;
+    status: number;
+    billStatus: number;
+    seriesType: number;
     combineOrderDetails: Detail[];
     isSettlementAgain: number;
-    riskStatus?:number
-  }
-
-
+    riskStatus?: number;
+    orderRemark?: string;
+  };
 
   type otherDataType = {
     thisPageBetTotalProfitAmount: number;
     thisPageBetUserCount: number;
     thisPageBetTotalAmount: number;
     thisPageBetCount: number;
-  }
+  };
 
   type RiskOtherDataType = {
     profitTotal: number;
     productAmountTotal: number;
     totalUserCount: number;
-    totalCount:number;
-  }
+    totalCount: number;
+  };
 
   type BetOrderData = {
     pageSize: number;
@@ -84,9 +85,9 @@ declare namespace BetOrderAPI {
     count: number;
     groupCount: null;
     pageData: BetOrderList[];
-    otherData: otherDataType
-  }
+    otherData: otherDataType;
+  };
 
-  type BetOrderResType = COMMON.BASE_RES_TYPE<BetOrderData>
-  type betCenterCancelResType = COMMON.BASE_RES_TYPE<null>
+  type BetOrderResType = COMMON.BASE_RES_TYPE<BetOrderData>;
+  type betCenterCancelResType = COMMON.BASE_RES_TYPE<null>;
 }

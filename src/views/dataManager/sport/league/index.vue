@@ -1,6 +1,11 @@
 <template>
   <div class="main">
-    <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
+    <SearchForm
+      :form="form"
+      :loading="loading"
+      @on-search="onSearch"
+      :levelList="levelList"
+    />
 
     <PureTableBar
       :title="t('联赛列表')"
@@ -83,6 +88,7 @@ const {
   handleTableWidthChange,
   handleCurrentChange,
   handleSelectionChange,
-  form
+  form,
+  levelList
 } = useLeague();
 </script>

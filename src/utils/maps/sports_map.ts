@@ -21,6 +21,8 @@ export const SPORT_ID_MAP = [
   // { label: t('电子竞技'), value: 4, type: 'FootBall' },
 ];
 
+
+
 export const FULL_SPORT_ID_MAP = [
   { label: t('足球'), value: 1, type: 'FootBall' },
   { label: t('篮球'), value: 2, type: 'BasketBall' },
@@ -50,26 +52,26 @@ export const MATH_RULE = {
 }
 
 export const ESPORT_ID_MAP = [
-  { value: 276, label: 'DOTA2' },
-  { value: 277, label: 'CS2' },
-  { value: 278, label: '英雄联盟' },
-  { value: 279, label: '王者荣耀' },
-  { value: 280, label: 'LOL:激斗峡谷' },
-  { value: 281, label: '永劫无间' },
-  { value: 282, label: '无尽对决' },
-  { value: 285, label: '传说对决' },
-  { value: 286, label: '无畏契约' },
-  { value: 287, label: 'MMA' },
-  { value: 288, label: '绝地求生' },
-  { value: 289, label: '穿越火线' },
-  { value: 290, label: '守望先锋' },
-  { value: 291, label: '星际争霸II' },
-  { value: 292, label: '火箭联盟' },
-  { value: 293, label: '彩虹六号' },
-  { value: 294, label: '炉石传说' },
-  { value: 295, label: 'FIFA' },
-  { value: 296, label: '使命召唤' },
-  { value: 297, label: '魔兽争霸3' }
+  { value: 276, label: t('刀塔/魔兽争霸') },
+  { value: 277, label: t('反恐精英') },
+  { value: 278, label: t('英雄联盟') },
+  { value: 279, label: t('王者荣耀') },
+  { value: 280, label: t('LOL:激斗峡谷') },
+  { value: 281, label: t('永劫无间') },
+  { value: 282, label: t('无尽对决') },
+  { value: 285, label: t('传说对决') },
+  { value: 286, label: t('无畏契约') },
+  { value: 287, label: t('MMA综合格斗') },
+  { value: 288, label: t('绝地求生') },
+  { value: 289, label: t('穿越火线') },
+  { value: 290, label: t('守望先锋') },
+  { value: 291, label: t('星际争霸II') },
+  { value: 292, label: t('火箭联盟') },
+  { value: 293, label: t('彩虹六号') },
+  { value: 294, label: t('炉石传说') },
+  { value: 295, label: t('FIFA足球世界') },
+  { value: 296, label: t('使命召唤') },
+  { value: 297, label: t('魔兽争霸3') }
 ];
 
 export const MATCH_EVENT_CODE = {

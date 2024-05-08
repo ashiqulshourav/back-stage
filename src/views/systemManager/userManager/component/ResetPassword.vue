@@ -1,6 +1,6 @@
 <template>
-  <div class="p-4">
-    <div class="px-2 flex gap-1 items-start">
+  <div class="py-4">
+    <div class="py-2 flex gap-1 items-start w-full">
       <img class="w-[20px]" src="@/assets/question_mark.png" alt="question" />
       <div class="flex flex-col gap-1 w-full">
         <div class="font-bold user-name">

@@ -6,6 +6,7 @@
       @on-search="onSearch"
       @exportFile="exportFile"
       :tenantList="tenantList"
+      :venueType="venueType"
     />
 
     <PureTableBar
@@ -123,11 +124,21 @@
             </div>
           </template>
           <template #matchMessage="{ row }">
-            <div class=" match_detail match_item match_detail"
+            <div
+              class="match_detail match_item match_detail"
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <div v-if="item.kindsCode !== 'Outright'" class="item_line">
+              <div
+                v-if="
+                  item.kindsCode?.includes('Outright') ||
+                  item.kindsCode?.includes('moutright')
+                "
+                class="item_line"
+              >
+                <span>冠军赛事</span>
+              </div>
+              <div v-else class="item_line">
                 <span
                   class="cursor-pointer"
                   @dblclick="
@@ -334,15 +345,22 @@
               :key="item.betItemId"
             >
               <el-checkbox
-                v-if="item.riskStatus === riskStatus.rejectBetting && hasAuth('REJECT')"
+                v-if="
+                  item.riskStatus === riskStatus.rejectBetting &&
+                  hasAuth('REJECT')
+                "
                 :checked="item.rejectSelected"
                 @change="data => selectReject(data, row.index - 1, index)"
               ></el-checkbox>
-              <el-button v-if="item.riskStatus === riskStatus.rejectBetting && hasAuth('REJECT')"
+
+              <el-button
+                v-if="
+                  item.riskStatus === riskStatus.rejectBetting &&
+                  hasAuth('REJECT')
+                "
                 size="small"
                 type="danger"
                 @click="handleCancel(row, index)"
-
               >
                 {{ t('风控划单') }}
               </el-button>
@@ -355,13 +373,15 @@
               :key="item.betItemId"
             >
               <el-checkbox
-                v-if="item.riskStatus === riskStatus.rejectBetting && hasAuth('APPROVE')"
                 :checked="item.approveSelected"
                 @change="data => selectApprove(data, row.index - 1, index)"
               ></el-checkbox>
               <el-button
                 @change="data => selectApprove(data, row.index - 1, index)"
-                v-if="item.riskStatus === riskStatus.rejectBetting && hasAuth('APPROVE')"
+                v-if="
+                  item.riskStatus === riskStatus.rejectBetting &&
+                  hasAuth('APPROVE')
+                "
                 size="small"
                 type="primary"
                 @click="handleApprove(row, index)"
@@ -382,14 +402,16 @@
                   <el-button
                     size="small"
                     type="primary"
+                    :icon="useRenderIcon(EditPen)"
                     @click="
                       editMatchDetailRemark(
+                        row.id,
                         item.detailId,
                         item.orderDetailRemark
                       )
                     "
                   >
-                    {{ t('编辑备注') }}
+                    {{ t('备注') }}
                   </el-button>
                 </div>
               </div>
@@ -439,7 +461,7 @@
 </template>
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
-import { useLeague } from './util/hook';
+import { useBettingAuditHook } from './util/hook';
 import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
@@ -460,10 +482,17 @@ import { riskStatus } from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { hasAuth } from '@/router/utils';
 import { ref } from 'vue';
-defineOptions({ name: 'bettingCenter' });
+import {useRenderIcon} from "@/components/ReIcon/src/hooks";
+import EditPen from "@iconify-icons/ep/edit-pen";
+
 const { tableHeaderStyle } = usePublicHooks();
 const rejectSelectedCount = ref(0);
 const approveSelectedCount = ref(0);
+
+const { venueType } = defineProps<{
+  venueType: number;
+}>();
+
 const {
   loading,
   dataList,
@@ -486,7 +515,7 @@ const {
   selectReject,
   selectApprove,
   editMatchDetailRemark
-} = useLeague();
+} = useBettingAuditHook(venueType);
 watch(
   dataList,
   dataList => {
@@ -528,15 +557,17 @@ watch(
     }
   }
 }
-.user_detail,.match_detail,.bet_detail{
+.user_detail,
+.match_detail,
+.bet_detail {
   min-width: 250px;
 }
-.odd_detail{
+.odd_detail {
   min-width: 100px;
 }
-.riskStatus_detail{
+.riskStatus_detail {
   width: 220px;
- }
+}
 .match_item {
   margin-bottom: 10px;
   position: relative;
@@ -594,7 +625,7 @@ watch(
 .operate {
   width: 110px;
 }
-.operation_item{
+.operation_item {
   width: 100px;
 }
 </style>

@@ -275,6 +275,7 @@ export default defineComponent({
                   <el-checkbox
                     class="!-mr-1"
                     label="列展示"
+                    value="列展示"
                     v-model={checkAll.value}
                     indeterminate={isIndeterminate.value}
                     onChange={value => handleCheckAllChange(value)}

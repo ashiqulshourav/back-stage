@@ -44,7 +44,10 @@ export const columns: TableColumnList = [
   {
     label: t('联赛等级'),
     prop: 'riskLevel',
-    minWidth: 150
+    minWidth: 150,
+    formatter: ({ riskLevel }): string => {
+      return riskLevel < 0 ? t('未评级') : riskLevel;
+    }
   },
   {
     label: t('操作'),

@@ -1,11 +1,10 @@
 import { handleTableWidth } from '@/utils/getTableWidth';
-import { depList } from '../utils/map';
 
 export const columns: TableColumnList = [
   {
     label: t('序号'),
     type: 'index',
-    minWidth: 100,
+    width: 100,
     headerRenderer: d => handleTableWidth(d, t('序号'))
   },
   {
@@ -15,11 +14,8 @@ export const columns: TableColumnList = [
   },
   {
     label: t('所属部门'),
-    prop: 'dept',
-    minWidth: 150,
-    formatter: ({ dept }): string => {
-      return depList.find(item => +item.key === +dept)?.val;
-    }
+    prop: 'deptName',
+    minWidth: 150
   },
   {
     label: t('所属角色'),

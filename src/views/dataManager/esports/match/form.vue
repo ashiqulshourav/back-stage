@@ -91,7 +91,7 @@
           <el-option
             v-for="item in renderLevelList"
             :key="item.league_level"
-            :label="item.league_level"
+            :label="item.league_level < 0 ? t('未评级') : item.league_level"
             :value="item.league_level"
           />
         </el-select>
@@ -207,20 +207,8 @@ const cancelDialog = () => {
   emits('closeDialog');
 };
 
-onMounted(() => {
-  initLevelList();
-});
-
-const levelList = reactive<ConfigCenterDataAPI.leagueLevelList[]>([]);
-const initLevelList = async () => {
-  const res = await API.getLevelList();
-  if (res.code) return;
-  levelList.length = 0;
-  levelList.push(...res.data);
-};
-
 const renderLevelList = computed(() => {
-  return levelList.filter(item => item.game_type === 3);
+  return props.levelList.filter(item => item.game_type === 3);
 });
 </script>
 

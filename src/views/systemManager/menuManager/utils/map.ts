@@ -5,3 +5,4 @@ export const TYPE_NAME = {
   1: t("按钮"),
   2: t("详情页面"),
 }
+
