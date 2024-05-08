@@ -206,7 +206,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
           row.combineOrderDetails.map(item2 => {
             if (item2.riskStatus === 2) riskSt = 2;
             if (item2.riskStatus === 203) riskSt = 203;
-            if (item2.riskStatus === 203) riskSt = 204;
+            if (item2.riskStatus === 204) riskSt = 204;
           });
           row.riskStatus = riskSt;
           return row;
@@ -418,7 +418,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     riskStatus?: number,
     isSpecialSettle?: number
   ) => {
-
+    console.log(1111,betResult,riskStatus)
     let obj = { status: -1, bgColor: '' };
     if (isSpecialSettle === 1) {
       // 特殊结算也算已结算
