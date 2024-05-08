@@ -83,20 +83,9 @@ export function useRiskControlHook({
     }).then(async () => {
       loading.value = true;
 
-      const transformPayload = (
-        data: RiskManagementDataAPI.RiskControlTypes[]
-      ) =>
-        data.map(item => ({
-          ...item,
-          days: parseInt(item.days || 0),
-          betcount: parseInt(item.betcount || 0),
-          profitAmout: parseInt(item.profiteAmout || 0),
-          profitRate: parseInt(item.profiteRate || 0)
-        }));
-
       const res = await API.updateAutoLimitConfig([
-        ...transformPayload(riskControlList),
-        ...transformPayload(delList)
+        ...riskControlList,
+        ...delList
       ]);
       loading.value = false;
       if (res.code) {
