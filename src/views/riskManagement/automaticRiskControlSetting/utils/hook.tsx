@@ -88,8 +88,8 @@ export function useRiskControlHook({
         ...delList
       ]);
       loading.value = false;
-      if (res.code) {
-        isEditRiskControls.value = false;
+      isEditRiskControls.value = false;
+      if (res.code) {        
         return message(res.msg, { type: 'error' });
       } else {
         delList.length = 0;
