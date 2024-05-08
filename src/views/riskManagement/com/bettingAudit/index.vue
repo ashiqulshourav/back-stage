@@ -374,6 +374,10 @@
             >
               <el-checkbox
                 :checked="item.approveSelected"
+                v-if="
+                  item.riskStatus === riskStatus.rejectBetting &&
+                  hasAuth('APPROVE')
+                "
                 @change="data => selectApprove(data, row.index - 1, index)"
               ></el-checkbox>
               <el-button
