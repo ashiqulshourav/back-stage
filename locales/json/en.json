@@ -633,7 +633,7 @@
   "k99efc31": "Voided",
   "k-135b225a": "Failure",
   "k1a47aaf7": "Match Suspension",
-  "k3208b2a6": "Appointment failed",
+  "k3208b2a6": "Booking Fail",
   "k49fc7c66": "Successfully copied {value}!",
   "k-d775857": "User ID: {value}",
   "k-4f42a2d0": "User ID:",
@@ -799,7 +799,7 @@
   "k-4dc1c6ee": "Overtime penalty kick sales status",
   "k-77f95769": "Merchant code: {value}",
   "k821a8c2": "Merchant code:",
-  "k-8f40c3f": "In appointment",
+  "k-8f40c3f": "Reserving",
   "k3428befd": "Settle full match",
   "k43f85ce7": "Are you sure you want to close the entire match?",
   "k6f408431": "League Type",
@@ -963,7 +963,7 @@
   "k-434315ab": "用户设置",
   "k-1d32686f": "复制默认密码",
   "k-7a16bb07": "账号密码",
-  "k-3b74d737": "预约取消",
+  "k-3b74d737": "Cancel Booking",
   "k-66c3b797": "每个用户最多添加20个属性标签",
   "k-450735cb": "无",
   "k1541036d": "例外限额",
@@ -1040,5 +1040,6 @@
   "k-76384e6f": "请输入角色所属部门",
   "k-73d4f59": "上级角色",
   "kdcb969a": "该角色下仍有{n}个用户，禁用此角色将导致这些用户无法访问系统。是否继续?",
-  "k-5b403837": "未评级"
+  "k-5b403837": "未评级",
+  "k-30c216de": "禁止编辑临时部门与游客角色，请到部门管理之移入部门操作"
 }
