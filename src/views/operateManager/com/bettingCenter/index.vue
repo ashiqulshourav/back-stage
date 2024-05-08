@@ -544,7 +544,8 @@ const {
   text-align: center;
   height: 25px;
   line-height: 25px;
-  width: 80px;
+  min-width: 80px;
+  padding: 0 8px;
   color: #fff;
   border-radius: 4px;
 }

@@ -44,7 +44,7 @@
           <el-select
             v-model="form.sportId"
             :placeholder="t('游戏种类')"
-            class="!w-[150px]"
+            class="!w-[160px]"
             @change="search"
           >
             <el-option :label="t('全部')" :value="''" />
@@ -57,7 +57,7 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('注单状态')}:`" prop="queryType">
-          <el-select class="min-w100"
+          <el-select class="!w-[150px]"
                   :placeholder="t('请选择状态')"
               v-model="form.queryType"
                      @change="search"
