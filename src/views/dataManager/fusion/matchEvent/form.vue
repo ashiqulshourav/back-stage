@@ -1,42 +1,54 @@
 <template>
-  <div>
-    <SearchForm
-      :form="form"
-      :loading="loading"
-      @on-search="onSearch"
-      :levelList="levelList"
-    />
+  <div class="grid grid-cols-5 bg-gray-100 ">
+    <div class="col-span-1 m-2">
+      <div class="col-span-1 m-2">
+      <pure-table
+        align-whole="center"
+        :data="dataList"
+        :columns="eventInfoColumn"
+        :stripe=true
+      />
+    </div>
+    </div>
+    <div class="col-span-4 m-2">
+      <SearchForm
+        :form="form"
+        :loading="loading"
+        @on-search="onSearch"
+        :levelList="levelList"
+      />
 
-    <PureTableBar
-      :title="``"
-      :columns="columns"
-      @refresh="onSearch('reload')"
-    >
-      <template v-slot="{ size, dynamicColumns }">
-        <pure-table
-          class="table_container"
-          align-whole="center"
-          showOverflowTooltip
-          table-layout="auto"
-          :loading="loading"
-          :size="size"
-          adaptive
-          :data="dataList"
-          :columns="dynamicColumns"
-          :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
-          :paginationSmall="size === 'small' ? true : false"
-          :header-cell-style="tableHeaderStyle"
-          @selection-change="handleSelectionChange"
-          @page-size-change="handleTableWidthChange"
-          @page-current-change="handleCurrentChange"
-        />
-      </template>
-    </PureTableBar>
-    <div class="flex justify-end">
-      <el-button @click="cancelDialog">{{ t('取消') }}</el-button>
-      <el-button :loading="loading" @click="confirmBtnClick" type="primary">{{
-        t('确定')
-      }}</el-button>
+      <PureTableBar
+        :title="``"
+        :columns="columns"
+        @refresh="onSearch('reload')"
+      >
+        <template v-slot="{ size, dynamicColumns }">
+          <pure-table
+            class="table_container"
+            align-whole="center"
+            showOverflowTooltip
+            table-layout="auto"
+            :loading="loading"
+            :size="size"
+            adaptive
+            :data="dataList"
+            :columns="dynamicColumns"
+            :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
+            :paginationSmall="size === 'small' ? true : false"
+            :header-cell-style="tableHeaderStyle"
+            @selection-change="handleSelectionChange"
+            @page-size-change="handleTableWidthChange"
+            @page-current-change="handleCurrentChange"
+          />
+        </template>
+      </PureTableBar>
+      <div class="flex justify-end">
+        <el-button @click="cancelDialog">{{ t('取消') }}</el-button>
+        <el-button :loading="loading" @click="confirmBtnClick" type="primary">{{
+          t('确定')
+        }}</el-button>
+      </div>
     </div>
   </div>
 </template>
@@ -49,9 +61,10 @@ import { message } from '@/utils/message';
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useLeague } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
-import { columns } from './component/TableColumnList';
 import { usePublicHooks } from '@/hooks';
+import { getLan } from "@/utils/utilFn";
 
+const lan = getLan() ?? 'zh';
 defineOptions({ name: 'METADATA_LEAGUE' });
 const { tableHeaderStyle } = usePublicHooks();
 
@@ -72,6 +85,60 @@ const uploadFormFile = ref();
 const leagueTagsId = reactive<ConfigCenterDataAPI.LeagueTagListFetchProps[]>(
   []
 );
+
+const columns: TableColumnList = [
+  {
+    label: t('数据源'),
+    prop: 'dataSource'
+  },
+  {
+    label: t('赛事ID'),
+    prop: 'matchId'
+  },
+  {
+    label: t('联赛'),
+    prop: lan === 'zh' ? 'leagueNameCn' : 'leagueNameEn',
+  },
+  {
+    label: t('主队'),
+    prop: lan === 'zh' ? 'homeTeamNameCn' : 'homeTeamNameEn',
+  },
+  {
+    label: t('客队'),
+    prop: lan === 'zh' ? 'awayTeamNameCn' : 'awayTeamNameEn',
+  },
+  {
+    label: t('比赛开始时间'),
+    prop: 'startTime'
+  },
+  {
+    label: t('操作'),
+    slot: 'operation'
+  }
+];
+
+const eventInfoColumn: TableColumnList = [
+  {
+    label: t('赛事ID'),
+    prop: 'matchId'
+  },
+  {
+    label: t('联赛'),
+    prop: lan === 'zh' ? 'leagueNameCn' : 'leagueNameEn',
+  },
+  {
+    label: t('主队'),
+    prop: lan === 'zh' ? 'homeTeamNameCn' : 'homeTeamNameEn',
+  },
+  {
+    label: t('客队'),
+    prop: lan === 'zh' ? 'awayTeamNameCn' : 'awayTeamNameEn',
+  },
+  {
+    label: t('比赛开始时间'),
+    prop: 'startTime'
+  }
+];
 
 const props = withDefaults(defineProps<FormProps>(), {
   formInline: () => ({
