@@ -1,14 +1,12 @@
 <template>
   <div class="grid grid-cols-5 bg-gray-100 ">
     <div class="col-span-1 m-2">
-      <div class="col-span-1 m-2">
       <pure-table
         align-whole="center"
         :data="dataList"
         :columns="eventInfoColumn"
         :stripe=true
       />
-    </div>
     </div>
     <div class="col-span-4 m-2">
       <SearchForm
@@ -34,22 +32,14 @@
             adaptive
             :data="dataList"
             :columns="dynamicColumns"
-            :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
-            :paginationSmall="size === 'small' ? true : false"
             :header-cell-style="tableHeaderStyle"
-            @selection-change="handleSelectionChange"
-            @page-size-change="handleTableWidthChange"
-            @page-current-change="handleCurrentChange"
           />
         </template>
       </PureTableBar>
-      <div class="flex justify-end">
-        <el-button @click="cancelDialog">{{ t('取消') }}</el-button>
-        <el-button :loading="loading" @click="confirmBtnClick" type="primary">{{
-          t('确定')
-        }}</el-button>
-      </div>
     </div>
+  </div>
+  <div class="flex justify-center bg-white mt-5">
+    <el-button type="primary" @click="closeDialog">{{ t('关闭对话框') }}</el-button>
   </div>
 </template>
 
@@ -57,7 +47,6 @@
 import { ref } from 'vue';
 import { FormProps } from './utils/types';
 import { t } from '@/plugins/i18n';
-import { message } from '@/utils/message';
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useLeague } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
@@ -71,16 +60,10 @@ const { tableHeaderStyle } = usePublicHooks();
 const {
   loading,
   dataList,
-  pagination,
   onSearch,
-  openDialog,
-  handleTableWidthChange,
-  handleCurrentChange,
-  handleSelectionChange,
   form,
   levelList
 } = useLeague();
-const uploadFormFile = ref();
 // const loading = ref(false);
 const leagueTagsId = reactive<ConfigCenterDataAPI.LeagueTagListFetchProps[]>(
   []
@@ -158,7 +141,6 @@ const props = withDefaults(defineProps<FormProps>(), {
 
 const emits = defineEmits(['reloadTable', 'closeDialog']);
 
-const ruleFormRef = ref();
 const newFormInline = ref(props.formInline);
 
 onMounted(() => {
@@ -175,32 +157,8 @@ const initLeaguetags = async () => {
   leagueTagsId.push(...res.data.list);
 };
 
-const cancelDialog = () => {
+const closeDialog = () => {
   emits('closeDialog');
-};
-
-const confirmBtnClick = () => {
-  ruleFormRef.value.validate(async (valid: any) => {
-    if (valid) {
-      loading.value = true;
-      if (uploadFormFile.value) {
-        let formData = new FormData();
-        formData.append('file', uploadFormFile.value);
-        formData.append('fileUsageCategory', '3');
-        const res = await API.fileUpload(formData);
-        if (res.data?.url) {
-          newFormInline.value.leagueLogo = res.data?.remoteFileName;
-        }
-      }
-      updateLeague();
-    }
-  });
-};
-
-const updateLeague = async () => {
-  const res = await API.updateLeague(newFormInline.value);
-  message(res.msg, { type: res.code ? 'error' : 'success' });
-  emits('closeDialog', !res.code && 'reload');
 };
 </script>
 
