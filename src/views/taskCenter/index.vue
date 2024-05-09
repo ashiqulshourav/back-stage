@@ -40,6 +40,7 @@
               type="danger"
               :size="size"
               :disabled="row.disabled"
+              :icon="useRenderIcon(Delete)"
             >
               {{ t('删除') }}
             </el-button>
@@ -57,6 +58,9 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
+import Delete from '@iconify-icons/ep/delete';
+import EditPen from '@iconify-icons/ep/edit-pen';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 defineOptions({ name: 'taskCenter' });
 const { tableHeaderStyle } = usePublicHooks();
 

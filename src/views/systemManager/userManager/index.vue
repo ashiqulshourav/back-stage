@@ -55,6 +55,7 @@
             <el-button
               v-if="hasAuth('USERMANAGERUPDATEPROFILE')"
               class="reset-margin"
+              link
               type="primary"
               :disabled="row.disabled"
               size="small"
@@ -71,6 +72,7 @@
               type="primary"
               :disabled="row.disabled"
               :size="size"
+              :icon="useRenderIcon(EditPen)"
               @click="openDialog(t('编辑账号'), row)"
             >
               {{ t('编辑') }}
@@ -83,6 +85,7 @@
               link
               type="danger"
               :size="size"
+              :icon="useRenderIcon(Delete)"
             >
               {{ t('删除') }}
             </el-button>
@@ -101,6 +104,10 @@ import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 import { hasAuth } from '@/router/utils';
+import Delete from '@iconify-icons/ep/delete';
+import EditPen from '@iconify-icons/ep/edit-pen';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+
 
 const { switchStyle } = usePublicHooks();
 const { tableHeaderStyle } = usePublicHooks();

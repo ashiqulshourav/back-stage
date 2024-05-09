@@ -32,6 +32,7 @@
               type="primary"
               size="large"
               @click="openRoleDialog(t('编辑菜单'), row)"
+              :icon="useRenderIcon(EditPen)"
             >
               {{ t('编辑') }}
             </el-button>
@@ -58,6 +59,8 @@ import { useMenuManagerHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 import { useUserStore } from '@/store/user';
+import EditPen from '@iconify-icons/ep/edit-pen';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 
 defineOptions({ name: 'SYSTEMCONFIG_MENUMANAGER' });
 const { tableHeaderStyle } = usePublicHooks();

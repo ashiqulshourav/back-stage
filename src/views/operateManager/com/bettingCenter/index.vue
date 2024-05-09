@@ -8,6 +8,7 @@
       :tenantList="tenantList"
       :riskLabelList="riskLabelList"
       :venueType="props.venueType"
+      :downloading="downloading"
     />
 
     <PureTableBar
@@ -477,7 +478,8 @@ const {
   isShowCancel,
   editOrderRemark,
   riskLabelList,
-  getOddStatus
+  getOddStatus,
+  downloading
 } = useBettingCenterHook(props.category, props.venueType);
 </script>
 
