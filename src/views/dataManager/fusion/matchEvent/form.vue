@@ -1,25 +1,41 @@
 <template>
   <div class="grid grid-cols-5 bg-gray-100 ">
-    <div class="col-span-1 m-2">
-      <pure-table
-        align-whole="center"
-        :data="dataList"
-        :columns="eventInfoColumn"
-        :stripe=true
-      />
+    <div class="place-content-center col-span-1 m-2">
+      <div class="text-center text-lg font-bold mb-5">{{ t('正在编辑的赛事信息') }}</div>
+      <table class="vertical-table">
+        <tr>
+          <th>{{ t('赛事ID')}}</th>
+          <td>{{ matchSourceDetails.matchId }}</td>
+        </tr>
+        <tr>
+          <th>{{ t('联赛名称')}}</th>
+          <td>{{ t(matchSourceDetails.leagueNameCn) }}</td>
+        </tr>
+        <tr>
+          <th>{{ t('客队名称')}}</th>
+          <td>{{ t(matchSourceDetails.homeTeamNameCn) }}</td>
+        </tr>
+        <tr>
+          <th>{{ t('客队名称')}}</th>
+          <td>{{ t(matchSourceDetails.awayTeamNameCn)  }}</td>
+        </tr>
+        <tr>
+          <th>{{ t('比赛开始时间')}}</th>
+          <td>{{ matchSourceDetails.beginTime }}</td>
+        </tr>
+      </table>
     </div>
     <div class="col-span-4 m-2">
       <SearchForm
         :form="form"
         :loading="loading"
-        @on-search="onSearch"
-        :levelList="levelList"
+        @on-search="onModalSearch"
       />
 
       <PureTableBar
         :title="``"
         :columns="matchColumns"
-        @refresh="onSearch('reload')"
+        @refresh="onModalSearch('reload')"
       >
         <template v-slot="{ size, dynamicColumns }">
           <pure-table
@@ -30,10 +46,20 @@
             :loading="loading"
             :size="size"
             adaptive
-            :data="dataList"
+            :data="matchInfoDataList"
             :columns="dynamicColumns"
             :header-cell-style="tableHeaderStyle"
-          />
+          >
+            <template #operation="{ row }">
+              <el-button
+                :type= "row.paringStatus === 0 ? 'success' : 'warning'"
+                :size="size"
+                @click="openDialog(t('立即匹配'), row)"
+              >
+                {{ t(row.paringStatus === 0 ? '编辑' : '取消匹配') }}
+              </el-button>
+            </template>
+          </pure-table>
         </template>
       </PureTableBar>
     </div>
@@ -45,80 +71,32 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { FormProps } from './utils/types';
 import { t } from '@/plugins/i18n';
 import { PureTableBar } from '@/components/RePureTableBar';
-import { useLeague } from './utils/hook';
-import SearchForm from './component/SearchForm.vue';
+import { matchCombineHook } from './utils/hook';
+import SearchForm from './component/ModalSearchForm.vue';
 import { usePublicHooks } from '@/hooks';
-import { getLan } from "@/utils/utilFn";
 import { matchColumns } from './component/TableColumnList';
 
-const lan = getLan() ?? 'zh';
 defineOptions({ name: 'METADATA_LEAGUE' });
 const { tableHeaderStyle } = usePublicHooks();
 
 const {
   loading,
-  dataList,
-  onSearch,
+  onModalSearch,
   form,
-  levelList
-} = useLeague();
-// const loading = ref(false);
-const leagueTagsId = reactive<ConfigCenterDataAPI.LeagueTagListFetchProps[]>(
-  []
-);
+  matchInfoDataList,
+} = matchCombineHook();
 
-const eventInfoColumn: TableColumnList = [
-  {
-    label: t('赛事ID'),
-    prop: 'matchId'
-  },
-  {
-    label: t('联赛'),
-    prop: lan === 'zh' ? 'leagueNameCn' : 'leagueNameEn',
-  },
-  {
-    label: t('主队'),
-    prop: lan === 'zh' ? 'homeTeamNameCn' : 'homeTeamNameEn',
-  },
-  {
-    label: t('客队'),
-    prop: lan === 'zh' ? 'awayTeamNameCn' : 'awayTeamNameEn',
-  },
-  {
-    label: t('比赛开始时间'),
-    prop: 'startTime'
-  }
-];
-
-const props = withDefaults(defineProps<FormProps>(), {
-  formInline: () => ({
-    leagueNameCn: '',
-    level: '',
-    countryId: '',
-    leagueNameEn: '',
-    leagueId: '',
-    leagueLogo: '',
-    sportId: '',
-    category: '',
-    riskLevel: '',
-    isEsportType: false,
-    leagueTagsId: []
-  })
-});
+const props = withDefaults(defineProps<{matchDetail: MatchCombineAPI.matchSourceDetail}>(), {});
 
 const emits = defineEmits(['reloadTable', 'closeDialog']);
 
-const newFormInline = ref(props.formInline);
+const matchSourceDetails = ref(props.matchDetail);
 
 onMounted(() => {
     getMatchDataSourceList();
 });
-
-
-
 
 const getMatchDataSourceList = () =>{
     const params = {
@@ -156,5 +134,26 @@ const closeDialog = () => {
     height: 100px;
     text-align: center;
   }
+}
+
+.vertical-table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #FFFFFF;
+}
+
+.vertical-table th, 
+.vertical-table td {
+  text-align: left;
+  padding: 16px;
+  border-right: 1px solid #FFFFFF;
+}
+
+.vertical-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+.vertical-table tr:nth-child(odd) {
+  background-color: #FFFFFF;
 }
 </style>

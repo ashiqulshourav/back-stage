@@ -51,7 +51,7 @@
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
 import EditPen from '@iconify-icons/ep/edit-pen';
-import { useLeague } from './utils/hook';
+import { matchCombineHook } from './utils/hook';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
@@ -71,6 +71,6 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   form,
-  levelList
-} = useLeague();
+  levelList,
+} = matchCombineHook();
 </script>

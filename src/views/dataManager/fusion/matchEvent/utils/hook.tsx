@@ -5,10 +5,14 @@ import { reactive, ref, onMounted, h } from 'vue';
 import { searchFormType } from './types';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 
-export function useLeague() {
+export function matchCombineHook() {
   const dataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
+  const matchInfoDataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
   const loading = ref(true);
   const levelList = reactive<ConfigCenterDataAPI.leagueLevelList[]>([]);
+  const matchSourceDetails = reactive<MatchCombineAPI.matchSourceDetail>(
+    {} as MatchCombineAPI.matchSourceDetail
+  );
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 20,
@@ -16,19 +20,7 @@ export function useLeague() {
     background: true
   });
   const form = reactive<searchFormType>({
-    dataSource: '',
-    sportId: '',
-    matchId: '',
-    leagueNameCn: '',
-    competitionDate: '',
-    leagueNameEn: '',
-    homeTeamNameCn: '',
-    homeTeamNameEn: '',
-    awayTeamNameCn: '',
-    awayTeamNameEn: '',
-    mathcMethod: '',
-    category:0 ,
-
+    category: 0,
   });
 
   function handleTableWidthChange(val: number) {
@@ -63,7 +55,7 @@ export function useLeague() {
         pageNum: pagination.currentPage
       });
       loading.value = false;
-      if(res.data.list){
+      if (res.data.list) {
         dataList.push(...res.data.list)
       }
     } catch (error) {
@@ -71,7 +63,25 @@ export function useLeague() {
     }
   }
 
-  async function openDialog(title: string, row?: MetadataAPI.LeagueList) {
+  async function onModalSearch(type?: string) {
+    if (type === 'reload') pagination.currentPage = 1;
+    try {
+      loading.value = true;
+      const res = await API.getMatchDataSourceList({
+        ...removeEmptyStringKeys(form),
+        pageSize: pagination.pageSize,
+        pageNum: pagination.currentPage
+      });
+      loading.value = false;
+      if (res.data.list) {
+        matchInfoDataList.push(...res.data.list)
+      }
+    } catch (error) {
+      loading.value = false;
+    }
+  }
+
+  async function openDialog(title: string, row?: MatchCombineAPI.matchSourceDetail) {
     addDialog({
       title,
       width: '95%',
@@ -80,21 +90,7 @@ export function useLeague() {
       hideFooter: true,
       contentRenderer: ({ options, index }) =>
         h(editForm, {
-          levelList,
-          formInline: {
-            leagueLogo: row?.leagueLogo ?? '',
-            leagueId: row?.leagueId ?? '',
-            countryId: row?.countryId ?? '',
-            leagueId188Bet: row?.leagueId188Bet ?? '',
-            leagueNameCn: row?.leagueNameCn ?? '',
-            leagueNameEn: row?.leagueNameEn ?? '',
-            level: row?.level ?? '',
-            sportId: row?.sportId ?? '',
-            category: row?.category ?? '',
-            leagueTagsId: row?.leagueTagsId ?? [],
-            isEsportType: form.category === 1,
-            riskLevel: row?.riskLevel ?? ''
-          },
+          matchDetail: Object.assign(matchSourceDetails, row),
           onCloseDialog: (params: string) => {
             closeDialog(options, index);
             params && onSearch();
@@ -105,11 +101,13 @@ export function useLeague() {
   onMounted(() => {
     onSearch();
     initLevelList();
+    onModalSearch();
   });
 
   return {
     loading,
     dataList,
+    matchInfoDataList,
     pagination,
     onSearch,
     openDialog,
@@ -117,6 +115,7 @@ export function useLeague() {
     handleTableWidthChange,
     handleCurrentChange,
     handleSelectionChange,
-    form
+    form,
+    onModalSearch,
   };
 }
