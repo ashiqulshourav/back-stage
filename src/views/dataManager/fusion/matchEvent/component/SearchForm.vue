@@ -29,7 +29,6 @@ import {
 } from 'plus-pro-components';
 import { t } from '@/plugins/i18n';
 import { searchFormType } from '../utils/types';
-import { formatNumber, inputRestrictions } from '@/utils/formatNumber';
 import { useMatchStore } from '@/store/match';
 import {
   SPORT_ID_MAP,
@@ -73,10 +72,10 @@ const columns: PlusColumn[] = [
     prop: 'dataSource',
     valueType: 'select',
     options: [
-      { label: t('全部'), value: 0 },
-      { label: t('未匹配'), value: 1 },
-      { label: t('熊猫'), value: 2 },
-      { label: t('播控'), value: 3 },
+      { label: t('全部'), value: '' },
+      { label: t('未匹配'), value: '0' },
+      { label: t('熊猫'), value: 'PS' },
+      { label: t('播控'), value: 'VS' },
     ],
     fieldProps: {
       onChange: chagenMatchType
@@ -133,9 +132,9 @@ const columns: PlusColumn[] = [
     prop: 'mathcMethod',
     valueType: 'select',
     options: [
-      { label: t('不限'), value: 0 },
-      { label: t('人工匹配'), value: 1 },
-      { label: t('自动匹配'), value: 2 },
+      { label: t('不限'), value: '' },
+      { label: t('人工匹配'), value: 2 },
+      { label: t('自动匹配'), value: 1 },
     ],
     fieldProps: {
       onChange: chagenMatchType

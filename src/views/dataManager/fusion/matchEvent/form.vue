@@ -143,7 +143,7 @@ const closeDialog = () => {
   border: 1px solid #FFFFFF;
 }
 
-.vertical-table th, 
+.vertical-table th,
 .vertical-table td {
   text-align: left;
   padding: 16px;
