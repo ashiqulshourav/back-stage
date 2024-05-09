@@ -58,6 +58,7 @@ export function useLeague() {
       loading.value = true;
       const res = await API.getMatchPairingList({
        /* ...removeEmptyStringKeys(form),*/
+        category:0,
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
