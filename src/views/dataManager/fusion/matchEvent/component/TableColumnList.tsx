@@ -1,5 +1,7 @@
 import { ESPORT_ID_MAP, SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { getLan } from "@/utils/utilFn";
+import dayjs from "dayjs";
+import {handleTableWidth} from "@/utils/getTableWidth";
 
 const lan = getLan() ?? 'zh';
 
@@ -11,7 +13,7 @@ export const columns: TableColumnList = [
       const arr = category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
       return arr.find(_ => _.value === sportId)?.label ?? '-';
     },
-    minWidth: 100,
+    minWidth: 150
   },
   {
     label: t('赛事ID'),
@@ -34,9 +36,10 @@ export const columns: TableColumnList = [
     minWidth: 150,
   },
   {
-    label: t('比赛开始时间'),
-    prop: 'startTime',
-    minWidth: 150,
+    label: t('开赛时间'),
+    prop: 'beginTime',
+    minWidth: 200,
+    formatter: ({ beginTime }) =>dayjs(beginTime).format('YYYY-MM-DD HH:mm:ss')
   },
   {
     label: t('数据源'),

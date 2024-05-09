@@ -34,4 +34,14 @@ export const metaData = {
     teamId?: string;
   }) => http.request<MetadataAPI.PlayerListRes>("post", "/player/v1/getPlayerList", { data }),
 
+  //数据源列表
+  getMatchDataSourceList: (data: {
+    pageNum: number;
+    pageSize: number;
+  }) => http.request<MatchCombineAPI.matchSourceData>("post", "/pairing/v1/getMatchDataSourceList", { data }),
+  //数据源列表
+  getMatchPairingList: (data: {
+    pageNum: number;
+    pageSize: number;
+  }) => http.request<MatchCombineAPI.matchSourceData>("post", "/pairing/v1/getMatchPairingList", { data }),
 };
