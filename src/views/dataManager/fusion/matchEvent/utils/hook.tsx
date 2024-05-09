@@ -1,18 +1,17 @@
 import editForm from '../form.vue';
-import { message } from '@/utils/message';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted, h } from 'vue';
-import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { searchFormType } from './types';
+import { removeEmptyStringKeys } from '@/utils/utilFn';
 
 export function useLeague() {
-  const dataList = reactive<MetadataAPI.LeagueList[]>([]);
+  const dataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
   const loading = ref(true);
   const levelList = reactive<ConfigCenterDataAPI.leagueLevelList[]>([]);
   const pagination = reactive<PaginationProps>({
     total: 0,
-    pageSize: 10,
+    pageSize: 20,
     currentPage: 1,
     background: true
   });
@@ -21,13 +20,15 @@ export function useLeague() {
     sportId: '',
     matchId: '',
     leagueNameCn: '',
-    competitionDate: Date.now(),
+    competitionDate: '',
     leagueNameEn: '',
     homeTeamNameCn: '',
     homeTeamNameEn: '',
     awayTeamNameCn: '',
     awayTeamNameEn: '',
     mathcMethod: '',
+    category:0 ,
+
   });
 
   function handleTableWidthChange(val: number) {
@@ -56,16 +57,15 @@ export function useLeague() {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       loading.value = true;
-      const res: MetadataAPI.LeagueListRes = await API.getLeagueList({
+      const res = await API.getMatchPairingList({
         ...removeEmptyStringKeys(form),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
       loading.value = false;
-      if (res.code) return message(res.msg, { type: 'error' });
-      dataList.length = 0;
-      dataList.push(...res.data.list);
-      pagination.total = res.data.total;
+      if(res.data.list){
+        dataList.push(...res.data.list)
+      }
     } catch (error) {
       loading.value = false;
     }
@@ -102,7 +102,6 @@ export function useLeague() {
         })
     });
   }
-
   onMounted(() => {
     onSearch();
     initLevelList();

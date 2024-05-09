@@ -18,7 +18,7 @@
 
       <PureTableBar
         :title="``"
-        :columns="columns"
+        :columns="matchColumns"
         @refresh="onSearch('reload')"
       >
         <template v-slot="{ size, dynamicColumns }">
@@ -52,6 +52,7 @@ import { useLeague } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
 import { usePublicHooks } from '@/hooks';
 import { getLan } from "@/utils/utilFn";
+import { matchColumns } from './component/TableColumnList';
 
 const lan = getLan() ?? 'zh';
 defineOptions({ name: 'METADATA_LEAGUE' });
@@ -68,37 +69,6 @@ const {
 const leagueTagsId = reactive<ConfigCenterDataAPI.LeagueTagListFetchProps[]>(
   []
 );
-
-const columns: TableColumnList = [
-  {
-    label: t('数据源'),
-    prop: 'dataSource'
-  },
-  {
-    label: t('赛事ID'),
-    prop: 'matchId'
-  },
-  {
-    label: t('联赛'),
-    prop: lan === 'zh' ? 'leagueNameCn' : 'leagueNameEn',
-  },
-  {
-    label: t('主队'),
-    prop: lan === 'zh' ? 'homeTeamNameCn' : 'homeTeamNameEn',
-  },
-  {
-    label: t('客队'),
-    prop: lan === 'zh' ? 'awayTeamNameCn' : 'awayTeamNameEn',
-  },
-  {
-    label: t('比赛开始时间'),
-    prop: 'startTime'
-  },
-  {
-    label: t('操作'),
-    slot: 'operation'
-  }
-];
 
 const eventInfoColumn: TableColumnList = [
   {
@@ -144,18 +114,22 @@ const emits = defineEmits(['reloadTable', 'closeDialog']);
 const newFormInline = ref(props.formInline);
 
 onMounted(() => {
-  initLeaguetags();
+    getMatchDataSourceList();
 });
 
-//- 获取联赛列表标签
-const initLeaguetags = async () => {
-  const res = await API.getLeagueTagList({
-    category: parseInt(newFormInline.value.category as string),
-    sportId: parseInt(newFormInline.value.sportId)
-  });
-  leagueTagsId.length = 0;
-  leagueTagsId.push(...res.data.list);
-};
+
+
+
+const getMatchDataSourceList = () =>{
+    const params = {
+        // pageNum:0,
+        // pageSize:20,
+        // category:0,
+    }
+    API.getMatchDataSourceList(params).then((res)=>{
+        console.log(2222222,res)
+    })
+}
 
 const closeDialog = () => {
   emits('closeDialog');

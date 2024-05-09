@@ -184,3 +184,37 @@ declare namespace MetadataAPI {
   type getCountryListResType = COMMON.BASE_RES_TYPE<getCountryListDataType>
 
 }
+
+declare namespace MatchCombineAPI {
+  type matchSourceDetail= {
+    id: number,
+    matchId:number,
+    sportNameCn: string,
+    sportNameEn: string,
+    leagueNameCn: string,
+    leagueNameEn: string,
+    matchNameCn: string,
+    matchNameEn: string,
+    homeTeamNameCn: string,
+    homeTeamNameEn: string,
+    awayTeamNameCn: string,
+    awayTeamNameEn: string,
+    beginTime: string,
+    startTime: null,
+    endTime: null,
+    videoMatchId: number,
+    matchId188bet: number,
+    category:number,
+    dataSourceCode: string,
+    pairingStatus: number,
+    pageSize: number,
+    pageNum: number
+  }
+  type matchSourceData = {
+    data:{
+    list:matchSourceDetail[],
+      pageSize:number,
+  }
+
+  }
+}
