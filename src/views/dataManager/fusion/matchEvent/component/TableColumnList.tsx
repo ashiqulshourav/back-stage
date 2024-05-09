@@ -2,6 +2,7 @@ import { ESPORT_ID_MAP, SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { getLan } from "@/utils/utilFn";
 import dayjs from "dayjs";
 import {handleTableWidth} from "@/utils/getTableWidth";
+import {t} from "@/plugins/i18n";
 
 const lan = getLan() ?? 'zh';
 
@@ -67,4 +68,37 @@ export const columns: TableColumnList = [
     width: 150,
     slot: 'operation',
   }
+];
+
+export const matchColumns: TableColumnList = [
+    {
+        label: t('数据源'),
+        prop: 'dataSource'
+    },
+    {
+        label: t('赛事ID'),
+        prop: 'matchId'
+    },
+    {
+        label: t('联赛'),
+        prop: lan === 'zh' ? 'leagueNameCn' : 'leagueNameEn',
+    },
+    {
+        label: t('主队'),
+        prop: lan === 'zh' ? 'homeTeamNameCn' : 'homeTeamNameEn',
+    },
+    {
+        label: t('客队'),
+        prop: lan === 'zh' ? 'awayTeamNameCn' : 'awayTeamNameEn',
+    },
+    {
+        label: t('开赛时间'),
+        prop: 'beginTime',
+        minWidth: 200,
+        formatter: ({ beginTime }) =>dayjs(beginTime).format('YYYY-MM-DD HH:mm:ss')
+    },
+    {
+        label: t('操作'),
+        slot: 'operation'
+    }
 ];

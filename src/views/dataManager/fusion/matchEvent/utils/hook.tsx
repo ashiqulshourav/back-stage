@@ -1,9 +1,7 @@
 import editForm from '../form.vue';
-import { message } from '@/utils/message';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted, h } from 'vue';
-import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { searchFormType } from './types';
 
 export function useLeague() {
@@ -102,7 +100,6 @@ export function useLeague() {
         })
     });
   }
-
   onMounted(() => {
     onSearch();
     initLevelList();
