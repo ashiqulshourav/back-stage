@@ -3,6 +3,7 @@ import { addDialog, closeDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted, h } from 'vue';
 import { searchFormType } from './types';
+import { removeEmptyStringKeys } from '@/utils/utilFn';
 
 export function useLeague() {
   const dataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
@@ -19,13 +20,15 @@ export function useLeague() {
     sportId: '',
     matchId: '',
     leagueNameCn: '',
-    competitionDate: Date.now(),
+    competitionDate: '',
     leagueNameEn: '',
     homeTeamNameCn: '',
     homeTeamNameEn: '',
     awayTeamNameCn: '',
     awayTeamNameEn: '',
     mathcMethod: '',
+    category:0 ,
+
   });
 
   function handleTableWidthChange(val: number) {
@@ -55,8 +58,7 @@ export function useLeague() {
     try {
       loading.value = true;
       const res = await API.getMatchPairingList({
-       /* ...removeEmptyStringKeys(form),*/
-        category:0,
+        ...removeEmptyStringKeys(form),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });

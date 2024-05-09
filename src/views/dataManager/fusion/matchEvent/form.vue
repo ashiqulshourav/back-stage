@@ -122,9 +122,9 @@ onMounted(() => {
 
 const getMatchDataSourceList = () =>{
     const params = {
-        pageNum:0,
-        pageSize:20,
-        category:0,
+        // pageNum:0,
+        // pageSize:20,
+        // category:0,
     }
     API.getMatchDataSourceList(params).then((res)=>{
         console.log(2222222,res)
