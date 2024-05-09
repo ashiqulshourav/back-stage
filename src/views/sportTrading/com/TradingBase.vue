@@ -1,8 +1,14 @@
 <template>
-  <div>
+  <div class="h-full flex flex-col overflow-hidden">
     <SearchFom :form="searchForm" :loading="loading" />
-    <div class="bg-bg_color w-[99/100] mt-2 pl-5 pt-[12px]">
+    <div
+      class="bg-bg_color w-[99/100] mt-2 pl-5 pt-[12px] flex-grow flex flex-col overflow-hidden"
+    >
       <div class="font-bold">{{ title }}</div>
+      <div class="flex flex-grow h-full overflow-hidden max-h-full">
+        <TabController />
+        <ContentMain />
+      </div>
     </div>
   </div>
 </template>
@@ -10,6 +16,8 @@
 <script setup lang="ts">
 import SearchFom from './SearchFom.vue';
 import { useTradingHook } from '../util/hook';
+import TabController from './TabController.vue';
+import ContentMain from './ContentMain.vue';
 
 const { searchForm, loading } = useTradingHook();
 const { type } = defineProps<{
@@ -21,4 +29,8 @@ const title = computed(() =>
 );
 </script>
 
-<style scoped></style>
+<style lang="scss">
+.el-scrollbar__view {
+  height: calc(100% - 20px);
+}
+</style>
