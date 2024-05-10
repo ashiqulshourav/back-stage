@@ -5,14 +5,13 @@ import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, h } from 'vue';
 import { editSearchFormType, searchFormType } from './types';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
-import {message} from "@/utils/message";
 import dayjs from "dayjs";
 export function matchCombineHook() {
   const dataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
   const matchInfoDataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
-  const alreadyMatch = reactive<Boolean>(false);
   const matchInfo = reactive<MatchCombineAPI.matchSourceDetail>({} as MatchCombineAPI.matchSourceDetail);
   const loading = ref(true);
+  const alreadyMatch = ref<Boolean>(false);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 20,
@@ -104,6 +103,7 @@ export function matchCombineHook() {
       loading.value = false;
       matchInfoDataList.length = 0;
       if (res.data.list) {
+         alreadyMatch.value = res.data.list[0].pairingStatus===1
         matchInfoDataList.push(...res.data.list)
       }
     } catch (error) {
@@ -165,5 +165,6 @@ export function matchCombineHook() {
     openManualMatchDialog,
     matchInfo,
     matchInfoDataList,
+    alreadyMatch,
   };
 }

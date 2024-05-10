@@ -93,6 +93,7 @@ const {
   editFrom,
   openManualMatchDialog,
   matchInfoDataList,
+  alreadyMatch,
 } = matchCombineHook();
 
 const props = withDefaults(defineProps<{rowData: MatchCombineAPI.matchPairingDetail}>(), {});
