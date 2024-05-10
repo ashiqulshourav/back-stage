@@ -111,14 +111,7 @@ export function matchCombineHook() {
     }
   }
 
-  const matchPairing = (param:{dpMatchId:number;dpMatchId188bet:number;matchId:number;matchId188bet:number;pairingUser:string})=>{
-      const params = { ...removeEmptyStringKeys(param)}
-    console.log(3333333,params)
-      API.matchPairing(params).then((res)=>{
-        message(res.msg, { type: res.code ? 'error' : 'success' });
-        console.log(11111,res)
-      })
-  }
+
 
   async function openDialog(title: string, row?: MatchCombineAPI.matchSourceDetail) {
     addDialog({
@@ -172,6 +165,5 @@ export function matchCombineHook() {
     openManualMatchDialog,
     matchInfo,
     matchInfoDataList,
-    matchPairing,
   };
 }

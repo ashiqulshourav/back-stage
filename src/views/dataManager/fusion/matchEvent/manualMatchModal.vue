@@ -74,21 +74,16 @@
   </div>
   <div class="flex justify-end bg-white mt-4">
     <el-button @click="closeDialog">{{ t('取消') }}</el-button>
-    <el-button type="primary" @click="matchEvent">{{ t('确定') }}</el-button>
+    <el-button type="primary" @click="handleMatch">{{ t('确定') }}</el-button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import { t } from '@/plugins/i18n';
-import { matchCombineHook } from './utils/hook';
+import {removeEmptyStringKeys} from "@/utils/utilFn";
+import {message} from "@/utils/message";
 defineOptions({ name: 'METADATA_LEAGUE' });
-const {
-  loading,
-  onModalSearch,
-  editFrom,
-  matchPairing
-} = matchCombineHook();
 
 const props = withDefaults(defineProps<{
   matchSource: MatchCombineAPI.matchSourceDetail,
@@ -99,11 +94,25 @@ const emits = defineEmits(['reloadTable', 'closeDialog']);
 
 const matchSourceDetails = ref(props.matchSource);
 const matchSourcePairDetails = ref(props.matchSourcePair)
+const handleMatch = ()=>{
 
-onMounted(() => {
-    // editFrom.sportId = matchSourceDetails.value.sportId
-    onModalSearch();
-});
+  console.log(11111,props.matchSource)
+  console.log(222222,props.matchSourcePair)
+  const param = {
+    dpMatchId: props.matchSource.matchId,
+    dpMatchId188bet: props.matchSource.matchId188bet,
+    matchId: props.matchSourcePair.matchId,
+    matchId188bet: props.matchSourcePair.matchId188bet,
+    pairingUser: ""
+  }
+  const params = { ...removeEmptyStringKeys(param)}
+  API.matchPairing(params).then((res)=>{
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    if(res.code===0){
+      emits('closeDialog');
+    }
+  })
+}
 
 const closeDialog = () => {
   emits('closeDialog');
@@ -159,9 +168,9 @@ const closeDialog = () => {
 }
 
 .link-icon {
-  margin: -10px; 
-  rotate: 90deg; 
-  height: 30px; 
+  margin: -10px;
+  rotate: 90deg;
+  height: 30px;
   width: 30px;
 }
 </style>
