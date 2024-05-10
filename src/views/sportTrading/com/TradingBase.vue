@@ -4,9 +4,9 @@
     <div
       class="bg-bg_color w-[99/100] mt-2 pl-5 pt-[12px] flex-grow flex flex-col overflow-hidden"
     >
-      <div class="font-bold">{{ title }}</div>
+      <div class="font-bold mb-2">{{ title }}</div>
       <div class="flex flex-grow h-full overflow-hidden max-h-full">
-        <TabController />
+        <div class="flex-shrink"><TabController /></div>
         <ContentMain />
       </div>
     </div>

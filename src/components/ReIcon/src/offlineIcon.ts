@@ -37,7 +37,10 @@ import menuTree from '@iconify-icons/ri/list-unordered';
 import configCenter from '@iconify-icons/ri/settings-3-line';
 import TaskCenterIcon from '@iconify-icons/ri/apps-fill';
 import Download from '@iconify-icons/ep/download';
-import Export from '@iconify-icons/ci/file-download';
+import play from '@iconify-icons/fa-solid/play-circle'
+import switch_icon from '@iconify-icons/ep/switch-button';
+import pause_circle from '@iconify-icons/fa-solid/pause-circle';
+import lock_icon from '@iconify-icons/fa-solid/lock';
 
 addIcon("dataSourceManager", dataManager);
 addIcon("sale", sale);
@@ -55,6 +58,12 @@ addIcon("taskCenter", TaskCenterIcon);
 addIcon("download", Download);
 
 /* 菜单icon结束 */
+//- 操盘图标开始
+addIcon("trading_play", play);
+addIcon("trading_switch", switch_icon);
+addIcon("trading_pause", pause_circle);
+addIcon("trading_lock", lock_icon);
+
 
 addIcon('homeFilled', HomeFilled);
 addIcon('informationLine', InformationLine);
