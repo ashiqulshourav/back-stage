@@ -74,7 +74,7 @@
   </div>
   <div class="flex justify-end bg-white mt-4">
     <el-button @click="closeDialog">{{ t('取消') }}</el-button>
-    <el-button @click="matchEvent">{{ t('确定') }}</el-button>
+    <el-button type="primary" @click="matchEvent">{{ t('确定') }}</el-button>
   </div>
 </template>
 
