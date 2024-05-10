@@ -31,7 +31,6 @@
         :loading="loading"
         @on-search="onModalSearch"
       />
-
       <PureTableBar
         :title="``"
         :columns="matchColumns"
@@ -56,7 +55,8 @@
                 :size="size"
                 @click="openDialog(t('立即匹配'), row)"
               >
-                {{ t(row.paringStatus === 0 ? '编辑' : '取消匹配') }}
+
+                {{ row.pairingStatus === 0?t('立即匹配'):t('取消匹配') }}
               </el-button>
             </template>
           </pure-table>
@@ -94,15 +94,15 @@ const emits = defineEmits(['reloadTable', 'closeDialog']);
 
 const matchSourceDetails = ref(props.matchDetail);
 
+console.log(222222222,matchSourceDetails)
+
 onMounted(() => {
     getMatchDataSourceList();
 });
 
 const getMatchDataSourceList = () =>{
     const params = {
-        // pageNum:0,
-        // pageSize:20,
-        // category:0,
+        sportId:1
     }
     API.getMatchDataSourceList(params).then((res)=>{
         console.log(2222222,res)

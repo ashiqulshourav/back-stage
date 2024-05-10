@@ -90,7 +90,7 @@ export function matchCombineHook() {
       hideFooter: true,
       contentRenderer: ({ options, index }) =>
         h(editForm, {
-          matchDetail: Object.assign(matchSourceDetails, row),
+          matchDetail:row,
           onCloseDialog: (params: string) => {
             closeDialog(options, index);
             params && onSearch();
