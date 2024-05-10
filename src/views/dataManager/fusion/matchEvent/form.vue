@@ -62,7 +62,7 @@
               <el-button
                 :type= "row.paringStatus === 0 ? 'success' : 'warning'"
                 :size="size"
-                @click="openManualMatchDialog(t('匹配确认'), row)"
+                @click="openManualMatchDialog(t('匹配确认'),rowData,row)"
               >
                 {{ row.pairingStatus === 0?t('立即匹配'):t('取消匹配') }}
               </el-button>
@@ -114,8 +114,6 @@ const _matchPairing = (row:MatchCombineAPI.matchSourceDetail)=>{
 }
 
 onMounted(() => {
-
-  console.log(123123,props?.rowData)
     const date = props?.rowData?.beginTime?.split(' ');
     if(date?.length){
       editFrom.startTime = date[0] +' '+ '00:00:00';

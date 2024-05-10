@@ -138,7 +138,7 @@ export function matchCombineHook() {
         })
     });
   }
-  async function openManualMatchDialog(title: string, row: MatchCombineAPI.matchSourceDetail) {
+  async function openManualMatchDialog(title: string, rowData:MatchCombineAPI.matchPairingDetail,row: MatchCombineAPI.matchSourceDetail) {
     addDialog({
       title,
       width: 'auto',
@@ -147,7 +147,7 @@ export function matchCombineHook() {
       hideFooter: true,
       contentRenderer: ({ options, index }) =>
         h(manualMatchModal, {
-          matchSource: matchInfo,
+          matchSource: rowData,
           matchSourcePair: row,
           onCloseDialog: (params: string) => {
             closeDialog(options, index);
