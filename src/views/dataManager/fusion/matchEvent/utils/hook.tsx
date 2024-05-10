@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 export function matchCombineHook() {
   const dataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
   const matchInfoDataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
+  const alreadyMatch = reactive<Boolean>(false);
   const matchInfo = reactive<MatchCombineAPI.matchSourceDetail>({} as MatchCombineAPI.matchSourceDetail);
   const loading = ref(true);
   const pagination = reactive<PaginationProps>({
@@ -45,7 +46,6 @@ export function matchCombineHook() {
       matchId188bet:null,
       startTime:null,
       endTime:null,
-
   });
 
   function handleTableWidthChange(val: number) {
