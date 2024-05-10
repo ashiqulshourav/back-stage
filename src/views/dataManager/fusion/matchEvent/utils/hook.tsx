@@ -85,6 +85,9 @@ export function matchCombineHook() {
       dataList.length=0
       if (res.data.list) {
         dataList.push(...res.data.list)
+        pagination.total = res.data.total;
+        pagination.pageSize = res.data.pageSize;
+        pagination.currentPage = res.data.pageNum;
       }
     } catch (error) {
       loading.value = false;
