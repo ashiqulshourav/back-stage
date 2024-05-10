@@ -4,6 +4,7 @@ import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, h } from 'vue';
 import {editSearchFormType, searchFormType} from './types';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
+import {message} from "@/utils/message";
 
 export function matchCombineHook() {
   const dataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
@@ -79,8 +80,18 @@ export function matchCombineHook() {
     }
   }
 
-  async function openDialog(title: string, row: MatchCombineAPI.matchSourceDetail) {
-    onModalSearch();
+  const matchPairing = (param:{dpMatchId:number;dpMatchId188bet:number;matchId:number;matchId188bet:number;pairingUser:string})=>{
+      const params = { ...removeEmptyStringKeys(param)}
+
+
+    console.log(3333333,params)
+      API.matchPairing(params).then((res)=>{
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        console.log(11111,res)
+      })
+  }
+
+  async function openDialog(title: string, row?: MatchCombineAPI.matchSourceDetail) {
     addDialog({
       title,
       width: '95%',
@@ -109,6 +120,7 @@ export function matchCombineHook() {
     handleSelectionChange,
     form,
     onModalSearch,
-      editFrom
+      editFrom,
+    matchPairing,
   };
 }

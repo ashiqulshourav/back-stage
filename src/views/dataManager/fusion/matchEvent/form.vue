@@ -45,7 +45,7 @@
             :loading="loading"
             :size="size"
             adaptive
-            :data="matchDataList"
+            :data="matchInfoDataList"
             :columns="dynamicColumns"
             :header-cell-style="tableHeaderStyle"
           >
@@ -53,7 +53,7 @@
               <el-button
                 :type= "row.paringStatus === 0 ? 'success' : 'warning'"
                 :size="size"
-                @click="openDialog(t('立即匹配'), row)"
+                @click ="_matchPairing(row)"
               >
 
                 {{ row.pairingStatus === 0?t('立即匹配'):t('取消匹配') }}
@@ -64,7 +64,7 @@
       </PureTableBar>
     </div>
   </div>
-  <div class="flex justify-center bg-white mt-4">
+  <div class="flex justify-center bg-white mt-5">
     <el-button type="primary" @click="closeDialog">{{ t('关闭对话框') }}</el-button>
   </div>
 </template>
@@ -86,15 +86,11 @@ const {
   editFrom,
 } = matchCombineHook();
 
-const props = withDefaults(defineProps<{
-  rowData: MatchCombineAPI.matchPairingDetail,
-  matchInfoDataList: MatchCombineAPI.matchSourceDetail[],
-}>(), {});
+const props = withDefaults(defineProps<{rowData: MatchCombineAPI.matchPairingDetail}>(), {});
 
 const emits = defineEmits(['reloadTable', 'closeDialog']);
 
 const matchSourceDetails = ref(props.rowData);
-const matchDataList = ref(props.matchInfoDataList)
 
 onMounted(() => {
     editFrom.sportId= props?.rowData?.sportId
