@@ -212,8 +212,10 @@ declare namespace MatchCombineAPI {
   }
   type matchSourceData = {
     data:{
-    list:matchSourceDetail[],
-      pageSize:number,
+      list:matchSourceDetail[],
+      pageSize: number,
+      pageNum: number,
+      total: number,
   }
 
   }

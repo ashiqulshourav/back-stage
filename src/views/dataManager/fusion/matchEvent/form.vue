@@ -45,7 +45,7 @@
             :loading="loading"
             :size="size"
             adaptive
-            :data="matchInfoDataList"
+            :data="matchDataList"
             :columns="dynamicColumns"
             :header-cell-style="tableHeaderStyle"
           >
@@ -64,7 +64,7 @@
       </PureTableBar>
     </div>
   </div>
-  <div class="flex justify-center bg-white mt-5">
+  <div class="flex justify-center bg-white mt-4">
     <el-button type="primary" @click="closeDialog">{{ t('关闭对话框') }}</el-button>
   </div>
 </template>
@@ -85,14 +85,17 @@ const {
   loading,
   onModalSearch,
   form,
-  matchInfoDataList,
 } = matchCombineHook();
 
-const props = withDefaults(defineProps<{matchDetail: MatchCombineAPI.matchSourceDetail}>(), {});
+const props = withDefaults(defineProps<{
+  matchDetail: MatchCombineAPI.matchSourceDetail,
+  matchInfoDataList: MatchCombineAPI.matchSourceDetail[],
+}>(), {});
 
 const emits = defineEmits(['reloadTable', 'closeDialog']);
 
 const matchSourceDetails = ref(props.matchDetail);
+const matchDataList = ref(props.matchInfoDataList)
 
 console.log(222222222,matchSourceDetails)
 

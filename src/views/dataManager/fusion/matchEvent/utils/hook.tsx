@@ -9,10 +9,6 @@ export function matchCombineHook() {
   const dataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
   const matchInfoDataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
   const loading = ref(true);
-  const levelList = reactive<ConfigCenterDataAPI.leagueLevelList[]>([]);
-  const matchSourceDetails = reactive<MatchCombineAPI.matchSourceDetail>(
-    {} as MatchCombineAPI.matchSourceDetail
-  );
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 20,
@@ -37,14 +33,6 @@ export function matchCombineHook() {
     console.log('handleSelectionChange', val);
   }
 
-  //- 获取联赛等级列表
-  const initLevelList = async () => {
-    const res = await API.getLevelList();
-    if (res.code) return;
-    levelList.length = 0;
-    levelList.push(...res.data);
-  };
-
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     try {
@@ -64,6 +52,7 @@ export function matchCombineHook() {
   }
 
   async function onModalSearch(type?: string) {
+    loading.value = false;
     if (type === 'reload') pagination.currentPage = 1;
     try {
       loading.value = true;
@@ -73,15 +62,16 @@ export function matchCombineHook() {
         pageNum: pagination.currentPage
       });
       loading.value = false;
-      if (res.data.list) {
-        matchInfoDataList.push(...res.data.list)
-      }
+      matchInfoDataList.length = 0;
+      matchInfoDataList.push(...res.data.list)
+      pagination.total = res.data.total
     } catch (error) {
       loading.value = false;
     }
   }
 
-  async function openDialog(title: string, row?: MatchCombineAPI.matchSourceDetail) {
+  async function openDialog(title: string, row: MatchCombineAPI.matchSourceDetail) {
+    onModalSearch();
     addDialog({
       title,
       width: '95%',
@@ -90,7 +80,8 @@ export function matchCombineHook() {
       hideFooter: true,
       contentRenderer: ({ options, index }) =>
         h(editForm, {
-          matchDetail:row,
+          matchDetail: row,
+          matchInfoDataList: matchInfoDataList,
           onCloseDialog: (params: string) => {
             closeDialog(options, index);
             params && onSearch();
@@ -100,8 +91,6 @@ export function matchCombineHook() {
   }
   onMounted(() => {
     onSearch();
-    initLevelList();
-    onModalSearch();
   });
 
   return {
@@ -111,7 +100,6 @@ export function matchCombineHook() {
     pagination,
     onSearch,
     openDialog,
-    levelList,
     handleTableWidthChange,
     handleCurrentChange,
     handleSelectionChange,

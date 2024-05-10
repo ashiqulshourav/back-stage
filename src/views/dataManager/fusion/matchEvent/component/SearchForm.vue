@@ -29,7 +29,6 @@ import {
 } from 'plus-pro-components';
 import { t } from '@/plugins/i18n';
 import { searchFormType } from '../utils/types';
-import { useMatchStore } from '@/store/match';
 import {
   SPORT_ID_MAP,
   ESPORT_ID_MAP,
@@ -40,14 +39,12 @@ import { useTranslationLang } from '@/layout/hooks/useTranslationLang';
 const props = defineProps<{
   loading: boolean;
   form: searchFormType;
-  levelList: ConfigCenterDataAPI.leagueLevelList[];
 }>();
 
 const { locale } = useTranslationLang();
 const selfForm = ref<FieldValues>(props.form);
 const defaultValue = ref<FieldValues>(JSON.parse(JSON.stringify(props.form)));
 const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
-const matchStore = useMatchStore();
 //- 联赛更改
 const chagenMatchType = (type: 0 | 1 | 2) => {
   props.form.sportId = '';

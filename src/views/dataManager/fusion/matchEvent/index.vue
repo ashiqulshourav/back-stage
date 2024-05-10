@@ -4,7 +4,6 @@
       :form="form"
       :loading="loading"
       @on-search="onSearch"
-      :levelList="levelList"
     />
 
     <PureTableBar
@@ -71,6 +70,5 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   form,
-  levelList,
 } = matchCombineHook();
 </script>
