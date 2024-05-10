@@ -60,8 +60,9 @@
           >
             <template #operation="{ row }">
               <el-button
-                :type= "row.paringStatus === 0 ? 'success' : 'warning'"
+                :type= "row.pairingStatus === 1 ? 'warning' : 'default'"
                 :size="size"
+                :disabled="row.pairingStatus === 0"
                 @click="openManualMatchDialog(t('匹配确认'),rowData,row)"
               >
                 {{ row.pairingStatus === 0?t('立即匹配'):t('取消匹配') }}
@@ -93,6 +94,7 @@ const {
   editFrom,
   openManualMatchDialog,
   matchInfoDataList,
+  alreadyMatch,
 } = matchCombineHook();
 
 const props = withDefaults(defineProps<{rowData: MatchCombineAPI.matchPairingDetail}>(), {});
@@ -100,19 +102,6 @@ const props = withDefaults(defineProps<{rowData: MatchCombineAPI.matchPairingDet
 const emits = defineEmits(['reloadTable', 'closeDialog']);
 
 const matchSourceDetails = ref(props.rowData);
-const _matchPairing = (row:MatchCombineAPI.matchSourceDetail)=>{
-  console.log('rowData',props.rowData)
-  console.log('row',row)
-  const params = {
-    dpMatchId: props.rowData.matchId,
-    dpMatchId188bet: props.rowData.matchId188bet,
-    matchId: '327521786928148482',
-    matchId188bet: row.matchId188bet,
-    pairingUser: ""
-  }
-  matchPairing(params)
-}
-
 onMounted(() => {
     const date = props?.rowData?.beginTime?.split(' ');
     if(date?.length){

@@ -3,3 +3,8 @@ export const matchSource = [
   { label: t('熊猫'), value: 'PS' },
   { label: t('播控'), value: 'VS' },
 ];
+
+export const matchMethod = [
+  { label: t('熊猫'), value: 1 },
+  { label: t('播控'), value: 2 },
+];

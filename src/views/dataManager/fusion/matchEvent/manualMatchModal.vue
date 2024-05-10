@@ -38,7 +38,9 @@
     </div>
     <IconifyIconOffline class="link-icon" icon="link"/>
     <div>
-      <div class="text-center border border-slate-100 border-b-0">DP</div>
+      <div class="text-center border border-slate-100 border-b-0">
+        {{ matchSource.find(_ => _.value == matchSourcePairDetails.dataSourceCode)?.label ?? '-' }}
+      </div>
       <table class="border border-slate-100 table">
         <tr>
           <th>{{ t('赛事ID')}}</th>
@@ -48,21 +50,21 @@
           <th>{{ t('联赛名称')}}</th>
           <td>
             <div>{{ matchSourcePairDetails.leagueNameCn }}</div>
-            <div>{{ matchSourcePairDetails.leagueNameEn }}</div>
+            <div>{{ matchSourcePairDetails.leagueNameEn ? matchSourcePairDetails.leagueNameEn : '-' }}</div>
           </td>
         </tr>
         <tr>
           <th>{{ t('客队名称')}}</th>
           <td>
             <div>{{ matchSourcePairDetails.homeTeamNameCn }}</div>
-            <div>{{ matchSourcePairDetails.homeTeamNameEn }}</div>
+            <div>{{ matchSourcePairDetails.homeTeamNameEn ? matchSourcePairDetails.homeTeamNameEn : '-' }}</div>
           </td>
         </tr>
         <tr>
           <th>{{ t('客队名称')}}</th>
           <td>
             <div>{{ matchSourcePairDetails.awayTeamNameCn }}</div>
-            <div>{{ matchSourcePairDetails.awayTeamNameEn }}</div>
+            <div>{{ matchSourcePairDetails.awayTeamNameEn ? matchSourcePairDetails.awayTeamNameEn : '-' }}</div>
           </td>
         </tr>
         <tr>
@@ -74,7 +76,7 @@
   </div>
   <div class="flex justify-end bg-white mt-4">
     <el-button @click="closeDialog">{{ t('取消') }}</el-button>
-    <el-button type="primary" @click="matchEvent">{{ t('确定') }}</el-button>
+    <el-button type="primary" @click="handleMatch">{{ t('确定') }}</el-button>
   </div>
 </template>
 
@@ -82,28 +84,46 @@
 import { ref } from 'vue';
 import { t } from '@/plugins/i18n';
 import { matchCombineHook } from './utils/hook';
+import { matchSource } from "./utils/map";
+import {removeEmptyStringKeys} from "@/utils/utilFn";
+import {message} from "@/utils/message";
+import {useUserStore} from "@/store/user";
 defineOptions({ name: 'METADATA_LEAGUE' });
-const {
-  loading,
-  onModalSearch,
-  editFrom,
-  matchPairing
-} = matchCombineHook();
 
 const props = withDefaults(defineProps<{
   matchSource: MatchCombineAPI.matchSourceDetail,
   matchSourcePair: MatchCombineAPI.matchSourceDetail,
 }>(), {});
-
+const userStore = useUserStore();
 const emits = defineEmits(['reloadTable', 'closeDialog']);
 
 const matchSourceDetails = ref(props.matchSource);
 const matchSourcePairDetails = ref(props.matchSourcePair)
-
-onMounted(() => {
-    // editFrom.sportId = matchSourceDetails.value.sportId
-    onModalSearch();
-});
+const handleMatch = ()=>{
+  const param = {
+    dpMatchId: props.matchSource.matchId,
+    dpMatchId188bet: props.matchSource.matchId188bet,
+    matchId: props.matchSourcePair.matchId,
+    matchId188bet: props.matchSourcePair.matchId188bet,
+    pairingUser: userStore.userInfo.name,
+  }
+  const params = { ...removeEmptyStringKeys(param)}
+  if(props.matchSourcePair.pairingStatus===0){
+    API.matchPairing(params).then((res)=>{
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if(res.code===0){
+        emits('closeDialog');
+      }
+    })
+  }else { // 取消匹配
+    API.cancelMatchPairing(params).then((res)=>{
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if(res.code===0){
+        emits('closeDialog');
+      }
+    })
+  }
+}
 
 const closeDialog = () => {
   emits('closeDialog');
@@ -159,9 +179,9 @@ const closeDialog = () => {
 }
 
 .link-icon {
-  margin: -10px; 
-  rotate: 90deg; 
-  height: 30px; 
+  margin: -10px;
+  rotate: 90deg;
+  height: 30px;
   width: 30px;
 }
 </style>

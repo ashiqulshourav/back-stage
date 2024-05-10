@@ -1,41 +1,41 @@
 <template>
   <el-form
-    ref="formRef"
-    :inline="true"
-    :model="form"
-    class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
+      ref="formRef"
+      :inline="true"
+      :model="form"
+      class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
   >
     <div class="flex">
       <div>
-        <el-form-item  :label="`${t('数据源')}:`" prop="dataSource">
+        <el-form-item  :label="`${t('数据源')}:`" prop="dataSourceCode">
           <el-select
-            v-model="form.dataSourceCode"
-            :placeholder="t('数据源')"
-            class="!w-[150px]"
+              v-model="form.dataSourceCode"
+              :placeholder="t('数据源')"
+              class="!w-[150px]"
           >
             <el-option :label="t('全部')" :value="' '" />
             <el-option :label="t('未匹配')" value="0" />
             <el-option
-              :label="item.label"
-              :value="item.value"
-              v-for="item in matchSource"
-              :key="item.value"
+                :label="item.label"
+                :value="item.value"
+                v-for="item in matchSource"
+                :key="item.value"
             />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('赛种选择')}:`" prop="sportId">
           <el-select
-            v-model="form.sportId"
-            :placeholder="t('赛种选择')"
-            class="!w-[160px]"
-            @change="search"
+              v-model="form.sportId"
+              :placeholder="t('赛种选择')"
+              class="!w-[160px]"
+              @change="search"
           >
             <el-option :label="t('全部')" :value="''" />
             <el-option
-              :label="item.label"
-              :value="item.value"
-              v-for="item in gameClassify"
-              :key="item.value"
+                :label="item.label"
+                :value="item.value"
+                v-for="item in gameClassify"
+                :key="item.value"
             />
           </el-select>
         </el-form-item>
@@ -69,11 +69,11 @@
 
         <el-form-item :label="`${t('主队中文名')}:`" prop="homeTeamNameCn">
           <el-input
-            v-model="form.homeTeamNameCn"
-            :placeholder="t('主队中文名称')"
-            clearable
-            v-enter="search"
-            class="!w-[150px]"
+              v-model="form.homeTeamNameCn"
+              :placeholder="t('主队中文名称')"
+              clearable
+              v-enter="search"
+              class="!w-[150px]"
           />
         </el-form-item>
         <el-form-item :label="`${t('主队英文名')}:`" prop="homeTeamNameEn">
@@ -87,11 +87,11 @@
         </el-form-item>
         <el-form-item :label="`${t('客队中文')}:`" prop="awayTeamNameCn">
           <el-input
-            v-model="form.awayTeamNameCn"
-            :placeholder="t('客队中文名称')"
-            clearable
-            v-enter="search"
-            class="!w-[150px]"
+              v-model="form.awayTeamNameCn"
+              :placeholder="t('客队中文名称')"
+              clearable
+              v-enter="search"
+              class="!w-[150px]"
           />
         </el-form-item>
         <el-form-item :label="`${t('客队英文')}:`" prop="awayTeamNameEn">
@@ -117,12 +117,12 @@
 
         <el-form-item :label="`${t('操作人')}:`" prop="pairingUser">
           <el-input
-            v-model="form.pairingUser"
-            :placeholder="t('操作人')"
-            clearable
-            maxLenght="20"
-            v-enter="search"
-            class="!w-[200px]"
+              v-model="form.pairingUser"
+              :placeholder="t('操作人')"
+              clearable
+              maxLenght="20"
+              v-enter="search"
+              class="!w-[200px]"
           />
         </el-form-item>
         <el-form-item prop="timeType" :label="`${t('比赛日期选择')}:`">
@@ -130,16 +130,16 @@
         </el-form-item>
         <el-form-item>
           <el-button
-            type="primary"
-            :icon="useRenderIcon(SearchIcon)"
-            :loading="loading"
-            @click="search"
+              type="primary"
+              :icon="useRenderIcon(SearchIcon)"
+              :loading="loading"
+              @click="search"
           >
             {{ t('筛选') }}
           </el-button>
           <el-button
-            :icon="useRenderIcon(RefreshIcon)"
-            @click="resetForm(formRef)"
+              :icon="useRenderIcon(RefreshIcon)"
+              @click="resetForm(formRef)"
           >
             {{ t('重置') }}
           </el-button>
@@ -157,7 +157,6 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import type { FormInstance } from 'element-plus';
 import dayjs from 'dayjs';
 import {searchFormType} from '../utils/types'
-
 import {matchSource} from '../utils/map'
 import {
   SPORT_ID_MAP,
