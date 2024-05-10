@@ -5,6 +5,9 @@ import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, h } from 'vue';
 import { editSearchFormType, searchFormType } from './types';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
+import {message} from "@/utils/message";
+import dayjs from "dayjs";
+import {string} from "vue-types";
 
 export function matchCombineHook() {
   const dataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
@@ -23,10 +26,27 @@ export function matchCombineHook() {
   });
   const form = reactive<searchFormType>({
     category: 0,
+    sportId:'',
+    matchId:'',
+    leagueNameCn:'',
+    leagueNameEn:'',
+    homeTeamNameCn:'',
+    homeTeamNameEn:'',
+    awayTeamNameCn: '',
+    awayTeamNameEn: '',
+    pairingType: 0,
+    startTime:'',
+    endTime:'',
+    pairingUser:'',
   });
 
-  const editFrom = reactive<editSearchFormType>({
-    sportId: '',
+  const editFrom =reactive<editSearchFormType>({
+      category: 0,
+      sportId:null,
+      matchId188bet:null,
+      startTime:null,
+      endTime:null,
+
   });
 
   function handleTableWidthChange(val: number) {
@@ -47,12 +67,24 @@ export function matchCombineHook() {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       loading.value = true;
+
+      if(form.startTime){
+        form.startTime= dayjs(form.startTime).format('YYYY-MM-DD HH:mm:ss')
+      }else {
+        form.startTime= dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss')
+      }
+      if(form.endTime){
+        form.endTime= dayjs(form.endTime).format('YYYY-MM-DD HH:mm:ss')
+      }else {
+        form.endTime= dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')
+      }
       const res = await API.getMatchPairingList({
         ...removeEmptyStringKeys(form),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
       loading.value = false;
+      dataList.length=0
       if (res.data.list) {
         dataList.push(...res.data.list)
       }
@@ -79,10 +111,17 @@ export function matchCombineHook() {
       loading.value = false;
     }
   }
-  console.log('###matchInfo', matchInfo)
-  async function openDialog(title: string, row: MatchCombineAPI.matchSourceDetail) {
-    Object.assign(matchInfo, row);
-    onModalSearch();
+
+  const matchPairing = (param:{dpMatchId:number;dpMatchId188bet:number;matchId:number;matchId188bet:number;pairingUser:string})=>{
+      const params = { ...removeEmptyStringKeys(param)}
+    console.log(3333333,params)
+      API.matchPairing(params).then((res)=>{
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        console.log(11111,res)
+      })
+  }
+
+  async function openDialog(title: string, row?: MatchCombineAPI.matchSourceDetail) {
     addDialog({
       title,
       width: '95%',
