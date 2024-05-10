@@ -6,6 +6,7 @@ import {editSearchFormType, searchFormType} from './types';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import {message} from "@/utils/message";
 import dayjs from "dayjs";
+import {string} from "vue-types";
 
 export function matchCombineHook() {
   const dataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
@@ -23,6 +24,18 @@ export function matchCombineHook() {
   });
   const form = reactive<searchFormType>({
     category: 0,
+    sportId:'',
+    matchId:'',
+    leagueNameCn:'',
+    leagueNameEn:'',
+    homeTeamNameCn:'',
+    homeTeamNameEn:'',
+    awayTeamNameCn: '',
+    awayTeamNameEn: '',
+    pairingType: 0,
+    startTime:'',
+    endTime:'',
+    pairingUser:'',
   });
 
   const editFrom =reactive<editSearchFormType>({
@@ -31,6 +44,7 @@ export function matchCombineHook() {
       matchId188bet:null,
       startTime:null,
       endTime:null,
+
   });
 
   function handleTableWidthChange(val: number) {
@@ -68,6 +82,7 @@ export function matchCombineHook() {
         pageNum: pagination.currentPage
       });
       loading.value = false;
+      dataList.length=0
       if (res.data.list) {
         dataList.push(...res.data.list)
       }

@@ -103,9 +103,9 @@
               class="!w-[150px]"
           />
         </el-form-item>
-        <el-form-item  :label="`${t('匹配方式')}:`" prop="mathcMethod">
+        <el-form-item  :label="`${t('匹配方式')}:`" prop="pairingType">
           <el-select
-              v-model="form.mathcMethod"
+              v-model="form.pairingType"
               :placeholder="t('匹配方式')"
               class="!w-[150px]"
           >
@@ -115,9 +115,9 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item :label="`${t('操作人')}:`" prop="operator">
+        <el-form-item :label="`${t('操作人')}:`" prop="pairingUser">
           <el-input
-            v-model="form.operator"
+            v-model="form.pairingUser"
             :placeholder="t('操作人')"
             clearable
             maxLenght="20"

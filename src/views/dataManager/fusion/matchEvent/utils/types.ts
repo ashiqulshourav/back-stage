@@ -4,19 +4,19 @@ interface FormProps {
 
 export type searchFormType = {
   dataSource?: string;
-  sportId?: string;
-  matchId?: string;
+  sportId?: string|number;
+  matchId?: string|number;
   leagueNameCn?: string;
-  competitionDate?: number;
   leagueNameEn?: string;
   homeTeamNameCn?: string;
   homeTeamNameEn?: string;
   awayTeamNameCn?: string;
   awayTeamNameEn?: string;
-  mathcMethod?: string;
+  pairingType: number;
   category?: number;
   startTime:string;
   endTime:string;
+  pairingUser:string;
 }
 
 export type editSearchFormType = {
