@@ -1,8 +1,8 @@
 import editForm from '../form.vue';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
-import { reactive, ref, onMounted, h } from 'vue';
-import { searchFormType } from './types';
+import { reactive, ref, h } from 'vue';
+import {editSearchFormType, searchFormType} from './types';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 
 export function matchCombineHook() {
@@ -13,10 +13,19 @@ export function matchCombineHook() {
     total: 0,
     pageSize: 20,
     currentPage: 1,
-    background: true
+  });
+  const editPagination = reactive<PaginationProps>({
+      total: 0,
+      pageSize: 20,
+      currentPage: 1,
   });
   const form = reactive<searchFormType>({
     category: 0,
+  });
+
+  const editFrom =reactive<editSearchFormType>({
+      category: 0,
+      sportId:'',
   });
 
   function handleTableWidthChange(val: number) {
@@ -52,19 +61,19 @@ export function matchCombineHook() {
   }
 
   async function onModalSearch(type?: string) {
-    loading.value = false;
-    if (type === 'reload') pagination.currentPage = 1;
+    if (type === 'reload') editPagination.currentPage = 1;
     try {
       loading.value = true;
       const res = await API.getMatchDataSourceList({
-        ...removeEmptyStringKeys(form),
-        pageSize: pagination.pageSize,
-        pageNum: pagination.currentPage
+        ...removeEmptyStringKeys(editFrom),
+        pageSize: editPagination.pageSize,
+        pageNum: editPagination.currentPage
       });
       loading.value = false;
-      matchInfoDataList.length = 0;
-      matchInfoDataList.push(...res.data.list)
-      pagination.total = res.data.total
+      matchInfoDataList.length=0;
+      if (res.data.list) {
+        matchInfoDataList.push(...res.data.list)
+      }
     } catch (error) {
       loading.value = false;
     }
@@ -80,8 +89,7 @@ export function matchCombineHook() {
       hideFooter: true,
       contentRenderer: ({ options, index }) =>
         h(editForm, {
-          matchDetail: row,
-          matchInfoDataList: matchInfoDataList,
+            rowData:row,
           onCloseDialog: (params: string) => {
             closeDialog(options, index);
             params && onSearch();
@@ -89,10 +97,6 @@ export function matchCombineHook() {
         })
     });
   }
-  onMounted(() => {
-    onSearch();
-  });
-
   return {
     loading,
     dataList,
@@ -105,5 +109,6 @@ export function matchCombineHook() {
     handleSelectionChange,
     form,
     onModalSearch,
+      editFrom
   };
 }

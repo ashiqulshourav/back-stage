@@ -1,11 +1,9 @@
 import { ESPORT_ID_MAP, SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { getLan } from "@/utils/utilFn";
 import dayjs from "dayjs";
-import {handleTableWidth} from "@/utils/getTableWidth";
 import {t} from "@/plugins/i18n";
-
+import {matchSource} from "../utils/map";
 const lan = getLan() ?? 'zh';
-
 export const columns: TableColumnList = [
   {
     label: t('赛种'),
@@ -73,7 +71,9 @@ export const columns: TableColumnList = [
 export const matchColumns: TableColumnList = [
     {
         label: t('数据源'),
-        prop: 'dataSource'
+        prop: 'dataSource',
+        formatter: ({ dataSourceCode }) => matchSource.find(_ => _.value === dataSourceCode)?.label ?? '-'
+
     },
     {
         label: t('赛事ID'),

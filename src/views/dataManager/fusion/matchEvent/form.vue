@@ -27,7 +27,7 @@
     </div>
     <div class="col-span-4 m-2">
       <SearchForm
-        :form="form"
+        :form="editFrom"
         :loading="loading"
         @on-search="onModalSearch"
       />
@@ -77,40 +77,29 @@ import { matchCombineHook } from './utils/hook';
 import SearchForm from './component/ModalSearchForm.vue';
 import { usePublicHooks } from '@/hooks';
 import { matchColumns } from './component/TableColumnList';
-
 defineOptions({ name: 'METADATA_LEAGUE' });
 const { tableHeaderStyle } = usePublicHooks();
-
 const {
   loading,
   onModalSearch,
-  form,
+  matchInfoDataList,
+  editFrom,
 } = matchCombineHook();
 
 const props = withDefaults(defineProps<{
-  matchDetail: MatchCombineAPI.matchSourceDetail,
+  rowData: MatchCombineAPI.matchPairingDetail,
   matchInfoDataList: MatchCombineAPI.matchSourceDetail[],
 }>(), {});
 
 const emits = defineEmits(['reloadTable', 'closeDialog']);
 
-const matchSourceDetails = ref(props.matchDetail);
+const matchSourceDetails = ref(props.rowData);
 const matchDataList = ref(props.matchInfoDataList)
 
-console.log(222222222,matchSourceDetails)
-
 onMounted(() => {
-    getMatchDataSourceList();
+    editFrom.sportId= props?.rowData?.sportId
+    onModalSearch();
 });
-
-const getMatchDataSourceList = () =>{
-    const params = {
-        sportId:1
-    }
-    API.getMatchDataSourceList(params).then((res)=>{
-        console.log(2222222,res)
-    })
-}
 
 const closeDialog = () => {
   emits('closeDialog');
