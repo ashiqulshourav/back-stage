@@ -87,35 +87,42 @@ import { matchCombineHook } from './utils/hook';
 import { matchSource } from "./utils/map";
 import {removeEmptyStringKeys} from "@/utils/utilFn";
 import {message} from "@/utils/message";
+import {useUserStore} from "@/store/user";
 defineOptions({ name: 'METADATA_LEAGUE' });
 
 const props = withDefaults(defineProps<{
   matchSource: MatchCombineAPI.matchSourceDetail,
   matchSourcePair: MatchCombineAPI.matchSourceDetail,
 }>(), {});
-
+const userStore = useUserStore();
 const emits = defineEmits(['reloadTable', 'closeDialog']);
 
 const matchSourceDetails = ref(props.matchSource);
 const matchSourcePairDetails = ref(props.matchSourcePair)
 const handleMatch = ()=>{
-
-  console.log(11111,props.matchSource)
-  console.log(222222,props.matchSourcePair)
   const param = {
     dpMatchId: props.matchSource.matchId,
     dpMatchId188bet: props.matchSource.matchId188bet,
     matchId: props.matchSourcePair.matchId,
     matchId188bet: props.matchSourcePair.matchId188bet,
-    pairingUser: ""
+    pairingUser: userStore.userInfo.name,
   }
   const params = { ...removeEmptyStringKeys(param)}
-  API.matchPairing(params).then((res)=>{
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    if(res.code===0){
-      emits('closeDialog');
-    }
-  })
+  if(props.matchSourcePair.pairingStatus===0){
+    API.matchPairing(params).then((res)=>{
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if(res.code===0){
+        emits('closeDialog');
+      }
+    })
+  }else { // 取消匹配
+    API.cancelMatchPairing(params).then((res)=>{
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if(res.code===0){
+        emits('closeDialog');
+      }
+    })
+  }
 }
 
 const closeDialog = () => {
