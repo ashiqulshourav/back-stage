@@ -29,7 +29,7 @@
 
       <el-form-item :label="`${t('事件源')}:`" prop="eventName">
         <el-select
-          v-model="form.eventSource"
+          v-model="form.dataSourceCode"
           :placeholder="t('事件源')"
           clearable
           class="!w-[150px]"

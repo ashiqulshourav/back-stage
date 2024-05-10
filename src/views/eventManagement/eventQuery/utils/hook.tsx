@@ -16,7 +16,7 @@ export function useEventQueryHook() {
 
   const form = reactive<searchFormType>({
     matchId: '',
-    eventSource: '',
+    dataSourceCode: '',
     eventCode: '',
     endTime: '',
     startTime: ''
