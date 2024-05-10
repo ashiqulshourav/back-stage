@@ -24,6 +24,13 @@ export function useEventQueryHook() {
 
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
+
+    if (!form.matchId) {
+      matchEventList.length = 0;
+      pagination.total = 0;
+      return;
+    }
+
     try {
       loading.value = true;
       const res = await API.getMatchEventByMatchId({
@@ -36,11 +43,9 @@ export function useEventQueryHook() {
 
       if (res?.code) return message(res?.msg, { type: 'error' });
       matchEventList.length = 0;
-      if (JSON.stringify(res.data) != '{}') {
-        console.log('hitting');
-        matchEventList.push(res.data);
-      }
-      // pagination.total = res.data.total;
+
+      matchEventList.push(...res.data.list);
+      pagination.total = res.data.total;
       document
         .querySelector('.table_container .el-scrollbar__wrap')
         .scroll(0, 0);
@@ -68,7 +73,7 @@ export function useEventQueryHook() {
   }
 
   onMounted(() => {
-    onSearch();
+    // onSearch();
   });
 
   return {

@@ -2,30 +2,40 @@ import dayjs from 'dayjs';
 
 export const columns: TableColumnList = [
   {
-    label: t('赛种'),
-    prop: 'sportName',
-    minWidth: 150
-  },
-  {
-    label: t('联赛名称'),
-    prop: 'league',
-    minWidth: 150
-  },
-  {
-    label: t('比赛对阵'),
-    slot: 'match_vs',
-    minWidth: 300
-  },
-  {
-    label: t('赛事id'),
-    prop: 'matchId',
-    minWidth: 150
-  },
-  {
-    label: t('开赛时间'),
-    prop: 'startDateTime',
+    label: t('事件源发生时间'),
+    prop: 'createdAt',
     minWidth: 150,
     formatter: ({ beginTimeLong }) =>
       dayjs(beginTimeLong).format('YYYY-MM-DD HH:mm:ss') || ''
+  },
+  {
+    label: t('事件源'),
+    prop: 'dataSourceCode',
+    minWidth: 150
+  },
+  {
+    label: t('事件名称'),
+    slot: 'addition5',
+    minWidth: 300
+  },
+  {
+    label: t('场次/局数/盘数'),
+    prop: 'extraInfo',
+    minWidth: 150
+  },
+  {
+    label: t('主/客'),
+    prop: 'homeAway',
+    minWidth: 150
+  },
+  {
+    label: t('球员名称'),
+    prop: 'player1Name',
+    minWidth: 150
+  },
+  {
+    label: t('比分'),
+    slot: 'score',
+    minWidth: 150
   }
 ];

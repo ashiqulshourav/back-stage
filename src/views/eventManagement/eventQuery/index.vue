@@ -2,7 +2,6 @@
   <div class="main">
     <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
 
-    
     <PureTableBar
       :title="t('赛事列表')"
       :columns="columns"
@@ -29,10 +28,8 @@
           @page-current-change="handleCurrentChange"
           @page-size-change="handlePageSizeChange"
         >
-          <template #match_vs="{ row }">
-            <span v-if="row.aTeamName && row.hTeamName">
-              {{ row.aTeamName }} vs {{ row.hTeamName }}
-            </span>
+          <template #score="{ row }">
+            <span> {{ row.t1 }} - {{ row.t2 }} </span>
           </template>
         </pure-table>
       </template>

@@ -127,6 +127,9 @@ const resetForm = (formEl: FormInstance | undefined) => {
   time.value = '';
   props.form.startTime = '';
   props.form.endTime = '';
+  props.form.matchId = '';
+  props.form.dataSourceCode = '';
+  props.form.eventCode = '';
   emits('onSearch', ...['reload']);
 };
 
