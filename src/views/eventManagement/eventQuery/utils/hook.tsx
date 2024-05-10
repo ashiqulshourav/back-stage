@@ -1,0 +1,92 @@
+import { searchFormType } from './types';
+import type { PaginationProps } from '@pureadmin/table';
+import { addDialog, closeDialog } from '@/components/ReDialog';
+
+export function useEventQueryHook() {
+  const dataList = reactive<PLayMethodAPI.getKindsCodeMatchList[]>([]);
+  const loading = ref(false);
+
+  const pagination = reactive<PaginationProps>({
+    total: 0,
+    pageSize: 10,
+    currentPage: 1,
+    background: true
+  });
+
+  const form = reactive<searchFormType>({
+    eventId: '',
+    startTime: '',
+    endTime: '',
+    eventName: ''
+  });
+
+  async function onSearch(type?: string) {
+    if (type === 'reload') pagination.currentPage = 1;
+    try {
+      loading.value = true;
+
+      loading.value = false;
+    } catch (error) {
+      loading.value = false;
+    }
+  }
+
+  function handleTableWidthChange(val: number) {
+    pagination.pageSize = val;
+    onSearch();
+  }
+
+  function handleCurrentChange(val: number) {
+    pagination.currentPage = val;
+    onSearch();
+  }
+  function handlePageSizeChange(val: number) {
+    pagination.pageSize = val;
+    onSearch();
+  }
+
+  function handleSelectionChange(val) {
+    console.log('handleSelectionChange', val);
+  }
+
+  onMounted(() => {
+    onSearch();
+  });
+
+  //- 开启玩法设定弹窗
+  // function openDialog(row: PLayMethodAPI.getKindsCodeMatchList) {
+  //   addDialog({
+  //     title: t('分类预览'),
+  //     width: '40%',
+  //     draggable: true,
+  //     alignCenter: true,
+  //     closeOnClickModal: false,
+  //     hideFooter: true,
+  //     contentRenderer: ({ options, index }) =>
+  //       h(editForm, {
+  //         matchId: row.matchId,
+  //         sportId: row.sportId,
+  //         leagueName: row.leagueNameCn,
+  //         beginTime: row.beginTime,
+  //         homeName: row.homeTeamNameCn,
+  //         awayName: row.awayTeamNameCn,
+  //         onCloseDialog: () => {
+  //           closeDialog(options, index);
+  //         }
+  //       })
+  //   });
+  // }
+
+  return {
+    loading,
+    pagination,
+    onSearch,
+    form,
+    handleTableWidthChange,
+    handleCurrentChange,
+    handleSelectionChange,
+    // openDialog,
+    dataList,
+    handlePageSizeChange
+  };
+}
