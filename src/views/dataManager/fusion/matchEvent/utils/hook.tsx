@@ -85,6 +85,9 @@ export function matchCombineHook() {
       dataList.length=0
       if (res.data.list) {
         dataList.push(...res.data.list)
+        pagination.total = res.data.total;
+        pagination.pageSize = res.data.pageSize;
+        pagination.currentPage = res.data.pageNum;
       }
     } catch (error) {
       loading.value = false;
@@ -103,7 +106,7 @@ export function matchCombineHook() {
       loading.value = false;
       matchInfoDataList.length = 0;
       if (res.data.list) {
-         alreadyMatch.value = res.data.list[0].pairingStatus===1
+        alreadyMatch.value = res.data.list.filter(item => item.pairingStatus === 1).length > 0;
         matchInfoDataList.push(...res.data.list)
       }
     } catch (error) {

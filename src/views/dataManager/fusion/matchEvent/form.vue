@@ -60,9 +60,9 @@
           >
             <template #operation="{ row }">
               <el-button
-                :type= "row.pairingStatus === 1 ? 'warning' : 'default'"
+                :type= "!alreadyMatch ? 'success' : row.pairingStatus === 1 ? 'warning' : 'default'"
                 :size="size"
-                :disabled="row.pairingStatus === 0"
+                :disabled="alreadyMatch && row.pairingStatus === 0"
                 @click="openManualMatchDialog(t('匹配确认'),rowData,row)"
               >
                 {{ row.pairingStatus === 0?t('立即匹配'):t('取消匹配') }}
