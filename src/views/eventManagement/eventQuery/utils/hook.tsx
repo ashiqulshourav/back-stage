@@ -1,9 +1,10 @@
 import { searchFormType } from './types';
 import type { PaginationProps } from '@pureadmin/table';
-import { addDialog, closeDialog } from '@/components/ReDialog';
+import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { message } from '@/utils/message';
 
 export function useEventQueryHook() {
-  const dataList = reactive<PLayMethodAPI.getKindsCodeMatchList[]>([]);
+  const matchEventList = reactive<EventAPI.MatchEvent[]>([]);
   const loading = ref(false);
 
   const pagination = reactive<PaginationProps>({
@@ -14,18 +15,40 @@ export function useEventQueryHook() {
   });
 
   const form = reactive<searchFormType>({
-    eventId: '',
-    startTime: '',
+    matchId: '',
+    dataSourceCode: '',
+    eventCode: '',
     endTime: '',
-    eventName: ''
+    startTime: ''
   });
 
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
+
+    if (!form.matchId) {
+      matchEventList.length = 0;
+      pagination.total = 0;
+      return;
+    }
+
     try {
       loading.value = true;
+      const res = await API.getMatchEventByMatchId({
+        ...(removeEmptyStringKeys(form) as searchFormType),
+        pageSize: pagination.pageSize,
+        pageNum: pagination.currentPage
+      });
 
       loading.value = false;
+
+      if (res?.code) return message(res?.msg, { type: 'error' });
+      matchEventList.length = 0;
+
+      matchEventList.push(...res.data.list);
+      pagination.total = res.data.total;
+      document
+        .querySelector('.table_container .el-scrollbar__wrap')
+        .scroll(0, 0);
     } catch (error) {
       loading.value = false;
     }
@@ -50,32 +73,8 @@ export function useEventQueryHook() {
   }
 
   onMounted(() => {
-    onSearch();
+    // onSearch();
   });
-
-  //- 开启玩法设定弹窗
-  // function openDialog(row: PLayMethodAPI.getKindsCodeMatchList) {
-  //   addDialog({
-  //     title: t('分类预览'),
-  //     width: '40%',
-  //     draggable: true,
-  //     alignCenter: true,
-  //     closeOnClickModal: false,
-  //     hideFooter: true,
-  //     contentRenderer: ({ options, index }) =>
-  //       h(editForm, {
-  //         matchId: row.matchId,
-  //         sportId: row.sportId,
-  //         leagueName: row.leagueNameCn,
-  //         beginTime: row.beginTime,
-  //         homeName: row.homeTeamNameCn,
-  //         awayName: row.awayTeamNameCn,
-  //         onCloseDialog: () => {
-  //           closeDialog(options, index);
-  //         }
-  //       })
-  //   });
-  // }
 
   return {
     loading,
@@ -86,7 +85,7 @@ export function useEventQueryHook() {
     handleCurrentChange,
     handleSelectionChange,
     // openDialog,
-    dataList,
+    matchEventList,
     handlePageSizeChange
   };
 }

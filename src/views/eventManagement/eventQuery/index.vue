@@ -17,7 +17,7 @@
           :size="size"
           adaptive
           :default-sort="{ prop: 'level', order: 'descending' }"
-          :data="dataList"
+          :data="matchEventList"
           :columns="dynamicColumns"
           :pagination="{
             ...pagination,
@@ -28,17 +28,8 @@
           @page-current-change="handleCurrentChange"
           @page-size-change="handlePageSizeChange"
         >
-          <template #operation="{ row }">
-            <el-button
-              v-auth="['UPDATE']"
-              class="reset-margin"
-              link
-              type="primary"
-              :size="size"
-              :icon="useRenderIcon(EditPen)"
-            >
-              {{ t('编辑') }}
-            </el-button>
+          <template #score="{ row }">
+            <span> {{ row.t1 }} - {{ row.t2 }} </span>
           </template>
         </pure-table>
       </template>
@@ -48,13 +39,13 @@
 
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
-import SearchForm from './component/SearchForm.vue';
 import { useEventQueryHook } from './utils/hook';
 import { usePublicHooks } from '@/hooks';
 import { t } from '@/plugins/i18n';
 import { columns } from './component/TableColumnList';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import EditPen from '@iconify-icons/ep/edit-pen';
+import SearchForm from './component/SearchForm.vue';
 
 defineOptions({ name: 'CONFIGCENTER_EVENT_QUERY' });
 const { tableHeaderStyle } = usePublicHooks();
@@ -67,7 +58,7 @@ const {
   handleTableWidthChange,
   handleSelectionChange,
   // openDialog,
-  dataList,
+  matchEventList,
   handleCurrentChange,
   handlePageSizeChange
 } = useEventQueryHook();
