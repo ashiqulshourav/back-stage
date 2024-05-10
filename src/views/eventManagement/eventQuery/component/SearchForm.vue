@@ -95,7 +95,7 @@ const time = ref('');
 const formRef = ref<FormInstance>();
 const emits = defineEmits(['onSearch']);
 const eventNames = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
-const pandaMatchList = reactive<EventAPI.PandaMatchEventList[]>([]);
+const pandaMatchList = reactive<PandaMatch[]>([]);
 
 const props = defineProps<{
   loading: boolean;

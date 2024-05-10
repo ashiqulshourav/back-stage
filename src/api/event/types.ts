@@ -16,8 +16,8 @@ declare namespace EventAPI {
 
   type PandaMatchEventListRes = {
     data: {
-      eventCode?: string;
-      eventName?: string;
+      eventCode: string;
+      eventName: string;
     }[];
   };
 
