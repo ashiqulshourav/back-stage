@@ -38,7 +38,9 @@
     </div>
     <IconifyIconOffline class="link-icon" icon="link"/>
     <div>
-      <div class="text-center border border-slate-100 border-b-0">DP</div>
+      <div class="text-center border border-slate-100 border-b-0">
+        {{ matchSource.find(_ => _.value == matchSourcePairDetails.dataSourceCode)?.label ?? '-' }}
+      </div>
       <table class="border border-slate-100 table">
         <tr>
           <th>{{ t('赛事ID')}}</th>
@@ -48,21 +50,21 @@
           <th>{{ t('联赛名称')}}</th>
           <td>
             <div>{{ matchSourcePairDetails.leagueNameCn }}</div>
-            <div>{{ matchSourcePairDetails.leagueNameEn }}</div>
+            <div>{{ matchSourcePairDetails.leagueNameEn ? matchSourcePairDetails.leagueNameEn : '-' }}</div>
           </td>
         </tr>
         <tr>
           <th>{{ t('客队名称')}}</th>
           <td>
             <div>{{ matchSourcePairDetails.homeTeamNameCn }}</div>
-            <div>{{ matchSourcePairDetails.homeTeamNameEn }}</div>
+            <div>{{ matchSourcePairDetails.homeTeamNameEn ? matchSourcePairDetails.homeTeamNameEn : '-' }}</div>
           </td>
         </tr>
         <tr>
           <th>{{ t('客队名称')}}</th>
           <td>
             <div>{{ matchSourcePairDetails.awayTeamNameCn }}</div>
-            <div>{{ matchSourcePairDetails.awayTeamNameEn }}</div>
+            <div>{{ matchSourcePairDetails.awayTeamNameEn ? matchSourcePairDetails.awayTeamNameEn : '-' }}</div>
           </td>
         </tr>
         <tr>
@@ -81,6 +83,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { t } from '@/plugins/i18n';
+import { matchCombineHook } from './utils/hook';
+import { matchSource } from "./utils/map";
 import {removeEmptyStringKeys} from "@/utils/utilFn";
 import {message} from "@/utils/message";
 import {useUserStore} from "@/store/user";
