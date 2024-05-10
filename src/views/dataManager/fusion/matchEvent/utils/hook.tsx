@@ -1,7 +1,7 @@
 import editForm from '../form.vue';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
-import { reactive, ref, onMounted, h } from 'vue';
+import { reactive, ref, h } from 'vue';
 import {editSearchFormType, searchFormType} from './types';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 
@@ -79,7 +79,7 @@ export function matchCombineHook() {
         pageNum: editPagination.currentPage
       });
       loading.value = false;
-        matchInfoDataList.length=0;
+      matchInfoDataList.length=0;
       if (res.data.list) {
         matchInfoDataList.push(...res.data.list)
       }

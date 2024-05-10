@@ -36,6 +36,7 @@ import {
   SPORT_CATEGORY
 } from '@/utils/maps/sports_map';
 import { useTranslationLang } from '@/layout/hooks/useTranslationLang';
+import {matchSource} from '../utils/map'
 
 const props = defineProps<{
   loading: boolean;
@@ -74,8 +75,7 @@ const columns: PlusColumn[] = [
     options: [
       { label: t('全部'), value: '' },
       { label: t('未匹配'), value: '0' },
-      { label: t('熊猫'), value: 'PS' },
-      { label: t('播控'), value: 'VS' },
+        ...matchSource
     ],
     fieldProps: {
       onChange: chagenMatchType

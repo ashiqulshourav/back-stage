@@ -82,8 +82,8 @@ const { tableHeaderStyle } = usePublicHooks();
 const {
   loading,
   onModalSearch,
-    matchInfoDataList,
-    editFrom,
+  matchInfoDataList,
+  editFrom,
 } = matchCombineHook();
 
 const props = withDefaults(defineProps<{rowData: MatchCombineAPI.matchPairingDetail}>(), {});
