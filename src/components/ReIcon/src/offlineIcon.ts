@@ -56,6 +56,7 @@ addIcon("configCenter", configCenter);
 addIcon("riskManagement", sale);
 addIcon("taskCenter", TaskCenterIcon);
 addIcon("download", Download);
+addIcon("SportTrading", metadata);
 
 /* 菜单icon结束 */
 //- 操盘图标开始
