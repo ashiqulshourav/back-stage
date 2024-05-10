@@ -2,6 +2,7 @@
   <div class="main">
     <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
 
+    
     <PureTableBar
       :title="t('赛事列表')"
       :columns="columns"
