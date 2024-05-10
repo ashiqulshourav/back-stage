@@ -1,33 +1,50 @@
 import editForm from '../form.vue';
+import manualMatchModal from '../manualMatchModal.vue';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
-import { reactive, ref, onMounted, h } from 'vue';
-import { searchFormType } from './types';
+import { reactive, ref, h } from 'vue';
+import { editSearchFormType, searchFormType } from './types';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
-
-export function useLeague() {
+import {message} from "@/utils/message";
+import dayjs from "dayjs";
+export function matchCombineHook() {
   const dataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
+  const matchInfoDataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
+  const matchInfo = reactive<MatchCombineAPI.matchSourceDetail>({} as MatchCombineAPI.matchSourceDetail);
   const loading = ref(true);
-  const levelList = reactive<ConfigCenterDataAPI.leagueLevelList[]>([]);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 20,
     currentPage: 1,
-    background: true
+  });
+  const editPagination = reactive<PaginationProps>({
+    total: 0,
+    pageSize: 20,
+    currentPage: 1,
   });
   const form = reactive<searchFormType>({
-    dataSource: '',
-    sportId: '',
-    matchId: '',
-    leagueNameCn: '',
-    competitionDate: '',
-    leagueNameEn: '',
-    homeTeamNameCn: '',
-    homeTeamNameEn: '',
+    dataSourceCode:'',
+    category: 0,
+    sportId:'',
+    matchId:'',
+    leagueNameCn:'',
+    leagueNameEn:'',
+    homeTeamNameCn:'',
+    homeTeamNameEn:'',
     awayTeamNameCn: '',
     awayTeamNameEn: '',
-    mathcMethod: '',
-    category:0 ,
+    pairingType: 0,
+    startTime:'',
+    endTime:'',
+    pairingUser:'',
+  });
+
+  const editFrom =reactive<editSearchFormType>({
+      category: 0,
+      sportId:null,
+      matchId188bet:null,
+      startTime:null,
+      endTime:null,
 
   });
 
@@ -45,25 +62,29 @@ export function useLeague() {
     console.log('handleSelectionChange', val);
   }
 
-  //- 获取联赛等级列表
-  const initLevelList = async () => {
-    const res = await API.getLevelList();
-    if (res.code) return;
-    levelList.length = 0;
-    levelList.push(...res.data);
-  };
-
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       loading.value = true;
+
+      if(form.startTime){
+        form.startTime= dayjs(form.startTime).format('YYYY-MM-DD HH:mm:ss')
+      }else {
+        form.startTime= dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss')
+      }
+      if(form.endTime){
+        form.endTime= dayjs(form.endTime).format('YYYY-MM-DD HH:mm:ss')
+      }else {
+        form.endTime= dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')
+      }
       const res = await API.getMatchPairingList({
         ...removeEmptyStringKeys(form),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
       loading.value = false;
-      if(res.data.list){
+      dataList.length=0
+      if (res.data.list) {
         dataList.push(...res.data.list)
       }
     } catch (error) {
@@ -71,7 +92,35 @@ export function useLeague() {
     }
   }
 
-  async function openDialog(title: string, row?: MetadataAPI.LeagueList) {
+  async function onModalSearch(type?: string) {
+    if (type === 'reload') editPagination.currentPage = 1;
+    try {
+      loading.value = true;
+      const res = await API.getMatchDataSourceList({
+        ...removeEmptyStringKeys(editFrom),
+        pageSize: editPagination.pageSize,
+        pageNum: editPagination.currentPage
+      });
+      loading.value = false;
+      matchInfoDataList.length = 0;
+      if (res.data.list) {
+        matchInfoDataList.push(...res.data.list)
+      }
+    } catch (error) {
+      loading.value = false;
+    }
+  }
+
+  const matchPairing = (param:{dpMatchId:number;dpMatchId188bet:number;matchId:number;matchId188bet:number;pairingUser:string})=>{
+      const params = { ...removeEmptyStringKeys(param)}
+    console.log(3333333,params)
+      API.matchPairing(params).then((res)=>{
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        console.log(11111,res)
+      })
+  }
+
+  async function openDialog(title: string, row?: MatchCombineAPI.matchSourceDetail) {
     addDialog({
       title,
       width: '95%',
@@ -80,21 +129,8 @@ export function useLeague() {
       hideFooter: true,
       contentRenderer: ({ options, index }) =>
         h(editForm, {
-          levelList,
-          formInline: {
-            leagueLogo: row?.leagueLogo ?? '',
-            leagueId: row?.leagueId ?? '',
-            countryId: row?.countryId ?? '',
-            leagueId188Bet: row?.leagueId188Bet ?? '',
-            leagueNameCn: row?.leagueNameCn ?? '',
-            leagueNameEn: row?.leagueNameEn ?? '',
-            level: row?.level ?? '',
-            sportId: row?.sportId ?? '',
-            category: row?.category ?? '',
-            leagueTagsId: row?.leagueTagsId ?? [],
-            isEsportType: form.category === 1,
-            riskLevel: row?.riskLevel ?? ''
-          },
+          rowData: row,
+          matchInfoDataList: matchInfoDataList,
           onCloseDialog: (params: string) => {
             closeDialog(options, index);
             params && onSearch();
@@ -102,10 +138,24 @@ export function useLeague() {
         })
     });
   }
-  onMounted(() => {
-    onSearch();
-    initLevelList();
-  });
+  async function openManualMatchDialog(title: string, rowData:MatchCombineAPI.matchPairingDetail,row: MatchCombineAPI.matchSourceDetail) {
+    addDialog({
+      title,
+      width: 'auto',
+      alignCenter: true,
+      closeOnClickModal: false,
+      hideFooter: true,
+      contentRenderer: ({ options, index }) =>
+        h(manualMatchModal, {
+          matchSource: rowData,
+          matchSourcePair: row,
+          onCloseDialog: (params: string) => {
+            closeDialog(options, index);
+            params && onSearch();
+          }
+        })
+    });
+  }
 
   return {
     loading,
@@ -113,10 +163,15 @@ export function useLeague() {
     pagination,
     onSearch,
     openDialog,
-    levelList,
     handleTableWidthChange,
     handleCurrentChange,
     handleSelectionChange,
-    form
+    form,
+    onModalSearch,
+    editFrom,
+    openManualMatchDialog,
+    matchInfo,
+    matchInfoDataList,
+    matchPairing,
   };
 }

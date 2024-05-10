@@ -56,7 +56,6 @@ const dynamicColumns = computed(() => {
   columns[4].hide = form.userId !== '' && form.matchId === '' && dataList.length !== 0;
   return columns;
 });
-console.log('###dataList', dataList)
 </script>
 
 <style>
