@@ -1,9 +1,10 @@
 import { searchFormType } from './types';
 import type { PaginationProps } from '@pureadmin/table';
-import { addDialog, closeDialog } from '@/components/ReDialog';
+import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { message } from '@/utils/message';
 
 export function useEventQueryHook() {
-  const dataList = reactive<PLayMethodAPI.getKindsCodeMatchList[]>([]);
+  const pandaMatchEventList = reactive<EventAPI.PandaMatchEvent[]>([]);
   const loading = ref(false);
 
   const pagination = reactive<PaginationProps>({
@@ -24,8 +25,22 @@ export function useEventQueryHook() {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       loading.value = true;
+      const res = await API.getPandaMatchEventList({
+        ...(removeEmptyStringKeys(form) as searchFormType),
+        pageSize: pagination.pageSize,
+        pageNum: pagination.currentPage
+      });
 
       loading.value = false;
+
+      console.log(res);
+      if (res?.code) return message(res?.msg, { type: 'error' });
+      pandaMatchEventList.length = 0;
+      pandaMatchEventList.push(...res.data);
+      // pagination.total = res.data.total;
+      // document
+      //   .querySelector('.table_container .el-scrollbar__wrap')
+      //   .scroll(0, 0);
     } catch (error) {
       loading.value = false;
     }
@@ -53,30 +68,6 @@ export function useEventQueryHook() {
     onSearch();
   });
 
-  //- 开启玩法设定弹窗
-  // function openDialog(row: PLayMethodAPI.getKindsCodeMatchList) {
-  //   addDialog({
-  //     title: t('分类预览'),
-  //     width: '40%',
-  //     draggable: true,
-  //     alignCenter: true,
-  //     closeOnClickModal: false,
-  //     hideFooter: true,
-  //     contentRenderer: ({ options, index }) =>
-  //       h(editForm, {
-  //         matchId: row.matchId,
-  //         sportId: row.sportId,
-  //         leagueName: row.leagueNameCn,
-  //         beginTime: row.beginTime,
-  //         homeName: row.homeTeamNameCn,
-  //         awayName: row.awayTeamNameCn,
-  //         onCloseDialog: () => {
-  //           closeDialog(options, index);
-  //         }
-  //       })
-  //   });
-  // }
-
   return {
     loading,
     pagination,
@@ -86,7 +77,7 @@ export function useEventQueryHook() {
     handleCurrentChange,
     handleSelectionChange,
     // openDialog,
-    dataList,
+    pandaMatchEventList,
     handlePageSizeChange
   };
 }
