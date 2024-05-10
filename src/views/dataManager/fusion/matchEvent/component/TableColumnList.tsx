@@ -42,22 +42,22 @@ export const columns: TableColumnList = [
   },
   {
     label: t('数据源'),
-    prop: 'dataSource',
+    prop: 'dataSourceCode',
     minWidth: 150,
   },
   {
     label: t('匹配方式'),
-    prop: 'matchMethod',
+    prop: 'pairingType',
     minWidth: 150,
   },
   {
     label: t('操作人'),
-    prop: 'createdBy',
+    prop: 'pairingUser',
     minWidth: 150,
   },
   {
     label: t('操作时间'),
-    prop: 'createdDate',
+    prop: 'pairingTime',
     minWidth: 150,
   },
   {

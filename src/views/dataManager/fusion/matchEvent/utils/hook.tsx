@@ -7,8 +7,6 @@ import { editSearchFormType, searchFormType } from './types';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import {message} from "@/utils/message";
 import dayjs from "dayjs";
-import {string} from "vue-types";
-
 export function matchCombineHook() {
   const dataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
   const matchInfoDataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
@@ -25,6 +23,7 @@ export function matchCombineHook() {
     currentPage: 1,
   });
   const form = reactive<searchFormType>({
+    dataSourceCode:'',
     category: 0,
     sportId:'',
     matchId:'',
@@ -172,5 +171,6 @@ export function matchCombineHook() {
     editFrom,
     openManualMatchDialog,
     matchInfo,
+    matchInfoDataList,
   };
 }

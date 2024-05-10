@@ -3,7 +3,7 @@ interface FormProps {
 }
 
 export type searchFormType = {
-  dataSource?: string;
+  dataSourceCode?: string;
   sportId?: string|number;
   matchId?: string|number;
   leagueNameCn?: string;

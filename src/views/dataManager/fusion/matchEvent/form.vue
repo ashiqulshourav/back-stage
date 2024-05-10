@@ -92,6 +92,7 @@ const {
   onModalSearch,
   editFrom,
   openManualMatchDialog,
+  matchInfoDataList,
 } = matchCombineHook();
 
 const props = withDefaults(defineProps<{rowData: MatchCombineAPI.matchPairingDetail}>(), {});

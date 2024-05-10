@@ -9,7 +9,7 @@
       <div>
         <el-form-item  :label="`${t('数据源')}:`" prop="dataSource">
           <el-select
-            v-model="form.category"
+            v-model="form.dataSourceCode"
             :placeholder="t('数据源')"
             class="!w-[150px]"
           >
@@ -110,8 +110,8 @@
               class="!w-[150px]"
           >
             <el-option :label="t('不限')" :value="' '" />
-            <el-option :label="t('人工匹配')" :value="2" />
-            <el-option :label="t('自动匹配')" :value="1" />
+            <el-option :label="t('人工匹配')" :value="1" />
+            <el-option :label="t('自动匹配')" :value="2" />
           </el-select>
         </el-form-item>
 
