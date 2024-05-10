@@ -1,52 +1,41 @@
-import { parseCountry } from '@/utils/formatMatch';
-import { ESPORT_ID_MAP, SPORT_ID_MAP } from '@/utils/maps/sports_map';
+import dayjs from 'dayjs';
 
 export const columns: TableColumnList = [
   {
-    label: t('联赛ID'),
-    prop: 'leagueId',
-    minWidth: 100
-  },
-  {
-    label: t('联赛名称'),
-    prop: 'leagueNameCn',
+    label: t('事件源发生时间'),
+    prop: 'createdAt',
     minWidth: 150,
-    align: 'left'
+    formatter: ({ beginTimeLong }) =>
+      dayjs(beginTimeLong).format('YYYY-MM-DD HH:mm:ss') || ''
   },
   {
-    label: t('赛种'),
-    prop: 'sportId',
-    formatter: ({ sportId, category }): string => {
-      const arr = category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
-      return arr.find(_ => _.value === sportId)?.label ?? '-';
-    },
+    label: t('事件源'),
+    prop: 'dataSourceCode',
     minWidth: 150
   },
   {
-    label: t('赛事ID'),
-    prop: 'matchId',
+    label: t('事件名称'),
+    slot: 'addition5',
+    minWidth: 300
+  },
+  {
+    label: t('场次/局数/盘数'),
+    prop: 'extraInfo',
     minWidth: 150
   },
   {
-    label: t('主队'),
-    prop: 'homeTeamNameCn',
+    label: t('主/客'),
+    prop: 'homeAway',
     minWidth: 150
   },
   {
-    label: t('客队'),
-    prop: 'awayTeamNameCn',
+    label: t('球员名称'),
+    prop: 'player1Name',
     minWidth: 150
   },
   {
-    label: t('开赛时间'),
-    prop: 'beginTime',
+    label: t('比分'),
+    slot: 'score',
     minWidth: 150
-  },
-
-  {
-    label: t('操作'),
-    fixed: 'right',
-    width: 240,
-    slot: 'operation'
   }
 ];

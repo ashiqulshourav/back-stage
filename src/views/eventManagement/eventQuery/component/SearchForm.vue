@@ -1,9 +1,13 @@
 <template>
   <div class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]">
     <el-form ref="formRef" :inline="true" :model="form">
-      <el-form-item :label="`${t('输入赛事ID')}`" prop="eventId">
+      <el-form-item
+        :label="`${t('输入赛事ID')}`"
+        prop="eventId"
+        :required="!form.matchId"
+      >
         <el-input
-          v-model="form.eventId"
+          v-model="form.matchId"
           :placeholder="t('输入赛事ID')"
           v-enter="search"
           clearable
@@ -23,10 +27,10 @@
         />
       </el-form-item>
 
-      <el-form-item :label="`${t('事件名称')}:`" prop="eventName">
+      <el-form-item :label="`${t('事件源')}:`" prop="eventName">
         <el-select
-          v-model="form.eventName"
-          :placeholder="t('事件名称')"
+          v-model="form.dataSourceCode"
+          :placeholder="t('事件源')"
           clearable
           class="!w-[150px]"
           @change="changeEventName"
@@ -34,8 +38,25 @@
           <el-option
             :label="item.label"
             :value="item.value"
-            v-for="item in eventNames"
+            v-for="item in EVENT_SOURCE"
             :key="item.value"
+          />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item :label="`${t('事件名称')}:`" prop="eventName">
+        <el-select
+          v-model="form.eventCode"
+          :placeholder="t('事件名称')"
+          clearable
+          class="!w-[150px]"
+          @change="changeEventName"
+        >
+          <el-option
+            :label="item.eventName"
+            :value="item.eventCode"
+            v-for="item in pandaMatchList"
+            :key="item.eventCode"
           />
         </el-select>
       </el-form-item>
@@ -65,13 +86,16 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import Search from '@iconify-icons/ep/search';
 import Refresh from '@iconify-icons/ep/refresh';
 import type { FormInstance } from 'element-plus';
-import { searchFormType } from '../utils/types';
+import { PandaMatch, searchFormType } from '../utils/types';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+import { EVENT_SOURCE } from '../utils/map';
+import { searchFormRules } from '../utils/rule';
 
 const time = ref('');
-const formRef = ref();
+const formRef = ref<FormInstance>();
 const emits = defineEmits(['onSearch']);
 const eventNames = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
+const pandaMatchList = reactive<PandaMatch[]>([]);
 
 const props = defineProps<{
   loading: boolean;
@@ -89,16 +113,33 @@ const changeDate = t => {
   search();
 };
 
+const getPandaMatchEventList = async () => {
+  const res = await API.getPandaMatchEventList();
+  pandaMatchList.push(...res.data);
+};
+
+onMounted(() => {
+  getPandaMatchEventList();
+});
+
 const resetForm = (formEl: FormInstance | undefined) => {
-  formEl.resetFields();
+  formEl?.resetFields();
   time.value = '';
   props.form.startTime = '';
   props.form.endTime = '';
+  props.form.matchId = '';
+  props.form.dataSourceCode = '';
+  props.form.eventCode = '';
   emits('onSearch', ...['reload']);
 };
 
 const search = () => {
-  emits('onSearch', ...['reload']);
+  formRef.value.validate(async v => {
+    console.log({ v });
+    if (v) {
+      emits('onSearch', ...['reload']);
+    }
+  });
 };
 
 const changeEventName = e => {
