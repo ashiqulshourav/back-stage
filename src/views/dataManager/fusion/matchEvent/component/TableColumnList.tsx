@@ -1,8 +1,9 @@
 import { ESPORT_ID_MAP, SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { getLan } from "@/utils/utilFn";
-
+import dayjs from "dayjs";
+import { t } from "@/plugins/i18n";
+import { matchMethod, matchSource } from "../utils/map";
 const lan = getLan() ?? 'zh';
-
 export const columns: TableColumnList = [
   {
     label: t('赛种'),
@@ -11,7 +12,7 @@ export const columns: TableColumnList = [
       const arr = category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
       return arr.find(_ => _.value === sportId)?.label ?? '-';
     },
-    minWidth: 100,
+    minWidth: 150
   },
   {
     label: t('赛事ID'),
@@ -34,28 +35,31 @@ export const columns: TableColumnList = [
     minWidth: 150,
   },
   {
-    label: t('比赛开始时间'),
-    prop: 'startTime',
-    minWidth: 150,
+    label: t('开赛时间'),
+    prop: 'beginTime',
+    minWidth: 200,
+    formatter: ({ beginTime }) => dayjs(beginTime).format('YYYY-MM-DD HH:mm:ss')
   },
   {
     label: t('数据源'),
-    prop: 'dataSource',
+    prop: 'dataSourceCode',
     minWidth: 150,
+    formatter: ({ dataSourceCode }) => matchSource.find(_ => _.value === dataSourceCode)?.label ?? '-'
   },
   {
     label: t('匹配方式'),
-    prop: 'matchMethod',
+    prop: 'pairingType',
     minWidth: 150,
+    formatter: ({ pairingType }) => matchMethod.find(_ => _.value === pairingType)?.label ?? '-'
   },
   {
     label: t('操作人'),
-    prop: 'createdBy',
+    prop: 'pairingUser',
     minWidth: 150,
   },
   {
     label: t('操作时间'),
-    prop: 'createdDate',
+    prop: 'pairingTime',
     minWidth: 150,
   },
   {
@@ -63,5 +67,40 @@ export const columns: TableColumnList = [
     fixed: 'right',
     width: 150,
     slot: 'operation',
+  }
+];
+
+export const matchColumns: TableColumnList = [
+  {
+    label: t('数据源'),
+    prop: 'dataSource',
+    formatter: ({ dataSourceCode }) => matchSource.find(_ => _.value === dataSourceCode)?.label ?? '-'
+
+  },
+  {
+    label: t('赛事ID'),
+    prop: 'matchId'
+  },
+  {
+    label: t('联赛'),
+    prop: lan === 'zh' ? 'leagueNameCn' : 'leagueNameEn',
+  },
+  {
+    label: t('主队'),
+    prop: lan === 'zh' ? 'homeTeamNameCn' : 'homeTeamNameEn',
+  },
+  {
+    label: t('客队'),
+    prop: lan === 'zh' ? 'awayTeamNameCn' : 'awayTeamNameEn',
+  },
+  {
+    label: t('开赛时间'),
+    prop: 'beginTime',
+    minWidth: 200,
+    formatter: ({ beginTime }) => dayjs(beginTime).format('YYYY-MM-DD HH:mm:ss')
+  },
+  {
+    label: t('操作'),
+    slot: 'operation'
   }
 ];

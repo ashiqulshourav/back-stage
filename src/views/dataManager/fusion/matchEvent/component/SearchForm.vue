@@ -29,26 +29,23 @@ import {
 } from 'plus-pro-components';
 import { t } from '@/plugins/i18n';
 import { searchFormType } from '../utils/types';
-import { formatNumber, inputRestrictions } from '@/utils/formatNumber';
-import { useMatchStore } from '@/store/match';
 import {
   SPORT_ID_MAP,
   ESPORT_ID_MAP,
   SPORT_CATEGORY
 } from '@/utils/maps/sports_map';
 import { useTranslationLang } from '@/layout/hooks/useTranslationLang';
+import {matchSource} from '../utils/map'
 
 const props = defineProps<{
   loading: boolean;
   form: searchFormType;
-  levelList: ConfigCenterDataAPI.leagueLevelList[];
 }>();
 
 const { locale } = useTranslationLang();
 const selfForm = ref<FieldValues>(props.form);
 const defaultValue = ref<FieldValues>(JSON.parse(JSON.stringify(props.form)));
 const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
-const matchStore = useMatchStore();
 //- 联赛更改
 const chagenMatchType = (type: 0 | 1 | 2) => {
   props.form.sportId = '';
@@ -73,10 +70,9 @@ const columns: PlusColumn[] = [
     prop: 'dataSource',
     valueType: 'select',
     options: [
-      { label: t('全部'), value: 0 },
-      { label: t('未匹配'), value: 1 },
-      { label: t('熊猫'), value: 2 },
-      { label: t('播控'), value: 3 },
+      { label: t('全部'), value: '' },
+      { label: t('未匹配'), value: '0' },
+        ...matchSource
     ],
     fieldProps: {
       onChange: chagenMatchType
@@ -133,9 +129,9 @@ const columns: PlusColumn[] = [
     prop: 'mathcMethod',
     valueType: 'select',
     options: [
-      { label: t('不限'), value: 0 },
-      { label: t('人工匹配'), value: 1 },
-      { label: t('自动匹配'), value: 2 },
+      { label: t('不限'), value: '' },
+      { label: t('人工匹配'), value: 2 },
+      { label: t('自动匹配'), value: 1 },
     ],
     fieldProps: {
       onChange: chagenMatchType

@@ -29,7 +29,7 @@ declare namespace PLayMethodAPI {
     startTime: number | string;
     endTime: number | string;
     matchId: number | string;
-  }
+  };
 
   type ConfigMap = any
 

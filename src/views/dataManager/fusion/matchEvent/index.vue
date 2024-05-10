@@ -1,10 +1,9 @@
 <template>
   <div class="main">
     <SearchForm
-      :form="form"
-      :loading="loading"
-      @on-search="onSearch"
-      :levelList="levelList"
+        :form="form"
+        :loading="loading"
+        @on-search="onSearch"
     />
 
     <PureTableBar
@@ -23,7 +22,7 @@
           adaptive
           :data="dataList"
           :columns="dynamicColumns"
-          :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
+          :pagination="{ ...pagination, pageSizes: [20, 50, 100] }"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
           @selection-change="handleSelectionChange"
@@ -51,14 +50,18 @@
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
 import EditPen from '@iconify-icons/ep/edit-pen';
-import { useLeague } from './utils/hook';
+import { matchCombineHook } from './utils/hook';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-import SearchForm from './component/SearchForm.vue';
+import SearchForm from './component/SearchForm1.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
+import {onMounted} from "vue";
 
 defineOptions({ name: 'METADATA_LEAGUE' });
+onMounted(() => {
+    onSearch();
+});
 const { tableHeaderStyle } = usePublicHooks();
 
 const {
@@ -71,6 +74,5 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   form,
-  levelList
-} = useLeague();
+} = matchCombineHook();
 </script>
