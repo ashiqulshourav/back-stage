@@ -4,7 +4,7 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { message } from '@/utils/message';
 
 export function useEventQueryHook() {
-  const pandaMatchEventList = reactive<EventAPI.PandaMatchEvent[]>([]);
+  const matchEventList = reactive<EventAPI.MatchEvent[]>([]);
   const loading = ref(false);
 
   const pagination = reactive<PaginationProps>({
@@ -15,17 +15,18 @@ export function useEventQueryHook() {
   });
 
   const form = reactive<searchFormType>({
-    eventId: '',
-    startTime: '',
+    matchId: '',
+    eventSource: '',
+    eventCode: '',
     endTime: '',
-    eventName: ''
+    startTime: ''
   });
 
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       loading.value = true;
-      const res = await API.getPandaMatchEventList({
+      const res = await API.getMatchEventByMatchId({
         ...(removeEmptyStringKeys(form) as searchFormType),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
@@ -33,14 +34,16 @@ export function useEventQueryHook() {
 
       loading.value = false;
 
-      console.log(res);
       if (res?.code) return message(res?.msg, { type: 'error' });
-      pandaMatchEventList.length = 0;
-      pandaMatchEventList.push(...res.data);
+      matchEventList.length = 0;
+      if (JSON.stringify(res.data) != '{}') {
+        console.log('hitting');
+        matchEventList.push(res.data);
+      }
       // pagination.total = res.data.total;
-      // document
-      //   .querySelector('.table_container .el-scrollbar__wrap')
-      //   .scroll(0, 0);
+      document
+        .querySelector('.table_container .el-scrollbar__wrap')
+        .scroll(0, 0);
     } catch (error) {
       loading.value = false;
     }
@@ -77,7 +80,7 @@ export function useEventQueryHook() {
     handleCurrentChange,
     handleSelectionChange,
     // openDialog,
-    pandaMatchEventList,
+    matchEventList,
     handlePageSizeChange
   };
 }

@@ -17,7 +17,7 @@
           :size="size"
           adaptive
           :default-sort="{ prop: 'level', order: 'descending' }"
-          :data="pandaMatchEventList"
+          :data="matchEventList"
           :columns="dynamicColumns"
           :pagination="{
             ...pagination,
@@ -28,6 +28,11 @@
           @page-current-change="handleCurrentChange"
           @page-size-change="handlePageSizeChange"
         >
+          <template #match_vs="{ row }">
+            <span v-if="row.aTeamName && row.hTeamName">
+              {{ row.aTeamName }} vs {{ row.hTeamName }}
+            </span>
+          </template>
         </pure-table>
       </template>
     </PureTableBar>
@@ -55,7 +60,7 @@ const {
   handleTableWidthChange,
   handleSelectionChange,
   // openDialog,
-  pandaMatchEventList,
+  matchEventList,
   handleCurrentChange,
   handlePageSizeChange
 } = useEventQueryHook();
