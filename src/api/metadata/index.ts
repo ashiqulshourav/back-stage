@@ -38,7 +38,7 @@ export const metaData = {
   getMatchDataSourceList: (data: {
     pageNum: number;
     pageSize: number;
-    sportId:number;
+    // sportId:number;
   }) => http.request<MatchCombineAPI.matchSourceData>("post", "/pairing/v1/getMatchDataSourceList", { data }),
   //数据源列表
   getMatchPairingList: (data: {

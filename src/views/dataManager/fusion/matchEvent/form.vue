@@ -9,15 +9,24 @@
         </tr>
         <tr>
           <th>{{ t('联赛名称')}}</th>
-          <td>{{ t(matchSourceDetails.leagueNameCn) }}</td>
+          <td>
+            <div>{{ matchSourceDetails.leagueNameCn }}</div>
+            <div>{{ matchSourceDetails.leagueNameEn }}</div>
+          </td>
         </tr>
         <tr>
           <th>{{ t('客队名称')}}</th>
-          <td>{{ t(matchSourceDetails.homeTeamNameCn) }}</td>
+          <td>
+            <div>{{ matchSourceDetails.homeTeamNameCn }}</div>
+            <div>{{ matchSourceDetails.homeTeamNameEn }}</div>
+          </td>
         </tr>
         <tr>
           <th>{{ t('客队名称')}}</th>
-          <td>{{ t(matchSourceDetails.awayTeamNameCn)  }}</td>
+          <td>
+            <div>{{ matchSourceDetails.awayTeamNameCn }}</div>
+            <div>{{ matchSourceDetails.awayTeamNameEn }}</div>
+          </td>
         </tr>
         <tr>
           <th>{{ t('比赛开始时间')}}</th>
@@ -53,9 +62,8 @@
               <el-button
                 :type= "row.paringStatus === 0 ? 'success' : 'warning'"
                 :size="size"
-                @click="openDialog(t('立即匹配'), row)"
+                @click="openManualMatchDialog(t('匹配确认'), row)"
               >
-
                 {{ row.pairingStatus === 0?t('立即匹配'):t('取消匹配') }}
               </el-button>
             </template>
@@ -82,12 +90,12 @@ const { tableHeaderStyle } = usePublicHooks();
 const {
   loading,
   onModalSearch,
-  matchInfoDataList,
   editFrom,
+  openManualMatchDialog,
 } = matchCombineHook();
 
 const props = withDefaults(defineProps<{
-  rowData: MatchCombineAPI.matchPairingDetail,
+  rowData: MatchCombineAPI.matchSourceDetail,
   matchInfoDataList: MatchCombineAPI.matchSourceDetail[],
 }>(), {});
 
@@ -97,7 +105,7 @@ const matchSourceDetails = ref(props.rowData);
 const matchDataList = ref(props.matchInfoDataList)
 
 onMounted(() => {
-    editFrom.sportId= props?.rowData?.sportId
+    editFrom.sportId = matchSourceDetails.value.sportId
     onModalSearch();
 });
 

@@ -19,10 +19,10 @@ export type searchFormType = {
 
 export type editSearchFormType = {
   sportId?: string|number;
-  pageNum:number;
-  pageSize:number;
-  beginTime:string;
-  endTime:string;
+  pageNum?:number;
+  pageSize?:number;
+  beginTime?:string;
+  endTime?:string;
 }
 
 export type { FormProps };

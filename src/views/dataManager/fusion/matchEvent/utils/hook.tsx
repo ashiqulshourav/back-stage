@@ -1,13 +1,15 @@
 import editForm from '../form.vue';
+import manualMatchModal from '../manualMatchModal.vue';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, h } from 'vue';
-import {editSearchFormType, searchFormType} from './types';
+import { editSearchFormType, searchFormType } from './types';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 
 export function matchCombineHook() {
   const dataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
   const matchInfoDataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
+  const matchInfo = reactive<MatchCombineAPI.matchSourceDetail>({} as MatchCombineAPI.matchSourceDetail);
   const loading = ref(true);
   const pagination = reactive<PaginationProps>({
     total: 0,
@@ -15,17 +17,16 @@ export function matchCombineHook() {
     currentPage: 1,
   });
   const editPagination = reactive<PaginationProps>({
-      total: 0,
-      pageSize: 20,
-      currentPage: 1,
+    total: 0,
+    pageSize: 20,
+    currentPage: 1,
   });
   const form = reactive<searchFormType>({
     category: 0,
   });
 
-  const editFrom =reactive<editSearchFormType>({
-      category: 0,
-      sportId:'',
+  const editFrom = reactive<editSearchFormType>({
+    sportId: '',
   });
 
   function handleTableWidthChange(val: number) {
@@ -70,7 +71,7 @@ export function matchCombineHook() {
         pageNum: editPagination.currentPage
       });
       loading.value = false;
-      matchInfoDataList.length=0;
+      matchInfoDataList.length = 0;
       if (res.data.list) {
         matchInfoDataList.push(...res.data.list)
       }
@@ -78,8 +79,9 @@ export function matchCombineHook() {
       loading.value = false;
     }
   }
-
+  console.log('###matchInfo', matchInfo)
   async function openDialog(title: string, row: MatchCombineAPI.matchSourceDetail) {
+    Object.assign(matchInfo, row);
     onModalSearch();
     addDialog({
       title,
@@ -89,7 +91,8 @@ export function matchCombineHook() {
       hideFooter: true,
       contentRenderer: ({ options, index }) =>
         h(editForm, {
-            rowData:row,
+          rowData: row,
+          matchInfoDataList: matchInfoDataList,
           onCloseDialog: (params: string) => {
             closeDialog(options, index);
             params && onSearch();
@@ -97,10 +100,28 @@ export function matchCombineHook() {
         })
     });
   }
+  async function openManualMatchDialog(title: string, row: MatchCombineAPI.matchSourceDetail) {
+    addDialog({
+      title,
+      width: 'auto',
+      alignCenter: true,
+      closeOnClickModal: false,
+      hideFooter: true,
+      contentRenderer: ({ options, index }) =>
+        h(manualMatchModal, {
+          matchSource: matchInfo,
+          matchSourcePair: row,
+          onCloseDialog: (params: string) => {
+            closeDialog(options, index);
+            params && onSearch();
+          }
+        })
+    });
+  }
+
   return {
     loading,
     dataList,
-    matchInfoDataList,
     pagination,
     onSearch,
     openDialog,
@@ -109,6 +130,8 @@ export function matchCombineHook() {
     handleSelectionChange,
     form,
     onModalSearch,
-      editFrom
+    editFrom,
+    openManualMatchDialog,
+    matchInfo,
   };
 }
