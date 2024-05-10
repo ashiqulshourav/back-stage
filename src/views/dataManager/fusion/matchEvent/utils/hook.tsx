@@ -172,5 +172,6 @@ export function matchCombineHook() {
     openManualMatchDialog,
     matchInfo,
     matchInfoDataList,
+    matchPairing,
   };
 }

@@ -73,7 +73,8 @@
     </div>
   </div>
   <div class="flex justify-end bg-white mt-4">
-    <el-button type="primary" @click="closeDialog">{{ t('关闭对话框') }}</el-button>
+    <el-button @click="closeDialog">{{ t('取消') }}</el-button>
+    <el-button @click="matchEvent">{{ t('确定') }}</el-button>
   </div>
 </template>
 
@@ -81,13 +82,12 @@
 import { ref } from 'vue';
 import { t } from '@/plugins/i18n';
 import { matchCombineHook } from './utils/hook';
-import { usePublicHooks } from '@/hooks';
-import Link from '@iconify-icons/icon-park-outline/link-one';
 defineOptions({ name: 'METADATA_LEAGUE' });
 const {
   loading,
   onModalSearch,
   editFrom,
+  matchPairing
 } = matchCombineHook();
 
 const props = withDefaults(defineProps<{
