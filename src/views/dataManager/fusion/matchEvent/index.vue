@@ -52,7 +52,7 @@ import { PureTableBar } from '@/components/RePureTableBar';
 import EditPen from '@iconify-icons/ep/edit-pen';
 import { matchCombineHook } from './utils/hook';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-import SearchForm from './component/SearchForm1.vue';
+import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
