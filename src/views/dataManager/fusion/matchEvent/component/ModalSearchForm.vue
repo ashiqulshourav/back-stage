@@ -23,22 +23,6 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item :label="`${t('赛种选择')}:`" prop="sportId">
-          <el-select
-              v-model="form.sportId"
-              :placeholder="t('赛种选择')"
-              class="!w-[160px]"
-              @change="search"
-          >
-            <el-option :label="t('全部')" :value="''" />
-            <el-option
-                :label="item.label"
-                :value="item.value"
-                v-for="item in gameClassify"
-                :key="item.value"
-            />
-          </el-select>
-        </el-form-item>
         <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
           <el-input
               v-model="form.matchId"
@@ -101,28 +85,6 @@
               clearable
               v-enter="search"
               class="!w-[150px]"
-          />
-        </el-form-item>
-        <el-form-item  :label="`${t('匹配方式')}:`" prop="pairingType">
-          <el-select
-              v-model="form.pairingType"
-              :placeholder="t('匹配方式')"
-              class="!w-[150px]"
-          >
-            <el-option :label="t('不限')" :value="' '" />
-            <el-option :label="t('人工匹配')" :value="1" />
-            <el-option :label="t('自动匹配')" :value="2" />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item :label="`${t('操作人')}:`" prop="pairingUser">
-          <el-input
-              v-model="form.pairingUser"
-              :placeholder="t('操作人')"
-              clearable
-              maxLenght="20"
-              v-enter="search"
-              class="!w-[200px]"
           />
         </el-form-item>
         <el-form-item prop="timeType" :label="`${t('比赛日期选择')}:`">

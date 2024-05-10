@@ -27,6 +27,12 @@ export type editSearchFormType = {
   startTime:string|null;
   endTime:string|null;
   matchId188bet:number|null;
+  leagueNameCn?: string;
+  leagueNameEn?: string;
+  homeTeamNameCn?: string;
+  homeTeamNameEn?: string;
+  awayTeamNameCn?: string;
+  awayTeamNameEn?: string;
 }
 
 export type { FormProps };
