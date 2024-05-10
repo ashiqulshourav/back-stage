@@ -60,7 +60,7 @@
           >
             <template #operation="{ row }">
               <el-button
-                :type= "row.paringStatus === 0 ? 'success' : 'warning'"
+                :type= "row.pairingStatus === 0 ? 'success' : 'warning'"
                 :size="size"
                 @click="openManualMatchDialog(t('匹配确认'),rowData,row)"
               >
