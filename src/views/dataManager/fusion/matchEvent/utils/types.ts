@@ -17,4 +17,12 @@ export type searchFormType = {
   category?: number;
 }
 
+export type editSearchFormType = {
+  sportId?: string|number;
+  pageNum:number;
+  pageSize:number;
+  beginTime:string;
+  endTime:string;
+}
+
 export type { FormProps };

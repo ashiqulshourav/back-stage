@@ -57,8 +57,12 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
+import {onMounted} from "vue";
 
 defineOptions({ name: 'METADATA_LEAGUE' });
+onMounted(() => {
+    onSearch();
+});
 const { tableHeaderStyle } = usePublicHooks();
 
 const {
