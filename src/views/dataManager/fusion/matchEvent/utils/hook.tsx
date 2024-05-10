@@ -5,6 +5,7 @@ import { reactive, ref, h } from 'vue';
 import {editSearchFormType, searchFormType} from './types';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import {message} from "@/utils/message";
+import dayjs from "dayjs";
 
 export function matchCombineHook() {
   const dataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
@@ -26,7 +27,10 @@ export function matchCombineHook() {
 
   const editFrom =reactive<editSearchFormType>({
       category: 0,
-      sportId:'',
+      sportId:null,
+      matchId188bet:null,
+      startTime:null,
+      endTime:null,
   });
 
   function handleTableWidthChange(val: number) {
@@ -47,6 +51,17 @@ export function matchCombineHook() {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       loading.value = true;
+
+      if(form.startTime){
+        form.startTime= dayjs(form.startTime).format('YYYY-MM-DD HH:mm:ss')
+      }else {
+        form.startTime= dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss')
+      }
+      if(form.endTime){
+        form.endTime= dayjs(form.endTime).format('YYYY-MM-DD HH:mm:ss')
+      }else {
+        form.endTime= dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')
+      }
       const res = await API.getMatchPairingList({
         ...removeEmptyStringKeys(form),
         pageSize: pagination.pageSize,
@@ -82,8 +97,6 @@ export function matchCombineHook() {
 
   const matchPairing = (param:{dpMatchId:number;dpMatchId188bet:number;matchId:number;matchId188bet:number;pairingUser:string})=>{
       const params = { ...removeEmptyStringKeys(param)}
-
-
     console.log(3333333,params)
       API.matchPairing(params).then((res)=>{
         message(res.msg, { type: res.code ? 'error' : 'success' });

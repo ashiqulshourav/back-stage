@@ -55,7 +55,6 @@
                 :size="size"
                 @click ="_matchPairing(row)"
               >
-
                 {{ row.pairingStatus === 0?t('立即匹配'):t('取消匹配') }}
               </el-button>
             </template>
@@ -84,6 +83,7 @@ const {
   onModalSearch,
   matchInfoDataList,
   editFrom,
+  matchPairing
 } = matchCombineHook();
 
 const props = withDefaults(defineProps<{rowData: MatchCombineAPI.matchPairingDetail}>(), {});
@@ -91,9 +91,31 @@ const props = withDefaults(defineProps<{rowData: MatchCombineAPI.matchPairingDet
 const emits = defineEmits(['reloadTable', 'closeDialog']);
 
 const matchSourceDetails = ref(props.rowData);
+const _matchPairing = (row:MatchCombineAPI.matchSourceDetail)=>{
+  console.log('rowData',props.rowData)
+  console.log('row',row)
+  const params = {
+    dpMatchId: props.rowData.matchId,
+    dpMatchId188bet: props.rowData.matchId188bet,
+    matchId: '327521786928148482',
+    matchId188bet: row.matchId188bet,
+    pairingUser: ""
+  }
+  matchPairing(params)
+}
 
 onMounted(() => {
-    editFrom.sportId= props?.rowData?.sportId
+
+  console.log(123123,props?.rowData)
+    const date = props?.rowData?.beginTime?.split(' ');
+    if(date?.length){
+      editFrom.startTime = date[0] +' '+ '00:00:00';
+      editFrom.endTime = date[0] +' '+ '23:59:59'
+    }
+    editFrom.sportId=   props?.rowData?.sportId;
+    editFrom.matchId188bet= props?.rowData.matchId188bet;
+    editFrom.beginTime
+
     onModalSearch();
 });
 

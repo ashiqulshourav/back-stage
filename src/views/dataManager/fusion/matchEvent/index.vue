@@ -1,9 +1,15 @@
 <template>
   <div class="main">
+<!--    <SearchForm-->
+<!--      :form="form"-->
+<!--      :loading="loading"-->
+<!--      @on-search="onSearch"-->
+<!--    />-->
     <SearchForm
-      :form="form"
-      :loading="loading"
-      @on-search="onSearch"
+        :form="form"
+        :loading="loading"
+        @on-search="onSearch"
+        :downloading="downloading"
     />
 
     <PureTableBar
@@ -52,7 +58,7 @@ import { PureTableBar } from '@/components/RePureTableBar';
 import EditPen from '@iconify-icons/ep/edit-pen';
 import { matchCombineHook } from './utils/hook';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-import SearchForm from './component/SearchForm.vue';
+import SearchForm from './component/SearchForm1.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';

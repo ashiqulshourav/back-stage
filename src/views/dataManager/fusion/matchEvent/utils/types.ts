@@ -15,14 +15,18 @@ export type searchFormType = {
   awayTeamNameEn?: string;
   mathcMethod?: string;
   category?: number;
+  startTime:string;
+  endTime:string;
 }
 
 export type editSearchFormType = {
   sportId?: string|number;
+  category:number;
   pageNum:number;
   pageSize:number;
-  beginTime:string;
-  endTime:string;
+  startTime:string|null;
+  endTime:string|null;
+  matchId188bet:number|null;
 }
 
 export type { FormProps };
