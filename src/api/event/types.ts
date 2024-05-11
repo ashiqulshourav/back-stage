@@ -1,12 +1,28 @@
 declare namespace EventAPI {
   type PandaMatchEventListParams = {
-    matchId?: number;
-    dataSourceCode?: string;
+    matchId?: number | string;
+    dataSourceCode?: string | number;
     eventCode?: string | number;
     startTime?: number | string;
     endTime?: number | string;
     pageSize?: number;
     pageNum?: number;
+  };
+
+  type MatchInfo = {
+    aTeamName: string;
+    hTeamName: string;
+    league: string;
+    matchId: string;
+    sportName: string;
+    startDateTime: string;
+  };
+
+  type MatchInfoRes = {
+    code: number;
+    ts: number;
+    msg: string;
+    data: MatchInfo;
   };
 
   type PandaMatchEventList = {
