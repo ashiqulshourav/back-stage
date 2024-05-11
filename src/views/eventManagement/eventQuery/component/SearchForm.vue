@@ -46,20 +46,37 @@
       </el-form-item>
 
       <el-form-item :label="`${t('事件名称')}:`" prop="eventName">
-        <el-select
-          v-model="form.eventCode"
-          :placeholder="t('事件名称')"
+        <el-tree-select
+          v-model="props.form.eventCode"
+          :data="
+            pandaMatchList.map(item => ({
+              value: item.eventCode,
+              label: item.eventName
+            }))
+          "
+          filterable
           clearable
-          class="!w-[150px]"
-          @change="changeEventName"
+          multiple
+          collapse-tags
+          collapse-tags-tooltip
+          :render-after-expand="false"
+          show-checkbox
+          check-strictly
+          check-on-click-node
+          style="width: 240px"
         >
-          <el-option
-            :label="item.eventName"
-            :value="item.eventCode"
-            v-for="item in pandaMatchList"
-            :key="item.eventCode"
-          />
-        </el-select>
+          <template #header>
+            <el-checkbox v-model="checkAll" @change="handleCheckAll">
+              {{ t('全选') }}
+            </el-checkbox>
+            <el-checkbox v-model="removeAll" @change="handleRemoveAll" :disabled="form?.eventCode.length == 0">
+            {{ t('全不选') }}
+          </el-checkbox>
+            <el-checkbox v-model="checkRevert" @change="handleCheckRevert">
+              {{ t('反选') }}
+            </el-checkbox>
+          </template>
+        </el-tree-select>
       </el-form-item>
 
       <el-form-item>
@@ -86,7 +103,7 @@ import dayjs from 'dayjs';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import Search from '@iconify-icons/ep/search';
 import Refresh from '@iconify-icons/ep/refresh';
-import type { FormInstance } from 'element-plus';
+import type { FormInstance, CheckboxValueType } from 'element-plus';
 import { PandaMatch, searchFormType } from '../utils/types';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { EVENT_SOURCE } from '../utils/map';
@@ -130,7 +147,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
   props.form.endTime = '';
   props.form.matchId = '';
   props.form.dataSourceCode = '';
-  props.form.eventCode = '';
+  props.form.eventCode = [];
   emits('onSearch', ...['reload']);
 };
 
@@ -145,6 +162,42 @@ const search = async (formEl: FormInstance | undefined) => {
 
 const changeEventName = e => {
   // props.form.eventName = '';
+};
+
+const checkAll = ref(false);
+const removeAll = ref(false);
+const checkRevert = ref(false);
+
+watch(
+  () => props.form.eventCode,
+  val => {
+    if (!val || val.length === 0) {
+      checkAll.value = false;
+    } else if (val.length === pandaMatchList.length) {
+      checkAll.value = true;
+      removeAll.value = false;
+    }
+    // checkRevert.value = false
+  }
+);
+
+const handleCheckAll = (val: CheckboxValueType) => {
+  if (val) {
+    props.form.eventCode = pandaMatchList.map(_ => _.eventCode);
+  } else {
+    props.form.eventCode = [];
+  }
+};
+const handleRemoveAll = (val: CheckboxValueType) => {
+  props.form.eventCode = [];
+};
+const handleCheckRevert = () => {
+  if (true) {
+    const oldArray = props.form.eventCode ? [...props.form.eventCode] : [];
+    props.form.eventCode = pandaMatchList
+      .filter(_ => !oldArray.includes(_.eventCode))
+      .map(_ => _.eventCode);
+  }
 };
 </script>
 

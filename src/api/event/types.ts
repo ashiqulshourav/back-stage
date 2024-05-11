@@ -2,7 +2,7 @@ declare namespace EventAPI {
   type PandaMatchEventListParams = {
     matchId?: number | string;
     dataSourceCode?: string | number;
-    eventCode?: string | number;
+    eventCode?: [];
     startTime?: number | string;
     endTime?: number | string;
     pageSize?: number;
