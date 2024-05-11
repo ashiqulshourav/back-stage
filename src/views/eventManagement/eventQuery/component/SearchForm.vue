@@ -1,11 +1,12 @@
 <template>
   <div class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]">
-    <el-form ref="formRef" :inline="true" :model="form">
-      <el-form-item
-        :label="`${t('输入赛事ID')}`"
-        prop="eventId"
-        :required="!form.matchId"
-      >
+    <el-form
+      ref="formRef"
+      :inline="true"
+      :model="form"
+      :rules="searchFormRules"
+    >
+      <el-form-item :label="`${t('输入赛事ID')}`" prop="matchId">
         <el-input
           v-model="form.matchId"
           :placeholder="t('输入赛事ID')"
@@ -66,7 +67,7 @@
           type="primary"
           :icon="useRenderIcon(Search)"
           :loading="loading"
-          @click="search"
+          @click="search(formRef)"
         >
           {{ t('筛选') }}
         </el-button>
@@ -110,7 +111,7 @@ const changeDate = t => {
     props.form.startTime = dayjs(t[0]).format('YYYY-MM-DD HH:mm:ss');
     props.form.endTime = dayjs(t[1]).endOf('day').format('YYYY-MM-DD HH:mm:ss');
   }
-  search();
+  emits('onSearch', ...['reload']);
 };
 
 const getPandaMatchEventList = async () => {
@@ -133,9 +134,9 @@ const resetForm = (formEl: FormInstance | undefined) => {
   emits('onSearch', ...['reload']);
 };
 
-const search = () => {
-  formRef.value.validate(async v => {
-    console.log({ v });
+const search = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  await formEl.validate(async v => {
     if (v) {
       emits('onSearch', ...['reload']);
     }
