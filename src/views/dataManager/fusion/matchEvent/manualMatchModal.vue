@@ -40,7 +40,7 @@
         </tr>
       </table>
     </div>
-    <IconifyIconOffline class="link-icon" icon="link"/>
+    <IconifyIconOffline class="link-icon" :icon="matchSourcePairDetails.pairingStatus === 1 ? 'unlink' : 'link'"/>
     <div>
       <div class="text-center border border-slate-100 border-b-0">
         {{ matchSource.find(_ => _.value == matchSourcePairDetails.dataSourceCode)?.label ?? '-' }}
