@@ -299,7 +299,7 @@
                 background: getStatus(
                   row.status,
                   row.billStatus,
-                  row.combineOrderDetails[0].betResult,
+                  row.betResultArr,
                   row.isReserve,
                   row.riskStatus,
                   row.isSpecialSettle
@@ -312,7 +312,7 @@
                   getStatus(
                     row.status,
                     row.billStatus,
-                    row.combineOrderDetails[0].betResult,
+                    row.betResultArr,
                     row.isReserve,
                     row.riskStatus,
                     row.isSpecialSettle
@@ -325,7 +325,7 @@
                 getStatus(
                   row.status,
                   row.billStatus,
-                  row.combineOrderDetails[0].betResult,
+                  row.betResultArr,
                   row.isReserve,
                   row.riskStatus,
                   row.isSpecialSettle
