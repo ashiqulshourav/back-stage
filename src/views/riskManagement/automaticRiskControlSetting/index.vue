@@ -14,15 +14,13 @@
           />
         </div>
 
-        <div v-if="currentRiskControlLabelId == 3">
-          <EditAutoLabelButton
-            :currentRiskControlLabelId="currentRiskControlLabelId"
-            :isEditRiskControls="isEditRiskControls"
-            :toggle="toggle"
-            :cancelRiskControlsEdit="cancelRiskControlsEdit"
-            :confirmRiskControlsClick="confirmRiskControlsClick"
-          />
-        </div>
+        <EditAutoLabelButton
+          :currentRiskControlLabelId="currentRiskControlLabelId"
+          :isEditRiskControls="isEditRiskControls"
+          :toggle="toggle"
+          :cancelRiskControlsEdit="cancelRiskControlsEdit"
+          :confirmRiskControlsClick="confirmRiskControlsClick"
+        />
       </div>
 
       <!-- Tables -->

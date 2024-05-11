@@ -12,7 +12,7 @@ export function useRiskControlHook({
   venueType: number;
   category: number;
 }) {
-  const currentRiskControlLabelId = ref(3);
+  const currentRiskControlLabelId = ref(0);
   const loading = ref(false);
   const isEditRiskControls = ref(false);
   const labelList = reactive<labelListType>({
@@ -46,7 +46,7 @@ export function useRiskControlHook({
   };
 
   // 初始化
-  async function onSearch() {
+  async function onSearchAutoLabelLimit() {
     loading.value = true;
     const res = await API.getAutoLimitConfigList();
 
@@ -61,13 +61,47 @@ export function useRiskControlHook({
 
   const cancelRiskControlsEdit = () => {
     isEditRiskControls.value = false;
-    onSearch();
+    switch (currentRiskControlLabelId.value) {
+      case 0:
+        {
+        }
+        break;
+      case 1:
+        {
+        }
+        break;
+      case 2:
+        {
+        }
+        break;
+      case 3:
+        {
+          onSearchAutoLabelLimit();
+        }
+        break;
+    }
   };
 
   const changeType = (id: number) => {
     currentRiskControlLabelId.value = id;
-    if (currentRiskControlLabelId.value == 3) {
-      cancelRiskControlsEdit();
+    switch (currentRiskControlLabelId.value) {
+      case 0:
+        {
+        }
+        break;
+      case 1:
+        {
+        }
+        break;
+      case 2:
+        {
+        }
+        break;
+      case 3:
+        {
+          cancelRiskControlsEdit();
+        }
+        break;
     }
   };
 
@@ -89,50 +123,100 @@ export function useRiskControlHook({
       ]);
       loading.value = false;
       isEditRiskControls.value = false;
-      if (res.code) {        
+      if (res.code) {
         return message(res.msg, { type: 'error' });
       } else {
         delList.length = 0;
 
         message(res.msg, { type: res.code ? 'error' : 'success' });
-        onSearch();
+        onSearchAutoLabelLimit();
       }
     });
   };
 
   const addControlLabel = () => {
-    riskControlList.push({
-      name: undefined,
-      days: undefined,
-      betcount: undefined,
-      profiteAmout: undefined,
-      profiteRate: undefined,
-      level: undefined,
-      labelId: undefined,
-      lableName: undefined
-    });
+    switch (currentRiskControlLabelId.value) {
+      case 0:
+        {
+        }
+        break;
+      case 1:
+        {
+        }
+        break;
+      case 2:
+        {
+        }
+        break;
+      case 3:
+        {
+          riskControlList.push({
+            name: undefined,
+            days: undefined,
+            betcount: undefined,
+            profiteAmout: undefined,
+            profiteRate: undefined,
+            level: undefined,
+            labelId: undefined,
+            lableName: undefined
+          });
+        }
+        break;
+    }
   };
 
   const deleteControlLabel = () => {
-    const item = riskControlList.pop();
-    delList.push({ ...item, delFlag: 1 });
+    switch (currentRiskControlLabelId.value) {
+      case 0:
+        {
+        }
+        break;
+      case 1:
+        {
+        }
+        break;
+      case 2:
+        {
+        }
+        break;
+      case 3:
+        {
+          const item = riskControlList.pop();
+          delList.push({ ...item, delFlag: 1 });
+        }
+        break;
+    }
   };
 
   watch(
     () => currentRiskControlLabelId.value,
     async () => {
-      // 自动标签限额 - auto label limit
-      if (currentRiskControlLabelId.value == 3) {
-        console.log('hit');
-        await dispatchGetLabelList();
-        await onSearch();
+      switch (currentRiskControlLabelId.value) {
+        case 0:
+          {
+          }
+          break;
+        case 1:
+          {
+          }
+          break;
+        case 2:
+          {
+          }
+          break;
+        case 3:
+          {
+            await dispatchGetLabelList();
+            await onSearchAutoLabelLimit();
+          }
+          break;
       }
     }
   );
 
   onMounted(async () => {
     dispatchGetLabelList();
-    onSearch();
+    onSearchAutoLabelLimit();
   });
 
   return {
