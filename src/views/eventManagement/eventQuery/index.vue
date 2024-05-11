@@ -2,6 +2,17 @@
   <div class="main">
     <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
 
+    <div
+      v-if="matchEventList.length"
+      class="mt-3 search-form bg-bg_color w-[99/100] pl-8 pt-[12px] flex flex-col"
+    >
+      <span>{{ matchInfo.sportName }}</span>
+      <span>{{ matchInfo.league }}</span>
+      <span>{{ matchInfo.aTeamName }} vs {{ matchInfo.hTeamName }}</span>
+      <span>{{ t('赛事ID ') }}: {{ matchInfo.matchId }}</span>
+      <span>{{ t('开赛时间') }}: {{ matchInfo.startDateTime }}</span>
+    </div>
+
     <PureTableBar
       :title="t('赛事列表')"
       :columns="columns"
@@ -43,8 +54,6 @@ import { useEventQueryHook } from './utils/hook';
 import { usePublicHooks } from '@/hooks';
 import { t } from '@/plugins/i18n';
 import { columns } from './component/TableColumnList';
-import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-import EditPen from '@iconify-icons/ep/edit-pen';
 import SearchForm from './component/SearchForm.vue';
 
 defineOptions({ name: 'CONFIGCENTER_EVENT_QUERY' });
@@ -55,12 +64,10 @@ const {
   pagination,
   onSearch,
   form,
-  handleTableWidthChange,
-  handleSelectionChange,
-  // openDialog,
   matchEventList,
   handleCurrentChange,
-  handlePageSizeChange
+  handlePageSizeChange,
+  matchInfo
 } = useEventQueryHook();
 </script>
 

@@ -202,14 +202,11 @@ export function useBettingCenterHook(category: number, venueType: number) {
       dataList.length = 0;
       if (res.data !== null) {
         let list = res?.data?.pageData || [];
-        list = list.map(row => {
-          let riskSt: number = -1;
-          row.combineOrderDetails.map(item2 => {
-            if (item2.riskStatus === 2) riskSt = 2;
-            if (item2.riskStatus === 203) riskSt = 203;
-            if (item2.riskStatus === 204) riskSt = 204;
+        list = list.map((row:BetOrderAPI.BetOrderList) => {
+          row.riskStatusArr = [];
+          row.combineOrderDetails.map((item2:BetOrderAPI.Detail) => {
+            row.riskStatusArr?.push(item2.riskStatus)
           });
-          row.riskStatus = riskSt;
           return row;
         });
         dataList.push(...list);
@@ -416,19 +413,19 @@ export function useBettingCenterHook(category: number, venueType: number) {
     billStatus: number,
     betResult: number,
     isReserve: number,
-    riskStatus?: number,
+    riskStatusArr?: number[],
     isSpecialSettle?: number
   ) => {
-    console.log(1111,betResult,riskStatus)
+    console.log(1111,betResult,riskStatusArr)
     let obj = { status: -1, bgColor: '' };
     if (isSpecialSettle === 1) {
       // 特殊结算也算已结算
       obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
     } else if (betResult == 22) {
       obj = { status: betStatus.reverseCancel, bgColor: '#F57582' }; //预约取消
-    } else if (riskStatus === 2) {
+    } else if (riskStatusArr?.includes(riskStatus.rejectBetting)) {
       obj = { status: betStatus.PendingApprove, bgColor: '#F57582' }; //待审核
-    }else if(betResult===61&&(riskStatus === 203||riskStatus === 204)){
+    }else if(betResult===61&&(riskStatusArr?.includes(riskStatus.reject) ||riskStatusArr?.includes(riskStatus.autoReject))){
       // 封控拒单
       obj = { status: betStatus.riskReject, bgColor: '#F88D48' };
     }else if (
