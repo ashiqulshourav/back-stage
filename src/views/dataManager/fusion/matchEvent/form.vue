@@ -119,9 +119,7 @@ const {
 } = matchCombineHook();
 
 const props = withDefaults(defineProps<{rowData: MatchCombineAPI.matchPairingDetail}>(), {});
-
 const emits = defineEmits(['reloadTable', 'closeDialog']);
-
 const matchSourceDetails = ref(props.rowData);
 onMounted(() => {
     const date = props?.rowData?.beginTime?.split(' ');
@@ -132,7 +130,6 @@ onMounted(() => {
     editFrom.sportId=   props?.rowData?.sportId;
     editFrom.matchId188bet= props?.rowData.matchId188bet;
     editFrom.beginTime
-
     onModalSearch();
 });
 
