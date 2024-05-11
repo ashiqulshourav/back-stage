@@ -80,7 +80,7 @@
                 :type= "!alreadyMatch ? 'success' : row.pairingStatus === 1 ? 'warning' : 'default'"
                 :size="size"
                 :disabled="alreadyMatch && row.pairingStatus === 0"
-                @click="openManualMatchDialog(row.pairingStatus === 1 ? t('取消匹配确认') : t('匹配确认'), rowData, row)"
+                @click="openManualMatchDialog(row.pairingStatus === 1 ? t('取消匹配确认') : t('匹配确认'), rowData, row, editFrom)"
               >
                 {{ row.pairingStatus === 0?t('立即匹配'):t('取消匹配') }}
               </el-button>

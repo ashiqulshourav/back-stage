@@ -38,6 +38,7 @@ import configCenter from '@iconify-icons/ri/settings-3-line';
 import TaskCenterIcon from '@iconify-icons/ri/apps-fill';
 import Download from '@iconify-icons/ep/download';
 import Link from '@iconify-icons/icon-park-outline/link-one';
+import Unlink from '@iconify-icons/icon-park-outline/unlink';
 
 addIcon("dataSourceManager", dataManager);
 addIcon("sale", sale);
@@ -80,3 +81,4 @@ addIcon('Delete', Delete);
 addIcon('loadingIcon', loading);
 addIcon('download', Download);
 addIcon('link', Link);
+addIcon('unlink', Unlink);
