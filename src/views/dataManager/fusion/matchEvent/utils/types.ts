@@ -1,20 +1,38 @@
 interface FormProps {
-  levelList: ConfigCenterDataAPI.leagueLevelList[];
-  formInline: MetadataAPI.LeagueList;
+  matchDetail: MatchCombineAPI.matchSourceDetail;
 }
 
 export type searchFormType = {
-  dataSource: string;
-  sportId: string;
-  matchId: string;
-  leagueNameCn: string;
-  competitionDate: number;
-  leagueNameEn: string;
-  homeTeamNameCn: string;
-  homeTeamNameEn: string;
-  awayTeamNameCn: string;
-  awayTeamNameEn: string;
-  mathcMethod: string;
+  dataSourceCode?: string;
+  sportId?: string|number;
+  matchId?: string|number;
+  leagueNameCn?: string;
+  leagueNameEn?: string;
+  homeTeamNameCn?: string;
+  homeTeamNameEn?: string;
+  awayTeamNameCn?: string;
+  awayTeamNameEn?: string;
+  pairingType: number;
+  category?: number;
+  startTime:string;
+  endTime:string;
+  pairingUser:string;
+}
+
+export type editSearchFormType = {
+  sportId?: string|number;
+  category:number;
+  pageNum:number;
+  pageSize:number;
+  startTime:string|null;
+  endTime:string|null;
+  matchId188bet:number|null;
+  leagueNameCn?: string;
+  leagueNameEn?: string;
+  homeTeamNameCn?: string;
+  homeTeamNameEn?: string;
+  awayTeamNameCn?: string;
+  awayTeamNameEn?: string;
 }
 
 export type { FormProps };
