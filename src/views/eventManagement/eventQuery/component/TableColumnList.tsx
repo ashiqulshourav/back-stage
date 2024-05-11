@@ -15,7 +15,7 @@ export const columns: TableColumnList = [
   },
   {
     label: t('事件名称'),
-    slot: 'addition5',
+    prop: 'addition5',
     minWidth: 300
   },
   {

@@ -5,6 +5,14 @@ import { message } from '@/utils/message';
 
 export function useEventQueryHook() {
   const matchEventList = reactive<EventAPI.MatchEvent[]>([]);
+  const matchInfo = reactive<EventAPI.MatchInfo>({
+    aTeamName: '',
+    hTeamName: '',
+    league: '',
+    matchId: '',
+    sportName: '',
+    startDateTime: ''
+  });
   const loading = ref(false);
 
   const pagination = reactive<PaginationProps>({
@@ -28,6 +36,13 @@ export function useEventQueryHook() {
     if (!form.matchId) {
       matchEventList.length = 0;
       pagination.total = 0;
+      matchInfo.aTeamName = '';
+      matchInfo.aTeamName = '';
+      matchInfo.hTeamName = '';
+      matchInfo.league = '';
+      matchInfo.matchId = '';
+      matchInfo.sportName = '';
+      matchInfo.startDateTime = '';
       return;
     }
 
@@ -43,6 +58,22 @@ export function useEventQueryHook() {
 
       if (res?.code) return message(res?.msg, { type: 'error' });
       matchEventList.length = 0;
+
+      const matchInfoRes = await API.getMatchInfoByMatchId({
+        matchId: form.matchId
+      });
+
+      if (matchInfoRes?.code) return message(res?.msg, { type: 'error' });
+
+      console.log('fuck', matchInfoRes.data);
+
+      matchInfo.aTeamName = matchInfoRes.data.aTeamName;
+      matchInfo.aTeamName = matchInfoRes.data.aTeamName;
+      matchInfo.hTeamName = matchInfoRes.data.hTeamName;
+      matchInfo.league = matchInfoRes.data.league;
+      matchInfo.matchId = matchInfoRes.data.matchId;
+      matchInfo.sportName = matchInfoRes.data.sportName;
+      matchInfo.startDateTime = matchInfoRes.data.startDateTime;
 
       matchEventList.push(...res.data.list);
       pagination.total = res.data.total;
@@ -86,6 +117,7 @@ export function useEventQueryHook() {
     handleSelectionChange,
     // openDialog,
     matchEventList,
-    handlePageSizeChange
+    handlePageSizeChange,
+    matchInfo
   };
 }
