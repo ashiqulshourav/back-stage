@@ -5,6 +5,9 @@ export const columns: TableColumnList = [
     label: t('事件源发生时间'),
     prop: 'createdAt',
     minWidth: 150,
+    formatter({ createdAt }: { createdAt: string }) {
+      return dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss');
+    }
   },
   {
     label: t('事件源'),
