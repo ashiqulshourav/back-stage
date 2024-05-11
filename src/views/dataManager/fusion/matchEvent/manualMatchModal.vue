@@ -1,6 +1,10 @@
 <template>
-  <div class="text-left text-lg font-bold">{{ t('确认匹配比赛数据？') }}</div>
-  <div class="text-left text-m mb-4">{{ t('确认后以下赛事将会完成匹配：') }}</div>
+  <div class="text-left text-lg font-bold">
+    {{ t('确认' + (matchSourcePairDetails.pairingStatus === 1 ? '取消' : '') +  '匹配比赛数据？') }}
+  </div>
+  <div class="text-left text-m mb-4">
+    {{ t('确认后以下赛事将会完成' + (matchSourcePairDetails.pairingStatus === 1 ? '取消' : '') + '匹配：') }}
+  </div>
   <div class="flex items-center">
     <div>
       <div class="text-center border border-slate-100 border-b-0">DP</div>
@@ -86,8 +90,12 @@ import { t } from '@/plugins/i18n';
 import { matchSource } from "./utils/map";
 import {removeEmptyStringKeys} from "@/utils/utilFn";
 import {message} from "@/utils/message";
-import {useUserStore} from "@/store/user";
-defineOptions({ name: 'METADATA_LEAGUE' });
+import { useUserStore } from "@/store/user";
+import { matchCombineHook } from './utils/hook';
+
+const {
+  onModalSearch,
+} = matchCombineHook();
 
 const props = withDefaults(defineProps<{
   matchSource: MatchCombineAPI.matchSourceDetail,
@@ -107,18 +115,29 @@ const handleMatch = ()=>{
     pairingUser: userStore.userInfo.name,
   }
   const params = { ...removeEmptyStringKeys(param)}
-  if(props.matchSourcePair.pairingStatus===0){
+  if (props.matchSourcePair.pairingStatus === 0) {
+    // const res = await API.matchPairing(params);
+    // message(res.msg, { type: res.code ? 'error' : 'success' });
+    // emits('closeDialog');
+    // onModalSearch('reload');
+    
     API.matchPairing(params).then((res)=>{
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if(res.code===0){
         emits('closeDialog');
+        onModalSearch('reload');
       }
     })
-  }else { // 取消匹配
+  } else { // 取消匹配
+    // const res = await API.cancelMatchPairing(params);
+    // message(res.msg, { type: res.code ? 'error' : 'success' });
+    // emits('closeDialog');
+    // onModalSearch('reload');
     API.cancelMatchPairing(params).then((res)=>{
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if(res.code===0){
         emits('closeDialog');
+        onModalSearch('reload');
       }
     })
   }

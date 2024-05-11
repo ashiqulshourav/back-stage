@@ -29,6 +29,18 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
+          <template #leagueName="{ row }">
+            <div> {{ handleNullValue(row.leagueNameCn) }} </div>
+            <div> {{ handleNullValue(row.leagueNameEn) }} </div>
+          </template>
+          <template #homeTeamName="{ row }">
+            <div> {{ handleNullValue(row.homeTeamNameCn) }} </div>
+            <div> {{ handleNullValue(row.homeTeamNameEn) }} </div>
+          </template>
+          <template #awayTeamName="{ row }">
+            <div> {{ handleNullValue(row.awayTeamNameCn) }} </div>
+            <div> {{ handleNullValue(row.awayTeamNameEn) }} </div>
+          </template>
           <template #operation="{ row }">
             <el-button
               class="reset-margin"
@@ -63,6 +75,10 @@ onMounted(() => {
     onSearch();
 });
 const { tableHeaderStyle } = usePublicHooks();
+
+const handleNullValue = (value: string | number) => {
+  return value ? value : '-';
+}
 
 const {
   loading,

@@ -57,13 +57,30 @@
             :data="matchInfoDataList"
             :columns="dynamicColumns"
             :header-cell-style="tableHeaderStyle"
+            :pagination="{ ...editPagination, pageSizes: [5, 10, 20, 50, 100] }"
+            :paginationSmall="size === 'small' ? true : false"
+            @selection-change="handleSelectionChange"
+            @page-size-change="handleModalTableWidthChange"
+            @page-current-change="handleModalCurrentChange"
           >
+            <template #leagueName="{ row }">
+              <div> {{ handleNullValue(row.leagueNameCn) }} </div>
+              <div> {{ handleNullValue(row.leagueNameEn) }} </div>
+            </template>
+            <template #homeTeamName="{ row }">
+              <div> {{ handleNullValue(row.homeTeamNameCn) }} </div>
+              <div> {{ handleNullValue(row.homeTeamNameEn) }} </div>
+            </template>
+            <template #awayTeamName="{ row }">
+              <div> {{ handleNullValue(row.awayTeamNameCn) }} </div>
+              <div> {{ handleNullValue(row.awayTeamNameEn) }} </div>
+            </template>
             <template #operation="{ row }">
               <el-button
                 :type= "!alreadyMatch ? 'success' : row.pairingStatus === 1 ? 'warning' : 'default'"
                 :size="size"
                 :disabled="alreadyMatch && row.pairingStatus === 0"
-                @click="openManualMatchDialog(t('匹配确认'),rowData,row)"
+                @click="openManualMatchDialog(row.pairingStatus === 1 ? t('取消匹配确认') : t('匹配确认'), rowData, row)"
               >
                 {{ row.pairingStatus === 0?t('立即匹配'):t('取消匹配') }}
               </el-button>
@@ -86,7 +103,7 @@ import { matchCombineHook } from './utils/hook';
 import SearchForm from './component/ModalSearchForm.vue';
 import { usePublicHooks } from '@/hooks';
 import { matchColumns } from './component/TableColumnList';
-defineOptions({ name: 'METADATA_LEAGUE' });
+
 const { tableHeaderStyle } = usePublicHooks();
 const {
   loading,
@@ -95,6 +112,10 @@ const {
   openManualMatchDialog,
   matchInfoDataList,
   alreadyMatch,
+  editPagination,
+  handleSelectionChange,
+  handleModalTableWidthChange,
+  handleModalCurrentChange,
 } = matchCombineHook();
 
 const props = withDefaults(defineProps<{rowData: MatchCombineAPI.matchPairingDetail}>(), {});
@@ -118,6 +139,10 @@ onMounted(() => {
 const closeDialog = () => {
   emits('closeDialog');
 };
+
+const handleNullValue = (value: string | number) => {
+  return value ? value : '-';
+}
 </script>
 
 <style lang="scss">

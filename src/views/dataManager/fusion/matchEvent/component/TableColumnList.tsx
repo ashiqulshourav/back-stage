@@ -1,9 +1,7 @@
 import { ESPORT_ID_MAP, SPORT_ID_MAP } from '@/utils/maps/sports_map';
-import { getLan } from "@/utils/utilFn";
 import dayjs from "dayjs";
 import { t } from "@/plugins/i18n";
 import { matchMethod, matchSource } from "../utils/map";
-const lan = getLan() ?? 'zh';
 export const columns: TableColumnList = [
   {
     label: t('赛种'),
@@ -21,17 +19,20 @@ export const columns: TableColumnList = [
   },
   {
     label: t('联赛'),
-    prop: lan === 'zh' ? 'leagueNameCn' : 'leagueNameEn',
+    slot: 'leagueName',
+    align: 'left',
     minWidth: 150,
   },
   {
     label: t('主队'),
-    prop: 'homeTeamNameCn',
+    slot: 'homeTeamName',
+    align: 'left',
     minWidth: 150,
   },
   {
     label: t('客队'),
-    prop: 'awayTeamNameCn',
+    slot: 'awayTeamName',
+    align: 'left',
     minWidth: 150,
   },
   {
@@ -83,20 +84,22 @@ export const matchColumns: TableColumnList = [
   },
   {
     label: t('联赛'),
-    prop: lan === 'zh' ? 'leagueNameCn' : 'leagueNameEn',
+    slot: 'leagueName',
+    align: 'left',
   },
   {
     label: t('主队'),
-    prop: lan === 'zh' ? 'homeTeamNameCn' : 'homeTeamNameEn',
+    slot: 'homeTeamName',
+    align: 'left',
   },
   {
     label: t('客队'),
-    prop: lan === 'zh' ? 'awayTeamNameCn' : 'awayTeamNameEn',
+    slot: 'awayTeamName',
+    align: 'left',
   },
   {
     label: t('开赛时间'),
     prop: 'beginTime',
-    minWidth: 200,
     formatter: ({ beginTime }) => dayjs(beginTime).format('YYYY-MM-DD HH:mm:ss')
   },
   {
