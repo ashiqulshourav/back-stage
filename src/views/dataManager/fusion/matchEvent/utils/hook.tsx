@@ -23,28 +23,28 @@ export function matchCombineHook() {
     currentPage: 1,
   });
   const form = reactive<searchFormType>({
-    dataSourceCode:'',
+    dataSourceCode: '',
     category: 0,
-    sportId:'',
-    matchId:'',
-    leagueNameCn:'',
-    leagueNameEn:'',
-    homeTeamNameCn:'',
-    homeTeamNameEn:'',
+    sportId: '',
+    matchId: '',
+    leagueNameCn: '',
+    leagueNameEn: '',
+    homeTeamNameCn: '',
+    homeTeamNameEn: '',
     awayTeamNameCn: '',
     awayTeamNameEn: '',
     pairingType: 0,
-    startTime:'',
-    endTime:'',
-    pairingUser:'',
+    startTime: '',
+    endTime: '',
+    pairingUser: '',
   });
 
   const editFrom =reactive<editSearchFormType>({
-      category: 0,
-      sportId:null,
-      matchId188bet:null,
-      startTime:null,
-      endTime:null,
+    category: 0,
+    sportId: null,
+    matchId188bet: null,
+    startTime: null,
+    endTime: null,
   });
 
   function handleTableWidthChange(val: number) {
@@ -57,6 +57,16 @@ export function matchCombineHook() {
     onSearch();
   }
 
+  function handleModalTableWidthChange(val: number) {
+    editPagination.pageSize = val;
+    onModalSearch();
+  }
+
+  function handleModalCurrentChange(val: number) {
+    editPagination.currentPage = val;
+    onModalSearch();
+  }
+
   function handleSelectionChange(val: number) {
     console.log('handleSelectionChange', val);
   }
@@ -66,15 +76,15 @@ export function matchCombineHook() {
     try {
       loading.value = true;
 
-      if(form.startTime){
-        form.startTime= dayjs(form.startTime).format('YYYY-MM-DD HH:mm:ss')
-      }else {
-        form.startTime= dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss')
+      if (form.startTime) {
+        form.startTime = dayjs(form.startTime).format('YYYY-MM-DD HH:mm:ss')
+      } else {
+        form.startTime = dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss')
       }
-      if(form.endTime){
-        form.endTime= dayjs(form.endTime).format('YYYY-MM-DD HH:mm:ss')
-      }else {
-        form.endTime= dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')
+      if (form.endTime) {
+        form.endTime = dayjs(form.endTime).format('YYYY-MM-DD HH:mm:ss')
+      } else {
+        form.endTime = dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')
       }
       const res = await API.getMatchPairingList({
         ...removeEmptyStringKeys(form),
@@ -82,7 +92,7 @@ export function matchCombineHook() {
         pageNum: pagination.currentPage
       });
       loading.value = false;
-      dataList.length=0
+      dataList.length = 0
       if (res.data.list) {
         dataList.push(...res.data.list)
         pagination.total = res.data.total;
@@ -95,9 +105,11 @@ export function matchCombineHook() {
   }
 
   async function onModalSearch(type?: string) {
+    console.log('###inside onModalSearch')
     if (type === 'reload') editPagination.currentPage = 1;
     try {
       loading.value = true;
+      console.log('###editFrom', editFrom);
       const res = await API.getMatchDataSourceList({
         ...removeEmptyStringKeys(editFrom),
         pageSize: editPagination.pageSize,
@@ -108,13 +120,19 @@ export function matchCombineHook() {
       if (res.data.list) {
         alreadyMatch.value = res.data.list.filter(item => item.pairingStatus === 1).length > 0;
         matchInfoDataList.push(...res.data.list)
+        editPagination.total = res.data.total;
+        editPagination.pageSize = res.data.pageSize;
+        editPagination.currentPage = res.data.pageNum;
+      }else {
+        editPagination.total = 0;
+        editPagination.pageSize = 1;
+        editPagination.currentPage = 1;
       }
     } catch (error) {
       loading.value = false;
+      matchInfoDataList.length = 0;
     }
   }
-
-
 
   async function openDialog(title: string, row?: MatchCombineAPI.matchSourceDetail) {
     addDialog({
@@ -134,7 +152,8 @@ export function matchCombineHook() {
         })
     });
   }
-  async function openManualMatchDialog(title: string, rowData:MatchCombineAPI.matchPairingDetail,row: MatchCombineAPI.matchSourceDetail) {
+
+  async function openManualMatchDialog(title: string, rowData: MatchCombineAPI.matchPairingDetail, row: MatchCombineAPI.matchSourceDetail) {
     addDialog({
       title,
       width: 'auto',
@@ -147,7 +166,14 @@ export function matchCombineHook() {
           matchSourcePair: row,
           onCloseDialog: (params: string) => {
             closeDialog(options, index);
-            params && onSearch();
+            // 匹配后更新列表数据状态；
+            alreadyMatch.value= params.pairingStatus===1
+            matchInfoDataList.map((item)=>{
+              if(item.matchId===params.matchId){
+                item.pairingStatus=params.pairingStatus
+              }
+            })
+
           }
         })
     });
@@ -169,5 +195,8 @@ export function matchCombineHook() {
     matchInfo,
     matchInfoDataList,
     alreadyMatch,
+    handleModalTableWidthChange,
+    handleModalCurrentChange,
+    editPagination,
   };
 }

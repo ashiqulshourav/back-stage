@@ -1,6 +1,10 @@
 <template>
-  <div class="text-left text-lg font-bold">{{ t('确认匹配比赛数据？') }}</div>
-  <div class="text-left text-m mb-4">{{ t('确认后以下赛事将会完成匹配：') }}</div>
+  <div class="text-left text-lg font-bold">
+    {{ t('确认' + (matchSourcePairDetails.pairingStatus === 1 ? '取消' : '') +  '匹配比赛数据？') }}
+  </div>
+  <div class="text-left text-m mb-4">
+    {{ t('确认后以下赛事将会完成' + (matchSourcePairDetails.pairingStatus === 1 ? '取消' : '') + '匹配：') }}
+  </div>
   <div class="flex items-center">
     <div>
       <div class="text-center border border-slate-100 border-b-0">DP</div>
@@ -36,7 +40,7 @@
         </tr>
       </table>
     </div>
-    <IconifyIconOffline class="link-icon" icon="link"/>
+    <IconifyIconOffline class="link-icon" :icon="matchSourcePairDetails.pairingStatus === 1 ? 'unlink' : 'link'"/>
     <div>
       <div class="text-center border border-slate-100 border-b-0">
         {{ matchSource.find(_ => _.value == matchSourcePairDetails.dataSourceCode)?.label ?? '-' }}
@@ -86,16 +90,19 @@ import { t } from '@/plugins/i18n';
 import { matchSource } from "./utils/map";
 import {removeEmptyStringKeys} from "@/utils/utilFn";
 import {message} from "@/utils/message";
-import {useUserStore} from "@/store/user";
-defineOptions({ name: 'METADATA_LEAGUE' });
+import { useUserStore } from "@/store/user";
+import { matchCombineHook } from './utils/hook';
+
+const {
+  editFrom,
+} = matchCombineHook();
 
 const props = withDefaults(defineProps<{
   matchSource: MatchCombineAPI.matchSourceDetail,
   matchSourcePair: MatchCombineAPI.matchSourceDetail,
 }>(), {});
 const userStore = useUserStore();
-const emits = defineEmits(['reloadTable', 'closeDialog']);
-
+const emits = defineEmits(['closeDialog']);
 const matchSourceDetails = ref(props.matchSource);
 const matchSourcePairDetails = ref(props.matchSourcePair)
 const handleMatch = ()=>{
@@ -107,18 +114,21 @@ const handleMatch = ()=>{
     pairingUser: userStore.userInfo.name,
   }
   const params = { ...removeEmptyStringKeys(param)}
-  if(props.matchSourcePair.pairingStatus===0){
+  editFrom.sportId=   props?.matchSource?.sportId;
+  editFrom.matchId188bet= props?.matchSourcePair.matchId188bet;
+  editFrom.matchId=props.matchSourcePair.matchId;
+  if (props.matchSourcePair.pairingStatus === 0) {
     API.matchPairing(params).then((res)=>{
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if(res.code===0){
-        emits('closeDialog');
+        emits('closeDialog',{matchId:props.matchSourcePair.matchId,pairingStatus:1});
       }
     })
-  }else { // 取消匹配
+  } else { // 取消匹配
     API.cancelMatchPairing(params).then((res)=>{
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if(res.code===0){
-        emits('closeDialog');
+        emits('closeDialog',{matchId:props.matchSourcePair.matchId,pairingStatus:0});
       }
     })
   }
