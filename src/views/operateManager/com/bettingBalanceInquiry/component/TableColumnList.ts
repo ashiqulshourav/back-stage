@@ -24,19 +24,19 @@ export const columns: TableColumnList = [
     prop: 'matchMaxWinLimit',
     minWidth: 150
   },
-  {
-    label: t('单关单日剩余可投额度'),
-    prop: 'seriesType1DayMaxLimit',
-    minWidth: 150
-  },
+  // {
+  //   label: t('单关单日剩余可投额度'),
+  //   prop: 'seriesType1DayMaxLimit',
+  //   minWidth: 150
+  // },
   {
     label: t('串关当日剩余可投额度'),
     prop: 'seriesType2DayMaxLimit',
     minWidth: 150
   },
-  {
-    label: t('冠军当日剩余可投额度'),
-    prop: 'championDayMaxLimit',
-    minWidth: 150
-  }
+  // {
+  //   label: t('冠军当日剩余可投额度'),
+  //   prop: 'championDayMaxLimit',
+  //   minWidth: 150
+  // }
 ];
