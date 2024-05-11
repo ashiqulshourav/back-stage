@@ -94,7 +94,7 @@ import { useUserStore } from "@/store/user";
 import { matchCombineHook } from './utils/hook';
 
 const {
-  onModalSearch,
+  editFrom,
 } = matchCombineHook();
 
 const props = withDefaults(defineProps<{
@@ -102,8 +102,7 @@ const props = withDefaults(defineProps<{
   matchSourcePair: MatchCombineAPI.matchSourceDetail,
 }>(), {});
 const userStore = useUserStore();
-const emits = defineEmits(['reloadTable', 'closeDialog']);
-
+const emits = defineEmits(['closeDialog']);
 const matchSourceDetails = ref(props.matchSource);
 const matchSourcePairDetails = ref(props.matchSourcePair)
 const handleMatch = ()=>{
@@ -115,29 +114,21 @@ const handleMatch = ()=>{
     pairingUser: userStore.userInfo.name,
   }
   const params = { ...removeEmptyStringKeys(param)}
+  editFrom.sportId=   props?.matchSource?.sportId;
+  editFrom.matchId188bet= props?.matchSourcePair.matchId188bet;
+  editFrom.matchId=props.matchSourcePair.matchId;
   if (props.matchSourcePair.pairingStatus === 0) {
-    // const res = await API.matchPairing(params);
-    // message(res.msg, { type: res.code ? 'error' : 'success' });
-    // emits('closeDialog');
-    // onModalSearch('reload');
-    
     API.matchPairing(params).then((res)=>{
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if(res.code===0){
-        emits('closeDialog');
-        onModalSearch('reload');
+        emits('closeDialog',{matchId:props.matchSourcePair.matchId,pairingStatus:1});
       }
     })
   } else { // 取消匹配
-    // const res = await API.cancelMatchPairing(params);
-    // message(res.msg, { type: res.code ? 'error' : 'success' });
-    // emits('closeDialog');
-    // onModalSearch('reload');
     API.cancelMatchPairing(params).then((res)=>{
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if(res.code===0){
-        emits('closeDialog');
-        onModalSearch('reload');
+        emits('closeDialog',{matchId:props.matchSourcePair.matchId,pairingStatus:0});
       }
     })
   }

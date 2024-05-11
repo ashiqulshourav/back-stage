@@ -123,11 +123,14 @@ export function matchCombineHook() {
         editPagination.total = res.data.total;
         editPagination.pageSize = res.data.pageSize;
         editPagination.currentPage = res.data.pageNum;
+      }else {
+        editPagination.total = 0;
+        editPagination.pageSize = 1;
+        editPagination.currentPage = 1;
       }
-      console.log('###success', matchInfoDataList);
     } catch (error) {
-      console.log('###error', error);
       loading.value = false;
+      matchInfoDataList.length = 0;
     }
   }
 
@@ -163,7 +166,14 @@ export function matchCombineHook() {
           matchSourcePair: row,
           onCloseDialog: (params: string) => {
             closeDialog(options, index);
-            params && onModalSearch();
+            // 匹配后更新列表数据状态；
+            alreadyMatch.value= params.pairingStatus===1
+            matchInfoDataList.map((item)=>{
+              if(item.matchId===params.matchId){
+                item.pairingStatus=params.pairingStatus
+              }
+            })
+
           }
         })
     });
