@@ -158,12 +158,11 @@ export function useBettingCenterHook(category: number, venueType: number) {
       if (res.code) return message(res.msg, { type: 'error' });
       if (res.data !== null) {
         let list = res?.data?.pageData || [];
-        list = list.map(row => {
-          let riskSt: number = -1;
-          row.combineOrderDetails.map(item2 => {
-            if (item2.riskStatus === 2) riskSt = 2;
+        list = list.map((row:BetOrderAPI.BetOrderList) => {
+          row.riskStatusArr = [];
+          row.combineOrderDetails.map((item2:BetOrderAPI.Detail) => {
+            row.riskStatusArr?.push(item2.riskStatus)
           });
-          row.riskStatus = riskSt;
           return row;
         });
 
@@ -204,8 +203,10 @@ export function useBettingCenterHook(category: number, venueType: number) {
         let list = res?.data?.pageData || [];
         list = list.map((row:BetOrderAPI.BetOrderList) => {
           row.riskStatusArr = [];
+          row.betResultArr = []
           row.combineOrderDetails.map((item2:BetOrderAPI.Detail) => {
             row.riskStatusArr?.push(item2.riskStatus)
+            row.betResultArr.push (item2.betResult)
           });
           return row;
         });
@@ -294,7 +295,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
           case 'teamName':
             if (
               data.kindsCodes?.includes('Outright') ||
-              data.kindsCodes?.includes('Moutright')
+              data.kindsCodes?.includes('moutright')
             ) {
               str = '冠军赛事';
             } else {
@@ -315,7 +316,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
                   data.billStatus,
                   data.betResult,
                   data.isReserve,
-                  data.riskStatus,
+                  data.riskStatusArr,
                   data.isSpecialSettle
                 )?.status as keyof typeof betStatusMap
               ];
@@ -328,7 +329,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
                   data.billStatus,
                   data.betResult,
                   data.isReserve,
-                  data.riskStatus,
+                  data.riskStatusArr,
                   data.isSpecialSettle
                 )?.status as keyof typeof betStatusMap
               ];
@@ -411,31 +412,30 @@ export function useBettingCenterHook(category: number, venueType: number) {
   const getStatus = (
     status: number,
     billStatus: number,
-    betResult: number,
+    betResultArr: number[],
     isReserve: number,
     riskStatusArr?: number[],
     isSpecialSettle?: number
   ) => {
-    console.log(1111,betResult,riskStatusArr)
     let obj = { status: -1, bgColor: '' };
     if (isSpecialSettle === 1) {
       // 特殊结算也算已结算
       obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
-    } else if (betResult == 22) {
+    } else if (betResultArr?.includes(22)) {
       obj = { status: betStatus.reverseCancel, bgColor: '#F57582' }; //预约取消
     } else if (riskStatusArr?.includes(riskStatus.rejectBetting)) {
       obj = { status: betStatus.PendingApprove, bgColor: '#F57582' }; //待审核
-    }else if(betResult===61&&(riskStatusArr?.includes(riskStatus.reject) ||riskStatusArr?.includes(riskStatus.autoReject))){
+    }else if(betResultArr?.includes(61)&&(riskStatusArr?.includes(riskStatus.reject) ||riskStatusArr?.includes(riskStatus.autoReject))){
       // 封控拒单
       obj = { status: betStatus.riskReject, bgColor: '#F88D48' };
     }else if (
       status == 2 &&
       billStatus === 1 &&
-      (betResult === 22 || betResult === 23)
+      (betResultArr?.includes(22)||betResultArr?.includes(23))
     ) {
       // 注单无效
       obj = { status: betStatus.betInvalid, bgColor: '#E54752' };
-    } else if (status === 2 && billStatus === 1 && betResult === 21) {
+    } else if (status === 2 && billStatus === 1 && betResultArr?.includes(21)) {
       // 预约失败
       obj = { status: betStatus.reserveFail, bgColor: '#F57582' };
     } else if (status === 0 && billStatus === 0) {
