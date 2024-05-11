@@ -379,6 +379,7 @@ export function useRiskControlHook({
   onMounted(async () => {
     dispatchGetLabelList();
     onSearchAutoLabelLimit();
+    // getPandaMatchEventList();
   });
 
   return {

@@ -13,19 +13,19 @@
       <template #eventSource="{ row }">
         <el-select
           v-if="isEditRiskControls"
-          v-model="row.eventCode"
-          :placeholder="t('事件名称')"
+          v-model="row.sourceCode"
+          :placeholder="t('事件源')"
           clearable
-          class="!w-[150px]"
         >
           <el-option
-            :label="item.eventName"
-            :value="item.eventCode"
-            v-for="item in pandaMatchList"
-            :key="item.eventCode"
+            :label="item.label"
+            :value="item.value"
+            v-for="item in EVENT_SOURCE"
+            :key="item.value"
           />
         </el-select>
-        <span v-else>{{ row.level }} </span>
+
+        <span v-else>{{ row.sourceCode }} </span>
       </template>
       <template #eventName="{ row }">
         <el-select
@@ -107,6 +107,7 @@ import { labelListType } from '@/views/operateManager/com/playerList/utils/types
 import { getLabelColor } from '@/components/RiskLabelList/utils';
 import { getLabelLevelByName } from '@/components/RiskLabelList/utils';
 import { PandaMatch } from '@/views/eventManagement/eventQuery/utils/types';
+import { EVENT_SOURCE } from '@/views/eventManagement/eventQuery/utils/map';
 
 const sportLimmitList = reactive<string[]>([]);
 
