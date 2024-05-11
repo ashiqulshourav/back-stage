@@ -61,7 +61,7 @@ declare namespace BetOrderAPI {
     seriesType: number;
     combineOrderDetails: Detail[];
     isSettlementAgain: number;
-    riskStatus?: number;
+    riskStatusArr?: number[];
     orderRemark?: string;
   };
 
