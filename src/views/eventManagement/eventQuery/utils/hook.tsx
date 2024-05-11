@@ -25,7 +25,7 @@ export function useEventQueryHook() {
   const form = reactive<searchFormType>({
     matchId: '',
     dataSourceCode: '',
-    eventCode: '',
+    eventCode: [],
     endTime: '',
     startTime: ''
   });
@@ -49,7 +49,7 @@ export function useEventQueryHook() {
     try {
       loading.value = true;
       const res = await API.getMatchEventByMatchId({
-        ...(removeEmptyStringKeys(form) as searchFormType),
+        ...(removeEmptyStringKeys({...form,eventCode:form.eventCode?.length?form.eventCode?.toString():''}) ),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
@@ -64,8 +64,6 @@ export function useEventQueryHook() {
       });
 
       if (matchInfoRes?.code) return message(res?.msg, { type: 'error' });
-
-      console.log('fuck', matchInfoRes.data);
 
       matchInfo.aTeamName = matchInfoRes.data.aTeamName;
       matchInfo.aTeamName = matchInfoRes.data.aTeamName;

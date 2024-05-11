@@ -2,8 +2,7 @@
   <div class="main">
     <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
 
-    <div
-      v-if="matchEventList.length"
+    <div v-if=" matchInfo.matchId"
       class="mt-3 search-form bg-bg_color w-[99/100] pl-8 pt-[12px] flex flex-col"
     >
       <span>{{ matchInfo.sportName }}</span>
