@@ -45,22 +45,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="`${t('事件名称')}:`" prop="eventName">
-        <el-select
-          v-model="form.eventCode"
-          :placeholder="t('事件名称')"
-          clearable
-          class="!w-[150px]"
-          @change="changeEventName"
-        >
-          <el-option
-            :label="item.eventName"
-            :value="item.eventCode"
-            v-for="item in pandaMatchList"
-            :key="item.eventCode"
-          />
-        </el-select>
-      </el-form-item>
+      
 
       <el-form-item>
         <el-button
