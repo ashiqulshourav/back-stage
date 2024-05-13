@@ -2,11 +2,6 @@ import dayjs from 'dayjs';
 
 export const columns: TableColumnList = [
   {
-    label: t('序号'),
-    type: 'index',
-    minWidth: 100
-  },
-  {
     label: t('事件源发生时间'),
     prop: 'createdAt',
     minWidth: 150,

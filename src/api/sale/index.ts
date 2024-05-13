@@ -13,7 +13,7 @@ export const saleData = {
     matchCondition?: number;
     startTime?: string;
     endTime?: string;
-  }) => http.request<SaleDataAPI.PreSaleListRes>("post", "/match/v1/getPreSaleList", { data }),
+  }) => http.request<SaleDataAPI.PreSaleListRes>("post", "/match/v1/getPreSaleList", {data}),
   //- 冠军体育预开售列表
   getChampionPreSaleList: (data: {
     matchId?: number;
@@ -26,63 +26,44 @@ export const saleData = {
     matchCondition?: number;
     startTime?: string;
     endTime?: string;
-  }) => http.request<SaleDataAPI.PreSaleListRes>("post", "/match/v1/getChampionPreSaleList", { data }),
+  }) => http.request<SaleDataAPI.PreSaleListRes>("post", "/match/v1/getChampionPreSaleList", {data}),
 
   getBetItemsList: (data: {
     matchId: number;
-  }) => http.request<SaleDataAPI.getBetItemsListResType>("post", "/betItems/v1/getBetItemsList", { data }),
+  }) => http.request<SaleDataAPI.getBetItemsListResType>("post", "/betItems/v1/getBetItemsList", {data}),
 
   getChampionBetItemsList: (data: {
     matchId: number;
-  }) => http.request<SaleDataAPI.getChampionBetItemsListResType>("post", "/betItems/v1/getChampionBetItemsList", { data }),
+  }) => http.request<SaleDataAPI.getChampionBetItemsListResType>("post", "/betItems/v1/getChampionBetItemsList", {data}),
 
   /** 投注玩法锁盘  */
   saleBetItems: (data: {
     matchId: number;
     betItemList: string[],
-  }) => http.request<SaleDataAPI.saleBetItemsResType>("post", "/betItems/v1/saleBetItems", { data }),
+  }) => http.request<SaleDataAPI.saleBetItemsResType>("post", "/betItems/v1/saleBetItems", {data}),
 
   /** 投注玩法批量开启  */
   openSaleBetItems: (data: {
     matchId: number;
     betItemList: string[],
-  }) => http.request<SaleDataAPI.saleBetItemsResType>("post", "/betItems/v1/openSaleBetItems", { data }),
+  }) => http.request<SaleDataAPI.saleBetItemsResType>("post", "/betItems/v1/openSaleBetItems", {data}),
 
   /** 赛事批量锁盘  */
   saleBetItemsByMatchIds: (data: {
     matchIdList: number[],
-  }) => http.request<SaleDataAPI.saleBetItemsResType>("post", "/betItems/v1/saleBetItemsByMatchIds", { data }),
+  }) => http.request<SaleDataAPI.saleBetItemsResType>("post", "/betItems/v1/saleBetItemsByMatchIds", {data}),
 
   /** 赛事批量解锁  */
   openBetItemsByMatchId: (data: {
     matchIdList: number[],
-  }) => http.request<SaleDataAPI.saleBetItemsResType>("post", "/betItems/v1/openBetItemsByMatchId", { data }),
+  }) => http.request<SaleDataAPI.saleBetItemsResType>("post", "/betItems/v1/openBetItemsByMatchId", {data}),
 
   updateSaleStatus: (data: {
     isSale: number;
     matchId: number;
-  }) => http.request<MetadataAPI.TeamListRes>("post", "/match/v1/updateSaleStatus", { data }),
+  }) => http.request<MetadataAPI.TeamListRes>("post", "/match/v1/updateSaleStatus", {data}),
 
   //- 常规比赛更新开售状态
-  updateMatch: (data: SaleDataAPI.UpdateMatchParamsType) => http.request<SaleDataAPI.UpdateMatchResType>("post", "/match/v1/updateMatch", { data }),
+  updateMatch: (data: SaleDataAPI.UpdateMatchParamsType) => http.request<SaleDataAPI.UpdateMatchResType>("post", "/match/v1/updateMatch", {data}),
   //- 冠军玩法更新开售状态
-
-
-  getMorningSets: (data: {
-    matchId?: number;
-    matchName?: number;
-    isSale?: number;
-    beginTime?: string;
-    pageNum?: number;
-    pageSize?: number;
-  }) => http.request<SaleDataAPI.PreSaleListRes>("post", "/match/v1/getMorningSets", { data }),
-
-  getRollingBall: (data: {
-    matchId?: number;
-    matchName?: number;
-    isSale?: number;
-    beginTime?: string;
-    pageNum?: number;
-    pageSize?: number;
-  }) => http.request<SaleDataAPI.PreSaleListRes>("post", "/match/v1/getRollingBall", { data }),
-};
+}
