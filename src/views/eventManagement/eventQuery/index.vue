@@ -21,11 +21,11 @@
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           class="table_container"
+          :max-height="matchInfo.matchId ? '480' : 'auto'"
           align-whole="center"
           showOverflowTooltip
           :loading="loading"
           :size="size"
-          height={{   matchInfo.matchId ? '100' : 'auto' }}
           adaptive
           :default-sort="{ prop: 'level', order: 'descending' }"
           :data="matchEventList"
