@@ -20,7 +20,7 @@ export const columns: TableColumnList = [
     minWidth: 150
   },
   {
-    label: t('单场赛事当日剩余可投注额度'),
+    label: t('单场赛事剩余赔付可用额度'),
     prop: 'matchMaxWinLimit',
     minWidth: 150
   },
@@ -30,7 +30,7 @@ export const columns: TableColumnList = [
   //   minWidth: 150
   // },
   {
-    label: t('串关当日剩余可投额度'),
+    label: t('串关当日剩余赔付可用额度'),
     prop: 'seriesType2DayMaxLimit',
     minWidth: 150
   },
