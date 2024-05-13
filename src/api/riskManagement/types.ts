@@ -50,6 +50,8 @@ declare namespace RiskManagementDataAPI {
     minLimitAmount?: number;
     maxLimitAmount?: number;
     isDelete?: number;
+    createdAt?: string;
+    updatedAt?: string;
   };
   type OrderRejectTypes = {
     sourceCode?: string;
@@ -58,6 +60,8 @@ declare namespace RiskManagementDataAPI {
     eventName?: string;
     betBeforeTime?: number;
     betAfterTime?: number;
+    createdAt?: string;
+    updatedAt?: string;
     isDelete?: number;
   };
   type LimitListType = {

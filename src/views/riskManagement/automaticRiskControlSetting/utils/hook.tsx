@@ -1,7 +1,7 @@
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 import { ElMessageBox } from 'element-plus';
 import { message } from '@/utils/message';
-import { reactive, ref, onMounted } from 'vue';
+import { reactive, ref, onMounted, toRaw } from 'vue';
 import {
   autoLabelColumns,
   orderPlacementColumns,
@@ -347,7 +347,9 @@ export function useRiskControlHook({
       case 1:
         {
           const item = orderPlacementList.pop();
-          delOrderPlacementList.push({ ...item, isDelete: 1 });
+          delOrderPlacementList.push({
+            ...item
+          });
         }
         break;
       case 2:
