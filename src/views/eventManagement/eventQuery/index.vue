@@ -23,9 +23,9 @@
           class="table_container"
           align-whole="center"
           showOverflowTooltip
-          table-layout="auto"
           :loading="loading"
           :size="size"
+          height={{   matchInfo.matchId ? '100' : 'auto' }}
           adaptive
           :default-sort="{ prop: 'level', order: 'descending' }"
           :data="matchEventList"
