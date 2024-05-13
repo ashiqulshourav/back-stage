@@ -77,6 +77,7 @@
     </el-form>
     <el-button
       type="primary"
+      v-if="hasAuth('EXPORT')"
       @click="exportFileClick"
       :loading="exportLoading"
       >{{ t('导出') }}</el-button
@@ -94,6 +95,7 @@ import { SearchFormType } from '../utils/types';
 import dayjs from 'dayjs';
 import Custom_date from '@/components/Form/Custom_date.vue';
 import { message } from '@/utils/message';
+import { hasAuth } from '@/router/utils';
 
 const props = defineProps<{
   loading: boolean;
