@@ -39,7 +39,7 @@ export function matchCombineHook() {
     pairingUser: '',
   });
 
-  const editFrom =reactive<editSearchFormType>({
+  const editFrom = reactive<editSearchFormType>({
     category: 0,
     sportId: null,
     matchId188bet: null,
@@ -74,8 +74,6 @@ export function matchCombineHook() {
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     try {
-      loading.value = true;
-
       if (form.startTime) {
         form.startTime = dayjs(form.startTime).format('YYYY-MM-DD HH:mm:ss')
       } else {
@@ -86,6 +84,7 @@ export function matchCombineHook() {
       } else {
         form.endTime = dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')
       }
+      loading.value = true;
       const res = await API.getMatchPairingList({
         ...removeEmptyStringKeys(form),
         pageSize: pagination.pageSize,
@@ -105,11 +104,9 @@ export function matchCombineHook() {
   }
 
   async function onModalSearch(type?: string) {
-    console.log('###inside onModalSearch')
     if (type === 'reload') editPagination.currentPage = 1;
     try {
       loading.value = true;
-      console.log('###editFrom', editFrom);
       const res = await API.getMatchDataSourceList({
         ...removeEmptyStringKeys(editFrom),
         pageSize: editPagination.pageSize,
@@ -123,7 +120,7 @@ export function matchCombineHook() {
         editPagination.total = res.data.total;
         editPagination.pageSize = res.data.pageSize;
         editPagination.currentPage = res.data.pageNum;
-      }else {
+      } else {
         editPagination.total = 0;
         editPagination.pageSize = 1;
         editPagination.currentPage = 1;
@@ -167,10 +164,10 @@ export function matchCombineHook() {
           onCloseDialog: (params: string) => {
             closeDialog(options, index);
             // 匹配后更新列表数据状态；
-            alreadyMatch.value= params.pairingStatus===1
-            matchInfoDataList.map((item)=>{
-              if(item.matchId===params.matchId){
-                item.pairingStatus=params.pairingStatus
+            alreadyMatch.value = params.pairingStatus === 1
+            matchInfoDataList.map((item) => {
+              if (item.matchId === params.matchId) {
+                item.pairingStatus = params.pairingStatus
               }
             })
 
