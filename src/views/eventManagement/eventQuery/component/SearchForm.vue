@@ -19,7 +19,7 @@
       <el-form-item :label="`${t('输入时间段')}:`" prop="startTime">
         <el-date-picker
           v-model="time"
-          type="daterange"
+          type="datetimerange"
           :start-placeholder="t('开始日期')"
           :end-placeholder="t('结束日期')"
           value-format="x"
@@ -69,9 +69,13 @@
             <el-checkbox v-model="checkAll" @change="handleCheckAll">
               {{ t('全选') }}
             </el-checkbox>
-            <el-checkbox v-model="removeAll" @change="handleRemoveAll" :disabled="form?.eventCode.length == 0">
-            {{ t('全不选') }}
-          </el-checkbox>
+            <el-checkbox
+              v-model="removeAll"
+              @change="handleRemoveAll"
+              :disabled="form?.eventCode.length == 0"
+            >
+              {{ t('全不选') }}
+            </el-checkbox>
             <el-checkbox v-model="checkRevert" @change="handleCheckRevert">
               {{ t('反选') }}
             </el-checkbox>

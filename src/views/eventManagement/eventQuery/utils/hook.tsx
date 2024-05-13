@@ -17,7 +17,7 @@ export function useEventQueryHook() {
 
   const pagination = reactive<PaginationProps>({
     total: 0,
-    pageSize: 10,
+    pageSize: 30,
     currentPage: 1,
     background: true
   });
@@ -49,7 +49,10 @@ export function useEventQueryHook() {
     try {
       loading.value = true;
       const res = await API.getMatchEventByMatchId({
-        ...(removeEmptyStringKeys({...form,eventCode:form.eventCode?.length?form.eventCode?.toString():''}) ),
+        ...removeEmptyStringKeys({
+          ...form,
+          eventCode: form.eventCode?.length ? form.eventCode?.toString() : ''
+        }),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
