@@ -67,22 +67,3 @@ export const saleData = {
   updateMatch: (data: SaleDataAPI.UpdateMatchParamsType) => http.request<SaleDataAPI.UpdateMatchResType>("post", "/match/v1/updateMatch", { data }),
   //- 冠军玩法更新开售状态
 
-
-  getMorningSets: (data: {
-    matchId?: number;
-    matchName?: number;
-    isSale?: number;
-    beginTime?: string;
-    pageNum?: number;
-    pageSize?: number;
-  }) => http.request<SaleDataAPI.PreSaleListRes>("post", "/match/v1/getMorningSets", { data }),
-
-  getRollingBall: (data: {
-    matchId?: number;
-    matchName?: number;
-    isSale?: number;
-    beginTime?: string;
-    pageNum?: number;
-    pageSize?: number;
-  }) => http.request<SaleDataAPI.PreSaleListRes>("post", "/match/v1/getRollingBall", { data }),
-};
