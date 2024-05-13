@@ -130,7 +130,7 @@ const changeDate = t => {
     props.form.endTime = '';
   } else {
     props.form.startTime = dayjs(t[0]).format('YYYY-MM-DD HH:mm:ss');
-    props.form.endTime = dayjs(t[1]).endOf('day').format('YYYY-MM-DD HH:mm:ss');
+    props.form.endTime = dayjs(t[1]).format('YYYY-MM-DD HH:mm:ss');
   }
   emits('onSearch', ...['reload']);
 };
