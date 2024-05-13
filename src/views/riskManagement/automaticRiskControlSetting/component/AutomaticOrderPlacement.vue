@@ -25,12 +25,12 @@
           />
         </el-select>
 
-        <span v-else>{{ row.sourceCode }} </span>
+        <span v-else>{{ row.sourceName }} </span>
       </template>
       <template #eventName="{ row }">
         <el-select
           v-if="isEditRiskControls"
-          v-model="row.level"
+          v-model="row.eventCode"
           :placeholder="t('请选择')"
           clearable
         >
@@ -41,7 +41,7 @@
             :key="idx"
           />
         </el-select>
-        <span v-else>{{ row.level }} </span>
+        <span v-else>{{ row.eventName }} </span>
       </template>
       <template #beforeBetting="{ row }">
         <div v-if="isEditRiskControls" class="flex items-center gap-2">

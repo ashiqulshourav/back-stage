@@ -110,13 +110,13 @@ export function useRiskControlHook({
       const res = await API.getRiskSettleConfigList();
 
       loading.value = false;
-      // if (res.code) return message(res.msg, { type: 'error' });
-      // console.log(res);
+      if (res.code) return message(res.msg, { type: 'error' });
+      console.log(res);
 
-      //riskControlList.length = 0;
-      //sourceRiskControlList.length = 0;
-      // riskControlList.push(...res.data);
-      // sourceRiskControlList.push(...res.data);
+      orderPlacementList.length = 0;
+      sourceOrderPlacementList.length = 0;
+      orderPlacementList.push(...res.data);
+      sourceOrderPlacementList.push(...res.data);
       loading.value = false;
     } catch (error) {
       loading.value = false;
