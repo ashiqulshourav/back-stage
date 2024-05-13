@@ -16,6 +16,7 @@
           v-model="row.sourceCode"
           :placeholder="t('事件源')"
           clearable
+          :onChange="changeSourceName(row)"
         >
           <el-option
             :label="item.label"
@@ -31,14 +32,16 @@
         <el-select
           v-if="isEditRiskControls"
           v-model="row.eventCode"
-          :placeholder="t('请选择')"
+          :placeholder="t('事件名称')"
           clearable
+          class="!w-[150px]"
+          :onChange="changeEventName(row)"
         >
           <el-option
-            :label="item"
-            :value="item"
-            v-for="(item, idx) in sportLimmitList"
-            :key="idx"
+            :label="item.eventName"
+            :value="item.eventCode"
+            v-for="item in pandaMatchList"
+            :key="item.eventCode"
           />
         </el-select>
         <span v-else>{{ row.eventName }} </span>
@@ -53,7 +56,7 @@
         </div>
         <span v-else> {{ row.betBeforeTime }} {{ t('秒') }} </span>
       </template>
-      <template #betAfterTime="{ row }">
+      <template #afterBetting="{ row }">
         <div v-if="isEditRiskControls" class="flex items-center gap-2">
           <el-input
             :formatter="v => formatNumberAndFillNull(v, 13)"
@@ -109,7 +112,7 @@ import { getLabelLevelByName } from '@/components/RiskLabelList/utils';
 import { PandaMatch } from '@/views/eventManagement/eventQuery/utils/types';
 import { EVENT_SOURCE } from '@/views/eventManagement/eventQuery/utils/map';
 
-const sportLimmitList = reactive<string[]>([]);
+const pandaMatchList = reactive<PandaMatch[]>([]);
 
 const { tableHeaderStyleBlue } = usePublicHooks();
 const props = defineProps<{
@@ -122,14 +125,29 @@ const props = defineProps<{
   pandaMatchList: PandaMatch[];
 }>();
 
-const getLimmitLevelList = async () => {
-  const res = await API.getLimitListDropDownBox();
-  if (res.code) return;
-  sportLimmitList.length = 0;
-  sportLimmitList.push(...res.data);
+const getPandaMatchEventList = async () => {
+  const res = await API.getPandaMatchEventList();
+  pandaMatchList.push(...res.data);
 };
+
+const changeEventName = (row): any => {
+  row.eventName = pandaMatchList.find(
+    item => item.eventCode == row.eventCode
+  )?.eventName;
+};
+
+const changeSourceName = (row): any => {
+  row.sourceName = EVENT_SOURCE.find(
+    item => item.value == row.sourceCode
+  )?.label;
+};
+
 onMounted(() => {
-  getLimmitLevelList();
+  getPandaMatchEventList();
+});
+
+onMounted(() => {
+  getPandaMatchEventList();
 });
 </script>
 

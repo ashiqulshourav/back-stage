@@ -208,9 +208,22 @@ export function useRiskControlHook({
     }).then(async () => {
       loading.value = true;
 
+      const transformPayload = (
+        data: RiskManagementDataAPI.OrderPlacementTypes[]
+      ) => {
+        return data.map(item => ({
+          ...item,
+          betBeforeTime: parseInt(item.betBeforeTime || 0),
+          betAfterTime: parseInt(item.betAfterTime || 0),
+          minLimitAmount: parseInt(item.minLimitAmount || 0),
+          maxLimitAmount: parseInt(item.maxLimitAmount || 0),
+          event_name: item.eventName
+        }));
+      };
+
       const res = await API.updateAutoLimitConfig([
-        ...riskControlList,
-        ...delRiskControlList
+        ...transformPayload(orderPlacementList),
+        ...transformPayload(delOrderPlacementList)
       ]);
       loading.value = false;
       isEditRiskControls.value = false;
