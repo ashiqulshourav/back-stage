@@ -4,7 +4,7 @@ import { reactive, ref } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { searchFormType } from './types';
 
-export function bettingBalanceInquiryHook() {
+export function bettingBalanceInquiryHook(category: number, venueType: number) {
   const dataList = reactive<OperateManagementDataAPI.BetBalanceType[]>([]);
   const loading = ref(true);
   const pagination = reactive<PaginationProps>({
@@ -16,6 +16,7 @@ export function bettingBalanceInquiryHook() {
   const form = reactive<searchFormType>({
     userId: '',
     matchId: '',
+    category: category,
   });
 
   function handleTableWidthChange(val: number) {
@@ -41,6 +42,7 @@ export function bettingBalanceInquiryHook() {
           ...removeEmptyStringKeys(form),
           userId: form.userId,
           matchId: form.matchId,
+          category: form.category,
         });
       loading.value = false;
       dataList.length = 0;

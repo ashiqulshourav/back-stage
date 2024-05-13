@@ -1,5 +1,8 @@
 <template>
-  <div class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]">
+  <div class="search-form bg-bg_color w-[99/100] pl-2 pt-3">
+    <div class="text-left font-bold mb-3">
+      <span>{{ t('用户赔付可用余额查询') }}</span>
+    </div>
     <el-form ref="formRef" :inline="true" :model="form">
       <el-form-item prop="id">
         <el-input
