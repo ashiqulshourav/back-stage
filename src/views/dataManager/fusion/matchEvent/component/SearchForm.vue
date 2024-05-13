@@ -109,9 +109,9 @@
               :placeholder="t('匹配方式')"
               class="!w-[150px]"
           >
-            <el-option :label="t('不限')" :value="' '" />
-            <el-option :label="t('人工匹配')" :value="1" />
-            <el-option :label="t('自动匹配')" :value="2" />
+            <el-option :label="t('不限')" :value=0 />
+            <el-option :label="t('人工匹配')" :value=1 />
+            <el-option :label="t('自动匹配')" :value=2 />
           </el-select>
         </el-form-item>
 

@@ -5,6 +5,7 @@ export const matchSource = [
 ];
 
 export const matchMethod = [
-  { label: t('熊猫'), value: 1 },
-  { label: t('播控'), value: 2 },
+  { label: '', value: 0 },
+  { label: t('人工匹配'), value: 1 },
+  { label: t('自动匹配'), value: 2 },
 ];
