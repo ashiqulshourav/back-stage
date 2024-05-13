@@ -7,10 +7,12 @@
       :category="props.category"
     />
     <PureTableBar
-      :title="t('投注余额查询')"
       :columns="columns"
       @refresh="onSearch('reload')"
     >
+      <template #title>
+        <span class="flex items-end text-sm -ml-4">{{ t('统计时间：北京时间中午12:00:00-隔日11:59:59') }}</span>
+      </template>
       <template v-slot="{ size }">
         <pure-table
           class="table_container"
