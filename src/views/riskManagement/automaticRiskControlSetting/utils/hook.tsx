@@ -212,7 +212,11 @@ export function useRiskControlHook({
         data: RiskManagementDataAPI.OrderPlacementTypes[]
       ) => {
         return data.map(item => ({
-          ...item,
+          sourceCode: item.sourceCode,
+          sourceName: item.sourceName,
+          eventCode: item.eventCode,
+          eventName: item.eventName,
+          isDelete: item.isDelete,
           betBeforeTime: parseInt(item.betBeforeTime || 0),
           betAfterTime: parseInt(item.betAfterTime || 0),
           minLimitAmount: parseInt(item.minLimitAmount || 0),
