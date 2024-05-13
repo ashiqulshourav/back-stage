@@ -23,7 +23,7 @@
           :start-placeholder="t('开始日期')"
           :end-placeholder="t('结束日期')"
           value-format="x"
-          format="YYYY-MM-DD"
+          format="YYYY-MM-DD HH:mm:ss"
           @change="changeDate"
         />
       </el-form-item>
