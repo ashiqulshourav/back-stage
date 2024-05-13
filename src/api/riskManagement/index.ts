@@ -59,6 +59,10 @@ export const riskManagementData = {
       'post',
       '/betLimit/update',
       { data }
-    )
+    ),
   // mockAPI.deleteRiskTag(data)
+
+  // order placement
+  getRiskSettleConfigList: () =>
+    http.request<any>('post', '/risk/settle/config/list')
 };
