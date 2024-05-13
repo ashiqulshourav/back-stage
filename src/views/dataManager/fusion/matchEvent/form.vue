@@ -15,7 +15,7 @@
           </td>
         </tr>
         <tr>
-          <th>{{ t('客队名称')}}</th>
+          <th>{{ t('主队名称')}}</th>
           <td>
             <div>{{ matchSourceDetails.homeTeamNameCn }}</div>
             <div>{{ matchSourceDetails.homeTeamNameEn }}</div>
