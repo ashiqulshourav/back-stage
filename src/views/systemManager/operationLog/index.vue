@@ -1,14 +1,16 @@
 <template>
-  <div class="main">
+  <div class="main !mt-2">
     <SearchForm
       :loading="loading"
       :operationTypeList="operationTypeList"
-      :searchMenuList="searchMenuList"
       @on-search="onSearch"
+      @exportFileClick="exportFileClick"
+      :exportLoading="exportLoading"
       :form="form"
+      :logTypeList="logTypeList"
     />
     <PureTableBar
-      :title="t('操作日志表')"
+      :title="t('操作日志列表')"
       :columns="columns"
       @refresh="onSearch('reload')"
     >
@@ -21,6 +23,7 @@
           :loading="loading"
           :size="size"
           adaptive
+          border
           :data="dataList"
           :columns="dynamicColumns"
           :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
@@ -29,8 +32,25 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
+          <template #operateType="{ row }">
+            {{ logTypeList[row.operateType] }}
+          </template>
+
           <template #requestLog="{ row }">
-            <el-button type="primary" :link="true" @click="openRequestLog(row)">
+            <el-button
+              type="primary"
+              :link="true"
+              @click="openRequestLog(t('操作参数'), row.requestLog)"
+            >
+              {{ t('点击查看') }}
+            </el-button>
+          </template>
+          <template #operateAfter="{ row }">
+            <el-button
+              type="primary"
+              :link="true"
+              @click="openRequestLog(t('修改后参数'), row.operateAfter)"
+            >
               {{ t('点击查看') }}
             </el-button>
           </template>
@@ -42,7 +62,6 @@
 
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
-// import AddFill from '@iconify-icons/ri/add-circle-line';
 import { useOperationLog } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
 import RequestDialog from './component/RequestDialog.vue';
@@ -52,33 +71,34 @@ import { usePublicHooks } from '@/hooks';
 
 defineOptions({ name: 'OPERATIONLOG' });
 const { tableHeaderStyle } = usePublicHooks();
-const openRequestLog = (row: OperationLogDataAPI.OperationLogListFetchList) => {
+
+const openRequestLog = (title: string, val: string) => {
   addDialog({
-    title: t('请求参数'),
+    title,
+    alignCenter: true,
     props: {
-      requestLog: JSON.parse(row.requestLog) ?? {}
+      requestLog: JSON.parse(JSON.stringify(val)) ?? {}
     },
-    width: '40%',
-    draggable: true,
+    width: '20%',
     hideFooter: true,
-    fullscreenIcon: true,
     closeOnClickModal: false,
     contentRenderer: () => h(RequestDialog)
   });
 };
 
-// const formRef = ref();
 const {
   loading,
   columns,
   dataList,
   pagination,
+  operationTypeList,
+  form,
+  exportLoading,
+  logTypeList,
+  exportFileClick,
   onSearch,
   handleTableWidthChange,
-  handleCurrentChange,
-  operationTypeList,
-  searchMenuList,
-  form
+  handleCurrentChange
 } = useOperationLog();
 </script>
 
