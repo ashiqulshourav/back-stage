@@ -214,8 +214,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
         dataList.map((item: any, index) => {
           item.index = index + 1;
         });
-
-
         pagination.total = res.data?.count;
         pagination.pageSize = res.data?.pageSize;
         pagination.currentPage = res.data?.pageNum;
@@ -262,12 +260,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
     const r = res.data.pageData.map((item: any, i) => {
       const arr: any[] = [];
       const data = { ...item, ...item?.combineOrderDetails[0] };
-      data.riskStatusArr = [];
-      data.betResultArr = []
-      data.combineOrderDetails.map((item2:BetOrderAPI.Detail) => {
-        data.riskStatusArr?.push(item2.riskStatus)
-        data.betResultArr.push (item2.betResult)
-      });
       columns.forEach((column: { prop: string }) => {
         let str = '';
         switch (column.prop.toString()) {
@@ -322,7 +314,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
                 getStatus(
                   data.status,
                   data.billStatus,
-                  data.betResultArr,
+                  data.betResult,
                   data.isReserve,
                   data.riskStatusArr,
                   data.isSpecialSettle
@@ -335,7 +327,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
                 getStatus(
                   data.status,
                   data.billStatus,
-                  data.betResultArr,
+                  data.betResult,
                   data.isReserve,
                   data.riskStatusArr,
                   data.isSpecialSettle
@@ -409,6 +401,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
         API.orderCancel(params).then(res => {
           if (res.code) {
           } else {
+            // onSearch();
             getRowByOrderId(data.id);
           }
           message(res.msg, { type: res.code ? 'error' : 'success' });
