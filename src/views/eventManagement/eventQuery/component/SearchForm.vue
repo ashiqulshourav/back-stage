@@ -65,6 +65,7 @@
           check-on-click-node
           style="width: 240px"
         >
+        
           <template #header>
             <el-checkbox v-model="checkAll" @change="handleCheckAll">
               {{ t('全选') }}
