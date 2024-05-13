@@ -35,6 +35,7 @@ export const columns: TableColumnList = [
       return <div style="white-space:pre-wrap">{operateBefore}</div>;
     },
     prop: 'operateBefore',
+    slot: 'operateBefore',
     minWidth: 200,
     headerRenderer: d => handleTableWidth(d, t('修改前'), 'auto')
   },

@@ -45,6 +45,15 @@
               {{ t('点击查看') }}
             </el-button>
           </template>
+          <template #operateBefore="{ row }">
+            <el-button
+              type="primary"
+              :link="true"
+              @click="openRequestLog(t('修改前参数'), row.operateBefore)"
+            >
+              {{ t('点击查看') }}
+            </el-button>
+          </template>
           <template #operateAfter="{ row }">
             <el-button
               type="primary"
