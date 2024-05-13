@@ -27,9 +27,26 @@ declare namespace OperationLogDataAPI {
     updatedAt: string;
   }
 
+
+  type OperationLogList = {
+    id: string;
+    userId: number;
+    userName: string;
+    requestLog: string;
+    operateLog: string;
+    operateType: string;
+    operateMenu: string;
+    operateIp: string;
+    operateTime: number;
+    createdAt: string;
+    updatedAt: string;
+    operateBefore: string;
+    operateAfter: string;
+  }
+
   type OperationLogListFetchData = {
     total: number;
-    list: OperationLogListFetchList[];
+    list: OperationLogList[];
     pageNum: number;
     pageSize: number;
     size: number;
@@ -47,6 +64,7 @@ declare namespace OperationLogDataAPI {
     navigateFirstPage: number;
     navigateLastPage: number;
   }
+
 
   type OperationLogListFetchRes = COMMON.BASE_RES_TYPE<OperationLogListFetchData>;
 
@@ -67,9 +85,7 @@ declare namespace OperationLogDataAPI {
     id: number;
     parentId: number;
     menuName: string;
-    value?: number;
-    label?: string;
-    children: OperationMenuTypeChildren[] | null;
+    children: OperationMenuTypeChildren[];
   }
 
 }
