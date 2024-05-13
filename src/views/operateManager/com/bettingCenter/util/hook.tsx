@@ -260,6 +260,13 @@ export function useBettingCenterHook(category: number, venueType: number) {
     const r = res.data.pageData.map((item: any, i) => {
       const arr: any[] = [];
       const data = { ...item, ...item?.combineOrderDetails[0] };
+      data.combineOrderDetails.map((item2:BetOrderAPI.Detail) => {
+        data.riskStatusArr=[];
+        data.betResultArr=[]
+        data.riskStatusArr?.push(item2.riskStatus)
+        data.betResultArr.push (item2.betResult)
+      });
+
       columns.forEach((column: { prop: string }) => {
         let str = '';
         switch (column.prop.toString()) {
@@ -314,7 +321,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
                 getStatus(
                   data.status,
                   data.billStatus,
-                  data.betResult,
+                  data.betResultArr,
                   data.isReserve,
                   data.riskStatusArr,
                   data.isSpecialSettle
@@ -327,7 +334,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
                 getStatus(
                   data.status,
                   data.billStatus,
-                  data.betResult,
+                  data.betResultArr,
                   data.isReserve,
                   data.riskStatusArr,
                   data.isSpecialSettle
