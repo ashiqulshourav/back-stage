@@ -21,9 +21,9 @@
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           class="table_container"
+          :max-height="matchInfo.matchId ? '480' : 'auto'"
           align-whole="center"
           showOverflowTooltip
-          table-layout="auto"
           :loading="loading"
           :size="size"
           adaptive
@@ -32,7 +32,7 @@
           :columns="dynamicColumns"
           :pagination="{
             ...pagination,
-            pageSizes: [50, 100, 200, 500, 1000]
+            pageSizes: [30, 50, 100, 200, 500, 1000]
           }"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
