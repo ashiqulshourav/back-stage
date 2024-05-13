@@ -32,7 +32,7 @@
           :columns="dynamicColumns"
           :pagination="{
             ...pagination,
-            pageSizes: [50, 100, 200, 500, 1000]
+            pageSizes: [30, 50, 100, 200, 500, 1000]
           }"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
