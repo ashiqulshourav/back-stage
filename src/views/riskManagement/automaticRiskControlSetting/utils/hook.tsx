@@ -9,6 +9,7 @@ import {
 } from '../component/TableColumnList';
 import { labelListType } from '@/views/operateManager/com/playerList/utils/types';
 import { PandaMatch } from '@/views/eventManagement/eventQuery/utils/types';
+import { EVENT_NAMES } from './map';
 
 export function useRiskControlHook({
   venueType,
@@ -168,8 +169,9 @@ export function useRiskControlHook({
   };
 
   const toggle = async (flag: boolean) => {
-    const r = await openPasswordInput();
-    if (!r) return;
+    // todo: add later
+    // const r = await openPasswordInput();
+    // if (!r) return;
     isEditRiskControls.value = flag;
   };
 
@@ -203,13 +205,13 @@ export function useRiskControlHook({
       loading.value = false;
       isEditRiskControls.value = false;
       if (res.code) {
-        return message(res.msg, { type: 'error' });
+        message(res.msg, { type: 'error' });
       } else {
-        delrejectOrderList.length = 0;
-
         message(res.msg, { type: res.code ? 'error' : 'success' });
-        onSearchRejectOrder();
       }
+      rejectOrderList.length = 0;
+      delrejectOrderList.length = 0;
+      onSearchRejectOrder();
     });
   };
   // auto label
@@ -244,13 +246,13 @@ export function useRiskControlHook({
       loading.value = false;
       isEditRiskControls.value = false;
       if (res.code) {
-        return message(res.msg, { type: 'error' });
+        message(res.msg, { type: 'error' });
       } else {
-        delOrderPlacementList.length = 0;
-
         message(res.msg, { type: res.code ? 'error' : 'success' });
-        onSearchOrderPlacement();
       }
+      orderPlacementList.length = 0;
+      delOrderPlacementList.length = 0;
+      onSearchOrderPlacement();
     });
   };
   // auto label
@@ -267,13 +269,14 @@ export function useRiskControlHook({
       loading.value = false;
       isEditRiskControls.value = false;
       if (res.code) {
-        return message(res.msg, { type: 'error' });
+        message(res.msg, { type: 'error' });
+        return;
       } else {
-        delRiskControlList.length = 0;
-
         message(res.msg, { type: res.code ? 'error' : 'success' });
-        onSearchAutoLabelLimit();
       }
+      riskControlList.length = 0;
+      delRiskControlList.length = 0;
+      onSearchAutoLabelLimit();
     });
   };
 

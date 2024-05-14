@@ -50,7 +50,7 @@ export const riskManagementData = {
       data: {}
     }),
 
-  updateAutoLimitConfig: (data: RiskManagementDataAPI.RiskControlTypes) =>
+  updateAutoLimitConfig: (data: RiskManagementDataAPI.RiskControlTypes[]) =>
     http.request<any>('post', '/autoLimitConfig/addOrEdit', { data }),
 
   //- 修改单关限额列表

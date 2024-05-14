@@ -41,6 +41,7 @@
             :value="item.eventCode"
             v-for="item in EVENT_NAMES"
             :key="item.eventCode"
+            :disabled="eventDisabled(item.eventCode)"
           />
         </el-select>
         <span v-else>{{ row.eventName }} </span>
@@ -132,6 +133,10 @@ const changeSourceName = (row): any => {
   row.sourceName = EVENT_SOURCE.find(
     item => item.value == row.sourceCode
   )?.label;
+};
+
+const eventDisabled = (eventCode: string) => {
+  return props.orderPlacementList.some(item => item.eventCode == eventCode);
 };
 </script>
 
