@@ -29,3 +29,18 @@ export const AUTO_RISK_CONTROLS: auto_risks_control_type[] = [
     linkName: 'AUTO_RISKS_LABEL_LIMIT_DETAIL'
   }
 ];
+
+export const EVENT_NAMES = [
+  {
+    eventName: '进球事件',
+    eventCode: 'goal'
+  },
+  {
+    eventName: '红牌事件',
+    eventCode: 'red_card'
+  },
+  {
+    eventName: '获得点球事件',
+    eventCode: 'penalty_awarded'
+  }
+] as const;

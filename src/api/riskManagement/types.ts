@@ -28,7 +28,6 @@ declare namespace RiskManagementDataAPI {
     remark?: string;
     labelType?: number;
   };
-  // baptiste - check with backend attrs
   type RiskControlTypes = {
     name?: string;
     days?: number;
@@ -41,6 +40,7 @@ declare namespace RiskManagementDataAPI {
     delFlag?: number; // 1是删除 其他则无感
   };
   type OrderPlacementTypes = {
+    id?: number | string;
     sourceCode?: string;
     sourceName?: string;
     eventCode?: string;
