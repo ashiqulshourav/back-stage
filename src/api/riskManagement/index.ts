@@ -74,5 +74,12 @@ export const riskManagementData = {
     http.request<any>('post', '/risk/bet/config/list'),
 
   editRiskBetConfigEdit: (data: RiskManagementDataAPI.OrderRejectTypes[]) =>
-    http.request<any>('post', '/risk/bet/config/edit', { data })
+    http.request<any>('post', '/risk/bet/config/edit', { data }),
+
+  // order freeze list
+  getRiskFreezeConfigList: () =>
+    http.request<any>('post', '/risk/freeze/config/list'),
+
+  getRiskFreezeConfigEdit: () =>
+    http.request<any>('post', '/risk/freeze/config/list')
 };
