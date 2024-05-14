@@ -38,6 +38,8 @@ declare namespace RiskManagementDataAPI {
     labelId?: number;
     lableName?: string | number;
     delFlag?: number; // 1是删除 其他则无感
+    minLimitAmount?: number;
+    maxLimitAmount?: number;
   };
   type OrderPlacementTypes = {
     id?: number | string;

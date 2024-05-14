@@ -13,9 +13,13 @@ export const autoLabelColumns: TableColumnList = [
     label: t('注单数量'),
     slot: 'numberOfBets'
   },
+  // {
+  //   label: t('用户输赢金额'),
+  //   slot: 'winLossAmount'
+  // },
   {
     label: t('用户输赢金额'),
-    slot: 'winLossAmount'
+    slot: 'betAmount'
   },
   {
     label: t('用户输赢率'),
