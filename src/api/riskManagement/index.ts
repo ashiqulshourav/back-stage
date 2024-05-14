@@ -66,13 +66,13 @@ export const riskManagementData = {
   getRiskSettleConfigList: () =>
     http.request<any>('post', '/risk/settle/config/list'),
 
-  updateOrderPlacement: (data: RiskManagementDataAPI.OrderPlacementTypes) =>
+  updateOrderPlacement: (data: RiskManagementDataAPI.OrderPlacementTypes[]) =>
     http.request<any>('post', '/risk/settle/config/edit', { data }),
 
   // order reject list
   getRiskBetConfigList: () =>
     http.request<any>('post', '/risk/bet/config/list'),
 
-  editRiskBetConfigEdit: (data: RiskManagementDataAPI.OrderRejectTypes) =>
+  editRiskBetConfigEdit: (data: RiskManagementDataAPI.OrderRejectTypes[]) =>
     http.request<any>('post', '/risk/bet/config/edit', { data })
 };
