@@ -192,7 +192,7 @@ export function useRiskControlHook({
           isDelete: item.isDelete,
           betBeforeTime: parseInt(item.betBeforeTime || 0),
           betAfterTime: parseInt(item.betAfterTime || 0),
-          event_name: item.eventName
+          event_name: item.eventName,
         }));
       };
 
