@@ -9,6 +9,7 @@ import {
 } from '../component/TableColumnList';
 import { labelListType } from '@/views/operateManager/com/playerList/utils/types';
 import { PandaMatch } from '@/views/eventManagement/eventQuery/utils/types';
+import { EVENT_NAMES } from './map';
 
 export function useRiskControlHook({
   venueType,
@@ -79,26 +80,20 @@ export function useRiskControlHook({
     }
   };
 
-  const getPandaMatchEventList = async () => {
-    const res = await API.getPandaMatchEventList();
-    pandaMatchList.push(...res.data);
-  };
-
   // reject
-  async function onSearchRejectOrder() {
+  async function onSearchFreezeOrder() {
     try {
-      loading.value = true;
-      // const res = await API.getRiskSettleConfigList();
-
-      loading.value = false;
-      // if (res.code) return message(res.msg, { type: 'error' });
+      // loading.value = true;
+      // const res = await API.getRiskFreezeConfigList();
+      // loading.value = false;
       // console.log(res);
-
-      //riskControlList.length = 0;
-      //sourceRiskControlList.length = 0;
-      // riskControlList.push(...res.data);
-      // sourceRiskControlList.push(...res.data);
-      loading.value = false;
+      // // if (res.code) return message(res.msg, { type: 'error' });
+      // // console.log(res);
+      // // rejectOrderList.length = 0;
+      // // sourcerejectOrderList.length = 0;
+      // // rejectOrderList.push(...res.data);
+      // // sourcerejectOrderList.push(...res.data);
+      // loading.value = false;
     } catch (error) {
       loading.value = false;
     }
@@ -123,6 +118,24 @@ export function useRiskControlHook({
     }
   }
   // auto freeze
+  async function onSearchRejectOrder() {
+    try {
+      loading.value = true;
+      const res = await API.getRiskSettleConfigList();
+
+      loading.value = false;
+      if (res.code) return message(res.msg, { type: 'error' });
+      console.log(res);
+
+      orderPlacementList.length = 0;
+      sourceOrderPlacementList.length = 0;
+      orderPlacementList.push(...res.data);
+      sourceOrderPlacementList.push(...res.data);
+      loading.value = false;
+    } catch (error) {
+      loading.value = false;
+    }
+  }
 
   // risk control label limit
   async function onSearchAutoLabelLimit() {
@@ -157,6 +170,7 @@ export function useRiskControlHook({
         break;
       case 2:
         {
+          onSearchFreezeOrder();
         }
         break;
       case 3:
@@ -173,8 +187,9 @@ export function useRiskControlHook({
   };
 
   const toggle = async (flag: boolean) => {
-    const r = await openPasswordInput();
-    if (!r) return;
+    // todo: add later
+    // const r = await openPasswordInput();
+    // if (!r) return;
     isEditRiskControls.value = flag;
   };
 
@@ -185,20 +200,36 @@ export function useRiskControlHook({
     }).then(async () => {
       loading.value = true;
 
-      const res = await API.updateAutoLimitConfig([
-        ...riskControlList,
-        ...delRiskControlList
+      const transformPayload = (
+        data: RiskManagementDataAPI.OrderPlacementTypes[]
+      ) => {
+        return data.map(item => ({
+          id: item?.id,
+          sourceCode: item.sourceCode,
+          sourceName: item.sourceName,
+          eventCode: item.eventCode,
+          eventName: item.eventName,
+          isDelete: item.isDelete,
+          betBeforeTime: parseInt(item.betBeforeTime || 0),
+          betAfterTime: parseInt(item.betAfterTime || 0),
+          event_name: item.eventName
+        }));
+      };
+
+      const res = await API.editRiskBetConfigEdit([
+        ...transformPayload(rejectOrderList),
+        ...transformPayload(delrejectOrderList)
       ]);
       loading.value = false;
       isEditRiskControls.value = false;
       if (res.code) {
-        return message(res.msg, { type: 'error' });
+        message(res.msg, { type: 'error' });
       } else {
-        delRiskControlList.length = 0;
-
         message(res.msg, { type: res.code ? 'error' : 'success' });
-        onSearchAutoLabelLimit();
       }
+      rejectOrderList.length = 0;
+      delrejectOrderList.length = 0;
+      onSearchRejectOrder();
     });
   };
   // auto label
@@ -212,7 +243,12 @@ export function useRiskControlHook({
         data: RiskManagementDataAPI.OrderPlacementTypes[]
       ) => {
         return data.map(item => ({
-          ...item,
+          id: item?.id,
+          sourceCode: item.sourceCode,
+          sourceName: item.sourceName,
+          eventCode: item.eventCode,
+          eventName: item.eventName,
+          isDelete: item.isDelete,
           betBeforeTime: parseInt(item.betBeforeTime || 0),
           betAfterTime: parseInt(item.betAfterTime || 0),
           minLimitAmount: parseInt(item.minLimitAmount || 0),
@@ -221,20 +257,20 @@ export function useRiskControlHook({
         }));
       };
 
-      const res = await API.updateAutoLimitConfig([
+      const res = await API.updateOrderPlacement([
         ...transformPayload(orderPlacementList),
         ...transformPayload(delOrderPlacementList)
       ]);
       loading.value = false;
       isEditRiskControls.value = false;
       if (res.code) {
-        return message(res.msg, { type: 'error' });
+        message(res.msg, { type: 'error' });
       } else {
-        delRiskControlList.length = 0;
-
         message(res.msg, { type: res.code ? 'error' : 'success' });
-        onSearchAutoLabelLimit();
       }
+      orderPlacementList.length = 0;
+      delOrderPlacementList.length = 0;
+      onSearchOrderPlacement();
     });
   };
   // auto label
@@ -251,13 +287,14 @@ export function useRiskControlHook({
       loading.value = false;
       isEditRiskControls.value = false;
       if (res.code) {
-        return message(res.msg, { type: 'error' });
+        message(res.msg, { type: 'error' });
+        return;
       } else {
-        delRiskControlList.length = 0;
-
         message(res.msg, { type: res.code ? 'error' : 'success' });
-        onSearchAutoLabelLimit();
       }
+      riskControlList.length = 0;
+      delRiskControlList.length = 0;
+      onSearchAutoLabelLimit();
     });
   };
 
@@ -348,7 +385,8 @@ export function useRiskControlHook({
         {
           const item = orderPlacementList.pop();
           delOrderPlacementList.push({
-            ...item
+            ...item,
+            isDelete: 1
           });
         }
         break;
@@ -393,8 +431,7 @@ export function useRiskControlHook({
 
   onMounted(async () => {
     dispatchGetLabelList();
-    onSearchAutoLabelLimit();
-    // getPandaMatchEventList();
+    onSearchRejectOrder();
   });
 
   return {

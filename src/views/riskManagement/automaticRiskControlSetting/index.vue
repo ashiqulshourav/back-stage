@@ -27,7 +27,14 @@
       <div>
         <!-- Automatically reject -->
         <div v-if="currentRiskControlLabelId == 0">
-          <AutomaticReject />
+          <AutomaticReject
+            :isEditRiskControls="isEditRiskControls"
+            :loading="loading"
+            :columns="rejectOrderColumns"
+            :addControlLabel="addControlLabel"
+            :deleteControlLabel="deleteControlLabel"
+            :rejectOrderList="rejectOrderList"
+          />
         </div>
         <!-- Automatic order placement -->
         <div v-if="currentRiskControlLabelId == 1">
@@ -37,7 +44,6 @@
             :columns="orderPlacementColumns"
             :addControlLabel="addControlLabel"
             :deleteControlLabel="deleteControlLabel"
-            :pandaMatchList="pandaMatchList"
             :orderPlacementList="orderPlacementList"
           />
         </div>

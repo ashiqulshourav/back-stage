@@ -34,14 +34,14 @@
           v-model="row.eventCode"
           :placeholder="t('事件名称')"
           clearable
-          class="!w-[150px]"
           :onChange="changeEventName(row)"
         >
           <el-option
             :label="item.eventName"
             :value="item.eventCode"
-            v-for="item in pandaMatchList"
+            v-for="item in EVENT_NAMES"
             :key="item.eventCode"
+            :disabled="eventDisabled(item.eventCode)"
           />
         </el-select>
         <span v-else>{{ row.eventName }} </span>
@@ -111,8 +111,7 @@ import { getLabelColor } from '@/components/RiskLabelList/utils';
 import { getLabelLevelByName } from '@/components/RiskLabelList/utils';
 import { PandaMatch } from '@/views/eventManagement/eventQuery/utils/types';
 import { EVENT_SOURCE } from '@/views/eventManagement/eventQuery/utils/map';
-
-const pandaMatchList = reactive<PandaMatch[]>([]);
+import { EVENT_NAMES } from '../utils/map';
 
 const { tableHeaderStyleBlue } = usePublicHooks();
 const props = defineProps<{
@@ -122,16 +121,10 @@ const props = defineProps<{
   orderPlacementList: RiskManagementDataAPI.OrderPlacementTypes[];
   addControlLabel: () => void;
   deleteControlLabel: () => void;
-  pandaMatchList: PandaMatch[];
 }>();
 
-const getPandaMatchEventList = async () => {
-  const res = await API.getPandaMatchEventList();
-  pandaMatchList.push(...res.data);
-};
-
 const changeEventName = (row): any => {
-  row.eventName = pandaMatchList.find(
+  row.eventName = EVENT_NAMES.find(
     item => item.eventCode == row.eventCode
   )?.eventName;
 };
@@ -142,13 +135,9 @@ const changeSourceName = (row): any => {
   )?.label;
 };
 
-onMounted(() => {
-  getPandaMatchEventList();
-});
-
-onMounted(() => {
-  getPandaMatchEventList();
-});
+const eventDisabled = (eventCode: string) => {
+  return props.orderPlacementList.some(item => item.eventCode == eventCode);
+};
 </script>
 
 <style scoped lang="scss">
