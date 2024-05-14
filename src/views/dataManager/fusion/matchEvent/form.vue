@@ -1,38 +1,8 @@
 <template>
-  <div class="grid grid-cols-5 bg-gray-100 ">
+  <div class="grid grid-cols-5 bg-gray-100">
     <div class="place-content-center col-span-1 m-2">
       <div class="text-center text-lg font-bold mb-5">{{ t('正在编辑的赛事信息') }}</div>
-      <table class="vertical-table">
-        <tr>
-          <th>{{ t('赛事ID')}}</th>
-          <td>{{ matchSourceDetails.matchId }}</td>
-        </tr>
-        <tr>
-          <th>{{ t('联赛名称')}}</th>
-          <td>
-            <div>{{ matchSourceDetails.leagueNameCn }}</div>
-            <div>{{ matchSourceDetails.leagueNameEn }}</div>
-          </td>
-        </tr>
-        <tr>
-          <th>{{ t('主队名称')}}</th>
-          <td>
-            <div>{{ matchSourceDetails.homeTeamNameCn }}</div>
-            <div>{{ matchSourceDetails.homeTeamNameEn }}</div>
-          </td>
-        </tr>
-        <tr>
-          <th>{{ t('客队名称')}}</th>
-          <td>
-            <div>{{ matchSourceDetails.awayTeamNameCn }}</div>
-            <div>{{ matchSourceDetails.awayTeamNameEn }}</div>
-          </td>
-        </tr>
-        <tr>
-          <th>{{ t('比赛开始时间')}}</th>
-          <td>{{ matchSourceDetails.beginTime }}</td>
-        </tr>
-      </table>
+      <VerticalTable :columns="selectedEventColumns" :dataList="matchSourceDetails"/>
     </div>
     <div class="col-span-4 m-2">
       <SearchForm
@@ -102,7 +72,8 @@ import { PureTableBar } from '@/components/RePureTableBar';
 import { matchCombineHook } from './utils/hook';
 import SearchForm from './component/ModalSearchForm.vue';
 import { usePublicHooks } from '@/hooks';
-import { matchColumns } from './component/TableColumnList';
+import { matchColumns, selectedEventColumns } from './component/TableColumnList';
+import VerticalTable from '@/components/VerticalTable/index.vue';
 
 const { tableHeaderStyle } = usePublicHooks();
 const {
@@ -111,7 +82,7 @@ const {
   editFrom,
   openManualMatchDialog,
   matchInfoDataList,
-  alreadyMatch,
+  // alreadyMatch,
   editPagination,
   handleSelectionChange,
   handleModalTableWidthChange,
@@ -121,6 +92,8 @@ const {
 const props = withDefaults(defineProps<{rowData: MatchCombineAPI.matchPairingDetail}>(), {});
 const emits = defineEmits(['reloadTable', 'closeDialog']);
 const matchSourceDetails = ref(props.rowData);
+const alreadyMatch = matchSourceDetails.value.pairingType !== 0;
+
 onMounted(() => {
     const date = props?.rowData?.beginTime?.split(' ');
     if(date?.length){
@@ -162,26 +135,5 @@ const handleNullValue = (value: string | number) => {
     height: 100px;
     text-align: center;
   }
-}
-
-.vertical-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-  width: 100%;
-  border: 1px solid #FFFFFF;
-}
-
-.vertical-table th,
-.vertical-table td {
-  text-align: left;
-  padding: 16px;
-  border-right: 1px solid #FFFFFF;
-}
-
-.vertical-table tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-.vertical-table tr:nth-child(odd) {
-  background-color: #FFFFFF;
 }
 </style>
