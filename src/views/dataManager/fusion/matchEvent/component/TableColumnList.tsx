@@ -107,3 +107,26 @@ export const matchColumns: TableColumnList = [
     slot: 'operation'
   }
 ];
+
+export const selectedEventColumns = [
+  {
+    label: t('赛事ID'),
+    keys: ["matchId"],
+  },
+  {
+    label: t('联赛名称'),
+    keys: ["leagueNameCn", "leagueNameEn"],
+  },
+  {
+    label: t('主队名称'),
+    keys: ["homeTeamNameCn", "homeTeamNameEn"],
+  },
+  {
+    label: t('客队名称'),
+    keys: ["awayTeamNameCn", "awayTeamNameEn"],
+  },
+  {
+    label: t('比赛开始时间'),
+    keys: ["beginTime"],
+  }
+];
