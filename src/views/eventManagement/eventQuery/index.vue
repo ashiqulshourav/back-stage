@@ -17,11 +17,44 @@
       :title="t('赛事列表')"
       :columns="columns"
       @refresh="onSearch('reload')"
+      v-if="matchInfo.matchId"
     >
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           class="table_container"
-          :max-height="matchInfo.matchId ? '480' : 'auto'"
+          :max-height="'calc(100vh - 450px)'"
+          align-whole="center"
+          showOverflowTooltip
+          :loading="loading"
+          :size="size"
+          adaptive
+          :default-sort="{ prop: 'level', order: 'descending' }"
+          :data="matchEventList"
+          :columns="dynamicColumns"
+          :pagination="{
+            ...pagination,
+            pageSizes: [30, 50, 100, 200, 500, 1000]
+          }"
+          :paginationSmall="size === 'small' ? true : false"
+          :header-cell-style="tableHeaderStyle"
+          @page-current-change="handleCurrentChange"
+          @page-size-change="handlePageSizeChange"
+        >
+          <template #score="{ row }">
+            <span> {{ row.t1 }} - {{ row.t2 }} </span>
+          </template>
+        </pure-table>
+      </template>
+    </PureTableBar>
+    <PureTableBar
+      :title="t('赛事列表')"
+      :columns="columns"
+      @refresh="onSearch('reload')"
+      v-else
+    >
+      <template v-slot="{ size, dynamicColumns }">
+        <pure-table
+          class="table_container"
           align-whole="center"
           showOverflowTooltip
           :loading="loading"
