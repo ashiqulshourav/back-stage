@@ -81,20 +81,19 @@ export function useRiskControlHook({
   };
 
   // reject
-  async function onSearchRejectOrder() {
+  async function onSearchFreezeOrder() {
     try {
-      loading.value = true;
-      const res = await API.getRiskBetConfigList();
-
-      loading.value = false;
-      if (res.code) return message(res.msg, { type: 'error' });
-      console.log(res);
-
-      rejectOrderList.length = 0;
-      sourcerejectOrderList.length = 0;
-      rejectOrderList.push(...res.data);
-      sourcerejectOrderList.push(...res.data);
-      loading.value = false;
+      // loading.value = true;
+      // const res = await API.getRiskFreezeConfigList();
+      // loading.value = false;
+      // console.log(res);
+      // // if (res.code) return message(res.msg, { type: 'error' });
+      // // console.log(res);
+      // // rejectOrderList.length = 0;
+      // // sourcerejectOrderList.length = 0;
+      // // rejectOrderList.push(...res.data);
+      // // sourcerejectOrderList.push(...res.data);
+      // loading.value = false;
     } catch (error) {
       loading.value = false;
     }
@@ -119,6 +118,24 @@ export function useRiskControlHook({
     }
   }
   // auto freeze
+  async function onSearchRejectOrder() {
+    try {
+      loading.value = true;
+      const res = await API.getRiskSettleConfigList();
+
+      loading.value = false;
+      if (res.code) return message(res.msg, { type: 'error' });
+      console.log(res);
+
+      orderPlacementList.length = 0;
+      sourceOrderPlacementList.length = 0;
+      orderPlacementList.push(...res.data);
+      sourceOrderPlacementList.push(...res.data);
+      loading.value = false;
+    } catch (error) {
+      loading.value = false;
+    }
+  }
 
   // risk control label limit
   async function onSearchAutoLabelLimit() {
@@ -153,6 +170,7 @@ export function useRiskControlHook({
         break;
       case 2:
         {
+          onSearchFreezeOrder();
         }
         break;
       case 3:
