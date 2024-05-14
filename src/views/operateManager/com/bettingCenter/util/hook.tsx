@@ -149,9 +149,9 @@ export function useBettingCenterHook(category: number, venueType: number) {
     try {
       const params: searchFormType = formatParams({
         export: false,
-        orderId:orderId
+        orderId:orderId,
+        pageNum:1
       }) as searchFormType;
-
       const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
         params
       );
