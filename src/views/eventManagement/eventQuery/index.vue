@@ -89,7 +89,7 @@ import { t } from '@/plugins/i18n';
 import { columns } from './component/TableColumnList';
 import SearchForm from './component/SearchForm.vue';
 
-defineOptions({ name: 'CONFIGCENTER_EVENT_QUERY' });
+defineOptions({ name: 'EVENTMANAGEMENT_EVENTQUERY' });
 const { tableHeaderStyle } = usePublicHooks();
 
 const {
