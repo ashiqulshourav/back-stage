@@ -36,7 +36,10 @@
               {{ t('编辑') }}
             </el-button>
             <el-button
-              v-if="userStore.userInfo.name === 'armour'"
+              v-if="
+                userStore.userInfo.name === 'armour' ||
+                userStore.userInfo.name.includes('xman')
+              "
               class="reset-margin"
               link
               type="danger"
