@@ -79,25 +79,20 @@ export function useRiskControlHook({
     }
   };
 
-  const getPandaMatchEventList = async () => {
-    const res = await API.getPandaMatchEventList();
-    pandaMatchList.push(...res.data);
-  };
-
   // reject
   async function onSearchRejectOrder() {
     try {
       loading.value = true;
-      // const res = await API.getRiskSettleConfigList();
+      const res = await API.getRiskBetConfigList();
 
       loading.value = false;
-      // if (res.code) return message(res.msg, { type: 'error' });
-      // console.log(res);
+      if (res.code) return message(res.msg, { type: 'error' });
+      console.log(res);
 
-      //riskControlList.length = 0;
-      //sourceRiskControlList.length = 0;
-      // riskControlList.push(...res.data);
-      // sourceRiskControlList.push(...res.data);
+      rejectOrderList.length = 0;
+      sourcerejectOrderList.length = 0;
+      rejectOrderList.push(...res.data);
+      sourcerejectOrderList.push(...res.data);
       loading.value = false;
     } catch (error) {
       loading.value = false;
@@ -185,19 +180,35 @@ export function useRiskControlHook({
     }).then(async () => {
       loading.value = true;
 
-      const res = await API.updateAutoLimitConfig([
-        ...riskControlList,
-        ...delRiskControlList
+      const transformPayload = (
+        data: RiskManagementDataAPI.OrderPlacementTypes[]
+      ) => {
+        return data.map(item => ({
+          id: item?.id,
+          sourceCode: item.sourceCode,
+          sourceName: item.sourceName,
+          eventCode: item.eventCode,
+          eventName: item.eventName,
+          isDelete: item.isDelete,
+          betBeforeTime: parseInt(item.betBeforeTime || 0),
+          betAfterTime: parseInt(item.betAfterTime || 0),
+          event_name: item.eventName
+        }));
+      };
+
+      const res = await API.editRiskBetConfigEdit([
+        ...transformPayload(rejectOrderList),
+        ...transformPayload(delrejectOrderList)
       ]);
       loading.value = false;
       isEditRiskControls.value = false;
       if (res.code) {
         return message(res.msg, { type: 'error' });
       } else {
-        delRiskControlList.length = 0;
+        delrejectOrderList.length = 0;
 
         message(res.msg, { type: res.code ? 'error' : 'success' });
-        onSearchAutoLabelLimit();
+        onSearchRejectOrder();
       }
     });
   };
@@ -212,6 +223,7 @@ export function useRiskControlHook({
         data: RiskManagementDataAPI.OrderPlacementTypes[]
       ) => {
         return data.map(item => ({
+          id: item?.id,
           sourceCode: item.sourceCode,
           sourceName: item.sourceName,
           eventCode: item.eventCode,
@@ -225,7 +237,7 @@ export function useRiskControlHook({
         }));
       };
 
-      const res = await API.updateAutoLimitConfig([
+      const res = await API.updateOrderPlacement([
         ...transformPayload(orderPlacementList),
         ...transformPayload(delOrderPlacementList)
       ]);
@@ -234,10 +246,10 @@ export function useRiskControlHook({
       if (res.code) {
         return message(res.msg, { type: 'error' });
       } else {
-        delRiskControlList.length = 0;
+        delOrderPlacementList.length = 0;
 
         message(res.msg, { type: res.code ? 'error' : 'success' });
-        onSearchAutoLabelLimit();
+        onSearchOrderPlacement();
       }
     });
   };
@@ -352,7 +364,8 @@ export function useRiskControlHook({
         {
           const item = orderPlacementList.pop();
           delOrderPlacementList.push({
-            ...item
+            ...item,
+            isDelete: 1
           });
         }
         break;
@@ -397,8 +410,7 @@ export function useRiskControlHook({
 
   onMounted(async () => {
     dispatchGetLabelList();
-    onSearchAutoLabelLimit();
-    // getPandaMatchEventList();
+    onSearchRejectOrder();
   });
 
   return {
