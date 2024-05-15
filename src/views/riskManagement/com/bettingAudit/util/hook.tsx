@@ -178,9 +178,10 @@ export function useBettingAuditHook(venueType: number) {
       const params: searchFormType = formatParams(
         {
           export: false,
-          orderId: orderId
+          orderId: orderId,
+          pageNum:1,
         },
-        1 // reset pageNum
+
       ) as searchFormType;
 
       const res: BetOrderAPI.BetOrderResType = await API.bettingAuditList(
