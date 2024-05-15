@@ -115,7 +115,7 @@ export function matchCombineHook() {
       loading.value = false;
       matchInfoDataList.length = 0;
       if (res.data.list) {
-        alreadyMatch.value = res.data.list.filter(item => item.pairingStatus === 1).length > 0;
+        // alreadyMatch.value = res.data.list.filter(item => item.pairingStatus === 1).length > 0;
         matchInfoDataList.push(...res.data.list)
         editPagination.total = res.data.total;
         editPagination.pageSize = res.data.pageSize;
