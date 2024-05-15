@@ -82,7 +82,7 @@ const {
   editFrom,
   openManualMatchDialog,
   matchInfoDataList,
-  // alreadyMatch,
+  alreadyMatch,
   editPagination,
   handleSelectionChange,
   handleModalTableWidthChange,
@@ -92,7 +92,7 @@ const {
 const props = withDefaults(defineProps<{rowData: MatchCombineAPI.matchPairingDetail}>(), {});
 const emits = defineEmits(['reloadTable', 'closeDialog']);
 const matchSourceDetails = ref(props.rowData);
-const alreadyMatch = matchSourceDetails.value.pairingType !== 0;
+alreadyMatch.value = matchSourceDetails.value.pairingType !== 0;
 
 onMounted(() => {
     const date = props?.rowData?.beginTime?.split(' ');
