@@ -1,167 +1,74 @@
 import { message } from '@/utils/message';
-// import editForm from '../form.vue';
-import type { PaginationProps } from '@pureadmin/table';
-import { ElMessageBox } from 'element-plus';
-import { SearchFormType } from './type';
-import { usePublicHooks } from '@/hooks';
+import { SearchFormType, handicapListType } from './type';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { baseHandicapList } from './baseData';
 
 export function useTradingHook() {
-  const dataList = reactive<SaleDataAPI.PreSaleList[]>([]);
   const loading = ref(true);
-  const allSaleSatatus = ref(0);
-  const { switchStyle } = usePublicHooks();
-  const matchCondition = ref(1);
-  const selectLockcList = reactive<SaleDataAPI.PreSaleList[]>([]);
-  const pagination = reactive<PaginationProps>({
-    total: 0,
-    pageSize: 10,
-    currentPage: 1,
-    background: true
-  });
+  const handicapLoading = ref(true);
+  const selectContentType = ref('all');
+  const matchList = reactive<sportTradingDataAPI.getMorningSetMatchListData[]>(
+    []
+  );
+  const handicapList = reactive<handicapListType[]>(baseHandicapList);
+  const currentMatch = reactive<sportTradingDataAPI.MatchDtoList>(
+    {} as sportTradingDataAPI.MatchDtoList
+  );
   const searchForm = reactive<SearchFormType>({
     sportId: 1,
-    league: '',
-    match: '',
+    leagueNameOrId: '',
+    matchNameOrId: '',
     startTime: '',
     endTime: ''
   });
 
-  function changeSwitch({
-    row
-  }: {
-    row: SaleDataAPI.PreSaleList;
-    index: number;
-  }) {
-    ElMessageBox.confirm(
-      row.isSale ? t(`确认要开售吗?`) : t('确认要下架吗？'),
-      t('系统提示'),
-      {
-        confirmButtonText: t('确定'),
-        cancelButtonText: t('取消'),
-        type: 'warning',
-        center: true,
-        dangerouslyUseHTMLString: true,
-        draggable: true
-      }
-    )
-      .then(async () => {
-        const res = await API.updateSaleStatus({
-          isSale: row.isSale,
-          matchId: row.matchId
-        });
-        if (res.code) return message(res.msg, { type: 'error' });
-        message(res.msg, { type: 'success' });
-        onSearch();
-      })
-      .catch(() => (row.isSale = row.isSale === 0 ? 1 : 0));
-  }
-
-  function handleTableWidthChange(pageSize: number) {
-    pagination.pageSize = pageSize;
-    pagination.currentPage = 1;
-    onSearch();
-  }
-
-  function handleCurrentChange(val: number) {
-    pagination.currentPage = val;
-    onSearch();
-  }
-
-  function handleSelectionChange(slectList: SaleDataAPI.PreSaleList[]) {
-    selectLockcList.length = 0;
-    selectLockcList.push(...slectList);
-  }
-
-  const locakMatch = () => {
-    ElMessageBox.confirm(`${t('确定要锁定选中比赛么?')} `, {
-      type: 'warning',
-      center: true
-    }).then(async () => {
-      const res: SaleDataAPI.saleBetItemsResType =
-        await API.saleBetItemsByMatchIds({
-          matchIdList: selectLockcList.map(_ => _.matchId)
-        });
-      message(res.msg, { type: res.code ? 'error' : 'success' });
-      if (res.code) return;
-      onSearch();
-    });
-  };
-
-  const unLocakMatch = () => {
-    ElMessageBox.confirm(`${t('确定要解锁选中的比赛么?')} `, {
-      type: 'warning',
-      center: true
-    }).then(async () => {
-      const res: SaleDataAPI.saleBetItemsResType =
-        await API.openBetItemsByMatchId({
-          matchIdList: selectLockcList.map(_ => _.matchId)
-        });
-      message(res.msg, { type: res.code ? 'error' : 'success' });
-      if (res.code) return;
-      onSearch();
-    });
-  };
-
   //- 初始化搜索
-  const onSearch = async (type?: 'reload') => {
-    if (type === 'reload') pagination.currentPage = 1;
+  const onSearch = async () => {
     loading.value = true;
-    const res: SaleDataAPI.PreSaleListRes = await API.getPreSaleList({
-      ...removeEmptyStringKeys(searchForm),
-      pageSize: pagination.pageSize,
-      pageNum: pagination.currentPage,
-      matchCondition: matchCondition.value
+    const res = await API.getMorningSetMatchList({
+      ...removeEmptyStringKeys(searchForm)
     });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
-    dataList.length = 0;
-    dataList.push(...res.data.list);
-    pagination.total = res.data.total;
-    pagination.pageSize = res.data.pageSize;
-    pagination.currentPage = res.data.pageNum;
+    matchList.length = 0;
+    const firstRenderList = res.data.slice(0, 1);
+    matchList.push(...firstRenderList);
+    Object.assign(currentMatch, matchList[0]?.matchDtoList[0]);
+    //- 获取赛事盘口
+    getHandicapltems();
+    //- 后续列表填充
+    res.data.slice(1).forEach(item => {
+      setTimeout(() => matchList.push(item), 20);
+    });
   };
 
-  const changeMatchCondition = (n: number) => {
-    matchCondition.value = n;
-    onSearch('reload');
+  //- 盘口赛事列表接口
+  const getHandicapltems = async () => {
+    handicapLoading.value = true;
+    const res = await API.getHandicapItems({ matchId: currentMatch.matchId });
+    handicapLoading.value = false;
+    if (res.code) return;
+    const tempList = handicapList.slice(1);
+
+    tempList.forEach(_ => {
+      _.list = res.data[
+        _.listType as keyof sportTradingDataAPI.getHandicapItemsData
+      ] as sportTradingDataAPI.BetItemsDtoList[];
+      _.amount = res.data[
+        _.amountType as keyof sportTradingDataAPI.getHandicapItemsData
+      ] as number;
+    });
+    handicapList[0].list = tempList.map(item => item.list).flat();
+    handicapList[0].amount = tempList
+      .map(item => item.amount)
+      .reduce((pre, next) => pre + next);
+    console.log('hook.tsx文件 65==============行打印=', handicapList);
   };
 
-  //- 开启关闭加时赛点球大战
-  const changeOverTimeStatus = ({
-    row
-  }: {
-    row: SaleDataAPI.PreSaleList;
-    index: number;
-  }) => {
-    ElMessageBox.confirm(
-      row.isSale
-        ? t(`确定要开启加时赛/点球大战么?`)
-        : t('确定要关闭加时赛/点球大战么？'),
-      t('系统提示'),
-      {
-        confirmButtonText: t('确定'),
-        cancelButtonText: t('取消'),
-        type: 'warning',
-        center: true,
-        dangerouslyUseHTMLString: true,
-        draggable: true
-      }
-    )
-      .then(async () => {
-        const res = await API.updateMatch({
-          overTimeAndPenaltyKickStatus: row.overTimeAndPenaltyKickStatus,
-          matchId: row.matchId
-        });
-        message(res.msg, { type: res.code ? 'error' : 'success' });
-        if (!res.code) onSearch();
-      })
-      .catch(
-        () =>
-          (row.overTimeAndPenaltyKickStatus = row.overTimeAndPenaltyKickStatus
-            ? false
-            : true)
-      );
+  //- 修改左侧选中比赛ID
+  const changeSelectMatch = (data: sportTradingDataAPI.MatchDtoList) => {
+    Object.assign(currentMatch, data);
+    getHandicapltems();
   };
 
   onMounted(() => {
@@ -170,21 +77,13 @@ export function useTradingHook() {
 
   return {
     loading,
-    dataList,
-    pagination,
+    matchList,
     onSearch,
-    handleTableWidthChange,
-    handleCurrentChange,
-    handleSelectionChange,
-    changeSwitch,
-    allSaleSatatus,
+    handicapLoading,
     searchForm,
-    switchStyle,
-    matchCondition,
-    changeMatchCondition,
-    locakMatch,
-    selectLockcList,
-    unLocakMatch,
-    changeOverTimeStatus
+    currentMatch,
+    changeSelectMatch,
+    handicapList,
+    selectContentType
   };
 }

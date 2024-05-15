@@ -18,24 +18,24 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item prop="league">
+      <el-form-item prop="leagueNameOrId">
         <el-input
-          v-model="form.league"
+          v-model="form.leagueNameOrId"
           :placeholder="t('联赛名称/ID')"
           v-enter="search"
           clearable
-          :formatter="(v:string) => formatNumber(v)"
+          maxlength="30"
           class="!w-[150px]"
         />
       </el-form-item>
 
-      <el-form-item prop="match">
+      <el-form-item prop="matchNameOrId">
         <el-input
-          v-model="form.match"
+          v-model="form.matchNameOrId"
           :placeholder="t('赛事名称/ID')"
           v-enter="search"
           clearable
-          :formatter="(v:string) => formatNumber(v)"
+          maxlength="30"
           class="!w-[150px]"
         />
       </el-form-item>
@@ -46,7 +46,7 @@
           :key="index"
           :type="selectIndex === index ? 'primary' : ''"
           @click="changeSelectDate(index)"
-          >{{ index === 0 ? t('今日') : item }}</el-button
+          >{{ index === 0 ? t('今日') : item.label }}</el-button
         >
         <CustomDate v-model:val="selectDate" @changeDate="changeDate" />
       </el-form-item>
@@ -76,7 +76,6 @@ import Refresh from '@iconify-icons/ep/refresh';
 import type { FormInstance } from 'element-plus';
 import { SearchFormType } from '../util/type';
 import dayjs from 'dayjs';
-import { formatNumber } from '@/utils/formatNumber';
 import CustomDate from '@/components/Form/Custom_date.vue';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 
@@ -96,8 +95,17 @@ const changeDate = (t: string[]) => {
     props.form.startTime = '';
     props.form.endTime = '';
   } else {
-    props.form.startTime = dayjs(t[0]).startOf('day').valueOf();
-    props.form.endTime = dayjs(t[1]).endOf('day').valueOf();
+    props.form.startTime = dayjs(t[0])
+      .set('hour', 12)
+      .set('minute', 0)
+      .set('second', 0)
+      .format('YYYY-MM-DD HH:mm:ss');
+    props.form.endTime = dayjs(t[1])
+      .add(t[0] === t[1] ? 1 : 0, 'day')
+      .set('hour', 12)
+      .set('minute', 0)
+      .set('second', 0)
+      .format('YYYY-MM-DD HH:mm:ss');
   }
   search();
 };
@@ -105,32 +113,39 @@ const changeDate = (t: string[]) => {
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl?.resetFields();
   selectIndex.value = -1;
-  emits('onSearch', ...['reload']);
+  props.form.endTime = '';
+  props.form.startTime = '';
+  emits('onSearch');
 };
 
 const changeSelectDate = (_: number) => {
   selectIndex.value = _;
-  props.form.startTime = dayjs(preDayArr.value[_])
-    .startOf('day')
+  props.form.startTime = dayjs(preDayArr.value[_].val).format(
+    'YYYY-MM-DD HH:mm:ss'
+  );
+  props.form.endTime = dayjs(preDayArr.value[_].val)
+    .add(1, 'day')
     .format('YYYY-MM-DD HH:mm:ss');
-  props.form.endTime = dayjs(preDayArr.value[_])
-    .endOf('day')
-    .format('YYYY-MM-DD HH:mm:ss');
+  selectDate.value = [props.form.startTime, props.form.endTime] as any;
   search();
 };
 
-const search = () => {
-  emits('onSearch', ...['reload']);
-};
+const search = () => emits('onSearch');
 
 const preDayArr = computed(() => {
   const preDayList = [];
   for (let i = 0; i < 6; i++) {
-    preDayList.push(
-      dayjs()
+    preDayList.push({
+      label: dayjs()
         .add(i, 'day')
-        .format(`MM${t('月')}DD${t('日')}`)
-    );
+        .format(`MM${t('月')}DD${t('日')}`),
+      val: dayjs()
+        .add(i, 'day')
+        .set('hour', 12)
+        .set('minute', 0)
+        .set('second', 0)
+        .format('YYYY-MM-DD HH:mm:ss')
+    });
   }
   return preDayList;
 });

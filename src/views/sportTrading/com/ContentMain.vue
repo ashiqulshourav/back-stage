@@ -5,40 +5,51 @@
         <div class="flex items-center">
           <span
             class="w-4 h-4 flex items-center text-[12px] justify-center bg-primary text-center rounded-full leading-4 text-white"
-            >4</span
           >
-          <span class="text-[#409EFF] ml-1">{{ t('英国超级联赛') }}</span>
+            <span class="scale-75">
+              {{ currentMatch?.level === 200 ? t('未') : currentMatch?.level }}
+            </span>
+            {{}}
+          </span>
+          <span class="text-[#409EFF] ml-1">{{
+            currentMatch?.leagueNameCn
+          }}</span>
         </div>
         <div class="flex ml-5">
           <div :class="['text-[--el-color-primary] flex items-center']">
-            <span>小明小明小明小明小明小明小明</span>
+            <span>{{ currentMatch?.homeTeamNameCn }}</span>
             <span
               class="w-4 font-bold h-4 flex items-center text-[12px] scale-75 justify-center bg-[--el-color-warning] text-white rounded-full leading-4"
               >{{ t('主') }}</span
             >
           </div>
           <div :class="['text-[--el-color-primary] !mr-1 !ml-1']">V</div>
-          <div :class="['text-[--el-color-danger]']">销量</div>
+          <div :class="['text-[--el-color-danger]']">
+            {{ currentMatch?.awayTeamNameCn }}
+          </div>
         </div>
       </div>
       <div class="flex ml-5">
         <el-button
-          type="primary"
           round
           size="small"
-          v-for="item in 5"
-          :key="item"
-          >{{ t('全部') }}(6)</el-button
+          v-for="(item, index) in handicapList"
+          :key="index"
+          :type="selectContentType === item.listType ? 'primary' : ''"
+          >{{ item.val }}({{ item.amount }})</el-button
         >
       </div>
     </div>
+
     <div class="flex items-center pl-3 pt-1 mb-2">
-      <span>2024-05-11</span>
+      <span>{{ currentMatch?.beginTime }}</span>
       <div class="flex pl-2">
         <IconGroup />
       </div>
     </div>
-    <div class="w-full h-full overflow-hidden pl-5">
+
+    <!-- - 赛事内容列表 -->
+    <div class="w-full h-full overflow-hidden pl-5" v-loading="handicapLoading">
       <el-scrollbar>
         <el-collapse
           ref="collapseRef"
@@ -47,32 +58,45 @@
           :accordion="false"
           @change="handleChange"
         >
-          <el-collapse-item :name="item" v-for="item in 5" :key="item">
+          <el-collapse-item
+            :name="index"
+            v-for="(item, index) in handicapList"
+            :key="index"
+          >
             <template #title>
               <div class="flex items-center">
-                <el-button type="primary" size="small">{{
-                  t('主要玩法')
-                }}</el-button>
+                <el-button type="primary" size="small">
+                  {{ item.val }}
+                </el-button>
                 <div class="flex justify-between ml-4">
                   <IconGroup />
                 </div>
               </div>
             </template>
-            <div class="ml-5 flex w-full" v-for="_ in 3" :key="_">
-              <div class="flex items-center self-start">
-                <span class="">全场独赢</span>
+            <div
+              class="ml-5 flex w-full"
+              v-for="(_, idx) in item.list"
+              :key="idx"
+            >
+              <div
+                class="flex items-center self-start w-[280px] justify-between"
+              >
+                <span>{{ _.betItemsName }}</span>
                 <div class="flex pl-2">
                   <IconGroup />
                 </div>
               </div>
+
               <div class="ml-2 flex-grow">
                 <div
-                  v-for="_ in 2"
+                  v-for="(d, i) in _.betItemsDtoList"
                   class="flex w-full justify-around pb-2 h-[35px]"
-                  :key="_"
+                  :key="i"
                 >
                   <div class="text-[--el-color-primary]">主队</div>
-                  <div class="text-[--el-color-danger]">1.93</div>
+                  <div class="text-[--el-color-danger]">
+                    {{ d.betItemsDtoList[0].odds }}
+                  </div>
                   <div @mouseenter="enterEvent" @mouseleave="levelEvent">
                     <div
                       v-if="!isShow"
@@ -113,12 +137,20 @@
 </template>
 
 <script setup lang="ts">
+import { handicapListType } from '../util/type';
 import IconGroup from './IconGroup.vue';
 import { t } from '@/plugins/i18n';
 const collapseRef = ref();
-const activeNames = ref([1]);
+const activeNames = ref([0]);
 const num = ref();
 const isShow = ref(false);
+
+const props = defineProps<{
+  handicapLoading: boolean;
+  currentMatch: sportTradingDataAPI.MatchDtoList;
+  handicapList: handicapListType[];
+  selectContentType: string;
+}>();
 
 const handleChange = (val: string[]) => {
   console.log(val);

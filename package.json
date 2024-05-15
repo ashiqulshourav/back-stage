@@ -28,7 +28,7 @@
   "dependencies": {
     "@pureadmin/descriptions": "^1.1.1",
     "@pureadmin/table": "^3.1.2",
-    "@pureadmin/utils": "^1.9.6",
+    "@pureadmin/utils": "^2.4.7",
     "@vueuse/core": "^10.2.0",
     "animate.css": "^4.1.1",
     "axios": "^1.4.0",
@@ -51,13 +51,14 @@
     "vue-i18n": "^9.2.2",
     "vue-json-pretty": "^2.3.0",
     "vue-router": "^4.2.2",
+    "vue-tippy": "^6.4.1",
     "vue-types": "^5.1.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.6",
     "@commitlint/config-conventional": "^17.6.6",
-    "@iconify-icons/fa-solid": "^1.2.4",
     "@iconify-icons/ep": "^1.2.12",
+    "@iconify-icons/fa-solid": "^1.2.4",
     "@iconify-icons/icon-park-outline": "^1.2.11",
     "@iconify-icons/ri": "^1.2.9",
     "@iconify/vue": "^4.1.1",

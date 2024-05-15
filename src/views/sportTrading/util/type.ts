@@ -1,7 +1,16 @@
 export type SearchFormType = {
   sportId: number | string;
-  league: number | string;
-  match: number | string;
+  leagueNameOrId: number | string;
+  matchNameOrId: number | string;
   startTime: number | string;
   endTime: number | string;
 }
+
+export type handicapListType =
+  {
+    listType: string;
+    val: string;
+    list: sportTradingDataAPI.BetItemsDtoList[];
+    amount: number;
+    amountType: string;
+  }
