@@ -23,6 +23,7 @@
             :value="item.value"
             v-for="item in EVENT_SOURCE"
             :key="item.value"
+            :disabled="sourceDisabled(item.value)"
           />
         </el-select>
 
@@ -120,6 +121,10 @@ const changeSourceName = (row): any => {
 
 const eventDisabled = (eventCode: string) => {
   return props.rejectOrderList.some(item => item.eventCode == eventCode);
+};
+
+const sourceDisabled = (sourceCode: string) => {
+  return props.rejectOrderList.some(item => item.sourceCode == sourceCode);
 };
 </script>
 
