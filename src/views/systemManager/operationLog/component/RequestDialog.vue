@@ -1,21 +1,10 @@
 <template>
-  <vue-json-pretty
-    v-model:data="renderData"
-    :deep="3"
-    :show-double-quotes="true"
-    :show-line="true"
-    :show-length="true"
-    :show-line-number="true"
-    :editable="false"
-  />
+  <div v-html="renderData" style="white-space: pre-wrap" class="ml-5"></div>
 </template>
 
 <script setup lang="ts">
-import VueJsonPretty from 'vue-json-pretty';
-import 'vue-json-pretty/lib/styles.css';
-import { JSONDataType } from 'vue-json-pretty/types/utils';
 const props = defineProps<{
-  requestLog: JSONDataType;
+  requestLog: any;
 }>();
 
 const renderData = reactive<Record<string, unknown>>(
