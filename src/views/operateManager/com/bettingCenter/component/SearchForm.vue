@@ -246,13 +246,11 @@
           </el-button>
           <el-button
             type="primary"
+            :icon="useRenderIcon(Download)"
+            :loading="downloading"
             v-if="hasAuth('EXPORT')"
             @click="exportFile()"
           >
-            <IconifyIconOffline
-              :icon="downloading ? 'loadingIcon' : 'download'"
-              :style="{marginRight: '6px', animation: downloading ? 'rotate 2s linear infinite' : 'none'}"
-            />
             {{ t('导出报表') }}
           </el-button>
         </el-form-item>
@@ -275,6 +273,8 @@ import {
   SPORT_CATEGORY
 } from '@/utils/maps/sports_map';
 import { searchFormType } from '../util/types';
+import Download from '@iconify-icons/ep/download';
+
 const props = defineProps<{
   loading: boolean;
   riskLabelList:UserAPI.labelType[];
