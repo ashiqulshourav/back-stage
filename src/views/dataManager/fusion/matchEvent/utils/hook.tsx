@@ -11,7 +11,7 @@ export function matchCombineHook() {
   const matchInfoDataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
   const matchInfo = reactive<MatchCombineAPI.matchSourceDetail>({} as MatchCombineAPI.matchSourceDetail);
   const loading = ref(true);
-  // const alreadyMatch = ref<Boolean>(false);
+  const alreadyMatch = ref<Boolean>(false);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 20,
@@ -164,7 +164,7 @@ export function matchCombineHook() {
           onCloseDialog: (params: string) => {
             closeDialog(options, index);
             // 匹配后更新列表数据状态；
-            // alreadyMatch.value = params.pairingStatus === 1
+            alreadyMatch.value = params.pairingStatus === 1
             matchInfoDataList.map((item) => {
               if (item.matchId === params.matchId) {
                 item.pairingStatus = params.pairingStatus
@@ -191,7 +191,7 @@ export function matchCombineHook() {
     openManualMatchDialog,
     matchInfo,
     matchInfoDataList,
-    // alreadyMatch,
+    alreadyMatch,
     handleModalTableWidthChange,
     handleModalCurrentChange,
     editPagination,
