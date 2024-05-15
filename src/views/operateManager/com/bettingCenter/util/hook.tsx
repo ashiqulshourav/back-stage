@@ -20,7 +20,7 @@ import {
   useSportFormatDetail,
   displayHomeAwayScore,
   BET_RESULT_TYPE_MAP,
-  formatSeriesType
+  formatSeriesType, getIsInplay
 } from '@/utils/formatMatch';
 import dayjs from 'dayjs';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
@@ -149,9 +149,9 @@ export function useBettingCenterHook(category: number, venueType: number) {
     try {
       const params: searchFormType = formatParams({
         export: false,
-        orderId:orderId
+        orderId:orderId,
+        pageNum:1
       }) as searchFormType;
-
       const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
         params
       );
@@ -370,6 +370,9 @@ export function useBettingCenterHook(category: number, venueType: number) {
             break;
           case 'tenantCode': //商户编码
             str = tenantObj[data.tenantId]?.name ?? '';
+            break;
+          case 'betStage': //投注阶段
+            str = getIsInplay(data.isInplay);
             break;
           default:
             str = data[column.prop as string];

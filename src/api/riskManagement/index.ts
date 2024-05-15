@@ -45,14 +45,6 @@ export const riskManagementData = {
       data: { gameType }
     }),
 
-  getAutoLimitConfigList: () =>
-    http.request<any>('post', '/autoLimitConfig/list', {
-      data: {}
-    }),
-
-  updateAutoLimitConfig: (data: any) =>
-    http.request<any>('post', '/autoLimitConfig/addOrEdit', { data }),
-
   //- 修改单关限额列表
   updateLevelLimit: (data: RiskManagementDataAPI.LimitListType[]) =>
     http.request<RiskManagementDataAPI.updateLevelLimitResType>(
@@ -62,7 +54,46 @@ export const riskManagementData = {
     ),
   // mockAPI.deleteRiskTag(data)
 
+  // auto label
+  getAutoLimitConfigList: () =>
+    http.request<RiskManagementDataAPI.RiskControlTypesRes>(
+      'post',
+      '/autoLimitConfig/list',
+      {
+        data: {}
+      }
+    ),
+
+  updateAutoLimitConfig: (data: RiskManagementDataAPI.RiskControlTypes[]) =>
+    http.request<any>('post', '/autoLimitConfig/addOrEdit', { data }),
+
   // order placement
   getRiskSettleConfigList: () =>
-    http.request<any>('post', '/risk/settle/config/list')
+    http.request<RiskManagementDataAPI.OrderPlacementTypesRes>(
+      'post',
+      '/risk/settle/config/list'
+    ),
+
+  updateOrderPlacement: (data: RiskManagementDataAPI.OrderPlacementTypes[]) =>
+    http.request<any>('post', '/risk/settle/config/edit', { data }),
+
+  // order reject list
+  getRiskBetConfigList: () =>
+    http.request<RiskManagementDataAPI.OrderRejectTypesRes>(
+      'post',
+      '/risk/bet/config/list'
+    ),
+
+  editRiskBetConfigEdit: (data: RiskManagementDataAPI.OrderRejectTypes[]) =>
+    http.request<any>('post', '/risk/bet/config/edit', { data }),
+
+  // order freeze list
+  getRiskFreezeConfigList: () =>
+    http.request<RiskManagementDataAPI.AutoFreezeRes>(
+      'post',
+      '/risk/freeze/config/list'
+    ),
+
+  updateRiskFreezeConfigList: (data: RiskManagementDataAPI.AutoFreeze[]) =>
+    http.request<any>('post', '/risk/freeze/config/edit', { data })
 };

@@ -5,7 +5,8 @@ import { reactive, ref, onMounted, toRaw } from 'vue';
 import {
   autoLabelColumns,
   orderPlacementColumns,
-  rejectOrderColumns
+  rejectOrderColumns,
+  autoFreezeColumns
 } from '../component/TableColumnList';
 import { labelListType } from '@/views/operateManager/com/playerList/utils/types';
 import { PandaMatch } from '@/views/eventManagement/eventQuery/utils/types';
@@ -45,6 +46,13 @@ export function useRiskControlHook({
     RiskManagementDataAPI.OrderPlacementTypes[]
   >([]);
   // auto freeze
+  const orderAutoFreezeList = reactive<RiskManagementDataAPI.AutoFreeze[]>([]);
+  const sourceOrderAutoFreezeList = reactive<
+    RiskManagementDataAPI.AutoFreeze[]
+  >([]);
+  const delOrderAutoFreezeList = reactive<RiskManagementDataAPI.AutoFreeze[]>(
+    []
+  );
 
   // auto label limit
   const labelList = reactive<labelListType>({
@@ -79,26 +87,18 @@ export function useRiskControlHook({
     }
   };
 
-  const getPandaMatchEventList = async () => {
-    const res = await API.getPandaMatchEventList();
-    pandaMatchList.push(...res.data);
-  };
-
   // reject
-  async function onSearchRejectOrder() {
+  async function onSearchFreezeOrder() {
     try {
       loading.value = true;
-      // const res = await API.getRiskSettleConfigList();
-
+      const res = await API.getRiskFreezeConfigList();
       loading.value = false;
-      // if (res.code) return message(res.msg, { type: 'error' });
-      // console.log(res);
+      if (res.code) return message(res.msg, { type: 'error' });
 
-      //riskControlList.length = 0;
-      //sourceRiskControlList.length = 0;
-      // riskControlList.push(...res.data);
-      // sourceRiskControlList.push(...res.data);
-      loading.value = false;
+      orderAutoFreezeList.length = 0;
+      sourceOrderAutoFreezeList.length = 0;
+      orderAutoFreezeList.push(...res.data);
+      sourceOrderAutoFreezeList.push(...res.data);
     } catch (error) {
       loading.value = false;
     }
@@ -111,24 +111,37 @@ export function useRiskControlHook({
 
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
-      console.log(res);
 
       orderPlacementList.length = 0;
       sourceOrderPlacementList.length = 0;
       orderPlacementList.push(...res.data);
       sourceOrderPlacementList.push(...res.data);
-      loading.value = false;
     } catch (error) {
       loading.value = false;
     }
   }
   // auto freeze
+  async function onSearchRejectOrder() {
+    try {
+      loading.value = true;
+      const res = await API.getRiskBetConfigList();
+
+      loading.value = false;
+      if (res.code) return message(res.msg, { type: 'error' });
+
+      rejectOrderList.length = 0;
+      sourcerejectOrderList.length = 0;
+      rejectOrderList.push(...res.data);
+      sourcerejectOrderList.push(...res.data);
+    } catch (error) {
+      loading.value = false;
+    }
+  }
 
   // risk control label limit
   async function onSearchAutoLabelLimit() {
     try {
       loading.value = true;
-      console.log('hitting');
       const res = await API.getAutoLimitConfigList();
 
       loading.value = false;
@@ -157,6 +170,7 @@ export function useRiskControlHook({
         break;
       case 2:
         {
+          onSearchFreezeOrder();
         }
         break;
       case 3:
@@ -173,8 +187,9 @@ export function useRiskControlHook({
   };
 
   const toggle = async (flag: boolean) => {
-    const r = await openPasswordInput();
-    if (!r) return;
+    // todo: add later
+    // const r = await openPasswordInput();
+    // if (!r) return;
     isEditRiskControls.value = flag;
   };
 
@@ -185,23 +200,39 @@ export function useRiskControlHook({
     }).then(async () => {
       loading.value = true;
 
-      const res = await API.updateAutoLimitConfig([
-        ...riskControlList,
-        ...delRiskControlList
+      const transformPayload = (
+        data: RiskManagementDataAPI.OrderRejectTypes[]
+      ) => {
+        return data.map(item => ({
+          id: item?.id,
+          sourceCode: item.sourceCode,
+          sourceName: item.sourceName,
+          eventCode: item.eventCode,
+          eventName: item.eventName,
+          isDelete: item.isDelete,
+          betBeforeTime: parseInt(item.betBeforeTime || 0),
+          betAfterTime: parseInt(item.betAfterTime || 0),
+          event_name: item.eventName
+        }));
+      };
+
+      const res = await API.editRiskBetConfigEdit([
+        ...transformPayload(rejectOrderList),
+        ...transformPayload(delrejectOrderList)
       ]);
       loading.value = false;
       isEditRiskControls.value = false;
       if (res.code) {
-        return message(res.msg, { type: 'error' });
+        message(res.msg, { type: 'error' });
       } else {
-        delRiskControlList.length = 0;
-
         message(res.msg, { type: res.code ? 'error' : 'success' });
-        onSearchAutoLabelLimit();
       }
+      rejectOrderList.length = 0;
+      delrejectOrderList.length = 0;
+      onSearchRejectOrder();
     });
   };
-  // auto label
+  // auto order placement
   const confirmOrderPlacement = () => {
     ElMessageBox.confirm(t('确定要修改限额吗？'), t('警告'), {
       center: true
@@ -212,7 +243,12 @@ export function useRiskControlHook({
         data: RiskManagementDataAPI.OrderPlacementTypes[]
       ) => {
         return data.map(item => ({
-          ...item,
+          id: item?.id,
+          sourceCode: item.sourceCode,
+          sourceName: item.sourceName,
+          eventCode: item.eventCode,
+          eventName: item.eventName,
+          isDelete: item.isDelete,
           betBeforeTime: parseInt(item.betBeforeTime || 0),
           betAfterTime: parseInt(item.betAfterTime || 0),
           minLimitAmount: parseInt(item.minLimitAmount || 0),
@@ -221,20 +257,20 @@ export function useRiskControlHook({
         }));
       };
 
-      const res = await API.updateAutoLimitConfig([
+      const res = await API.updateOrderPlacement([
         ...transformPayload(orderPlacementList),
         ...transformPayload(delOrderPlacementList)
       ]);
       loading.value = false;
       isEditRiskControls.value = false;
       if (res.code) {
-        return message(res.msg, { type: 'error' });
+        message(res.msg, { type: 'error' });
       } else {
-        delRiskControlList.length = 0;
-
         message(res.msg, { type: res.code ? 'error' : 'success' });
-        onSearchAutoLabelLimit();
       }
+      orderPlacementList.length = 0;
+      delOrderPlacementList.length = 0;
+      onSearchOrderPlacement();
     });
   };
   // auto label
@@ -251,13 +287,59 @@ export function useRiskControlHook({
       loading.value = false;
       isEditRiskControls.value = false;
       if (res.code) {
-        return message(res.msg, { type: 'error' });
+        message(res.msg, { type: 'error' });
+        return;
       } else {
-        delRiskControlList.length = 0;
-
         message(res.msg, { type: res.code ? 'error' : 'success' });
-        onSearchAutoLabelLimit();
       }
+      riskControlList.length = 0;
+      delRiskControlList.length = 0;
+      onSearchAutoLabelLimit();
+    });
+  };
+
+  // auto freeze
+  const confirmAutoFreeze = () => {
+    ElMessageBox.confirm(t('确定要修改限额吗？'), t('警告'), {
+      center: true
+    }).then(async () => {
+      loading.value = true;
+
+      const transformPayload = (data: RiskManagementDataAPI.AutoFreeze[]) => {
+        return data.map(item => ({
+          id: item?.id,
+          isDisable: item.isDisable,
+          sourceCode: item.sourceCode,
+          sourceName: item.sourceName,
+          eventCode: item.eventCode,
+          eventName: item.eventName,
+          isDelete: item.isDelete,
+          betBeforeTime: parseInt(item.betBeforeTime || 0),
+          betAfterTime: parseInt(item.betAfterTime || 0),
+          minLimitAmount: parseInt(item.minLimitAmount || 0),
+          maxLimitAmount: parseInt(item.maxLimitAmount || 0),
+          event_name: item.eventName,
+          userCreateAfter: 0,
+          labels: '',
+          excepLimitUser: 0
+        }));
+      };
+
+      const res = await API.updateRiskFreezeConfigList([
+        ...transformPayload(orderAutoFreezeList),
+        ...transformPayload(delOrderAutoFreezeList)
+      ]);
+      loading.value = false;
+      isEditRiskControls.value = false;
+      if (res.code) {
+        message(res.msg, { type: 'error' });
+        return;
+      } else {
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+      }
+      orderAutoFreezeList.length = 0;
+      delOrderAutoFreezeList.length = 0;
+      onSearchFreezeOrder();
     });
   };
 
@@ -275,6 +357,7 @@ export function useRiskControlHook({
         break;
       case 2:
         {
+          confirmAutoFreeze();
         }
         break;
       case 3:
@@ -317,6 +400,17 @@ export function useRiskControlHook({
         break;
       case 2:
         {
+          orderAutoFreezeList.push({
+            sourceCode: undefined,
+            sourceName: undefined,
+            eventCode: undefined,
+            eventName: undefined,
+            betBeforeTime: undefined,
+            betAfterTime: undefined,
+            minLimitAmount: undefined,
+            maxLimitAmount: undefined,
+            isDelete: undefined
+          });
         }
         break;
       case 3:
@@ -348,12 +442,18 @@ export function useRiskControlHook({
         {
           const item = orderPlacementList.pop();
           delOrderPlacementList.push({
-            ...item
+            ...item,
+            isDelete: 1
           });
         }
         break;
       case 2:
         {
+          const item = orderAutoFreezeList.pop();
+          delOrderAutoFreezeList.push({
+            ...item,
+            isDelete: 1
+          });
         }
         break;
       case 3:
@@ -368,7 +468,6 @@ export function useRiskControlHook({
   watch(
     () => currentRiskControlLabelId.value,
     async () => {
-      console.log(currentRiskControlLabelId.value);
       switch (currentRiskControlLabelId.value) {
         case 0:
           {
@@ -393,8 +492,7 @@ export function useRiskControlHook({
 
   onMounted(async () => {
     dispatchGetLabelList();
-    onSearchAutoLabelLimit();
-    // getPandaMatchEventList();
+    onSearchRejectOrder();
   });
 
   return {
@@ -414,6 +512,8 @@ export function useRiskControlHook({
     rejectOrderColumns,
     rejectOrderList,
     orderPlacementList,
-    pandaMatchList
+    pandaMatchList,
+    autoFreezeColumns,
+    orderAutoFreezeList
   };
 }

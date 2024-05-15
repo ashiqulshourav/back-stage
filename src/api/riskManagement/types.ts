@@ -28,7 +28,6 @@ declare namespace RiskManagementDataAPI {
     remark?: string;
     labelType?: number;
   };
-  // baptiste - check with backend attrs
   type RiskControlTypes = {
     name?: string;
     days?: number;
@@ -39,8 +38,16 @@ declare namespace RiskManagementDataAPI {
     labelId?: number;
     lableName?: string | number;
     delFlag?: number; // 1是删除 其他则无感
+    minLimitAmount?: number;
+    maxLimitAmount?: number;
+  };
+  type RiskControlTypesRes = {
+    code: number;
+    msg: string;
+    data: RiskControlTypes[];
   };
   type OrderPlacementTypes = {
+    id?: number | string;
     sourceCode?: string;
     sourceName?: string;
     eventCode?: string;
@@ -53,7 +60,13 @@ declare namespace RiskManagementDataAPI {
     createdAt?: string;
     updatedAt?: string;
   };
+  type OrderPlacementTypesRes = {
+    code: number;
+    msg: string;
+    data: OrderPlacementTypes[];
+  };
   type OrderRejectTypes = {
+    id?: number;
     sourceCode?: string;
     sourceName?: string;
     eventCode?: string;
@@ -63,6 +76,34 @@ declare namespace RiskManagementDataAPI {
     createdAt?: string;
     updatedAt?: string;
     isDelete?: number;
+  };
+  type OrderRejectTypesRes = {
+    code: number;
+    msg: string;
+    data: OrderRejectTypes[];
+  };
+  type AutoFreezeRes = {
+    code: number;
+    msg: string;
+    data: AutoFreeze[];
+  };
+  type AutoFreeze = {
+    id?: number;
+    isDisable?: number;
+    sourceCode?: string;
+    sourceName?: string;
+    eventCode?: string;
+    eventName?: string;
+    betBeforeTime?: number;
+    betAfterTime?: number;
+    minLimitAmount?: number;
+    maxLimitAmount?: number;
+    userCreateAfter?: number;
+    labels?: string;
+    excepLimitUser?: number;
+    isDelete?: number;
+    createAt?: string;
+    updateAt?: string;
   };
   type LimitListType = {
     leagueLevel: number;

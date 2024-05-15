@@ -27,7 +27,14 @@
       <div>
         <!-- Automatically reject -->
         <div v-if="currentRiskControlLabelId == 0">
-          <AutomaticReject />
+          <AutomaticReject
+            :isEditRiskControls="isEditRiskControls"
+            :loading="loading"
+            :columns="rejectOrderColumns"
+            :addControlLabel="addControlLabel"
+            :deleteControlLabel="deleteControlLabel"
+            :rejectOrderList="rejectOrderList"
+          />
         </div>
         <!-- Automatic order placement -->
         <div v-if="currentRiskControlLabelId == 1">
@@ -37,12 +44,20 @@
             :columns="orderPlacementColumns"
             :addControlLabel="addControlLabel"
             :deleteControlLabel="deleteControlLabel"
-            :pandaMatchList="pandaMatchList"
             :orderPlacementList="orderPlacementList"
           />
         </div>
         <!-- AutoFreeze -->
-        <AutomaticFreeze />
+        <div v-if="currentRiskControlLabelId == 2">
+          <AutomaticFreeze
+            :isEditRiskControls="isEditRiskControls"
+            :loading="loading"
+            :columns="autoFreezeColumns"
+            :addControlLabel="addControlLabel"
+            :deleteControlLabel="deleteControlLabel"
+            :orderAutoFreezeList="orderAutoFreezeList"
+          />
+        </div>
         <!-- Auto Label Limit -->
         <div v-if="currentRiskControlLabelId == 3">
           <AutoLabelLimit
@@ -96,7 +111,9 @@ const {
   rejectOrderColumns,
   rejectOrderList,
   orderPlacementList,
-  pandaMatchList
+  pandaMatchList,
+  autoFreezeColumns,
+  orderAutoFreezeList
 } = useRiskControlHook({ venueType: 1, category: 1 });
 </script>
 

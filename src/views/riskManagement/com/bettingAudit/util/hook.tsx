@@ -18,7 +18,7 @@ import {
   useSportFormatDetail,
   displayHomeAwayScore,
   BET_RESULT_TYPE_MAP,
-  formatSeriesType
+  formatSeriesType, getIsInplay
 } from '@/utils/formatMatch';
 import dayjs from 'dayjs';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
@@ -178,9 +178,10 @@ export function useBettingAuditHook(venueType: number) {
       const params: searchFormType = formatParams(
         {
           export: false,
-          orderId: orderId
+          orderId: orderId,
+          pageNum:1,
         },
-        1 // reset pageNum
+
       ) as searchFormType;
 
       const res: BetOrderAPI.BetOrderResType = await API.bettingAuditList(
@@ -311,6 +312,9 @@ export function useBettingAuditHook(venueType: number) {
             break;
           case 'riskStatus': //审核状态
             str = getRiskStatus(data.riskStatus).label;
+            break;
+          case 'betStage': //投注阶段
+            str = getIsInplay(data.isInplay);
             break;
           default:
             str = data[column.prop as string];

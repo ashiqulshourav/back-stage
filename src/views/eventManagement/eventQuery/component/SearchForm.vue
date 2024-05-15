@@ -58,12 +58,11 @@
           clearable
           multiple
           collapse-tags
-          collapse-tags-tooltip
           :render-after-expand="false"
           show-checkbox
           check-strictly
           check-on-click-node
-          style="width: 240px"
+          style="width: 200px"
         >
           <template #header>
             <el-checkbox v-model="checkAll" @change="handleCheckAll">
