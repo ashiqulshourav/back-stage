@@ -14,28 +14,56 @@
           />
         </div>
 
-        <div v-if="currentRiskControlLabelId == 3">
-          <EditAutoLabelButton
-            :currentRiskControlLabelId="currentRiskControlLabelId"
-            :isEditRiskControls="isEditRiskControls"
-            :toggle="toggle"
-            :cancelRiskControlsEdit="cancelRiskControlsEdit"
-            :confirmRiskControlsClick="confirmRiskControlsClick"
-          />
-        </div>
+        <EditAutoLabelButton
+          :currentRiskControlLabelId="currentRiskControlLabelId"
+          :isEditRiskControls="isEditRiskControls"
+          :toggle="toggle"
+          :cancelRiskControlsEdit="cancelRiskControlsEdit"
+          :confirmRiskControlsClick="confirmRiskControlsClick"
+        />
       </div>
 
       <!-- Tables -->
       <div>
         <!-- Automatically reject -->
+        <div v-if="currentRiskControlLabelId == 0">
+          <AutomaticReject
+            :isEditRiskControls="isEditRiskControls"
+            :loading="loading"
+            :columns="rejectOrderColumns"
+            :addControlLabel="addControlLabel"
+            :deleteControlLabel="deleteControlLabel"
+            :rejectOrderList="rejectOrderList"
+          />
+        </div>
         <!-- Automatic order placement -->
+        <div v-if="currentRiskControlLabelId == 1">
+          <AutomaticOrderPlacement
+            :isEditRiskControls="isEditRiskControls"
+            :loading="loading"
+            :columns="orderPlacementColumns"
+            :addControlLabel="addControlLabel"
+            :deleteControlLabel="deleteControlLabel"
+            :orderPlacementList="orderPlacementList"
+          />
+        </div>
         <!-- AutoFreeze -->
+        <div v-if="currentRiskControlLabelId == 2">
+          <AutomaticFreeze
+            :isEditRiskControls="isEditRiskControls"
+            :loading="loading"
+            :columns="autoFreezeColumns"
+            :addControlLabel="addControlLabel"
+            :deleteControlLabel="deleteControlLabel"
+            :orderAutoFreezeList="orderAutoFreezeList"
+          />
+        </div>
         <!-- Auto Label Limit -->
         <div v-if="currentRiskControlLabelId == 3">
           <AutoLabelLimit
             :isEditRiskControls="isEditRiskControls"
             :loading="loading"
-            :columns="columns"
+            :columns="autoLabelColumns"
             :riskControlList="riskControlList"
             :addControlLabel="addControlLabel"
             :deleteControlLabel="deleteControlLabel"
@@ -61,6 +89,9 @@ import {
 } from '@/utils/formatNumber';
 import AutoLabelLimit from './component/AutoLabelLimit.vue';
 import EditAutoLabelButton from './component/EditAutoLabelButton.vue';
+import AutomaticReject from './component/AutomaticReject.vue';
+import AutomaticOrderPlacement from './component/AutomaticOrderPlacement.vue';
+import AutomaticFreeze from './component/AutomaticFreeze.vue';
 
 // :category="1" :venueType="1"
 const {
@@ -71,12 +102,18 @@ const {
   toggle,
   cancelRiskControlsEdit,
   confirmRiskControlsClick,
-  columns,
+  autoLabelColumns,
   riskControlList,
   deleteControlLabel,
   addControlLabel,
-  confirmSportClick,
-  labelList
+  labelList,
+  orderPlacementColumns,
+  rejectOrderColumns,
+  rejectOrderList,
+  orderPlacementList,
+  pandaMatchList,
+  autoFreezeColumns,
+  orderAutoFreezeList
 } = useRiskControlHook({ venueType: 1, category: 1 });
 </script>
 

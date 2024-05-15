@@ -37,6 +37,9 @@ import menuTree from '@iconify-icons/ri/list-unordered';
 import configCenter from '@iconify-icons/ri/settings-3-line';
 import TaskCenterIcon from '@iconify-icons/ri/apps-fill';
 import Download from '@iconify-icons/ep/download';
+import Link from '@iconify-icons/icon-park-outline/link-one';
+import Unlink from '@iconify-icons/icon-park-outline/unlink';
+import EventManagementIcon from '@iconify-icons/ri/calendar-event-fill';
 
 addIcon("dataSourceManager", dataManager);
 addIcon("sale", sale);
@@ -51,6 +54,7 @@ addIcon("menuTree", menuTree);
 addIcon("configCenter", configCenter);
 addIcon("riskManagement", sale);
 addIcon("taskCenter", TaskCenterIcon);
+addIcon("eventManagement", EventManagementIcon);
 
 /* 菜单icon结束 */
 
@@ -78,3 +82,5 @@ addIcon('deleteBin_5Line', deleteBin_5Line);
 addIcon('Delete', Delete);
 addIcon('loadingIcon', loading);
 addIcon('download', Download);
+addIcon('link', Link);
+addIcon('unlink', Unlink);

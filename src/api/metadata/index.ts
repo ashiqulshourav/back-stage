@@ -34,4 +34,32 @@ export const metaData = {
     teamId?: string;
   }) => http.request<MetadataAPI.PlayerListRes>("post", "/player/v1/getPlayerList", { data }),
 
+  //数据源列表
+  getMatchDataSourceList: (data: {
+    pageNum: number;
+    pageSize: number;
+    // sportId:number;
+  }) => http.request<MatchCombineAPI.matchSourceData>("post", "/pairing/v1/getMatchDataSourceList", { data }),
+  //数据源列表
+  getMatchPairingList: (data: {
+    pageNum: number;
+    pageSize: number;
+  }) => http.request<MatchCombineAPI.matchSourceData>("post", "/pairing/v1/getMatchPairingList", { data }),
+  // 赛事匹配
+  matchPairing: (data: {
+    dpMatchId: number;
+    dpMatchId188bet: number;
+    matchId:number;
+    matchId188bet:number;
+    pairingUser:string
+  }) => http.request<MatchCombineAPI.matchSourceData>("post", "/pairing/v1/matchPairing", { data }),
+  cancelMatchPairing: (data: {
+    dpMatchId: number;
+    dpMatchId188bet: number;
+    matchId:number;
+    matchId188bet:number;
+    pairingUser:string
+  }) => http.request<MatchCombineAPI.matchSourceData>("post", "/pairing/v1/cancelPairing", { data }),
+
+
 };

@@ -279,7 +279,7 @@ declare namespace SattleDataAPI {
     eventCodes?: any[];
     matchPeriodIds?: any[];
     childEvents?: any[];
-    isEdit: boolean;
+    isEdit?: boolean;
   }
 
   type TennisEventsData = {

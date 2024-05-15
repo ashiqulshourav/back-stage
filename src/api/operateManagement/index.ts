@@ -1,5 +1,6 @@
 import { http } from '@/utils/http';
 import mockAPI from './mock';
+import { searchFormType } from '@/views/operateManager/com/bettingBalanceInquiry/utils/types';
 
 export const operateManagementData = {
   //- 运营管理
@@ -41,7 +42,7 @@ export const operateManagementData = {
     }),
   // mockAPI.deleteOperateTag(data)
 
-  getBetBalance: (data: { userId: string; matchId: string }) =>
+  getBetBalance: (data: searchFormType) =>
     http.request<OperateManagementDataAPI.BetBalanceRes>
       ('post', '/operateBalance/canBetBalance', { data }),
 };
