@@ -1,9 +1,9 @@
 <template>
   <div class="text-left text-lg font-bold">
-    {{ t('确认' + (matchSourcePairDetails.pairingStatus === 1 ? '取消' : '') +  '匹配比赛数据？') }}
+    {{ modalHeader(matchSourcePairDetails.pairingStatus === 1) }}
   </div>
   <div class="text-left text-m mb-4">
-    {{ t('确认后以下赛事将会完成' + (matchSourcePairDetails.pairingStatus === 1 ? '取消' : '') + '匹配：') }}
+    {{ modalSubHeader(matchSourcePairDetails.pairingStatus === 1) }}
   </div>
   <div class="flex items-center">
     <div>
@@ -37,6 +37,14 @@ import { useUserStore } from "@/store/user";
 import { matchCombineHook } from './utils/hook';
 import { selectedEventColumns } from './component/TableColumnList';
 import VerticalTable from '@/components/VerticalTable/index.vue';
+
+const modalHeader = (value: boolean) => {
+  return value ? t('确认取消匹配比赛数据？') : t('确认匹配比赛数据？');
+}
+
+const modalSubHeader = (value: boolean) => {
+  return value ? t('确认后以下赛事将会完成取消匹配：') : t('确认后以下赛事将会完成匹配：');
+}
 
 const {
   editFrom,
