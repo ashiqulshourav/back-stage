@@ -76,3 +76,30 @@ export const rejectOrderColumns: TableColumnList = [
     slot: 'afterBetting'
   }
 ];
+
+export const autoFreezeColumns: TableColumnList = [
+  {
+    label: t('启用禁用状态'),
+    slot: 'isDisable'
+  },
+  {
+    label: t('事件源'),
+    slot: 'sourceName'
+  },
+  {
+    label: t('事件名称'),
+    slot: 'eventName'
+  },
+  {
+    label: t('投注前'),
+    slot: 'betBeforeTime'
+  },
+  {
+    label: t('投注后'),
+    slot: 'betAfterTime'
+  },
+  {
+    label: t('投注金额区间'),
+    slot: 'betAmountRange'
+  }
+];
