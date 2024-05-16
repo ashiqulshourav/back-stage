@@ -21,7 +21,17 @@
           active-text="On"
           inactive-text="Off"
         />
-        <span v-else>{{ row.isDisable ? 'On' : 'Off' }}</span>
+        <span v-else>
+          <el-switch
+            size="large"
+            v-model="row.isDisable"
+            :active-value="1"
+            :inactive-value="0"
+            inline-prompt
+            active-text="On"
+            inactive-text="Off"
+            :disabled="true"
+        /></span>
       </template>
       <template #sourceName="{ row }">
         <el-select
@@ -29,7 +39,6 @@
           v-model="row.sourceCode"
           :placeholder="t('事件源')"
           clearable
-          :onChange="changeSourceName(row)"
         >
           <el-option
             :label="item.label"
@@ -96,6 +105,12 @@
           {{ row.minLimitAmount || '0' }} -
           {{ row.maxLimitAmount || t('以上') }}</span
         >
+        <div
+          v-if="showBetAmountError(row)"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('自动冻结投注前时间必须大于自动划单投注前时间:熊猫 56') }}
+        </div>
       </template>
     </pure-table>
 
@@ -143,18 +158,16 @@ const changeEventName = (row): any => {
   )?.eventName;
 };
 
-const changeSourceName = (row): any => {
-  row.sourceName = EVENT_SOURCE.find(
-    item => item.value == row.sourceCode
-  )?.label;
-};
-
 const eventDisabled = (eventCode: string) => {
   return props.orderAutoFreezeList.some(item => item.eventCode == eventCode);
 };
 
 const sourceDisabled = (sourceCode: string) => {
   return props.orderAutoFreezeList.some(item => item.sourceCode == sourceCode);
+};
+
+const showBetAmountError = (row: any) => {
+  return Number(row.maxLimitAmount) <= Number(row.minLimitAmount);
 };
 </script>
 
