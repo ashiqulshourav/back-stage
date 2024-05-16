@@ -7,21 +7,25 @@
   </div>
   <div class="flex items-center">
     <div>
-      <div class="vertical-table-title">DP</div>
-      <VerticalTable :columns="selectedEventColumns" :dataList="matchSourceDetails"/>
+      <VerticalTable 
+        :columns="selectedEventColumns" 
+        :dataList="matchSourceDetails"
+        :title="'DP'"
+      />
     </div>
     <IconifyIconOffline 
       class="link-icon" 
       :icon="matchSourcePairDetails.pairingStatus === 1 ? 'unlink' : 'link'"
     />
     <div>
-      <div class="vertical-table-title">
-        {{ matchSource.find(_ => _.value == matchSourcePairDetails.dataSourceCode)?.label ?? '-' }}
-      </div>
-      <VerticalTable :columns="selectedEventColumns" :dataList="matchSourcePairDetails"/>
+      <VerticalTable 
+        :columns="selectedEventColumns" 
+        :dataList="matchSourcePairDetails"
+        :title="matchSource.find(_ => _.value == matchSourcePairDetails.dataSourceCode)?.label ?? '-'"
+      />
     </div>
   </div>
-  <div class="flex justify-end bg-white mt-4">
+  <div class="flex justify-end mt-4">
     <el-button @click="closeDialog">{{ t('取消') }}</el-button>
     <el-button type="primary" @click="handleMatch">{{ t('确定') }}</el-button>
   </div>
@@ -112,13 +116,6 @@ const closeDialog = () => {
     height: 100px;
     text-align: center;
   }
-}
-
-.vertical-table-title {
-  text-align: center;
-  border-width: 1px;
-  border-color: rgb(248 250 252);
-  border-bottom: 0px;
 }
 
 .link-icon {
