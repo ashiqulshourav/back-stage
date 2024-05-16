@@ -302,7 +302,7 @@ export function useRiskControlHook({
   const confirmAutoFreeze = () => {
     let returnFn = false;
     orderAutoFreezeList.forEach(item => {
-      if (Number(item.maxLimitAmount) <= Number(item.minLimitAmount)) {
+      if (Number(item.maxLimitAmount) < Number(item.minLimitAmount)) {
         returnFn = true;
       }
     });
