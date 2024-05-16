@@ -300,47 +300,56 @@ export function useRiskControlHook({
 
   // auto freeze
   const confirmAutoFreeze = () => {
-    ElMessageBox.confirm(t('确定要修改限额吗？'), t('警告'), {
-      center: true
-    }).then(async () => {
-      loading.value = true;
-
-      const transformPayload = (data: RiskManagementDataAPI.AutoFreeze[]) => {
-        return data.map(item => ({
-          id: item?.id,
-          isDisable: item.isDisable,
-          sourceCode: item.sourceCode,
-          sourceName: item.sourceName,
-          eventCode: item.eventCode,
-          eventName: item.eventName,
-          isDelete: item.isDelete,
-          betBeforeTime: parseInt(item.betBeforeTime || 0),
-          betAfterTime: parseInt(item.betAfterTime || 0),
-          minLimitAmount: parseInt(item.minLimitAmount || 0),
-          maxLimitAmount: parseInt(item.maxLimitAmount || 0),
-          event_name: item.eventName,
-          userCreateAfter: 0,
-          labels: '',
-          excepLimitUser: 0
-        }));
-      };
-
-      const res = await API.updateRiskFreezeConfigList([
-        ...transformPayload(orderAutoFreezeList),
-        ...transformPayload(delOrderAutoFreezeList)
-      ]);
-      loading.value = false;
-      isEditRiskControls.value = false;
-      if (res.code) {
-        message(res.msg, { type: 'error' });
-        return;
-      } else {
-        message(res.msg, { type: res.code ? 'error' : 'success' });
+    let returnFn = false;
+    orderAutoFreezeList.forEach(item => {
+      if (Number(item.maxLimitAmount) <= Number(item.minLimitAmount)) {
+        returnFn = true;
       }
-      orderAutoFreezeList.length = 0;
-      delOrderAutoFreezeList.length = 0;
-      onSearchFreezeOrder();
     });
+
+    if (returnFn) return;
+    else
+      ElMessageBox.confirm(t('确定要修改限额吗？'), t('警告'), {
+        center: true
+      }).then(async () => {
+        loading.value = true;
+
+        const transformPayload = (data: RiskManagementDataAPI.AutoFreeze[]) => {
+          return data.map(item => ({
+            id: item?.id,
+            isDisable: item.isDisable,
+            sourceCode: item.sourceCode,
+            sourceName: item.sourceName,
+            eventCode: item.eventCode,
+            eventName: item.eventName,
+            isDelete: item.isDelete,
+            betBeforeTime: parseInt(item.betBeforeTime || 0),
+            betAfterTime: parseInt(item.betAfterTime || 0),
+            minLimitAmount: parseInt(item.minLimitAmount || 0),
+            maxLimitAmount: parseInt(item.maxLimitAmount || 0),
+            event_name: item.eventName,
+            userCreateAfter: 0,
+            labels: '',
+            excepLimitUser: 0
+          }));
+        };
+
+        const res = await API.updateRiskFreezeConfigList([
+          ...transformPayload(orderAutoFreezeList),
+          ...transformPayload(delOrderAutoFreezeList)
+        ]);
+        loading.value = false;
+        isEditRiskControls.value = false;
+        if (res.code) {
+          message(res.msg, { type: 'error' });
+          return;
+        } else {
+          message(res.msg, { type: res.code ? 'error' : 'success' });
+        }
+        orderAutoFreezeList.length = 0;
+        delOrderAutoFreezeList.length = 0;
+        onSearchFreezeOrder();
+      });
   };
 
   const confirmRiskControlsClick = () => {
