@@ -1,13 +1,172 @@
 <template>
   <div>
+    <pure-table
+      maxHeight="500"
+      align-whole="center"
+      :loading="loading"
+      size="small"
+      border
+      :data="orderAutoFreezeList"
+      :columns="columns"
+      :header-cell-style="tableHeaderStyleBlue"
+    >
+      <template #isDisable="{ row }">
+        <el-switch
+          v-if="isEditRiskControls"
+          size="large"
+          v-model="row.isDisable"
+          :active-value="1"
+          :inactive-value="0"
+          inline-prompt
+          active-text="On"
+          inactive-text="Off"
+        />
+        <span v-else>{{ row.isDisable ? 'On' : 'Off' }}</span>
+      </template>
+      <template #sourceName="{ row }">
+        <el-select
+          v-if="isEditRiskControls"
+          v-model="row.sourceCode"
+          :placeholder="t('事件源')"
+          clearable          
+        >
+          <el-option
+            :label="item.label"
+            :value="item.value"
+            v-for="item in EVENT_SOURCE"
+            :key="item.value"
+            :disabled="sourceDisabled(item.value)"
+          />
+        </el-select>
 
+        <span v-else>{{ row.sourceName }} </span>
+      </template>
+      <template #eventName="{ row }">
+        <el-select
+          v-if="isEditRiskControls"
+          v-model="row.eventCode"
+          :placeholder="t('事件名称')"
+          clearable
+          :onChange="changeEventName(row)"
+        >
+          <el-option
+            :label="item.eventName"
+            :value="item.eventCode"
+            v-for="item in EVENT_NAMES"
+            :key="item.eventCode"
+            :disabled="eventDisabled(item.eventCode)"
+          />
+        </el-select>
+        <span v-else>{{ row.eventName }} </span>
+      </template>
+      <template #betBeforeTime="{ row }">
+        <div v-if="isEditRiskControls" class="flex items-center gap-2">
+          <el-input
+            :formatter="v => formatNumberAndFillNull(v, 13)"
+            v-model="row.betBeforeTime"
+          />
+          {{ t('秒') }}
+        </div>
+        <span v-else> {{ row.betBeforeTime }} {{ t('秒') }} </span>
+      </template>
+      <template #betAfterTime="{ row }">
+        <div v-if="isEditRiskControls" class="flex items-center gap-2">
+          <el-input
+            :formatter="v => formatNumberAndFillNull(v, 13)"
+            v-model="row.betAfterTime"
+          />
+          {{ t('秒') }}
+        </div>
+        <span v-else> {{ row.betAfterTime }} {{ t('秒') }} </span>
+      </template>
+      <template #betAmountRange="{ row }">
+        <div v-if="isEditRiskControls" class="flex items-center gap-2">
+          <el-input
+            :formatter="v => formatNumberAndFillNull(v, 13)"
+            v-model="row.minLimitAmount"
+          />
+          -
+          <el-input
+            :formatter="v => formatNumberAndFillNull(v, 13)"
+            v-model="row.maxLimitAmount"
+          />
+        </div>
+        <span v-else>
+          {{ row.minLimitAmount || '0' }} -
+          {{ row.maxLimitAmount || t('以上') }}</span
+        >
+        <div
+          v-if="showBetAmountError(row)"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('自动冻结投注前时间必须大于自动划单投注前时间:熊猫 56') }}
+        </div>
+      </template>
+    </pure-table>
+
+    <!-- Edit Buttons -->
+    <div class="mt-2" v-if="isEditRiskControls">
+      <el-button size="small" type="primary" @click="addControlLabel">
+        <span class="text-xs">+</span>
+      </el-button>
+      <el-button size="small" type="primary" @click="deleteControlLabel">
+        <span class="text-[16px]">-</span>
+      </el-button>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { t } from '@/plugins/i18n';
 
+import { usePublicHooks } from '@/hooks';
+import {
+  addThousandSeparator,
+  formatNumberAndFillNull,
+  formatNumberWithLength
+} from '@/utils/formatNumber';
+import { labelListType } from '@/views/operateManager/com/playerList/utils/types';
+import { getLabelColor } from '@/components/RiskLabelList/utils';
+import { getLabelLevelByName } from '@/components/RiskLabelList/utils';
+import { PandaMatch } from '@/views/eventManagement/eventQuery/utils/types';
+import { EVENT_SOURCE } from '@/views/eventManagement/eventQuery/utils/map';
+import { EVENT_NAMES } from '../utils/map';
+
+const { tableHeaderStyleBlue } = usePublicHooks();
+const props = defineProps<{
+  isEditRiskControls: boolean;
+  loading: boolean;
+  columns: TableColumnList;
+  orderAutoFreezeList: RiskManagementDataAPI.AutoFreeze[];
+  addControlLabel: () => void;
+  deleteControlLabel: () => void;
+}>();
+
+const changeEventName = (row): any => {
+  row.eventName = EVENT_NAMES.find(
+    item => item.eventCode == row.eventCode
+  )?.eventName;
+};
+
+const eventDisabled = (eventCode: string) => {
+  return props.orderAutoFreezeList.some(item => item.eventCode == eventCode);
+};
+
+const sourceDisabled = (sourceCode: string) => {
+  return props.orderAutoFreezeList.some(item => item.sourceCode == sourceCode);
+};
+
+const showBetAmountError = (row: any) => {
+  return Number(row.maxLimitAmount) <= Number(row.minLimitAmount);
+};
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.custom {
+  flex: 0 0 0;
+  max-width: unset;
+  .el-tag__content {
+    color: white;
+  }
+}
 </style>

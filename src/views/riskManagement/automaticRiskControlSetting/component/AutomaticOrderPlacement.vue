@@ -16,13 +16,13 @@
           v-model="row.sourceCode"
           :placeholder="t('事件源')"
           clearable
-          :onChange="changeSourceName(row)"
         >
           <el-option
             :label="item.label"
             :value="item.value"
             v-for="item in EVENT_SOURCE"
             :key="item.value"
+            :disabled="sourceDisabled(item.value)"
           />
         </el-select>
 
@@ -129,14 +129,12 @@ const changeEventName = (row): any => {
   )?.eventName;
 };
 
-const changeSourceName = (row): any => {
-  row.sourceName = EVENT_SOURCE.find(
-    item => item.value == row.sourceCode
-  )?.label;
-};
-
 const eventDisabled = (eventCode: string) => {
   return props.orderPlacementList.some(item => item.eventCode == eventCode);
+};
+
+const sourceDisabled = (sourceCode: string) => {
+  return props.orderPlacementList.some(item => item.sourceCode == sourceCode);
 };
 </script>
 
