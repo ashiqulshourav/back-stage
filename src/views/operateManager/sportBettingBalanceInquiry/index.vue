@@ -1,5 +1,5 @@
 <template>
-  <BettingBalanceInquiry :category="0"></BettingBalanceInquiry>
+  <BettingBalanceInquiry :category="0" :venueType="0"></BettingBalanceInquiry>
 </template>
 
 <script setup lang="ts">

@@ -78,7 +78,6 @@ const changeTime = (v: string, type: string) => {
   if (!secondNum.value) secondNum.value = 0;
   type === 'firstTime' ? (minuteNum.value = +v) : (secondNum.value = +v);
   const r = minuteNum.value * 60 + +secondNum.value;
-  console.log('MatchTime.vue文件 81==============行打印=', r);
   props.row.eventTime = r;
 };
 </script>

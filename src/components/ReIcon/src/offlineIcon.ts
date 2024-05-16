@@ -41,6 +41,9 @@ import play from '@iconify-icons/fa-solid/play-circle'
 import switch_icon from '@iconify-icons/ep/switch-button';
 import pause_circle from '@iconify-icons/fa-solid/pause-circle';
 import lock_icon from '@iconify-icons/fa-solid/lock';
+import Link from '@iconify-icons/icon-park-outline/link-one';
+import Unlink from '@iconify-icons/icon-park-outline/unlink';
+import EventManagementIcon from '@iconify-icons/ri/calendar-event-fill';
 
 addIcon("dataSourceManager", dataManager);
 addIcon("sale", sale);
@@ -57,6 +60,7 @@ addIcon("riskManagement", sale);
 addIcon("taskCenter", TaskCenterIcon);
 addIcon("download", Download);
 addIcon("SportTrading", metadata);
+addIcon("eventManagement", EventManagementIcon);
 
 /* 菜单icon结束 */
 //- 操盘图标开始
@@ -89,3 +93,6 @@ addIcon('editPen', EditPen);
 addIcon('deleteBin_5Line', deleteBin_5Line);
 addIcon('Delete', Delete);
 addIcon('loadingIcon', loading);
+addIcon('download', Download);
+addIcon('link', Link);
+addIcon('unlink', Unlink);

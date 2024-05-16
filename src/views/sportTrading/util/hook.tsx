@@ -53,7 +53,7 @@ export function useTradingHook() {
     tempList.forEach(_ => {
       _.list = res.data[
         _.listType as keyof sportTradingDataAPI.getHandicapItemsData
-      ] as sportTradingDataAPI.BetItemsDtoList[];
+      ] as sportTradingDataAPI.MainBetItemsDtoList[];
       _.amount = res.data[
         _.amountType as keyof sportTradingDataAPI.getHandicapItemsData
       ] as number;

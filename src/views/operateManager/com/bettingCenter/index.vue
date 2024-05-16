@@ -8,6 +8,7 @@
       :tenantList="tenantList"
       :riskLabelList="riskLabelList"
       :venueType="props.venueType"
+      :downloading="downloading"
     />
 
     <PureTableBar
@@ -298,7 +299,7 @@
                 background: getStatus(
                   row.status,
                   row.billStatus,
-                  row.combineOrderDetails[0].betResult,
+                  row.betResultArr,
                   row.isReserve,
                   row.riskStatus,
                   row.isSpecialSettle
@@ -311,7 +312,7 @@
                   getStatus(
                     row.status,
                     row.billStatus,
-                    row.combineOrderDetails[0].betResult,
+                    row.betResultArr,
                     row.isReserve,
                     row.riskStatus,
                     row.isSpecialSettle
@@ -324,7 +325,7 @@
                 getStatus(
                   row.status,
                   row.billStatus,
-                  row.combineOrderDetails[0].betResult,
+                  row.betResultArr,
                   row.isReserve,
                   row.riskStatus,
                   row.isSpecialSettle
@@ -477,7 +478,8 @@ const {
   isShowCancel,
   editOrderRemark,
   riskLabelList,
-  getOddStatus
+  getOddStatus,
+  downloading
 } = useBettingCenterHook(props.category, props.venueType);
 </script>
 
@@ -544,7 +546,6 @@ const {
   text-align: center;
   height: 25px;
   line-height: 25px;
-  min-width: 80px;
   padding: 0 8px;
   color: #fff;
   border-radius: 4px;

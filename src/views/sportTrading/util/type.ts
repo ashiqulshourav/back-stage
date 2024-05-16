@@ -10,7 +10,7 @@ export type handicapListType =
   {
     listType: string;
     val: string;
-    list: sportTradingDataAPI.BetItemsDtoList[];
+    list: sportTradingDataAPI.MainBetItemsDtoList[];
     amount: number;
     amountType: string;
   }

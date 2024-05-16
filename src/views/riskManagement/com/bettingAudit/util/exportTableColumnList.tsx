@@ -36,6 +36,10 @@ export const columns: TableColumnList = [
     prop: 'playType',
   },
   {
+    label: t('投注阶段'),
+    prop: 'betStage',
+  },
+  {
     label: t('投注项'),
     prop: 'betName',
   },

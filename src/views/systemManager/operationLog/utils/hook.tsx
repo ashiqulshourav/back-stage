@@ -1,33 +1,29 @@
 import { message } from '@/utils/message';
-// import editForm from "../form.vue";
-import type { PaginationProps } from '@pureadmin/table';
-// import { addDialog } from "@/components/ReDialog";
-import { usePublicHooks } from '@/hooks';
+import type { PaginationProps, TableColumns } from '@pureadmin/table';
 import { columns } from '../component/TableColumnList';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { utils, writeFile } from 'xlsx';
 
 export function useOperationLog() {
-  const dataList = reactive<OperationLogDataAPI.OperationLogListFetchList[]>(
-    []
-  );
+  const dataList = reactive<OperationLogDataAPI.OperationLogList[]>([]);
   const loading = ref(true);
-  const switchLoadMap = ref({});
-  const { switchStyle } = usePublicHooks();
+  const exportLoading = ref(false);
   const operationTypeList = reactive<string[]>([]);
-  const searchMenuList = reactive<
-    OperationLogDataAPI.OperationMenuTypeChildren[]
-  >([]);
+  const logTypeList = reactive<string[]>([]);
   const pagination = reactive<PaginationProps>({
     total: 0,
-    pageSize: 10,
+    pageSize: 50,
     currentPage: 1,
     background: true
   });
   const form = reactive({
-    operateType: '',
-    operateMenu: [],
+    operateMenu: '',
     operateLog: '',
-    userName: ''
+    operateType: '',
+    requestLog: '',
+    userName: '',
+    beginTime: '',
+    endTime: ''
   });
 
   function handleTableWidthChange(val: number) {
@@ -40,79 +36,87 @@ export function useOperationLog() {
     onSearch();
   }
 
+  //- 初始化列表渲染
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     loading.value = true;
     const o = JSON.parse(JSON.stringify(removeEmptyStringKeys(form)));
-    if (o.operateMenu) o.operateMenu = o.operateMenu.join('-');
+    o.operateMenu && (o.operateMenu = o.operateMenu.join('-'));
     try {
-      const res: OperationLogDataAPI.OperationLogListFetchRes =
-        await API.getOperateLogList({
-          ...o,
-          pageSize: pagination.pageSize,
-          pageNum: pagination.currentPage
-        });
+      const res = await API.getOperateLogList({
+        ...o,
+        pageSize: pagination.pageSize,
+        pageNum: pagination.currentPage
+      });
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
       dataList.push(...res.data.list);
       pagination.total = res.data.total;
-      pagination.pageSize = res.data.pageSize;
-      pagination.currentPage = res.data.pageNum;
     } catch (error) {
       loading.value = false;
     }
   }
 
-  const initTypeList = async () => {
-    const res: OperationLogDataAPI.OperationLogTypeRes =
-      await API.getOperateType();
-    if (res.code) return message(res.msg, { type: 'error' });
-    operationTypeList.length = 0;
-    operationTypeList.push(...res.data);
-  };
-
-  const initMenuList = async () => {
-    const res: OperationLogDataAPI.OperationMenuTypeRes =
-      await API.getOperateMenus();
-    if (res.code) return message(res.msg, { type: 'error' });
-    res.data = recursiveTransform(res.data);
-    searchMenuList.length = 0;
-    searchMenuList.push(...res.data);
-  };
-
-  const recursiveTransform = data => {
-    return data.map(item => {
-      const transformedItem = {
-        ...item,
-        // value: item.id,
-        value: item.menuName,
-        label: item.menuName
-      };
-      if (item.children && item.children.length > 0) {
-        transformedItem.children = recursiveTransform(item.children);
-      }
-      return transformedItem;
+  //- 导出excel表格
+  const exportFileClick = async () => {
+    exportLoading.value = true;
+    message(t('导出报表开始'), { type: 'warning' });
+    const o = JSON.parse(JSON.stringify(removeEmptyStringKeys(form)));
+    o.operateMenu && (o.operateMenu = o.operateMenu.join('-'));
+    const r = await API.getOperateLogList({
+      ...o,
+      pageNum: 1,
+      pageSize: 50000
     });
+    if (r.code) return message(r.msg, { type: 'error' });
+
+    const res: string[][] = r.data.list.map(item => {
+      const arr: any = [];
+      columns.forEach(column => {
+        arr.push(
+          item[column.prop as keyof OperationLogDataAPI.OperationLogList] ?? '-'
+        );
+      });
+      return arr;
+    });
+    const titleList: string[] = [];
+    columns.forEach((column: TableColumns) => {
+      titleList.push(column?.label ?? '');
+    });
+    res.unshift(titleList);
+    const workSheet = utils.aoa_to_sheet(res);
+    const workBook = utils.book_new();
+    utils.book_append_sheet(workBook, workSheet, '数据报表');
+    writeFile(workBook, `${t('操作日志报表')}.xlsx`);
+    message(t('导出报表成功'), { type: 'success' });
+    exportLoading.value = false;
+  };
+
+  //- 获取下拉菜单列表
+  const getOperateTypes = async () => {
+    const res = await API.getOperateType();
+    if (res.code) return message(res.msg, { type: 'error' });
+    logTypeList.length = 0;
+    logTypeList.push(...res.data);
   };
 
   onMounted(() => {
     onSearch();
-    initTypeList();
-    initMenuList();
+    getOperateTypes();
   });
   return {
     loading,
     columns,
     dataList,
     pagination,
+    operationTypeList,
+    form,
+    exportLoading,
+    logTypeList,
+    exportFileClick,
     onSearch,
     handleTableWidthChange,
-    switchLoadMap,
-    handleCurrentChange,
-    switchStyle,
-    operationTypeList,
-    searchMenuList,
-    form
+    handleCurrentChange
   };
 }

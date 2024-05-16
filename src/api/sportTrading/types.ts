@@ -40,7 +40,7 @@ declare namespace sportTradingDataAPI {
   }
   type getMorningSetMatchListRes = COMMON.BASE_RES_TYPE<getMorningSetMatchListData[]>
 
-  type innerDtoList = {
+  type BetItemsDtoList = {
     betItemsId: number;
     matchId: number;
     kindsCode: string;
@@ -51,7 +51,7 @@ declare namespace sportTradingDataAPI {
     sourceBetItemsMid: number;
     homeOrAway: string;
     handicap: string;
-    handicapEn?: any;
+    handicapEn: null | boolean;
     odds: number;
     dpOdds?: any;
     isSale: number;
@@ -65,23 +65,28 @@ declare namespace sportTradingDataAPI {
     betAmount: number;
   }
 
-  type BetItemsDtoList = {
-    betItemsName: string;
-    betItemsNameEn?: any;
-    kindsCode: string;
+  type KindsCodeDtoList = {
     betItemsIdList: number[];
-    betItemsDtoList: innerDtoList[];
+    sourceBetItemsMid: number;
+    betItemsDtoList: BetItemsDtoList[];
   }
 
+  type MainBetItemsDtoList = {
+    betItemsIdList: number[];
+    kindsCode: string;
+    betItemsName: string;
+    betItemsNameEn?: any;
+    kindsCodeDtoList: KindsCodeDtoList[];
+  }
 
   type getHandicapItemsData = {
-    mainBetItemsDtoList: BetItemsDtoList[];
-    goalBetItemsDtoList: BetItemsDtoList[];
-    cornerBetItemsDtoList: BetItemsDtoList[];
-    cardBetItemsDtoList: BetItemsDtoList[];
-    overtimeBetItemsDtoList: BetItemsDtoList[];
-    penaltyKickBetItemsDtoList: BetItemsDtoList[];
-    specialBetItemsDtoList: BetItemsDtoList[];
+    mainBetItemsDtoList: MainBetItemsDtoList[];
+    goalBetItemsDtoList: MainBetItemsDtoList[];
+    cornerBetItemsDtoList: MainBetItemsDtoList[];
+    cardBetItemsDtoList: MainBetItemsDtoList[];
+    overtimeBetItemsDtoList: MainBetItemsDtoList[];
+    penaltyKickBetItemsDtoList: MainBetItemsDtoList[];
+    specialBetItemsDtoList: MainBetItemsDtoList[];
     mainBetItemsSize: number;
     goalBetItemsSize: number;
     cornerBetItemsSize: number;
@@ -90,6 +95,7 @@ declare namespace sportTradingDataAPI {
     penaltyKickBetItemsSize: number;
     specialBetItemsSize: number;
   }
+
 
   type getHandicapItemsRes = COMMON.BASE_RES_TYPE<getHandicapItemsData>
 }

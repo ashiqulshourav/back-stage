@@ -184,3 +184,111 @@ declare namespace MetadataAPI {
   type getCountryListResType = COMMON.BASE_RES_TYPE<getCountryListDataType>
 
 }
+
+declare namespace MatchCombineAPI {
+  type matchSourceDetail= {
+    id: number,
+    matchId:number,
+    sportNameCn: string,
+    sportNameEn: string,
+    leagueNameCn: string,
+    leagueNameEn: string,
+    matchNameCn: string,
+    matchNameEn: string,
+    homeTeamNameCn: string,
+    homeTeamNameEn: string,
+    awayTeamNameCn: string,
+    awayTeamNameEn: string,
+    beginTime: string,
+    startTime: null,
+    endTime: null,
+    videoMatchId: number,
+    matchId188bet: number,
+    category:number,
+    dataSourceCode: string,
+    pairingStatus: number,
+    pageSize: number,
+    pageNum: number
+  }
+  type matchSourceData = {
+    data:{
+      list:matchSourceDetail[],
+      pageSize: number,
+      pageNum: number,
+      total: number,
+    }
+  }
+  type matchPairingDetail= {
+    "matchId": number,
+    "countryId": null,
+    "sportId": number,
+    "leagueId": number,
+    "matchName": null,
+    "homeTeamId": number,
+    "awayTeamId": number,
+    "beginTime": string,
+    "beginTimeLong": null,
+    "playingField": null,
+    "isNeutral": null,
+    "level": null,
+    "isSale": null,
+    "videoUrl": null,
+    "status": string,
+    "hb": null,
+    "hip": null,
+    "ip": number,
+    "mt": null,
+    "uc": null,
+    "currentScore": null,
+    "currentTime": null,
+    "currentPc": null,
+    "pandaResult": number,
+    "pandaMatchId": number,
+    "pandaVideoId": "",
+    "pandaOppositeStatus": number,
+    "pandaLinkId": null,
+    "matchId188bet": number,
+    "videoMatchId": number,
+    "videoReverse": null,
+    "category": number,
+    "periodType": null,
+    "isChampion": null,
+    "settlementStatus": null,
+    "halfSettlementStatus": null,
+    "fullSettlementStatus": null,
+    "handicapStatus": null,
+    "unSettlementEvents": null,
+    "leagueNameCn": string,
+    "leagueNameEn": string,
+    "homeTeamNameCn": string,
+    "homeTeamNameEn": string,
+    "awayTeamNameCn": string,
+    "awayTeamNameEn": string,
+    "settlementType": null,
+    "matchCondition": null,
+    "startTime": null,
+    "endTime": null,
+    "leagueIds": null,
+    "saleHandicaps": null,
+    "allHandicaps": null,
+    "pageSize": number,
+    "pageNum": number,
+    "cancelOrderTimes": null,
+    "reSettleStatus": null,
+    "overTimeAndPenaltyKickStatus": null,
+    "openMatchIds": null,
+    "filterMatchIds": null,
+    "pairingType": number,
+    "pairingTime": null,
+    "pairingUser": string,
+    "dataSourceCode": string
+  }
+  type matchPairingData = {
+    data:{
+      list:matchPairingDetail[],
+      pageSize:number,
+      pageNum:number,
+    }
+  }
+
+}

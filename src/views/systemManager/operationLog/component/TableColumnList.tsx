@@ -4,65 +4,68 @@ import { handleTableWidth } from '@/utils/getTableWidth';
 
 export const columns: TableColumnList = [
   {
-    label: 'ID',
-    prop: 'id'
+    label: t('操作菜单'),
+    prop: 'operateMenu',
+    align: 'left',
+    minWidth: 230,
+    formatter: ({ operateMenu }) => (operateMenu ? operateMenu : '-'),
+    headerRenderer: d => handleTableWidth(d, t('操作菜单'), 'auto')
   },
   {
-    label: t('创建时间'),
-    prop: 'createdAt',
-    formatter: ({ createdAt }) =>
-      `${dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss')}`,
-    headerRenderer: d => handleTableWidth(d, t('创建时间'), 'auto'),
-    minWidth: 160
-  },
-  {
-    label: t('操作人Ip'),
-    prop: 'operateIp',
-    headerRenderer: d => handleTableWidth(d, t('操作人Ip'))
-  },
-  {
-    label: t('操作记录'),
+    label: t('操作类别'),
     prop: 'operateLog',
     minWidth: 200,
-    headerRenderer: d => handleTableWidth(d, t('操作记录'), 'auto')
-  },
-  {
-    label: t('操作日志菜单'),
-    prop: 'operateMenu',
-    headerRenderer: d => handleTableWidth(d, t('操作日志菜单'), 'auto'),
-    minWidth: 160
-  },
-  {
-    label: t('接口响应时长'),
-    headerRenderer: d => handleTableWidth(d, t('接口响应时长')),
-    prop: 'operateTime'
+    headerRenderer: d => handleTableWidth(d, t('操作类别'), 'auto')
   },
   {
     label: t('操作类型'),
-    headerRenderer: d => handleTableWidth(d, t('操作类型')),
-    prop: 'operateType'
+    prop: 'operateType',
+    minWidth: 100,
+    headerRenderer: d => handleTableWidth(d, t('操作类型'), 'auto')
   },
   {
-    label: t('请求参数'),
+    label: t('操作参数'),
     slot: 'requestLog',
-    headerRenderer: d => handleTableWidth(d, t('请求参数'))
+    prop: 'requestLog',
+    headerRenderer: d => handleTableWidth(d, t('操作参数'), 'auto')
   },
   {
-    label: t('更新时间'),
+    label: t('修改前'),
+    formatter: ({ operateBefore }) => {
+      return <div style="white-space:pre-wrap">{operateBefore}</div>;
+    },
+    prop: 'operateBefore',
+    slot: 'operateBefore',
+    minWidth: 200,
+    headerRenderer: d => handleTableWidth(d, t('修改前'), 'auto')
+  },
+  {
+    label: t('修改后'),
+    prop: 'operateAfter',
+    slot: 'operateAfter',
+    minWidth: 150,
+    headerRenderer: d => handleTableWidth(d, t('修改后'), 'auto')
+  },
+  {
+    label: t('操作人'),
+    formatter: ({ userName }) => userName ?? '-',
+    prop: 'userName',
+    minWidth: 150,
+    headerRenderer: d => handleTableWidth(d, t('操作人'), 'auto')
+  },
+  {
+    label: t('操作IP'),
+    formatter: ({ operateIp }) => operateIp ?? '-',
+    prop: 'operateIp',
+    minWidth: 150,
+    headerRenderer: d => handleTableWidth(d, t('操作IP'), 'auto')
+  },
+  {
+    label: t('操作时间'),
     prop: 'updatedAt',
-    headerRenderer: d => handleTableWidth(d, t('更新时间'), 'auto'),
+    minWidth: 200,
+    headerRenderer: d => handleTableWidth(d, t('操作时间'), 'auto'),
     formatter: ({ updatedAt }) =>
-      `${dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss')}`,
-    minWidth: 160
-  },
-  {
-    label: t('操作人id'),
-    headerRenderer: d => handleTableWidth(d, t('操作人id')),
-    prop: 'userId'
-  },
-  {
-    label: t('操作用户名'),
-    headerRenderer: d => handleTableWidth(d, t('操作用户名')),
-    prop: 'userName'
+      `${dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss')}`
   }
 ];
