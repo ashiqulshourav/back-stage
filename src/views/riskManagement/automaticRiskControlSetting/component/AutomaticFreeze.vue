@@ -21,14 +21,24 @@
           active-text="On"
           inactive-text="Off"
         />
-        <span v-else>{{ row.isDisable ? 'On' : 'Off' }}</span>
+        <span v-else>
+          <el-switch
+            size="large"
+            v-model="row.isDisable"
+            :active-value="1"
+            :inactive-value="0"
+            inline-prompt
+            active-text="On"
+            inactive-text="Off"
+            :disabled="true"
+        /></span>
       </template>
       <template #sourceName="{ row }">
         <el-select
           v-if="isEditRiskControls"
           v-model="row.sourceCode"
           :placeholder="t('事件源')"
-          clearable          
+          clearable
         >
           <el-option
             :label="item.label"
