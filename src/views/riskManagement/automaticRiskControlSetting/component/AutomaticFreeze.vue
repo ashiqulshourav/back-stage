@@ -96,6 +96,12 @@
           {{ row.minLimitAmount || '0' }} -
           {{ row.maxLimitAmount || t('以上') }}</span
         >
+        <div
+          v-if="showBetAmountError(row)"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('自动冻结投注前时间必须大于自动划单投注前时间:熊猫 56') }}
+        </div>
       </template>
     </pure-table>
 
@@ -155,6 +161,10 @@ const eventDisabled = (eventCode: string) => {
 
 const sourceDisabled = (sourceCode: string) => {
   return props.orderAutoFreezeList.some(item => item.sourceCode == sourceCode);
+};
+
+const showBetAmountError = (row: any) => {
+  return Number(row.maxLimitAmount) <= Number(row.minLimitAmount);
 };
 </script>
 
