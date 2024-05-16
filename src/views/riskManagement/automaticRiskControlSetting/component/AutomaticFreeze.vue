@@ -167,7 +167,7 @@ const sourceDisabled = (sourceCode: string) => {
 };
 
 const showBetAmountError = (row: any) => {
-  return Number(row.maxLimitAmount) <= Number(row.minLimitAmount);
+  return Number(row.maxLimitAmount) < Number(row.minLimitAmount);
 };
 </script>
 
