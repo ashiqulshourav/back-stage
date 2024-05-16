@@ -18,6 +18,7 @@
     <PureTableBar @refresh="reloadTable" :columns="columns">
       <template #title>
         <div class="flex items-center">
+          <!--- fullSettlementStatus 1：全场已经结算  -->
           <template v-if="!renderObj.fullSettlementStatus">
             <SettleMatchBtn
               :parentRow="renderObj"
@@ -215,7 +216,7 @@
                 @click="
                   addChildRow(
                     item.tableList,
-                    item.type,
+                    item.type as 'goal',
                     selectTabIndex,
                     item.key
                   )
@@ -234,7 +235,7 @@
                 @click="
                   addChildRow(
                     item.tableList,
-                    item.type,
+                    item.type as 'goal' | 'yellow_red_card' | 'corner',
                     selectTabIndex,
                     item.key
                   )
@@ -306,8 +307,8 @@ const teamChangeEvent = (
     const prevRow: SattleDataAPI.MatchEventsList = childrenData[childIndex - 1];
     const t1Increment = isHome ? 1 : 0;
     const t2Increment = isHome ? 0 : 1;
-    row.t1 = +prevRow.t1 + t1Increment;
-    row.t2 = +prevRow.t2 + t2Increment;
+    row.t1 = +(prevRow.t1 as string) + t1Increment;
+    row.t2 = +(prevRow.t2 as string) + t2Increment;
 
     if (isYellowRedCard) {
       if (row.redOrYellow === 2) {

@@ -6,11 +6,11 @@ declare namespace SattleDataAPI {
     eventTime?: string | number | Date;
     createdAt?: number;
     extraInfo?: string;
-    homeAway?: string;
+    homeAway?: string | null;
     id?: number;
     _tempDate?: number;
     matchId?: number;
-    matchPeriodId?: number | string;
+    matchPeriodId?: number | string | null;
     matchType?: number;
     player1Id?: number;
     player1Name?: string;
@@ -19,8 +19,8 @@ declare namespace SattleDataAPI {
     player2Id?: number;
     sourceType?: number;
     sportId?: number;
-    t1: number | string;
-    t2: number | string;
+    t1: number | string | null;
+    t2: number | string | null;
     isEdit?: boolean;
     t1Y?: number;
     t2Y?: number;
@@ -66,7 +66,7 @@ declare namespace SattleDataAPI {
     canceled?: number;
     eventCode?: string | number;
     eventTime?: Date | number | string;
-    homeAway?: string;
+    homeAway?: string | null;
     matchId?: number;
     matchPeriodId?: number;
     player1Name?: string;
@@ -77,7 +77,7 @@ declare namespace SattleDataAPI {
     dataSourceCode?: string;
     t1?: number | string;
     t2?: number | string;
-    id?: number;
+    id?: number | null;
     gameRule?: string;
     inningNum?: number;
     firstNum?: number;
@@ -557,11 +557,11 @@ declare namespace SattleDataAPI {
       firstT1?: number | string;
       firstT2?: number | string;
       eventCode?: string | number;
-      eventTime: number | string | Date;
-      homeAway?: string;
-      matchPeriodId: number | string;
-      t1?: number | string;
-      t2?: number | string;
+      eventTime?: number | string | Date;
+      homeAway?: string | null;
+      matchPeriodId?: number | string | null;
+      t1?: number | string | null;
+      t2?: number | string | null;
     }[]
   }
 
