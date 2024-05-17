@@ -1,7 +1,7 @@
 <template>
 	<div class="table-container">
-		<div class="vertical-table-title" :style="customCss">{{ title }}</div>
-		<table class="vertical-table" :style="customCss">
+		<div class="vertical-table-title" :style="cssVar">{{ title }}</div>
+		<table class="vertical-table" :style="cssVar">
 			<tr v-for="(column, index) in columns" :key="index">
 				<th>{{ t(column.label) }}</th>
 				<td>
@@ -25,7 +25,7 @@ defineProps<{
 }>()
 
 const { dataTheme } = useDataThemeChange();
-const customCss = dataTheme.value ? `--evenRow: #262727; --oddRow: #141414;` : `--evenRow: #F2F2F2; --oddRow: #FFFFFF; --border: 1px solid rgb(248 250 252);`
+const cssVar = dataTheme.value ? `--bgEven: #262727; --bgOdd: #141414; --border: rgba(30 30 30);` : `--bgEven: #F2F2F2; --bgOdd: #FFFFFF; --border: rgb(248 248 248);`
 const handleNullValue = (value: string | number) => {
 	return value ? value : '-';
 }
@@ -45,19 +45,19 @@ const handleNullValue = (value: string | number) => {
 .vertical-table td {
 	text-align: left;
 	padding: 16px;
-	border: var(--border);
+	border: 1px solid var(--border);
 }
 
 .vertical-table tr:nth-child(even) {
-	background-color: var(--evenRow);
+	background-color: var(--bgEven);
 }
 
 .vertical-table tr:nth-child(odd) {
-	background-color: var(--oddRow);
+	background-color: var(--bgOdd);
 }
 
 .vertical-table-title {
   text-align: center;
-	background-color: var(--evenRow);
+	background-color: var(--bgEven);
 }
 </style>

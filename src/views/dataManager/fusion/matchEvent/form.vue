@@ -1,6 +1,6 @@
 <template>
   <div class="modal-container" :style="`background-color: ${dataTheme ? '#020409' : '#F0F2F5'}`">
-    <div class="place-content-center col-span-1 m-2">
+    <div class="place-content-center col-span-1 ml-2">
       <div class="text-center text-lg font-bold mb-5">{{ t('正在编辑的赛事信息') }}</div>
       <VerticalTable :columns="selectedEventColumns" :dataList="matchSourceDetails"/>
     </div>
