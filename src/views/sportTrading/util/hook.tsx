@@ -17,7 +17,7 @@ export function useTradingHook() {
   );
   const searchForm = reactive<SearchFormType>({
     sportId: 1,
-    leagueNameOrId: '土耳其',
+    leagueNameOrId: '',
     matchNameOrId: '',
     startTime: '',
     endTime: ''
@@ -51,17 +51,6 @@ export function useTradingHook() {
     if (res.code) return;
     const tempList = handicapList.slice(1);
 
-    res.data.goalBetItemsDtoList.forEach(item => {
-      // - 波胆单独处理
-      if (BO_DAN_CODE_LIST.includes(item.kindsCode)) {
-        transferBoDanCol(
-          item,
-          currentMatch.homeTeamNameCn,
-          currentMatch.awayTeamNameCn
-        );
-      }
-    });
-
     tempList.forEach(_ => {
       _.list = res.data[
         _.listType as keyof sportTradingDataAPI.getHandicapItemsData
@@ -74,7 +63,22 @@ export function useTradingHook() {
     handicapList[0].amount = tempList
       .map(item => item.amount)
       .reduce((pre, next) => pre + next);
-    console.log('hook.tsx文件 65==============行打印=', handicapList);
+
+    handicapList[0].list.forEach(item => {
+      item.kindsCodeDtoList.forEach(_ => {
+        _.betItemsDtoList.forEach(l => {
+          if (!l.dpOdds) l.dpOdds = l.odds;
+        });
+      });
+      // - 波胆单独处理
+      if (BO_DAN_CODE_LIST.includes(item.kindsCode)) {
+        transferBoDanCol(
+          item,
+          currentMatch.homeTeamNameCn,
+          currentMatch.awayTeamNameCn
+        );
+      }
+    });
   };
 
   //- 修改左侧选中比赛ID

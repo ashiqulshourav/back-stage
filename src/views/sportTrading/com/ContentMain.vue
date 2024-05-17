@@ -91,9 +91,7 @@
                         v-if="s.sourceBetItemsId !== 1"
                         class="min-w-[120px] text-[--el-color-primary]"
                       >
-                        {{
-                          s.dpOdds ? s.dpOdds?.toFixed(2) : s.odds?.toFixed(2)
-                        }}
+                        {{ s.dpOdds?.toFixed(2) }}
                       </div>
                       <div
                         v-else
@@ -103,7 +101,7 @@
                           <el-input-number
                             size="small"
                             :step="0.01"
-                            v-model="num"
+                            v-model="s.dpOdds"
                             controls-position="right"
                           />
                         </div>
@@ -207,7 +205,7 @@ const mouseEvent = (
   s: sportTradingDataAPI.BetItemsDtoList,
   type: 'enter' | 'leave'
 ) => {
-  scrollPostitonObj.left = `${e.target.getBoundingClientRect().left + 148}px`;
+  scrollPostitonObj.left = `${e.target.getBoundingClientRect().left + 172}px`;
   scrollPostitonObj.top = `${e.target.getBoundingClientRect().top - 172}px`;
   isShowScroll.value = type === 'enter';
   s.sourceBetItemsId = type === 'enter' ? 1 : -1;
