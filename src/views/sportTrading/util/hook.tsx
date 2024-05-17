@@ -2,11 +2,12 @@ import { message } from '@/utils/message';
 import { SearchFormType, handicapListType } from './type';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { baseHandicapList } from './baseData';
+import { BO_DAN_CODE_LIST, transferBoDanCol } from './playMap';
 
 export function useTradingHook() {
   const loading = ref(true);
   const handicapLoading = ref(true);
-  const selectContentType = ref('all');
+
   const matchList = reactive<sportTradingDataAPI.getMorningSetMatchListData[]>(
     []
   );
@@ -16,7 +17,7 @@ export function useTradingHook() {
   );
   const searchForm = reactive<SearchFormType>({
     sportId: 1,
-    leagueNameOrId: '',
+    leagueNameOrId: '土耳其',
     matchNameOrId: '',
     startTime: '',
     endTime: ''
@@ -50,6 +51,17 @@ export function useTradingHook() {
     if (res.code) return;
     const tempList = handicapList.slice(1);
 
+    res.data.goalBetItemsDtoList.forEach(item => {
+      // - 波胆单独处理
+      if (BO_DAN_CODE_LIST.includes(item.kindsCode)) {
+        transferBoDanCol(
+          item,
+          currentMatch.homeTeamNameCn,
+          currentMatch.awayTeamNameCn
+        );
+      }
+    });
+
     tempList.forEach(_ => {
       _.list = res.data[
         _.listType as keyof sportTradingDataAPI.getHandicapItemsData
@@ -71,6 +83,12 @@ export function useTradingHook() {
     getHandicapltems();
   };
 
+  //- 修改内容部分导航标签分类
+  const selectContentType = ref('all');
+  const changeSelectType = (type: string) => {
+    selectContentType.value = type;
+  };
+
   onMounted(() => {
     onSearch();
   });
@@ -84,6 +102,7 @@ export function useTradingHook() {
     currentMatch,
     changeSelectMatch,
     handicapList,
-    selectContentType
+    selectContentType,
+    changeSelectType
   };
 }

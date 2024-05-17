@@ -66,7 +66,7 @@
               </div>
               <div :class="['text-[--el-color-primary] !mr-2 !ml-2']">V</div>
               <ReText type="danger" size="small">
-                {{ _.homeTeamNameCn }}
+                {{ _.awayTeamNameCn }}
               </ReText>
             </div>
             <div class="flex cursor-pointer">

@@ -18,6 +18,7 @@
           :currentMatch="currentMatch"
           :handicapList="handicapList"
           :selectContentType="selectContentType"
+          @changeSelectType="changeSelectType"
         />
       </div>
     </div>
@@ -39,7 +40,8 @@ const {
   onSearch,
   handicapLoading,
   handicapList,
-  selectContentType
+  selectContentType,
+  changeSelectType
 } = useTradingHook();
 
 const { type } = defineProps<{

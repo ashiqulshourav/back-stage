@@ -35,6 +35,7 @@
         v-for="(item, index) in handicapList"
         :key="index"
         :type="selectContentType === item.listType ? 'primary' : ''"
+        @click="changeSelectType(item.listType)"
         >{{ item.val }}({{ item.amount }})</el-button
       >
     </div>
@@ -56,6 +57,12 @@ defineProps<{
   handicapList: handicapListType[];
   selectContentType: string;
 }>();
+
+const emits = defineEmits(['changeSelectType']);
+//- 修改选择类型
+const changeSelectType = (type: string) => {
+  emits('changeSelectType', type);
+};
 </script>
 
 <style scoped></style>

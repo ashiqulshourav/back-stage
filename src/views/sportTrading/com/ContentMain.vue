@@ -4,11 +4,14 @@
       :currentMatch="currentMatch"
       :handicapList="handicapList"
       :selectContentType="selectContentType"
+      @changeSelectType="changeSelectType"
     />
-
     <!-- - 赛事内容列表 -->
-    <div class="w-full h-full overflow-hidden pl-5" v-loading="handicapLoading">
-      <el-scrollbar>
+    <div
+      class="w-full overflow-hidden pl-5 h-[calc(100%-60px)]"
+      v-loading="handicapLoading"
+    >
+      <el-scrollbar ref="contentScrollRef">
         <el-collapse
           ref="collapseRef"
           v-model="activeNames"
@@ -55,55 +58,54 @@
                       l === 0 && 'bg-[--el-color-primary-light-9]'
                     ]"
                     :key="l"
+                    @mouseleave="e => mouseEvent(e, s, 'leave')"
                     v-for="(s, l) in d.betItemsDtoList"
                   >
                     <div class="text-[--el-color-primary] text-center w-1/5">
-                      {{ s.handicap }}
+                      {{
+                        PLAY_MATCH_NAME(
+                          s.kindsCode,
+                          s.handicap,
+                          currentMatch.homeTeamNameCn,
+                          currentMatch.awayTeamNameCn
+                        )[s.homeOrAway ? s.homeOrAway : s.handicap] ??
+                        goalScoring(
+                          s.kindsCode,
+                          s.handicap,
+                          s.n,
+                          currentMatch.homeTeamNameCn,
+                          currentMatch.awayTeamNameCn,
+                          s.renderName
+                        )
+                      }}
                     </div>
                     <div class="text-[--el-color-danger] text-center w-1/5">
-                      {{ s.odds }}
+                      {{ s.odds.toFixed(2) }}
                     </div>
                     <div
                       class="w-1/5 text-center"
-                      @mouseenter="mouseEvent(s, 'enter')"
-                      @mouseleave="mouseEvent(s, 'leave')"
+                      @mouseenter="e => mouseEvent(e, s, 'enter')"
+                      @mouseleave="e => mouseEvent(e, s, 'leave')"
                     >
                       <div
-                        v-show="s.sourceBetItemsId !== 1"
+                        v-if="s.sourceBetItemsId !== 1"
                         class="min-w-[120px] text-[--el-color-primary]"
                       >
-                        {{ s.dpOdds ?? s.odds }}
+                        {{
+                          s.dpOdds ? s.dpOdds?.toFixed(2) : s.odds?.toFixed(2)
+                        }}
                       </div>
                       <div
-                        v-show="s.sourceBetItemsId === 1"
+                        v-else
                         class="text-[--el-color-primary] flex justify-center cursor-pointer relative"
                       >
-                        <div class="min-w-[120px]">
+                        <div class="w-[120px]">
                           <el-input-number
                             size="small"
                             :step="0.01"
                             v-model="num"
                             controls-position="right"
                           />
-                        </div>
-                        <div
-                          class="absolute w-16 right-[-33px] bg-[--el-color-primary-light-8] flex flex-col top-[0px] pt-2 pb-2 border-[1px] border-solid border-[#f0f0f0] dark:border-[#303030]"
-                        >
-                          <el-scrollbar ref="scrollRef" height="200px">
-                            <div class="flex flex-col">
-                              <span
-                                v-for="item in numberList()"
-                                :key="item"
-                                :class="[
-                                  'w-full text-[--el-color-primary]',
-                                  item === 0 &&
-                                    'bg-[--el-color-primary-dark-2] !text-white'
-                                ]"
-                              >
-                                {{ item > 0 ? '+' : '' }} {{ item }}
-                              </span>
-                            </div>
-                          </el-scrollbar>
                         </div>
                       </div>
                     </div>
@@ -121,6 +123,27 @@
           </el-collapse-item>
         </el-collapse>
       </el-scrollbar>
+      <!-- scroll滚动条 -->
+      <div
+        v-show="isShowScroll"
+        class="fixed w-16 bg-[--el-color-primary-light-8] flex flex-col pt-2 pb-2 border-[1px] border-solid border-[#f0f0f0] dark:border-[#303030]"
+        :style="scrollPostitonObj"
+      >
+        <el-scrollbar ref="scrollRef" height="180px">
+          <div class="flex flex-col">
+            <span
+              v-for="item in numberList()"
+              :key="item"
+              :class="[
+                'w-full text-[--el-color-primary] text-center',
+                item === 0 && 'bg-[--el-color-primary-dark-2] !text-white'
+              ]"
+            >
+              {{ item > 0 ? '+' : '' }}{{ item }}
+            </span>
+          </div>
+        </el-scrollbar>
+      </div>
     </div>
   </div>
 </template>
@@ -129,12 +152,15 @@
 import { handicapListType } from '../util/type';
 import IconGroup from './IconGroup.vue';
 import ContentTitle from './ContentTitle.vue';
+import { subtraction } from '@pureadmin/utils';
+import { PLAY_MATCH_NAME, goalScoring } from '../util/playMap';
 const collapseRef = ref();
 const activeNames = ref([0]);
-import { subtraction } from '@pureadmin/utils';
 const num = ref();
 const scrollRef = ref();
-
+const isShowScroll = ref(false);
+const scrollPostitonObj = reactive({ left: '0px', top: '0px' });
+const contentScrollRef = ref();
 const props = defineProps<{
   handicapLoading: boolean;
   currentMatch: sportTradingDataAPI.MatchDtoList;
@@ -156,25 +182,41 @@ const numberList = (): number[] => {
 
 watch(
   () => props.handicapList,
-  l => {
+  () => {
     nextTick(() => {
-      scrollRef.value.forEach((item: any) => {
-        item.scrollTo(0, 600);
-      });
+      scrollRef.value.scrollTo(0, 520);
     });
   },
   {
     deep: true
   }
 );
+//- 监听内容分类改变
+watch(
+  () => props.selectContentType,
+  v => {
+    const index = props.handicapList.findIndex(item => item.listType === v);
+    activeNames.value = [index];
+    contentScrollRef.value.scrollTo(0, 0);
+  }
+);
 
 //- 鼠标滑入交互处理
 const mouseEvent = (
+  e: any,
   s: sportTradingDataAPI.BetItemsDtoList,
   type: 'enter' | 'leave'
 ) => {
-  // scrollRef.value[0].scrollTo(0, 600);
+  scrollPostitonObj.left = `${e.target.getBoundingClientRect().left + 148}px`;
+  scrollPostitonObj.top = `${e.target.getBoundingClientRect().top - 172}px`;
+  isShowScroll.value = type === 'enter';
   s.sourceBetItemsId = type === 'enter' ? 1 : -1;
+};
+
+const emits = defineEmits(['changeSelectType']);
+//- 修改选择类型
+const changeSelectType = (type: string) => {
+  emits('changeSelectType', type);
 };
 </script>
 
