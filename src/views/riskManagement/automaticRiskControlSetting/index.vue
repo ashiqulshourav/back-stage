@@ -58,6 +58,7 @@
             :addControlLabel="addControlLabel"
             :deleteControlLabel="deleteControlLabel"
             :orderPlacementList="orderPlacementList"
+            :orderAutoFreezeList="orderAutoFreezeList"
             :isFormClick="isFormClick"
           />
         </div>
@@ -69,6 +70,7 @@
             :columns="autoFreezeColumns"
             :addControlLabel="addControlLabel"
             :deleteControlLabel="deleteControlLabel"
+            :orderPlacementList="orderPlacementList"
             :orderAutoFreezeList="orderAutoFreezeList"
             :isFormClick="isFormClick"
           />

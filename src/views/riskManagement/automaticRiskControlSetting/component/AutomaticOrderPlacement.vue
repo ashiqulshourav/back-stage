@@ -17,6 +17,7 @@
           :placeholder="t('事件源')"
           clearable
           required
+          :onChange="changeSourceName(row)"
         >
           <el-option
             :label="item.label"
@@ -68,6 +69,12 @@
           {{ t('秒') }}
         </div>
         <span v-else> {{ row.betBeforeTime }} {{ t('秒') }} </span>
+        <div
+          v-if="showBetBeforeTimeError(row) && isFormClick"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('自动冻结投注后时间必须大于自动划单投注后时间') }}
+        </div>
       </template>
       <template #afterBetting="{ row }">
         <div v-if="isEditRiskControls" class="flex items-center gap-2">
@@ -78,11 +85,12 @@
           {{ t('秒') }}
         </div>
         <span v-else> {{ row.betAfterTime }} {{ t('秒') }} </span>
+
         <div
-          v-if="showBettingError(row) && isFormClick"
+          v-if="showBetAfterTimeError(row) && isFormClick"
           class="text-red-500 text-xs text-start"
         >
-          {{ t('自动划单投注后时间必须大于自动划单投注前时间') }}
+          {{ t('自动冻结投注后时间必须大于自动划单投注后时间') }}
         </div>
       </template>
       <template #betAmount="{ row }">
@@ -97,10 +105,27 @@
             v-model="row.maxLimitAmount"
           />
         </div>
-        <span v-else>
-          {{ row.minLimitAmount || '0' }} -
-          {{ row.maxLimitAmount || t('以上') }}</span
-        >
+        <div v-else>
+          <span v-if="Number(row.minLimitAmount) && Number(row.maxLimitAmount)">
+            {{
+              addThousandSeparator(row.minLimitAmount) +
+              t('元') +
+              ' - ' +
+              addThousandSeparator(row.maxLimitAmount) +
+              t('元')
+            }}
+          </span>
+          <span
+            v-if="Number(row.minLimitAmount) && !Number(row.maxLimitAmount)"
+          >
+            {{ t('高于') + addThousandSeparator(row.maxLimitAmount) + t('元') }}
+          </span>
+          <span
+            v-if="!Number(row.minLimitAmount) && Number(row.maxLimitAmount)"
+          >
+            {{ t('低于') + addThousandSeparator(row.maxLimitAmount) + t('元') }}
+          </span>
+        </div>
       </template>
     </pure-table>
 
@@ -138,6 +163,7 @@ const props = defineProps<{
   loading: boolean;
   columns: TableColumnList;
   orderPlacementList: RiskManagementDataAPI.OrderPlacementTypes[];
+  orderAutoFreezeList: RiskManagementDataAPI.AutoFreeze[];
   addControlLabel: () => void;
   deleteControlLabel: () => void;
   isFormClick: boolean;
@@ -149,11 +175,16 @@ const changeEventName = (row): any => {
   )?.eventName;
 };
 
+const changeSourceName = (row): any => {
+  row.sourceName = EVENT_SOURCE.find(
+    item => item.value == row.sourceCode
+  )?.label;
+};
+
 const eventDisabled = (eventCode: string, row: any) => {
   let disable = false;
   props.orderPlacementList.forEach(item => {
     if (item.sourceCode == row.sourceCode) {
-      console.log('same');
       if (item.eventCode == eventCode) {
         disable = true;
       }
@@ -163,8 +194,44 @@ const eventDisabled = (eventCode: string, row: any) => {
   return disable;
 };
 
-const showBettingError = (row: any) => {
-  return !row.betBeforeTime && !row.betAfterTime;
+const showBetAfterTimeError = (row: any) => {
+  let error = false;
+  if (!row.betBeforeTime && !row.betAfterTime) {
+    error = true;
+  } else if (row.betAfterTime) {
+    props.orderAutoFreezeList.forEach(orderFreeze => {
+      if (
+        orderFreeze.sourceCode == row.sourceCode &&
+        orderFreeze.eventCode == row.eventCode
+      ) {
+        if (Number(row.betAfterTime) > Number(orderFreeze.betAfterTime)) {
+          error = true;
+        }
+      }
+    });
+  }
+
+  return error;
+};
+
+const showBetBeforeTimeError = (row: any) => {
+  let error = false;
+  if (!row.betBeforeTime && !row.betAfterTime) {
+    error = true;
+  } else if (row.betBeforeTime) {
+    props.orderAutoFreezeList.forEach(orderFreeze => {
+      if (
+        orderFreeze.sourceCode == row.sourceCode &&
+        orderFreeze.eventCode == row.eventCode
+      ) {
+        if (Number(row.betBeforeTime) > Number(orderFreeze.betBeforeTime)) {
+          error = true;
+        }
+      }
+    });
+  }
+
+  return error;
 };
 </script>
 
