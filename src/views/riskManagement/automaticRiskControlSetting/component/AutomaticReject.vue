@@ -26,6 +26,12 @@
         </el-select>
 
         <span v-else>{{ row.sourceName }} </span>
+        <div
+          v-if="!row.sourceCode && isFormClick"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('事件源或者事件名称不能为空 ') }}
+        </div>
       </template>
       <template #eventName="{ row }">
         <el-select
@@ -34,6 +40,7 @@
           :placeholder="t('事件名称')"
           clearable
           :onChange="changeEventName(row)"
+          required
         >
           <el-option
             :label="item.eventName"
@@ -44,6 +51,12 @@
           />
         </el-select>
         <span v-else>{{ row.eventName }} </span>
+        <div
+          v-if="!row.eventCode && isFormClick"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('事件源或者事件名称不能为空') }}
+        </div>
       </template>
       <template #beforeBetting="{ row }">
         <div v-if="isEditRiskControls" class="flex items-center gap-2">
@@ -64,6 +77,12 @@
           {{ t('秒') }}
         </div>
         <span v-else> {{ row.betAfterTime }} {{ t('秒') }} </span>
+        <div
+          v-if="showBettingError(row) && isFormClick"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('自动划单投注后时间必须大于自动划单投注前时间') }}
+        </div>
       </template>
     </pure-table>
 
@@ -103,6 +122,7 @@ const props = defineProps<{
   rejectOrderList: RiskManagementDataAPI.OrderRejectTypes[];
   addControlLabel: () => void;
   deleteControlLabel: () => void;
+  isFormClick: boolean;
 }>();
 
 const changeEventName = (row): any => {
@@ -123,6 +143,10 @@ const eventDisabled = (eventCode: string, row: any) => {
   });
 
   return disable;
+};
+
+const showBettingError = (row: any) => {
+  return !row.betBeforeTime && !row.betAfterTime;
 };
 </script>
 

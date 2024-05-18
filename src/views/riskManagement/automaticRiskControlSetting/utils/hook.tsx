@@ -21,6 +21,7 @@ export function useRiskControlHook({
   const currentRiskControlLabelId = ref(0);
   const loading = ref(false);
   const isEditRiskControls = ref(false);
+  const isFormClick = ref(false);
   const { openPasswordInput } = usePasswordInputHook();
   const pandaMatchList = reactive<PandaMatch[]>([]);
 
@@ -157,6 +158,7 @@ export function useRiskControlHook({
 
   const cancelRiskControlsEdit = () => {
     isEditRiskControls.value = false;
+    isFormClick.value = false;
     switch (currentRiskControlLabelId.value) {
       case 0:
         {
@@ -184,6 +186,7 @@ export function useRiskControlHook({
   const changeType = (id: number) => {
     currentRiskControlLabelId.value = id;
     cancelRiskControlsEdit();
+    isFormClick.value = false;
   };
 
   const toggle = async (flag: boolean) => {
@@ -199,6 +202,7 @@ export function useRiskControlHook({
       center: true
     }).then(async () => {
       loading.value = true;
+      isFormClick.value = true;
 
       const transformPayload = (
         data: RiskManagementDataAPI.OrderRejectTypes[]
@@ -225,6 +229,7 @@ export function useRiskControlHook({
       if (res.code) {
         message(res.msg, { type: 'error' });
       } else {
+        isFormClick.value = false;
         message(res.msg, { type: res.code ? 'error' : 'success' });
         isEditRiskControls.value = false;
         rejectOrderList.length = 0;
@@ -239,6 +244,7 @@ export function useRiskControlHook({
       center: true
     }).then(async () => {
       loading.value = true;
+      isFormClick.value = true;
 
       const transformPayload = (
         data: RiskManagementDataAPI.OrderPlacementTypes[]
@@ -267,6 +273,7 @@ export function useRiskControlHook({
       if (res.code) {
         message(res.msg, { type: 'error' });
       } else {
+        isFormClick.value = false;
         message(res.msg, { type: res.code ? 'error' : 'success' });
         isEditRiskControls.value = false;
         orderPlacementList.length = 0;
@@ -281,6 +288,7 @@ export function useRiskControlHook({
       center: true
     }).then(async () => {
       loading.value = true;
+      isFormClick.value = true;
 
       const res = await API.updateAutoLimitConfig([
         ...riskControlList,
@@ -291,6 +299,7 @@ export function useRiskControlHook({
         message(res.msg, { type: 'error' });
         return;
       } else {
+        isFormClick.value = false;
         message(res.msg, { type: res.code ? 'error' : 'success' });
         isEditRiskControls.value = false;
         riskControlList.length = 0;
@@ -315,6 +324,7 @@ export function useRiskControlHook({
         center: true
       }).then(async () => {
         loading.value = true;
+        isFormClick.value = true;
 
         const transformPayload = (data: RiskManagementDataAPI.AutoFreeze[]) => {
           return data.map(item => ({
@@ -345,6 +355,7 @@ export function useRiskControlHook({
           message(res.msg, { type: 'error' });
           return;
         } else {
+          isFormClick.value = false;
           message(res.msg, { type: res.code ? 'error' : 'success' });
           isEditRiskControls.value = false;
           orderAutoFreezeList.length = 0;
@@ -525,6 +536,7 @@ export function useRiskControlHook({
     orderPlacementList,
     pandaMatchList,
     autoFreezeColumns,
-    orderAutoFreezeList
+    orderAutoFreezeList,
+    isFormClick
   };
 }

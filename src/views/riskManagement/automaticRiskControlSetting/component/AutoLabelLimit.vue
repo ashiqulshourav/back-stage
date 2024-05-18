@@ -153,6 +153,7 @@ const props = defineProps<{
   addControlLabel: () => void;
   deleteControlLabel: () => void;
   labelList: labelListType;
+  isFormClick: boolean;
 }>();
 
 const getLimmitLevelList = async () => {
