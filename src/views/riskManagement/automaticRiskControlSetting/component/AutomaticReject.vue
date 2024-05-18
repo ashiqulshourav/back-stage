@@ -30,7 +30,7 @@
           v-if="!row.sourceCode && isFormClick"
           class="text-red-500 text-xs text-start"
         >
-          {{ t('事件源或者事件名称不能为空 ') }}
+          {{ t('事件源不能为空') }}
         </div>
       </template>
       <template #eventName="{ row }">
@@ -55,7 +55,7 @@
           v-if="!row.eventCode && isFormClick"
           class="text-red-500 text-xs text-start"
         >
-          {{ t('事件源或者事件名称不能为空') }}
+          {{ t('事件名称不能为空') }}
         </div>
       </template>
       <template #beforeBetting="{ row }">
