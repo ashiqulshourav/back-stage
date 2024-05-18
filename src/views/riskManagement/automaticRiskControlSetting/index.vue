@@ -46,6 +46,7 @@
             :addControlLabel="addControlLabel"
             :deleteControlLabel="deleteControlLabel"
             :rejectOrderList="rejectOrderList"
+            :isFormClick="isFormClick"
           />
         </div>
         <!-- Automatic order placement -->
@@ -57,6 +58,7 @@
             :addControlLabel="addControlLabel"
             :deleteControlLabel="deleteControlLabel"
             :orderPlacementList="orderPlacementList"
+            :isFormClick="isFormClick"
           />
         </div>
         <!-- AutoFreeze -->
@@ -68,6 +70,7 @@
             :addControlLabel="addControlLabel"
             :deleteControlLabel="deleteControlLabel"
             :orderAutoFreezeList="orderAutoFreezeList"
+            :isFormClick="isFormClick"
           />
         </div>
         <!-- Auto Label Limit -->
@@ -80,6 +83,7 @@
             :addControlLabel="addControlLabel"
             :deleteControlLabel="deleteControlLabel"
             :labelList="labelList"
+            :isFormClick="isFormClick"
           />
         </div>
       </div>
@@ -125,7 +129,8 @@ const {
   orderPlacementList,
   pandaMatchList,
   autoFreezeColumns,
-  orderAutoFreezeList
+  orderAutoFreezeList,
+  isFormClick
 } = useRiskControlHook({ venueType: 1, category: 1 });
 </script>
 
