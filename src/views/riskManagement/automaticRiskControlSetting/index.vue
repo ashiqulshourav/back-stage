@@ -2,7 +2,7 @@
   <div class="main">
     <div class="mb-5">
       <!-- Top Buttons -->
-      <div class="flex justify-between item-center mb-4">
+      <div class="flex justify-between item-center mb-2">
         <div class="flex mt-4 flex-wrap w-full">
           <CustomButton
             class="mb-2 !ml-0 mr-2"
@@ -13,7 +13,19 @@
             @click="changeType(item.value)"
           />
         </div>
+      </div>
 
+      <div class="flex justify-between items-center mb-4">
+        <span v-if="currentRiskControlLabelId == 0">{{ t('接拒设置') }}</span>
+        <span v-if="currentRiskControlLabelId == 1">{{
+          t('自动划单设置')
+        }}</span>
+        <span v-if="currentRiskControlLabelId == 2">{{
+          t('冻结注单设置')
+        }}</span>
+        <span v-if="currentRiskControlLabelId == 3">{{
+          t('自动标签、限额等级设置')
+        }}</span>
         <EditAutoLabelButton
           :currentRiskControlLabelId="currentRiskControlLabelId"
           :isEditRiskControls="isEditRiskControls"
