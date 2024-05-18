@@ -221,15 +221,16 @@ export function useRiskControlHook({
         ...transformPayload(delrejectOrderList)
       ]);
       loading.value = false;
-      isEditRiskControls.value = false;
+
       if (res.code) {
         message(res.msg, { type: 'error' });
       } else {
         message(res.msg, { type: res.code ? 'error' : 'success' });
+        isEditRiskControls.value = false;
+        rejectOrderList.length = 0;
+        delrejectOrderList.length = 0;
+        onSearchRejectOrder();
       }
-      rejectOrderList.length = 0;
-      delrejectOrderList.length = 0;
-      onSearchRejectOrder();
     });
   };
   // auto order placement
@@ -262,15 +263,16 @@ export function useRiskControlHook({
         ...transformPayload(delOrderPlacementList)
       ]);
       loading.value = false;
-      isEditRiskControls.value = false;
+
       if (res.code) {
         message(res.msg, { type: 'error' });
       } else {
         message(res.msg, { type: res.code ? 'error' : 'success' });
+        isEditRiskControls.value = false;
+        orderPlacementList.length = 0;
+        delOrderPlacementList.length = 0;
+        onSearchOrderPlacement();
       }
-      orderPlacementList.length = 0;
-      delOrderPlacementList.length = 0;
-      onSearchOrderPlacement();
     });
   };
   // auto label
@@ -285,16 +287,16 @@ export function useRiskControlHook({
         ...delRiskControlList
       ]);
       loading.value = false;
-      isEditRiskControls.value = false;
       if (res.code) {
         message(res.msg, { type: 'error' });
         return;
       } else {
         message(res.msg, { type: res.code ? 'error' : 'success' });
+        isEditRiskControls.value = false;
+        riskControlList.length = 0;
+        delRiskControlList.length = 0;
+        onSearchAutoLabelLimit();
       }
-      riskControlList.length = 0;
-      delRiskControlList.length = 0;
-      onSearchAutoLabelLimit();
     });
   };
 
@@ -339,16 +341,16 @@ export function useRiskControlHook({
           ...transformPayload(delOrderAutoFreezeList)
         ]);
         loading.value = false;
-        isEditRiskControls.value = false;
         if (res.code) {
           message(res.msg, { type: 'error' });
           return;
         } else {
           message(res.msg, { type: res.code ? 'error' : 'success' });
+          isEditRiskControls.value = false;
+          orderAutoFreezeList.length = 0;
+          delOrderAutoFreezeList.length = 0;
+          onSearchFreezeOrder();
         }
-        orderAutoFreezeList.length = 0;
-        delOrderAutoFreezeList.length = 0;
-        onSearchFreezeOrder();
       });
   };
 
