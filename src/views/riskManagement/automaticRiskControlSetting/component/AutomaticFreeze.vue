@@ -45,7 +45,6 @@
             :value="item.value"
             v-for="item in EVENT_SOURCE"
             :key="item.value"
-            :disabled="sourceDisabled(item.value)"
           />
         </el-select>
 
@@ -64,7 +63,7 @@
             :value="item.eventCode"
             v-for="item in EVENT_NAMES"
             :key="item.eventCode"
-            :disabled="eventDisabled(item.eventCode)"
+            :disabled="eventDisabled(item.eventCode, row)"
           />
         </el-select>
         <span v-else>{{ row.eventName }} </span>
@@ -158,12 +157,18 @@ const changeEventName = (row): any => {
   )?.eventName;
 };
 
-const eventDisabled = (eventCode: string) => {
-  return props.orderAutoFreezeList.some(item => item.eventCode == eventCode);
-};
+const eventDisabled = (eventCode: string, row: any) => {
+  let disable = false;
+  props.orderAutoFreezeList.forEach(item => {
+    if (item.sourceCode == row.sourceCode) {
+      console.log('same');
+      if (item.eventCode == eventCode) {
+        disable = true;
+      }
+    }
+  });
 
-const sourceDisabled = (sourceCode: string) => {
-  return props.orderAutoFreezeList.some(item => item.sourceCode == sourceCode);
+  return disable;
 };
 
 const showBetAmountError = (row: any) => {
