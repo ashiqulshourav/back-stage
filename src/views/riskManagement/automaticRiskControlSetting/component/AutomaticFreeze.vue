@@ -91,6 +91,12 @@
           {{ t('秒') }}
         </div>
         <span v-else> {{ row.betBeforeTime }} {{ t('秒') }} </span>
+        <div
+          v-if="showBetBeforeTimeError(row) && isFormClick"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('自动冻结投注前时间必须小于自动划单投注前时间') }}
+        </div>
       </template>
       <template #betAfterTime="{ row }">
         <div v-if="isEditRiskControls" class="flex items-center gap-2">
@@ -102,10 +108,10 @@
         </div>
         <span v-else> {{ row.betAfterTime }} {{ t('秒') }} </span>
         <div
-          v-if="showBettingError(row) && isFormClick"
+          v-if="showBetAfterTimeError(row) && isFormClick"
           class="text-red-500 text-xs text-start"
         >
-          {{ t('自动划单投注后时间必须大于自动划单投注前时间') }}
+          {{ t('自动冻结投注前时间必须小于自动划单投注前时间') }}
         </div>
       </template>
       <template #betAmountRange="{ row }">
@@ -120,15 +126,32 @@
             v-model="row.maxLimitAmount"
           />
         </div>
-        <span v-else>
-          {{ row.minLimitAmount || '0' }} -
-          {{ row.maxLimitAmount || t('以上') }}</span
-        >
+        <div v-else>
+          <span v-if="Number(row.minLimitAmount) && Number(row.maxLimitAmount)">
+            {{
+              addThousandSeparator(row.minLimitAmount) +
+              t('元') +
+              ' - ' +
+              addThousandSeparator(row.maxLimitAmount) +
+              t('元')
+            }}
+          </span>
+          <span
+            v-if="Number(row.minLimitAmount) && !Number(row.maxLimitAmount)"
+          >
+            {{ t('高于') + addThousandSeparator(row.maxLimitAmount) + t('元') }}
+          </span>
+          <span
+            v-if="!Number(row.minLimitAmount) && Number(row.maxLimitAmount)"
+          >
+            {{ t('低于') + addThousandSeparator(row.maxLimitAmount) + t('元') }}
+          </span>
+        </div>
         <div
           v-if="showBetAmountError(row) && isFormClick"
           class="text-red-500 text-xs text-start"
         >
-          {{ t('自动冻结投注前时间必须大于自动划单投注前时间:熊猫 56') }}
+          {{ t('投注金额最小值不能大于最大值') }}
         </div>
       </template>
     </pure-table>
@@ -167,6 +190,7 @@ const props = defineProps<{
   loading: boolean;
   columns: TableColumnList;
   orderAutoFreezeList: RiskManagementDataAPI.AutoFreeze[];
+  orderPlacementList: RiskManagementDataAPI.OrderPlacementTypes[];
   addControlLabel: () => void;
   deleteControlLabel: () => void;
   isFormClick: boolean;
@@ -182,7 +206,6 @@ const eventDisabled = (eventCode: string, row: any) => {
   let disable = false;
   props.orderAutoFreezeList.forEach(item => {
     if (item.sourceCode == row.sourceCode) {
-      console.log('same');
       if (item.eventCode == eventCode) {
         disable = true;
       }
@@ -200,8 +223,44 @@ const showBetAmountError = (row: any) => {
   }
 };
 
-const showBettingError = (row: any) => {
-  return !row.betBeforeTime && !row.betAfterTime;
+const showBetBeforeTimeError = (row: any) => {
+  let error = false;
+  if (!row.betBeforeTime && !row.betAfterTime) {
+    error = true;
+  } else if (row.betBeforeTime) {
+    props.orderPlacementList.forEach(orderPlacement => {
+      if (
+        orderPlacement.sourceCode == row.sourceCode &&
+        orderPlacement.eventCode == row.eventCode
+      ) {
+        if (Number(row.betBeforeTime) < Number(orderPlacement.betBeforeTime)) {
+          error = true;
+        }
+      }
+    });
+  }
+
+  return error;
+};
+
+const showBetAfterTimeError = (row: any) => {
+  let error = false;
+  if (!row.betBeforeTime && !row.betAfterTime) {
+    error = true;
+  } else if (row.betAfterTime) {
+    props.orderPlacementList.forEach(orderPlacement => {
+      if (
+        orderPlacement.sourceCode == row.sourceCode &&
+        orderPlacement.eventCode == row.eventCode
+      ) {
+        if (Number(row.betAfterTime) < Number(orderPlacement.betAfterTime)) {
+          error = true;
+        }
+      }
+    });
+  }
+
+  return error;
 };
 </script>
 

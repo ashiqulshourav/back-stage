@@ -263,6 +263,34 @@ export function useRiskControlHook({
       if (!item.betBeforeTime && !item.betAfterTime) {
         isValid = false;
       }
+
+      if (item.betAfterTime) {
+        orderAutoFreezeList.forEach(orderFreeze => {
+          if (
+            orderFreeze.sourceCode == item.sourceCode &&
+            orderFreeze.eventCode == item.eventCode
+          ) {
+            if (Number(item.betAfterTime) > Number(orderFreeze.betAfterTime)) {
+              isValid = false;
+            }
+          }
+        });
+      }
+
+      if (item.betBeforeTime) {
+        orderAutoFreezeList.forEach(orderFreeze => {
+          if (
+            orderFreeze.sourceCode == item.sourceCode &&
+            orderFreeze.eventCode == item.eventCode
+          ) {
+            if (
+              Number(item.betBeforeTime) < Number(orderFreeze.betBeforeTime)
+            ) {
+              isValid = false;
+            }
+          }
+        });
+      }
     });
 
     if (isValid) {
@@ -345,6 +373,36 @@ export function useRiskControlHook({
 
       if (!item.betBeforeTime && !item.betAfterTime) {
         isValid = false;
+      }
+
+      if (item.betAfterTime) {
+        orderPlacementList.forEach(orderPlacement => {
+          if (
+            orderPlacement.sourceCode == item.sourceCode &&
+            orderPlacement.eventCode == item.eventCode
+          ) {
+            if (
+              Number(item.betAfterTime) < Number(orderPlacement.betAfterTime)
+            ) {
+              isValid = false;
+            }
+          }
+        });
+      }
+
+      if (item.betBeforeTime) {
+        orderPlacementList.forEach(orderPlacement => {
+          if (
+            orderPlacement.sourceCode == item.sourceCode &&
+            orderPlacement.eventCode == item.eventCode
+          ) {
+            if (
+              Number(item.betBeforeTime) < Number(orderPlacement.betBeforeTime)
+            ) {
+              isValid = false;
+            }
+          }
+        });
       }
 
       if (!Number(item.maxLimitAmount) && !Number(item.minLimitAmount)) {
@@ -533,10 +591,12 @@ export function useRiskControlHook({
           break;
         case 1:
           {
+            onSearchFreezeOrder();
           }
           break;
         case 2:
           {
+            onSearchOrderPlacement();
           }
           break;
         case 3:

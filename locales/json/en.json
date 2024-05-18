@@ -1110,5 +1110,9 @@
   "k48a6143f": "Automatic labeling and limit level setting",
   "k1a6d65be": "after betting time must be greater than before betting time",
   "k39c236e3": "The event source cannot be null",
-  "k6eb77054": "The event name cannot be null"
+  "k6eb77054": "The event name cannot be null",
+  "k622d75cd": "元",
+  "k454b1c4c": "高于",
+  "k630765f3": "低于",
+  "k-454a57fc": "投注金额最小值不能大于最大值"
 }
