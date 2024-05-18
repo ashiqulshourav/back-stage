@@ -284,7 +284,7 @@ export function useRiskControlHook({
             orderFreeze.eventCode == item.eventCode
           ) {
             if (
-              Number(item.betBeforeTime) < Number(orderFreeze.betBeforeTime)
+              Number(item.betBeforeTime) > Number(orderFreeze.betBeforeTime)
             ) {
               isValid = false;
             }

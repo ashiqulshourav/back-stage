@@ -40,6 +40,7 @@
           :placeholder="t('事件源')"
           clearable
           required
+          :onChange="changeSourceName(row)"
         >
           <el-option
             :label="item.label"
@@ -200,6 +201,12 @@ const changeEventName = (row): any => {
   row.eventName = EVENT_NAMES.find(
     item => item.eventCode == row.eventCode
   )?.eventName;
+};
+
+const changeSourceName = (row): any => {
+  row.sourceName = EVENT_SOURCE.find(
+    item => item.value == row.sourceCode
+  )?.label;
 };
 
 const eventDisabled = (eventCode: string, row: any) => {

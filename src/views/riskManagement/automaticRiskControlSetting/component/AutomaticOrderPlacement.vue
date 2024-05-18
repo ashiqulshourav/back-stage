@@ -17,6 +17,7 @@
           :placeholder="t('事件源')"
           clearable
           required
+          :onChange="changeSourceName(row)"
         >
           <el-option
             :label="item.label"
@@ -174,6 +175,12 @@ const changeEventName = (row): any => {
   )?.eventName;
 };
 
+const changeSourceName = (row): any => {
+  row.sourceName = EVENT_SOURCE.find(
+    item => item.value == row.sourceCode
+  )?.label;
+};
+
 const eventDisabled = (eventCode: string, row: any) => {
   let disable = false;
   props.orderPlacementList.forEach(item => {
@@ -217,8 +224,7 @@ const showBetBeforeTimeError = (row: any) => {
         orderFreeze.sourceCode == row.sourceCode &&
         orderFreeze.eventCode == row.eventCode
       ) {
-        if (Number(row.betBeforeTime) < Number(orderFreeze.betBeforeTime)) {
-          console.log(row.betBeforeTime);
+        if (Number(row.betBeforeTime) > Number(orderFreeze.betBeforeTime)) {
           error = true;
         }
       }
