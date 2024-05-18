@@ -193,10 +193,11 @@ const eventDisabled = (eventCode: string, row: any) => {
 };
 
 const showBetAmountError = (row: any) => {
-  return (
-    (!row.maxLimitAmount && !row.minLimitAmount) ||
-    (Number(row.maxLimitAmount) < Number(row.minLimitAmount))
-  );
+  if (!Number(row.maxLimitAmount) && !Number(row.minLimitAmount)) {
+    return true;
+  } else if (row.maxLimitAmount && row.minLimitAmount) {
+    return Number(row.maxLimitAmount) < Number(row.minLimitAmount);
+  }
 };
 
 const showBettingError = (row: any) => {
