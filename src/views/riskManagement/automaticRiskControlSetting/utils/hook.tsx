@@ -190,14 +190,11 @@ export function useRiskControlHook({
   };
 
   const toggle = async (flag: boolean) => {
-    // todo: add later
-    // const r = await openPasswordInput();
-    // if (!r) return;
     isEditRiskControls.value = flag;
   };
 
   // rejectOrder
-  const confirmRejectOrder = () => {
+  const confirmRejectOrder = async () => {
     // validation
     isFormClick.value = true;
     let isValid = true;
@@ -213,48 +210,47 @@ export function useRiskControlHook({
     });
 
     if (isValid) {
-      ElMessageBox.confirm(t('确定要修改限额吗？'), t('警告'), {
-        center: true
-      }).then(async () => {
-        loading.value = true;
+      const r = await openPasswordInput();
+      if (!r) return;
 
-        const transformPayload = (
-          data: RiskManagementDataAPI.OrderRejectTypes[]
-        ) => {
-          return data.map(item => ({
-            id: item?.id,
-            sourceCode: item.sourceCode,
-            sourceName: item.sourceName,
-            eventCode: item.eventCode,
-            eventName: item.eventName,
-            isDelete: item.isDelete,
-            betBeforeTime: parseInt(item.betBeforeTime || 0),
-            betAfterTime: parseInt(item.betAfterTime || 0),
-            event_name: item.eventName
-          }));
-        };
+      loading.value = true;
 
-        const res = await API.editRiskBetConfigEdit([
-          ...transformPayload(rejectOrderList),
-          ...transformPayload(delrejectOrderList)
-        ]);
-        loading.value = false;
+      const transformPayload = (
+        data: RiskManagementDataAPI.OrderRejectTypes[]
+      ) => {
+        return data.map(item => ({
+          id: item?.id,
+          sourceCode: item.sourceCode,
+          sourceName: item.sourceName,
+          eventCode: item.eventCode,
+          eventName: item.eventName,
+          isDelete: item.isDelete,
+          betBeforeTime: parseInt(item.betBeforeTime || 0),
+          betAfterTime: parseInt(item.betAfterTime || 0),
+          event_name: item.eventName
+        }));
+      };
 
-        if (res.code) {
-          message(res.msg, { type: 'error' });
-        } else {
-          isFormClick.value = false;
-          message(res.msg, { type: res.code ? 'error' : 'success' });
-          isEditRiskControls.value = false;
-          rejectOrderList.length = 0;
-          delrejectOrderList.length = 0;
-          onSearchRejectOrder();
-        }
-      });
+      const res = await API.editRiskBetConfigEdit([
+        ...transformPayload(rejectOrderList),
+        ...transformPayload(delrejectOrderList)
+      ]);
+      loading.value = false;
+
+      if (res.code) {
+        message(res.msg, { type: 'error' });
+      } else {
+        isFormClick.value = false;
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        isEditRiskControls.value = false;
+        rejectOrderList.length = 0;
+        delrejectOrderList.length = 0;
+        onSearchRejectOrder();
+      }
     }
   };
   // auto order placement
-  const confirmOrderPlacement = () => {
+  const confirmOrderPlacement = async () => {
     // validation
     isFormClick.value = true;
     let isValid = true;
@@ -270,77 +266,75 @@ export function useRiskControlHook({
     });
 
     if (isValid) {
-      ElMessageBox.confirm(t('确定要修改限额吗？'), t('警告'), {
-        center: true
-      }).then(async () => {
-        loading.value = true;
+      const r = await openPasswordInput();
+      if (!r) return;
 
-        const transformPayload = (
-          data: RiskManagementDataAPI.OrderPlacementTypes[]
-        ) => {
-          return data.map(item => ({
-            id: item?.id,
-            sourceCode: item.sourceCode,
-            sourceName: item.sourceName,
-            eventCode: item.eventCode,
-            eventName: item.eventName,
-            isDelete: item.isDelete,
-            betBeforeTime: parseInt(item.betBeforeTime || 0),
-            betAfterTime: parseInt(item.betAfterTime || 0),
-            minLimitAmount: parseInt(item.minLimitAmount || 0),
-            maxLimitAmount: parseInt(item.maxLimitAmount || 0),
-            event_name: item.eventName
-          }));
-        };
-
-        const res = await API.updateOrderPlacement([
-          ...transformPayload(orderPlacementList),
-          ...transformPayload(delOrderPlacementList)
-        ]);
-        loading.value = false;
-
-        if (res.code) {
-          message(res.msg, { type: 'error' });
-        } else {
-          isFormClick.value = false;
-          message(res.msg, { type: res.code ? 'error' : 'success' });
-          isEditRiskControls.value = false;
-          orderPlacementList.length = 0;
-          delOrderPlacementList.length = 0;
-          onSearchOrderPlacement();
-        }
-      });
-    }
-  };
-  // auto label
-  const confirmAutoLabel = () => {
-    ElMessageBox.confirm(t('确定要修改限额吗？'), t('警告'), {
-      center: true
-    }).then(async () => {
       loading.value = true;
-      isFormClick.value = true;
 
-      const res = await API.updateAutoLimitConfig([
-        ...riskControlList,
-        ...delRiskControlList
+      const transformPayload = (
+        data: RiskManagementDataAPI.OrderPlacementTypes[]
+      ) => {
+        return data.map(item => ({
+          id: item?.id,
+          sourceCode: item.sourceCode,
+          sourceName: item.sourceName,
+          eventCode: item.eventCode,
+          eventName: item.eventName,
+          isDelete: item.isDelete,
+          betBeforeTime: parseInt(item.betBeforeTime || 0),
+          betAfterTime: parseInt(item.betAfterTime || 0),
+          minLimitAmount: parseInt(item.minLimitAmount || 0),
+          maxLimitAmount: parseInt(item.maxLimitAmount || 0),
+          event_name: item.eventName
+        }));
+      };
+
+      const res = await API.updateOrderPlacement([
+        ...transformPayload(orderPlacementList),
+        ...transformPayload(delOrderPlacementList)
       ]);
       loading.value = false;
+
       if (res.code) {
         message(res.msg, { type: 'error' });
-        return;
       } else {
         isFormClick.value = false;
         message(res.msg, { type: res.code ? 'error' : 'success' });
         isEditRiskControls.value = false;
-        riskControlList.length = 0;
-        delRiskControlList.length = 0;
-        onSearchAutoLabelLimit();
+        orderPlacementList.length = 0;
+        delOrderPlacementList.length = 0;
+        onSearchOrderPlacement();
       }
-    });
+    }
+  };
+  // auto label
+  const confirmAutoLabel = async () => {
+    const r = await openPasswordInput();
+    if (!r) return;
+
+    loading.value = true;
+    isFormClick.value = true;
+
+    const res = await API.updateAutoLimitConfig([
+      ...riskControlList,
+      ...delRiskControlList
+    ]);
+    loading.value = false;
+    if (res.code) {
+      message(res.msg, { type: 'error' });
+      return;
+    } else {
+      isFormClick.value = false;
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      isEditRiskControls.value = false;
+      riskControlList.length = 0;
+      delRiskControlList.length = 0;
+      onSearchAutoLabelLimit();
+    }
   };
 
   // auto freeze
-  const confirmAutoFreeze = () => {
+  const confirmAutoFreeze = async () => {
     // validation
     isFormClick.value = true;
     let isValid = true;
@@ -362,49 +356,49 @@ export function useRiskControlHook({
       }
     });
 
-    if (isValid)
-      ElMessageBox.confirm(t('确定要修改限额吗？'), t('警告'), {
-        center: true
-      }).then(async () => {
-        loading.value = true;
+    if (isValid) {
+      const r = await openPasswordInput();
+      if (!r) return;
 
-        const transformPayload = (data: RiskManagementDataAPI.AutoFreeze[]) => {
-          return data.map(item => ({
-            id: item?.id,
-            isDisable: item.isDisable,
-            sourceCode: item.sourceCode,
-            sourceName: item.sourceName,
-            eventCode: item.eventCode,
-            eventName: item.eventName,
-            isDelete: item.isDelete,
-            betBeforeTime: parseInt(item.betBeforeTime || 0),
-            betAfterTime: parseInt(item.betAfterTime || 0),
-            minLimitAmount: parseInt(item.minLimitAmount || 0),
-            maxLimitAmount: parseInt(item.maxLimitAmount || 0),
-            event_name: item.eventName,
-            userCreateAfter: 0,
-            labels: '',
-            excepLimitUser: 0
-          }));
-        };
+      loading.value = true;
 
-        const res = await API.updateRiskFreezeConfigList([
-          ...transformPayload(orderAutoFreezeList),
-          ...transformPayload(delOrderAutoFreezeList)
-        ]);
-        loading.value = false;
-        if (res.code) {
-          message(res.msg, { type: 'error' });
-          return;
-        } else {
-          isFormClick.value = false;
-          message(res.msg, { type: res.code ? 'error' : 'success' });
-          isEditRiskControls.value = false;
-          orderAutoFreezeList.length = 0;
-          delOrderAutoFreezeList.length = 0;
-          onSearchFreezeOrder();
-        }
-      });
+      const transformPayload = (data: RiskManagementDataAPI.AutoFreeze[]) => {
+        return data.map(item => ({
+          id: item?.id,
+          isDisable: item.isDisable,
+          sourceCode: item.sourceCode,
+          sourceName: item.sourceName,
+          eventCode: item.eventCode,
+          eventName: item.eventName,
+          isDelete: item.isDelete,
+          betBeforeTime: parseInt(item.betBeforeTime || 0),
+          betAfterTime: parseInt(item.betAfterTime || 0),
+          minLimitAmount: parseInt(item.minLimitAmount || 0),
+          maxLimitAmount: parseInt(item.maxLimitAmount || 0),
+          event_name: item.eventName,
+          userCreateAfter: 0,
+          labels: '',
+          excepLimitUser: 0
+        }));
+      };
+
+      const res = await API.updateRiskFreezeConfigList([
+        ...transformPayload(orderAutoFreezeList),
+        ...transformPayload(delOrderAutoFreezeList)
+      ]);
+      loading.value = false;
+      if (res.code) {
+        message(res.msg, { type: 'error' });
+        return;
+      } else {
+        isFormClick.value = false;
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        isEditRiskControls.value = false;
+        orderAutoFreezeList.length = 0;
+        delOrderAutoFreezeList.length = 0;
+        onSearchFreezeOrder();
+      }
+    }
   };
 
   const confirmRiskControlsClick = () => {
