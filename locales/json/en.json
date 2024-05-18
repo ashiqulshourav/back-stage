@@ -1123,7 +1123,7 @@
   "k-1d374401": "Automatic order setting",
   "k-5c9ea522": "Freeze bet settings",
   "k48a6143f": "Automatic labeling and limit level setting",
-  "k5300b7ce": "The event source or event name cannot be null ",
-  "k-43b1710c": "The event source or event name cannot be null",
-  "k1a6d65be": "after betting time must be greater than before betting time"
+  "k1a6d65be": "after betting time must be greater than before betting time",
+  "k39c236e3": "The event source cannot be null",
+  "k6eb77054": "The event name cannot be null"
 }
