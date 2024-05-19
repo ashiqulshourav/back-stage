@@ -11,6 +11,7 @@
             :matchList="matchList"
             :currentMatch="currentMatch"
             @changeSelectMatch="changeSelectMatch"
+            @changeStatus="changeStatus"
           />
         </div>
         <ContentMain
@@ -19,6 +20,8 @@
           :handicapList="handicapList"
           :selectContentType="selectContentType"
           @changeSelectType="changeSelectType"
+          @clearMatchTime="clearMatchTime"
+          @changeStatus="changeStatus"
         />
       </div>
     </div>
@@ -41,7 +44,9 @@ const {
   handicapLoading,
   handicapList,
   selectContentType,
-  changeSelectType
+  changeSelectType,
+  clearMatchTime,
+  changeStatus
 } = useTradingHook();
 
 const { type } = defineProps<{

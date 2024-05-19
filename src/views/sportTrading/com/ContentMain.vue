@@ -5,6 +5,7 @@
       :handicapList="handicapList"
       :selectContentType="selectContentType"
       @changeSelectType="changeSelectType"
+      @changeStatus="changeStatus"
     />
     <!-- - 赛事内容列表 -->
     <div
@@ -17,7 +18,6 @@
           v-model="activeNames"
           class=""
           :accordion="false"
-          @change="handleChange"
         >
           <el-collapse-item
             :name="index"
@@ -53,12 +53,12 @@
               <div class="flex-grow">
                 <div v-for="(d, i) in _.kindsCodeDtoList" :key="i">
                   <div
+                    @mouseleave="e => mouseEvent(e, s, 'leave')"
                     :class="[
                       'flex w-full items-center h-[35px]',
                       l === 0 && 'bg-[--el-color-primary-light-9]'
                     ]"
                     :key="l"
-                    @mouseleave="e => mouseEvent(e, s, 'leave')"
                     v-for="(s, l) in d.betItemsDtoList"
                   >
                     <div class="text-[--el-color-primary] text-center w-1/5">
@@ -82,31 +82,12 @@
                     <div class="text-[--el-color-danger] text-center w-1/5">
                       {{ s.odds.toFixed(2) }}
                     </div>
-                    <div
-                      class="w-1/5 text-center"
-                      @mouseenter="e => mouseEvent(e, s, 'enter')"
-                      @mouseleave="e => mouseEvent(e, s, 'leave')"
-                    >
-                      <div
-                        v-if="s.sourceBetItemsId !== 1"
-                        class="min-w-[120px] text-[--el-color-primary]"
-                      >
-                        {{ s.dpOdds?.toFixed(2) }}
-                      </div>
-                      <div
-                        v-else
-                        class="text-[--el-color-primary] flex justify-center cursor-pointer relative"
-                      >
-                        <div class="w-[120px]">
-                          <el-input-number
-                            size="small"
-                            :step="0.01"
-                            v-model="s.dpOdds"
-                            controls-position="right"
-                          />
-                        </div>
-                      </div>
-                    </div>
+                    <InputCom
+                      :s="s"
+                      @changeMouse="mouseEvent"
+                      :selectNum="selectNum"
+                      :selectItem="selectItem"
+                    />
 
                     <div class="text-[--el-color-primary] w-1/5 text-center">
                       {{ s.betCount }}/{{ s.betAmount }}
@@ -130,10 +111,11 @@
         <el-scrollbar ref="scrollRef" height="180px">
           <div class="flex flex-col">
             <span
+              @click="shortcutSelectNum(item)"
               v-for="item in numberList()"
               :key="item"
               :class="[
-                'w-full text-[--el-color-primary] text-center',
+                'w-full text-[--el-color-primary] text-center cursor-pointer',
                 item === 0 && 'bg-[--el-color-primary-dark-2] !text-white'
               ]"
             >
@@ -152,23 +134,23 @@ import IconGroup from './IconGroup.vue';
 import ContentTitle from './ContentTitle.vue';
 import { subtraction } from '@pureadmin/utils';
 import { PLAY_MATCH_NAME, goalScoring } from '../util/playMap';
+import InputCom from './InputCom.vue';
+
 const collapseRef = ref();
 const activeNames = ref([0]);
-const num = ref();
 const scrollRef = ref();
 const isShowScroll = ref(false);
 const scrollPostitonObj = reactive({ left: '0px', top: '0px' });
 const contentScrollRef = ref();
+const selectItem = reactive<sportTradingDataAPI.BetItemsDtoList>(
+  {} as sportTradingDataAPI.BetItemsDtoList
+);
 const props = defineProps<{
   handicapLoading: boolean;
   currentMatch: sportTradingDataAPI.MatchDtoList;
   handicapList: handicapListType[];
   selectContentType: string;
 }>();
-
-const handleChange = (val: string[]) => {
-  console.log(val);
-};
 
 const numberList = (): number[] => {
   const arr = [];
@@ -199,22 +181,45 @@ watch(
   }
 );
 
+const emits = defineEmits([
+  'changeSelectType',
+  'clearMatchTime',
+  'changeStatus'
+]);
 //- 鼠标滑入交互处理
 const mouseEvent = (
   e: any,
   s: sportTradingDataAPI.BetItemsDtoList,
   type: 'enter' | 'leave'
 ) => {
-  scrollPostitonObj.left = `${e.target.getBoundingClientRect().left + 172}px`;
-  scrollPostitonObj.top = `${e.target.getBoundingClientRect().top - 172}px`;
+  if (type === 'enter') {
+    Object.assign(selectItem, s);
+    scrollPostitonObj.left = `${e.target.getBoundingClientRect().left + 70}px`;
+    scrollPostitonObj.top = `${e.target.getBoundingClientRect().top - 172}px`;
+  }
   isShowScroll.value = type === 'enter';
   s.sourceBetItemsId = type === 'enter' ? 1 : -1;
+  emits('clearMatchTime', s.sourceBetItemsId);
 };
 
-const emits = defineEmits(['changeSelectType']);
 //- 修改选择类型
 const changeSelectType = (type: string) => {
   emits('changeSelectType', type);
+};
+
+//快捷选择数字事件
+const selectNum = ref(0);
+const shortcutSelectNum = (_: number) => {
+  selectNum.value = _;
+  isShowScroll.value = false;
+};
+
+//- 修改图标状态
+const changeStatus = (d: {
+  status: number;
+  classify: 'match' | 'category' | 'pan';
+}) => {
+  emits('changeStatus', d);
 };
 </script>
 

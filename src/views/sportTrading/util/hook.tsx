@@ -2,7 +2,13 @@ import { message } from '@/utils/message';
 import { SearchFormType, handicapListType } from './type';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { baseHandicapList } from './baseData';
-import { BO_DAN_CODE_LIST, transferBoDanCol } from './playMap';
+import {
+  BO_DAN_CODE_LIST,
+  SALE_STATUS,
+  icon_msg_tip,
+  transferBoDanCol
+} from './playMap';
+import { ElMessageBox } from 'element-plus';
 
 export function useTradingHook() {
   const loading = ref(true);
@@ -44,6 +50,7 @@ export function useTradingHook() {
   };
 
   //- 盘口赛事列表接口
+  const loopTimer = ref<NodeJS.Timeout>();
   const getHandicapltems = async () => {
     handicapLoading.value = true;
     const res = await API.getHandicapItems({ matchId: currentMatch.matchId });
@@ -79,11 +86,22 @@ export function useTradingHook() {
         );
       }
     });
+    //- 开启事件定时任务
+    runLoopMatch();
+  };
+
+  //- 开启定时轮询任务
+  const runLoopMatch = () => {
+    if (loopTimer) clearInterval(loopTimer.value);
+    loopTimer.value = setInterval(() => {
+      getHandicapltems();
+    }, 5000);
   };
 
   //- 修改左侧选中比赛ID
   const changeSelectMatch = (data: sportTradingDataAPI.MatchDtoList) => {
     Object.assign(currentMatch, data);
+    clearTimeout(loopTimer.value);
     getHandicapltems();
   };
 
@@ -91,6 +109,55 @@ export function useTradingHook() {
   const selectContentType = ref('all');
   const changeSelectType = (type: string) => {
     selectContentType.value = type;
+  };
+
+  //- 鼠标进入后清空定时器
+  const clearMatchTime = (type: 1 | -1) => {
+    if (type === 1) {
+      clearInterval(loopTimer.value);
+    } else {
+      runLoopMatch();
+    }
+  };
+
+  //-赛事盘口状态更新
+  const changeStatus = ({
+    status,
+    classify
+  }: {
+    status: Partial<SALE_STATUS>;
+    classify: 'match' | 'category' | 'pan';
+  }) => {
+    clearInterval(loopTimer.value);
+    ElMessageBox.confirm(icon_msg_tip[status], t('系统提示'), {
+      confirmButtonText: t('确定'),
+      cancelButtonText: t('取消'),
+      type: 'warning',
+      center: true
+    })
+      .then(async () => {
+        const res = await API.updateHandicapStatus({
+          operateMenu: '操盘管理-早盘管理',
+          matchId: currentMatch.matchId,
+          isSale: status
+        });
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        runLoopMatch();
+        if (res.code) return;
+        switch (classify) {
+          case 'match':
+            upateMatchSale(status);
+            break;
+          default:
+            break;
+        }
+      })
+      .catch(() => runLoopMatch());
+  };
+
+  //- 修改赛事图标状态
+  const upateMatchSale = () => {
+    currentMatch.isSale = status;
   };
 
   onMounted(() => {
@@ -107,6 +174,8 @@ export function useTradingHook() {
     changeSelectMatch,
     handicapList,
     selectContentType,
-    changeSelectType
+    changeSelectType,
+    clearMatchTime,
+    changeStatus
   };
 }

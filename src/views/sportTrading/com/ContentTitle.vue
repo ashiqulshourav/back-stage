@@ -42,8 +42,11 @@
   </div>
   <div class="flex items-center pl-3 pt-1 mb-2">
     <span>{{ currentMatch?.beginTime }}</span>
-    <div class="flex pl-2">
-      <IconGroup />
+    <div class="flex pl-2 cursor-pointer">
+      <IconGroup
+        :typeNum="currentMatch?.isSale"
+        @changeMatchStatus="changeMatchStatus"
+      />
     </div>
   </div>
 </template>
@@ -51,6 +54,7 @@
 <script setup lang="ts">
 import { handicapListType } from '../util/type';
 import { t } from '@/plugins/i18n';
+import IconGroup from './IconGroup.vue';
 
 defineProps<{
   currentMatch: sportTradingDataAPI.MatchDtoList;
@@ -58,10 +62,18 @@ defineProps<{
   selectContentType: string;
 }>();
 
-const emits = defineEmits(['changeSelectType']);
+const emits = defineEmits(['changeSelectType', 'changeStatus']);
 //- 修改选择类型
 const changeSelectType = (type: string) => {
   emits('changeSelectType', type);
+};
+
+//- 修改图标类型
+const changeMatchStatus = (d: {
+  status: number;
+  classify: 'match' | 'category' | 'pan';
+}) => {
+  emits('changeStatus', d);
 };
 </script>
 

@@ -1,33 +1,39 @@
 <template>
   <IconifyIconOffline
-    @click="changeType"
-    :class="['text-[#A8ABB2]']"
+    :class="`text-[#${typeNum === SALE_STATUS.open ? '409EFF' : 'A8ABB2'}]`"
+    @click.native.stop="changeType(SALE_STATUS.open)"
     icon="trading_play"
   />
   <IconifyIconOffline
-    @click="changeType"
-    :class="['text-[#A8ABB2] text-sm ml-2 mr-2']"
+    :class="`text-[#${
+      typeNum === SALE_STATUS.close ? '409EFF' : 'A8ABB2'
+    }] text-sm ml-2 mr-2`"
     icon="trading_switch"
+    @click.native.stop="changeType(SALE_STATUS.close)"
   />
   <IconifyIconOffline
-    @click="changeType"
-    :class="['text-[#409EFF] text-sm mr-2']"
+    :class="`text-[#${
+      typeNum === SALE_STATUS.sealing ? '409EFF' : 'A8ABB2'
+    }] text-sm  mr-2`"
     icon="trading_pause"
+    @click.native.stop="changeType(SALE_STATUS.sealing)"
   />
   <IconifyIconOffline
-    @click="changeType"
-    :class="['text-[#409EFF]']"
+    :class="`text-[#${typeNum === SALE_STATUS.lock ? '409EFF' : 'A8ABB2'}]`"
     icon="trading_lock"
+    @click.native.stop="changeType(SALE_STATUS.lock)"
   />
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+import { SALE_STATUS } from '../util/playMap';
+defineProps<{
   typeNum?: number | null;
 }>();
 
-const changeType = () => {
-  console.log('IconGroup.vue文件 30==============行打印=', 111);
+const emits = defineEmits(['changeMatchStatus']);
+const changeType = (status: number) => {
+  emits('changeMatchStatus', { status, classify: 'match' });
 };
 </script>
 

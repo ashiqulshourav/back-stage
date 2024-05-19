@@ -96,7 +96,14 @@ declare namespace sportTradingDataAPI {
     penaltyKickBetItemsSize: number;
     specialBetItemsSize: number;
   }
-
-
   type getHandicapItemsRes = COMMON.BASE_RES_TYPE<getHandicapItemsData>
+
+  type updateHandicapStatusParams = {
+    matchId: number;
+    operateMenu: string;
+    betItemsIds?: number[];
+    isSale: number;
+  }
+
+  type updateHandicapStatus = COMMON.BASE_RES_TYPE<null>
 }

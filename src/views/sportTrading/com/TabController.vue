@@ -70,7 +70,10 @@
               </ReText>
             </div>
             <div class="flex cursor-pointer">
-              <IconGroup :typeNum="_.isSale" />
+              <IconGroup
+                :typeNum="_.isSale"
+                @changeMatchStatus="changeMatchStatus"
+              />
             </div>
           </div>
         </div>
@@ -87,7 +90,7 @@ import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { ReText } from '@/components/ReText';
 
 const collapseRef = ref();
-const emits = defineEmits(['changeSelectMatch']);
+const emits = defineEmits(['changeSelectMatch', 'changeStatus']);
 
 const props = defineProps<{
   matchList: sportTradingDataAPI.getMorningSetMatchListData[];
@@ -112,7 +115,12 @@ const changeSelectItem = (_: sportTradingDataAPI.MatchDtoList) => {
   emits('changeSelectMatch', _);
 };
 
-const text = ref('自行车自行车');
+const changeMatchStatus = (d: {
+  status: number;
+  classify: 'match' | 'category' | 'pan';
+}) => {
+  emits('changeStatus', d);
+};
 
 //- 获取当前玩法
 const getSportType = (_: number) => {

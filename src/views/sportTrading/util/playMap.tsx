@@ -1,3 +1,19 @@
+//- icon图标状态
+/* 2-开盘 3-封盘 4-锁盘 0-关盘 */
+export enum SALE_STATUS {
+  close = 0,
+  open = 2,
+  sealing = 3,
+  lock = 4
+}
+
+export const icon_msg_tip = {
+  [SALE_STATUS.close]: t('确定要关盘么?'),
+  [SALE_STATUS.open]: t('确定要开盘么?'),
+  [SALE_STATUS.sealing]: t('确定要封盘么?'),
+  [SALE_STATUS.lock]: t('确定要锁盘么?')
+};
+
 //- 波胆集合
 export const BO_DAN_CODE_LIST = ['FT_CS', 'HT_CS'];
 
