@@ -20,7 +20,7 @@ import {
   useSportFormatDetail,
   displayHomeAwayScore,
   BET_RESULT_TYPE_MAP,
-  formatSeriesType
+  formatSeriesType, getIsInplay
 } from '@/utils/formatMatch';
 import dayjs from 'dayjs';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
@@ -249,6 +249,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
   //- 导出excel表格
   const exportFile = async () => {
     downloading.value = true;
+    message(t('导出报表开始'), { type: 'warning' });
     const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
       formatParams({
         pageNum: 1,
@@ -256,7 +257,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
         export: true
       }) as searchFormType
     );
-    downloading.value = false;
     const r = res.data.pageData.map((item: any, i) => {
       const arr: any[] = [];
       const data = { ...item, ...item?.combineOrderDetails[0] };
@@ -371,6 +371,9 @@ export function useBettingCenterHook(category: number, venueType: number) {
           case 'tenantCode': //商户编码
             str = tenantObj[data.tenantId]?.name ?? '';
             break;
+          case 'betStage': //投注阶段
+            str = getIsInplay(data.isInplay);
+            break;
           default:
             str = data[column.prop as string];
         }
@@ -392,9 +395,8 @@ export function useBettingCenterHook(category: number, venueType: number) {
 
     utils.book_append_sheet(workBook, workSheet, '数据报表');
     writeFile(workBook, '赛程_注单中心.xlsx');
-    message(t('导出成功'), {
-      type: 'success'
-    });
+    message(t('导出成功'), { type: 'success' });
+    downloading.value = false;
   };
 
   const handleCancel = (data: any) => {
