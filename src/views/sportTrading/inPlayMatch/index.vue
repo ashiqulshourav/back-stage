@@ -1,5 +1,5 @@
 <template>
-  <TradingBase />
+  <TradingBase type="in" />
 </template>
 
 <script setup lang="ts">

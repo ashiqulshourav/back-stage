@@ -12,7 +12,16 @@
         v-for="item in matchList"
         :key="item.type"
       >
-        <template #title> {{ item.type }} ({{ item.size }}) </template>
+        <template #title>
+          {{
+            item.type === 'nover'
+              ? t('进行中')
+              : item.type === 'nobegin'
+              ? t('未开赛')
+              : item.type
+          }}
+          ({{ item.size }})
+        </template>
         <div
           :class="[
             'flex items-center border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#303030] p-2  cursor-pointer',

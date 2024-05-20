@@ -10,9 +10,10 @@ import {
 } from './playMap';
 import { ElMessageBox } from 'element-plus';
 
-export function useTradingHook() {
+export function useTradingHook(type: 'early' | 'in') {
   const loading = ref(true);
   const handicapLoading = ref(true);
+  const noMatchList = ref(false);
   const matchList = reactive<sportTradingDataAPI.getMorningSetMatchListData[]>(
     []
   );
@@ -31,11 +32,13 @@ export function useTradingHook() {
   //- 初始化搜索
   const onSearch = async () => {
     loading.value = true;
-    const res = await API.getMorningSetMatchList({
-      ...removeEmptyStringKeys(searchForm)
-    });
+    noMatchList.value = false;
+    const reqUrl =
+      type === 'early' ? 'getMorningSetMatchList' : 'getRollingMatchList';
+    const res = await API[reqUrl]({ ...removeEmptyStringKeys(searchForm) });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
+    if (!res.data.length) return (noMatchList.value = true);
     matchList.length = 0;
     const firstRenderList = res.data.slice(0, 1);
     matchList.push(...firstRenderList);
@@ -50,8 +53,8 @@ export function useTradingHook() {
 
   //- 盘口赛事列表接口
   const loopTimer = ref<NodeJS.Timeout>();
-  const getHandicapltems = async () => {
-    handicapLoading.value = true;
+  const getHandicapltems = async (noLoading?: boolean) => {
+    !noLoading && (handicapLoading.value = true);
     const res = await API.getHandicapItems({ matchId: currentMatch.matchId });
     handicapLoading.value = false;
     if (res.code) return;
@@ -133,7 +136,7 @@ export function useTradingHook() {
   const runLoopMatch = () => {
     if (loopTimer) clearInterval(loopTimer.value);
     loopTimer.value = setInterval(() => {
-      getHandicapltems();
+      getHandicapltems(true);
     }, 5000);
   };
 
@@ -251,6 +254,10 @@ export function useTradingHook() {
     onSearch();
   });
 
+  onUnmounted(() => {
+    if (loopTimer) clearInterval(loopTimer.value);
+  });
+
   return {
     loading,
     matchList,
@@ -264,6 +271,7 @@ export function useTradingHook() {
     changeSelectType,
     clearMatchTime,
     changeStatus,
-    sendNewOdds
+    sendNewOdds,
+    noMatchList
   };
 }
