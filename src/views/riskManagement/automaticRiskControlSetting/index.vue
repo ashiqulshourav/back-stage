@@ -34,16 +34,30 @@
       <div class="flex justify-between items-center mb-4">
         <span
           v-if="currentRiskControlLabelId == 0 && hasAuth('AUTOREJECTLIST')"
+          class="font-bold"
           >{{ t('接拒设置') }}</span
         >
         <span
           v-if="
             currentRiskControlLabelId == 1 && hasAuth('AUTOORDERPLACEMENTLIST')
           "
-          >{{ t('自动划单设置') }}</span
+          class="flex gap-10"
         >
+          <span class="font-bold">{{ t('自动划单设置') }}</span>
+          <span>
+            <span class="text-gray-500 flex items-center gap-2">
+              <el-icon><InfoFilled /></el-icon>
+              {{
+                t(
+                  '在此处设定自动冻结注单的条件，符合冻结条件的注单，被冻结后，会在注单审核页面，等待风控批准是否可进行结算流程。'
+                )
+              }}</span
+            >
+          </span>
+        </span>
         <span
           v-if="currentRiskControlLabelId == 2 && hasAuth('AUTOFREEZELIST')"
+          class="font-bold"
           >{{ t('冻结注单设置') }}</span
         >
         <!-- <span v-if="currentRiskControlLabelId == 3">{{
@@ -168,6 +182,7 @@ import EditAutoLabelButton from './component/EditAutoLabelButton.vue';
 import AutomaticReject from './component/AutomaticReject.vue';
 import AutomaticOrderPlacement from './component/AutomaticOrderPlacement.vue';
 import AutomaticFreeze from './component/AutomaticFreeze.vue';
+import { InfoFilled } from '@element-plus/icons-vue';
 
 // :category="1" :venueType="1"
 const {
