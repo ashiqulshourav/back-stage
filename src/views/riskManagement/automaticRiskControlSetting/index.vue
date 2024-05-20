@@ -4,28 +4,51 @@
       <!-- Top Buttons -->
       <div class="flex justify-between item-center mb-2">
         <div class="flex mt-4 flex-wrap w-full">
+          <!-- reject -->
           <CustomButton
+            v-if="hasAuth('AUTOREJECTLIST')"
             class="mb-2 !ml-0 mr-2"
-            v-for="item in AUTO_RISK_CONTROLS"
-            :key="item.value"
-            :type="item.value === currentRiskControlLabelId ? 'primary' : ''"
-            :btnText="item.label"
-            @click="changeType(item.value)"
+            :type="0 == currentRiskControlLabelId ? 'primary' : ''"
+            :btnText="t('自动接拒')"
+            @click="changeType(0)"
+          />
+          <!-- order placement -->
+          <CustomButton
+            v-if="hasAuth('AUTOORDERPLACEMENTLIST')"
+            class="mb-2 !ml-0 mr-2"
+            :type="1 == currentRiskControlLabelId ? 'primary' : ''"
+            :btnText="t('自动划单')"
+            @click="changeType(1)"
+          />
+          <!-- auto freeze -->
+          <CustomButton
+            v-if="hasAuth('AUTOFREEZELIST')"
+            class="mb-2 !ml-0 mr-2"
+            :type="2 == currentRiskControlLabelId ? 'primary' : ''"
+            :btnText="t('自动冻结')"
+            @click="changeType(2)"
           />
         </div>
       </div>
 
       <div class="flex justify-between items-center mb-4">
-        <span v-if="currentRiskControlLabelId == 0">{{ t('接拒设置') }}</span>
-        <span v-if="currentRiskControlLabelId == 1">{{
-          t('自动划单设置')
-        }}</span>
-        <span v-if="currentRiskControlLabelId == 2">{{
-          t('冻结注单设置')
-        }}</span>
-        <span v-if="currentRiskControlLabelId == 3">{{
+        <span
+          v-if="currentRiskControlLabelId == 0 && hasAuth('AUTOREJECTLIST')"
+          >{{ t('接拒设置') }}</span
+        >
+        <span
+          v-if="
+            currentRiskControlLabelId == 1 && hasAuth('AUTOORDERPLACEMENTLIST')
+          "
+          >{{ t('自动划单设置') }}</span
+        >
+        <span
+          v-if="currentRiskControlLabelId == 2 && hasAuth('AUTOFREEZELIST')"
+          >{{ t('冻结注单设置') }}</span
+        >
+        <!-- <span v-if="currentRiskControlLabelId == 3">{{
           t('自动标签、限额等级设置')
-        }}</span>
+        }}</span> -->
 
         <div
           v-if="currentRiskControlLabelId == 0 && hasAuth('UPDATEAUTOREJECT')"
@@ -72,6 +95,7 @@
         <!-- Automatically reject -->
         <div v-if="currentRiskControlLabelId == 0">
           <AutomaticReject
+            v-if="hasAuth('AUTOREJECTLIST')"
             :isEditRiskControls="isEditRiskControls"
             :loading="loading"
             :columns="rejectOrderColumns"
@@ -84,6 +108,7 @@
         <!-- Automatic order placement -->
         <div v-if="currentRiskControlLabelId == 1">
           <AutomaticOrderPlacement
+            v-if="hasAuth('AUTOORDERPLACEMENTLIST')"
             :isEditRiskControls="isEditRiskControls"
             :loading="loading"
             :columns="orderPlacementColumns"
@@ -97,6 +122,7 @@
         <!-- AutoFreeze -->
         <div v-if="currentRiskControlLabelId == 2">
           <AutomaticFreeze
+            v-if="hasAuth('AUTOFREEZELIST')"
             :isEditRiskControls="isEditRiskControls"
             :loading="loading"
             :columns="autoFreezeColumns"
@@ -108,7 +134,7 @@
           />
         </div>
         <!-- Auto Label Limit -->
-        <div v-if="currentRiskControlLabelId == 3">
+        <!-- <div v-if="currentRiskControlLabelId == 3">
           <AutoLabelLimit
             :isEditRiskControls="isEditRiskControls"
             :loading="loading"
@@ -119,7 +145,7 @@
             :labelList="labelList"
             :isFormClick="isFormClick"
           />
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

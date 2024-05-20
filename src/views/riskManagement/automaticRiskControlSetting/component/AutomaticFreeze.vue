@@ -140,12 +140,12 @@
           <span
             v-if="Number(row.minLimitAmount) && !Number(row.maxLimitAmount)"
           >
-            {{ t('高于') + addThousandSeparator(row.minLimitAmount) + t('元') }}
+            {{ addThousandSeparator(row.minLimitAmount) + t('以上') }}
           </span>
           <span
             v-if="!Number(row.minLimitAmount) && Number(row.maxLimitAmount)"
           >
-            {{ t('低于') + addThousandSeparator(row.maxLimitAmount) + t('元') }}
+            {{ addThousandSeparator(row.maxLimitAmount) + t('以下') }}
           </span>
         </div>
         <div
