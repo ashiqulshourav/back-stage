@@ -57,7 +57,7 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('注单状态')}:`" prop="queryType">
-          <el-select class="!w-[150px]"
+          <el-select class="!w-[180px]"
                   :placeholder="t('请选择状态')"
               v-model="form.queryType"
                      @change="search"
@@ -65,8 +65,8 @@
               <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
           </el-select>
         </el-form-item>
-        <el-form-item prop="riskStatus">
-          <el-select v-model="form.riskStatus"  :label="`${t('风控状态')}:`"  class="!w-[110px]" @change="search">
+        <el-form-item :label="`${t('风控状态')}:`" prop="riskStatus">
+          <el-select v-model="form.riskStatus"   class="!w-[180px]" @change="search">
             <el-option v-for="item in Object.entries(riskStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
           </el-select>
         </el-form-item>

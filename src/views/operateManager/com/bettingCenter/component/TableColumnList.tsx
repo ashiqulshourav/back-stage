@@ -1,5 +1,6 @@
 import { t } from "@/plugins/i18n";
-import {addThousandSeparator} from '@/utils/formatNumber'
+import {addThousandSeparator} from '@/utils/formatNumber';
+import {riskStatusMap} from "@/views/operateManager/com/bettingCenter/util/types";
 
 export const columns: TableColumnList = [
   {
@@ -26,13 +27,21 @@ export const columns: TableColumnList = [
     minWidth: 100,
     align:'left',
   },
+  {
+    label: t("风控状态"),
+    slot: "riskStatus",
+    minWidth: 50,
+    align:'center',
+    formatter: ({ riskStatus }) =>riskStatusMap[riskStatus]||'未风控'
+  },
 
   {
-    label: t("状态"),
+    label: t("结算状态"),
     slot: "status",
     minWidth: 50,
     align:'left',
   },
+
   {
     label: t("赔率"),
     slot: "odd",
