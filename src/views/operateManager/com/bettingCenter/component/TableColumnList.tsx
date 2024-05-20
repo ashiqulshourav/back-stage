@@ -34,16 +34,15 @@ export const columns: TableColumnList = [
     align:'center',
   },
   {
-    label: t("结算状态"),
-    slot: "status",
-    minWidth: 50,
-    align:'left',
-  },
-
-  {
     label: t("赔率"),
     slot: "odd",
     minWidth: 50,
+    align:'center',
+  },
+  {
+    label: t("结算状态"),
+    slot: "status",
+    minWidth: 100,
     align:'center',
   },
   {

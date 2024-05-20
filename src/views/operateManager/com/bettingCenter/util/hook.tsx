@@ -27,7 +27,7 @@ import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { ElMessageBox } from 'element-plus';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
-import { riskStatus } from '@/views/riskManagement/com/bettingAudit/util/types';
+import { riskStatus } from '../util/types';
 import editOrder from '../component/editOrder.vue';
 export function useBettingCenterHook(category: number, venueType: number) {
   const { openPasswordInput } = usePasswordInputHook();
@@ -424,25 +424,24 @@ export function useBettingCenterHook(category: number, venueType: number) {
     billStatus: number,
     betResultArr: number[],
     isReserve: number,
-    riskStatusArr?: number[],
-    isSpecialSettle?: number
+    riskStatusArr: number[],
+    isSpecialSettle: number
   ) => {
     let obj = { status: -1, bgColor: '' };
-    if (isSpecialSettle === 1) {
+
+    if (isSpecialSettle === 1){
       // 特殊结算也算已结算
       obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
-    } else if (betResultArr?.includes(22)) {
-      obj = { status: betStatus.reverseCancel, bgColor: '#F57582' }; //预约取消
-    } else if (riskStatusArr?.includes(riskStatus.rejectBetting)) {
-      obj = { status: betStatus.PendingApprove, bgColor: '#F57582' }; //待审核
-    }else if (
-      status == 2 &&
-      billStatus === 1 &&
-      (betResultArr?.includes(22)||betResultArr?.includes(23))
-    ) {
+    }else if(riskStatusArr?.includes(2)){
+      // 👝审核
+      obj = { status: betStatus.PendingApprove, bgColor: '#F57582' };
+    }else if (betResultArr?.includes(61)){
+      // 投注失败
+      obj = { status: betStatus.betFail, bgColor: '#F57582' };
+    }else if (riskStatusArr?.includes(203)||riskStatusArr?.includes(204)){
       // 注单无效
-      obj = { status: betStatus.betInvalid, bgColor: '#E54752' };
-    } else if (status === 2 && billStatus === 1 && betResultArr?.includes(21)) {
+      obj = { status: betStatus.betFail, bgColor: '#F57582' };
+    }else if (status === 2 && billStatus === 1 && betResultArr?.includes(21)){
       // 预约失败
       obj = { status: betStatus.reserveFail, bgColor: '#F57582' };
     } else if (status === 0 && billStatus === 0) {
@@ -456,29 +455,63 @@ export function useBettingCenterHook(category: number, venueType: number) {
     } else if (status === 1 && billStatus === 1) {
       // 已结算
       obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
-    } else if (status === 3) {
-      // 待确认
-      obj = { status: betStatus.PendingApprove, bgColor: '#FFC53D' };
-    } else if (status === 4) {
-      // 投注失败
-      obj = { status: betStatus.betFail, bgColor: '#F57582' };
     } else if (status === 5) {
       // 赛事异常
       obj = { status: betStatus.eventAbnormal, bgColor: '#F88D48' };
     }
+    //
+    // if (isSpecialSettle === 1) {
+    //   // 特殊结算也算已结算
+    //   obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
+    // } else if (betResultArr?.includes(22)) {
+    //   obj = { status: betStatus.reverseCancel, bgColor: '#F57582' }; //预约取消
+    // } else if (riskStatusArr?.includes(riskStatus.rejectBetting)) {
+    //   obj = { status: betStatus.PendingApprove, bgColor: '#F57582' }; //待审核
+    // }else if (
+    //   status == 2 &&
+    //   billStatus === 1 &&
+    //   (betResultArr?.includes(22)||betResultArr?.includes(23))
+    // ) {
+    //   // 注单无效
+    //   obj = { status: betStatus.betInvalid, bgColor: '#E54752' };
+    // } else if (status === 2 && billStatus === 1 && betResultArr?.includes(21)) {
+    //   // 预约失败
+    //   obj = { status: betStatus.reserveFail, bgColor: '#F57582' };
+    // } else if (status === 0 && billStatus === 0) {
+    //   // 未结算
+    //   if (isReserve === 1) {
+    //     // 预约中
+    //     obj = { status: betStatus.onReverse, bgColor: '#F57582' };
+    //   } else {
+    //     obj = { status: betStatus.unsettlementBet, bgColor: '#FFC53D' };
+    //   }
+    // } else if (status === 1 && billStatus === 1) {
+    //   // 已结算
+    //   obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
+    // } else if (status === 3) {
+    //   // 待确认
+    //   obj = { status: betStatus.PendingApprove, bgColor: '#FFC53D' };
+    // } else if (status === 4) {
+    //   // 投注失败
+    //   obj = { status: betStatus.betFail, bgColor: '#F57582' };
+    // } else if (status === 5) {
+    //   // 赛事异常
+    //   obj = { status: betStatus.eventAbnormal, bgColor: '#F88D48' };
+    // }
     return obj;
   };
 
   const getOddStatus = (betResult: number, riskSt: number) => {
-    if (riskSt === riskStatus.reject || riskSt === riskStatus.autoReject) {
-      return '无效注单';
-    } else {
+    if (riskSt === riskStatus.autoReject || riskSt === riskStatus.handleReject) {
+      return t('无效注单');
+    }else if (betResult===61){
+      return t('投注失败');
+    }else {
       return (
         BET_RESULT_TYPE_MAP[betResult as keyof typeof BET_RESULT_TYPE_MAP] || ''
       );
     }
   };
-
   const switchDialog = async (flag: boolean, row: any) => {
     UDialogFlag.value = flag;
     if (flag) {

@@ -57,16 +57,17 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('注单状态')}:`" prop="queryType">
-          <el-select class="!w-[180px]"
+          <el-select class="!w-[150px]"
                   :placeholder="t('请选择状态')"
               v-model="form.queryType"
                      @change="search"
           >
+            <el-option :label="t('全部')" :value="''" />
               <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('风控状态')}:`" prop="riskStatus">
-          <el-select v-model="form.riskStatus"   class="!w-[180px]" @change="search">
+          <el-select v-model="form.riskStatus"   class="!w-[150px]" @change="search">
             <el-option v-for="item in Object.entries(riskStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
           </el-select>
         </el-form-item>
@@ -75,7 +76,7 @@
           <el-select
               v-model="form.isInplay"
               clearable
-              class="!w-[100px]"
+              class="!w-[120px]"
               @change="search"
           >
             <el-option
