@@ -1,5 +1,5 @@
 <template>
-  <TradingBase :type="'early'" />
+  <TradingBase type="early" />
 </template>
 
 <script setup lang="ts">

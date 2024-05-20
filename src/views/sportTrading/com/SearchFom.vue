@@ -40,7 +40,7 @@
         />
       </el-form-item>
 
-      <el-form-item prop="startTime">
+      <el-form-item prop="startTime" v-if="type === 'early'">
         <el-button
           v-for="(item, index) in preDayArr"
           :key="index"
@@ -50,6 +50,16 @@
         >
         <CustomDate v-model:val="selectDate" @changeDate="changeDate" />
       </el-form-item>
+
+      <el-form-item prop="startTime" v-else>
+        <el-time-picker
+          v-model="selectDate"
+          is-range
+          @change="changeSelectDate"
+          :range-separator="t('至')"
+          :start-placeholder="t('开始时间')"
+          :end-placeholder="t('结束时间')"
+      /></el-form-item>
 
       <el-form-item>
         <el-button
@@ -86,7 +96,11 @@ const searchLoading = ref(false);
 const selectDate = ref('');
 
 const props = withDefaults(
-  defineProps<{ loading: boolean; form: SearchFormType }>(),
+  defineProps<{
+    loading: boolean;
+    form: SearchFormType;
+    type: 'early' | 'in';
+  }>(),
   {}
 );
 
@@ -115,17 +129,25 @@ const resetForm = (formEl: FormInstance | undefined) => {
   selectIndex.value = -1;
   props.form.endTime = '';
   props.form.startTime = '';
+  selectDate.value = '';
   emits('onSearch');
 };
 
-const changeSelectDate = (_: number) => {
-  selectIndex.value = _;
-  props.form.startTime = dayjs(preDayArr.value[_].val).format(
-    'YYYY-MM-DD HH:mm:ss'
-  );
-  props.form.endTime = dayjs(preDayArr.value[_].val)
-    .add(1, 'day')
-    .format('YYYY-MM-DD HH:mm:ss');
+const changeSelectDate = (_: number | Date[]) => {
+  selectIndex.value = _ as number;
+  if (props.type === 'early') {
+    props.form.startTime = dayjs(preDayArr.value[_ as number].val).format(
+      'YYYY-MM-DD HH:mm:ss'
+    );
+    props.form.endTime = dayjs(preDayArr.value[_ as number].val)
+      .add(1, 'day')
+      .format('YYYY-MM-DD HH:mm:ss');
+  } else {
+    props.form.startTime = dayjs((_ as Date[])[0]).format(
+      'YYYY-MM-DD HH:mm:ss'
+    );
+    props.form.endTime = dayjs((_ as Date[])[1]).format('YYYY-MM-DD HH:mm:ss');
+  }
   selectDate.value = [props.form.startTime, props.form.endTime] as any;
   search();
 };
