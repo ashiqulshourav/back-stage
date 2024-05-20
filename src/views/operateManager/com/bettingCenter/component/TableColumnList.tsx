@@ -31,7 +31,7 @@ export const columns: TableColumnList = [
     label: t("状态"),
     slot: "status",
     minWidth: 50,
-    align:'left',
+    align:'center',
   },
   {
     label: t("赔率"),
