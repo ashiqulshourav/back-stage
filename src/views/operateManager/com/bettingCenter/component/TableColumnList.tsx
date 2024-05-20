@@ -26,17 +26,22 @@ export const columns: TableColumnList = [
     minWidth: 100,
     align:'left',
   },
-
   {
-    label: t("状态"),
-    slot: "status",
-    minWidth: 50,
+    label: t("风控状态"),
+    slot: "riskStatus",
+    minWidth: 100,
     align:'center',
   },
   {
     label: t("赔率"),
     slot: "odd",
     minWidth: 50,
+    align:'center',
+  },
+  {
+    label: t("结算状态"),
+    slot: "status",
+    minWidth: 100,
     align:'center',
   },
   {

@@ -27,7 +27,9 @@ export type searchFormType = {
   maxProfitAmount: number | string;
   riskControlLabelList: number[],
   venueType: number;
+  riskStatus:number|string;
 }
+
 
 export enum betStatus {
   all = 1,
@@ -51,11 +53,27 @@ export const betStatusMap = {
   [betStatus.betInvalid]: t('注单无效'),
   [betStatus.betFail]: t('投注失败'),
   [betStatus.eventAbnormal]: t('赛事异常'),
-  [betStatus.riskReject]: t('风控拒单'),
   [betStatus.reserveFail]: t('预约失败'),
   [betStatus.onReverse]: t('预约中'),
   [betStatus.reverseCancel]: t('预约取消')
 }
+
+export enum riskStatus{
+  waitingApprove = 2,
+  autoApprove=103,
+  handelApprove=104,
+  autoReject = 203,
+  handleReject = 204,
+}
+export const riskStatusMap = {
+  [riskStatus.waitingApprove]: t('待审核'),
+  [riskStatus.autoApprove]: t('自动审核通过'),
+  [riskStatus.handelApprove]: t('手动审核通过'),
+  [riskStatus.autoReject]: t('自动划单'),
+  [riskStatus.handleReject]: t('手动划单'),
+}
+
+
 
 export const seriesTypesSingle = {
   '2001': { value: '2001', name: '2串1', list: [2001] },

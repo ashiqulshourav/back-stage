@@ -62,7 +62,13 @@
               v-model="form.queryType"
                      @change="search"
           >
+            <el-option :label="t('全部')" :value="''" />
               <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="`${t('风控状态')}:`" prop="riskStatus">
+          <el-select v-model="form.riskStatus"   class="!w-[150px]" @change="search">
+            <el-option v-for="item in Object.entries(riskStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
           </el-select>
         </el-form-item>
 
@@ -70,7 +76,7 @@
           <el-select
               v-model="form.isInplay"
               clearable
-              class="!w-[100px]"
+              class="!w-[120px]"
               @change="search"
           >
             <el-option
@@ -228,6 +234,8 @@
           </el-select>
           <CustomDate v-model:val="selectDate"  :start-placeholder="dayjs().startOf('month').format('YYYY-MM-DD')" :end-placeholder="dayjs().startOf('day').format('YYYY-MM-DD')" @changeDate="changeDate" />
         </el-form-item>
+
+
         <el-form-item>
 
           <el-button
@@ -287,7 +295,7 @@ const props = defineProps<{
 const formRef = ref();
 const selectDate = ref('');
 const gameClassify = ref<{ label: string; value: number }[]>(props.venueType===1?ESPORT_ID_MAP:SPORT_ID_MAP);
-import {  betStatusMap,seriesTypesSingle,seriesTypesDuplex} from "../util/types";
+import {  betStatusMap,seriesTypesSingle,seriesTypesDuplex,riskStatusMap} from "../util/types";
 import {hasAuth} from "@/router/utils";
 import CustomDate from "@/components/Form/Custom_date.vue";
 
