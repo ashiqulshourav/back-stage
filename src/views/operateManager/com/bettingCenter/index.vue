@@ -347,6 +347,15 @@
               }}
             </div>
           </template>
+          <template #riskStatus="{ row }">
+            <div
+              class="match_item riskStatus_detail"
+              v-for="item in row.combineOrderDetails"
+              :key="item.id"
+            >
+              <div> {{riskStatusMap[item.riskStatus as keyof typeof riskStatus]||'未风控'}}  </div>
+            </div>
+          </template>
           <template #operation="{ row }">
             <div>
               <el-button
@@ -447,7 +456,7 @@ import {
   displayHomeAwayScore,
   getIsInplay
 } from '@/utils/formatMatch';
-import { betStatus, betStatusMap } from './util/types';
+import {betStatus, betStatusMap, riskStatus, riskStatusMap} from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
 import {useRenderIcon} from "@/components/ReIcon/src/hooks";
@@ -505,6 +514,9 @@ const {
   min-width: 200px;
 }
 .status_detail{
+  width: 120px;
+}
+.riskStatus_detail{
   width: 120px;
 }
 .match_item {

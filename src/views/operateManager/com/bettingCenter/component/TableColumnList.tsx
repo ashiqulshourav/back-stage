@@ -30,11 +30,9 @@ export const columns: TableColumnList = [
   {
     label: t("风控状态"),
     slot: "riskStatus",
-    minWidth: 50,
+    minWidth: 100,
     align:'center',
-    formatter: ({ riskStatus }) =>riskStatusMap[riskStatus]||'未风控'
   },
-
   {
     label: t("结算状态"),
     slot: "status",
