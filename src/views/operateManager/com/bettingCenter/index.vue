@@ -305,7 +305,7 @@
                   row.isSpecialSettle
                 ).bgColor
               }"
-              class="status_detail status_btn mb-1"
+              class="status_detail status_btn mb-1 mx-auto"
             >
               {{
                 betStatusMap[
