@@ -41,9 +41,14 @@
           v-if="
             currentRiskControlLabelId == 1 && hasAuth('AUTOORDERPLACEMENTLIST')
           "
-          class="flex gap-10"
         >
           <span class="font-bold">{{ t('自动划单设置') }}</span>
+        </span>
+        <span
+          v-if="currentRiskControlLabelId == 2 && hasAuth('AUTOFREEZELIST')"
+          class="flex gap-10"
+        >
+          <span class="font-bold">{{ t('冻结注单设置') }}</span>
           <span>
             <span class="text-gray-500 flex items-center gap-2">
               <el-icon><InfoFilled /></el-icon>
@@ -55,11 +60,6 @@
             >
           </span>
         </span>
-        <span
-          v-if="currentRiskControlLabelId == 2 && hasAuth('AUTOFREEZELIST')"
-          class="font-bold"
-          >{{ t('冻结注单设置') }}</span
-        >
         <!-- <span v-if="currentRiskControlLabelId == 3">{{
           t('自动标签、限额等级设置')
         }}</span> -->
