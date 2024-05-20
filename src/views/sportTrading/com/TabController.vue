@@ -72,7 +72,7 @@
             <div class="flex cursor-pointer">
               <IconGroup
                 :typeNum="_.isSale"
-                @changeMatchStatus="changeMatchStatus"
+                @changeMatchStatus="d => changeMatchStatus(d)"
               />
             </div>
           </div>
@@ -115,11 +115,11 @@ const changeSelectItem = (_: sportTradingDataAPI.MatchDtoList) => {
   emits('changeSelectMatch', _);
 };
 
-const changeMatchStatus = (d: {
-  status: number;
-  classify: 'match' | 'category' | 'pan';
-}) => {
-  emits('changeStatus', d);
+const changeMatchStatus = (status: number) => {
+  emits('changeStatus', {
+    status,
+    classify: 'match'
+  });
 };
 
 //- 获取当前玩法

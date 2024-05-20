@@ -1,39 +1,38 @@
 <template>
   <IconifyIconOffline
-    :class="`text-[#${typeNum === SALE_STATUS.open ? '409EFF' : 'A8ABB2'}]`"
-    @click.native.stop="changeType(SALE_STATUS.open)"
+    :style="{ color: typeNum === SALE_STATUS.open ? '#A8ABB2' : '#409EFF' }"
+    @click.stop="changeType(SALE_STATUS.open)"
     icon="trading_play"
   />
   <IconifyIconOffline
-    :class="`text-[#${
-      typeNum === SALE_STATUS.close ? '409EFF' : 'A8ABB2'
-    }] text-sm ml-2 mr-2`"
+    class="text-sm ml-2 mr-2"
     icon="trading_switch"
-    @click.native.stop="changeType(SALE_STATUS.close)"
+    :style="{ color: typeNum === SALE_STATUS.close ? '#A8ABB2' : '#409EFF' }"
+    @click.stop="changeType(SALE_STATUS.close)"
   />
   <IconifyIconOffline
-    :class="`text-[#${
-      typeNum === SALE_STATUS.sealing ? '409EFF' : 'A8ABB2'
-    }] text-sm  mr-2`"
+    class="text-sm mr-2"
+    :style="{ color: typeNum === SALE_STATUS.sealing ? '#A8ABB2' : '#409EFF' }"
     icon="trading_pause"
-    @click.native.stop="changeType(SALE_STATUS.sealing)"
+    @click.stop="changeType(SALE_STATUS.sealing)"
   />
   <IconifyIconOffline
-    :class="`text-[#${typeNum === SALE_STATUS.lock ? '409EFF' : 'A8ABB2'}]`"
+    :style="{ color: typeNum === SALE_STATUS.lock ? '#A8ABB2' : '#409EFF' }"
     icon="trading_lock"
-    @click.native.stop="changeType(SALE_STATUS.lock)"
+    @click.stop="changeType(SALE_STATUS.lock)"
   />
 </template>
 
 <script setup lang="ts">
 import { SALE_STATUS } from '../util/playMap';
-defineProps<{
+const props = defineProps<{
   typeNum?: number | null;
 }>();
 
 const emits = defineEmits(['changeMatchStatus']);
 const changeType = (status: number) => {
-  emits('changeMatchStatus', { status, classify: 'match' });
+  if (props.typeNum === status) return;
+  emits('changeMatchStatus', status);
 };
 </script>
 

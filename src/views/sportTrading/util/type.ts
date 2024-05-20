@@ -13,4 +13,6 @@ export type handicapListType =
     list: sportTradingDataAPI.MainBetItemsDtoList[];
     amount: number;
     amountType: string;
+    betItemsIdList: number[];
+    isSale: null | number;
   }

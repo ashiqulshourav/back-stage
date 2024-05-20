@@ -1,10 +1,20 @@
 export const baseHandicapList = [
-  { listType: 'all', val: t('全部'), list: [], amount: 0, amountType: '' },
+  {
+    listType: 'all',
+    val: t('全部'),
+    list: [],
+    amount: 0,
+    amountType: '',
+    betItemsIdList: [],
+    isSale: null
+  },
   {
     listType: 'mainBetItemsDtoList',
     val: t('主要'),
     list: [],
     amount: 0,
+    isSale: null,
+    betItemsIdList: [],
     amountType: 'mainBetItemsSize'
   },
   {
@@ -12,6 +22,8 @@ export const baseHandicapList = [
     val: t('进球'),
     list: [],
     amount: 0,
+    isSale: null,
+    betItemsIdList: [],
     amountType: 'goalBetItemsSize'
   },
   {
@@ -19,6 +31,8 @@ export const baseHandicapList = [
     val: t('角球'),
     list: [],
     amount: 0,
+    isSale: null,
+    betItemsIdList: [],
     amountType: 'cornerBetItemsSize'
   },
   {
@@ -26,6 +40,8 @@ export const baseHandicapList = [
     val: t('罚牌'),
     list: [],
     amount: 0,
+    isSale: null,
+    betItemsIdList: [],
     amountType: 'cardBetItemsSize'
   },
   {
@@ -33,6 +49,8 @@ export const baseHandicapList = [
     val: t('加时'),
     list: [],
     amount: 0,
+    isSale: null,
+    betItemsIdList: [],
     amountType: 'overtimeBetItemsSize'
   },
   {
@@ -40,6 +58,8 @@ export const baseHandicapList = [
     val: t('点球'),
     list: [],
     amount: 0,
+    isSale: null,
+    betItemsIdList: [],
     amountType: 'penaltyKickBetItemsSize'
   },
   {
@@ -47,6 +67,8 @@ export const baseHandicapList = [
     val: t('特殊'),
     list: [],
     amount: 0,
+    isSale: null,
+    betItemsIdList: [],
     amountType: 'specialBetItemsSize'
   }
 ];

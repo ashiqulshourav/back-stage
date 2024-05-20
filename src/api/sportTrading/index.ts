@@ -7,4 +7,6 @@ export const sportTradingData = {
   getHandicapItems: (data: { matchId: number }) => http.request<sportTradingDataAPI.getHandicapItemsRes>("post", "/operateHandicap/v1/getHandicapItems", { data }),
   //- 赛事盘口状态更新
   updateHandicapStatus: (data: sportTradingDataAPI.updateHandicapStatusParams) => http.request<sportTradingDataAPI.updateHandicapStatus>("post", "/operateHandicap/v1/updateHandicapStatus", { data }),
+  //- 盘口赔率更新
+  updateHandicapOdds: (data: sportTradingDataAPI.updateHandicapOddsParams) => http.request<sportTradingDataAPI.updateHandicapOddsParamsRes>("post", "/operateHandicap/v1/updateHandicapOdds", { data }),
 };

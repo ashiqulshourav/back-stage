@@ -13,7 +13,6 @@ import { ElMessageBox } from 'element-plus';
 export function useTradingHook() {
   const loading = ref(true);
   const handicapLoading = ref(true);
-
   const matchList = reactive<sportTradingDataAPI.getMorningSetMatchListData[]>(
     []
   );
@@ -59,24 +58,54 @@ export function useTradingHook() {
     const tempList = handicapList.slice(1);
 
     tempList.forEach(_ => {
+      const iconMap = {
+        0: 0,
+        2: 0,
+        3: 0,
+        4: 0
+      };
       _.list = res.data[
         _.listType as keyof sportTradingDataAPI.getHandicapItemsData
       ] as sportTradingDataAPI.MainBetItemsDtoList[];
       _.amount = res.data[
         _.amountType as keyof sportTradingDataAPI.getHandicapItemsData
       ] as number;
+      _.betItemsIdList = (
+        res.data[
+          _.listType as keyof sportTradingDataAPI.getHandicapItemsData
+        ] as sportTradingDataAPI.MainBetItemsDtoList[]
+      ).reduce((pre, next) => {
+        iconMap[next.isSale as keyof typeof iconMap] += 1;
+        pre.push(...next.betItemsIdList);
+        return pre;
+      }, [] as number[]);
+
+      Object.keys(iconMap).forEach(key => {
+        if (
+          iconMap[+key as keyof typeof iconMap] == _.list.length &&
+          _.list.length > 0
+        ) {
+          _.isSale = +key;
+        }
+      });
     });
+
+    //- 第一项单独处理
+    const map = { 0: 0, 2: 0, 3: 0, 4: 0 };
     handicapList[0].list = tempList.map(item => item.list).flat();
     handicapList[0].amount = tempList
       .map(item => item.amount)
       .reduce((pre, next) => pre + next);
-
+    handicapList[0].betItemsIdList.length = 0;
     handicapList[0].list.forEach(item => {
+      handicapList[0].betItemsIdList.push(...item.betItemsIdList);
+      map[item.isSale as keyof typeof map] += 1;
       item.kindsCodeDtoList.forEach(_ => {
         _.betItemsDtoList.forEach(l => {
           if (!l.dpOdds) l.dpOdds = l.odds;
         });
       });
+
       // - 波胆单独处理
       if (BO_DAN_CODE_LIST.includes(item.kindsCode)) {
         transferBoDanCol(
@@ -86,6 +115,16 @@ export function useTradingHook() {
         );
       }
     });
+
+    Object.keys(map).forEach(key => {
+      if (
+        map[+key as keyof typeof map] == handicapList[0].list.length &&
+        handicapList[0].list.length > 0
+      ) {
+        handicapList[0].isSale = +key;
+      }
+    });
+    handicapList[0] = JSON.parse(JSON.stringify(handicapList[0]));
     //- 开启事件定时任务
     runLoopMatch();
   };
@@ -123,10 +162,16 @@ export function useTradingHook() {
   //-赛事盘口状态更新
   const changeStatus = ({
     status,
-    classify
+    classify,
+    betItemsIdList,
+    categoryData,
+    item
   }: {
     status: Partial<SALE_STATUS>;
     classify: 'match' | 'category' | 'pan';
+    betItemsIdList?: number[];
+    categoryData?: sportTradingDataAPI.MainBetItemsDtoList;
+    item?: handicapListType;
   }) => {
     clearInterval(loopTimer.value);
     ElMessageBox.confirm(icon_msg_tip[status], t('系统提示'), {
@@ -139,7 +184,8 @@ export function useTradingHook() {
         const res = await API.updateHandicapStatus({
           operateMenu: '操盘管理-早盘管理',
           matchId: currentMatch.matchId,
-          isSale: status
+          isSale: status,
+          betItemsIds: betItemsIdList ?? []
         });
         message(res.msg, { type: res.code ? 'error' : 'success' });
         runLoopMatch();
@@ -147,6 +193,14 @@ export function useTradingHook() {
         switch (classify) {
           case 'match':
             upateMatchSale(status);
+          case 'pan':
+            upatePanSale(
+              status,
+              categoryData as sportTradingDataAPI.MainBetItemsDtoList
+            );
+            break;
+          case 'category':
+            upatePalySale(status, item as handicapListType);
             break;
           default:
             break;
@@ -156,8 +210,41 @@ export function useTradingHook() {
   };
 
   //- 修改赛事图标状态
-  const upateMatchSale = () => {
+  const upateMatchSale = (status: number) => {
     currentMatch.isSale = status;
+    matchList.some(item => {
+      const r = item.matchDtoList.find(_ => _.matchId === currentMatch.matchId);
+      if (r) {
+        r.isSale = currentMatch.isSale;
+        return true;
+      } else return false;
+    });
+  };
+
+  //- 修改盘赛事图标状态
+  const upatePanSale = (
+    status: number,
+    categoryData: sportTradingDataAPI.MainBetItemsDtoList
+  ) => {
+    categoryData.isSale = status;
+  };
+
+  //- 修改玩法状态
+  const upatePalySale = (status: number, item: handicapListType) => {
+    item.isSale = status;
+    item.list.forEach(item => (item.isSale = status));
+  };
+
+  //- 点击快捷键修改赔率
+  const sendNewOdds = async (
+    betItemsDtoList: { betItemsId: number; dpOdds: number }[]
+  ) => {
+    const res = await API.updateHandicapOdds({
+      matchId: currentMatch.matchId,
+      operateMenu: '操盘管理-早盘管理',
+      betItemsDtoList
+    });
+    message(res.msg, { type: res.code ? 'error' : 'success' });
   };
 
   onMounted(() => {
@@ -176,6 +263,7 @@ export function useTradingHook() {
     selectContentType,
     changeSelectType,
     clearMatchTime,
-    changeStatus
+    changeStatus,
+    sendNewOdds
   };
 }

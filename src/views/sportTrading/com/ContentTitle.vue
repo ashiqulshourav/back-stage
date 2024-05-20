@@ -69,11 +69,11 @@ const changeSelectType = (type: string) => {
 };
 
 //- 修改图标类型
-const changeMatchStatus = (d: {
-  status: number;
-  classify: 'match' | 'category' | 'pan';
-}) => {
-  emits('changeStatus', d);
+const changeMatchStatus = (status: number) => {
+  emits('changeStatus', {
+    status,
+    classify: 'match'
+  });
 };
 </script>
 

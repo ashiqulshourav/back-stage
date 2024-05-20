@@ -77,6 +77,7 @@ declare namespace sportTradingDataAPI {
     kindsCode: string;
     betItemsName: string;
     betItemsNameEn?: any;
+    isSale: number;
     kindsCodeDtoList: KindsCodeDtoList[];
   }
 
@@ -105,5 +106,12 @@ declare namespace sportTradingDataAPI {
     isSale: number;
   }
 
+  type updateHandicapOddsParams = {
+    matchId: number;
+    operateMenu: string;
+    betItemsDtoList: { betItemsId: number; dpOdds: number }[];
+  }
+
   type updateHandicapStatus = COMMON.BASE_RES_TYPE<null>
+  type updateHandicapOddsParamsRes = COMMON.BASE_RES_TYPE<null>
 }

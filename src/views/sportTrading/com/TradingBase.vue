@@ -22,6 +22,7 @@
           @changeSelectType="changeSelectType"
           @clearMatchTime="clearMatchTime"
           @changeStatus="changeStatus"
+          @sendNewOdds="sendNewOdds"
         />
       </div>
     </div>
@@ -30,7 +31,7 @@
 
 <script setup lang="ts">
 import SearchFom from './SearchFom.vue';
-import { useTradingHook } from '../util/hook';
+import { useTradingHook } from '../util/trading_hook';
 import TabController from './TabController.vue';
 import ContentMain from './ContentMain.vue';
 
@@ -46,7 +47,8 @@ const {
   selectContentType,
   changeSelectType,
   clearMatchTime,
-  changeStatus
+  changeStatus,
+  sendNewOdds
 } = useTradingHook();
 
 const { type } = defineProps<{
