@@ -1,11 +1,11 @@
 <template>
   <div
     class="w-1/5 text-center input_wrapper relative"
-    @mouseenter.stop="e => mouseEvent(e, renderData, 'enter')"
-    @mouseleave.stop="e => mouseEvent(e, renderData, 'leave')"
+    @mouseenter.stop="e => mouseEvent(e, props.s, 'enter')"
+    @mouseleave.stop="e => mouseEvent(e, props.s, 'leave')"
   >
     <div
-      v-if="renderData.sourceBetItemsId !== 1"
+      v-if="showNum"
       class="min-w-[120px] text-[--el-color-primary] text-left"
     >
       {{ renderData.dpOdds?.toFixed(2) }}
@@ -27,7 +27,7 @@
     </div>
     <div
       v-if="renderData.odds !== renderData.dpOdds"
-      class="absolute right-2 top-1/2 translate-y-[-50%] w-[60px] text-xs text-white"
+      class="absolute right-0 top-1/2 translate-y-[-50%] w-[60px] text-xs text-white"
       :style="{ backgroundColor: `var(${tipData.color})` }"
     >
       {{ tipData.val }}
@@ -45,6 +45,15 @@ const props = defineProps<{
   selectNum: number;
   selectItem: sportTradingDataAPI.BetItemsDtoList;
 }>();
+
+const showNum = ref(true);
+watch(
+  () => props.s,
+  d => (showNum.value = d.sourceBetItemsId !== 1),
+  {
+    deep: true
+  }
+);
 
 const renderData = reactive<sportTradingDataAPI.BetItemsDtoList>(props.s);
 

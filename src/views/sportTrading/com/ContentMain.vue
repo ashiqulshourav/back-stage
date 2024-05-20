@@ -11,14 +11,10 @@
     <div
       class="w-full overflow-hidden pl-5 h-[calc(100%-60px)]"
       v-loading="handicapLoading"
+      @mouseleave="clearTime"
     >
       <el-scrollbar ref="contentScrollRef">
-        <el-collapse
-          ref="collapseRef"
-          v-model="activeNames"
-          class=""
-          :accordion="false"
-        >
+        <el-collapse ref="collapseRef" v-model="activeNames">
           <el-collapse-item
             :name="index"
             v-for="(item, index) in handicapList"
@@ -229,8 +225,8 @@ const mouseEvent = (
     .find(item => item.listType === props.selectContentType)!
     .list.forEach(item => {
       item.kindsCodeDtoList.forEach(_ => {
-        _.betItemsDtoList.forEach(s => {
-          s.sourceBetItemsId = -1;
+        _.betItemsDtoList.forEach(r => {
+          r.sourceBetItemsId = -1;
         });
       });
     });
@@ -294,6 +290,11 @@ const shortcutSelectNum = (_: number) => {
   }
   nextTick(() => (selectNum.value = 0));
   // isShowScroll.value = false;
+};
+
+const clearTime = () => {
+  emits('clearMatchTime', -1);
+  isShowScroll.value = false;
 };
 
 //- 修改图标状态(包含盘，赛事，玩法)
