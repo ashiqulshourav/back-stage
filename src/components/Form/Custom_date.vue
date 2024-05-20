@@ -19,6 +19,7 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
+import { DateModelType } from 'element-plus';
 
 const props = withDefaults(
   defineProps<{
@@ -38,7 +39,8 @@ const props = withDefaults(
     isSingle: false,
     placeholder: t('请选择日期'),
     startPlaceholder: t('开始日期'),
-    endPlaceholder: t('结束日期')
+    endPlaceholder: t('结束日期'),
+    disabledDefaut: false
   }
 );
 
@@ -144,7 +146,8 @@ const shortcuts = !props.isShowShortCuts
     ];
 const emits = defineEmits(['update:val', 'changeDate']);
 const timeVal = computed({
-  get: () => props.val,
+  get: () =>
+    props.val as string | number | Date | [DateModelType, DateModelType],
   set(val) {
     emits('update:val', val);
   }

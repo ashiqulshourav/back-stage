@@ -37,6 +37,7 @@ export const goalScoring = (
     'HalfWithMostGoals'
   ];
   const b = ['FT_TG', 'HT_TG'];
+  const c = ['Outright'];
   if (n) return n;
   switch (true) {
     case a.includes(kindsCode):
@@ -47,6 +48,8 @@ export const goalScoring = (
       } else {
         return handicap.split('').join('~');
       }
+    case c.includes(kindsCode):
+      return handicap;
     case BO_DAN_CODE_LIST.includes(kindsCode):
       return `${renderName} ${handicap}`;
     case kindsCode === 'FT_HF':
