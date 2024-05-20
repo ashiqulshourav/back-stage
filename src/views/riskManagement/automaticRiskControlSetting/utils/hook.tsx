@@ -277,20 +277,20 @@ export function useRiskControlHook({
         });
       }
 
-      if (item.betBeforeTime) {
-        orderAutoFreezeList.forEach(orderFreeze => {
-          if (
-            orderFreeze.sourceCode == item.sourceCode &&
-            orderFreeze.eventCode == item.eventCode
-          ) {
-            if (
-              Number(item.betBeforeTime) > Number(orderFreeze.betBeforeTime)
-            ) {
-              isValid = false;
-            }
-          }
-        });
-      }
+      // if (item.betBeforeTime) {
+      //   orderAutoFreezeList.forEach(orderFreeze => {
+      //     if (
+      //       orderFreeze.sourceCode == item.sourceCode &&
+      //       orderFreeze.eventCode == item.eventCode
+      //     ) {
+      //       if (
+      //         Number(item.betBeforeTime) > Number(orderFreeze.betBeforeTime)
+      //       ) {
+      //         isValid = false;
+      //       }
+      //     }
+      //   });
+      // }
     });
 
     if (isValid) {
@@ -390,20 +390,20 @@ export function useRiskControlHook({
         });
       }
 
-      if (item.betBeforeTime) {
-        orderPlacementList.forEach(orderPlacement => {
-          if (
-            orderPlacement.sourceCode == item.sourceCode &&
-            orderPlacement.eventCode == item.eventCode
-          ) {
-            if (
-              Number(item.betBeforeTime) < Number(orderPlacement.betBeforeTime)
-            ) {
-              isValid = false;
-            }
-          }
-        });
-      }
+      // if (item.betBeforeTime) {
+      //   orderPlacementList.forEach(orderPlacement => {
+      //     if (
+      //       orderPlacement.sourceCode == item.sourceCode &&
+      //       orderPlacement.eventCode == item.eventCode
+      //     ) {
+      //       if (
+      //         Number(item.betBeforeTime) < Number(orderPlacement.betBeforeTime)
+      //       ) {
+      //         isValid = false;
+      //       }
+      //     }
+      //   });
+      // }
 
       if (!Number(item.maxLimitAmount) && !Number(item.minLimitAmount)) {
         isValid = false;

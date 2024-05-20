@@ -92,12 +92,12 @@
           {{ t('秒') }}
         </div>
         <span v-else> {{ row.betBeforeTime }} {{ t('秒') }} </span>
-        <div
+        <!-- <div
           v-if="showBetBeforeTimeError(row) && isFormClick"
           class="text-red-500 text-xs text-start"
         >
           {{ t('自动冻结投注前时间必须小于自动划单投注前时间') }}
-        </div>
+        </div> -->
       </template>
       <template #betAfterTime="{ row }">
         <div v-if="isEditRiskControls" class="flex items-center gap-2">

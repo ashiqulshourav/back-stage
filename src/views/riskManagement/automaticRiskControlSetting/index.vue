@@ -26,13 +26,45 @@
         <span v-if="currentRiskControlLabelId == 3">{{
           t('自动标签、限额等级设置')
         }}</span>
-        <EditAutoLabelButton
-          :currentRiskControlLabelId="currentRiskControlLabelId"
-          :isEditRiskControls="isEditRiskControls"
-          :toggle="toggle"
-          :cancelRiskControlsEdit="cancelRiskControlsEdit"
-          :confirmRiskControlsClick="confirmRiskControlsClick"
-        />
+
+        <div
+          v-if="currentRiskControlLabelId == 0 && hasAuth('UPDATEAUTOREJECT')"
+        >
+          <EditAutoLabelButton
+            :currentRiskControlLabelId="currentRiskControlLabelId"
+            :isEditRiskControls="isEditRiskControls"
+            :toggle="toggle"
+            :cancelRiskControlsEdit="cancelRiskControlsEdit"
+            :confirmRiskControlsClick="confirmRiskControlsClick"
+          />
+        </div>
+        <div v-if="currentRiskControlLabelId == 1 && hasAuth('UPDATESETTLE')">
+          <EditAutoLabelButton
+            :currentRiskControlLabelId="currentRiskControlLabelId"
+            :isEditRiskControls="isEditRiskControls"
+            :toggle="toggle"
+            :cancelRiskControlsEdit="cancelRiskControlsEdit"
+            :confirmRiskControlsClick="confirmRiskControlsClick"
+          />
+        </div>
+        <div v-if="currentRiskControlLabelId == 2 && hasAuth('UPDATEFREEZE')">
+          <EditAutoLabelButton
+            :currentRiskControlLabelId="currentRiskControlLabelId"
+            :isEditRiskControls="isEditRiskControls"
+            :toggle="toggle"
+            :cancelRiskControlsEdit="cancelRiskControlsEdit"
+            :confirmRiskControlsClick="confirmRiskControlsClick"
+          />
+        </div>
+        <!-- <div v-if="currentRiskControlLabelId == 3 && hasAuth('UPDATEFREEZE')">
+          <EditAutoLabelButton
+            :currentRiskControlLabelId="currentRiskControlLabelId"
+            :isEditRiskControls="isEditRiskControls"
+            :toggle="toggle"
+            :cancelRiskControlsEdit="cancelRiskControlsEdit"
+            :confirmRiskControlsClick="confirmRiskControlsClick"
+          />
+        </div> -->
       </div>
 
       <!-- Tables -->
@@ -95,7 +127,7 @@
 
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
-
+import { hasAuth } from '@/router/utils';
 import { AUTO_RISK_CONTROLS } from './utils/map';
 import { useRiskControlHook } from './utils/hook';
 import CustomButton from '@/components/Form/CustomButton.vue';
