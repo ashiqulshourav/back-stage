@@ -73,7 +73,7 @@
           v-if="showBetBeforeTimeError(row) && isFormClick"
           class="text-red-500 text-xs text-start"
         >
-          {{ t('自动冻结投注后时间必须大于自动划单投注后时间') }}
+          {{ t('自动冻结投注前时间必须小于自动划单投注前时间') }}
         </div> -->
       </template>
       <template #afterBetting="{ row }">
