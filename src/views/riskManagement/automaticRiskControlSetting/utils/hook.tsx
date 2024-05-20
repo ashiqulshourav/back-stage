@@ -525,7 +525,8 @@ export function useRiskControlHook({
             betAfterTime: undefined,
             minLimitAmount: undefined,
             maxLimitAmount: undefined,
-            isDelete: undefined
+            isDelete: undefined,
+            isDisable: 1
           });
         }
         break;
