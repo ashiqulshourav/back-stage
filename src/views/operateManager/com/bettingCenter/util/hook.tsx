@@ -435,9 +435,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
       obj = { status: betStatus.reverseCancel, bgColor: '#F57582' }; //预约取消
     } else if (riskStatusArr?.includes(riskStatus.rejectBetting)) {
       obj = { status: betStatus.PendingApprove, bgColor: '#F57582' }; //待审核
-    }else if(betResultArr?.includes(61)&&(riskStatusArr?.includes(riskStatus.reject) ||riskStatusArr?.includes(riskStatus.autoReject))){
-      // 封控拒单
-      obj = { status: betStatus.riskReject, bgColor: '#F88D48' };
     }else if (
       status == 2 &&
       billStatus === 1 &&
