@@ -32,14 +32,14 @@ export const optimize: Directive = {
           value.event,
           type === "debounce"
             ? debounce(
-                params ? () => value.fn(...params) : value.fn,
-                value?.timeout ?? 200,
-                value?.immediate ?? false
-              )
+              params ? () => value.fn(...params) : value.fn,
+              value?.timeout ?? 200,
+              value?.immediate ?? false
+            )
             : throttle(
-                params ? () => value.fn(...params) : value.fn,
-                value?.timeout ?? 1000
-              )
+              params ? () => value.fn(...params) : value.fn,
+              value?.timeout ?? 1000
+            )
         );
       } else {
         throw new Error(
