@@ -553,7 +553,6 @@
   "k-403a0ddc": "Indonesian odds",
   "k4543ea7d": "American odds",
   "k9fcad0e": "Fractional odds",
-  "k-41d75bfe": "Full-time over/under",
   "k4f4396aa": "Half-time over/under",
   "k-16f35d25": "Full-time odd/even",
   "k-232a28a4": "Odd/even - first half",
@@ -1097,7 +1096,6 @@
   "k511a184c": "首个进球",
   "k-3a1eeadb": "最后进球",
   "k-51d0e109": "more",
-  "k-220beb86": "betAfterAmount must be greater than betBeforeAmount",
   "k19ea5923": "beforeBetting",
   "k1be3a181": "afterBetting",
   "k-160fa12a": "Enable Disable Status",
@@ -1126,8 +1124,12 @@
   "k1a6d65be": "after betting time must be greater than before betting time",
   "k39c236e3": "The event source cannot be null",
   "k6eb77054": "The event name cannot be null",
-  "k622d75cd": "元",
-  "k454b1c4c": "高于",
-  "k630765f3": "低于",
-  "k-454a57fc": "投注金额最小值不能大于最大值"
+  "k-454a57fc": "The minimum value of the bet cannot be greater than the maximum value",
+  "k42b2fafa": "not choose any of them",
+  "k-2de5d529": "反选",
+  "k72df3930": "导出报表开始",
+  "k4af9a03b": "The time before the automatic freezing of bets must be less than the time before the automatic placing of bets",
+  "k31a9e7e3": "The time freezing of bets must be greater than the time automatic placing of bets",
+  "k-26d7d19f": "以下",
+  "k-7c47d64b": "Set the conditions for automatically freezing the note here. The note that meets the freezing conditions, after being frozen, will be on the note review page, waiting for the wind control to approve whether the settlement process can be carried out."
 }
