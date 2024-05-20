@@ -109,10 +109,8 @@
           <span v-if="Number(row.minLimitAmount) && Number(row.maxLimitAmount)">
             {{
               addThousandSeparator(row.minLimitAmount) +
-              t('元') +
               ' - ' +
-              addThousandSeparator(row.maxLimitAmount) +
-              t('元')
+              addThousandSeparator(row.maxLimitAmount)
             }}
           </span>
           <span
