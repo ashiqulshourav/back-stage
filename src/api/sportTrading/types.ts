@@ -70,6 +70,8 @@ declare namespace sportTradingDataAPI {
     betItemsIdList: number[];
     sourceBetItemsMid: number;
     betItemsDtoList: BetItemsDtoList[];
+    isSale: number;
+    betAmountDiffer: number;
   }
 
   type MainBetItemsDtoList = {
@@ -89,6 +91,8 @@ declare namespace sportTradingDataAPI {
     overtimeBetItemsDtoList: MainBetItemsDtoList[];
     penaltyKickBetItemsDtoList: MainBetItemsDtoList[];
     specialBetItemsDtoList: MainBetItemsDtoList[];
+    beginTimeLong: number;
+    status: string; //赛事状态 nobegin  nover
     mainBetItemsSize: number;
     goalBetItemsSize: number;
     cornerBetItemsSize: number;
