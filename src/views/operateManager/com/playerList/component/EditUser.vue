@@ -18,6 +18,7 @@
           <p>{{ t('每个用户最多添加20个风控标签') }}</p>
           <p
             @click="emits('onOpenRecord', form.id, 1)"
+            v-if="hasAuth('GETLABELLIST')"
             class="text-primary text-right cursor-pointer"
           >
             {{ t('风控标签修改记录') }}>>
@@ -34,7 +35,7 @@
         <el-row class="mt-2 w-full" v-if="!isRiskLabelAdd">
           <el-col :span="24" class="!flex justify-end">
             <el-button
-              v-if="hasAuth('SETTING')"
+              v-if="hasAuth('ADDUSERLABEL')"
               :icon="Plus"
               type="primary"
               @click="isRiskLabelAdd = true"
@@ -76,6 +77,7 @@
           <p>{{ t('每个用户最多添加20个属性标签') }}</p>
           <p
             @click="emits('onOpenRecord', form.id, 2)"
+            v-if="hasAuth('GETLABELLIST')"
             class="text-primary text-right cursor-pointer"
           >
             {{ t('属性标签修改记录') }}>>
@@ -91,7 +93,7 @@
         <el-row class="mt-2 w-full" v-if="!isAttrLabelAdd">
           <el-col class="!flex justify-end">
             <el-button
-              v-if="hasAuth('SETTING')"
+              v-if="hasAuth('ADDUSERLABEL')"
               :icon="Plus"
               type="primary"
               @click="isAttrLabelAdd = true"
@@ -113,18 +115,14 @@
           </el-col>
           <el-col :span="10" class="!flex justify-end">
             <el-button
-              v-if="hasAuth('SETTING')"
               type="primary"
               @click="handleAddLabel(labelForm.attr, 'attr')"
               class="w-1/3"
               >{{ t('添加') }}</el-button
             >
-            <el-button
-              v-if="hasAuth('SETTING')"
-              class="w-1/3"
-              @click="handleDelLabel('attr')"
-              >{{ t('取消') }}</el-button
-            >
+            <el-button class="w-1/3" @click="handleDelLabel('attr')">{{
+              t('取消')
+            }}</el-button>
           </el-col>
         </el-row>
       </el-form-item>
@@ -486,7 +484,7 @@ const handleUpdate = () => {
       deletedIds.push(item.id);
     });
     if (deletedIds.length !== 0) emits('onDel', [form.id], deletedIds);
-    
+
     if (isSpecial.value) {
       form.specialLimit.productAmountTotalLimit = parseInt(
         form.specialLimit.productAmountTotalLimit
