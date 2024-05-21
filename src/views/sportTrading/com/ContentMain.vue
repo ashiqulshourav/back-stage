@@ -13,123 +13,126 @@
       v-loading="handicapLoading"
       @mouseleave="clearTime"
     >
-      <el-scrollbar ref="contentScrollRef">
-        <el-collapse ref="collapseRef" v-model="activeNames">
-          <el-collapse-item
-            :name="index"
-            v-for="(item, index) in handicapList"
-            :key="index"
-          >
-            <template #title>
-              <div class="flex items-center">
-                <el-button type="primary" size="small">
-                  {{ item.val }}
-                </el-button>
-                <div class="flex justify-between ml-4">
-                  <IconGroup
-                    :typeNum="item.isSale"
-                    @changeMatchStatus="
-                      status =>
-                        changeStatus({
-                          status,
-                          classify: 'category',
-                          betItemsIdList: item.betItemsIdList,
-                          item
-                        })
-                    "
-                  />
-                </div>
-              </div>
-            </template>
-            <div
-              class="ml-5 flex w-full border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#303030] mb-2"
-              v-for="(_, idx) in item.list"
-              :key="idx"
+      <template>
+        <el-scrollbar ref="contentScrollRef">
+          <el-collapse ref="collapseRef" v-model="activeNames">
+            <el-collapse-item
+              :name="index"
+              v-for="(item, index) in handicapList"
+              :key="index"
             >
-              <div
-                class="flex items-center pl-2 self-start w-[280px] justify-between bg-[--el-color-primary-light-9] h-[35px] pr-2"
-              >
-                <span class="text-[#409EFF] font-bold">{{
-                  _.betItemsName
-                }}</span>
-                <div class="flex pl-2 cursor-pointer">
-                  <IconGroup
-                    :typeNum="_.isSale"
-                    @changeMatchStatus="
-                      status =>
-                        changeStatus({
-                          status,
-                          classify: 'pan',
-                          betItemsIdList: _.betItemsIdList,
-                          categoryData: _
-                        })
-                    "
-                  />
-                </div>
-              </div>
-
-              <div class="flex-grow">
-                <div
-                  v-for="(d, i) in _.kindsCodeDtoList"
-                  :key="i"
-                  class="border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#503e3e]"
-                >
-                  <div
-                    @mouseleave="e => mouseEvent(e, s, 'leave')"
-                    :class="[
-                      'flex w-full items-center h-[35px]',
-                      l === 0 && 'bg-[--el-color-primary-light-9]'
-                    ]"
-                    v-for="(s, l) in d.betItemsDtoList"
-                    :key="`${i}-${l}`"
-                  >
-                    <div class="text-[--el-color-primary] text-center w-1/5">
-                      {{
-                        PLAY_MATCH_NAME(
-                          s.kindsCode,
-                          s.handicap,
-                          currentMatch.homeTeamNameCn,
-                          currentMatch.awayTeamNameCn
-                        )[s.homeOrAway ? s.homeOrAway : s.handicap] ??
-                        goalScoring(
-                          s.kindsCode,
-                          s.handicap,
-                          s.n,
-                          currentMatch.homeTeamNameCn,
-                          currentMatch.awayTeamNameCn,
-                          s.renderName
-                        )
-                      }}
-                    </div>
-                    <div class="text-center w-1/5">
-                      {{ s.odds.toFixed(2) }}
-                    </div>
-                    <InputCom
-                      :s="s"
-                      @changeMouse="
-                        (e, s, type) =>
-                          mouseEvent(e, s, type, d.betItemsDtoList)
+              <template #title>
+                <div class="flex items-center">
+                  <el-button type="primary" size="small">
+                    {{ item.val }}
+                  </el-button>
+                  <div class="flex justify-between ml-4">
+                    <IconGroup
+                      :typeNum="item.isSale"
+                      @changeMatchStatus="
+                        status =>
+                          changeStatus({
+                            status,
+                            classify: 'category',
+                            betItemsIdList: item.betItemsIdList,
+                            item
+                          })
                       "
-                      :selectNum="selectNum"
-                      :selectItem="selectItem"
-                      @changeSelectNum="shortcutSelectNum"
                     />
-                    <div class="text-[--el-color-primary] w-1/5 text-center">
-                      {{ s.betCount }}/{{ s.betAmount }}
-                    </div>
+                  </div>
+                </div>
+              </template>
+              <div
+                class="ml-5 flex w-full border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#303030] mb-2"
+                v-for="(_, idx) in item.list"
+                :key="idx"
+              >
+                <div
+                  class="flex items-center pl-2 self-start w-[280px] justify-between bg-[--el-color-primary-light-9] h-[35px] pr-2"
+                >
+                  <span class="text-[#409EFF] font-bold">{{
+                    _.betItemsName
+                  }}</span>
+                  <div class="flex pl-2 cursor-pointer">
+                    <IconGroup
+                      :typeNum="_.isSale"
+                      @changeMatchStatus="
+                        status =>
+                          changeStatus({
+                            status,
+                            classify: 'pan',
+                            betItemsIdList: _.betItemsIdList,
+                            categoryData: _
+                          })
+                      "
+                    />
+                  </div>
+                </div>
+
+                <div class="flex-grow">
+                  <div
+                    v-for="(d, i) in _.kindsCodeDtoList"
+                    :key="i"
+                    class="border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#503e3e]"
+                  >
                     <div
-                      class="text-[--el-color-primary] w-1/5 text-center"
-                      v-if="l === 0"
+                      @mouseleave="e => mouseEvent(e, s, 'leave')"
+                      :class="[
+                        'flex w-full items-center h-[35px]',
+                        l === 0 && 'bg-[--el-color-primary-light-9]'
+                      ]"
+                      v-for="(s, l) in d.betItemsDtoList"
+                      :key="`${i}-${l}`"
                     >
-                      {{ d.betAmountDiffer ?? '' }}
+                      <div class="text-[--el-color-primary] text-center w-1/5">
+                        {{
+                          PLAY_MATCH_NAME(
+                            s.kindsCode,
+                            s.handicap,
+                            currentMatch.homeTeamNameCn,
+                            currentMatch.awayTeamNameCn
+                          )[s.homeOrAway ? s.homeOrAway : s.handicap] ??
+                          goalScoring(
+                            s.kindsCode,
+                            s.handicap,
+                            s.n,
+                            currentMatch.homeTeamNameCn,
+                            currentMatch.awayTeamNameCn,
+                            s.renderName
+                          )
+                        }}
+                      </div>
+                      <div class="text-center w-1/5">
+                        {{ s.odds.toFixed(2) }}
+                      </div>
+                      <InputCom
+                        :s="s"
+                        @changeMouse="
+                          (e, s, type) =>
+                            mouseEvent(e, s, type, d.betItemsDtoList)
+                        "
+                        :selectNum="selectNum"
+                        :selectItem="selectItem"
+                        @changeSelectNum="shortcutSelectNum"
+                      />
+                      <div class="text-[--el-color-primary] w-1/5 text-center">
+                        {{ s.betCount }}/{{ s.betAmount }}
+                      </div>
+                      <div
+                        class="text-[--el-color-primary] w-1/5 text-center"
+                        v-if="l === 0"
+                      >
+                        {{ d.betAmountDiffer ?? '' }}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </el-collapse-item>
-        </el-collapse>
-      </el-scrollbar>
+            </el-collapse-item>
+          </el-collapse>
+        </el-scrollbar>
+      </template>
+
       <!-- scroll滚动条 -->
       <div
         v-show="isShowScroll"
@@ -179,6 +182,7 @@ const props = defineProps<{
   currentMatch: sportTradingDataAPI.MatchDtoList;
   handicapList: handicapListType[];
   selectContentType: string;
+  panIsEmpty: boolean;
 }>();
 
 const numberList = (): number[] => {

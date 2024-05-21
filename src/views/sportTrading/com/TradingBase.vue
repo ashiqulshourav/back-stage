@@ -32,6 +32,7 @@
             @clearMatchTime="clearMatchTime"
             @changeStatus="changeStatus"
             @sendNewOdds="sendNewOdds"
+            :panIsEmpty="panIsEmpty"
           />
         </template>
       </div>
@@ -64,7 +65,8 @@ const {
   clearMatchTime,
   changeStatus,
   sendNewOdds,
-  noMatchList
+  noMatchList,
+  panIsEmpty
 } = useTradingHook(type);
 
 const title = computed(() =>

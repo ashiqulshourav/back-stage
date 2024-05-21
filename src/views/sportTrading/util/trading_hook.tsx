@@ -23,6 +23,7 @@ export function useTradingHook(type: 'early' | 'in') {
     []
   );
   const handicapList = reactive<handicapListType[]>(baseHandicapList);
+  const panIsEmpty = ref(false);
   const currentMatch = reactive<sportTradingDataAPI.MatchDtoList>(
     {} as sportTradingDataAPI.MatchDtoList
   );
@@ -73,6 +74,8 @@ export function useTradingHook(type: 'early' | 'in') {
       if (loopTimer) clearTimeout(loopTimer.value);
       return;
     }
+    //检测是否有盘数据返回
+    checkHasData(res.data);
 
     const tempList = handicapList.slice(1);
     tempList.forEach(_ => {
@@ -145,6 +148,20 @@ export function useTradingHook(type: 'early' | 'in') {
     handicapList[0] = JSON.parse(JSON.stringify(handicapList[0]));
     //- 开启事件定时任务
     runLoopMatch();
+  };
+
+  //- 检测是否有盘数据
+  const checkHasData = (d: sportTradingDataAPI.getHandicapItemsData) => {
+    panIsEmpty.value = false;
+    const arr: sportTradingDataAPI.MainBetItemsDtoList[] = [];
+    Object.values(d).forEach(
+      (v: keyof sportTradingDataAPI.getHandicapItemsData) => {
+        if (Array.isArray(v)) {
+          arr.push(...v);
+        }
+      }
+    );
+    if (!arr.length) panIsEmpty.value = true;
   };
 
   //- 检测是否开始比赛
@@ -323,6 +340,7 @@ export function useTradingHook(type: 'early' | 'in') {
     sendNewOdds,
     noMatchList,
     matchStatus,
-    matchStartTime
+    matchStartTime,
+    panIsEmpty
   };
 }
