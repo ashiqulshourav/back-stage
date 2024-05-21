@@ -305,7 +305,7 @@
                   row.isSpecialSettle
                 ).bgColor
               }"
-              class="status_detail status_btn"
+              class="settle_status_detail status_btn"
             >
               {{
                 betStatusMap[
@@ -513,8 +513,8 @@ const {
 .bet_detail{
   min-width: 200px;
 }
-.status_detail{
-  width: 120px;
+.settle_status_detail{
+  min-width: 80px;
   display: flex;
   justify-items: center;
   justify-content: center;

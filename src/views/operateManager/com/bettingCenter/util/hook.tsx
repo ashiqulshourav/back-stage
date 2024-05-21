@@ -418,7 +418,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     riskStatusArr: number[],
     isSpecialSettle: number
   ) => {
-    let obj = { status: -1, bgColor: '' };
+    let obj = { status: -1, bgColor: '#F57582' };
 
     if (isSpecialSettle === 1){
       // 特殊结算也算已结算
@@ -509,10 +509,11 @@ export function useBettingCenterHook(category: number, venueType: number) {
     let flag = true;
     row.combineOrderDetails.map((item: BetOrderAPI.Detail) => {
       if (
-        item.riskStatus === riskStatus.rejectBetting ||
-        item.riskStatus === riskStatus.reject ||
-        item.riskStatus === riskStatus.approve ||
-        item.riskStatus === riskStatus.autoReject
+        item.riskStatus === riskStatus.waitingApprove ||
+        item.riskStatus === riskStatus.autoApprove ||
+        item.riskStatus === riskStatus.handelApprove ||
+        item.riskStatus === riskStatus.autoReject ||
+        item.riskStatus === riskStatus.handleReject
       ) {
         flag = false;
       }
