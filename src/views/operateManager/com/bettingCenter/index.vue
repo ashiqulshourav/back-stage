@@ -293,7 +293,7 @@
             >
             <span v-else>-</span>
           </template>
-          <template #status="{ row }">
+          <template #settleStatus="{ row }">
             <div
               :style="{
                 background: getStatus(

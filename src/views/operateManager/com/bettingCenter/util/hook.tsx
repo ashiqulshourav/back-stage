@@ -5,9 +5,11 @@ import type { FormInstance } from 'element-plus';
 import {
   betStatus,
   betStatusMap,
+  riskStatusMap,
   searchFormType,
   seriesTypesSingle,
-  seriesTypesDuplex
+  seriesTypesDuplex,
+
 } from './types';
 import { columns } from './exportTableColumnList';
 import { utils, writeFile } from 'xlsx';
@@ -316,7 +318,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
           case 'isSettlementAgain':
             str = data.isSettlementAgain === 2 ? '是' : '否';
             break;
-          case 'status':
+          case 'settleStatus':
             str =
               betStatusMap[
                 getStatus(
@@ -329,19 +331,9 @@ export function useBettingCenterHook(category: number, venueType: number) {
                 )?.status as keyof typeof betStatusMap
               ];
             break;
-          case 'billStatus':
-            str =
-              betStatusMap[
-                getStatus(
-                  data.status,
-                  data.billStatus,
-                  data.betResultArr,
-                  data.isReserve,
-                  data.riskStatusArr,
-                  data.isSpecialSettle
-                )?.status as keyof typeof betStatusMap
-              ];
-            break;
+          case 'riskStatus':
+              str = riskStatusMap[item.riskStatus as keyof typeof riskStatus]||'-';
+              break;
           case 'settleScore':
             str = displayHomeAwayScore(data.settleScore, data.sportId);
             break;
@@ -386,7 +378,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
     columns.forEach((column: { label: string }) => {
       titleList.push(column.label);
     });
-
     r.unshift(titleList);
     const workBook = utils.book_new();
     const workSheet = utils.aoa_to_sheet(r);
@@ -459,45 +450,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
       // 赛事异常
       obj = { status: betStatus.eventAbnormal, bgColor: '#F88D48' };
     }
-    //
-    // if (isSpecialSettle === 1) {
-    //   // 特殊结算也算已结算
-    //   obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
-    // } else if (betResultArr?.includes(22)) {
-    //   obj = { status: betStatus.reverseCancel, bgColor: '#F57582' }; //预约取消
-    // } else if (riskStatusArr?.includes(riskStatus.rejectBetting)) {
-    //   obj = { status: betStatus.PendingApprove, bgColor: '#F57582' }; //待审核
-    // }else if (
-    //   status == 2 &&
-    //   billStatus === 1 &&
-    //   (betResultArr?.includes(22)||betResultArr?.includes(23))
-    // ) {
-    //   // 注单无效
-    //   obj = { status: betStatus.betInvalid, bgColor: '#E54752' };
-    // } else if (status === 2 && billStatus === 1 && betResultArr?.includes(21)) {
-    //   // 预约失败
-    //   obj = { status: betStatus.reserveFail, bgColor: '#F57582' };
-    // } else if (status === 0 && billStatus === 0) {
-    //   // 未结算
-    //   if (isReserve === 1) {
-    //     // 预约中
-    //     obj = { status: betStatus.onReverse, bgColor: '#F57582' };
-    //   } else {
-    //     obj = { status: betStatus.unsettlementBet, bgColor: '#FFC53D' };
-    //   }
-    // } else if (status === 1 && billStatus === 1) {
-    //   // 已结算
-    //   obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
-    // } else if (status === 3) {
-    //   // 待确认
-    //   obj = { status: betStatus.PendingApprove, bgColor: '#FFC53D' };
-    // } else if (status === 4) {
-    //   // 投注失败
-    //   obj = { status: betStatus.betFail, bgColor: '#F57582' };
-    // } else if (status === 5) {
-    //   // 赛事异常
-    //   obj = { status: betStatus.eventAbnormal, bgColor: '#F88D48' };
-    // }
+
     return obj;
   };
 
