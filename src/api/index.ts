@@ -15,6 +15,7 @@ import { taskCenter } from '@/api/taskCenter';
 import { riskManagementData } from './riskManagement';
 import { operateManagementData } from './operateManagement';
 import { sportTradingData } from './sportTrading';
+import { eventData } from './event';
 
 export const API = {
   ...user,
@@ -33,5 +34,6 @@ export const API = {
   ...taskCenter,
   ...riskManagementData,
   ...sportTradingData,
-  ...operateManagementData
+  ...operateManagementData,
+  ...eventData
 };
