@@ -36,12 +36,12 @@ export const columns: TableColumnList = [
   {
     label: t("赔率"),
     slot: "odd",
-    minWidth: 50,
+    minWidth: 100,
     align:'center',
   },
   {
     label: t("结算状态"),
-    slot: "status",
+    slot: "settleStatus",
     minWidth: 100,
     align:'center',
   },
