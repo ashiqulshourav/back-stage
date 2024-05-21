@@ -2,8 +2,11 @@ import { message } from '@/utils/message';
 import { SearchFormType, handicapListType } from './type';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { baseHandicapList } from './baseData';
+import { addDialog, closeDialog } from '@/components/ReDialog';
+import MatchCountDown from '../com/MatchCountDown.vue';
 import {
   BO_DAN_CODE_LIST,
+  MATCH_STATUS,
   SALE_STATUS,
   icon_msg_tip,
   transferBoDanCol
@@ -14,6 +17,8 @@ export function useTradingHook(type: 'early' | 'in') {
   const loading = ref(true);
   const handicapLoading = ref(true);
   const noMatchList = ref(false);
+  const matchStatus = ref<'countDown' | 'canceled' | 'over'>('countDown');
+  const matchStartTime = ref<number>();
   const matchList = reactive<sportTradingDataAPI.getMorningSetMatchListData[]>(
     []
   );
@@ -58,8 +63,18 @@ export function useTradingHook(type: 'early' | 'in') {
     const res = await API.getHandicapItems({ matchId: currentMatch.matchId });
     handicapLoading.value = false;
     if (res.code) return;
-    const tempList = handicapList.slice(1);
+    //- 检测是否比赛开始
+    if (
+      !checkisBeginMatch(
+        res.data.status as 'countDown' | 'canceled' | 'over',
+        res.data.beginTimeLong
+      )
+    ) {
+      if (loopTimer) clearTimeout(loopTimer.value);
+      return;
+    }
 
+    const tempList = handicapList.slice(1);
     tempList.forEach(_ => {
       const iconMap = {
         0: 0,
@@ -130,6 +145,40 @@ export function useTradingHook(type: 'early' | 'in') {
     handicapList[0] = JSON.parse(JSON.stringify(handicapList[0]));
     //- 开启事件定时任务
     runLoopMatch();
+  };
+
+  //- 检测是否开始比赛
+  const checkisBeginMatch = (
+    status: 'countDown' | 'canceled' | 'over',
+    beginTimeLong: number
+  ) => {
+    matchStatus.value = status;
+    matchStartTime.value = beginTimeLong;
+    if (
+      (beginTimeLong - Date.now() < 16000 && type === 'early') ||
+      (type === 'in' && matchStatus.value === MATCH_STATUS.over) ||
+      matchStatus.value === MATCH_STATUS.canceled
+    ) {
+      addDialog({
+        class: 'count_down_dialog',
+        width: '8%',
+        center: true,
+        closeOnClickModal: false,
+        hideFooter: true,
+        alignCenter: true,
+        showClose: false,
+        contentRenderer: ({ options, index }) =>
+          h(MatchCountDown, {
+            status: matchStatus.value,
+            onCloseDialog: (_: boolean) => {
+              closeDialog(options, index);
+              onSearch();
+            }
+          })
+      });
+      return false;
+    }
+    return true;
   };
 
   //- 开启定时轮询任务
@@ -272,6 +321,8 @@ export function useTradingHook(type: 'early' | 'in') {
     clearMatchTime,
     changeStatus,
     sendNewOdds,
-    noMatchList
+    noMatchList,
+    matchStatus,
+    matchStartTime
   };
 }

@@ -117,8 +117,11 @@
                     <div class="text-[--el-color-primary] w-1/5 text-center">
                       {{ s.betCount }}/{{ s.betAmount }}
                     </div>
-                    <div class="text-[--el-color-primary] w-1/5 text-center">
-                      -444
+                    <div
+                      class="text-[--el-color-primary] w-1/5 text-center"
+                      v-if="l === 0"
+                    >
+                      {{ d.betAmountDiffer ?? '' }}
                     </div>
                   </div>
                 </div>

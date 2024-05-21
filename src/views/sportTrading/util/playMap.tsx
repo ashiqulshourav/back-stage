@@ -14,6 +14,13 @@ export const icon_msg_tip = {
   [SALE_STATUS.lock]: t('确定要锁盘么?')
 };
 
+export enum MATCH_STATUS {
+  nover = 'nover',
+  over = 'over', //结束
+  nobegin = 'nobegin',
+  canceled = 'canceled' //取消
+}
+
 //- 波胆集合
 export const BO_DAN_CODE_LIST = ['FT_CS', 'HT_CS'];
 
