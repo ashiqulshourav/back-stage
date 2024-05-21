@@ -160,7 +160,11 @@ function hasOneShowingChild(children: menuType[] = [], parent: menuType) {
   if (showingChildren.length === 1) {
     return false;
   }
-
+  console.log(
+    'sidebarItem.vue文件 169==============行打印=',
+    showingChildren,
+    children
+  );
   if (showingChildren.length === 0) {
     onlyOneChild.value = { ...parent, path: '', noShowingChildren: true };
     return true;

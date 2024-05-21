@@ -21,10 +21,10 @@
               :currentMatch="currentMatch"
               @changeSelectMatch="changeSelectMatch"
               @changeStatus="changeStatus"
+              :type="type"
             />
           </div>
           <ContentMain
-            :handicapLoading="handicapLoading"
             :currentMatch="currentMatch"
             :handicapList="handicapList"
             :selectContentType="selectContentType"
@@ -58,7 +58,6 @@ const {
   currentMatch,
   changeSelectMatch,
   onSearch,
-  handicapLoading,
   handicapList,
   selectContentType,
   changeSelectType,
