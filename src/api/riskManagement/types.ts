@@ -41,11 +41,6 @@ declare namespace RiskManagementDataAPI {
     minLimitAmount?: number;
     maxLimitAmount?: number;
   };
-  type RiskControlTypesRes = {
-    code: number;
-    msg: string;
-    data: RiskControlTypes[];
-  };
   type OrderPlacementTypes = {
     id?: number | string;
     sourceCode?: string;
@@ -60,11 +55,6 @@ declare namespace RiskManagementDataAPI {
     createdAt?: string;
     updatedAt?: string;
   };
-  type OrderPlacementTypesRes = {
-    code: number;
-    msg: string;
-    data: OrderPlacementTypes[];
-  };
   type OrderRejectTypes = {
     id?: number;
     sourceCode?: string;
@@ -76,16 +66,6 @@ declare namespace RiskManagementDataAPI {
     createdAt?: string;
     updatedAt?: string;
     isDelete?: number;
-  };
-  type OrderRejectTypesRes = {
-    code: number;
-    msg: string;
-    data: OrderRejectTypes[];
-  };
-  type AutoFreezeRes = {
-    code: number;
-    msg: string;
-    data: AutoFreeze[];
   };
   type AutoFreeze = {
     id?: number;
@@ -149,4 +129,9 @@ declare namespace RiskManagementDataAPI {
   type RiskTagRes = COMMON.BASE_RES_TYPE<RiskTagType>;
   type LimitRes = COMMON.BASE_RES_TYPE<LimitListType[]>;
   type updateLevelLimitResType = COMMON.BASE_RES_TYPE<null>;
+
+  type OrderRejectTypesRes = COMMON.BASE_RES_TYPE<OrderRejectTypes[]>;
+  type AutoFreezeRes = COMMON.BASE_RES_TYPE<AutoFreeze[]>;
+  type OrderPlacementTypesRes = COMMON.BASE_RES_TYPE<OrderPlacementTypes[]>;
+  type RiskControlTypesRes = COMMON.BASE_RES_TYPE<RiskControlTypes[]>;
 }
