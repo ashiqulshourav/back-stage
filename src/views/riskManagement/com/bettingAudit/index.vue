@@ -331,10 +331,10 @@
                 }}
               </div>
               <div
-                :style="{ background: getRiskStatus(row.riskStatusArr).bgColor }"
+                :style="{ background: getRiskStatus(item.riskStatus).bgColor }"
                 class="status_btn mb-1 mx-auto"
               >
-                {{ getRiskStatus(row.riskStatusArr).label }}
+                {{ getRiskStatus(item.riskStatus).label }}
               </div>
             </div>
           </template>
@@ -486,8 +486,8 @@ import { riskStatus } from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { hasAuth } from '@/router/utils';
 import { ref } from 'vue';
-import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-import EditPen from '@iconify-icons/ep/edit-pen';
+import {useRenderIcon} from "@/components/ReIcon/src/hooks";
+import EditPen from "@iconify-icons/ep/edit-pen";
 
 const { tableHeaderStyle } = usePublicHooks();
 const rejectSelectedCount = ref(0);
@@ -506,6 +506,7 @@ const {
   onSearch,
   handleTableWidthChange,
   handleCurrentChange,
+  handleSelectionChange,
   exportFile,
   copyTest,
   tenantList,
