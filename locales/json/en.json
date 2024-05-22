@@ -1041,7 +1041,6 @@
   "k-ad363c4": "No limit",
   "k-7363752e": "Manual Matching",
   "k32d967cc": "Automatic Matching",
-  "k422fe8e4": "Operating Time",
   "k-4b28900b": "Event information being edited",
   "k4d947533": "Cancel Match Confirmation",
   "k6d0806a4": "Match Confirmation",
@@ -1101,8 +1100,6 @@
   "k66577c63": "无进球",
   "k511a184c": "首个进球",
   "k-3a1eeadb": "最后进球",
-  "k-160fa12a": "启用禁用状态",
-  "k1a76d648": "投注金额区间",
   "k-4fdb76a9": "English name of home team",
   "k109f081b": "Confirm unmatching match data?",
   "k-4bc44b2b": "Confirm matching match data?",
@@ -1155,11 +1152,7 @@
   "k-535ec39": "Manual Approved",
   "k42b53cc3": "赛事结束",
   "k-5d386b5e": "export",
-  "k-34eee106": "修改前",
-  "k-36e719a8": "修改后",
-  "k-2ff974a4": "操作IP",
   "k-70e92dac": "Single",
   "k1e1e14d6": "Parlay",
   "k17637687": "Multiple",
-  "k-7c47d64b": "Set the conditions for automatically freezing the note here. The note that meets the freezing conditions, after being frozen, will be on the note review page, waiting for the wind control to approve whether the settlement process can be carried out."
 }
