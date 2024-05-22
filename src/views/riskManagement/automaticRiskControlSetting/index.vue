@@ -51,7 +51,7 @@
           <span class="font-bold">{{ t('冻结注单设置') }}</span>
           <span>
             <span class="text-gray-500 flex items-center gap-4">
-              <el-icon @mouseover="showMessage = true" @mouseleave="showMessage = false"><InfoFilled /></el-icon>
+              <el-icon @mouseover="showMessage = true" @mouseleave="showMessage = false" class="cursor-pointer"><InfoFilled /></el-icon>
               
                 <span v-if="showMessage">{{
                 t(
