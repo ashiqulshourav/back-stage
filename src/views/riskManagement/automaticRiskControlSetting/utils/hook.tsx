@@ -613,9 +613,23 @@ export function useRiskControlHook({
     dispatchGetLabelList();
     onSearchRejectOrder();
 
-    onSearchRejectOrder();
-    onSearchOrderPlacement();
-    onSearchFreezeOrder();
+    switch (currentRiskControlLabelId.value) {
+      case 0:
+        {
+          onSearchRejectOrder();
+        }
+        break;
+      case 1:
+        {
+          onSearchOrderPlacement();
+        }
+        break;
+      case 2:
+        {
+          onSearchFreezeOrder();
+        }
+        break;
+    }
   });
 
   return {
