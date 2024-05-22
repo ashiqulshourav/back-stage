@@ -15,7 +15,6 @@ import { ElMessageBox } from 'element-plus';
 
 export function useTradingHook(type: 'early' | 'in') {
   const loading = ref(true);
-  const handicapLoading = ref(true);
   const noMatchList = ref(false);
   const matchStatus = ref<'countDown' | 'canceled' | 'over'>('countDown');
   const matchStartTime = ref<number>();
@@ -59,10 +58,8 @@ export function useTradingHook(type: 'early' | 'in') {
 
   //- 盘口赛事列表接口
   const loopTimer = ref<NodeJS.Timeout>();
-  const getHandicapltems = async (noLoading?: boolean) => {
-    !noLoading && (handicapLoading.value = true);
+  const getHandicapltems = async () => {
     const res = await API.getHandicapItems({ matchId: currentMatch.matchId });
-    handicapLoading.value = false;
     if (res.code) return;
     //- 检测是否比赛开始
     if (
@@ -202,7 +199,7 @@ export function useTradingHook(type: 'early' | 'in') {
   const runLoopMatch = () => {
     if (loopTimer) clearInterval(loopTimer.value);
     loopTimer.value = setInterval(() => {
-      getHandicapltems(true);
+      getHandicapltems();
     }, 5000);
   };
 
@@ -328,7 +325,6 @@ export function useTradingHook(type: 'early' | 'in') {
     loading,
     matchList,
     onSearch,
-    handicapLoading,
     searchForm,
     currentMatch,
     changeSelectMatch,

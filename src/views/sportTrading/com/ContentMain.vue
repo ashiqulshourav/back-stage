@@ -10,10 +10,15 @@
     <!-- - 赛事内容列表 -->
     <div
       class="w-full overflow-hidden pl-5 h-[calc(100%-60px)]"
-      v-loading="handicapLoading"
       @mouseleave="clearTime"
     >
-      <template>
+      <div
+        class="flex items-center justify-center min-h-[500px]"
+        v-if="panIsEmpty"
+      >
+        <el-empty :description="t('暂无数据')" :image-size="100" />
+      </div>
+      <template v-else>
         <el-scrollbar ref="contentScrollRef">
           <el-collapse ref="collapseRef" v-model="activeNames">
             <el-collapse-item
@@ -166,6 +171,7 @@ import ContentTitle from './ContentTitle.vue';
 import { addition, subtraction } from '@pureadmin/utils';
 import { PLAY_MATCH_NAME, goalScoring } from '../util/playMap';
 import InputCom from './InputCom.vue';
+import { t } from '@/plugins/i18n';
 
 const collapseRef = ref();
 const activeNames = ref([0]);
@@ -178,7 +184,6 @@ const selectItem = reactive<sportTradingDataAPI.BetItemsDtoList>(
   {} as sportTradingDataAPI.BetItemsDtoList
 );
 const props = defineProps<{
-  handicapLoading: boolean;
   currentMatch: sportTradingDataAPI.MatchDtoList;
   handicapList: handicapListType[];
   selectContentType: string;
