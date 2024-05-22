@@ -46,17 +46,19 @@
         </span>
         <span
           v-if="currentRiskControlLabelId == 2 && hasAuth('AUTOFREEZELIST')"
-          class="flex gap-10"
+          class="flex gap-5 items-center"
         >
           <span class="font-bold">{{ t('冻结注单设置') }}</span>
           <span>
-            <span class="text-gray-500 flex items-center gap-2">
-              <el-icon><InfoFilled /></el-icon>
-              {{
+            <span class="text-gray-500 flex items-center gap-4">
+              <el-icon @mouseover="showMessage = true" @mouseleave="showMessage = false"><InfoFilled /></el-icon>
+              
+                <span v-if="showMessage">{{
                 t(
                   '在此处设定自动冻结注单的条件，符合冻结条件的注单，被冻结后，会在注单审核页面，等待风控批准是否可进行结算流程。'
                 )
-              }}</span
+              }}</span>
+              </span
             >
           </span>
         </span>
@@ -183,6 +185,8 @@ import AutomaticReject from './component/AutomaticReject.vue';
 import AutomaticOrderPlacement from './component/AutomaticOrderPlacement.vue';
 import AutomaticFreeze from './component/AutomaticFreeze.vue';
 import { InfoFilled } from '@element-plus/icons-vue';
+
+const showMessage = ref(false);
 
 // :category="1" :venueType="1"
 const {
