@@ -56,7 +56,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item :label="`${t('注单状态')}:`" prop="queryType">
+        <el-form-item :label="`${t('结算状态')}:`" prop="queryType">
           <el-select class="!w-[150px]"
                   :placeholder="t('请选择状态')"
               v-model="form.queryType"
