@@ -40,22 +40,10 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('联赛ID'), 'auto')
   },
   {
-    label: t('热门排序'),
-    prop: 'level',
-    minWidth: 100,
-    headerRenderer: d => handleTableWidth(d, t('热门排序'), 'auto')
-  },
-  {
     label: t('赛事ID'),
     prop: 'matchId',
     minWidth: 120,
     headerRenderer: d => handleTableWidth(d, t('赛事ID'), 'auto')
-  },
-  {
-    label: t('国家/地区'),
-    prop: 'countryId',
-    headerRenderer: d => handleTableWidth(d, t('国家/地区'), 'auto'),
-    formatter: ({ countryId }) => parseCountry(countryId)
   },
   {
     label: t('开赛时间'),

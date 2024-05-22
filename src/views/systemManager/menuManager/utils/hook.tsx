@@ -68,7 +68,7 @@ export function useMenuManagerHook() {
       });
   };
 
-  //- 角色弹窗
+  //- 菜单
   function openRoleDialog(title: string, row?: RoleAPI.ChildResourceList) {
     addDialog({
       title,

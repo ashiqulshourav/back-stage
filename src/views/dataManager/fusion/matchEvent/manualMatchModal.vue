@@ -7,75 +7,18 @@
   </div>
   <div class="flex items-center">
     <div>
-      <div class="text-center border border-slate-100 border-b-0">DP</div>
-      <table class="border border-slate-100 table">
-        <tr>
-          <th>{{ t('赛事ID')}}</th>
-          <td>{{ matchSourceDetails.matchId }}</td>
-        </tr>
-        <tr>
-          <th>{{ t('联赛名称')}}</th>
-          <td>
-            <div>{{ matchSourceDetails.leagueNameCn }}</div>
-            <div>{{ matchSourceDetails.leagueNameEn }}</div>
-          </td>
-        </tr>
-        <tr>
-          <th>{{ t('客队名称')}}</th>
-          <td>
-            <div>{{ matchSourceDetails.homeTeamNameCn }}</div>
-            <div>{{ matchSourceDetails.homeTeamNameEn }}</div>
-          </td>
-        </tr>
-        <tr>
-          <th>{{ t('客队名称')}}</th>
-          <td>
-            <div>{{ matchSourceDetails.awayTeamNameCn }}</div>
-            <div>{{ matchSourceDetails.awayTeamNameEn }}</div>
-          </td>
-        </tr>
-        <tr>
-          <th>{{ t('比赛开始时间')}}</th>
-          <td>{{ matchSourceDetails.beginTime }}</td>
-        </tr>
-      </table>
+      <div class="vertical-table-title">DP</div>
+      <VerticalTable :columns="selectedEventColumns" :dataList="matchSourceDetails"/>
     </div>
-    <IconifyIconOffline class="link-icon" :icon="matchSourcePairDetails.pairingStatus === 1 ? 'unlink' : 'link'"/>
+    <IconifyIconOffline 
+      class="link-icon" 
+      :icon="matchSourcePairDetails.pairingStatus === 1 ? 'unlink' : 'link'"
+    />
     <div>
-      <div class="text-center border border-slate-100 border-b-0">
+      <div class="vertical-table-title">
         {{ matchSource.find(_ => _.value == matchSourcePairDetails.dataSourceCode)?.label ?? '-' }}
       </div>
-      <table class="border border-slate-100 table">
-        <tr>
-          <th>{{ t('赛事ID')}}</th>
-          <td>{{ matchSourcePairDetails.matchId }}</td>
-        </tr>
-        <tr>
-          <th>{{ t('联赛名称')}}</th>
-          <td>
-            <div>{{ matchSourcePairDetails.leagueNameCn }}</div>
-            <div>{{ matchSourcePairDetails.leagueNameEn ? matchSourcePairDetails.leagueNameEn : '-' }}</div>
-          </td>
-        </tr>
-        <tr>
-          <th>{{ t('客队名称')}}</th>
-          <td>
-            <div>{{ matchSourcePairDetails.homeTeamNameCn }}</div>
-            <div>{{ matchSourcePairDetails.homeTeamNameEn ? matchSourcePairDetails.homeTeamNameEn : '-' }}</div>
-          </td>
-        </tr>
-        <tr>
-          <th>{{ t('客队名称')}}</th>
-          <td>
-            <div>{{ matchSourcePairDetails.awayTeamNameCn }}</div>
-            <div>{{ matchSourcePairDetails.awayTeamNameEn ? matchSourcePairDetails.awayTeamNameEn : '-' }}</div>
-          </td>
-        </tr>
-        <tr>
-          <th>{{ t('比赛开始时间')}}</th>
-          <td>{{ matchSourcePairDetails.beginTime }}</td>
-        </tr>
-      </table>
+      <VerticalTable :columns="selectedEventColumns" :dataList="matchSourcePairDetails"/>
     </div>
   </div>
   <div class="flex justify-end bg-white mt-4">
@@ -92,6 +35,8 @@ import {removeEmptyStringKeys} from "@/utils/utilFn";
 import {message} from "@/utils/message";
 import { useUserStore } from "@/store/user";
 import { matchCombineHook } from './utils/hook';
+import { selectedEventColumns } from './component/TableColumnList';
+import VerticalTable from '@/components/VerticalTable/index.vue';
 
 const {
   editFrom,
@@ -161,30 +106,11 @@ const closeDialog = () => {
   }
 }
 
-.table {
-  border-collapse: collapse;
-  border-spacing: 0;
-  width: 100%;
-}
-
-.table th,
-.table td {
-  text-align: left;
-  padding: 16px;
-  border-right: 1px solid #FFFFFF;
-}
-
-.table th:last-child,
-.table td:last-child {
-  border-right: none;
-}
-
-.table tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-.table tr:nth-child(odd) {
-  background-color: #FFFFFF;
+.vertical-table-title {
+  text-align: center;
+  border-width: 1px;
+  border-color: rgb(248 250 252);
+  border-bottom: 0px;
 }
 
 .link-icon {

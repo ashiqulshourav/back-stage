@@ -62,7 +62,13 @@
               v-model="form.queryType"
                      @change="search"
           >
+            <el-option :label="t('全部')" :value="''" />
               <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="`${t('风控状态')}:`" prop="riskStatus">
+          <el-select v-model="form.riskStatus"   class="!w-[150px]" @change="search">
+            <el-option v-for="item in Object.entries(riskStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
           </el-select>
         </el-form-item>
 
@@ -70,7 +76,7 @@
           <el-select
               v-model="form.isInplay"
               clearable
-              class="!w-[100px]"
+              class="!w-[120px]"
               @change="search"
           >
             <el-option
@@ -89,10 +95,10 @@
         </el-form-item>
         <el-form-item :label="`${t('过关类型')}:`" prop="seriesType">
           <el-select v-model="form.seriesType" clearable class="!w-[100px]" @change="search" >
-            <el-option  label="全部" value="" />
-            <el-option label="单关" :value="1" />
-            <el-option label="单式串关" :value="2" />
-            <el-option label="复试串关"  :value="3" />
+            <el-option  :label="t('全部')" value="" />
+            <el-option :label="t('单关')" :value="1" />
+            <el-option :label="t('单式串关')" :value="2" />
+            <el-option :label="t('复试串关')"  :value="3" />
           </el-select>
         </el-form-item>
         <el-form-item v-if="form.seriesType===2" :label="`${t('单式串关类型')}:`" prop="seriesDetails">
@@ -228,6 +234,8 @@
           </el-select>
           <CustomDate v-model:val="selectDate"  :start-placeholder="dayjs().startOf('month').format('YYYY-MM-DD')" :end-placeholder="dayjs().startOf('day').format('YYYY-MM-DD')" @changeDate="changeDate" />
         </el-form-item>
+
+
         <el-form-item>
 
           <el-button
@@ -246,13 +254,11 @@
           </el-button>
           <el-button
             type="primary"
+            :icon="useRenderIcon(Download)"
+            :loading="downloading"
             v-if="hasAuth('EXPORT')"
             @click="exportFile()"
           >
-            <IconifyIconOffline
-              :icon="downloading ? 'loadingIcon' : 'download'"
-              :style="{marginRight: '6px', animation: downloading ? 'rotate 2s linear infinite' : 'none'}"
-            />
             {{ t('导出报表') }}
           </el-button>
         </el-form-item>
@@ -275,6 +281,8 @@ import {
   SPORT_CATEGORY
 } from '@/utils/maps/sports_map';
 import { searchFormType } from '../util/types';
+import Download from '@iconify-icons/ep/download';
+
 const props = defineProps<{
   loading: boolean;
   riskLabelList:UserAPI.labelType[];
@@ -287,7 +295,7 @@ const props = defineProps<{
 const formRef = ref();
 const selectDate = ref('');
 const gameClassify = ref<{ label: string; value: number }[]>(props.venueType===1?ESPORT_ID_MAP:SPORT_ID_MAP);
-import {  betStatusMap,seriesTypesSingle,seriesTypesDuplex} from "../util/types";
+import {  betStatusMap,seriesTypesSingle,seriesTypesDuplex,riskStatusMap} from "../util/types";
 import {hasAuth} from "@/router/utils";
 import CustomDate from "@/components/Form/Custom_date.vue";
 

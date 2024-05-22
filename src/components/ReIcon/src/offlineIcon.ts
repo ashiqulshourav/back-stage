@@ -37,8 +37,13 @@ import menuTree from '@iconify-icons/ri/list-unordered';
 import configCenter from '@iconify-icons/ri/settings-3-line';
 import TaskCenterIcon from '@iconify-icons/ri/apps-fill';
 import Download from '@iconify-icons/ep/download';
+import play from '@iconify-icons/fa-solid/play-circle'
+import switch_icon from '@iconify-icons/ep/switch-button';
+import pause_circle from '@iconify-icons/fa-solid/pause-circle';
+import lock_icon from '@iconify-icons/fa-solid/lock';
 import Link from '@iconify-icons/icon-park-outline/link-one';
 import Unlink from '@iconify-icons/icon-park-outline/unlink';
+import EventManagementIcon from '@iconify-icons/ri/calendar-event-fill';
 
 addIcon("dataSourceManager", dataManager);
 addIcon("sale", sale);
@@ -53,8 +58,17 @@ addIcon("menuTree", menuTree);
 addIcon("configCenter", configCenter);
 addIcon("riskManagement", sale);
 addIcon("taskCenter", TaskCenterIcon);
+addIcon("download", Download);
+addIcon("SportTrading", metadata);
+addIcon("eventManagement", EventManagementIcon);
 
 /* 菜单icon结束 */
+//- 操盘图标开始
+addIcon("trading_play", play);
+addIcon("trading_switch", switch_icon);
+addIcon("trading_pause", pause_circle);
+addIcon("trading_lock", lock_icon);
+
 
 addIcon('homeFilled', HomeFilled);
 addIcon('informationLine', InformationLine);

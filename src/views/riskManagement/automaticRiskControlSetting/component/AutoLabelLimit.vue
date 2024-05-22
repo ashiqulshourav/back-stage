@@ -37,13 +37,30 @@
         </div>
         <span v-else> {{ row.betcount }} {{ t('笔') }} </span>
       </template>
-      <template #winLossAmount="{ row }">
+      <!-- <template #winLossAmount="{ row }">
         <el-input
           v-if="isEditRiskControls"
           :formatter="v => formatNumberWithLength(v, 0)"
           v-model="row.profiteAmout"
         />
         <span v-else> {{ addThousandSeparator(row.profiteAmout) }}</span>
+      </template> -->
+      <template #betAmount="{ row }">
+        <div v-if="isEditRiskControls" class="flex items-center gap-2">
+          <el-input
+            :formatter="v => formatNumberAndFillNull(v, 13)"
+            v-model="row.minLimitAmount"
+          />
+          -
+          <el-input
+            :formatter="v => formatNumberAndFillNull(v, 13)"
+            v-model="row.maxLimitAmount"
+          />
+        </div>
+        <span v-else>
+          {{ row.minLimitAmount || '0' }} -
+          {{ row.maxLimitAmount || t('以上') }}</span
+        >
       </template>
       <template #winLossRate="{ row }">
         <div v-if="isEditRiskControls" class="flex items-center gap-2">
@@ -136,6 +153,7 @@ const props = defineProps<{
   addControlLabel: () => void;
   deleteControlLabel: () => void;
   labelList: labelListType;
+  isFormClick: boolean;
 }>();
 
 const getLimmitLevelList = async () => {
