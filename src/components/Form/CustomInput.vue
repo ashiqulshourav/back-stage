@@ -7,9 +7,6 @@
       <el-tab-pane label="English">
         <el-input :placeholder="placehoder" v-model="formData.en" />
       </el-tab-pane>
-      <!-- <el-tab-pane label="French">
-      <el-input />
-    </el-tab-pane> -->
     </el-tabs>
   </div>
 </template>
