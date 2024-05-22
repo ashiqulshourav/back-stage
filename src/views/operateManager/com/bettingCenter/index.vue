@@ -32,7 +32,6 @@
           :pagination="pagination"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
-          @selection-change="handleSelectionChange"
           @page-size-change="handlePageSizeChange"
           @page-current-change="handleCurrentChange"
         >
@@ -476,7 +475,6 @@ const {
   onSearch,
   handlePageSizeChange,
   handleCurrentChange,
-  handleSelectionChange,
   exportFile,
   handleCancel,
   getStatus,

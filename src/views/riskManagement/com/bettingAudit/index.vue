@@ -331,10 +331,10 @@
                 }}
               </div>
               <div
-                :style="{ background: getRiskStatus(item.riskStatus).bgColor }"
+                :style="{ background: getRiskStatus(row.riskStatusArr).bgColor }"
                 class="status_btn mb-1 mx-auto"
               >
-                {{ getRiskStatus(item.riskStatus).label }}
+                {{ getRiskStatus(row.riskStatusArr).label }}
               </div>
             </div>
           </template>
@@ -506,7 +506,6 @@ const {
   onSearch,
   handleTableWidthChange,
   handleCurrentChange,
-  handleSelectionChange,
   exportFile,
   copyTest,
   tenantList,

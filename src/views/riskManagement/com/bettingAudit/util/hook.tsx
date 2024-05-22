@@ -66,21 +66,16 @@ export function useBettingAuditHook(venueType: number) {
     pagination.pageSize = val;
     onSearch();
   }
-  const selectReject = (flag: boolean, index: number, i) => {
+  const selectReject = (flag: boolean, index: number, i:number) => {
     dataList[index].combineOrderDetails[i]['rejectSelected'] = flag;
   };
-  const selectApprove = (flag, index, i) => {
+  const selectApprove = (flag:boolean, index:number, i:number) => {
     dataList[index].combineOrderDetails[i]['approveSelected'] = flag;
   };
   function handleCurrentChange(val: number) {
     pagination.currentPage = val;
     onSearch();
   }
-
-  function handleSelectionChange(val) {
-    console.log('handleSelectionChange', val);
-  }
-
   const formatParams = (privateparams = {}, pageNum?: number) => {
     let seriesDetails: any = [];
     if (form.seriesType == 2) {
@@ -153,14 +148,20 @@ export function useBettingAuditHook(venueType: number) {
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
       if (res.data !== null) {
-        dataList.push(...res?.data?.pageData);
-        dataList.map((item: any, index) => {
-          item.index = index + 1;
-          item.combineOrderDetails.map((item: BetOrderAPI.Detail) => {
+        let list = res?.data?.pageData || [];
+        console.log(222222,list)
+        list = list.map((row:BetOrderAPI.BetOrderList,index:number) => {
+          row.riskStatusArr = []
+           row.index = index + 1;
+          row.combineOrderDetails.map((item:BetOrderAPI.Detail) => {
+            row.riskStatusArr?.push(item.riskStatus);
             item.rejectSelected = false;
             item.approveSelected = false;
           });
+          return row;
         });
+        console.log(33333,list)
+        dataList.push(...list);
         pagination.total = res?.data?.count;
         pagination.pageSize = res?.data?.pageSize;
         pagination.currentPage = res?.data?.pageNum;
@@ -311,7 +312,7 @@ export function useBettingAuditHook(venueType: number) {
             str = tenantObj[data.tenantId]?.name ?? '';
             break;
           case 'riskStatus': //审核状态
-            str = getRiskStatus(data.riskStatus).label;
+            str = getRiskStatus(data.riskStatusArr).label;
             break;
           case 'betStage': //投注阶段
             str = getIsInplay(data.isInplay);
@@ -453,18 +454,18 @@ export function useBettingAuditHook(venueType: number) {
     });
   };
 
-  const getRiskStatus = (rStatus: number) => {
+  const getRiskStatus = (riskStatusArr: number[]) => {
     let obj = { label: '', bgColor: '' };
-    if (rStatus === riskStatus.approve) {
+    if ( riskStatusArr.includes(riskStatus.approve)) {
       obj = { label: riskStatusMap[riskStatus.approve], bgColor: '#FFC53D' };
-    } else if (rStatus === riskStatus.reject) {
+    } else if (riskStatusArr.includes(riskStatus.reject)) {
       obj = { label: riskStatusMap[riskStatus.reject], bgColor: '#F88D48' };
-    } else if (rStatus === riskStatus.rejectBetting) {
+    } else if (riskStatus.rejectBetting) {
       obj = {
         label: riskStatusMap[riskStatus.rejectBetting],
         bgColor: '#F88D48'
       };
-    } else if (rStatus === riskStatus.autoReject) {
+    } else if (riskStatusArr.includes(riskStatus.autoReject) ) {
       obj = { label: riskStatusMap[riskStatus.autoReject], bgColor: '#F88D48' };
     }
     return obj;
@@ -522,7 +523,6 @@ export function useBettingAuditHook(venueType: number) {
     resetForm,
     handleTableWidthChange,
     handleCurrentChange,
-    handleSelectionChange,
     exportFile,
     getRiskStatus,
     copyTest,
