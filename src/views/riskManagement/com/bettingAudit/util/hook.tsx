@@ -18,7 +18,7 @@ import {
   useSportFormatDetail,
   displayHomeAwayScore,
   BET_RESULT_TYPE_MAP,
-  formatSeriesType, getIsInplay
+  formatSeriesType
 } from '@/utils/formatMatch';
 import dayjs from 'dayjs';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
@@ -178,10 +178,9 @@ export function useBettingAuditHook(venueType: number) {
       const params: searchFormType = formatParams(
         {
           export: false,
-          orderId: orderId,
-          pageNum:1,
+          orderId: orderId
         },
-
+        1 // reset pageNum
       ) as searchFormType;
 
       const res: BetOrderAPI.BetOrderResType = await API.bettingAuditList(
@@ -223,9 +222,15 @@ export function useBettingAuditHook(venueType: number) {
     const res: BetOrderAPI.BetOrderResType = await API.bettingAuditList(
       formatParams({ pageNum: 1, pageSize: 50000 }) as searchFormType
     );
-    const r = res.data.pageData.map((item: any, i) => {
+    let list = []
+    res.data?.pageData?.map((row)=>{
+      row?.combineOrderDetails?.map((match)=>{
+        list.push({...row,...match})
+      })
+    })
+    const r = list.map((item: any, i) => {
       const arr = [];
-      const data = { ...item, ...item?.combineOrderDetails[0] };
+      const data = item
       columns.forEach((column: { prop: string }) => {
         let str = '';
         switch (column.prop.toString()) {
@@ -313,9 +318,6 @@ export function useBettingAuditHook(venueType: number) {
           case 'riskStatus': //审核状态
             str = getRiskStatus(data.riskStatus).label;
             break;
-          case 'betStage': //投注阶段
-            str = getIsInplay(data.isInplay);
-            break;
           default:
             str = data[column.prop as string];
         }
@@ -333,7 +335,6 @@ export function useBettingAuditHook(venueType: number) {
     workSheet['C1'].s = {
       wrapText: true
     };
-
     utils.book_append_sheet(workBook, workSheet, '数据报表');
     writeFile(workBook, '赛程_注单审核.xlsx');
     message(t('导出成功'), {
