@@ -6,7 +6,7 @@ import { TOrder } from '@/core/services/Table';
 import { useMatchStore } from "@/store/match";
 import { useI18n } from "vue-i18n";
 
-// 解析当前比分
+//- 解析当前比分
 export const parseMatchScore = (s: string) => {
   const match = s.match(/H(\d+)A(\d+)/);
   if (match) {

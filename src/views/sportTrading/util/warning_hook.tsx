@@ -2,6 +2,7 @@ import { message } from '@/utils/message';
 import { WarningSearchFormType, handicapListType } from './type';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { baseHandicapList } from './baseData';
+import type { PaginationProps } from '@pureadmin/table';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import MatchCountDown from '../com/MatchCountDown.vue';
 import {
@@ -27,6 +28,13 @@ export function useWarningHook() {
     {} as sportTradingDataAPI.MatchDtoList
   );
 
+  const pagination = reactive<PaginationProps>({
+    total: 0,
+    pageSize: 10,
+    currentPage: 1,
+    background: true
+  });
+
   const searchForm = reactive<WarningSearchFormType>({
     sportId: 1,
     leagueNameOrId: '',
@@ -51,6 +59,7 @@ export function useWarningHook() {
   });
 
   return {
-    searchForm
+    searchForm,
+    pagination
   };
 }

@@ -3,7 +3,7 @@
     <Serach :form="searchForm" />
     <div class="flex flex-grow">
       <WarningList />
-      <MatchList />
+      <MatchList :pagination="pagination" />
     </div>
   </div>
 </template>
@@ -14,7 +14,7 @@ import MatchList from './com/WarningList.vue';
 import { useWarningHook } from '../util/warning_hook';
 import Serach from './com/Search.vue';
 
-const { searchForm } = useWarningHook();
+const { searchForm, pagination } = useWarningHook();
 </script>
 
 <style lang="scss">
