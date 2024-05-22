@@ -10,6 +10,7 @@ import {
 } from '../component/TableColumnList';
 import { labelListType } from '@/views/operateManager/com/playerList/utils/types';
 import { PandaMatch } from '@/views/eventManagement/eventQuery/utils/types';
+import { hasAuth } from '@/router/utils';
 
 export function useRiskControlHook({
   venueType,
@@ -18,7 +19,7 @@ export function useRiskControlHook({
   venueType: number;
   category: number;
 }) {
-  const currentRiskControlLabelId = ref(0);
+  const currentRiskControlLabelId = ref(hasAuth('AUTOREJECTLIST') ? 0 : hasAuth('AUTOORDERPLACEMENTLIST') ? 1 : 2);
   const loading = ref(false);
   const isEditRiskControls = ref(false);
   const isFormClick = ref(false);
@@ -588,16 +589,15 @@ export function useRiskControlHook({
       switch (currentRiskControlLabelId.value) {
         case 0:
           {
+
           }
           break;
         case 1:
           {
-            onSearchFreezeOrder();
           }
           break;
         case 2:
           {
-            onSearchOrderPlacement();
           }
           break;
         case 3:
@@ -612,6 +612,10 @@ export function useRiskControlHook({
   onMounted(async () => {
     dispatchGetLabelList();
     onSearchRejectOrder();
+
+    onSearchRejectOrder();
+    onSearchOrderPlacement();
+    onSearchFreezeOrder();
   });
 
   return {
