@@ -611,7 +611,6 @@ export function useRiskControlHook({
 
   onMounted(async () => {
     dispatchGetLabelList();
-    onSearchRejectOrder();
 
     switch (currentRiskControlLabelId.value) {
       case 0:
