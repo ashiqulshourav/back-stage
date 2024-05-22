@@ -22,7 +22,7 @@ export const columns: TableColumnList = [
   {
     label: t('联赛名称'),
     prop: 'leagueNameCn',
-    headerRenderer: d => handleTableWidth(d, t('联赛名称'), 'auto'),
+    // headerRenderer: d => handleTableWidth(d, t('联赛名称'), 'auto'),
     formatter: ({ leagueNameCn, leagueNameEn }) => {
       const d = { zh: leagueNameCn, en: leagueNameEn };
       return d[lan] ?? leagueNameCn ?? '-';
@@ -46,12 +46,6 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('联赛ID'), 'auto')
   },
   {
-    label: t('热门排序'),
-    prop: 'level',
-    minWidth: 100,
-    headerRenderer: d => handleTableWidth(d, t('热门排序'), 'auto')
-  },
-  {
     label: t('赛事ID'),
     prop: 'matchId',
     minWidth: 120,
@@ -70,12 +64,6 @@ export const columns: TableColumnList = [
     minWidth: 150,
     headerRenderer: d => handleTableWidth(d, t('客队'), 'auto'),
     align: 'left'
-  },
-  {
-    label: t('国家/地区'),
-    prop: 'countryId',
-    headerRenderer: d => handleTableWidth(d, t('国家/地区'), 'auto'),
-    formatter: ({ countryId }) => parseCountry(countryId)
   },
   {
     label: t('开赛时间'),

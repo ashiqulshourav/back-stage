@@ -95,10 +95,10 @@
         </el-form-item>
         <el-form-item :label="`${t('过关类型')}:`" prop="seriesType">
           <el-select v-model="form.seriesType" clearable class="!w-[100px]" @change="search" >
-            <el-option  label="全部" value="" />
-            <el-option label="单关" :value="1" />
-            <el-option label="单式串关" :value="2" />
-            <el-option label="复试串关"  :value="3" />
+            <el-option  :label="t('全部')" value="" />
+            <el-option :label="t('单关')" :value="1" />
+            <el-option :label="t('单式串关')" :value="2" />
+            <el-option :label="t('复试串关')"  :value="3" />
           </el-select>
         </el-form-item>
         <el-form-item v-if="form.seriesType===2" :label="`${t('单式串关类型')}:`" prop="seriesDetails">
