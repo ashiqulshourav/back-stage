@@ -13,4 +13,8 @@ export const sportTradingData = {
   updateHandicapOdds: (data: sportTradingDataAPI.updateHandicapOddsParams) => http.request<sportTradingDataAPI.updateHandicapOddsParamsRes>("post", "/operateHandicap/v1/updateHandicapOdds", { data }),
   //- 告警赛事列表
   getAlarmMatchList: (data: sportTradingDataAPI.MorningSetMatchListParams) => http.request<sportTradingDataAPI.getAlarmMatchListRes>("post", "/operateHandicap/v1/getAlarmMatchList", { data }),
+  //- 查询告警配置
+  getOperateHandicapConfig: () => http.request<sportTradingDataAPI.getOperateHandicapConfigRes>("post", "/operateHandicap/v1/getOperateHandicapConfig", {}),
+  //- 更新告警配置
+  updateOperateHandicapConfig: (data: { alarmValue: number; alarmPercent: number; }) => http.request<sportTradingDataAPI.updateOperateHandicapConfigRes>("post", "/operateHandicap/v1/updateOperateHandicapConfig", { data }),
 };

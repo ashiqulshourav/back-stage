@@ -235,4 +235,14 @@ declare namespace sportTradingDataAPI {
   }
 
   type getAlarmMatchListRes = COMMON.BASE_RES_TYPE<getAlarmMatchListData>
+
+  //- 告警设置
+  type getOperateHandicapConfigData = {
+    alarmValue: number;
+    alarmPercent: number;
+  }
+
+  type getOperateHandicapConfigRes = COMMON.BASE_RES_TYPE<getOperateHandicapConfigData>
+
+  type updateOperateHandicapConfigRes = COMMON.BASE_RES_TYPE<null>
 }
