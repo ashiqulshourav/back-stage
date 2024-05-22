@@ -32,7 +32,6 @@
           :pagination="pagination"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
-          @selection-change="handleSelectionChange"
           @page-size-change="handlePageSizeChange"
           @page-current-change="handleCurrentChange"
         >
@@ -293,7 +292,7 @@
             >
             <span v-else>-</span>
           </template>
-          <template #status="{ row }">
+          <template #settleStatus="{ row }">
             <div
               :style="{
                 background: getStatus(
@@ -301,11 +300,11 @@
                   row.billStatus,
                   row.betResultArr,
                   row.isReserve,
-                  row.riskStatus,
+                  row.riskStatusArr,
                   row.isSpecialSettle
                 ).bgColor
               }"
-              class="status_detail status_btn mb-1"
+              class="settle_status_detail status_btn"
             >
               {{
                 betStatusMap[
@@ -314,7 +313,7 @@
                     row.billStatus,
                     row.betResultArr,
                     row.isReserve,
-                    row.riskStatus,
+                    row.riskStatusArr,
                     row.isSpecialSettle
                   ).status as keyof typeof betStatusMap
                   ]
@@ -345,6 +344,15 @@
                   ? calculateSeriesTypeTotal(row.combineOrderDetails)
                   : ''
               }}
+            </div>
+          </template>
+          <template #riskStatus="{ row }">
+            <div
+              class="riskStatus_detail"
+              v-for="item in row.combineOrderDetails"
+              :key="item.id"
+            >
+             <span>{{riskStatusMap[item.riskStatus as keyof typeof riskStatus]||'-'}}</span>
             </div>
           </template>
           <template #operation="{ row }">
@@ -447,7 +455,7 @@ import {
   displayHomeAwayScore,
   getIsInplay
 } from '@/utils/formatMatch';
-import { betStatus, betStatusMap } from './util/types';
+import {betStatus, betStatusMap, riskStatus, riskStatusMap} from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
 import {useRenderIcon} from "@/components/ReIcon/src/hooks";
@@ -467,7 +475,6 @@ const {
   onSearch,
   handlePageSizeChange,
   handleCurrentChange,
-  handleSelectionChange,
   exportFile,
   handleCancel,
   getStatus,
@@ -504,8 +511,19 @@ const {
 .bet_detail{
   min-width: 200px;
 }
-.status_detail{
+.settle_status_detail{
+  min-width: 80px;
+  display: flex;
+  justify-items: center;
+  justify-content: center;
+}
+.riskStatus_detail{
   width: 120px;
+  min-height: 100px;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  justify-content: center;
 }
 .match_item {
   margin-bottom: 10px;
@@ -553,6 +571,10 @@ const {
 .odd_item {
   min-width: 80px;
   min-height: 100px;
+  display: flex;
+  justify-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .operate {

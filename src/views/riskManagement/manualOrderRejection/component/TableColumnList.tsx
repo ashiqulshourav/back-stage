@@ -33,7 +33,7 @@ export const columns: TableColumnList = [
     label: t('接拒状态'),
     slot: 'orderAcceptanceStatus',
     minWidth: 100,
-    className: 'postion',
+    className: 'position',
     headerRenderer: d => handleTableWidth(d, t('接拒状态'), 'auto')
   },
   // {
@@ -66,7 +66,7 @@ export const columns: TableColumnList = [
   {
     label: t('操作'),
     slot: 'operation',
-    className: 'postion',
+    className: 'position',
     minWidth: 150,
     headerRenderer: d => handleTableWidth(d, t('操作'), 'auto'),
     align: 'center'

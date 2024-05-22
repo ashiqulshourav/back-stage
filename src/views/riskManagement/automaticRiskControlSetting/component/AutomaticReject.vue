@@ -16,17 +16,23 @@
           v-model="row.sourceCode"
           :placeholder="t('事件源')"
           clearable
+          :onChange="changeSourceName(row)"
         >
           <el-option
             :label="item.label"
             :value="item.value"
             v-for="item in EVENT_SOURCE"
             :key="item.value"
-            :disabled="sourceDisabled(item.value)"
           />
         </el-select>
 
         <span v-else>{{ row.sourceName }} </span>
+        <div
+          v-if="!row.sourceCode && isFormClick"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('事件源不能为空') }}
+        </div>
       </template>
       <template #eventName="{ row }">
         <el-select
@@ -35,16 +41,23 @@
           :placeholder="t('事件名称')"
           clearable
           :onChange="changeEventName(row)"
+          required
         >
           <el-option
             :label="item.eventName"
             :value="item.eventCode"
             v-for="item in EVENT_NAMES"
             :key="item.eventCode"
-            :disabled="eventDisabled(item.eventCode)"
+            :disabled="eventDisabled(item.eventCode, row)"
           />
         </el-select>
         <span v-else>{{ row.eventName }} </span>
+        <div
+          v-if="!row.eventCode && isFormClick"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('事件名称不能为空') }}
+        </div>
       </template>
       <template #beforeBetting="{ row }">
         <div v-if="isEditRiskControls" class="flex items-center gap-2">
@@ -65,6 +78,12 @@
           {{ t('秒') }}
         </div>
         <span v-else> {{ row.betAfterTime }} {{ t('秒') }} </span>
+        <div
+          v-if="showBettingError(row) && isFormClick"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('自动划单投注后时间必须大于自动划单投注前时间') }}
+        </div>
       </template>
     </pure-table>
 
@@ -104,6 +123,7 @@ const props = defineProps<{
   rejectOrderList: RiskManagementDataAPI.OrderRejectTypes[];
   addControlLabel: () => void;
   deleteControlLabel: () => void;
+  isFormClick: boolean;
 }>();
 
 const changeEventName = (row): any => {
@@ -112,12 +132,28 @@ const changeEventName = (row): any => {
   )?.eventName;
 };
 
-const eventDisabled = (eventCode: string) => {
-  return props.rejectOrderList.some(item => item.eventCode == eventCode);
+const changeSourceName = (row): any => {
+  row.sourceName = EVENT_SOURCE.find(
+    item => item.value == row.sourceCode
+  )?.label;
 };
 
-const sourceDisabled = (sourceCode: string) => {
-  return props.rejectOrderList.some(item => item.sourceCode == sourceCode);
+const eventDisabled = (eventCode: string, row: any) => {
+  let disable = false;
+  props.rejectOrderList.forEach(item => {
+    if (item.sourceCode == row.sourceCode) {
+      console.log('same');
+      if (item.eventCode == eventCode) {
+        disable = true;
+      }
+    }
+  });
+
+  return disable;
+};
+
+const showBettingError = (row: any) => {
+  return !row.betBeforeTime && !row.betAfterTime;
 };
 </script>
 

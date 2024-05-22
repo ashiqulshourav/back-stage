@@ -5,7 +5,7 @@ import { columns } from './TableColumnList';
     round
     type="info"
     effect="plain"
-    :closable="expand"
+    :closable="expand && hasAuth(['DELUSERLABEL'])"
   >
     <div
       :style="`background-color: ${getLabelColor(label.level, type)}`"
@@ -15,6 +15,8 @@ import { columns } from './TableColumnList';
   </el-tag>
 </template>
 <script setup lang="ts">
+import { hasAuth } from '@/router/utils';
+
 const props = defineProps<{
   label: UserAPI.labelType;
   type: string;

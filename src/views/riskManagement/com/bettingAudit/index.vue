@@ -125,7 +125,7 @@
           </template>
           <template #matchMessage="{ row }">
             <div
-              class="match_detail match_item match_detail"
+              class="match_detail match_item match_detail text-left"
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -193,7 +193,7 @@
           </template>
           <template #betDetail="{ row }">
             <div
-              class="match_item bet_detail"
+              class="match_item bet_detail text-left"
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -260,7 +260,7 @@
           </template>
           <template #odd="{ row }">
             <div
-              class="match_item odd_item odd_detail"
+              class="match_item odd_item odd_detail text-center"
               v-for="item in row.combineOrderDetails"
               :key="item.id"
             >
@@ -299,12 +299,12 @@
           </template>
           <template #riskStatus="{ row }">
             <div
-              class="match_item odd_item riskStatus_detail"
+              class="match_item odd_item riskStatus_detail text-center"
               v-for="(item, idx) in row.combineOrderDetails"
               :key="idx"
             >
               <div
-                class="text-left"
+                class=""
                 v-if="item.riskStatus === riskStatus.reject"
               >
                 原因:{{ item.riskType }}
@@ -332,7 +332,7 @@
               </div>
               <div
                 :style="{ background: getRiskStatus(item.riskStatus).bgColor }"
-                class="status_btn mb-1"
+                class="status_btn mb-1 mx-auto"
               >
                 {{ getRiskStatus(item.riskStatus).label }}
               </div>
@@ -340,7 +340,7 @@
           </template>
           <template #cancel="{ row }">
             <div
-              class="match_item cancel flex justify-between items-center"
+              class="match_item cancel flex justify-between items-center text-center"
               v-for="(item, index) in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -368,7 +368,7 @@
           </template>
           <template #approve="{ row }">
             <div
-              class="match_item approve_detail approve flex justify-between items-center"
+              class="match_item approve_detail approve flex justify-between items-center text-center"
               v-for="(item, index) in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -396,7 +396,7 @@
           </template>
           <template #operation="{ row }">
             <div
-              class="match_item approve flex justify-between items-center"
+              class="match_item approve flex justify-center items-center text-center width-auto"
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -575,7 +575,6 @@ watch(
 .match_item {
   margin-bottom: 10px;
   position: relative;
-  text-align: left;
   &:last-child {
     margin-bottom: 0;
   }
@@ -625,7 +624,9 @@ watch(
 .approve {
   width: 100px;
 }
-
+.width-auto{
+  width: auto;
+}
 .operate {
   width: 110px;
 }

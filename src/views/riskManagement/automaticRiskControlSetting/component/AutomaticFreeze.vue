@@ -21,25 +21,42 @@
           active-text="On"
           inactive-text="Off"
         />
-        <span v-else>{{ row.isDisable ? 'On' : 'Off' }}</span>
+        <span v-else>
+          <el-switch
+            size="large"
+            v-model="row.isDisable"
+            :active-value="1"
+            :inactive-value="0"
+            inline-prompt
+            active-text="On"
+            inactive-text="Off"
+            :disabled="true"
+        /></span>
       </template>
       <template #sourceName="{ row }">
         <el-select
           v-if="isEditRiskControls"
           v-model="row.sourceCode"
           :placeholder="t('事件源')"
-          clearable          
+          clearable
+          required
+          :onChange="changeSourceName(row)"
         >
           <el-option
             :label="item.label"
             :value="item.value"
             v-for="item in EVENT_SOURCE"
             :key="item.value"
-            :disabled="sourceDisabled(item.value)"
           />
         </el-select>
 
         <span v-else>{{ row.sourceName }} </span>
+        <div
+          v-if="!row.sourceCode && isFormClick"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('事件源不能为空') }}
+        </div>
       </template>
       <template #eventName="{ row }">
         <el-select
@@ -48,16 +65,23 @@
           :placeholder="t('事件名称')"
           clearable
           :onChange="changeEventName(row)"
+          required
         >
           <el-option
             :label="item.eventName"
             :value="item.eventCode"
             v-for="item in EVENT_NAMES"
             :key="item.eventCode"
-            :disabled="eventDisabled(item.eventCode)"
+            :disabled="eventDisabled(item.eventCode, row)"
           />
         </el-select>
         <span v-else>{{ row.eventName }} </span>
+        <div
+          v-if="!row.eventCode && isFormClick"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('事件名称不能为空') }}
+        </div>
       </template>
       <template #betBeforeTime="{ row }">
         <div v-if="isEditRiskControls" class="flex items-center gap-2">
@@ -68,6 +92,12 @@
           {{ t('秒') }}
         </div>
         <span v-else> {{ row.betBeforeTime }} {{ t('秒') }} </span>
+        <!-- <div
+          v-if="showBetBeforeTimeError(row) && isFormClick"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('自动冻结投注前时间必须小于自动划单投注前时间') }}
+        </div> -->
       </template>
       <template #betAfterTime="{ row }">
         <div v-if="isEditRiskControls" class="flex items-center gap-2">
@@ -78,6 +108,12 @@
           {{ t('秒') }}
         </div>
         <span v-else> {{ row.betAfterTime }} {{ t('秒') }} </span>
+        <div
+          v-if="showBetAfterTimeError(row) && isFormClick"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('自动冻结投注后时间必须大于自动划单投注后时间') }}
+        </div>
       </template>
       <template #betAmountRange="{ row }">
         <div v-if="isEditRiskControls" class="flex items-center gap-2">
@@ -91,15 +127,30 @@
             v-model="row.maxLimitAmount"
           />
         </div>
-        <span v-else>
-          {{ row.minLimitAmount || '0' }} -
-          {{ row.maxLimitAmount || t('以上') }}</span
-        >
+        <div v-else>
+          <span v-if="Number(row.minLimitAmount) && Number(row.maxLimitAmount)">
+            {{
+              addThousandSeparator(row.minLimitAmount) +
+              ' - ' +
+              addThousandSeparator(row.maxLimitAmount)
+            }}
+          </span>
+          <span
+            v-if="Number(row.minLimitAmount) && !Number(row.maxLimitAmount)"
+          >
+            {{ addThousandSeparator(row.minLimitAmount) + t('以上') }}
+          </span>
+          <span
+            v-if="!Number(row.minLimitAmount) && Number(row.maxLimitAmount)"
+          >
+            {{ addThousandSeparator(row.maxLimitAmount) + t('以下') }}
+          </span>
+        </div>
         <div
-          v-if="showBetAmountError(row)"
+          v-if="showBetAmountError(row) && isFormClick"
           class="text-red-500 text-xs text-start"
         >
-          {{ t('自动冻结投注前时间必须大于自动划单投注前时间:熊猫 56') }}
+          {{ t('投注金额最小值不能大于最大值') }}
         </div>
       </template>
     </pure-table>
@@ -138,8 +189,10 @@ const props = defineProps<{
   loading: boolean;
   columns: TableColumnList;
   orderAutoFreezeList: RiskManagementDataAPI.AutoFreeze[];
+  orderPlacementList: RiskManagementDataAPI.OrderPlacementTypes[];
   addControlLabel: () => void;
   deleteControlLabel: () => void;
+  isFormClick: boolean;
 }>();
 
 const changeEventName = (row): any => {
@@ -148,16 +201,71 @@ const changeEventName = (row): any => {
   )?.eventName;
 };
 
-const eventDisabled = (eventCode: string) => {
-  return props.orderAutoFreezeList.some(item => item.eventCode == eventCode);
+const changeSourceName = (row): any => {
+  row.sourceName = EVENT_SOURCE.find(
+    item => item.value == row.sourceCode
+  )?.label;
 };
 
-const sourceDisabled = (sourceCode: string) => {
-  return props.orderAutoFreezeList.some(item => item.sourceCode == sourceCode);
+const eventDisabled = (eventCode: string, row: any) => {
+  let disable = false;
+  props.orderAutoFreezeList.forEach(item => {
+    if (item.sourceCode == row.sourceCode) {
+      if (item.eventCode == eventCode) {
+        disable = true;
+      }
+    }
+  });
+
+  return disable;
 };
 
 const showBetAmountError = (row: any) => {
-  return Number(row.maxLimitAmount) <= Number(row.minLimitAmount);
+  if (!Number(row.maxLimitAmount) && !Number(row.minLimitAmount)) {
+    return true;
+  } else if (row.maxLimitAmount && row.minLimitAmount) {
+    return Number(row.maxLimitAmount) < Number(row.minLimitAmount);
+  }
+};
+
+const showBetBeforeTimeError = (row: any) => {
+  let error = false;
+  if (!row.betBeforeTime && !row.betAfterTime) {
+    error = true;
+  } else if (row.betBeforeTime) {
+    props.orderPlacementList.forEach(orderPlacement => {
+      if (
+        orderPlacement.sourceCode == row.sourceCode &&
+        orderPlacement.eventCode == row.eventCode
+      ) {
+        if (Number(row.betBeforeTime) < Number(orderPlacement.betBeforeTime)) {
+          error = true;
+        }
+      }
+    });
+  }
+
+  return error;
+};
+
+const showBetAfterTimeError = (row: any) => {
+  let error = false;
+  if (!row.betBeforeTime && !row.betAfterTime) {
+    error = true;
+  } else if (row.betAfterTime) {
+    props.orderPlacementList.forEach(orderPlacement => {
+      if (
+        orderPlacement.sourceCode == row.sourceCode &&
+        orderPlacement.eventCode == row.eventCode
+      ) {
+        if (Number(row.betAfterTime) < Number(orderPlacement.betAfterTime)) {
+          error = true;
+        }
+      }
+    });
+  }
+
+  return error;
 };
 </script>
 

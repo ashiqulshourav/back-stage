@@ -1,6 +1,5 @@
 import { message } from '@/utils/message';
-import { useEventListener } from '@vueuse/core';
-import { copyTextToClipboard } from '@pureadmin/utils';
+import { useEventListener, useClipboard } from '@vueuse/core';
 import type { Directive, DirectiveBinding } from 'vue';
 
 interface CopyEl extends HTMLElement {
@@ -12,14 +11,15 @@ export const copy: Directive = {
   mounted(el: CopyEl, binding: DirectiveBinding) {
     const { value } = binding;
     if (value) {
-      el.copyValue = value;
-      const arg = binding.arg ?? 'dblclick';
+      el.copyValue = value.val;
+      const arg = binding.arg ?? "dblclick";
       // Register using addEventListener on mounted, and removeEventListener automatically on unmounted
-      useEventListener(el, arg, () => {
-        const success = copyTextToClipboard(el.copyValue);
-        success
-          ? message(t('复制成功'), { type: 'success' })
-          : message(t('复制失败'), { type: 'error' });
+      useEventListener(el, arg, (e) => {
+        e.stopPropagation()
+        // const success = copyTextToClipboard(value.val);
+        const { copy } = useClipboard({ source: value.val })
+        copy(value.val)
+        message(value?.tip ? value.tip : "复制成功", { type: "success" })
       });
     } else {
       throw new Error(
