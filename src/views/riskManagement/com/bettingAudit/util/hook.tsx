@@ -222,9 +222,15 @@ export function useBettingAuditHook(venueType: number) {
     const res: BetOrderAPI.BetOrderResType = await API.bettingAuditList(
       formatParams({ pageNum: 1, pageSize: 50000 }) as searchFormType
     );
-    const r = res.data.pageData.map((item: any, i) => {
+    let list = []
+    res.data?.pageData?.map((row)=>{
+      row?.combineOrderDetails?.map((match)=>{
+        list.push({...row,...match})
+      })
+    })
+    const r = list.map((item: any, i) => {
       const arr = [];
-      const data = { ...item, ...item?.combineOrderDetails[0] };
+      const data = item
       columns.forEach((column: { prop: string }) => {
         let str = '';
         switch (column.prop.toString()) {
@@ -329,7 +335,6 @@ export function useBettingAuditHook(venueType: number) {
     workSheet['C1'].s = {
       wrapText: true
     };
-
     utils.book_append_sheet(workBook, workSheet, '数据报表');
     writeFile(workBook, '赛程_注单审核.xlsx');
     message(t('导出成功'), {
