@@ -1,35 +1,44 @@
 <template>
-  <div class="bg-bg_color w-full flex-grow ml-3 overflow-auto search-form p-5">
+  <div
+    class="bg-bg_color w-full flex-grow ml-3 search-form p-5 flex flex-col h-full"
+    v-loading="loading"
+  >
     <div class="flex justify-between">
       <div class="font-bold">{{ t('告警列表') }}</div>
+
       <div>
         <el-button type="primary">{{ t('刷新') }}</el-button>
       </div>
     </div>
 
-    <el-pagination
-      v-model:current-page="pagination.currentPage"
-      v-model:page-size="pagination.pageSize"
-      :small="true"
-      :background="pagination.background"
-      layout="prev, pager, next, jumper"
-      :total="1000"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-    />
+    <div class="flex-grow h-[calc(100%-80px)]">
+      <el-scrollbar>
+        <WarningMatch
+          v-for="(item, index) in matchList"
+          :matchData="item"
+          :matchList="matchList"
+          :key="index"
+        />
+      </el-scrollbar>
+    </div>
+
+    <div class="flex justify-end pt-2">
+      <PaginationCom :pagination="pagination" />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import type { PaginationProps } from '@pureadmin/table';
+import PaginationCom from './PaginationCom.vue';
+import WarningMatch from './WarningMatch.vue';
 
-const props = defineProps<{
+defineProps<{
   pagination: PaginationProps;
+  loading: boolean;
+  matchList: sportTradingDataAPI.getAlarmMatchListType[];
 }>();
-
-const handleSizeChange = () => {};
-const handleCurrentChange = () => {};
 </script>
 
 <style scoped></style>

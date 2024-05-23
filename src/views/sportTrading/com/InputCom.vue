@@ -1,20 +1,20 @@
 <template>
   <div
-    class="w-1/5 text-center input_wrapper relative"
+    class="w-1/5 text-center input_wrapper relative h-full"
     @mouseenter.stop="e => mouseEvent(e, props.s, 'enter')"
     @mouseleave.stop="e => mouseEvent(e, props.s, 'leave')"
   >
     <div
       v-if="showNum"
-      class="min-w-[120px] text-[--el-color-primary] text-left"
+      class="min-w-[120px] text-[--el-color-primary] text-left h-full flex items-center"
     >
       {{ renderData.dpOdds?.toFixed(2) }}
     </div>
     <div
       v-else
-      class="text-[--el-color-primary] flex justify-start cursor-pointer relative"
+      class="text-[--el-color-primary] flex justify-start cursor-pointer h-full relative"
     >
-      <div class="w-[120px] flex justify-start">
+      <div class="w-[120px] flex justify-start items-center h-full">
         <el-input-number
           class="!w-[70px]"
           size="small"
@@ -49,7 +49,9 @@ const props = defineProps<{
 const showNum = ref(true);
 watch(
   () => props.s,
-  d => (showNum.value = d.sourceBetItemsId !== 1),
+  d => {
+    showNum.value = d.sourceBetItemsId !== 1;
+  },
   {
     deep: true
   }
@@ -77,7 +79,7 @@ const changeDpOdds = debounce((v: number) => {
 const tipData = computed(() => {
   return {
     val: `${renderData.dpOdds > renderData.odds ? '+' : '-'}${Math.abs(
-      subtraction(renderData.dpOdds, Math.abs(renderData.odds))
+      subtraction(renderData.dpOdds, Math.abs(renderData.odds), 2)
     )}`,
     color:
       renderData.dpOdds > renderData.odds

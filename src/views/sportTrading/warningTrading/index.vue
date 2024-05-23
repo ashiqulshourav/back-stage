@@ -1,9 +1,13 @@
 <template>
   <div class="flex flex-col h-full">
-    <Serach :form="searchForm" />
-    <div class="flex flex-grow">
+    <Serach :form="searchForm" :loading="loading" />
+    <div class="flex flex-grow h-[calc(100%-60px)]">
       <WarningList />
-      <MatchList :pagination="pagination" />
+      <MatchList
+        :pagination="pagination"
+        :loading="loading"
+        :matchList="matchList"
+      />
     </div>
   </div>
 </template>
@@ -14,7 +18,7 @@ import MatchList from './com/WarningList.vue';
 import { useWarningHook } from '../util/warning_hook';
 import Serach from './com/Search.vue';
 
-const { searchForm, pagination } = useWarningHook();
+const { searchForm, pagination, loading, matchList } = useWarningHook();
 </script>
 
 <style lang="scss">
