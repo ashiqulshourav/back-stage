@@ -60,7 +60,8 @@ export function useTradingHook(type: 'early' | 'in') {
   const loopTimer = ref<NodeJS.Timeout>();
   const getHandicapltems = async () => {
     const res = await API.getHandicapItems({ matchId: currentMatch.matchId });
-    if (res.code) return;
+    if (res.code) return message(res.msg, { type: 'error' });
+
     //- 检测是否比赛开始
     if (
       !checkisBeginMatch(
@@ -68,20 +69,13 @@ export function useTradingHook(type: 'early' | 'in') {
         res.data.beginTimeLong
       )
     ) {
-      if (loopTimer) clearTimeout(loopTimer.value);
-      return;
+      if (loopTimer.value) return clearTimeout(loopTimer.value);
     }
     //检测是否有盘数据返回
     checkHasData(res.data);
 
     const tempList = handicapList.slice(1);
     tempList.forEach(_ => {
-      const iconMap = {
-        0: 0,
-        2: 0,
-        3: 0,
-        4: 0
-      };
       _.list = res.data[
         _.listType as keyof sportTradingDataAPI.getHandicapItemsData
       ] as sportTradingDataAPI.MainBetItemsDtoList[];
@@ -93,23 +87,12 @@ export function useTradingHook(type: 'early' | 'in') {
           _.listType as keyof sportTradingDataAPI.getHandicapItemsData
         ] as sportTradingDataAPI.MainBetItemsDtoList[]
       ).reduce((pre, next) => {
-        iconMap[next.isSale as keyof typeof iconMap] += 1;
         pre.push(...next.betItemsIdList);
         return pre;
       }, [] as number[]);
-
-      Object.keys(iconMap).forEach(key => {
-        if (
-          iconMap[+key as keyof typeof iconMap] == _.list.length &&
-          _.list.length > 0
-        ) {
-          _.isSale = +key;
-        }
-      });
     });
 
     //- 第一项单独处理
-    const map = { 0: 0, 2: 0, 3: 0, 4: 0 };
     handicapList[0].list = tempList.map(item => item.list).flat();
     handicapList[0].amount = tempList
       .map(item => item.amount)
@@ -117,7 +100,6 @@ export function useTradingHook(type: 'early' | 'in') {
     handicapList[0].betItemsIdList.length = 0;
     handicapList[0].list.forEach(item => {
       handicapList[0].betItemsIdList.push(...item.betItemsIdList);
-      map[item.isSale as keyof typeof map] += 1;
       item.kindsCodeDtoList.forEach(_ => {
         _.betItemsDtoList.forEach(l => {
           if (!l.dpOdds) l.dpOdds = l.odds;
@@ -131,15 +113,6 @@ export function useTradingHook(type: 'early' | 'in') {
           currentMatch.homeTeamNameCn,
           currentMatch.awayTeamNameCn
         );
-      }
-    });
-
-    Object.keys(map).forEach(key => {
-      if (
-        map[+key as keyof typeof map] == handicapList[0].list.length &&
-        handicapList[0].list.length > 0
-      ) {
-        handicapList[0].isSale = +key;
       }
     });
     handicapList[0] = JSON.parse(JSON.stringify(handicapList[0]));

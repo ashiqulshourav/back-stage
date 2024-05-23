@@ -1,7 +1,7 @@
 export const warningBaseList = [
   {
     listType: 'mainBetItemsDtoList',
-    val: t('主要'),
+    val: t('主要玩法'),
     list: [],
     isSale: null,
     betItemsIdList: []

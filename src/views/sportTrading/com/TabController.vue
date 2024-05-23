@@ -105,6 +105,7 @@
                       <IconGroup
                         :typeNum="item.isSale"
                         @changeMatchStatus="d => changeMatchStatus(d)"
+                        :closeThreeIcon="true"
                       />
                     </div>
                   </div>

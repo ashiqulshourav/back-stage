@@ -7,7 +7,9 @@
       <div class="font-bold">{{ t('告警列表') }}</div>
 
       <div>
-        <el-button type="primary">{{ t('刷新') }}</el-button>
+        <el-button type="primary" @click="reloadList">{{
+          t('刷新')
+        }}</el-button>
       </div>
     </div>
 
@@ -23,7 +25,10 @@
     </div>
 
     <div class="flex justify-end pt-2">
-      <PaginationCom :pagination="pagination" />
+      <PaginationCom
+        :pagination="pagination"
+        @changePageSize="changePageSize"
+      />
     </div>
   </div>
 </template>
@@ -39,6 +44,9 @@ defineProps<{
   loading: boolean;
   matchList: sportTradingDataAPI.getAlarmMatchListType[];
 }>();
+const emits = defineEmits(['changePageSize', 'reloadList']);
+const changePageSize = () => emits('changePageSize');
+const reloadList = () => emits('reloadList');
 </script>
 
 <style scoped></style>

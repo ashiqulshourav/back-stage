@@ -11,6 +11,7 @@
     @click.stop="changeType(SALE_STATUS.close)"
   />
   <IconifyIconOffline
+    v-if="!closeThreeIcon"
     class="text-sm mr-2"
     :style="{ color: typeNum === SALE_STATUS.sealing ? '#A8ABB2' : '#409EFF' }"
     icon="trading_pause"
@@ -27,6 +28,7 @@
 import { SALE_STATUS } from '../util/playMap';
 const props = defineProps<{
   typeNum?: number | null;
+  closeThreeIcon?: boolean;
 }>();
 
 const emits = defineEmits(['changeMatchStatus']);

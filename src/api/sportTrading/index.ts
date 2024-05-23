@@ -17,4 +17,6 @@ export const sportTradingData = {
   getOperateHandicapConfig: () => http.request<sportTradingDataAPI.getOperateHandicapConfigRes>("post", "/operateHandicap/v1/getOperateHandicapConfig", {}),
   //- 更新告警配置
   updateOperateHandicapConfig: (data: { alarmValue: number; alarmPercent: number; }) => http.request<sportTradingDataAPI.updateOperateHandicapConfigRes>("post", "/operateHandicap/v1/updateOperateHandicapConfig", { data }),
+  //- 告警赛事轮询接口
+  loopAlarmMatchList: (data: sportTradingDataAPI.loopAlarmMatchListParams) => http.request<sportTradingDataAPI.getAlarmMatchListRes>("post", "/operateHandicap/v1/loopAlarmMatchList", { data }),
 };
