@@ -425,9 +425,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
     }else if(riskStatusArr?.includes(2)){
       // 👝审核
       obj = { status: betStatus.PendingApprove, bgColor: '#F57582' };
-    }else if (betResultArr?.includes(61)){
-      // 投注失败
-      obj = { status: betStatus.betFail, bgColor: '#F57582' };
     }else if (riskStatusArr?.includes(riskStatus.handleReject)||riskStatusArr?.includes(riskStatus.autoReject)){
       // 注单无效
       obj = { status: betStatus.betFail, bgColor: '#F57582' };

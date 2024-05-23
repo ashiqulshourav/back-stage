@@ -37,9 +37,7 @@ export enum betStatus {
   unsettlementBet = 3,
   settlementBet = 4,
   betInvalid = 6,
-  betFail = 7,
   eventAbnormal = 8,
-  riskReject = 9,
   reserveFail = 10,
   onReverse = 11,
   reverseCancel=12
@@ -51,7 +49,6 @@ export const betStatusMap = {
   [betStatus.settlementBet]: t('已结算'),
   [betStatus.PendingApprove]: t('待审核'),
   [betStatus.betInvalid]: t('注单无效'),
-  [betStatus.betFail]: t('投注失败'),
   [betStatus.eventAbnormal]: t('赛事异常'),
   [betStatus.reserveFail]: t('预约失败'),
   [betStatus.onReverse]: t('预约中'),
