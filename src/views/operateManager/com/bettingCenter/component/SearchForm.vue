@@ -19,59 +19,39 @@
             <el-option v-for="item in tenantList" :label="item.tenantName" :value="item.id" :key="item.id" />
           </el-select>
         </el-form-item>
-        <el-form-item  :label="`${t('风控标签')}:`"  prop="riskControlLabelList">
-          <el-select v-model="form.riskControlLabelList"  @change="search" multiple clearable class="!w-[150px]">
-            <el-option v-for="item in riskLabelList" :label="item.name" :value="item.id" />
-          </el-select>
-        </el-form-item>
-        <el-form-item v-if="props.venueType===0"  :label="`${t('赛事类型')}:`" prop="category">
+        <el-form-item :label="`${t('赛种')}:`" prop="sportId">
           <el-select
-            v-model="form.category"
-            :placeholder="t('赛事类型')"
-            class="!w-[150px]"
-            @change="chagenMatchType"
-          >
-            <el-option :label="t('全部')" :value="' '" />
-            <el-option
-              :label="item.label"
-              :value="item.value"
-              v-for="item in SPORT_CATEGORY"
-              :key="item.value"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="`${t('游戏种类')}:`" prop="sportId">
-          <el-select
-            v-model="form.sportId"
-            :placeholder="t('游戏种类')"
-            class="!w-[160px]"
-            @change="search"
+              v-model="form.sportId"
+              :placeholder="t('赛种')"
+              class="!w-[160px]"
+              @change="search"
           >
             <el-option :label="t('全部')" :value="''" />
             <el-option
-              :label="item.label"
-              :value="item.value"
-              v-for="item in gameClassify"
-              :key="item.value"
+                :label="item.label"
+                :value="item.value"
+                v-for="item in gameClassify"
+                :key="item.value"
             />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('结算状态')}:`" prop="queryType">
           <el-select class="!w-[150px]"
-                  :placeholder="t('请选择状态')"
-              v-model="form.queryType"
+                     :placeholder="t('请选择状态')"
+                     v-model="form.queryType"
                      @change="search"
           >
-            <el-option :label="t('全部')" :value="''" />
-              <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
+            <el-option :label="t('全部')" :value="1" />
+            <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('风控状态')}:`" prop="riskStatus">
+
           <el-select v-model="form.riskStatus"   class="!w-[150px]" @change="search">
+            <el-option  :label="t('全部')"  value="" />
             <el-option v-for="item in Object.entries(riskStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
           </el-select>
         </el-form-item>
-
         <el-form-item :label="`${t('投注阶段')}:`" prop="isInplay">
           <el-select
               v-model="form.isInplay"
@@ -124,11 +104,11 @@
         </el-form-item>
         <el-form-item :label="`${t('联赛ID')}:`" prop="leagueId">
           <el-input
-            v-model="form.leagueId"
-            :placeholder="t('联赛ID')"
-            clearable
-            v-enter="search"
-            class="!w-[150px]"
+              v-model="form.leagueId"
+              :placeholder="t('联赛ID')"
+              clearable
+              v-enter="search"
+              class="!w-[150px]"
           />
         </el-form-item>
         <el-form-item :label="`${t('联赛名')}:`" prop="leagueName">
@@ -149,36 +129,38 @@
               class="!w-[150px]"
           />
         </el-form-item>
-        <el-form-item :label="`${t('主队')}:`" prop="homeTeamName">
+        <el-form-item :label="`${t('玩家号')}:`" prop="userIdOrName">
           <el-input
-            v-model="form.homeTeamName"
-            :placeholder="t('主队名称')"
-            clearable
-            v-enter="search"
+              v-model="form.userIdOrName"
+              :placeholder="t('请输入会员账号/ID')"
+              clearable
+              maxLenght="20"
+              v-enter="search"
+              class="!w-[200px]"
+          />
+        </el-form-item>
+        <el-form-item  :label="`${t('风控标签')}:`"  prop="riskControlLabelList">
+          <el-select v-model="form.riskControlLabelList"  @change="search" multiple clearable class="!w-[150px]">
+            <el-option v-for="item in riskLabelList" :label="item.name" :value="item.id" />
+          </el-select>
+        </el-form-item>
+        <el-form-item v-if="props.venueType===0"  :label="`${t('赛事类型')}:`" prop="category">
+          <el-select
+            v-model="form.category"
+            :placeholder="t('赛事类型')"
             class="!w-[150px]"
-          />
+            @change="chagenMatchType"
+          >
+            <el-option :label="t('全部')" :value="' '" />
+            <el-option
+              :label="item.label"
+              :value="item.value"
+              v-for="item in SPORT_CATEGORY"
+              :key="item.value"
+            />
+          </el-select>
         </el-form-item>
-        <el-form-item :label="`${t('客队')}:`" prop="awayTeamName">
-          <el-input
-            v-model="form.awayTeamName"
-            :placeholder="t('客队名称')"
-            clearable
-            v-enter="search"
-            class="!w-[150px]"
-          />
-        </el-form-item>
-
-        <el-form-item :label="`${t('会员账号')}:`" prop="userIdOrName">
-          <el-input
-            v-model="form.userIdOrName"
-            :placeholder="t('请输入会员账号/ID')"
-            clearable
-            maxLenght="20"
-            v-enter="search"
-            class="!w-[200px]"
-          />
-        </el-form-item>
-        <el-form-item :label="`${t('注单流水号')}:`" prop="orderId">
+        <el-form-item :label="`${t('注单号')}:`" prop="orderId">
           <el-input
             v-model="form.orderId"
             :placeholder="t('注单流水号')"
@@ -188,8 +170,6 @@
             class="!w-[200px]"
           />
         </el-form-item>
-
-
         <el-form-item :label="`${t('投注额')}:`" prop="minBetAmount">
           <el-input
               v-model="form.minBetAmount"
@@ -228,14 +208,12 @@
         </el-form-item>
         <el-form-item prop="timeType">
           <el-select v-model="form.timeType"  class="!w-[110px]" @change="search">
-            <el-option  :label="t('注单时间')" :value="1"  />
+            <el-option  :label="t('下注时间')" :value="1"  />
             <el-option  :label="t('结算时间')" :value="2"  />
-            <el-option  :label="t('比赛时间')" :value="3"  />
+            <el-option  :label="t('开赛时间')" :value="3"  />
           </el-select>
           <CustomDate v-model:val="selectDate"  :start-placeholder="dayjs().startOf('month').format('YYYY-MM-DD')" :end-placeholder="dayjs().startOf('day').format('YYYY-MM-DD')" @changeDate="changeDate" />
         </el-form-item>
-
-
         <el-form-item>
 
           <el-button

@@ -62,7 +62,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
     matchId: '',
     awayTeamName: '',
     homeTeamName: '',
-    // status:[],
     isInplay: '',
     seriesType: '',
     category: '',
@@ -418,7 +417,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     riskStatusArr: number[],
     isSpecialSettle: number
   ) => {
-    let obj = { status: -1, bgColor: '#F57582' };
+    let obj = { status: -1, bgColor: '' };
 
     if (isSpecialSettle === 1){
       // 特殊结算也算已结算
@@ -429,7 +428,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     }else if (betResultArr?.includes(61)){
       // 投注失败
       obj = { status: betStatus.betFail, bgColor: '#F57582' };
-    }else if (riskStatusArr?.includes(203)||riskStatusArr?.includes(204)){
+    }else if (riskStatusArr?.includes(riskStatus.handleReject)||riskStatusArr?.includes(riskStatus.autoReject)){
       // 注单无效
       obj = { status: betStatus.betFail, bgColor: '#F57582' };
     }else if (status === 2 && billStatus === 1 && betResultArr?.includes(21)){
