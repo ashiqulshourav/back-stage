@@ -1,5 +1,7 @@
 declare namespace sportTradingDataAPI {
   type MorningSetMatchListParams = {
+    pageNum?: number;
+    pageSize?: number;
     sportId?: number | string;
     leagueNameOrId?: number | string;
     matchNameOrId?: number | string;
@@ -230,4 +232,14 @@ declare namespace sportTradingDataAPI {
   type getOperateHandicapConfigRes = COMMON.BASE_RES_TYPE<getOperateHandicapConfigData>
 
   type updateOperateHandicapConfigRes = COMMON.BASE_RES_TYPE<null>
+
+  type loopAlarmMatchListParams = {
+    sportId: number | string;
+    pageNum: number;
+    pageSize: number;
+    total: number;
+    pages: number;
+    size: number;
+    matchIdList: number[]
+  }
 }

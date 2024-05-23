@@ -6,7 +6,6 @@
     :background="pagination.background"
     layout="prev, pager, next, jumper"
     :total="pagination.total"
-    @size-change="handleSizeChange"
     @current-change="handleCurrentChange"
   />
 </template>
@@ -17,8 +16,8 @@ defineProps<{
   pagination: PaginationProps;
 }>();
 
-const handleSizeChange = () => {};
-const handleCurrentChange = () => {};
+const emits = defineEmits(['changePageSize']);
+const handleCurrentChange = () => emits('changePageSize');
 </script>
 
 <style scoped></style>

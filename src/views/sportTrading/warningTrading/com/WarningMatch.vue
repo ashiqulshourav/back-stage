@@ -102,11 +102,11 @@
                     :selectItem="selectItem"
                     @changeSelectNum="shortcutSelectNum"
                   />
-                  <div class="text-[--el-color-primary] w-1/5 text-center">
+                  <div class="text-[--el-color-primary] w-1/6 text-center">
                     {{ s.betCount }}/{{ s.betAmount }}
                   </div>
                   <div
-                    class="text-[--el-color-primary] w-1/5 text-center"
+                    class="text-[--el-color-primary] w-1/6 text-center"
                     v-if="l === 0"
                   >
                     {{ d.betAmountDiffer ?? '' }}

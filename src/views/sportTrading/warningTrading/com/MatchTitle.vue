@@ -10,7 +10,7 @@
           currentMatch.status === MATCH_STATUS.nover ? t('滚球') : t('早盘')
         }}</el-button
       >
-      <el-button size="small" type="primary">{{ t('足球') }}</el-button>
+      <el-button size="small" color="#337ecc">{{ t('足球') }}</el-button>
     </div>
     <div class="flex items-start">
       <div class="flex text-sm">
@@ -26,7 +26,7 @@
               </span>
               {{}}
             </span>
-            <span class="text-[#409EFF] text-xs ml-1">
+            <span class="text-[#409EFF] text-xs ml-1 font-bold">
               {{ currentMatch?.leagueNameCn }}
             </span>
           </div>
@@ -49,6 +49,7 @@
         </div>
         <div class="flex mt-1 cursor-pointer text-xs">
           <IconGroup
+            :closeThreeIcon="true"
             :typeNum="currentMatch?.isSale"
             @changeMatchStatus="changeMatchStatus"
           />
