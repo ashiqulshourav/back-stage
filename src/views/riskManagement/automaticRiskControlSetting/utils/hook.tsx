@@ -261,11 +261,11 @@ export function useRiskControlHook({
         isValid = false;
       }
 
-      if (!item.betBeforeTime && !item.betAfterTime) {
+      if (item.betBeforeTime === "" && item.betAfterTime === "") {
         isValid = false;
       }
 
-      if (item.betAfterTime) {
+      if (item.betAfterTime !== "") {
         orderAutoFreezeList.forEach(orderFreeze => {
           if (
             orderFreeze.sourceCode == item.sourceCode &&
@@ -310,10 +310,10 @@ export function useRiskControlHook({
           eventCode: item.eventCode,
           eventName: item.eventName,
           isDelete: item.isDelete,
-          betBeforeTime: parseInt(item.betBeforeTime || 0),
-          betAfterTime: parseInt(item.betAfterTime || 0),
-          minLimitAmount: parseInt(item.minLimitAmount || 0),
-          maxLimitAmount: parseInt(item.maxLimitAmount || 0),
+          betBeforeTime: item.betBeforeTime,
+          betAfterTime: item.betAfterTime,
+          minLimitAmount: item.minLimitAmount,
+          maxLimitAmount: item.maxLimitAmount,
           event_name: item.eventName
         }));
       };
@@ -372,11 +372,11 @@ export function useRiskControlHook({
         isValid = false;
       }
 
-      if (!item.betBeforeTime && !item.betAfterTime) {
+      if (item.betBeforeTime === "" && item.betAfterTime === "") {
         isValid = false;
       }
 
-      if (item.betAfterTime) {
+      if (item.betAfterTime !== "") {
         orderPlacementList.forEach(orderPlacement => {
           if (
             orderPlacement.sourceCode == item.sourceCode &&
@@ -406,6 +406,12 @@ export function useRiskControlHook({
       //   });
       // }
 
+      if (item.maxLimitAmount && item.minLimitAmount) {
+        if (Number(item.maxLimitAmount) < Number(item.minLimitAmount)) {
+            isValid = false;
+        }  
+      }
+
     });
 
     if (isValid) {
@@ -423,10 +429,10 @@ export function useRiskControlHook({
           eventCode: item.eventCode,
           eventName: item.eventName,
           isDelete: item.isDelete,
-          betBeforeTime: parseInt(item.betBeforeTime || 0),
-          betAfterTime: parseInt(item.betAfterTime || 0),
-          minLimitAmount: parseInt(item.minLimitAmount || 0),
-          maxLimitAmount: parseInt(item.maxLimitAmount || 0),
+          betBeforeTime: item.betBeforeTime,
+          betAfterTime: item.betAfterTime,
+          minLimitAmount: item.minLimitAmount,
+          maxLimitAmount: item.maxLimitAmount,
           event_name: item.eventName,
           userCreateAfter: 0,
           labels: '',
