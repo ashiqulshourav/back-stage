@@ -202,7 +202,7 @@ const showBetAfterTimeError = (row: any) => {
         orderFreeze.sourceCode == row.sourceCode &&
         orderFreeze.eventCode == row.eventCode
       ) {
-        if (Number(row.betAfterTime) > Number(orderFreeze.betAfterTime)) {
+        if (Number(row.betAfterTime) >= Number(orderFreeze.betAfterTime)) {
           error = true;
         }
       }

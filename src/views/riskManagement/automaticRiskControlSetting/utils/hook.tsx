@@ -271,7 +271,7 @@ export function useRiskControlHook({
             orderFreeze.sourceCode == item.sourceCode &&
             orderFreeze.eventCode == item.eventCode
           ) {
-            if (Number(item.betAfterTime) > Number(orderFreeze.betAfterTime)) {
+            if (Number(item.betAfterTime) >= Number(orderFreeze.betAfterTime)) {
               isValid = false;
             }
           }
@@ -383,7 +383,7 @@ export function useRiskControlHook({
             orderPlacement.eventCode == item.eventCode
           ) {
             if (
-              Number(item.betAfterTime) < Number(orderPlacement.betAfterTime)
+              Number(item.betAfterTime) <= Number(orderPlacement.betAfterTime)
             ) {
               isValid = false;
             }
