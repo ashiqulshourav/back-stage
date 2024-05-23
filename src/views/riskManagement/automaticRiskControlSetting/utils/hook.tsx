@@ -406,6 +406,12 @@ export function useRiskControlHook({
       //   });
       // }
 
+      if (item.maxLimitAmount && item.minLimitAmount) {
+        if (Number(item.maxLimitAmount) <= Number(item.minLimitAmount)) {
+            isValid = false;
+        }  
+      }
+
     });
 
     if (isValid) {
