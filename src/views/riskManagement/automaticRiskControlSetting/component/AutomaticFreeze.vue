@@ -129,11 +129,18 @@
         </div>
         <div v-else>
           <span v-if="Number(row.minLimitAmount) && Number(row.maxLimitAmount)">
-            {{
-              addThousandSeparator(row.minLimitAmount) +
-              ' - ' +
-              addThousandSeparator(row.maxLimitAmount)
-            }}
+            <span v-if="Number(row.minLimitAmount) == Number(row.maxLimitAmount)">
+              {{
+                addThousandSeparator(row.minLimitAmount)
+              }}
+            </span>
+            <span v-else>
+              {{
+                addThousandSeparator(row.minLimitAmount) +
+                ' - ' +
+                addThousandSeparator(row.maxLimitAmount)
+              }}  
+            </span>      
           </span>
           <span
             v-if="Number(row.minLimitAmount) && !Number(row.maxLimitAmount)"
@@ -222,7 +229,7 @@ const eventDisabled = (eventCode: string, row: any) => {
 
 const showBetAmountError = (row: any) => {
   if (row.maxLimitAmount && row.minLimitAmount) {
-    return Number(row.maxLimitAmount) <= Number(row.minLimitAmount);
+    return Number(row.maxLimitAmount) < Number(row.minLimitAmount);
   }
 };
 
@@ -248,9 +255,9 @@ const showBetBeforeTimeError = (row: any) => {
 
 const showBetAfterTimeError = (row: any) => {
   let error = false;
-  if (!row.betBeforeTime && !row.betAfterTime) {
+  if (row.betBeforeTime === "" && row.betAfterTime === "") {
     error = true;
-  } else if (row.betAfterTime) {
+  } else if (row.betAfterTime !== "") {
     props.orderPlacementList.forEach(orderPlacement => {
       if (
         orderPlacement.sourceCode == row.sourceCode &&
