@@ -146,12 +146,12 @@
             {{ addThousandSeparator(row.maxLimitAmount) + t('以下') }}
           </span>
         </div>
-        <div
+        <!-- <div
           v-if="showBetAmountError(row) && isFormClick"
           class="text-red-500 text-xs text-start"
         >
           {{ t('投注金额最小值不能大于最大值') }}
-        </div>
+        </div> -->
       </template>
     </pure-table>
 
@@ -221,9 +221,7 @@ const eventDisabled = (eventCode: string, row: any) => {
 };
 
 const showBetAmountError = (row: any) => {
-  if (!Number(row.maxLimitAmount) && !Number(row.minLimitAmount)) {
-    return true;
-  } else if (row.maxLimitAmount && row.minLimitAmount) {
+  if (row.minLimitAmount) {
     return Number(row.maxLimitAmount) < Number(row.minLimitAmount);
   }
 };
