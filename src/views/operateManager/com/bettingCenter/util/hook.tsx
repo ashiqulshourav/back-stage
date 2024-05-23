@@ -427,7 +427,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
       obj = { status: betStatus.PendingApprove, bgColor: '#F57582' };
     }else if (riskStatusArr?.includes(riskStatus.handleReject)||riskStatusArr?.includes(riskStatus.autoReject)){
       // 注单无效
-      obj = { status: betStatus.betFail, bgColor: '#F57582' };
+      obj = { status: betStatus.betInvalid, bgColor: '#F57582' };
     }else if (status === 2 && billStatus === 1 && betResultArr?.includes(21)){
       // 预约失败
       obj = { status: betStatus.reserveFail, bgColor: '#F57582' };
