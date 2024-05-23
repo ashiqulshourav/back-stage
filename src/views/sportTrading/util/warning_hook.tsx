@@ -1,7 +1,7 @@
 import { message } from '@/utils/message';
 import { WarningSearchFormType, handicapListType } from './type';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
-import { baseHandicapList } from './baseData';
+import { baseHandicapList, warningBaseList } from './baseData';
 import type { PaginationProps } from '@pureadmin/table';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import MatchCountDown from '../com/MatchCountDown.vue';
@@ -17,11 +17,10 @@ import { ElMessageBox } from 'element-plus';
 export function useWarningHook() {
   const loading = ref(true);
   const noMatchList = ref(false);
+  const matchList = reactive<sportTradingDataAPI.getAlarmMatchListType[]>([]);
   const matchStatus = ref<'countDown' | 'canceled' | 'over'>('countDown');
   const matchStartTime = ref<number>();
-  const matchList = reactive<sportTradingDataAPI.getMorningSetMatchListData[]>(
-    []
-  );
+
   const handicapList = reactive<handicapListType[]>(baseHandicapList);
   const panIsEmpty = ref(false);
   const currentMatch = reactive<sportTradingDataAPI.MatchDtoList>(
@@ -50,8 +49,41 @@ export function useWarningHook() {
     const res = await API.getAlarmMatchList({
       ...removeEmptyStringKeys(searchForm)
     });
+    loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
-    console.log('warning_hook.tsx文件 42==============行打印=', res);
+    pagination.total = res.data.total;
+    res.data.list.forEach((item: sportTradingDataAPI.getAlarmMatchListType) => {
+      const baseDatat: typeof warningBaseList = JSON.parse(
+        JSON.stringify(warningBaseList)
+      );
+      baseDatat.forEach(_ => {
+        const arr =
+          item.betItemsResultDto[
+            _.listType as keyof sportTradingDataAPI.BetItemsResultDto
+          ];
+        arr.forEach((d: sportTradingDataAPI.MainListType) => {
+          d.kindsCodeDtoList.forEach(_ => {
+            _.betItemsDtoList.forEach(l => {
+              if (!l.dpOdds) l.dpOdds = l.odds;
+            });
+          });
+          // - 波胆单独处理
+          if (BO_DAN_CODE_LIST.includes(d.kindsCode)) {
+            transferBoDanCol(
+              d as sportTradingDataAPI.MainBetItemsDtoList,
+              currentMatch.homeTeamNameCn,
+              currentMatch.awayTeamNameCn
+            );
+          }
+        });
+        _.list = arr;
+      });
+      item.renderList = baseDatat.filter(item => {
+        return item.list.length;
+      });
+    });
+    matchList.length = 0;
+    matchList.push(...res.data.list);
   };
 
   onMounted(() => {
@@ -60,6 +92,8 @@ export function useWarningHook() {
 
   return {
     searchForm,
-    pagination
+    pagination,
+    loading,
+    matchList
   };
 }

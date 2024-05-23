@@ -130,38 +130,14 @@ declare namespace sportTradingDataAPI {
     kindsCodeDtoList: KindsCodeDtoListType[];
   }
 
-  type BetItemsDtoList1 = {
-    betItemsId: number;
-    matchId: number;
-    kindsCode: string;
-    betItemsName: string;
-    betItemsNameEn?: any;
-    sourceCode: string;
-    sourceBetItemsId: number;
-    sourceBetItemsMid: number;
-    homeOrAway: string;
-    handicap: string;
-    handicapEn?: any;
-    odds: number;
-    dpOdds: number;
-    oddsVariable: number;
-    isSale: number;
-    displayIndex: number;
-    handicapIndex: number;
-    handicapItemIndex: number;
-    oddsType: string;
-    ctid: number;
-    n: string;
-    betCount: number;
-    betAmount: number;
-  }
+
 
   type KindsCodeDtoListType = {
     betItemsIdList: number[];
     sourceBetItemsMid: number;
     isSale: number;
     betAmountDiffer: number;
-    betItemsDtoList: BetItemsDtoList1[];
+    betItemsDtoList: BetItemsDtoList[];
   }
 
 
@@ -211,6 +187,15 @@ declare namespace sportTradingDataAPI {
     riskLevel: number;
     score: number;
     betItemsResultDto: BetItemsResultDto;
+    renderList: renderListType[];
+  }
+
+  type renderListType = {
+    listType: string;
+    val: string;
+    list: MainListType[];
+    isSale?: number | null;
+    betItemsIdList: number[];
   }
 
   type getAlarmMatchListData = {
