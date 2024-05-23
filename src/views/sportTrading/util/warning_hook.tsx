@@ -140,6 +140,27 @@ export function useWarningHook() {
     saveList(res.data);
   };
 
+  //- 点击快捷键修改赔率
+  const sendNewOdds = async (
+    betItemsDtoList: { betItemsId: number; dpOdds: number }[]
+  ) => {
+    const res = await API.updateHandicapOdds({
+      matchId: currentMatch.matchId,
+      operateMenu: '操盘管理-早盘管理',
+      betItemsDtoList
+    });
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+  };
+
+  //- 鼠标进入后清空定时器
+  const clearMatchTime = (type: 1 | -1) => {
+    if (type === 1) {
+      clearInterval(loopTimer.value);
+    } else {
+      getLoopMatchData();
+    }
+  };
+
   onMounted(() => {
     onSearch();
   });
@@ -153,6 +174,8 @@ export function useWarningHook() {
     loading,
     matchList,
     changePageSize,
-    reloadList
+    reloadList,
+    sendNewOdds,
+    clearMatchTime
   };
 }

@@ -20,6 +20,8 @@
           :matchData="item"
           :matchList="matchList"
           :key="index"
+          @sendNewOdds="sendNewOdds"
+          @clearMatchTime="clearMatchTime"
         />
       </el-scrollbar>
     </div>
@@ -44,9 +46,19 @@ defineProps<{
   loading: boolean;
   matchList: sportTradingDataAPI.getAlarmMatchListType[];
 }>();
-const emits = defineEmits(['changePageSize', 'reloadList']);
+const emits = defineEmits([
+  'changePageSize',
+  'reloadList',
+  'sendNewOdds',
+  'clearMatchTime'
+]);
 const changePageSize = () => emits('changePageSize');
 const reloadList = () => emits('reloadList');
+
+const sendNewOdds = (params: { betItemsId: number; dpOdds: number }) =>
+  emits('sendNewOdds', params);
+  
+const clearMatchTime = (n: number) => emits('clearMatchTime', n);
 </script>
 
 <style scoped></style>

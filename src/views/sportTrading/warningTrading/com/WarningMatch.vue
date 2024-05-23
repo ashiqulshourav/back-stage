@@ -151,8 +151,6 @@ import IconGroup from '../../com/IconGroup.vue';
 import { PLAY_MATCH_NAME, goalScoring } from '../../util/playMap';
 import InputCom from '../../com/InputCom.vue';
 
-//-快捷选择数字事件
-const selectNum = ref(0);
 const scrollRef = ref();
 const betItemsDtoList = reactive<sportTradingDataAPI.BetItemsDtoList[]>([]);
 const props = defineProps<{
@@ -172,6 +170,8 @@ watch(
   }
 );
 
+//-快捷选择数字事件
+const selectNum = ref(0);
 const shortcutSelectNum = (_: number) => {
   if (_ === 0) return;
   selectNum.value = _;
@@ -211,7 +211,6 @@ const shortcutSelectNum = (_: number) => {
     });
   }
   nextTick(() => (selectNum.value = 0));
-  // isShowScroll.value = false;
 };
 
 const selectItem = reactive<sportTradingDataAPI.BetItemsDtoList>(
@@ -260,7 +259,6 @@ const mouseEvent = (
     });
   });
   //- 进入之后清空所有内容
-
   if (type === 'enter') {
     Object.assign(selectItem, s);
     scrollPostitonObj.left = `${e.target.getBoundingClientRect().left + 70}px`;

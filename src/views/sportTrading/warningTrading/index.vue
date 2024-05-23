@@ -8,7 +8,9 @@
         :pagination="pagination"
         :loading="loading"
         :matchList="matchList"
+        @sendNewOdds="sendNewOdds"
         @changePageSize="changePageSize"
+        @clearMatchTime="clearMatchTime"
       />
     </div>
   </div>
@@ -26,7 +28,9 @@ const {
   loading,
   matchList,
   changePageSize,
-  reloadList
+  reloadList,
+  sendNewOdds,
+  clearMatchTime
 } = useWarningHook();
 </script>
 
