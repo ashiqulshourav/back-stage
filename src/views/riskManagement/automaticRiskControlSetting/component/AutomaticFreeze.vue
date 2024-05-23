@@ -256,7 +256,7 @@ const showBetAfterTimeError = (row: any) => {
         orderPlacement.sourceCode == row.sourceCode &&
         orderPlacement.eventCode == row.eventCode
       ) {
-        if (Number(row.betAfterTime) < Number(orderPlacement.betAfterTime)) {
+        if (Number(row.betAfterTime) <= Number(orderPlacement.betAfterTime)) {
           error = true;
         }
       }
