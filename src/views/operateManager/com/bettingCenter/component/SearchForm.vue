@@ -41,12 +41,14 @@
                      v-model="form.queryType"
                      @change="search"
           >
-            <el-option :label="t('全部')" :value="''" />
+            <el-option :label="t('全部')" :value="1" />
             <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('风控状态')}:`" prop="riskStatus">
+
           <el-select v-model="form.riskStatus"   class="!w-[150px]" @change="search">
+            <el-option  :label="t('全部')"  value="" />
             <el-option v-for="item in Object.entries(riskStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
           </el-select>
         </el-form-item>
