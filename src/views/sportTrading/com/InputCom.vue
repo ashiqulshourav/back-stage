@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-1/4 text-center input_wrapper relative h-full z-10"
+    class="w-1/4 text-center input_wrapper relative h-full"
     @mouseenter.stop="e => mouseEvent(e, props.s, 'enter')"
     @mouseleave.stop="e => mouseEvent(e, props.s, 'leave')"
   >
