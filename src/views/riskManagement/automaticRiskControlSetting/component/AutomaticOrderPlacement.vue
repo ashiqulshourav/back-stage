@@ -202,6 +202,8 @@ const showBetAfterTimeError = (row: any) => {
         orderFreeze.sourceCode == row.sourceCode &&
         orderFreeze.eventCode == row.eventCode
       ) {
+        console.log("hitting", orderFreeze.sourceName, row.sourceName,
+        orderFreeze.eventName, row.eventName);
         if (Number(row.betAfterTime) >= Number(orderFreeze.betAfterTime)) {
           error = true;
         }
