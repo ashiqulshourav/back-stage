@@ -203,9 +203,10 @@ export function useBettingCenterHook(category: number, venueType: number) {
       dataList.length = 0;
       if (res.data !== null) {
         let list = res?.data?.pageData || [];
-        list = list.map((row:BetOrderAPI.BetOrderList) => {
+        list = list.map((row:BetOrderAPI.BetOrderList,index:number) => {
           row.riskStatusArr = [];
-          row.betResultArr = []
+          row.betResultArr = [];
+          row.index = index + 1;
           row.combineOrderDetails.map((item2:BetOrderAPI.Detail) => {
             row.riskStatusArr?.push(item2.riskStatus)
             row.betResultArr.push (item2.betResult)
@@ -213,9 +214,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
           return row;
         });
         dataList.push(...list);
-        dataList.map((item: any, index) => {
-          item.index = index + 1;
-        });
         pagination.total = res.data?.count;
         pagination.pageSize = res.data?.pageSize;
         pagination.currentPage = res.data?.pageNum;
@@ -428,7 +426,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     }else if (riskStatusArr?.includes(riskStatus.handleReject)||riskStatusArr?.includes(riskStatus.autoReject)){
       // 注单无效
       obj = { status: betStatus.betInvalid, bgColor: '#F57582' };
-    }else if (status === 2 && billStatus === 1 && betResultArr?.includes(21)){
+    }else if (status === 2 && billStatus === 1 && (betResultArr?.includes(21)||betResultArr?.includes(22))){
       // 预约失败
       obj = { status: betStatus.reserveFail, bgColor: '#F57582' };
     } else if (status === 0 && billStatus === 0) {
