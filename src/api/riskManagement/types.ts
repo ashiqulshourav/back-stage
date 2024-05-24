@@ -29,6 +29,7 @@ declare namespace RiskManagementDataAPI {
     labelType?: number;
   };
   type RiskControlTypes = {
+    id?: number;
     name?: string;
     days?: number;
     betcount?: number;

@@ -552,31 +552,39 @@ export function useRiskControlHook({
       case 0:
         {
           const item = rejectOrderList.pop();
-          delrejectOrderList.push({ ...item, isDelete: 1 });
+          if (item?.id) {            
+            delrejectOrderList.push({ ...item, isDelete: 1 });
+          }
         }
         break;
       case 1:
         {
           const item = orderPlacementList.pop();
-          delOrderPlacementList.push({
-            ...item,
-            isDelete: 1
-          });
+          if (item?.id) {            
+            delOrderPlacementList.push({
+              ...item,
+              isDelete: 1
+            });
+          }
         }
         break;
       case 2:
         {
           const item = orderAutoFreezeList.pop();
-          delOrderAutoFreezeList.push({
-            ...item,
-            isDelete: 1
-          });
+          if (item?.id) {            
+            delOrderAutoFreezeList.push({
+              ...item,
+              isDelete: 1
+            });
+          }
         }
         break;
       case 3:
         {
           const item = riskControlList.pop();
-          delRiskControlList.push({ ...item, delFlag: 1 });
+          if (item?.id) {            
+            delRiskControlList.push({ ...item, delFlag: 1 });
+          }
         }
         break;
     }
