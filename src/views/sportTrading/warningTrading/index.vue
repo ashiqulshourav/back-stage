@@ -3,7 +3,11 @@
     <Serach :form="searchForm" :loading="loading" @onSearch="onSearch" />
     <div class="flex flex-grow h-[calc(100%-60px)]">
       <WarningList />
+      <div class="flex w-full justify-center" v-if="noMatchList">
+        <el-empty></el-empty>
+      </div>
       <MatchList
+        v-else
         @reloadList="reloadList"
         :pagination="pagination"
         :loading="loading"
@@ -33,7 +37,8 @@ const {
   sendNewOdds,
   clearMatchTime,
   changeStatus,
-  onSearch
+  onSearch,
+  noMatchList
 } = useWarningHook();
 </script>
 
