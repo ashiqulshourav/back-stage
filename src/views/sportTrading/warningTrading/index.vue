@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col h-full">
-    <Serach :form="searchForm" :loading="loading" />
+    <Serach :form="searchForm" :loading="loading" @onSearch="onSearch" />
     <div class="flex flex-grow h-[calc(100%-60px)]">
       <WarningList />
       <MatchList
@@ -11,6 +11,7 @@
         @sendNewOdds="sendNewOdds"
         @changePageSize="changePageSize"
         @clearMatchTime="clearMatchTime"
+        @changeStatus="changeStatus"
       />
     </div>
   </div>
@@ -30,7 +31,9 @@ const {
   changePageSize,
   reloadList,
   sendNewOdds,
-  clearMatchTime
+  clearMatchTime,
+  changeStatus,
+  onSearch
 } = useWarningHook();
 </script>
 

@@ -8,7 +8,7 @@
       v-if="showNum"
       class="min-w-[120px] text-[--el-color-primary] text-left h-full flex items-center"
     >
-      {{ renderData.dpOdds?.toFixed(2) }}
+      {{ s.dpOdds?.toFixed(2) }}
     </div>
     <div
       v-else
@@ -20,13 +20,13 @@
           size="small"
           :step="0.01"
           @change="changeDpOdds"
-          v-model="renderData.dpOdds"
+          v-model="s.dpOdds"
           controls-position="right"
         />
       </div>
     </div>
     <div
-      v-if="renderData.odds !== renderData.dpOdds"
+      v-if="s.odds !== s.dpOdds"
       class="absolute right-0 top-1/2 translate-y-[-50%] w-[60px] text-xs text-white"
       :style="{ backgroundColor: `var(${tipData.color})` }"
     >
@@ -47,6 +47,7 @@ const props = defineProps<{
 }>();
 
 const showNum = ref(true);
+
 watch(
   () => props.s,
   d => {
@@ -57,16 +58,14 @@ watch(
   }
 );
 
-const renderData = reactive<sportTradingDataAPI.BetItemsDtoList>(props.s);
-
 watch(
   () => props.selectNum,
   v => {
     if (props.selectItem.betItemsId === props.s.betItemsId) {
       if (v > 0) {
-        renderData.dpOdds = addition(renderData.dpOdds, v, 2);
+        props.s.dpOdds = addition(props.s.dpOdds, v, 2);
       } else if (v < 0) {
-        renderData.dpOdds = subtraction(renderData.dpOdds, Math.abs(v), 2);
+        props.s.dpOdds = subtraction(props.s.dpOdds, Math.abs(v), 2);
       }
     }
   }
@@ -78,11 +77,11 @@ const changeDpOdds = debounce((v: number) => {
 
 const tipData = computed(() => {
   return {
-    val: `${renderData.dpOdds > renderData.odds ? '+' : '-'}${Math.abs(
-      subtraction(renderData.dpOdds, Math.abs(renderData.odds), 2)
+    val: `${props.s.dpOdds > props.s.odds ? '+' : '-'}${Math.abs(
+      subtraction(props.s.dpOdds, Math.abs(props.s.odds), 2)
     )}`,
     color:
-      renderData.dpOdds > renderData.odds
+      props.s.dpOdds > props.s.odds
         ? '--el-color-success-light-3'
         : '--el-color-danger-light-3'
   };
@@ -95,7 +94,6 @@ const mouseEvent = (
   type: 'enter' | 'leave'
 ) => {
   emits('changeMouse', e, s, type);
-  //- reload页面
 };
 </script>
 

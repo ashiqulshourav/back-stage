@@ -47,9 +47,7 @@ import TabController from './TabController.vue';
 import ContentMain from './ContentMain.vue';
 import { t } from '@/plugins/i18n';
 
-const { type } = defineProps<{
-  type: 'early' | 'in';
-}>();
+const { type } = defineProps<{ type: 'early' | 'in' }>();
 
 const {
   searchForm,

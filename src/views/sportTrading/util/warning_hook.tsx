@@ -1,13 +1,10 @@
 import { message } from '@/utils/message';
-import { WarningSearchFormType, handicapListType } from './type';
+import { WarningSearchFormType } from './type';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
-import { baseHandicapList, warningBaseList } from './baseData';
+import { warningBaseList } from './baseData';
 import type { PaginationProps } from '@pureadmin/table';
-import { addDialog, closeDialog } from '@/components/ReDialog';
-import MatchCountDown from '../com/MatchCountDown.vue';
 import {
   BO_DAN_CODE_LIST,
-  MATCH_STATUS,
   SALE_STATUS,
   icon_msg_tip,
   transferBoDanCol
@@ -18,16 +15,9 @@ export function useWarningHook() {
   const loading = ref(true);
   const noMatchList = ref(false);
   const matchList = reactive<sportTradingDataAPI.getAlarmMatchListType[]>([]);
-  const matchStatus = ref<'countDown' | 'canceled' | 'over'>('countDown');
-  const matchStartTime = ref<number>();
   const matchIdList = reactive<number[]>([]);
   const pages = ref<number>();
   const size = ref<number>();
-
-  const handicapList = reactive<handicapListType[]>(baseHandicapList);
-  const currentMatch = reactive<sportTradingDataAPI.MatchDtoList>(
-    {} as sportTradingDataAPI.MatchDtoList
-  );
 
   //- 分页内容
   const pagination = reactive<PaginationProps>({
@@ -98,8 +88,8 @@ export function useWarningHook() {
           if (BO_DAN_CODE_LIST.includes(d.kindsCode)) {
             transferBoDanCol(
               d as sportTradingDataAPI.MainBetItemsDtoList,
-              currentMatch.homeTeamNameCn,
-              currentMatch.awayTeamNameCn
+              item.homeTeamNameCn,
+              item.awayTeamNameCn
             );
           }
         });
@@ -141,13 +131,14 @@ export function useWarningHook() {
   };
 
   //- 点击快捷键修改赔率
-  const sendNewOdds = async (
-    betItemsDtoList: { betItemsId: number; dpOdds: number }[]
-  ) => {
+  const sendNewOdds = async (d: {
+    matchId: number;
+    params: { betItemsId: number; dpOdds: number }[];
+  }) => {
     const res = await API.updateHandicapOdds({
-      matchId: currentMatch.matchId,
+      matchId: d.matchId,
       operateMenu: '操盘管理-早盘管理',
-      betItemsDtoList
+      betItemsDtoList: d.params
     });
     message(res.msg, { type: res.code ? 'error' : 'success' });
   };
@@ -157,8 +148,88 @@ export function useWarningHook() {
     if (type === 1) {
       clearInterval(loopTimer.value);
     } else {
-      getLoopMatchData();
+      runLoopMatch();
     }
+  };
+
+  //-赛事盘口状态更新
+  const changeStatus = ({
+    matchId,
+    status,
+    classify,
+    betItemsIdList,
+    categoryData,
+    item
+  }: {
+    matchId: number;
+    status: Partial<SALE_STATUS>;
+    classify: 'match' | 'category' | 'pan';
+    betItemsIdList?: number[];
+    categoryData?: sportTradingDataAPI.MainListType;
+    item?: sportTradingDataAPI.renderListType;
+  }) => {
+    clearInterval(loopTimer.value);
+    ElMessageBox.confirm(icon_msg_tip[status], t('系统提示'), {
+      confirmButtonText: t('确定'),
+      cancelButtonText: t('取消'),
+      type: 'warning',
+      center: true
+    })
+      .then(async () => {
+        const res = await API.updateHandicapStatus({
+          operateMenu: '操盘管理-早盘管理',
+          matchId: matchId,
+          isSale: status,
+          betItemsIds: betItemsIdList ?? []
+        });
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        runLoopMatch();
+        if (res.code) return;
+        switch (classify) {
+          case 'match':
+            upateMatchSale(status, matchId);
+          case 'pan':
+            upatePanSale(
+              status,
+              categoryData as sportTradingDataAPI.MainBetItemsDtoList
+            );
+            break;
+          case 'category':
+            upatePalySale(status, item as sportTradingDataAPI.renderListType);
+            break;
+          default:
+            break;
+        }
+      })
+      .catch(() => runLoopMatch());
+  };
+
+  //- 修改赛事图标状态
+  const upateMatchSale = (status: number, selectId: number) => {
+    matchList.some(_ => {
+      if (_.matchId === selectId) {
+        _.isSale = status;
+        return true;
+      }
+      return false;
+    });
+  };
+
+  //- 修改盘赛事图标状态
+  const upatePanSale = (
+    status: number,
+    categoryData: sportTradingDataAPI.MainBetItemsDtoList
+  ) => {
+    categoryData.isSale = status;
+  };
+
+  //- 修改玩法状态
+  const upatePalySale = (
+    status: number,
+    item: sportTradingDataAPI.renderListType
+  ) => {
+    item.isSale = status;
+    item.list.forEach(item => (item.isSale = status));
   };
 
   onMounted(() => {
@@ -176,6 +247,8 @@ export function useWarningHook() {
     changePageSize,
     reloadList,
     sendNewOdds,
-    clearMatchTime
+    clearMatchTime,
+    changeStatus,
+    onSearch
   };
 }
