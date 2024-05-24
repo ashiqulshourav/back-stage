@@ -1,4 +1,3 @@
-3
 <template>
   <div class="pl-5 pr-5 text-sm flex-grow w-full">
     <ContentTitle

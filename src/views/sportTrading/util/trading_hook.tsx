@@ -165,6 +165,7 @@ export function useTradingHook(type: 'early' | 'in') {
       (type === 'in' && matchStatus.value === MATCH_STATUS.over) ||
       matchStatus.value === MATCH_STATUS.canceled
     ) {
+      if (loopTimer.value) clearInterval(loopTimer.value);
       addDialog({
         class: 'count_down_dialog',
         width: '8%',
@@ -179,12 +180,39 @@ export function useTradingHook(type: 'early' | 'in') {
             onCloseDialog: (_: boolean) => {
               closeDialog(options, index);
               onSearch();
+              resetSearchForm();
             }
           })
       });
       return false;
     }
     return true;
+  };
+
+  //- 重置表单
+  const resetSearchForm = () => {
+    Object.assign(searchForm, {
+      sportId: 1,
+      leagueNameOrId: '',
+      matchNameOrId: '',
+      startTime:
+        type === 'early'
+          ? dayjs()
+              .set('hour', 12)
+              .set('minute', 0)
+              .set('second', 0)
+              .format('YYYY-MM-DD HH:mm:ss')
+          : '',
+      endTime:
+        type === 'early'
+          ? dayjs()
+              .add(7, 'day')
+              .set('hour', 12)
+              .set('minute', 0)
+              .set('second', 0)
+              .format('YYYY-MM-DD HH:mm:ss')
+          : ''
+    });
   };
 
   //- 开启定时轮询任务
