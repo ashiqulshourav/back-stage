@@ -78,7 +78,7 @@ const changeDpOdds = debounce((v: number) => {
 const tipData = computed(() => {
   return {
     val: `${props.s.dpOdds > props.s.odds ? '+' : '-'}${Math.abs(
-      subtraction(props.s.dpOdds, Math.abs(props.s.odds), 2)
+      subtraction(Math.abs(props.s.dpOdds), Math.abs(props.s.odds), 2)
     )}`,
     color:
       props.s.dpOdds > props.s.odds
