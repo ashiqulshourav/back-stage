@@ -13,7 +13,8 @@
   "editor.suggestSelection": "first",
   "editor.acceptSuggestionOnCommitCharacter": false,
   "css.lint.propertyIgnoredDueToDisplay": "ignore",
-  // "workbench.colorTheme": "One Monokai",
+  "workbench.colorTheme": "Default Light+",
+  "editor.fontWeight": "560",
   // "workbench.colorCustomizations": {
   //   "[One Monokai]": {
   //     "tab.activeBackground": "#1b1414",
