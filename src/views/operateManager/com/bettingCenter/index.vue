@@ -516,6 +516,8 @@ const {
   display: flex;
   justify-items: center;
   justify-content: center;
+  max-width: fit-content;
+  margin: 0 auto;
 }
 .riskStatus_detail{
   width: 120px;
@@ -564,7 +566,7 @@ const {
   text-align: center;
   height: 25px;
   line-height: 25px;
-  padding: 0 8px;
+  padding: 0 10px;
   color: #fff;
   border-radius: 4px;
 }
