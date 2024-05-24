@@ -56,12 +56,17 @@ export function useWarningHook() {
     });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
-    //获取当前页面IDS
-    matchIdList.length = 0;
-    matchIdList.push(...res.data?.list.map(item => item.matchId));
-    saveList(res.data);
-    //- 开启事件定时任务
-    runLoopMatch();
+    if (res.data.list.length) {
+      //获取当前页面IDS
+      matchIdList.length = 0;
+      matchIdList.push(...res.data?.list.map(item => item.matchId));
+      saveList(res.data);
+      //- 开启事件定时任务
+      runLoopMatch();
+    } else {
+      if (loopTimer.value) clearInterval(loopTimer.value);
+      matchList.length = 0;
+    }
   };
 
   //- 处理数据填充逻辑
@@ -101,12 +106,13 @@ export function useWarningHook() {
     });
     matchList.length = 0;
     matchList.push(...data.list);
+    noMatchList.value = false;
   };
 
   //- 开启定时轮询任务
   const loopTimer = ref<NodeJS.Timeout>();
   const runLoopMatch = () => {
-    if (loopTimer) clearInterval(loopTimer.value);
+    if (loopTimer.value) clearInterval(loopTimer.value);
     loopTimer.value = setInterval(() => {
       getLoopMatchData();
     }, 5000);
@@ -249,6 +255,7 @@ export function useWarningHook() {
     sendNewOdds,
     clearMatchTime,
     changeStatus,
-    onSearch
+    onSearch,
+    noMatchList
   };
 }
