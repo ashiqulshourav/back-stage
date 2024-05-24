@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col">
-    <MatchTitle :current-match="matchData" />
+    <MatchTitle @changeStatus="changeStatus" :current-match="matchData" />
 
     <!-- - 赛事内容列表 -->
     <div class="w-ful overflow-y-auto pl-5 pt-1" @mouseleave="clearTime">
@@ -10,16 +10,17 @@
         v-for="(item, index) in matchData.renderList"
         :key="index"
       >
-        <div class="flex items-center self-start">
+        <div class="flex items-center self-start w-[160px]">
           <el-button type="primary" size="small">
             {{ item.val }}
           </el-button>
-          <div class="flex justify-between ml-4 text-xs">
+          <div class="flex justify-between ml-4 text-xs cursor-pointer">
             <IconGroup
               :typeNum="item.isSale"
               @changeMatchStatus="
                 status =>
                   changeStatus({
+                    matchId: matchData.matchId,
                     status,
                     classify: 'category',
                     betItemsIdList: item.betItemsIdList,
@@ -47,6 +48,7 @@
                   @changeMatchStatus="
                     status =>
                       changeStatus({
+                        matchId: matchData.matchId,
                         status,
                         classify: 'pan',
                         betItemsIdList: _.betItemsIdList,
@@ -100,7 +102,7 @@
                     "
                     :selectNum="selectNum"
                     :selectItem="selectItem"
-                    @changeSelectNum="shortcutSelectNum"
+                    @changeSelectNum="(n:number) => shortcutSelectNum(n,'input')"
                   />
                   <div class="text-[--el-color-primary] w-1/6 text-center">
                     {{ s.betCount }}/{{ s.betAmount }}
@@ -127,7 +129,7 @@
         <el-scrollbar ref="scrollRef" height="180px">
           <div class="flex flex-col">
             <span
-              @click="shortcutSelectNum(item)"
+              @click="shortcutSelectNum(item, 'shortcut')"
               v-for="item in numberList()"
               :key="item"
               :class="[
@@ -151,8 +153,6 @@ import IconGroup from '../../com/IconGroup.vue';
 import { PLAY_MATCH_NAME, goalScoring } from '../../util/playMap';
 import InputCom from '../../com/InputCom.vue';
 
-//-快捷选择数字事件
-const selectNum = ref(0);
 const scrollRef = ref();
 const betItemsDtoList = reactive<sportTradingDataAPI.BetItemsDtoList[]>([]);
 const props = defineProps<{
@@ -172,9 +172,11 @@ watch(
   }
 );
 
-const shortcutSelectNum = (_: number) => {
+//-快捷选择数字事件
+const selectNum = ref(0);
+const shortcutSelectNum = (_: number, type: string) => {
   if (_ === 0) return;
-  selectNum.value = _;
+  type === 'shortcut' && (selectNum.value = _);
   const params: { betItemsId: number; dpOdds: number }[] = [];
 
   //- 下盘需要递减
@@ -210,8 +212,7 @@ const shortcutSelectNum = (_: number) => {
       emits('sendNewOdds', params);
     });
   }
-  nextTick(() => (selectNum.value = 0));
-  // isShowScroll.value = false;
+  nextTick(() => type === 'shortcut' && (selectNum.value = 0));
 };
 
 const selectItem = reactive<sportTradingDataAPI.BetItemsDtoList>(
@@ -241,7 +242,6 @@ const numberList = (): number[] => {
   return arr;
 };
 
-//- 鼠标滑入交互处理
 const mouseEvent = (
   e: any,
   s: sportTradingDataAPI.BetItemsDtoList,
@@ -260,7 +260,6 @@ const mouseEvent = (
     });
   });
   //- 进入之后清空所有内容
-
   if (type === 'enter') {
     Object.assign(selectItem, s);
     scrollPostitonObj.left = `${e.target.getBoundingClientRect().left + 70}px`;
@@ -275,6 +274,7 @@ const mouseEvent = (
 
 //- 修改图标状态(包含盘，赛事，玩法)
 const changeStatus = (d: {
+  matchId: number;
   status: number;
   classify?: 'match' | 'category' | 'pan';
   betItemsIdList?: number[];

@@ -15,7 +15,13 @@
     <div class="flex items-start">
       <div class="flex text-sm">
         <div class="flex flex-col w-full">
-          <div class="flex items-center">
+          <div
+            class="flex items-center cursor-pointer"
+            v-copy:click="{
+              val: currentMatch.leagueId,
+              tip: t('联赛ID复制成功')
+            }"
+          >
             <span
               class="w-4 h-4 flex items-center text-[12px] justify-center bg-primary text-center rounded-full leading-4 text-white"
             >
@@ -33,7 +39,13 @@
           <span class="text-xs mt-1">{{ currentMatch?.beginTime }}</span>
         </div>
       </div>
-      <div class="flex flex-col items-start pl-3 ml-3 text-sm">
+      <div
+        class="flex flex-col items-start pl-3 ml-3 text-sm cursor-pointer"
+        v-copy:click="{
+          val: currentMatch.matchId,
+          tip: t('赛事ID复制成功')
+        }"
+      >
         <div class="flex">
           <div :class="['text-[--el-color-primary] text-xs flex items-center']">
             <span>{{ currentMatch?.homeTeamNameCn }}</span>
@@ -64,7 +76,7 @@ import { t } from '@/plugins/i18n';
 import IconGroup from '../../com/IconGroup.vue';
 import { MATCH_STATUS } from '../../util/playMap';
 
-defineProps<{
+const props = defineProps<{
   currentMatch: sportTradingDataAPI.getAlarmMatchListType;
 }>();
 
@@ -73,6 +85,7 @@ const emits = defineEmits(['changeSelectType', 'changeStatus']);
 //- 修改图标类型
 const changeMatchStatus = (status: number) => {
   emits('changeStatus', {
+    matchId: props.currentMatch.matchId,
     status,
     classify: 'match'
   });

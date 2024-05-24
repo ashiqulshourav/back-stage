@@ -1,3 +1,4 @@
+3
 <template>
   <div class="pl-5 pr-5 text-sm flex-grow w-full">
     <ContentTitle
@@ -55,7 +56,7 @@
                 <div
                   class="flex items-center pl-2 self-start w-[280px] justify-between bg-[--el-color-primary-light-9] h-[35px] pr-2"
                 >
-                  <span class="text-[#409EFF] font-bold">{{
+                  <span class="text-[#409EFF] font-bold leading-none">{{
                     _.betItemsName
                   }}</span>
                   <div class="flex pl-2 cursor-pointer">
@@ -118,13 +119,13 @@
                         "
                         :selectNum="selectNum"
                         :selectItem="selectItem"
-                        @changeSelectNum="shortcutSelectNum"
+                        @changeSelectNum="(n:number) => shortcutSelectNum(n,'input')"
                       />
-                      <div class="text-[--el-color-primary] w-1/5 text-center">
+                      <div class="text-[--el-color-primary] w-1/6 text-center">
                         {{ s.betCount }}/{{ s.betAmount }}
                       </div>
                       <div
-                        class="text-[--el-color-primary] w-1/5 text-center"
+                        class="text-[--el-color-primary] w-1/6 text-center"
                         v-if="l === 0"
                       >
                         {{ d.betAmountDiffer ?? '' }}
@@ -147,7 +148,7 @@
         <el-scrollbar ref="scrollRef" height="180px">
           <div class="flex flex-col">
             <span
-              @click="shortcutSelectNum(item)"
+              @click="shortcutSelectNum(item, 'shortcut')"
               v-for="item in numberList()"
               :key="item"
               :class="[
@@ -262,9 +263,9 @@ const changeSelectType = (type: string) => {
 
 //-快捷选择数字事件
 const selectNum = ref(0);
-const shortcutSelectNum = (_: number) => {
+const shortcutSelectNum = (_: number, type: string) => {
   if (_ === 0) return;
-  selectNum.value = _;
+  type === 'shortcut' && (selectNum.value = _);
   const params: { betItemsId: number; dpOdds: number }[] = [];
 
   //- 下盘需要递减
@@ -292,6 +293,7 @@ const shortcutSelectNum = (_: number) => {
     const d = betItemsDtoList.find(
       item => item.betItemsId === selectItem.betItemsId
     ) as sportTradingDataAPI.BetItemsDtoList;
+
     nextTick(() => {
       params.push({
         betItemsId: d.betItemsId,
@@ -300,8 +302,7 @@ const shortcutSelectNum = (_: number) => {
       emits('sendNewOdds', params);
     });
   }
-  nextTick(() => (selectNum.value = 0));
-  // isShowScroll.value = false;
+  nextTick(() => type === 'shortcut' && (selectNum.value = 0));
 };
 
 const clearTime = () => {

@@ -104,6 +104,10 @@ const props = withDefaults(
   {}
 );
 
+onMounted(() => {
+  selectDate.value = [props.form.startTime, props.form.endTime] as any;
+});
+
 const changeDate = (t: string[]) => {
   if (!t) {
     props.form.startTime = '';
@@ -127,9 +131,27 @@ const changeDate = (t: string[]) => {
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl?.resetFields();
   selectIndex.value = -1;
-  props.form.endTime = '';
-  props.form.startTime = '';
-  selectDate.value = '';
+  props.form.startTime =
+    props.type === 'early'
+      ? dayjs()
+          .set('hour', 12)
+          .set('minute', 0)
+          .set('second', 0)
+          .format('YYYY-MM-DD HH:mm:ss')
+      : '';
+  props.form.endTime =
+    props.type === 'early'
+      ? dayjs()
+          .add(7, 'day')
+          .set('hour', 12)
+          .set('minute', 0)
+          .set('second', 0)
+          .format('YYYY-MM-DD HH:mm:ss')
+      : '';
+  selectDate.value =
+    props.type === 'early'
+      ? ([props.form.startTime, props.form.endTime] as any)
+      : '';
   emits('onSearch');
 };
 

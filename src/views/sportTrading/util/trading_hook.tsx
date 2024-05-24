@@ -11,6 +11,7 @@ import {
   icon_msg_tip,
   transferBoDanCol
 } from './playMap';
+import dayjs from 'dayjs';
 import { ElMessageBox } from 'element-plus';
 
 export function useTradingHook(type: 'early' | 'in') {
@@ -30,8 +31,23 @@ export function useTradingHook(type: 'early' | 'in') {
     sportId: 1,
     leagueNameOrId: '',
     matchNameOrId: '',
-    startTime: '',
-    endTime: ''
+    startTime:
+      type === 'early'
+        ? dayjs()
+            .set('hour', 12)
+            .set('minute', 0)
+            .set('second', 0)
+            .format('YYYY-MM-DD HH:mm:ss')
+        : '',
+    endTime:
+      type === 'early'
+        ? dayjs()
+            .add(7, 'day')
+            .set('hour', 12)
+            .set('minute', 0)
+            .set('second', 0)
+            .format('YYYY-MM-DD HH:mm:ss')
+        : ''
   });
 
   //- 初始化搜索
@@ -43,7 +59,10 @@ export function useTradingHook(type: 'early' | 'in') {
     const res = await API[reqUrl]({ ...removeEmptyStringKeys(searchForm) });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
-    if (!res.data.length) return (noMatchList.value = true);
+    if (!res.data.length) {
+      loopTimer.value && clearInterval(loopTimer.value);
+      return (noMatchList.value = true);
+    }
     matchList.length = 0;
     const firstRenderList = res.data.slice(0, 1);
     matchList.push(...firstRenderList);
