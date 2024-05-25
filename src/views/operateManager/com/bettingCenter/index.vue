@@ -353,6 +353,7 @@
               :key="item.id"
             >
              <span>{{riskStatusMap[item.riskStatus as keyof typeof riskStatus]||'-'}}</span>
+              <span v-if="riskStatusMap[item.riskStatus as keyof typeof riskStatus]">原因:{{item.riskType}}</span>
             </div>
           </template>
           <template #operation="{ row }">
@@ -523,6 +524,7 @@ const {
   width: 120px;
   min-height: 100px;
   display: flex;
+  flex-direction: column;
   justify-items: center;
   align-items: center;
   justify-content: center;
