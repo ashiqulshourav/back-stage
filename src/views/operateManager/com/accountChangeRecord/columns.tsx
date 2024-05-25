@@ -23,6 +23,14 @@ export const columns: TableColumnList = [
     minWidth: 55
   },
   {
+    label: t("注单号"),
+    prop: "identifier",
+    minWidth: 200,
+    formatter: ({ identifier,type }) =>{
+      return [10,11].includes(type)?'-':(identifier?.split('_')?.length&& identifier?.split('_')[0])
+    }
+  },
+  {
     label: t("账变类型"),
     minWidth: 180,
     prop: "type",
@@ -58,16 +66,6 @@ export const columns: TableColumnList = [
     minWidth: 200,
     formatter: ({ updatedAt }) => dayjs(updatedAt).format("YYYY-MM-DD HH:mm:ss")
   },
-  {
-    label: t("注单号"),
-    prop: "identifier",
-    minWidth: 200,
-    formatter: ({ identifier,type }) =>{
-      return [10,11].includes(type)?'-':(identifier?.split('_')?.length&& identifier?.split('_')[0])
-    }
-  },
-  {
-    label: t("备注"),
-    prop: "remark"
-  }
+
+
 ]

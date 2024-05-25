@@ -3,7 +3,6 @@
     <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
     <pure-table
       align-whole="center"
-      showOverflowTooltip
       table-layout="auto"
       :loading="loading"
       adaptive

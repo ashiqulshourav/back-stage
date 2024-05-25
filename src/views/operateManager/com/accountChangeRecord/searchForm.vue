@@ -3,7 +3,7 @@
     ref="formRef"
     :inline="true"
     :model="form"
-    class="search-form bg-bg_color w-[99/100]"
+    class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
   >
     <el-form-item prop="accountChangeTypeCode">
       <el-select
@@ -56,12 +56,12 @@ import RefreshIcon from "@iconify-icons/ep/refresh"
 import { useRenderIcon } from "@/components/ReIcon/src/hooks"
 import type { FormInstance } from "element-plus"
 import dayjs from "dayjs"
-import { BetDetailSerachType } from "../../utils/type"
+import {accountChangeRecordSearchFormType} from "./util/types"
 import { accountChangeTypeCodeList } from "./columns"
-
+//accountChangeRecordSearchFormType
 const props = defineProps<{
   loading: boolean
-  form: BetDetailSerachType
+  form: accountChangeRecordSearchFormType
 }>()
 
 const formRef = ref()
@@ -83,8 +83,6 @@ const exportFile = () => {
 }
 
 const changeDate = t => {
-  console.log(t)
-
   if (!t) {
     props.form.startCreatedAt = ""
     props.form.endCreatedAt = ""
@@ -100,14 +98,19 @@ const search = () => {
   emits("onSearch", ...["reload"])
 }
 </script>
-
 <style scoped lang="scss">
 :deep(.el-dropdown-menu__item i) {
   margin: 0;
+}
+.min-w100{
+  min-width: 100px;
 }
 .search-form {
   :deep(.el-form-item) {
     margin-bottom: 12px;
   }
+}
+.arrange2{
+  margin-left: -25px;
 }
 </style>
