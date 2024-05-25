@@ -129,18 +129,18 @@
         </div>
         <div v-else>
           <span v-if="Number(row.minLimitAmount) && Number(row.maxLimitAmount)">
-            <span v-if="Number(row.minLimitAmount) == Number(row.maxLimitAmount)">
-              {{
-                addThousandSeparator(row.minLimitAmount)
-              }}
+            <span
+              v-if="Number(row.minLimitAmount) == Number(row.maxLimitAmount)"
+            >
+              {{ addThousandSeparator(row.minLimitAmount) }}
             </span>
             <span v-else>
               {{
                 addThousandSeparator(row.minLimitAmount) +
                 ' - ' +
                 addThousandSeparator(row.maxLimitAmount)
-              }}  
-            </span>      
+              }}
+            </span>
           </span>
           <span
             v-if="Number(row.minLimitAmount) && !Number(row.maxLimitAmount)"
@@ -255,9 +255,9 @@ const showBetBeforeTimeError = (row: any) => {
 
 const showBetAfterTimeError = (row: any) => {
   let error = false;
-  if (row.betBeforeTime === "" && row.betAfterTime === "") {
+  if (!Number(row.betBeforeTime) && !Number(row.betAfterTime)) {
     error = true;
-  } else if (row.betAfterTime !== "") {
+  } else if (Number(row.betAfterTime)) {
     props.orderPlacementList.forEach(orderPlacement => {
       if (
         orderPlacement.sourceCode == row.sourceCode &&
