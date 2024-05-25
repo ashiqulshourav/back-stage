@@ -1,5 +1,6 @@
 import { t } from "@/plugins/i18n";
-import {addThousandSeparator} from '@/utils/formatNumber'
+import {addThousandSeparator} from '@/utils/formatNumber';
+import { handleTableWidth } from '@/utils/getTableWidth';
 
 export const columns: TableColumnList = [
   {
@@ -43,6 +44,7 @@ export const columns: TableColumnList = [
     slot: "settleStatus",
     minWidth: 100,
     align:'center',
+    headerRenderer: d => handleTableWidth(d, t('结算状态'), 'auto')
   },
   {
     label: t("投注额"),
