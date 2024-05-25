@@ -354,17 +354,13 @@
             >
              <span 
               :style="{
-                  background: getStatus(
-                    row.status,
-                    row.billStatus,
-                    row.betResultArr,
-                    row.isReserve,
-                    row.riskStatusArr,
-                    row.isSpecialSettle
+                  background: getRiskStatusColor(
+                    item.riskStatus,
                   ).bgColor
                 }"
-                class="status_btn block"
-              >{{riskStatusMap[item.riskStatus as keyof typeof riskStatus]||'-'}}</span>
+              :class="item.riskStatus !== 0 ? 'status_btn block' : ''"
+             >{{riskStatusMap[item.riskStatus as keyof typeof riskStatus]||'-'}}</span>
+              <span v-if="riskStatusMap[item.riskStatus as keyof typeof riskStatus]">原因:{{item.riskType}}</span>
             </div>
           </template>
           <template #operation="{ row }">
@@ -498,7 +494,8 @@ const {
   editOrderRemark,
   riskLabelList,
   getOddStatus,
-  downloading
+  downloading,
+  getRiskStatusColor,
 } = useBettingCenterHook(props.category, props.venueType);
 </script>
 
@@ -532,8 +529,13 @@ const {
   margin: 0 auto;
 }
 .riskStatus_detail{
-  width: max-content;
-  display: inline-block;
+  width: 100%;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+  justify-content: center;
 }
 .match_item {
   margin-bottom: 10px;
