@@ -19,7 +19,9 @@ export function useRiskControlHook({
   venueType: number;
   category: number;
 }) {
-  const currentRiskControlLabelId = ref(hasAuth('AUTOREJECTLIST') ? 0 : hasAuth('AUTOORDERPLACEMENTLIST') ? 1 : 2);
+  const currentRiskControlLabelId = ref(
+    hasAuth('AUTOREJECTLIST') ? 0 : hasAuth('AUTOORDERPLACEMENTLIST') ? 1 : 2
+  );
   const loading = ref(false);
   const isEditRiskControls = ref(false);
   const isFormClick = ref(false);
@@ -261,11 +263,11 @@ export function useRiskControlHook({
         isValid = false;
       }
 
-      if (item.betBeforeTime === "" && item.betAfterTime === "") {
+      if (!Number(item.betBeforeTime) && !Number(item.betAfterTime)) {
         isValid = false;
       }
 
-      if (item.betAfterTime !== "") {
+      if (Number(item.betAfterTime)) {
         orderAutoFreezeList.forEach(orderFreeze => {
           if (
             orderFreeze.sourceCode == item.sourceCode &&
@@ -310,10 +312,10 @@ export function useRiskControlHook({
           eventCode: item.eventCode,
           eventName: item.eventName,
           isDelete: item.isDelete,
-          betBeforeTime: item.betBeforeTime,
-          betAfterTime: item.betAfterTime,
-          minLimitAmount: item.minLimitAmount,
-          maxLimitAmount: item.maxLimitAmount,
+          betBeforeTime: Number(item.betBeforeTime) || 0,
+          betAfterTime: Number(item.betAfterTime) || 0,
+          minLimitAmount: Number(item.minLimitAmount) || 0,
+          maxLimitAmount: Number(item.maxLimitAmount) || 0,
           event_name: item.eventName
         }));
       };
@@ -372,11 +374,11 @@ export function useRiskControlHook({
         isValid = false;
       }
 
-      if (item.betBeforeTime === "" && item.betAfterTime === "") {
+      if (!Number(item.betBeforeTime) && !Number(item.betAfterTime)) {
         isValid = false;
       }
 
-      if (item.betAfterTime !== "") {
+      if (Number(item.betAfterTime)) {
         orderPlacementList.forEach(orderPlacement => {
           if (
             orderPlacement.sourceCode == item.sourceCode &&
@@ -408,10 +410,9 @@ export function useRiskControlHook({
 
       if (item.maxLimitAmount && item.minLimitAmount) {
         if (Number(item.maxLimitAmount) < Number(item.minLimitAmount)) {
-            isValid = false;
-        }  
+          isValid = false;
+        }
       }
-
     });
 
     if (isValid) {
@@ -429,10 +430,10 @@ export function useRiskControlHook({
           eventCode: item.eventCode,
           eventName: item.eventName,
           isDelete: item.isDelete,
-          betBeforeTime: item.betBeforeTime,
-          betAfterTime: item.betAfterTime,
-          minLimitAmount: item.minLimitAmount,
-          maxLimitAmount: item.maxLimitAmount,
+          betBeforeTime: Number(item.betBeforeTime) || 0,
+          betAfterTime: Number(item.betAfterTime) || 0,
+          minLimitAmount: Number(item.minLimitAmount) || 0,
+          maxLimitAmount: Number(item.maxLimitAmount) || 0,
           event_name: item.eventName,
           userCreateAfter: 0,
           labels: '',
@@ -552,7 +553,7 @@ export function useRiskControlHook({
       case 0:
         {
           const item = rejectOrderList.pop();
-          if (item?.id) {            
+          if (item?.id) {
             delrejectOrderList.push({ ...item, isDelete: 1 });
           }
         }
@@ -560,7 +561,7 @@ export function useRiskControlHook({
       case 1:
         {
           const item = orderPlacementList.pop();
-          if (item?.id) {            
+          if (item?.id) {
             delOrderPlacementList.push({
               ...item,
               isDelete: 1
@@ -571,7 +572,7 @@ export function useRiskControlHook({
       case 2:
         {
           const item = orderAutoFreezeList.pop();
-          if (item?.id) {            
+          if (item?.id) {
             delOrderAutoFreezeList.push({
               ...item,
               isDelete: 1
@@ -582,7 +583,7 @@ export function useRiskControlHook({
       case 3:
         {
           const item = riskControlList.pop();
-          if (item?.id) {            
+          if (item?.id) {
             delRiskControlList.push({ ...item, delFlag: 1 });
           }
         }
@@ -596,7 +597,6 @@ export function useRiskControlHook({
       switch (currentRiskControlLabelId.value) {
         case 0:
           {
-
           }
           break;
         case 1:
