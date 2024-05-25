@@ -85,7 +85,16 @@
           {{ t('秒') }}
         </div>
         <span v-else> {{ row.betAfterTime }} {{ t('秒') }} </span>
-
+        <div
+          v-if="
+            !Number(row.betBeforeTime) &&
+            !Number(row.betAfterTime) &&
+            isFormClick
+          "
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('投注前时间和投注后时间不能同时为空') }}
+        </div>
         <div
           v-if="showBetAfterTimeError(row) && isFormClick"
           class="text-red-500 text-xs text-start"
@@ -130,6 +139,12 @@
           >
             {{ addThousandSeparator(row.maxLimitAmount) + t('以下') }}
           </span>
+        </div>
+        <div
+          v-if="showBetAmountError(row) && isFormClick"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('投注金额最小值不能大于最大值') }}
         </div>
       </template>
     </pure-table>
@@ -199,12 +214,15 @@ const eventDisabled = (eventCode: string, row: any) => {
   return disable;
 };
 
+const showBetAmountError = (row: any) => {
+  if (row.maxLimitAmount && row.minLimitAmount) {
+    return Number(row.maxLimitAmount) < Number(row.minLimitAmount);
+  }
+};
+
 const showBetAfterTimeError = (row: any) => {
   let error = false;
-  console.log(row.betBeforeTime, row.betAfterTime);
-  if (!Number(row.betBeforeTime) && !Number(row.betAfterTime)) {
-    error = true;
-  } else if (Number(row.betAfterTime)) {
+  if (Number(row.betAfterTime)) {
     props.orderAutoFreezeList.forEach(orderFreeze => {
       if (
         orderFreeze.sourceCode == row.sourceCode &&

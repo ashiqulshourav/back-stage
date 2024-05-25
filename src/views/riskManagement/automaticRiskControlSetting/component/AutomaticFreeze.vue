@@ -109,6 +109,16 @@
         </div>
         <span v-else> {{ row.betAfterTime }} {{ t('秒') }} </span>
         <div
+          v-if="
+            !Number(row.betBeforeTime) &&
+            !Number(row.betAfterTime) &&
+            isFormClick
+          "
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('投注前时间和投注后时间不能同时为空') }}
+        </div>
+        <div
           v-if="showBetAfterTimeError(row) && isFormClick"
           class="text-red-500 text-xs text-start"
         >
@@ -255,9 +265,7 @@ const showBetBeforeTimeError = (row: any) => {
 
 const showBetAfterTimeError = (row: any) => {
   let error = false;
-  if (!Number(row.betBeforeTime) && !Number(row.betAfterTime)) {
-    error = true;
-  } else if (Number(row.betAfterTime)) {
+  if (Number(row.betAfterTime)) {
     props.orderPlacementList.forEach(orderPlacement => {
       if (
         orderPlacement.sourceCode == row.sourceCode &&
