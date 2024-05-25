@@ -329,7 +329,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
               ];
             break;
           case 'riskStatus':
-              str = riskStatusMap[item.riskStatus as keyof typeof riskStatus]||'-';
+              str = riskStatusMap[data.riskStatus as keyof typeof riskStatus]||'-';
               break;
           case 'settleScore':
             str = displayHomeAwayScore(data.settleScore, data.sportId);
