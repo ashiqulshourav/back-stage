@@ -215,7 +215,7 @@ const eventDisabled = (eventCode: string, row: any) => {
 };
 
 const showBetAmountError = (row: any) => {
-  if (row.maxLimitAmount && row.minLimitAmount) {
+  if (Number(row.maxLimitAmount) && Number(row.minLimitAmount)) {
     return Number(row.maxLimitAmount) < Number(row.minLimitAmount);
   }
 };
