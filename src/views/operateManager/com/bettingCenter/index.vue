@@ -352,7 +352,19 @@
               v-for="item in row.combineOrderDetails"
               :key="item.id"
             >
-             <span>{{riskStatusMap[item.riskStatus as keyof typeof riskStatus]||'-'}}</span>
+             <span 
+              :style="{
+                  background: getStatus(
+                    row.status,
+                    row.billStatus,
+                    row.betResultArr,
+                    row.isReserve,
+                    row.riskStatusArr,
+                    row.isSpecialSettle
+                  ).bgColor
+                }"
+                class="status_btn block"
+              >{{riskStatusMap[item.riskStatus as keyof typeof riskStatus]||'-'}}</span>
             </div>
           </template>
           <template #operation="{ row }">
@@ -520,12 +532,8 @@ const {
   margin: 0 auto;
 }
 .riskStatus_detail{
-  width: 120px;
-  min-height: 100px;
-  display: flex;
-  justify-items: center;
-  align-items: center;
-  justify-content: center;
+  width: max-content;
+  display: inline-block;
 }
 .match_item {
   margin-bottom: 10px;
