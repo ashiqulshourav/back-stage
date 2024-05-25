@@ -44,6 +44,7 @@ import lock_icon from '@iconify-icons/fa-solid/lock';
 import Link from '@iconify-icons/icon-park-outline/link-one';
 import Unlink from '@iconify-icons/icon-park-outline/unlink';
 import EventManagementIcon from '@iconify-icons/ri/calendar-event-fill';
+import ChangeAccount from '@iconify-icons/fa-solid/user-edit';
 
 addIcon("dataSourceManager", dataManager);
 addIcon("sale", sale);
@@ -96,3 +97,4 @@ addIcon('loadingIcon', loading);
 addIcon('download', Download);
 addIcon('link', Link);
 addIcon('unlink', Unlink);
+addIcon('changeAccount', ChangeAccount);

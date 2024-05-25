@@ -5,5 +5,5 @@
 <script setup lang="ts">
 import AccountChangeRecord from '../com/accountChangeRecord/index.vue';
 
-// defineOptions({ name: 'OPERATEMANAGER_SPORTPLAYERLIST' });
+defineOptions({ name: 'OPERATEMANAGER_SPORTCHANGEACCOUNTRECORD' });
 </script>

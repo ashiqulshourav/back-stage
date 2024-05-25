@@ -5,6 +5,7 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { accountChangeRecordSearchFormType } from '../util/types';
 import dayjs from 'dayjs';
 export function useBetListHook() {
+  const route = useRoute();
   const dataList = reactive<MemberAdminAPI.PageData[]>([]);
   const loading = ref(true);
   const pagination = reactive<PaginationProps>({
@@ -16,7 +17,7 @@ export function useBetListHook() {
   const form = reactive<accountChangeRecordSearchFormType>({
     createTimeStart: dayjs().startOf('month')?.valueOf(),
     createTimeEnd: dayjs().endOf('day').valueOf(),
-    userId: '1790032619430216671',
+    userId: route.query.userId,
   });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
