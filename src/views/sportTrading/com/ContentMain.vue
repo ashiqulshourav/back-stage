@@ -61,6 +61,7 @@
                   <div class="flex pl-2 cursor-pointer">
                     <IconGroup
                       :typeNum="_.isSale"
+                      renderType="pan"
                       @changeMatchStatus="
                         status =>
                           changeStatus({
