@@ -27,6 +27,7 @@ export const columns: TableColumnList = [
     label: t('操作参数'),
     slot: 'requestLog',
     prop: 'requestLog',
+    minWidth: 200,
     headerRenderer: d => handleTableWidth(d, t('操作参数'), 'auto')
   },
   {

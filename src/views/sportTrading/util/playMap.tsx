@@ -1,9 +1,9 @@
 //- icon图标状态
 /* 2-开盘 3-封盘 4-锁盘 0-关盘 */
 export enum SALE_STATUS {
-  close = 0,
+  close = 3,
   open = 2,
-  sealing = 3,
+  sealing = 0,
   lock = 4
 }
 
