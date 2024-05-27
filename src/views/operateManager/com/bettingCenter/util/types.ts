@@ -56,6 +56,7 @@ export const betStatusMap = {
 }
 
 export enum riskStatus{
+  unRisk = 0,
   waitingApprove = 2,
   autoApprove=103,
   handelApprove=104,
@@ -63,6 +64,7 @@ export enum riskStatus{
   handleReject = 204,
 }
 export const riskStatusMap = {
+  [riskStatus.unRisk]: t('未风控'),
   [riskStatus.waitingApprove]: t('待审核'),
   [riskStatus.autoApprove]: t('自动审核通过'),
   [riskStatus.handelApprove]: t('手动审核通过'),
