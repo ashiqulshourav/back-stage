@@ -268,7 +268,7 @@
                 }}
               </div>
               <div>{{ markeTypeMap[(item.marketType )as keyof typeof markeTypeMap] }}</div>
-              <div v-if="getOddStatus(item?.betResult,item.riskStatus)">
+              <div v-if="getOddStatus(row.status,row.billStatus,row.isReserve,item.riskStatus,item?.betResult)">
                 <span
                   :class="
                     [EBetResultType.WIN, EBetResultType.WIN_HALF].includes(
@@ -278,7 +278,7 @@
                       : 'lose'
                   "
                 >
-                  {{getOddStatus(item?.betResult,item.riskStatus)}}
+                  {{getOddStatus(row.status,row.billStatus,row.isReserve,item.riskStatus,item?.betResult)}}
                 </span
                 >
               </div>

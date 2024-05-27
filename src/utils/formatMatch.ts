@@ -150,11 +150,11 @@ export const BET_RESULT_TYPE_MAP: { [key in EBetResultType]: string } = {
   [EBetResultType.GAME_CANCEL]: t('比赛取消'),
   [EBetResultType.GAME_POSTPONED]: t('比赛延期'),
   [EBetResultType.ROLLBACK]: t('回滚'),
-  [EBetResultType.CANCELL]: t('注单取消'),
-  [EBetResultType.HANDLE_CANCEL]: t('注单取消'),
-  [EBetResultType.AUTO_CANCEL]: t('预约失效'),
+  [EBetResultType.CANCELL]: t('预约失败'),  //21
+  [EBetResultType.HANDLE_CANCEL]: t('注单无效'),//23  // 原来 注单取消
+  [EBetResultType.AUTO_CANCEL]: t('预约取消'), //22
   [EBetResultType.FLAT_MATCH_ROLLBACK]: t('走水'), // 比分回滚取消结算返还金额,算走水
-  [EBetResultType.RISK_REJECT]: t('走水')  // 风控拒也算走水
+  [EBetResultType.RISK_REJECT]: t('投注失败')  // 风控拒也算走水
 };
 
 export const getViewOddFn = (od: number, type: EOddType, currentOddType: number) => {
