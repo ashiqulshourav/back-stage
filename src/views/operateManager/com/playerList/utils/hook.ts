@@ -9,9 +9,12 @@ import {
   updateUserFormType
 } from './types';
 import { FormInstance } from 'element-plus';
+import { useSettingStoreHook } from '@/store/settings';
 
 export function userPlayerListHook(venueType: number, category: number) {
   const route = useRoute();
+  const router = useRouter();
+  const settingStore = useSettingStoreHook();
   // data list
   const dataList = reactive<UserAPI.operateUserList[]>([]);
   const selectedDataList = reactive<UserAPI.operateUserList[]>([]);
@@ -52,6 +55,19 @@ export function userPlayerListHook(venueType: number, category: number) {
   const form = reactive<searchFormType>({} as searchFormType);
 
   const recordForm = reactive<recordFormType>({} as recordFormType);
+
+  const goChangeAccountPage = (row: UserAPI.operateUserList) => {
+    settingStore.save_player_info({
+      page: pagination.currentPage,
+    });
+    router.push({
+      name:
+        route.path === '/operateManager/sportPlayerList'
+          ? 'OPERATEMANAGER_SPORTCHANGEACCOUNTRECORD'
+          : 'OPERATEMANAGER_ESPORTCHANGEACCOUNTRECORD',
+      query: { userId: row.id }
+    });
+  };
 
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -273,6 +289,7 @@ export function userPlayerListHook(venueType: number, category: number) {
     dispatchLabelsDel,
     dispatchLabelsAdd,
     dispatchUpdateUser,
-    tenantObj
+    tenantObj,
+    goChangeAccountPage,
   };
 }

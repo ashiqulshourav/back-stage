@@ -46,6 +46,9 @@ export const useSettingStore = defineStore({
     save_selttle_history_page_info(info: { page: number | null; matchType: number | null }) {
       this.settleHistoryPageInfo = info;
     },
+    save_player_info(info: { page: number;}) {
+      this.playerListPageInfo = info;
+    },
   }
 });
 
