@@ -32,6 +32,7 @@ export const columns: TableColumnList = [
     slot: "riskStatus",
     minWidth: 100,
     align:'center',
+    headerRenderer: d => handleTableWidth(d, t('风控状态'), 'auto')
   },
   {
     label: t("赔率"),
