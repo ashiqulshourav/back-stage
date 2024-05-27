@@ -1,6 +1,10 @@
 <template>
   <div class="main">
-    <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
+    <SearchForm 
+     :form="form" 
+     :loading="loading"
+     @on-search="onSearch"
+     @openModifyBalanceDialog="openModifyBalanceDialog" />
     <pure-table
       align-whole="center"
       table-layout="auto"
@@ -24,6 +28,7 @@ import { useAccountChangeRecordHook } from './util/hook';
 import SearchForm from './searchForm.vue';
 import { columns } from './columns';
 import { usePublicHooks } from '@/hooks';
+import { t } from '@/plugins/i18n';
 const { tableHeaderStyle } = usePublicHooks();
 const {
   loading,
@@ -33,7 +38,8 @@ const {
   handleTableWidthChange,
   handleCurrentChange,
   handleSelectionChange,
-  form
+  form,
+  openModifyBalanceDialog,
 } = useAccountChangeRecordHook();
 </script>
 

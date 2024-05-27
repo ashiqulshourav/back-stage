@@ -1,6 +1,6 @@
 import { http } from '@/utils/http';
 import { searchFormType } from '@/views/operateManager/com/bettingBalanceInquiry/utils/types';
-import {accountChangeRecordSearchFormType} from  '@/views/operateManager/com/accountChangeRecord/util/types';
+import { accountChangeRecordSearchFormType, modifyBalanceFormType } from '@/views/operateManager/com/accountChangeRecord/util/types';
 
 
 
@@ -50,4 +50,8 @@ export const operateManagementData = {
   getAccountChangeRecord: (data: accountChangeRecordSearchFormType) =>
     http.request<OperateManagementDataAPI.BetBalanceRes>
     ('post', '/operate/queryAccountChangeLog', { data }),
+
+  getAccountChange: (data: modifyBalanceFormType) =>
+    http.request<OperateManagementDataAPI.BetBalanceRes>
+    ('post', '/operate/accountChange', { data }),
 };

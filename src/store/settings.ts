@@ -17,6 +17,10 @@ export const useSettingStore = defineStore({
       page: null,
       matchType: null,
     },
+    playerListPageInfo: {
+      page: null,
+    },
+    
   }),
   getters: {
     getTitle(state) {
@@ -46,7 +50,7 @@ export const useSettingStore = defineStore({
     save_selttle_history_page_info(info: { page: number | null; matchType: number | null }) {
       this.settleHistoryPageInfo = info;
     },
-    save_player_info(info: { page: number;}) {
+    save_player_info(info: { page: number | null;}) {
       this.playerListPageInfo = info;
     },
   }

@@ -5,6 +5,18 @@
     :model="form"
     class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
   >
+    <div>
+      <div>
+        
+      </div>
+      <el-button
+        class="float-right"
+        type="primary"
+        @click="openModifyBalanceDialog()"
+      >
+        {{ t("修改余额") }}
+      </el-button>
+    </div>
     <el-form-item prop="accountChangeTypeCode">
       <el-select
         v-model="form.accountChangeTypeCode"
@@ -67,7 +79,7 @@ const props = defineProps<{
 const formRef = ref()
 const selectDate = ref()
 
-const emits = defineEmits(["onSearch", "exportFile"])
+const emits = defineEmits(["onSearch", "exportFile", "openModifyBalanceDialog"])
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields()
   selectDate.value = ""
@@ -97,6 +109,11 @@ const changeDate = t => {
 const search = () => {
   emits("onSearch", ...["reload"])
 }
+
+const openModifyBalanceDialog = () => {
+  emits("openModifyBalanceDialog", ...[(t('修改余额'))])
+}
+
 </script>
 <style scoped lang="scss">
 :deep(.el-dropdown-menu__item i) {

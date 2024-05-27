@@ -2,12 +2,16 @@ import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
-import { accountChangeRecordSearchFormType } from '../util/types';
+import { accountChangeRecordSearchFormType, modifyBalanceFormType } from '../util/types';
+import ModifyBalanceForm from '../modifyBalanceModal.vue';
+import ConfirmModifyBalanceForm from '../confirmModifyBalanceModal.vue';
+import { addDialog, closeDialog } from '@/components/ReDialog';
 import dayjs from 'dayjs';
 export function useAccountChangeRecordHook() {
   const route = useRoute();
   const dataList = reactive<MemberAdminAPI.PageData[]>([]);
   const loading = ref(true);
+  const modifyBalanceLoading = ref(false);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -19,6 +23,14 @@ export function useAccountChangeRecordHook() {
     createTimeEnd: dayjs().endOf('day').valueOf(),
     userId: route.query.userId,
   });
+
+  const editFrom = reactive<modifyBalanceFormType>({
+    userId: route.query.userId,
+    amount: null,
+    accountChangeTypeCode: null,
+    remark: '',
+  });
+
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
     onSearch();
@@ -53,6 +65,42 @@ export function useAccountChangeRecordHook() {
       loading.value = false;
     }
   }
+
+  async function openModifyBalanceDialog(title?: string) {
+    addDialog({
+      title,
+      width: 'auto',
+      alignCenter: true,
+      closeOnClickModal: false,
+      hideFooter: true,
+      contentRenderer: ({ options, index }) =>
+        h(ModifyBalanceForm, {
+          userId: route.query.userId,
+          onCloseDialog: (params: string) => {
+            closeDialog(options, index);
+            onSearch();
+          }
+        })
+    });
+  }
+
+  async function openConfirmModifyBalanceDialog(title?: string, data: modifyBalanceFormType) {
+    addDialog({
+      title,
+      width: '25%',
+      alignCenter: true,
+      closeOnClickModal: false,
+      hideFooter: true,
+      contentRenderer: ({ options, index }) =>
+        h(ConfirmModifyBalanceForm, {
+          data: data,
+          onCloseDialog: (params: string) => {
+            closeDialog(options, index);
+          }
+        })
+    });
+  }
+
   const resetForm = formEl => {
     if (!formEl) return;
     formEl.resetFields();
@@ -72,6 +120,10 @@ export function useAccountChangeRecordHook() {
     form,
     handleTableWidthChange,
     handleCurrentChange,
-    handleSelectionChange
+    handleSelectionChange,
+    openModifyBalanceDialog,
+    modifyBalanceLoading,
+    editFrom,
+    openConfirmModifyBalanceDialog,
   };
 }
