@@ -407,6 +407,23 @@ export function useBettingCenterHook(category: number, venueType: number) {
       }
     });
   };
+
+  const getRiskStatusColor = (
+    riskStatus: number,
+  ) => {
+    let obj = {bgColor: ''};
+    if(riskStatus === 2){
+      obj.bgColor = '#FFC53D';
+    } else if(riskStatus === 103 || riskStatus === 104){
+      obj.bgColor = '#40A9FF';
+    } else if(riskStatus === 203 || riskStatus === 204){
+      obj.bgColor = '#F57582';
+    } else{
+      obj.bgColor = '';
+    }
+    return obj;
+  }
+  
   const getStatus = (
     status: number,
     billStatus: number,
@@ -578,5 +595,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
     riskLabelList,
     getOddStatus,
     downloading,
+    getRiskStatusColor,
   };
 }
