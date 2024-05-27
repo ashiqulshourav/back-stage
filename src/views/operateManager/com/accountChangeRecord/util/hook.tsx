@@ -4,7 +4,7 @@ import { reactive, ref, onMounted } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { accountChangeRecordSearchFormType } from '../util/types';
 import dayjs from 'dayjs';
-export function useBetListHook() {
+export function useAccountChangeRecordHook() {
   const dataList = reactive<MemberAdminAPI.PageData[]>([]);
   const loading = ref(true);
   const pagination = reactive<PaginationProps>({
