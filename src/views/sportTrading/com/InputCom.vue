@@ -38,6 +38,7 @@
 <script setup lang="ts">
 import { subtraction, addition } from '@pureadmin/utils';
 import { debounce } from '@pureadmin/utils';
+import { hasAuth } from '@/router/utils';
 
 const emits = defineEmits(['changeMouse', 'changeSelectNum']);
 const props = defineProps<{
@@ -93,6 +94,7 @@ const mouseEvent = (
   s: sportTradingDataAPI.BetItemsDtoList,
   type: 'enter' | 'leave'
 ) => {
+  if (!hasAuth('CHANGE_ODDS')) return;
   emits('changeMouse', e, s, type);
 };
 </script>

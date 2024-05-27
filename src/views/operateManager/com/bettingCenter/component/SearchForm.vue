@@ -418,6 +418,7 @@ onActivated(() => {
   if (betStore.gameplayData.betItemsId) {
     props.form.betItemId = betStore.gameplayData.betItemsId;
     props.form.matchId = betStore.gameplayData.matchId;
+    search();
   }
 });
 
@@ -429,6 +430,7 @@ onDeactivated(() => {
       betItemsId: '',
       matchId: ''
     });
+    search();
   }
 });
 </script>
