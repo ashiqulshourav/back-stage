@@ -392,6 +392,20 @@ const exportFile = () => {
 /* 添加投注项ID分类 */
 const betStore = useBetStore();
 
+watch(
+  () => betStore.gameplayData,
+  v => {
+    if (v.betItemsId) {
+      props.form.betItemId = v.betItemsId;
+      props.form.matchId = v.matchId;
+    }
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+);
+
 onActivated(() => {
   if (betStore.gameplayData.betItemsId) {
     props.form.betItemId = betStore.gameplayData.betItemsId;
