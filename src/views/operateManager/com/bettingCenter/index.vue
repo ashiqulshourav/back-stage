@@ -23,6 +23,7 @@
           align-whole="center"
           table-layout="auto"
           :loading="loading"
+          showOverflowTooltip
           :size="size"
           class="table_container"
           adaptive
@@ -268,7 +269,7 @@
                 }}
               </div>
               <div>{{ markeTypeMap[(item.marketType )as keyof typeof markeTypeMap] }}</div>
-              <div v-if="getOddStatus(row.status,row.billStatus,row.isReserve,item.riskStatus,item?.betResult)">
+              <div v-if="getOddStatus(item?.betResult,item.riskStatus)">
                 <span
                   :class="
                     [EBetResultType.WIN, EBetResultType.WIN_HALF].includes(
@@ -278,7 +279,7 @@
                       : 'lose'
                   "
                 >
-                  {{getOddStatus(row.status,row.billStatus,row.isReserve,item.riskStatus,item?.betResult)}}
+                  {{getOddStatus(item?.betResult,item.riskStatus)}}
                 </span
                 >
               </div>
@@ -359,8 +360,8 @@
                   ).bgColor
                 }"
               :class="item.riskStatus !== 0 ? 'status_btn block' : ''"
-             >{{riskStatusMap[item.riskStatus as keyof typeof riskStatus]||'-'}}</span>
-              <span v-if="riskStatusMap[item.riskStatus as keyof typeof riskStatus]&&item.riskType">原因:{{item.riskType}}</span>
+             >{{item.riskStatus===0?'-':riskStatusMap[item.riskStatus as keyof typeof riskStatusMap]||'-'}}</span>
+              <span v-if="riskStatusMap[item.riskStatus as keyof typeof riskStatusMap]&&item.riskType">原因:{{item.riskType}}</span>
             </div>
           </template>
           <template #operation="{ row }">
@@ -579,6 +580,7 @@ const {
   padding: 0 10px;
   color: #fff;
   border-radius: 4px;
+  word-break: keep-all;
 }
 .odd_item {
   min-width: 80px;

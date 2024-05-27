@@ -331,7 +331,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
               ];
             break;
           case 'riskStatus':
-              str = riskStatusMap[data.riskStatus as keyof typeof riskStatus]||'-';
+              str = data.riskStatus===0?'-':riskStatusMap[data.riskStatus as keyof typeof riskStatusMap];
               break;
           case 'settleScore':
             str = displayHomeAwayScore(data.settleScore, data.sportId);
@@ -453,37 +453,26 @@ export function useBettingCenterHook(category: number, venueType: number) {
     } else if (status === 0 && billStatus === 0&&isReserve === 1&&!( betResultArr?.includes(21)|| betResultArr?.includes(22) )) {
       // 预约中
       obj = { status: betStatus.onReverse, bgColor: '#F57582' };
+    } else if (status === 5||betResultArr?.includes(18)) {
+      // 赛事异常
+      obj = { status: betStatus.eventAbnormal, bgColor: '#F88D48' };
     }else if(status === 0 && billStatus === 0&&isReserve === 2){
       // 未结算
       obj = { status: betStatus.unsettlementBet, bgColor: '#FFC53D' };
     } else if (status === 1 && billStatus === 1) {
       // 已结算
       obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
-    } else if (status === 5) {
-      // 赛事异常
-      obj = { status: betStatus.eventAbnormal, bgColor: '#F88D48' };
     }
-
     return obj;
   };
 
-  const getOddStatus = (status:number,billStatus:number,isReserve:number, riskSt: number,betResult:number) => {
-    return BET_RESULT_TYPE_MAP[betResult as keyof typeof BET_RESULT_TYPE_MAP] || ''
-    // if(status===2&&billStatus==1&&isReserve==1&&betResult===22){
-    //   // 预约取消
-    //   return t('预约取消');
-    // }else if(status === 2 && billStatus === 1 && betResult===21){
-    //   // 预约失败
-    //   return t('预约失败');
-    // }else if (riskSt === riskStatus.autoReject || riskSt === riskStatus.handleReject) {
-    //   return t('注单无效');
-    // }else if (betResult===61){
-    //   return t('投注失败');
-    // }else {
-    //   return (
-    //     BET_RESULT_TYPE_MAP[betResult as keyof typeof BET_RESULT_TYPE_MAP] || ''
-    //   );
-    // }
+  const getOddStatus = (betResult:number,riskSt:number) => {
+    // return BET_RESULT_TYPE_MAP[betResult as keyof typeof BET_RESULT_TYPE_MAP] || ''
+   if (riskSt === riskStatus.autoReject || riskSt === riskStatus.handleReject) {
+      return t('注单无效');
+    }else {
+      return BET_RESULT_TYPE_MAP[betResult as keyof typeof BET_RESULT_TYPE_MAP] || ''
+    }
   };
   const switchDialog = async (flag: boolean, row: any) => {
     UDialogFlag.value = flag;
