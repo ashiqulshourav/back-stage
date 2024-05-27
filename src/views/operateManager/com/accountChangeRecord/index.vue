@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { useBetListHook } from './util/hook';
+import { useAccountChangeRecordHook } from './util/hook';
 import SearchForm from './searchForm.vue';
 import { columns } from './columns';
 import { usePublicHooks } from '@/hooks';
@@ -34,7 +34,7 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   form
-} = useBetListHook();
+} = useAccountChangeRecordHook();
 </script>
 
 <style lang="scss">

@@ -1,4 +1,5 @@
 import dayjs from "dayjs"
+import {addThousandSeparator} from "@/utils/formatNumber";
 
 export const accountChangeTypeCodeList = [
   {
@@ -23,7 +24,7 @@ export const columns: TableColumnList = [
     minWidth: 55
   },
   {
-    label: t("注单号"),
+    label: t("注单号(流水ID)"),
     prop: "identifier",
     minWidth: 200,
     formatter: ({ identifier,type }) =>{
@@ -46,19 +47,19 @@ export const columns: TableColumnList = [
     label: t("账变金额"),
     prop: "transAmount",
     minWidth: 150,
-    formatter: ({ transAmount }) => (transAmount ? transAmount.toFixed(2) : "-")
+    formatter: ({ transAmount }) => (transAmount ? addThousandSeparator(transAmount) : "-")
   },
   {
     label: t("账变前金额"),
     prop: "prevBalance",
     minWidth: 150,
-    formatter: ({ prevBalance }) => (prevBalance ? prevBalance.toFixed(2) : "-")
+    formatter: ({ prevBalance }) => (prevBalance ? addThousandSeparator(prevBalance) : "-")
   },
   {
     label: t("账变后金额"),
     prop: "balance",
     minWidth: 150,
-    formatter: ({ balance }) => (balance ? balance.toFixed(2) : "-")
+    formatter: ({ balance }) => (balance ?addThousandSeparator(balance) : "-")
   },
   {
     label: t("账变时间"),

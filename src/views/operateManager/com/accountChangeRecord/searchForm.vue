@@ -8,7 +8,7 @@
     <el-form-item prop="accountChangeTypeCode">
       <el-select
         v-model="form.accountChangeTypeCode"
-        :placeholder="`${t('请选择或输入账变类型')}`"
+        :placeholder="`${t('请选择账变类型')}`"
         clearable
         class="!w-[150px]"
       >
