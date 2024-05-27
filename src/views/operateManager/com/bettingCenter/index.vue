@@ -23,6 +23,7 @@
           align-whole="center"
           table-layout="auto"
           :loading="loading"
+          showOverflowTooltip
           :size="size"
           class="table_container"
           adaptive
@@ -579,6 +580,7 @@ const {
   padding: 0 10px;
   color: #fff;
   border-radius: 4px;
+  word-break: keep-all;
 }
 .odd_item {
   min-width: 80px;
