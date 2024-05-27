@@ -22,7 +22,8 @@ import {
   useSportFormatDetail,
   displayHomeAwayScore,
   BET_RESULT_TYPE_MAP,
-  formatSeriesType, getIsInplay
+  formatSeriesType,
+  getIsInplay
 } from '@/utils/formatMatch';
 import dayjs from 'dayjs';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
@@ -41,7 +42,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
   const riskLabelList = reactive<UserAPI.labelType[]>([]);
   const UDialogFlag = ref<Boolean>(false);
   const loading = ref(true);
-  const downloading = ref(false)
+  const downloading = ref(false);
   const totalInfo = reactive<BetOrderAPI.otherDataType>(
     {} as BetOrderAPI.otherDataType
   );
@@ -63,6 +64,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     awayTeamName: '',
     homeTeamName: '',
     isInplay: '',
+     betItemId: '',
     seriesType: '',
     category: '',
     timeType: 1,
@@ -151,8 +153,8 @@ export function useBettingCenterHook(category: number, venueType: number) {
     try {
       const params: searchFormType = formatParams({
         export: false,
-        orderId:orderId,
-        pageNum:1
+        orderId: orderId,
+        pageNum: 1
       }) as searchFormType;
       const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
         params
@@ -160,17 +162,17 @@ export function useBettingCenterHook(category: number, venueType: number) {
       if (res.code) return message(res.msg, { type: 'error' });
       if (res.data !== null) {
         let list = res?.data?.pageData || [];
-        list = list.map((row:BetOrderAPI.BetOrderList) => {
+        list = list.map((row: BetOrderAPI.BetOrderList) => {
           row.riskStatusArr = [];
-          row.combineOrderDetails.map((item2:BetOrderAPI.Detail) => {
-            row.riskStatusArr?.push(item2.riskStatus)
+          row.combineOrderDetails.map((item2: BetOrderAPI.Detail) => {
+            row.riskStatusArr?.push(item2.riskStatus);
           });
           return row;
         });
 
         dataList.map((item: any) => {
-          if(item.id === orderId){
-            Object.assign(item, list[0])
+          if (item.id === orderId) {
+            Object.assign(item, list[0]);
           }
         });
       }
@@ -260,11 +262,11 @@ export function useBettingCenterHook(category: number, venueType: number) {
     const r = res.data.pageData.map((item: any, i) => {
       const arr: any[] = [];
       const data = { ...item, ...item?.combineOrderDetails[0] };
-      data.combineOrderDetails.map((item2:BetOrderAPI.Detail) => {
-        data.riskStatusArr=[];
-        data.betResultArr=[]
-        data.riskStatusArr?.push(item2.riskStatus)
-        data.betResultArr.push (item2.betResult)
+      data.combineOrderDetails.map((item2: BetOrderAPI.Detail) => {
+        data.riskStatusArr = [];
+        data.betResultArr = [];
+        data.riskStatusArr?.push(item2.riskStatus);
+        data.betResultArr.push(item2.betResult);
       });
 
       columns.forEach((column: { prop: string }) => {

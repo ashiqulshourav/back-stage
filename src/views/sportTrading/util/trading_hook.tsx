@@ -338,7 +338,10 @@ export function useTradingHook(type: 'early' | 'in') {
   });
 
   onUnmounted(() => {
-    if (loopTimer) clearInterval(loopTimer.value);
+    if (loopTimer.value) clearInterval(loopTimer.value);
+    handicapList.forEach(item => {
+      item.list = [];
+    });
   });
 
   return {

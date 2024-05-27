@@ -25,6 +25,7 @@ export type searchFormType = {
   maxBetAmount: number | string;
   minProfitAmount: number | string;
   maxProfitAmount: number | string;
+  betItemId: number | string;
   riskControlLabelList: number[],
   venueType: number;
   riskStatus:number|string;
@@ -40,7 +41,7 @@ export enum betStatus {
   eventAbnormal = 8,
   reserveFail = 10,
   onReverse = 11,
-  reverseCancel=12
+  reverseCancel = 12
 }
 export const betStatusMap = {
   [betStatus.all]: t('全部'),
@@ -91,7 +92,7 @@ export const seriesTypesDuplex = {
   '6001': { value: '6001', name: '6串1', list: [6007, 60028, 60084, 600210] },
   '7001': { value: '7001', name: '7串1', list: [7008, 70036, 700120] },
   '8001': { value: '8001', name: '8串1', list: [8009, 80045] },
-  '9001': { value: '9001', name: '9串1', list: [ 90010] },
+  '9001': { value: '9001', name: '9串1', list: [90010] },
   '3004': { value: '3004', name: '3串4', list: [3004] },
   '40011': { value: '40011', name: '4串11', list: [40011] },
   '50026': { value: '50026', name: '5串26', list: [50026] },
