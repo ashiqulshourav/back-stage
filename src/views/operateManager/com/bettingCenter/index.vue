@@ -352,7 +352,7 @@
               v-for="item in row.combineOrderDetails"
               :key="item.id"
             >
-             <span 
+             <span
               :style="{
                   background: getRiskStatusColor(
                     item.riskStatus,
@@ -360,7 +360,7 @@
                 }"
               :class="item.riskStatus !== 0 ? 'status_btn block' : ''"
              >{{riskStatusMap[item.riskStatus as keyof typeof riskStatus]||'-'}}</span>
-              <span v-if="riskStatusMap[item.riskStatus as keyof typeof riskStatus]">原因:{{item.riskType}}</span>
+              <span v-if="riskStatusMap[item.riskStatus as keyof typeof riskStatus]&&item.riskType">原因:{{item.riskType}}</span>
             </div>
           </template>
           <template #operation="{ row }">
