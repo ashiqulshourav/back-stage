@@ -1,7 +1,7 @@
 <template>
   <div class="flex min-w-[300px] flex-col bg-bg_color pt-2 p-3">
     <div class="font-bold mb-3">{{ t('告警设定') }}</div>
-    <div class="flex justify-end pr-5">
+    <div class="flex justify-end pr-5" v-if="hasAuth('SETTING_WARNING')">
       <el-button
         v-if="!isShowEdit"
         type="primary"
@@ -52,6 +52,7 @@ import {
   formatNumber,
   formatWarningNum
 } from '@/utils/formatNumber';
+import { hasAuth } from '@/router/utils';
 
 const isShowEdit = ref(false);
 const warningData = reactive<sportTradingDataAPI.getOperateHandicapConfigData>({

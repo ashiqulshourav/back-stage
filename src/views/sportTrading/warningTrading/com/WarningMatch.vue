@@ -105,7 +105,15 @@
                     :selectItem="selectItem"
                     @changeSelectNum="(n:number) => shortcutSelectNum(n,'input')"
                   />
-                  <div class="text-[--el-color-primary] w-1/6 text-center">
+                  <div
+                    :class="[
+                      'text-[--el-color-primary] w-1/6 text-center',
+                      (s.betCount > 0 || s.betAmount > 0) && 'cursor-pointer'
+                    ]"
+                    @click="
+                      goBetOroderPage(s.betCount > 0 || s.betAmount > 0, s)
+                    "
+                  >
                     {{ s.betCount }}/{{ s.betAmount }}
                   </div>
                   <div
@@ -153,6 +161,7 @@ import { addition, subtraction } from '@pureadmin/utils';
 import IconGroup from '../../com/IconGroup.vue';
 import { PLAY_MATCH_NAME, goalScoring } from '../../util/playMap';
 import InputCom from '../../com/InputCom.vue';
+import { useBetStore } from '@/store/bet';
 
 const scrollRef = ref();
 const betItemsDtoList = reactive<sportTradingDataAPI.BetItemsDtoList[]>([]);
@@ -283,6 +292,21 @@ const changeStatus = (d: {
   item?: sportTradingDataAPI.renderListType;
 }) => {
   emits('changeStatus', d);
+};
+
+//- 跳转到订单界面
+const betStore = useBetStore();
+const router = useRouter();
+const goBetOroderPage = (
+  isGo: boolean,
+  s: sportTradingDataAPI.BetItemsDtoList
+) => {
+  if (!isGo) return;
+  betStore.set_gameplay_data({
+    matchId: s.matchId,
+    betItemsId: s.betItemsId
+  });
+  router.push('/operateManager/sportBettingCenter');
 };
 </script>
 
