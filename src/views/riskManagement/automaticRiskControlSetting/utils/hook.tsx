@@ -207,7 +207,7 @@ export function useRiskControlHook({
         isValid = false;
       }
 
-      if (!item.betBeforeTime && !item.betAfterTime) {
+      if (!Number(item.betBeforeTime) && !Number(item.betAfterTime)) {
         isValid = false;
       }
     });
