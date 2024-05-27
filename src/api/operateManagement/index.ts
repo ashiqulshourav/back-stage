@@ -1,6 +1,8 @@
 import { http } from '@/utils/http';
-import mockAPI from './mock';
 import { searchFormType } from '@/views/operateManager/com/bettingBalanceInquiry/utils/types';
+import {accountChangeRecordSearchFormType} from  '@/views/operateManager/com/accountChangeRecord/util/types';
+
+
 
 export const operateManagementData = {
   //- 运营管理
@@ -41,8 +43,11 @@ export const operateManagementData = {
       data
     }),
   // mockAPI.deleteOperateTag(data)
-
   getBetBalance: (data: searchFormType) =>
     http.request<OperateManagementDataAPI.BetBalanceRes>
       ('post', '/operateBalance/canBetBalance', { data }),
+
+  getAccountChangeRecord: (data: accountChangeRecordSearchFormType) =>
+    http.request<OperateManagementDataAPI.BetBalanceRes>
+    ('post', '/operate/queryAccountChangeLog', { data }),
 };
