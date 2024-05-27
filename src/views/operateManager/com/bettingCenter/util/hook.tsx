@@ -439,7 +439,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     }else if(riskStatusArr?.includes( betStatus.PendingApprove)&&isSpecialSettle===0){
       // 待审核
       obj = { status: betStatus.PendingApprove, bgColor: '#F57582' };
-    }else if (status===2&&billStatus===1&&isReserve===2&&(betResultArr?.includes(22)||betResultArr?.includes(23))){
+    }else if (status===2&&billStatus===1&&isReserve===2&&(betResultArr?.includes(22)||betResultArr?.includes(23)) || riskStatusArr?.includes(riskStatus.autoReject)||riskStatusArr?.includes(riskStatus.handleReject) ){
       // 注单无效
       obj = { status: betStatus.betInvalid, bgColor: '#F57582' };
     }else if (status === 2 && billStatus === 1 && betResultArr?.includes(21)){
