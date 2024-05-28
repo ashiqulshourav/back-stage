@@ -2,7 +2,10 @@ import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
-import { accountChangeRecordSearchFormType, modifyBalanceFormType } from '../util/types';
+import {
+  accountChangeRecordSearchFormType,
+  modifyBalanceFormType
+} from '../util/types';
 import ModifyBalanceForm from '../modifyBalanceModal.vue';
 import ConfirmModifyBalanceForm from '../confirmModifyBalanceModal.vue';
 import { addDialog, closeAllDialog, closeDialog } from '@/components/ReDialog';
@@ -27,22 +30,23 @@ export function useAccountChangeRecordHook() {
   const form = reactive<accountChangeRecordSearchFormType>({
     createTimeStart: dayjs().startOf('month')?.valueOf(),
     createTimeEnd: dayjs().endOf('day').valueOf(),
-    userId: route.query.userId,
+    userId: route.query.userId
   });
 
   const editFrom = reactive<modifyBalanceFormType>({
     userId: route.query.userId,
     amount: null,
     accountChangeTypeCode: null,
-    remark: '',
+    remark: ''
   });
 
   const userData = reactive<UserAPI.operateUserList>({
     id: renderObj.id,
     userName: renderObj.userName,
     tenantName: renderObj.tenantName,
-    balance: renderObj.balance,
+    balance: renderObj.balance
   });
+
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
     onSearch();
@@ -53,9 +57,10 @@ export function useAccountChangeRecordHook() {
     onSearch();
   }
 
-  const changeBalance = (amount:number)=>{
-    userData.balance=Number(userData.balance)+Number(amount)
-  }
+  const changeBalance = (amount: number) => {
+    userData.balance = Number(userData.balance) + Number(amount);
+    console.log('hook.tsx文件 62==============行打印=', userData.balance);
+  };
 
   function handleSelectionChange(val) {
     console.log('handleSelectionChange', val);
@@ -68,7 +73,7 @@ export function useAccountChangeRecordHook() {
       const res = await API.getAccountChangeRecord({
         ...removeEmptyStringKeys({ ...form }),
         pageSize: pagination.pageSize,
-        pageNum: pagination.currentPage,
+        pageNum: pagination.currentPage
       });
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
@@ -94,10 +99,9 @@ export function useAccountChangeRecordHook() {
         contentRenderer: ({ options, index }) =>
           h(ModifyBalanceForm, {
             userId: route.query.userId,
-              changeBalance:(amount:number)=>{
-                  console.log(55555,amount)
-               changeBalance(amount)
-              },
+            changeBalance: (amount: number) => {
+              changeBalance(amount);
+            },
             onCloseDialog: (params: string) => {
               closeDialog(options, index);
               onSearch();
@@ -107,7 +111,10 @@ export function useAccountChangeRecordHook() {
     }
   }
 
-  async function openConfirmModifyBalanceDialog(title?: string, data: modifyBalanceFormType) {
+  async function openConfirmModifyBalanceDialog(
+    title?: string,
+    data: modifyBalanceFormType
+  ) {
     addDialog({
       title,
       width: 'auto',
@@ -150,6 +157,6 @@ export function useAccountChangeRecordHook() {
     editFrom,
     openConfirmModifyBalanceDialog,
     userData,
-    changeBalance,
+    changeBalance
   };
 }
