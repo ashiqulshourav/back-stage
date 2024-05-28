@@ -24,14 +24,13 @@
             }"
           >
             <span
-              class="w-4 h-4 flex items-center text-[12px] justify-center bg-primary text-center rounded-full leading-4 text-white"
+              class="w-4 h-4 flex items-center text-[12px] justify-center bg-primary text-center rounded-full text-white"
             >
-              <span class="scale-75">
+              <span class="scale-75 font-bold">
                 {{
                   currentMatch?.level === 200 ? t('未') : currentMatch?.level
                 }}
               </span>
-              {{}}
             </span>
             <span class="text-[#409EFF] text-xs ml-1 font-bold">
               {{ currentMatch?.leagueNameCn }}
@@ -48,11 +47,11 @@
           tip: t('赛事ID复制成功')
         }"
       >
-        <div class="flex">
+        <div class="flex items-center">
           <div :class="['text-[--el-color-primary] text-xs flex items-center']">
             <span>{{ currentMatch?.homeTeamNameCn }}</span>
             <span
-              class="w-4 font-bold h-4 flex items-center text-xs scale-75 justify-center bg-[--el-color-warning] text-white rounded-full leading-4"
+              class="w-5 font-bold h-5 flex items-center text-xs scale-75 justify-center bg-[--el-color-warning] text-white rounded-full"
               >{{ t('主') }}</span
             >
           </div>
