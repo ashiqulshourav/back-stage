@@ -83,7 +83,7 @@ export function useAccountChangeRecordHook() {
     if (r) {
       addDialog({
         title,
-        width: 'auto',
+        width: '30%',
         alignCenter: true,
         closeOnClickModal: false,
         hideFooter: true,
@@ -102,7 +102,7 @@ export function useAccountChangeRecordHook() {
   async function openConfirmModifyBalanceDialog(title?: string, data: modifyBalanceFormType) {
     addDialog({
       title,
-      width: 'auto',
+      width: '20%',
       alignCenter: true,
       closeOnClickModal: false,
       hideFooter: true,

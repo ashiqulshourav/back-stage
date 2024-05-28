@@ -1,5 +1,6 @@
 <template>
   <el-form
+    class="mx-20"
     ref="formRef"
     label-width="100px"
     label-position="left"
@@ -25,7 +26,7 @@
     </el-form-item>
 
     <el-form-item prop="amount">
-      <div class="flex">
+      <div class="w-full flex">
         <el-input
           v-model="enteredAmount"
           clearable
@@ -47,7 +48,7 @@
       />
     </el-form-item>
   </el-form>
-  <div class="flex justify-end bg-white mt-4">
+  <div class="flex justify-end bg-white mt-16">
     <el-button @click="closeDialog">{{ t('取消') }}</el-button>
     <el-button :disabled="!isEditFormHasNull(editFrom)" type="primary" @click="openConfirmModifyBalanceDialog(t('确认操作'), editFrom)">{{ t('确定') }}</el-button>
   </div>
