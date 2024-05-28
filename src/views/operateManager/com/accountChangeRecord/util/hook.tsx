@@ -53,6 +53,10 @@ export function useAccountChangeRecordHook() {
     onSearch();
   }
 
+  const changeBalance = (amount:number)=>{
+    userData.balance=Number(userData.balance)+Number(amount)
+  }
+
   function handleSelectionChange(val) {
     console.log('handleSelectionChange', val);
   }
@@ -90,6 +94,10 @@ export function useAccountChangeRecordHook() {
         contentRenderer: ({ options, index }) =>
           h(ModifyBalanceForm, {
             userId: route.query.userId,
+              changeBalance:(amount:number)=>{
+                  console.log(55555,amount)
+               changeBalance(amount)
+              },
             onCloseDialog: (params: string) => {
               closeDialog(options, index);
               onSearch();
@@ -127,10 +135,6 @@ export function useAccountChangeRecordHook() {
     onSearch();
   };
 
-  onMounted(() => {
-    onSearch();
-  });
-
   return {
     loading,
     dataList,
@@ -146,5 +150,6 @@ export function useAccountChangeRecordHook() {
     editFrom,
     openConfirmModifyBalanceDialog,
     userData,
+    changeBalance,
   };
 }
