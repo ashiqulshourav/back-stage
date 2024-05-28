@@ -62,6 +62,7 @@
                           </span>
                         </span>
                         <ReText
+                          v-if="item.leagueId"
                           type="primary"
                           size="small"
                           v-copy:click="{
@@ -78,6 +79,7 @@
 
                   <div class="pr-2 ml-6 flex-grow-1">
                     <div
+                      v-if="item.matchId"
                       class="flex mb-2 text-xs w-[150px]"
                       v-copy:click="{
                         val: item.matchId,

@@ -16,6 +16,7 @@
       <div class="flex text-sm">
         <div class="flex flex-col w-full">
           <div
+            v-if="currentMatch.leagueId"
             class="flex items-center cursor-pointer"
             v-copy:click="{
               val: currentMatch.leagueId,
@@ -40,6 +41,7 @@
         </div>
       </div>
       <div
+        v-if="currentMatch.matchId"
         class="flex flex-col items-start pl-3 ml-3 text-sm cursor-pointer"
         v-copy:click="{
           val: currentMatch.matchId,

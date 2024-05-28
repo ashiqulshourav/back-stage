@@ -5,8 +5,8 @@
       :style="{
         color:
           typeNum === SALE_STATUS.open && renderType === 'pan'
-            ? '#A8ABB2'
-            : '#409EFF'
+            ? '#409EFF'
+            : '#A8ABB2'
       }"
       @click.stop="changeType(SALE_STATUS.open)"
       icon="trading_play"
@@ -17,29 +17,28 @@
       :style="{
         color:
           typeNum === SALE_STATUS.close && renderType === 'pan'
-            ? '#A8ABB2'
-            : '#409EFF'
+            ? '#F56C6C'
+            : '#A8ABB2'
       }"
       @click.stop="changeType(SALE_STATUS.close)"
     />
     <IconifyIconOffline
-      v-if="!closeThreeIcon"
-      class="text-sm mr-2"
+      :class="['text-sm mr-2', closeThreeIcon && 'cursor-not-allowed']"
       :style="{
         color:
           typeNum === SALE_STATUS.sealing && renderType === 'pan'
-            ? '#A8ABB2'
-            : '#409EFF'
+            ? '#F56C6C'
+            : '#A8ABB2'
       }"
       icon="trading_pause"
-      @click.stop="changeType(SALE_STATUS.sealing)"
+      @click.stop="!closeThreeIcon && changeType(SALE_STATUS.sealing)"
     />
     <IconifyIconOffline
       :style="{
         color:
           typeNum === SALE_STATUS.lock && renderType === 'pan'
-            ? '#A8ABB2'
-            : '#409EFF'
+            ? '#F56C6C'
+            : '#A8ABB2'
       }"
       icon="trading_lock"
       @click.stop="changeType(SALE_STATUS.lock)"
