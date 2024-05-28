@@ -17,7 +17,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="tsx">
 import CustomButton from '@/components/Form/CustomButton.vue';
 import { t } from '@/plugins/i18n';
 import { SETTLE_BUTTON_TYPE } from './util/type';
@@ -98,7 +98,7 @@ const currentSettleType = computed(() => {
   return o;
 });
 
-const emites = defineEmits(['reloadTable']);
+const emits = defineEmits(['reloadTable']);
 const router = useRouter();
 
 const closeMatchClick = async () => {
@@ -120,10 +120,10 @@ const closeMatchClick = async () => {
       if (res.code) return;
       router.go(-1);
     } else {
-      emites('reloadTable', true);
+      emits('reloadTable', true);
     }
   } else {
-    emites('reloadTable', true);
+    emits('reloadTable', true);
   }
 };
 
@@ -148,7 +148,7 @@ const settleClick = () => {
       if (!r) return;
     }
 
-    const res = await API[currentSettleType.value.reqUrl]({
+    const res = await API[currentSettleType.value.reqUrl as keyof typeof API]({
       matchId: props.matchId
     });
     message(res.msg, { type: res.code ? 'error' : 'success' });

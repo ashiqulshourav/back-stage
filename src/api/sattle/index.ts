@@ -704,4 +704,10 @@ export const sattleData = {
   iceHockeyConfirm2ndSettlement: (data: SattleDataAPI.confirm2ndSettlementReqType) => request<SattleDataAPI.open2ndSettlementStatusResType>(
     'post', '/iceHockey/v1/confirm2ndSettlement', { data }),
 
+  //- 足球盘口取消加时赛
+  cancelFootballOverTimeOrder: (data: SattleDataAPI.cancelFootballPenaltyKickOrderReqParams) => request<SattleDataAPI.cancelFootballPenaltyKickOrderRes>(
+    'post', '/event/v1/cancelFootballOverTimeOrder', { data }),
+  //- 足球盘口取消点球
+  cancelFootballPenaltyKickOrder: (data: SattleDataAPI.cancelFootballPenaltyKickOrderReqParams) => request<SattleDataAPI.cancelFootballPenaltyKickOrderRes>(
+    'post', '/event/v1/cancelFootballPenaltyKickOrder', { data }),
 };

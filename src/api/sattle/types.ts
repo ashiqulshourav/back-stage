@@ -586,4 +586,12 @@ declare namespace SattleDataAPI {
       }[]
     }[]
   }
+
+  type cancelFootballPenaltyKickOrderReqParams = {
+    matchId: number;
+    remark: string;
+    sportName: string;
+  }
+
+  type cancelFootballPenaltyKickOrderRes = COMMON.BASE_RES_TYPE<null>
 }
