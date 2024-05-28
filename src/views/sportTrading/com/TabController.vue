@@ -145,7 +145,7 @@ const activeNames = computed({
     props.matchList.length && arr.push(props.matchList[0].type);
     return arr;
   },
-  set(v) {
+  set(_) {
     // console.log('TabController.vue文件 103==============行打印=', v);
   }
 });
