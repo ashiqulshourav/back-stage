@@ -24,7 +24,7 @@ export function useEsportsSettlement() {
   const eventMatchList = reactive<EsportsSettlementAPI.ChampionEventList[]>([]);
 
   //- 分页点击
-  const handleCurrentChange = (val: number, index) =>
+  const handleCurrentChange = (val: number, index: number) =>
     (rList[index].currentPage = val);
 
   //- 每页显示条数改变
@@ -77,7 +77,7 @@ export function useEsportsSettlement() {
         betResultItems: row.handicapList.map((item, index) => {
           return {
             betItemId: item.betItemsId,
-            betResult: type ? 18 : row.betOptions === index ? 4 : 3,
+            betResult: type ? 24 : row.betOptions === index ? 4 : 3,
             handicap: item.handicap,
             kindsCode: item.kindsCode,
             n: item.n,
