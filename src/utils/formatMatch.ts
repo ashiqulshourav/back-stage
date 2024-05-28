@@ -130,7 +130,6 @@ export enum EBetResultType {
   HANDLE_CANCEL = 23,
   FLAT_MATCH_ROLLBACK = 51,
   RISK_REJECT = 61
-
 }
 export const BET_RESULT_TYPE_MAP: { [key in EBetResultType]: string } = {
   [EBetResultType.NO_RESULT]: t('无结果'),

@@ -306,9 +306,18 @@
             :icon="useRenderIcon(Download)"
             :loading="downloading"
             v-if="hasAuth('EXPORT')"
-            @click="exportFile()"
+            @click="exportFile('settle')"
           >
-            {{ t('导出报表') }}
+            {{ t('结算导出报表') }}
+          </el-button>
+          <el-button
+            type="primary"
+            :icon="useRenderIcon(Download)"
+            :loading="downloading"
+            v-if="hasAuth('EXPORT')"
+            @click="exportFile('risk')"
+          >
+            {{ t('风控导出报表') }}
           </el-button>
         </el-form-item>
       </div>
@@ -385,8 +394,8 @@ const search = () => {
   emits('onSearch', ...['reload']);
 };
 
-const exportFile = () => {
-  emits('exportFile');
+const exportFile = (flag) => {
+  emits('exportFile',flag);
 };
 
 /* 添加投注项ID分类 */
