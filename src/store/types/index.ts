@@ -58,5 +58,11 @@ export type MatchType = {
   settleRequestLoading: boolean;
   sportId: number;
   matchSearchLoading: boolean;
-
+};
+export type BetType = {
+  gameplayData: {
+    matchId: string;
+    betItemsId: number | string;
+  },
+  isOpenVoice: boolean;
 };

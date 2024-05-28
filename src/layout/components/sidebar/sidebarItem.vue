@@ -294,6 +294,7 @@ function resolvePath(routePath) {
           <template #content>
             {{ props?.item?.meta?.title }}
           </template>
+
           <span
             ref="menuTextRef"
             :style="getSubTextStyle"
@@ -301,12 +302,6 @@ function resolvePath(routePath) {
             class="!flex items-center"
           >
             {{ overflowSlice(props.item?.meta?.title, props.item) }}
-            <span
-              v-if="props.item?.meta?.enTitle === 'riskManagement'"
-              class="w-4 !h-4 bg-red-700 text-xs ml-1 flex justify-center !leading-none rounded-full items-center"
-            >
-              <span class="scale-75">{{ 68 }}</span>
-            </span>
           </span>
         </el-tooltip>
         <extraIcon
