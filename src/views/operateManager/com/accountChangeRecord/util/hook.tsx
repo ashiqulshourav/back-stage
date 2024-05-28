@@ -14,7 +14,7 @@ import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 
 export function useAccountChangeRecordHook() {
   const route = useRoute();
-  const dataList = reactive<MemberAdminAPI.PageData[]>([]);
+  const dataList = reactive<MemberAdminAPI.PageData[]>([]);//need to change
   const loading = ref(true);
   const modifyBalanceLoading = ref(false);
   const { openPasswordInput } = usePasswordInputHook();
@@ -33,14 +33,7 @@ export function useAccountChangeRecordHook() {
     userId: route.query.userId
   });
 
-  const editFrom = reactive<modifyBalanceFormType>({
-    userId: route.query.userId,
-    amount: null,
-    accountChangeTypeCode: null,
-    remark: ''
-  });
-
-  const userData = reactive<UserAPI.operateUserList>({
+  const userData = reactive<UserAPI.operateUserList>({ //create Type
     id: renderObj.id,
     userName: renderObj.userName,
     tenantName: renderObj.tenantName,
@@ -113,31 +106,6 @@ export function useAccountChangeRecordHook() {
     }
   }
 
-  // async function openConfirmModifyBalanceDialog(
-  //   title?: string,
-  //   data: modifyBalanceFormType
-  // ) {
-  //   addDialog({
-  //     title,
-  //     width: '20%',
-  //     alignCenter: true,
-  //     closeOnClickModal: false,
-  //     hideFooter: true,
-  //     contentRenderer: ({ options, index }) =>
-  //       h(ConfirmModifyBalanceForm, {
-  //         data: data,
-  //         userName: renderObj.userName,
-  //         onCloseDialog: (params: string) => {
-  //           closeDialog(options, index);
-  //         },
-  //         onCloseAllDialog: (params: string) => {
-  //           closeAllDialog();
-  //           onSearch();
-  //         }
-  //       })
-  //   });
-  // }
-
   const resetForm = formEl => {
     if (!formEl) return;
     formEl.resetFields();
@@ -156,8 +124,6 @@ export function useAccountChangeRecordHook() {
     handleSelectionChange,
     openModifyBalanceDialog,
     modifyBalanceLoading,
-    editFrom,
-    // openConfirmModifyBalanceDialog,
     userData,
     changeBalance
   };
