@@ -247,7 +247,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
   };
 
   //- 导出excel表格
-  const exportFile = async () => {
+  const exportFile = async (flag) => {
     downloading.value = true;
     message(t('导出报表开始'), { type: 'warning' });
     const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
@@ -257,9 +257,22 @@ export function useBettingCenterHook(category: number, venueType: number) {
         export: true
       }) as searchFormType
     );
-    const r = res.data.pageData.map((item: any, i) => {
+    let list = [];
+    if(flag==='risk'){
+      res.data.pageData.map((item)=>{
+        item?.combineOrderDetails.map((match)=>{
+          list.push({...item,...match})
+        })
+      })
+    }else{
+      res.data.pageData.map((item)=>{
+        list.push({...item,...item?.combineOrderDetails[0]})
+      })
+    }
+
+    const r = list.map((item: any, i) => {
       const arr: any[] = [];
-      const data = { ...item, ...item?.combineOrderDetails[0] };
+      const data = { ...item };
       data.combineOrderDetails.map((item2:BetOrderAPI.Detail) => {
         data.riskStatusArr=[];
         data.betResultArr=[]
