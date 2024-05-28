@@ -12,7 +12,7 @@
         <span
           class="w-4 h-4 flex items-center text-[12px] justify-center bg-primary text-center rounded-full leading-4 text-white"
         >
-          <span class="scale-75">
+          <span class="scale-75 font-bold">
             {{ currentMatch?.level === 200 ? t('未') : currentMatch?.level }}
           </span>
         </span>
@@ -32,7 +32,7 @@
         <div :class="['text-[--el-color-primary] flex items-center']">
           <span>{{ currentMatch?.homeTeamNameCn }}</span>
           <span
-            class="w-4 font-bold h-4 flex items-center text-[12px] scale-75 justify-center bg-[--el-color-warning] text-white rounded-full leading-4"
+            class="w-5 font-bold h-5 flex items-center text-[12px] scale-75 justify-center bg-[--el-color-warning] text-white rounded-full"
             >{{ t('主') }}</span
           >
         </div>

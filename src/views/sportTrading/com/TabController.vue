@@ -1,5 +1,5 @@
 <template>
-  <el-scrollbar :class="type">
+  <el-scrollbar :class="type" :always="true">
     <el-collapse
       ref="collapseRef"
       v-model="activeNames"
@@ -23,7 +23,7 @@
           }}
           ({{ item.size }})
         </template>
-        <div class="max-h-[600px]">
+        <div class="max-h-[600px] hide_scroll">
           <DynamicScroller
             :items="item.matchDtoList"
             :min-item-size="9"
@@ -55,13 +55,14 @@
                     <div class="ml-3 mr-4 flex flex-col w-[125px]">
                       <div class="flex items-center">
                         <span
-                          class="w-4 h-4 flex flex-shrink-0 mr-1 text-[12px] justify-center bg-primary text-center rounded-full leading-4 text-white"
+                          class="w-4 items-center h-4 flex flex-shrink-0 mr-1 text-[12px] justify-center bg-primary rounded-full text-white"
                         >
-                          <span class="scale-75">
+                          <span class="font-bold scale-75">
                             {{ item.level === 200 ? t('未') : item.level }}
                           </span>
                         </span>
                         <ReText
+                          class="leading-none"
                           v-if="item.leagueId"
                           type="primary"
                           size="small"
@@ -80,26 +81,32 @@
                   <div class="pr-2 ml-6 flex-grow-1">
                     <div
                       v-if="item.matchId"
-                      class="flex mb-2 text-xs w-[150px]"
+                      class="flex mb-2 text-xs w-[150px] items-center"
                       v-copy:click="{
                         val: item.matchId,
                         tip: t('赛事ID复制成功')
                       }"
                     >
-                      <div :class="['text-[--el-color-primary] !text-xs flex']">
-                        <ReText type="primary" size="small">
+                      <div
+                        class="text-[--el-color-primary] !text-xs flex items-center"
+                      >
+                        <ReText
+                          type="primary"
+                          size="small"
+                          class="leading-none"
+                        >
                           {{ item.homeTeamNameCn }}
                         </ReText>
                         <span
-                          class="w-4 font-bold h-4 flex items-center text-[12px] justify-center scale-75 bg-[--el-color-warning] text-white rounded-full leading-4"
+                          class="w-5 font-bold h-5 flex items-center text-[12px] justify-center scale-75 bg-[--el-color-warning] text-white rounded-full leading-4"
                         >
-                          <span class="">{{ t('主') }}</span>
+                          <span class="font-bold">{{ t('主') }}</span>
                         </span>
                       </div>
                       <div :class="['text-[--el-color-primary] !mr-2 !ml-2']">
                         V
                       </div>
-                      <ReText type="danger" size="small">
+                      <ReText type="danger" size="small" class="leading-none">
                         {{ item.awayTeamNameCn }}
                       </ReText>
                     </div>
@@ -150,7 +157,7 @@ const activeNames = computed({
   }
 });
 
-const handleChange = (val: string[]) => {};
+const handleChange = (_: string[]) => {};
 
 //- 切换赛事
 const changeSelectItem = (_: sportTradingDataAPI.MatchDtoList) => {
@@ -173,12 +180,12 @@ const getSportType = (_: number) => {
 <style lang="scss">
 .early {
   ::-webkit-scrollbar {
-    display: none;
+    display: none !important;
   }
 }
 .in {
   ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); /* 较少使用 */
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     border-radius: 3px;
     background: rgba(0, 0, 0, 0.1);
   }
@@ -189,7 +196,7 @@ const getSportType = (_: number) => {
     background: rgba(0, 0, 0, 0.2);
   }
   ::-webkit-scrollbar {
-    width: 4px;
+    width: 6px;
     background: transparent !important;
   }
 }
