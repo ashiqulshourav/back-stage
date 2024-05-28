@@ -15,8 +15,7 @@ import { useAccountChangeRecordHook } from './util/hook';
 import {message} from "@/utils/message";
 import { t } from '@/plugins/i18n';
 import {removeEmptyStringKeys} from "@/utils/utilFn";
-const emits = defineEmits(['closeDialog', 'closeAllDialog']);
-
+const emits = defineEmits(['closeDialog', 'closeAllDialog','changeBalance']);
 const props = withDefaults(defineProps<{
   data: modifyBalanceFormType,
   userName: string,
@@ -36,6 +35,7 @@ const modifyBalance = () => {
   API.getAccountChange(params).then((res) => {
     message(res.msg, { type: res.code ? 'error' : 'success' });
     if(res.code===0){
+      emits('changeBalance',editFrom.value.accountChangeTypeCode==91?editFrom.value.amount:-editFrom.value.amount);
       emits('closeAllDialog');
     }
   })

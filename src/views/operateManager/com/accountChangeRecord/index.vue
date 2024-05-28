@@ -1,10 +1,10 @@
 <template>
   <div class="main">
-    <SearchForm 
-     :form="form" 
+    <SearchForm
+     :form="form"
      :loading="loading"
      @on-search="onSearch"
-     @openModifyBalanceDialog="openModifyBalanceDialog" 
+     @openModifyBalanceDialog="openModifyBalanceDialog"
      :userData="userData"
     />
     <pure-table
@@ -30,7 +30,7 @@ import { useAccountChangeRecordHook } from './util/hook';
 import SearchForm from './searchForm.vue';
 import { columns } from './columns';
 import { usePublicHooks } from '@/hooks';
-import { t } from '@/plugins/i18n';
+import {onMounted} from "vue";
 const { tableHeaderStyle } = usePublicHooks();
 const {
   loading,
@@ -44,6 +44,9 @@ const {
   openModifyBalanceDialog,
   userData,
 } = useAccountChangeRecordHook();
+onMounted(() => {
+  onSearch();
+});
 </script>
 
 <style lang="scss">

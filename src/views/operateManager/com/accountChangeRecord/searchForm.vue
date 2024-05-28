@@ -9,11 +9,11 @@
       <div>
         <div class="user-info">
           <div class="min-w-16">{{ t('用户名') }}</div>
-          <div class="ml-20">{{ userInfo.userName }}</div>
+          <div class="ml-20">{{ userData.userName }}</div>
         </div>
         <div class="user-info">
           <div class="min-w-16">{{ t('用户ID') }}</div>
-          <div class="ml-20">{{ userInfo.id }}</div>
+          <div class="ml-20">{{ userData.id }}</div>
         </div>
         <div class="user-info">
           <div class="min-w-16">{{ t('用户币种') }}</div>
@@ -23,20 +23,17 @@
       <div>
         <div class="user-info">
           <div class="min-w-16">{{ t('可用余额') }}</div>
-          <div class="ml-20">{{ userInfo.balance }}</div>
+          <div class="ml-20">{{ userData.balance }}</div>
         </div>
       </div>
       <div>
         <div class="user-info">
           <div class="min-w-16">{{ t('所属商户') }}</div>
-          <div class="ml-20">{{ userInfo.tenantName }}</div>
+          <div class="ml-20">{{ userData.tenantName }}</div>
         </div>
       </div>
-      <el-button
-        type="primary"
-        @click="openModifyBalanceDialog()"
-      >
-        {{ t("修改余额") }}
+      <el-button type="primary" @click="openModifyBalanceDialog()">
+        {{ t('修改余额') }}
       </el-button>
     </div>
     <el-form-item prop="accountChangeTypeCode">
@@ -74,77 +71,80 @@
         :loading="loading"
         @click="search"
       >
-        {{ t("筛选") }}
+        {{ t('筛选') }}
       </el-button>
       <el-button :icon="useRenderIcon(RefreshIcon)" @click="resetForm(formRef)">
-        {{ t("重置") }}
+        {{ t('重置') }}
       </el-button>
     </el-form-item>
   </el-form>
 </template>
 
 <script setup lang="ts">
-import { t } from "@/plugins/i18n"
-import SearchIcon from "@iconify-icons/ep/search"
-import RefreshIcon from "@iconify-icons/ep/refresh"
-import { useRenderIcon } from "@/components/ReIcon/src/hooks"
-import type { FormInstance } from "element-plus"
-import dayjs from "dayjs"
-import {accountChangeRecordSearchFormType} from "./util/types"
-import { accountChangeTypeCodeList } from "./columns"
+import { t } from '@/plugins/i18n';
+import SearchIcon from '@iconify-icons/ep/search';
+import RefreshIcon from '@iconify-icons/ep/refresh';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import type { FormInstance } from 'element-plus';
+import dayjs from 'dayjs';
+import { accountChangeRecordSearchFormType } from './util/types';
+import { accountChangeTypeCodeList } from './columns';
 //accountChangeRecordSearchFormType
 const props = defineProps<{
-  loading: boolean
-  form: accountChangeRecordSearchFormType
-  userData: UserAPI.operateUserList
-}>()
+  loading: boolean;
+  form: accountChangeRecordSearchFormType;
+  userData: UserAPI.operateUserList;
+}>();
 
-const userInfo = ref(props.userData);
+// const userInfo = ref(props.userData);
 
-const formRef = ref()
-const selectDate = ref()
+const formRef = ref();
+const selectDate = ref();
 
-const emits = defineEmits(["onSearch", "exportFile", "openModifyBalanceDialog"])
+const emits = defineEmits([
+  'onSearch',
+  'exportFile',
+  'openModifyBalanceDialog'
+]);
 const resetForm = (formEl: FormInstance | undefined) => {
-  formEl.resetFields()
-  selectDate.value = ""
+  formEl.resetFields();
+  selectDate.value = '';
   props.form.startCreatedAt = dayjs()
-    .startOf("month")
-    .format("YYYY-MM-DD HH:mm:ss")
-  props.form.endCreatedAt = dayjs().endOf("day").format("YYYY-MM-DD HH:mm:ss")
-  search()
-}
+    .startOf('month')
+    .format('YYYY-MM-DD HH:mm:ss');
+  props.form.endCreatedAt = dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss');
+  search();
+};
 
 const exportFile = () => {
-  emits("exportFile")
-}
+  emits('exportFile');
+};
 
 const changeDate = t => {
   if (!t) {
-    props.form.startCreatedAt = ""
-    props.form.endCreatedAt = ""
+    props.form.startCreatedAt = '';
+    props.form.endCreatedAt = '';
   } else {
-    props.form.startCreatedAt = dayjs(t[0]).format("YYYY-MM-DD HH:mm:ss")
+    props.form.startCreatedAt = dayjs(t[0]).format('YYYY-MM-DD HH:mm:ss');
 
-    props.form.endCreatedAt = dayjs(t[1]).format("YYYY-MM-DD HH:mm:ss")
+    props.form.endCreatedAt = dayjs(t[1]).format('YYYY-MM-DD HH:mm:ss');
   }
-  search()
-}
+  search();
+};
 
 const search = () => {
-  emits("onSearch", ...["reload"])
-}
+  emits('onSearch', ...['reload']);
+};
 
 const openModifyBalanceDialog = () => {
-  emits("openModifyBalanceDialog", ...[(t('修改余额'))])
-}
-
+  emits('openModifyBalanceDialog', ...[t('修改余额')]);
+};
 </script>
 <style scoped lang="scss">
 :deep(.el-dropdown-menu__item i) {
   margin: 0;
 }
-.min-w100{
+.min-w100 {
   min-width: 100px;
 }
 .search-form {
@@ -152,7 +152,7 @@ const openModifyBalanceDialog = () => {
     margin-bottom: 12px;
   }
 }
-.arrange2{
+.arrange2 {
   margin-left: -25px;
 }
 .user-info {
