@@ -49,7 +49,7 @@
     </el-form-item>
   </el-form>
   <div class="flex justify-end bg-white mt-16">
-    <el-button @click="closeDialog">{{ t('取消') }}</el-button>
+    <el-button @click="close">{{ t('取消') }}</el-button>
     <el-button :disabled="!isEditFormHasNull(editFrom)" type="primary" @click="submit(t('确认操作'))">{{ t('确定') }}</el-button>
     <!-- <el-button :disabled="!isEditFormHasNull(editFrom)" type="primary" @click="openConfirmModifyBalanceDialog(t('确认操作'), editFrom)">{{ t('确定') }}</el-button> -->
 
@@ -65,7 +65,7 @@ import { modifyBalanceFormType } from './util/types';
 const emits = defineEmits(['closeDialog', 'changeBalance']);
 const route = useRoute();
 import ConfirmModifyBalanceForm from './confirmModifyBalanceModal.vue';
-import { addDialog, closeAllDialog } from '@/components/ReDialog';
+import { addDialog, closeAllDialog, closeDialog } from '@/components/ReDialog';
 
 const {
   changeBalance,
@@ -108,12 +108,12 @@ const submit = (title: string) => {
     alignCenter: true,
     closeOnClickModal: false,
     hideFooter: true,
-    contentRenderer: ({}) =>
+    contentRenderer: ({ options, index }) =>
       h(ConfirmModifyBalanceForm, {
         data: editFrom,
         userName: name.value,
         onCloseDialog: () => {
-          closeDialog();
+          closeDialog(options, index);
         },
         changeBalance: (amount: number) => {
           changeBalance(amount);
@@ -128,7 +128,7 @@ const submit = (title: string) => {
 }
 
 const formRef = ref();
-const closeDialog = () => {
+const close = () => {
   emits('closeDialog');
 };
 </script>
