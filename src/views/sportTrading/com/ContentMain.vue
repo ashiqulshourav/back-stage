@@ -90,25 +90,31 @@
                       v-for="(s, l) in d.betItemsDtoList"
                       :key="`${i}-${l}`"
                     >
-                      <div class="text-[--el-color-primary] text-center w-1/5">
-                        {{
-                          PLAY_MATCH_NAME(
-                            s.kindsCode,
-                            s.handicap,
-                            currentMatch.homeTeamNameCn,
-                            currentMatch.awayTeamNameCn
-                          )[s.homeOrAway ? s.homeOrAway : s.handicap] ??
-                          goalScoring(
-                            s.kindsCode,
-                            s.handicap,
-                            s.n,
-                            currentMatch.homeTeamNameCn,
-                            currentMatch.awayTeamNameCn,
-                            s.renderName
-                          )
-                        }}
+                      <div
+                        class="text-[--el-color-primary] text-center pl-2 pr-2 leading-none w-1/4"
+                      >
+                        <ReText type="" size="small">
+                          {{
+                            PLAY_MATCH_NAME(
+                              s.kindsCode,
+                              s.handicap,
+                              currentMatch.homeTeamNameCn,
+                              currentMatch.awayTeamNameCn
+                            )[
+                              s.homeOrAway ? s.homeOrAway : s.handicap
+                            ]?.replace('&', ' ') ??
+                            goalScoring(
+                              s.kindsCode,
+                              s.handicap,
+                              s.n,
+                              currentMatch.homeTeamNameCn,
+                              currentMatch.awayTeamNameCn,
+                              s.renderName
+                            )?.replace('&', ' ')
+                          }}
+                        </ReText>
                       </div>
-                      <div class="text-center w-1/5">
+                      <div class="text-center w-1/6">
                         {{ s.odds.toFixed(2) }}
                       </div>
                       <InputCom
@@ -183,6 +189,7 @@ import { PLAY_MATCH_NAME, goalScoring } from '../util/playMap';
 import InputCom from './InputCom.vue';
 import { t } from '@/plugins/i18n';
 import { useBetStore } from '@/store/bet';
+import { ReText } from '@/components/ReText';
 
 const collapseRef = ref();
 const activeNames = ref([0]);

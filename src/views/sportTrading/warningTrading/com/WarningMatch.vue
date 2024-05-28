@@ -75,14 +75,17 @@
                   v-for="(s, l) in d.betItemsDtoList"
                   :key="`${i}-${l}`"
                 >
-                  <div class="text-[--el-color-primary] text-center w-1/5">
+                  <div class="text-[--el-color-primary] text-center w-1/4">
                     {{
                       PLAY_MATCH_NAME(
                         s.kindsCode,
                         s.handicap,
                         matchData.homeTeamNameCn,
                         matchData.awayTeamNameCn
-                      )[s.homeOrAway ? s.homeOrAway : s.handicap] ??
+                      )[s.homeOrAway ? s.homeOrAway : s.handicap]?.replace(
+                        '&',
+                        ' '
+                      ) ??
                       goalScoring(
                         s.kindsCode,
                         s.handicap,
@@ -90,10 +93,10 @@
                         matchData.homeTeamNameCn,
                         matchData.awayTeamNameCn,
                         s.renderName
-                      )
+                      )?.replace('&', ' ')
                     }}
                   </div>
-                  <div class="text-center w-1/5">
+                  <div class="text-center w-1/6">
                     {{ s.odds.toFixed(2) }}
                   </div>
                   <InputCom
