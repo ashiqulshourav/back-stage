@@ -1,20 +1,34 @@
 <template>
   <div class="flex">
     <div class="flex items-center w-full">
-      <div class="flex items-center">
+      <div
+        v-if="currentMatch.leagueId"
+        class="flex items-center cursor-pointer"
+        v-copy:click="{
+          val: currentMatch.leagueId,
+          tip: t('联赛ID复制成功')
+        }"
+      >
         <span
           class="w-4 h-4 flex items-center text-[12px] justify-center bg-primary text-center rounded-full leading-4 text-white"
         >
           <span class="scale-75">
             {{ currentMatch?.level === 200 ? t('未') : currentMatch?.level }}
           </span>
-          {{}}
         </span>
         <span class="text-[#409EFF] ml-1">{{
           currentMatch?.leagueNameCn
         }}</span>
       </div>
-      <div class="flex ml-5">
+
+      <div
+        v-if="currentMatch.matchId"
+        class="flex ml-5 cursor-pointer"
+        v-copy:click="{
+          val: currentMatch.matchId,
+          tip: t('赛事ID复制成功')
+        }"
+      >
         <div :class="['text-[--el-color-primary] flex items-center']">
           <span>{{ currentMatch?.homeTeamNameCn }}</span>
           <span

@@ -23,8 +23,7 @@
       @click.stop="changeType(SALE_STATUS.close)"
     />
     <IconifyIconOffline
-      v-if="!closeThreeIcon"
-      class="text-sm mr-2"
+      :class="['text-sm mr-2', closeThreeIcon && 'cursor-not-allowed']"
       :style="{
         color:
           typeNum === SALE_STATUS.sealing && renderType === 'pan'
@@ -32,7 +31,7 @@
             : '#A8ABB2'
       }"
       icon="trading_pause"
-      @click.stop="changeType(SALE_STATUS.sealing)"
+      @click.stop="!closeThreeIcon && changeType(SALE_STATUS.sealing)"
     />
     <IconifyIconOffline
       :style="{
