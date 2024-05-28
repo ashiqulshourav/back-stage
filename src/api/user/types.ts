@@ -125,6 +125,7 @@ declare namespace UserAPI {
     seriesSingleDayCumulativeCompensationLimit: number;
     attributeLabelList: labelType[];
     riskControlLabelList: labelType[];
+    balance: number;
   };
 
   type operateUserData = {

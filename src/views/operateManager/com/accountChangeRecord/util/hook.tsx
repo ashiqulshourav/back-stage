@@ -5,13 +5,19 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { accountChangeRecordSearchFormType, modifyBalanceFormType } from '../util/types';
 import ModifyBalanceForm from '../modifyBalanceModal.vue';
 import ConfirmModifyBalanceForm from '../confirmModifyBalanceModal.vue';
-import { addDialog, closeDialog } from '@/components/ReDialog';
+import { addDialog, closeAllDialog, closeDialog } from '@/components/ReDialog';
 import dayjs from 'dayjs';
+import { usePasswordInputHook } from '@/hooks/passwordInputHook';
+
 export function useAccountChangeRecordHook() {
   const route = useRoute();
   const dataList = reactive<MemberAdminAPI.PageData[]>([]);
   const loading = ref(true);
   const modifyBalanceLoading = ref(false);
+  const { openPasswordInput } = usePasswordInputHook();
+  const renderObj = reactive<UserAPI.operateUserList>(
+    history.state.params as UserAPI.operateUserList
+  );
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -31,6 +37,12 @@ export function useAccountChangeRecordHook() {
     remark: '',
   });
 
+  const userData = reactive<UserAPI.operateUserList>({
+    id: renderObj.id,
+    userName: renderObj.userName,
+    tenantName: renderObj.tenantName,
+    balance: renderObj.balance,
+  });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
     onSearch();
@@ -58,7 +70,7 @@ export function useAccountChangeRecordHook() {
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
       dataList.push(...res.data.pageData);
-      pagination.total=res.data.count;
+      pagination.total = res.data.count;
       pagination.pageSize = res.data.pageSize;
       pagination.currentPage = res.data.pageNum;
     } catch (error) {
@@ -67,6 +79,27 @@ export function useAccountChangeRecordHook() {
   }
 
   async function openModifyBalanceDialog(title?: string) {
+    const r = await openPasswordInput();
+    if (r) {
+      addDialog({
+        title,
+        width: 'auto',
+        alignCenter: true,
+        closeOnClickModal: false,
+        hideFooter: true,
+        contentRenderer: ({ options, index }) =>
+          h(ModifyBalanceForm, {
+            userId: route.query.userId,
+            onCloseDialog: (params: string) => {
+              closeDialog(options, index);
+              onSearch();
+            }
+          })
+      });
+    }
+  }
+
+  async function openConfirmModifyBalanceDialog(title?: string, data: modifyBalanceFormType) {
     addDialog({
       title,
       width: 'auto',
@@ -74,28 +107,15 @@ export function useAccountChangeRecordHook() {
       closeOnClickModal: false,
       hideFooter: true,
       contentRenderer: ({ options, index }) =>
-        h(ModifyBalanceForm, {
-          userId: route.query.userId,
-          onCloseDialog: (params: string) => {
-            closeDialog(options, index);
-            onSearch();
-          }
-        })
-    });
-  }
-
-  async function openConfirmModifyBalanceDialog(title?: string, data: modifyBalanceFormType) {
-    addDialog({
-      title,
-      width: '25%',
-      alignCenter: true,
-      closeOnClickModal: false,
-      hideFooter: true,
-      contentRenderer: ({ options, index }) =>
         h(ConfirmModifyBalanceForm, {
           data: data,
+          userName: renderObj.userName,
           onCloseDialog: (params: string) => {
             closeDialog(options, index);
+          },
+          onCloseAllDialog: (params: string) => {
+            closeAllDialog();
+            onSearch();
           }
         })
     });
@@ -125,5 +145,6 @@ export function useAccountChangeRecordHook() {
     modifyBalanceLoading,
     editFrom,
     openConfirmModifyBalanceDialog,
+    userData,
   };
 }

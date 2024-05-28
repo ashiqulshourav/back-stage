@@ -60,12 +60,16 @@ export function userPlayerListHook(venueType: number, category: number) {
     settingStore.save_player_info({
       page: pagination.currentPage,
     });
+    const params = JSON.parse(JSON.stringify(row));
     router.push({
       name:
         route.path === '/operateManager/sportPlayerList'
           ? 'OPERATEMANAGER_SPORTCHANGEACCOUNTRECORD'
           : 'OPERATEMANAGER_ESPORTCHANGEACCOUNTRECORD',
-      query: { userId: row.id }
+      query: {
+        userId: row.id,
+      },
+      state: { params }
     });
   };
 

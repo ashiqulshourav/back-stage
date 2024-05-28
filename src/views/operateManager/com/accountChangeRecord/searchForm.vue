@@ -3,14 +3,36 @@
     ref="formRef"
     :inline="true"
     :model="form"
-    class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]"
+    class="search-form bg-bg_color w-[99/100] px-8 pt-[12px]"
   >
-    <div>
+    <div class="mb-10 flex justify-between">
       <div>
-        
+        <div class="user-info">
+          <div class="min-w-16">{{ t('用户名') }}</div>
+          <div class="ml-20">{{ userInfo.userName }}</div>
+        </div>
+        <div class="user-info">
+          <div class="min-w-16">{{ t('用户ID') }}</div>
+          <div class="ml-20">{{ userInfo.id }}</div>
+        </div>
+        <div class="user-info">
+          <div class="min-w-16">{{ t('用户币种') }}</div>
+          <div class="ml-20">{{ t('人民币') }}</div>
+        </div>
+      </div>
+      <div>
+        <div class="user-info">
+          <div class="min-w-16">{{ t('可用余额') }}</div>
+          <div class="ml-20">{{ userInfo.balance }}</div>
+        </div>
+      </div>
+      <div>
+        <div class="user-info">
+          <div class="min-w-16">{{ t('所属商户') }}</div>
+          <div class="ml-20">{{ userInfo.tenantName }}</div>
+        </div>
       </div>
       <el-button
-        class="float-right"
         type="primary"
         @click="openModifyBalanceDialog()"
       >
@@ -74,7 +96,10 @@ import { accountChangeTypeCodeList } from "./columns"
 const props = defineProps<{
   loading: boolean
   form: accountChangeRecordSearchFormType
+  userData: UserAPI.operateUserList
 }>()
+
+const userInfo = ref(props.userData);
 
 const formRef = ref()
 const selectDate = ref()
@@ -129,5 +154,10 @@ const openModifyBalanceDialog = () => {
 }
 .arrange2{
   margin-left: -25px;
+}
+.user-info {
+  display: flex;
+  font-size: 14px;
+  margin-bottom: 10px;
 }
 </style>

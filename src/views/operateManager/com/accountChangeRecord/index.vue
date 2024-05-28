@@ -4,7 +4,9 @@
      :form="form" 
      :loading="loading"
      @on-search="onSearch"
-     @openModifyBalanceDialog="openModifyBalanceDialog" />
+     @openModifyBalanceDialog="openModifyBalanceDialog" 
+     :userData="userData"
+    />
     <pure-table
       align-whole="center"
       table-layout="auto"
@@ -40,6 +42,7 @@ const {
   handleSelectionChange,
   form,
   openModifyBalanceDialog,
+  userData,
 } = useAccountChangeRecordHook();
 </script>
 

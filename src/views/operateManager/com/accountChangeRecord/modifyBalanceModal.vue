@@ -1,7 +1,8 @@
 <template>
   <el-form
     ref="formRef"
-    label-width="150px"
+    label-width="100px"
+    label-position="left"
     :model="editFrom"
     :rules="formRules"
   >
@@ -23,19 +24,23 @@
       </el-select>
     </el-form-item>
 
-    <el-form-item :label="t('元')" prop="amount">
-      <el-input
-        v-model="editFrom.amount"
-        clearable
-        type="number"
-        :placeholder="t('请输入10000元')"
-      />
+    <el-form-item prop="amount">
+      <div class="flex">
+        <el-input
+          v-model="enteredAmount"
+          clearable
+          type="number"
+          :placeholder="t('请输入10000元')"
+        />
+        <div class="pl-2">{{ t('元') }}</div>
+      </div>
     </el-form-item>
 
     <el-form-item  :label="t('备注')" prop="remark">
       <el-input
         v-model="editFrom.remark"
-        maxLength="35"
+        maxlength="200"
+        show-word-limit
         :placeholder="t('输入内容，最多200字')"
         type="textarea"
         :autosize="{ minRows: 3, maxRows: 4 }"
@@ -44,16 +49,16 @@
   </el-form>
   <div class="flex justify-end bg-white mt-4">
     <el-button @click="closeDialog">{{ t('取消') }}</el-button>
-    <el-button type="primary" @click="openConfirmModifyBalanceDialog(t('确认操作'), editFrom)">{{ t('确定') }}</el-button>
+    <el-button :disabled="!isEditFormHasNull(editFrom)" type="primary" @click="openConfirmModifyBalanceDialog(t('确认操作'), editFrom)">{{ t('确定') }}</el-button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import { ref, reactive, watch } from 'vue';
 import { formRules } from './util/rule';
-import { accountChangeRecordSearchFormType } from './util/types';
 import { useAccountChangeRecordHook } from './util/hook';
 import { t } from '@/plugins/i18n';
+import { modifyBalanceFormType } from './util/types';
 const emits = defineEmits(['closeDialog']);
 
 const {
@@ -66,6 +71,21 @@ const props = withDefaults(defineProps<{
 }>(), {});
 
 const id = ref(props.userId);
+const enteredAmount = ref(editFrom.amount);
+watch(enteredAmount, (newValue) => {
+  if (newValue > 10000) {
+    editFrom.amount = 10000;
+    enteredAmount.value = 10000;
+  } else {
+    editFrom.amount = newValue;
+  }
+});
+const isEditFormHasNull = (editFrom: modifyBalanceFormType) => {
+  for (const value of Object.values(editFrom)) {
+        if (!value) return false;
+    }
+    return true;
+}
 
 const formRef = ref();
 const closeDialog = () => {
