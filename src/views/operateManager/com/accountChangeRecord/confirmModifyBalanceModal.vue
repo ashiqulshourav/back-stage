@@ -1,6 +1,6 @@
 <template>
   <div class="text-center">
-    {{ '确认后用户 ' + name + (editFrom.accountChangeTypeCode === 91 ? ' 将加钱 ' : ' 将扣钱 ') + editFrom.amount + '元'}}
+    {{ '确认后用户 ' + props.userName + (editFrom.accountChangeTypeCode === 91 ? ' 将加钱 ' : ' 将扣钱 ') + editFrom.amount + '元'}}
   </div>
   <div class="flex justify-end bg-white mt-4">
     <el-button @click="closeDialog">{{ t('取消') }}</el-button>
@@ -9,21 +9,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
-import { modifyBalanceFormType } from './util/types';
-import { useAccountChangeRecordHook } from './util/hook';
+import { ref } from 'vue';
 import {message} from "@/utils/message";
 import { t } from '@/plugins/i18n';
 import {removeEmptyStringKeys} from "@/utils/utilFn";
-const emits = defineEmits(['closeDialog', 'closeAllDialog','changeBalance']);
+const emits = defineEmits(['closeDialog', 'closeAllDialog', ]);
 const props = withDefaults(defineProps<{
   data: modifyBalanceFormType,
   userName: string,
+  confirmChangeBalance:Function
 }>(), {});
 
 const editFrom = ref(props.data);
-const name = ref(props.userName);
-
 const modifyBalance = () => {
   const param = {
     userId: editFrom.value.userId,
@@ -35,7 +32,7 @@ const modifyBalance = () => {
   API.getAccountChange(params).then((res) => {
     message(res.msg, { type: res.code ? 'error' : 'success' });
     if(res.code===0){
-      emits('changeBalance',editFrom.value.accountChangeTypeCode==91?editFrom.value.amount:-editFrom.value.amount);
+      props.confirmChangeBalance(param.accountChangeTypeCode === 91?param.accountChangeTypeCode:-param.accountChangeTypeCode)
       emits('closeAllDialog');
     }
   })

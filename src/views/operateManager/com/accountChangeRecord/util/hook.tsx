@@ -58,10 +58,11 @@ export function useAccountChangeRecordHook() {
   }
 
   const changeBalance = (amount: number) => {
-    userData.balance = Number(userData.balance) + Number(amount);
     console.log('hook.tsx文件 62==============行打印=', userData.balance);
+    userData.balance = Number(userData.balance) + Number(amount);
+    console.log('hook.tsx文件 63==============行打印=', userData.balance);
   };
-  console.log('hook.tsx文件 63==============行打印=', userData.balance);
+
 
   function handleSelectionChange(val) {
     console.log('handleSelectionChange', val);
@@ -100,9 +101,9 @@ export function useAccountChangeRecordHook() {
         contentRenderer: ({ options, index }) =>
           h(ModifyBalanceForm, {
             userName: renderObj.userName,
-            // changeBalance: (amount: number) => {
-            //   changeBalance(amount);
-            // },
+            changeBalance: (amount: number) => {
+              userData.balance = Number(userData.balance) + Number(amount);
+            },
             onCloseDialog: (params: string) => {
               closeDialog(options, index);
               onSearch();

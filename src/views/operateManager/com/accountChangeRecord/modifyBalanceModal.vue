@@ -59,22 +59,14 @@
 <script setup lang="ts">
 import { ref, reactive, watch } from 'vue';
 import { formRules } from './util/rule';
-import { useAccountChangeRecordHook } from './util/hook';
 import { t } from '@/plugins/i18n';
-import { modifyBalanceFormType } from './util/types';
-const emits = defineEmits(['closeDialog', 'changeBalance']);
+const emits = defineEmits(['closeDialog']);
 const route = useRoute();
 import ConfirmModifyBalanceForm from './confirmModifyBalanceModal.vue';
 import { addDialog, closeAllDialog } from '@/components/ReDialog';
-
-const {
-  changeBalance,
-//   editFrom,
-//   openConfirmModifyBalanceDialog,
-} = useAccountChangeRecordHook();
-
 const props = withDefaults(defineProps<{
   userName: string,
+  changeBalance:Function,
 }>(), {});
 
 const editFrom = reactive<modifyBalanceFormType>({
@@ -83,7 +75,7 @@ const editFrom = reactive<modifyBalanceFormType>({
   accountChangeTypeCode: null,
   remark: ''
 });
-  
+
 const name = ref(props.userName);
 const enteredAmount = ref(editFrom.amount);
 watch(enteredAmount, (newValue) => {
@@ -100,8 +92,8 @@ const isEditFormHasNull = (editFrom: modifyBalanceFormType) => {
     }
     return true;
 }
-  
-const submit = (title: string) => { 
+
+const submit = (title: string) => {
   addDialog({
     title,
     width: '20%',
@@ -112,25 +104,18 @@ const submit = (title: string) => {
       h(ConfirmModifyBalanceForm, {
         data: editFrom,
         userName: name.value,
-        onCloseDialog: () => {
-          closeDialog();
-        },
-        changeBalance: (amount: number) => {
-          changeBalance(amount);
+        confirmChangeBalance: (amount:number) => {
+          props.changeBalance(amount)
         },
         onCloseAllDialog: () => {
           closeAllDialog();
-          // changeBalance(editFrom.amount)
-          // onSearch();
         }
       })
   });
 }
 
 const formRef = ref();
-const closeDialog = () => {
-  emits('closeDialog');
-};
+
 </script>
 
 <style lang="scss">
