@@ -61,6 +61,7 @@ export function useAccountChangeRecordHook() {
     userData.balance = Number(userData.balance) + Number(amount);
     console.log('hook.tsx文件 62==============行打印=', userData.balance);
   };
+  console.log('hook.tsx文件 63==============行打印=', userData.balance);
 
   function handleSelectionChange(val) {
     console.log('handleSelectionChange', val);
@@ -98,10 +99,10 @@ export function useAccountChangeRecordHook() {
         hideFooter: true,
         contentRenderer: ({ options, index }) =>
           h(ModifyBalanceForm, {
-            userId: route.query.userId,
-            changeBalance: (amount: number) => {
-              changeBalance(amount);
-            },
+            userName: renderObj.userName,
+            // changeBalance: (amount: number) => {
+            //   changeBalance(amount);
+            // },
             onCloseDialog: (params: string) => {
               closeDialog(options, index);
               onSearch();
@@ -111,30 +112,30 @@ export function useAccountChangeRecordHook() {
     }
   }
 
-  async function openConfirmModifyBalanceDialog(
-    title?: string,
-    data: modifyBalanceFormType
-  ) {
-    addDialog({
-      title,
-      width: '20%',
-      alignCenter: true,
-      closeOnClickModal: false,
-      hideFooter: true,
-      contentRenderer: ({ options, index }) =>
-        h(ConfirmModifyBalanceForm, {
-          data: data,
-          userName: renderObj.userName,
-          onCloseDialog: (params: string) => {
-            closeDialog(options, index);
-          },
-          onCloseAllDialog: (params: string) => {
-            closeAllDialog();
-            onSearch();
-          }
-        })
-    });
-  }
+  // async function openConfirmModifyBalanceDialog(
+  //   title?: string,
+  //   data: modifyBalanceFormType
+  // ) {
+  //   addDialog({
+  //     title,
+  //     width: '20%',
+  //     alignCenter: true,
+  //     closeOnClickModal: false,
+  //     hideFooter: true,
+  //     contentRenderer: ({ options, index }) =>
+  //       h(ConfirmModifyBalanceForm, {
+  //         data: data,
+  //         userName: renderObj.userName,
+  //         onCloseDialog: (params: string) => {
+  //           closeDialog(options, index);
+  //         },
+  //         onCloseAllDialog: (params: string) => {
+  //           closeAllDialog();
+  //           onSearch();
+  //         }
+  //       })
+  //   });
+  // }
 
   const resetForm = formEl => {
     if (!formEl) return;
@@ -155,7 +156,7 @@ export function useAccountChangeRecordHook() {
     openModifyBalanceDialog,
     modifyBalanceLoading,
     editFrom,
-    openConfirmModifyBalanceDialog,
+    // openConfirmModifyBalanceDialog,
     userData,
     changeBalance
   };

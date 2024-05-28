@@ -50,7 +50,9 @@
   </el-form>
   <div class="flex justify-end bg-white mt-16">
     <el-button @click="closeDialog">{{ t('取消') }}</el-button>
-    <el-button :disabled="!isEditFormHasNull(editFrom)" type="primary" @click="openConfirmModifyBalanceDialog(t('确认操作'), editFrom)">{{ t('确定') }}</el-button>
+    <el-button :disabled="!isEditFormHasNull(editFrom)" type="primary" @click="submit(t('确认操作'))">{{ t('确定') }}</el-button>
+    <!-- <el-button :disabled="!isEditFormHasNull(editFrom)" type="primary" @click="openConfirmModifyBalanceDialog(t('确认操作'), editFrom)">{{ t('确定') }}</el-button> -->
+
   </div>
 </template>
 
@@ -60,18 +62,29 @@ import { formRules } from './util/rule';
 import { useAccountChangeRecordHook } from './util/hook';
 import { t } from '@/plugins/i18n';
 import { modifyBalanceFormType } from './util/types';
-const emits = defineEmits(['closeDialog']);
+const emits = defineEmits(['closeDialog', 'changeBalance']);
+const route = useRoute();
+import ConfirmModifyBalanceForm from './confirmModifyBalanceModal.vue';
+import { addDialog, closeAllDialog } from '@/components/ReDialog';
 
 const {
-  editFrom,
-  openConfirmModifyBalanceDialog,
+  changeBalance,
+//   editFrom,
+//   openConfirmModifyBalanceDialog,
 } = useAccountChangeRecordHook();
 
 const props = withDefaults(defineProps<{
-  userId: string,
+  userName: string,
 }>(), {});
 
-const id = ref(props.userId);
+const editFrom = reactive<modifyBalanceFormType>({
+  userId: route.query.userId,
+  amount: null,
+  accountChangeTypeCode: null,
+  remark: ''
+});
+  
+const name = ref(props.userName);
 const enteredAmount = ref(editFrom.amount);
 watch(enteredAmount, (newValue) => {
   if (newValue > 10000) {
@@ -86,6 +99,32 @@ const isEditFormHasNull = (editFrom: modifyBalanceFormType) => {
         if (!value) return false;
     }
     return true;
+}
+  
+const submit = (title: string) => { 
+  addDialog({
+    title,
+    width: '20%',
+    alignCenter: true,
+    closeOnClickModal: false,
+    hideFooter: true,
+    contentRenderer: ({}) =>
+      h(ConfirmModifyBalanceForm, {
+        data: editFrom,
+        userName: name.value,
+        onCloseDialog: () => {
+          closeDialog();
+        },
+        changeBalance: (amount: number) => {
+          changeBalance(amount);
+        },
+        onCloseAllDialog: () => {
+          closeAllDialog();
+          // changeBalance(editFrom.amount)
+          // onSearch();
+        }
+      })
+  });
 }
 
 const formRef = ref();
