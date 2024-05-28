@@ -44,11 +44,14 @@
             }}</el-text>
           </template>
           <CustomButton
+            class="ml-2"
+            v-if="hasAuth('OVERTIME_CANCEL')"
             type="danger"
             @click="cancelMatchOvertimeRace('cancelFootballOverTimeOrder')"
             :btn-text="t('取消加时赛')"
           />
           <CustomButton
+            v-if="hasAuth('PENALTY_SHOOTOUT_CANCEL')"
             type="danger"
             @click="cancelMatchOvertimeRace('cancelFootballPenaltyKickOrder')"
             :btn-text="t('取消点球')"
