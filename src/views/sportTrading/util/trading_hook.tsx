@@ -52,6 +52,7 @@ export function useTradingHook(type: 'early' | 'in') {
 
   //- 初始化搜索
   const onSearch = async () => {
+    if (loopTimer.value) clearInterval(loopTimer.value);
     loading.value = true;
     noMatchList.value = false;
     const reqUrl =
