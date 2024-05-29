@@ -9,7 +9,7 @@
       @click="settleClick"
     />
     <CustomButton
-      v-if="userStore.userInfo.name === 'dptrekay'"
+      v-if="userStore.userInfo.name === 'admin1'"
       type="danger"
       @click="closeMatch"
       :btn-text="t('结算全场')"
@@ -148,7 +148,7 @@ const settleClick = () => {
       if (!r) return;
     }
 
-    const res = await API[currentSettleType.value.reqUrl]({
+    const res = await API[currentSettleType.value.reqUrl as keyof typeof API]({
       matchId: props.matchId
     });
     message(res.msg, { type: res.code ? 'error' : 'success' });

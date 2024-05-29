@@ -113,7 +113,7 @@
                     <div class="flex cursor-pointer">
                       <IconGroup
                         :typeNum="item.isSale"
-                        @changeMatchStatus="d => changeMatchStatus(d)"
+                        @changeMatchStatus="d => changeMatchStatus(d, item)"
                         :closeThreeIcon="true"
                       />
                     </div>
@@ -164,10 +164,14 @@ const changeSelectItem = (_: sportTradingDataAPI.MatchDtoList) => {
   emits('changeSelectMatch', _);
 };
 
-const changeMatchStatus = (status: number) => {
+const changeMatchStatus = (
+  status: number,
+  item: sportTradingDataAPI.MatchDtoList
+) => {
   emits('changeStatus', {
     status,
-    classify: 'match'
+    classify: 'match',
+    matchId: item.matchId
   });
 };
 
