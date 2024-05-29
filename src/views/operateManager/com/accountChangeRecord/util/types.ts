@@ -5,6 +5,7 @@ export type accountChangeRecordSearchFormType = {
   endCreatedAt: string | number,
   startCreatedAt: string | number,
   userId: string
+  accountChangeTypeCode: string | number
 }
 
 
@@ -13,4 +14,11 @@ export type modifyBalanceFormType = {
   amount: number,
   accountChangeTypeCode: number,
   remark: string,
+}
+
+export type userDataType = {
+  userId: string,
+  userName: string,
+  tenantName: string,
+  balance: number,
 }
