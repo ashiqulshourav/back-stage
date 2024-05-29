@@ -8,7 +8,7 @@
       v-if="showNum"
       :class="[
         'min-w-[120px] text-[--el-color-primary] text-left h-full flex items-center',
-        saleStatus !== 2 && 'text-[--el-color-info]'
+        saleStatus !== 2 && 'text-[#909399]'
       ]"
     >
       {{ s.dpOdds?.toFixed(2) }}

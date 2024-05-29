@@ -3,13 +3,7 @@ import { WarningSearchFormType } from './type';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { warningBaseList } from './baseData';
 import type { PaginationProps } from '@pureadmin/table';
-import {
-  BO_DAN_CODE_LIST,
-  SALE_STATUS,
-  icon_msg_tip,
-  transferBoDanCol
-} from './playMap';
-import { ElMessageBox } from 'element-plus';
+import { BO_DAN_CODE_LIST, SALE_STATUS, transferBoDanCol } from './playMap';
 
 export function useWarningHook() {
   const loading = ref(true);
