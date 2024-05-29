@@ -3,10 +3,7 @@
   <template v-else>
     <IconifyIconOffline
       :style="{
-        color:
-          typeNum === SALE_STATUS.open && renderType === 'pan'
-            ? '#409EFF'
-            : '#A8ABB2'
+        color: typeNum === SALE_STATUS.open ? '#409EFF' : '#A8ABB2'
       }"
       @click.stop="changeType(SALE_STATUS.open)"
       icon="trading_play"
@@ -15,30 +12,21 @@
       class="text-sm ml-2 mr-2"
       icon="trading_switch"
       :style="{
-        color:
-          typeNum === SALE_STATUS.close && renderType === 'pan'
-            ? '#F56C6C'
-            : '#A8ABB2'
+        color: typeNum === SALE_STATUS.close ? '#F56C6C' : '#A8ABB2'
       }"
       @click.stop="changeType(SALE_STATUS.close)"
     />
     <IconifyIconOffline
       :class="['text-sm mr-2', closeThreeIcon && 'cursor-not-allowed']"
       :style="{
-        color:
-          typeNum === SALE_STATUS.sealing && renderType === 'pan'
-            ? '#F56C6C'
-            : '#A8ABB2'
+        color: typeNum === SALE_STATUS.sealing ? '#F56C6C' : '#A8ABB2'
       }"
       icon="trading_pause"
       @click.stop="!closeThreeIcon && changeType(SALE_STATUS.sealing)"
     />
     <IconifyIconOffline
       :style="{
-        color:
-          typeNum === SALE_STATUS.lock && renderType === 'pan'
-            ? '#F56C6C'
-            : '#A8ABB2'
+        color: typeNum === SALE_STATUS.lock ? '#F56C6C' : '#A8ABB2'
       }"
       icon="trading_lock"
       @click.stop="changeType(SALE_STATUS.lock)"
