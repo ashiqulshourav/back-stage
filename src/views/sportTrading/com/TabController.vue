@@ -9,8 +9,8 @@
     >
       <el-collapse-item
         :name="item.type"
-        v-for="item in matchList"
-        :key="item.type"
+        v-for="(item, index) in matchList"
+        :key="index"
         class="h-full"
       >
         <template #title>
@@ -63,7 +63,6 @@
                         </span>
                         <ReText
                           class="leading-none"
-                          v-if="item.leagueId"
                           type="primary"
                           size="small"
                           v-copy:click="{

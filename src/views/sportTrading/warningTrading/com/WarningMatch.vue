@@ -101,6 +101,7 @@
                   </div>
                   <InputCom
                     :s="s"
+                    :saleStatus="_.isSale"
                     @changeMouse="
                       (e, s, type) => mouseEvent(e, s, type, d.betItemsDtoList)
                     "

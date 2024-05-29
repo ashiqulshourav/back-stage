@@ -159,7 +159,8 @@ export function useWarningHook() {
   };
 
   //-赛事盘口状态更新
-  const changeStatus = ({
+  const riotPrevention = ref(false);
+  const changeStatus = async ({
     matchId,
     status,
     classify,
@@ -174,40 +175,34 @@ export function useWarningHook() {
     categoryData?: sportTradingDataAPI.MainListType;
     item?: sportTradingDataAPI.renderListType;
   }) => {
+    if (riotPrevention.value) return;
+    riotPrevention.value = true;
     clearInterval(loopTimer.value);
-    ElMessageBox.confirm(icon_msg_tip[status], t('系统提示'), {
-      confirmButtonText: t('确定'),
-      cancelButtonText: t('取消'),
-      type: 'warning',
-      center: true
-    })
-      .then(async () => {
-        const res = await API.updateHandicapStatus({
-          operateMenu: '操盘管理-早盘管理',
-          matchId: matchId,
-          isSale: status,
-          betItemsIds: betItemsIdList ?? []
-        });
-        message(res.msg, { type: res.code ? 'error' : 'success' });
-        runLoopMatch();
-        if (res.code) return;
-        switch (classify) {
-          case 'match':
-            upateMatchSale(status, matchId);
-          case 'pan':
-            upatePanSale(
-              status,
-              categoryData as sportTradingDataAPI.MainBetItemsDtoList
-            );
-            break;
-          case 'category':
-            upatePalySale(status, item as sportTradingDataAPI.renderListType);
-            break;
-          default:
-            break;
-        }
-      })
-      .catch(() => runLoopMatch());
+    const res = await API.updateHandicapStatus({
+      operateMenu: '操盘管理-早盘管理',
+      matchId: matchId,
+      isSale: status,
+      betItemsIds: betItemsIdList ?? []
+    });
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    runLoopMatch();
+    riotPrevention.value = false;
+    if (res.code) return;
+    switch (classify) {
+      case 'match':
+        upateMatchSale(status, matchId);
+      case 'pan':
+        upatePanSale(
+          status,
+          categoryData as sportTradingDataAPI.MainBetItemsDtoList
+        );
+        break;
+      case 'category':
+        upatePalySale(status, item as sportTradingDataAPI.renderListType);
+        break;
+      default:
+        break;
+    }
   };
 
   //- 修改赛事图标状态

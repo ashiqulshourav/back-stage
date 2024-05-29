@@ -6,7 +6,7 @@ export const sportTradingData = {
   //- 滚球赛事列表
   getRollingMatchList: (data: sportTradingDataAPI.MorningSetMatchListParams) => http.request<sportTradingDataAPI.getMorningSetMatchListRes>("post", '/operateHandicap/v1/getRollingMatchList', { data }),
   //- 赛事盘口列表获取
-  getHandicapItems: (data: { matchId: number }) => http.request<sportTradingDataAPI.getHandicapItemsRes>("post", "/operateHandicap/v1/getHandicapItems", { data }),
+  getHandicapItems: (data: { matchId: number }, noNprogress: boolean) => http.request<sportTradingDataAPI.getHandicapItemsRes>("post", "/operateHandicap/v1/getHandicapItems", { data }, { noNprogress }),
   //- 赛事盘口状态更新
   updateHandicapStatus: (data: sportTradingDataAPI.updateHandicapStatusParams) => http.request<sportTradingDataAPI.updateHandicapStatus>("post", "/operateHandicap/v1/updateHandicapStatus", { data }),
   //- 盘口赔率更新
@@ -18,5 +18,7 @@ export const sportTradingData = {
   //- 更新告警配置
   updateOperateHandicapConfig: (data: { alarmValue: number; alarmPercent: number; }) => http.request<sportTradingDataAPI.updateOperateHandicapConfigRes>("post", "/operateHandicap/v1/updateOperateHandicapConfig", { data }),
   //- 告警赛事轮询接口
-  loopAlarmMatchList: (data: sportTradingDataAPI.loopAlarmMatchListParams) => http.request<sportTradingDataAPI.getAlarmMatchListRes>("post", "/operateHandicap/v1/loopAlarmMatchList", { data }),
+  loopAlarmMatchList: (data: sportTradingDataAPI.loopAlarmMatchListParams) => http.request<sportTradingDataAPI.getAlarmMatchListRes>("post", "/operateHandicap/v1/loopAlarmMatchList", { data }, {
+    noNprogress: true
+  }),
 };

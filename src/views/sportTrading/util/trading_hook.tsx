@@ -78,8 +78,11 @@ export function useTradingHook(type: 'early' | 'in') {
 
   //- 盘口赛事列表接口
   const loopTimer = ref<NodeJS.Timeout>();
-  const getHandicapltems = async () => {
-    const res = await API.getHandicapItems({ matchId: currentMatch.matchId });
+  const getHandicapltems = async (noNprogress: boolean = false) => {
+    const res = await API.getHandicapItems(
+      { matchId: currentMatch.matchId },
+      noNprogress
+    );
     if (res.code) return message(res.msg, { type: 'error' });
 
     //- 检测是否比赛开始
@@ -220,7 +223,8 @@ export function useTradingHook(type: 'early' | 'in') {
   const runLoopMatch = () => {
     if (loopTimer) clearInterval(loopTimer.value);
     loopTimer.value = setInterval(() => {
-      getHandicapltems();
+      //- 轮询不现实进度条
+      getHandicapltems(true);
     }, 5000);
   };
 
@@ -247,7 +251,8 @@ export function useTradingHook(type: 'early' | 'in') {
   };
 
   //-赛事盘口状态更新
-  const changeStatus = ({
+  const riotPrevention = ref(false);
+  const changeStatus = async ({
     status,
     classify,
     betItemsIdList,
@@ -262,40 +267,34 @@ export function useTradingHook(type: 'early' | 'in') {
     item?: handicapListType;
     matchId?: number;
   }) => {
+    if (riotPrevention.value) return;
+    riotPrevention.value = true;
     clearInterval(loopTimer.value);
-    ElMessageBox.confirm(icon_msg_tip[status], t('系统提示'), {
-      confirmButtonText: t('确定'),
-      cancelButtonText: t('取消'),
-      type: 'warning',
-      center: true
-    })
-      .then(async () => {
-        const res = await API.updateHandicapStatus({
-          operateMenu: '操盘管理-早盘管理',
-          matchId: matchId ? matchId : currentMatch.matchId,
-          isSale: status,
-          betItemsIds: betItemsIdList ?? []
-        });
-        message(res.msg, { type: res.code ? 'error' : 'success' });
-        runLoopMatch();
-        if (res.code) return;
-        switch (classify) {
-          case 'match':
-            upateMatchSale(status, matchId as number);
-          case 'pan':
-            upatePanSale(
-              status,
-              categoryData as sportTradingDataAPI.MainBetItemsDtoList
-            );
-            break;
-          case 'category':
-            upatePalySale(status, item as handicapListType);
-            break;
-          default:
-            break;
-        }
-      })
-      .catch(() => runLoopMatch());
+    const res = await API.updateHandicapStatus({
+      operateMenu: '操盘管理-早盘管理',
+      matchId: matchId ? matchId : currentMatch.matchId,
+      isSale: status,
+      betItemsIds: betItemsIdList ?? []
+    });
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    runLoopMatch();
+    riotPrevention.value = false;
+    if (res.code) return;
+    switch (classify) {
+      case 'match':
+        upateMatchSale(status, matchId as number);
+      case 'pan':
+        upatePanSale(
+          status,
+          categoryData as sportTradingDataAPI.MainBetItemsDtoList
+        );
+        break;
+      case 'category':
+        upatePalySale(status, item as handicapListType);
+        break;
+      default:
+        break;
+    }
   };
 
   //- 修改赛事图标状态

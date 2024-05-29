@@ -32,7 +32,7 @@
       <el-form-item prop="matchNameOrId">
         <el-input
           v-model="form.matchNameOrId"
-          :placeholder="t('赛事名称/ID')"
+          :placeholder="t('赛事ID')"
           v-enter="search"
           clearable
           maxlength="30"
