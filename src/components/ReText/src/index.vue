@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { h, onMounted, ref, useSlots } from "vue";
-import { type TippyOptions, useTippy } from "vue-tippy";
+import { h, onMounted, ref, useSlots } from 'vue';
+import { type TippyOptions, useTippy } from 'vue-tippy';
 
 defineOptions({
-  name: "ReText"
+  name: 'ReText'
 });
 
 const props = defineProps({
@@ -32,10 +32,12 @@ const isTextEllipsis = (el: HTMLElement) => {
   }
 };
 
-const getTippyProps = () => ({
-  content: h($slots.content || $slots.default),
-  ...props.tippyProps
-});
+const getTippyProps = () => {
+  return {
+    content: h($slots.content || $slots.default),
+    ...props.tippyProps
+  };
+};
 
 function handleHover(event: MouseEvent) {
   if (isTextEllipsis(event.target as HTMLElement)) {

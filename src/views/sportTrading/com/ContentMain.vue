@@ -25,6 +25,7 @@
               :name="index"
               v-for="(item, index) in handicapList"
               :key="index"
+              :class="[!item.list.length && 'collapse_empty']"
             >
               <template #title>
                 <div class="flex items-center">
@@ -48,7 +49,7 @@
                 </div>
               </template>
               <div
-                class="ml-5 flex w-full border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#303030] mb-2"
+                class="ml-5 flex w-full mb-2"
                 v-for="(_, idx) in item.list"
                 :key="idx"
               >
@@ -76,11 +77,7 @@
                 </div>
 
                 <div class="flex-grow">
-                  <div
-                    v-for="(d, i) in _.kindsCodeDtoList"
-                    :key="i"
-                    class="border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#503e3e]"
-                  >
+                  <div v-for="(d, i) in _.kindsCodeDtoList" :key="i">
                     <div
                       @mouseleave="e => mouseEvent(e, s, 'leave')"
                       :class="[
@@ -93,7 +90,7 @@
                       <div
                         class="text-[--el-color-primary] text-center pl-2 pr-2 leading-none w-1/4"
                       >
-                        <ReText type="" size="small">
+                        <ReText size="small">
                           {{
                             PLAY_MATCH_NAME(
                               s.kindsCode,
@@ -119,13 +116,15 @@
                       </div>
                       <InputCom
                         :s="s"
+                        :saleStatus="_.isSale"
                         @changeMouse="
                           (e, s, type) =>
                             mouseEvent(e, s, type, d.betItemsDtoList)
                         "
                         :selectNum="selectNum"
                         :selectItem="selectItem"
-                        @changeSelectNum="(n:number) => shortcutSelectNum(n,'input')"
+                        @changeSelectNum="(n:number) =>
+                      shortcutSelectNum(n,'input')"
                       />
                       <div
                         :class="[
@@ -354,4 +353,10 @@ const goBetOroderPage = (
 };
 </script>
 
-<style scoped></style>
+<style lang="scss">
+.collapse_empty {
+  .el-collapse-item__wrap {
+    height: 0;
+  }
+}
+</style>

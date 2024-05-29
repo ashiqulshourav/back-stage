@@ -6,7 +6,10 @@
   >
     <div
       v-if="showNum"
-      class="min-w-[120px] text-[--el-color-primary] text-left h-full flex items-center"
+      :class="[
+        'min-w-[120px] text-[--el-color-primary] text-left h-full flex items-center',
+        saleStatus !== 2 && 'text-[--el-color-info]'
+      ]"
     >
       {{ s.dpOdds?.toFixed(2) }}
     </div>
@@ -44,6 +47,7 @@ const emits = defineEmits(['changeMouse', 'changeSelectNum']);
 const props = defineProps<{
   s: sportTradingDataAPI.BetItemsDtoList;
   selectNum: number;
+  saleStatus: number;
   selectItem: sportTradingDataAPI.BetItemsDtoList;
 }>();
 
@@ -94,7 +98,7 @@ const mouseEvent = (
   s: sportTradingDataAPI.BetItemsDtoList,
   type: 'enter' | 'leave'
 ) => {
-  if (!hasAuth('CHANGE_ODDS')) return;
+  if (!hasAuth('CHANGE_ODDS') || props.saleStatus !== 2) return;
   emits('changeMouse', e, s, type);
 };
 </script>
