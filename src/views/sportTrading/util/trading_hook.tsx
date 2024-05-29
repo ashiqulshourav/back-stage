@@ -8,11 +8,9 @@ import {
   BO_DAN_CODE_LIST,
   MATCH_STATUS,
   SALE_STATUS,
-  icon_msg_tip,
   transferBoDanCol
 } from './playMap';
 import dayjs from 'dayjs';
-import { ElMessageBox } from 'element-plus';
 
 export function useTradingHook(type: 'early' | 'in') {
   const loading = ref(true);
@@ -233,6 +231,7 @@ export function useTradingHook(type: 'early' | 'in') {
     Object.assign(currentMatch, data);
     clearTimeout(loopTimer.value);
     getHandicapltems();
+    selectContentType.value = 'all';
   };
 
   //- 修改内容部分导航标签分类

@@ -78,8 +78,8 @@
 
                 <div class="flex-grow">
                   <div v-for="(d, i) in _.kindsCodeDtoList" :key="i">
+                    <!-- @mouseleave="e => mouseEvent(e, s, 'leave')" -->
                     <div
-                      @mouseleave="e => mouseEvent(e, s, 'leave')"
                       :class="[
                         'flex w-full items-center h-[35px]',
                         l === 0 && 'bg-[--el-color-primary-light-9]'
@@ -117,6 +117,7 @@
                       <InputCom
                         :s="s"
                         :saleStatus="_.isSale"
+                        @showShortcutContainer="showShortcutContainer"
                         @changeMouse="
                           (e, s, type) =>
                             mouseEvent(e, s, type, d.betItemsDtoList)
@@ -155,9 +156,12 @@
 
       <!-- scroll滚动条 -->
       <div
-        v-show="isShowScroll"
-        class="fixed w-16 bg-[--el-color-primary-light-8] flex flex-col pt-2 pb-2 border-[1px] border-solid border-[#f0f0f0] dark:border-[#303030]"
+        :class="[
+          'fixed w-16 bg-[--el-color-primary-light-8] flex flex-col pt-2 pb-2 border-[1px] border-solid border-[#f0f0f0] dark:border-[#303030]',
+          isShowScroll ? 'visible' : 'invisible'
+        ]"
         :style="scrollPostitonObj"
+        @mouseleave="isShowScroll = false"
       >
         <el-scrollbar ref="scrollRef" height="180px">
           <div class="flex flex-col">
@@ -197,7 +201,7 @@ const isShowScroll = ref(false);
 const scrollPostitonObj = reactive({ left: '0px', top: '0px' });
 const contentScrollRef = ref();
 const betItemsDtoList = reactive<sportTradingDataAPI.BetItemsDtoList[]>([]);
-const selectItem = reactive<sportTradingDataAPI.BetItemsDtoList>(
+const selectItem = ref<sportTradingDataAPI.BetItemsDtoList>(
   {} as sportTradingDataAPI.BetItemsDtoList
 );
 const props = defineProps<{
@@ -214,6 +218,16 @@ const numberList = (): number[] => {
   }
   return arr;
 };
+
+watch(
+  () => props.currentMatch,
+  () => {
+    activeNames.value = [0];
+  },
+  {
+    deep: true
+  }
+);
 
 watch(
   () => props.handicapList,
@@ -249,28 +263,30 @@ const mouseEvent = (
   type: 'enter' | 'leave',
   list?: sportTradingDataAPI.BetItemsDtoList[]
 ) => {
-  //鼠标滑入之前所有为隐藏
-  props.handicapList
-    .find(item => item.listType === props.selectContentType)!
-    .list.forEach(item => {
-      item.kindsCodeDtoList.forEach(_ => {
-        _.betItemsDtoList.forEach(r => {
-          r.sourceBetItemsId = -1;
+  if (type === 'enter') {
+    //鼠标滑入之前所有为隐藏
+    props.handicapList
+      .find(item => item.listType === props.selectContentType)!
+      .list.forEach(item => {
+        item.kindsCodeDtoList.forEach(_ => {
+          _.betItemsDtoList.forEach(r => {
+            r.sourceBetItemsId = -1;
+          });
         });
       });
-    });
-
-  if (type === 'enter') {
-    Object.assign(selectItem, s);
+    selectItem.value = s;
     scrollPostitonObj.left = `${e.target.getBoundingClientRect().left + 70}px`;
-    scrollPostitonObj.top = `${e.target.getBoundingClientRect().top - 172}px`;
+    scrollPostitonObj.top = `${e.target.getBoundingClientRect().top - 170}px`;
     betItemsDtoList.length = 0;
     betItemsDtoList.push(...(list as sportTradingDataAPI.BetItemsDtoList[]));
+    s.sourceBetItemsId = 1;
+  } else {
+    if (!isShowScroll.value) s.sourceBetItemsId = -1;
   }
-  isShowScroll.value = type === 'enter';
-  s.sourceBetItemsId = type === 'enter' ? 1 : -1;
   emits('clearMatchTime', s.sourceBetItemsId);
 };
+
+const showShortcutContainer = () => (isShowScroll.value = true);
 
 //- 修改选择类型
 const changeSelectType = (type: string) => {
@@ -287,10 +303,10 @@ const shortcutSelectNum = (_: number, type: string) => {
   //- 下盘需要递减
   if (betItemsDtoList.length === 2) {
     const otherIdx = betItemsDtoList.findIndex(
-      item => item.betItemsId !== selectItem.betItemsId
+      item => item.betItemsId !== selectItem.value.betItemsId
     );
     const d = betItemsDtoList.find(
-      item => item.betItemsId !== selectItem.betItemsId
+      item => item.betItemsId !== selectItem.value.betItemsId
     ) as sportTradingDataAPI.BetItemsDtoList;
     if (_ > 0) {
       d.dpOdds = subtraction(d.dpOdds, Math.abs(_), 2);
@@ -307,7 +323,7 @@ const shortcutSelectNum = (_: number, type: string) => {
   } else {
     //- 长度大于3的盘口
     const d = betItemsDtoList.find(
-      item => item.betItemsId === selectItem.betItemsId
+      item => item.betItemsId === selectItem.value.betItemsId
     ) as sportTradingDataAPI.BetItemsDtoList;
 
     nextTick(() => {
@@ -322,8 +338,9 @@ const shortcutSelectNum = (_: number, type: string) => {
 };
 
 const clearTime = () => {
-  emits('clearMatchTime', -1);
   isShowScroll.value = false;
+  selectItem.value.sourceBetItemsId = -1;
+  emits('clearMatchTime', -1);
 };
 
 //- 修改图标状态(包含盘，赛事，玩法)
