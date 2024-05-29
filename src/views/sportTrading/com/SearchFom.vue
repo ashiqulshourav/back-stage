@@ -180,7 +180,7 @@ const search = () => emits('onSearch');
 
 const preDayArr = computed(() => {
   const preDayList = [];
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 7; i++) {
     preDayList.push({
       label: dayjs()
         .add(i, 'day')

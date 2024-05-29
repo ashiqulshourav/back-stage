@@ -89,13 +89,15 @@
                       <div
                         class="text-[--el-color-primary] !text-xs flex items-center"
                       >
-                        <ReText
-                          type="primary"
-                          size="small"
-                          class="leading-none"
-                        >
-                          {{ item.homeTeamNameCn }}
-                        </ReText>
+                        <div class="max-w-[100px]">
+                          <ReText
+                            type="primary"
+                            size="small"
+                            class="leading-none"
+                          >
+                            {{ item.homeTeamNameCn }}
+                          </ReText>
+                        </div>
                         <span
                           class="w-5 font-bold h-5 flex items-center text-[12px] justify-center scale-75 bg-[--el-color-warning] text-white rounded-full leading-4"
                         >
