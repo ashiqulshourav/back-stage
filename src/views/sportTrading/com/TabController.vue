@@ -69,6 +69,7 @@
                             val: item.leagueId,
                             tip: t('联赛ID复制成功')
                           }"
+                          :tippyProps="{ content: item.leagueNameCn }"
                         >
                           {{ item.leagueNameCn }}
                         </ReText>
@@ -79,7 +80,6 @@
 
                   <div class="pr-2 ml-6 flex-grow-1">
                     <div
-                      v-if="item.matchId"
                       class="flex mb-2 text-xs w-[150px] items-center"
                       v-copy:click="{
                         val: item.matchId,
@@ -89,11 +89,11 @@
                       <div
                         class="text-[--el-color-primary] !text-xs flex items-center"
                       >
-                        <div class="max-w-[100px]">
+                        <div class="max-w-[100px] flex items-center">
                           <ReText
                             type="primary"
                             size="small"
-                            class="leading-none"
+                            :tippyProps="{ content: item.homeTeamNameCn }"
                           >
                             {{ item.homeTeamNameCn }}
                           </ReText>
@@ -107,7 +107,11 @@
                       <div :class="['text-[--el-color-primary] !mr-2 !ml-2']">
                         V
                       </div>
-                      <ReText type="danger" size="small" class="leading-none">
+                      <ReText
+                        type="danger"
+                        size="small"
+                        :tippyProps="{ content: item.awayTeamNameCn }"
+                      >
                         {{ item.awayTeamNameCn }}
                       </ReText>
                     </div>
