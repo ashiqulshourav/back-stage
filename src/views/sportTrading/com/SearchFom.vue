@@ -34,6 +34,7 @@
           v-model="form.matchNameOrId"
           :placeholder="t('赛事ID')"
           v-enter="search"
+          :formatter="(v:string) => formatNumber(v)"
           clearable
           maxlength="30"
           class="!w-[150px]"
@@ -88,6 +89,7 @@ import { SearchFormType } from '../util/type';
 import dayjs from 'dayjs';
 import CustomDate from '@/components/Form/Custom_date.vue';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+import { formatNumber } from '@/utils/formatNumber';
 
 const formRef = ref();
 const emits = defineEmits(['onSearch']);
