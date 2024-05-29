@@ -252,13 +252,15 @@ export function useTradingHook(type: 'early' | 'in') {
     classify,
     betItemsIdList,
     categoryData,
-    item
+    item,
+    matchId
   }: {
     status: Partial<SALE_STATUS>;
     classify: 'match' | 'category' | 'pan';
     betItemsIdList?: number[];
     categoryData?: sportTradingDataAPI.MainBetItemsDtoList;
     item?: handicapListType;
+    matchId?: number;
   }) => {
     clearInterval(loopTimer.value);
     ElMessageBox.confirm(icon_msg_tip[status], t('系统提示'), {
@@ -270,7 +272,7 @@ export function useTradingHook(type: 'early' | 'in') {
       .then(async () => {
         const res = await API.updateHandicapStatus({
           operateMenu: '操盘管理-早盘管理',
-          matchId: currentMatch.matchId,
+          matchId: matchId ? matchId : currentMatch.matchId,
           isSale: status,
           betItemsIds: betItemsIdList ?? []
         });
@@ -279,7 +281,7 @@ export function useTradingHook(type: 'early' | 'in') {
         if (res.code) return;
         switch (classify) {
           case 'match':
-            upateMatchSale(status);
+            upateMatchSale(status, matchId as number);
           case 'pan':
             upatePanSale(
               status,
@@ -297,10 +299,10 @@ export function useTradingHook(type: 'early' | 'in') {
   };
 
   //- 修改赛事图标状态
-  const upateMatchSale = (status: number) => {
+  const upateMatchSale = (status: number, m: number) => {
     currentMatch.isSale = status;
     matchList.some(item => {
-      const r = item.matchDtoList.find(_ => _.matchId === currentMatch.matchId);
+      const r = item.matchDtoList.find(_ => _.matchId === m);
       if (r) {
         r.isSale = currentMatch.isSale;
         return true;

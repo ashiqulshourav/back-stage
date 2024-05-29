@@ -9,7 +9,7 @@
       @click="settleClick"
     />
     <CustomButton
-      v-if="userStore.userInfo.name === 'dptrekay'"
+      v-if="userStore.userInfo.name === 'admin1'"
       type="danger"
       @click="closeMatch"
       :btn-text="t('结算全场')"
