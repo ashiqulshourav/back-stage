@@ -23,6 +23,7 @@
           align-whole="center"
           table-layout="auto"
           :loading="loading"
+          showOverflowTooltip
           :size="size"
           class="table_container"
           adaptive
@@ -268,7 +269,7 @@
                 }}
               </div>
               <div>{{ markeTypeMap[(item.marketType )as keyof typeof markeTypeMap] }}</div>
-              <div v-if="getOddStatus(item?.betResult,item.riskStatus)">
+              <div v-if="getOddStatus(row.status,row.billStatus,row.isReserve,item.riskStatus,item?.betResult)">
                 <span
                   :class="
                     [EBetResultType.WIN, EBetResultType.WIN_HALF].includes(
@@ -278,7 +279,7 @@
                       : 'lose'
                   "
                 >
-                  {{getOddStatus(item?.betResult,item.riskStatus)}}
+                  {{getOddStatus(row.status,row.billStatus,row.isReserve,item.riskStatus,item?.betResult)}}
                 </span
                 >
               </div>
@@ -352,7 +353,15 @@
               v-for="item in row.combineOrderDetails"
               :key="item.id"
             >
-             <span>{{riskStatusMap[item.riskStatus as keyof typeof riskStatus]||'-'}}</span>
+             <span
+              :style="{
+                  background: getRiskStatusColor(
+                    item.riskStatus,
+                  ).bgColor
+                }"
+              :class="item.riskStatus !== 0 ? 'status_btn block' : ''"
+             >{{riskStatusMap[item.riskStatus as keyof typeof riskStatus]||'-'}}</span>
+              <span v-if="riskStatusMap[item.riskStatus as keyof typeof riskStatus]&&item.riskType">原因:{{item.riskType}}</span>
             </div>
           </template>
           <template #operation="{ row }">
@@ -486,7 +495,8 @@ const {
   editOrderRemark,
   riskLabelList,
   getOddStatus,
-  downloading
+  downloading,
+  getRiskStatusColor,
 } = useBettingCenterHook(props.category, props.venueType);
 </script>
 
@@ -516,11 +526,14 @@ const {
   display: flex;
   justify-items: center;
   justify-content: center;
+  max-width: fit-content;
+  margin: 0 auto;
 }
 .riskStatus_detail{
-  width: 120px;
+  width: 100%;
   min-height: 100px;
   display: flex;
+  flex-direction: column;
   justify-items: center;
   align-items: center;
   justify-content: center;
@@ -564,9 +577,10 @@ const {
   text-align: center;
   height: 25px;
   line-height: 25px;
-  padding: 0 8px;
+  padding: 0 10px;
   color: #fff;
   border-radius: 4px;
+  word-break: keep-all;
 }
 .odd_item {
   min-width: 80px;
