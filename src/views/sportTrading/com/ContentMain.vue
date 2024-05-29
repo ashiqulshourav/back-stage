@@ -216,6 +216,16 @@ const numberList = (): number[] => {
 };
 
 watch(
+  () => props.currentMatch,
+  () => {
+    activeNames.value = [0];
+  },
+  {
+    deep: true
+  }
+);
+
+watch(
   () => props.handicapList,
   () => {
     nextTick(() => {
