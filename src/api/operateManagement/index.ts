@@ -48,10 +48,10 @@ export const operateManagementData = {
       ('post', '/operateBalance/canBetBalance', { data }),
 
   getAccountChangeRecord: (data: accountChangeRecordSearchFormType) =>
-    http.request<OperateManagementDataAPI.BetBalanceRes>
+    http.request<OperateManagementDataAPI.AccountChangeRecordRes>
     ('post', '/operate/queryAccountChangeLog', { data }),
 
   getAccountChange: (data: modifyBalanceFormType) =>
-    http.request<OperateManagementDataAPI.BetBalanceRes>
+    http.request<OperateManagementDataAPI.AccountChangeRes>
     ('post', '/operate/accountChange', { data }),
 };

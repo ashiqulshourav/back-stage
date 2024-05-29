@@ -1,8 +1,8 @@
 <template>
-  <div class="text-center">
-    {{ '确认后用户 ' + props.userName + (editFrom.accountChangeTypeCode === 91 ? ' 将加钱 ' : ' 将扣钱 ') + editFrom.amount + '元'}}
+  <div class="mt-4 text-center">
+    {{ t('确认后用户 ') + props.userName + (editFrom.accountChangeTypeCode === 91 ? t(' 将加钱 ') : t(' 将扣钱 ')) + editFrom.amount + '元'}}
   </div>
-  <div class="flex justify-end bg-white mt-4">
+  <div class="flex justify-end bg-white mt-10">
     <el-button @click="closeDialog">{{ t('取消') }}</el-button>
     <el-button type="primary" @click="modifyBalance">{{ t('确定') }}</el-button>
   </div>
@@ -13,7 +13,8 @@ import { ref } from 'vue';
 import {message} from "@/utils/message";
 import { t } from '@/plugins/i18n';
 import {removeEmptyStringKeys} from "@/utils/utilFn";
-const emits = defineEmits(['closeDialog', 'closeAllDialog', ]);
+import { modifyBalanceFormType } from './util/types';
+const emits = defineEmits(['closeDialog', 'closeAllDialog', 'onSearch']);
 const props = withDefaults(defineProps<{
   data: modifyBalanceFormType,
   userName: string,
@@ -32,7 +33,8 @@ const modifyBalance = () => {
   API.getAccountChange(params).then((res) => {
     message(res.msg, { type: res.code ? 'error' : 'success' });
     if(res.code===0){
-      props.confirmChangeBalance(param.accountChangeTypeCode === 91?param.amount:-param.amount)
+      // props.confirmChangeBalance(param.accountChangeTypeCode === 91?param.amount:-param.amount)
+      props.confirmChangeBalance();
       emits('closeAllDialog');
     }
   })

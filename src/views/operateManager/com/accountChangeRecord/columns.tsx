@@ -67,6 +67,4 @@ export const columns: TableColumnList = [
     minWidth: 200,
     formatter: ({ updatedAt }) => dayjs(updatedAt).format("YYYY-MM-DD HH:mm:ss")
   },
-
-
 ]

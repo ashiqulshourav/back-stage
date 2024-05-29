@@ -1,20 +1,17 @@
 import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
-import { reactive, ref, onMounted } from 'vue';
+import { reactive, ref } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
-import {
-  accountChangeRecordSearchFormType,
-  modifyBalanceFormType
-} from '../util/types';
+import { accountChangeRecordSearchFormType, userDataType } from '../util/types';
 import ModifyBalanceForm from '../modifyBalanceModal.vue';
-import ConfirmModifyBalanceForm from '../confirmModifyBalanceModal.vue';
-import { addDialog, closeAllDialog, closeDialog } from '@/components/ReDialog';
+import { addDialog, closeDialog } from '@/components/ReDialog';
 import dayjs from 'dayjs';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
+import { FormInstance } from 'element-plus';
 
 export function useAccountChangeRecordHook() {
   const route = useRoute();
-  const dataList = reactive<MemberAdminAPI.PageData[]>([]);//need to change
+  const dataList = reactive<OperateManagementDataAPI.AccountChangeRecordType[]>([]);
   const loading = ref(true);
   const modifyBalanceLoading = ref(false);
   const { openPasswordInput } = usePasswordInputHook();
@@ -33,8 +30,8 @@ export function useAccountChangeRecordHook() {
     userId: route.query.userId
   });
 
-  const userData = reactive<UserAPI.operateUserList>({ //create Type
-    id: renderObj.id,
+  const userData = reactive<userDataType>({
+    userId: renderObj.id,
     userName: renderObj.userName,
     tenantName: renderObj.tenantName,
     balance: renderObj.balance
@@ -50,11 +47,9 @@ export function useAccountChangeRecordHook() {
     onSearch();
   }
 
-  const changeBalance = (amount: number) => {
-    console.log('hook.tsx文件 62==============行打印=', userData.balance);
-    userData.balance = Number(userData.balance) + Number(amount);
-    console.log('hook.tsx文件 63==============行打印=', userData.balance);
-  };
+  // const changeBalance = (amount: number) => {
+  //   userData.balance = Number(userData.balance) + Number(amount);
+  // };
 
 
   function handleSelectionChange(val) {
@@ -76,7 +71,10 @@ export function useAccountChangeRecordHook() {
       dataList.push(...res.data.pageData);
       pagination.total = res.data.count;
       pagination.pageSize = res.data.pageSize;
-      pagination.currentPage = res.data.pageNum;
+      pagination.currentPage = res.data.pageNumber;
+      if (form.accountChangeTypeCode == undefined && form.endCreatedAt == undefined && form.startCreatedAt == undefined) {
+        userData.balance = res.data.pageData[0].balance;
+      }
     } catch (error) {
       loading.value = false;
     }
@@ -94,8 +92,11 @@ export function useAccountChangeRecordHook() {
         contentRenderer: ({ options, index }) =>
           h(ModifyBalanceForm, {
             userName: renderObj.userName,
-            changeBalance: (amount: number) => {
-              userData.balance = Number(userData.balance) + Number(amount);
+            // changeBalance: (amount: number) => {
+            //   userData.balance = Number(userData.balance) + Number(amount);
+            // },
+            search: () => {
+              onSearch();
             },
             onCloseDialog: (params: string) => {
               closeDialog(options, index);
@@ -106,7 +107,7 @@ export function useAccountChangeRecordHook() {
     }
   }
 
-  const resetForm = formEl => {
+  const resetForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return;
     formEl.resetFields();
     onSearch();
@@ -125,6 +126,6 @@ export function useAccountChangeRecordHook() {
     openModifyBalanceDialog,
     modifyBalanceLoading,
     userData,
-    changeBalance
+    // changeBalance
   };
 }

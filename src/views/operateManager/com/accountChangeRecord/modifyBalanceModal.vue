@@ -1,8 +1,8 @@
 <template>
   <el-form
-    class="mx-20"
+    class="w-4/5 mx-[10%]"
     ref="formRef"
-    label-width="100px"
+    label-width="auto"
     label-position="left"
     :model="editFrom"
     :rules="formRules"
@@ -25,19 +25,19 @@
       </el-select>
     </el-form-item>
 
-    <el-form-item prop="amount">
+    <el-form-item :label="` `" prop="amount">
       <div class="w-full flex">
         <el-input
           v-model="enteredAmount"
           clearable
           type="number"
-          :placeholder="t('请输入10000元')"
+          :placeholder="t('请输入数字最高10000元')"
         />
         <div class="pl-2">{{ t('元') }}</div>
       </div>
     </el-form-item>
 
-    <el-form-item  :label="t('备注')" prop="remark">
+    <el-form-item :label="t('备注')" prop="remark">
       <el-input
         v-model="editFrom.remark"
         maxlength="200"
@@ -49,10 +49,8 @@
     </el-form-item>
   </el-form>
   <div class="flex justify-end bg-white mt-16">
-    <el-button @click="closeDialog">{{ t('取消') }}</el-button>
+    <el-button @click="close">{{ t('取消') }}</el-button>
     <el-button :disabled="!isEditFormHasNull(editFrom)" type="primary" @click="submit(t('确认操作'))">{{ t('确定') }}</el-button>
-    <!-- <el-button :disabled="!isEditFormHasNull(editFrom)" type="primary" @click="openConfirmModifyBalanceDialog(t('确认操作'), editFrom)">{{ t('确定') }}</el-button> -->
-
   </div>
 </template>
 
@@ -63,10 +61,12 @@ import { t } from '@/plugins/i18n';
 const emits = defineEmits(['closeDialog']);
 const route = useRoute();
 import ConfirmModifyBalanceForm from './confirmModifyBalanceModal.vue';
-import { addDialog, closeAllDialog } from '@/components/ReDialog';
+import { addDialog, closeAllDialog, closeDialog } from '@/components/ReDialog';
+import { modifyBalanceFormType } from './util/types';
 const props = withDefaults(defineProps<{
   userName: string,
-  changeBalance:Function,
+  // changeBalance: Function,
+  search: Function,
 }>(), {});
 
 const editFrom = reactive<modifyBalanceFormType>({
@@ -100,12 +100,16 @@ const submit = (title: string) => {
     alignCenter: true,
     closeOnClickModal: false,
     hideFooter: true,
-    contentRenderer: ({}) =>
+    contentRenderer: ({ options, index }) =>
       h(ConfirmModifyBalanceForm, {
         data: editFrom,
         userName: name.value,
-        confirmChangeBalance: (amount:number) => {
-          props.changeBalance(amount)
+        onCloseDialog: () => {
+          closeDialog(options, index);
+        },
+        confirmChangeBalance: () => {
+          // props.changeBalance(amount);
+          props.search();
         },
         onCloseAllDialog: () => {
           closeAllDialog();
@@ -113,6 +117,10 @@ const submit = (title: string) => {
       })
   });
 }
+
+const close = () => {
+  emits('closeDialog');
+};
 
 const formRef = ref();
 
