@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-1/4 text-center input_wrapper relative h-full"
+    class="w-1/4 text-center input_wrapper relative h-full input_container"
     @mouseenter.stop="e => mouseEvent(e, props.s, 'enter')"
     @mouseleave.stop="e => mouseEvent(e, props.s, 'leave')"
   >
@@ -22,6 +22,7 @@
           class="!w-[70px]"
           size="small"
           :step="0.01"
+          @focus="inputFoucs(true)"
           @change="changeDpOdds"
           v-model="s.dpOdds"
           controls-position="right"
@@ -43,7 +44,11 @@ import { subtraction, addition } from '@pureadmin/utils';
 import { debounce } from '@pureadmin/utils';
 import { hasAuth } from '@/router/utils';
 
-const emits = defineEmits(['changeMouse', 'changeSelectNum']);
+const emits = defineEmits([
+  'changeMouse',
+  'changeSelectNum',
+  'showShortcutContainer'
+]);
 const props = defineProps<{
   s: sportTradingDataAPI.BetItemsDtoList;
   selectNum: number;
@@ -100,6 +105,11 @@ const mouseEvent = (
 ) => {
   if (!hasAuth('CHANGE_ODDS') || props.saleStatus !== 2) return;
   emits('changeMouse', e, s, type);
+};
+
+//- 输入框获得焦点
+const inputFoucs = (status: boolean) => {
+  emits('showShortcutContainer', status, props.s);
 };
 </script>
 
