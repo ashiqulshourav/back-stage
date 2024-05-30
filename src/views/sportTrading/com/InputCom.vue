@@ -18,8 +18,6 @@
       class="text-[--el-color-primary] flex justify-start cursor-pointer h-full relative"
     >
       <div class="w-[120px] flex justify-start items-center h-full">
-        <!-- :min="-0.99"
-          :max="0.99" -->
         <el-input-number
           class="!w-[70px]"
           size="small"
@@ -90,7 +88,7 @@ const inputCom = computed({
 const changeDpOdds = debounce(() => {
   emits('changeSelectNum', s1.value);
   s1.value = 0;
-}, 1000);
+}, 500);
 
 const showNum = ref(true);
 
@@ -127,14 +125,27 @@ watch(
 );
 
 const tipData = computed(() => {
+  let baseN = 0;
+  let val = 0;
+  if (props.s.odds < 0 && props.s.dpOdds < 0) {
+    val = subtraction(Math.abs(props.s.odds), Math.abs(props.s.dpOdds), 2);
+  } else if (props.s.odds > 0 && props.s.dpOdds > 0) {
+    val = subtraction(Math.abs(props.s.dpOdds), Math.abs(props.s.odds), 2);
+  } else if (
+    (props.s.odds < 0 && props.s.dpOdds > 0) ||
+    (props.s.odds > 0 && props.s.dpOdds < 0)
+  ) {
+    if (props.s.odds > 0) {
+      baseN = subtraction(2, Math.abs(props.s.dpOdds), 2);
+      val = subtraction(baseN, props.s.odds, 2);
+    } else {
+      baseN = subtraction(2, Math.abs(props.s.dpOdds), 2);
+      val = subtraction(Math.abs(props.s.odds), baseN, 2);
+    }
+  }
   return {
-    val: `${props.s.dpOdds > props.s.odds ? '+' : '-'}${Math.abs(
-      subtraction(Math.abs(props.s.dpOdds), Math.abs(props.s.odds), 2)
-    )}`,
-    color:
-      props.s.dpOdds > props.s.odds
-        ? '--el-color-success-light-3'
-        : '--el-color-danger-light-3'
+    val: val > 0 ? `+${val}` : val,
+    color: val > 0 ? '--el-color-success-light-3' : '--el-color-danger-light-3'
   };
 });
 
