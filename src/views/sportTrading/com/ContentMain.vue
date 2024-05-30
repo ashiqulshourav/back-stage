@@ -297,10 +297,9 @@ const changeSelectType = (type: string) => {
 const selectNum = ref(0);
 const shortcutSelectNum = (_: number, type: string) => {
   if (_ === 0) return;
-  
+
   type === 'shortcut' && (selectNum.value = _);
   const params: { betItemsId: number; dpOdds: number }[] = [];
-
   //- 下盘需要递减
   if (betItemsDtoList.length === 2) {
     const otherIdx = betItemsDtoList.findIndex(
@@ -314,6 +313,16 @@ const shortcutSelectNum = (_: number, type: string) => {
     } else {
       d.dpOdds = addition(d.dpOdds, Math.abs(_), 2);
     }
+    if (Math.abs(d.dpOdds.dpOdds) >= 1) {
+      if (Math.abs(d.dpOdds.dpOdds) === 1) {
+        d.dpOdds.dpOdds = -1;
+      } else if (d.dpOdds.dpOdds > 0) {
+        d.dpOdds.dpOdds = subtraction(d.dpOdds.dpOdds, 2, 2);
+      } else {
+        d.dpOdds.dpOdds = subtraction(2, Math.abs(d.dpOdds.dpOdds), 2);
+      }
+    }
+
     params.push(
       ...betItemsDtoList.map((d, index: number) => ({
         betItemsId: d.betItemsId,
