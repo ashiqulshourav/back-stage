@@ -25,7 +25,7 @@
         <div class="col-span-1">
           <div class="user-info">
             <div class="labels">{{ t('可用余额') }}</div>
-            <div class="labels">{{ userData.balance }}</div>
+            <div class="labels">{{ addThousandSeparator(userData.balance.toFixed(2)) }}</div>
           </div>
         </div>
         <div class="col-span-1">
@@ -93,7 +93,8 @@ import type { FormInstance } from 'element-plus';
 import dayjs from 'dayjs';
 import { accountChangeRecordSearchFormType, userDataType } from './util/types';
 import { accountChangeTypeCodeList } from './columns';
-//accountChangeRecordSearchFormType
+import { addThousandSeparator } from "@/utils/formatNumber";
+
 const props = defineProps<{
   loading: boolean;
   form: accountChangeRecordSearchFormType;

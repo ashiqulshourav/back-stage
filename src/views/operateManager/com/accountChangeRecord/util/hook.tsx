@@ -6,7 +6,6 @@ import { accountChangeRecordSearchFormType, userDataType } from '../util/types';
 import ModifyBalanceForm from '../modifyBalanceModal.vue';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import dayjs from 'dayjs';
-import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 import { FormInstance } from 'element-plus';
 
 export function useAccountChangeRecordHook() {
@@ -14,7 +13,6 @@ export function useAccountChangeRecordHook() {
   const dataList = reactive<OperateManagementDataAPI.AccountChangeRecordType[]>([]);
   const loading = ref(true);
   const modifyBalanceLoading = ref(false);
-  const { openPasswordInput } = usePasswordInputHook();
   const renderObj = reactive<UserAPI.operateUserList>(
     history.state.params as UserAPI.operateUserList
   );
@@ -72,7 +70,7 @@ export function useAccountChangeRecordHook() {
       pagination.total = res.data.count;
       pagination.pageSize = res.data.pageSize;
       pagination.currentPage = res.data.pageNumber;
-      if (form.accountChangeTypeCode == undefined && form.endCreatedAt == undefined && form.startCreatedAt == undefined) {
+      if (!form.accountChangeTypeCode && !form.endCreatedAt && !form.startCreatedAt) {
         userData.balance = res.data.pageData[0].balance;
       }
     } catch (error) {
@@ -81,30 +79,27 @@ export function useAccountChangeRecordHook() {
   }
 
   async function openModifyBalanceDialog(title?: string) {
-    const r = await openPasswordInput();
-    if (r) {
-      addDialog({
-        title,
-        width: '30%',
-        alignCenter: true,
-        closeOnClickModal: false,
-        hideFooter: true,
-        contentRenderer: ({ options, index }) =>
-          h(ModifyBalanceForm, {
-            userName: renderObj.userName,
-            // changeBalance: (amount: number) => {
-            //   userData.balance = Number(userData.balance) + Number(amount);
-            // },
-            search: () => {
-              onSearch();
-            },
-            onCloseDialog: (params: string) => {
-              closeDialog(options, index);
-              onSearch();
-            }
-          })
-      });
-    }
+    addDialog({
+      title,
+      width: '30%',
+      alignCenter: true,
+      closeOnClickModal: false,
+      hideFooter: true,
+      contentRenderer: ({ options, index }) =>
+        h(ModifyBalanceForm, {
+          userName: renderObj.userName,
+          // changeBalance: (amount: number) => {
+          //   userData.balance = Number(userData.balance) + Number(amount);
+          // },
+          search: () => {
+            onSearch();
+          },
+          onCloseDialog: (params: string) => {
+            closeDialog(options, index);
+            onSearch();
+          }
+        })
+    });
   }
 
   const resetForm = (formEl: FormInstance | undefined) => {

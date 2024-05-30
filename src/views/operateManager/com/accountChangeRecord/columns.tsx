@@ -25,11 +25,11 @@ export const columns: TableColumnList = [
   },
   {
     label: t("注单号(流水ID)"),
-    prop: "identifier",
+    prop: "transNo",
     minWidth: 200,
-    formatter: ({ identifier,type }) =>{
-      return [10,11].includes(type)?'-':(identifier?.split('_')?.length&& identifier?.split('_')[0])
-    }
+    // formatter: ({ identifier,type }) =>{
+    //   return [10,11].includes(type)?'-':(identifier?.split('_')?.length&& identifier?.split('_')[0])
+    // }
   },
   {
     label: t("账变类型"),
@@ -47,24 +47,29 @@ export const columns: TableColumnList = [
     label: t("账变金额"),
     prop: "transAmount",
     minWidth: 150,
-    formatter: ({ transAmount }) => (transAmount ? addThousandSeparator(transAmount) : "-")
+    formatter: ({ transAmount }) => (transAmount ? addThousandSeparator(transAmount.toFixed(2)) : "-")
   },
   {
     label: t("账变前金额"),
     prop: "prevBalance",
     minWidth: 150,
-    formatter: ({ prevBalance }) => (prevBalance ? addThousandSeparator(prevBalance) : "-")
+    formatter: ({ prevBalance }) => (prevBalance ? addThousandSeparator(prevBalance.toFixed(2)) : "-")
   },
   {
     label: t("账变后金额"),
     prop: "balance",
     minWidth: 150,
-    formatter: ({ balance }) => (balance ?addThousandSeparator(balance) : "-")
+    formatter: ({ balance }) => (balance ? addThousandSeparator(balance.toFixed(2)) : "-")
   },
   {
     label: t("账变时间"),
     prop: "createTime",
     minWidth: 200,
     formatter: ({ updatedAt }) => dayjs(updatedAt).format("YYYY-MM-DD HH:mm:ss")
+  },
+  {
+    label: t("备注"),
+    minWidth: 100,
+    prop: "remark",
   },
 ]

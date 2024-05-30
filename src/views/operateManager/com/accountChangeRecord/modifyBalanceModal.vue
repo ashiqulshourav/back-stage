@@ -63,6 +63,9 @@ const route = useRoute();
 import ConfirmModifyBalanceForm from './confirmModifyBalanceModal.vue';
 import { addDialog, closeAllDialog, closeDialog } from '@/components/ReDialog';
 import { modifyBalanceFormType } from './util/types';
+import { usePasswordInputHook } from '@/hooks/passwordInputHook';
+
+const { openPasswordInput } = usePasswordInputHook();
 const props = withDefaults(defineProps<{
   userName: string,
   // changeBalance: Function,
@@ -78,14 +81,19 @@ const editFrom = reactive<modifyBalanceFormType>({
 
 const name = ref(props.userName);
 const enteredAmount = ref(editFrom.amount);
+
 watch(enteredAmount, (newValue) => {
   if (newValue > 10000) {
     editFrom.amount = 10000;
     enteredAmount.value = 10000;
-  } else {
+  } else if (newValue <= 0) {
+    editFrom.amount = '';
+    enteredAmount.value = '';
+  }else {
     editFrom.amount = newValue;
   }
 });
+
 const isEditFormHasNull = (editFrom: modifyBalanceFormType) => {
   for (const value of Object.values(editFrom)) {
         if (!value) return false;
@@ -93,29 +101,33 @@ const isEditFormHasNull = (editFrom: modifyBalanceFormType) => {
     return true;
 }
 
-const submit = (title: string) => {
-  addDialog({
-    title,
-    width: '20%',
-    alignCenter: true,
-    closeOnClickModal: false,
-    hideFooter: true,
-    contentRenderer: ({ options, index }) =>
-      h(ConfirmModifyBalanceForm, {
-        data: editFrom,
-        userName: name.value,
-        onCloseDialog: () => {
-          closeDialog(options, index);
-        },
-        confirmChangeBalance: () => {
-          // props.changeBalance(amount);
-          props.search();
-        },
-        onCloseAllDialog: () => {
-          closeAllDialog();
-        }
-      })
-  });
+const submit = async (title: string) => {
+  const r = await openPasswordInput();
+  if (r) { 
+    addDialog({
+      title,
+      width: '20%',
+      alignCenter: true,
+      closeOnClickModal: false,
+      hideFooter: true,
+      contentRenderer: ({ options, index }) =>
+        h(ConfirmModifyBalanceForm, {
+          data: editFrom,
+          userName: name.value,
+          onCloseDialog: () => {
+            closeDialog(options, index);
+          },
+          confirmChangeBalance: () => {
+            // props.changeBalance(amount);
+            props.search();
+          },
+          onCloseAllDialog: () => {
+            closeAllDialog();
+          }
+        })
+    });
+  }
+  
 }
 
 const close = () => {
