@@ -18,14 +18,15 @@
       class="text-[--el-color-primary] flex justify-start cursor-pointer h-full relative"
     >
       <div class="w-[120px] flex justify-start items-center h-full">
+        <!-- :min="-0.99"
+          :max="0.99" -->
         <el-input-number
           class="!w-[70px]"
           size="small"
           :step="0.01"
           @focus="inputFoucs(true)"
-          @change="changeDpOdds"
-          v-model="s.dpOdds"
           controls-position="right"
+          v-model="inputCom"
         />
       </div>
     </div>
@@ -56,6 +57,29 @@ const props = defineProps<{
   selectItem: sportTradingDataAPI.BetItemsDtoList;
 }>();
 
+const s1 = ref(0);
+const inputCom = computed({
+  get() {
+    return props.s.dpOdds;
+  },
+  set(v: number) {
+    if (!v) return;
+    const n = subtraction(v, props.s.dpOdds, 2);
+    if (n > 0) {
+      s1.value = addition(s1.value, n, 2);
+    } else {
+      s1.value = subtraction(s1.value, Math.abs(n), 2);
+    }
+    props.s.dpOdds = v;
+    changeDpOdds();
+  }
+});
+
+const changeDpOdds = debounce(() => {
+  emits('changeSelectNum', s1.value);
+  s1.value = 0;
+}, 500);
+
 const showNum = ref(true);
 
 watch(
@@ -80,10 +104,6 @@ watch(
     }
   }
 );
-const changeDpOdds = debounce((v: number) => {
-  const n: number = subtraction(v, props.selectItem.dpOdds, 2);
-  emits('changeSelectNum', n);
-}, 500);
 
 const tipData = computed(() => {
   return {
