@@ -30,7 +30,14 @@
         }"
       >
         <div :class="['text-[--el-color-primary] flex items-center']">
-          <span>{{ currentMatch?.homeTeamNameCn }}</span>
+          <ReText
+            class="leading-none !max-w-[160px]"
+            type="primary"
+            size="small"
+            :tippyProps="{ content: currentMatch.homeTeamNameCn }"
+          >
+            {{ currentMatch.homeTeamNameCn }}
+          </ReText>
           <span
             class="w-5 font-bold h-5 flex items-center text-[12px] scale-75 justify-center bg-[--el-color-warning] text-white rounded-full"
             >{{ t('主') }}</span
@@ -38,7 +45,14 @@
         </div>
         <div :class="['text-[--el-color-primary] !mr-1 !ml-1']">V</div>
         <div :class="['text-[--el-color-danger]']">
-          {{ currentMatch?.awayTeamNameCn }}
+          <ReText
+            class="leading-none !max-w-[160px]"
+            type="primary"
+            size="small"
+            :tippyProps="{ content: currentMatch.awayTeamNameCn }"
+          >
+            {{ currentMatch.awayTeamNameCn }}
+          </ReText>
         </div>
       </div>
     </div>
@@ -70,6 +84,7 @@
 import { handicapListType } from '../util/type';
 import { t } from '@/plugins/i18n';
 import IconGroup from './IconGroup.vue';
+import { ReText } from '@/components/ReText';
 
 defineProps<{
   currentMatch: sportTradingDataAPI.MatchDtoList;

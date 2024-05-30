@@ -48,6 +48,8 @@ export function useTradingHook(type: 'early' | 'in') {
         : ''
   });
 
+  //- 盘口赛事列表接口
+  const loopTimer = ref<NodeJS.Timeout>();
   //- 初始化搜索
   const onSearch = async () => {
     if (loopTimer.value) clearInterval(loopTimer.value);
@@ -74,8 +76,6 @@ export function useTradingHook(type: 'early' | 'in') {
     });
   };
 
-  //- 盘口赛事列表接口
-  const loopTimer = ref<NodeJS.Timeout>();
   const getHandicapltems = async (noNprogress: boolean = false) => {
     const res = await API.getHandicapItems(
       { matchId: currentMatch.matchId },
@@ -335,12 +335,18 @@ export function useTradingHook(type: 'early' | 'in') {
   };
 
   onMounted(() => {
+    handicapList.forEach(item => {
+      item.amount = 0;
+      item.list = [];
+    });
+    if (loopTimer.value) clearInterval(loopTimer.value);
     onSearch();
   });
 
   onUnmounted(() => {
     if (loopTimer.value) clearInterval(loopTimer.value);
     handicapList.forEach(item => {
+      item.amount = 0;
       item.list = [];
     });
   });
