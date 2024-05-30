@@ -25,6 +25,7 @@ import { message } from '@/utils/message';
 import { ElMessageBox } from 'element-plus';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 import { useUserStore } from '@/store/user';
+import { QuestionFilled } from '@element-plus/icons-vue';
 
 const props = defineProps<{
   parentRow: SattleDataAPI.getSettlementDataList;
@@ -131,31 +132,84 @@ const closeMatchClick = async () => {
 
 //- 比赛结算
 const settleClick = () => {
-  ElMessageBox.confirm(currentSettleType.value.confirmTxt, t('警告'), {
-    dangerouslyUseHTMLString: true,
-    confirmButtonText: t('确认'),
-    cancelButtonText: t('取消'),
-    center: true
-  }).then(async () => {
-    const selttArr = [
-      'allSettlement',
-      'overTimeFullSettlement',
-      'penaltyKickSettlement'
-    ];
-
-    if (selttArr.includes(currentSettleType.value.reqUrl)) {
-      const r = await openPasswordInput();
-      if (!r) return;
-    }
-
-    const res = await API[currentSettleType.value.reqUrl]({
-      matchId: props.matchId
+  if (
+    currentSettleType.value.reqUrl === 'allSettlement' ||
+    currentSettleType.value.reqUrl === 'overTimeFullSettlement'
+  ) {
+    const strArr =
+      currentSettleType.value.reqUrl === 'allSettlement'
+        ? [
+            t('确认进入加时赛结算阶段？'),
+            t(
+              '加时赛结算开关已开启，确认结算后进入加时赛结算阶段，此操作不可恢复。'
+            )
+          ]
+        : [
+            t('确认进入点球大战结算阶段？'),
+            t(
+              '点球大战结算开关已开启，确认结算后进入点球结算阶段，此操作不可恢复。'
+            )
+          ];
+    ElMessageBox.confirm(
+      `<div class="flex flex-col  pr-4">
+          <div class="flex items-center">
+          <span class="font-bold text-[16px]">${strArr[0]}</span>
+          </div>
+        <p>${strArr[1]}</p>
+      </div>`,
+      t('操作确认'),
+      {
+        customClass: 'tip_dialog',
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: t('确定'),
+        cancelButtonText: t('取消'),
+        type: 'warning',
+        icon: markRaw(QuestionFilled)
+      }
+    ).then(() => {
+      sendReq();
     });
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    if (res.code) return;
-    closeMatchClick();
+  } else {
+    ElMessageBox.confirm(currentSettleType.value.confirmTxt, t('警告'), {
+      dangerouslyUseHTMLString: true,
+      confirmButtonText: t('确认'),
+      cancelButtonText: t('取消'),
+      center: true
+    }).then(() => {
+      sendReq();
+    });
+  }
+};
+
+//- 发送结算请求
+const sendReq = async () => {
+  const selttArr = [
+    'allSettlement',
+    'overTimeFullSettlement',
+    'penaltyKickSettlement'
+  ];
+
+  if (selttArr.includes(currentSettleType.value.reqUrl)) {
+    const r = await openPasswordInput();
+    if (!r) return;
+  }
+
+  const res = await API[currentSettleType.value.reqUrl as keyof typeof API]({
+    matchId: props.matchId
   });
+  message(res.msg, { type: res.code ? 'error' : 'success' });
+  if (res.code) return;
+  closeMatchClick();
 };
 </script>
 
-<style scoped></style>
+<style lang="scss">
+.tip_dialog {
+  .el-message-box__container {
+    align-items: flex-start;
+  }
+  .el-message-box__btns {
+    flex-direction: row;
+  }
+}
+</style>
