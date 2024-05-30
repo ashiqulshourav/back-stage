@@ -220,10 +220,10 @@ export function useTradingHook(type: 'early' | 'in') {
   //- 开启定时轮询任务
   const runLoopMatch = () => {
     if (loopTimer) clearInterval(loopTimer.value);
-    /* loopTimer.value = setInterval(() => {
+    loopTimer.value = setInterval(() => {
       //- 轮询不现实进度条
       getHandicapltems(true);
-    }, 5000); */
+    }, 5000);
   };
 
   //- 修改左侧选中比赛ID
