@@ -71,6 +71,15 @@ const inputCom = computed({
       s1.value = subtraction(s1.value, Math.abs(n), 2);
     }
     props.s.dpOdds = v;
+    if (Math.abs(props.s.dpOdds) >= 1) {
+      if (Math.abs(props.s.dpOdds) === 1) {
+        props.s.dpOdds = -1;
+      } else if (props.s.dpOdds > 0) {
+        props.s.dpOdds = subtraction(props.s.dpOdds, 2, 2);
+      } else {
+        props.s.dpOdds = subtraction(2, Math.abs(props.s.dpOdds), 2);
+      }
+    }
     changeDpOdds();
   }
 });
@@ -100,6 +109,15 @@ watch(
         props.s.dpOdds = addition(props.s.dpOdds, v, 2);
       } else if (v < 0) {
         props.s.dpOdds = subtraction(props.s.dpOdds, Math.abs(v), 2);
+      }
+      if (Math.abs(props.s.dpOdds) >= 1) {
+        if (Math.abs(props.s.dpOdds) === 1) {
+          props.s.dpOdds = -1;
+        } else if (props.s.dpOdds > 0) {
+          props.s.dpOdds = subtraction(props.s.dpOdds, 2, 2);
+        } else {
+          props.s.dpOdds = subtraction(2, Math.abs(props.s.dpOdds), 2);
+        }
       }
     }
   }
