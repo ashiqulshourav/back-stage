@@ -313,13 +313,13 @@ const shortcutSelectNum = (_: number, type: string) => {
     } else {
       d.dpOdds = addition(d.dpOdds, Math.abs(_), 2);
     }
-    if (Math.abs(d.dpOdds.dpOdds) >= 1) {
-      if (Math.abs(d.dpOdds.dpOdds) === 1) {
-        d.dpOdds.dpOdds = -1;
-      } else if (d.dpOdds.dpOdds > 0) {
-        d.dpOdds.dpOdds = subtraction(d.dpOdds.dpOdds, 2, 2);
+    if (Math.abs(d.dpOdds) >= 1) {
+      if (Math.abs(d.dpOdds) === 1) {
+        d.dpOdds = -1;
+      } else if (d.dpOdds > 0) {
+        d.dpOdds = subtraction(d.dpOdds, 2, 2);
       } else {
-        d.dpOdds.dpOdds = subtraction(2, Math.abs(d.dpOdds.dpOdds), 2);
+        d.dpOdds = subtraction(2, Math.abs(d.dpOdds), 2);
       }
     }
 

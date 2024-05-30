@@ -65,7 +65,7 @@ declare namespace sportTradingDataAPI {
     n: string;
     betCount: number;
     betAmount: number;
-    oddsVaribale: number;
+    oddsVariable: number;
     renderName?: string;
   }
 
