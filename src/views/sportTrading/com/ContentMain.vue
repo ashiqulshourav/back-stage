@@ -297,6 +297,7 @@ const changeSelectType = (type: string) => {
 const selectNum = ref(0);
 const shortcutSelectNum = (_: number, type: string) => {
   if (_ === 0) return;
+  
   type === 'shortcut' && (selectNum.value = _);
   const params: { betItemsId: number; dpOdds: number }[] = [];
 

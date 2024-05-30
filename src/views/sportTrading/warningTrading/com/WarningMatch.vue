@@ -66,8 +66,8 @@
                 :key="i"
                 class="border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#503e3e]"
               >
+                <!-- @mouseleave="e => mouseEvent(e, s, 'leave')" -->
                 <div
-                  @mouseleave="e => mouseEvent(e, s, 'leave')"
                   :class="[
                     'flex w-full items-center h-[35px]',
                     l === 0 && 'bg-[--el-color-primary-light-9]'
@@ -108,6 +108,7 @@
                     :selectNum="selectNum"
                     :selectItem="selectItem"
                     @changeSelectNum="(n:number) => shortcutSelectNum(n,'input')"
+                    @showShortcutContainer="showShortcutContainer"
                   />
                   <div
                     :class="[
@@ -135,9 +136,12 @@
 
       <!-- scroll滚动条 -->
       <div
-        v-show="isShowScroll"
-        class="fixed w-16 bg-[--el-color-primary-light-8] flex flex-col pt-2 pb-2 border-[1px] border-solid border-[#f0f0f0] dark:border-[#303030]"
+        :class="[
+          'fixed w-16 bg-[--el-color-primary-light-8] flex flex-col pt-2 pb-2 border-[1px] border-solid border-[#f0f0f0] dark:border-[#303030]',
+          isShowScroll ? 'visible' : 'invisible'
+        ]"
         :style="scrollPostitonObj"
+        @mouseleave="isShowScroll = false"
       >
         <el-scrollbar ref="scrollRef" height="180px">
           <div class="flex flex-col">
@@ -196,10 +200,10 @@ const shortcutSelectNum = (_: number, type: string) => {
   //- 下盘需要递减
   if (betItemsDtoList.length === 2) {
     const otherIdx = betItemsDtoList.findIndex(
-      item => item.betItemsId !== selectItem.betItemsId
+      item => item.betItemsId !== selectItem.value.betItemsId
     );
     const d = betItemsDtoList.find(
-      item => item.betItemsId !== selectItem.betItemsId
+      item => item.betItemsId !== selectItem.value.betItemsId
     ) as sportTradingDataAPI.BetItemsDtoList;
     if (_ > 0) {
       d.dpOdds = subtraction(d.dpOdds, Math.abs(_), 2);
@@ -216,7 +220,7 @@ const shortcutSelectNum = (_: number, type: string) => {
   } else {
     //- 长度大于3的盘口
     const d = betItemsDtoList.find(
-      item => item.betItemsId === selectItem.betItemsId
+      item => item.betItemsId === selectItem.value.betItemsId
     ) as sportTradingDataAPI.BetItemsDtoList;
     nextTick(() => {
       params.push({
@@ -229,7 +233,7 @@ const shortcutSelectNum = (_: number, type: string) => {
   nextTick(() => type === 'shortcut' && (selectNum.value = 0));
 };
 
-const selectItem = reactive<sportTradingDataAPI.BetItemsDtoList>(
+const selectItem = ref<sportTradingDataAPI.BetItemsDtoList>(
   {} as sportTradingDataAPI.BetItemsDtoList
 );
 
@@ -245,6 +249,7 @@ const scrollPostitonObj = reactive({ left: '0px', top: '0px' });
 
 const clearTime = () => {
   emits('clearMatchTime', -1);
+  selectItem.value.sourceBetItemsId = -1;
   isShowScroll.value = false;
 };
 
@@ -262,27 +267,28 @@ const mouseEvent = (
   type: 'enter' | 'leave',
   list?: sportTradingDataAPI.BetItemsDtoList[]
 ) => {
-  props.matchList.forEach(item => {
-    item.renderList.forEach(_ => {
-      _.list.forEach(d => {
-        d.kindsCodeDtoList.forEach(_ => {
-          _.betItemsDtoList.forEach(r => {
-            r.sourceBetItemsId = -1;
+  //- 进入之后清空所有内容
+  if (type === 'enter') {
+    props.matchList.forEach(item => {
+      item.renderList.forEach(_ => {
+        _.list.forEach(d => {
+          d.kindsCodeDtoList.forEach(_ => {
+            _.betItemsDtoList.forEach(r => {
+              r.sourceBetItemsId = -1;
+            });
           });
         });
       });
     });
-  });
-  //- 进入之后清空所有内容
-  if (type === 'enter') {
-    Object.assign(selectItem, s);
+    selectItem.value = s;
     scrollPostitonObj.left = `${e.target.getBoundingClientRect().left + 70}px`;
     scrollPostitonObj.top = `${e.target.getBoundingClientRect().top - 170}px`;
     betItemsDtoList.length = 0;
     betItemsDtoList.push(...(list as sportTradingDataAPI.BetItemsDtoList[]));
+    s.sourceBetItemsId = 1;
+  } else {
+    if (!isShowScroll.value) s.sourceBetItemsId = -1;
   }
-  isShowScroll.value = type === 'enter';
-  s.sourceBetItemsId = type === 'enter' ? 1 : -1;
   emits('clearMatchTime', s.sourceBetItemsId);
 };
 
@@ -297,6 +303,8 @@ const changeStatus = (d: {
 }) => {
   emits('changeStatus', d);
 };
+
+const showShortcutContainer = () => (isShowScroll.value = true);
 
 //- 跳转到订单界面
 const betStore = useBetStore();
