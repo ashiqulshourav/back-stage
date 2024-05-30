@@ -27,6 +27,7 @@
           @focus="inputFoucs(true)"
           controls-position="right"
           v-model="inputCom"
+          @change="changeDpOdds"
         />
       </div>
     </div>
@@ -58,12 +59,14 @@ const props = defineProps<{
 }>();
 
 const s1 = ref(0);
+const oldVal = ref(0);
 const inputCom = computed({
   get() {
     return props.s.dpOdds;
   },
   set(v: number) {
-    if (!v) return;
+    if (!v || oldVal.value === v) return;
+    oldVal.value = v;
     const n = subtraction(v, props.s.dpOdds, 2);
     if (n > 0) {
       s1.value = addition(s1.value, n, 2);
@@ -87,7 +90,7 @@ const inputCom = computed({
 const changeDpOdds = debounce(() => {
   emits('changeSelectNum', s1.value);
   s1.value = 0;
-}, 500);
+}, 1000);
 
 const showNum = ref(true);
 
