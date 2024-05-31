@@ -231,11 +231,11 @@ export function useTradingHook(type: 'early' | 'in') {
     Object.assign(currentMatch, data);
     clearTimeout(loopTimer.value);
     getHandicapltems();
-    selectContentType.value = 'all';
+    selectContentType.value = 'mainBetItemsDtoList';
   };
 
   //- 修改内容部分导航标签分类
-  const selectContentType = ref('all');
+  const selectContentType = ref('mainBetItemsDtoList');
   const changeSelectType = (type: string) => {
     selectContentType.value = type;
   };

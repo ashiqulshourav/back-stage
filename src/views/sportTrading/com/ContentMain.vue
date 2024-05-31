@@ -207,7 +207,7 @@ import { useBetStore } from '@/store/bet';
 import { ReText } from '@/components/ReText';
 
 const collapseRef = ref();
-const activeNames = ref([0]);
+const activeNames = ref([1]);
 const scrollRef = ref();
 const isShowScroll = ref(false);
 const scrollPostitonObj = reactive({ left: '0px', top: '0px' });
@@ -234,7 +234,7 @@ const numberList = (): number[] => {
 watch(
   () => props.currentMatch,
   () => {
-    activeNames.value = [0];
+    activeNames.value = [1];
   },
   {
     deep: true
