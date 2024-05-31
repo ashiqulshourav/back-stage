@@ -5,7 +5,7 @@ export const columns: TableColumnList = [
     label: t("序号"),
     prop: 'index',
     align:'left',
-
+    className: 'mw-50',
   },
   {
     label: t("用户信息"),

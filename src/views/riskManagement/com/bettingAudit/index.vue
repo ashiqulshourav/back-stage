@@ -637,4 +637,7 @@ watch(
 .mw-120 > .cell{
   min-width: 120px;
 }
+.mw-50 > .cell{
+  min-width: 55px;
+}
 </style>
