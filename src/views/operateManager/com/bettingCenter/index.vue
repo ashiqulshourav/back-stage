@@ -504,9 +504,6 @@ const {
 .bet_detail{
   min-width: 200px;
 }
-.status_detail{
-  width: 120px;
-}
 .match_item {
   margin-bottom: 10px;
   position: relative;
@@ -549,6 +546,8 @@ const {
   padding: 0 8px;
   color: #fff;
   border-radius: 4px;
+  width: auto;
+  display: inline-block;
 }
 .odd_item {
   min-width: 80px;
