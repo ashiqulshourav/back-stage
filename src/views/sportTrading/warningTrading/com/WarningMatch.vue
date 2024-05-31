@@ -107,6 +107,7 @@
                     "
                     :selectNum="selectNum"
                     :selectItem="selectItem"
+                    :betItemsDtoList="betItemsDtoList"
                     @changeSelectNum="(n:number) => shortcutSelectNum(n,'input')"
                     @showShortcutContainer="showShortcutContainer"
                   />
@@ -167,7 +168,7 @@
 import MatchTitle from './MatchTitle.vue';
 import { addition, subtraction } from '@pureadmin/utils';
 import IconGroup from '../../com/IconGroup.vue';
-import { PLAY_MATCH_NAME, goalScoring } from '../../util/playMap';
+import { PLAY_MATCH_NAME, goalScoring, resetDpodds } from '../../util/playMap';
 import InputCom from '../../com/InputCom.vue';
 import { useBetStore } from '@/store/bet';
 
@@ -181,13 +182,9 @@ const props = defineProps<{
 watch(
   () => props.matchData,
   () => {
-    nextTick(() => {
-      scrollRef.value.scrollTo(0, 520);
-    });
+    nextTick(() => scrollRef.value.scrollTo(0, 520));
   },
-  {
-    deep: true
-  }
+  { deep: true }
 );
 
 //-快捷选择数字事件
@@ -202,20 +199,24 @@ const shortcutSelectNum = (_: number, type: string) => {
     const otherIdx = betItemsDtoList.findIndex(
       item => item.betItemsId !== selectItem.value.betItemsId
     );
+
     const d = betItemsDtoList.find(
       item => item.betItemsId !== selectItem.value.betItemsId
     ) as sportTradingDataAPI.BetItemsDtoList;
+
     if (_ > 0) {
       d.dpOdds = subtraction(d.dpOdds, Math.abs(_), 2);
     } else {
       d.dpOdds = addition(d.dpOdds, Math.abs(_), 2);
     }
+    if (Math.abs(d.dpOdds) >= 1) d.dpOdds = resetDpodds(d.dpOdds);
     params.push(
       ...betItemsDtoList.map((d, index: number) => ({
         betItemsId: d.betItemsId,
         dpOdds: index !== otherIdx ? _ : _ * -1
       }))
     );
+
     emits('sendNewOdds', params);
   } else {
     //- 长度大于3的盘口

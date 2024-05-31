@@ -8,7 +8,8 @@
       v-if="showNum"
       :class="[
         'min-w-[120px] text-[--el-color-primary] text-left h-full flex items-center',
-        saleStatus !== 2 && 'text-[#909399]'
+        saleStatus !== 2 && '!text-[#909399]',
+        s.dpOdds?.toFixed(2) < 0 && 'translate-x-[-6px]'
       ]"
     >
       {{ s.dpOdds?.toFixed(2) }}
@@ -43,6 +44,7 @@
 import { subtraction, addition } from '@pureadmin/utils';
 import { debounce } from '@pureadmin/utils';
 import { hasAuth } from '@/router/utils';
+import { resetDpodds } from '../util/playMap';
 
 const emits = defineEmits([
   'changeMouse',
@@ -54,6 +56,7 @@ const props = defineProps<{
   selectNum: number;
   saleStatus: number;
   selectItem: sportTradingDataAPI.BetItemsDtoList;
+  betItemsDtoList: sportTradingDataAPI.BetItemsDtoList[];
 }>();
 
 const s1 = ref(0);
@@ -73,14 +76,19 @@ const inputCom = computed({
     }
     props.s.dpOdds = v;
     if (Math.abs(props.s.dpOdds) >= 1) {
-      if (Math.abs(props.s.dpOdds) === 1) {
-        props.s.dpOdds = -1;
-      } else if (props.s.dpOdds > 0) {
-        props.s.dpOdds = subtraction(props.s.dpOdds, 2, 2);
-      } else {
-        props.s.dpOdds = subtraction(2, Math.abs(props.s.dpOdds), 2);
-      }
+      props.s.dpOdds = resetDpodds(props.s.dpOdds);
     }
+
+    const d = props.betItemsDtoList.find(
+      item => item.betItemsId !== props.selectItem.betItemsId
+    ) as sportTradingDataAPI.BetItemsDtoList;
+    if (s1.value > 0) {
+      d.dpOdds = subtraction(d.dpOdds, Math.abs(s1.value), 2);
+    } else {
+      d.dpOdds = addition(d.dpOdds, Math.abs(s1.value), 2);
+    }
+    if (Math.abs(d.dpOdds) >= 1) d.dpOdds = resetDpodds(d.dpOdds);
+
     changeDpOdds();
   }
 });
