@@ -315,6 +315,7 @@ import {
 } from '@/utils/maps/sports_map';
 import { searchFormType } from '../util/types';
 import Download from '@iconify-icons/ep/download';
+import { useBetStore } from '@/store/bet';
 
 const props = defineProps<{
   loading: boolean;
@@ -370,6 +371,43 @@ const search = () => {
 const exportFile = () => {
   emits('exportFile');
 };
+
+/* 添加投注项ID分类 */
+const betStore = useBetStore();
+
+watch(
+  () => betStore.gameplayData,
+  v => {
+    if (v.betItemsId) {
+      props.form.betItemId = v.betItemsId;
+      props.form.matchId = v.matchId;
+    }
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+);
+
+onActivated(() => {
+  if (betStore.gameplayData.betItemsId) {
+    props.form.betItemId = betStore.gameplayData.betItemsId;
+    props.form.matchId = betStore.gameplayData.matchId;
+    search();
+  }
+});
+
+onDeactivated(() => {
+  if (betStore.gameplayData.betItemsId) {
+    props.form.betItemId = '';
+    props.form.matchId = '';
+    betStore.set_gameplay_data({
+      betItemsId: '',
+      matchId: ''
+    });
+    search();
+  }
+});
 </script>
 
 <style scoped lang="scss">
