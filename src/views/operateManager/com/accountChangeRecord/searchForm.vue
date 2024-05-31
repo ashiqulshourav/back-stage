@@ -113,7 +113,9 @@ const emits = defineEmits([
 ]);
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
-  // selectDate.value = '';
+  selectDate.value = '';
+  props.form.startCreatedAt = '';
+  props.form.endCreatedAt = '';
   // props.form.startCreatedAt = dayjs()
   //   .startOf('month')
   //   .format('YYYY-MM-DD HH:mm:ss');

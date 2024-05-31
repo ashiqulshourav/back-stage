@@ -13,6 +13,7 @@ export function useAccountChangeRecordHook() {
   const dataList = reactive<OperateManagementDataAPI.AccountChangeRecordType[]>([]);
   const loading = ref(true);
   const modifyBalanceLoading = ref(false);
+  const router = useRouter();
   const renderObj = reactive<UserAPI.operateUserList>(
     history.state.params as UserAPI.operateUserList
   );
@@ -23,8 +24,8 @@ export function useAccountChangeRecordHook() {
     background: true
   });
   const form = reactive<accountChangeRecordSearchFormType>({
-    createTimeStart: dayjs().startOf('month')?.valueOf(),
-    createTimeEnd: dayjs().endOf('day').valueOf(),
+    startCreatedAt: '',
+    endCreatedAt: '',
     userId: route.query.userId
   });
 
@@ -53,6 +54,15 @@ export function useAccountChangeRecordHook() {
   function handleSelectionChange(val) {
     console.log('handleSelectionChange', val);
   }
+
+  const goToUserListPage = () => {
+    router.push({
+      name:
+        route.path === '/operateManager/sportChangeAccountRecord'
+          ? 'OPERATEMANAGER_SPORTPLAYERLIST'
+          : 'OPERATEMANAGER_ESPORTPLAYERLIST',
+    });
+  };
 
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
@@ -121,6 +131,7 @@ export function useAccountChangeRecordHook() {
     openModifyBalanceDialog,
     modifyBalanceLoading,
     userData,
+    goToUserListPage,
     // changeBalance
   };
 }
