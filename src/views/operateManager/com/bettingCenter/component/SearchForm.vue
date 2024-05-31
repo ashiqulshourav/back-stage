@@ -16,7 +16,12 @@
             clearable
             @change="search"
           >
-            <el-option v-for="item in tenantList" :label="item.tenantName" :value="item.id" :key="item.id" />
+            <el-option
+              v-for="item in tenantList"
+              :label="item.tenantName"
+              :value="item.id"
+              :key="item.id"
+            />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('赛种')}:`" prop="sportId">
@@ -36,12 +41,18 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('注单状态')}:`" prop="queryType">
-          <el-select class="!w-[150px]"
-                     :placeholder="t('请选择状态')"
-                     v-model="form.queryType"
-                     @change="search"
+          <el-select
+            class="!w-[150px]"
+            :placeholder="t('请选择状态')"
+            v-model="form.queryType"
+            @change="search"
           >
-            <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
+            <el-option
+              v-for="item in Object.entries(betStatusMap)"
+              :label="item[1]"
+              :value="Number(item[0])"
+              :key="item[0]"
+            />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('投注阶段')}:`" prop="isInplay">
@@ -51,47 +62,63 @@
             class="!w-[120px]"
             @change="search"
           >
-            <el-option
-              label="全部"
-              value=""
-            />
-            <el-option
-              label="滚球"
-              :value="1"
-            />
-            <el-option
-              label="早盘"
-              :value="0"
-            />
+            <el-option label="全部" value="" />
+            <el-option label="滚球" :value="1" />
+            <el-option label="早盘" :value="0" />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('过关类型')}:`" prop="seriesType">
-          <el-select v-model="form.seriesType" clearable class="!w-[100px]" @change="search" >
-            <el-option  :label="t('全部')" value="" />
+          <el-select
+            v-model="form.seriesType"
+            clearable
+            class="!w-[100px]"
+            @change="search"
+          >
+            <el-option :label="t('全部')" value="" />
             <el-option :label="t('单关')" :value="1" />
             <el-option :label="t('单式串关')" :value="2" />
-            <el-option :label="t('复试串关')"  :value="3" />
+            <el-option :label="t('复试串关')" :value="3" />
           </el-select>
         </el-form-item>
-        <el-form-item v-if="form.seriesType===2" :label="`${t('单式串关类型')}:`" prop="seriesDetails">
-          <el-select class="min-w100"
-                     :placeholder="t('请选择串关类型')"
-                     multiple
-                     v-model="form.seriesDetailsSingle"
-                     clearable
+        <el-form-item
+          v-if="form.seriesType === 2"
+          :label="`${t('单式串关类型')}:`"
+          prop="seriesDetails"
+        >
+          <el-select
+            class="min-w100"
+            :placeholder="t('请选择串关类型')"
+            multiple
+            v-model="form.seriesDetailsSingle"
+            clearable
           >
-            <el-option v-for="item in seriesTypesSingle " :label="item.name" :value="item.value" :key="item.value" />
+            <el-option
+              v-for="item in seriesTypesSingle"
+              :label="item.name"
+              :value="item.value"
+              :key="item.value"
+            />
           </el-select>
         </el-form-item>
-        <el-form-item v-if="form.seriesType===3" :label="`${t('复试串关类型')}:`" prop="seriesDetails">
-          <el-select class="min-w100"
-                     :placeholder="t('请选择串关类型')"
-                     multiple
-                     v-model="form.seriesDetailsDuplex"
-                     @change="search"
-                     clearable
+        <el-form-item
+          v-if="form.seriesType === 3"
+          :label="`${t('复试串关类型')}:`"
+          prop="seriesDetails"
+        >
+          <el-select
+            class="min-w100"
+            :placeholder="t('请选择串关类型')"
+            multiple
+            v-model="form.seriesDetailsDuplex"
+            @change="search"
+            clearable
           >
-            <el-option v-for="item in seriesTypesDuplex" :label="item.name" :value="item.value" :key="item.value" />
+            <el-option
+              v-for="item in seriesTypesDuplex"
+              :label="item.name"
+              :value="item.value"
+              :key="item.value"
+            />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('联赛ID')}:`" prop="leagueId">
@@ -131,12 +158,26 @@
             class="!w-[200px]"
           />
         </el-form-item>
-        <el-form-item  :label="`${t('风控标签')}:`"  prop="riskControlLabelList">
-          <el-select v-model="form.riskControlLabelList"  @change="search" multiple clearable class="!w-[150px]">
-            <el-option v-for="item in riskLabelList" :label="item.name" :value="item.id" />
+        <el-form-item :label="`${t('风控标签')}:`" prop="riskControlLabelList">
+          <el-select
+            v-model="form.riskControlLabelList"
+            @change="search"
+            multiple
+            clearable
+            class="!w-[150px]"
+          >
+            <el-option
+              v-for="item in riskLabelList"
+              :label="item.name"
+              :value="item.id"
+            />
           </el-select>
         </el-form-item>
-        <el-form-item v-if="props.venueType===0"  :label="`${t('赛事类型')}:`" prop="category">
+        <el-form-item
+          v-if="props.venueType === 0"
+          :label="`${t('赛事类型')}:`"
+          prop="category"
+        >
           <el-select
             v-model="form.category"
             :placeholder="t('赛事类型')"
@@ -189,7 +230,11 @@
             v-enter="search"
           />
         </el-form-item>
-        <el-form-item :label="`${t('')}-`" prop="maxProfitAmount" class="arrange2">
+        <el-form-item
+          :label="`${t('')}-`"
+          prop="maxProfitAmount"
+          class="arrange2"
+        >
           <el-input
             v-model="form.maxProfitAmount"
             :placeholder="t('最大值')"
@@ -199,14 +244,32 @@
           />
         </el-form-item>
         <el-form-item prop="timeType">
-          <el-select v-model="form.timeType"  class="!w-[110px]" @change="search">
-            <el-option  :label="t('下注时间')" :value="1"  />
-            <el-option  :label="t('结算时间')" :value="2"  />
-            <el-option  :label="t('开赛时间')" :value="3"  />
+          <el-select
+            v-model="form.timeType"
+            class="!w-[110px]"
+            @change="search"
+          >
+            <el-option :label="t('下注时间')" :value="1" />
+            <el-option :label="t('结算时间')" :value="2" />
+            <el-option :label="t('开赛时间')" :value="3" />
           </el-select>
-          <CustomDate v-model:val="selectDate"  :start-placeholder="dayjs().startOf('month').format('YYYY-MM-DD')" :end-placeholder="dayjs().startOf('day').format('YYYY-MM-DD')" @changeDate="changeDate" />
+          <CustomDate
+            v-model:val="selectDate"
+            :start-placeholder="dayjs().startOf('month').format('YYYY-MM-DD')"
+            :end-placeholder="dayjs().startOf('day').format('YYYY-MM-DD')"
+            @changeDate="changeDate"
+          />
         </el-form-item>
         <el-form-item>
+          <el-form-item :label="`${t('投注项ID')}:`" prop="betItemId">
+            <el-input
+              v-model="form.betItemId"
+              :placeholder="t('投注项ID')"
+              clearable
+              class="!w-[180px]"
+              v-enter="search"
+            />
+          </el-form-item>
 
           <el-button
             type="primary"
@@ -255,19 +318,25 @@ import Download from '@iconify-icons/ep/download';
 
 const props = defineProps<{
   loading: boolean;
-  riskLabelList:UserAPI.labelType[];
+  riskLabelList: UserAPI.labelType[];
   form: searchFormType;
-  tenantList: []
-  venueType: number
+  tenantList: [];
+  venueType: number;
   downloading: boolean;
 }>();
 
 const formRef = ref();
 const selectDate = ref('');
-const gameClassify = ref<{ label: string; value: number }[]>(props.venueType===1?ESPORT_ID_MAP:SPORT_ID_MAP);
-import {  betStatusMap,seriesTypesSingle,seriesTypesDuplex} from "../util/types";
-import {hasAuth} from "@/router/utils";
-import CustomDate from "@/components/Form/Custom_date.vue";
+const gameClassify = ref<{ label: string; value: number }[]>(
+  props.venueType === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP
+);
+import {
+  betStatusMap,
+  seriesTypesSingle,
+  seriesTypesDuplex
+} from '../util/types';
+import { hasAuth } from '@/router/utils';
+import CustomDate from '@/components/Form/Custom_date.vue';
 
 const emits = defineEmits(['onSearch', 'exportFile']);
 const resetForm = (formEl: FormInstance | undefined) => {
@@ -291,7 +360,7 @@ const chagenMatchType = (type: 0 | 1 | 2) => {
   props.form.sportId = '';
   //- 电竞比赛 =1
   gameClassify.value = type === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
-  search()
+  search();
 };
 
 const search = () => {
@@ -307,7 +376,7 @@ const exportFile = () => {
 :deep(.el-dropdown-menu__item i) {
   margin: 0;
 }
-.min-w100{
+.min-w100 {
   min-width: 100px;
 }
 .search-form {
@@ -315,7 +384,7 @@ const exportFile = () => {
     margin-bottom: 12px;
   }
 }
-.arrange2{
+.arrange2 {
   margin-left: -25px;
 }
 </style>
