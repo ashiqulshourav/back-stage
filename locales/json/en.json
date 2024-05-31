@@ -1054,7 +1054,7 @@
   "k-5bd6f419": "主/客",
   "k-2d984472": "球员名称",
   "k29f4a9c5": "Match ID ",
-  "k-383bc73": "不能为空",
+  "k-383bc73": "Cannot be empty",
   "k653baded": "User's Available Payout Balance Inquiry",
   "k39eb9507": "Available Payout Balance for Single Match",
   "k-6db73539": "Available Payout Balance for Multi-bet / Day",
@@ -1147,6 +1147,8 @@
   "k-5d386b5e": "export",
   "k-70e92dac": "Single",
   "k1e1e14d6": "Parlay",
+  "k17637687": "Multiple",
+  "k17637687": "Multiple",
   "k-24930c47": "User ID",
   "k61e7b55a": "Betting Time",
   "k17637687": "Multiple",
@@ -1190,4 +1192,5 @@
   "k-475f9ab1": "The overtime switch been turned on. After confirming, will begin the overtime settlement phase. This is cannot be restored. ",
   "k621775de": "Confirm to enter penalty shootout settlement?",
   "ke45bb3a": "The shootout switch been turned on. After confirming , will begin the penalty shootout settlement phase. This is cannot be restored."
+  "k-102bec3a": "Back to previous page"
 }

@@ -2,10 +2,7 @@ import dayjs from "dayjs"
 import {addThousandSeparator} from "@/utils/formatNumber";
 
 export const accountChangeTypeCodeList = [
-  {
-    label: t("系统自动结算"),
-    value: 30
-  },
+  { label: t("系统自动结算"), value: 30 },
   { label: t("结算返还（加钱）"), value: 31 },
   { label: t("手动结算（加钱）"), value: 91 },
   { label: t("手动结算（扣钱）"), value: 90 },

@@ -28,10 +28,12 @@
     <el-form-item :label="` `" prop="amount">
       <div class="w-full flex">
         <el-input
-          v-model="enteredAmount"
+          v-model="editFrom.amount"
           clearable
-          type="number"
+          type="text"
           :placeholder="t('请输入数字最高10000元')"
+          @keydown="checkDigit" 
+          @input="handleInput"
         />
         <div class="pl-2">{{ t('元') }}</div>
       </div>
@@ -80,19 +82,25 @@ const editFrom = reactive<modifyBalanceFormType>({
 });
 
 const name = ref(props.userName);
-const enteredAmount = ref(editFrom.amount);
 
-watch(enteredAmount, (newValue) => {
-  if (newValue > 10000) {
-    editFrom.amount = 10000;
-    enteredAmount.value = 10000;
-  } else if (newValue <= 0) {
-    editFrom.amount = '';
-    enteredAmount.value = '';
-  }else {
-    editFrom.amount = newValue;
+const checkDigit = (event: KeyboardEvent) => {
+  const input = event.target as HTMLInputElement;
+  const value = input.value;
+  // Allowing digits, backspace, and up to two decimal points
+  if (
+    !/^\d*\.?\d{0,2}$/.test(value + event.key) &&
+    event.key !== "Backspace"
+  ) {
+    event.preventDefault();
   }
-});
+};
+
+const handleInput = (value: number) => {
+  // Set value back to 10000 if it exceeds 10000
+  if (value > 10000) {
+    editFrom.amount = 10000;
+  }
+};
 
 const isEditFormHasNull = (editFrom: modifyBalanceFormType) => {
   for (const value of Object.values(editFrom)) {
