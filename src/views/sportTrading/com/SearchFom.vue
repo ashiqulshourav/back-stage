@@ -1,11 +1,11 @@
 <template>
   <div class="search-form bg-bg_color w-[99/100] pl-5 pt-[12px]">
     <el-form ref="formRef" :inline="true" :model="form">
-      <el-form-item prop="sportId">
+      <el-form-item prop="sportId" class="!mr-3">
         <el-select
           v-model="form.sportId"
           :placeholder="t('游戏种类')"
-          class="!w-[150px]"
+          class="!w-[100px]"
           @change="search"
         >
           <el-option
@@ -18,7 +18,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item prop="leagueNameOrId">
+      <el-form-item prop="leagueNameOrId" class="!mr-3">
         <el-input
           v-model="form.leagueNameOrId"
           :placeholder="t('联赛名称/ID')"
@@ -29,7 +29,7 @@
         />
       </el-form-item>
 
-      <el-form-item prop="matchNameOrId">
+      <el-form-item prop="matchNameOrId" class="!mr-3">
         <el-input
           v-model="form.matchNameOrId"
           :placeholder="t('赛事ID')"
@@ -41,7 +41,7 @@
         />
       </el-form-item>
 
-      <el-form-item prop="startTime" v-if="type === 'early'">
+      <el-form-item prop="startTime" v-if="type === 'early'" class="!mr-3">
         <el-button
           v-for="(item, index) in preDayArr"
           :key="index"
@@ -49,10 +49,14 @@
           @click="changeSelectDate(index)"
           >{{ index === 0 ? t('今日') : item.label }}</el-button
         >
-        <CustomDate v-model:val="selectDate" @changeDate="changeDate" />
+        <CustomDate
+          v-model:val="selectDate"
+          @changeDate="changeDate"
+          class="!ml-3"
+        />
       </el-form-item>
 
-      <el-form-item prop="startTime" v-else>
+      <el-form-item prop="startTime" v-else class="!mr-3">
         <el-time-picker
           v-model="selectDate"
           is-range

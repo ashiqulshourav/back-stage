@@ -56,9 +56,15 @@
                 <div
                   class="flex items-center pl-2 self-start w-[280px] justify-between bg-[--el-color-primary-light-9] h-[35px] pr-2"
                 >
-                  <span class="text-[#409EFF] font-bold leading-none">{{
-                    _.betItemsName
-                  }}</span>
+                  <ReText
+                    size="small"
+                    :tippyProps="{ content: _.betItemsName }"
+                  >
+                    <span class="text-[#409EFF] font-bold leading-none">{{
+                      _.betItemsName
+                    }}</span>
+                  </ReText>
+
                   <div class="flex pl-2 cursor-pointer">
                     <IconGroup
                       :typeNum="_.isSale"
