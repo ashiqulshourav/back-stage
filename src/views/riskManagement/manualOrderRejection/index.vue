@@ -280,19 +280,6 @@
                 }}
               </div>
               <div>{{ markeTypeMap[item.marketType] }}</div>
-              <div v-if="BET_RESULT_TYPE_MAP[item?.betResult]">
-                <span
-                  :class="
-                    [EBetResultType.WIN, EBetResultType.WIN_HALF].includes(
-                      item?.betResult
-                    )
-                      ? 'win'
-                      : 'lose'
-                  "
-                >
-                  {{ BET_RESULT_TYPE_MAP[item?.betResult] }}</span
-                >
-              </div>
             </div>
           </template>
           <template #operation="{ row }">
