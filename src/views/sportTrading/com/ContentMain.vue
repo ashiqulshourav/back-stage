@@ -111,7 +111,12 @@
                           }}
                         </ReText>
                       </div>
-                      <div class="text-center w-1/6">
+                      <div
+                        :class="[
+                          'text-center w-1/6',
+                          s.odds < 0 && 'translate-x-[-2px]'
+                        ]"
+                      >
                         {{ s.odds.toFixed(2) }}
                       </div>
                       <InputCom
@@ -124,6 +129,7 @@
                         "
                         :selectNum="selectNum"
                         :selectItem="selectItem"
+                        :betItemsDtoList="betItemsDtoList"
                         @changeSelectNum="(n:number) =>
                       shortcutSelectNum(n,'input')"
                       />
@@ -188,7 +194,7 @@ import { handicapListType } from '../util/type';
 import IconGroup from './IconGroup.vue';
 import ContentTitle from './ContentTitle.vue';
 import { addition, subtraction } from '@pureadmin/utils';
-import { PLAY_MATCH_NAME, goalScoring } from '../util/playMap';
+import { PLAY_MATCH_NAME, goalScoring, resetDpodds } from '../util/playMap';
 import InputCom from './InputCom.vue';
 import { t } from '@/plugins/i18n';
 import { useBetStore } from '@/store/bet';
@@ -297,7 +303,6 @@ const changeSelectType = (type: string) => {
 const selectNum = ref(0);
 const shortcutSelectNum = (_: number, type: string) => {
   if (_ === 0) return;
-
   type === 'shortcut' && (selectNum.value = _);
   const params: { betItemsId: number; dpOdds: number }[] = [];
   //- 下盘需要递减
@@ -305,22 +310,18 @@ const shortcutSelectNum = (_: number, type: string) => {
     const otherIdx = betItemsDtoList.findIndex(
       item => item.betItemsId !== selectItem.value.betItemsId
     );
-    const d = betItemsDtoList.find(
-      item => item.betItemsId !== selectItem.value.betItemsId
-    ) as sportTradingDataAPI.BetItemsDtoList;
-    if (_ > 0) {
-      d.dpOdds = subtraction(d.dpOdds, Math.abs(_), 2);
-    } else {
-      d.dpOdds = addition(d.dpOdds, Math.abs(_), 2);
-    }
-    if (Math.abs(d.dpOdds) >= 1) {
-      if (Math.abs(d.dpOdds) === 1) {
-        d.dpOdds = -1;
-      } else if (d.dpOdds > 0) {
-        d.dpOdds = subtraction(d.dpOdds, 2, 2);
+
+    //- 快捷选择单独处理
+    if (type === 'shortcut') {
+      const d = betItemsDtoList.find(
+        item => item.betItemsId !== selectItem.value.betItemsId
+      ) as sportTradingDataAPI.BetItemsDtoList;
+      if (_ > 0) {
+        d.dpOdds = subtraction(d.dpOdds, Math.abs(_), 2);
       } else {
-        d.dpOdds = subtraction(2, Math.abs(d.dpOdds), 2);
+        d.dpOdds = addition(d.dpOdds, Math.abs(_), 2);
       }
+      if (Math.abs(d.dpOdds) >= 1) d.dpOdds = resetDpodds(d.dpOdds);
     }
 
     params.push(
