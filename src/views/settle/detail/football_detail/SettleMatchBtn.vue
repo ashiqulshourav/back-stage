@@ -193,7 +193,6 @@ const sendReq = async () => {
     const r = await openPasswordInput();
     if (!r) return;
   }
-
   const res = await API[currentSettleType.value.reqUrl as keyof typeof API]({
     matchId: props.matchId
   });
