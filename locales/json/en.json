@@ -1147,8 +1147,6 @@
   "k-5d386b5e": "export",
   "k-70e92dac": "Single",
   "k1e1e14d6": "Parlay",
-  "k17637687": "Multiple",
-  "k17637687": "Multiple",
   "k-24930c47": "User ID",
   "k61e7b55a": "Betting Time",
   "k17637687": "Multiple",
@@ -1187,5 +1185,9 @@
   "k7ba2c1df": "After confirmation, user ",
   "k-13dbb7b5": " will add ",
   "k1cf85aa8": " will deduct ",
-  "k34a5bb33": "Please enter an amount up to 10000元"
+  "k34a5bb33": "Please enter an amount up to 10000元",
+  "k-2f3153b8": "Confirm to enter overtime settlement?",
+  "k-475f9ab1": "The overtime switch been turned on. After confirming, will begin the overtime settlement phase. This is cannot be restored. ",
+  "k621775de": "Confirm to enter penalty shootout settlement?",
+  "ke45bb3a": "The shootout switch been turned on. After confirming , will begin the penalty shootout settlement phase. This is cannot be restored."
 }
