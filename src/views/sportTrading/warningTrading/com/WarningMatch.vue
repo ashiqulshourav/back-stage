@@ -199,17 +199,19 @@ const shortcutSelectNum = (_: number, type: string) => {
     const otherIdx = betItemsDtoList.findIndex(
       item => item.betItemsId !== selectItem.value.betItemsId
     );
-
-    const d = betItemsDtoList.find(
-      item => item.betItemsId !== selectItem.value.betItemsId
-    ) as sportTradingDataAPI.BetItemsDtoList;
-
-    if (_ > 0) {
-      d.dpOdds = subtraction(d.dpOdds, Math.abs(_), 2);
-    } else {
-      d.dpOdds = addition(d.dpOdds, Math.abs(_), 2);
+    //- 快捷选择单独处理
+    if (type === 'shortcut') {
+      const d = betItemsDtoList.find(
+        item => item.betItemsId !== selectItem.value.betItemsId
+      ) as sportTradingDataAPI.BetItemsDtoList;
+      if (_ > 0) {
+        d.dpOdds = subtraction(d.dpOdds, Math.abs(_), 2);
+      } else {
+        d.dpOdds = addition(d.dpOdds, Math.abs(_), 2);
+      }
+      if (Math.abs(d.dpOdds) >= 1) d.dpOdds = resetDpodds(d.dpOdds);
     }
-    if (Math.abs(d.dpOdds) >= 1) d.dpOdds = resetDpodds(d.dpOdds);
+
     params.push(
       ...betItemsDtoList.map((d, index: number) => ({
         betItemsId: d.betItemsId,
