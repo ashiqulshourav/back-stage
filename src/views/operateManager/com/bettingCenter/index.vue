@@ -23,7 +23,6 @@
           align-whole="center"
           table-layout="auto"
           :loading="loading"
-          showOverflowTooltip
           :size="size"
           class="table_container"
           adaptive
@@ -33,6 +32,7 @@
           :pagination="pagination"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
+          @selection-change="handleSelectionChange"
           @page-size-change="handlePageSizeChange"
           @page-current-change="handleCurrentChange"
         >
@@ -269,7 +269,7 @@
                 }}
               </div>
               <div>{{ markeTypeMap[(item.marketType )as keyof typeof markeTypeMap] }}</div>
-              <div v-if="getOddStatus(row.status,row.billStatus,row.isReserve,item.riskStatus,item?.betResult)">
+              <div v-if="getOddStatus(item?.betResult,item.riskStatus)">
                 <span
                   :class="
                     [EBetResultType.WIN, EBetResultType.WIN_HALF].includes(
@@ -279,7 +279,7 @@
                       : 'lose'
                   "
                 >
-                  {{getOddStatus(row.status,row.billStatus,row.isReserve,item.riskStatus,item?.betResult)}}
+                  {{getOddStatus(item?.betResult,item.riskStatus)}}
                 </span
                 >
               </div>
@@ -293,7 +293,7 @@
             >
             <span v-else>-</span>
           </template>
-          <template #settleStatus="{ row }">
+          <template #status="{ row }">
             <div
               :style="{
                 background: getStatus(
@@ -301,11 +301,11 @@
                   row.billStatus,
                   row.betResultArr,
                   row.isReserve,
-                  row.riskStatusArr,
+                  row.riskStatus,
                   row.isSpecialSettle
                 ).bgColor
               }"
-              class="settle_status_detail status_btn"
+              class="status_detail status_btn mb-1 mx-auto"
             >
               {{
                 betStatusMap[
@@ -314,7 +314,7 @@
                     row.billStatus,
                     row.betResultArr,
                     row.isReserve,
-                    row.riskStatusArr,
+                    row.riskStatus,
                     row.isSpecialSettle
                   ).status as keyof typeof betStatusMap
                   ]
@@ -345,23 +345,6 @@
                   ? calculateSeriesTypeTotal(row.combineOrderDetails)
                   : ''
               }}
-            </div>
-          </template>
-          <template #riskStatus="{ row }">
-            <div
-              class="riskStatus_detail"
-              v-for="item in row.combineOrderDetails"
-              :key="item.id"
-            >
-             <span
-              :style="{
-                  background: getRiskStatusColor(
-                    item.riskStatus,
-                  ).bgColor
-                }"
-              :class="item.riskStatus !== 0 ? 'status_btn block' : ''"
-             >{{riskStatusMap[item.riskStatus as keyof typeof riskStatus]||'-'}}</span>
-              <span v-if="riskStatusMap[item.riskStatus as keyof typeof riskStatus]&&item.riskType">原因:{{item.riskType}}</span>
             </div>
           </template>
           <template #operation="{ row }">
@@ -464,7 +447,7 @@ import {
   displayHomeAwayScore,
   getIsInplay
 } from '@/utils/formatMatch';
-import {betStatus, betStatusMap, riskStatus, riskStatusMap} from './util/types';
+import { betStatus, betStatusMap } from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
 import {useRenderIcon} from "@/components/ReIcon/src/hooks";
@@ -484,6 +467,7 @@ const {
   onSearch,
   handlePageSizeChange,
   handleCurrentChange,
+  handleSelectionChange,
   exportFile,
   handleCancel,
   getStatus,
@@ -495,8 +479,7 @@ const {
   editOrderRemark,
   riskLabelList,
   getOddStatus,
-  downloading,
-  getRiskStatusColor,
+  downloading
 } = useBettingCenterHook(props.category, props.venueType);
 </script>
 
@@ -521,22 +504,8 @@ const {
 .bet_detail{
   min-width: 200px;
 }
-.settle_status_detail{
-  min-width: 80px;
-  display: flex;
-  justify-items: center;
-  justify-content: center;
-  max-width: fit-content;
-  margin: 0 auto;
-}
-.riskStatus_detail{
-  width: 100%;
-  min-height: 100px;
-  display: flex;
-  flex-direction: column;
-  justify-items: center;
-  align-items: center;
-  justify-content: center;
+.status_detail{
+  width: 120px;
 }
 .match_item {
   margin-bottom: 10px;
@@ -577,18 +546,13 @@ const {
   text-align: center;
   height: 25px;
   line-height: 25px;
-  padding: 0 10px;
+  padding: 0 8px;
   color: #fff;
   border-radius: 4px;
-  word-break: keep-all;
 }
 .odd_item {
   min-width: 80px;
   min-height: 100px;
-  display: flex;
-  justify-items: center;
-  justify-content: center;
-  flex-direction: column;
 }
 
 .operate {

@@ -9,33 +9,33 @@
       <div>
         <el-form-item :label="`${t('商户名')}:`" prop="tenantIds">
           <el-select
-              class="!min-w-[200px]"
-              :placeholder="t('请选择商户ID，多选项')"
-                     multiple
-                     v-model="form.tenantIds"
-                     clearable
-                     @change="search"
+            class="!min-w-[200px]"
+            :placeholder="t('请选择商户ID，多选项')"
+            multiple
+            v-model="form.tenantIds"
+            clearable
+            @change="search"
           >
             <el-option v-for="item in tenantList" :label="item.tenantName" :value="item.id" :key="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('赛种')}:`" prop="sportId">
           <el-select
-              v-model="form.sportId"
-              :placeholder="t('赛种')"
-              class="!w-[160px]"
-              @change="search"
+            v-model="form.sportId"
+            :placeholder="t('赛种')"
+            class="!w-[160px]"
+            @change="search"
           >
             <el-option :label="t('全部')" :value="''" />
             <el-option
-                :label="item.label"
-                :value="item.value"
-                v-for="item in gameClassify"
-                :key="item.value"
+              :label="item.label"
+              :value="item.value"
+              v-for="item in gameClassify"
+              :key="item.value"
             />
           </el-select>
         </el-form-item>
-        <el-form-item :label="`${t('结算状态')}:`" prop="queryType">
+        <el-form-item :label="`${t('注单状态')}:`" prop="queryType">
           <el-select class="!w-[150px]"
                      :placeholder="t('请选择状态')"
                      v-model="form.queryType"
@@ -44,31 +44,24 @@
             <el-option v-for="item in Object.entries(betStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
           </el-select>
         </el-form-item>
-        <el-form-item :label="`${t('风控状态')}:`" prop="riskStatus">
-
-          <el-select v-model="form.riskStatus"   class="!w-[150px]" @change="search">
-            <el-option  :label="t('全部')"  value="" />
-            <el-option v-for="item in Object.entries(riskStatusMap)" :label="item[1]" :value="Number(item[0])" :key="item[0]" />
-          </el-select>
-        </el-form-item>
         <el-form-item :label="`${t('投注阶段')}:`" prop="isInplay">
           <el-select
-              v-model="form.isInplay"
-              clearable
-              class="!w-[120px]"
-              @change="search"
+            v-model="form.isInplay"
+            clearable
+            class="!w-[120px]"
+            @change="search"
           >
             <el-option
-                label="全部"
-                value=""
+              label="全部"
+              value=""
             />
             <el-option
-                label="滚球"
-                :value="1"
+              label="滚球"
+              :value="1"
             />
             <el-option
-                label="早盘"
-                :value="0"
+              label="早盘"
+              :value="0"
             />
           </el-select>
         </el-form-item>
@@ -103,39 +96,39 @@
         </el-form-item>
         <el-form-item :label="`${t('联赛ID')}:`" prop="leagueId">
           <el-input
-              v-model="form.leagueId"
-              :placeholder="t('联赛ID')"
-              clearable
-              v-enter="search"
-              class="!w-[150px]"
+            v-model="form.leagueId"
+            :placeholder="t('联赛ID')"
+            clearable
+            v-enter="search"
+            class="!w-[150px]"
           />
         </el-form-item>
         <el-form-item :label="`${t('联赛名')}:`" prop="leagueName">
           <el-input
-              v-model="form.leagueName"
-              :placeholder="t('联赛名')"
-              clearable
-              v-enter="search"
-              class="!w-[150px]"
+            v-model="form.leagueName"
+            :placeholder="t('联赛名')"
+            clearable
+            v-enter="search"
+            class="!w-[150px]"
           />
         </el-form-item>
         <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
           <el-input
-              v-model="form.matchId"
-              :placeholder="t('赛事ID')"
-              clearable
-              v-enter="search"
-              class="!w-[150px]"
+            v-model="form.matchId"
+            :placeholder="t('赛事ID')"
+            clearable
+            v-enter="search"
+            class="!w-[150px]"
           />
         </el-form-item>
         <el-form-item :label="`${t('玩家号')}:`" prop="userIdOrName">
           <el-input
-              v-model="form.userIdOrName"
-              :placeholder="t('请输入会员账号/ID')"
-              clearable
-              maxLenght="20"
-              v-enter="search"
-              class="!w-[200px]"
+            v-model="form.userIdOrName"
+            :placeholder="t('请输入会员账号/ID')"
+            clearable
+            maxLenght="20"
+            v-enter="search"
+            class="!w-[200px]"
           />
         </el-form-item>
         <el-form-item  :label="`${t('风控标签')}:`"  prop="riskControlLabelList">
@@ -171,38 +164,38 @@
         </el-form-item>
         <el-form-item :label="`${t('投注额')}:`" prop="minBetAmount">
           <el-input
-              v-model="form.minBetAmount"
-              :placeholder="t('最小值')"
-              clearable
-              class="!w-[110px]"
-              v-enter="search"
+            v-model="form.minBetAmount"
+            :placeholder="t('最小值')"
+            clearable
+            class="!w-[110px]"
+            v-enter="search"
           />
         </el-form-item>
         <el-form-item :label="`${t('')}-`" prop="maxBetAmount" class="arrange2">
           <el-input
-              v-model="form.maxBetAmount"
-              :placeholder="t('最大值')"
-              clearable
-              class="!w-[110px]"
-              v-enter="search"
+            v-model="form.maxBetAmount"
+            :placeholder="t('最大值')"
+            clearable
+            class="!w-[110px]"
+            v-enter="search"
           />
         </el-form-item>
         <el-form-item :label="`${t('用户输赢金额')}:`" prop="minProfitAmount">
           <el-input
-              v-model="form.minProfitAmount"
-              :placeholder="t('最小值')"
-              clearable
-              class="!w-[110px]"
-              v-enter="search"
+            v-model="form.minProfitAmount"
+            :placeholder="t('最小值')"
+            clearable
+            class="!w-[110px]"
+            v-enter="search"
           />
         </el-form-item>
         <el-form-item :label="`${t('')}-`" prop="maxProfitAmount" class="arrange2">
           <el-input
-              v-model="form.maxProfitAmount"
-              :placeholder="t('最大值')"
-              clearable
-              class="!w-[110px]"
-              v-enter="search"
+            v-model="form.maxProfitAmount"
+            :placeholder="t('最大值')"
+            clearable
+            class="!w-[110px]"
+            v-enter="search"
           />
         </el-form-item>
         <el-form-item prop="timeType">
@@ -234,9 +227,18 @@
             :icon="useRenderIcon(Download)"
             :loading="downloading"
             v-if="hasAuth('EXPORT')"
-            @click="exportFile()"
+            @click="exportFile('settle')"
           >
-            {{ t('导出报表') }}
+            {{ t('结算导出报表') }}
+          </el-button>
+          <el-button
+            type="primary"
+            :icon="useRenderIcon(Download)"
+            :loading="downloading"
+            v-if="hasAuth('EXPORT')"
+            @click="exportFile('risk')"
+          >
+            {{ t('风控导出报表') }}
           </el-button>
         </el-form-item>
       </div>
@@ -272,7 +274,7 @@ const props = defineProps<{
 const formRef = ref();
 const selectDate = ref('');
 const gameClassify = ref<{ label: string; value: number }[]>(props.venueType===1?ESPORT_ID_MAP:SPORT_ID_MAP);
-import {  betStatusMap,seriesTypesSingle,seriesTypesDuplex,riskStatusMap} from "../util/types";
+import {  betStatusMap,seriesTypesSingle,seriesTypesDuplex} from "../util/types";
 import {hasAuth} from "@/router/utils";
 import CustomDate from "@/components/Form/Custom_date.vue";
 
@@ -305,8 +307,8 @@ const search = () => {
   emits('onSearch', ...['reload']);
 };
 
-const exportFile = () => {
-  emits('exportFile');
+const exportFile = (flag) => {
+  emits('exportFile',flag);
 };
 </script>
 
