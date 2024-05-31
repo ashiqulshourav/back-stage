@@ -227,18 +227,9 @@
             :icon="useRenderIcon(Download)"
             :loading="downloading"
             v-if="hasAuth('EXPORT')"
-            @click="exportFile('settle')"
+            @click="exportFile()"
           >
-            {{ t('结算导出报表') }}
-          </el-button>
-          <el-button
-            type="primary"
-            :icon="useRenderIcon(Download)"
-            :loading="downloading"
-            v-if="hasAuth('EXPORT')"
-            @click="exportFile('risk')"
-          >
-            {{ t('风控导出报表') }}
+            {{ t('导出报表') }}
           </el-button>
         </el-form-item>
       </div>
@@ -307,8 +298,8 @@ const search = () => {
   emits('onSearch', ...['reload']);
 };
 
-const exportFile = (flag) => {
-  emits('exportFile',flag);
+const exportFile = () => {
+  emits('exportFile');
 };
 </script>
 
