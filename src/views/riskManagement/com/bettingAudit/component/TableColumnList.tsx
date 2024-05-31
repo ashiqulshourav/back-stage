@@ -39,6 +39,7 @@ export const columns: TableColumnList = [
     prop: "productAmountTotal",
     minWidth: 120,
     align:'center',
+    className: 'mw-120',
     formatter: ({ productAmountTotal }) => (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
   },
   {

@@ -293,9 +293,10 @@
             <span
               v-if="row.profitAmount"
               :class="row.profitAmount > 0 ? 'win' : 'lose'"
+              class="min-w-[100px] inline-block"
               >{{ row.profitAmount.toFixed(2) }}</span
             >
-            <span v-else>-</span>
+            <span v-else class="min-w-[100px] inline-block">-</span>
           </template>
           <template #riskStatus="{ row }">
             <div
@@ -632,5 +633,8 @@ watch(
 }
 .operation_item {
   width: 100px;
+}
+.mw-120 > .cell{
+  min-width: 120px;
 }
 </style>
