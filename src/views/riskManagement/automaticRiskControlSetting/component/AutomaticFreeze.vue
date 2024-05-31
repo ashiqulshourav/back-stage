@@ -1,7 +1,7 @@
 <template>
   <div>
     <pure-table
-      maxHeight="500"
+      height="700"
       align-whole="center"
       :loading="loading"
       size="small"
@@ -13,7 +13,7 @@
       <template #isDisable="{ row }">
         <el-switch
           v-if="isEditRiskControls"
-          size="large"
+          size="small"
           v-model="row.isDisable"
           :active-value="1"
           :inactive-value="0"
@@ -23,7 +23,7 @@
         />
         <span v-else>
           <el-switch
-            size="large"
+            size="small"
             v-model="row.isDisable"
             :active-value="1"
             :inactive-value="0"

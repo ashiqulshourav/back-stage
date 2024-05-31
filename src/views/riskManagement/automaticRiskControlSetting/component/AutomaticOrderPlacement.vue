@@ -1,7 +1,7 @@
 <template>
   <div>
     <pure-table
-      maxHeight="500"
+      height="700"
       align-whole="center"
       :loading="loading"
       size="small"
