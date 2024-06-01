@@ -4,6 +4,7 @@ import { searchFormType } from '@/views/operateManager/com/bettingCenter/util/ty
 export const bettingCenter = {
   //-结算中心列表
   bettingCenterList: (data: searchFormType) => http.request<any>("post", "/bet-center/list", { data }),
+  bettingCenterExport: (data: searchFormType) => http.request<any>("post", "/bet-center/listExport", { data }),
   betcenterRisk: (data: searchFormType) => http.request<any>("post", "/bet-center/risk", { data }),
   orderCancel: (data: {
     orderId: number;

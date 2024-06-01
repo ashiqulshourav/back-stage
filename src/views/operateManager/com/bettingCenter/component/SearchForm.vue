@@ -294,6 +294,16 @@
           >
             {{ t('导出报表') }}
           </el-button>
+
+          <el-button
+            type="primary"
+            :icon="useRenderIcon(Download)"
+            :loading="downloading"
+            v-if="hasAuth('EXPORT')"
+            @click="exportFileTest()"
+          >
+            {{ t('导出报表 TEST') }}
+          </el-button>
         </el-form-item>
       </div>
     </div>
@@ -339,7 +349,7 @@ import {
 import { hasAuth } from '@/router/utils';
 import CustomDate from '@/components/Form/Custom_date.vue';
 
-const emits = defineEmits(['onSearch', 'exportFile']);
+const emits = defineEmits(['onSearch', 'exportFile', 'exportFileTest']);
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl?.resetFields();
   selectDate.value = '';
@@ -370,6 +380,10 @@ const search = () => {
 
 const exportFile = () => {
   emits('exportFile');
+};
+
+const exportFileTest = () => {
+  emits('exportFileTest');
 };
 
 /* 添加投注项ID分类 */
