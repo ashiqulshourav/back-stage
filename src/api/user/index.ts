@@ -41,6 +41,24 @@ export const user = {
     http.request<UserAPI.operateUserListReqType>('post', '/operate/userList', {
       data
     }),
+  // player list export
+  playerListExport: (data: {
+    export: boolean;
+    pageSize: number;
+    pageNum: number;
+    ids?: string[];
+    venueType?: number;
+    tenantIds?: number | string | string[];
+    limitLevel?: number | string;
+    limittenantCodeLevel?: number | string;
+  }) => 
+    {
+      console.log({data})
+      return http.request<UserAPI.operateUserListReqType>('post', '/operate/userListExport', {
+        data
+    })
+    },
+
   addLabels: (data: { id: string[]; labelId: number[] }) =>
     http.request<UserAPI.updateUserLevelLimitResType>(
       'post',
