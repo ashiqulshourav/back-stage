@@ -181,8 +181,8 @@ export function useTradingHook(type: 'early' | 'in') {
             status: matchStatus.value,
             onCloseDialog: (_: boolean) => {
               closeDialog(options, index);
-              onSearch();
               resetSearchForm();
+              onSearch();
             }
           })
       });
