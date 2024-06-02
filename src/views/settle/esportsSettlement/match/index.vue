@@ -65,7 +65,7 @@
               v-if="row.isShowCancelBtn && hasAuth('CANCELMATCH')"
               type="danger"
               size="small"
-              :disabled="row.cancelOrderTimes > 0"
+              :disabled="(row.cancelOrderTimes as number) > 0"
               @click="cancelClick(row)"
               >{{ t('取消比赛') }}</el-button
             >
