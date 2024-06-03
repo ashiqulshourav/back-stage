@@ -24,6 +24,9 @@ export const columns: TableColumnList = [
     label: t("注单号"),
     prop: "transNo",
     minWidth: 200,
+    // formatter: ({ identifier,type }) =>{
+    //   return [10,11].includes(type)?'-':(identifier?.split('_')?.length&& identifier?.split('_')[0])
+    // }
   },
   {
     label: t("流水ID"),
