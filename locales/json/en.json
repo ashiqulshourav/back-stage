@@ -1162,7 +1162,6 @@
   "k-5fb1731c": "Secondary settlement（Deduct money）",
   "k26a4ad5f": "Secondary settlement（Add money）",
   "k-2038df7d": "Cancel Bet",
-  "k-592d4cf7": "Bet Number (Transaction ID)",
   "k-712e7ceb": "Account Change Type",
   "k-6f539a5e": "Transaction Type",
   "k-24f72a2d": "Account Change Amount",
@@ -1192,5 +1191,6 @@
   "k-475f9ab1": "The overtime switch been turned on. After confirming, will begin the overtime settlement phase. This is cannot be restored. ",
   "k621775de": "Confirm to enter penalty shootout settlement?",
   "ke45bb3a": "The shootout switch been turned on. After confirming , will begin the penalty shootout settlement phase. This is cannot be restored.",
-  "k-102bec3a": "Back to previous page"
+  "k-102bec3a": "Back to previous page",
+  "k-5078f0e7": "Transaction ID"
 }

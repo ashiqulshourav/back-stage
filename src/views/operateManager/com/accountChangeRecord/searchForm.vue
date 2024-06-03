@@ -7,33 +7,17 @@
   >
     <div class="mb-6 font-bold">{{ t('用户信息') }}</div>
     <div class="flex">
-      <div class="w-11/12 grid grid-cols-4 gap-20 mb-10">
-        <div class="col-span-1">
-          <div class="grid-cols-2 user-info">
-            <div class="labels">{{ t('用户名') }}</div>
-            <div class="labels">{{ userData.userName }}</div>
+      <div class="mb-10 w-2/3 grid grid-rows-3 grid-flow-col">
+        <el-row
+          class="mb-2.5"
+          v-for="(item, index) in userInfo"
+          :key="index"
+        >
+          <div class="flex">
+            <div class="mr-8 text-sm flex-shrink-0">{{ item.title }}</div>
+            <div class="text-sm flex" v-html="item.value"></div>
           </div>
-          <div class="user-info">
-            <div class="labels">{{ t('用户ID') }}</div>
-            <div class="labels">{{ userData.userId }}</div>
-          </div>
-          <div class="user-info">
-            <div class="labels">{{ t('用户币种') }}</div>
-            <div class="labels">{{ t('人民币') }}</div>
-          </div>
-        </div>
-        <div class="col-span-1">
-          <div class="user-info">
-            <div class="labels">{{ t('可用余额') }}</div>
-            <div class="labels">{{ addThousandSeparator(userData.balance.toFixed(2)) }}</div>
-          </div>
-        </div>
-        <div class="col-span-1">
-          <div class="user-info">
-            <div class="labels">{{ t('所属商户') }}</div>
-            <div class="labels">{{ userData.tenantName }}</div>
-          </div>
-        </div>
+        </el-row>
       </div>
       <el-button class="ml-auto" type="primary" @click="openModifyBalanceDialog()">
         {{ t('修改余额') }}
@@ -106,6 +90,18 @@ const props = defineProps<{
 const formRef = ref();
 const selectDate = ref();
 
+const userInfo = [
+  { title: t('用户名'), value: props.userData.userName },
+  { title: t('用户ID'), value: props.userData.userId },
+  { title: t('用户币种'), value: t('人民币') },
+  { title: t('可用余额'), value: addThousandSeparator(props.userData.balance.toFixed(2)) },
+  { title: t(''), value: '' },
+  { title: t(''), value: '' },
+  { title: t('所属商户'), value: props.userData.tenantName },
+  { title: t(''), value: '' },
+  { title: t(''), value: '' },
+]
+
 const emits = defineEmits([
   'onSearch',
   'exportFile',
@@ -161,14 +157,5 @@ const openModifyBalanceDialog = () => {
 }
 .arrange2 {
   margin-left: -25px;
-}
-.user-info {
-  display: flex;
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-.labels {
-  width: 45%;
-  grid-column: span 1 / span 1;
 }
 </style>
