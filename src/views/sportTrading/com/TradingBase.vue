@@ -33,6 +33,10 @@
             @changeStatus="changeStatus"
             @sendNewOdds="sendNewOdds"
             :panIsEmpty="panIsEmpty"
+            :isShowDialog="isShowDialog"
+            :matchStatus="matchStatus"
+            @onCloseDialog="onCloseDialog"
+            :type="type"
           />
         </template>
       </div>
@@ -63,8 +67,13 @@ const {
   changeStatus,
   sendNewOdds,
   noMatchList,
-  panIsEmpty
+  panIsEmpty,
+  isShowDialog,
+  matchStatus,
+  onCloseDialog
 } = useTradingHook(type);
+
+
 
 const title = computed(() =>
   type === 'early' ? t('早盘管理') : t('滚球管理')
