@@ -1136,8 +1136,6 @@
   "k3ba2d2b4": "确定要锁盘么?",
   "k7e1ab4b0": "至",
   "k18bf7fc8": "即将开赛",
-  "k1b941334": "Auto Approved",
-  "k-535ec39": "Manual Approved",
   "k42b53cc3": "赛事结束",
   "k-5d386b5e": "export",
   "k-70e92dac": "Single",
@@ -1155,7 +1153,6 @@
   "k-5fb1731c": "Secondary settlement（Deduct money）",
   "k26a4ad5f": "Secondary settlement（Add money）",
   "k-2038df7d": "Cancel Bet",
-  "k-592d4cf7": "Bet Number (Transaction ID)",
   "k-712e7ceb": "Account Change Type",
   "k-6f539a5e": "Transaction Type",
   "k-24f72a2d": "Account Change Amount",
@@ -1181,5 +1178,6 @@
   "k-13dbb7b5": " will add ",
   "k1cf85aa8": " will deduct ",
   "k34a5bb33": "Please enter an amount up to 10000元",
-  "k-102bec3a": "Back to previous page"
+  "k-102bec3a": "Back to previous page",
+  "k-5078f0e7": "Transaction ID"
 }
