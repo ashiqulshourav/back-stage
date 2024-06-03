@@ -1,7 +1,7 @@
 <template>
   <div>
     <pure-table
-      maxHeight="500"
+      height="700"
       align-whole="center"
       :loading="loading"
       size="small"
@@ -82,7 +82,7 @@
           v-if="showBettingError(row) && isFormClick"
           class="text-red-500 text-xs text-start"
         >
-          {{ t('自动划单投注后时间必须大于自动划单投注前时间') }}
+          {{ t('投注前时间和投注后时间不能同时为空') }}
         </div>
       </template>
     </pure-table>
@@ -153,7 +153,7 @@ const eventDisabled = (eventCode: string, row: any) => {
 };
 
 const showBettingError = (row: any) => {
-  return !row.betBeforeTime && !row.betAfterTime;
+  return !Number(row.betBeforeTime) && !Number(row.betAfterTimes);
 };
 </script>
 
