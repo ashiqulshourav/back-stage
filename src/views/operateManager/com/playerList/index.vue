@@ -90,17 +90,17 @@
             >
               {{ t('编辑') }}
             </el-button>
-            <el-button
-              v-if="hasAuth('SETTING')"
-              class="reset-margin"
-              link
-              type="primary"
-              :size="size"
-              :icon="useRenderIcon(ChangeAccount)"
-              @click="goChangeAccountPage(row)"
-            >
-              {{ t('帐变') }}
-            </el-button>
+<!--            <el-button-->
+<!--              v-if="hasAuth('SETTING')"-->
+<!--              class="reset-margin"-->
+<!--              link-->
+<!--              type="primary"-->
+<!--              :size="size"-->
+<!--              :icon="useRenderIcon(ChangeAccount)"-->
+<!--              @click="goChangeAccountPage(row)"-->
+<!--            >-->
+<!--              {{ t('帐变') }}-->
+<!--            </el-button>-->
           </template>
         </pure-table>
       </template>
@@ -194,7 +194,7 @@ const {
   dispatchLabelsDel,
   dispatchLabelsAdd,
   dispatchUpdateUser,
-  tenantObj, 
+  tenantObj,
   goChangeAccountPage
 } = userPlayerListHook(props.category, props.venueType);
 </script>
