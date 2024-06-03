@@ -378,7 +378,7 @@ const recordArr = computed(() => {
 
 //- 点球不显示时间
 const columns = computed(() => {
-  childColumns[3].hide = selectTabIndex.value === '6';
+  // childColumns[3].hide = selectTabIndex.value === '6';
   return childColumns;
 });
 </script>

@@ -36,7 +36,7 @@ export const esportsSettlement = {
       betItemsName: string;
     }[]
   }) => http.request<EsportsSettlementAPI.manualSettleESportHandicapResType>("post", "/championSettle/v1/manualSettleChampionHandicap", { data }),
-  //- 重新结算
+  //- 重新结算(二次结算)
   eSportReSettlement: (data: {
     matchId: number;
     betResultItems: {
