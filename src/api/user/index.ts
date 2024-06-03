@@ -52,13 +52,9 @@ export const user = {
     limitLevel?: number | string;
     limittenantCodeLevel?: number | string;
   }) => 
-    {
-      console.log({data})
-      return http.request<UserAPI.operateUserListReqType>('post', '/operate/userListExport', {
-        data
-    })
-    },
-
+    http.request<UserAPI.operateUserListReqType>('post', '/operate/userListExport', {
+      data
+    }),
   addLabels: (data: { id: string[]; labelId: number[] }) =>
     http.request<UserAPI.updateUserLevelLimitResType>(
       'post',

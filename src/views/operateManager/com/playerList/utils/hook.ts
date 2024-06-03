@@ -99,8 +99,8 @@ export function userPlayerListHook(venueType: number, category: number) {
     const res = await API.playerListExport({
       ...removeEmptyStringKeys(form),
       venueType: venueType,
-      pageSize: pagination.pageSize,
-      pageNum: pagination.currentPage,
+      pageSize: 50000,
+      pageNum: 1,
       export: true,
     })
     // console.log(res, 111111111)
