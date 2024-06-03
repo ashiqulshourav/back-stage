@@ -84,7 +84,6 @@
 
                 <div class="flex-grow">
                   <div v-for="(d, i) in _.kindsCodeDtoList" :key="i">
-                    <!-- @mouseleave="e => mouseEvent(e, s, 'leave')" -->
                     <div
                       :class="[
                         'flex w-full items-center h-[35px]',

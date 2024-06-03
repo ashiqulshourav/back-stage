@@ -108,7 +108,7 @@
                         V
                       </div>
                       <ReText
-                        type="danger"
+                        type="primary"
                         size="small"
                         :tippyProps="{ content: item.awayTeamNameCn }"
                       >

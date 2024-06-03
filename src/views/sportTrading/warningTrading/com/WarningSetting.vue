@@ -9,7 +9,7 @@
         >{{ t('编辑') }}</el-button
       >
       <template v-else>
-        <el-button @click="isShowEdit = false">{{ t('取消') }}</el-button>
+        <el-button @click="cancelEdit">{{ t('取消') }}</el-button>
         <el-button type="primary" @click="sendWarningData">{{
           t('保存')
         }}</el-button>
@@ -24,6 +24,7 @@
         <div v-else class="flex flex-grow pr-6">
           <el-input
             type="number"
+            :min="1"
             :formatter="(v:string) => formatNumber(v,13)"
             v-model="warningData.alarmValue"
           />
@@ -59,6 +60,11 @@ const warningData = reactive<sportTradingDataAPI.getOperateHandicapConfigData>({
   alarmValue: 0,
   alarmPercent: 0
 });
+const oldWarningData =
+  reactive<sportTradingDataAPI.getOperateHandicapConfigData>({
+    alarmValue: 0,
+    alarmPercent: 0
+  });
 
 //- 修改保存状态
 const changeEditStatus = (_: boolean) => {
@@ -69,11 +75,18 @@ onMounted(() => {
   getOperateHandicapConfig();
 });
 
+//- 修改取消值
+const cancelEdit = () => {
+  isShowEdit.value = false;
+  Object.assign(warningData, oldWarningData);
+};
+
 //- 查询告警配置
 const getOperateHandicapConfig = async () => {
   const res = await API.getOperateHandicapConfig();
   if (res.code) return message(res.msg, { type: 'error' });
   Object.assign(warningData, res.data);
+  Object.assign(oldWarningData, res.data);
 };
 
 //- 发送告警值到后端
