@@ -133,8 +133,10 @@ const closeMatchClick = async () => {
 //- 比赛结算
 const settleClick = () => {
   if (
-    currentSettleType.value.reqUrl === 'allSettlement' ||
-    currentSettleType.value.reqUrl === 'overTimeFullSettlement'
+    (currentSettleType.value.reqUrl === 'allSettlement' &&
+      props.overTimeStatus) ||
+    (currentSettleType.value.reqUrl === 'overTimeFullSettlement' &&
+      props.penaltyKickStatus)
   ) {
     const strArr =
       currentSettleType.value.reqUrl === 'allSettlement'
