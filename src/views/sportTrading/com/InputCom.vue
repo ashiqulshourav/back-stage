@@ -79,15 +79,17 @@ const inputCom = computed({
       props.s.dpOdds = resetDpodds(props.s.dpOdds);
     }
 
-    const d = props.betItemsDtoList.find(
-      item => item.betItemsId !== props.selectItem.betItemsId
-    ) as sportTradingDataAPI.BetItemsDtoList;
-    if (s1.value > 0) {
-      d.dpOdds = subtraction(d.dpOdds, Math.abs(s1.value), 2);
-    } else {
-      d.dpOdds = addition(d.dpOdds, Math.abs(s1.value), 2);
+    if (props.betItemsDtoList.length === 2) {
+      const d = props.betItemsDtoList.find(
+        item => item.betItemsId !== props.selectItem.betItemsId
+      ) as sportTradingDataAPI.BetItemsDtoList;
+      if (s1.value > 0) {
+        d.dpOdds = subtraction(d.dpOdds, Math.abs(s1.value), 2);
+      } else {
+        d.dpOdds = addition(d.dpOdds, Math.abs(s1.value), 2);
+      }
+      if (Math.abs(d.dpOdds) >= 1) d.dpOdds = resetDpodds(d.dpOdds);
     }
-    if (Math.abs(d.dpOdds) >= 1) d.dpOdds = resetDpodds(d.dpOdds);
 
     changeDpOdds();
   }
