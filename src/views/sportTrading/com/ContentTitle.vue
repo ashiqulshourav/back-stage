@@ -32,7 +32,11 @@
         <div :class="['text-[--el-color-primary] flex items-center']">
           <ReText
             class="leading-none !max-w-[160px]"
-            type="primary"
+            :type="
+              currentMatch.HandicapTeam?.toUpperCase() === 'HOME'
+                ? 'danger'
+                : 'primary'
+            "
             size="small"
             :tippyProps="{ content: currentMatch.homeTeamNameCn }"
           >
@@ -47,7 +51,11 @@
         <div :class="['text-[--el-color-danger]']">
           <ReText
             class="leading-none !max-w-[160px]"
-            type="primary"
+            :type="
+              currentMatch.HandicapTeam?.toUpperCase() === 'AWAY'
+                ? 'danger'
+                : 'primary'
+            "
             size="small"
             :tippyProps="{ content: currentMatch.awayTeamNameCn }"
           >

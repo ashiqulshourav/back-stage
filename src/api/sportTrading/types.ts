@@ -33,6 +33,7 @@ declare namespace sportTradingDataAPI {
     status?: any;
     level: number;
     riskLevel: number;
+    HandicapTeam: string;
   }
 
   type getMorningSetMatchListData = {

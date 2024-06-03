@@ -30,6 +30,7 @@ const defaultConfig: AxiosRequestConfig = {
   }
 };
 
+window.axiosPromiseArr = [];
 class PureHttp {
   constructor() {
     this.httpInterceptorsRequest();
@@ -43,6 +44,9 @@ class PureHttp {
   private httpInterceptorsRequest(): void {
     PureHttp.axiosInstance.interceptors.request.use(
       async (config: PureHttpRequestConfig): Promise<any> => {
+
+
+
         if (!config.noNprogress) NProgress.start();
         // 优先判断post/get等方法是否传入回调，否则执行初始化设置等回调
         if (typeof config.beforeRequestCallback === 'function') {
@@ -69,7 +73,11 @@ class PureHttp {
             config!.headers!['accept-language'] = lanStr;
           }
         }
+        config.cancelToken = new Axios.CancelToken(cancel => {
+          window.axiosPromiseArr.push({ cancel })
+        });
         return config;
+
       },
       error => {
         return Promise.reject(error);
@@ -103,6 +111,7 @@ class PureHttp {
         return response.data;
       },
       (error: PureHttpError) => {
+        console.log('index.ts文件 114==============行打印=', error);
         switch (error!.response!.status) {
           case 403:
             useUserStore().logOut();

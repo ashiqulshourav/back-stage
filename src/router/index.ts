@@ -104,6 +104,12 @@ const whiteList = ["/login"];
 const { VITE_HIDE_HOME } = import.meta.env;
 
 router.beforeEach((to: ToRouteType, _from, next) => {
+
+  window.axiosPromiseArr.forEach((ele, index) => {
+    ele.cancel()
+    delete window.axiosPromiseArr[index]
+  });
+
   if (to.meta?.keepAlive) {
     handleAliveRoute(to, "add");
     // 页面整体刷新和点击标签页刷新
