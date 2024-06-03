@@ -103,8 +103,7 @@ export function userPlayerListHook(venueType: number, category: number) {
       pageNum: 1,
       export: true,
     })
-    // console.log(res, 111111111)
-    // message(res.msg, { type: res.code ? 'error' : 'success' });
+    message(res.msg, { type: res.code ? 'error' : 'success' });
     downloading.value = false;
   }
 

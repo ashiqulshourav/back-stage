@@ -221,6 +221,16 @@
           >
             {{ t('导出报表') }}
           </el-button>
+
+          <el-button
+            type="primary"
+            :icon="useRenderIcon(Download)"
+              :loading="loading"
+            v-if="hasAuth('EXPORT')"
+            @click="exportFileTest()"
+          >
+            {{ t('导出报表 TEST') }}
+          </el-button>
         </el-form-item>
       </div>
     </div>
@@ -261,7 +271,7 @@ import { hasAuth } from '@/router/utils';
 import CustomDate from '@/components/Form/Custom_date.vue';
 import { formRules } from '@/views/configCenter/classify_setting/utils/rule';
 
-const emits = defineEmits(['onSearch', 'exportFile']);
+const emits = defineEmits(['onSearch', 'exportFile', 'exportFileTest']);
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
   selectDate.value = '';
@@ -292,6 +302,10 @@ const search = () => {
 
 const exportFile = () => {
   emits('exportFile');
+};
+
+const exportFileTest = () => {
+  emits('exportFileTest');
 };
 </script>
 
