@@ -1,9 +1,9 @@
 <template>
-  <div class="flex">
-    <div class="flex items-center w-full">
+  <div class="flex w-full">
+    <div class="flex items-center flex-grow">
       <div
         v-if="currentMatch.leagueId"
-        class="flex items-center cursor-pointer"
+        class="flex items-center cursor-pointer flex-shrink-0"
         v-copy:click="{
           val: currentMatch.leagueId,
           tip: t('联赛ID复制成功')
@@ -23,15 +23,15 @@
 
       <div
         v-if="currentMatch.matchId"
-        class="flex ml-5 cursor-pointer"
+        class="flex ml-5 cursor-pointer flex-grow"
         v-copy:click="{
           val: currentMatch.matchId,
           tip: t('赛事ID复制成功')
         }"
       >
-        <div :class="['text-[--el-color-primary] flex items-center']">
+        <div class="text-[--el-color-primary] flex items-center !max-w-[40%]">
           <ReText
-            class="leading-none !max-w-[160px]"
+            class="leading-none flex-grow"
             :type="
               currentMatch.HandicapTeam?.toUpperCase() === 'HOME'
                 ? 'danger'
@@ -48,9 +48,9 @@
           >
         </div>
         <div :class="['text-[--el-color-primary] !mr-1 !ml-1']">V</div>
-        <div :class="['text-[--el-color-danger]']">
+        <div class="text-[--el-color-danger] !max-w-[40%]">
           <ReText
-            class="leading-none !max-w-[160px]"
+            class="leading-none"
             :type="
               currentMatch.HandicapTeam?.toUpperCase() === 'AWAY'
                 ? 'danger'
@@ -64,7 +64,7 @@
         </div>
       </div>
     </div>
-    <div class="flex ml-5">
+    <div class="flex ml-5 flex-shrink-0">
       <el-button
         round
         size="small"

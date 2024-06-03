@@ -8,7 +8,8 @@
           : 'var(--el-color-danger-light-3)'
     }"
   >
-    {{ mapText[status] }} {{ n }}s
+    {{ status === 'countDown' ? t('即将开赛') : '' }} {{ mapText[status] }}
+    {{ n }}s
   </div>
 </template>
 

@@ -45,7 +45,7 @@ export const formatNumberWithLength = (value: string, length: number) => {
 };
 
 export const formatWarningNum = (val: string, len?: number) => {
-  if (val === '0') return val;
+  if (val === '0') return 1;
   if (+val > 100) return 100;
   return val
     .replace(/\D/g, '')
