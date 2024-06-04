@@ -6,6 +6,8 @@ export const bettingCenter = {
   bettingCenterList: (data: searchFormType) => http.request<any>("post", "/bet-center/list", { data }),
   bettingCenterExport: (data: searchFormType) => http.request<any>("post", "/bet-center/listExport", { data }),
   betcenterRisk: (data: searchFormType) => http.request<any>("post", "/bet-center/risk", { data }),
+  // export request
+  riskExport: (data: searchFormType) => http.request<any>("post", "/bet-center/riskExport", { data }),
   orderCancel: (data: {
     orderId: number;
   }) => http.request<any>("post", "/bet-center/cancel", { data }),
