@@ -15,6 +15,7 @@
           :type="currentSelectTimeIndex === index ? 'primary' : 'info'"
           v-for="(item, index) in timeList"
           :key="index"
+          @click="changeTime(index)"
           >{{ item }}s</el-button
         >
       </div>
@@ -22,15 +23,15 @@
     <div class="flex">
       <div class="flex flex-col items-center">
         <span>{{ t('手动接拒') }}</span>
-        <span class="text-[30px]">50</span>
+        <span class="text-[30px]">{{riskNoticeStore.jjAuditCount}}</span>
       </div>
       <div class="flex mr-10 ml-10 flex-col items-center">
         <span>{{ t('体育注单审核') }}</span>
-        <span class="text-[30px]">50</span>
+        <span class="text-[30px]">{{riskNoticeStore.sportAuditCount}}</span>
       </div>
       <div class="flex flex-col items-center">
         <span>{{ t('电竞注单审核') }}</span>
-        <span class="text-[30px]">50</span>
+        <span class="text-[30px]">{{riskNoticeStore.esportAuditCount}}</span>
       </div>
     </div>
   </div>
@@ -39,11 +40,17 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import { useBetStore } from '@/store/bet';
+import { useRiskNoticeStore } from '@/store/riskNotice';
 
 const betStore = useBetStore();
-
+const riskNoticeStore = useRiskNoticeStore();
 const timeList = reactive<number[]>([30, 60, 120, 180]);
 const currentSelectTimeIndex = ref<number>(0);
+
+function changeTime (index: number) {
+  currentSelectTimeIndex.value = index;
+  riskNoticeStore.setDelaySecond(timeList[index]);
+}
 
 const voiceStatus = computed({
   set(v: boolean) {

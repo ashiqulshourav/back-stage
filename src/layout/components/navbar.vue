@@ -10,12 +10,17 @@
     <Breadcrumb v-if="layout !== 'mix'" class="breadcrumb-container" />
     <!-- <mixNav v-if="layout === 'mix'" /> -->
 
-    <div v-if="layout === 'vertical'" class="vertical-header-right">
+    <div v-if="layout === 'vertical'" class="vertical-header-right flex items-center">
       <!-- 菜单搜索 -->
       <!-- <Search /> -->
       <!-- 通知 -->
       <!-- <Notice id="header-notice" /> -->
       <!-- 国际化 -->
+      <!-- RiskNotice Menu -->
+      <div class="relative mr-5 flex items-center justify-center">
+        <el-icon size="large"><UserFilled /></el-icon>
+        <span class="absolute bg-red-500 min-w-4 h-4 text-xs flex items-center justify-center bottom-[10px] left-[10px] text-white rounded-full">{{ riskNoticeStore.totalCount }}</span>
+      </div>
       <LanguageNav />
       <!-- 退出登录 -->
       <el-dropdown trigger="click">
@@ -65,10 +70,13 @@ import LanguageNav from '@/components/LanguageNav/index.vue';
 import { t } from '@/plugins/i18n';
 import { useUserStore } from '@/store/user';
 import { useResetPasswordHook } from '@/hooks/resetPasswordHook';
+import { UserFilled } from '@element-plus/icons-vue';
+import { useRiskNoticeStore } from '@/store/riskNotice';
 
 const { openResetDialog } = useResetPasswordHook();
 
 const userStore = useUserStore();
+const riskNoticeStore = useRiskNoticeStore();
 const { layout, logout, onPanel, pureApp, userAvatar, toggleSideBar } =
   useNav();
 </script>
