@@ -34,6 +34,10 @@ export function useBettingAuditHook(venueType: number) {
   const tenantList = reactive<any>([]);
   const tenantObj = reactive<any>({});
   const loading = ref(true);
+  const hasDataFetching = ref(1);
+  const dataFetchingTime = ref(30);
+  const loopTimer = ref<NodeJS.Timeout>();
+  const isEditDialogClick = ref(false);
 
   const totalInfo = reactive<BetOrderAPI.RiskOtherDataType>(
     {} as BetOrderAPI.RiskOtherDataType
@@ -91,7 +95,7 @@ export function useBettingAuditHook(venueType: number) {
           );
         });
       } else {
-        for (let item in seriesTypesSingle) {
+        for (const item in seriesTypesSingle) {
           seriesDetails.push(
             ...seriesTypesSingle[item as keyof typeof seriesTypesSingle].list
           );
@@ -105,7 +109,7 @@ export function useBettingAuditHook(venueType: number) {
           );
         });
       } else {
-        for (let item in seriesTypesDuplex) {
+        for (const item in seriesTypesDuplex) {
           seriesDetails.push(
             ...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list
           );
@@ -133,46 +137,69 @@ export function useBettingAuditHook(venueType: number) {
   };
 
   async function onSearch(type?: string) {
-    if (type === 'reload') pagination.currentPage = 1;
-    try {
-      const params: searchFormType = formatParams({}) as searchFormType;
-      if (Number(params.maxBetAmount) < Number(params.minBetAmount)) {
-        message(t('请检查投注额，最小值不能大于最大值'), { type: 'warning' });
-        return;
-      }
-      if (Number(params.maxProfitAmount) < Number(params.minProfitAmount)) {
-        message(t('请检查用户输赢，最小值不能大于最大值'), { type: 'warning' });
-        return;
-      }
-      loading.value = true;
-      const res: BetOrderAPI.BetOrderResType = await API.bettingAuditList({
-        ...params,
-        venueType
-      });
-      loading.value = false;
-      if (res.code) return message(res.msg, { type: 'error' });
-      dataList.length = 0;
-      if (res.data !== null) {
-        dataList.push(...res?.data?.pageData);
-        dataList.map((item: any, index) => {
-          item.index = index + 1;
-          item.combineOrderDetails.map((item: BetOrderAPI.Detail) => {
-            item.rejectSelected = false;
-            item.approveSelected = false;
+    loopTimer.value && clearInterval(loopTimer.value);
+    const fetchData = async () => {
+      if (type === 'reload') pagination.currentPage = 1;
+      try {
+        const params: searchFormType = formatParams({}) as searchFormType;
+        if (Number(params.maxBetAmount) < Number(params.minBetAmount)) {
+          message(t('请检查投注额，最小值不能大于最大值'), { type: 'warning' });
+          return;
+        }
+        if (Number(params.maxProfitAmount) < Number(params.minProfitAmount)) {
+          message(t('请检查用户输赢，最小值不能大于最大值'), {
+            type: 'warning'
           });
+          return;
+        }
+        loading.value = true;
+        const res: BetOrderAPI.BetOrderResType = await API.bettingAuditList({
+          ...params,
+          venueType
         });
-        pagination.total = res?.data?.count;
-        pagination.pageSize = res?.data?.pageSize;
-        pagination.currentPage = res?.data?.pageNum;
-        Object.assign(totalInfo, res?.data?.otherData);
+        loading.value = false;
+        if (res.code) return message(res.msg, { type: 'error' });
+        dataList.length = 0;
+        if (res.data !== null) {
+          dataList.push(...res?.data?.pageData);
+          dataList.map((item: any, index) => {
+            item.index = index + 1;
+            item.combineOrderDetails.map((item: BetOrderAPI.Detail) => {
+              item.rejectSelected = false;
+              item.approveSelected = false;
+            });
+          });
+          pagination.total = res?.data?.count;
+          pagination.pageSize = res?.data?.pageSize;
+          pagination.currentPage = res?.data?.pageNum;
+          Object.assign(totalInfo, res?.data?.otherData);
+        }
+        document
+          .querySelector('.table_container .el-scrollbar__wrap')
+          ?.scroll(0, 0);
+      } catch (error) {
+        loading.value = false;
       }
-      document
-        .querySelector('.table_container .el-scrollbar__wrap')
-        ?.scroll(0, 0);
-    } catch (error) {
-      loading.value = false;
-    }
+    };
+
+    if (hasDataFetching.value) {
+      if (!isEditDialogClick) {
+        loopTimer.value = setInterval(
+          async () => await fetchData(),
+          Number(dataFetchingTime.value) * 1000
+        );
+      }
+      await fetchData();
+    } else await fetchData();
   }
+
+  watch(
+    () => [hasDataFetching.value, isEditDialogClick.value],
+    () => {
+      onSearch();
+    }
+  );
+
   async function getRowByOrderId(orderId: string) {
     try {
       const params: searchFormType = formatParams(
@@ -188,7 +215,7 @@ export function useBettingAuditHook(venueType: number) {
       );
       if (res.code) return message(res.msg, { type: 'error' });
       if (res.data !== null) {
-        let list = res?.data?.pageData || [];
+        const list = res?.data?.pageData || [];
         dataList.map((item: any) => {
           if (item.id === orderId) {
             Object.assign(item, list[0]);
@@ -222,15 +249,15 @@ export function useBettingAuditHook(venueType: number) {
     const res: BetOrderAPI.BetOrderResType = await API.bettingAuditList(
       formatParams({ pageNum: 1, pageSize: 50000 }) as searchFormType
     );
-    let list = []
-    res.data?.pageData?.map((row)=>{
-      row?.combineOrderDetails?.map((match)=>{
-        list.push({...row,...match})
-      })
-    })
+    const list = [];
+    res.data?.pageData?.map(row => {
+      row?.combineOrderDetails?.map(match => {
+        list.push({ ...row, ...match });
+      });
+    });
     const r = list.map((item: any, i) => {
       const arr = [];
-      const data = item
+      const data = item;
       columns.forEach((column: { prop: string }) => {
         let str = '';
         switch (column.prop.toString()) {
@@ -347,10 +374,11 @@ export function useBettingAuditHook(venueType: number) {
       formatParams({ pageNum: 1, pageSize: 50000, venueType }) as searchFormType
     );
     message(res.msg, { type: res.code ? 'error' : 'success' });
-  }
+  };
 
   const handleCancel = (row: any, index: number) => {
-    let data = { ...row }; //...row.combineOrderDetails[index]
+    isEditDialogClick.value = true;
+    const data = { ...row }; //...row.combineOrderDetails[index]
     data.combineOrderDetails = data.combineOrderDetails.filter(
       (item: BetOrderAPI.Detail, i: number) => {
         return i == index;
@@ -376,6 +404,7 @@ export function useBettingAuditHook(venueType: number) {
         h(formDom, {
           list: list,
           onCloseDialog: () => {
+            isEditDialogClick.value = false;
             onSearch('reload');
             closeDialog(options, index);
           }
@@ -383,7 +412,8 @@ export function useBettingAuditHook(venueType: number) {
     });
   };
   const handleApprove = (row: any, index: number) => {
-    let data = { ...row }; //...row.combineOrderDetails[index]
+    isEditDialogClick.value = true;
+    const data = { ...row }; //...row.combineOrderDetails[index]
     data.combineOrderDetails = data.combineOrderDetails.filter((item, i) => {
       return i == index;
     });
@@ -394,7 +424,8 @@ export function useBettingAuditHook(venueType: number) {
     openApproveDialog(list);
   };
   const handleApproveSome = () => {
-    let obj = {};
+    isEditDialogClick.value = true;
+    const obj = {};
     dataList.map(item => {
       item.combineOrderDetails.map((match: any) => {
         if (match.approveSelected) {
@@ -419,7 +450,7 @@ export function useBettingAuditHook(venueType: number) {
     openApproveDialog(list);
   };
   const handleCancelSome = () => {
-    let obj = {};
+    const obj = {};
     dataList.map(item => {
       item.combineOrderDetails.map((match: any) => {
         if (match.rejectSelected) {
@@ -449,6 +480,7 @@ export function useBettingAuditHook(venueType: number) {
       center: true,
       type: 'warning'
     }).then(async () => {
+      isEditDialogClick.value = false;
       const r = await openPasswordInput();
       if (!r) {
         return;
@@ -484,6 +516,7 @@ export function useBettingAuditHook(venueType: number) {
     orderDetailId: number,
     orderDetailRemark: string
   ) => {
+    isEditDialogClick.value = true;
     addDialog({
       title: t('编辑备注'),
       class: 'reset_dialog',
@@ -496,6 +529,7 @@ export function useBettingAuditHook(venueType: number) {
           ref: editDialogRef,
           data: { orderDetailId, orderDetailRemark },
           onCloseDialog: (value: string) => {
+            isEditDialogClick.value = false;
             closeDialog(options, index);
             getRowByOrderId(orderId);
             // onSearch();
@@ -518,6 +552,10 @@ export function useBettingAuditHook(venueType: number) {
   onMounted(() => {
     onSearch();
     getTenantList();
+  });
+
+  onUnmounted(() => {
+    loopTimer.value && clearInterval(loopTimer.value);
   });
 
   return {
@@ -543,6 +581,8 @@ export function useBettingAuditHook(venueType: number) {
     handleApproveSome,
     selectReject,
     selectApprove,
-    editMatchDetailRemark
+    editMatchDetailRemark,
+    hasDataFetching,
+    dataFetchingTime
   };
 }

@@ -18,21 +18,41 @@
       @refresh="onSearch('reload')"
     >
       <template #title>
-        <div class="flex item-center">
-          <el-button
-            type="danger"
-            v-if="rejectSelectedCount && hasAuth('REJECTSOME')"
-            @click="handleCancelSome"
-          >
-            {{ t('批量划单') }}
-          </el-button>
-          <el-button
-            type="primary"
-            v-if="approveSelectedCount && hasAuth('APPROVESOME')"
-            @click="handleApproveSome"
-          >
-            {{ t('批量通过') }}
-          </el-button>
+        <div class="flex item-center justify-between pr-5 gap-2 w-full">
+          <div>
+            <el-button
+              type="danger"
+              v-if="rejectSelectedCount && hasAuth('REJECTSOME')"
+              @click="handleCancelSome"
+            >
+              {{ t('批量划单') }}
+            </el-button>
+            <el-button
+              type="primary"
+              v-if="approveSelectedCount && hasAuth('APPROVESOME')"
+              @click="handleApproveSome"
+            >
+              {{ t('批量通过') }}
+            </el-button>
+          </div>       
+          <div class="flex gap-3 items-center">
+            <el-switch
+              v-model="hasDataFetching"
+              inline-prompt
+              active-text="开"
+              inactive-text="关"
+              :active-value="1"
+              :inactive-value="0"
+              style="--el-switch-on-color: #f88d48;"
+            />
+            <el-select v-model="dataFetchingTime" style="width: 80px">
+              <el-option :label="30" :value="30"/>
+              <el-option :label="60" :value="60"/>
+              <el-option :label="120" :value="120"/>
+              <el-option :label="180" :value="180"/>
+            </el-select>
+            <span>S</span>  
+          </div>   
         </div>
       </template>
       <template v-slot="{ size, dynamicColumns }">
@@ -521,7 +541,9 @@ const {
   getRiskStatus,
   selectReject,
   selectApprove,
-  editMatchDetailRemark
+  editMatchDetailRemark,
+  hasDataFetching,
+  dataFetchingTime
 } = useBettingAuditHook(venueType);
 watch(
   dataList,
