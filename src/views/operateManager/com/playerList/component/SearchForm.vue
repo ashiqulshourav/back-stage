@@ -28,34 +28,6 @@
           </div>
         </el-popover>
       </el-form-item>
-      <el-form-item prop="ids" :label="t('用户ID： ')">
-        <el-input
-          v-model="form.ids as string"
-          :placeholder="t('可输入1-50个用户ID,用逗号进行分割')"
-          clearable
-          ref="buttonRef"
-          :formatter="formatterTxt"
-          :disabled="idList.length > 50"
-          class="!w-[260px]"
-        />
-        <el-popover
-          ref="popoverRef"
-          :virtual-ref="buttonRef"
-          trigger="click"
-          width="260px"
-          virtual-triggering
-        >
-          <div class="flex flex-start w-full flex-wrap">
-            <span
-              class="el-tag mr-2 mb-1"
-              v-for="item in idList.filter(_ => _ !== '')"
-              :key="item"
-              >{{ item }}</span
-            >
-          </div>
-        </el-popover>
-      </el-form-item>
-
       <el-form-item prop="tenantIds" :label="t('商户:')">
         <el-select
           v-model="form.tenantIds"
@@ -191,7 +163,7 @@ import { hasAuth } from '@/router/utils';
 const formRef = ref();
 const buttonRef = ref();
 const buttonRef1 = ref();
-const emits = defineEmits(['onSearch', 'exportFileTest']);
+const emits = defineEmits(['onSearch']);
 const idList = reactive<string[]>([]);
 const userIds = reactive<string[]>([]);
 const sportLimmitList = reactive<string[]>([]);

@@ -1148,10 +1148,8 @@
   "k-70e92dac": "Single",
   "k1e1e14d6": "Parlay",
   "k17637687": "Multiple",
-  "k17637687": "Multiple",
   "k-24930c47": "User ID",
   "k61e7b55a": "Betting Time",
-  "k17637687": "Multiple",
   "k72b12dc5": "Automatic settlement by system",
   "k-629e4023": "Settlement refund（Add money）",
   "k-2b49c1e7": "Manual settlement（Add money）",
@@ -1193,4 +1191,5 @@
   "ke45bb3a": "The shootout switch been turned on. After confirming , will begin the penalty shootout settlement phase. This is cannot be restored.",
   "k-102bec3a": "Back to previous page",
   "k-5078f0e7": "Transaction ID"
+
 }

@@ -6,11 +6,6 @@ export const columns: TableColumnList = [
     align: 'left'
   },
   {
-    label: t('用户ID'),
-    prop: 'id',
-    minWidth: 200
-  },
-  {
     label: t('用户名'),
     prop: 'userName',
     minWidth: 150,

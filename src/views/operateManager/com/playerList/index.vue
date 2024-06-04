@@ -196,7 +196,7 @@ const {
   dispatchLabelsDel,
   dispatchLabelsAdd,
   dispatchUpdateUser,
-  tenantObj, 
+  tenantObj,
   goChangeAccountPage,
   downloading,
   exportFileTest
