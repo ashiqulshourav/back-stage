@@ -1,33 +1,6 @@
 <template>
   <div class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]">
     <el-form ref="formRef" v-model="form" :inline="true" :model="form">
-      <el-form-item prop="ids" :label="t('用户ID： ')">
-        <el-input
-          v-model="form.ids as string"
-          :placeholder="t('可输入1-50个用户ID,用逗号进行分割')"
-          clearable
-          ref="buttonRef"
-          :formatter="formatterTxt"
-          :disabled="idList.length > 50"
-          class="!w-[260px]"
-        />
-        <el-popover
-          ref="popoverRef"
-          :virtual-ref="buttonRef"
-          trigger="click"
-          width="260px"
-          virtual-triggering
-        >
-          <div class="flex flex-start w-full flex-wrap">
-            <span
-              class="el-tag mr-2 mb-1"
-              v-for="item in idList.filter(_ => _ !== '')"
-              :key="item"
-              >{{ item }}</span
-            >
-          </div>
-        </el-popover>
-      </el-form-item>
       <el-form-item prop="usernames" :label="t('用户名： ')">
         <el-input
           v-model="form.usernames as string"
