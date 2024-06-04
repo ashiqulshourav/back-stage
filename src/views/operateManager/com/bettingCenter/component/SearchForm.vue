@@ -204,7 +204,11 @@
             <el-option  :label="t('结算时间')" :value="2"  />
             <el-option  :label="t('开赛时间')" :value="3"  />
           </el-select>
-          <CustomDate v-model:val="selectDate"  :start-placeholder="dayjs().startOf('month').format('YYYY-MM-DD')" :end-placeholder="dayjs().startOf('day').format('YYYY-MM-DD')" @changeDate="changeDate" />
+          <CustomDate 
+          v-model:val="selectDate" 
+          :start-placeholder="dayjs().subtract(30, 'day').startOf('day').format('YYYY-MM-DD')" 
+          :end-placeholder="dayjs().startOf('day').format('YYYY-MM-DD')"
+          @changeDate="changeDate" />
         </el-form-item>
         <el-form-item>
 
