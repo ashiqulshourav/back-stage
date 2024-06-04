@@ -71,6 +71,7 @@ export type menuType = {
     icon?: string;
     title?: string;
     rank?: number;
+    enTitle?: string;
     showParent?: boolean;
     extraIcon?: string;
   };

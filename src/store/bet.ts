@@ -6,11 +6,15 @@ export const useBetStore = defineStore('BETSTATE', {
     gameplayData: {
       matchId: '',
       betItemsId: ''
-    }
+    },
+    isOpenVoice: true
   }),
   actions: {
     set_gameplay_data(d: Omit<BetType, 'gameplayData'>) {
       Object.assign(this.gameplayData, d)
     },
+    set_is_open_voice(_: boolean) {
+      this.isOpenVoice = _;
+    }
   },
 });

@@ -18,21 +18,43 @@
       @refresh="onSearch('reload')"
     >
       <template #title>
-        <div class="flex item-center">
-          <el-button
-            type="danger"
-            v-if="rejectSelectedCount && hasAuth('REJECTSOME')"
-            @click="handleCancelSome"
-          >
-            {{ t('批量划单') }}
-          </el-button>
-          <el-button
-            type="primary"
-            v-if="approveSelectedCount && hasAuth('APPROVESOME')"
-            @click="handleApproveSome"
-          >
-            {{ t('批量通过') }}
-          </el-button>
+        <div class="flex item-center justify-between w-full pr-10">
+          <div>
+            <el-button
+              type="danger"
+              v-if="rejectSelectedCount && hasAuth('REJECTSOME')"
+              @click="handleCancelSome"
+            >
+              {{ t('批量划单') }}
+            </el-button>
+            <el-button
+              type="primary"
+              v-if="approveSelectedCount && hasAuth('APPROVESOME')"
+              @click="handleApproveSome"
+            >
+              {{ t('批量通过') }}
+            </el-button>
+          </div>
+          <div class="flex items-center gap-3">
+            {{ isDataFetching }}
+            {{ dataFetchingTime }}
+            <el-switch
+              v-model="isDataFetching"
+              inline-prompt
+              :active-text="t('开启')"
+              :inactive-text="t('关闭')"
+              :active-value="1"
+              :inactive-value="0"
+              style="--el-switch-on-color: rgb(248, 141, 72)"
+            />
+            <el-select v-model="dataFetchingTime">
+              <el-option :label="30" :value="30" />
+              <el-option :label="60" :value="60" />
+              <el-option :label="120" :value="120" />
+              <el-option :label="180" :value="180" />
+            </el-select>
+            S
+          </div>
         </div>
       </template>
       <template v-slot="{ size, dynamicColumns }">
@@ -305,10 +327,7 @@
               v-for="(item, idx) in row.combineOrderDetails"
               :key="idx"
             >
-              <div
-                class=""
-                v-if="item.riskStatus === riskStatus.reject"
-              >
+              <div class="" v-if="item.riskStatus === riskStatus.reject">
                 原因:{{ item.riskType }}
               </div>
               <div
@@ -353,7 +372,7 @@
                 "
                 :checked="item.rejectSelected"
                 @change="data => selectReject(data, row.index - 1, index)"
-              ></el-checkbox>
+              />
 
               <el-button
                 v-if="
@@ -381,7 +400,7 @@
                   hasAuth('APPROVE')
                 "
                 @change="data => selectApprove(data, row.index - 1, index)"
-              ></el-checkbox>
+              />
               <el-button
                 @change="data => selectApprove(data, row.index - 1, index)"
                 v-if="
@@ -488,12 +507,14 @@ import { riskStatus } from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { hasAuth } from '@/router/utils';
 import { ref } from 'vue';
-import {useRenderIcon} from "@/components/ReIcon/src/hooks";
-import EditPen from "@iconify-icons/ep/edit-pen";
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import EditPen from '@iconify-icons/ep/edit-pen';
 
 const { tableHeaderStyle } = usePublicHooks();
 const rejectSelectedCount = ref(0);
 const approveSelectedCount = ref(0);
+const isDataFetching = ref(1);
+const dataFetchingTime = ref(30);
 
 const { venueType } = defineProps<{
   venueType: number;
@@ -627,7 +648,7 @@ watch(
 .approve {
   width: 100px;
 }
-.width-auto{
+.width-auto {
   width: auto;
 }
 .operate {
@@ -636,10 +657,10 @@ watch(
 .operation_item {
   width: 100px;
 }
-.mw-120 > .cell{
+.mw-120 > .cell {
   min-width: 120px;
 }
-.mw-50 > .cell{
+.mw-50 > .cell {
   min-width: 55px;
 }
 </style>
