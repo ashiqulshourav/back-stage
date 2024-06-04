@@ -91,7 +91,7 @@
               {{ t('编辑') }}
             </el-button>
             <el-button
-              v-if="hasAuth('SETTING')"
+              v-if="hasAuth('changeAccountRecord'.toUpperCase())"
               class="reset-margin"
               link
               type="primary"
@@ -194,7 +194,7 @@ const {
   dispatchLabelsDel,
   dispatchLabelsAdd,
   dispatchUpdateUser,
-  tenantObj, 
+  tenantObj,
   goChangeAccountPage
 } = userPlayerListHook(props.category, props.venueType);
 </script>
