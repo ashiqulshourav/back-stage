@@ -53,7 +53,7 @@ export function useManualOrderRejectionHook() {
     awayTeamName: '',
     sportId: '',
     userIdOrName: '',
-    timeStart: dayjs().startOf('month').valueOf(),
+    timeStart: dayjs().subtract(30, 'day').startOf('day').valueOf(),
     timeEnd: dayjs().endOf('day').valueOf(),
     orderId: '',
     status: [],

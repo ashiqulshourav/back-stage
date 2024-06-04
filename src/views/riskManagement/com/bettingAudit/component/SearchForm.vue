@@ -192,7 +192,7 @@
         <el-form-item :label="`${t('注单时间')}:`">
           <CustomDate
             v-model:val="selectDate"
-            :start-placeholder="dayjs().startOf('month').format('YYYY-MM-DD')"
+            :start-placeholder="dayjs().subtract(30, 'day').startOf('day').format('YYYY-MM-DD')"
             :end-placeholder="dayjs().startOf('day').format('YYYY-MM-DD')"
             @changeDate="changeDate"
           />
