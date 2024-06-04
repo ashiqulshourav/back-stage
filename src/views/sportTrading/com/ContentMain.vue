@@ -1,5 +1,8 @@
 <template>
-  <div class="pl-5 pr-5 text-sm flex-grow w-full relative" ref="contentRef">
+  <div
+    class="pl-5 pr-5 text-sm flex-grow relative w-[calc(100%-400px)]"
+    ref="contentRef"
+  >
     <ContentTitle
       :currentMatch="currentMatch"
       :handicapList="handicapList"
@@ -306,8 +309,8 @@ const mouseEvent = (
   type: 'enter' | 'leave',
   list?: sportTradingDataAPI.BetItemsDtoList[]
 ) => {
-  isShowScroll.value = false;
   if (type === 'enter') {
+    isShowScroll.value = false;
     //鼠标滑入之前所有为隐藏
     props.handicapList
       .find(item => item.listType === props.selectContentType)!

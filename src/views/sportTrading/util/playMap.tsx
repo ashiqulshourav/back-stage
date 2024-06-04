@@ -188,8 +188,8 @@ export const PLAY_MATCH_NAME = (
   switch (true) {
     case t1.includes(kindsCode):
       return {
-        Over: `${t('大')}-${handicap}`,
-        Under: `${t('小')}-${handicap}`
+        Over: `${t('大')} ${handicap}`,
+        Under: `${t('小')} ${handicap}`
       };
     case t2.includes(kindsCode):
       return {
