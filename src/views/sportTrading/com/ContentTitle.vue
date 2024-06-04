@@ -1,7 +1,6 @@
 <template>
-  <div class="flex justify-between">
-    <div class="flex items-center w-[40%] overflow-hidden">
-      <!-- 2xl:w-full xl:w-1/3 -->
+  <div class="flex justify-between w-full">
+    <div class="flex-grow items-center flex mr-1 max-w-[33%]">
       <div
         v-if="currentMatch.leagueId"
         class="flex items-center cursor-pointer max-w-[50%]"
@@ -18,7 +17,7 @@
           </span>
         </span>
         <ReText
-          class="leading-none flex-grow"
+          class="leading-none"
           type="primary"
           size="small"
           :tippyProps="{ content: currentMatch.leagueNameCn }"
@@ -29,15 +28,15 @@
 
       <div
         v-if="currentMatch.matchId"
-        class="flex 2xl:ml-5 xl:ml-1 cursor-pointer"
+        class="flex pl-2 flex-grow cursor-pointer"
         v-copy:click="{
           val: currentMatch.matchId,
           tip: t('赛事ID复制成功')
         }"
       >
-        <div class="text-[--el-color-primary] flex items-center flex-grow">
+        <div class="flex items-center max-w-[45%]">
           <ReText
-            class="leading-none flex-grow"
+            class="leading-none"
             :type="
               currentMatch.HandicapTeam?.toUpperCase() === 'HOME'
                 ? 'danger'
@@ -53,7 +52,6 @@
             >{{ t('主') }}</span
           >
         </div>
-        <!-- 2xl:!w-full xl:!w-[20%] -->
         <div class="text-[--el-color-primary] !mr-1 !ml-1">V</div>
         <ReText
           class="leading-none max-w-[45%]"
@@ -69,11 +67,12 @@
         </ReText>
       </div>
     </div>
-    <div class="flex flex-grow justify-end ml-2 w-[60%]">
+
+    <div class="flex justify-end ml-2 w-[60%]">
       <el-button
         round
         size="small"
-        class="xl:!ml-1 2xl:!ml-3"
+        class="xl:!ml-1 w-[61px]"
         v-for="(item, index) in handicapList"
         :key="index"
         :type="selectContentType === item.listType ? 'primary' : ''"
