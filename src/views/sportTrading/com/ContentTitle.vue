@@ -68,6 +68,7 @@
       <el-button
         round
         size="small"
+        class="!ml-1"
         v-for="(item, index) in handicapList"
         :key="index"
         :type="selectContentType === item.listType ? 'primary' : ''"

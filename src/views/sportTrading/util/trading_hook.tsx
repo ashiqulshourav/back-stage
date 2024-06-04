@@ -48,10 +48,6 @@ export function useTradingHook(type: 'early' | 'in') {
         : ''
   });
 
-  /* 
-isHandicap: item.ptds?.filter((ptd) => ptd.kc === 'FT_AH' && ptd.ctid === 0)?.some((ptd) => ptd.hcl[0].bil.some((b) => (b.h.startsWith('-') && b.hoa?.toUpperCase() === 'HOME'))),
- */
-
   //- 盘口赛事列表接口
   const loopTimer = ref<NodeJS.Timeout>();
   //- 初始化搜索
@@ -131,8 +127,10 @@ isHandicap: item.ptds?.filter((ptd) => ptd.kc === 'FT_AH' && ptd.ctid === 0)?.so
           if (l.kindsCode === 'FT_AH' && l.ctid === 0 && i === 0) {
             if (_.betItemsDtoList[0].handicap.startsWith('-')) {
               currentMatch.HandicapTeam = _.betItemsDtoList[0].homeOrAway;
-            } else {
+            } else if (_.betItemsDtoList[1].handicap.startsWith('-')) {
               currentMatch.HandicapTeam = _.betItemsDtoList[1].homeOrAway;
+            } else {
+              currentMatch.HandicapTeam = '';
             }
           }
           if (!l.dpOdds) l.dpOdds = l.odds;
