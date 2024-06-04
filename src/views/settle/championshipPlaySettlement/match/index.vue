@@ -29,7 +29,6 @@
           :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
-          @selection-change="handleSelectionChange"
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
@@ -96,7 +95,6 @@ const {
   onSearch,
   handleTableWidthChange,
   handleCurrentChange,
-  handleSelectionChange,
   searchForm,
   matchCondition,
   switchStyle,

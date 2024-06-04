@@ -6,7 +6,9 @@
       :loading="loading"
       :labelList="labelList"
       :tenantList="tenantList"
+      @exportFileTest="exportFileTest"
       @on-search="onSearch"
+      :downloading="downloading"
     />
     <PureTableBar :columns="columns" @refresh="onSearch('reload')">
       <template #title>
@@ -194,8 +196,10 @@ const {
   dispatchLabelsDel,
   dispatchLabelsAdd,
   dispatchUpdateUser,
-  tenantObj,
-  goChangeAccountPage
+  tenantObj, 
+  goChangeAccountPage,
+  downloading,
+  exportFileTest
 } = userPlayerListHook(props.category, props.venueType);
 </script>
 

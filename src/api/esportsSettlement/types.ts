@@ -230,6 +230,7 @@ declare namespace EsportsSettlementAPI {
     settleStatus: number;
     updatedAt?: any;
     betOptions: number;
+    multipartBetOptions: number[];
     oldBetOptions: number;
     isEdit: boolean;
     handicapList: HandicapList[];

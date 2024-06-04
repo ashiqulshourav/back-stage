@@ -33,6 +33,7 @@ declare global {
   interface Window {
     // Global vue app instance
     __APP__: App<Element>;
+    axiosPromiseArr: any[];
     webkitCancelAnimationFrame: (handle: number) => void;
     mozCancelAnimationFrame: (handle: number) => void;
     oCancelAnimationFrame: (handle: number) => void;

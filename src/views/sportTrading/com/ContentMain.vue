@@ -1,5 +1,5 @@
 <template>
-  <div class="pl-5 pr-5 text-sm flex-grow w-full">
+  <div class="pl-5 pr-5 text-sm flex-grow w-full relative" ref="contentRef">
     <ContentTitle
       :currentMatch="currentMatch"
       :handicapList="handicapList"
@@ -84,7 +84,6 @@
 
                 <div class="flex-grow">
                   <div v-for="(d, i) in _.kindsCodeDtoList" :key="i">
-                    <!-- @mouseleave="e => mouseEvent(e, s, 'leave')" -->
                     <div
                       :class="[
                         'flex w-full items-center h-[35px]',
@@ -192,6 +191,25 @@
         </el-scrollbar>
       </div>
     </div>
+
+    <el-dialog
+      v-model="dialogStatus"
+      :append-to="contentRef"
+      :append-to-body="false"
+      :align-center="true"
+      width="150"
+      custom-class="over_dialog"
+      modal-class="over_mdal"
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      :show-close="false"
+    >
+      <MatchCountDown
+        :type="type"
+        :status="matchStatus"
+        @closeDialog="onCloseDialog"
+      />
+    </el-dialog>
   </div>
 </template>
 
@@ -205,7 +223,9 @@ import InputCom from './InputCom.vue';
 import { t } from '@/plugins/i18n';
 import { useBetStore } from '@/store/bet';
 import { ReText } from '@/components/ReText';
+import MatchCountDown from './MatchCountDown.vue';
 
+const contentRef = ref();
 const collapseRef = ref();
 const activeNames = ref([1]);
 const scrollRef = ref();
@@ -221,7 +241,17 @@ const props = defineProps<{
   handicapList: handicapListType[];
   selectContentType: string;
   panIsEmpty: boolean;
+  isShowDialog: boolean;
+  matchStatus: 'countDown' | 'canceled' | 'over';
+  type: string;
 }>();
+
+const dialogStatus = computed({
+  get() {
+    return props.isShowDialog;
+  },
+  set(_) {}
+});
 
 const numberList = (): number[] => {
   const arr = [];
@@ -266,7 +296,8 @@ const emits = defineEmits([
   'changeSelectType',
   'clearMatchTime',
   'changeStatus',
-  'sendNewOdds'
+  'sendNewOdds',
+  'onCloseDialog'
 ]);
 //- 鼠标滑入交互处理
 const mouseEvent = (
@@ -275,6 +306,7 @@ const mouseEvent = (
   type: 'enter' | 'leave',
   list?: sportTradingDataAPI.BetItemsDtoList[]
 ) => {
+  isShowScroll.value = false;
   if (type === 'enter') {
     //鼠标滑入之前所有为隐藏
     props.handicapList
@@ -287,8 +319,8 @@ const mouseEvent = (
         });
       });
     selectItem.value = s;
-    scrollPostitonObj.left = `${e.target.getBoundingClientRect().left + 70}px`;
-    scrollPostitonObj.top = `${e.target.getBoundingClientRect().top - 170}px`;
+    scrollPostitonObj.left = `${e.target.getBoundingClientRect().left + 76}px`;
+    scrollPostitonObj.top = `${e.target.getBoundingClientRect().top - 168}px`;
     betItemsDtoList.length = 0;
     betItemsDtoList.push(...(list as sportTradingDataAPI.BetItemsDtoList[]));
     s.sourceBetItemsId = 1;
@@ -385,12 +417,28 @@ const goBetOroderPage = (
   });
   router.push('/operateManager/sportBettingCenter');
 };
+
+const onCloseDialog = () => emits('onCloseDialog');
 </script>
 
 <style lang="scss">
 .collapse_empty {
   .el-collapse-item__wrap {
     height: 0;
+  }
+}
+
+.over_mdal {
+  position: absolute;
+  .el-overlay-dialog {
+    position: absolute;
+    .el-dialog__header {
+      display: none;
+    }
+    .el-dialog {
+      background-color: transparent !important;
+      box-shadow: none;
+    }
   }
 }
 </style>
