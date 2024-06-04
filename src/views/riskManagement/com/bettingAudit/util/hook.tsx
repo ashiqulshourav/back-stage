@@ -344,7 +344,7 @@ export function useBettingAuditHook(venueType: number) {
 
   const exportFileTest = async () => {
     const res: BetOrderAPI.BetOrderResType = await API.bettingAuditListExport(
-      formatParams({ pageNum: 1, pageSize: 50000 }) as searchFormType
+      formatParams({ pageNum: 1, pageSize: 50000, venueType }) as searchFormType
     );
     message(res.msg, { type: res.code ? 'error' : 'success' });
   }
