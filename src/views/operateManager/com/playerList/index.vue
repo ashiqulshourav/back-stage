@@ -194,7 +194,7 @@ const {
   dispatchLabelsDel,
   dispatchLabelsAdd,
   dispatchUpdateUser,
-  tenantObj, 
+  tenantObj,
   goChangeAccountPage
 } = userPlayerListHook(props.category, props.venueType);
 </script>

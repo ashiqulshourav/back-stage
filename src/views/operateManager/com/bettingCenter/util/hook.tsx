@@ -447,14 +447,12 @@ export function useBettingCenterHook(category: number, venueType: number) {
       // 特殊结算也算已结算
       obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
     } else if (betResultArr?.includes(22)) {
-      obj = { status: betStatus.reverseCancel, bgColor: '#F57582' }; //预约取消
+      //预约取消
+      obj = { status: betStatus.reverseCancel, bgColor: '#F57582' };
     } else if (riskStatusArr?.includes(riskStatus.rejectBetting)) {
-      obj = { status: betStatus.PendingApprove, bgColor: '#F57582' }; //待审核
-    } else if (
-      betResultArr?.includes(61) &&
-      (riskStatusArr?.includes(riskStatus.reject) ||
-        riskStatusArr?.includes(riskStatus.autoReject))
-    ) {
+      //待审核
+      obj = { status: betStatus.PendingApprove, bgColor: '#F57582' };
+    }else if(betResultArr?.includes(61)&&(riskStatusArr?.includes(riskStatus.reject) ||riskStatusArr?.includes(riskStatus.autoReject))){
       // 封控拒单
       obj = { status: betStatus.riskReject, bgColor: '#F88D48' };
     } else if (
