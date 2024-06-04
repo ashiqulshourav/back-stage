@@ -322,7 +322,8 @@ export function useTradingHook(type: 'early' | 'in') {
     if (res.code) return;
     switch (classify) {
       case 'match':
-        upateMatchSale(status, matchId as number);
+        upateMatchSale(status);
+        break;
       case 'pan':
         upatePanSale(
           status,
@@ -339,15 +340,8 @@ export function useTradingHook(type: 'early' | 'in') {
   };
 
   //- 修改赛事图标状态
-  const upateMatchSale = (status: number, m: number) => {
+  const upateMatchSale = (status: number) => {
     currentMatch.isSale = status;
-    matchList.some(item => {
-      const r = item.matchDtoList.find(_ => _.matchId === m);
-      if (r) {
-        r.isSale = currentMatch.isSale;
-        return true;
-      } else return false;
-    });
   };
 
   //- 修改盘赛事图标状态

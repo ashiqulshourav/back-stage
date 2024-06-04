@@ -214,6 +214,7 @@ export function useWarningHook() {
     switch (classify) {
       case 'match':
         upateMatchSale(status, matchId);
+        break;
       case 'pan':
         upatePanSale(
           status,
