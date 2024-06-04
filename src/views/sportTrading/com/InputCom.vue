@@ -80,15 +80,14 @@ const inputCom = computed({
     if (Math.abs(props.s.dpOdds) >= 1) {
       props.s.dpOdds = resetDpodds(props.s.dpOdds);
     }
-
     if (props.betItemsDtoList.length === 2) {
       const d = props.betItemsDtoList.find(
         item => item.betItemsId !== props.selectItem.betItemsId
       ) as sportTradingDataAPI.BetItemsDtoList;
-      if (s1.value > 0) {
-        d.dpOdds = subtraction(d.dpOdds, Math.abs(s1.value), 2);
+      if (n > 0) {
+        d.dpOdds = subtraction(d.dpOdds, n, 2);
       } else {
-        d.dpOdds = addition(d.dpOdds, Math.abs(s1.value), 2);
+        d.dpOdds = addition(d.dpOdds, Math.abs(n), 2);
       }
       if (Math.abs(d.dpOdds) >= 1) d.dpOdds = resetDpodds(d.dpOdds);
     }
