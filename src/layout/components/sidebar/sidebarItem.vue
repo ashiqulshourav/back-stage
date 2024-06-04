@@ -160,7 +160,6 @@ function hasOneShowingChild(children: menuType[] = [], parent: menuType) {
   if (showingChildren.length === 1) {
     return false;
   }
-
   if (showingChildren.length === 0) {
     onlyOneChild.value = { ...parent, path: '', noShowingChildren: true };
     return true;

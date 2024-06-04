@@ -8,14 +8,12 @@ import {
   BO_DAN_CODE_LIST,
   MATCH_STATUS,
   SALE_STATUS,
-  icon_msg_tip,
   transferBoDanCol
 } from './playMap';
-import { ElMessageBox } from 'element-plus';
+import dayjs from 'dayjs';
 
 export function useTradingHook(type: 'early' | 'in') {
   const loading = ref(true);
-  const handicapLoading = ref(true);
   const noMatchList = ref(false);
   const matchStatus = ref<'countDown' | 'canceled' | 'over'>('countDown');
   const matchStartTime = ref<number>();
@@ -31,12 +29,30 @@ export function useTradingHook(type: 'early' | 'in') {
     sportId: 1,
     leagueNameOrId: '',
     matchNameOrId: '',
-    startTime: '',
-    endTime: ''
+    startTime:
+      type === 'early'
+        ? dayjs()
+            .set('hour', 12)
+            .set('minute', 0)
+            .set('second', 0)
+            .format('YYYY-MM-DD HH:mm:ss')
+        : '',
+    endTime:
+      type === 'early'
+        ? dayjs()
+            .add(7, 'day')
+            .set('hour', 12)
+            .set('minute', 0)
+            .set('second', 0)
+            .format('YYYY-MM-DD HH:mm:ss')
+        : ''
   });
 
+  //- 盘口赛事列表接口
+  const loopTimer = ref<NodeJS.Timeout>();
   //- 初始化搜索
   const onSearch = async () => {
+    if (loopTimer.value) clearInterval(loopTimer.value);
     loading.value = true;
     noMatchList.value = false;
     const reqUrl =
@@ -44,7 +60,10 @@ export function useTradingHook(type: 'early' | 'in') {
     const res = await API[reqUrl]({ ...removeEmptyStringKeys(searchForm) });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
-    if (!res.data.length) return (noMatchList.value = true);
+    if (!res.data.length) {
+      loopTimer.value && clearInterval(loopTimer.value);
+      return (noMatchList.value = true);
+    }
     matchList.length = 0;
     const firstRenderList = res.data.slice(0, 1);
     matchList.push(...firstRenderList);
@@ -57,13 +76,13 @@ export function useTradingHook(type: 'early' | 'in') {
     });
   };
 
-  //- 盘口赛事列表接口
-  const loopTimer = ref<NodeJS.Timeout>();
-  const getHandicapltems = async (noLoading?: boolean) => {
-    !noLoading && (handicapLoading.value = true);
-    const res = await API.getHandicapItems({ matchId: currentMatch.matchId });
-    handicapLoading.value = false;
-    if (res.code) return;
+  const getHandicapltems = async (noNprogress: boolean = false) => {
+    const res = await API.getHandicapItems(
+      { matchId: currentMatch.matchId },
+      noNprogress
+    );
+    if (res.code) return message(res.msg, { type: 'error' });
+
     //- 检测是否比赛开始
     if (
       !checkisBeginMatch(
@@ -71,20 +90,13 @@ export function useTradingHook(type: 'early' | 'in') {
         res.data.beginTimeLong
       )
     ) {
-      if (loopTimer) clearTimeout(loopTimer.value);
-      return;
+      if (loopTimer.value) return clearTimeout(loopTimer.value);
     }
     //检测是否有盘数据返回
     checkHasData(res.data);
 
     const tempList = handicapList.slice(1);
     tempList.forEach(_ => {
-      const iconMap = {
-        0: 0,
-        2: 0,
-        3: 0,
-        4: 0
-      };
       _.list = res.data[
         _.listType as keyof sportTradingDataAPI.getHandicapItemsData
       ] as sportTradingDataAPI.MainBetItemsDtoList[];
@@ -96,23 +108,12 @@ export function useTradingHook(type: 'early' | 'in') {
           _.listType as keyof sportTradingDataAPI.getHandicapItemsData
         ] as sportTradingDataAPI.MainBetItemsDtoList[]
       ).reduce((pre, next) => {
-        iconMap[next.isSale as keyof typeof iconMap] += 1;
         pre.push(...next.betItemsIdList);
         return pre;
       }, [] as number[]);
-
-      Object.keys(iconMap).forEach(key => {
-        if (
-          iconMap[+key as keyof typeof iconMap] == _.list.length &&
-          _.list.length > 0
-        ) {
-          _.isSale = +key;
-        }
-      });
     });
 
     //- 第一项单独处理
-    const map = { 0: 0, 2: 0, 3: 0, 4: 0 };
     handicapList[0].list = tempList.map(item => item.list).flat();
     handicapList[0].amount = tempList
       .map(item => item.amount)
@@ -120,7 +121,6 @@ export function useTradingHook(type: 'early' | 'in') {
     handicapList[0].betItemsIdList.length = 0;
     handicapList[0].list.forEach(item => {
       handicapList[0].betItemsIdList.push(...item.betItemsIdList);
-      map[item.isSale as keyof typeof map] += 1;
       item.kindsCodeDtoList.forEach(_ => {
         _.betItemsDtoList.forEach(l => {
           if (!l.dpOdds) l.dpOdds = l.odds;
@@ -134,15 +134,6 @@ export function useTradingHook(type: 'early' | 'in') {
           currentMatch.homeTeamNameCn,
           currentMatch.awayTeamNameCn
         );
-      }
-    });
-
-    Object.keys(map).forEach(key => {
-      if (
-        map[+key as keyof typeof map] == handicapList[0].list.length &&
-        handicapList[0].list.length > 0
-      ) {
-        handicapList[0].isSale = +key;
       }
     });
     handicapList[0] = JSON.parse(JSON.stringify(handicapList[0]));
@@ -176,6 +167,7 @@ export function useTradingHook(type: 'early' | 'in') {
       (type === 'in' && matchStatus.value === MATCH_STATUS.over) ||
       matchStatus.value === MATCH_STATUS.canceled
     ) {
+      if (loopTimer.value) clearInterval(loopTimer.value);
       addDialog({
         class: 'count_down_dialog',
         width: '8%',
@@ -190,6 +182,7 @@ export function useTradingHook(type: 'early' | 'in') {
             onCloseDialog: (_: boolean) => {
               closeDialog(options, index);
               onSearch();
+              resetSearchForm();
             }
           })
       });
@@ -198,10 +191,37 @@ export function useTradingHook(type: 'early' | 'in') {
     return true;
   };
 
+  //- 重置表单
+  const resetSearchForm = () => {
+    Object.assign(searchForm, {
+      sportId: 1,
+      leagueNameOrId: '',
+      matchNameOrId: '',
+      startTime:
+        type === 'early'
+          ? dayjs()
+              .set('hour', 12)
+              .set('minute', 0)
+              .set('second', 0)
+              .format('YYYY-MM-DD HH:mm:ss')
+          : '',
+      endTime:
+        type === 'early'
+          ? dayjs()
+              .add(7, 'day')
+              .set('hour', 12)
+              .set('minute', 0)
+              .set('second', 0)
+              .format('YYYY-MM-DD HH:mm:ss')
+          : ''
+    });
+  };
+
   //- 开启定时轮询任务
   const runLoopMatch = () => {
     if (loopTimer) clearInterval(loopTimer.value);
     loopTimer.value = setInterval(() => {
+      //- 轮询不现实进度条
       getHandicapltems(true);
     }, 5000);
   };
@@ -211,10 +231,11 @@ export function useTradingHook(type: 'early' | 'in') {
     Object.assign(currentMatch, data);
     clearTimeout(loopTimer.value);
     getHandicapltems();
+    selectContentType.value = 'mainBetItemsDtoList';
   };
 
   //- 修改内容部分导航标签分类
-  const selectContentType = ref('all');
+  const selectContentType = ref('mainBetItemsDtoList');
   const changeSelectType = (type: string) => {
     selectContentType.value = type;
   };
@@ -229,60 +250,57 @@ export function useTradingHook(type: 'early' | 'in') {
   };
 
   //-赛事盘口状态更新
-  const changeStatus = ({
+  const riotPrevention = ref(false);
+  const changeStatus = async ({
     status,
     classify,
     betItemsIdList,
     categoryData,
-    item
+    item,
+    matchId
   }: {
     status: Partial<SALE_STATUS>;
     classify: 'match' | 'category' | 'pan';
     betItemsIdList?: number[];
     categoryData?: sportTradingDataAPI.MainBetItemsDtoList;
     item?: handicapListType;
+    matchId?: number;
   }) => {
+    if (riotPrevention.value) return;
+    riotPrevention.value = true;
     clearInterval(loopTimer.value);
-    ElMessageBox.confirm(icon_msg_tip[status], t('系统提示'), {
-      confirmButtonText: t('确定'),
-      cancelButtonText: t('取消'),
-      type: 'warning',
-      center: true
-    })
-      .then(async () => {
-        const res = await API.updateHandicapStatus({
-          operateMenu: '操盘管理-早盘管理',
-          matchId: currentMatch.matchId,
-          isSale: status,
-          betItemsIds: betItemsIdList ?? []
-        });
-        message(res.msg, { type: res.code ? 'error' : 'success' });
-        runLoopMatch();
-        if (res.code) return;
-        switch (classify) {
-          case 'match':
-            upateMatchSale(status);
-          case 'pan':
-            upatePanSale(
-              status,
-              categoryData as sportTradingDataAPI.MainBetItemsDtoList
-            );
-            break;
-          case 'category':
-            upatePalySale(status, item as handicapListType);
-            break;
-          default:
-            break;
-        }
-      })
-      .catch(() => runLoopMatch());
+    const res = await API.updateHandicapStatus({
+      operateMenu: '操盘管理-早盘管理',
+      matchId: matchId ? matchId : currentMatch.matchId,
+      isSale: status,
+      betItemsIds: betItemsIdList ?? []
+    });
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    runLoopMatch();
+    riotPrevention.value = false;
+    if (res.code) return;
+    switch (classify) {
+      case 'match':
+        upateMatchSale(status, matchId as number);
+      case 'pan':
+        upatePanSale(
+          status,
+          categoryData as sportTradingDataAPI.MainBetItemsDtoList
+        );
+        break;
+      case 'category':
+        upatePalySale(status, item as handicapListType);
+        break;
+      default:
+        break;
+    }
   };
 
   //- 修改赛事图标状态
-  const upateMatchSale = (status: number) => {
+  const upateMatchSale = (status: number, m: number) => {
     currentMatch.isSale = status;
     matchList.some(item => {
-      const r = item.matchDtoList.find(_ => _.matchId === currentMatch.matchId);
+      const r = item.matchDtoList.find(_ => _.matchId === m);
       if (r) {
         r.isSale = currentMatch.isSale;
         return true;
@@ -317,18 +335,26 @@ export function useTradingHook(type: 'early' | 'in') {
   };
 
   onMounted(() => {
+    handicapList.forEach(item => {
+      item.amount = 0;
+      item.list = [];
+    });
+    if (loopTimer.value) clearInterval(loopTimer.value);
     onSearch();
   });
 
   onUnmounted(() => {
-    if (loopTimer) clearInterval(loopTimer.value);
+    if (loopTimer.value) clearInterval(loopTimer.value);
+    handicapList.forEach(item => {
+      item.amount = 0;
+      item.list = [];
+    });
   });
 
   return {
     loading,
     matchList,
     onSearch,
-    handicapLoading,
     searchForm,
     currentMatch,
     changeSelectMatch,

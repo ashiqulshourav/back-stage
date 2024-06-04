@@ -17,7 +17,7 @@ export const copy: Directive = {
       useEventListener(el, arg, (e) => {
         e.stopPropagation()
         // const success = copyTextToClipboard(value.val);
-        const { copy } = useClipboard({ source: value.val })
+        const { copy } = useClipboard({ source: value.val, legacy: true })
         copy(value.val)
         message(value?.tip ? value.tip : "复制成功", { type: "success" })
       });

@@ -51,7 +51,7 @@
           <span class="font-bold">{{ t('冻结注单设置') }}</span>
           <span>
             <span class="text-gray-500 flex items-center gap-4">
-              <el-icon @mouseover="showMessage = true" @mouseleave="showMessage = false"><InfoFilled /></el-icon>
+              <el-icon @mouseover="showMessage = true" @mouseleave="showMessage = false" class="cursor-pointer"><InfoFilled /></el-icon>
               
                 <span v-if="showMessage">{{
                 t(
@@ -67,7 +67,7 @@
         }}</span> -->
 
         <div
-          v-if="currentRiskControlLabelId == 0 && hasAuth('UPDATEAUTOREJECT')"
+          v-if="currentRiskControlLabelId == 0 && hasAuth('AUTOREJECTLIST') && hasAuth('UPDATEAUTOREJECT')"
         >
           <EditAutoLabelButton
             :currentRiskControlLabelId="currentRiskControlLabelId"
@@ -77,7 +77,7 @@
             :confirmRiskControlsClick="confirmRiskControlsClick"
           />
         </div>
-        <div v-if="currentRiskControlLabelId == 1 && hasAuth('UPDATESETTLE')">
+        <div v-if="currentRiskControlLabelId == 1 && hasAuth('AUTOORDERPLACEMENTLIST') && hasAuth('UPDATESETTLE')">
           <EditAutoLabelButton
             :currentRiskControlLabelId="currentRiskControlLabelId"
             :isEditRiskControls="isEditRiskControls"
@@ -86,7 +86,7 @@
             :confirmRiskControlsClick="confirmRiskControlsClick"
           />
         </div>
-        <div v-if="currentRiskControlLabelId == 2 && hasAuth('UPDATEFREEZE')">
+        <div v-if="currentRiskControlLabelId == 2 && hasAuth('AUTOFREEZELIST') && hasAuth('UPDATEFREEZE')">
           <EditAutoLabelButton
             :currentRiskControlLabelId="currentRiskControlLabelId"
             :isEditRiskControls="isEditRiskControls"

@@ -43,7 +43,7 @@ class PureHttp {
   private httpInterceptorsRequest(): void {
     PureHttp.axiosInstance.interceptors.request.use(
       async (config: PureHttpRequestConfig): Promise<any> => {
-        NProgress.start();
+        if (!config.noNprogress) NProgress.start();
         // 优先判断post/get等方法是否传入回调，否则执行初始化设置等回调
         if (typeof config.beforeRequestCallback === 'function') {
           config.beforeRequestCallback(config);
@@ -56,18 +56,17 @@ class PureHttp {
         }
         /** 请求白名单，放置一些不需要token的接口（通过设置请求白名单，防止token过期后再请求造成的死循环问题） */
         const whiteList = ['/refreshToken', '/login'];
-        if (whiteList.some(_ => config.url.indexOf(_) < 0)) {
+        if (whiteList.some(_ => config!.url!.indexOf(_) < 0)) {
+
           const token: string = storageSession().getItem(TokenKey) ?? '';
-          if (token) {
-            config.headers["Accesstoken"] = token;
-          }
-          if (config.url.includes('/bet-center/cancel')) {
-            config.data = config.data.orderIds
-          }
-          if (addAcceptLanguageList.includes(config.url)) {
+          if (token) config!.headers!["Accesstoken"] = token;
+
+          if (config?.url?.includes('/bet-center/cancel')) config.data = config.data.orderIds;
+
+          if (addAcceptLanguageList.includes(config.url as string)) {
             const lan: { locale: string } = storageLocal().getItem('responsive-locale') ?? { locale: 'zh' }
             let lanStr = lan.locale === 'zh' ? 'CN' : 'EN'
-            config.headers['accept-language'] = lanStr;
+            config!.headers!['accept-language'] = lanStr;
           }
         }
         return config;
@@ -104,7 +103,7 @@ class PureHttp {
         return response.data;
       },
       (error: PureHttpError) => {
-        switch (error.response.status) {
+        switch (error!.response!.status) {
           case 403:
             useUserStore().logOut();
             break;
@@ -135,7 +134,7 @@ class PureHttp {
     return new Promise((resolve, reject) => {
       PureHttp.axiosInstance
         .request(config)
-        .then((response: undefined) => {
+        .then((response: any) => {
           resolve(response);
         })
         .catch(error => {

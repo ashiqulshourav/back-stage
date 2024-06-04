@@ -42,5 +42,9 @@ export const EVENT_NAMES = [
   {
     eventName: '获得点球事件',
     eventCode: 'penalty_awarded'
+  },
+  {
+    eventName: '角球 ',
+    eventCode: 'corner'
   }
 ] as const;

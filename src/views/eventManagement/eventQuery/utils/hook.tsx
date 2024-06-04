@@ -100,7 +100,7 @@ export function useEventQueryHook() {
     onSearch();
   }
 
-  function handleSelectionChange(val) {
+  function handleSelectionChange(val: any) {
     console.log('handleSelectionChange', val);
   }
 

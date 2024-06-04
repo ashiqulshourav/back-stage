@@ -8,13 +8,15 @@ export const eventData = {
     ),
 
   getMatchEventByMatchId: (data: EventAPI.PandaMatchEventListParams) =>
-    http.request<EventAPI.MatchEvent[]>(
+    http.request<EventAPI.MatchEventRes>(
       'post',
       '/event/v1/getMatchEventByMatchId',
       { data }
     ),
 
-  getMatchInfoByMatchId: (data: any) =>
+  getMatchInfoByMatchId: (data: {
+      matchId?: number | string;
+  }) =>
     http.request<EventAPI.MatchInfoRes>(
       'post',
       '/event/v1/getMatchInfoByMatchId',

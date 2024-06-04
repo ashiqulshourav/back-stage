@@ -53,7 +53,7 @@ type DialogProps = {
   destroyOnClose?: boolean;
 };
 
-type BtnClickDialog = {
+export type BtnClickDialog = {
   options?: DialogOptions;
   index?: number;
 };

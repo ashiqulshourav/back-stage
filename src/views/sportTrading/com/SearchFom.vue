@@ -1,11 +1,11 @@
 <template>
   <div class="search-form bg-bg_color w-[99/100] pl-5 pt-[12px]">
     <el-form ref="formRef" :inline="true" :model="form">
-      <el-form-item prop="sportId">
+      <el-form-item prop="sportId" class="!mr-3">
         <el-select
           v-model="form.sportId"
           :placeholder="t('游戏种类')"
-          class="!w-[150px]"
+          class="!w-[100px]"
           @change="search"
         >
           <el-option
@@ -18,7 +18,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item prop="leagueNameOrId">
+      <el-form-item prop="leagueNameOrId" class="!mr-3">
         <el-input
           v-model="form.leagueNameOrId"
           :placeholder="t('联赛名称/ID')"
@@ -29,18 +29,19 @@
         />
       </el-form-item>
 
-      <el-form-item prop="matchNameOrId">
+      <el-form-item prop="matchNameOrId" class="!mr-3">
         <el-input
           v-model="form.matchNameOrId"
-          :placeholder="t('赛事名称/ID')"
+          :placeholder="t('赛事ID')"
           v-enter="search"
+          :formatter="(v:string) => formatNumber(v)"
           clearable
           maxlength="30"
           class="!w-[150px]"
         />
       </el-form-item>
 
-      <el-form-item prop="startTime" v-if="type === 'early'">
+      <el-form-item prop="startTime" v-if="type === 'early'" class="!mr-3">
         <el-button
           v-for="(item, index) in preDayArr"
           :key="index"
@@ -48,10 +49,14 @@
           @click="changeSelectDate(index)"
           >{{ index === 0 ? t('今日') : item.label }}</el-button
         >
-        <CustomDate v-model:val="selectDate" @changeDate="changeDate" />
+        <CustomDate
+          v-model:val="selectDate"
+          @changeDate="changeDate"
+          class="!ml-3"
+        />
       </el-form-item>
 
-      <el-form-item prop="startTime" v-else>
+      <el-form-item prop="startTime" v-else class="!mr-3">
         <el-time-picker
           v-model="selectDate"
           is-range
@@ -88,6 +93,7 @@ import { SearchFormType } from '../util/type';
 import dayjs from 'dayjs';
 import CustomDate from '@/components/Form/Custom_date.vue';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+import { formatNumber } from '@/utils/formatNumber';
 
 const formRef = ref();
 const emits = defineEmits(['onSearch']);
@@ -103,6 +109,10 @@ const props = withDefaults(
   }>(),
   {}
 );
+
+onMounted(() => {
+  selectDate.value = [props.form.startTime, props.form.endTime] as any;
+});
 
 const changeDate = (t: string[]) => {
   if (!t) {
@@ -127,9 +137,27 @@ const changeDate = (t: string[]) => {
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl?.resetFields();
   selectIndex.value = -1;
-  props.form.endTime = '';
-  props.form.startTime = '';
-  selectDate.value = '';
+  props.form.startTime =
+    props.type === 'early'
+      ? dayjs()
+          .set('hour', 12)
+          .set('minute', 0)
+          .set('second', 0)
+          .format('YYYY-MM-DD HH:mm:ss')
+      : '';
+  props.form.endTime =
+    props.type === 'early'
+      ? dayjs()
+          .add(7, 'day')
+          .set('hour', 12)
+          .set('minute', 0)
+          .set('second', 0)
+          .format('YYYY-MM-DD HH:mm:ss')
+      : '';
+  selectDate.value =
+    props.type === 'early'
+      ? ([props.form.startTime, props.form.endTime] as any)
+      : '';
   emits('onSearch');
 };
 
@@ -156,7 +184,7 @@ const search = () => emits('onSearch');
 
 const preDayArr = computed(() => {
   const preDayList = [];
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 7; i++) {
     preDayList.push({
       label: dayjs()
         .add(i, 'day')

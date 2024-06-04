@@ -1,7 +1,7 @@
 <template>
   <div>
     <pure-table
-      maxHeight="500"
+      height="700"
       align-whole="center"
       :loading="loading"
       size="small"
@@ -85,7 +85,16 @@
           {{ t('秒') }}
         </div>
         <span v-else> {{ row.betAfterTime }} {{ t('秒') }} </span>
-
+        <div
+          v-if="
+            !Number(row.betBeforeTime) &&
+            !Number(row.betAfterTime) &&
+            isFormClick
+          "
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('投注前时间和投注后时间不能同时为空') }}
+        </div>
         <div
           v-if="showBetAfterTimeError(row) && isFormClick"
           class="text-red-500 text-xs text-start"
@@ -107,11 +116,18 @@
         </div>
         <div v-else>
           <span v-if="Number(row.minLimitAmount) && Number(row.maxLimitAmount)">
-            {{
-              addThousandSeparator(row.minLimitAmount) +
-              ' - ' +
-              addThousandSeparator(row.maxLimitAmount)
-            }}
+            <span
+              v-if="Number(row.minLimitAmount) == Number(row.maxLimitAmount)"
+            >
+              {{ addThousandSeparator(row.minLimitAmount) }}
+            </span>
+            <span v-else>
+              {{
+                addThousandSeparator(row.minLimitAmount) +
+                ' - ' +
+                addThousandSeparator(row.maxLimitAmount)
+              }}
+            </span>
           </span>
           <span
             v-if="Number(row.minLimitAmount) && !Number(row.maxLimitAmount)"
@@ -123,6 +139,12 @@
           >
             {{ addThousandSeparator(row.maxLimitAmount) + t('以下') }}
           </span>
+        </div>
+        <div
+          v-if="showBetAmountError(row) && isFormClick"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('投注金额最小值不能大于最大值') }}
         </div>
       </template>
     </pure-table>
@@ -192,17 +214,21 @@ const eventDisabled = (eventCode: string, row: any) => {
   return disable;
 };
 
+const showBetAmountError = (row: any) => {
+  if (Number(row.maxLimitAmount) && Number(row.minLimitAmount)) {
+    return Number(row.maxLimitAmount) < Number(row.minLimitAmount);
+  }
+};
+
 const showBetAfterTimeError = (row: any) => {
   let error = false;
-  if (!row.betBeforeTime && !row.betAfterTime) {
-    error = true;
-  } else if (row.betAfterTime) {
+  if (Number(row.betAfterTime)) {
     props.orderAutoFreezeList.forEach(orderFreeze => {
       if (
         orderFreeze.sourceCode == row.sourceCode &&
         orderFreeze.eventCode == row.eventCode
       ) {
-        if (Number(row.betAfterTime) > Number(orderFreeze.betAfterTime)) {
+        if (Number(row.betAfterTime) >= Number(orderFreeze.betAfterTime)) {
           error = true;
         }
       }

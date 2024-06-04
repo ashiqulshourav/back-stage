@@ -6,7 +6,7 @@ import { TOrder } from '@/core/services/Table';
 import { useMatchStore } from "@/store/match";
 import { useI18n } from "vue-i18n";
 
-// 解析当前比分
+//- 解析当前比分
 export const parseMatchScore = (s: string) => {
   const match = s.match(/H(\d+)A(\d+)/);
   if (match) {
@@ -130,7 +130,6 @@ export enum EBetResultType {
   HANDLE_CANCEL = 23,
   FLAT_MATCH_ROLLBACK = 51,
   RISK_REJECT = 61
-
 }
 export const BET_RESULT_TYPE_MAP: { [key in EBetResultType]: string } = {
   [EBetResultType.NO_RESULT]: t('无结果'),

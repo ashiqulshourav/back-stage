@@ -18,13 +18,6 @@ declare namespace EventAPI {
     startDateTime: string;
   };
 
-  type MatchInfoRes = {
-    code: number;
-    ts: number;
-    msg: string;
-    data: MatchInfo;
-  };
-
   type PandaMatchEventList = {
     eventCode: string;
     eventName: string;
@@ -115,4 +108,9 @@ declare namespace EventAPI {
     navigateFirstPage: number;
     navigateLastPage: number;
   };
+
+  type MatchInfoRes = COMMON.BASE_RES_TYPE<MatchInfo>;
+  
+  type MatchEventRes = COMMON.BASE_RES_TYPE<COMMON.ListData<MatchEvent>>;
+
 }

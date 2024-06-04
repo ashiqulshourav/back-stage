@@ -5,6 +5,13 @@ export type SearchFormType = {
   startTime: number | string;
   endTime: number | string;
 }
+export type WarningSearchFormType = {
+  sportId: number | string;
+  leagueNameOrId: number | string;
+  matchNameOrId: number | string;
+  startTime: number | string;
+  endTime: number | string;
+}
 
 export type handicapListType =
   {

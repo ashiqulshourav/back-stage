@@ -139,3 +139,9 @@ import Search from '@iconify-icons/ep/search';
 ```js
 import.meta.env.VITE_BUILD_TYPE === 'pro';
 ```
+
+### css 边框
+
+```js
+border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#303030]
+```
