@@ -8,7 +8,7 @@
           : 'var(--el-color-danger-light-3)'
     }"
   >
-    {{ status === 'countDown' ? t('即将开赛') : '' }} {{ mapText[status] }}
+    {{ mapText[status] }}
     {{ n }}s
   </div>
 </template>
@@ -18,12 +18,12 @@ import { t } from '@/plugins/i18n';
 const timer = ref();
 
 defineProps<{
-  status: 'countDown' | 'canceled' | 'over';
+  status: 'nobegin' | 'canceled' | 'over';
   type: string;
 }>();
 
 const mapText = {
-  countDown: t('即将开赛'),
+  nobegin: t('即将开赛'),
   canceled: t('赛事取消'),
   over: t('赛事结束')
 };

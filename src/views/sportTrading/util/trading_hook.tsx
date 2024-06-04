@@ -13,7 +13,7 @@ import dayjs from 'dayjs';
 export function useTradingHook(type: 'early' | 'in') {
   const loading = ref(true);
   const noMatchList = ref(false);
-  const matchStatus = ref<'countDown' | 'canceled' | 'over'>('countDown');
+  const matchStatus = ref<'nobegin' | 'canceled' | 'over'>('nobegin');
   const matchStartTime = ref<number>();
   const matchList = reactive<sportTradingDataAPI.getMorningSetMatchListData[]>(
     []
@@ -87,7 +87,7 @@ export function useTradingHook(type: 'early' | 'in') {
     //- 检测是否比赛开始
     if (
       !checkisBeginMatch(
-        res.data.status as 'countDown' | 'canceled' | 'over',
+        res.data.status as 'nobegin' | 'canceled' | 'over',
         res.data.beginTimeLong
       )
     ) {
@@ -205,7 +205,7 @@ export function useTradingHook(type: 'early' | 'in') {
 
   //- 检测是否开始比赛
   const checkisBeginMatch = (
-    status: 'countDown' | 'canceled' | 'over',
+    status: 'nobegin' | 'canceled' | 'over',
     beginTimeLong: number
   ) => {
     matchStatus.value = status;
