@@ -52,6 +52,7 @@
         <CustomDate
           v-model:val="selectDate"
           @changeDate="changeDate"
+          :isShowShortCuts="false"
           class="!ml-3"
         />
       </el-form-item>

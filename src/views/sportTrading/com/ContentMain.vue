@@ -246,7 +246,7 @@ const props = defineProps<{
   selectContentType: string;
   panIsEmpty: boolean;
   isShowDialog: boolean;
-  matchStatus: 'countDown' | 'canceled' | 'over';
+  matchStatus: 'nobegin' | 'canceled' | 'over';
   type: string;
 }>();
 
