@@ -192,6 +192,7 @@ declare namespace sportTradingDataAPI {
     score: number;
     betItemsResultDto: BetItemsResultDto;
     renderList: renderListType[];
+    HandicapTeam: string;
   }
 
   type renderListType = {

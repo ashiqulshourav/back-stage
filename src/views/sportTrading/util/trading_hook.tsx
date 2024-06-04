@@ -210,6 +210,7 @@ export function useTradingHook(type: 'early' | 'in') {
   ) => {
     matchStatus.value = status;
     matchStartTime.value = beginTimeLong;
+    status = 'over';
     if (
       (beginTimeLong - Date.now() < 16000 && type === 'early') ||
       (type === 'in' && matchStatus.value === MATCH_STATUS.over) ||
@@ -218,6 +219,9 @@ export function useTradingHook(type: 'early' | 'in') {
       if (loopTimer.value) clearInterval(loopTimer.value);
       isShowDialog.value = true;
       return false;
+    } else if (matchStatus.value === 'over') {
+      if (loopTimer.value) clearInterval(loopTimer.value);
+      isShowDialog.value = true;
     }
     return true;
   };

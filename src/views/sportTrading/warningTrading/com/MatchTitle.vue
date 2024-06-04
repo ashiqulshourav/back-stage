@@ -48,7 +48,14 @@
         }"
       >
         <div class="flex items-center">
-          <div :class="['text-[--el-color-primary] text-xs flex items-center']">
+          <div
+            :class="[
+              ' text-xs flex items-center',
+              currentMatch.HandicapTeam?.toUpperCase() === 'HOME'
+                ? 'text-[--el-color-danger]'
+                : 'text-[--el-color-primary]'
+            ]"
+          >
             <span>{{ currentMatch?.homeTeamNameCn }}</span>
             <span
               class="w-5 font-bold h-5 flex items-center text-xs scale-75 justify-center bg-[--el-color-warning] text-white rounded-full"
@@ -56,7 +63,14 @@
             >
           </div>
           <div class="text-[--el-color-primary] !mr-1 !ml-1 text-xs">V</div>
-          <div class="text-[--el-color-danger] text-xs">
+          <div
+            :class="[
+              'text-xs',
+              currentMatch.HandicapTeam?.toUpperCase() === 'AWAY'
+                ? 'text-[--el-color-danger]'
+                : 'text-[--el-color-primary] '
+            ]"
+          >
             {{ currentMatch?.awayTeamNameCn }}
           </div>
         </div>
