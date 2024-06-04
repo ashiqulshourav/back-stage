@@ -19,11 +19,11 @@
           </div>
         </el-row>
       </div>
-      <el-button class="ml-auto" type="primary" @click="openModifyBalanceDialog()">
+      <el-button  v-if="hasAuth('changAccountAmount'.toUpperCase())" class="ml-auto" type="primary" @click="openModifyBalanceDialog()">
         {{ t('修改余额') }}
       </el-button>
     </div>
-    
+
     <el-form-item prop="accountChangeTypeCode">
       <el-select
         v-model="form.accountChangeTypeCode"
@@ -78,6 +78,7 @@ import dayjs from 'dayjs';
 import { accountChangeRecordSearchFormType, userDataType } from './util/types';
 import { accountChangeTypeCodeList } from './columns';
 import { addThousandSeparator } from "@/utils/formatNumber";
+import {hasAuth} from "@/router/utils";
 
 const props = defineProps<{
   loading: boolean;

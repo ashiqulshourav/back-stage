@@ -93,7 +93,7 @@
               {{ t('编辑') }}
             </el-button>
             <el-button
-              v-if="hasAuth('SETTING')"
+              v-if="hasAuth('changeAccountRecord'.toUpperCase())"
               class="reset-margin"
               link
               type="primary"
