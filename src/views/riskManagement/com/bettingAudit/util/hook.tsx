@@ -37,6 +37,7 @@ export function useBettingAuditHook(venueType: number) {
   const hasDataFetching = ref(1);
   const dataFetchingTime = ref(30);
   const loopTimer = ref<NodeJS.Timeout>();
+  const isEditDialogClick = ref(false);
 
   const totalInfo = reactive<BetOrderAPI.RiskOtherDataType>(
     {} as BetOrderAPI.RiskOtherDataType
@@ -182,16 +183,18 @@ export function useBettingAuditHook(venueType: number) {
     };
 
     if (hasDataFetching.value) {
-      loopTimer.value = setInterval(
-        async () => await fetchData(),
-        Number(dataFetchingTime.value) * 1000
-      );
+      if (!isEditDialogClick) {
+        loopTimer.value = setInterval(
+          async () => await fetchData(),
+          Number(dataFetchingTime.value) * 1000
+        );
+      }
       await fetchData();
     } else await fetchData();
   }
 
   watch(
-    () => hasDataFetching.value,
+    () => [hasDataFetching.value, isEditDialogClick.value],
     () => {
       onSearch();
     }
@@ -374,6 +377,7 @@ export function useBettingAuditHook(venueType: number) {
   };
 
   const handleCancel = (row: any, index: number) => {
+    isEditDialogClick.value = true;
     const data = { ...row }; //...row.combineOrderDetails[index]
     data.combineOrderDetails = data.combineOrderDetails.filter(
       (item: BetOrderAPI.Detail, i: number) => {
@@ -400,6 +404,7 @@ export function useBettingAuditHook(venueType: number) {
         h(formDom, {
           list: list,
           onCloseDialog: () => {
+            isEditDialogClick.value = false;
             onSearch('reload');
             closeDialog(options, index);
           }
@@ -407,6 +412,7 @@ export function useBettingAuditHook(venueType: number) {
     });
   };
   const handleApprove = (row: any, index: number) => {
+    isEditDialogClick.value = true;
     const data = { ...row }; //...row.combineOrderDetails[index]
     data.combineOrderDetails = data.combineOrderDetails.filter((item, i) => {
       return i == index;
@@ -418,6 +424,7 @@ export function useBettingAuditHook(venueType: number) {
     openApproveDialog(list);
   };
   const handleApproveSome = () => {
+    isEditDialogClick.value = true;
     const obj = {};
     dataList.map(item => {
       item.combineOrderDetails.map((match: any) => {
@@ -473,6 +480,7 @@ export function useBettingAuditHook(venueType: number) {
       center: true,
       type: 'warning'
     }).then(async () => {
+      isEditDialogClick.value = false;
       const r = await openPasswordInput();
       if (!r) {
         return;
@@ -508,6 +516,7 @@ export function useBettingAuditHook(venueType: number) {
     orderDetailId: number,
     orderDetailRemark: string
   ) => {
+    isEditDialogClick.value = true;
     addDialog({
       title: t('编辑备注'),
       class: 'reset_dialog',
@@ -520,6 +529,7 @@ export function useBettingAuditHook(venueType: number) {
           ref: editDialogRef,
           data: { orderDetailId, orderDetailRemark },
           onCloseDialog: (value: string) => {
+            isEditDialogClick.value = false;
             closeDialog(options, index);
             getRowByOrderId(orderId);
             // onSearch();
