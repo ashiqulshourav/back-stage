@@ -98,6 +98,12 @@ export function useTradingHook(type: 'early' | 'in') {
 
     const tempList = handicapList.slice(1);
     tempList.forEach(_ => {
+      const o = {
+        3: 0,
+        2: 0,
+        0: 0,
+        4: 0
+      };
       _.list = res.data[
         _.listType as keyof sportTradingDataAPI.getHandicapItemsData
       ] as sportTradingDataAPI.MainBetItemsDtoList[];
@@ -112,6 +118,21 @@ export function useTradingHook(type: 'early' | 'in') {
         pre.push(...next.betItemsIdList);
         return pre;
       }, [] as number[]);
+      _.list.forEach(item => {
+        o[item.isSale as keyof typeof o] += 1;
+      });
+      Object.keys(o).some(key => {
+        if (
+          _.list.length === +o[key as unknown as keyof typeof o] &&
+          _.list.length
+        ) {
+          _.isSale = +key;
+          return true;
+        } else {
+          _.isSale = 2;
+          return false;
+        }
+      });
     });
 
     //- 第一项单独处理
@@ -120,7 +141,14 @@ export function useTradingHook(type: 'early' | 'in') {
       .map(item => item.amount)
       .reduce((pre, next) => pre + next);
     handicapList[0].betItemsIdList.length = 0;
+    const o = {
+      3: 0,
+      2: 0,
+      0: 0,
+      4: 0
+    };
     handicapList[0].list.forEach(item => {
+      o[item.isSale as keyof typeof o] += 1;
       handicapList[0].betItemsIdList.push(...item.betItemsIdList);
       item.kindsCodeDtoList.forEach((_, i: number) => {
         _.betItemsDtoList.forEach(l => {
@@ -147,6 +175,18 @@ export function useTradingHook(type: 'early' | 'in') {
       }
     });
     handicapList[0] = JSON.parse(JSON.stringify(handicapList[0]));
+    Object.keys(o).some(key => {
+      if (
+        handicapList[0].list.length === +o[key as unknown as keyof typeof o] &&
+        handicapList[0].list.length
+      ) {
+        handicapList[0].isSale = +key;
+        return true;
+      } else {
+        handicapList[0].isSale = 2;
+        return false;
+      }
+    });
   };
 
   //- 检测是否有盘数据
@@ -282,7 +322,8 @@ export function useTradingHook(type: 'early' | 'in') {
       case 'pan':
         upatePanSale(
           status,
-          categoryData as sportTradingDataAPI.MainBetItemsDtoList
+          categoryData as sportTradingDataAPI.MainBetItemsDtoList,
+          item as handicapListType
         );
         break;
       case 'category':
@@ -308,9 +349,32 @@ export function useTradingHook(type: 'early' | 'in') {
   //- 修改盘赛事图标状态
   const upatePanSale = (
     status: number,
-    categoryData: sportTradingDataAPI.MainBetItemsDtoList
+    categoryData: sportTradingDataAPI.MainBetItemsDtoList,
+    item: handicapListType
   ) => {
+    const o = {
+      3: 0,
+      2: 0,
+      0: 0,
+      4: 0
+    };
+
     categoryData.isSale = status;
+    item.list.forEach(_ => {
+      o[_.isSale as keyof typeof o] += 1;
+    });
+    Object.keys(o).some(key => {
+      if (
+        item.list.length === +o[key as unknown as keyof typeof o] &&
+        item.list.length
+      ) {
+        item.isSale = +key;
+        return true;
+      } else {
+        item.isSale = 2;
+        return false;
+      }
+    });
   };
 
   //- 修改玩法状态
