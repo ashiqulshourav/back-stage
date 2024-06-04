@@ -53,7 +53,8 @@
                         status,
                         classify: 'pan',
                         betItemsIdList: _.betItemsIdList,
-                        categoryData: _
+                        categoryData: _,
+                        item
                       })
                   "
                 />

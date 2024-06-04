@@ -3,7 +3,7 @@
     class="flex items-center w-full justify-center pt-3 pb-3 text-white text-xs"
     :style="{
       backgroundColor:
-        status === 'canceled' && type === 'early'
+        (status === 'canceled' && type === 'early') || status === 'over'
           ? '#A8ABB2'
           : 'var(--el-color-danger-light-3)'
     }"
