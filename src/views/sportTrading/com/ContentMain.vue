@@ -306,6 +306,7 @@ const mouseEvent = (
   type: 'enter' | 'leave',
   list?: sportTradingDataAPI.BetItemsDtoList[]
 ) => {
+  isShowScroll.value = false;
   if (type === 'enter') {
     //鼠标滑入之前所有为隐藏
     props.handicapList
@@ -318,8 +319,8 @@ const mouseEvent = (
         });
       });
     selectItem.value = s;
-    scrollPostitonObj.left = `${e.target.getBoundingClientRect().left + 70}px`;
-    scrollPostitonObj.top = `${e.target.getBoundingClientRect().top - 170}px`;
+    scrollPostitonObj.left = `${e.target.getBoundingClientRect().left + 76}px`;
+    scrollPostitonObj.top = `${e.target.getBoundingClientRect().top - 168}px`;
     betItemsDtoList.length = 0;
     betItemsDtoList.push(...(list as sportTradingDataAPI.BetItemsDtoList[]));
     s.sourceBetItemsId = 1;
