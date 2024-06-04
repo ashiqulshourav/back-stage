@@ -1,35 +1,42 @@
 <template>
-  <div class="flex w-full">
-    <div class="flex items-center flex-grow">
+  <div class="flex w-full justify-between">
+    <div class="flex items-center">
       <div
         v-if="currentMatch.leagueId"
-        class="flex items-center cursor-pointer flex-shrink-0"
+        class="flex items-center cursor-pointer 2xl:w-full xl:w-1/3"
         v-copy:click="{
           val: currentMatch.leagueId,
           tip: t('联赛ID复制成功')
         }"
       >
         <span
-          class="w-4 h-4 flex items-center text-[12px] justify-center bg-primary text-center rounded-full leading-4 text-white"
+          class="w-4 h-4 flex items-center text-[12px] justify-center bg-primary text-center rounded-full leading-4 text-white flex-shrink-0 mr-1"
         >
           <span class="scale-75 font-bold">
             {{ currentMatch?.level === 200 ? t('未') : currentMatch?.level }}
           </span>
         </span>
-        <span class="text-[#409EFF] ml-1">{{
-          currentMatch?.leagueNameCn
-        }}</span>
+        <ReText
+          class="leading-none flex-grow"
+          type="primary"
+          size="small"
+          :tippyProps="{ content: currentMatch.leagueNameCn }"
+        >
+          {{ currentMatch.leagueNameCn }}
+        </ReText>
       </div>
 
       <div
         v-if="currentMatch.matchId"
-        class="flex ml-5 cursor-pointer flex-grow"
+        class="flex 2xl:ml-5 xl:ml-1 cursor-pointer flex-grow"
         v-copy:click="{
           val: currentMatch.matchId,
           tip: t('赛事ID复制成功')
         }"
       >
-        <div class="text-[--el-color-primary] flex items-center !max-w-[40%]">
+        <div
+          class="text-[--el-color-primary] flex items-center 2xl:!w-full xl:!w-[40%]"
+        >
           <ReText
             class="leading-none flex-grow"
             :type="
@@ -43,12 +50,12 @@
             {{ currentMatch.homeTeamNameCn }}
           </ReText>
           <span
-            class="w-5 font-bold h-5 flex items-center text-[12px] scale-75 justify-center bg-[--el-color-warning] text-white rounded-full"
+            class="w-5 font-bold h-5 flex items-center text-[12px] scale-75 justify-center bg-[--el-color-warning] flex-shrink-0 text-white rounded-full"
             >{{ t('主') }}</span
           >
         </div>
         <div :class="['text-[--el-color-primary] !mr-1 !ml-1']">V</div>
-        <div class="text-[--el-color-danger] !max-w-[40%]">
+        <div class="text-[--el-color-danger] 2xl:!w-full xl:!w-[40%]">
           <ReText
             class="leading-none"
             :type="
@@ -64,11 +71,11 @@
         </div>
       </div>
     </div>
-    <div class="flex ml-5 flex-shrink-0">
+    <div class="flex flex-grow justify-end">
       <el-button
         round
         size="small"
-        class="!ml-1"
+        class="xl:!ml-1 2xl:!ml-3"
         v-for="(item, index) in handicapList"
         :key="index"
         :type="selectContentType === item.listType ? 'primary' : ''"

@@ -272,6 +272,7 @@ const mouseEvent = (
 ) => {
   //- 进入之后清空所有内容
   if (type === 'enter') {
+    isShowScroll.value = false;
     props.matchList.forEach(item => {
       item.renderList.forEach(_ => {
         _.list.forEach(d => {
