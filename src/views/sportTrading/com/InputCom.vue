@@ -1,19 +1,21 @@
 <template>
   <div
     class="w-1/4 text-center input_wrapper relative h-full input_container"
-    @mouseenter.stop="e => mouseEvent(e, props.s, 'enter')"
     @mouseleave.stop="e => mouseEvent(e, props.s, 'leave')"
   >
-    <div
+    <!-- @mouseenter.stop="e => mouseEvent(e, props.s, 'enter')" -->
+    <!-- min-w-[120px]  -->
+    <span
       v-if="showNum"
+      @mouseenter.stop="e => mouseEvent(e, props.s, 'enter')"
       :class="[
-        'min-w-[120px] text-[--el-color-primary] text-left h-full flex items-center',
+        'text-[--el-color-primary] text-left h-full flex items-center w-[70px]',
         saleStatus !== 2 && '!text-[#909399]',
         s.dpOdds?.toFixed(2) < 0 && 'translate-x-[-6px]'
       ]"
     >
       {{ s.dpOdds?.toFixed(2) }}
-    </div>
+    </span>
     <div
       v-else
       class="text-[--el-color-primary] flex justify-start cursor-pointer h-full relative"
@@ -79,15 +81,17 @@ const inputCom = computed({
       props.s.dpOdds = resetDpodds(props.s.dpOdds);
     }
 
-    const d = props.betItemsDtoList.find(
-      item => item.betItemsId !== props.selectItem.betItemsId
-    ) as sportTradingDataAPI.BetItemsDtoList;
-    if (s1.value > 0) {
-      d.dpOdds = subtraction(d.dpOdds, Math.abs(s1.value), 2);
-    } else {
-      d.dpOdds = addition(d.dpOdds, Math.abs(s1.value), 2);
+    if (props.betItemsDtoList.length === 2) {
+      const d = props.betItemsDtoList.find(
+        item => item.betItemsId !== props.selectItem.betItemsId
+      ) as sportTradingDataAPI.BetItemsDtoList;
+      if (s1.value > 0) {
+        d.dpOdds = subtraction(d.dpOdds, Math.abs(s1.value), 2);
+      } else {
+        d.dpOdds = addition(d.dpOdds, Math.abs(s1.value), 2);
+      }
+      if (Math.abs(d.dpOdds) >= 1) d.dpOdds = resetDpodds(d.dpOdds);
     }
-    if (Math.abs(d.dpOdds) >= 1) d.dpOdds = resetDpodds(d.dpOdds);
 
     changeDpOdds();
   }

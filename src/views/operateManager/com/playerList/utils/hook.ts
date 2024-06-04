@@ -35,6 +35,7 @@ export function userPlayerListHook(venueType: number, category: number) {
   const isOpenRecord = ref(false);
   const isMultiModal = ref(false);
   const isMultiDel = ref(false);
+  const downloading = ref(false);
 
   const loading = ref(true);
   const pagination = reactive<PaginationProps>({
@@ -110,6 +111,21 @@ export function userPlayerListHook(venueType: number, category: number) {
     onSearchRecord('reload');
     isOpenRecord.value = true;
   };
+
+  // export player list
+  const exportFileTest = async () =>{
+    downloading.value = true;
+    message(t('导出报表开始'), { type: 'warning' });
+    const res = await API.playerListExport({
+      ...removeEmptyStringKeys(form),
+      venueType: venueType,
+      pageSize: 50000,
+      pageNum: 1,
+      export: true,
+    })
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    downloading.value = false;
+  }
 
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
@@ -295,5 +311,8 @@ export function userPlayerListHook(venueType: number, category: number) {
     dispatchUpdateUser,
     tenantObj,
     goChangeAccountPage,
+    tenantObj, 
+    downloading,
+    exportFileTest
   };
 }

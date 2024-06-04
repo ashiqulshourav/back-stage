@@ -2,8 +2,6 @@ import { message } from '@/utils/message';
 import { SearchFormType, handicapListType } from './type';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { baseHandicapList } from './baseData';
-import { addDialog, closeDialog } from '@/components/ReDialog';
-import MatchCountDown from '../com/MatchCountDown.vue';
 import {
   BO_DAN_CODE_LIST,
   MATCH_STATUS,
@@ -25,6 +23,8 @@ export function useTradingHook(type: 'early' | 'in') {
   const currentMatch = reactive<sportTradingDataAPI.MatchDtoList>(
     {} as sportTradingDataAPI.MatchDtoList
   );
+
+  const isShowDialog = ref(false);
   const searchForm = reactive<SearchFormType>({
     sportId: 1,
     leagueNameOrId: '',
@@ -69,7 +69,9 @@ export function useTradingHook(type: 'early' | 'in') {
     matchList.push(...firstRenderList);
     Object.assign(currentMatch, matchList[0]?.matchDtoList[0]);
     //- 获取赛事盘口
-    getHandicapltems();
+    await getHandicapltems();
+    //- 开启事件定时任务
+    runLoopMatch();
     //- 后续列表填充
     res.data.slice(1).forEach(item => {
       setTimeout(() => matchList.push(item), 20);
@@ -82,7 +84,6 @@ export function useTradingHook(type: 'early' | 'in') {
       noNprogress
     );
     if (res.code) return message(res.msg, { type: 'error' });
-
     //- 检测是否比赛开始
     if (
       !checkisBeginMatch(
@@ -90,7 +91,7 @@ export function useTradingHook(type: 'early' | 'in') {
         res.data.beginTimeLong
       )
     ) {
-      if (loopTimer.value) return clearTimeout(loopTimer.value);
+      return clearTimeout(loopTimer.value);
     }
     //检测是否有盘数据返回
     checkHasData(res.data);
@@ -121,8 +122,17 @@ export function useTradingHook(type: 'early' | 'in') {
     handicapList[0].betItemsIdList.length = 0;
     handicapList[0].list.forEach(item => {
       handicapList[0].betItemsIdList.push(...item.betItemsIdList);
-      item.kindsCodeDtoList.forEach(_ => {
+      item.kindsCodeDtoList.forEach((_, i: number) => {
         _.betItemsDtoList.forEach(l => {
+          if (l.kindsCode === 'FT_AH' && l.ctid === 0 && i === 0) {
+            if (_.betItemsDtoList[0].handicap.startsWith('-')) {
+              currentMatch.HandicapTeam = _.betItemsDtoList[0].homeOrAway;
+            } else if (_.betItemsDtoList[1].handicap.startsWith('-')) {
+              currentMatch.HandicapTeam = _.betItemsDtoList[1].homeOrAway;
+            } else {
+              currentMatch.HandicapTeam = '';
+            }
+          }
           if (!l.dpOdds) l.dpOdds = l.odds;
         });
       });
@@ -137,8 +147,6 @@ export function useTradingHook(type: 'early' | 'in') {
       }
     });
     handicapList[0] = JSON.parse(JSON.stringify(handicapList[0]));
-    //- 开启事件定时任务
-    runLoopMatch();
   };
 
   //- 检测是否有盘数据
@@ -168,27 +176,16 @@ export function useTradingHook(type: 'early' | 'in') {
       matchStatus.value === MATCH_STATUS.canceled
     ) {
       if (loopTimer.value) clearInterval(loopTimer.value);
-      addDialog({
-        class: 'count_down_dialog',
-        width: '8%',
-        center: true,
-        closeOnClickModal: false,
-        hideFooter: true,
-        alignCenter: true,
-        showClose: false,
-        contentRenderer: ({ options, index }) =>
-          h(MatchCountDown, {
-            status: matchStatus.value,
-            onCloseDialog: (_: boolean) => {
-              closeDialog(options, index);
-              onSearch();
-              resetSearchForm();
-            }
-          })
-      });
+      isShowDialog.value = true;
       return false;
     }
     return true;
+  };
+
+  const onCloseDialog = () => {
+    isShowDialog.value = false;
+    resetSearchForm();
+    onSearch();
   };
 
   //- 重置表单
@@ -219,7 +216,7 @@ export function useTradingHook(type: 'early' | 'in') {
 
   //- 开启定时轮询任务
   const runLoopMatch = () => {
-    if (loopTimer) clearInterval(loopTimer.value);
+    if (loopTimer.value) clearInterval(loopTimer.value);
     loopTimer.value = setInterval(() => {
       //- 轮询不现实进度条
       getHandicapltems(true);
@@ -367,6 +364,8 @@ export function useTradingHook(type: 'early' | 'in') {
     noMatchList,
     matchStatus,
     matchStartTime,
-    panIsEmpty
+    panIsEmpty,
+    isShowDialog,
+    onCloseDialog
   };
 }

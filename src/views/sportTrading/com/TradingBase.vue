@@ -33,6 +33,10 @@
             @changeStatus="changeStatus"
             @sendNewOdds="sendNewOdds"
             :panIsEmpty="panIsEmpty"
+            :isShowDialog="isShowDialog"
+            :matchStatus="matchStatus"
+            @onCloseDialog="onCloseDialog"
+            :type="type"
           />
         </template>
       </div>
@@ -63,7 +67,10 @@ const {
   changeStatus,
   sendNewOdds,
   noMatchList,
-  panIsEmpty
+  panIsEmpty,
+  isShowDialog,
+  matchStatus,
+  onCloseDialog
 } = useTradingHook(type);
 
 const title = computed(() =>
