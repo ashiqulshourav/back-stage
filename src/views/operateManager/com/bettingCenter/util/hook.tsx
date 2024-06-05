@@ -399,6 +399,20 @@ export function useBettingCenterHook(category: number, venueType: number) {
     downloading.value = false;
   };
 
+  const exportFileTest = async () => {
+    downloading.value = true;
+    message(t('导出报表开始'), { type: 'warning' });
+    const res: BetOrderAPI.BetOrderResType = await API.bettingCenterExport(
+      formatParams({
+        pageNum: 1,
+        pageSize: 50000,
+        export: true
+      }) as searchFormType
+    );
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    downloading.value = false;
+  };
+
   const handleCancel = (data: any) => {
     ElMessageBox.confirm(t('确定取消注单吗？'), t('警告'), {
       center: true,
@@ -590,6 +604,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     handleCurrentChange,
     handleSelectionChange,
     exportFile,
+    exportFileTest,
     handleCancel,
     getStatus,
     copyTest,
