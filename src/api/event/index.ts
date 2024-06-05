@@ -17,7 +17,7 @@ export const eventData = {
   matchEventDataExport: (data: EventAPI.PandaMatchEventListParams) =>
   http.request<EventAPI.MatchEventRes>(
     'post',
-    '/event/v1/getMatchEventByMatchId',
+    '/event/v1/getMatchEventByMatchId/excel',
     { data }
   ),
 
