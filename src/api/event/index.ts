@@ -14,12 +14,12 @@ export const eventData = {
       { data }
     ),
   
-    matchEventDataExport: (data: EventAPI.PandaMatchEventListParams) =>
-    http.request<EventAPI.MatchEventRes>(
-      'post',
-      '/event/v1/getMatchEventByMatchId',
-      { data }
-    ),
+  matchEventDataExport: (data: EventAPI.PandaMatchEventListParams) =>
+  http.request<EventAPI.MatchEventRes>(
+    'post',
+    '/event/v1/getMatchEventByMatchId',
+    { data }
+  ),
 
   getMatchInfoByMatchId: (data: {
       matchId?: number | string;
