@@ -38,6 +38,7 @@ export function useBettingAuditHook(venueType: number) {
   const dataFetchingTime = ref(30);
   const loopTimer = ref<NodeJS.Timeout>();
   const isEditDialogClick = ref(false);
+  const isEditRemarkClick = ref(false);
 
   const totalInfo = reactive<BetOrderAPI.RiskOtherDataType>(
     {} as BetOrderAPI.RiskOtherDataType
@@ -183,18 +184,24 @@ export function useBettingAuditHook(venueType: number) {
     };
 
     if (hasDataFetching.value) {
-      if (!isEditDialogClick.value) {
+      if (!isEditDialogClick.value && !isEditRemarkClick.value) {
         loopTimer.value = setInterval(
           async () => await fetchData(),
           Number(dataFetchingTime.value) * 1000
         );
       }
-      await fetchData();
+      if (isEditRemarkClick.value) {
+        await fetchData();
+      }
     } else await fetchData();
   }
 
   watch(
-    () => [hasDataFetching.value, isEditDialogClick.value],
+    () => [
+      hasDataFetching.value,
+      isEditDialogClick.value,
+      isEditRemarkClick.value
+    ],
     () => {
       onSearch();
     }
@@ -516,7 +523,7 @@ export function useBettingAuditHook(venueType: number) {
     orderDetailId: number,
     orderDetailRemark: string
   ) => {
-    isEditDialogClick.value = true;
+    isEditRemarkClick.value = true;
     addDialog({
       title: t('编辑备注'),
       class: 'reset_dialog',
@@ -529,7 +536,7 @@ export function useBettingAuditHook(venueType: number) {
           ref: editDialogRef,
           data: { orderDetailId, orderDetailRemark },
           onCloseDialog: (value: string) => {
-            isEditDialogClick.value = false;
+            isEditRemarkClick.value = false;
             closeDialog(options, index);
             getRowByOrderId(orderId);
             // onSearch();
