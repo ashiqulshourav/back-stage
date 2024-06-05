@@ -99,7 +99,7 @@
           type="primary"
           :icon="useRenderIcon(Download)"
           :loading="downloading"
-          v-if="form.matchId"
+          v-if="form.matchId&&hasAuth('export'.toUpperCase())"
           @click="exportFile()"
         >
           {{ t('导出报表') }}
@@ -122,6 +122,7 @@ import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { EVENT_SOURCE } from '../utils/map';
 import { searchFormRules } from '../utils/rule';
 import Download from '@iconify-icons/ep/download';
+import { hasAuth } from '@/router/utils';
 
 const time = ref('');
 const formRef = ref<FormInstance>();
