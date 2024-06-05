@@ -166,7 +166,7 @@
             v-if="hasAuth('EXPORT')"
             @click="exportFileTest()"
           >
-            {{ t('导出报表 Test') }}
+            {{ t('导出报表 TEST') }}
           </el-button>
       </el-form-item>
     </el-form>
