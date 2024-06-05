@@ -138,28 +138,13 @@ const changeDate = (t: string[]) => {
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl?.resetFields();
   selectIndex.value = -1;
-  props.form.startTime =
-    props.type === 'early'
-      ? dayjs()
-          .set('hour', 12)
-          .set('minute', 0)
-          .set('second', 0)
-          .format('YYYY-MM-DD HH:mm:ss')
-      : '';
-  props.form.endTime =
-    props.type === 'early'
-      ? dayjs()
-          .add(7, 'day')
-          .set('hour', 12)
-          .set('minute', 0)
-          .set('second', 0)
-          .format('YYYY-MM-DD HH:mm:ss')
-      : '';
+  props.form.startTime = '';
+  props.form.endTime = '';
   selectDate.value =
     props.type === 'early'
       ? ([props.form.startTime, props.form.endTime] as any)
       : '';
-  emits('onSearch');
+  emits('onSearch', true);
 };
 
 const changeSelectDate = (_: number | Date[]) => {
