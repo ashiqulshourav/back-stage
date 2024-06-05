@@ -7,8 +7,9 @@
         <el-input
           type="number"
           size="small"
-          v-model="n"
+          v-model="row.firstNum"
           :disabled="!row.isEdit"
+          @change="changeNum"
           :formatter="(v:string) => inputRestrictions(v, 0, 100)"
       /></span>
       <span>{{ t('轮') }}</span>
@@ -45,7 +46,35 @@ const props = defineProps<
   }
 >();
 
-const n = ref<number>(1);
+//- 轮输入触发事件
+
+const changeNum = (v: string) => {
+  const errMsg = t('请按照比赛阶段顺序输入事件');
+  if (props.item.tableList.length === 2) {
+    const lastN: number = props.item.tableList[props.item.tableList.length - 1]
+      .firstNum as number;
+    const secondLastN: number = props.item.tableList[
+      props.item.tableList.length - 2
+    ].firstNum as number;
+    if (lastN < secondLastN) {
+      props.row.firstNum = '';
+      return message(errMsg, { type: 'error' });
+    } else if (+v < lastN) {
+      return message(errMsg, { type: 'error' });
+    }
+  } else if (props.item.tableList.length > 2) {
+    const lastN: number = props.item.tableList[props.item.tableList.length - 2]
+      .firstNum as number;
+    const secondLastN: number = props.item.tableList[
+      props.item.tableList.length - 3
+    ].firstNum as number;
+
+    if ((lastN === secondLastN && +v <= lastN) || +v < lastN) {
+      props.row.firstNum = '';
+      return message(errMsg, { type: 'error' });
+    }
+  }
+};
 
 const matchStatusList = computed(() => {
   const _ = {

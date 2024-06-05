@@ -520,7 +520,6 @@
   "k-7903932e": "Are you sure you want to recompute this event?",
   "k3715b14e": "Are you sure you want to delete this event?",
   "k4c302e2d": "Confirm secondary settlement",
-  "k-20a80af1": "No change in results, please select again",
   "k50b8b7c6": "Are you sure you want to recompute this record?",
   "k3c2e8c": "Enable secondary settlement",
   "k45ce33be": "This match has already been settled. Recomputing will affect all associated settled bets and reissue results. Are you sure you want to confirm secondary settlement?",
@@ -1121,5 +1120,6 @@
   "k-8ecb699": "修改前参数",
   "k-5af08606": "修改后参数",
   "k-277660fd": "操作日志报表",
-  "k-35fc732b": "导出报表成功"
+  "k-35fc732b": "导出报表成功",
+  "k-502cd55b": "请按照比赛阶段顺序输入事件"
 }

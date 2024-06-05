@@ -63,7 +63,7 @@ const teamChangeEvent = (...data: any[]) => {
     //   row.t1 = +prevRow.t1 + t1;
     //   row.t2 = +prevRow.t2 + t2;
     // }
-    row.firstNum = index + 1;
+    // row.firstNum = index + 1;
     row.firstT1 = t1;
     row.firstT2 = t2;
   } else {

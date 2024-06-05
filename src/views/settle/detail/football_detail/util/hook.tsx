@@ -143,7 +143,7 @@ export function useFootball() {
       message(t('请先完成之前的事件结算'), { type: 'error' });
     } else {
       const tempList: Partial<SattleDataAPI.MatchEventsList> = {
-        eventTime: index === '6' ? 1 : '',
+        eventTime: '',
         homeAway: null,
         matchPeriodId: index === '6' ? 50 : null,
         isBackEndReturnData: false,
@@ -266,7 +266,7 @@ export function useFootball() {
 
   //- 是否输入了完整的内容
   const isTheFormComplete = (row: SattleDataAPI.MatchEventsList) => {
-    const requireDdata = {
+    const requireDdata: { [key: string]: any } = {
       t1: row.t1,
       t2: row.t2,
       eventCode: row.eventCode,
@@ -275,6 +275,9 @@ export function useFootball() {
       matchPeriodId: row.matchPeriodId,
       homeAway: row.homeAway
     };
+    if (row.matchPeriodId === 50) {
+      requireDdata.firstNum = row.firstNum;
+    }
     return !Object.keys(requireDdata).every(key => {
       return key === 't1' || key === 't2' || key === 'eventTime'
         ? parseInt(requireDdata[key as keyof typeof requireDdata] as string) >=
