@@ -10,7 +10,7 @@
       <div class="mb-10 w-2/3 grid grid-rows-3 grid-flow-col">
         <el-row
           class="mb-2.5"
-          v-for="(item, index) in userInfo"
+          v-for="(item, index) in userInfo(userData)"
           :key="index"
         >
           <div class="flex">
@@ -19,11 +19,11 @@
           </div>
         </el-row>
       </div>
-      <el-button class="ml-auto" type="primary" @click="openModifyBalanceDialog()">
+      <el-button  v-if="hasAuth('changAccountAmount'.toUpperCase())" class="ml-auto" type="primary" @click="openModifyBalanceDialog()">
         {{ t('修改余额') }}
       </el-button>
     </div>
-    
+
     <el-form-item prop="accountChangeTypeCode">
       <el-select
         v-model="form.accountChangeTypeCode"
@@ -78,6 +78,7 @@ import dayjs from 'dayjs';
 import { accountChangeRecordSearchFormType, userDataType } from './util/types';
 import { accountChangeTypeCodeList } from './columns';
 import { addThousandSeparator } from "@/utils/formatNumber";
+import {hasAuth} from "@/router/utils";
 
 const props = defineProps<{
   loading: boolean;
@@ -90,14 +91,14 @@ const props = defineProps<{
 const formRef = ref();
 const selectDate = ref();
 
-const userInfo = [
-  { title: t('用户名'), value: props.userData.userName },
-  { title: t('用户ID'), value: props.userData.userId },
+const userInfo = (data: userDataType) => [
+  { title: t('用户名'), value: data.userName },
+  { title: t('用户ID'), value: data.userId },
   { title: t('用户币种'), value: t('人民币') },
-  { title: t('可用余额'), value: addThousandSeparator(props.userData.balance.toFixed(2)) },
+  { title: t('可用余额'), value: addThousandSeparator(data.balance.toFixed(2)) },
   { title: t(''), value: '' },
   { title: t(''), value: '' },
-  { title: t('所属商户'), value: props.userData.tenantName },
+  { title: t('所属商户'), value: data.tenantName },
   { title: t(''), value: '' },
   { title: t(''), value: '' },
 ]

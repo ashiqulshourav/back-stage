@@ -222,7 +222,7 @@
             {{ t('导出报表') }}
           </el-button>
 
-          <el-button
+<!--          <el-button
             type="primary"
             :icon="useRenderIcon(Download)"
               :loading="loading"
@@ -230,7 +230,7 @@
             @click="exportFileTest()"
           >
             {{ t('导出报表 TEST') }}
-          </el-button>
+          </el-button>-->
         </el-form-item>
       </div>
     </div>
