@@ -520,7 +520,6 @@
   "k-7903932e": "Are you sure you want to recompute this event?",
   "k3715b14e": "Are you sure you want to delete this event?",
   "k4c302e2d": "Confirm secondary settlement",
-  "k-20a80af1": "No change in results, please select again",
   "k50b8b7c6": "Are you sure you want to recompute this record?",
   "k3c2e8c": "Enable secondary settlement",
   "k45ce33be": "This match has already been settled. Recomputing will affect all associated settled bets and reissue results. Are you sure you want to confirm secondary settlement?",
@@ -1190,6 +1189,6 @@
   "k621775de": "Confirm to enter penalty shootout settlement?",
   "ke45bb3a": "The shootout switch been turned on. After confirming , will begin the penalty shootout settlement phase. This is cannot be restored.",
   "k-102bec3a": "Back to previous page",
-  "k-5078f0e7": "Transaction ID"
-
+  "k-5078f0e7": "Transaction ID",
+  "k-502cd55b": "请按照比赛阶段顺序输入事件"
 }

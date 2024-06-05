@@ -63,7 +63,8 @@ export const columns: TableColumnList = [
   {
     label: t('比赛状态'),
     prop: 'status',
-    formatter: ({ status }) => MATCH_STATUS[status] ?? '-',
+    formatter: ({ status }) =>
+      MATCH_STATUS[status as keyof typeof MATCH_STATUS] ?? '-',
     headerRenderer: d => handleTableWidth(d, t('比赛状态'))
   },
   /* {
@@ -128,7 +129,7 @@ export const yellow_red_column = [
         </>
       );
     },
-    formatter: ({ t1Y, t2Y }) => {
+    formatter: ({ t1Y, t2Y }: { t1Y: string; t2Y: string }) => {
       return `${t1Y ?? 0} : ${t2Y ?? 0}`;
     }
   },
@@ -145,7 +146,7 @@ export const yellow_red_column = [
         </>
       );
     },
-    formatter: ({ t1R, t2R }) => {
+    formatter: ({ t1R, t2R }: { t1R: string; t2R: string }) => {
       return `${t1R ?? 0} : ${t2R ?? 0}`;
     }
   }
