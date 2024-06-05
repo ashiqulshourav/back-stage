@@ -19,7 +19,7 @@
       <!-- RiskNotice Menu -->
       <div class="relative mr-5 flex items-center justify-center">
         <el-icon size="large"><UserFilled /></el-icon>
-        <span class="absolute bg-red-500 min-w-4 h-4 text-xs flex items-center justify-center bottom-[10px] left-[10px] text-white rounded-full">{{ riskNoticeStore.totalCount }}</span>
+        <span class="absolute bg-red-500 min-w-4 h-4 text-[10px] flex items-center justify-center bottom-[10px] left-[10px] text-white rounded-full">{{ riskNoticeStore.totalCount }}</span>
       </div>
       <LanguageNav />
       <!-- 退出登录 -->
