@@ -196,7 +196,7 @@ export function usePreSale() {
     index: number;
   }) => {
     ElMessageBox.confirm(
-      row.isSale
+      row.overTimeAndPenaltyKickStatus
         ? t(`确定要开启加时赛/点球大战么?`)
         : t('确定要关闭加时赛/点球大战么？'),
       t('系统提示'),

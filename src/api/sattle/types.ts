@@ -37,7 +37,7 @@ declare namespace SattleDataAPI {
     t: number;
     isSettleStatus: boolean;
     isShowCount: boolean;
-    firstNum?: number;
+    firstNum?: number | string;
     firstT1?: number;
     firstT2?: number;
   };
