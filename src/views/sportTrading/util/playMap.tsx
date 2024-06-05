@@ -1,9 +1,12 @@
 //- icon图标状态
+
+import { subtraction } from '@pureadmin/utils';
+
 /* 2-开盘 3-封盘 4-锁盘 0-关盘 */
 export enum SALE_STATUS {
-  close = 0,
+  close = 3,
   open = 2,
-  sealing = 3,
+  sealing = 0,
   lock = 4
 }
 
@@ -210,5 +213,15 @@ export const PLAY_MATCH_NAME = (
         Away: null,
         Draw: null
       };
+  }
+};
+
+export const resetDpodds = (dpOdds: number) => {
+  if (Math.abs(dpOdds) === 1) {
+    return -1;
+  } else if (dpOdds > 0) {
+    return subtraction(dpOdds, 2, 2);
+  } else {
+    return subtraction(2, Math.abs(dpOdds), 2);
   }
 };

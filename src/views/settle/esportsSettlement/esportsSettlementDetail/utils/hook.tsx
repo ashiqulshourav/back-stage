@@ -92,7 +92,6 @@ export function useEsportsSettlement() {
         });
       });
     });
-    console.log('hook.tsx文件 90==============行打印=', rList);
   };
 
   //-
@@ -126,7 +125,7 @@ export function useEsportsSettlement() {
           return {
             betItemId: item.betItemsId,
             betResult: type
-              ? 18
+              ? 24
               : row.multipartBetOptions.length > 0
               ? multipBetResultCheck(row.multipartBetOptions, index)
               : row.betOptions === index

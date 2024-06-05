@@ -43,6 +43,19 @@
               t('请依照正序进行确认结算')
             }}</el-text>
           </template>
+          <CustomButton
+            class="ml-2"
+            v-if="hasAuth('OVERTIME_CANCEL')"
+            type="danger"
+            @click="cancelMatchOvertimeRace('cancelFootballOverTimeOrder')"
+            :btn-text="t('取消加时赛')"
+          />
+          <CustomButton
+            v-if="hasAuth('PENALTY_SHOOTOUT_CANCEL')"
+            type="danger"
+            @click="cancelMatchOvertimeRace('cancelFootballPenaltyKickOrder')"
+            :btn-text="t('取消点球')"
+          />
         </div>
       </template>
       <template v-slot="{ size }">
@@ -249,7 +262,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="tsx">
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import FootballDetail from './FootballDetail.vue';
@@ -268,6 +281,10 @@ import { usePublicHooks } from '@/hooks';
 import Delete from '@iconify-icons/ep/delete';
 import { MatchEventRowType, MatchEventType } from './util/type';
 import { hasAuth } from '@/router/utils';
+import { addDialog, closeDialog } from '@/components/ReDialog';
+import { DialogOptions } from '@/components/ReDialog/type';
+import { message } from '@/utils/message';
+import CustomButton from '@/components/Form/CustomButton.vue';
 
 const { tableHeaderStyle } = usePublicHooks();
 
@@ -335,6 +352,52 @@ const changeTab = (n: string) => {
   selectTabIndex.value = n;
   const resizeEvent = new Event('resize');
   window.dispatchEvent(resizeEvent);
+};
+
+//- 取消加时赛or取消点球
+const cancelMatchOvertimeRace = async (type: string) => {
+  const remark = ref<string>();
+  addDialog({
+    title:
+      type === 'cancelFootballOverTimeOrder' ? t('取消加时赛') : t('取消点球'),
+    width: '20%',
+    footerButtons: [
+      {
+        label: t('取消'),
+        btnClick: ({ dialog: { options, index } }) => {
+          closeDialog(options as DialogOptions, index as number);
+        }
+      },
+      {
+        type: 'primary',
+        loading: false,
+        label: t('确认'),
+        btnClick: async ({ dialog: { options, index } }) => {
+          const res = await API[type as keyof typeof API]({
+            matchId: renderObj.matchId,
+            remark: remark.value,
+            sportName: t('足球')
+          });
+          message(res.msg, {
+            type: res.code ? 'error' : 'success'
+          });
+          closeDialog(options as DialogOptions, index as number);
+        }
+      }
+    ],
+    contentRenderer: () => (
+      <el-form>
+        <el-form-item label={t('取消原因:')} required>
+          <el-input
+            type="textarea"
+            rows={4}
+            v-model={remark.value}
+            placeholder={t('请输入取消原因')}
+          />
+        </el-form-item>
+      </el-form>
+    )
+  });
 };
 
 const {

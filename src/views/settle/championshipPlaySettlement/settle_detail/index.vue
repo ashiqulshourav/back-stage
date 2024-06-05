@@ -21,7 +21,11 @@
         >
           <!-- - 盘口投注项 -->
           <template #betOptions="{ row }">
-            <el-radio-group class="bet_item" v-model="row.betOptions">
+            <el-radio-group
+              class="bet_item"
+              v-model="row.betOptions"
+              v-if="row.handicapList.length === 2"
+            >
               <el-radio
                 :class="[
                   row?.handicapList.length > 2 && 'mb-1',
@@ -46,6 +50,37 @@
                 <span class="ml-3">{{ item.odds }}</span>
               </el-radio>
             </el-radio-group>
+
+            <el-checkbox-group
+              v-else
+              class="bet_item"
+              v-model="row.multipartBetOptions"
+            >
+              <el-checkbox
+                :disabled="row.settleStatus === 2"
+                :label="index"
+                :value="index"
+                border
+                :class="[
+                  row?.handicapList.length > 2 && 'mb-1',
+                  row.handicapList.length % 2 === 0 ? 'odd' : 'event'
+                ]"
+                v-for="(item, index) in row.handicapList"
+                :key="index"
+              >
+                <template v-if="item.handicap.length > 20">
+                  <el-tooltip
+                    effect="dark"
+                    :content="item.handicap"
+                    placement="top-start"
+                  >
+                    <span>{{ item.handicap }}</span>
+                  </el-tooltip>
+                </template>
+                <span v-else>{{ item.handicap }}</span>
+                <span class="ml-3">{{ item.odds }}</span>
+              </el-checkbox>
+            </el-checkbox-group>
           </template>
 
           <!-- - 操作 -->
@@ -160,6 +195,29 @@ const {
     }
   }
   .el-radio__label {
+    flex-grow: 1;
+  }
+  &.el-checkbox-group {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    label {
+      &.odd {
+        width: 45%;
+      }
+      width: 30%;
+      margin-right: 0;
+      display: flex;
+      :deep() {
+        .el-checkbox__label {
+          display: flex !important;
+          justify-content: space-between;
+          flex-grow: 1;
+        }
+      }
+    }
+  }
+  .el-checkbox__label {
     flex-grow: 1;
   }
 }

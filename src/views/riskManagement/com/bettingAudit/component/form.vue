@@ -57,6 +57,7 @@ const selectObj = {
   goal: '进球',
   redCard: '红牌',
   penaltyAwarded: '点球',
+  corner: '角球',
   other: '其它'
 };
 

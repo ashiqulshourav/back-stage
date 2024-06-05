@@ -142,6 +142,52 @@ export function useManualOrderRejectionHook() {
     }
   }
 
+  const exportFileTest = async () => {
+      loading.value = true;
+      // 对于串关类型的选择处理
+      let seriesDetails: any = [];
+      if (form.seriesType == 2) {
+        if (form.seriesDetailsSingle.length) {
+          form.seriesDetailsSingle.map((item: any) => {
+            seriesDetails.push(...seriesTypesSingle[item].list);
+          });
+        } else {
+          for (let item in seriesTypesSingle) {
+            seriesDetails.push(...seriesTypesSingle[item].list);
+          }
+        }
+      } else if (form.seriesType == 3) {
+        if (form.seriesDetailsDuplex.length) {
+          form.seriesDetailsDuplex.map((item: any) => {
+            seriesDetails.push(...seriesTypesDuplex[item].list);
+          });
+        } else {
+          for (let item in seriesTypesDuplex) {
+            seriesDetails.push(...seriesTypesDuplex[item].list);
+          }
+        }
+      } else {
+        seriesDetails = '';
+      }
+      if (seriesDetails.length > 1) {
+        seriesDetails = [...new Set(seriesDetails)];
+      }
+      const res: BetOrderAPI.BetOrderResType = await API.riskExport({
+        ...removeEmptyStringKeys({
+          ...form,
+          seriesDetailsSingle: '',
+          seriesDetailsDuplex: '',
+          seriesDetails: seriesDetails,
+          seriesType: +form.seriesType > 2 ? 2 : form.seriesType
+        }),
+        pageSize: 1,
+        pageNum: 50000,
+        export: true,
+      } as any);
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      loading.value = false;
+  }
+
   const getTenantList1 = async () => {
     const res = await API.getTenantList();
     if (res.data?.data?.length) {
@@ -420,6 +466,7 @@ export function useManualOrderRejectionHook() {
     pagination,
     form,
     totalInfo,
+    exportFileTest,
     onSearch,
     resetForm,
     handleTableWidthChange,

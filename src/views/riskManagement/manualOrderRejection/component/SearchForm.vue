@@ -233,6 +233,14 @@
           >
             {{ t('导出报表') }}
           </el-button>
+
+          <el-button
+            type="primary"
+            :icon="useRenderIcon(Download)"
+            @click="exportFileTest()"
+          >
+            {{ t('导出报表 TEST') }}
+          </el-button>
         </el-form-item>
       </div>
     </div>
@@ -247,6 +255,7 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import type { FormInstance } from 'element-plus';
 import dayjs from 'dayjs';
 import { formatNumber } from '@/utils/formatNumber';
+import Download from '@iconify-icons/ep/download';
 import {
   SPORT_ID_MAP,
   ESPORT_ID_MAP
@@ -279,7 +288,7 @@ const dateRangetType = computed(() => {
   return o[dateType.value];
 });
 
-const emits = defineEmits(['onSearch', 'exportFile']);
+const emits = defineEmits(['onSearch', 'exportFile', 'exportFileTest']);
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
   selectDate.value = '';
@@ -310,6 +319,10 @@ const search = () => {
 
 const exportFile = () => {
   emits('exportFile');
+};
+
+const exportFileTest = () => {
+  emits('exportFileTest');
 };
 </script>
 
