@@ -199,7 +199,7 @@ const {
   tenantObj,
   goChangeAccountPage,
   downloading,
-  exportFileTest
+  exportFileTest,
 } = userPlayerListHook(props.category, props.venueType);
 </script>
 

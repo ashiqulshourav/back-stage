@@ -54,7 +54,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
   const form = reactive<searchFormType>({
     sportId: '',
     userIdOrName: '',
-    timeStart: dayjs().startOf('month').valueOf(),
+    timeStart: dayjs().subtract(30, 'day').startOf('day').valueOf(),
     timeEnd: dayjs().endOf('day').valueOf(),
     orderId: '',
     leagueId: '',

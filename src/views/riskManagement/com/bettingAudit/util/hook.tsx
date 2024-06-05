@@ -52,7 +52,7 @@ export function useBettingAuditHook(venueType: number) {
   const form = reactive<searchFormType>({
     sportId: '',
     userIdOrName: '',
-    createTimeStart: dayjs().startOf('month').valueOf(),
+    createTimeStart: dayjs().subtract(30, 'day').startOf('day').valueOf(),
     createTimeEnd: dayjs().endOf('day').valueOf(),
     orderId: '',
     leagueId: '',
