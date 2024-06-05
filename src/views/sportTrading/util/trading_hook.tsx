@@ -57,6 +57,8 @@ export function useTradingHook(type: 'early' | 'in') {
     noMatchList.value = false;
     const reqUrl =
       type === 'early' ? 'getMorningSetMatchList' : 'getRollingMatchList';
+    const r = removeEmptyStringKeys(searchForm);
+    console.log('trading_hook.tsx文件 61==============行打印=', r);
     const res = await API[reqUrl]({ ...removeEmptyStringKeys(searchForm) });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
