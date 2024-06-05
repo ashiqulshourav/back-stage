@@ -27,6 +27,7 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import { MatchEventRowType } from './util/type';
+import { message } from '@/utils/message';
 
 const { row, index, item } = defineProps<
   MatchEventRowType & {
@@ -66,6 +67,17 @@ const teamChangeEvent = (...data: any[]) => {
     // row.firstNum = index + 1;
     row.firstT1 = t1;
     row.firstT2 = t2;
+    if (item.tableList.length > 1) {
+      const last = item.tableList[item.tableList.length - 1];
+      const second = item.tableList[item.tableList.length - 2];
+      if (
+        +(last.firstNum as string) === +(second.firstNum as string) &&
+        last.homeAway === second.homeAway
+      ) {
+        last.homeAway = '';
+        message(t('事件得分录入错误,请重新输入'), { type: 'error' });
+      }
+    }
   } else {
     emits('teamChangeEvent', ...data);
   }

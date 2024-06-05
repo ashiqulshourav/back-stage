@@ -3,7 +3,7 @@
     <div class="flex items-center justify-center w-full">
       <span>{{ t('第') }}</span>
 
-      <span class="w-10 mx-2 bg-[#dcdfe6] rounded-sm">
+      <span class="w-10 mx-2 rounded-sm">
         <el-input
           type="number"
           size="small"
