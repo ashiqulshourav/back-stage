@@ -9,8 +9,8 @@
     >
       <el-collapse-item
         :name="item.type"
-        v-for="(item, index) in matchList"
-        :key="index"
+        v-for="item in matchList"
+        :key="item.type"
         class="h-full"
       >
         <template #title>
@@ -30,12 +30,12 @@
             key-field="matchId"
             class="overflow-y-auto max-h-[600px]"
           >
-            <template #default="{ item, index, active }">
+            <template #default="{ item, active }">
               <DynamicScrollerItem
                 :item="item"
                 :active="active"
                 :size-dependencies="[item.matchId]"
-                :data-index="index"
+                :data-index="item.matchId"
                 :data-active="active"
                 class="message"
               >
