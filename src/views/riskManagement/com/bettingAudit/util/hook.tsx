@@ -183,12 +183,12 @@ export function useBettingAuditHook(venueType: number) {
     };
 
     if (hasDataFetching.value) {
-      if (!isEditDialogClick) {
-        loopTimer.value = setInterval(
-          async () => await fetchData(),
-          Number(dataFetchingTime.value) * 1000
-        );
-      }
+      // if (!isEditDialogClick) {
+      //   loopTimer.value = setInterval(
+      //     async () => await fetchData(),
+      //     Number(dataFetchingTime.value) * 1000
+      //   );
+      // }
       await fetchData();
     } else await fetchData();
   }
