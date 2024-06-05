@@ -32,7 +32,7 @@
           clearable
           type="text"
           :placeholder="t('请输入数字最高10000元')"
-          @keydown="checkDigit" 
+          @keydown="checkDigit"
           @input="handleInput"
         />
         <div class="pl-2">{{ t('元') }}</div>
@@ -70,7 +70,7 @@ import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 const { openPasswordInput } = usePasswordInputHook();
 const props = withDefaults(defineProps<{
   userName: string,
-  // changeBalance: Function,
+   changeBalance: Function,
   search: Function,
 }>(), {});
 
@@ -111,7 +111,7 @@ const isEditFormHasNull = (editFrom: modifyBalanceFormType) => {
 
 const submit = async (title: string) => {
   const r = await openPasswordInput();
-  if (r) { 
+  if (r) {
     addDialog({
       title,
       width: '20%',
@@ -126,7 +126,8 @@ const submit = async (title: string) => {
             closeDialog(options, index);
           },
           confirmChangeBalance: () => {
-            // props.changeBalance(amount);
+            console.log(11111111,editFrom)
+             props.changeBalance(editFrom.accountChangeTypeCode === 91?editFrom.amount:-editFrom.amount);
             props.search();
           },
           onCloseAllDialog: () => {
@@ -135,7 +136,7 @@ const submit = async (title: string) => {
         })
     });
   }
-  
+
 }
 
 const close = () => {

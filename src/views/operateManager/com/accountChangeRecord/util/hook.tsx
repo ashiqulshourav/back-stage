@@ -5,7 +5,6 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { accountChangeRecordSearchFormType, userDataType } from '../util/types';
 import ModifyBalanceForm from '../modifyBalanceModal.vue';
 import { addDialog, closeDialog } from '@/components/ReDialog';
-import dayjs from 'dayjs';
 import { FormInstance } from 'element-plus';
 
 export function useAccountChangeRecordHook() {
@@ -98,9 +97,12 @@ export function useAccountChangeRecordHook() {
       contentRenderer: ({ options, index }) =>
         h(ModifyBalanceForm, {
           userName: renderObj.userName,
-          // changeBalance: (amount: number) => {
-          //   userData.balance = Number(userData.balance) + Number(amount);
-          // },
+          changeBalance: (amount: number) => {
+            console.log(3333333,amount)
+            userData.balance = Number(userData.balance) + Number(amount);
+
+            console.log(44444, userData.balance)
+          },
           search: () => {
             onSearch();
           },

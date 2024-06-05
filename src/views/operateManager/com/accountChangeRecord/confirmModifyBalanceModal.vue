@@ -33,8 +33,7 @@ const modifyBalance = () => {
   API.getAccountChange(params).then((res) => {
     message(res.msg, { type: res.code ? 'error' : 'success' });
     if(res.code===0){
-      // props.confirmChangeBalance(param.accountChangeTypeCode === 91?param.amount:-param.amount)
-      props.confirmChangeBalance();
+       props.confirmChangeBalance()
       emits('closeAllDialog');
     }
   })
