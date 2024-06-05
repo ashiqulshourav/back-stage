@@ -22,22 +22,16 @@ export const columns: TableColumnList = [
   },
   {
     label: t("注单号"),
-    prop: "identifier",
+    prop: "transNo",
     minWidth: 200,
-    formatter: ({ identifier }) =>{
-     if(identifier.indexOf('_')>0&&identifier?.split('_')?.length){
-       return  identifier?.split('_')[0]
-     }
-    return '-'
-    }
+    // formatter: ({ identifier,type }) =>{
+    //   return [10,11].includes(type)?'-':(identifier?.split('_')?.length&& identifier?.split('_')[0])
+    // }
   },
   {
     label: t("流水ID"),
-    prop: "id",
+    prop: "identifier",
     minWidth: 100,
-    formatter: ({ id }) =>{
-      return 'zb'+id
-    }
   },
   {
     label: t("账变类型"),
