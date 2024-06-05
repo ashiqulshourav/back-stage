@@ -30,34 +30,48 @@ export function useTradingHook(type: 'early' | 'in') {
     leagueNameOrId: '',
     matchNameOrId: '',
     startTime:
-      type === 'early'
+      /* type === 'early'
         ? dayjs()
             .set('hour', 12)
             .set('minute', 0)
             .set('second', 0)
             .format('YYYY-MM-DD HH:mm:ss')
-        : '',
+        : */ '',
     endTime:
-      type === 'early'
+      /* type === 'early'
         ? dayjs()
             .add(7, 'day')
             .set('hour', 12)
             .set('minute', 0)
             .set('second', 0)
             .format('YYYY-MM-DD HH:mm:ss')
-        : ''
+        : */ ''
   });
 
   //- 盘口赛事列表接口
   const loopTimer = ref<NodeJS.Timeout>();
   //- 初始化搜索
-  const onSearch = async () => {
+  const onSearch = async (isInit?: boolean) => {
     if (loopTimer.value) clearInterval(loopTimer.value);
     loading.value = true;
     noMatchList.value = false;
     const reqUrl =
       type === 'early' ? 'getMorningSetMatchList' : 'getRollingMatchList';
-    const res = await API[reqUrl]({ ...removeEmptyStringKeys(searchForm) });
+    const r = removeEmptyStringKeys(searchForm);
+    if (isInit && type === 'early') {
+      r.startTime = dayjs()
+        .set('hour', 12)
+        .set('minute', 0)
+        .set('second', 0)
+        .format('YYYY-MM-DD HH:mm:ss');
+      r.endTime = dayjs()
+        .add(7, 'day')
+        .set('hour', 12)
+        .set('minute', 0)
+        .set('second', 0)
+        .format('YYYY-MM-DD HH:mm:ss');
+    }
+    const res = await API[reqUrl]({ ...r });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
     if (!res.data.length) {
@@ -229,7 +243,7 @@ export function useTradingHook(type: 'early' | 'in') {
   const onCloseDialog = () => {
     isShowDialog.value = false;
     resetSearchForm();
-    onSearch();
+    onSearch(true);
   };
 
   //- 重置表单
@@ -399,7 +413,7 @@ export function useTradingHook(type: 'early' | 'in') {
       item.list = [];
     });
     if (loopTimer.value) clearInterval(loopTimer.value);
-    onSearch();
+    onSearch(true);
   });
 
   onUnmounted(() => {

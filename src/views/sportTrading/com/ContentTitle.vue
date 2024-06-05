@@ -1,23 +1,23 @@
 <template>
   <div class="flex justify-between w-full">
-    <div class="flex-grow items-center flex mr-1 max-w-[33%]">
+    <div class="flex-grow items-center flex mr-1 max-w-[45%] overflow-hidden">
       <div
         v-if="currentMatch.leagueId"
-        class="flex items-center cursor-pointer max-w-[50%]"
+        class="flex items-center cursor-pointer"
         v-copy:click="{
           val: currentMatch.leagueId,
           tip: t('联赛ID复制成功')
         }"
       >
         <span
-          class="w-4 h-4 flex items-center text-[12px] justify-center bg-primary text-center rounded-full leading-4 text-white mr-1"
+          class="w-4 h-4 flex items-center text-[12px] flex-shrink-0 justify-center bg-primary text-center rounded-full leading-4 text-white mr-1"
         >
           <span class="scale-75 font-bold">
             {{ currentMatch?.level === 200 ? t('未') : currentMatch?.level }}
           </span>
         </span>
         <ReText
-          class="leading-none"
+          class="leading-none flex flex-grow"
           type="primary"
           size="small"
           :tippyProps="{ content: currentMatch.leagueNameCn }"
@@ -34,7 +34,7 @@
           tip: t('赛事ID复制成功')
         }"
       >
-        <div class="flex items-center max-w-[45%]">
+        <div class="flex flex-grow w-0 items-center">
           <ReText
             class="leading-none"
             :type="
@@ -51,24 +51,26 @@
             class="w-5 font-bold h-5 flex items-center text-[12px] scale-75 justify-center bg-[--el-color-warning] flex-shrink-0 text-white rounded-full"
             >{{ t('主') }}</span
           >
+          <div class="text-[--el-color-primary] flex-shrink-0 !mr-1 !ml-1">
+            V
+          </div>
+          <ReText
+            class="leading-none"
+            :type="
+              currentMatch.HandicapTeam?.toUpperCase() === 'AWAY'
+                ? 'danger'
+                : 'primary'
+            "
+            size="small"
+            :tippyProps="{ content: currentMatch.awayTeamNameCn }"
+          >
+            {{ currentMatch.awayTeamNameCn }}
+          </ReText>
         </div>
-        <div class="text-[--el-color-primary] !mr-1 !ml-1">V</div>
-        <ReText
-          class="leading-none max-w-[45%]"
-          :type="
-            currentMatch.HandicapTeam?.toUpperCase() === 'AWAY'
-              ? 'danger'
-              : 'primary'
-          "
-          size="small"
-          :tippyProps="{ content: currentMatch.awayTeamNameCn }"
-        >
-          {{ currentMatch.awayTeamNameCn }}
-        </ReText>
       </div>
     </div>
 
-    <div class="flex justify-end ml-2 w-[60%]">
+    <div class="flex justify-end ml-2">
       <el-button
         round
         size="small"
