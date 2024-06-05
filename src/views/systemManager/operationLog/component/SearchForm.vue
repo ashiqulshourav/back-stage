@@ -73,6 +73,15 @@
         <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
           {{ t('重置') }}
         </el-button>
+
+        <el-button
+          type="primary"
+          v-if="hasAuth('EXPORT')"
+          @click="exportFileTest"
+          :loading="exportLoading"
+          :icon="useRenderIcon(Download)"
+          >{{ t('导出 TEST') }}
+        </el-button>
       </el-form-item>
     </el-form>
     <el-button
@@ -96,6 +105,7 @@ import dayjs from 'dayjs';
 import Custom_date from '@/components/Form/Custom_date.vue';
 import { message } from '@/utils/message';
 import { hasAuth } from '@/router/utils';
+import Download from '@iconify-icons/ep/download';
 
 const props = defineProps<{
   loading: boolean;
@@ -106,7 +116,7 @@ const props = defineProps<{
 
 const selectDate = ref('');
 const formRef = ref<FormInstance>();
-const emits = defineEmits(['onSearch', 'exportFileClick']);
+const emits = defineEmits(['onSearch', 'exportFileClick', 'exportFileTest']);
 const menusList = reactive<OperationLogDataAPI.OperationMenuTypeChildren[]>([]);
 
 const resetForm = (formEl: FormInstance | undefined) => {
@@ -145,6 +155,10 @@ const initMenu = async () => {
 
 const exportFileClick = () => {
   emits('exportFileClick');
+};
+
+const exportFileTest = () => {
+  emits('exportFileTest');
 };
 
 const search = () => {
