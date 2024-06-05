@@ -36,7 +36,7 @@
             </el-button>
           </div>       
           <div class="flex gap-3 items-center">
-            <el-switch
+            <!-- <el-switch
               v-model="hasDataFetching"
               inline-prompt
               active-text="开"
@@ -51,7 +51,7 @@
               <el-option :label="120" :value="120"/>
               <el-option :label="180" :value="180"/>
             </el-select>
-            <span>S</span>  
+            <span>S</span>   -->
           </div>   
         </div>
       </template>
