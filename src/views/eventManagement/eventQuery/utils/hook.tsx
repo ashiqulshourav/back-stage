@@ -4,6 +4,7 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { message } from '@/utils/message';
 
 export function useEventQueryHook() {
+  const downloading = ref(false);
   const matchEventList = reactive<EventAPI.MatchEvent[]>([]);
   const matchInfo = reactive<EventAPI.MatchInfo>({
     aTeamName: '',
@@ -29,6 +30,17 @@ export function useEventQueryHook() {
     endTime: '',
     startTime: ''
   });
+
+  const exportFile = async () => {
+    downloading.value = true;
+    message(t('导出报表开始'), { type: 'warning' });
+    const res: EventAPI.MatchEvent = await API.matchEventDataExport({
+        ...form,
+        eventCode: form.eventCode?.length ? form.eventCode?.toString() : ''
+    });
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    downloading.value = false;
+  }
 
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
@@ -119,6 +131,8 @@ export function useEventQueryHook() {
     // openDialog,
     matchEventList,
     handlePageSizeChange,
-    matchInfo
+    matchInfo,
+    downloading,
+    exportFile,
   };
 }

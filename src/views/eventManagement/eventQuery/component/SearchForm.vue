@@ -94,6 +94,16 @@
         <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
           {{ t('重置') }}
         </el-button>
+
+        <el-button
+          type="primary"
+          :icon="useRenderIcon(Download)"
+          :loading="downloading"
+          v-if="form.matchId"
+          @click="exportFile()"
+        >
+          {{ t('导出报表') }}
+        </el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -111,16 +121,18 @@ import { PandaMatch, searchFormType } from '../utils/types';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { EVENT_SOURCE } from '../utils/map';
 import { searchFormRules } from '../utils/rule';
+import Download from '@iconify-icons/ep/download';
 
 const time = ref('');
 const formRef = ref<FormInstance>();
-const emits = defineEmits(['onSearch']);
+const emits = defineEmits(['onSearch', 'exportFile']);
 const eventNames = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
 const pandaMatchList = reactive<PandaMatch[]>([]);
 
 const props = defineProps<{
   loading: boolean;
   form: searchFormType;
+  downloading: boolean;
 }>();
 
 const changeDate = t => {
@@ -201,6 +213,10 @@ const handleCheckRevert = () => {
       .filter(_ => !oldArray.includes(_.eventCode))
       .map(_ => _.eventCode);
   }
+};
+
+const exportFile = () => {
+  emits('exportFile');
 };
 </script>
 
