@@ -34,7 +34,7 @@ export function useEventQueryHook() {
   const exportFile = async () => {
     downloading.value = true;
     message(t('导出报表开始'), { type: 'warning' });
-    const res = await API.getMatchEventByMatchId({
+    const res = await API.matchEventDataExport({
       ...removeEmptyStringKeys({
         ...form,
         eventCode: form.eventCode?.length ? form.eventCode?.toString() : ''
