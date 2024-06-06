@@ -142,7 +142,7 @@ export function useManualOrderRejectionHook() {
     }
   }
 
-  const exportFileTest = async () => {
+  const exportFile = async () => {
       loading.value = true;
       // 对于串关类型的选择处理
       let seriesDetails: any = [];
@@ -205,156 +205,6 @@ export function useManualOrderRejectionHook() {
     onSearch();
   };
 
-  //- 导出excel表格
-  /*   const exportFile = async () => {
-    // 对于串关类型的选择处理
-    let seriesDetails: any = [];
-    if (form.seriesType == 2) {
-      if (form.seriesDetailsSingle.length) {
-        form.seriesDetailsSingle.map((item: any) => {
-          seriesDetails.push(...seriesTypesSingle[item].list);
-        });
-      } else {
-        for (let item in seriesTypesSingle) {
-          seriesDetails.push(...seriesTypesSingle[item].list);
-        }
-      }
-    } else if (form.seriesType == 3) {
-      if (form.seriesDetailsDuplex.length) {
-        form.seriesDetailsDuplex.map((item: any) => {
-          seriesDetails.push(...seriesTypesDuplex[item].list);
-        });
-      } else {
-        for (let item in seriesTypesDuplex) {
-          seriesDetails.push(...seriesTypesDuplex[item].list);
-        }
-      }
-    } else {
-      seriesDetails = '';
-    }
-    if (seriesDetails.length > 1) {
-      seriesDetails = [...new Set(seriesDetails)];
-    }
-
-    const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList({
-      ...removeEmptyStringKeys({
-        ...form,
-        seriesDetailsSingle: '',
-        seriesDetailsDuplex: '',
-        seriesDetails: seriesDetails,
-        seriesType: +form.seriesType > 2 ? 2 : form.seriesType
-      }),
-      status: form.status?.length ? form.status : [2, 3, 4, 5, 6, 7, 8],
-      pageNum: 1,
-      pageSize: 10000
-    } as any);
-    const r = res.data.pageData.map((item: any, i) => {
-      const arr = [];
-      const data = { ...item, ...item?.combineOrderDetails[0] };
-      columns.forEach((column: { prop: string }) => {
-        let str = '';
-        switch (column.prop.toString()) {
-          case 'sportId':
-            str =
-              SPORT_ID_MAP.find(_ => +_.value === +data[column.prop as string])
-                ?.label ?? data.sportNameCn;
-            break;
-          case 'beginTime':
-            str = data.beginTime
-              ? dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss')
-              : '-';
-            break;
-          case 'createTime':
-            str = data.createTime
-              ? dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss')
-              : '-';
-            break;
-          case 'settleTime':
-            str = data.settleTime
-              ? dayjs(data[column.prop]).format('YYYY-MM-DD HH:mm:ss')
-              : '-';
-            break;
-          case 'index':
-            str = (i + 1).toString();
-            break;
-          case 'playType':
-            str = useSportFormatDetail(data)[4];
-            break;
-          case 'betName':
-            str = getBetTeamType(data || ({} as Detail));
-            break;
-          case 'teamName':
-            str = `${data.homeTeamNameCn} vs ${data.awayTeamNameCn}`;
-            break;
-          case 'marketType':
-            str = markeTypeMap[data.marketType];
-            break;
-          case 'isSettlementAgain':
-            str = data.isSettlementAgain === 1 ? '是' : '否';
-            break;
-          case 'status':
-            str =
-              betStatusMap[
-                getStatus(data.status, data.billStatus, data.betResult)?.status
-              ];
-            break;
-          case 'billStatus':
-            str =
-              betStatusMap[
-                getStatus(data.status, data.billStatus, data.betResult)?.status
-              ];
-            break;
-          case 'settleScore':
-            str = displayHomeAwayScore(data.settleScore, data.sportId);
-            break;
-          case 'betResult':
-            str = BET_RESULT_TYPE_MAP[data.betResult];
-            break;
-          case 'scoreBenchmark':
-            str = displayHomeAwayScore(data.scoreBenchmark, data.sportId);
-            break;
-          case 'seriesType':
-            if (data.combineOrderDetails.length > 1) {
-              str =
-                String(data.seriesType).slice(-3) === '001' ? '串关' : '复式';
-              str +=
-                ' ' +
-                formatSeriesType(
-                  data?.seriesType,
-                  data.combineOrderDetails.length
-                );
-            }
-            break;
-          case 'isSeriesType': //单关 串关
-            str = data.seriesType === 1 ? '单关' : '串关';
-            break;
-          case 'tenantName': //单关 串关
-            str = tenantObj[data.tenantId].name ?? '';
-            break;
-          default:
-            str = data[column.prop as string];
-        }
-        arr.push(str);
-      });
-      return arr;
-    });
-    const titleList = [];
-    columns.forEach(column => {
-      titleList.push(column.label);
-    });
-    r.unshift(titleList);
-    const workBook = utils.book_new();
-    const workSheet = utils.aoa_to_sheet(r);
-    workSheet['C1'].s = {
-      wrapText: true
-    };
-
-    utils.book_append_sheet(workBook, workSheet, '数据报表');
-    writeFile(workBook, '赛程_注单中心.xlsx');
-    message(t('导出成功'), {
-      type: 'success'
-    });
-  }; */
   const handleCancel = (data: any) => {
     return new Promise<boolean>((resolve, reject) => {
       ElMessageBox.confirm(t('确定取消注单吗？'), t('警告'), {
@@ -466,13 +316,12 @@ export function useManualOrderRejectionHook() {
     pagination,
     form,
     totalInfo,
-    exportFileTest,
     onSearch,
     resetForm,
     handleTableWidthChange,
     handleCurrentChange,
     handleSelectionChange,
-    // exportFile,
+    exportFile,
     handleCancel,
     // getStatus,
     copyTest,
