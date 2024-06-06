@@ -118,7 +118,7 @@ export function userPlayerListHook(venueType: number, category: number) {
     message(t('导出报表开始'), { type: 'warning' });
     const res = await API.playerListExport({
       ...removeEmptyStringKeys(form),
-      venueType: 1,
+      venueType: venueType,
       pageSize: 50000,
       pageNum: 1,
       export: true,
