@@ -140,9 +140,6 @@ const _loginRequest = async () => {
     //- 第一次登录强制弹出充值密码弹窗
     userStore.setUserInfo(res.data);
 
-    const audio = new Audio('/public/welcome.mp3');
-    audio.play();
-
     await riskStoreStore.setRiskNotice();
 
     if (!REGEXP_PWD.test(ruleForm.password) || res.data.flag === 1) {

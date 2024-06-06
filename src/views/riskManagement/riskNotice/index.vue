@@ -8,7 +8,10 @@
         inline-prompt
         active-text="on"
         inactive-text="off"
-        v-model="voiceStatus"
+        v-model="riskNotificationSwitch"
+        :active-value="1"
+        :inactive-value="0"
+        @change="setRiskNotification"
       />
       <div class="flex">
         <el-button
@@ -41,25 +44,29 @@
 import { t } from '@/plugins/i18n';
 import { useBetStore } from '@/store/bet';
 import { useRiskNoticeStore } from '@/store/riskNotice';
+import { useRiskNotice } from './util/hook';
 
 const betStore = useBetStore();
 const riskNoticeStore = useRiskNoticeStore();
-const timeList = reactive<number[]>([30, 60, 120, 180]);
+const timeList = ['30', '60', '120', '180'];
+const {riskNotificationSwitch, riskNotificationRefresh, setRiskNotification} = useRiskNotice();
 const currentSelectTimeIndex = ref<number>(0);
+
+watch(
+  () => riskNotificationRefresh.value,
+  () => {
+    currentSelectTimeIndex.value = timeList.indexOf(riskNotificationRefresh.value)
+  }
+)
+
 
 function changeTime (index: number) {
   currentSelectTimeIndex.value = index;
-  riskNoticeStore.setDelaySecond(timeList[index]);
+  riskNoticeStore.setRiskNoticeRefreshSecond(timeList[index]);
+  riskNotificationRefresh.value = timeList[index];
+  setRiskNotification();
 }
 
-const voiceStatus = computed({
-  set(v: boolean) {
-    betStore.set_is_open_voice(v);
-  },
-  get() {
-    return betStore.isOpenVoice;
-  }
-});
 </script>
 
 <style scoped></style>

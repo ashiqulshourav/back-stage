@@ -127,10 +127,11 @@ declare namespace RiskManagementDataAPI {
     delFlag?: null | number; // 1是删除 其他则无感
   };
   type RiskNotice {
-    esportAuditCount: number;
-    jjAuditCount: number;
-    sportAuditCount: number;
-    delaySecond?: number;
+    esportAuditCount?: number;
+    jjAuditCount?: number;
+    sportAuditCount?: number;
+    riskNotificationRefresh?: string;
+    riskNotificationSwitch?: number;
   }
   type RiskTagListRes = COMMON.BASE_RES_TYPE<RiskTagListType>;
   type RiskTagRes = COMMON.BASE_RES_TYPE<RiskTagType>;

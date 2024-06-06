@@ -5,28 +5,35 @@ export const useRiskNoticeStore = defineStore('RISKNOTICESTATE', {
     esportAuditCount: 0,
     jjAuditCount: 0,
     sportAuditCount: 0,
-    delaySecond: 30,
+    riskNotificationRefresh: '30',
+    riskNotificationSwitch: 0,
   }),
   actions: {
     async setRiskNotice() {      
 
-      const refresh = async() => {
-        const riskNoticeRes = await API.getRiskNotice();
-        this.esportAuditCount = riskNoticeRes.data.esportAuditCount;
-        this.jjAuditCount = riskNoticeRes.data.jjAuditCount;
-        this.sportAuditCount = riskNoticeRes.data.sportAuditCount;
-      }
-      await refresh();
+      const riskNoticeRes = await API.getRiskNoticeAggregate();
 
-      const interval = ref<NodeJS.Timeout>();
-      if (interval.value) clearInterval(interval.value);
-      interval.value = setInterval(async () => {
-        console.log("hitt111");
-        await refresh();
-      }, Number(this.delaySecond) * 1000);      
+        if (!riskNoticeRes.code) {
+          // play sound
+          if(this.esportAuditCount != riskNoticeRes.data.esportAuditCount ||
+              this.jjAuditCount != riskNoticeRes.data.jjAuditCount ||
+              this.sportAuditCount != riskNoticeRes.data.sportAuditCount) {
+            const audio = new Audio('/src/assets/media/order.mp3');
+            audio.play();
+          }
+
+          this.esportAuditCount = riskNoticeRes.data.esportAuditCount;
+          this.jjAuditCount = riskNoticeRes.data.jjAuditCount;
+          this.sportAuditCount = riskNoticeRes.data.sportAuditCount;   
+        }       
+
+        const res = await API.getRiskNotification();
+
+        this.riskNotificationSwitch = res.data.riskNotificationSwitch;
+
     },
-    setDelaySecond(second: number) {
-      this.delaySecond = second;
+    setRiskNoticeRefreshSecond(second: string) {
+      this.riskNotificationRefresh = second;
     }
   },
   getters: {

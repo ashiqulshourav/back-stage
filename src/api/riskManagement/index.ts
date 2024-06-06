@@ -113,5 +113,9 @@ export const riskManagementData = {
       { data }
     ),
 
-  getRiskNotice: () => http.request<RiskManagementDataAPI.RiskNoticeRes>('post', '/risk/notice/aggregate')
+  getRiskNoticeAggregate: () => http.request<RiskManagementDataAPI.RiskNoticeRes>('post', '/risk/notice/aggregate'),
+
+  getRiskNotification: () => http.request<RiskManagementDataAPI.RiskNoticeRes>('post', '/kmg/matchUser/getRiskNotification'),
+
+  setRiskNotification: (data: RiskManagementDataAPI.RiskNotice) => http.request('post', '/kmg/matchUser/setRiskNotification', { data }),
 };
