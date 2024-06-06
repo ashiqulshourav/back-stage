@@ -24,7 +24,7 @@ export function useEsportsSettlement() {
   const eventMatchList = reactive<EsportsSettlementAPI.ChampionEventList[]>([]);
 
   //- 分页点击
-  const handleCurrentChange = (val: number, index) =>
+  const handleCurrentChange = (val: number, index: number) =>
     (rList[index].currentPage = val);
 
   //- 每页显示条数改变
