@@ -392,6 +392,7 @@ watch(
   () => betStore.gameplayData,
   v => {
     if (v.betItemsId) {
+      setPropsForm();
       props.form.betItemId = v.betItemsId;
       props.form.matchId = v.matchId;
     }
@@ -402,8 +403,40 @@ watch(
   }
 );
 
+//- 操盘管理重置表单为初始值
+const setPropsForm = () => {
+  Object.assign(props.form, {
+    sportId: '',
+    userIdOrName: '',
+    timeStart: dayjs().startOf('month').valueOf(),
+    timeEnd: dayjs().endOf('day').valueOf(),
+    orderId: '',
+    leagueId: '',
+    matchId: '',
+    awayTeamName: '',
+    homeTeamName: '',
+    // status:[],
+    betItemId: '',
+    isInplay: '',
+    seriesType: '',
+    category: '',
+    timeType: 1,
+    leagueName: '',
+    tenantIds: [],
+    seriesDetailsSingle: [],
+    seriesDetailsDuplex: [],
+    queryType: 1,
+    minBetAmount: '',
+    maxBetAmount: '',
+    minProfitAmount: '',
+    maxProfitAmount: '',
+    riskControlLabelList: []
+  });
+};
+
 onActivated(() => {
   if (betStore.gameplayData.betItemsId) {
+    setPropsForm();
     props.form.betItemId = betStore.gameplayData.betItemsId;
     props.form.matchId = betStore.gameplayData.matchId;
     search();

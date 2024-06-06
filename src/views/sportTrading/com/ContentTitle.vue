@@ -2,12 +2,8 @@
   <div class="flex justify-between w-full">
     <div class="flex-grow items-center flex mr-1 max-w-[45%] overflow-hidden">
       <div
-        v-if="currentMatch.leagueId"
         class="flex items-center cursor-pointer"
-        v-copy:click="{
-          val: currentMatch.leagueId,
-          tip: t('联赛ID复制成功')
-        }"
+        @click="copyText('leagueId')"
       >
         <span
           class="w-4 h-4 flex items-center text-[12px] flex-shrink-0 justify-center bg-primary text-center rounded-full leading-4 text-white mr-1"
@@ -25,14 +21,9 @@
           {{ currentMatch.leagueNameCn }}
         </ReText>
       </div>
-
       <div
-        v-if="currentMatch.matchId"
         class="flex pl-2 flex-grow cursor-pointer"
-        v-copy:click="{
-          val: currentMatch.matchId,
-          tip: t('赛事ID复制成功')
-        }"
+        @click="copyText('matchId')"
       >
         <div class="flex flex-grow w-0 items-center">
           <ReText
@@ -101,8 +92,10 @@ import { handicapListType } from '../util/type';
 import { t } from '@/plugins/i18n';
 import IconGroup from './IconGroup.vue';
 import { ReText } from '@/components/ReText';
+import { copyTextToClipboard } from '@pureadmin/utils';
+import { message } from '@/utils/message';
 
-defineProps<{
+const props = defineProps<{
   currentMatch: sportTradingDataAPI.MatchDtoList;
   handicapList: handicapListType[];
   selectContentType: string;
@@ -112,6 +105,19 @@ const emits = defineEmits(['changeSelectType', 'changeStatus']);
 //- 修改选择类型
 const changeSelectType = (type: string) => {
   emits('changeSelectType', type);
+};
+
+const copyText = (type: string) => {
+  let val;
+  if (type === 'leagueId') {
+    val = props.currentMatch.leagueId;
+    message(t('联赛ID复制成功'), { type: 'success' });
+  } else {
+    val = props.currentMatch.matchId;
+    message(t('赛事ID复制成功'), { type: 'success' });
+  }
+
+  copyTextToClipboard(val.toString());
 };
 
 //- 修改图标类型
