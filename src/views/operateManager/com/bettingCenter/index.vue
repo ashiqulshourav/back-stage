@@ -5,7 +5,6 @@
       :loading="loading"
       @on-search="onSearch"
       @exportFile="exportFile"
-      @exportFileTest="exportFileTest"
       :tenantList="tenantList"
       :riskLabelList="riskLabelList"
       :venueType="props.venueType"
@@ -470,7 +469,6 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   exportFile,
-  exportFileTest,
   handleCancel,
   getStatus,
   copyTest,
