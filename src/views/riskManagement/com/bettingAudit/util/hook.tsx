@@ -181,33 +181,32 @@ export function useBettingAuditHook(venueType: number) {
     }
   };
 
-  async function onSearch(type?: string) {
-    loopTimer.value && clearInterval(loopTimer.value);
-
-    if (!isEditRemarkClick) {      
-      await fetchData(type);
-    }
-
+  const fetchListDataWithInterval = async (type?: string) => {
+    _clearInterval();
     if (hasDataFetching.value) {
       if (!isEditDialogClick.value && !isEditRemarkClick.value) {
         loopTimer.value = setInterval(
-          async () => await fetchData(),
-          Number(dataFetchingTime.value) * 1000
-          // 3000
+          async () => await fetchData(type),
+          // Number(dataFetchingTime.value) * 1000
+          10000
         );
       }
-      if (isEditRemarkClick.value) {
-        await fetchData();
-      }
     }
+  };
+
+  const _clearInterval = () =>
+    loopTimer.value && clearInterval(loopTimer.value);
+
+  async function onSearch(type?: string) {
+    _clearInterval();
+
+    await fetchData(type);
+
+    await fetchListDataWithInterval();
   }
 
   watch(
-    () => [
-      hasDataFetching.value,
-      isEditDialogClick.value,
-      isEditRemarkClick.value
-    ],
+    () => [hasDataFetching.value],
     () => {
       onSearch();
     }
@@ -390,7 +389,7 @@ export function useBettingAuditHook(venueType: number) {
   };
 
   const handleCancel = (row: any, index: number) => {
-    isEditDialogClick.value = true;
+    _clearInterval();
     const data = { ...row }; //...row.combineOrderDetails[index]
     data.combineOrderDetails = data.combineOrderDetails.filter(
       (item: BetOrderAPI.Detail, i: number) => {
@@ -416,16 +415,17 @@ export function useBettingAuditHook(venueType: number) {
       contentRenderer: ({ options, index }) =>
         h(formDom, {
           list: list,
-          onCloseDialog: () => {
+          onCloseDialog: async  () => {
             isEditDialogClick.value = false;
-            onSearch('reload');
+            // onSearch('reload');
+            await fetchListDataWithInterval('reload');
             closeDialog(options, index);
           }
         })
     });
   };
   const handleApprove = (row: any, index: number) => {
-    isEditDialogClick.value = true;
+    _clearInterval();
     const data = { ...row }; //...row.combineOrderDetails[index]
     data.combineOrderDetails = data.combineOrderDetails.filter((item, i) => {
       return i == index;
@@ -437,7 +437,7 @@ export function useBettingAuditHook(venueType: number) {
     openApproveDialog(list);
   };
   const handleApproveSome = () => {
-    isEditDialogClick.value = true;
+    _clearInterval();
     const obj = {};
     dataList.map(item => {
       item.combineOrderDetails.map((match: any) => {
@@ -498,8 +498,8 @@ export function useBettingAuditHook(venueType: number) {
       if (!r) {
         return;
       }
-      API.bettingAuditConfirm(list).then(res => {
-        onSearch();
+      API.bettingAuditConfirm(list).then(async res => {
+        await fetchListDataWithInterval();
         res.code === 0
           ? message(res.msg, { type: 'success' })
           : message(res.msg, { type: 'error' });
@@ -529,7 +529,7 @@ export function useBettingAuditHook(venueType: number) {
     orderDetailId: number,
     orderDetailRemark: string
   ) => {
-    isEditRemarkClick.value = true;
+    _clearInterval();
     addDialog({
       title: t('编辑备注'),
       class: 'reset_dialog',
@@ -546,20 +546,7 @@ export function useBettingAuditHook(venueType: number) {
             closeDialog(options, index);
             getRowByOrderId(orderId);
             // refresh data
-            if (hasDataFetching.value) {
-              if (!isEditDialogClick.value && !isEditRemarkClick.value) {
-                const loopTimer = ref<NodeJS.Timeout>();
-                loopTimer.value = setInterval(
-                  async () => await fetchData(),
-                  Number(dataFetchingTime.value) * 1000
-                  // 3000
-                );
-                loopTimer.value && clearInterval(loopTimer.value);
-              }
-              if (isEditRemarkClick.value) {
-                await fetchData();
-              }
-            }
+            await fetchListDataWithInterval();
           }
         })
     });
