@@ -17,7 +17,7 @@
       <!-- <Notice id="header-notice" /> -->
       <!-- 国际化 -->
       <!-- RiskNotice Menu -->
-      <div class="relative mr-5 flex items-center justify-center">
+      <div class="relative mr-5 flex items-center justify-center cursor-pointer" @click="goToRiskNotice">
         <el-icon size="large"><UserFilled /></el-icon>
         <span class="absolute bg-red-500 min-w-4 h-4 text-[10px] flex items-center justify-center bottom-[10px] left-[10px] text-white rounded-full">{{ noticeValue }}</span>
       </div>
@@ -72,14 +72,20 @@ import { useUserStore } from '@/store/user';
 import { useResetPasswordHook } from '@/hooks/resetPasswordHook';
 import { UserFilled } from '@element-plus/icons-vue';
 import { useRiskNoticeStore } from '@/store/riskNotice';
+import { useRouter } from "vue-router";
 
 const { openResetDialog } = useResetPasswordHook();
 const interval = ref<NodeJS.Timeout>();
+const router = useRouter();
 
 const userStore = useUserStore();
 const riskNoticeStore = useRiskNoticeStore();
 const { layout, logout, onPanel, pureApp, userAvatar, toggleSideBar } =
   useNav();
+
+const goToRiskNotice = () => {
+  router.push('/riskManagement/riskNotice');
+}
 
 const noticeValue = computed(() => {
   return Number(riskNoticeStore.totalCount) > 99 ? '99+': riskNoticeStore.totalCount
