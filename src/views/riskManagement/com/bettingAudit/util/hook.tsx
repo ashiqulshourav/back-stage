@@ -137,63 +137,69 @@ export function useBettingAuditHook(venueType: number) {
     };
   };
 
+  const fetchData = async (type?: string) => {
+    if (type === 'reload') pagination.currentPage = 1;
+    try {
+      const params: searchFormType = formatParams({}) as searchFormType;
+      if (Number(params.maxBetAmount) < Number(params.minBetAmount)) {
+        message(t('请检查投注额，最小值不能大于最大值'), { type: 'warning' });
+        return;
+      }
+      if (Number(params.maxProfitAmount) < Number(params.minProfitAmount)) {
+        message(t('请检查用户输赢，最小值不能大于最大值'), {
+          type: 'warning'
+        });
+        return;
+      }
+      loading.value = true;
+      const res: BetOrderAPI.BetOrderResType = await API.bettingAuditList({
+        ...params,
+        venueType
+      });
+      loading.value = false;
+      if (res.code) return message(res.msg, { type: 'error' });
+      dataList.length = 0;
+      if (res.data !== null) {
+        dataList.push(...res?.data?.pageData);
+        dataList.map((item: any, index) => {
+          item.index = index + 1;
+          item.combineOrderDetails.map((item: BetOrderAPI.Detail) => {
+            item.rejectSelected = false;
+            item.approveSelected = false;
+          });
+        });
+        pagination.total = res?.data?.count;
+        pagination.pageSize = res?.data?.pageSize;
+        pagination.currentPage = res?.data?.pageNum;
+        Object.assign(totalInfo, res?.data?.otherData);
+      }
+      document
+        .querySelector('.table_container .el-scrollbar__wrap')
+        ?.scroll(0, 0);
+    } catch (error) {
+      loading.value = false;
+    }
+  };
+
   async function onSearch(type?: string) {
     loopTimer.value && clearInterval(loopTimer.value);
-    const fetchData = async () => {
-      if (type === 'reload') pagination.currentPage = 1;
-      try {
-        const params: searchFormType = formatParams({}) as searchFormType;
-        if (Number(params.maxBetAmount) < Number(params.minBetAmount)) {
-          message(t('请检查投注额，最小值不能大于最大值'), { type: 'warning' });
-          return;
-        }
-        if (Number(params.maxProfitAmount) < Number(params.minProfitAmount)) {
-          message(t('请检查用户输赢，最小值不能大于最大值'), {
-            type: 'warning'
-          });
-          return;
-        }
-        loading.value = true;
-        const res: BetOrderAPI.BetOrderResType = await API.bettingAuditList({
-          ...params,
-          venueType
-        });
-        loading.value = false;
-        if (res.code) return message(res.msg, { type: 'error' });
-        dataList.length = 0;
-        if (res.data !== null) {
-          dataList.push(...res?.data?.pageData);
-          dataList.map((item: any, index) => {
-            item.index = index + 1;
-            item.combineOrderDetails.map((item: BetOrderAPI.Detail) => {
-              item.rejectSelected = false;
-              item.approveSelected = false;
-            });
-          });
-          pagination.total = res?.data?.count;
-          pagination.pageSize = res?.data?.pageSize;
-          pagination.currentPage = res?.data?.pageNum;
-          Object.assign(totalInfo, res?.data?.otherData);
-        }
-        document
-          .querySelector('.table_container .el-scrollbar__wrap')
-          ?.scroll(0, 0);
-      } catch (error) {
-        loading.value = false;
-      }
-    };
+
+    if (!isEditRemarkClick) {      
+      await fetchData(type);
+    }
 
     if (hasDataFetching.value) {
       if (!isEditDialogClick.value && !isEditRemarkClick.value) {
         loopTimer.value = setInterval(
           async () => await fetchData(),
           Number(dataFetchingTime.value) * 1000
+          // 3000
         );
       }
       if (isEditRemarkClick.value) {
         await fetchData();
       }
-    } else await fetchData();
+    }
   }
 
   watch(
@@ -535,11 +541,25 @@ export function useBettingAuditHook(venueType: number) {
         h(editOrder, {
           ref: editDialogRef,
           data: { orderDetailId, orderDetailRemark },
-          onCloseDialog: (value: string) => {
+          onCloseDialog: async (value: string) => {
             isEditRemarkClick.value = false;
             closeDialog(options, index);
             getRowByOrderId(orderId);
-            // onSearch();
+            // refresh data
+            if (hasDataFetching.value) {
+              if (!isEditDialogClick.value && !isEditRemarkClick.value) {
+                const loopTimer = ref<NodeJS.Timeout>();
+                loopTimer.value = setInterval(
+                  async () => await fetchData(),
+                  Number(dataFetchingTime.value) * 1000
+                  // 3000
+                );
+                loopTimer.value && clearInterval(loopTimer.value);
+              }
+              if (isEditRemarkClick.value) {
+                await fetchData();
+              }
+            }
           }
         })
     });
