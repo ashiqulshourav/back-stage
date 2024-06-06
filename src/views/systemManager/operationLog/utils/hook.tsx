@@ -58,8 +58,8 @@ export function useOperationLog() {
     }
   }
 
-  // export functionality
-  const exportFileTest = async () => {
+  // export to excel
+  const exportFile = async () => {
     exportLoading.value = true;
     message(t('导出报表开始'), { type: 'warning' });
 
@@ -134,6 +134,6 @@ export function useOperationLog() {
     onSearch,
     handleTableWidthChange,
     handleCurrentChange,
-    exportFileTest,
+    exportFile,
   };
 }

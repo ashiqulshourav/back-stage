@@ -77,10 +77,10 @@
         <el-button
           type="primary"
           v-if="hasAuth('EXPORT')"
-          @click="exportFileTest"
+          @click="exportFile"
           :loading="exportLoading"
           :icon="useRenderIcon(Download)"
-          >{{ t('导出 TEST') }}
+          >{{ t('导出') }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -116,7 +116,7 @@ const props = defineProps<{
 
 const selectDate = ref('');
 const formRef = ref<FormInstance>();
-const emits = defineEmits(['onSearch', 'exportFileClick', 'exportFileTest']);
+const emits = defineEmits(['onSearch', 'exportFileClick', 'exportFile']);
 const menusList = reactive<OperationLogDataAPI.OperationMenuTypeChildren[]>([]);
 
 const resetForm = (formEl: FormInstance | undefined) => {
@@ -157,8 +157,8 @@ const exportFileClick = () => {
   emits('exportFileClick');
 };
 
-const exportFileTest = () => {
-  emits('exportFileTest');
+const exportFile = () => {
+  emits('exportFile');
 };
 
 const search = () => {
