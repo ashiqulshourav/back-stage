@@ -6,7 +6,7 @@
       :loading="loading"
       :labelList="labelList"
       :tenantList="tenantList"
-      @exportFileTest="exportFileTest"
+      @exportFile="exportFile"
       @on-search="onSearch"
       :downloading="downloading"
     />
@@ -199,7 +199,7 @@ const {
   tenantObj,
   goChangeAccountPage,
   downloading,
-  exportFileTest,
+  exportFile,
 } = userPlayerListHook(props.category, props.venueType);
 </script>
 

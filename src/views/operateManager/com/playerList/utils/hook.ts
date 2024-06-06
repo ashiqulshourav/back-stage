@@ -113,12 +113,12 @@ export function userPlayerListHook(venueType: number, category: number) {
   };
 
   // export player list
-  const exportFileTest = async () =>{
+  const exportFile = async () =>{
     downloading.value = true;
     message(t('导出报表开始'), { type: 'warning' });
     const res = await API.playerListExport({
       ...removeEmptyStringKeys(form),
-      venueType: venueType,
+      venueType: 1,
       pageSize: 50000,
       pageNum: 1,
       export: true,
@@ -312,6 +312,6 @@ export function userPlayerListHook(venueType: number, category: number) {
     tenantObj,
     goChangeAccountPage,
     downloading,
-    exportFileTest,
+    exportFile,
   };
 }
