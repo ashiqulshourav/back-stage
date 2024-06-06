@@ -58,6 +58,22 @@ export function useOperationLog() {
     }
   }
 
+  // export functionality
+  const exportFileTest = async () => {
+    exportLoading.value = true;
+    message(t('导出报表开始'), { type: 'warning' });
+
+    const res = await API.operationLogExport({
+      ...removeEmptyStringKeys(form),
+      pageNum: 1,
+      pageSize: 50000,
+      export: true
+    });
+
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    exportLoading.value = false;
+  }
+
   //- 导出excel表格
   const exportFileClick = async () => {
     exportLoading.value = true;
@@ -117,6 +133,7 @@ export function useOperationLog() {
     exportFileClick,
     onSearch,
     handleTableWidthChange,
-    handleCurrentChange
+    handleCurrentChange,
+    exportFileTest,
   };
 }
