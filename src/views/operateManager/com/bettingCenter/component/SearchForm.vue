@@ -397,24 +397,6 @@ const exportFile = () => {
   emits('exportFile');
 };
 
-/* 添加投注项ID分类 */
-const betStore = useBetStore();
-
-watch(
-  () => betStore.gameplayData,
-  v => {
-    if (v.betItemsId) {
-      setPropsForm();
-      props.form.betItemId = v.betItemsId;
-      props.form.matchId = v.matchId;
-    }
-  },
-  {
-    immediate: true,
-    deep: true
-  }
-);
-
 //- 操盘管理重置表单为初始值
 const setPropsForm = () => {
   Object.assign(props.form, {
@@ -445,6 +427,24 @@ const setPropsForm = () => {
     riskControlLabelList: []
   });
 };
+
+/* 添加投注项ID分类 */
+const betStore = useBetStore();
+
+watch(
+  () => betStore.gameplayData,
+  v => {
+    if (v.betItemsId) {
+      setPropsForm();
+      props.form.betItemId = v.betItemsId;
+      props.form.matchId = v.matchId;
+    }
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+);
 
 onActivated(() => {
   if (betStore.gameplayData.betItemsId) {
