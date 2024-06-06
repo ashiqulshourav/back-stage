@@ -344,6 +344,8 @@ const resetForm = (formEl: FormInstance | undefined) => {
   formEl?.resetFields();
   selectDate.value = '';
   gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
+  props.form.betItemId = '';
+  props.form.matchId = '';
   search();
 };
 
