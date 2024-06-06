@@ -109,6 +109,7 @@
                     :selectNum="selectNum"
                     :selectItem="selectItem"
                     :betItemsDtoList="betItemsDtoList"
+                    @hideScrollList="() => (isShowScroll = false)"
                     @changeSelectNum="(n:number) => shortcutSelectNum(n,'input')"
                     @showShortcutContainer="showShortcutContainer"
                   />
@@ -143,7 +144,9 @@
           isShowScroll ? 'visible' : 'invisible'
         ]"
         :style="scrollPostitonObj"
-        @mouseleave="isShowScroll = false"
+        @mouseenter="mouseEnterScroll"
+        @mousemove="mouseMoveScroll"
+        @mouseleave="mouseLeaveScroll"
       >
         <el-scrollbar ref="scrollRef" height="180px">
           <div class="flex flex-col">
@@ -286,7 +289,9 @@ const mouseEvent = (
       });
     });
     selectItem.value = s;
-    scrollPostitonObj.left = `${e.target.getBoundingClientRect().left + 76}px`;
+    scrollPostitonObj.left = `${
+      e.target.getBoundingClientRect().left + (s.dpOdds < 0 ? 76 : 70)
+    }px`;
     scrollPostitonObj.top = `${e.target.getBoundingClientRect().top - 168}px`;
     betItemsDtoList.length = 0;
     betItemsDtoList.push(...(list as sportTradingDataAPI.BetItemsDtoList[]));
@@ -307,6 +312,32 @@ const changeStatus = (d: {
   item?: sportTradingDataAPI.renderListType;
 }) => {
   emits('changeStatus', d);
+};
+
+// 快捷键鼠标事件
+let lastX = ref<number>();
+let direction = ref<string>('');
+const mouseEnterScroll = (e: any) => {
+  lastX.value = e.clientX;
+};
+
+const mouseMoveScroll = (e: any) => {
+  const currentX = e.clientX;
+  if (lastX !== undefined) {
+    const diffX = currentX - (lastX.value as number);
+    if (diffX > 0) {
+      direction.value = 'right';
+    } else {
+      direction.value = 'left';
+    }
+  }
+};
+
+const mouseLeaveScroll = () => {
+  if (direction.value === 'right') {
+    selectItem.value.sourceBetItemsId = -1;
+  }
+  isShowScroll.value = false;
 };
 
 const showShortcutContainer = () => (isShowScroll.value = true);

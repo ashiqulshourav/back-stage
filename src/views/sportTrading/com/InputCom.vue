@@ -3,8 +3,6 @@
     class="w-1/4 text-center input_wrapper relative h-full input_container"
     @mouseleave.stop="e => mouseEvent(e, props.s, 'leave')"
   >
-    <!-- @mouseenter.stop="e => mouseEvent(e, props.s, 'enter')" -->
-    <!-- min-w-[120px]  -->
     <span
       v-if="showNum"
       @mouseenter.stop="e => mouseEvent(e, props.s, 'enter')"
@@ -20,7 +18,12 @@
       v-else
       class="text-[--el-color-primary] flex justify-start cursor-pointer h-full relative"
     >
-      <div class="w-[120px] flex justify-start items-center h-full">
+      <div
+        class="w-[120px] flex justify-start items-center h-full"
+        @mousemove="inputContainerMouseMove"
+        @mouseenter="inputContainerMouseEnter"
+        @mouseleave="inputContainerMouseLeave"
+      >
         <el-input-number
           class="!w-[70px]"
           size="small"
@@ -51,7 +54,8 @@ import { resetDpodds } from '../util/playMap';
 const emits = defineEmits([
   'changeMouse',
   'changeSelectNum',
-  'showShortcutContainer'
+  'showShortcutContainer',
+  'hideScrollList'
 ]);
 const props = defineProps<{
   s: sportTradingDataAPI.BetItemsDtoList;
@@ -60,6 +64,34 @@ const props = defineProps<{
   selectItem: sportTradingDataAPI.BetItemsDtoList;
   betItemsDtoList: sportTradingDataAPI.BetItemsDtoList[];
 }>();
+
+// 快捷键鼠标事件
+let lastX = ref<number>(0);
+let direction = ref<string>('');
+
+const inputContainerMouseEnter = (e: any) => {
+  lastX.value = e.clientX;
+};
+
+const inputContainerMouseMove = (e: any) => {
+  const currentX = e.clientX;
+  if (lastX !== undefined) {
+    const diffX = currentX - (lastX.value as number);
+    if (diffX > 0) {
+      direction.value = 'right';
+    } else {
+      direction.value = 'left';
+    }
+  }
+};
+
+const inputContainerMouseLeave = () => {
+  if (direction.value === 'left') {
+    emits('hideScrollList');
+  }
+  lastX.value = 0;
+  direction.value = '';
+};
 
 const s1 = ref(0);
 const oldVal = ref(0);
