@@ -203,6 +203,9 @@
                 "
               >
                 {{ t('赛事ID:') }} {{ item.matchId }}
+                <span class="inline-block">
+                  <IconifyIconOffline :icon="Copy" />
+                </span>
               </div>
               <div class="item_line">
                 {{ t('开赛时间:')
@@ -246,6 +249,9 @@
                 "
               >
                 {{ t('注单号:') }} {{ row.id }}
+                <span class="inline-block">
+                  <IconifyIconOffline :icon="Copy" />
+                </span>
               </div>
               <div class="item_line">
                 {{ t('投注时间:')
@@ -490,6 +496,7 @@ import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
 import { addThousandSeparator } from '@/utils/formatNumber';
+import Copy from '@iconify-icons/ep/copy-document';
 import {
   formatSeriesType,
   useSportFormatDetail,
