@@ -35,7 +35,7 @@
             </el-button>
           </div>       
           <div class="flex gap-3 items-center">
-            <!-- <el-switch
+            <el-switch
               v-model="hasDataFetching"
               inline-prompt
               active-text="开"
@@ -44,13 +44,14 @@
               :inactive-value="0"
               style="--el-switch-on-color: #f88d48;"
             />
+            <span>{{t('列表刷新频率')}}</span>
             <el-select v-model="dataFetchingTime" style="width: 80px">
               <el-option :label="30" :value="30"/>
               <el-option :label="60" :value="60"/>
               <el-option :label="120" :value="120"/>
               <el-option :label="180" :value="180"/>
             </el-select>
-            <span>S</span>   -->
+            <span>S</span>  
           </div>   
         </div>
       </template>
@@ -324,10 +325,7 @@
               v-for="(item, idx) in row.combineOrderDetails"
               :key="idx"
             >
-              <div
-                class=""
-                v-if="item.riskStatus === riskStatus.reject"
-              >
+              <div class="" v-if="item.riskStatus === riskStatus.reject">
                 原因:{{ item.riskType }}
               </div>
               <div
@@ -372,7 +370,7 @@
                 "
                 :checked="item.rejectSelected"
                 @change="data => selectReject(data, row.index - 1, index)"
-              ></el-checkbox>
+              />
 
               <el-button
                 v-if="
@@ -400,7 +398,7 @@
                   hasAuth('APPROVE')
                 "
                 @change="data => selectApprove(data, row.index - 1, index)"
-              ></el-checkbox>
+              />
               <el-button
                 @change="data => selectApprove(data, row.index - 1, index)"
                 v-if="
@@ -507,12 +505,13 @@ import { riskStatus } from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { hasAuth } from '@/router/utils';
 import { ref } from 'vue';
-import {useRenderIcon} from "@/components/ReIcon/src/hooks";
-import EditPen from "@iconify-icons/ep/edit-pen";
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import EditPen from '@iconify-icons/ep/edit-pen';
 
 const { tableHeaderStyle } = usePublicHooks();
 const rejectSelectedCount = ref(0);
 const approveSelectedCount = ref(0);
+const isDataFetching = ref(1);
 
 const { venueType } = defineProps<{
   venueType: number;
@@ -647,7 +646,7 @@ watch(
 .approve {
   width: 100px;
 }
-.width-auto{
+.width-auto {
   width: auto;
 }
 .operate {
@@ -656,10 +655,10 @@ watch(
 .operation_item {
   width: 100px;
 }
-.mw-120 > .cell{
+.mw-120 > .cell {
   min-width: 120px;
 }
-.mw-50 > .cell{
+.mw-50 > .cell {
   min-width: 55px;
 }
 </style>

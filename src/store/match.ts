@@ -50,6 +50,7 @@ export const useMatchStore = defineStore('MATCHSTATE', {
         pageSize: 9999
       });
       this.countryList = res.data.list;
+      console.log(this.countryList);
     },
 
     search_league_list(query: string, currentSportId: number | string, category: LeagueClassifyType = 0) {

@@ -65,7 +65,11 @@ export const riskManagementData = {
     ),
 
   updateAutoLimitConfig: (data: RiskManagementDataAPI.RiskControlTypes[]) =>
-    http.request<RiskManagementDataAPI.RiskControlTypesRes>('post', '/autoLimitConfig/addOrEdit', { data }),
+    http.request<RiskManagementDataAPI.RiskControlTypesRes>(
+      'post',
+      '/autoLimitConfig/addOrEdit',
+      { data }
+    ),
 
   // order placement
   getRiskSettleConfigList: () =>
@@ -75,7 +79,11 @@ export const riskManagementData = {
     ),
 
   updateOrderPlacement: (data: RiskManagementDataAPI.OrderPlacementTypes[]) =>
-    http.request<RiskManagementDataAPI.OrderPlacementTypesRes>('post', '/risk/settle/config/edit', { data }),
+    http.request<RiskManagementDataAPI.OrderPlacementTypesRes>(
+      'post',
+      '/risk/settle/config/edit',
+      { data }
+    ),
 
   // order reject list
   getRiskBetConfigList: () =>
@@ -85,7 +93,11 @@ export const riskManagementData = {
     ),
 
   editRiskBetConfigEdit: (data: RiskManagementDataAPI.OrderRejectTypes[]) =>
-    http.request<RiskManagementDataAPI.OrderRejectTypesRes>('post', '/risk/bet/config/edit', { data }),
+    http.request<RiskManagementDataAPI.OrderRejectTypesRes>(
+      'post',
+      '/risk/bet/config/edit',
+      { data }
+    ),
 
   // order freeze list
   getRiskFreezeConfigList: () =>
@@ -95,5 +107,15 @@ export const riskManagementData = {
     ),
 
   updateRiskFreezeConfigList: (data: RiskManagementDataAPI.AutoFreeze[]) =>
-    http.request<RiskManagementDataAPI.AutoFreezeRes>('post', '/risk/freeze/config/edit', { data })
+    http.request<RiskManagementDataAPI.AutoFreezeRes>(
+      'post',
+      '/risk/freeze/config/edit',
+      { data }
+    ),
+
+  getRiskNoticeAggregate: () => http.request<RiskManagementDataAPI.RiskNoticeRes>('post', '/risk/notice/aggregate'),
+
+  getRiskNotification: () => http.request<RiskManagementDataAPI.RiskNoticeRes>('post', '/kmg/matchUser/getRiskNotification'),
+
+  setRiskNotification: (data: RiskManagementDataAPI.RiskNotice) => http.request('post', '/kmg/matchUser/setRiskNotification', { data }),
 };
