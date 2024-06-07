@@ -77,7 +77,7 @@ export function useEsportsSettlement() {
         betResultItems: row.handicapList.map((item, index) => {
           return {
             betItemId: item.betItemsId,
-            betResult: type ? 18 : row.betOptions === index ? 4 : 3,
+            betResult: type ? 24 : row.betOptions === index ? 4 : 3,
             handicap: item.handicap,
             kindsCode: item.kindsCode,
             n: item.n,
