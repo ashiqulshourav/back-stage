@@ -125,7 +125,7 @@ export function useEsportsSettlement() {
           return {
             betItemId: item.betItemsId,
             betResult: type
-              ? 24
+              ? 18
               : row.multipartBetOptions.length > 0
               ? multipBetResultCheck(row.multipartBetOptions, index)
               : row.betOptions === index
