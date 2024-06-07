@@ -110,7 +110,7 @@ export function useUserManager() {
             closeType?: string,
             isShowSuccessDialog?: boolean
           ) => {
-            if (closeType) onSearch('reload');
+            closeType ? onSearch('reload') : onSearch();
             closeDialog(options, index);
             if (isShowSuccessDialog) {
               ElMessageBox.confirm(
