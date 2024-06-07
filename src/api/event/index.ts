@@ -19,5 +19,12 @@ export const eventData = {
       'post',
       '/event/v1/getMatchInfoByMatchId',
       { data }
+    ),
+  //- 获取赛事+注单动画
+  getMatchStatistic: (data: {
+    matchId: string | number
+  }) =>
+    http.request<EventAPI.MatchInfoRes>('post', '/matchData/v1/getMatchStatistic',
+      { data }
     )
 };

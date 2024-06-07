@@ -5,10 +5,14 @@ export function useEventMatchBet() {
     matchId: ''
   });
 
-  async function onSearch(type?: string) {}
+  async function onSearch(type?: string) {
+    /* /matchData/v1/getMatchStatistic */
+    const res = await API.getMatchStatistic(form);
+    if (res.code) return;
+  }
 
   onMounted(() => {
-    // onSearch();
+    onSearch();
   });
 
   return {
