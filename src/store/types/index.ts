@@ -66,5 +66,6 @@ export type BetType = {
   gameplayData: {
     matchId: string;
     betItemsId: number | string;
-  }
+  },
+  isOpenVoice: boolean;
 };

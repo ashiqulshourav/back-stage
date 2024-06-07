@@ -94,6 +94,7 @@ import { t } from '@/plugins/i18n';
 import { getMD5 } from '@/utils/caypto';
 import { useResetPasswordHook } from '@/hooks/resetPasswordHook';
 import { REGEXP_PWD } from '@/components/ResetDialog/rule';
+import { useRiskNoticeStore } from '@/store/riskNotice';
 defineOptions({ name: 'Login' });
 const router = useRouter();
 const loading = ref(false);
@@ -104,6 +105,7 @@ const { dataTheme, dataThemeChange } = useDataThemeChange();
 dataThemeChange();
 const { title } = useNav();
 const userStore = useUserStore();
+const riskStoreStore = useRiskNoticeStore();
 const buildType = import.meta.env.VITE_BUILD_TYPE;
 const ruleForm = reactive({
   username: '',
@@ -137,6 +139,9 @@ const _loginRequest = async () => {
     if (res.code) return message(res.msg, { type: 'error' });
     //- 第一次登录强制弹出充值密码弹窗
     userStore.setUserInfo(res.data);
+
+    await riskStoreStore.setRiskNotice();
+
     if (!REGEXP_PWD.test(ruleForm.password) || res.data.flag === 1) {
       ruleForm.password = '';
       return openResetDialog();

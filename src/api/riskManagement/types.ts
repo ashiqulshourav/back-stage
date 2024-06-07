@@ -126,6 +126,13 @@ declare namespace RiskManagementDataAPI {
     esportWholeMaxBetRolling?: null | number;
     delFlag?: null | number; // 1是删除 其他则无感
   };
+  type RiskNotice {
+    esportAuditCount?: number;
+    jjAuditCount?: number;
+    sportAuditCount?: number;
+    riskNotificationRefresh?: string;
+    riskNotificationSwitch?: number;
+  }
   type RiskTagListRes = COMMON.BASE_RES_TYPE<RiskTagListType>;
   type RiskTagRes = COMMON.BASE_RES_TYPE<RiskTagType>;
   type LimitRes = COMMON.BASE_RES_TYPE<LimitListType[]>;
@@ -135,4 +142,5 @@ declare namespace RiskManagementDataAPI {
   type AutoFreezeRes = COMMON.BASE_RES_TYPE<AutoFreeze[]>;
   type OrderPlacementTypesRes = COMMON.BASE_RES_TYPE<OrderPlacementTypes[]>;
   type RiskControlTypesRes = COMMON.BASE_RES_TYPE<RiskControlTypes[]>;
+  type RiskNoticeRes = COMMON.BASE_RES_TYPE<RiskNotice>;
 }

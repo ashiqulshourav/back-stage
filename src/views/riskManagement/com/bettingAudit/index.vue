@@ -325,10 +325,7 @@
               v-for="(item, idx) in row.combineOrderDetails"
               :key="idx"
             >
-              <div
-                class=""
-                v-if="item.riskStatus === riskStatus.reject"
-              >
+              <div class="" v-if="item.riskStatus === riskStatus.reject">
                 原因:{{ item.riskType }}
               </div>
               <div
@@ -373,7 +370,7 @@
                 "
                 :checked="item.rejectSelected"
                 @change="data => selectReject(data, row.index - 1, index)"
-              ></el-checkbox>
+              />
 
               <el-button
                 v-if="
@@ -401,7 +398,7 @@
                   hasAuth('APPROVE')
                 "
                 @change="data => selectApprove(data, row.index - 1, index)"
-              ></el-checkbox>
+              />
               <el-button
                 @change="data => selectApprove(data, row.index - 1, index)"
                 v-if="
@@ -508,12 +505,14 @@ import { riskStatus } from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { hasAuth } from '@/router/utils';
 import { ref } from 'vue';
-import {useRenderIcon} from "@/components/ReIcon/src/hooks";
-import EditPen from "@iconify-icons/ep/edit-pen";
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import EditPen from '@iconify-icons/ep/edit-pen';
 
 const { tableHeaderStyle } = usePublicHooks();
 const rejectSelectedCount = ref(0);
 const approveSelectedCount = ref(0);
+const isDataFetching = ref(1);
+const dataFetchingTime = ref(30);
 
 const { venueType } = defineProps<{
   venueType: number;
@@ -648,7 +647,7 @@ watch(
 .approve {
   width: 100px;
 }
-.width-auto{
+.width-auto {
   width: auto;
 }
 .operate {
@@ -657,10 +656,10 @@ watch(
 .operation_item {
   width: 100px;
 }
-.mw-120 > .cell{
+.mw-120 > .cell {
   min-width: 120px;
 }
-.mw-50 > .cell{
+.mw-50 > .cell {
   min-width: 55px;
 }
 </style>
