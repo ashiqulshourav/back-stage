@@ -512,7 +512,6 @@ const { tableHeaderStyle } = usePublicHooks();
 const rejectSelectedCount = ref(0);
 const approveSelectedCount = ref(0);
 const isDataFetching = ref(1);
-const dataFetchingTime = ref(30);
 
 const { venueType } = defineProps<{
   venueType: number;
