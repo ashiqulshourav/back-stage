@@ -27,15 +27,17 @@ import { t } from '@/plugins/i18n';
 import formDom from '../component/form.vue';
 import { ElMessageBox, FormInstance } from 'element-plus';
 import editOrder from '../component/editOrder.vue';
+import { useBettingAuditStore } from '@/store/bettingAudit';
 
 export function useBettingAuditHook(venueType: number) {
   const { openPasswordInput } = usePasswordInputHook();
+  const bettingAuditStore = useBettingAuditStore();
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<any>([]);
   const tenantObj = reactive<any>({});
   const loading = ref(true);
   const hasDataFetching = ref(1);
-  const dataFetchingTime = ref(60);
+  const dataFetchingTime = ref(bettingAuditStore.dataFetchingTime);
   const loopTimer = ref<NodeJS.Timeout>();
   const isEditDialogClick = ref(false);
   const isEditRemarkClick = ref(false);
@@ -209,6 +211,7 @@ export function useBettingAuditHook(venueType: number) {
     () => [hasDataFetching.value, dataFetchingTime.value],
     () => {
       onSearch();
+      bettingAuditStore.setDataFetchingTime(dataFetchingTime.value);
     }
   );
 
