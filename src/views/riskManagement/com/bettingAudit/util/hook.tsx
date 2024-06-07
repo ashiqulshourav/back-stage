@@ -188,7 +188,7 @@ export function useBettingAuditHook(venueType: number) {
         loopTimer.value = setInterval(
           async () => await fetchData(type),
           Number(dataFetchingTime.value) * 1000
-          // 10000
+          // 5000
         );
       }
     }
@@ -291,7 +291,7 @@ export function useBettingAuditHook(venueType: number) {
       contentRenderer: ({ options, index }) =>
         h(formDom, {
           list: list,
-          onCloseDialog: async  () => {
+          onCloseDialog: async () => {
             isEditDialogClick.value = false;
             // onSearch('reload');
             await fetchListDataWithInterval('reload');
