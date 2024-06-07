@@ -166,7 +166,6 @@ const getDepList = async () => {
     res.data = res.data[0].subNodeList;
   }
   departmentList.length = 0;
-
   departmentList.push(...res.data);
 };
 
@@ -206,7 +205,7 @@ const confirmClick = () => {
       message(res.msg, { type: res.code ? 'error' : 'success' });
       emits(
         'closeDialog',
-        res.code ? '' : 'reloadTable',
+        res.code || newFormInline.id ? '' : 'reloadTable',
         !res.code && !newFormInline.id
       );
     }
