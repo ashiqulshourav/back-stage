@@ -187,8 +187,8 @@ export function useBettingAuditHook(venueType: number) {
       if (!isEditDialogClick.value && !isEditRemarkClick.value) {
         loopTimer.value = setInterval(
           async () => await fetchData(type),
-          // Number(dataFetchingTime.value) * 1000
-          10000
+          Number(dataFetchingTime.value) * 1000
+          // 10000
         );
       }
     }
