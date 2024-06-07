@@ -169,7 +169,7 @@
                 {{ item.sportNameCn }}/{{ item.leagueNameCn }}
               </div>
               <div
-                class="item_line cursor-pointer"
+                class="item_line cursor-pointer flex items-baseline gap-1"
                 @dblclick="
                   copyTest(
                     item.matchId,
@@ -177,7 +177,10 @@
                   )
                 "
               >
-                {{ t('赛事ID:') }} {{ item.matchId }}
+                {{ t('赛事ID:') }} {{ item.matchId }} 
+                <span class="inline-block">
+                  <IconifyIconOffline :icon="Copy" />
+                </span>
               </div>
               <div class="item_line">
                 {{ t('开赛时间:')
@@ -215,12 +218,15 @@
                 }}
               </div>
               <div
-                class="item_line cursor-pointer"
+                class="item_line cursor-pointer flex items-baseline gap-1"
                 @dblclick="
                   copyTest(row.id, t('注单号：{value}', { value: row.id }))
                 "
               >
                 {{ t('注单号:') }} {{ row.id }}
+                <span class="inline-block">
+                  <IconifyIconOffline :icon="Copy" />
+                </span>
               </div>
               <div class="item_line">
                 {{ t('投注时间:')
@@ -453,6 +459,7 @@ import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
 import {useRenderIcon} from "@/components/ReIcon/src/hooks";
 import EditPen from "@iconify-icons/ep/edit-pen";
+import Copy from '@iconify-icons/ep/copy-document';
 const props = defineProps<{
   category: number;
   venueType: number;
