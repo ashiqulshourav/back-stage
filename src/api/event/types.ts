@@ -115,4 +115,28 @@ declare namespace EventAPI {
     navigateFirstPage: number;
     navigateLastPage: number;
   };
+
+  type EventData = {
+    type: string;
+    n: number;
+  }
+
+  type Event = {
+    away: EventData[];
+    home: EventData[];
+  }
+
+  type getMatchStatusticData = {
+    beginTime: string;
+    homeTeamNameCn: string;
+    awayTeamNameCn: string;
+    homeTeamLogo: string;
+    awayTeamLogo: string;
+    bet: number[];
+    event: Event[];
+  }
+
+
+
+  type getMatchStatusticResType = COMMON.BASE_RES_TYPE<getMatchStatusticData>
 }

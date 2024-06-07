@@ -24,7 +24,7 @@ export const eventData = {
   getMatchStatistic: (data: {
     matchId: string | number
   }) =>
-    http.request<EventAPI.MatchInfoRes>('post', '/matchData/v1/getMatchStatistic',
+    http.request<EventAPI.getMatchStatusticResType>('post', '/matchData/v1/getMatchStatistic',
       { data }
     )
 };
