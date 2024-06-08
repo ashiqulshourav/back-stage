@@ -30,7 +30,7 @@ import editOrder from '../component/editOrder.vue';
 import { useBettingAuditStore } from '@/store/bettingAudit';
 
 export function useBettingAuditHook(venueType: number) {
-  const { openPasswordInput } = usePasswordInputHook();
+  const { openPasswordInput } = usePasswordInputHook({showClose: false});
   const bettingAuditStore = useBettingAuditStore();
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<any>([]);
@@ -190,8 +190,8 @@ export function useBettingAuditHook(venueType: number) {
       if (!isEditDialogClick.value && !isEditRemarkClick.value) {
         loopTimer.value = setInterval(
           async () => await fetchData(type),
-          // Number(dataFetchingTime.value) * 1000
-          5000
+          Number(dataFetchingTime.value) * 1000
+          // 5000
         );
       }
     }
