@@ -238,7 +238,7 @@
           <template #orderAcceptanceStatus="{ row }">
             <div class="h-full">
               <div
-                class="match_item accept-status"
+                class="match_item"
                 v-for="item in row.combineOrderDetails"
                 :key="item.betItemId"
               >
@@ -246,6 +246,7 @@
                   :style="{
                     background: getBackgroundColor(row.billStatus).bgColor
                   }"
+                  class="accept-status"
                 >
                   {{
                     getVal(
@@ -260,6 +261,7 @@
                   :style="{
                       background: getBackgroundColor(row.billStatus).bgColor
                   }"
+                  class="accept-status"
                 >
                   {{
                     getVal1(
@@ -501,7 +503,7 @@ const {
   width: 100px;
 }
 
-.accept-status > span{
+.accept-status {
   padding: 0 8px;
   line-height: 25px;
   display: inline-block;
