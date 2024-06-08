@@ -107,7 +107,7 @@ onMounted(() => {
 })
 
 watch(
-  () => riskNoticeStore.riskNotificationSwitch,
+  () => [riskNoticeStore.riskNotificationSwitch, riskNoticeStore.riskNotificationRefresh],
   () => {
     refreshRiskNotice();
   },
