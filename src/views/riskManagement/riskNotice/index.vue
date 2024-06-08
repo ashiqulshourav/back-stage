@@ -26,15 +26,15 @@
     <div class="flex">
       <div class="flex flex-col items-center">
         <span>{{ t('手动接拒') }}</span>
-        <span class="text-[30px]">{{riskNoticeStore.jjAuditCount}}</span>
+        <span class="text-[30px]">{{jjAuditCount}}</span>
       </div>
       <div class="flex mr-10 ml-10 flex-col items-center">
         <span>{{ t('体育注单审核') }}</span>
-        <span class="text-[30px]">{{riskNoticeStore.sportAuditCount}}</span>
+        <span class="text-[30px]">{{sportAuditCount}}</span>
       </div>
       <div class="flex flex-col items-center">
         <span>{{ t('电竞注单审核') }}</span>
-        <span class="text-[30px]">{{riskNoticeStore.esportAuditCount}}</span>
+        <span class="text-[30px]">{{esportAuditCount}}</span>
       </div>
     </div>
   </div>
@@ -49,7 +49,14 @@ import { useRiskNotice } from './util/hook';
 const betStore = useBetStore();
 const riskNoticeStore = useRiskNoticeStore();
 const timeList = ['30', '60', '120', '180'];
-const {riskNotificationSwitch, riskNotificationRefresh, setRiskNotification} = useRiskNotice();
+const {
+    riskNotificationSwitch, 
+    riskNotificationRefresh, 
+    setRiskNotification,
+    jjAuditCount,
+    sportAuditCount,
+    esportAuditCount
+} = useRiskNotice();
 const currentSelectTimeIndex = ref<number>(0);
 
 watch(
