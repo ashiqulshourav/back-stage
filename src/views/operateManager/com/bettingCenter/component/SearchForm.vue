@@ -294,6 +294,16 @@
           >
             {{ t('导出报表') }}
           </el-button>
+
+         <el-button
+            type="primary"
+            :icon="useRenderIcon(Download)"
+            :loading="downloading"
+            v-if="hasAuth('EXPORT')"
+            @click="exportFileTest()"
+          >
+            {{ t('报表异步导出') }}
+          </el-button>
         </el-form-item>
       </div>
     </div>
@@ -339,7 +349,7 @@ import {
 import { hasAuth } from '@/router/utils';
 import CustomDate from '@/components/Form/Custom_date.vue';
 
-const emits = defineEmits(['onSearch', 'exportFile']);
+const emits = defineEmits(['onSearch', 'exportFile', 'exportFileTest']);
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl?.resetFields();
   selectDate.value = '';
@@ -372,6 +382,10 @@ const search = () => {
 
 const exportFile = () => {
   emits('exportFile');
+};
+
+const exportFileTest = () => {
+  emits('exportFileTest');
 };
 
 //- 操盘管理重置表单为初始值

@@ -80,7 +80,7 @@
           @click="exportFile"
           :loading="exportLoading"
           :icon="useRenderIcon(Download)"
-          >{{ t('导出') }}
+          >{{ t('报表异步导出') }}
         </el-button>
       </el-form-item>
     </el-form>

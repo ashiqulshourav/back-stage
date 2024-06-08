@@ -106,6 +106,7 @@ const {
   exportLoading,
   logTypeList,
   exportFileClick,
+  exportFile,
   onSearch,
   handleTableWidthChange,
   handleCurrentChange,

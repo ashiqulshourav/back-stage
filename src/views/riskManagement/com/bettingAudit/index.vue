@@ -33,8 +33,8 @@
             >
               {{ t('批量通过') }}
             </el-button>
-          </div>       
-          <div class="flex gap-3 items-center">
+          </div>
+          <div v-if="hasAuth('refreshSetting'.toUpperCase())" class="flex gap-3 items-center">
             <el-switch
               v-model="hasDataFetching"
               inline-prompt
@@ -51,8 +51,8 @@
               <el-option :label="120" :value="120"/>
               <el-option :label="180" :value="180"/>
             </el-select>
-            <span>S</span>  
-          </div>   
+            <span>S</span>
+          </div>
         </div>
       </template>
       <template v-slot="{ size, dynamicColumns }">

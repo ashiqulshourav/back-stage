@@ -131,6 +131,7 @@ export function useOperationLog() {
     exportLoading,
     logTypeList,
     exportFileClick,
+    exportFile,
     onSearch,
     handleTableWidthChange,
     handleCurrentChange,
