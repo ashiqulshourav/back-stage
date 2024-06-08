@@ -54,7 +54,7 @@ const timeList = ['30', '60', '120', '180'];
 const {
     riskNotificationSwitch, 
     riskNotificationRefresh, 
-    setRiskNotification,
+    setRiskNotification,  
     jjAuditCount,
     sportAuditCount,
     esportAuditCount
