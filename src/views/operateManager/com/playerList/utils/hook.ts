@@ -311,7 +311,6 @@ export function userPlayerListHook(venueType: number, category: number) {
     dispatchUpdateUser,
     tenantObj,
     goChangeAccountPage,
-    tenantObj, 
     downloading,
     exportFileTest
   };
