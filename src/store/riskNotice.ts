@@ -18,11 +18,11 @@ export const useRiskNoticeStore = defineStore('RISKNOTICESTATE', {
         this.riskNotificationSwitch = res.data.riskNotificationSwitch;
 
         if (this.riskNotificationSwitch) {
+          const existingValue = Number(this.esportAuditCount) + Number(this.jjAuditCount) + Number(this.sportAuditCount);
+          const newValue = Number(riskNoticeRes.data.esportAuditCount) + Number(riskNoticeRes.data.jjAuditCount) + Number(riskNoticeRes.data.sportAuditCount);
           // play sound
           if (
-            this.esportAuditCount != riskNoticeRes.data.esportAuditCount ||
-            this.jjAuditCount != riskNoticeRes.data.jjAuditCount ||
-            this.sportAuditCount != riskNoticeRes.data.sportAuditCount
+            newValue > existingValue
           ) {
             const audio = new Audio('/src/assets/media/order.mp3');
             audio.play();
