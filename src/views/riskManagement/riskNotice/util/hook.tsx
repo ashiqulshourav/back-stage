@@ -1,6 +1,7 @@
 import { useRiskNoticeStore } from '@/store/riskNotice';
 
 export function useRiskNotice() {
+  const riskStore = useRiskNoticeStore();
   const riskNotificationRefresh = ref('30');
   const riskNotificationSwitch = ref(0);
   const jjAuditCount = ref(0);

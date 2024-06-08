@@ -26,15 +26,15 @@
     <div class="flex">
       <div class="flex flex-col items-center cursor-pointer" @click="router.push('/riskManagement/manualOrderRejection')">
         <span>{{ t('手动接拒') }}</span>
-        <span class="text-[30px]">{{jjAuditCount}}</span>
+        <span class="text-[30px]">{{riskNoticeStore.jjAuditCount}}</span>
       </div>
       <div class="flex mr-10 ml-10 flex-col items-center cursor-pointer" @click="router.push('/riskManagement/sportBettingAudit')">
         <span>{{ t('体育注单审核') }}</span>
-        <span class="text-[30px]">{{sportAuditCount}}</span>
+        <span class="text-[30px]">{{riskNoticeStore.sportAuditCount}}</span>
       </div>
       <div class="flex flex-col items-center cursor-pointer" @click="router.push('/riskManagement/esportBettingAudit')">
         <span>{{ t('电竞注单审核') }}</span>
-        <span class="text-[30px]">{{esportAuditCount}}</span>
+        <span class="text-[30px]">{{riskNoticeStore.esportAuditCount}}</span>
       </div>
     </div>
   </div>
