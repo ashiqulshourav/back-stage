@@ -248,8 +248,160 @@ export function useBettingCenterHook(category: number, venueType: number) {
     onSearch();
   };
 
-  //- export to excel
+  //- 导出excel表格
   const exportFile = async () => {
+    downloading.value = true;
+    message(t('导出报表开始'), { type: 'warning' });
+    const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
+      formatParams({
+        pageNum: 1,
+        pageSize: 50000,
+        export: true
+      }) as searchFormType
+    );
+    const r = res.data.pageData.map((item: any, i) => {
+      const arr: any[] = [];
+      const data = { ...item, ...item?.combineOrderDetails[0] };
+      data.combineOrderDetails.map((item2: BetOrderAPI.Detail) => {
+        data.riskStatusArr = [];
+        data.betResultArr = [];
+        data.riskStatusArr?.push(item2.riskStatus);
+        data.betResultArr.push(item2.betResult);
+      });
+
+      columns.forEach((column: { prop: string }) => {
+        let str = '';
+        switch (column.prop.toString()) {
+          case 'sportId':
+            str =
+              SPORT_ID_MAP.find(_ => +_.value === +data[column.prop as string])
+                ?.label ?? data.sportNameCn;
+            break;
+          case 'beginTime':
+            str = data.beginTime
+              ? dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss')
+              : '';
+            break;
+          case 'createTime':
+            str = data.createTime
+              ? dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss')
+              : '';
+            break;
+          case 'settleTime':
+            str = data.settleTime
+              ? dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss')
+              : '';
+            break;
+          case 'index':
+            str = (i + 1).toString();
+            break;
+          case 'playType':
+            str = useSportFormatDetail(data)[4];
+            break;
+          case 'betName':
+            str = useSportFormatDetail(data)[3];
+            break;
+          case 'teamName':
+            if (
+              data.kindsCodes?.includes('Outright') ||
+              data.kindsCodes?.includes('moutright')
+            ) {
+              str = '冠军赛事';
+            } else {
+              str = `${data.homeTeamNameCn} vs ${data.awayTeamNameCn}`;
+            }
+            break;
+          case 'marketType':
+            str = markeTypeMap[data.marketType as keyof typeof markeTypeMap];
+            break;
+          case 'isSettlementAgain':
+            str = data.isSettlementAgain === 2 ? '是' : '否';
+            break;
+          case 'status':
+            str =
+              betStatusMap[
+                getStatus(
+                  data.status,
+                  data.billStatus,
+                  data.betResultArr,
+                  data.isReserve,
+                  data.riskStatusArr,
+                  data.isSpecialSettle
+                )?.status as keyof typeof betStatusMap
+              ];
+            break;
+          case 'billStatus':
+            str =
+              betStatusMap[
+                getStatus(
+                  data.status,
+                  data.billStatus,
+                  data.betResultArr,
+                  data.isReserve,
+                  data.riskStatusArr,
+                  data.isSpecialSettle
+                )?.status as keyof typeof betStatusMap
+              ];
+            break;
+          case 'settleScore':
+            str = displayHomeAwayScore(data.settleScore, data.sportId);
+            break;
+          case 'betResult':
+            str = getOddStatus(data.betResult, data.riskStatus);
+            break;
+          case 'scoreBenchmark':
+            str = displayHomeAwayScore(data.scoreBenchmark, data.sportId);
+            break;
+          case 'seriesType':
+            if (data.combineOrderDetails.length > 1) {
+              str =
+                String(data.seriesType).slice(-3) === '001' ? '串关' : '复式';
+              str +=
+                ' ' +
+                formatSeriesType(
+                  data?.seriesType,
+                  data.combineOrderDetails.length
+                );
+            }
+            break;
+          case 'isSeriesType': //单关 串关
+            str = data.seriesType === 1 ? '单关' : '串关';
+            break;
+          case 'tenantName': //商户名
+            str = tenantObj[data.tenantId]?.tenantName ?? '';
+            break;
+          case 'tenantCode': //商户编码
+            str = tenantObj[data.tenantId]?.name ?? '';
+            break;
+          case 'betStage': //投注阶段
+            str = getIsInplay(data.isInplay);
+            break;
+          default:
+            str = data[column.prop as string];
+        }
+        arr.push(str);
+      });
+      return arr;
+    });
+    const titleList: string[] = [];
+    columns.forEach((column: { label: string }) => {
+      titleList.push(column.label);
+    });
+
+    r.unshift(titleList);
+    const workBook = utils.book_new();
+    const workSheet = utils.aoa_to_sheet(r);
+    workSheet['C1'].s = {
+      wrapText: true
+    };
+
+    utils.book_append_sheet(workBook, workSheet, '数据报表');
+    writeFile(workBook, '赛程_注单中心.xlsx');
+    message(t('导出成功'), { type: 'success' });
+    downloading.value = false;
+  };
+
+  const exportFileTest = async () => {
     downloading.value = true;
     message(t('导出报表开始'), { type: 'warning' });
     const res: BetOrderAPI.BetOrderResType = await API.bettingCenterExport(
@@ -454,6 +606,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     handleCurrentChange,
     handleSelectionChange,
     exportFile,
+    exportFileTest,
     handleCancel,
     getStatus,
     copyTest,

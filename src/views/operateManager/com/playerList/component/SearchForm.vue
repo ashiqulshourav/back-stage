@@ -137,7 +137,7 @@
             :icon="useRenderIcon(Download)"
             :loading="downloading"
             v-if="hasAuth('EXPORT')"
-            @click="exportFileTest()"
+            @click="exportFile()"
           >
             {{ t('报表异步导出') }}
           </el-button>
@@ -163,7 +163,7 @@ import { hasAuth } from '@/router/utils';
 const formRef = ref();
 const buttonRef = ref();
 const buttonRef1 = ref();
-const emits = defineEmits(['onSearch', 'exportFileTest']);
+const emits = defineEmits(['onSearch', 'exportFile']);
 const idList = reactive<string[]>([]);
 const userIds = reactive<string[]>([]);
 const sportLimmitList = reactive<string[]>([]);
@@ -223,8 +223,8 @@ const search = () => {
   emits('onSearch', 'reload');
 };
 
-const exportFileTest = () => {
-  emits('exportFileTest');
+const exportFile = () => {
+  emits('exportFile');
 };
 
 onMounted(() => {
