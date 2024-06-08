@@ -234,13 +234,13 @@
             {{ t('导出报表') }}
           </el-button>
 
-<!--          <el-button
+         <el-button
             type="primary"
             :icon="useRenderIcon(Download)"
             @click="exportFileTest()"
           >
-            {{ t('导出报表 TEST') }}
-          </el-button>-->
+            {{ t('报表异步导出') }}
+          </el-button>
         </el-form-item>
       </div>
     </div>
