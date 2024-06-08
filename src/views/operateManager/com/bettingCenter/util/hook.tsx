@@ -248,8 +248,8 @@ export function useBettingCenterHook(category: number, venueType: number) {
     onSearch();
   };
 
-  //- 导出excel表格
-  const exportFile = async () => {
+   //- 导出excel表格
+   const exportFile = async () => {
     downloading.value = true;
     message(t('导出报表开始'), { type: 'warning' });
     const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
