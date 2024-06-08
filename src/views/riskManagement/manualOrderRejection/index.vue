@@ -242,7 +242,7 @@
                 v-for="item in row.combineOrderDetails"
                 :key="item.betItemId"
               >
-                <span v-if="row.combineOrderDetails.length < 2" 
+                <span v-if="row.combineOrderDetails.length < 2"
                   :style="{
                     background: getBackgroundColor(row.billStatus).bgColor
                   }"
@@ -256,7 +256,7 @@
                     )
                   }}
                 </span>
-                <span v-else 
+                <span v-else
                   :style="{
                       background: getBackgroundColor(row.billStatus).bgColor
                   }"
@@ -271,7 +271,7 @@
                   }}
                 </span>
                 <span class="block">
-                  {{ rejectReasonMap[item.riskType] }}
+                  {{ rejectReasonMap[item.riskType as keyof typeof rejectReasonMap] }}
                 </span>
               </div>
             </div>

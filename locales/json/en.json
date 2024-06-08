@@ -1119,7 +1119,6 @@
   "k-1d374401": "Automatic order setting",
   "k-5c9ea522": "Freeze bet settings",
   "k48a6143f": "Automatic labeling and limit level setting",
-  "k1a6d65be": "after betting time must be greater than before betting time",
   "k39c236e3": "The event source cannot be null",
   "k6eb77054": "The event name cannot be null",
   "k-454a57fc": "The minimum value of the bet cannot be greater than the maximum value",
@@ -1179,5 +1178,12 @@
   "k1cf85aa8": " will deduct ",
   "k34a5bb33": "Please enter an amount up to 10000元",
   "k-102bec3a": "Back to previous page",
-  "k-5078f0e7": "Transaction ID"
+  "k-5078f0e7": "Transaction ID",
+  "k-1bbacadc": "导出报表 TEST",
+  "k-2f6b5d47": "投注前时间和投注后时间不能同时为空",
+  "k200cd5dd": "盘口封盘",
+  "k-4d6fefce": "盘口正常",
+  "k638f9c62": "盘口锁盘",
+  "k45ae7708": "盘口不存在",
+  "k603a3d5e": "未定义"
 }
