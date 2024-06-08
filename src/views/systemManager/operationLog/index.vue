@@ -110,7 +110,6 @@ const {
   onSearch,
   handleTableWidthChange,
   handleCurrentChange,
-  exportFile,
 } = useOperationLog();
 </script>
 
