@@ -20,6 +20,7 @@ export const useRiskNoticeStore = defineStore('RISKNOTICESTATE', {
         if (this.riskNotificationSwitch) {
           const existingValue = Number(this.esportAuditCount) + Number(this.jjAuditCount) + Number(this.sportAuditCount);
           const newValue = Number(riskNoticeRes.data.esportAuditCount) + Number(riskNoticeRes.data.jjAuditCount) + Number(riskNoticeRes.data.sportAuditCount);
+          console.log({existingValue, newValue});
           // play sound
           if (
             newValue > existingValue
