@@ -238,11 +238,15 @@
           <template #orderAcceptanceStatus="{ row }">
             <div class="h-full">
               <div
-                class="match_item"
+                class="match_item accept-status"
                 v-for="item in row.combineOrderDetails"
                 :key="item.betItemId"
               >
-                <span v-if="row.combineOrderDetails.length < 2">
+                <span v-if="row.combineOrderDetails.length < 2" 
+                  :style="{
+                    background: getBackgroundColor(row.billStatus).bgColor
+                  }"
+                >
                   {{
                     getVal(
                       row.billStatus,
@@ -252,7 +256,11 @@
                     )
                   }}
                 </span>
-                <span v-else>
+                <span v-else 
+                  :style="{
+                      background: getBackgroundColor(row.billStatus).bgColor
+                  }"
+                >
                   {{
                     getVal1(
                       row.billStatus,
@@ -261,6 +269,9 @@
                       item
                     )
                   }}
+                </span>
+                <span class="block">
+                  {{ rejectReasonMap[item.riskType] }}
                 </span>
               </div>
             </div>
@@ -355,6 +366,7 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
+import { rejectReasonMap } from './util/types'
 import {
   formatSeriesType,
   useSportFormatDetail,
@@ -418,7 +430,8 @@ const {
   exportFileTest,
   confirmBetClick,
   refuseBetClick,
-  tenantObj
+  tenantObj,
+  getBackgroundColor,
 } = useManualOrderRejectionHook();
 </script>
 
@@ -486,5 +499,13 @@ const {
 
 .operate {
   width: 100px;
+}
+
+.accept-status > span{
+  padding: 0 8px;
+  line-height: 25px;
+  display: inline-block;
+  color: white;
+  border-radius: 4px;
 }
 </style>
