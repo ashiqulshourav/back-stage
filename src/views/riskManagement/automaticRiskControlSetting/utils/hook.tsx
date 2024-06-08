@@ -135,7 +135,16 @@ export function useRiskControlHook({
 
       rejectOrderList.length = 0;
       sourcerejectOrderList.length = 0;
-      rejectOrderList.push(...res.data);
+
+      console.log(res.data);
+      rejectOrderList.push(
+        ...res.data.map(item => ({
+          ...item,
+          leagueGradles: item?.leagueGradles
+            ? (item?.leagueGradles as any).split(',')
+            : []
+        }))
+      );
       sourcerejectOrderList.push(...res.data);
     } catch (error) {
       loading.value = false;
@@ -228,9 +237,11 @@ export function useRiskControlHook({
           eventCode: item.eventCode,
           eventName: item.eventName,
           isDelete: item.isDelete,
+          sportId: 1,
           betBeforeTime: parseInt(item.betBeforeTime || 0),
           betAfterTime: parseInt(item.betAfterTime || 0),
-          event_name: item.eventName
+          event_name: item.eventName,
+          leagueGradles: (item?.leagueGradles as any)?.join(',')
         }));
       };
 

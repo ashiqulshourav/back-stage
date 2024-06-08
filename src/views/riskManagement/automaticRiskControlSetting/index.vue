@@ -35,7 +35,7 @@
         <span
           v-if="currentRiskControlLabelId == 0 && hasAuth('AUTOREJECTLIST')"
           class="font-bold"
-          >{{ t('接拒设置') }}</span
+          >{{ t('足球接拒设置') }}</span
         >
         <span
           v-if="
