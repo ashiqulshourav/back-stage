@@ -131,6 +131,16 @@
         <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
           {{ t('重置') }}
         </el-button>
+
+        <el-button
+            type="primary"
+            :icon="useRenderIcon(Download)"
+            :loading="downloading"
+            v-if="hasAuth('EXPORT')"
+            @click="exportFileTest()"
+          >
+            {{ t('报表异步导出') }}
+          </el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -147,11 +157,13 @@ import Search from '@iconify-icons/ep/search';
 import Refresh from '@iconify-icons/ep/refresh';
 import { labelListType, tenantType } from '../utils/types';
 import type { FormInstance } from 'element-plus';
+import Download from '@iconify-icons/ep/download';
+import { hasAuth } from '@/router/utils';
 
 const formRef = ref();
 const buttonRef = ref();
 const buttonRef1 = ref();
-const emits = defineEmits(['onSearch']);
+const emits = defineEmits(['onSearch', 'exportFileTest']);
 const idList = reactive<string[]>([]);
 const userIds = reactive<string[]>([]);
 const sportLimmitList = reactive<string[]>([]);
@@ -162,6 +174,7 @@ const props = defineProps<{
   category: number;
   labelList: labelListType;
   tenantList: tenantType[];
+  downloading: boolean;
 }>();
 
 const form = ref(props.form);
@@ -208,6 +221,10 @@ const search = () => {
     .filter(item => item !== '')
     .map(item => item.trim());
   emits('onSearch', 'reload');
+};
+
+const exportFileTest = () => {
+  emits('exportFileTest');
 };
 
 onMounted(() => {
