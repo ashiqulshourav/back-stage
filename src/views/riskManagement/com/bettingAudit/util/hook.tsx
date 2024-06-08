@@ -67,7 +67,7 @@ export function useBettingAuditHook(venueType: number) {
     seriesDetailsDuplex: [],
     minBetAmount: '',
     maxBetAmount: '',
-    riskStatus: ''
+    riskStatus:window?.location?.href?.indexOf('riskStatus=2')?2:'',
   });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -582,6 +582,7 @@ export function useBettingAuditHook(venueType: number) {
 
   //- 切换比赛类型
   onMounted(() => {
+    console.log(11111,window.location.href.indexOf('riskStatus=2'))
     onSearch();
     getTenantList();
   });
