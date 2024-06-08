@@ -142,7 +142,7 @@ export function useManualOrderRejectionHook() {
     }
   }
 
-  const exportFile = async () => {
+  const exportFileTest = async () => {
       loading.value = true;
       // 对于串关类型的选择处理
       let seriesDetails: any = [];
@@ -321,7 +321,7 @@ export function useManualOrderRejectionHook() {
     handleTableWidthChange,
     handleCurrentChange,
     handleSelectionChange,
-    exportFile,
+    exportFileTest,
     handleCancel,
     // getStatus,
     copyTest,
