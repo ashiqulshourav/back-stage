@@ -104,16 +104,16 @@ export function useRiskControlHook({
       orderAutoFreezeList.push(
         ...res.data.map(item => ({
           ...item,
-          leagueGradles: item?.leagueGradles
-            ? (item?.leagueGradles as any).split(',')
+          leagueGrades: item?.leagueGrades
+            ? (item?.leagueGrades as any).split(',')
             : []
         }))
       );
       sourceOrderAutoFreezeList.push(
         ...res.data.map(item => ({
           ...item,
-          leagueGradles: item?.leagueGradles
-            ? (item?.leagueGradles as any).split(',')
+          leagueGrades: item?.leagueGrades
+            ? (item?.leagueGrades as any).split(',')
             : []
         }))
       );
@@ -135,16 +135,16 @@ export function useRiskControlHook({
       orderPlacementList.push(
         ...res.data.map(item => ({
           ...item,
-          leagueGradles: item?.leagueGradles
-            ? (item?.leagueGradles as any).split(',')
+          leagueGrades: item?.leagueGrades
+            ? (item?.leagueGrades as any).split(',')
             : []
         }))
       );
       sourceOrderPlacementList.push(
         ...res.data.map(item => ({
           ...item,
-          leagueGradles: item?.leagueGradles
-            ? (item?.leagueGradles as any).split(',')
+          leagueGrades: item?.leagueGrades
+            ? (item?.leagueGrades as any).split(',')
             : []
         }))
       );
@@ -168,16 +168,16 @@ export function useRiskControlHook({
       rejectOrderList.push(
         ...res.data.map(item => ({
           ...item,
-          leagueGradles: item?.leagueGradles
-            ? (item?.leagueGradles as any).split(',')
+          leagueGrades: item?.leagueGrades
+            ? (item?.leagueGrades as any).split(',')
             : []
         }))
       );
       sourcerejectOrderList.push(
         ...res.data.map(item => ({
           ...item,
-          leagueGradles: item?.leagueGradles
-            ? (item?.leagueGradles as any).split(',')
+          leagueGrades: item?.leagueGrades
+            ? (item?.leagueGrades as any).split(',')
             : []
         }))
       );
@@ -273,10 +273,10 @@ export function useRiskControlHook({
           eventName: item.eventName,
           isDelete: item.isDelete,
           sportId: 1,
-          leagueGradles: (item?.leagueGradles as any)?.join(','),
+          leagueGrades: (item?.leagueGrades as any)?.join(','),
           betBeforeTime: parseInt(item.betBeforeTime || 0),
           betAfterTime: parseInt(item.betAfterTime || 0),
-          event_name: item.eventName,
+          event_name: item.eventName
         }));
       };
 
@@ -370,7 +370,7 @@ export function useRiskControlHook({
           maxLimitAmount: Number(item.maxLimitAmount) || 0,
           event_name: item.eventName,
           sportId: 1,
-          leagueGradles: (item?.leagueGradles as any)?.join(','),
+          leagueGrades: (item?.leagueGrades as any)?.join(',')
         }));
       };
 
@@ -493,7 +493,7 @@ export function useRiskControlHook({
           labels: '',
           excepLimitUser: 0,
           sportId: 1,
-          leagueGradles: (item?.leagueGradles as any)?.join(','),
+          leagueGrades: (item?.leagueGrades as any)?.join(',')
         }));
       };
 
@@ -551,7 +551,7 @@ export function useRiskControlHook({
             eventCode: undefined,
             eventName: undefined,
             betBeforeTime: undefined,
-            leagueGradles: [],
+            leagueGrades: [],
             betAfterTime: undefined,
             isDelete: undefined
           });
@@ -567,7 +567,7 @@ export function useRiskControlHook({
             betBeforeTime: undefined,
             betAfterTime: undefined,
             minLimitAmount: undefined,
-            leagueGradles: [],
+            leagueGrades: [],
             maxLimitAmount: undefined,
             isDelete: undefined
           });
@@ -580,7 +580,7 @@ export function useRiskControlHook({
             sourceName: undefined,
             eventCode: undefined,
             eventName: undefined,
-            leagueGradles: [],
+            leagueGrades: [],
             betBeforeTime: undefined,
             betAfterTime: undefined,
             minLimitAmount: undefined,

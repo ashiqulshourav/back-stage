@@ -10,10 +10,10 @@
       :columns="columns"
       :header-cell-style="tableHeaderStyleBlue"
     >
-      <template #leagueGradles="{ row }">
+      <template #leagueGrades="{ row }">
           <el-select
             v-if="isEditRiskControls"
-            v-model="row.leagueGradles"
+            v-model="row.leagueGrades"
             :placeholder="t('联赛等级')"
             clearable
             multiple
@@ -27,7 +27,7 @@
             />
           </el-select>
 
-          <span v-else>{{ formatRanges(row.leagueGradles) }} </span>
+          <span v-else>{{ formatRanges(row.leagueGrades) }} </span>
           <div
             v-if="!row.sourceCode && isFormClick"
             class="text-red-500 text-xs text-start"
