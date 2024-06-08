@@ -5,7 +5,7 @@
       :form="form"
       :loading="loading"
       @on-search="onSearch"
-      @exportFile="exportFile"
+      @exportFileTest="exportFileTest"
       :tenantList="tenantList"
     />
     <PureTableBar
@@ -422,7 +422,7 @@ const {
   handleSelectionChange,
   copyTest,
   tenantList,
-  exportFile,
+  exportFileTest,
   confirmBetClick,
   refuseBetClick,
   tenantObj
