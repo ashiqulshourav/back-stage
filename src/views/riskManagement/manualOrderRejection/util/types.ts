@@ -74,3 +74,12 @@ export const seriesTypesDuplex = {
   '900502': { value: '900502', name: '9串502', list: [900502] },
   '10001013': { value: '10001013', name: '10串1013', list: [10001013] },
 }
+
+export const rejectReasonMap = {
+ 'bet_item_disable': t('盘口封盘'),
+ 'bet_item_lock': t('盘口锁盘'),
+ 'bet_item_settle': t('已结算'),
+ 'bet_item_notfound': t('无此盘口'),
+ // 'bet_item_undefined': t('未定义'),
+  // 'bet_item_ensable': t('盘口正常'),
+}

@@ -414,6 +414,19 @@ export function useManualOrderRejectionHook() {
     return obj;
   }; */
 
+  const getBackgroundColor = (billStatus: number) => {
+    let obj = { bgColor:  "" };
+  
+    if(billStatus === 0){
+      obj.bgColor = '#FFC53D'
+    } else if(billStatus === 1){
+      obj.bgColor = '#E54752'
+    } else{
+      obj.bgColor = '';
+    }
+    return obj;
+  }
+
   function copyTest(str: string, tip: string) {
     if (!str) return;
     const success = copyTextToClipboard(str.toString());
@@ -479,6 +492,7 @@ export function useManualOrderRejectionHook() {
     copyTest,
     confirmBetClick,
     refuseBetClick,
-    tenantObj
+    tenantObj,
+    getBackgroundColor,
   };
 }
