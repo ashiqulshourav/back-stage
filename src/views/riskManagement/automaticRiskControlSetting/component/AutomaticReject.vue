@@ -34,7 +34,7 @@
           >
             {{ t('事件源不能为空') }}
           </div>
-        </template>
+      </template>
       <template #eventSource="{ row }">
         <el-select
           v-if="isEditRiskControls"

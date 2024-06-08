@@ -101,8 +101,22 @@ export function useRiskControlHook({
 
       orderAutoFreezeList.length = 0;
       sourceOrderAutoFreezeList.length = 0;
-      orderAutoFreezeList.push(...res.data);
-      sourceOrderAutoFreezeList.push(...res.data);
+      orderAutoFreezeList.push(
+        ...res.data.map(item => ({
+          ...item,
+          leagueGradles: item?.leagueGradles
+            ? (item?.leagueGradles as any).split(',')
+            : []
+        }))
+      );
+      sourceOrderAutoFreezeList.push(
+        ...res.data.map(item => ({
+          ...item,
+          leagueGradles: item?.leagueGradles
+            ? (item?.leagueGradles as any).split(',')
+            : []
+        }))
+      );
     } catch (error) {
       loading.value = false;
     }
@@ -118,8 +132,22 @@ export function useRiskControlHook({
 
       orderPlacementList.length = 0;
       sourceOrderPlacementList.length = 0;
-      orderPlacementList.push(...res.data);
-      sourceOrderPlacementList.push(...res.data);
+      orderPlacementList.push(
+        ...res.data.map(item => ({
+          ...item,
+          leagueGradles: item?.leagueGradles
+            ? (item?.leagueGradles as any).split(',')
+            : []
+        }))
+      );
+      sourceOrderPlacementList.push(
+        ...res.data.map(item => ({
+          ...item,
+          leagueGradles: item?.leagueGradles
+            ? (item?.leagueGradles as any).split(',')
+            : []
+        }))
+      );
     } catch (error) {
       loading.value = false;
     }
@@ -145,7 +173,14 @@ export function useRiskControlHook({
             : []
         }))
       );
-      sourcerejectOrderList.push(...res.data);
+      sourcerejectOrderList.push(
+        ...res.data.map(item => ({
+          ...item,
+          leagueGradles: item?.leagueGradles
+            ? (item?.leagueGradles as any).split(',')
+            : []
+        }))
+      );
     } catch (error) {
       loading.value = false;
     }
@@ -238,10 +273,10 @@ export function useRiskControlHook({
           eventName: item.eventName,
           isDelete: item.isDelete,
           sportId: 1,
+          leagueGradles: (item?.leagueGradles as any)?.join(','),
           betBeforeTime: parseInt(item.betBeforeTime || 0),
           betAfterTime: parseInt(item.betAfterTime || 0),
           event_name: item.eventName,
-          leagueGradles: (item?.leagueGradles as any)?.join(',')
         }));
       };
 
@@ -333,7 +368,9 @@ export function useRiskControlHook({
           betAfterTime: Number(item.betAfterTime) || 0,
           minLimitAmount: Number(item.minLimitAmount) || 0,
           maxLimitAmount: Number(item.maxLimitAmount) || 0,
-          event_name: item.eventName
+          event_name: item.eventName,
+          sportId: 1,
+          leagueGradles: (item?.leagueGradles as any)?.join(','),
         }));
       };
 
@@ -454,7 +491,9 @@ export function useRiskControlHook({
           event_name: item.eventName,
           userCreateAfter: 0,
           labels: '',
-          excepLimitUser: 0
+          excepLimitUser: 0,
+          sportId: 1,
+          leagueGradles: (item?.leagueGradles as any)?.join(','),
         }));
       };
 
@@ -512,6 +551,7 @@ export function useRiskControlHook({
             eventCode: undefined,
             eventName: undefined,
             betBeforeTime: undefined,
+            leagueGradles: [],
             betAfterTime: undefined,
             isDelete: undefined
           });
@@ -527,6 +567,7 @@ export function useRiskControlHook({
             betBeforeTime: undefined,
             betAfterTime: undefined,
             minLimitAmount: undefined,
+            leagueGradles: [],
             maxLimitAmount: undefined,
             isDelete: undefined
           });
@@ -539,6 +580,7 @@ export function useRiskControlHook({
             sourceName: undefined,
             eventCode: undefined,
             eventName: undefined,
+            leagueGradles: [],
             betBeforeTime: undefined,
             betAfterTime: undefined,
             minLimitAmount: undefined,

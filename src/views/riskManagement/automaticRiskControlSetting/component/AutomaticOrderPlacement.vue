@@ -10,6 +10,31 @@
       :columns="columns"
       :header-cell-style="tableHeaderStyleBlue"
     >
+      <template #leagueGradles="{ row }">
+        <el-select
+          v-if="isEditRiskControls"
+          v-model="row.leagueGradles"
+          :placeholder="t('联赛等级')"
+          clearable
+          multiple
+          :onChange="changeSourceName(row)"
+        >
+          <el-option
+            :label="item"
+            :value="item"
+            v-for="item in LEAGUE_GRADLES"
+            :key="item"
+          />
+        </el-select>
+
+        <span v-else>{{ formatRanges(row.leagueGradles) }} </span>
+        <div
+          v-if="!row.sourceCode && isFormClick"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('事件源不能为空') }}
+        </div>
+      </template>
       <template #eventSource="{ row }">
         <el-select
           v-if="isEditRiskControls"
@@ -175,7 +200,7 @@ import { getLabelColor } from '@/components/RiskLabelList/utils';
 import { getLabelLevelByName } from '@/components/RiskLabelList/utils';
 import { PandaMatch } from '@/views/eventManagement/eventQuery/utils/types';
 import { EVENT_SOURCE } from '@/views/eventManagement/eventQuery/utils/map';
-import { EVENT_NAMES } from '../utils/map';
+import { EVENT_NAMES, LEAGUE_GRADLES, formatRanges } from '../utils/map';
 
 const { tableHeaderStyleBlue } = usePublicHooks();
 const props = defineProps<{
