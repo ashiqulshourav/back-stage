@@ -190,7 +190,8 @@ export function useBettingAuditHook(venueType: number) {
       if (!isEditDialogClick.value && !isEditRemarkClick.value) {
         loopTimer.value = setInterval(
           async () => await fetchData(type),
-          Number(dataFetchingTime.value) * 1000
+          // Number(dataFetchingTime.value) * 1000
+          5000
         );
       }
     }
@@ -268,7 +269,6 @@ export function useBettingAuditHook(venueType: number) {
   };
 
   const handleCancel = (row: any, index: number) => {
-    _clearInterval();
     const data = { ...row }; //...row.combineOrderDetails[index]
     data.combineOrderDetails = data.combineOrderDetails.filter(
       (item: BetOrderAPI.Detail, i: number) => {
@@ -283,28 +283,32 @@ export function useBettingAuditHook(venueType: number) {
   };
 
   const openCancelDialog = async list => {
+    _clearInterval();
     const r = await openPasswordInput();
-    if (!r) return;
+    if (!r) {
+      await fetchListDataWithInterval();
+      return;
+    }
     addDialog({
       title: '风控划单',
       width: '30%',
       hideFooter: true,
       closeOnClickModal: false,
       alignCenter: true,
+      showClose: false,
       contentRenderer: ({ options, index }) =>
         h(formDom, {
           list: list,
           onCloseDialog: async () => {
             isEditDialogClick.value = false;
             // onSearch('reload');
-            await fetchListDataWithInterval('reload');
+            await fetchListDataWithInterval();
             closeDialog(options, index);
           }
         })
     });
   };
   const handleApprove = (row: any, index: number) => {
-    _clearInterval();
     const data = { ...row }; //...row.combineOrderDetails[index]
     data.combineOrderDetails = data.combineOrderDetails.filter((item, i) => {
       return i == index;
@@ -316,7 +320,6 @@ export function useBettingAuditHook(venueType: number) {
     openApproveDialog(list);
   };
   const handleApproveSome = () => {
-    _clearInterval();
     const obj = {};
     dataList.map(item => {
       item.combineOrderDetails.map((match: any) => {
@@ -367,23 +370,33 @@ export function useBettingAuditHook(venueType: number) {
     openCancelDialog(list);
   };
 
-  const openApproveDialog = list => {
-    ElMessageBox.confirm(t('确定审核通过吗？'), t('警告'), {
-      center: true,
-      type: 'warning'
-    }).then(async () => {
+  const openApproveDialog = async list => {
+    _clearInterval();
+    try {
+      const action = await ElMessageBox.confirm(
+        t('确定审核通过吗？'),
+        t('警告'),
+        {
+          center: true,
+          type: 'warning',
+          showClose: false
+        }
+      );
+
+      await fetchListDataWithInterval();
       isEditDialogClick.value = false;
       const r = await openPasswordInput();
       if (!r) {
         return;
       }
       API.bettingAuditConfirm(list).then(async res => {
-        await fetchListDataWithInterval();
         res.code === 0
           ? message(res.msg, { type: 'success' })
           : message(res.msg, { type: 'error' });
       });
-    });
+    } catch (error) {
+      await fetchListDataWithInterval();
+    }
   };
 
   const getRiskStatus = (rStatus: number) => {
@@ -416,6 +429,7 @@ export function useBettingAuditHook(venueType: number) {
       center: true,
       closeOnClickModal: false,
       hideFooter: true,
+      showClose: false,
       contentRenderer: ({ options, index }) =>
         h(editOrder, {
           ref: editDialogRef,
