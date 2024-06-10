@@ -27,8 +27,10 @@ import { ElMessageBox } from 'element-plus';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
 import { addDialog, closeDialog } from '@/components/ReDialog/index';
+import { useRiskNoticeStore } from '@/store/riskNotice';
 
 export function useManualOrderRejectionHook() {
+  const riskNoticeStore = useRiskNoticeStore();
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<any>([]);
   const tenantObj = reactive<any>({});
@@ -90,7 +92,7 @@ export function useManualOrderRejectionHook() {
             seriesDetails.push(...seriesTypesSingle[item].list);
           });
         } else {
-          for (let item in seriesTypesSingle) {
+          for (const item in seriesTypesSingle) {
             seriesDetails.push(...seriesTypesSingle[item].list);
           }
         }
@@ -100,7 +102,7 @@ export function useManualOrderRejectionHook() {
             seriesDetails.push(...seriesTypesDuplex[item].list);
           });
         } else {
-          for (let item in seriesTypesDuplex) {
+          for (const item in seriesTypesDuplex) {
             seriesDetails.push(...seriesTypesDuplex[item].list);
           }
         }
@@ -143,50 +145,50 @@ export function useManualOrderRejectionHook() {
   }
 
   const exportFileTest = async () => {
-      loading.value = true;
-      // 对于串关类型的选择处理
-      let seriesDetails: any = [];
-      if (form.seriesType == 2) {
-        if (form.seriesDetailsSingle.length) {
-          form.seriesDetailsSingle.map((item: any) => {
-            seriesDetails.push(...seriesTypesSingle[item].list);
-          });
-        } else {
-          for (let item in seriesTypesSingle) {
-            seriesDetails.push(...seriesTypesSingle[item].list);
-          }
-        }
-      } else if (form.seriesType == 3) {
-        if (form.seriesDetailsDuplex.length) {
-          form.seriesDetailsDuplex.map((item: any) => {
-            seriesDetails.push(...seriesTypesDuplex[item].list);
-          });
-        } else {
-          for (let item in seriesTypesDuplex) {
-            seriesDetails.push(...seriesTypesDuplex[item].list);
-          }
-        }
+    loading.value = true;
+    // 对于串关类型的选择处理
+    let seriesDetails: any = [];
+    if (form.seriesType == 2) {
+      if (form.seriesDetailsSingle.length) {
+        form.seriesDetailsSingle.map((item: any) => {
+          seriesDetails.push(...seriesTypesSingle[item].list);
+        });
       } else {
-        seriesDetails = '';
+        for (const item in seriesTypesSingle) {
+          seriesDetails.push(...seriesTypesSingle[item].list);
+        }
       }
-      if (seriesDetails.length > 1) {
-        seriesDetails = [...new Set(seriesDetails)];
+    } else if (form.seriesType == 3) {
+      if (form.seriesDetailsDuplex.length) {
+        form.seriesDetailsDuplex.map((item: any) => {
+          seriesDetails.push(...seriesTypesDuplex[item].list);
+        });
+      } else {
+        for (const item in seriesTypesDuplex) {
+          seriesDetails.push(...seriesTypesDuplex[item].list);
+        }
       }
-      const res: BetOrderAPI.BetOrderResType = await API.riskExport({
-        ...removeEmptyStringKeys({
-          ...form,
-          seriesDetailsSingle: '',
-          seriesDetailsDuplex: '',
-          seriesDetails: seriesDetails,
-          seriesType: +form.seriesType > 2 ? 2 : form.seriesType
-        }),
-        pageSize: 1,
-        pageNum: 50000,
-        export: true,
-      } as any);
-      message(res.msg, { type: res.code ? 'error' : 'success' });
-      loading.value = false;
-  }
+    } else {
+      seriesDetails = '';
+    }
+    if (seriesDetails.length > 1) {
+      seriesDetails = [...new Set(seriesDetails)];
+    }
+    const res: BetOrderAPI.BetOrderResType = await API.riskExport({
+      ...removeEmptyStringKeys({
+        ...form,
+        seriesDetailsSingle: '',
+        seriesDetailsDuplex: '',
+        seriesDetails: seriesDetails,
+        seriesType: +form.seriesType > 2 ? 2 : form.seriesType
+      }),
+      pageSize: 1,
+      pageNum: 50000,
+      export: true
+    } as any);
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    loading.value = false;
+  };
 
   const getTenantList1 = async () => {
     const res = await API.getTenantList();
@@ -199,7 +201,7 @@ export function useManualOrderRejectionHook() {
     }
   };
 
-   //- 导出excel表格
+  //- 导出excel表格
   /*   const exportFile = async () => {
     // 对于串关类型的选择处理
     let seriesDetails: any = [];
@@ -415,17 +417,17 @@ export function useManualOrderRejectionHook() {
   }; */
 
   const getBackgroundColor = (billStatus: number) => {
-    let obj = { bgColor:  "" };
-  
-    if(billStatus === 0){
-      obj.bgColor = '#FFC53D'
-    } else if(billStatus === 1){
-      obj.bgColor = '#E54752'
-    } else{
+    const obj = { bgColor: '' };
+
+    if (billStatus === 0) {
+      obj.bgColor = '#FFC53D';
+    } else if (billStatus === 1) {
+      obj.bgColor = '#E54752';
+    } else {
       obj.bgColor = '';
     }
     return obj;
-  }
+  };
 
   function copyTest(str: string, tip: string) {
     if (!str) return;
@@ -448,9 +450,12 @@ export function useManualOrderRejectionHook() {
       contentRenderer: ({ options, index }) =>
         h(RejctDialogForm, {
           detailId,
-          onCloseDialog: (type?: 'reload') => {
+          onCloseDialog: async (type?: 'reload') => {
             closeDialog(options, index);
-            if (type) onSearch();
+            if (type) {
+              onSearch();
+              await riskNoticeStore.setRiskNotice();
+            }
           }
         })
     });
@@ -463,7 +468,10 @@ export function useManualOrderRejectionHook() {
     }).then(async () => {
       const res = await API.riskConfirm([{ detailId, status: 1 }]);
       message(res.msg, { type: res.code ? 'error' : 'success' });
-      if (!res.code) onSearch();
+      if (!res.code) {
+        onSearch();
+        await riskNoticeStore.setRiskNotice();
+      }
     });
   };
 
@@ -493,6 +501,6 @@ export function useManualOrderRejectionHook() {
     confirmBetClick,
     refuseBetClick,
     tenantObj,
-    getBackgroundColor,
+    getBackgroundColor
   };
 }
