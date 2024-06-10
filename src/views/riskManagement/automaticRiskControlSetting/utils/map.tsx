@@ -50,7 +50,7 @@ export const EVENT_NAMES = [
 ] as const;
 
 export const LEAGUE_GRADLES = [
-  '未评级',
+  '-1',
   '1',
   '2',
   '3',
@@ -71,7 +71,6 @@ export const LEAGUE_GRADLES = [
   '18',
   '19',
   '20',
-  '21'
 ];
 
 export function formatRanges(arr: string[]) {
@@ -86,7 +85,7 @@ export function formatRanges(arr: string[]) {
     for (let i = 1; i < arr.length; i++) {
         let current = arr[i];
         let currentIsNum = !isNaN(parseInt(current)); // check if the current item is a number
-        
+
         // If the type changes or there's a gap in numbers, push the range
         if (currentIsNum !== prevIsNum || (currentIsNum && parseInt(current) - parseInt(end) !== 1)) {
             if (start !== end) {
@@ -96,18 +95,18 @@ export function formatRanges(arr: string[]) {
             }
             start = current;
         }
-        
+
         end = current;
         prevIsNum = currentIsNum;
     }
-    
+
     // Push the last range
     if (start !== end) {
         ranges.push(`${start}~${end}`);
     } else {
         ranges.push(`${start}`);
     }
-    
+
     return `${ranges.join(', ')}`;
 }
 

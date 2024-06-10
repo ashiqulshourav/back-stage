@@ -20,7 +20,7 @@
           :onChange="changeSourceName(row)"
         >
           <el-option
-            :label="item"
+            :label="item=='-1'?'未评级':item"
             :value="item"
             v-for="item in LEAGUE_GRADLES"
             :key="item"
@@ -49,6 +49,7 @@
             :value="item.value"
             v-for="item in EVENT_SOURCE"
             :key="item.value"
+            :disabled="sourceDisabled(item.value, row)"
           />
         </el-select>
 
@@ -231,6 +232,19 @@ const eventDisabled = (eventCode: string, row: any) => {
   props.orderPlacementList.forEach(item => {
     if (item.sourceCode == row.sourceCode) {
       if (item.eventCode == eventCode) {
+        disable = true;
+      }
+    }
+  });
+
+  return disable;
+};
+
+const sourceDisabled = (sourceCode: string, row: any) => {
+  let disable = false;
+  props.orderPlacementList.forEach(item => {
+    if (item.eventCode == row.eventCode) {
+      if (item.sourceCode == sourceCode) {
         disable = true;
       }
     }
