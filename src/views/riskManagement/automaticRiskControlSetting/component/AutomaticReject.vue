@@ -48,6 +48,7 @@
             :value="item.value"
             v-for="item in EVENT_SOURCE"
             :key="item.value"
+            :disabled="sourceDisabled(item.value, row)"
           />
         </el-select>
 
@@ -176,6 +177,20 @@ const eventDisabled = (eventCode: string, row: any) => {
 
   return disable;
 };
+
+const sourceDisabled = (sourceCode: string, row: any) => {
+  let disable = false;
+  props.rejectOrderList.forEach(item => {
+    if (item.eventCode == row.eventCode) {
+      if (item.sourceCode == sourceCode) {
+        disable = true;
+      }
+    }
+  });
+
+  return disable;
+};
+
 
 const showBettingError = (row: any) => {
   return !Number(row.betBeforeTime) && !Number(row.betAfterTimes);
