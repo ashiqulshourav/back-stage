@@ -28,11 +28,11 @@
         </el-select>
 
         <span v-else>{{ formatRanges(row.leagueGrades) }} </span>
-        <div
-          v-if="!row.sourceCode && isFormClick"
+         <div
+          v-if="!row.leagueGrades?.length && isFormClick"
           class="text-red-500 text-xs text-start"
         >
-          {{ t('事件源不能为空') }}
+          {{ t('联赛等级不能为空') }}
         </div>
       </template>
       <template #isDisable="{ row }">
