@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import sound from '@/assets/media/order_sound.mp3';
 
 export const useRiskNoticeStore = defineStore('RISKNOTICESTATE', {
   state: (): RiskManagementDataAPI.RiskNotice => ({
@@ -18,14 +19,18 @@ export const useRiskNoticeStore = defineStore('RISKNOTICESTATE', {
         this.riskNotificationSwitch = res.data.riskNotificationSwitch;
 
         if (this.riskNotificationSwitch) {
-          const existingValue = Number(this.esportAuditCount) + Number(this.jjAuditCount) + Number(this.sportAuditCount);
-          const newValue = Number(riskNoticeRes.data.esportAuditCount) + Number(riskNoticeRes.data.jjAuditCount) + Number(riskNoticeRes.data.sportAuditCount);
+          const existingValue =
+            Number(this.esportAuditCount) +
+            Number(this.jjAuditCount) +
+            Number(this.sportAuditCount);
+          const newValue =
+            Number(riskNoticeRes.data.esportAuditCount) +
+            Number(riskNoticeRes.data.jjAuditCount) +
+            Number(riskNoticeRes.data.sportAuditCount);
           console.log({ existingValue, newValue });
           // play sound
-          if (
-            newValue > existingValue
-          ) {
-            const audio = new Audio('@/src/assets/media/order.mp3');
+          if (newValue > existingValue) {
+            const audio = new Audio(sound);
             audio.play();
           }
         }
