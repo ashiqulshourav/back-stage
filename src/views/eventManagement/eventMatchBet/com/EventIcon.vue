@@ -1,7 +1,7 @@
 <template>
   <div
     class="absolute h-full flex justify-center"
-    :style="{ left: index + '%' }"
+    :style="{ left: index + 1 + '%' }"
   >
     <div
       class="absolute w-4 cursor-pointer flex items-center h-full"
@@ -9,7 +9,7 @@
     >
       <el-tooltip placement="top-start" v-for="(s, l) in data" :key="l">
         <template #content>
-          <span>{{ t('距离开赛') }}{{ index }}{{ t('分钟后') }}-</span>
+          <span>{{ t('距离开赛') }}{{ index + 1 }}{{ t('分钟后') }}-</span>
           <span class="text-primary">{{ type }}</span>
           <span>{{ t('发生') }}</span>
           <span>{{ eMap[s.type as keyof typeof eMap] }}</span>

@@ -18,7 +18,7 @@
       <el-tooltip placement="top-start" v-if="item > 0">
         <template #content>
           <div class="flex flex-col text-xs">
-            <span> {{ t('比赛进行时间') }}: {{ index }}{{ t('分') }} </span>
+            <span> {{ t('比赛进行时间') }}: {{ index + 1 }}{{ t('分') }} </span>
             <span> {{ t('注单数量') }}:{{ item }} </span>
           </div>
         </template>
@@ -27,7 +27,7 @@
           :style="{
             height: convertToPercentage(item, maxNum) + '%'
           }"
-          @click="showBetDetail(index)"
+          @click="showBetDetail(index + 1)"
         ></div>
       </el-tooltip>
     </div>
