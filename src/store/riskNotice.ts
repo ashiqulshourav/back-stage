@@ -24,7 +24,8 @@ export const useRiskNoticeStore = defineStore('RISKNOTICESTATE', {
             this.jjAuditCount != riskNoticeRes.data.jjAuditCount ||
             this.sportAuditCount != riskNoticeRes.data.sportAuditCount
           ) {
-            const audio = new Audio('/src/assets/media/order.mp3');
+            const path = new URL('../assets/media/order.mp3', import.meta.url).href
+            const audio = new Audio(path);
             audio.play();
           }
         }
