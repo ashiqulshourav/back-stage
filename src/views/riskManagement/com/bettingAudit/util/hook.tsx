@@ -28,6 +28,7 @@ import formDom from '../component/form.vue';
 import { ElMessageBox, FormInstance } from 'element-plus';
 import editOrder from '../component/editOrder.vue';
 import { useBettingAuditStore } from '@/store/bettingAudit';
+import {hasAuth} from "@/router/utils";
 
 export function useBettingAuditHook(venueType: number) {
   const { openPasswordInput } = usePasswordInputHook({showClose: false});
@@ -186,7 +187,8 @@ export function useBettingAuditHook(venueType: number) {
   const fetchListDataWithInterval = async (type?: string) => {
     _clearInterval();
     console.log({ dataFetchingTime: dataFetchingTime.value });
-    if (hasDataFetching.value) {
+    console.log(11111,hasDataFetching,hasDataFetching.value)
+    if (hasDataFetching.value&&hasAuth('refreshSetting'.toUpperCase())) {
       if (!isEditDialogClick.value && !isEditRemarkClick.value) {
         loopTimer.value = setInterval(
           async () => await fetchData(type),
