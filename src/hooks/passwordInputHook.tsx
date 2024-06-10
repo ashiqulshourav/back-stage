@@ -2,7 +2,7 @@ import { addDialog, closeDialog } from '@/components/ReDialog';
 
 import PasswordInput from '@/components/PasswordInput/index.vue';
 
-export const usePasswordInputHook = (prop) => {
+export const usePasswordInputHook = (prop?: {showClose?: boolean}) => {
   const resetFormRef = ref();
 
   const openPasswordInput = () => {

@@ -110,7 +110,29 @@ declare namespace EventAPI {
   };
 
   type MatchInfoRes = COMMON.BASE_RES_TYPE<MatchInfo>;
-  
   type MatchEventRes = COMMON.BASE_RES_TYPE<COMMON.ListData<MatchEvent>>;
 
+  type EventData = {
+    type: string;
+    n: number;
+  }
+
+  type Event = {
+    away: EventData[];
+    home: EventData[];
+  }
+
+  type getMatchStatusticData = {
+    beginTime: string;
+    homeTeamNameCn: string;
+    awayTeamNameCn: string;
+    homeTeamLogo: string;
+    awayTeamLogo: string;
+    bet: number[];
+    event: Event[];
+  }
+
+
+
+  type getMatchStatusticResType = COMMON.BASE_RES_TYPE<getMatchStatusticData>
 }

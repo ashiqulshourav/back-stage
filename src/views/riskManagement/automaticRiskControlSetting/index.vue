@@ -9,7 +9,7 @@
             v-if="hasAuth('AUTOREJECTLIST')"
             class="mb-2 !ml-0 mr-2"
             :type="0 == currentRiskControlLabelId ? 'primary' : ''"
-            :btnText="t('自动接拒')"
+            :btnText="t('足球自动接拒')"
             @click="changeType(0)"
           />
           <!-- order placement -->
@@ -17,7 +17,7 @@
             v-if="hasAuth('AUTOORDERPLACEMENTLIST')"
             class="mb-2 !ml-0 mr-2"
             :type="1 == currentRiskControlLabelId ? 'primary' : ''"
-            :btnText="t('自动划单')"
+            :btnText="t('足球自动划单')"
             @click="changeType(1)"
           />
           <!-- auto freeze -->
@@ -25,7 +25,7 @@
             v-if="hasAuth('AUTOFREEZELIST')"
             class="mb-2 !ml-0 mr-2"
             :type="2 == currentRiskControlLabelId ? 'primary' : ''"
-            :btnText="t('自动冻结')"
+            :btnText="t('足球自动冻结')"
             @click="changeType(2)"
           />
         </div>
@@ -35,24 +35,24 @@
         <span
           v-if="currentRiskControlLabelId == 0 && hasAuth('AUTOREJECTLIST')"
           class="font-bold"
-          >{{ t('接拒设置') }}</span
+          >{{ t('足球接拒设置') }}</span
         >
         <span
           v-if="
             currentRiskControlLabelId == 1 && hasAuth('AUTOORDERPLACEMENTLIST')
           "
         >
-          <span class="font-bold">{{ t('自动划单设置') }}</span>
+          <span class="font-bold">{{ t('足球自动划单设置') }}</span>
         </span>
         <span
           v-if="currentRiskControlLabelId == 2 && hasAuth('AUTOFREEZELIST')"
           class="flex gap-5 items-center"
         >
-          <span class="font-bold">{{ t('冻结注单设置') }}</span>
+          <span class="font-bold">{{ t('足球冻结注单设置') }}</span>
           <span>
             <span class="text-gray-500 flex items-center gap-4">
               <el-icon @mouseover="showMessage = true" @mouseleave="showMessage = false" class="cursor-pointer"><InfoFilled /></el-icon>
-              
+
                 <span v-if="showMessage">{{
                 t(
                   '在此处设定自动冻结注单的条件，符合冻结条件的注单，被冻结后，会在注单审核页面，等待风控批准是否可进行结算流程。'

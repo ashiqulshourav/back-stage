@@ -97,28 +97,26 @@ const goToRiskNotice = () => {
 };
 
 const noticeValue = computed(() => {
-  const total =
-    Number(riskNoticeStore.esportAuditCount) +
-    Number(riskNoticeStore.jjAuditCount) +
-    Number(riskNoticeStore.sportAuditCount);
-  return Number(total) > 99 ? '99+' : total;
-});
+  return Number(riskNoticeStore.totalCount) > 9999 ? '9999+': riskNoticeStore.totalCount
+})
 
 const refreshRiskNotice = () => {
   if (interval.value) clearInterval(interval.value);
-  if (riskNoticeStore.riskNotificationSwitch) {
-    interval.value = setInterval(async () => {
-      await riskNoticeStore.setRiskNotice();
-    }, Number(riskNoticeStore.riskNotificationRefresh) * 1000);
-  }
-};
+  interval.value = setInterval(async () => {
+    await riskNoticeStore.setRiskNotice();
+  },
+    Number(riskNoticeStore.riskNotificationRefresh) * 1000
+  );      
+  // if (riskNoticeStore.riskNotificationSwitch) {        
+  // }
+}
 
 onMounted(() => {
   refreshRiskNotice();
 });
 
 watch(
-  () => riskNoticeStore.riskNotificationSwitch,
+  () => [riskNoticeStore.riskNotificationSwitch, riskNoticeStore.riskNotificationRefresh],
   () => {
     refreshRiskNotice();
   }

@@ -58,6 +58,7 @@ const selectObj = {
   redCard: '红牌',
   penaltyAwarded: '点球',
   corner: '角球',
+  dangerous_bet: '危险投注',
   other: '其它'
 };
 
