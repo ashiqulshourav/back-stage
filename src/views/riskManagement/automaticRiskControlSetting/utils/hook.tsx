@@ -247,6 +247,10 @@ export function useRiskControlHook({
     let isValid = true;
 
     rejectOrderList.forEach(item => {
+      if (!item.leagueGrades?.length) {
+        isValid = false;
+      }
+
       if (!item.sourceCode || !item.eventCode) {
         isValid = false;
       }
@@ -305,6 +309,9 @@ export function useRiskControlHook({
     let isValid = true;
 
     orderPlacementList.forEach(item => {
+      if (!item.leagueGrades?.length) {
+        isValid = false;
+      }
       if (!item.sourceCode || !item.eventCode) {
         isValid = false;
       }
@@ -424,6 +431,9 @@ export function useRiskControlHook({
     isFormClick.value = true;
     let isValid = true;
     orderAutoFreezeList.forEach(item => {
+      if (!item.leagueGrades?.length) {
+        isValid = false;
+      }
       if (!item.sourceCode || !item.eventCode) {
         isValid = false;
       }
