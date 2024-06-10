@@ -93,13 +93,13 @@ const noticeValue = computed(() => {
 
 const refreshRiskNotice = () => {
   if (interval.value) clearInterval(interval.value);
-  if (riskNoticeStore.riskNotificationSwitch) {        
-    interval.value = setInterval(async () => {
-      await riskNoticeStore.setRiskNotice();
-    },
-      Number(riskNoticeStore.riskNotificationRefresh) * 1000
-    );      
-  }
+  interval.value = setInterval(async () => {
+    await riskNoticeStore.setRiskNotice();
+  },
+    Number(riskNoticeStore.riskNotificationRefresh) * 1000
+  );      
+  // if (riskNoticeStore.riskNotificationSwitch) {        
+  // }
 }
 
 onMounted(() => {
