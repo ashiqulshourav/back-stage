@@ -23,6 +23,7 @@
                 :value="item"
                 v-for="item in LEAGUE_GRADLES"
                 :key="item"
+                :disabled="leagueDisabled(row, item)"
             />
           </el-select>
 
@@ -162,6 +163,24 @@ const changeSourceName = (row): any => {
     item => item.value == row.sourceCode
   )?.label;
 };
+
+const leagueDisabled = (row: any, leagueItem: any) => {
+  let disable = false;
+
+  props.rejectOrderList.forEach(selectedItem => {
+
+  if (selectedItem.sourceCode == row.sourceCode) {
+    if (selectedItem.eventCode == row.eventCode) {
+      if (selectedItem.leagueGrades?.includes(leagueItem)) {        
+        disable = true;
+      }
+    }
+  }
+  });
+
+  return disable;
+}
+
 
 const eventDisabled = (eventCode: string, row: any) => {
   let disable = false;
