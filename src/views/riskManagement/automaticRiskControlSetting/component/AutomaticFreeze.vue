@@ -20,10 +20,10 @@
           :onChange="changeSourceName(row)"
         >
           <el-option
-            :label="item"
-            :value="item"
-            v-for="item in LEAGUE_GRADLES"
-            :key="item"
+              :label="item=='-1'?'未评级':item"
+              :value="item"
+              v-for="item in LEAGUE_GRADLES"
+              :key="item"
           />
         </el-select>
 
