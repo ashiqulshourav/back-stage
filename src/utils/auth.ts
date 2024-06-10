@@ -63,7 +63,13 @@ export function getToken(): DataInfo<number> {
 
 /** 删除`token`以及key值为`user-info`的session信息 */
 export function removeStorage() {
-  localStorage.clear();
+
+  localStorage.removeItem('USERSTATE');
+  localStorage.removeItem('iconify-version');
+  localStorage.removeItem('RISKNOTICESTATE');
+  localStorage.removeItem('MATCHSTATE');
+  localStorage.removeItem('responsive-layout');
+  // localStorage.removeItem('RISKNOTICESTATE');
   sessionStorage.clear()
 }
 
