@@ -252,12 +252,24 @@ const changeSourceName = (row): any => {
 
 const eventDisabled = (eventCode: string, row: any) => {
   let disable = false;
-  props.orderAutoFreezeList.forEach(item => {
-    if (item.sourceCode == row.sourceCode) {
-      if (item.eventCode == eventCode) {
-        disable = true;
+  props.orderAutoFreezeList.forEach(selectedItem => {
+
+    let found = false;
+
+    for (let i = 0; i < toRaw(row.leagueGrades).length; i++) {
+       if((toRaw(selectedItem.leagueGrades) as any)?.includes(toRaw(row.leagueGrades)[i])) {
+         found = true;
+       }
+    }
+
+    if (found) {      
+      if (selectedItem.sourceCode == row.sourceCode) {
+        if (selectedItem.eventCode == eventCode) {
+          disable = true;
+        }
       }
     }
+
   });
 
   return disable;
@@ -265,10 +277,21 @@ const eventDisabled = (eventCode: string, row: any) => {
 
 const sourceDisabled = (sourceCode: string, row: any) => {
   let disable = false;
-  props.orderAutoFreezeList.forEach(item => {
-    if (item.eventCode == row.eventCode) {
-      if (item.sourceCode == sourceCode) {
-        disable = true;
+  props.orderAutoFreezeList.forEach(selectedItem => {
+
+    let found = false;
+
+    for (let i = 0; i < toRaw(row.leagueGrades).length; i++) {
+       if((toRaw(selectedItem.leagueGrades) as any)?.includes(toRaw(row.leagueGrades)[i])) {
+         found = true;
+       }
+    }
+
+    if (found) {      
+      if (selectedItem.eventCode == row.eventCode) {
+        if (selectedItem.sourceCode == sourceCode) {
+          disable = true;
+        }
       }
     }
   });
