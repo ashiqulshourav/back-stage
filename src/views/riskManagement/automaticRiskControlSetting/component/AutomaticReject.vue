@@ -166,10 +166,10 @@ const changeSourceName = (row): any => {
 
 const eventDisabled = (eventCode: string, row: any) => {
   let disable = false;
-  props.rejectOrderList.forEach(item => {
-    if (item.sourceCode == row.sourceCode) {
+  props.rejectOrderList.forEach(selectedItem => {
+    if (selectedItem.sourceCode == row.sourceCode) {
       console.log('same');
-      if (item.eventCode == eventCode) {
+      if (selectedItem.eventCode == eventCode) {
         disable = true;
       }
     }
