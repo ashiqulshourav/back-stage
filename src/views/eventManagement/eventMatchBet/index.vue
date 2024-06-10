@@ -23,7 +23,7 @@
             v-if="matchData.homeTeamNameCn || matchData.awayTeamNameCn"
           />
           <el-empty
-            class="!py-0"
+            class="!py-0 bg-white dark:bg-transparent"
             v-else
             :description="t('请先进行赛事选择')"
             :image-size="60"
