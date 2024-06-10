@@ -12,7 +12,7 @@
       :key="index"
       class="absolute bottom-[14px] cursor-pointer px-[2px] w-[1%] h-[80%] flex items-end"
       :style="{
-        left: `${index}%`
+        left: `${index + 1}%`
       }"
     >
       <el-tooltip placement="top-start" v-if="item > 0">
@@ -56,6 +56,7 @@ const showBetDetail = (i: number) => {
     class: 'reset_dialog',
     width: '80%',
     center: true,
+    alignCenter: true,
     closeOnClickModal: false,
     hideFooter: true,
     contentRenderer: ({ options, index }) =>

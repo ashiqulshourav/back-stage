@@ -28,8 +28,13 @@ export const eventData = {
       { data }
     ),
   //- 获取制定注单
-  getMatchBetList: (data: { matchId: string | number }) =>
-    http.request<EventAPI.getMatchStatusticResType>('post', '/matchData/v1/getMatchBetList',
+  getMatchBetList: (data: {
+    matchId: number | string;
+    startMinutes: number;
+    pageSize: number;
+    pageNum: number;
+  }) =>
+    http.request<EventAPI.getMatchBetListResType>('post', '/matchData/v1/getMatchBetList',
       { data }
     ),
 };

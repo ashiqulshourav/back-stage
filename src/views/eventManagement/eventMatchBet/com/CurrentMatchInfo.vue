@@ -8,10 +8,10 @@
         label-class-name="my-label"
         width="150px"
       >
-        {{ matchData.homeTeamNameCn ?? '-' }}
+        {{ matchData.homeTeamNameCn ? matchData.homeTeamNameCn : '-' }}
       </el-descriptions-item>
       <el-descriptions-item :label="t('客队')" align="center">
-        {{ matchData.awayTeamNameCn ?? '-' }}
+        {{ matchData.awayTeamNameCn ? matchData.awayTeamNameCn : '-' }}
       </el-descriptions-item>
       <el-descriptions-item :label="t('开赛时间')" align="center">
         {{

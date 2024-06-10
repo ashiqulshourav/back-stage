@@ -7,8 +7,8 @@ export function useEventMatchBet() {
   const loopTimer = ref();
 
   const form = reactive<{ matchId: number | string }>({
-    matchId: '286694'
-    // matchId: ''
+    // matchId: '288252'
+    matchId: ''
   });
 
   async function onSearch(type?: string) {
@@ -24,7 +24,7 @@ export function useEventMatchBet() {
       });
     }
 
-    if (loopTimer.value) clearInterval(loopTimer.value);
+    // if (loopTimer.value) clearInterval(loopTimer.value);
     const res = await API.getMatchStatistic(form);
     if (res.code) return;
 
@@ -33,13 +33,9 @@ export function useEventMatchBet() {
   }
 
   const loop = () => {
-    if (loopTimer.value) return;
+    if (loopTimer.value) clearInterval(loopTimer.value);
     loopTimer.value = setInterval(() => onSearch(), 5000);
   };
-
-  onMounted(() => {
-    onSearch();
-  });
 
   onUnmounted(() => {
     loopTimer.value && clearInterval(loopTimer.value);

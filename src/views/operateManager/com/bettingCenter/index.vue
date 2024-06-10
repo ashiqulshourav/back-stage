@@ -102,13 +102,13 @@
                     String(row.seriesType).slice(-3) === '001' ? '串关' : '复式'
                   }}
                   <span>{{
-                      formatSeriesType(
-                        row?.seriesType,
-                        row.combineOrderDetails.length
-                      )
-                    }}</span>
+                    formatSeriesType(
+                      row?.seriesType,
+                      row.combineOrderDetails.length
+                    )
+                  }}</span>
                   <span class="ml-1"
-                  >总计：{{
+                    >总计：{{
                       `${calculateSeriesTypeTotalBets(
                         row?.seriesType
                       )}注 每注：${row.orderAmount}`
@@ -130,30 +130,36 @@
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <div v-if="item.kindsCode?.includes('Outright')||item.kindsCode?.includes('moutright')" class="item_line" >
+              <div
+                v-if="
+                  item.kindsCode?.includes('Outright') ||
+                  item.kindsCode?.includes('moutright')
+                "
+                class="item_line"
+              >
                 <span>冠军赛事</span>
               </div>
-              <div   v-else class="item_line">
+              <div v-else class="item_line">
                 <span
-                    class="cursor-pointer"
-                    @dblclick="
+                  class="cursor-pointer"
+                  @dblclick="
                     copyTest(
                       item.homeTeamNameCn,
                       t('主队：{value}', { value: item.homeTeamNameCn })
                     )
                   "
-                >{{ item.homeTeamNameCn }}</span
+                  >{{ item.homeTeamNameCn }}</span
                 >
                 vs
                 <span
-                    class="cursor-pointer"
-                    @dblclick="
+                  class="cursor-pointer"
+                  @dblclick="
                     copyTest(
                       item.awayTeamNameCn,
                       t('客队：{value}', { value: item.awayTeamNameCn })
                     )
                   "
-                >{{ item.awayTeamNameCn }}</span
+                  >{{ item.awayTeamNameCn }}</span
                 >
               </div>
               <div
@@ -268,8 +274,10 @@
                   )
                 }}
               </div>
-              <div>{{ markeTypeMap[(item.marketType )as keyof typeof markeTypeMap] }}</div>
-              <div v-if="getOddStatus(item?.betResult,item.riskStatus)">
+              <div>
+                {{ markeTypeMap[item.marketType as keyof typeof markeTypeMap] }}
+              </div>
+              <div v-if="getOddStatus(item?.betResult, item.riskStatus)">
                 <span
                   :class="
                     [EBetResultType.WIN, EBetResultType.WIN_HALF].includes(
@@ -279,9 +287,8 @@
                       : 'lose'
                   "
                 >
-                  {{getOddStatus(item?.betResult,item.riskStatus)}}
-                </span
-                >
+                  {{ getOddStatus(item?.betResult, item.riskStatus) }}
+                </span>
               </div>
             </div>
           </template>
@@ -289,7 +296,7 @@
             <span
               v-if="row.profitAmount"
               :class="row.profitAmount > 0 ? 'win' : 'lose'"
-            >{{ row.profitAmount.toFixed(2) }}</span
+              >{{ row.profitAmount.toFixed(2) }}</span
             >
             <span v-else>-</span>
           </template>
@@ -317,7 +324,7 @@
                     row.riskStatus,
                     row.isSpecialSettle
                   ).status as keyof typeof betStatusMap
-                  ]
+                ]
               }}
             </div>
             <div
@@ -365,7 +372,10 @@
               <el-button
                 class="mb-1 w-100"
                 @click="switchDialog(true, row)"
-                v-if="!(row.status==2||row.isReserve === 1)&&hasAuth('specialSettlement'.toUpperCase())"
+                v-if="
+                  !(row.status == 2 || row.isReserve === 1) &&
+                  hasAuth('specialSettlement'.toUpperCase())
+                "
               >
                 {{ t('特殊结算') }}
               </el-button>
@@ -398,7 +408,7 @@
           <div>
             <label>{{ t('用户数：') }}</label>
             <span
-            >{{ addThousandSeparator(totalInfo?.thisPageBetUserCount) ?? 0
+              >{{ addThousandSeparator(totalInfo?.thisPageBetUserCount) ?? 0
               }}{{ t('人') }}</span
             >
           </div>
@@ -450,8 +460,8 @@ import {
 import { betStatus, betStatusMap } from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
-import {useRenderIcon} from "@/components/ReIcon/src/hooks";
-import EditPen from "@iconify-icons/ep/edit-pen";
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import EditPen from '@iconify-icons/ep/edit-pen';
 const props = defineProps<{
   category: number;
   venueType: number;
@@ -498,13 +508,13 @@ const {
     }
   }
 }
-.match_detail{
+.match_detail {
   min-width: 200px;
 }
-.bet_detail{
+.bet_detail {
   min-width: 200px;
 }
-.status_detail{
+.status_detail {
   width: 120px;
 }
 .match_item {

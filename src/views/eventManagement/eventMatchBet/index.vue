@@ -107,7 +107,7 @@ const awayPic = computed(() => {
 
 <style scoped lang="scss"></style>
 <style lang="scss">
-.el-scrollbar__view {
-  height: calc(100% - 20px);
-}
+// .el-scrollbar__view {
+//   height: calc(100% - 20px);
+// }
 </style>
