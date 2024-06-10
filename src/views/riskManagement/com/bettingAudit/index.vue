@@ -41,8 +41,6 @@
               inline-prompt
               active-text="开"
               inactive-text="关"
-              :active-value="1"
-              :inactive-value="0"
               style="--el-switch-on-color: #f88d48;"
             />
             <span>{{t('列表刷新频率')}}</span>

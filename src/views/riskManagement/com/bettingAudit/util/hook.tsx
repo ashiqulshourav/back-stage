@@ -36,7 +36,7 @@ export function useBettingAuditHook(venueType: number) {
   const tenantList = reactive<any>([]);
   const tenantObj = reactive<any>({});
   const loading = ref(true);
-  const hasDataFetching = ref(1);
+  const hasDataFetching = ref(bettingAuditStore.hasDataFetching);
   const dataFetchingTime = ref(bettingAuditStore.dataFetchingTime);
   const loopTimer = ref<NodeJS.Timeout>();
   const isEditDialogClick = ref(false);
@@ -209,7 +209,15 @@ export function useBettingAuditHook(venueType: number) {
   }
 
   watch(
-    () => [hasDataFetching.value, dataFetchingTime.value],
+    () => [hasDataFetching.value],
+    () => {
+      onSearch();
+      bettingAuditStore.setHasDataFetching();
+    }
+  );
+
+    watch(
+    () => [dataFetchingTime.value],
     () => {
       onSearch();
       bettingAuditStore.setDataFetchingTime(dataFetchingTime.value);
