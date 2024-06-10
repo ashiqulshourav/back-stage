@@ -134,6 +134,7 @@
             clearable
             class="!min-w-[150px]"
             :placeholder="t('请选择风控状态')"
+            @change="search"
           >
             <el-option :label="t('待确认')" :value="0" />
             <el-option :label="t('风控拒单')" :value="1" />
