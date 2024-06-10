@@ -1,6 +1,7 @@
 <template>
   <div class="main h-full flex flex-col">
     <SearchFrom :form="form" :loading="loading" @on-search="onSearch" />
+    <CurrentMatchInfo :matchData="matchData" />
     <div class="p-t-[10px]">
       <div
         class="relative pl-20 w-full bg-[#6AA1FF] text-white dark:bg-[#3e3e3e]"
@@ -17,13 +18,14 @@
               :index="index"
             />
           </div>
-
+          <!-- - 内容部分 -->
           <BetAmount
             :renderList="matchData.bet"
+            :matchId="form.matchId"
             v-if="matchData.homeTeamNameCn || matchData.awayTeamNameCn"
           />
           <el-empty
-            class="!py-0 bg-white dark:bg-transparent"
+            class="bg-white dark:bg-transparent"
             v-else
             :description="t('请先进行赛事选择')"
             :image-size="60"
@@ -83,6 +85,7 @@ import EventIcon from './com/EventIcon.vue';
 import LineCom from './com/LineCom.vue';
 import TimeLine from './com/TimeLine.vue';
 import BetAmount from './com/BetAmount.vue';
+import CurrentMatchInfo from './com/CurrentMatchInfo.vue';
 
 const { loading, onSearch, form, matchData } = useEventMatchBet();
 

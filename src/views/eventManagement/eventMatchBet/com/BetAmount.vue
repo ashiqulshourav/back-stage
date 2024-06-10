@@ -1,5 +1,5 @@
 <template>
-  <div class="relative h-[110px] bg-white dark:bg-transparent">
+  <div class="relative h-[140px] bg-white dark:bg-transparent">
     <div
       class="absolute w-[1px] h-full left-[45.45%] translate-x-[-50%] bg-[#dcdfe6] dark:bg-[#363536]"
     ></div>
@@ -15,7 +15,7 @@
         left: `${index}%`
       }"
     >
-      <el-tooltip placement="top-start">
+      <el-tooltip placement="top-start" v-if="item > 0">
         <template #content>
           <div class="flex flex-col text-xs">
             <span> {{ t('比赛进行时间') }}: {{ index }}{{ t('分') }} </span>
@@ -23,11 +23,11 @@
           </div>
         </template>
         <div
-          v-if="item > 0"
           class="bg-[#BEDAFF] dark:bg-[#eeb683] w-full ease-in-out duration-500 transition-all"
           :style="{
             height: convertToPercentage(item, maxNum) + '%'
           }"
+          @click="showBetDetail(index)"
         ></div>
       </el-tooltip>
     </div>
@@ -35,9 +35,12 @@
 </template>
 
 <script setup lang="ts">
+import { addDialog, closeDialog } from '@/components/ReDialog';
 import { t } from '@/plugins/i18n';
+import BetList from './BetList.vue';
 const props = defineProps<{
   renderList: number[];
+  matchId: number | string;
 }>();
 
 const maxNum = computed(() => {
@@ -46,6 +49,24 @@ const maxNum = computed(() => {
 
 const convertToPercentage = (value: number, base: number) => {
   return (value / base) * 100;
+};
+
+const showBetDetail = (i: number) => {
+  addDialog({
+    class: 'reset_dialog',
+    width: '80%',
+    center: true,
+    closeOnClickModal: false,
+    hideFooter: true,
+    contentRenderer: ({ options, index }) =>
+      h(BetList, {
+        index: i,
+        matchId: props.matchId,
+        onCloseDialog: (_: boolean) => {
+          closeDialog(options, index);
+        }
+      })
+  });
 };
 </script>
 
