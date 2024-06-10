@@ -52,8 +52,8 @@ export const MATH_RULE = {
 }
 
 export const ESPORT_ID_MAP = [
-  { value: 276, label: t('刀塔/魔兽争霸') },
-  { value: 277, label: t('反恐精英') },
+  { value: 276, label: t('刀塔2') },
+  { value: 277, label: t('反恐精英2') },
   { value: 278, label: t('英雄联盟') },
   { value: 279, label: t('王者荣耀') },
   { value: 280, label: t('LOL:激斗峡谷') },
@@ -65,7 +65,7 @@ export const ESPORT_ID_MAP = [
   { value: 288, label: t('绝地求生') },
   { value: 289, label: t('穿越火线') },
   { value: 290, label: t('守望先锋') },
-  { value: 291, label: t('星际争霸II') },
+  { value: 291, label: t('星际争霸2') },
   { value: 292, label: t('火箭联盟') },
   { value: 293, label: t('彩虹六号') },
   { value: 294, label: t('炉石传说') },

@@ -2,12 +2,16 @@ import { defineStore } from 'pinia';
 
 export const useBettingAuditStore = defineStore('BETTING_AUDIT', {
   state: (): any => ({
-    dataFetchingTime: 60
+    dataFetchingTime: 60,
+    hasDataFetching: true
   }),
   actions: {
-    async setDataFetchingTime(time: number) {
+    setDataFetchingTime(time: number) {
       this.dataFetchingTime = time;
-      console.log('111', this.dataFetchingTime);
+    },
+    setHasDataFetching() {
+      this.hasDataFetching = !this.hasDataFetching;
+      console.log(this.hasDataFetching);
     }
   },
   persist: {

@@ -38,7 +38,7 @@ export const autoLabelColumns: TableColumnList = [
 export const orderPlacementColumns: TableColumnList = [
   {
     label: t('联赛等级'),
-    slot: 'leagueGradles'
+    slot: 'leagueGrades'
   },
   {
     label: t('事件源'),
@@ -65,7 +65,7 @@ export const orderPlacementColumns: TableColumnList = [
 export const rejectOrderColumns: TableColumnList = [
   {
     label: t('联赛等级'),
-    slot: 'leagueGradles'
+    slot: 'leagueGrades'
   },
   {
     label: t('事件源'),
@@ -88,7 +88,7 @@ export const rejectOrderColumns: TableColumnList = [
 export const autoFreezeColumns: TableColumnList = [
   {
     label: t('联赛等级'),
-    slot: 'leagueGradles'
+    slot: 'leagueGrades'
   },
   {
     label: t('启用禁用状态'),

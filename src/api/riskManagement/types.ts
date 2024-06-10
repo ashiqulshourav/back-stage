@@ -44,7 +44,7 @@ declare namespace RiskManagementDataAPI {
   };
   type OrderPlacementTypes = {
     id?: number | string;
-    leagueGradles?: string | string[];
+    leagueGrades?: string | string[];
     sourceCode?: string;
     sourceName?: string;
     eventCode?: string;
@@ -59,7 +59,7 @@ declare namespace RiskManagementDataAPI {
   };
   type OrderRejectTypes = {
     id?: number;
-    leagueGradles?: string | string[];
+    leagueGrades?: string | string[];
     sourceCode?: string;
     sourceName?: string;
     eventCode?: string;
@@ -72,7 +72,7 @@ declare namespace RiskManagementDataAPI {
   };
   type AutoFreeze = {
     id?: number;
-    leagueGradles?: string | string[];
+    leagueGrades?: string | string[];
     isDisable?: number;
     sourceCode?: string;
     sourceName?: string;

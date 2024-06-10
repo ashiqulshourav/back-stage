@@ -28,6 +28,7 @@ import formDom from '../component/form.vue';
 import { ElMessageBox, FormInstance } from 'element-plus';
 import editOrder from '../component/editOrder.vue';
 import { useBettingAuditStore } from '@/store/bettingAudit';
+import {hasAuth} from "@/router/utils";
 
 export function useBettingAuditHook(venueType: number) {
   const { openPasswordInput } = usePasswordInputHook({showClose: false});
@@ -36,7 +37,7 @@ export function useBettingAuditHook(venueType: number) {
   const tenantList = reactive<any>([]);
   const tenantObj = reactive<any>({});
   const loading = ref(true);
-  const hasDataFetching = ref(1);
+  const hasDataFetching = ref(bettingAuditStore.hasDataFetching);
   const dataFetchingTime = ref(bettingAuditStore.dataFetchingTime);
   const loopTimer = ref<NodeJS.Timeout>();
   const isEditDialogClick = ref(false);
@@ -67,7 +68,7 @@ export function useBettingAuditHook(venueType: number) {
     seriesDetailsDuplex: [],
     minBetAmount: '',
     maxBetAmount: '',
-    riskStatus: ''
+    riskStatus:window?.location?.href?.indexOf('riskStatus=2')?2:'',
   });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -186,7 +187,8 @@ export function useBettingAuditHook(venueType: number) {
   const fetchListDataWithInterval = async (type?: string) => {
     _clearInterval();
     console.log({ dataFetchingTime: dataFetchingTime.value });
-    if (hasDataFetching.value) {
+    console.log(11111,hasDataFetching,hasDataFetching.value)
+    if (hasDataFetching.value&&hasAuth('refreshSetting'.toUpperCase())) {
       if (!isEditDialogClick.value && !isEditRemarkClick.value) {
         loopTimer.value = setInterval(
           async () => await fetchData(type),
@@ -209,7 +211,15 @@ export function useBettingAuditHook(venueType: number) {
   }
 
   watch(
-    () => [hasDataFetching.value, dataFetchingTime.value],
+    () => [hasDataFetching.value],
+    () => {
+      onSearch();
+      bettingAuditStore.setHasDataFetching();
+    }
+  );
+
+    watch(
+    () => [dataFetchingTime.value],
     () => {
       onSearch();
       bettingAuditStore.setDataFetchingTime(dataFetchingTime.value);
@@ -582,6 +592,7 @@ export function useBettingAuditHook(venueType: number) {
 
   //- 切换比赛类型
   onMounted(() => {
+    console.log(11111,window.location.href.indexOf('riskStatus=2'))
     onSearch();
     getTenantList();
   });

@@ -557,6 +557,7 @@ const {
   border-radius: 4px;
   width: auto;
   display: inline-block;
+  min-width: max-content;
 }
 .odd_item {
   min-width: 80px;

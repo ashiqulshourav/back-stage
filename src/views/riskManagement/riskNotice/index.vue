@@ -28,11 +28,11 @@
         <span>{{ t('手动接拒') }}</span>
         <span class="text-[30px]">{{riskNoticeStore.jjAuditCount}}</span>
       </div>
-      <div class="flex mr-10 ml-10 flex-col items-center cursor-pointer" @click="router.push('/riskManagement/sportBettingAudit')">
+      <div class="flex mr-10 ml-10 flex-col items-center cursor-pointer" @click="router.push('/riskManagement/sportBettingAudit?riskStatus=2')">
         <span>{{ t('体育注单审核') }}</span>
         <span class="text-[30px]">{{riskNoticeStore.sportAuditCount}}</span>
       </div>
-      <div class="flex flex-col items-center cursor-pointer" @click="router.push('/riskManagement/esportBettingAudit')">
+      <div class="flex flex-col items-center cursor-pointer" @click="router.push('/riskManagement/esportBettingAudit?riskStatus=2')">
         <span>{{ t('电竞注单审核') }}</span>
         <span class="text-[30px]">{{riskNoticeStore.esportAuditCount}}</span>
       </div>
@@ -52,12 +52,9 @@ const betStore = useBetStore();
 const riskNoticeStore = useRiskNoticeStore();
 const timeList = ['30', '60', '120', '180'];
 const {
-    riskNotificationSwitch, 
-    riskNotificationRefresh, 
+    riskNotificationSwitch,
+    riskNotificationRefresh,
     setRiskNotification,
-    jjAuditCount,
-    sportAuditCount,
-    esportAuditCount
 } = useRiskNotice();
 const currentSelectTimeIndex = ref<number>(0);
 

@@ -268,6 +268,9 @@
                     )
                   }}
                 </span>
+                <span class="block">
+                  {{ rejectReasonMap[item.riskType as keyof typeof rejectReasonMap] }}
+                </span>
               </div>
             </div>
           </template>
@@ -361,6 +364,7 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
+import { rejectReasonMap } from './util/types'
 import Copy from '@iconify-icons/ep/copy-document';
 import {
   formatSeriesType,
@@ -388,7 +392,7 @@ const getVal = (s1, s2, s3, s4) => {
       val = t('待确认');
       break;
     case s3 === 61:
-      val = t('已拒单');
+      val = t('风控拒单');
       break;
   }
   return val;
@@ -404,7 +408,7 @@ const getVal1 = (billStatus, betResult, settleStatus, item) => {
       val = t('待确认');
       break;
     case betResult === 61 && settleStatus === 1:
-      val = t('已拒单');
+      val = t('风控拒单');
       break;
   }
   return val;
@@ -425,7 +429,8 @@ const {
   exportFileTest,
   confirmBetClick,
   refuseBetClick,
-  tenantObj
+  tenantObj,
+  getBackgroundColor,
 } = useManualOrderRejectionHook();
 </script>
 
@@ -493,5 +498,13 @@ const {
 
 .operate {
   width: 100px;
+}
+
+.accept-status {
+  padding: 0 8px;
+  line-height: 25px;
+  display: inline-block;
+  color: white;
+  border-radius: 4px;
 }
 </style>

@@ -88,18 +88,18 @@ const goToRiskNotice = () => {
 }
 
 const noticeValue = computed(() => {
-  return Number(riskNoticeStore.totalCount) > 99 ? '99+': riskNoticeStore.totalCount
+  return Number(riskNoticeStore.totalCount) > 9999 ? '9999+': riskNoticeStore.totalCount
 })
 
 const refreshRiskNotice = () => {
   if (interval.value) clearInterval(interval.value);
-  if (riskNoticeStore.riskNotificationSwitch) {        
-    interval.value = setInterval(async () => {
-      await riskNoticeStore.setRiskNotice();
-    },
-      Number(riskNoticeStore.riskNotificationRefresh) * 1000
-    );      
-  }
+  interval.value = setInterval(async () => {
+    await riskNoticeStore.setRiskNotice();
+  },
+    Number(riskNoticeStore.riskNotificationRefresh) * 1000
+  );      
+  // if (riskNoticeStore.riskNotificationSwitch) {        
+  // }
 }
 
 onMounted(() => {
@@ -107,7 +107,7 @@ onMounted(() => {
 })
 
 watch(
-  () => riskNoticeStore.riskNotificationSwitch,
+  () => [riskNoticeStore.riskNotificationSwitch, riskNoticeStore.riskNotificationRefresh],
   () => {
     refreshRiskNotice();
   },
