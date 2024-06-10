@@ -17,7 +17,6 @@
           :placeholder="t('联赛等级')"
           clearable
           multiple
-          :onChange="changeSourceName(row)"
         >
           <el-option
             :label="item=='-1'?'未评级':item"
