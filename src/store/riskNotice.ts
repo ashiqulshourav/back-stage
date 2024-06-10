@@ -25,7 +25,8 @@ export const useRiskNoticeStore = defineStore('RISKNOTICESTATE', {
           if (
             newValue > existingValue
           ) {
-            const audio = new Audio('@/src/assets/media/order.mp3');
+            const path = new URL('../assets/media/order.mp3', import.meta.url).href
+            const audio = new Audio(path);
             audio.play();
           }
         }
