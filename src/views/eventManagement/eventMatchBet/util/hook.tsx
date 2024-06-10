@@ -7,20 +7,27 @@ export function useEventMatchBet() {
   const loopTimer = ref();
 
   const form = reactive<{ matchId: number | string }>({
-    // matchId: '27568'
-    matchId: '275677'
+    // matchId: '286694'
+    matchId: ''
   });
 
-  async function onSearch() {
+  async function onSearch(type?: string) {
+    if (type === 'reload') {
+      Object.assign(matchData, {
+        beginTime: '',
+        homeTeamNameCn: '',
+        awayTeamNameCn: '',
+        homeTeamLogo: '',
+        awayTeamLogo: '',
+        bet: [],
+        event: []
+      });
+    }
+
+    if (loopTimer.value) clearInterval(loopTimer.value);
     const res = await API.getMatchStatistic(form);
     if (res.code) return;
-    //- todo
-    res.data.bet = res.data.bet.map((item, index) => {
-      if (index % 6 === 0) {
-        return Math.floor(Math.random() * (100 + 1));
-      }
-      return item;
-    });
+
     Object.assign(matchData, res.data);
     loop();
   }

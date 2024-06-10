@@ -60,16 +60,16 @@ const props = defineProps<{
 //   emits('onSearch', ...['reload']);
 // };
 
-// const resetForm = (formEl: FormInstance | undefined) => {
-//   formEl?.resetFields();
-//   time.value = '';
-//   props.form.startTime = '';
-//   props.form.endTime = '';
-//   props.form.matchId = '';
-//   props.form.dataSourceCode = '';
-//   props.form.eventCode = [];
-//   emits('onSearch', ...['reload']);
-// };
+const resetForm = (formEl: FormInstance | undefined) => {
+  formEl?.resetFields();
+  time.value = '';
+  // props.form.startTime = '';
+  // props.form.endTime = '';
+  // props.form.matchId = '';
+  // props.form.dataSourceCode = '';
+  // props.form.eventCode = [];
+  emits('onSearch', ...['reload']);
+};
 
 const search = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
