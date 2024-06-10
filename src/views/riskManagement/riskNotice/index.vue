@@ -55,9 +55,6 @@ const {
     riskNotificationSwitch,
     riskNotificationRefresh,
     setRiskNotification,
-    jjAuditCount,
-    sportAuditCount,
-    esportAuditCount
 } = useRiskNotice();
 const currentSelectTimeIndex = ref<number>(0);
 

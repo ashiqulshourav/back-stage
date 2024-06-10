@@ -88,7 +88,7 @@ const goToRiskNotice = () => {
 }
 
 const noticeValue = computed(() => {
-  return Number(riskNoticeStore.totalCount) > 99 ? '99+': riskNoticeStore.totalCount
+  return Number(riskNoticeStore.totalCount) > 9999 ? '9999+': riskNoticeStore.totalCount
 })
 
 const refreshRiskNotice = () => {
