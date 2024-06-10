@@ -45,10 +45,10 @@
             />
             <span>{{t('列表刷新频率')}}</span>
             <el-select v-model="dataFetchingTime" style="width: 80px">
-              <el-option :label="30" :value="30"/>
-              <el-option :label="60" :value="60"/>
-              <el-option :label="120" :value="120"/>
-              <el-option :label="180" :value="180"/>
+              <el-option label="30" :value="30"/>
+              <el-option label="60" :value="60"/>
+              <el-option label="120" :value="120"/>
+              <el-option label="180" :value="180"/>
             </el-select>
             <span>S</span>
           </div>
