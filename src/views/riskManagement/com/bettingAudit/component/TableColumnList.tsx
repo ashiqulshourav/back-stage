@@ -5,7 +5,7 @@ export const columns: TableColumnList = [
     label: t("序号"),
     prop: 'index',
     align:'left',
-
+    className: 'mw-50',
   },
   {
     label: t("用户信息"),
@@ -39,6 +39,7 @@ export const columns: TableColumnList = [
     prop: "productAmountTotal",
     minWidth: 120,
     align:'center',
+    className: 'mw-120',
     formatter: ({ productAmountTotal }) => (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
   },
   {

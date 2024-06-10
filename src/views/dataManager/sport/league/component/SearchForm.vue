@@ -6,7 +6,7 @@
     label-position="right"
     @search="search"
     @reset="handleRest"
-    :has-unfold="false"
+    :has-unfold="true"
     labelWidth="auto"
     :defaultValues="defaultValue"
     :searchText="t('筛选')"

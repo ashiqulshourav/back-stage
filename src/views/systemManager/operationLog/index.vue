@@ -5,6 +5,7 @@
       :operationTypeList="operationTypeList"
       @on-search="onSearch"
       @exportFileClick="exportFileClick"
+      @exportFile="exportFile"
       :exportLoading="exportLoading"
       :form="form"
       :logTypeList="logTypeList"
@@ -105,9 +106,10 @@ const {
   exportLoading,
   logTypeList,
   exportFileClick,
+  exportFile,
   onSearch,
   handleTableWidthChange,
-  handleCurrentChange
+  handleCurrentChange,
 } = useOperationLog();
 </script>
 

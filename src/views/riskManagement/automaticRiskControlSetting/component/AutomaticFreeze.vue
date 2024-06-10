@@ -1,7 +1,7 @@
 <template>
   <div>
     <pure-table
-      maxHeight="500"
+      height="700"
       align-whole="center"
       :loading="loading"
       size="small"
@@ -10,10 +10,35 @@
       :columns="columns"
       :header-cell-style="tableHeaderStyleBlue"
     >
+      <template #leagueGrades="{ row }">
+        <el-select
+          v-if="isEditRiskControls"
+          v-model="row.leagueGrades"
+          :placeholder="t('联赛等级')"
+          clearable
+          multiple
+        >
+          <el-option
+              :label="item=='-1'?'未评级':item"
+              :value="item"
+              v-for="item in LEAGUE_GRADLES"
+              :key="item"
+              :disabled="leagueDisabled(row, item)"
+          />
+        </el-select>
+
+        <span v-else>{{ formatRanges(row.leagueGrades) }} </span>
+         <div
+          v-if="!row.leagueGrades?.length && isFormClick"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('联赛等级不能为空') }}
+        </div>
+      </template>
       <template #isDisable="{ row }">
         <el-switch
           v-if="isEditRiskControls"
-          size="large"
+          size="small"
           v-model="row.isDisable"
           :active-value="1"
           :inactive-value="0"
@@ -23,7 +48,7 @@
         />
         <span v-else>
           <el-switch
-            size="large"
+            size="small"
             v-model="row.isDisable"
             :active-value="1"
             :inactive-value="0"
@@ -47,6 +72,7 @@
             :value="item.value"
             v-for="item in EVENT_SOURCE"
             :key="item.value"
+            :disabled="sourceDisabled(item.value, row)"
           />
         </el-select>
 
@@ -109,6 +135,16 @@
         </div>
         <span v-else> {{ row.betAfterTime }} {{ t('秒') }} </span>
         <div
+          v-if="
+            !Number(row.betBeforeTime) &&
+            !Number(row.betAfterTime) &&
+            isFormClick
+          "
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('投注前时间和投注后时间不能同时为空') }}
+        </div>
+        <div
           v-if="showBetAfterTimeError(row) && isFormClick"
           class="text-red-500 text-xs text-start"
         >
@@ -129,11 +165,18 @@
         </div>
         <div v-else>
           <span v-if="Number(row.minLimitAmount) && Number(row.maxLimitAmount)">
-            {{
-              addThousandSeparator(row.minLimitAmount) +
-              ' - ' +
-              addThousandSeparator(row.maxLimitAmount)
-            }}
+            <span
+              v-if="Number(row.minLimitAmount) == Number(row.maxLimitAmount)"
+            >
+              {{ addThousandSeparator(row.minLimitAmount) }}
+            </span>
+            <span v-else>
+              {{
+                addThousandSeparator(row.minLimitAmount) +
+                ' - ' +
+                addThousandSeparator(row.maxLimitAmount)
+              }}
+            </span>
           </span>
           <span
             v-if="Number(row.minLimitAmount) && !Number(row.maxLimitAmount)"
@@ -181,7 +224,7 @@ import { getLabelColor } from '@/components/RiskLabelList/utils';
 import { getLabelLevelByName } from '@/components/RiskLabelList/utils';
 import { PandaMatch } from '@/views/eventManagement/eventQuery/utils/types';
 import { EVENT_SOURCE } from '@/views/eventManagement/eventQuery/utils/map';
-import { EVENT_NAMES } from '../utils/map';
+import { EVENT_NAMES, LEAGUE_GRADLES, formatRanges } from '../utils/map';
 
 const { tableHeaderStyleBlue } = usePublicHooks();
 const props = defineProps<{
@@ -207,12 +250,65 @@ const changeSourceName = (row): any => {
   )?.label;
 };
 
+const leagueDisabled = (row: any, leagueItem: any) => {
+  let disable = false;
+
+  props.orderAutoFreezeList.forEach(selectedItem => {
+
+  if (selectedItem.sourceCode == row.sourceCode) {
+    if (selectedItem.eventCode == row.eventCode) {
+      if (selectedItem.leagueGrades?.includes(leagueItem)) {        
+        disable = true;
+      }
+    }
+  }
+  });
+
+  return disable;
+}
+
 const eventDisabled = (eventCode: string, row: any) => {
   let disable = false;
-  props.orderAutoFreezeList.forEach(item => {
-    if (item.sourceCode == row.sourceCode) {
-      if (item.eventCode == eventCode) {
-        disable = true;
+  props.orderAutoFreezeList.forEach(selectedItem => {
+
+    let found = false;
+
+    for (let i = 0; i < toRaw(row.leagueGrades).length; i++) {
+       if((toRaw(selectedItem.leagueGrades) as any)?.includes(toRaw(row.leagueGrades)[i])) {
+         found = true;
+       }
+    }
+
+    if (found) {      
+      if (selectedItem.sourceCode == row.sourceCode) {
+        if (selectedItem.eventCode == eventCode) {
+          disable = true;
+        }
+      }
+    }
+
+  });
+
+  return disable;
+};
+
+const sourceDisabled = (sourceCode: string, row: any) => {
+  let disable = false;
+  props.orderAutoFreezeList.forEach(selectedItem => {
+
+    let found = false;
+
+    for (let i = 0; i < toRaw(row.leagueGrades).length; i++) {
+       if((toRaw(selectedItem.leagueGrades) as any)?.includes(toRaw(row.leagueGrades)[i])) {
+         found = true;
+       }
+    }
+
+    if (found) {      
+      if (selectedItem.eventCode == row.eventCode) {
+        if (selectedItem.sourceCode == sourceCode) {
+          disable = true;
+        }
       }
     }
   });
@@ -221,9 +317,7 @@ const eventDisabled = (eventCode: string, row: any) => {
 };
 
 const showBetAmountError = (row: any) => {
-  if (!Number(row.maxLimitAmount) && !Number(row.minLimitAmount)) {
-    return true;
-  } else if (row.maxLimitAmount && row.minLimitAmount) {
+  if (Number(row.maxLimitAmount) && Number(row.minLimitAmount)) {
     return Number(row.maxLimitAmount) < Number(row.minLimitAmount);
   }
 };
@@ -250,15 +344,13 @@ const showBetBeforeTimeError = (row: any) => {
 
 const showBetAfterTimeError = (row: any) => {
   let error = false;
-  if (!row.betBeforeTime && !row.betAfterTime) {
-    error = true;
-  } else if (row.betAfterTime) {
+  if (Number(row.betAfterTime)) {
     props.orderPlacementList.forEach(orderPlacement => {
       if (
         orderPlacement.sourceCode == row.sourceCode &&
         orderPlacement.eventCode == row.eventCode
       ) {
-        if (Number(row.betAfterTime) < Number(orderPlacement.betAfterTime)) {
+        if (Number(row.betAfterTime) <= Number(orderPlacement.betAfterTime)) {
           error = true;
         }
       }

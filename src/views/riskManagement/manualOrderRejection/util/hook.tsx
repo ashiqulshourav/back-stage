@@ -53,7 +53,7 @@ export function useManualOrderRejectionHook() {
     awayTeamName: '',
     sportId: '',
     userIdOrName: '',
-    timeStart: dayjs().startOf('month').valueOf(),
+    timeStart: dayjs().subtract(30, 'day').startOf('day').valueOf(),
     timeEnd: dayjs().endOf('day').valueOf(),
     orderId: '',
     status: [],
@@ -142,6 +142,52 @@ export function useManualOrderRejectionHook() {
     }
   }
 
+  const exportFileTest = async () => {
+      loading.value = true;
+      // 对于串关类型的选择处理
+      let seriesDetails: any = [];
+      if (form.seriesType == 2) {
+        if (form.seriesDetailsSingle.length) {
+          form.seriesDetailsSingle.map((item: any) => {
+            seriesDetails.push(...seriesTypesSingle[item].list);
+          });
+        } else {
+          for (let item in seriesTypesSingle) {
+            seriesDetails.push(...seriesTypesSingle[item].list);
+          }
+        }
+      } else if (form.seriesType == 3) {
+        if (form.seriesDetailsDuplex.length) {
+          form.seriesDetailsDuplex.map((item: any) => {
+            seriesDetails.push(...seriesTypesDuplex[item].list);
+          });
+        } else {
+          for (let item in seriesTypesDuplex) {
+            seriesDetails.push(...seriesTypesDuplex[item].list);
+          }
+        }
+      } else {
+        seriesDetails = '';
+      }
+      if (seriesDetails.length > 1) {
+        seriesDetails = [...new Set(seriesDetails)];
+      }
+      const res: BetOrderAPI.BetOrderResType = await API.riskExport({
+        ...removeEmptyStringKeys({
+          ...form,
+          seriesDetailsSingle: '',
+          seriesDetailsDuplex: '',
+          seriesDetails: seriesDetails,
+          seriesType: +form.seriesType > 2 ? 2 : form.seriesType
+        }),
+        pageSize: 1,
+        pageNum: 50000,
+        export: true,
+      } as any);
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      loading.value = false;
+  }
+
   const getTenantList1 = async () => {
     const res = await API.getTenantList();
     if (res.data?.data?.length) {
@@ -153,13 +199,7 @@ export function useManualOrderRejectionHook() {
     }
   };
 
-  const resetForm = formEl => {
-    if (!formEl) return;
-    formEl.resetFields();
-    onSearch();
-  };
-
-  //- 导出excel表格
+   //- 导出excel表格
   /*   const exportFile = async () => {
     // 对于串关类型的选择处理
     let seriesDetails: any = [];
@@ -309,6 +349,13 @@ export function useManualOrderRejectionHook() {
       type: 'success'
     });
   }; */
+
+  const resetForm = formEl => {
+    if (!formEl) return;
+    formEl.resetFields();
+    onSearch();
+  };
+
   const handleCancel = (data: any) => {
     return new Promise<boolean>((resolve, reject) => {
       ElMessageBox.confirm(t('确定取消注单吗？'), t('警告'), {
@@ -366,6 +413,19 @@ export function useManualOrderRejectionHook() {
     }
     return obj;
   }; */
+
+  const getBackgroundColor = (billStatus: number) => {
+    let obj = { bgColor:  "" };
+  
+    if(billStatus === 0){
+      obj.bgColor = '#FFC53D'
+    } else if(billStatus === 1){
+      obj.bgColor = '#E54752'
+    } else{
+      obj.bgColor = '';
+    }
+    return obj;
+  }
 
   function copyTest(str: string, tip: string) {
     if (!str) return;
@@ -425,12 +485,14 @@ export function useManualOrderRejectionHook() {
     handleTableWidthChange,
     handleCurrentChange,
     handleSelectionChange,
+    exportFileTest,
     // exportFile,
     handleCancel,
     // getStatus,
     copyTest,
     confirmBetClick,
     refuseBetClick,
-    tenantObj
+    tenantObj,
+    getBackgroundColor,
   };
 }

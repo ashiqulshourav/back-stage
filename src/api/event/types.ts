@@ -18,13 +18,6 @@ declare namespace EventAPI {
     startDateTime: string;
   };
 
-  type MatchInfoRes = {
-    code: number;
-    ts: number;
-    msg: string;
-    data: MatchInfo;
-  };
-
   type PandaMatchEventList = {
     eventCode: string;
     eventName: string;
@@ -115,4 +108,113 @@ declare namespace EventAPI {
     navigateFirstPage: number;
     navigateLastPage: number;
   };
+
+  type MatchInfoRes = COMMON.BASE_RES_TYPE<MatchInfo>;
+  type MatchEventRes = COMMON.BASE_RES_TYPE<COMMON.ListData<MatchEvent>>;
+
+  type EventData = {
+    type: string;
+    n: number;
+  }
+
+  type Event = {
+    away: EventData[];
+    home: EventData[];
+  }
+
+  type getMatchStatusticData = {
+    beginTime: string;
+    homeTeamNameCn: string;
+    awayTeamNameCn: string;
+    homeTeamLogo: string;
+    awayTeamLogo: string;
+    bet: number[];
+    event: Event[];
+  }
+
+
+
+  type getMatchStatusticResType = COMMON.BASE_RES_TYPE<getMatchStatusticData>
+
+
+  type CombineOrderDetail = {
+    detailId: string;
+    settleStatus: number;
+    isInplay: number;
+    marketType: number;
+    oddValue: number;
+    marketTypeFinally: number;
+    oddFinally: number;
+    sportId: string;
+    sportNameCn: string;
+    sportNameEn: string;
+    matchId: string;
+    matchNameCn: string;
+    matchNameEn: string;
+    homeTeamNameCn: string;
+    homeTeamNameEn: string;
+    awayTeamNameCn: string;
+    awayTeamNameEn: string;
+    scoreBenchmark: string;
+    settleScore?: any;
+    betItemCTID: number;
+    beginTime: string;
+    leagueId: string;
+    leagueNameCn: string;
+    leagueNameEn: string;
+    betItemId: string;
+    betItemName: string;
+    betHandicap: string;
+    betHomeOrAway: string;
+    kindsCode: string;
+    kindsName: string;
+    betResult: number;
+    category: number;
+    betN: string;
+    currency: string;
+    riskStatus: number;
+    riskTimes: number;
+    riskType: string;
+    orderDetailRemark: string;
+  }
+
+  type PageData = {
+    id: string;
+    userId: string;
+    userName: string;
+    tenantId: string;
+    tenantCode: string;
+    orderAmount: number;
+    productAmountTotal: number;
+    profitAmount?: any;
+    settleAmount?: any;
+    createTime: string;
+    updateTime: string;
+    updateUser: string;
+    settleTime?: any;
+    settleTimes: number;
+    status: number;
+    displayStatus: number;
+    billStatus: number;
+    isReserve: number;
+    seriesType: number;
+    combineOrderDetails: CombineOrderDetail[];
+    isSettlementAgain: number;
+    maxWinAmount?: any;
+    currency: string;
+    isSpecialSettle: number;
+    orderRemark: string;
+    riskControlLabelList?: any;
+  }
+
+  type getMatchBetListResTypeData = {
+    count: number;
+    groupCount?: any;
+    pageNum: number;
+    pageSize: number;
+    pageData: PageData[];
+    otherData?: any;
+  }
+
+  type getMatchBetListResType = COMMON.BASE_RES_TYPE<getMatchBetListResTypeData>
 }

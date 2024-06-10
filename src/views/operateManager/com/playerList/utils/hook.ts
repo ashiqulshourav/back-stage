@@ -9,9 +9,12 @@ import {
   updateUserFormType
 } from './types';
 import { FormInstance } from 'element-plus';
+import { useSettingStoreHook } from '@/store/settings';
 
 export function userPlayerListHook(venueType: number, category: number) {
   const route = useRoute();
+  const router = useRouter();
+  const settingStore = useSettingStoreHook();
   // data list
   const dataList = reactive<UserAPI.operateUserList[]>([]);
   const selectedDataList = reactive<UserAPI.operateUserList[]>([]);
@@ -32,6 +35,7 @@ export function userPlayerListHook(venueType: number, category: number) {
   const isOpenRecord = ref(false);
   const isMultiModal = ref(false);
   const isMultiDel = ref(false);
+  const downloading = ref(false);
 
   const loading = ref(true);
   const pagination = reactive<PaginationProps>({
@@ -52,6 +56,23 @@ export function userPlayerListHook(venueType: number, category: number) {
   const form = reactive<searchFormType>({} as searchFormType);
 
   const recordForm = reactive<recordFormType>({} as recordFormType);
+
+  const goChangeAccountPage = (row: UserAPI.operateUserList) => {
+    settingStore.save_player_info({
+      page: pagination.currentPage,
+    });
+    const params = JSON.parse(JSON.stringify(row));
+    router.push({
+      name:
+        route.path === '/operateManager/sportPlayerList'
+          ? 'OPERATEMANAGER_SPORTCHANGEACCOUNTRECORD'
+          : 'OPERATEMANAGER_ESPORTCHANGEACCOUNTRECORD',
+      query: {
+        userId: row.id,
+      },
+      state: { params }
+    });
+  };
 
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -90,6 +111,21 @@ export function userPlayerListHook(venueType: number, category: number) {
     onSearchRecord('reload');
     isOpenRecord.value = true;
   };
+
+  // export player list
+  const exportFile = async () =>{
+    downloading.value = true;
+    message(t('导出报表开始'), { type: 'warning' });
+    const res = await API.playerListExport({
+      ...removeEmptyStringKeys(form),
+      venueType: venueType,
+      pageSize: 50000,
+      pageNum: 1,
+      export: true,
+    })
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    downloading.value = false;
+  }
 
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
@@ -273,6 +309,9 @@ export function userPlayerListHook(venueType: number, category: number) {
     dispatchLabelsDel,
     dispatchLabelsAdd,
     dispatchUpdateUser,
-    tenantObj
+    tenantObj,
+    goChangeAccountPage,
+    downloading,
+    exportFile,
   };
 }

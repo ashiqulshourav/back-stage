@@ -138,11 +138,13 @@ const updateStatus = async (index: number) => {
                 penaltyKickStatus: !props.penaltyKickStatus
               }
             };
-      const res = await API[reqData.url](reqData.params);
+      const res = await API[reqData.url as keyof typeof API](reqData.params);
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if (!res.code) {
         emits('reloadEventList');
         return Promise.resolve(true);
+      } else {
+        return Promise.reject();
       }
     })
     .catch(() => Promise.reject());

@@ -6,7 +6,7 @@ import { TOrder } from '@/core/services/Table';
 import { useMatchStore } from "@/store/match";
 import { useI18n } from "vue-i18n";
 
-// 解析当前比分
+//- 解析当前比分
 export const parseMatchScore = (s: string) => {
   const match = s.match(/H(\d+)A(\d+)/);
   if (match) {
@@ -130,7 +130,6 @@ export enum EBetResultType {
   HANDLE_CANCEL = 23,
   FLAT_MATCH_ROLLBACK = 51,
   RISK_REJECT = 61
-
 }
 export const BET_RESULT_TYPE_MAP: { [key in EBetResultType]: string } = {
   [EBetResultType.NO_RESULT]: t('无结果'),
@@ -150,11 +149,11 @@ export const BET_RESULT_TYPE_MAP: { [key in EBetResultType]: string } = {
   [EBetResultType.GAME_CANCEL]: t('比赛取消'),
   [EBetResultType.GAME_POSTPONED]: t('比赛延期'),
   [EBetResultType.ROLLBACK]: t('回滚'),
-  [EBetResultType.CANCELL]: t('注单取消'),
-  [EBetResultType.HANDLE_CANCEL]: t('注单取消'),
-  [EBetResultType.AUTO_CANCEL]: t('预约失效'),
+  [EBetResultType.CANCELL]: t('预约失败'),  //21
+  [EBetResultType.HANDLE_CANCEL]: t('注单无效'),//23  // 原来 注单取消
+  [EBetResultType.AUTO_CANCEL]: t('预约取消'), //22
   [EBetResultType.FLAT_MATCH_ROLLBACK]: t('走水'), // 比分回滚取消结算返还金额,算走水
-  [EBetResultType.RISK_REJECT]: t('走水')  // 风控拒也算走水
+  [EBetResultType.RISK_REJECT]: t('投注失败')  // 风控拒也算走水
 };
 
 export const getViewOddFn = (od: number, type: EOddType, currentOddType: number) => {

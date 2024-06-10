@@ -3,10 +3,13 @@
     class="flex items-center w-full justify-center pt-3 pb-3 text-white text-xs"
     :style="{
       backgroundColor:
-        status === 'canceled' ? '#A8ABB2' : 'var(--el-color-danger-light-3)'
+        (status === 'canceled' && type === 'early') || status === 'over'
+          ? '#A8ABB2'
+          : 'var(--el-color-danger-light-3)'
     }"
   >
-    {{ mapText[status] }} {{ n }}s
+    {{ mapText[status] }}
+    {{ n }}s
   </div>
 </template>
 
@@ -15,11 +18,12 @@ import { t } from '@/plugins/i18n';
 const timer = ref();
 
 defineProps<{
-  status: 'countDown' | 'canceled' | 'over';
+  status: 'nobegin' | 'canceled' | 'over';
+  type: string;
 }>();
 
 const mapText = {
-  countDown: t('即将开赛'),
+  nobegin: t('即将开赛'),
   canceled: t('赛事取消'),
   over: t('赛事结束')
 };

@@ -10,6 +10,7 @@ import {
 } from '../component/TableColumnList';
 import { labelListType } from '@/views/operateManager/com/playerList/utils/types';
 import { PandaMatch } from '@/views/eventManagement/eventQuery/utils/types';
+import { hasAuth } from '@/router/utils';
 
 export function useRiskControlHook({
   venueType,
@@ -18,7 +19,9 @@ export function useRiskControlHook({
   venueType: number;
   category: number;
 }) {
-  const currentRiskControlLabelId = ref(0);
+  const currentRiskControlLabelId = ref(
+    hasAuth('AUTOREJECTLIST') ? 0 : hasAuth('AUTOORDERPLACEMENTLIST') ? 1 : 2
+  );
   const loading = ref(false);
   const isEditRiskControls = ref(false);
   const isFormClick = ref(false);
@@ -98,8 +101,22 @@ export function useRiskControlHook({
 
       orderAutoFreezeList.length = 0;
       sourceOrderAutoFreezeList.length = 0;
-      orderAutoFreezeList.push(...res.data);
-      sourceOrderAutoFreezeList.push(...res.data);
+      orderAutoFreezeList.push(
+        ...res.data.map(item => ({
+          ...item,
+          leagueGrades: item?.leagueGrades
+            ? (item?.leagueGrades as any).split(',')
+            : []
+        }))
+      );
+      sourceOrderAutoFreezeList.push(
+        ...res.data.map(item => ({
+          ...item,
+          leagueGrades: item?.leagueGrades
+            ? (item?.leagueGrades as any).split(',')
+            : []
+        }))
+      );
     } catch (error) {
       loading.value = false;
     }
@@ -115,8 +132,22 @@ export function useRiskControlHook({
 
       orderPlacementList.length = 0;
       sourceOrderPlacementList.length = 0;
-      orderPlacementList.push(...res.data);
-      sourceOrderPlacementList.push(...res.data);
+      orderPlacementList.push(
+        ...res.data.map(item => ({
+          ...item,
+          leagueGrades: item?.leagueGrades
+            ? (item?.leagueGrades as any).split(',')
+            : []
+        }))
+      );
+      sourceOrderPlacementList.push(
+        ...res.data.map(item => ({
+          ...item,
+          leagueGrades: item?.leagueGrades
+            ? (item?.leagueGrades as any).split(',')
+            : []
+        }))
+      );
     } catch (error) {
       loading.value = false;
     }
@@ -132,8 +163,24 @@ export function useRiskControlHook({
 
       rejectOrderList.length = 0;
       sourcerejectOrderList.length = 0;
-      rejectOrderList.push(...res.data);
-      sourcerejectOrderList.push(...res.data);
+
+      console.log(res.data);
+      rejectOrderList.push(
+        ...res.data.map(item => ({
+          ...item,
+          leagueGrades: item?.leagueGrades
+            ? (item?.leagueGrades as any).split(',')
+            : []
+        }))
+      );
+      sourcerejectOrderList.push(
+        ...res.data.map(item => ({
+          ...item,
+          leagueGrades: item?.leagueGrades
+            ? (item?.leagueGrades as any).split(',')
+            : []
+        }))
+      );
     } catch (error) {
       loading.value = false;
     }
@@ -200,11 +247,15 @@ export function useRiskControlHook({
     let isValid = true;
 
     rejectOrderList.forEach(item => {
+      if (!item.leagueGrades?.length) {
+        isValid = false;
+      }
+
       if (!item.sourceCode || !item.eventCode) {
         isValid = false;
       }
 
-      if (!item.betBeforeTime && !item.betAfterTime) {
+      if (!Number(item.betBeforeTime) && !Number(item.betAfterTime)) {
         isValid = false;
       }
     });
@@ -225,6 +276,8 @@ export function useRiskControlHook({
           eventCode: item.eventCode,
           eventName: item.eventName,
           isDelete: item.isDelete,
+          sportId: 1,
+          leagueGrades: (item?.leagueGrades as any)?.join(','),
           betBeforeTime: parseInt(item.betBeforeTime || 0),
           betAfterTime: parseInt(item.betAfterTime || 0),
           event_name: item.eventName
@@ -256,21 +309,24 @@ export function useRiskControlHook({
     let isValid = true;
 
     orderPlacementList.forEach(item => {
+      if (!item.leagueGrades?.length) {
+        isValid = false;
+      }
       if (!item.sourceCode || !item.eventCode) {
         isValid = false;
       }
 
-      if (!item.betBeforeTime && !item.betAfterTime) {
+      if (!Number(item.betBeforeTime) && !Number(item.betAfterTime)) {
         isValid = false;
       }
 
-      if (item.betAfterTime) {
+      if (Number(item.betAfterTime)) {
         orderAutoFreezeList.forEach(orderFreeze => {
           if (
             orderFreeze.sourceCode == item.sourceCode &&
             orderFreeze.eventCode == item.eventCode
           ) {
-            if (Number(item.betAfterTime) > Number(orderFreeze.betAfterTime)) {
+            if (Number(item.betAfterTime) >= Number(orderFreeze.betAfterTime)) {
               isValid = false;
             }
           }
@@ -291,6 +347,12 @@ export function useRiskControlHook({
       //     }
       //   });
       // }
+
+      if (Number(item.maxLimitAmount) && Number(item.minLimitAmount)) {
+        if (Number(item.maxLimitAmount) < Number(item.minLimitAmount)) {
+          isValid = false;
+        }
+      }
     });
 
     if (isValid) {
@@ -309,11 +371,13 @@ export function useRiskControlHook({
           eventCode: item.eventCode,
           eventName: item.eventName,
           isDelete: item.isDelete,
-          betBeforeTime: parseInt(item.betBeforeTime || 0),
-          betAfterTime: parseInt(item.betAfterTime || 0),
-          minLimitAmount: parseInt(item.minLimitAmount || 0),
-          maxLimitAmount: parseInt(item.maxLimitAmount || 0),
-          event_name: item.eventName
+          betBeforeTime: Number(item.betBeforeTime) || 0,
+          betAfterTime: Number(item.betAfterTime) || 0,
+          minLimitAmount: Number(item.minLimitAmount) || 0,
+          maxLimitAmount: Number(item.maxLimitAmount) || 0,
+          event_name: item.eventName,
+          sportId: 1,
+          leagueGrades: (item?.leagueGrades as any)?.join(',')
         }));
       };
 
@@ -367,22 +431,25 @@ export function useRiskControlHook({
     isFormClick.value = true;
     let isValid = true;
     orderAutoFreezeList.forEach(item => {
+      if (!item.leagueGrades?.length) {
+        isValid = false;
+      }
       if (!item.sourceCode || !item.eventCode) {
         isValid = false;
       }
 
-      if (!item.betBeforeTime && !item.betAfterTime) {
+      if (!Number(item.betBeforeTime) && !Number(item.betAfterTime)) {
         isValid = false;
       }
 
-      if (item.betAfterTime) {
+      if (Number(item.betAfterTime)) {
         orderPlacementList.forEach(orderPlacement => {
           if (
             orderPlacement.sourceCode == item.sourceCode &&
             orderPlacement.eventCode == item.eventCode
           ) {
             if (
-              Number(item.betAfterTime) < Number(orderPlacement.betAfterTime)
+              Number(item.betAfterTime) <= Number(orderPlacement.betAfterTime)
             ) {
               isValid = false;
             }
@@ -405,9 +472,7 @@ export function useRiskControlHook({
       //   });
       // }
 
-      if (!Number(item.maxLimitAmount) && !Number(item.minLimitAmount)) {
-        isValid = false;
-      } else if (item.maxLimitAmount && item.minLimitAmount) {
+      if (Number(item.maxLimitAmount) && Number(item.minLimitAmount)) {
         if (Number(item.maxLimitAmount) < Number(item.minLimitAmount)) {
           isValid = false;
         }
@@ -429,14 +494,16 @@ export function useRiskControlHook({
           eventCode: item.eventCode,
           eventName: item.eventName,
           isDelete: item.isDelete,
-          betBeforeTime: parseInt(item.betBeforeTime || 0),
-          betAfterTime: parseInt(item.betAfterTime || 0),
-          minLimitAmount: parseInt(item.minLimitAmount || 0),
-          maxLimitAmount: parseInt(item.maxLimitAmount || 0),
+          betBeforeTime: Number(item.betBeforeTime) || 0,
+          betAfterTime: Number(item.betAfterTime) || 0,
+          minLimitAmount: Number(item.minLimitAmount) || 0,
+          maxLimitAmount: Number(item.maxLimitAmount) || 0,
           event_name: item.eventName,
           userCreateAfter: 0,
           labels: '',
-          excepLimitUser: 0
+          excepLimitUser: 0,
+          sportId: 1,
+          leagueGrades: (item?.leagueGrades as any)?.join(',')
         }));
       };
 
@@ -494,6 +561,7 @@ export function useRiskControlHook({
             eventCode: undefined,
             eventName: undefined,
             betBeforeTime: undefined,
+            leagueGrades: [],
             betAfterTime: undefined,
             isDelete: undefined
           });
@@ -509,6 +577,7 @@ export function useRiskControlHook({
             betBeforeTime: undefined,
             betAfterTime: undefined,
             minLimitAmount: undefined,
+            leagueGrades: [],
             maxLimitAmount: undefined,
             isDelete: undefined
           });
@@ -521,6 +590,7 @@ export function useRiskControlHook({
             sourceName: undefined,
             eventCode: undefined,
             eventName: undefined,
+            leagueGrades: [],
             betBeforeTime: undefined,
             betAfterTime: undefined,
             minLimitAmount: undefined,
@@ -552,31 +622,39 @@ export function useRiskControlHook({
       case 0:
         {
           const item = rejectOrderList.pop();
-          delrejectOrderList.push({ ...item, isDelete: 1 });
+          if (item?.id) {
+            delrejectOrderList.push({ ...item, isDelete: 1 });
+          }
         }
         break;
       case 1:
         {
           const item = orderPlacementList.pop();
-          delOrderPlacementList.push({
-            ...item,
-            isDelete: 1
-          });
+          if (item?.id) {
+            delOrderPlacementList.push({
+              ...item,
+              isDelete: 1
+            });
+          }
         }
         break;
       case 2:
         {
           const item = orderAutoFreezeList.pop();
-          delOrderAutoFreezeList.push({
-            ...item,
-            isDelete: 1
-          });
+          if (item?.id) {
+            delOrderAutoFreezeList.push({
+              ...item,
+              isDelete: 1
+            });
+          }
         }
         break;
       case 3:
         {
           const item = riskControlList.pop();
-          delRiskControlList.push({ ...item, delFlag: 1 });
+          if (item?.id) {
+            delRiskControlList.push({ ...item, delFlag: 1 });
+          }
         }
         break;
     }
@@ -592,12 +670,10 @@ export function useRiskControlHook({
           break;
         case 1:
           {
-            onSearchFreezeOrder();
           }
           break;
         case 2:
           {
-            onSearchOrderPlacement();
           }
           break;
         case 3:
@@ -611,7 +687,24 @@ export function useRiskControlHook({
 
   onMounted(async () => {
     dispatchGetLabelList();
-    onSearchRejectOrder();
+
+    switch (currentRiskControlLabelId.value) {
+      case 0:
+        {
+          onSearchRejectOrder();
+        }
+        break;
+      case 1:
+        {
+          onSearchOrderPlacement();
+        }
+        break;
+      case 2:
+        {
+          onSearchFreezeOrder();
+        }
+        break;
+    }
   });
 
   return {

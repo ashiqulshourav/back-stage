@@ -8,16 +8,42 @@ export const eventData = {
     ),
 
   getMatchEventByMatchId: (data: EventAPI.PandaMatchEventListParams) =>
-    http.request<EventAPI.MatchEvent[]>(
+    http.request<EventAPI.MatchEventRes>(
       'post',
       '/event/v1/getMatchEventByMatchId',
       { data }
     ),
+  
+  matchEventDataExport: (data: EventAPI.PandaMatchEventListParams) =>
+  http.request<EventAPI.MatchEventRes>(
+    'post',
+    '/event/v1/getMatchEventByMatchId/excel',
+    { data }
+  ),
 
-  getMatchInfoByMatchId: (data: any) =>
+  getMatchInfoByMatchId: (data: {
+      matchId?: number | string;
+  }) =>
     http.request<EventAPI.MatchInfoRes>(
       'post',
       '/event/v1/getMatchInfoByMatchId',
       { data }
-    )
+    ),
+  //- 获取赛事+注单动画
+  getMatchStatistic: (data: {
+    matchId: string | number
+  }) =>
+    http.request<EventAPI.getMatchStatusticResType>('post', '/matchData/v1/getMatchStatistic',
+      { data }
+    ),
+  //- 获取制定注单
+  getMatchBetList: (data: {
+    matchId: number | string;
+    startMinutes: number;
+    pageSize: number;
+    pageNum: number;
+  }) =>
+    http.request<EventAPI.getMatchBetListResType>('post', '/matchData/v1/getMatchBetList',
+      { data }
+    ),
 };

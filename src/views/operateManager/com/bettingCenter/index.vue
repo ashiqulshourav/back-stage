@@ -5,6 +5,7 @@
       :loading="loading"
       @on-search="onSearch"
       @exportFile="exportFile"
+      @exportFileTest="exportFileTest"
       :tenantList="tenantList"
       :riskLabelList="riskLabelList"
       :venueType="props.venueType"
@@ -32,6 +33,7 @@
           :pagination="pagination"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
+          @selection-change="handleSelectionChange"
           @page-size-change="handlePageSizeChange"
           @page-current-change="handleCurrentChange"
         >
@@ -101,13 +103,13 @@
                     String(row.seriesType).slice(-3) === '001' ? '串关' : '复式'
                   }}
                   <span>{{
-                      formatSeriesType(
-                        row?.seriesType,
-                        row.combineOrderDetails.length
-                      )
-                    }}</span>
+                    formatSeriesType(
+                      row?.seriesType,
+                      row.combineOrderDetails.length
+                    )
+                  }}</span>
                   <span class="ml-1"
-                  >总计：{{
+                    >总计：{{
                       `${calculateSeriesTypeTotalBets(
                         row?.seriesType
                       )}注 每注：${row.orderAmount}`
@@ -129,30 +131,36 @@
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <div v-if="item.kindsCode?.includes('Outright')||item.kindsCode?.includes('moutright')" class="item_line" >
+              <div
+                v-if="
+                  item.kindsCode?.includes('Outright') ||
+                  item.kindsCode?.includes('moutright')
+                "
+                class="item_line"
+              >
                 <span>冠军赛事</span>
               </div>
-              <div   v-else class="item_line">
+              <div v-else class="item_line">
                 <span
-                    class="cursor-pointer"
-                    @dblclick="
+                  class="cursor-pointer"
+                  @dblclick="
                     copyTest(
                       item.homeTeamNameCn,
                       t('主队：{value}', { value: item.homeTeamNameCn })
                     )
                   "
-                >{{ item.homeTeamNameCn }}</span
+                  >{{ item.homeTeamNameCn }}</span
                 >
                 vs
                 <span
-                    class="cursor-pointer"
-                    @dblclick="
+                  class="cursor-pointer"
+                  @dblclick="
                     copyTest(
                       item.awayTeamNameCn,
                       t('客队：{value}', { value: item.awayTeamNameCn })
                     )
                   "
-                >{{ item.awayTeamNameCn }}</span
+                  >{{ item.awayTeamNameCn }}</span
                 >
               </div>
               <div
@@ -167,7 +175,7 @@
                 {{ item.sportNameCn }}/{{ item.leagueNameCn }}
               </div>
               <div
-                class="item_line cursor-pointer"
+                class="item_line cursor-pointer flex items-baseline gap-1"
                 @dblclick="
                   copyTest(
                     item.matchId,
@@ -176,6 +184,9 @@
                 "
               >
                 {{ t('赛事ID:') }} {{ item.matchId }}
+                <span class="inline-block">
+                  <IconifyIconOffline :icon="Copy" />
+                </span>
               </div>
               <div class="item_line">
                 {{ t('开赛时间:')
@@ -213,12 +224,15 @@
                 }}
               </div>
               <div
-                class="item_line cursor-pointer"
+                class="item_line cursor-pointer flex items-baseline gap-1"
                 @dblclick="
                   copyTest(row.id, t('注单号：{value}', { value: row.id }))
                 "
               >
                 {{ t('注单号:') }} {{ row.id }}
+                <span class="inline-block">
+                  <IconifyIconOffline :icon="Copy" />
+                </span>
               </div>
               <div class="item_line">
                 {{ t('投注时间:')
@@ -267,8 +281,10 @@
                   )
                 }}
               </div>
-              <div>{{ markeTypeMap[(item.marketType )as keyof typeof markeTypeMap] }}</div>
-              <div v-if="getOddStatus(item?.betResult,item.riskStatus)">
+              <div>
+                {{ markeTypeMap[item.marketType as keyof typeof markeTypeMap] }}
+              </div>
+              <div v-if="getOddStatus(item?.betResult, item.riskStatus)">
                 <span
                   :class="
                     [EBetResultType.WIN, EBetResultType.WIN_HALF].includes(
@@ -278,9 +294,8 @@
                       : 'lose'
                   "
                 >
-                  {{getOddStatus(item?.betResult,item.riskStatus)}}
-                </span
-                >
+                  {{ getOddStatus(item?.betResult, item.riskStatus) }}
+                </span>
               </div>
             </div>
           </template>
@@ -288,11 +303,11 @@
             <span
               v-if="row.profitAmount"
               :class="row.profitAmount > 0 ? 'win' : 'lose'"
-            >{{ row.profitAmount.toFixed(2) }}</span
+              >{{ row.profitAmount.toFixed(2) }}</span
             >
             <span v-else>-</span>
           </template>
-          <template #settleStatus="{ row }">
+          <template #status="{ row }">
             <div
               :style="{
                 background: getStatus(
@@ -300,11 +315,11 @@
                   row.billStatus,
                   row.betResultArr,
                   row.isReserve,
-                  row.riskStatusArr,
+                  row.riskStatus,
                   row.isSpecialSettle
                 ).bgColor
               }"
-              class="settle_status_detail status_btn"
+              class="status_detail status_btn mb-1 mx-auto"
             >
               {{
                 betStatusMap[
@@ -313,10 +328,10 @@
                     row.billStatus,
                     row.betResultArr,
                     row.isReserve,
-                    row.riskStatusArr,
+                    row.riskStatus,
                     row.isSpecialSettle
                   ).status as keyof typeof betStatusMap
-                  ]
+                ]
               }}
             </div>
             <div
@@ -346,15 +361,6 @@
               }}
             </div>
           </template>
-          <template #riskStatus="{ row }">
-            <div
-              class="riskStatus_detail"
-              v-for="item in row.combineOrderDetails"
-              :key="item.id"
-            >
-             <span>{{riskStatusMap[item.riskStatus as keyof typeof riskStatus]||'-'}}</span>
-            </div>
-          </template>
           <template #operation="{ row }">
             <div>
               <el-button
@@ -373,7 +379,10 @@
               <el-button
                 class="mb-1 w-100"
                 @click="switchDialog(true, row)"
-                v-if="!(row.status==2||row.isReserve === 1)&&hasAuth('specialSettlement'.toUpperCase())"
+                v-if="
+                  !(row.status == 2 || row.isReserve === 1) &&
+                  hasAuth('specialSettlement'.toUpperCase())
+                "
               >
                 {{ t('特殊结算') }}
               </el-button>
@@ -406,7 +415,7 @@
           <div>
             <label>{{ t('用户数：') }}</label>
             <span
-            >{{ addThousandSeparator(totalInfo?.thisPageBetUserCount) ?? 0
+              >{{ addThousandSeparator(totalInfo?.thisPageBetUserCount) ?? 0
               }}{{ t('人') }}</span
             >
           </div>
@@ -455,11 +464,12 @@ import {
   displayHomeAwayScore,
   getIsInplay
 } from '@/utils/formatMatch';
-import {betStatus, betStatusMap, riskStatus, riskStatusMap} from './util/types';
+import { betStatus, betStatusMap } from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
-import {useRenderIcon} from "@/components/ReIcon/src/hooks";
-import EditPen from "@iconify-icons/ep/edit-pen";
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import EditPen from '@iconify-icons/ep/edit-pen';
+import Copy from '@iconify-icons/ep/copy-document';
 const props = defineProps<{
   category: number;
   venueType: number;
@@ -475,7 +485,9 @@ const {
   onSearch,
   handlePageSizeChange,
   handleCurrentChange,
+  handleSelectionChange,
   exportFile,
+  exportFileTest,
   handleCancel,
   getStatus,
   copyTest,
@@ -505,25 +517,11 @@ const {
     }
   }
 }
-.match_detail{
+.match_detail {
   min-width: 200px;
 }
-.bet_detail{
+.bet_detail {
   min-width: 200px;
-}
-.settle_status_detail{
-  min-width: 80px;
-  display: flex;
-  justify-items: center;
-  justify-content: center;
-}
-.riskStatus_detail{
-  width: 120px;
-  min-height: 100px;
-  display: flex;
-  justify-items: center;
-  align-items: center;
-  justify-content: center;
 }
 .match_item {
   margin-bottom: 10px;
@@ -567,14 +565,13 @@ const {
   padding: 0 8px;
   color: #fff;
   border-radius: 4px;
+  width: auto;
+  display: inline-block;
+  min-width: max-content;
 }
 .odd_item {
   min-width: 80px;
   min-height: 100px;
-  display: flex;
-  justify-items: center;
-  justify-content: center;
-  flex-direction: column;
 }
 
 .operate {

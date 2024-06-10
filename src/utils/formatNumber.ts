@@ -44,6 +44,15 @@ export const formatNumberWithLength = (value: string, length: number) => {
   return stringValue;
 };
 
+export const formatWarningNum = (val: string, len?: number) => {
+  if (val === '0') return 1;
+  if (+val > 100) return 100;
+  return val
+    .replace(/\D/g, '')
+    .replace(/^0{1,}/g, '')
+    .slice(0, len ?? MAX_INPUT_NUMBER_LENGTH);
+};
+
 export const formatNumberAndFillZero = (val: string, len?: number) => {
   if (val === '0') return val;
   if (val === '') return 0;
@@ -52,6 +61,8 @@ export const formatNumberAndFillZero = (val: string, len?: number) => {
     .replace(/^0{1,}/g, '')
     .slice(0, len ?? MAX_INPUT_NUMBER_LENGTH);
 };
+
+
 export const formatNumberAndFillNull = (val: string, len?: number) => {
   if (val === '0') return val;
   if (val === '') return null;
@@ -88,6 +99,7 @@ export const inputRestrictions = (
   }
 };
 
+//- 数字千位分割
 export const addThousandSeparator = (num: string, separator = ',') => {
   if (num === null) {
     return '';

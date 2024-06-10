@@ -4,7 +4,7 @@ import { ElMessageBox } from 'element-plus';
 import { SearchFormType } from './types';
 import { usePublicHooks } from '@/hooks';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
-import { addDialog, closeDialog } from '@/components/ReDialog';
+import { DialogOptions, addDialog, closeDialog } from '@/components/ReDialog';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 
@@ -13,7 +13,6 @@ export function useChampionshipPlaySettlementHook() {
   const loading = ref(true);
   const matchCondition = ref(1);
   const { switchStyle } = usePublicHooks();
-  const selectLockcList = reactive<SaleDataAPI.PreSaleList[]>([]);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -37,7 +36,7 @@ export function useChampionshipPlaySettlementHook() {
   const { openPasswordInput } = usePasswordInputHook();
 
   //- 取消比赛
-  const cancelClick = async row => {
+  const cancelClick = async (row: EsportsSettlementAPI.ESportMatchList) => {
     const remark = ref('');
     const r = await openPasswordInput();
     if (!r) return;
@@ -48,7 +47,7 @@ export function useChampionshipPlaySettlementHook() {
         {
           label: t('取消'),
           btnClick: ({ dialog: { options, index } }) => {
-            closeDialog(options, index);
+            closeDialog(options as DialogOptions, index as number);
           }
         },
         {
@@ -66,14 +65,14 @@ export function useChampionshipPlaySettlementHook() {
                 SPORT_ID_MAP.find(item => item.value === row.sportId)?.label ??
                 t('电竞')
             };
-            options.footerButtons[1].loading = true;
+            options!.footerButtons![1].loading = true;
             const res = await API.cancelBetOrder(params);
-            options.footerButtons[1].loading = false;
+            options!.footerButtons![1].loading = false;
 
             message(res.msg, {
               type: res.code ? 'error' : 'success'
             });
-            closeDialog(options, index);
+            closeDialog(options as DialogOptions, index as number);
             if (!res.code) onSearch();
           }
         }
@@ -102,11 +101,6 @@ export function useChampionshipPlaySettlementHook() {
   function handleCurrentChange(val: number) {
     pagination.currentPage = val;
     onSearch();
-  }
-
-  function handleSelectionChange(slectList) {
-    selectLockcList.length = 0;
-    selectLockcList.push(...slectList);
   }
 
   const onSearch = async (type?: 'reload') => {
@@ -174,7 +168,6 @@ export function useChampionshipPlaySettlementHook() {
     onSearch,
     handleTableWidthChange,
     handleCurrentChange,
-    handleSelectionChange,
     searchForm,
     matchCondition,
     changeMatchCondition,

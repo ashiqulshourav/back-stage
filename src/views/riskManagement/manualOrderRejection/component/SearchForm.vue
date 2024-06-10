@@ -134,6 +134,7 @@
             clearable
             class="!min-w-[150px]"
             :placeholder="t('请选择风控状态')"
+            @change="search"
           >
             <el-option :label="t('待确认')" :value="0" />
             <el-option :label="t('风控拒单')" :value="1" />
@@ -207,7 +208,7 @@
           />
         </el-form-item>
         <el-form-item prop="timeType" :label="`${t('注单时间')}:`">
-          <CustomDate v-model:val="selectDate" @changeDate="changeDate" :start-placeholder="dayjs().startOf('month').format('YYYY-MM-DD')" :end-placeholder="dayjs().startOf('day').format('YYYY-MM-DD')" />
+          <CustomDate v-model:val="selectDate" @changeDate="changeDate" :start-placeholder="dayjs().subtract(30, 'day').startOf('day').format('YYYY-MM-DD')" :end-placeholder="dayjs().startOf('day').format('YYYY-MM-DD')" />
         </el-form-item>
 
         <el-form-item>
@@ -225,13 +226,22 @@
           >
             {{ t('重置') }}
           </el-button>
-          <el-button
+
+         <el-button
             type="primary"
-            :icon="useRenderIcon('exportFill')"
+            :icon="useRenderIcon(Download)"
             v-if="hasAuth('EXPORT')"
             @click="exportFile()"
           >
             {{ t('导出报表') }}
+          </el-button>
+
+         <el-button
+            type="primary"
+            :icon="useRenderIcon(Download)"
+            @click="exportFileTest()"
+          >
+            {{ t('报表异步导出') }}
           </el-button>
         </el-form-item>
       </div>
@@ -247,6 +257,7 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import type { FormInstance } from 'element-plus';
 import dayjs from 'dayjs';
 import { formatNumber } from '@/utils/formatNumber';
+import Download from '@iconify-icons/ep/download';
 import {
   SPORT_ID_MAP,
   ESPORT_ID_MAP
@@ -279,7 +290,7 @@ const dateRangetType = computed(() => {
   return o[dateType.value];
 });
 
-const emits = defineEmits(['onSearch', 'exportFile']);
+const emits = defineEmits(['onSearch', 'exportFile', 'exportFileTest']);
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
   selectDate.value = '';
@@ -310,6 +321,10 @@ const search = () => {
 
 const exportFile = () => {
   emits('exportFile');
+};
+
+const exportFileTest = () => {
+  emits('exportFileTest');
 };
 </script>
 

@@ -1,0 +1,78 @@
+<template>
+  <div class="flex flex-col pl-20 pt-10">
+    <div class="flex items-center mb-10 mt-2">
+      <span class="font-bold mr-5 text-[20px]">{{ t('待办事项') }}</span>
+
+      <el-switch
+        class="mr-10"
+        inline-prompt
+        active-text="on"
+        inactive-text="off"
+        v-model="riskNotificationSwitch"
+        :active-value="1"
+        :inactive-value="0"
+        @change="setRiskNotification"
+      />
+      <div class="flex">
+        <el-button
+          :type="currentSelectTimeIndex === index ? 'primary' : 'info'"
+          v-for="(item, index) in timeList"
+          :key="index"
+          @click="changeTime(index)"
+          >{{ item }}s</el-button
+        >
+      </div>
+    </div>
+    <div class="flex">
+      <div class="flex flex-col items-center cursor-pointer" @click="router.push('/riskManagement/manualOrderRejection')">
+        <span>{{ t('手动接拒') }}</span>
+        <span class="text-[30px]">{{riskNoticeStore.jjAuditCount}}</span>
+      </div>
+      <div class="flex mr-10 ml-10 flex-col items-center cursor-pointer" @click="router.push('/riskManagement/sportBettingAudit?riskStatus=2')">
+        <span>{{ t('体育注单审核') }}</span>
+        <span class="text-[30px]">{{riskNoticeStore.sportAuditCount}}</span>
+      </div>
+      <div class="flex flex-col items-center cursor-pointer" @click="router.push('/riskManagement/esportBettingAudit?riskStatus=2')">
+        <span>{{ t('电竞注单审核') }}</span>
+        <span class="text-[30px]">{{riskNoticeStore.esportAuditCount}}</span>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { t } from '@/plugins/i18n';
+import { useBetStore } from '@/store/bet';
+import { useRiskNoticeStore } from '@/store/riskNotice';
+import { useRiskNotice } from './util/hook';
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const betStore = useBetStore();
+const riskNoticeStore = useRiskNoticeStore();
+const timeList = ['30', '60', '120', '180'];
+const {
+    riskNotificationSwitch,
+    riskNotificationRefresh,
+    setRiskNotification,
+} = useRiskNotice();
+const currentSelectTimeIndex = ref<number>(0);
+
+watch(
+  () => riskNotificationRefresh.value,
+  () => {
+    currentSelectTimeIndex.value = timeList.indexOf(riskNotificationRefresh.value)
+  }
+)
+
+
+function changeTime (index: number) {
+  currentSelectTimeIndex.value = index;
+  riskNoticeStore.setRiskNoticeRefreshSecond(timeList[index]);
+  riskNotificationRefresh.value = timeList[index];
+  setRiskNotification();
+}
+
+</script>
+
+<style scoped></style>

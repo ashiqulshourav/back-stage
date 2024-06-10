@@ -24,7 +24,7 @@ export function useEsportsSettlement() {
   const eventMatchList = reactive<EsportsSettlementAPI.ChampionEventList[]>([]);
 
   //- 分页点击
-  const handleCurrentChange = (val: number, index) =>
+  const handleCurrentChange = (val: number, index: number) =>
     (rList[index].currentPage = val);
 
   //- 每页显示条数改变
@@ -43,6 +43,11 @@ export function useEsportsSettlement() {
     res.data.forEach(item => {
       if (item.settleStatus === 1) {
         item.betOptions = item.handicapList.findIndex(item => item.win === 1);
+        item.multipartBetOptions = item.handicapList
+          .map((item, index) => {
+            return item.win === 1 ? index : -1;
+          })
+          .filter(_ => _ !== -1);
       } else {
         item.betOptions = -1;
       }
@@ -52,13 +57,19 @@ export function useEsportsSettlement() {
     eventMatchList.push(...res.data);
   };
 
+  //-
+  const multipBetResultCheck = (list: number[], index: number) => {
+    return list.includes(index) ? 4 : 3;
+  };
+
   //- 结算提交
   const manualSettleESportHandicapClick = async (
     row: EsportsSettlementAPI.ChampionEventList,
     type?: 'cancel'
   ) => {
-    if (row.betOptions < 0 && !type)
+    if (row.betOptions < 0 && !row.multipartBetOptions.length && !type)
       return message(t('请先选择投注项'), { type: 'error' });
+
     ElMessageBox.confirm(
       type ? t('确认要取消盘口么?') : t('确认要结算该记录么?'),
       '系统提示',
@@ -77,7 +88,13 @@ export function useEsportsSettlement() {
         betResultItems: row.handicapList.map((item, index) => {
           return {
             betItemId: item.betItemsId,
-            betResult: type ? 18 : row.betOptions === index ? 4 : 3,
+            betResult: type
+              ? 24
+              : row.multipartBetOptions.length > 0
+              ? multipBetResultCheck(row.multipartBetOptions, index)
+              : row.betOptions === index
+              ? 4
+              : 3,
             handicap: item.handicap,
             kindsCode: item.kindsCode,
             n: item.n,
@@ -116,9 +133,6 @@ export function useEsportsSettlement() {
   const resetManualSettleESportHandicapClick = async (
     row: EsportsSettlementAPI.ChampionEventList
   ) => {
-    // if (row.oldBetOptions === row.betOptions)
-    //   return message(t('结果未改变，请重新选择'), { type: 'error' });
-
     ElMessageBox.confirm(t('确认要从新结算该记录么?'), '系统提示', {
       confirmButtonText: t('确认'),
       cancelButtonText: t('取消'),
@@ -135,7 +149,12 @@ export function useEsportsSettlement() {
         betResultItems: row.handicapList.map((item, index) => {
           return {
             betItemId: item.betItemsId,
-            betResult: row.betOptions === index ? 4 : 3,
+            betResult:
+              row.multipartBetOptions.length > 0
+                ? multipBetResultCheck(row.multipartBetOptions, index)
+                : row.betOptions === index
+                ? 4
+                : 3,
             handicap: item.handicap,
             id: item.id,
             n: item.n,

@@ -5,6 +5,7 @@
       :form="form"
       :loading="loading"
       @on-search="onSearch"
+      @exportFileTest="exportFileTest"
       :tenantList="tenantList"
     />
     <PureTableBar
@@ -157,6 +158,9 @@
                 "
               >
                 {{ t('赛事ID:') }} {{ item.matchId }}
+                <span class="inline-block">
+                  <IconifyIconOffline :icon="Copy" />
+                </span>
               </div>
               <div class="item_line">
                 {{ t('开赛时间:')
@@ -201,6 +205,9 @@
                 "
               >
                 {{ t('注单号:') }} {{ row.id }}
+                <span class="inline-block">
+                  <IconifyIconOffline :icon="Copy" />
+                </span>
               </div>
               <div class="item_line">
                 {{ t('投注时间:')
@@ -261,6 +268,9 @@
                     )
                   }}
                 </span>
+                <span class="block">
+                  {{ rejectReasonMap[item.riskType as keyof typeof rejectReasonMap] }}
+                </span>
               </div>
             </div>
           </template>
@@ -280,19 +290,6 @@
                 }}
               </div>
               <div>{{ markeTypeMap[item.marketType] }}</div>
-              <div v-if="BET_RESULT_TYPE_MAP[item?.betResult]">
-                <span
-                  :class="
-                    [EBetResultType.WIN, EBetResultType.WIN_HALF].includes(
-                      item?.betResult
-                    )
-                      ? 'win'
-                      : 'lose'
-                  "
-                >
-                  {{ BET_RESULT_TYPE_MAP[item?.betResult] }}</span
-                >
-              </div>
             </div>
           </template>
           <template #operation="{ row }">
@@ -367,6 +364,8 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
+import { rejectReasonMap } from './util/types'
+import Copy from '@iconify-icons/ep/copy-document';
 import {
   formatSeriesType,
   useSportFormatDetail,
@@ -393,7 +392,7 @@ const getVal = (s1, s2, s3, s4) => {
       val = t('待确认');
       break;
     case s3 === 61:
-      val = t('已拒单');
+      val = t('风控拒单');
       break;
   }
   return val;
@@ -409,7 +408,7 @@ const getVal1 = (billStatus, betResult, settleStatus, item) => {
       val = t('待确认');
       break;
     case betResult === 61 && settleStatus === 1:
-      val = t('已拒单');
+      val = t('风控拒单');
       break;
   }
   return val;
@@ -427,9 +426,11 @@ const {
   handleSelectionChange,
   copyTest,
   tenantList,
+  exportFileTest,
   confirmBetClick,
   refuseBetClick,
-  tenantObj
+  tenantObj,
+  getBackgroundColor,
 } = useManualOrderRejectionHook();
 </script>
 
@@ -497,5 +498,13 @@ const {
 
 .operate {
   width: 100px;
+}
+
+.accept-status {
+  padding: 0 8px;
+  line-height: 25px;
+  display: inline-block;
+  color: white;
+  border-radius: 4px;
 }
 </style>

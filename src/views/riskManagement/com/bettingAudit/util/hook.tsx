@@ -27,13 +27,21 @@ import { t } from '@/plugins/i18n';
 import formDom from '../component/form.vue';
 import { ElMessageBox, FormInstance } from 'element-plus';
 import editOrder from '../component/editOrder.vue';
+import { useBettingAuditStore } from '@/store/bettingAudit';
+import {hasAuth} from "@/router/utils";
 
 export function useBettingAuditHook(venueType: number) {
-  const { openPasswordInput } = usePasswordInputHook();
+  const { openPasswordInput } = usePasswordInputHook({showClose: false});
+  const bettingAuditStore = useBettingAuditStore();
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<any>([]);
   const tenantObj = reactive<any>({});
   const loading = ref(true);
+  const hasDataFetching = ref(bettingAuditStore.hasDataFetching);
+  const dataFetchingTime = ref(bettingAuditStore.dataFetchingTime);
+  const loopTimer = ref<NodeJS.Timeout>();
+  const isEditDialogClick = ref(false);
+  const isEditRemarkClick = ref(false);
 
   const totalInfo = reactive<BetOrderAPI.RiskOtherDataType>(
     {} as BetOrderAPI.RiskOtherDataType
@@ -48,7 +56,7 @@ export function useBettingAuditHook(venueType: number) {
   const form = reactive<searchFormType>({
     sportId: '',
     userIdOrName: '',
-    createTimeStart: dayjs().startOf('month').valueOf(),
+    createTimeStart: dayjs().subtract(30, 'day').startOf('day').valueOf(),
     createTimeEnd: dayjs().endOf('day').valueOf(),
     orderId: '',
     leagueId: '',
@@ -60,7 +68,7 @@ export function useBettingAuditHook(venueType: number) {
     seriesDetailsDuplex: [],
     minBetAmount: '',
     maxBetAmount: '',
-    riskStatus: ''
+    riskStatus:window?.location?.href?.indexOf('riskStatus=2')?2:'',
   });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -91,7 +99,7 @@ export function useBettingAuditHook(venueType: number) {
           );
         });
       } else {
-        for (let item in seriesTypesSingle) {
+        for (const item in seriesTypesSingle) {
           seriesDetails.push(
             ...seriesTypesSingle[item as keyof typeof seriesTypesSingle].list
           );
@@ -105,7 +113,7 @@ export function useBettingAuditHook(venueType: number) {
           );
         });
       } else {
-        for (let item in seriesTypesDuplex) {
+        for (const item in seriesTypesDuplex) {
           seriesDetails.push(
             ...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list
           );
@@ -132,7 +140,7 @@ export function useBettingAuditHook(venueType: number) {
     };
   };
 
-  async function onSearch(type?: string) {
+  const fetchData = async (type?: string) => {
     if (type === 'reload') pagination.currentPage = 1;
     try {
       const params: searchFormType = formatParams({}) as searchFormType;
@@ -141,7 +149,9 @@ export function useBettingAuditHook(venueType: number) {
         return;
       }
       if (Number(params.maxProfitAmount) < Number(params.minProfitAmount)) {
-        message(t('请检查用户输赢，最小值不能大于最大值'), { type: 'warning' });
+        message(t('请检查用户输赢，最小值不能大于最大值'), {
+          type: 'warning'
+        });
         return;
       }
       loading.value = true;
@@ -172,7 +182,50 @@ export function useBettingAuditHook(venueType: number) {
     } catch (error) {
       loading.value = false;
     }
+  };
+
+  const fetchListDataWithInterval = async (type?: string) => {
+    _clearInterval();
+    console.log({ dataFetchingTime: dataFetchingTime.value });
+    console.log(11111,hasDataFetching,hasDataFetching.value)
+    if (hasDataFetching.value&&hasAuth('refreshSetting'.toUpperCase())) {
+      if (!isEditDialogClick.value && !isEditRemarkClick.value) {
+        loopTimer.value = setInterval(
+          async () => await fetchData(type),
+          Number(dataFetchingTime.value) * 1000
+          // 5000
+        );
+      }
+    }
+  };
+
+  const _clearInterval = () =>
+    loopTimer.value && clearInterval(loopTimer.value);
+
+  async function onSearch(type?: string) {
+    _clearInterval();
+
+    await fetchData(type);
+
+    await fetchListDataWithInterval();
   }
+
+  watch(
+    () => [hasDataFetching.value],
+    () => {
+      onSearch();
+      bettingAuditStore.setHasDataFetching();
+    }
+  );
+
+    watch(
+    () => [dataFetchingTime.value],
+    () => {
+      onSearch();
+      bettingAuditStore.setDataFetchingTime(dataFetchingTime.value);
+    }
+  );
+
   async function getRowByOrderId(orderId: string) {
     try {
       const params: searchFormType = formatParams(
@@ -188,7 +241,7 @@ export function useBettingAuditHook(venueType: number) {
       );
       if (res.code) return message(res.msg, { type: 'error' });
       if (res.data !== null) {
-        let list = res?.data?.pageData || [];
+        const list = res?.data?.pageData || [];
         dataList.map((item: any) => {
           if (item.id === orderId) {
             Object.assign(item, list[0]);
@@ -222,15 +275,15 @@ export function useBettingAuditHook(venueType: number) {
     const res: BetOrderAPI.BetOrderResType = await API.bettingAuditList(
       formatParams({ pageNum: 1, pageSize: 50000 }) as searchFormType
     );
-    let list = []
-    res.data?.pageData?.map((row)=>{
-      row?.combineOrderDetails?.map((match)=>{
-        list.push({...row,...match})
-      })
-    })
+    const list = [];
+    res.data?.pageData?.map(row => {
+      row?.combineOrderDetails?.map(match => {
+        list.push({ ...row, ...match });
+      });
+    });
     const r = list.map((item: any, i) => {
       const arr = [];
-      const data = item
+      const data = item;
       columns.forEach((column: { prop: string }) => {
         let str = '';
         switch (column.prop.toString()) {
@@ -341,8 +394,17 @@ export function useBettingAuditHook(venueType: number) {
       type: 'success'
     });
   };
+
+  // export to excel
+  const exportFileTest = async () => {
+    const res: BetOrderAPI.BetOrderResType = await API.bettingAuditListExport(
+      formatParams({ pageNum: 1, pageSize: 50000, venueType }) as searchFormType
+    );
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+  };
+
   const handleCancel = (row: any, index: number) => {
-    let data = { ...row }; //...row.combineOrderDetails[index]
+    const data = { ...row }; //...row.combineOrderDetails[index]
     data.combineOrderDetails = data.combineOrderDetails.filter(
       (item: BetOrderAPI.Detail, i: number) => {
         return i == index;
@@ -356,26 +418,33 @@ export function useBettingAuditHook(venueType: number) {
   };
 
   const openCancelDialog = async list => {
+    _clearInterval();
     const r = await openPasswordInput();
-    if (!r) return;
+    if (!r) {
+      await fetchListDataWithInterval();
+      return;
+    }
     addDialog({
       title: '风控划单',
       width: '30%',
       hideFooter: true,
       closeOnClickModal: false,
       alignCenter: true,
+      showClose: false,
       contentRenderer: ({ options, index }) =>
         h(formDom, {
           list: list,
-          onCloseDialog: () => {
-            onSearch('reload');
+          onCloseDialog: async () => {
+            isEditDialogClick.value = false;
+            // onSearch('reload');
+            await fetchListDataWithInterval();
             closeDialog(options, index);
           }
         })
     });
   };
   const handleApprove = (row: any, index: number) => {
-    let data = { ...row }; //...row.combineOrderDetails[index]
+    const data = { ...row }; //...row.combineOrderDetails[index]
     data.combineOrderDetails = data.combineOrderDetails.filter((item, i) => {
       return i == index;
     });
@@ -386,7 +455,7 @@ export function useBettingAuditHook(venueType: number) {
     openApproveDialog(list);
   };
   const handleApproveSome = () => {
-    let obj = {};
+    const obj = {};
     dataList.map(item => {
       item.combineOrderDetails.map((match: any) => {
         if (match.approveSelected) {
@@ -411,7 +480,7 @@ export function useBettingAuditHook(venueType: number) {
     openApproveDialog(list);
   };
   const handleCancelSome = () => {
-    let obj = {};
+    const obj = {};
     dataList.map(item => {
       item.combineOrderDetails.map((match: any) => {
         if (match.rejectSelected) {
@@ -436,22 +505,33 @@ export function useBettingAuditHook(venueType: number) {
     openCancelDialog(list);
   };
 
-  const openApproveDialog = list => {
-    ElMessageBox.confirm(t('确定审核通过吗？'), t('警告'), {
-      center: true,
-      type: 'warning'
-    }).then(async () => {
+  const openApproveDialog = async list => {
+    _clearInterval();
+    try {
+      const action = await ElMessageBox.confirm(
+        t('确定审核通过吗？'),
+        t('警告'),
+        {
+          center: true,
+          type: 'warning',
+          showClose: false
+        }
+      );
+
+      await fetchListDataWithInterval();
+      isEditDialogClick.value = false;
       const r = await openPasswordInput();
       if (!r) {
         return;
       }
-      API.bettingAuditConfirm(list).then(res => {
-        onSearch();
+      API.bettingAuditConfirm(list).then(async res => {
         res.code === 0
           ? message(res.msg, { type: 'success' })
           : message(res.msg, { type: 'error' });
       });
-    });
+    } catch (error) {
+      await fetchListDataWithInterval();
+    }
   };
 
   const getRiskStatus = (rStatus: number) => {
@@ -476,6 +556,7 @@ export function useBettingAuditHook(venueType: number) {
     orderDetailId: number,
     orderDetailRemark: string
   ) => {
+    _clearInterval();
     addDialog({
       title: t('编辑备注'),
       class: 'reset_dialog',
@@ -483,14 +564,17 @@ export function useBettingAuditHook(venueType: number) {
       center: true,
       closeOnClickModal: false,
       hideFooter: true,
+      showClose: false,
       contentRenderer: ({ options, index }) =>
         h(editOrder, {
           ref: editDialogRef,
           data: { orderDetailId, orderDetailRemark },
-          onCloseDialog: (value: string) => {
+          onCloseDialog: async (value: string) => {
+            isEditRemarkClick.value = false;
             closeDialog(options, index);
             getRowByOrderId(orderId);
-            // onSearch();
+            // refresh data
+            await fetchListDataWithInterval();
           }
         })
     });
@@ -508,8 +592,13 @@ export function useBettingAuditHook(venueType: number) {
 
   //- 切换比赛类型
   onMounted(() => {
+    console.log(11111,window.location.href.indexOf('riskStatus=2'))
     onSearch();
     getTenantList();
+  });
+
+  onUnmounted(() => {
+    loopTimer.value && clearInterval(loopTimer.value);
   });
 
   return {
@@ -525,6 +614,7 @@ export function useBettingAuditHook(venueType: number) {
     handleCurrentChange,
     handleSelectionChange,
     exportFile,
+    exportFileTest,
     getRiskStatus,
     copyTest,
     tenantObj,
@@ -534,6 +624,8 @@ export function useBettingAuditHook(venueType: number) {
     handleApproveSome,
     selectReject,
     selectApprove,
-    editMatchDetailRemark
+    editMatchDetailRemark,
+    hasDataFetching,
+    dataFetchingTime
   };
 }
