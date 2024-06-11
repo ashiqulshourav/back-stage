@@ -226,15 +226,14 @@
           >
             {{ t('重置') }}
           </el-button>
-
-         <el-button
+          <!-- <el-button
             type="primary"
             :icon="useRenderIcon(Download)"
             v-if="hasAuth('EXPORT')"
             @click="exportFile()"
           >
             {{ t('导出报表') }}
-          </el-button>
+          </el-button> -->
 
          <el-button
             type="primary"
@@ -290,7 +289,7 @@ const dateRangetType = computed(() => {
   return o[dateType.value];
 });
 
-const emits = defineEmits(['onSearch', 'exportFile', 'exportFileTest']);
+const emits = defineEmits(['onSearch', 'exportFileTest']);
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
   selectDate.value = '';
@@ -319,9 +318,9 @@ const search = () => {
   emits('onSearch', ...['reload']);
 };
 
-const exportFile = () => {
-  emits('exportFile');
-};
+// const exportFile = () => {
+//   emits('exportFile');
+// };
 
 const exportFileTest = () => {
   emits('exportFileTest');
