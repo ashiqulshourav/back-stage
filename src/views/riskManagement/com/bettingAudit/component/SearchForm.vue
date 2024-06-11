@@ -273,9 +273,11 @@ import { formRules } from '@/views/configCenter/classify_setting/utils/rule';
 
 const emits = defineEmits(['onSearch', 'exportFile', 'exportFileTest']);
 const resetForm = (formEl: FormInstance | undefined) => {
-  formEl.resetFields();
+  formEl?.resetFields();
   selectDate.value = '';
   gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
+  props.form.createTimeStart = dayjs().subtract(30, 'day').startOf('day').valueOf();
+  props.form.createTimeEnd = dayjs().endOf('day').valueOf();
   search();
 };
 
