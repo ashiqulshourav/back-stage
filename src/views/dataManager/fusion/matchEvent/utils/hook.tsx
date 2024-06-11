@@ -3,9 +3,10 @@ import manualMatchModal from '../manualMatchModal.vue';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, h } from 'vue';
-import { editSearchFormType, searchFormType } from './types';
+import { editSearchFormType, searchFormType, udpateOddsType } from './types';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import dayjs from "dayjs";
+
 export function matchCombineHook() {
   const dataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
   const matchInfoDataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
@@ -47,6 +48,11 @@ export function matchCombineHook() {
     endTime: null,
   });
 
+  const updateOddsParams = reactive<udpateOddsType>({
+    matchId: null,
+    isDataSourceOdds: null,
+  });
+
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
     onSearch();
@@ -69,6 +75,12 @@ export function matchCombineHook() {
 
   function handleSelectionChange(val: number) {
     console.log('handleSelectionChange', val);
+  }
+
+  async function getOdds() {
+    const res = await API.updateOdds({
+      ...removeEmptyStringKeys(updateOddsParams)
+    });
   }
 
   async function onSearch(type?: string) {
@@ -195,5 +207,7 @@ export function matchCombineHook() {
     handleModalTableWidthChange,
     handleModalCurrentChange,
     editPagination,
+    getOdds,
+    updateOddsParams,
   };
 }

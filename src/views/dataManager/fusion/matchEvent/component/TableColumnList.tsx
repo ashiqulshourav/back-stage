@@ -54,6 +54,11 @@ export const columns: TableColumnList = [
     formatter: ({ pairingType }) => matchMethod.find(_ => _.value === pairingType)?.label ?? '-'
   },
   {
+    label: t('获取赔率数据'),
+    slot: 'isDataSourceOdds',
+    minWidth: 150,
+  },
+  {
     label: t('操作人'),
     prop: 'pairingUser',
     minWidth: 150,

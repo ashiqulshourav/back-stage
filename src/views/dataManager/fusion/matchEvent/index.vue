@@ -41,6 +41,16 @@
             <div> {{ handleNullValue(row.awayTeamNameCn) }} </div>
             <div> {{ handleNullValue(row.awayTeamNameEn) }} </div>
           </template>
+          <template #isDataSourceOdds="{ row }">
+            <el-switch
+              v-show="row.pairingType != 0"
+              v-model="row.isDataSourceOdds"
+              :active-value="1"
+              :inactive-value="0"
+              inline-prompt
+              @click="handleUpdateOdds(row)"
+            />
+          </template>
           <template #operation="{ row }">
             <el-button
               class="reset-margin"
@@ -80,6 +90,12 @@ const handleNullValue = (value: string | number) => {
   return value ? value : '-';
 }
 
+const handleUpdateOdds = (row: MatchCombineAPI.matchSourceDetail) => {
+  updateOddsParams.matchId = row.matchId
+  updateOddsParams.isDataSourceOdds = row.isDataSourceOdds
+  getOdds();
+}
+
 const {
   loading,
   dataList,
@@ -90,5 +106,7 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   form,
+  getOdds,
+  updateOddsParams,
 } = matchCombineHook();
 </script>

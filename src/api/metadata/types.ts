@@ -208,7 +208,8 @@ declare namespace MatchCombineAPI {
     dataSourceCode: string,
     pairingStatus: number,
     pageSize: number,
-    pageNum: number
+    pageNum: number,
+    isDataSourceOdds: number,
   }
   type matchSourceData = {
     data:{
