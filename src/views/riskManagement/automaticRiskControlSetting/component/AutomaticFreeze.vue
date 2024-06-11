@@ -17,22 +17,22 @@
           :placeholder="t('联赛等级')"
           clearable
           multiple
-          :onChange="changeSourceName(row)"
         >
           <el-option
               :label="item=='-1'?'未评级':item"
               :value="item"
               v-for="item in LEAGUE_GRADLES"
               :key="item"
+              :disabled="leagueDisabled(row, item)"
           />
         </el-select>
 
         <span v-else>{{ formatRanges(row.leagueGrades) }} </span>
-        <div
-          v-if="!row.sourceCode && isFormClick"
+         <div
+          v-if="!row.leagueGrades?.length && isFormClick"
           class="text-red-500 text-xs text-start"
         >
-          {{ t('事件源不能为空') }}
+          {{ t('联赛等级不能为空') }}
         </div>
       </template>
       <template #isDisable="{ row }">
@@ -250,14 +250,43 @@ const changeSourceName = (row): any => {
   )?.label;
 };
 
-const eventDisabled = (eventCode: string, row: any) => {
+const leagueDisabled = (row: any, leagueItem: any) => {
   let disable = false;
-  props.orderAutoFreezeList.forEach(item => {
-    if (item.sourceCode == row.sourceCode) {
-      if (item.eventCode == eventCode) {
+
+  props.orderAutoFreezeList.forEach(selectedItem => {
+
+  if (selectedItem.sourceCode && row.sourceCode && selectedItem.sourceCode == row.sourceCode) {
+    if (selectedItem.eventCode == row.eventCode) {
+      if (selectedItem.leagueGrades?.includes(leagueItem)) {        
         disable = true;
       }
     }
+  }
+  });
+
+  return disable;
+}
+
+const eventDisabled = (eventCode: string, row: any) => {
+  let disable = false;
+  props.orderAutoFreezeList.forEach(selectedItem => {
+
+    let found = false;
+
+    for (let i = 0; i < toRaw(row.leagueGrades).length; i++) {
+       if((toRaw(selectedItem.leagueGrades) as any)?.includes(toRaw(row.leagueGrades)[i])) {
+         found = true;
+       }
+    }
+
+    if (found) {      
+      if (selectedItem.sourceCode == row.sourceCode) {
+        if (selectedItem.eventCode == eventCode) {
+          disable = true;
+        }
+      }
+    }
+
   });
 
   return disable;
@@ -265,10 +294,21 @@ const eventDisabled = (eventCode: string, row: any) => {
 
 const sourceDisabled = (sourceCode: string, row: any) => {
   let disable = false;
-  props.orderAutoFreezeList.forEach(item => {
-    if (item.eventCode == row.eventCode) {
-      if (item.sourceCode == sourceCode) {
-        disable = true;
+  props.orderAutoFreezeList.forEach(selectedItem => {
+
+    let found = false;
+
+    for (let i = 0; i < toRaw(row.leagueGrades).length; i++) {
+       if((toRaw(selectedItem.leagueGrades) as any)?.includes(toRaw(row.leagueGrades)[i])) {
+         found = true;
+       }
+    }
+
+    if (found) {      
+      if (selectedItem.eventCode == row.eventCode) {
+        if (selectedItem.sourceCode == sourceCode) {
+          disable = true;
+        }
       }
     }
   });

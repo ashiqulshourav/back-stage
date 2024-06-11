@@ -28,10 +28,12 @@ import formDom from '../component/form.vue';
 import { ElMessageBox, FormInstance } from 'element-plus';
 import editOrder from '../component/editOrder.vue';
 import { useBettingAuditStore } from '@/store/bettingAudit';
-import {hasAuth} from "@/router/utils";
+import { hasAuth } from '@/router/utils';
+import { useRiskNoticeStore } from '@/store/riskNotice';
 
 export function useBettingAuditHook(venueType: number) {
-  const { openPasswordInput } = usePasswordInputHook({showClose: false});
+  const riskNoticeStore = useRiskNoticeStore();
+  const { openPasswordInput } = usePasswordInputHook({ showClose: false });
   const bettingAuditStore = useBettingAuditStore();
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<any>([]);
@@ -68,7 +70,7 @@ export function useBettingAuditHook(venueType: number) {
     seriesDetailsDuplex: [],
     minBetAmount: '',
     maxBetAmount: '',
-    riskStatus:window?.location?.href?.indexOf('riskStatus=2')?2:'',
+    riskStatus: window?.location?.href?.indexOf('riskStatus=2') ? 2 : ''
   });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -187,8 +189,8 @@ export function useBettingAuditHook(venueType: number) {
   const fetchListDataWithInterval = async (type?: string) => {
     _clearInterval();
     console.log({ dataFetchingTime: dataFetchingTime.value });
-    console.log(11111,hasDataFetching,hasDataFetching.value)
-    if (hasDataFetching.value&&hasAuth('refreshSetting'.toUpperCase())) {
+    console.log(11111, hasDataFetching, hasDataFetching.value);
+    if (hasDataFetching.value && hasAuth('refreshSetting'.toUpperCase())) {
       if (!isEditDialogClick.value && !isEditRemarkClick.value) {
         loopTimer.value = setInterval(
           async () => await fetchData(type),
@@ -218,7 +220,7 @@ export function useBettingAuditHook(venueType: number) {
     }
   );
 
-    watch(
+  watch(
     () => [dataFetchingTime.value],
     () => {
       onSearch();
@@ -438,6 +440,7 @@ export function useBettingAuditHook(venueType: number) {
             isEditDialogClick.value = false;
             // onSearch('reload');
             await fetchListDataWithInterval();
+            await riskNoticeStore.setRiskNotice();
             closeDialog(options, index);
           }
         })
@@ -531,6 +534,8 @@ export function useBettingAuditHook(venueType: number) {
       });
     } catch (error) {
       await fetchListDataWithInterval();
+    } finally {
+      await riskNoticeStore.setRiskNotice();
     }
   };
 
@@ -575,6 +580,7 @@ export function useBettingAuditHook(venueType: number) {
             getRowByOrderId(orderId);
             // refresh data
             await fetchListDataWithInterval();
+            await riskNoticeStore.setRiskNotice();
           }
         })
     });
@@ -592,7 +598,7 @@ export function useBettingAuditHook(venueType: number) {
 
   //- 切换比赛类型
   onMounted(() => {
-    console.log(11111,window.location.href.indexOf('riskStatus=2'))
+    console.log(11111, window.location.href.indexOf('riskStatus=2'));
     onSearch();
     getTenantList();
   });

@@ -35,5 +35,15 @@ export const eventData = {
   }) =>
     http.request<EventAPI.getMatchStatusticResType>('post', '/matchData/v1/getMatchStatistic',
       { data }
-    )
+    ),
+  //- 获取制定注单
+  getMatchBetList: (data: {
+    matchId: number | string;
+    startMinutes: number;
+    pageSize: number;
+    pageNum: number;
+  }) =>
+    http.request<EventAPI.getMatchBetListResType>('post', '/matchData/v1/getMatchBetList',
+      { data }
+    ),
 };

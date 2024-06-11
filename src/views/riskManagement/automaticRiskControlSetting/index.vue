@@ -42,13 +42,13 @@
             currentRiskControlLabelId == 1 && hasAuth('AUTOORDERPLACEMENTLIST')
           "
         >
-          <span class="font-bold">{{ t('自动划单设置') }}</span>
+          <span class="font-bold">{{ t('足球自动划单设置') }}</span>
         </span>
         <span
           v-if="currentRiskControlLabelId == 2 && hasAuth('AUTOFREEZELIST')"
           class="flex gap-5 items-center"
         >
-          <span class="font-bold">{{ t('冻结注单设置') }}</span>
+          <span class="font-bold">{{ t('足球冻结注单设置') }}</span>
           <span>
             <span class="text-gray-500 flex items-center gap-4">
               <el-icon @mouseover="showMessage = true" @mouseleave="showMessage = false" class="cursor-pointer"><InfoFilled /></el-icon>

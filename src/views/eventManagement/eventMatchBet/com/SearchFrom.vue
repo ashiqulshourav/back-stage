@@ -11,7 +11,6 @@
           class="!w-[150px]"
         />
       </el-form-item>
-
       <el-form-item>
         <el-button
           type="primary"
@@ -72,10 +71,10 @@ const resetForm = (formEl: FormInstance | undefined) => {
 };
 
 const search = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return;
+  if (!formEl || !props.form.matchId) return;
   await formEl.validate(async v => {
     if (v) {
-      emits('onSearch', ...['reload']);
+      emits('onSearch');
     }
   });
 };
