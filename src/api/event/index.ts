@@ -34,7 +34,8 @@ export const eventData = {
     matchId: string | number
   }) =>
     http.request<EventAPI.getMatchStatusticResType>('post', '/matchData/v1/getMatchStatistic',
-      { data }
+      { data },
+      { noNprogress: true }
     ),
   //- 获取制定注单
   getMatchBetList: (data: {
@@ -44,6 +45,9 @@ export const eventData = {
     pageNum: number;
   }) =>
     http.request<EventAPI.getMatchBetListResType>('post', '/matchData/v1/getMatchBetList',
-      { data }
+      { data },
+      {
+        noNprogress: true
+      }
     ),
 };
