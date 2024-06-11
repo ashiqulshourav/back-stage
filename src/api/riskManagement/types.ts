@@ -56,6 +56,7 @@ declare namespace RiskManagementDataAPI {
     isDelete?: number;
     createdAt?: string;
     updatedAt?: string;
+    idx?: number;
   };
   type OrderRejectTypes = {
     id?: number;
@@ -69,6 +70,7 @@ declare namespace RiskManagementDataAPI {
     createdAt?: string;
     updatedAt?: string;
     isDelete?: number;
+    idx?: number;
   };
   type AutoFreeze = {
     id?: number;
@@ -88,6 +90,7 @@ declare namespace RiskManagementDataAPI {
     isDelete?: number;
     createAt?: string;
     updateAt?: string;
+    idx?: number;
   };
   type LimitListType = {
     leagueLevel: number;
