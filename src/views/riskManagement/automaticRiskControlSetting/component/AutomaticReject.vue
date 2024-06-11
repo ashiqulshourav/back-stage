@@ -169,7 +169,7 @@ const leagueDisabled = (row: any, leagueItem: any) => {
 
   props.rejectOrderList.forEach(selectedItem => {
 
-  if (selectedItem.sourceCode == row.sourceCode) {
+  if (selectedItem.sourceCode && row.sourceCode && selectedItem.sourceCode == row.sourceCode) {
     if (selectedItem.eventCode == row.eventCode) {
       if (selectedItem.leagueGrades?.includes(leagueItem)) {        
         disable = true;
