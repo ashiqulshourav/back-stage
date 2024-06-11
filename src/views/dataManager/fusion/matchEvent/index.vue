@@ -48,7 +48,7 @@
               :active-value="1"
               :inactive-value="0"
               inline-prompt
-              @change="handleUpdateOdds(row)"
+              @change="getOdds(row)"
             />
           </template>
           <template #operation="{ row }">
@@ -90,12 +90,6 @@ const handleNullValue = (value: string | number) => {
   return value ? value : '-';
 }
 
-const handleUpdateOdds = (row: MatchCombineAPI.matchSourceDetail) => {
-  updateOddsParams.matchId = row.matchId
-  updateOddsParams.isDataSourceOdds = row.isDataSourceOdds
-  getOdds();
-}
-
 const {
   loading,
   dataList,
@@ -107,6 +101,5 @@ const {
   handleSelectionChange,
   form,
   getOdds,
-  updateOddsParams,
 } = matchCombineHook();
 </script>

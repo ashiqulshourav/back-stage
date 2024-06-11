@@ -77,9 +77,12 @@ export function matchCombineHook() {
     console.log('handleSelectionChange', val);
   }
 
-  async function getOdds() {
-    const res = await API.updateOdds({
-      ...removeEmptyStringKeys(updateOddsParams)
+  async function getOdds(row: MatchCombineAPI.matchSourceDetail) {
+    updateOddsParams.matchId = row.matchId
+    updateOddsParams.isDataSourceOdds = row.isDataSourceOdds
+    await API.updateOdds({
+      matchId: updateOddsParams.matchId,
+      isDataSourceOdds: updateOddsParams.isDataSourceOdds,
     });
   }
 
