@@ -315,7 +315,7 @@
                   row.billStatus,
                   row.betResultArr,
                   row.isReserve,
-                  row.riskStatus,
+                  row.riskStatusArr,
                   row.isSpecialSettle
                 ).bgColor
               }"
@@ -328,7 +328,7 @@
                     row.billStatus,
                     row.betResultArr,
                     row.isReserve,
-                    row.riskStatus,
+                    row.riskStatusArr,
                     row.isSpecialSettle
                   ).status as keyof typeof betStatusMap
                 ]
@@ -341,7 +341,7 @@
                   row.billStatus,
                   row.betResultArr,
                   row.isReserve,
-                  row.riskStatus,
+                  row.riskStatusArr,
                   row.isSpecialSettle
                 ).status === betStatus.settlementBet
               "

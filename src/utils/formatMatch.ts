@@ -154,6 +154,7 @@ export const BET_RESULT_TYPE_MAP: { [key in EBetResultType]: string } = {
   [EBetResultType.AUTO_CANCEL]: t('预约取消'), //22
   [EBetResultType.FLAT_MATCH_ROLLBACK]: t('走水'), // 比分回滚取消结算返还金额,算走水
   [EBetResultType.RISK_REJECT]: t('投注失败')  // 风控拒也算走水
+
 };
 
 export const getViewOddFn = (od: number, type: EOddType, currentOddType: number) => {

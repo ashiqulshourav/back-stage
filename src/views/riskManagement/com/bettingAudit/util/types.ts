@@ -51,12 +51,14 @@ export const seriesTypesDuplex = {
 
 export enum riskStatus {
   rejectBetting=2,
+  autoApprove=103,
   approve=104,
   reject=204,
   autoReject=203,
 }
 export const riskStatusMap ={
   [riskStatus.rejectBetting]: t('待审核'),
+  [riskStatus.autoApprove]: t('自动通过'),
   [riskStatus.approve]: t('手动通过'),
   [riskStatus.reject]: t('手动划单'),
   [riskStatus.autoReject]: t('自动划单'),

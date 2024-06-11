@@ -442,6 +442,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     riskStatusArr?: number[],
     isSpecialSettle?: number
   ) => {
+    console.log(11112222,betResultArr,riskStatusArr)
     let obj = { status: -1, bgColor: '' };
     if (isSpecialSettle === 1) {
       // 特殊结算也算已结算
@@ -460,6 +461,9 @@ export function useBettingCenterHook(category: number, venueType: number) {
       billStatus === 1 &&
       (betResultArr?.includes(22) || betResultArr?.includes(23))
     ) {
+      // 注单无效
+      obj = { status: betStatus.betInvalid, bgColor: '#E54752' };
+    }else if(riskStatusArr?.includes(riskStatus.autoApprove)&&betResultArr.includes(24)){
       // 注单无效
       obj = { status: betStatus.betInvalid, bgColor: '#E54752' };
     } else if (status === 2 && billStatus === 1 && betResultArr?.includes(21)) {
@@ -492,7 +496,9 @@ export function useBettingCenterHook(category: number, venueType: number) {
   const getOddStatus = (betResult: number, riskSt: number) => {
     if (riskSt === riskStatus.reject || riskSt === riskStatus.autoReject) {
       return '无效注单';
-    } else {
+    }else if(betResult===24&&riskSt==riskStatus.autoApprove){
+      return '盘口取消';
+    }else {
       return (
         BET_RESULT_TYPE_MAP[betResult as keyof typeof BET_RESULT_TYPE_MAP] || ''
       );
