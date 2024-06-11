@@ -167,10 +167,10 @@ const changeSourceName = (row): any => {
 const leagueDisabled = (row: any, leagueItem: any) => {
   let disable = false;
 
-  props.rejectOrderList.forEach(selectedItem => {
+  props.rejectOrderList.length > 1 && props.rejectOrderList.filter(item => item.idx != row.idx).forEach(selectedItem => {
 
-  if (selectedItem.sourceCode == row.sourceCode) {
-    if (selectedItem.eventCode == row.eventCode) {
+  if (selectedItem.sourceCode && selectedItem.eventCode && row.sourceCode && row.eventCode) {
+    if (selectedItem.eventCode == row.eventCode && selectedItem.sourceCode == row.sourceCode) {
       if (selectedItem.leagueGrades?.includes(leagueItem)) {        
         disable = true;
       }

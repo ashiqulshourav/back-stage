@@ -102,19 +102,21 @@ export function useRiskControlHook({
       orderAutoFreezeList.length = 0;
       sourceOrderAutoFreezeList.length = 0;
       orderAutoFreezeList.push(
-        ...res.data.map(item => ({
+        ...res.data.map((item, idx) => ({
           ...item,
           leagueGrades: item?.leagueGrades
             ? (item?.leagueGrades as any).split(',')
-            : []
+            : [],
+          idx: idx + 1
         }))
       );
       sourceOrderAutoFreezeList.push(
-        ...res.data.map(item => ({
+        ...res.data.map((item, idx) => ({
           ...item,
           leagueGrades: item?.leagueGrades
             ? (item?.leagueGrades as any).split(',')
-            : []
+            : [],
+          idx: idx + 1
         }))
       );
     } catch (error) {
@@ -133,19 +135,21 @@ export function useRiskControlHook({
       orderPlacementList.length = 0;
       sourceOrderPlacementList.length = 0;
       orderPlacementList.push(
-        ...res.data.map(item => ({
+        ...res.data.map((item, idx) => ({
           ...item,
           leagueGrades: item?.leagueGrades
             ? (item?.leagueGrades as any).split(',')
-            : []
+            : [],
+          idx: idx + 1
         }))
       );
       sourceOrderPlacementList.push(
-        ...res.data.map(item => ({
+        ...res.data.map((item, idx) => ({
           ...item,
           leagueGrades: item?.leagueGrades
             ? (item?.leagueGrades as any).split(',')
-            : []
+            : [],
+          idx: idx + 1
         }))
       );
     } catch (error) {
@@ -166,19 +170,21 @@ export function useRiskControlHook({
 
       console.log(res.data);
       rejectOrderList.push(
-        ...res.data.map(item => ({
+        ...res.data.map((item, idx) => ({
           ...item,
           leagueGrades: item?.leagueGrades
             ? (item?.leagueGrades as any).split(',')
-            : []
+            : [],
+          idx: idx + 1
         }))
       );
       sourcerejectOrderList.push(
-        ...res.data.map(item => ({
+        ...res.data.map((item, idx) => ({
           ...item,
           leagueGrades: item?.leagueGrades
             ? (item?.leagueGrades as any).split(',')
-            : []
+            : [],
+          idx: idx + 1
         }))
       );
     } catch (error) {
@@ -563,7 +569,8 @@ export function useRiskControlHook({
             betBeforeTime: undefined,
             leagueGrades: [],
             betAfterTime: undefined,
-            isDelete: undefined
+            isDelete: undefined,
+            idx: rejectOrderList.length + 1
           });
         }
         break;

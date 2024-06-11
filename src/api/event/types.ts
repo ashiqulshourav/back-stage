@@ -130,6 +130,7 @@ declare namespace EventAPI {
     awayTeamLogo: string;
     bet: number[];
     event: Event[];
+    matchStatus: string;
   }
 
 

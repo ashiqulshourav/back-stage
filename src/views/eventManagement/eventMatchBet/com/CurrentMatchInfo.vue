@@ -22,7 +22,11 @@
       </el-descriptions-item>
 
       <el-descriptions-item :label="t('赛事状态')" align="center">
-        {{ t('未开赛') }}
+        {{
+          matchData?.matchStatus
+            ? MATCH_STATUS[matchData?.matchStatus as keyof typeof MATCH_STATUS]
+            : '-'
+        }}
       </el-descriptions-item>
     </el-descriptions>
   </div>
@@ -31,6 +35,7 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
+import { MATCH_STATUS } from '@/utils/maps/sports_map';
 
 defineProps<{
   matchData: EventAPI.getMatchStatusticData;

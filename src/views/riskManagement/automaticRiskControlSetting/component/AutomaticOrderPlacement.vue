@@ -230,9 +230,9 @@ const changeSourceName = (row): any => {
 const leagueDisabled = (row: any, leagueItem: any) => {
   let disable = false;
 
-  props.orderPlacementList.forEach(selectedItem => {
+  props.orderPlacementList.length > 1 && props.orderPlacementList.filter(item => item.idx != row.idx).forEach(selectedItem => {
 
-  if (selectedItem.sourceCode == row.sourceCode) {
+  if (selectedItem.sourceCode && row.sourceCode && row.eventCode && selectedItem.sourceCode == row.sourceCode) {
     if (selectedItem.eventCode == row.eventCode) {
       if (selectedItem.leagueGrades?.includes(leagueItem)) {        
         disable = true;

@@ -26,7 +26,7 @@
       >
         <el-icon size="large"><UserFilled /></el-icon>
         <span
-          class="absolute bg-red-500 min-w-4 h-4 text-[10px] flex items-center justify-center bottom-[10px] left-[10px] text-white rounded-full"
+          class="absolute p-1 bg-red-500 min-w-4 h-4 text-[10px] mr-2 flex items-center justify-center bottom-[10px] left-[10px] text-white rounded-full"
           >{{ noticeValue }}</span
         >
       </div>
@@ -101,7 +101,7 @@ const noticeValue = computed(() => {
     Number(riskNoticeStore.esportAuditCount) +
     Number(riskNoticeStore.jjAuditCount) +
     Number(riskNoticeStore.sportAuditCount);
-  return Number(total) > 99 ? '99+' : total;
+  return Number(total) > 9999 ? '9999+' : total;
 });
 
 const refreshRiskNotice = () => {
