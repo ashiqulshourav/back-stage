@@ -43,7 +43,7 @@
           </template>
           <template #isDataSourceOdds="{ row }">
             <el-switch
-              v-show="row.pairingType != 0"
+              v-if="row.pairingType != 0"
               v-model="row.isDataSourceOdds"
               :active-value="1"
               :inactive-value="0"
