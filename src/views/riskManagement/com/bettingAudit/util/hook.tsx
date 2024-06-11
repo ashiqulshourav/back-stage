@@ -188,8 +188,6 @@ export function useBettingAuditHook(venueType: number) {
 
   const fetchListDataWithInterval = async (type?: string) => {
     _clearInterval();
-    console.log({ dataFetchingTime: dataFetchingTime.value });
-    console.log(11111, hasDataFetching, hasDataFetching.value);
     if (hasDataFetching.value && hasAuth('refreshSetting'.toUpperCase())) {
       if (!isEditDialogClick.value && !isEditRemarkClick.value) {
         loopTimer.value = setInterval(
@@ -598,7 +596,6 @@ export function useBettingAuditHook(venueType: number) {
 
   //- 切换比赛类型
   onMounted(() => {
-    console.log(11111, window.location.href.indexOf('riskStatus=2'));
     onSearch();
     getTenantList();
   });

@@ -27,7 +27,6 @@ export const useRiskNoticeStore = defineStore('RISKNOTICESTATE', {
             Number(riskNoticeRes.data.esportAuditCount) +
             Number(riskNoticeRes.data.jjAuditCount) +
             Number(riskNoticeRes.data.sportAuditCount);
-          console.log({ existingValue, newValue });
           // play sound
           if (newValue > existingValue) {
             const audio = new Audio(sound);
