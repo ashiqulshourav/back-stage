@@ -23,7 +23,7 @@ export function useEventQueryHook() {
   });
 
   const form = reactive<searchFormType>({
-    matchId: '',
+    matchId: '286400',
     dataSourceCode: '',
     eventCode: [],
     endTime: '',
@@ -32,7 +32,6 @@ export function useEventQueryHook() {
 
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
-
     if (!form.matchId) {
       matchEventList.length = 0;
       pagination.total = 0;

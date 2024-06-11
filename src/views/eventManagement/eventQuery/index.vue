@@ -2,17 +2,7 @@
   <div class="main">
     <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
 
-    <div
-      v-if="matchInfo.matchId"
-      class="mt-3 search-form bg-bg_color w-[99/100] pl-8 pt-[12px] flex flex-col"
-    >
-      <span>{{ matchInfo.sportName }}</span>
-      <span>{{ matchInfo.league }}</span>
-      <span>{{ matchInfo.hTeamName }} vs {{ matchInfo.aTeamName }} </span>
-      <span>{{ t('赛事ID ') }}: {{ matchInfo.matchId }}</span>
-      <span>{{ t('开赛时间') }}: {{ matchInfo.startDateTime }}</span>
-    </div>
-
+    <MatchDetail :matchInfo="matchInfo"></MatchDetail>
     <PureTableBar
       :title="t('赛事列表')"
       :columns="columns"
@@ -88,6 +78,7 @@ import { usePublicHooks } from '@/hooks';
 import { t } from '@/plugins/i18n';
 import { columns } from './component/TableColumnList';
 import SearchForm from './component/SearchForm.vue';
+import MatchDetail from './component/MatchDetail.vue';
 
 defineOptions({ name: 'EVENTMANAGEMENT_EVENTQUERY' });
 const { tableHeaderStyle } = usePublicHooks();
