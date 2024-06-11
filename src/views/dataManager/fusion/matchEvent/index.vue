@@ -48,7 +48,7 @@
               :active-value="1"
               :inactive-value="0"
               inline-prompt
-              @click="handleUpdateOdds(row)"
+              @change="handleUpdateOdds(row)"
             />
           </template>
           <template #operation="{ row }">

@@ -56,7 +56,7 @@ export const columns: TableColumnList = [
   {
     label: t('获取赔率数据'),
     slot: 'isDataSourceOdds',
-    minWidth: 150,
+    minWidth: 110,
   },
   {
     label: t('操作人'),
