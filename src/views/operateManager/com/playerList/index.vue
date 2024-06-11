@@ -198,7 +198,6 @@ const {
   dispatchUpdateUser,
   tenantObj,
   goChangeAccountPage,
-  tenantObj, 
   downloading,
   exportFileTest
 } = userPlayerListHook(props.category, props.venueType);

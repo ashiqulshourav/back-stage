@@ -295,6 +295,8 @@ const resetForm = (formEl: FormInstance | undefined) => {
   selectDate.value = '';
   // props.form.queryType = '';
   gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
+  props.form.timeStart = dayjs().subtract(30, 'day').startOf('day').valueOf();
+  props.form.timeEnd = dayjs().endOf('day').valueOf();
   search();
 };
 
