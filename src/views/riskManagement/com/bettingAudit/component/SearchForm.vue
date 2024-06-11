@@ -215,7 +215,7 @@
          <el-button
             type="primary"
             :icon="useRenderIcon(Download)"
-              :loading="loading"
+            :loading="downloading"
             v-if="hasAuth('EXPORT')"
             @click="exportFile()"
           >
@@ -225,7 +225,7 @@
          <el-button
             type="primary"
             :icon="useRenderIcon(Download)"
-              :loading="loading"
+            :loading="downloading"
             v-if="hasAuth('EXPORT')"
             @click="exportFileTest()"
           >
@@ -257,6 +257,7 @@ const props = defineProps<{
   venueType: number;
   form: searchFormType;
   tenantList: [];
+  downloading: boolean;
 }>();
 
 const formRef = ref();
