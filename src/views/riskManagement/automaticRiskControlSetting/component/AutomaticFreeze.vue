@@ -255,7 +255,7 @@ const leagueDisabled = (row: any, leagueItem: any) => {
 
   props.orderAutoFreezeList.forEach(selectedItem => {
 
-  if (selectedItem.sourceCode == row.sourceCode) {
+  if (selectedItem.sourceCode && row.sourceCode && selectedItem.sourceCode == row.sourceCode) {
     if (selectedItem.eventCode == row.eventCode) {
       if (selectedItem.leagueGrades?.includes(leagueItem)) {        
         disable = true;
