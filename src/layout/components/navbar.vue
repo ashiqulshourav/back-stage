@@ -101,7 +101,7 @@ const noticeValue = computed(() => {
     Number(riskNoticeStore.esportAuditCount) +
     Number(riskNoticeStore.jjAuditCount) +
     Number(riskNoticeStore.sportAuditCount);
-  return Number(total) > 99 ? '99+' : total;
+  return Number(total) > 9999 ? '9999+' : total;
 });
 
 const refreshRiskNotice = () => {
