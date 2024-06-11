@@ -11,7 +11,6 @@ export const useBettingAuditStore = defineStore('BETTING_AUDIT', {
     },
     setHasDataFetching() {
       this.hasDataFetching = !this.hasDataFetching;
-      console.log(this.hasDataFetching);
     }
   },
   persist: {

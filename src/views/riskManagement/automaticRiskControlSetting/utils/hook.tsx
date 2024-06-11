@@ -168,7 +168,6 @@ export function useRiskControlHook({
       rejectOrderList.length = 0;
       sourcerejectOrderList.length = 0;
 
-      console.log(res.data);
       rejectOrderList.push(
         ...res.data.map((item, idx) => ({
           ...item,

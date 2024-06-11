@@ -196,7 +196,6 @@ const eventDisabled = (eventCode: string, row: any) => {
 
     if (found) {      
       if (selectedItem.sourceCode == row.sourceCode) {
-        console.log('same');
         if (selectedItem.eventCode == eventCode) {
           disable = true;
         }
