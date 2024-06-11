@@ -22,12 +22,11 @@ export function useEventMatchBet() {
         bet: [],
         event: []
       });
+      clearInterval(loopTimer.value);
+      return;
     }
-
-    // if (loopTimer.value) clearInterval(loopTimer.value);
     const res = await API.getMatchStatistic(form);
     if (res.code) return;
-
     Object.assign(matchData, res.data);
     loop();
   }
