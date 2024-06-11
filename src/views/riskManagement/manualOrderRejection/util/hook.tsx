@@ -33,6 +33,7 @@ export function useManualOrderRejectionHook() {
   const tenantList = reactive<any>([]);
   const tenantObj = reactive<any>({});
   const loading = ref(true);
+  const downloading = ref(true);
   const totalInfo = reactive<BetOrderAPI.otherDataType>(
     {} as BetOrderAPI.otherDataType
   );
@@ -124,6 +125,7 @@ export function useManualOrderRejectionHook() {
         pageNum: pagination.currentPage
       } as any);
       loading.value = false;
+      downloading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
       if (res.data !== null) {
@@ -138,12 +140,12 @@ export function useManualOrderRejectionHook() {
         .querySelector('.table_container .el-scrollbar__wrap')
         .scroll(0, 0);
     } catch (error) {
-      loading.value = false;
+      downloading.value = false;
     }
   }
 
   const exportFileTest = async () => {
-      loading.value = true;
+      downloading.value = true;
       // 对于串关类型的选择处理
       let seriesDetails: any = [];
       if (form.seriesType == 2) {
@@ -185,7 +187,7 @@ export function useManualOrderRejectionHook() {
         export: true,
       } as any);
       message(res.msg, { type: res.code ? 'error' : 'success' });
-      loading.value = false;
+      downloading.value = false;
   }
 
   const getTenantList1 = async () => {
@@ -461,6 +463,7 @@ export function useManualOrderRejectionHook() {
 
   return {
     loading,
+    downloading,
     dataList,
     tenantList,
     pagination,

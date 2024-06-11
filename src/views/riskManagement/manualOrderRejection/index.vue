@@ -4,6 +4,7 @@
     <SearchForm
       :form="form"
       :loading="loading"
+      :downloading="downloading"
       @on-search="onSearch"
       @exportFileTest="exportFileTest"
       :tenantList="tenantList"
@@ -405,6 +406,7 @@ const getVal1 = (billStatus, betResult, settleStatus, item) => {
 
 const {
   loading,
+  downloading,
   dataList,
   pagination,
   totalInfo,
