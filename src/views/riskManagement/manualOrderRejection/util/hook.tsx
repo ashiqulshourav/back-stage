@@ -199,13 +199,7 @@ export function useManualOrderRejectionHook() {
     }
   };
 
-  const resetForm = formEl => {
-    if (!formEl) return;
-    formEl.resetFields();
-    onSearch();
-  };
-
-  //- 导出excel表格
+   //- 导出excel表格
   /*   const exportFile = async () => {
     // 对于串关类型的选择处理
     let seriesDetails: any = [];
@@ -355,6 +349,13 @@ export function useManualOrderRejectionHook() {
       type: 'success'
     });
   }; */
+
+  const resetForm = formEl => {
+    if (!formEl) return;
+    formEl.resetFields();
+    onSearch();
+  };
+
   const handleCancel = (data: any) => {
     return new Promise<boolean>((resolve, reject) => {
       ElMessageBox.confirm(t('确定取消注单吗？'), t('警告'), {
@@ -479,12 +480,12 @@ export function useManualOrderRejectionHook() {
     pagination,
     form,
     totalInfo,
-    exportFileTest,
     onSearch,
     resetForm,
     handleTableWidthChange,
     handleCurrentChange,
     handleSelectionChange,
+    exportFileTest,
     // exportFile,
     handleCancel,
     // getStatus,

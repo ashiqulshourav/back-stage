@@ -1,6 +1,12 @@
 <template>
   <div class="main">
-    <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
+    <SearchForm 
+    :form="form" 
+    :loading="loading" 
+    @exportFile="exportFile"
+    @on-search="onSearch" 
+    :downloading="downloading"
+  />
 
     <div
       v-if="matchInfo.matchId"
@@ -100,7 +106,9 @@ const {
   matchEventList,
   handleCurrentChange,
   handlePageSizeChange,
-  matchInfo
+  matchInfo,
+  downloading,
+  exportFile,
 } = useEventQueryHook();
 </script>
 

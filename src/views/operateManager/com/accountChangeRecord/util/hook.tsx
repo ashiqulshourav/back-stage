@@ -80,7 +80,7 @@ export function useAccountChangeRecordHook() {
       pagination.total = res.data.count;
       pagination.pageSize = res.data.pageSize;
       pagination.currentPage = res.data.pageNumber;
-      if (!form.accountChangeTypeCode && !form.endCreatedAt && !form.startCreatedAt) {
+      if (!form.accountChangeTypeCode && !form.endCreatedAt && !form.startCreatedAt && res.data.pageNum === 1) {
         userData.balance = res.data.pageData[0].balance;
       }
     } catch (error) {

@@ -226,21 +226,22 @@
           >
             {{ t('重置') }}
           </el-button>
-          <el-button
+
+         <el-button
             type="primary"
-            :icon="useRenderIcon('exportFill')"
+            :icon="useRenderIcon(Download)"
             v-if="hasAuth('EXPORT')"
             @click="exportFile()"
           >
             {{ t('导出报表') }}
           </el-button>
 
-          <el-button
+         <el-button
             type="primary"
             :icon="useRenderIcon(Download)"
             @click="exportFileTest()"
           >
-            {{ t('导出报表 TEST') }}
+            {{ t('报表异步导出') }}
           </el-button>
         </el-form-item>
       </div>

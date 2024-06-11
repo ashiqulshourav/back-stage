@@ -21,10 +21,10 @@
               :currentMatch="currentMatch"
               @changeSelectMatch="changeSelectMatch"
               @changeStatus="changeStatus"
+              :type="type"
             />
           </div>
           <ContentMain
-            :handicapLoading="handicapLoading"
             :currentMatch="currentMatch"
             :handicapList="handicapList"
             :selectContentType="selectContentType"
@@ -33,6 +33,10 @@
             @changeStatus="changeStatus"
             @sendNewOdds="sendNewOdds"
             :panIsEmpty="panIsEmpty"
+            :isShowDialog="isShowDialog"
+            :matchStatus="matchStatus"
+            @onCloseDialog="onCloseDialog"
+            :type="type"
           />
         </template>
       </div>
@@ -47,9 +51,7 @@ import TabController from './TabController.vue';
 import ContentMain from './ContentMain.vue';
 import { t } from '@/plugins/i18n';
 
-const { type } = defineProps<{
-  type: 'early' | 'in';
-}>();
+const { type } = defineProps<{ type: 'early' | 'in' }>();
 
 const {
   searchForm,
@@ -58,7 +60,6 @@ const {
   currentMatch,
   changeSelectMatch,
   onSearch,
-  handicapLoading,
   handicapList,
   selectContentType,
   changeSelectType,
@@ -66,7 +67,10 @@ const {
   changeStatus,
   sendNewOdds,
   noMatchList,
-  panIsEmpty
+  panIsEmpty,
+  isShowDialog,
+  matchStatus,
+  onCloseDialog
 } = useTradingHook(type);
 
 const title = computed(() =>

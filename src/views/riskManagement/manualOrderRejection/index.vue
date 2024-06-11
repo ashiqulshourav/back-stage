@@ -158,6 +158,9 @@
                 "
               >
                 {{ t('赛事ID:') }} {{ item.matchId }}
+                <span class="inline-block">
+                  <IconifyIconOffline :icon="Copy" />
+                </span>
               </div>
               <div class="item_line">
                 {{ t('开赛时间:')
@@ -202,6 +205,9 @@
                 "
               >
                 {{ t('注单号:') }} {{ row.id }}
+                <span class="inline-block">
+                  <IconifyIconOffline :icon="Copy" />
+                </span>
               </div>
               <div class="item_line">
                 {{ t('投注时间:')
@@ -242,12 +248,7 @@
                 v-for="item in row.combineOrderDetails"
                 :key="item.betItemId"
               >
-                <span v-if="row.combineOrderDetails.length < 2"
-                  :style="{
-                    background: getBackgroundColor(row.billStatus).bgColor
-                  }"
-                  class="accept-status"
-                >
+                <span v-if="row.combineOrderDetails.length < 2">
                   {{
                     getVal(
                       row.billStatus,
@@ -257,12 +258,7 @@
                     )
                   }}
                 </span>
-                <span v-else
-                  :style="{
-                      background: getBackgroundColor(row.billStatus).bgColor
-                  }"
-                  class="accept-status"
-                >
+                <span v-else>
                   {{
                     getVal1(
                       row.billStatus,
@@ -369,6 +365,7 @@ import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
 import { rejectReasonMap } from './util/types'
+import Copy from '@iconify-icons/ep/copy-document';
 import {
   formatSeriesType,
   useSportFormatDetail,

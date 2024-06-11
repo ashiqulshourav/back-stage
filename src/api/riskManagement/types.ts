@@ -29,6 +29,7 @@ declare namespace RiskManagementDataAPI {
     labelType?: number;
   };
   type RiskControlTypes = {
+    id?: number;
     name?: string;
     days?: number;
     betcount?: number;
@@ -41,13 +42,9 @@ declare namespace RiskManagementDataAPI {
     minLimitAmount?: number;
     maxLimitAmount?: number;
   };
-  type RiskControlTypesRes = {
-    code: number;
-    msg: string;
-    data: RiskControlTypes[];
-  };
   type OrderPlacementTypes = {
     id?: number | string;
+    leagueGrades?: string | string[];
     sourceCode?: string;
     sourceName?: string;
     eventCode?: string;
@@ -60,13 +57,9 @@ declare namespace RiskManagementDataAPI {
     createdAt?: string;
     updatedAt?: string;
   };
-  type OrderPlacementTypesRes = {
-    code: number;
-    msg: string;
-    data: OrderPlacementTypes[];
-  };
   type OrderRejectTypes = {
     id?: number;
+    leagueGrades?: string | string[];
     sourceCode?: string;
     sourceName?: string;
     eventCode?: string;
@@ -77,18 +70,9 @@ declare namespace RiskManagementDataAPI {
     updatedAt?: string;
     isDelete?: number;
   };
-  type OrderRejectTypesRes = {
-    code: number;
-    msg: string;
-    data: OrderRejectTypes[];
-  };
-  type AutoFreezeRes = {
-    code: number;
-    msg: string;
-    data: AutoFreeze[];
-  };
   type AutoFreeze = {
     id?: number;
+    leagueGrades?: string | string[];
     isDisable?: number;
     sourceCode?: string;
     sourceName?: string;
@@ -145,8 +129,21 @@ declare namespace RiskManagementDataAPI {
     esportWholeMaxBetRolling?: null | number;
     delFlag?: null | number; // 1是删除 其他则无感
   };
+  type RiskNotice {
+    esportAuditCount?: number;
+    jjAuditCount?: number;
+    sportAuditCount?: number;
+    riskNotificationRefresh?: string;
+    riskNotificationSwitch?: number;
+  }
   type RiskTagListRes = COMMON.BASE_RES_TYPE<RiskTagListType>;
   type RiskTagRes = COMMON.BASE_RES_TYPE<RiskTagType>;
   type LimitRes = COMMON.BASE_RES_TYPE<LimitListType[]>;
   type updateLevelLimitResType = COMMON.BASE_RES_TYPE<null>;
+
+  type OrderRejectTypesRes = COMMON.BASE_RES_TYPE<OrderRejectTypes[]>;
+  type AutoFreezeRes = COMMON.BASE_RES_TYPE<AutoFreeze[]>;
+  type OrderPlacementTypesRes = COMMON.BASE_RES_TYPE<OrderPlacementTypes[]>;
+  type RiskControlTypesRes = COMMON.BASE_RES_TYPE<RiskControlTypes[]>;
+  type RiskNoticeRes = COMMON.BASE_RES_TYPE<RiskNotice>;
 }

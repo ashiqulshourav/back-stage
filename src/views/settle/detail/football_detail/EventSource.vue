@@ -6,15 +6,15 @@
       !row.homeAway && 'un_select'
     ]"
     :disabled="!row.isEdit"
-    v-model="row.homeAway"
+    v-model="row.homeAway as string"
     :placeholder="row.isEdit ? t('请选择') : '-'"
     @change="teamChangeEvent(row, index, item.tableList, item.type)"
   >
     <template v-if="row.matchPeriodId === 50">
-      <el-option :label="t('双方无进球')" value="none" />
+      <!-- <el-option :label="t('双方无进球')" value="none" /> -->
       <el-option :label="t('主队进一球')" value="home" />
       <el-option :label="t('客队进一球')" value="away" />
-      <el-option :label="t('双方各进一球')" value="all" />
+      <!-- <el-option :label="t('双方各进一球')" value="all" /> -->
     </template>
     <template v-else>
       <el-option :label="t('主队')" value="home" />
@@ -27,6 +27,7 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import { MatchEventRowType } from './util/type';
+import { message } from '@/utils/message';
 
 const { row, index, item } = defineProps<
   MatchEventRowType & {
@@ -36,7 +37,7 @@ const { row, index, item } = defineProps<
 
 const emits = defineEmits(['teamChangeEvent']);
 
-const teamChangeEvent = (...data) => {
+const teamChangeEvent = (...data: any[]) => {
   if (row.matchPeriodId === 50) {
     let t1 = 0;
     let t2 = 0;
@@ -63,9 +64,20 @@ const teamChangeEvent = (...data) => {
     //   row.t1 = +prevRow.t1 + t1;
     //   row.t2 = +prevRow.t2 + t2;
     // }
-    row.firstNum = index + 1;
+    // row.firstNum = index + 1;
     row.firstT1 = t1;
     row.firstT2 = t2;
+    if (item.tableList.length > 1) {
+      const last = item.tableList[item.tableList.length - 1];
+      const second = item.tableList[item.tableList.length - 2];
+      if (
+        +(last.firstNum as string) === +(second.firstNum as string) &&
+        last.homeAway === second.homeAway
+      ) {
+        last.homeAway = '';
+        message(t('事件得分录入错误,请重新输入'), { type: 'error' });
+      }
+    }
   } else {
     emits('teamChangeEvent', ...data);
   }

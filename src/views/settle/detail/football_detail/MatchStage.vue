@@ -1,11 +1,17 @@
 <template>
   <template v-if="row.matchPeriodId === 50">
-    <div class="flex item-center justify-center w-full">
+    <div class="flex items-center justify-center w-full">
       <span>{{ t('第') }}</span>
-      <span
-        class="pl-2 ml-2 mr-2 pr-2 bg-[#dcdfe6] dark:bg-[#303030] rounded-sm"
-        >{{ index + 1 }}</span
-      >
+
+      <span class="w-10 mx-2 rounded-sm">
+        <el-input
+          type="number"
+          size="small"
+          v-model="row.firstNum"
+          :disabled="!row.isEdit"
+          @change="changeNum"
+          :formatter="(v:string) => inputRestrictions(v, 0, 100)"
+      /></span>
       <span>{{ t('轮') }}</span>
     </div>
   </template>
@@ -14,7 +20,7 @@
       :class="[row.canceled === 1 && 'canceled', '!w-[150px]']"
       :disabled="!row.isEdit"
       @change="changeSwitch"
-      v-model="row.matchPeriodId"
+      v-model="row.matchPeriodId as number"
       :placeholder="row.isEdit ? t('请选择') : '-'"
     >
       <el-option
@@ -31,6 +37,7 @@
 import { t } from '@/plugins/i18n';
 import { MatchEventRowType, MatchTimeType } from './util/type';
 import { message } from '@/utils/message';
+import { inputRestrictions } from '@/utils/formatNumber';
 
 const props = defineProps<
   MatchEventRowType & {
@@ -38,6 +45,36 @@ const props = defineProps<
     matchType: number;
   }
 >();
+
+//- 轮输入触发事件
+
+const changeNum = (v: string) => {
+  const errMsg = t('请按照比赛阶段顺序输入事件');
+  if (props.item.tableList.length === 2) {
+    const lastN: number = props.item.tableList[props.item.tableList.length - 1]
+      .firstNum as number;
+    const secondLastN: number = props.item.tableList[
+      props.item.tableList.length - 2
+    ].firstNum as number;
+    if (lastN < secondLastN) {
+      props.row.firstNum = '';
+      return message(errMsg, { type: 'error' });
+    } else if (+v < lastN) {
+      return message(errMsg, { type: 'error' });
+    }
+  } else if (props.item.tableList.length > 2) {
+    const lastN: number = props.item.tableList[props.item.tableList.length - 2]
+      .firstNum as number;
+    const secondLastN: number = props.item.tableList[
+      props.item.tableList.length - 3
+    ].firstNum as number;
+
+    if ((lastN === secondLastN && +v <= lastN) || +v < lastN) {
+      props.row.firstNum = '';
+      return message(errMsg, { type: 'error' });
+    }
+  }
+};
 
 const matchStatusList = computed(() => {
   const _ = {
@@ -54,10 +91,10 @@ const matchStatusList = computed(() => {
     ],
     2: [{ code: MatchTimeType.PSO, val: t('点球') }]
   };
-  return _[props.matchType];
+  return _[props.matchType as keyof typeof _];
 });
 
-const changeSwitch = val => {
+const changeSwitch = (val: MatchTimeType) => {
   if (props.item.tableList.length < 2) return;
   if (props.matchType < 3) {
     if (

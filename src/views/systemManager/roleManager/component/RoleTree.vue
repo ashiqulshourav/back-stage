@@ -13,7 +13,7 @@
       ref="treeRef"
       :data="menusData"
       :props="dataProps"
-      default-expand-all
+      :default-expand-all="false"
       show-checkbox
       class="role_tree"
       :check-on-click-node="true"

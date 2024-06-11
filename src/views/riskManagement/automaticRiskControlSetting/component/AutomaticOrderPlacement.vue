@@ -10,6 +10,31 @@
       :columns="columns"
       :header-cell-style="tableHeaderStyleBlue"
     >
+      <template #leagueGrades="{ row }">
+        <el-select
+          v-if="isEditRiskControls"
+          v-model="row.leagueGrades"
+          :placeholder="t('联赛等级')"
+          clearable
+          multiple
+        >
+          <el-option
+            :label="item=='-1'?'未评级':item"
+            :value="item"
+            v-for="item in LEAGUE_GRADLES"
+            :key="item"
+            :disabled="leagueDisabled(row, item)"
+          />
+        </el-select>
+
+        <span v-else>{{ formatRanges(row.leagueGrades) }} </span>
+        <div
+          v-if="!row.leagueGrades?.length && isFormClick"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('联赛等级不能为空') }}
+        </div>
+      </template>
       <template #eventSource="{ row }">
         <el-select
           v-if="isEditRiskControls"
@@ -24,6 +49,7 @@
             :value="item.value"
             v-for="item in EVENT_SOURCE"
             :key="item.value"
+            :disabled="sourceDisabled(item.value, row)"
           />
         </el-select>
 
@@ -175,7 +201,7 @@ import { getLabelColor } from '@/components/RiskLabelList/utils';
 import { getLabelLevelByName } from '@/components/RiskLabelList/utils';
 import { PandaMatch } from '@/views/eventManagement/eventQuery/utils/types';
 import { EVENT_SOURCE } from '@/views/eventManagement/eventQuery/utils/map';
-import { EVENT_NAMES } from '../utils/map';
+import { EVENT_NAMES, LEAGUE_GRADLES, formatRanges } from '../utils/map';
 
 const { tableHeaderStyleBlue } = usePublicHooks();
 const props = defineProps<{
@@ -201,14 +227,68 @@ const changeSourceName = (row): any => {
   )?.label;
 };
 
-const eventDisabled = (eventCode: string, row: any) => {
+const leagueDisabled = (row: any, leagueItem: any) => {
   let disable = false;
-  props.orderPlacementList.forEach(item => {
-    if (item.sourceCode == row.sourceCode) {
-      if (item.eventCode == eventCode) {
+
+  props.orderPlacementList.forEach(selectedItem => {
+
+  if (selectedItem.sourceCode == row.sourceCode) {
+    if (selectedItem.eventCode == row.eventCode) {
+      if (selectedItem.leagueGrades?.includes(leagueItem)) {        
         disable = true;
       }
     }
+  }
+  });
+
+  return disable;
+}
+
+const eventDisabled = (eventCode: string, row: any) => {
+  let disable = false;
+  props.orderPlacementList.forEach(selectedItem => {
+
+    let found = false;
+
+    for (let i = 0; i < toRaw(row.leagueGrades).length; i++) {
+       if((toRaw(selectedItem.leagueGrades) as any)?.includes(toRaw(row.leagueGrades)[i])) {
+         found = true;
+       }
+    }
+
+    if (found) {      
+      if (selectedItem.sourceCode == row.sourceCode) {
+        if (selectedItem.eventCode == eventCode) {
+          disable = true;
+        }
+      }
+    }
+
+  });
+
+  return disable;
+};
+
+const sourceDisabled = (sourceCode: string, row: any) => {
+  let disable = false;
+  props.orderPlacementList.forEach(selectedItem => {
+
+    let found = false;
+
+    for (let i = 0; i < toRaw(row.leagueGrades).length; i++) {
+       if((toRaw(selectedItem.leagueGrades) as any)?.includes(toRaw(row.leagueGrades)[i])) {
+         found = true;
+       }
+    }
+
+    if (found) {      
+      if (selectedItem.eventCode == row.eventCode) {
+        if (selectedItem.sourceCode == sourceCode) {
+          disable = true;
+        }
+      }
+    }
+
   });
 
   return disable;

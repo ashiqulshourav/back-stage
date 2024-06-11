@@ -18,21 +18,40 @@
       @refresh="onSearch('reload')"
     >
       <template #title>
-        <div class="flex item-center">
-          <el-button
-            type="danger"
-            v-if="rejectSelectedCount && hasAuth('REJECTSOME')"
-            @click="handleCancelSome"
-          >
-            {{ t('批量划单') }}
-          </el-button>
-          <el-button
-            type="primary"
-            v-if="approveSelectedCount && hasAuth('APPROVESOME')"
-            @click="handleApproveSome"
-          >
-            {{ t('批量通过') }}
-          </el-button>
+        <div class="flex item-center justify-between pr-5 gap-2 w-full">
+          <div>
+            <el-button
+              type="danger"
+              v-if="rejectSelectedCount && hasAuth('REJECTSOME')"
+              @click="handleCancelSome"
+            >
+              {{ t('批量划单') }}
+            </el-button>
+            <el-button
+              type="primary"
+              v-if="approveSelectedCount && hasAuth('APPROVESOME')"
+              @click="handleApproveSome"
+            >
+              {{ t('批量通过') }}
+            </el-button>
+          </div>
+          <div v-if="hasAuth('refreshSetting'.toUpperCase())" class="flex gap-3 items-center">
+            <el-switch
+              v-model="hasDataFetching"
+              inline-prompt
+              active-text="开"
+              inactive-text="关"
+              style="--el-switch-on-color: #f88d48;"
+            />
+            <span>{{t('列表刷新频率')}}</span>
+            <el-select v-model="dataFetchingTime" style="width: 80px">
+              <el-option label="30" :value="30"/>
+              <el-option label="60" :value="60"/>
+              <el-option label="120" :value="120"/>
+              <el-option label="180" :value="180"/>
+            </el-select>
+            <span>S</span>
+          </div>
         </div>
       </template>
       <template v-slot="{ size, dynamicColumns }">
@@ -183,6 +202,9 @@
                 "
               >
                 {{ t('赛事ID:') }} {{ item.matchId }}
+                <span class="inline-block">
+                  <IconifyIconOffline :icon="Copy" />
+                </span>
               </div>
               <div class="item_line">
                 {{ t('开赛时间:')
@@ -226,6 +248,9 @@
                 "
               >
                 {{ t('注单号:') }} {{ row.id }}
+                <span class="inline-block">
+                  <IconifyIconOffline :icon="Copy" />
+                </span>
               </div>
               <div class="item_line">
                 {{ t('投注时间:')
@@ -305,10 +330,7 @@
               v-for="(item, idx) in row.combineOrderDetails"
               :key="idx"
             >
-              <div
-                class=""
-                v-if="item.riskStatus === riskStatus.reject"
-              >
+              <div class="" v-if="item.riskStatus === riskStatus.reject">
                 原因:{{ item.riskType }}
               </div>
               <div
@@ -353,7 +375,7 @@
                 "
                 :checked="item.rejectSelected"
                 @change="data => selectReject(data, row.index - 1, index)"
-              ></el-checkbox>
+              />
 
               <el-button
                 v-if="
@@ -381,7 +403,7 @@
                   hasAuth('APPROVE')
                 "
                 @change="data => selectApprove(data, row.index - 1, index)"
-              ></el-checkbox>
+              />
               <el-button
                 @change="data => selectApprove(data, row.index - 1, index)"
                 v-if="
@@ -473,6 +495,7 @@ import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
 import { addThousandSeparator } from '@/utils/formatNumber';
+import Copy from '@iconify-icons/ep/copy-document';
 import {
   formatSeriesType,
   useSportFormatDetail,
@@ -488,12 +511,13 @@ import { riskStatus } from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { hasAuth } from '@/router/utils';
 import { ref } from 'vue';
-import {useRenderIcon} from "@/components/ReIcon/src/hooks";
-import EditPen from "@iconify-icons/ep/edit-pen";
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import EditPen from '@iconify-icons/ep/edit-pen';
 
 const { tableHeaderStyle } = usePublicHooks();
 const rejectSelectedCount = ref(0);
 const approveSelectedCount = ref(0);
+const isDataFetching = ref(1);
 
 const { venueType } = defineProps<{
   venueType: number;
@@ -521,7 +545,9 @@ const {
   getRiskStatus,
   selectReject,
   selectApprove,
-  editMatchDetailRemark
+  editMatchDetailRemark,
+  hasDataFetching,
+  dataFetchingTime
 } = useBettingAuditHook(venueType);
 watch(
   dataList,
@@ -627,7 +653,7 @@ watch(
 .approve {
   width: 100px;
 }
-.width-auto{
+.width-auto {
   width: auto;
 }
 .operate {
@@ -636,10 +662,10 @@ watch(
 .operation_item {
   width: 100px;
 }
-.mw-120 > .cell{
+.mw-120 > .cell {
   min-width: 120px;
 }
-.mw-50 > .cell{
+.mw-50 > .cell {
   min-width: 55px;
 }
 </style>
