@@ -238,6 +238,7 @@
          <el-button
             type="primary"
             :icon="useRenderIcon(Download)"
+            :loading="downloading"
             @click="exportFileTest()"
           >
             {{ t('报表异步导出') }}
@@ -275,6 +276,7 @@ const props = defineProps<{
   loading: boolean;
   form: searchFormType;
   tenantList: any;
+  downloading: boolean;
 }>();
 
 const formRef = ref();

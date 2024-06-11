@@ -41,6 +41,7 @@ export function useBettingAuditHook(venueType: number) {
   const loading = ref(true);
   const hasDataFetching = ref(bettingAuditStore.hasDataFetching);
   const dataFetchingTime = ref(bettingAuditStore.dataFetchingTime);
+  const downloading = ref(true);
   const loopTimer = ref<NodeJS.Timeout>();
   const isEditDialogClick = ref(false);
   const isEditRemarkClick = ref(false);
@@ -162,6 +163,7 @@ export function useBettingAuditHook(venueType: number) {
         venueType
       });
       loading.value = false;
+      downloading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
       dataList.length = 0;
       if (res.data !== null) {
@@ -183,6 +185,7 @@ export function useBettingAuditHook(venueType: number) {
         ?.scroll(0, 0);
     } catch (error) {
       loading.value = false;
+      downloading.value = false;
     }
   };
 
@@ -272,6 +275,8 @@ export function useBettingAuditHook(venueType: number) {
 
   //- 导出excel表格
   const exportFile = async () => {
+    downloading.value = true;
+    message(t('导出报表开始'), { type: 'warning' });
     const res: BetOrderAPI.BetOrderResType = await API.bettingAuditList(
       formatParams({ pageNum: 1, pageSize: 50000 }) as searchFormType
     );
@@ -390,17 +395,19 @@ export function useBettingAuditHook(venueType: number) {
     };
     utils.book_append_sheet(workBook, workSheet, '数据报表');
     writeFile(workBook, '赛程_注单审核.xlsx');
-    message(t('导出成功'), {
-      type: 'success'
-    });
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    downloading.value = false;
   };
 
   // export to excel
   const exportFileTest = async () => {
+    downloading.value = true;
+    message(t('导出报表开始'), { type: 'warning' });
     const res: BetOrderAPI.BetOrderResType = await API.bettingAuditListExport(
       formatParams({ pageNum: 1, pageSize: 50000, venueType }) as searchFormType
     );
     message(res.msg, { type: res.code ? 'error' : 'success' });
+    downloading.value = false;
   };
 
   const handleCancel = (row: any, index: number) => {
@@ -409,7 +416,7 @@ export function useBettingAuditHook(venueType: number) {
       (item: BetOrderAPI.Detail, i: number) => {
         return i == index;
       }
-    );
+    );s
     const details = data.combineOrderDetails.map((item: BetOrderAPI.Detail) => {
       return { detailId: item.detailId, riskTimes: item.riskTimes };
     });
@@ -606,6 +613,7 @@ export function useBettingAuditHook(venueType: number) {
 
   return {
     loading,
+    downloading,
     dataList,
     tenantList,
     pagination,

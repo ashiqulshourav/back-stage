@@ -8,6 +8,7 @@
       @exportFileTest="exportFileTest"
       :tenantList="tenantList"
       :venueType="venueType"
+      :downloading="downloading"
     />
 
     <PureTableBar
@@ -525,6 +526,7 @@ const { venueType } = defineProps<{
 
 const {
   loading,
+  downloading,
   dataList,
   pagination,
   totalInfo,
