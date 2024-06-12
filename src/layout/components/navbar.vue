@@ -117,8 +117,9 @@ const noticeValueCount = computed(() => {
 const refreshRiskNoticeWithInterval = async () => {
   if (interval.value) clearInterval(interval.value);
 
+  await riskNoticeStore.setRiskNotice();
+  console.log('auth', hasAuth('RISKNOTICEAGGREGATE'))
   if (hasAuth('RISKNOTICEAGGREGATE')) {    
-    await riskNoticeStore.setRiskNotice();
     interval.value = setInterval(async () => {
       await riskNoticeStore.setRiskNotice();
     }, 5000);
@@ -126,7 +127,8 @@ const refreshRiskNoticeWithInterval = async () => {
 };
 
 onMounted(() => {
-  riskNoticeStore.setRiskNotice();
+  // riskNoticeStore.setRiskNotice();
+  refreshRiskNoticeWithInterval();
 });
 
 watch(

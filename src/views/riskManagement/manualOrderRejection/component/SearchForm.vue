@@ -303,6 +303,10 @@ const resetForm = (formEl: FormInstance | undefined) => {
   gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
   props.form.timeStart = dayjs().subtract(30, 'day').startOf('day').valueOf();
   props.form.timeEnd = dayjs().endOf('day').valueOf();
+  riskNoticeStore.setRiskNoticeTimeFrame({
+    createTimeStart: dayjs().subtract(30, 'day').startOf('day').valueOf(),
+    createTimeEnd: dayjs().endOf('day').valueOf(),
+  });
   search();
 };
 
