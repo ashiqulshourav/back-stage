@@ -138,6 +138,8 @@ declare namespace RiskManagementDataAPI {
     sportAuditCount?: number;
     riskNotificationRefresh?: string;
     riskNotificationSwitch?: number;
+    createTimeStart?: number;
+    createTimeEnd?: number;
   }
   type RiskTagListRes = COMMON.BASE_RES_TYPE<RiskTagListType>;
   type RiskTagRes = COMMON.BASE_RES_TYPE<RiskTagType>;

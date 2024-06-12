@@ -1,4 +1,5 @@
 import { useRiskNoticeStore } from '@/store/riskNotice';
+import dayjs from 'dayjs';
 
 export function useRiskNotice() {
   const riskNotificationRefresh = ref('30');
@@ -28,7 +29,10 @@ export function useRiskNotice() {
   }
 
   async function getRiskNoticeAggregate() {
-    const riskNoticeRes = await API.getRiskNoticeAggregate();
+    const riskNoticeRes = await API.getRiskNoticeAggregate({
+      createTimeStart: dayjs().subtract(30, 'day').startOf('day').valueOf(),
+      createTimeEnd: dayjs().endOf('day').valueOf()
+    });
 
     if (!riskNoticeRes.code) {
       esportAuditCount.value = riskNoticeRes.data.esportAuditCount!;
@@ -37,7 +41,6 @@ export function useRiskNotice() {
     }
   }
 
-  
   onMounted(() => {
     getRiskNotification();
     getRiskNoticeAggregate();

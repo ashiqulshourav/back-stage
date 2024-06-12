@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import sound from '@/assets/media/order_sound.mp3';
+import dayjs from 'dayjs';
 
 export const useRiskNoticeStore = defineStore('RISKNOTICESTATE', {
   state: (): RiskManagementDataAPI.RiskNotice => ({
@@ -7,11 +8,18 @@ export const useRiskNoticeStore = defineStore('RISKNOTICESTATE', {
     jjAuditCount: 0,
     sportAuditCount: 0,
     riskNotificationRefresh: '30',
-    riskNotificationSwitch: 0
+    riskNotificationSwitch: 0,
+    createTimeStart: 0,
+    createTimeEnd: 0
   }),
   actions: {
     async setRiskNotice() {
-      const riskNoticeRes = await API.getRiskNoticeAggregate();
+      const riskNoticeRes = await API.getRiskNoticeAggregate({
+        createTimeStart:
+          this.createTimeStart ||
+          dayjs().subtract(30, 'day').startOf('day').valueOf(),
+        createTimeEnd: this.createTimeEnd || dayjs().endOf('day').valueOf()
+      });
 
       if (!riskNoticeRes.code) {
         const res = await API.getRiskNotification();
@@ -37,10 +45,8 @@ export const useRiskNoticeStore = defineStore('RISKNOTICESTATE', {
 
           this.esportAuditCount = riskNoticeRes.data.esportAuditCount;
           this.jjAuditCount = riskNoticeRes.data.jjAuditCount;
-          this.sportAuditCount = riskNoticeRes.data.sportAuditCount;  
+          this.sportAuditCount = riskNoticeRes.data.sportAuditCount;
         }
-
-        
       }
     },
     setRiskNoticeRefreshSecond(second: string) {
