@@ -416,7 +416,7 @@ export function useBettingAuditHook(venueType: number) {
       (item: BetOrderAPI.Detail, i: number) => {
         return i == index;
       }
-    );s
+    );
     const details = data.combineOrderDetails.map((item: BetOrderAPI.Detail) => {
       return { detailId: item.detailId, riskTimes: item.riskTimes };
     });
