@@ -2,7 +2,7 @@ declare namespace EventAPI {
   type PandaMatchEventListParams = {
     matchId?: number | string;
     dataSourceCode?: string | number;
-    eventCode?: [] | '';
+    eventCode?: string[] | string | '';
     startTime?: number | string;
     endTime?: number | string;
     pageSize?: number;
@@ -116,9 +116,12 @@ declare namespace EventAPI {
     navigateLastPage: number;
   };
 
+  type getMatchEventByMatchIdResType = COMMON.BASE_RES_TYPE<matchEventList>
+
   type EventData = {
     type: string;
     n: number;
+    time: number;
   }
 
   type Event = {
@@ -132,12 +135,14 @@ declare namespace EventAPI {
     awayTeamNameCn: string;
     homeTeamLogo: string;
     awayTeamLogo: string;
-    bet: number[];
+    bet: {
+      n: string;
+      o: number;
+      t: string;
+    }[];
     event: Event[];
     matchStatus: string;
   }
-
-
 
   type getMatchStatusticResType = COMMON.BASE_RES_TYPE<getMatchStatusticData>
 

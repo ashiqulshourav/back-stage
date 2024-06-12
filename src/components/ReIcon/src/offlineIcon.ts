@@ -44,6 +44,8 @@ import lock_icon from '@iconify-icons/fa-solid/lock';
 import Link from '@iconify-icons/icon-park-outline/link-one';
 import Unlink from '@iconify-icons/icon-park-outline/unlink';
 import EventManagementIcon from '@iconify-icons/ri/calendar-event-fill';
+import Copy from '@iconify-icons/ep/copy-document';
+
 
 addIcon("dataSourceManager", dataManager);
 addIcon("sale", sale);
@@ -61,6 +63,7 @@ addIcon("taskCenter", TaskCenterIcon);
 addIcon("download", Download);
 addIcon("SportTrading", metadata);
 addIcon("eventManagement", EventManagementIcon);
+addIcon("copyIcon", Copy);
 
 /* 菜单icon结束 */
 //- 操盘图标开始

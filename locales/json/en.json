@@ -1057,7 +1057,6 @@
   "k6175649e": "Session/Round/Set",
   "k-5bd6f419": "Home/Away",
   "k-2d984472": "Player Name",
-  "k29f4a9c5": "Event ID",
   "k-383bc73": "Cannot be empty",
   "k653baded": "User Payout Available Balance Query",
   "k39eb9507": "Remaining Payout Available Amount for Single Event",
@@ -1139,6 +1138,10 @@
   "k56766813": "分钟后",
   "k18318dfe": "发生",
   "k-281f3ff2": "事件",
-  "k77c95f3e": "请先进行赛事选择",
-  "k66d4e447": "玩法"
+  "k66d4e447": "玩法",
+  "k-316c7e2": "队伍名称",
+  "k-7403906f": "FT",
+  "kec19d00": "HT1",
+  "k-68373346": "HT2",
+  "k5d5d4310": "注单分布"
 }

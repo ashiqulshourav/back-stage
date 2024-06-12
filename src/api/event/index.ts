@@ -8,7 +8,7 @@ export const eventData = {
     ),
 
   getMatchEventByMatchId: (data: EventAPI.PandaMatchEventListParams) =>
-    http.request<EventAPI.MatchEvent[]>(
+    http.request<EventAPI.getMatchEventByMatchIdResType>(
       'post',
       '/event/v1/getMatchEventByMatchId',
       { data }

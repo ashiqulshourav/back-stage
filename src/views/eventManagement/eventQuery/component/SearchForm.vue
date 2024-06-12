@@ -12,7 +12,7 @@
           :placeholder="t('输入赛事ID')"
           v-enter="search"
           clearable
-          :formatter="v => formatNumber(v)"
+          :formatter="(v:string) => formatNumber(v)"
           class="!w-[150px]"
         />
       </el-form-item>
@@ -34,7 +34,6 @@
           :placeholder="t('事件源')"
           clearable
           class="!w-[150px]"
-          @change="changeEventName"
         >
           <el-option
             :label="item.label"
@@ -71,7 +70,7 @@
             <el-checkbox
               v-model="removeAll"
               @change="handleRemoveAll"
-              :disabled="form?.eventCode.length == 0"
+              :disabled="form!.eventCode!.length == 0"
             >
               {{ t('全不选') }}
             </el-checkbox>
@@ -108,14 +107,12 @@ import Search from '@iconify-icons/ep/search';
 import Refresh from '@iconify-icons/ep/refresh';
 import type { FormInstance, CheckboxValueType } from 'element-plus';
 import { PandaMatch, searchFormType } from '../utils/types';
-import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { EVENT_SOURCE } from '../utils/map';
 import { searchFormRules } from '../utils/rule';
 
 const time = ref('');
 const formRef = ref<FormInstance>();
 const emits = defineEmits(['onSearch']);
-const eventNames = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
 const pandaMatchList = reactive<PandaMatch[]>([]);
 
 const props = defineProps<{
@@ -123,7 +120,7 @@ const props = defineProps<{
   form: searchFormType;
 }>();
 
-const changeDate = t => {
+const changeDate = (t: any) => {
   if (!t) {
     props.form.startTime = '';
     props.form.endTime = '';
@@ -158,13 +155,9 @@ const search = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate(async v => {
     if (v) {
-      emits('onSearch', ...['reload']);
+      emits('onSearch', ...['init']);
     }
   });
-};
-
-const changeEventName = e => {
-  // props.form.eventName = '';
 };
 
 const checkAll = ref(false);
@@ -173,7 +166,7 @@ const checkRevert = ref(false);
 
 watch(
   () => props.form.eventCode,
-  val => {
+  (val: any) => {
     if (!val || val.length === 0) {
       checkAll.value = false;
     } else if (val.length === pandaMatchList.length) {
@@ -191,7 +184,7 @@ const handleCheckAll = (val: CheckboxValueType) => {
     props.form.eventCode = [];
   }
 };
-const handleRemoveAll = (val: CheckboxValueType) => {
+const handleRemoveAll = () => {
   props.form.eventCode = [];
 };
 const handleCheckRevert = () => {

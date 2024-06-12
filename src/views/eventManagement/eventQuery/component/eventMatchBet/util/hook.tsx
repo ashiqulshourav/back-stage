@@ -7,7 +7,6 @@ export function useEventMatchBet() {
   const loopTimer = ref();
 
   const form = reactive<{ matchId: number | string }>({
-    // matchId: '288252'
     matchId: ''
   });
 
