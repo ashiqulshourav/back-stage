@@ -21,6 +21,7 @@
       <!-- 国际化 -->
       <!-- RiskNotice Menu -->
       <div
+        v-if="hasAuth('RISKNOTICEAGGREGATE')"
         class="relative mr-5 flex items-center justify-center cursor-pointer"
         @click="goToRiskNotice"
       >
@@ -82,6 +83,7 @@ import { useResetPasswordHook } from '@/hooks/resetPasswordHook';
 import { UserFilled } from '@element-plus/icons-vue';
 import { useRiskNoticeStore } from '@/store/riskNotice';
 import { useRouter } from 'vue-router';
+import { hasAuth } from '@/router/utils';
 
 const { openResetDialog } = useResetPasswordHook();
 const interval = ref<NodeJS.Timeout>();
@@ -106,11 +108,14 @@ const noticeValue = computed(() => {
 
 const refreshRiskNotice = () => {
   if (interval.value) clearInterval(interval.value);
-  interval.value = setInterval(async () => {
-    await riskNoticeStore.setRiskNotice();
-  }, Number(riskNoticeStore.riskNotificationRefresh) * 1000);
-  // if (riskNoticeStore.riskNotificationSwitch) {
-  // }
+
+  if (hasAuth('RISKNOTICEAGGREGATE')) {    
+    interval.value = setInterval(async () => {
+      await riskNoticeStore.setRiskNotice();
+    }, Number(riskNoticeStore.riskNotificationRefresh) * 1000);
+    // if (riskNoticeStore.riskNotificationSwitch) {
+    // }
+  }
 };
 
 onMounted(() => {

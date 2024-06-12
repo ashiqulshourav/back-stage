@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col pl-20 pt-10">
-    <div class="flex items-center mb-10 mt-2">
+    <div class="flex items-center mb-10 mt-2" v-if="hasAuth('GETRISKNOTIFICATION')">
       <span class="font-bold mr-5 text-[20px]">{{ t('待办事项') }}</span>
 
       <el-switch
@@ -12,6 +12,7 @@
         :active-value="1"
         :inactive-value="0"
         @change="setRiskNotification"
+        :disabled="!hasAuth('SETRISKNOTIFICATION')"
       />
       <div class="flex">
         <el-button
@@ -19,11 +20,12 @@
           v-for="(item, index) in timeList"
           :key="index"
           @click="changeTime(index)"
-          >{{ item }}s</el-button
+          :disabled="!hasAuth('SETRISKNOTIFICATION')"
+          >{{ item }}s</el-button          
         >
       </div>
     </div>
-    <div class="flex">
+    <div class="flex" v-if="hasAuth('RISKNOTICEAGGREGATE')">
       <div class="flex flex-col items-center cursor-pointer" @click="router.push('/riskManagement/manualOrderRejection')">
         <span>{{ t('手动接拒') }}</span>
         <span class="text-[30px]">{{riskNoticeStore.jjAuditCount}}</span>
@@ -46,6 +48,7 @@ import { useBetStore } from '@/store/bet';
 import { useRiskNoticeStore } from '@/store/riskNotice';
 import { useRiskNotice } from './util/hook';
 import { useRouter } from "vue-router";
+import { hasAuth } from '@/router/utils';
 
 const router = useRouter();
 const betStore = useBetStore();
