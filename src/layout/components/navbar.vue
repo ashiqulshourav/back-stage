@@ -21,7 +21,7 @@
       <!-- 国际化 -->
       <!-- RiskNotice Menu -->
       <div
-        v-if="hasAuth('RISKNOTICEAGGREGATE')"
+      v-if="noticeValueCount > 0"
         class="relative mr-5 flex items-center justify-center cursor-pointer"
         @click="goToRiskNotice"
       >
@@ -106,6 +106,14 @@ const noticeValue = computed(() => {
   return Number(total) > 9999 ? '9999+' : total;
 });
 
+const noticeValueCount = computed(() => {
+  const total =
+    Number(riskNoticeStore.esportAuditCount) +
+    Number(riskNoticeStore.jjAuditCount) +
+    Number(riskNoticeStore.sportAuditCount);
+  return Number(total);
+});
+
 const refreshRiskNotice = () => {
   if (interval.value) clearInterval(interval.value);
 
@@ -116,8 +124,11 @@ const refreshRiskNotice = () => {
   }
 };
 
-onMounted(() => {
-  refreshRiskNotice();
+onMounted(async () => {
+  // refreshRiskNotice();
+  if (hasAuth('RISKNOTICEAGGREGATE')) {
+    await riskNoticeStore.setRiskNotice();
+  }
 });
 
 watch(
