@@ -76,25 +76,19 @@ export const LEAGUE_GRADLES = [
 export function formatRanges(arr: string[]) {
   if (!arr.length) return '';
 
-  arr = arr.sort((a: any, b: any) => {
-    // if (isNaN(a) && isNaN(b)) {
-    //   return a.localeCompare(b);
-    // } else if (isNaN(a)) {
-    //   return 1;
-    // } else if (isNaN(b)) {
-    //   return -1;
-    // } else {
-    //   return a - b; // Sort numerically
-    // }
-    if (a === '未评级') {
-      return -1; // 'apple' comes before anything else
-    } else if (b === '未评级') {
-      return 1; // anything else comes after 'apple'
-    } else {
-      // Compare as strings otherwise
-      return a.localeCompare(b);
-    }
-  });
+  arr = arr
+    .sort((a: any, b: any) => {
+      if (isNaN(a) && isNaN(b)) {
+        return a.localeCompare(b);
+      } else if (isNaN(a)) {
+        return 1;
+      } else if (isNaN(b)) {
+        return -1;
+      } else {
+        return a - b; // Sort numerically
+      }
+    })
+    .filter(item => item !== '未评级');
 
   const ranges = [];
   let start = arr[0];
