@@ -208,7 +208,14 @@
           />
         </el-form-item>
         <el-form-item prop="timeType" :label="`${t('注单时间')}:`">
-          <CustomDate v-model:val="selectDate" @changeDate="changeDate" :start-placeholder="dayjs().subtract(30, 'day').startOf('day').format('YYYY-MM-DD')" :end-placeholder="dayjs().startOf('day').format('YYYY-MM-DD')" />
+          <CustomDate
+            v-model:val="selectDate"
+            @changeDate="changeDate"
+            :start-placeholder="
+              dayjs().subtract(30, 'day').startOf('day').format('YYYY-MM-DD')
+            "
+            :end-placeholder="dayjs().startOf('day').format('YYYY-MM-DD')"
+          />
         </el-form-item>
 
         <el-form-item>
@@ -235,14 +242,14 @@
             {{ t('导出报表') }}
           </el-button> -->
 
-         <el-button
+          <!-- <el-button
             type="primary"
             :icon="useRenderIcon(Download)"
             :loading="downloading"
             @click="exportFileTest()"
           >
             {{ t('报表异步导出') }}
-          </el-button>
+          </el-button> -->
         </el-form-item>
       </div>
     </div>
@@ -271,7 +278,7 @@ import { searchFormType } from '../util/types';
 } from '../util/types'; */
 
 import { hasAuth } from '@/router/utils';
-import CustomDate from "@/components/Form/Custom_date.vue";
+import CustomDate from '@/components/Form/Custom_date.vue';
 const props = defineProps<{
   loading: boolean;
   form: searchFormType;
