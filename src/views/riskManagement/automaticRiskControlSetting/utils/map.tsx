@@ -76,6 +76,18 @@ export const LEAGUE_GRADLES = [
 export function formatRanges(arr: string[]) {
   if (!arr.length) return '';
 
+  arr = arr.sort((a: any, b: any) => {
+  if (isNaN(a) && isNaN(b)) { 
+    return a.localeCompare(b);
+  } else if (isNaN(a)) { 
+    return 1; 
+  } else if (isNaN(b)) {
+    return -1; 
+  } else {
+    return a - b; // Sort numerically
+  }
+});;
+
   const ranges = [];
   let start = arr[0];
   let end = start;
