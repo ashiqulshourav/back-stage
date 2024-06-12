@@ -113,8 +113,6 @@ const refreshRiskNotice = () => {
     interval.value = setInterval(async () => {
       await riskNoticeStore.setRiskNotice();
     }, 5000);
-    // if (riskNoticeStore.riskNotificationSwitch) {
-    // }
   }
 };
 
