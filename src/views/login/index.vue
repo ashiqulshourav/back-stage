@@ -95,6 +95,8 @@ import { getMD5 } from '@/utils/caypto';
 import { useResetPasswordHook } from '@/hooks/resetPasswordHook';
 import { REGEXP_PWD } from '@/components/ResetDialog/rule';
 import { useRiskNoticeStore } from '@/store/riskNotice';
+import { hasAuth } from '@/router/utils';
+
 defineOptions({ name: 'Login' });
 const router = useRouter();
 const loading = ref(false);
@@ -140,16 +142,15 @@ const _loginRequest = async () => {
     //- 第一次登录强制弹出充值密码弹窗
     userStore.setUserInfo(res.data);
 
-    await riskStoreStore.setRiskNotice();
-
     if (!REGEXP_PWD.test(ruleForm.password) || res.data.flag === 1) {
       ruleForm.password = '';
       return openResetDialog();
     }
 
     initRouter()
-      .then(() => {
+      .then(async () => {
         message(t('登录成功'), { type: 'success' });
+
         router.push(getTopMenu(true).path);
       })
       .catch(err => {
