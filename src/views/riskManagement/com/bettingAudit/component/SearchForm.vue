@@ -272,6 +272,10 @@ import { hasAuth } from '@/router/utils';
 import CustomDate from '@/components/Form/Custom_date.vue';
 import { formRules } from '@/views/configCenter/classify_setting/utils/rule';
 
+import { useRiskNoticeStore } from '@/store/riskNotice';
+
+const riskNoticeStore = useRiskNoticeStore();
+
 const emits = defineEmits(['onSearch', 'exportFile', 'exportFileTest']);
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl?.resetFields();
@@ -279,6 +283,10 @@ const resetForm = (formEl: FormInstance | undefined) => {
   gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
   props.form.createTimeStart = dayjs().subtract(30, 'day').startOf('day').valueOf();
   props.form.createTimeEnd = dayjs().endOf('day').valueOf();
+  riskNoticeStore.setRiskNoticeTimeFrame({
+    createTimeStart: dayjs().subtract(30, 'day').startOf('day').valueOf(),
+    createTimeEnd: dayjs().endOf('day').valueOf(),
+  });
   search();
 };
 
@@ -286,9 +294,19 @@ const changeDate = t => {
   if (!t) {
     props.form.createTimeStart = '';
     props.form.createTimeEnd = '';
+
+    riskNoticeStore.setRiskNoticeTimeFrame({
+      createTimeStart: 0,
+      createTimeEnd: 0,
+    });
   } else {
     props.form.createTimeStart = dayjs(t[0]).startOf('day').valueOf();
     props.form.createTimeEnd = dayjs(t[1]).endOf('day').valueOf();
+
+    riskNoticeStore.setRiskNoticeTimeFrame({
+      createTimeStart: dayjs(t[0]).startOf('day').valueOf(),
+      createTimeEnd: dayjs(t[1]).endOf('day').valueOf(),
+    });
   }
   search();
 };
