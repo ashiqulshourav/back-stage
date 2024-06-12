@@ -51,7 +51,11 @@ export const useRiskNoticeStore = defineStore('RISKNOTICESTATE', {
     },
     setRiskNoticeRefreshSecond(second: string) {
       this.riskNotificationRefresh = second;
-    }
+    },
+    setRiskNoticeTimeFrame(date: { createTimeStart: number, createTimeEnd: number }) {
+      this.createTimeStart = date.createTimeStart;
+      this.createTimeEnd = date.createTimeEnd;
+    } 
   },
   getters: {
     totalCount: state =>
