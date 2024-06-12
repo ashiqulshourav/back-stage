@@ -4,6 +4,9 @@ export function useRiskNotice() {
   const riskNotificationRefresh = ref('30');
   const riskNotificationSwitch = ref(0);
   const riskNoticeStore = useRiskNoticeStore();
+  const esportAuditCount = ref(0);
+  const jjAuditCount = ref(0);
+  const sportAuditCount = ref(0);
 
   async function getRiskNotification() {
     const res = await API.getRiskNotification();
@@ -24,13 +27,28 @@ export function useRiskNotice() {
     }
   }
 
+  async function getRiskNoticeAggregate() {
+    const riskNoticeRes = await API.getRiskNoticeAggregate();
+
+    if (!riskNoticeRes.code) {
+      esportAuditCount.value = riskNoticeRes.data.esportAuditCount!;
+      jjAuditCount.value = riskNoticeRes.data.jjAuditCount!;
+      sportAuditCount.value = riskNoticeRes.data.sportAuditCount!;
+    }
+  }
+
   onMounted(() => {
     getRiskNotification();
+    getRiskNoticeAggregate();
   });
 
   return {
     riskNotificationRefresh,
     riskNotificationSwitch,
     setRiskNotification,
+    esportAuditCount,
+    jjAuditCount,
+    sportAuditCount,
+    getRiskNoticeAggregate
   };
 }

@@ -112,7 +112,7 @@ const refreshRiskNotice = () => {
   if (hasAuth('RISKNOTICEAGGREGATE')) {    
     interval.value = setInterval(async () => {
       await riskNoticeStore.setRiskNotice();
-    }, Number(riskNoticeStore.riskNotificationRefresh) * 1000);
+    }, 5000);
     // if (riskNoticeStore.riskNotificationSwitch) {
     // }
   }
