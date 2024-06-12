@@ -53,8 +53,10 @@ export enum riskStatus {
   rejectBetting=2,
   autoApprove=103,
   approve=104,
-  reject=204,
-  autoReject=203,
+  reject=204, //
+  autoReject=203, //
+  reject1=201, // 手动拒绝
+  autoReject1=202, //自动拒绝
 }
 export const riskStatusMap ={
   [riskStatus.rejectBetting]: t('待审核'),
@@ -62,4 +64,6 @@ export const riskStatusMap ={
   [riskStatus.approve]: t('手动通过'),
   [riskStatus.reject]: t('手动划单'),
   [riskStatus.autoReject]: t('自动划单'),
+  [riskStatus.reject1]: t('手动拒绝'),
+  [riskStatus.autoReject1]: t('自动拒绝'),
 }
