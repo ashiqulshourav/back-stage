@@ -37,7 +37,7 @@ export enum betStatus {
   betInvalid = 6,
   betFail = 7,
   eventAbnormal = 8,
-  riskReject = 9,
+  riskReject = 9, // 风控划单
   reserveFail = 10,
   onReverse = 11,
   reverseCancel=12
@@ -51,7 +51,7 @@ export const betStatusMap = {
   [betStatus.betInvalid]: t('注单无效'),
   [betStatus.betFail]: t('投注失败'),
   [betStatus.eventAbnormal]: t('赛事异常'),
-  [betStatus.riskReject]: t('风控拒单'),
+  [betStatus.riskReject]: t('风控划单'),
   [betStatus.reserveFail]: t('预约失败'),
   [betStatus.onReverse]: t('预约中'),
   [betStatus.reverseCancel]: t('预约取消')

@@ -453,8 +453,11 @@ export function useBettingCenterHook(category: number, venueType: number) {
       //待审核
       obj = { status: betStatus.PendingApprove, bgColor: '#F57582' };
     }else if(betResultArr?.includes(61)&&(riskStatusArr?.includes(riskStatus.reject) ||riskStatusArr?.includes(riskStatus.autoReject))){
-      // 封控拒单
+      // 封控划单 203 204
       obj = { status: betStatus.riskReject, bgColor: '#F88D48' };
+    }else if(riskStatusArr?.includes(riskStatus.reject1)||riskStatusArr?.includes(riskStatus.autoReject1)){
+       // 封控拒单 201 202
+      obj = { status: betStatus.betFail, bgColor: '#F88D48' };
     } else if (
       status == 2 &&
       billStatus === 1 &&
@@ -493,7 +496,9 @@ export function useBettingCenterHook(category: number, venueType: number) {
   };
 
   const getOddStatus = (betResult: number, riskSt: number) => {
-    if (riskSt === riskStatus.reject || riskSt === riskStatus.autoReject) {
+    if (riskSt === riskStatus.reject1 || riskSt === riskStatus.autoReject1) {
+      return '投注失败';
+    }else if(riskSt === riskStatus.reject || riskSt === riskStatus.autoReject){
       return '无效注单';
     }else if(betResult===24&&riskSt==riskStatus.autoApprove){
       return '盘口取消';
