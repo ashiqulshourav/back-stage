@@ -442,7 +442,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
     riskStatusArr?: number[],
     isSpecialSettle?: number
   ) => {
-    console.log(11112222,betResultArr,riskStatusArr)
     let obj = { status: -1, bgColor: '' };
     if (isSpecialSettle === 1) {
       // 特殊结算也算已结算
