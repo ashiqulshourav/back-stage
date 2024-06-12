@@ -114,30 +114,35 @@ const noticeValueCount = computed(() => {
   return Number(total);
 });
 
-const refreshRiskNotice = () => {
+const refreshRiskNoticeWithInterval = async () => {
   if (interval.value) clearInterval(interval.value);
 
   if (hasAuth('RISKNOTICEAGGREGATE')) {    
+    await riskNoticeStore.setRiskNotice();
     interval.value = setInterval(async () => {
       await riskNoticeStore.setRiskNotice();
     }, 5000);
   }
 };
 
-onMounted(async () => {
-  // refreshRiskNotice();
-  if (hasAuth('RISKNOTICEAGGREGATE')) {
-    await riskNoticeStore.setRiskNotice();
-  }
+onMounted(() => {
+  riskNoticeStore.setRiskNotice();
 });
 
 watch(
   () => [
     riskNoticeStore.riskNotificationSwitch,
-    riskNoticeStore.riskNotificationRefresh
+    riskNoticeStore.riskNotificationRefresh,
+    riskNoticeStore.createTimeStart,
+    riskNoticeStore.createTimeEnd
   ],
   () => {
-    refreshRiskNotice();
+
+    if (riskNoticeStore.createTimeStart && riskNoticeStore.createTimeEnd) {
+      refreshRiskNoticeWithInterval();
+    }else {
+      refreshRiskNoticeWithInterval();
+    }
   }
 );
 </script>
