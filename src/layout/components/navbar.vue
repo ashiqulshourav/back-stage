@@ -21,7 +21,7 @@
       <!-- 国际化 -->
       <!-- RiskNotice Menu -->
       <div
-      v-if="noticeValueCount > 0"
+        v-if="noticeValueCount > 0"
         class="relative mr-5 flex items-center justify-center cursor-pointer"
         @click="goToRiskNotice"
       >
@@ -118,12 +118,9 @@ const refreshRiskNoticeWithInterval = async () => {
   if (interval.value) clearInterval(interval.value);
 
   await riskNoticeStore.setRiskNotice();
-  console.log('auth', hasAuth('RISKNOTICEAGGREGATE'))
-  if (hasAuth('RISKNOTICEAGGREGATE')) {    
-    interval.value = setInterval(async () => {
-      await riskNoticeStore.setRiskNotice();
-    }, 5000);
-  }
+  interval.value = setInterval(async () => {
+    await riskNoticeStore.setRiskNotice();
+  }, 5000);
 };
 
 onMounted(() => {
@@ -139,10 +136,9 @@ watch(
     riskNoticeStore.createTimeEnd
   ],
   () => {
-
     if (riskNoticeStore.createTimeStart && riskNoticeStore.createTimeEnd) {
       refreshRiskNoticeWithInterval();
-    }else {
+    } else {
       refreshRiskNoticeWithInterval();
     }
   }
