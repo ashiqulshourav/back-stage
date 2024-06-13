@@ -33,6 +33,12 @@ export const dateSetSecond = (secondNumber: number) => {
   return `${year}-${padZero(month)}-${padZero(day)} ${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
 };
 
+export const getSecond = (totalSeconds: number) => {
+  const minutes = padZero(Math.floor(totalSeconds / 60));
+  const seconds = padZero(totalSeconds % 60);
+  return `${minutes}:${seconds}`;
+}
+
 //- 十分秒获取时间戳
 export const compareTime = (time: string) => {
   const [hours, minutes, seconds] = time.split(':').map(Number);
