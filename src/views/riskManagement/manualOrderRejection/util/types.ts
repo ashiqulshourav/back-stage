@@ -80,6 +80,7 @@ export const rejectReasonMap = {
  'bet_item_lock': t('盘口锁盘'),
  'bet_item_settle': t('已结算'),
  'bet_item_notfound': t('无此盘口'),
+  'bet_item_notshow': t('盘口不显示'),
  // 'bet_item_undefined': t('未定义'),
   // 'bet_item_ensable': t('盘口正常'),
 }

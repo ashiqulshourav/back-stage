@@ -192,7 +192,9 @@
         <el-form-item :label="`${t('注单时间')}:`">
           <CustomDate
             v-model:val="selectDate"
-            :start-placeholder="dayjs().subtract(30, 'day').startOf('day').format('YYYY-MM-DD')"
+            :start-placeholder="
+              dayjs().subtract(30, 'day').startOf('day').format('YYYY-MM-DD')
+            "
             :end-placeholder="dayjs().startOf('day').format('YYYY-MM-DD')"
             @changeDate="changeDate"
           />
@@ -212,7 +214,7 @@
           >
             {{ t('重置') }}
           </el-button>
-         <el-button
+          <el-button
             type="primary"
             :icon="useRenderIcon(Download)"
             :loading="downloading"
@@ -222,7 +224,7 @@
             {{ t('导出报表') }}
           </el-button>
 
-         <el-button
+           <el-button
             type="primary"
             :icon="useRenderIcon(Download)"
             :loading="downloading"
@@ -262,7 +264,9 @@ const props = defineProps<{
 
 const formRef = ref();
 const selectDate = ref('');
-const gameClassify = ref<{ label: string; value: number }[]>(props.venueType===1?ESPORT_ID_MAP:SPORT_ID_MAP);
+const gameClassify = ref<{ label: string; value: number }[]>(
+  props.venueType === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP
+);
 import {
   riskStatusMap,
   seriesTypesSingle,
@@ -281,7 +285,10 @@ const resetForm = (formEl: FormInstance | undefined) => {
   formEl?.resetFields();
   selectDate.value = '';
   gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
-  props.form.createTimeStart = dayjs().subtract(30, 'day').startOf('day').valueOf();
+  props.form.createTimeStart = dayjs()
+    .subtract(30, 'day')
+    .startOf('day')
+    .valueOf();
   props.form.createTimeEnd = dayjs().endOf('day').valueOf();
   riskNoticeStore.setRiskNoticeTimeFrame({
     createTimeStart: dayjs().subtract(30, 'day').startOf('day').valueOf(),
