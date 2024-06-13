@@ -24,7 +24,9 @@
         <span class="mr-1"
           >{{ t('开赛时间') }}: {{ matchInfo.startDateTime }}</span
         >
-        <span class="font-bold">结束</span>
+        <span class="font-bold">{{
+          MATCH_STATUS[matchData.matchStatus as keyof typeof MATCH_STATUS]
+        }}</span>
         <el-button
           class="ml-4"
           size="small"
@@ -61,7 +63,7 @@ import { copyTextToClipboard } from '@pureadmin/utils';
 import { titleColumn } from './TableColumnList';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import EventMatchBet from './eventMatchBet/index.vue';
-
+import { MATCH_STATUS } from '@/utils/maps/sports_map';
 const props = defineProps<{
   matchInfo: EventAPI.MatchInfo;
 }>();
@@ -77,6 +79,7 @@ const copyTxt = (val: string, type: 'league' | 'match') => {
 };
 
 const list = computed(() => {
+  console.log('MatchDetail.vue文件 82==============行打印=', matchData.event);
   return [
     {
       teamName: props.matchInfo.hTeamName ?? '-',
@@ -102,7 +105,7 @@ const list = computed(() => {
 });
 
 watch(
-  () => props.matchInfo,
+  () => props.matchInfo.matchId,
   () => {
     initData();
   },

@@ -50,7 +50,7 @@ const initEchart = async () => {
         left: 0,
         right: 1,
         top: 5,
-        bottom: 0,
+        bottom: 5,
         containLabel: false
       },
       series: [
