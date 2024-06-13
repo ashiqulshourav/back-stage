@@ -79,11 +79,9 @@ const copyTxt = (val: string, type: 'league' | 'match') => {
 };
 
 const list = computed(() => {
-  console.log('MatchDetail.vue文件 82==============行打印=', matchData.event);
-  return [
+  const l: EventAPI.lType[] = [
     {
       teamName: props.matchInfo.hTeamName ?? '-',
-      ft: 0,
       ht1: 0,
       ht2: 0,
       goal: 0,
@@ -93,7 +91,6 @@ const list = computed(() => {
     },
     {
       teamName: props.matchInfo.aTeamName ?? '-',
-      ft: 0,
       ht1: 0,
       ht2: 0,
       goal: 0,
@@ -102,19 +99,44 @@ const list = computed(() => {
       red_card: 0
     }
   ];
+  if (matchData.event) {
+    matchData.event[0].home.forEach(item => {
+      // @ts-ignore
+      if (item.type === 'goal') {
+        if (+item.time <= 2700) {
+          l[0].ht1 += 1;
+        } else {
+          l[0].ht2 += 1;
+        }
+      }
+      // @ts-ignore
+      l[0][item.type] += 1;
+    });
+    matchData.event[0].away.forEach(item => {
+      // @ts-ignore
+      if (item.type === 'goal') {
+        if (+item.time <= 2700) {
+          l[1].ht1 += 1;
+        } else {
+          l[1].ht2 += 1;
+        }
+      }
+      // @ts-ignore
+      l[1][item.type] += 1;
+    });
+  }
+  return l;
 });
-
+const loopTimer = ref();
 watch(
   () => props.matchInfo.matchId,
   () => {
+    if (loopTimer.value) clearInterval(loopTimer.value);
     initData();
   },
-  {
-    deep: true
-  }
+  { deep: true }
 );
 
-const loopTimer = ref();
 const matchData = reactive<EventAPI.getMatchStatusticData>(
   {} as EventAPI.getMatchStatusticData
 );
@@ -123,6 +145,12 @@ const initData = async () => {
   const res = await API.getMatchStatistic({ matchId: props.matchInfo.matchId });
   if (res.code) return;
   Object.assign(matchData, res.data);
+  if (matchData.matchStatus === 'nover') runLoop();
+};
+
+const runLoop = () => {
+  if (loopTimer.value) clearInterval(loopTimer.value);
+  loopTimer.value = setInterval(() => initData(), 5000);
 };
 
 const betMapCLick = () => {

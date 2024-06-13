@@ -111,10 +111,20 @@ declare namespace EventAPI {
 
   type getMatchEventByMatchIdResType = COMMON.BASE_RES_TYPE<matchEventList>
 
+  type lType = {
+    teamName: string;
+    ht1: number;
+    ht2: number;
+    goal: number;
+    corner: number;
+    yellow_card: number;
+    red_card: number;
+  }
+
   type EventData = {
-    type: string;
-    n: number;
-    time: number;
+    type: Partial<lType>;
+    n: number | string;
+    time: number | string;
   }
 
   type Event = {

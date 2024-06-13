@@ -1,12 +1,6 @@
 <template>
   <div class="main">
-    <SearchForm 
-    :form="form" 
-    :loading="loading" 
-    @exportFile="exportFile"
-    @on-search="onSearch" 
-    :downloading="downloading"
-  />
+    <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
 
     <MatchDetail :matchInfo="matchInfo"></MatchDetail>
     <PureTableBar
@@ -63,9 +57,7 @@ const {
   matchEventList,
   handleCurrentChange,
   handlePageSizeChange,
-  matchInfo,
-  downloading,
-  exportFile,
+  matchInfo
 } = useEventQueryHook();
 </script>
 

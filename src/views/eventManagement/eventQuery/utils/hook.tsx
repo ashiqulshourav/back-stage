@@ -4,7 +4,6 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { message } from '@/utils/message';
 
 export function useEventQueryHook() {
-  const downloading = ref(false);
   const matchEventList = reactive<EventAPI.MatchEvent[]>([]);
   const matchInfo = reactive<EventAPI.MatchInfo>({
     aTeamName: '',
@@ -25,7 +24,7 @@ export function useEventQueryHook() {
 
   const form = reactive<searchFormType>({
     // matchId: '302309',
-    matchId: '224257',
+    matchId: '',
     dataSourceCode: '',
     eventCode: [],
     endTime: '',
@@ -110,7 +109,6 @@ export function useEventQueryHook() {
     form,
     handleTableWidthChange,
     handleCurrentChange,
-    // openDialog,
     matchEventList,
     handlePageSizeChange,
     matchInfo

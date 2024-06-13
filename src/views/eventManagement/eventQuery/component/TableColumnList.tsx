@@ -62,10 +62,6 @@ export const titleColumn: TableColumnList = [
     minWidth: 200
   },
   {
-    label: t('FT'),
-    prop: 'ft'
-  },
-  {
     label: t('HT1'),
     prop: 'ht1'
   },
