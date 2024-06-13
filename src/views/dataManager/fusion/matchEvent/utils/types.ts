@@ -35,4 +35,9 @@ export type editSearchFormType = {
   awayTeamNameEn?: string;
 }
 
+export type udpateOddsType = {
+  matchId: number;
+  isDataSourceOdds: number;
+}
+
 export type { FormProps };

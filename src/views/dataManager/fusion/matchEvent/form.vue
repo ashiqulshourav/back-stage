@@ -1,16 +1,18 @@
 <template>
-  <div class="grid grid-cols-5 bg-gray-100">
-    <div class="place-content-center col-span-1 m-2">
+  <div class="modal-container" :style="`background-color: ${dataTheme ? '#020409' : '#F0F2F5'}`">
+    <div class="place-content-center col-span-1 ml-2">
       <div class="text-center text-lg font-bold mb-5">{{ t('正在编辑的赛事信息') }}</div>
       <VerticalTable :columns="selectedEventColumns" :dataList="matchSourceDetails"/>
     </div>
     <div class="col-span-4 m-2">
       <SearchForm
+        class="container"
         :form="editFrom"
         :loading="loading"
         @on-search="onModalSearch"
       />
       <PureTableBar
+        class="container"
         :title="``"
         :columns="matchColumns"
         @refresh="onModalSearch('reload')"
@@ -60,7 +62,7 @@
       </PureTableBar>
     </div>
   </div>
-  <div class="flex justify-center bg-white mt-5">
+  <div class="flex justify-center mt-5">
     <el-button type="primary" @click="closeDialog">{{ t('关闭对话框') }}</el-button>
   </div>
 </template>
@@ -74,7 +76,9 @@ import SearchForm from './component/ModalSearchForm.vue';
 import { usePublicHooks } from '@/hooks';
 import { matchColumns, selectedEventColumns } from './component/TableColumnList';
 import VerticalTable from '@/components/VerticalTable/index.vue';
+import { useDataThemeChange } from '@/layout/hooks/useDataThemeChange';
 
+const { dataTheme } = useDataThemeChange();
 const { tableHeaderStyle } = usePublicHooks();
 const {
   loading,
@@ -116,6 +120,13 @@ const handleNullValue = (value: string | number) => {
 </script>
 
 <style lang="scss">
+.container {
+	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+.modal-container {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
 .avatar-uploader {
   .el-upload {
     border: 1px dashed var(--el-border-color);

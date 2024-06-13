@@ -29,7 +29,6 @@
           :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
-          @selection-change="handleSelectionChange"
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
@@ -64,7 +63,7 @@
               v-if="row.isShowCancelBtn && hasAuth('CANCELMATCH')"
               type="danger"
               size="small"
-              :disabled="row.cancelOrderTimes > 0"
+              :disabled="(row.cancelOrderTimes as number) > 0"
               @click="cancelClick(row)"
               >{{ t('取消比赛') }}</el-button
             >
@@ -96,7 +95,6 @@ const {
   onSearch,
   handleTableWidthChange,
   handleCurrentChange,
-  handleSelectionChange,
   searchForm,
   matchCondition,
   switchStyle,

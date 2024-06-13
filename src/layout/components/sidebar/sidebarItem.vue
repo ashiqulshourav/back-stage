@@ -79,7 +79,7 @@ const getSubTextStyle = computed((): CSSProperties => {
 });
 
 const getSubMenuDivStyle = computed((): any => {
-  return item => {
+  return (item: { parentId: null; pathList: string | any[] }) => {
     return !isCollapse.value
       ? {
           width: '100%',
@@ -116,7 +116,7 @@ const hoverMenuMap = new WeakMap();
 // 存储菜单文本dom元素
 const menuTextRef = ref(null);
 
-function hoverMenu(key) {
+function hoverMenu(key: WeakKey) {
   // 如果当前菜单showTooltip属性已存在，退出计算
   if (hoverMenuMap.get(key)) return;
 
@@ -256,28 +256,30 @@ function resolvePath(routePath) {
     v-else
     ref="subMenu"
     v-bind="expandCloseIcon"
-    :index="resolvePath(props.item.path)"
+    :index="resolvePath(props?.item?.path)"
   >
     <template #title>
       <div
-        v-if="toRaw(props.item.meta.icon)"
+        v-if="toRaw(props?.item?.meta?.icon)"
         :style="getsubMenuIconStyle"
         class="sub-menu-icon"
       >
         <component
-          :is="useRenderIcon(props.item.meta && toRaw(props.item.meta.icon))"
+          :is="
+            useRenderIcon(props?.item?.meta && toRaw(props?.item?.meta?.icon))
+          "
         />
       </div>
       <span v-if="layout === 'horizontal'">
-        {{ props.item.meta.title }}
+        {{ props?.item?.meta?.title }}
       </span>
       <div
         :style="getSubMenuDivStyle(props.item)"
         v-if="
           !(
             isCollapse &&
-            toRaw(props.item.meta.icon) &&
-            props.item.parentId === null
+            toRaw(props?.item?.meta?.icon) &&
+            props?.item?.parentId === null
           )
         "
       >
@@ -286,24 +288,29 @@ function resolvePath(routePath) {
           placement="top"
           :effect="tooltipEffect"
           :offset="-10"
-          :disabled="!props.item.showTooltip"
+          :disabled="!props?.item?.showTooltip"
         >
           <template #content>
-            {{ props.item.meta.title }}
+            {{ props?.item?.meta?.title }}
           </template>
+
           <span
             ref="menuTextRef"
             :style="getSubTextStyle"
-            @mouseover="hoverMenu(props.item)"
+            @mouseover="hoverMenu(props?.item)"
+            class="!flex items-center"
           >
-            {{ overflowSlice(props.item.meta.title, props.item) }}
+            {{ overflowSlice(props.item?.meta?.title, props.item) }}
           </span>
         </el-tooltip>
-        <extraIcon v-if="!isCollapse" :extraIcon="props.item.meta.extraIcon" />
+        <extraIcon
+          v-if="!isCollapse"
+          :extraIcon="props?.item?.meta?.extraIcon"
+        />
       </div>
     </template>
     <sidebar-item
-      v-for="child in props.item.children"
+      v-for="child in props!.item!.children"
       :key="child.path"
       :is-nest="true"
       :item="child"

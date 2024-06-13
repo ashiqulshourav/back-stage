@@ -24,45 +24,10 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item :label="`${t('风控标签')}:`" prop="riskControlLabelList">
-          <el-select
-            v-model="form.riskControlLabelList"
-            @change="search"
-            multiple
-            clearable
-            class="!w-[150px]"
-          >
-            <el-option
-              v-for="item in riskLabelList"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          v-if="props.venueType === 0"
-          :label="`${t('赛事类型')}:`"
-          prop="category"
-        >
-          <el-select
-            v-model="form.category"
-            :placeholder="t('赛事类型')"
-            class="!w-[150px]"
-            @change="chagenMatchType"
-          >
-            <el-option :label="t('全部')" :value="' '" />
-            <el-option
-              :label="item.label"
-              :value="item.value"
-              v-for="item in SPORT_CATEGORY"
-              :key="item.value"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="`${t('游戏种类')}:`" prop="sportId">
+        <el-form-item :label="`${t('赛种')}:`" prop="sportId">
           <el-select
             v-model="form.sportId"
-            :placeholder="t('游戏种类')"
+            :placeholder="t('赛种')"
             class="!w-[160px]"
             @change="search"
           >
@@ -90,12 +55,11 @@
             />
           </el-select>
         </el-form-item>
-
         <el-form-item :label="`${t('投注阶段')}:`" prop="isInplay">
           <el-select
             v-model="form.isInplay"
             clearable
-            class="!w-[100px]"
+            class="!w-[120px]"
             @change="search"
           >
             <el-option label="全部" value="" />
@@ -110,10 +74,10 @@
             class="!w-[100px]"
             @change="search"
           >
-            <el-option label="全部" value="" />
-            <el-option label="单关" :value="1" />
-            <el-option label="单式串关" :value="2" />
-            <el-option label="复试串关" :value="3" />
+            <el-option :label="t('全部')" value="" />
+            <el-option :label="t('单关')" :value="1" />
+            <el-option :label="t('单式串关')" :value="2" />
+            <el-option :label="t('复试串关')" :value="3" />
           </el-select>
         </el-form-item>
         <el-form-item
@@ -184,26 +148,7 @@
             class="!w-[150px]"
           />
         </el-form-item>
-        <el-form-item :label="`${t('主队')}:`" prop="homeTeamName">
-          <el-input
-            v-model="form.homeTeamName"
-            :placeholder="t('主队名称')"
-            clearable
-            v-enter="search"
-            class="!w-[150px]"
-          />
-        </el-form-item>
-        <el-form-item :label="`${t('客队')}:`" prop="awayTeamName">
-          <el-input
-            v-model="form.awayTeamName"
-            :placeholder="t('客队名称')"
-            clearable
-            v-enter="search"
-            class="!w-[150px]"
-          />
-        </el-form-item>
-
-        <el-form-item :label="`${t('会员账号')}:`" prop="userIdOrName">
+        <el-form-item :label="`${t('玩家号')}:`" prop="userIdOrName">
           <el-input
             v-model="form.userIdOrName"
             :placeholder="t('请输入会员账号/ID')"
@@ -213,7 +158,42 @@
             class="!w-[200px]"
           />
         </el-form-item>
-        <el-form-item :label="`${t('注单流水号')}:`" prop="orderId">
+        <el-form-item :label="`${t('风控标签')}:`" prop="riskControlLabelList">
+          <el-select
+            v-model="form.riskControlLabelList"
+            @change="search"
+            multiple
+            clearable
+            class="!w-[150px]"
+          >
+            <el-option
+              v-for="item in riskLabelList"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          v-if="props.venueType === 0"
+          :label="`${t('赛事类型')}:`"
+          prop="category"
+        >
+          <el-select
+            v-model="form.category"
+            :placeholder="t('赛事类型')"
+            class="!w-[150px]"
+            @change="chagenMatchType"
+          >
+            <el-option :label="t('全部')" :value="' '" />
+            <el-option
+              :label="item.label"
+              :value="item.value"
+              v-for="item in SPORT_CATEGORY"
+              :key="item.value"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="`${t('注单号')}:`" prop="orderId">
           <el-input
             v-model="form.orderId"
             :placeholder="t('注单流水号')"
@@ -223,11 +203,10 @@
             class="!w-[200px]"
           />
         </el-form-item>
-
         <el-form-item :label="`${t('投注额')}:`" prop="minBetAmount">
           <el-input
             v-model="form.minBetAmount"
-            :placeholder="t('最小投注额')"
+            :placeholder="t('最小值')"
             clearable
             class="!w-[110px]"
             v-enter="search"
@@ -236,7 +215,7 @@
         <el-form-item :label="`${t('')}-`" prop="maxBetAmount" class="arrange2">
           <el-input
             v-model="form.maxBetAmount"
-            :placeholder="t('最大投注额')"
+            :placeholder="t('最大值')"
             clearable
             class="!w-[110px]"
             v-enter="search"
@@ -245,7 +224,7 @@
         <el-form-item :label="`${t('用户输赢金额')}:`" prop="minProfitAmount">
           <el-input
             v-model="form.minProfitAmount"
-            :placeholder="t('最小输赢金额')"
+            :placeholder="t('最小值')"
             clearable
             class="!w-[110px]"
             v-enter="search"
@@ -258,7 +237,7 @@
         >
           <el-input
             v-model="form.maxProfitAmount"
-            :placeholder="t('最大输赢金额')"
+            :placeholder="t('最大值')"
             clearable
             class="!w-[110px]"
             v-enter="search"
@@ -270,29 +249,27 @@
             class="!w-[110px]"
             @change="search"
           >
-            <el-option :label="t('注单时间')" :value="1" />
+            <el-option :label="t('下注时间')" :value="1" />
             <el-option :label="t('结算时间')" :value="2" />
-            <el-option :label="t('比赛时间')" :value="3" />
+            <el-option :label="t('开赛时间')" :value="3" />
           </el-select>
-          <CustomDate
-            v-model:val="selectDate"
-            :start-placeholder="dayjs().startOf('month').format('YYYY-MM-DD')"
-            :end-placeholder="dayjs().startOf('day').format('YYYY-MM-DD')"
-            @changeDate="changeDate"
-          />
+          <CustomDate 
+          v-model:val="selectDate" 
+          :start-placeholder="dayjs().subtract(30, 'day').startOf('day').format('YYYY-MM-DD')" 
+          :end-placeholder="dayjs().startOf('day').format('YYYY-MM-DD')"
+          @changeDate="changeDate" />
         </el-form-item>
-
-        <el-form-item :label="`${t('投注项ID')}:`" prop="betItemId">
-          <el-input
-            v-model="form.betItemId"
-            :placeholder="t('投注项ID')"
-            clearable
-            class="!w-[180px]"
-            v-enter="search"
-          />
-        </el-form-item>
-
         <el-form-item>
+          <el-form-item :label="`${t('投注项ID')}:`" prop="betItemId">
+            <el-input
+              v-model="form.betItemId"
+              :placeholder="t('投注项ID')"
+              clearable
+              class="!w-[180px]"
+              v-enter="search"
+            />
+          </el-form-item>
+
           <el-button
             type="primary"
             :icon="useRenderIcon(SearchIcon)"
@@ -307,19 +284,25 @@
           >
             {{ t('重置') }}
           </el-button>
-          <el-button
+
+         <el-button
             type="primary"
+            :icon="useRenderIcon(Download)"
+            :loading="downloading"
             v-if="hasAuth('EXPORT')"
             @click="exportFile()"
           >
-            <IconifyIconOffline
-              :icon="downloading ? 'loadingIcon' : 'download'"
-              :style="{
-                marginRight: '6px',
-                animation: downloading ? 'rotate 2s linear infinite' : 'none'
-              }"
-            />
             {{ t('导出报表') }}
+          </el-button>
+
+         <el-button
+            type="primary"
+            :icon="useRenderIcon(Download)"
+            :loading="downloading"
+            v-if="hasAuth('EXPORT')"
+            @click="exportFileTest()"
+          >
+            {{ t('报表异步导出') }}
           </el-button>
         </el-form-item>
       </div>
@@ -341,6 +324,9 @@ import {
   SPORT_CATEGORY
 } from '@/utils/maps/sports_map';
 import { searchFormType } from '../util/types';
+import Download from '@iconify-icons/ep/download';
+import { useBetStore } from '@/store/bet';
+
 const props = defineProps<{
   loading: boolean;
   riskLabelList: UserAPI.labelType[];
@@ -362,13 +348,14 @@ import {
 } from '../util/types';
 import { hasAuth } from '@/router/utils';
 import CustomDate from '@/components/Form/Custom_date.vue';
-import { useBetStore } from '@/store/bet';
 
-const emits = defineEmits(['onSearch', 'exportFile']);
+const emits = defineEmits(['onSearch', 'exportFile', 'exportFileTest']);
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl?.resetFields();
   selectDate.value = '';
   gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
+  props.form.timeStart = dayjs().subtract(30, 'day').startOf('day').valueOf();
+  props.form.timeEnd = dayjs().endOf('day').valueOf();
   props.form.betItemId = '';
   props.form.matchId = '';
   search();
@@ -397,6 +384,10 @@ const search = () => {
 
 const exportFile = () => {
   emits('exportFile');
+};
+
+const exportFileTest = () => {
+  emits('exportFileTest');
 };
 
 //- 操盘管理重置表单为初始值

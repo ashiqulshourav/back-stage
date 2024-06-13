@@ -70,10 +70,15 @@ const initEchart = async () => {
     {
       name: 'click',
       callback: params => {
-        console.log('click', params);
+        getBetDetail(params.data[3]);
       }
     }
   );
+};
+
+const emits = defineEmits(['getBetDetail']);
+const getBetDetail = (o: string) => {
+  emits('getBetDetail', o);
 };
 
 watch(

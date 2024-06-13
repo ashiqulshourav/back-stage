@@ -1,7 +1,7 @@
 <template>
   <div>
     <pure-table
-      maxHeight="500"
+      height="700"
       align-whole="center"
       :loading="loading"
       size="small"
@@ -10,6 +10,31 @@
       :columns="columns"
       :header-cell-style="tableHeaderStyleBlue"
     >
+      <template #leagueGrades="{ row }">
+          <el-select
+            v-if="isEditRiskControls"
+            v-model="row.leagueGrades"
+            :placeholder="t('联赛等级')"
+            clearable
+            multiple
+          >
+            <el-option
+                :label="item=='-1'?'未评级':item"
+                :value="item"
+                v-for="item in LEAGUE_GRADLES"
+                :key="item"
+                :disabled="leagueDisabled(row, item)"
+            />
+          </el-select>
+
+          <span v-else>{{ formatRanges(row.leagueGrades) }} </span>
+           <div
+              v-if="!row.leagueGrades?.length && isFormClick"
+              class="text-red-500 text-xs text-start"
+            >
+              {{ t('联赛等级不能为空') }}
+            </div>
+      </template>
       <template #eventSource="{ row }">
         <el-select
           v-if="isEditRiskControls"
@@ -23,11 +48,17 @@
             :value="item.value"
             v-for="item in EVENT_SOURCE"
             :key="item.value"
-            :disabled="sourceDisabled(item.value)"
+            :disabled="sourceDisabled(item.value, row)"
           />
         </el-select>
 
         <span v-else>{{ row.sourceName }} </span>
+        <div
+          v-if="!row.sourceCode && isFormClick"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('事件源不能为空') }}
+        </div>
       </template>
       <template #eventName="{ row }">
         <el-select
@@ -36,16 +67,23 @@
           :placeholder="t('事件名称')"
           clearable
           :onChange="changeEventName(row)"
+          required
         >
           <el-option
             :label="item.eventName"
             :value="item.eventCode"
             v-for="item in EVENT_NAMES"
             :key="item.eventCode"
-            :disabled="eventDisabled(item.eventCode)"
+            :disabled="eventDisabled(item.eventCode, row)"
           />
         </el-select>
         <span v-else>{{ row.eventName }} </span>
+        <div
+          v-if="!row.eventCode && isFormClick"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('事件名称不能为空') }}
+        </div>
       </template>
       <template #beforeBetting="{ row }">
         <div v-if="isEditRiskControls" class="flex items-center gap-2">
@@ -66,6 +104,12 @@
           {{ t('秒') }}
         </div>
         <span v-else> {{ row.betAfterTime }} {{ t('秒') }} </span>
+        <div
+          v-if="showBettingError(row) && isFormClick"
+          class="text-red-500 text-xs text-start"
+        >
+          {{ t('投注前时间和投注后时间不能同时为空') }}
+        </div>
       </template>
     </pure-table>
 
@@ -95,7 +139,7 @@ import { getLabelColor } from '@/components/RiskLabelList/utils';
 import { getLabelLevelByName } from '@/components/RiskLabelList/utils';
 import { PandaMatch } from '@/views/eventManagement/eventQuery/utils/types';
 import { EVENT_SOURCE } from '@/views/eventManagement/eventQuery/utils/map';
-import { EVENT_NAMES } from '../utils/map';
+import { EVENT_NAMES, LEAGUE_GRADLES, formatRanges } from '../utils/map';
 
 const { tableHeaderStyleBlue } = usePublicHooks();
 const props = defineProps<{
@@ -105,6 +149,7 @@ const props = defineProps<{
   rejectOrderList: RiskManagementDataAPI.OrderRejectTypes[];
   addControlLabel: () => void;
   deleteControlLabel: () => void;
+  isFormClick: boolean;
 }>();
 
 const changeEventName = (row): any => {
@@ -119,12 +164,78 @@ const changeSourceName = (row): any => {
   )?.label;
 };
 
-const eventDisabled = (eventCode: string) => {
-  return props.rejectOrderList.some(item => item.eventCode == eventCode);
+const leagueDisabled = (row: any, leagueItem: any) => {
+  let disable = false;
+
+  props.rejectOrderList.length > 1 && props.rejectOrderList.filter(item => item.idx != row.idx).forEach(selectedItem => {
+
+  if (selectedItem.sourceCode && selectedItem.eventCode && row.sourceCode && row.eventCode) {
+    if (selectedItem.eventCode == row.eventCode && selectedItem.sourceCode == row.sourceCode) {
+      if (selectedItem.leagueGrades?.includes(leagueItem)) {        
+        disable = true;
+      }
+    }
+  }
+  });
+
+  return disable;
+}
+
+
+const eventDisabled = (eventCode: string, row: any) => {
+  let disable = false;
+  props.rejectOrderList.forEach(selectedItem => {
+
+    let found = false;
+
+    for (let i = 0; i < toRaw(row.leagueGrades).length; i++) {
+       if((toRaw(selectedItem.leagueGrades) as any)?.includes(toRaw(row.leagueGrades)[i])) {
+         found = true;
+       }
+    }
+
+    if (found) {      
+      if (selectedItem.sourceCode == row.sourceCode) {
+        if (selectedItem.eventCode == eventCode) {
+          disable = true;
+        }
+      }
+    }
+
+
+  });
+
+  return disable;
 };
 
-const sourceDisabled = (sourceCode: string) => {
-  return props.rejectOrderList.some(item => item.sourceCode == sourceCode);
+const sourceDisabled = (sourceCode: string, row: any) => {
+  let disable = false;
+  props.rejectOrderList.forEach(selectedItem => {
+
+    let found = false;
+
+    for (let i = 0; i < toRaw(row.leagueGrades).length; i++) {
+       if((toRaw(selectedItem.leagueGrades) as any)?.includes(toRaw(row.leagueGrades)[i])) {
+         found = true;
+       }
+    }
+
+    if (found) {      
+      if (selectedItem.eventCode == row.eventCode) {
+        if (selectedItem.sourceCode == sourceCode) {
+          disable = true;
+        }
+      }
+    }
+
+  });
+
+  return disable;
+};
+
+
+const showBettingError = (row: any) => {
+  return !Number(row.betBeforeTime) && !Number(row.betAfterTimes);
 };
 </script>
 

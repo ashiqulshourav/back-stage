@@ -13,17 +13,19 @@ import { searchFormType } from '@/views/operateManager/com/bettingCenter/util/ty
 export const bettingCenter = {
   //-结算中心列表
   bettingCenterList: (data: searchFormType) => http.request<any>("post", "/bet-center/list", { data }),
+  bettingCenterExport: (data: searchFormType) => http.request<any>("post", "/bet-center/listExport", { data }),
   betcenterRisk: (data: searchFormType) => http.request<any>("post", "/bet-center/risk", { data }),
+  riskExport: (data: searchFormType) => http.request<any>("post", "/bet-center/riskExport", { data }),
   orderCancel: (data: {
     orderId: number;
   }) => http.request<any>("post", "/bet-center/cancel", { data }),
   //- 特殊结算
   getCurrentBet: (data: {
-    "orderId": number;
-    "queryType": number;
-    "pageSize": number;
-    "pageNum": number;
-    "export": boolean;
+    orderId: string;
+    queryType: number;
+    pageSize: number;
+    pageNum: number;
+    export: boolean;
   }) => http.request<any>("post", "/bet-center/list", { data }),
   betSettle: (data: number[]) => http.request<BetOrderAPI.betCenterCancelResType>("post", "/bet-settle/settle", { data }),
 
@@ -40,6 +42,7 @@ export const bettingCenter = {
   riskConfirm: (data: { detailId: number; status: number }[]) => http.request<BetOrderAPI.betCenterCancelResType>("post", "/bet-center/risk/confirm", { data }),
   // 注单审核列表
   bettingAuditList: (data: searchFormType) => http.request<any>("post", "/bet-center/manualSettlePage", { data }),
+  bettingAuditListExport: (data: searchFormType) => http.request<any>("post", "/bet-center/manualSettleExport", { data }),
   // 注单审核通过
   bettingAuditConfirm: (data: any) => http.request<any>("post", "/bet-center/manualConfirm", { data }),
   // 注单审核拒绝

@@ -33,12 +33,12 @@
         <pure-table
           class="table_container"
           align-whole="center"
-          showOverflowTooltip
           table-layout="auto"
           :loading="loading"
           :size="size"
           adaptive
           :data="dataList"
+          show-overflow-tooltip
           :columns="dynamicColumns"
           :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
           :paginationSmall="size === 'small' ? true : false"

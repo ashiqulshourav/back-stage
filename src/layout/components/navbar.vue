@@ -10,12 +10,27 @@
     <Breadcrumb v-if="layout !== 'mix'" class="breadcrumb-container" />
     <!-- <mixNav v-if="layout === 'mix'" /> -->
 
-    <div v-if="layout === 'vertical'" class="vertical-header-right">
+    <div
+      v-if="layout === 'vertical'"
+      class="vertical-header-right flex items-center"
+    >
       <!-- 菜单搜索 -->
       <!-- <Search /> -->
       <!-- 通知 -->
       <!-- <Notice id="header-notice" /> -->
       <!-- 国际化 -->
+      <!-- RiskNotice Menu -->
+      <div
+        v-if="noticeValueCount > 0"
+        class="relative mr-5 flex items-center justify-center cursor-pointer"
+        @click="goToRiskNotice"
+      >
+        <el-icon size="large"><UserFilled /></el-icon>
+        <span
+          class="absolute p-1 bg-red-500 min-w-4 h-4 text-[10px] mr-2 flex items-center justify-center bottom-[10px] left-[10px] text-white rounded-full"
+          >{{ noticeValue }}</span
+        >
+      </div>
       <LanguageNav />
       <!-- 退出登录 -->
       <el-dropdown trigger="click">
@@ -65,12 +80,70 @@ import LanguageNav from '@/components/LanguageNav/index.vue';
 import { t } from '@/plugins/i18n';
 import { useUserStore } from '@/store/user';
 import { useResetPasswordHook } from '@/hooks/resetPasswordHook';
+import { UserFilled } from '@element-plus/icons-vue';
+import { useRiskNoticeStore } from '@/store/riskNotice';
+import { useRouter } from 'vue-router';
+import { hasAuth } from '@/router/utils';
 
 const { openResetDialog } = useResetPasswordHook();
+const interval = ref<NodeJS.Timeout>();
+const router = useRouter();
 
 const userStore = useUserStore();
+const riskNoticeStore = useRiskNoticeStore();
 const { layout, logout, onPanel, pureApp, userAvatar, toggleSideBar } =
   useNav();
+
+const goToRiskNotice = () => {
+  router.push('/riskManagement/riskNotice');
+};
+
+const noticeValue = computed(() => {
+  const total =
+    Number(riskNoticeStore.esportAuditCount) +
+    Number(riskNoticeStore.jjAuditCount) +
+    Number(riskNoticeStore.sportAuditCount);
+  return Number(total) > 9999 ? '9999+' : total;
+});
+
+const noticeValueCount = computed(() => {
+  const total =
+    Number(riskNoticeStore.esportAuditCount) +
+    Number(riskNoticeStore.jjAuditCount) +
+    Number(riskNoticeStore.sportAuditCount);
+  return Number(total);
+});
+
+const refreshRiskNoticeWithInterval = async () => {
+  if (interval.value) clearInterval(interval.value);
+
+  if (hasAuth('RISKNOTICEAGGREGATE')) {
+    await riskNoticeStore.setRiskNotice();
+    interval.value = setInterval(async () => {
+      await riskNoticeStore.setRiskNotice();
+    }, 5000);
+  }
+};
+
+onMounted(() => {
+  riskNoticeStore.setRiskNotice();
+});
+
+watch(
+  () => [
+    riskNoticeStore.riskNotificationSwitch,
+    riskNoticeStore.riskNotificationRefresh,
+    riskNoticeStore.createTimeStart,
+    riskNoticeStore.createTimeEnd
+  ],
+  () => {
+    if (riskNoticeStore.createTimeStart && riskNoticeStore.createTimeEnd) {
+      refreshRiskNoticeWithInterval();
+    } else {
+      refreshRiskNoticeWithInterval();
+    }
+  }
+);
 </script>
 
 <style lang="scss" scoped>

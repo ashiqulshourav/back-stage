@@ -18,13 +18,6 @@ declare namespace EventAPI {
     startDateTime: string;
   };
 
-  type MatchInfoRes = {
-    code: number;
-    ts: number;
-    msg: string;
-    data: MatchInfo;
-  };
-
   type PandaMatchEventList = {
     eventCode: string;
     eventName: string;
@@ -137,7 +130,7 @@ declare namespace EventAPI {
     awayTeamLogo: string;
     bet: {
       n: string;
-      o: number;
+      o: string;
       t: string;
     }[];
     event: Event[];

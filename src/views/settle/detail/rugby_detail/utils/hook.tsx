@@ -30,13 +30,8 @@ export function useVolleballHook() {
 
   //- 手动添加局
   const addEventRow = () => {
-    const noEmpty = dataList.every(item => {
-      return (
-        item.firstT1.toString() !== '' &&
-        item.firstT2.toString() !== '' &&
-        !item.isEdit
-      );
-    });
+    const noEmpty = dataList.every(item => item.id);
+
     if (!noEmpty) return message(t('请先完成之前事件结算'), { type: 'error' });
 
     const params: Partial<SattleDataAPI.volleyballData> = {

@@ -26,6 +26,14 @@ export const columns: TableColumnList = [
     minWidth: 300
   },
   {
+    label: t('取消事件'),
+    prop: 'canceled',
+    minWidth: 150,
+    formatter({ canceled }: { canceled: number }) {
+      return canceled == 0 ? '否' : '是';
+    }
+  },
+  {
     label: t('场次/局数/盘数'),
     prop: 'extraInfo',
     minWidth: 150

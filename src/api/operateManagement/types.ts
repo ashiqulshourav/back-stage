@@ -33,7 +33,35 @@ declare namespace OperateManagementDataAPI {
     championDayMaxLimit: number;
   }
 
+  type AccountChangeRecordType = {
+    id: string;
+    userId: string;
+    tenantCode: string;
+    operatorId: string;
+    balance: number;
+    createdAt: string;
+    identifier: string;
+    isSync: number;
+    prevBalance: number;
+    remark: string;
+    sign: string;
+    transAmount: number;
+    transNo: string;
+    type: number;
+    updatedAt: string;
+  }
+
+  type AccountChangeRecordListType = {
+    pageData: AccountChangeRecordType[];
+    count: number;
+    pageSize: number;
+    pageNumber: number;
+    currentPage: number
+  }
+
   type OperateTagListRes = COMMON.BASE_RES_TYPE<OperateTagListType>;
   type OperateTagRes = COMMON.BASE_RES_TYPE<OperateTagType>;
   type BetBalanceRes = COMMON.BASE_RES_TYPE<BetBalanceType>;
+  type AccountChangeRecordRes = COMMON.BASE_RES_TYPE<AccountChangeRecordListType>;
+  type AccountChangeRes = COMMON.BASE_RES_TYPE;
 }

@@ -6,7 +6,7 @@
       :model="form"
       :rules="searchFormRules"
     >
-      <el-form-item :label="`${t('输入赛事ID')}`" prop="matchId">
+      <el-form-item class="!mr-2" :label="`${t('输入赛事ID')}`" prop="matchId">
         <el-input
           v-model="form.matchId"
           :placeholder="t('输入赛事ID')"
@@ -16,7 +16,11 @@
           class="!w-[150px]"
         />
       </el-form-item>
-      <el-form-item :label="`${t('输入时间段')}:`" prop="startTime">
+      <el-form-item
+        class="!mr-2"
+        :label="`${t('输入时间段')}:`"
+        prop="startTime"
+      >
         <el-date-picker
           v-model="time"
           type="datetimerange"
@@ -28,7 +32,7 @@
         />
       </el-form-item>
 
-      <el-form-item :label="`${t('事件源')}:`" prop="eventName">
+      <el-form-item class="!mr-2" :label="`${t('事件源')}:`" prop="eventName">
         <el-select
           v-model="form.dataSourceCode"
           :placeholder="t('事件源')"
@@ -93,6 +97,16 @@
         <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
           {{ t('重置') }}
         </el-button>
+
+        <el-button
+          type="primary"
+          :icon="useRenderIcon(Download)"
+          :loading="downloading"
+          v-if="form.matchId && hasAuth('export'.toUpperCase())"
+          @click="exportFile()"
+        >
+          {{ t('导出报表') }}
+        </el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -109,15 +123,18 @@ import type { FormInstance, CheckboxValueType } from 'element-plus';
 import { PandaMatch, searchFormType } from '../utils/types';
 import { EVENT_SOURCE } from '../utils/map';
 import { searchFormRules } from '../utils/rule';
+import Download from '@iconify-icons/ep/download';
+import { hasAuth } from '@/router/utils';
 
 const time = ref('');
 const formRef = ref<FormInstance>();
-const emits = defineEmits(['onSearch']);
+const emits = defineEmits(['onSearch', 'exportFile']);
 const pandaMatchList = reactive<PandaMatch[]>([]);
 
 const props = defineProps<{
   loading: boolean;
   form: searchFormType;
+  downloading: boolean;
 }>();
 
 const changeDate = (t: any) => {
@@ -194,6 +211,10 @@ const handleCheckRevert = () => {
       .filter(_ => !oldArray.includes(_.eventCode))
       .map(_ => _.eventCode);
   }
+};
+
+const exportFile = () => {
+  emits('exportFile');
 };
 </script>
 

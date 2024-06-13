@@ -28,16 +28,6 @@ export const parseCountry = (countryId: number) => {
   if (!country) return '-';
   return (locale.value === 'zh' ? country?.countryNameCn : country?.countryNameEn)
 }
-// 获取结算时主队比分
-export const getHomeSettleScore = (s: string) => {
-  const match = s.match(/H(\d+)A(\d+)/);
-  return parseInt(match[1], 10);
-}
-//获取结算时客队比分
-export const getAwaySettleScore = (s: string) => {
-  const match = s.match(/H(\d+)A(\d+)/);
-  return parseInt(match[2], 10);
-}
 
 export const getPlayNameByKc = ({ code, name, ctid, sportId }: { code: string, name?: string, ctid?: number, sportId?: number }) => {
   if (ctid !== undefined && name !== undefined && ctid !== 0) return name;
@@ -140,7 +130,6 @@ export enum EBetResultType {
   HANDLE_CANCEL = 23,
   FLAT_MATCH_ROLLBACK = 51,
   RISK_REJECT = 61
-
 }
 export const BET_RESULT_TYPE_MAP: { [key in EBetResultType]: string } = {
   [EBetResultType.NO_RESULT]: t('无结果'),
@@ -160,11 +149,12 @@ export const BET_RESULT_TYPE_MAP: { [key in EBetResultType]: string } = {
   [EBetResultType.GAME_CANCEL]: t('比赛取消'),
   [EBetResultType.GAME_POSTPONED]: t('比赛延期'),
   [EBetResultType.ROLLBACK]: t('回滚'),
-  [EBetResultType.CANCELL]: t('注单取消'),
-  [EBetResultType.HANDLE_CANCEL]: t('注单取消'),
-  [EBetResultType.AUTO_CANCEL]: t('预约失效'),
+  [EBetResultType.CANCELL]: t('预约失败'),  //21
+  [EBetResultType.HANDLE_CANCEL]: t('注单无效'),//23  // 原来 注单取消
+  [EBetResultType.AUTO_CANCEL]: t('预约取消'), //22
   [EBetResultType.FLAT_MATCH_ROLLBACK]: t('走水'), // 比分回滚取消结算返还金额,算走水
-  [EBetResultType.RISK_REJECT]: t('走水')  // 风控拒也算走水
+  [EBetResultType.RISK_REJECT]: t('投注失败')  // 风控拒也算走水
+
 };
 
 export const getViewOddFn = (od: number, type: EOddType, currentOddType: number) => {
@@ -177,26 +167,7 @@ export const getViewOddFn = (od: number, type: EOddType, currentOddType: number)
   return truncateDecimals(od, 2);
 };
 
-export const playMap = {
-  FT_OU: t('全场大小'),
-  HT_OU: t('半场大小'),
-  FT_OE: t('全场单双'),
-  HT_OE: t('单双-上半场'),
-  FT_AH: t('全场让球'),
-  HT_AH: t('半场让球'),
-  FT_1X2: t('全场独赢'),
-  Winner: t('全场独赢'),
-  FT_ML: t('全场独赢'),
-  HT_1X2: t('半场独赢'),
-  HT_ML: t('半场独赢'),
-  FT_CS: t('全场波胆'),
-  HT_CS: t('波胆-上半场'),
-  FTS_AH: t('全场让局'),
-  FTS_OU: t('总局数'),
-  BothTeamsToScore: t('双方进球'),
-};
-
-export const formatSeriesType = (seriesType: number, len: number) => {
+export const formatSeriesType=(seriesType: number, len: number)=>{
   switch (seriesType) {
     case 10001013: return '10串1013';
     case 10001: return '10串1';
@@ -221,14 +192,6 @@ export const isVisiableSecondText = (betHandicap: string, betN: string, kc: stri
   return false;
 };
 
-// 获取注单玩法中具体数值或直接返回空-适用于下注时本地数据展示
-export const getBetHandiCapAtBetting = (name: string, sprotId?: number) => {
-  // 电子竞技-过滤
-  if (sprotId && sprotId > 33) {
-    return '';
-  }
-  return name;
-};
 
 export const useSportFormatDetail = (row) => {
   let score: string;
@@ -401,10 +364,7 @@ export const calculateSeriesTypeTotalBets = (seriesType: number) => {
   return arr.length > 0 ? arr[1] : ''
 }
 
-// enum TeamType {
-//   home='home',
-//   away='away'
-// }
+
 // 获取比分
 export const displayHomeAwayScore = (scoreString: string, sprotId?: ESportType, witchTeam?: TeamType) => {
   if (sprotId > 33) return '';

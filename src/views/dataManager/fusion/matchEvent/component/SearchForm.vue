@@ -79,7 +79,7 @@
         <el-form-item :label="`${t('主队英文名')}:`" prop="homeTeamNameEn">
           <el-input
               v-model="form.homeTeamNameEn"
-              :placeholder="t('主队中文名称')"
+              :placeholder="t('主队英文名称')"
               clearable
               v-enter="search"
               class="!w-[150px]"

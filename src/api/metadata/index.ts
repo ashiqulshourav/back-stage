@@ -1,4 +1,5 @@
 import { http } from "@/utils/http";
+import { udpateOddsType } from "@/views/dataManager/fusion/matchEvent/utils/types";
 
 export const metaData = {
   //- 普通体育联赛列表获取
@@ -61,5 +62,6 @@ export const metaData = {
     pairingUser:string
   }) => http.request<MatchCombineAPI.matchSourceData>("post", "/pairing/v1/cancelPairing", { data }),
 
+  updateOdds: (data: udpateOddsType) => http.request<MatchCombineAPI.matchSourceData>("post", "/pairing/v1/updateOdds", { data }),
 
 };

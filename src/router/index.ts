@@ -218,6 +218,9 @@ const clearSettleInfo = (to) => {
   if (!(to?.name as string)?.startsWith('SETTLE') || to?.name === 'SETTLE_MAIN') {
     settingStore.save_selttle_history_page_info({ page: null, matchType: null })
   }
+  if (!(to?.name as string)?.startsWith('OPERATEMANAGER')){
+    settingStore.save_player_info({ page: null})
+  }
 }
 
 export default router;

@@ -34,6 +34,6 @@ export const API = {
   ...taskCenter,
   ...riskManagementData,
   ...sportTradingData,
-  ...eventData,
-  ...operateManagementData
+  ...operateManagementData,
+  ...eventData
 };

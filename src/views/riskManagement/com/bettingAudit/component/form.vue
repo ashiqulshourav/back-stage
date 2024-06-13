@@ -18,7 +18,7 @@
       </el-radio-group>
     </el-form-item>
 
-    <el-form-item prop="other" class="w-full">
+    <el-form-item :prop="isOthers(form) ? 'others' : ''" class="w-full">
       <el-input
         :row="2"
         v-model="form.others"
@@ -32,7 +32,7 @@
   </el-form>
   <div class="flex justify-end">
     <el-button @click="closeDialog">{{ t('取消') }}</el-button>
-    <el-button type="primary" @click="confirmClick">{{ t('确定') }}</el-button>
+    <el-button :disabled="isOthers(form)" type="primary" @click="confirmClick">{{ t('确定') }}</el-button>
   </div>
 </template>
 
@@ -57,12 +57,16 @@ const selectObj = {
   goal: '进球',
   redCard: '红牌',
   penaltyAwarded: '点球',
+  corner: '角球',
+  dangerous_bet: '危险投注',
   other: '其它'
 };
 
 const closeDialog = () => {
   emits('closeDialog');
 };
+
+const isOthers = (f) => f.riskType === '其它' && f.others.trim() === '' ;
 
 /* 传,roleName,status,comment */
 const confirmClick = () => {

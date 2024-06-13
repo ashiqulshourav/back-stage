@@ -192,7 +192,7 @@
         <el-form-item :label="`${t('注单时间')}:`">
           <CustomDate
             v-model:val="selectDate"
-            :start-placeholder="dayjs().startOf('month').format('YYYY-MM-DD')"
+            :start-placeholder="dayjs().subtract(30, 'day').startOf('day').format('YYYY-MM-DD')"
             :end-placeholder="dayjs().startOf('day').format('YYYY-MM-DD')"
             @changeDate="changeDate"
           />
@@ -212,14 +212,24 @@
           >
             {{ t('重置') }}
           </el-button>
-          <el-button
+         <el-button
             type="primary"
             :icon="useRenderIcon(Download)"
-              :loading="loading"
+            :loading="downloading"
             v-if="hasAuth('EXPORT')"
             @click="exportFile()"
           >
             {{ t('导出报表') }}
+          </el-button>
+
+         <el-button
+            type="primary"
+            :icon="useRenderIcon(Download)"
+            :loading="downloading"
+            v-if="hasAuth('EXPORT')"
+            @click="exportFileTest()"
+          >
+            {{ t('报表异步导出') }}
           </el-button>
         </el-form-item>
       </div>
@@ -247,6 +257,7 @@ const props = defineProps<{
   venueType: number;
   form: searchFormType;
   tenantList: [];
+  downloading: boolean;
 }>();
 
 const formRef = ref();
@@ -261,11 +272,13 @@ import { hasAuth } from '@/router/utils';
 import CustomDate from '@/components/Form/Custom_date.vue';
 import { formRules } from '@/views/configCenter/classify_setting/utils/rule';
 
-const emits = defineEmits(['onSearch', 'exportFile']);
+const emits = defineEmits(['onSearch', 'exportFile', 'exportFileTest']);
 const resetForm = (formEl: FormInstance | undefined) => {
-  formEl.resetFields();
+  formEl?.resetFields();
   selectDate.value = '';
   gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
+  props.form.createTimeStart = dayjs().subtract(30, 'day').startOf('day').valueOf();
+  props.form.createTimeEnd = dayjs().endOf('day').valueOf();
   search();
 };
 
@@ -292,6 +305,10 @@ const search = () => {
 
 const exportFile = () => {
   emits('exportFile');
+};
+
+const exportFileTest = () => {
+  emits('exportFileTest');
 };
 </script>
 

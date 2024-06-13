@@ -6,7 +6,9 @@
       :loading="loading"
       :labelList="labelList"
       :tenantList="tenantList"
+      @exportFile="exportFile"
       @on-search="onSearch"
+      :downloading="downloading"
     />
     <PureTableBar :columns="columns" @refresh="onSearch('reload')">
       <template #title>
@@ -90,6 +92,17 @@
             >
               {{ t('编辑') }}
             </el-button>
+            <el-button
+              v-if="hasAuth('changeAccountRecord'.toUpperCase())"
+              class="reset-margin"
+              link
+              type="primary"
+              :size="size"
+              :icon="useRenderIcon(ChangeAccount)"
+              @click="goChangeAccountPage(row)"
+            >
+              {{ t('帐变') }}
+            </el-button>
           </template>
         </pure-table>
       </template>
@@ -141,6 +154,7 @@ import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 import { hasAuth } from '@/router/utils';
 import EditPen from '@iconify-icons/ep/edit-pen';
+import ChangeAccount from '@iconify-icons/fa-solid/user-edit';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import LabelListCom from './component/LabelListCom.vue';
 
@@ -182,7 +196,10 @@ const {
   dispatchLabelsDel,
   dispatchLabelsAdd,
   dispatchUpdateUser,
-  tenantObj
+  tenantObj,
+  goChangeAccountPage,
+  downloading,
+  exportFile,
 } = userPlayerListHook(props.category, props.venueType);
 </script>
 

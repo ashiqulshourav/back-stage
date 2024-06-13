@@ -54,7 +54,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
   const form = reactive<searchFormType>({
     sportId: '',
     userIdOrName: '',
-    timeStart: dayjs().startOf('month').valueOf(),
+    timeStart: dayjs().subtract(30, 'day').startOf('day').valueOf(),
     timeEnd: dayjs().endOf('day').valueOf(),
     orderId: '',
     leagueId: '',
@@ -248,9 +248,10 @@ export function useBettingCenterHook(category: number, venueType: number) {
     onSearch();
   };
 
-  //- 导出excel表格
-  const exportFile = async () => {
+   //- 导出excel表格
+   const exportFile = async () => {
     downloading.value = true;
+    message(t('导出报表开始'), { type: 'warning' });
     const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
       formatParams({
         pageNum: 1,
@@ -258,7 +259,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
         export: true
       }) as searchFormType
     );
-    downloading.value = false;
     const r = res.data.pageData.map((item: any, i) => {
       const arr: any[] = [];
       const data = { ...item, ...item?.combineOrderDetails[0] };
@@ -397,9 +397,22 @@ export function useBettingCenterHook(category: number, venueType: number) {
 
     utils.book_append_sheet(workBook, workSheet, '数据报表');
     writeFile(workBook, '赛程_注单中心.xlsx');
-    message(t('导出成功'), {
-      type: 'success'
-    });
+    message(t('导出成功'), { type: 'success' });
+    downloading.value = false;
+  };
+
+  const exportFileTest = async () => {
+    downloading.value = true;
+    message(t('导出报表开始'), { type: 'warning' });
+    const res: BetOrderAPI.BetOrderResType = await API.bettingCenterExport(
+      formatParams({
+        pageNum: 1,
+        pageSize: 50000,
+        export: true
+      }) as searchFormType
+    );
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    downloading.value = false;
   };
 
   const handleCancel = (data: any) => {
@@ -434,14 +447,12 @@ export function useBettingCenterHook(category: number, venueType: number) {
       // 特殊结算也算已结算
       obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
     } else if (betResultArr?.includes(22)) {
-      obj = { status: betStatus.reverseCancel, bgColor: '#F57582' }; //预约取消
+      //预约取消
+      obj = { status: betStatus.reverseCancel, bgColor: '#F57582' };
     } else if (riskStatusArr?.includes(riskStatus.rejectBetting)) {
-      obj = { status: betStatus.PendingApprove, bgColor: '#F57582' }; //待审核
-    } else if (
-      betResultArr?.includes(61) &&
-      (riskStatusArr?.includes(riskStatus.reject) ||
-        riskStatusArr?.includes(riskStatus.autoReject))
-    ) {
+      //待审核
+      obj = { status: betStatus.PendingApprove, bgColor: '#F57582' };
+    }else if(betResultArr?.includes(61)&&(riskStatusArr?.includes(riskStatus.reject) ||riskStatusArr?.includes(riskStatus.autoReject))){
       // 封控拒单
       obj = { status: betStatus.riskReject, bgColor: '#F88D48' };
     } else if (
@@ -449,6 +460,9 @@ export function useBettingCenterHook(category: number, venueType: number) {
       billStatus === 1 &&
       (betResultArr?.includes(22) || betResultArr?.includes(23))
     ) {
+      // 注单无效
+      obj = { status: betStatus.betInvalid, bgColor: '#E54752' };
+    }else if(riskStatusArr?.includes(riskStatus.autoApprove)&&betResultArr.includes(24)){
       // 注单无效
       obj = { status: betStatus.betInvalid, bgColor: '#E54752' };
     } else if (status === 2 && billStatus === 1 && betResultArr?.includes(21)) {
@@ -481,7 +495,9 @@ export function useBettingCenterHook(category: number, venueType: number) {
   const getOddStatus = (betResult: number, riskSt: number) => {
     if (riskSt === riskStatus.reject || riskSt === riskStatus.autoReject) {
       return '无效注单';
-    } else {
+    }else if(betResult===24&&riskSt==riskStatus.autoApprove){
+      return '盘口取消';
+    }else {
       return (
         BET_RESULT_TYPE_MAP[betResult as keyof typeof BET_RESULT_TYPE_MAP] || ''
       );
@@ -595,6 +611,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     handleCurrentChange,
     handleSelectionChange,
     exportFile,
+    exportFileTest,
     handleCancel,
     getStatus,
     copyTest,

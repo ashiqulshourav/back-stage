@@ -5,6 +5,7 @@
       :loading="loading"
       @on-search="onSearch"
       @exportFile="exportFile"
+      @exportFileTest="exportFileTest"
       :tenantList="tenantList"
       :riskLabelList="riskLabelList"
       :venueType="props.venueType"
@@ -174,7 +175,7 @@
                 {{ item.sportNameCn }}/{{ item.leagueNameCn }}
               </div>
               <div
-                class="item_line cursor-pointer"
+                class="item_line cursor-pointer flex items-baseline gap-1"
                 @dblclick="
                   copyTest(
                     item.matchId,
@@ -183,6 +184,9 @@
                 "
               >
                 {{ t('赛事ID:') }} {{ item.matchId }}
+                <span class="inline-block">
+                  <IconifyIconOffline :icon="Copy" />
+                </span>
               </div>
               <div class="item_line">
                 {{ t('开赛时间:')
@@ -220,12 +224,15 @@
                 }}
               </div>
               <div
-                class="item_line cursor-pointer"
+                class="item_line cursor-pointer flex items-baseline gap-1"
                 @dblclick="
                   copyTest(row.id, t('注单号：{value}', { value: row.id }))
                 "
               >
                 {{ t('注单号:') }} {{ row.id }}
+                <span class="inline-block">
+                  <IconifyIconOffline :icon="Copy" />
+                </span>
               </div>
               <div class="item_line">
                 {{ t('投注时间:')
@@ -308,11 +315,11 @@
                   row.billStatus,
                   row.betResultArr,
                   row.isReserve,
-                  row.riskStatus,
+                  row.riskStatusArr,
                   row.isSpecialSettle
                 ).bgColor
               }"
-              class="status_detail status_btn mb-1"
+              class="status_detail status_btn mb-1 mx-auto"
             >
               {{
                 betStatusMap[
@@ -321,7 +328,7 @@
                     row.billStatus,
                     row.betResultArr,
                     row.isReserve,
-                    row.riskStatus,
+                    row.riskStatusArr,
                     row.isSpecialSettle
                   ).status as keyof typeof betStatusMap
                 ]
@@ -334,7 +341,7 @@
                   row.billStatus,
                   row.betResultArr,
                   row.isReserve,
-                  row.riskStatus,
+                  row.riskStatusArr,
                   row.isSpecialSettle
                 ).status === betStatus.settlementBet
               "
@@ -462,6 +469,7 @@ import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import EditPen from '@iconify-icons/ep/edit-pen';
+import Copy from '@iconify-icons/ep/copy-document';
 const props = defineProps<{
   category: number;
   venueType: number;
@@ -479,6 +487,7 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   exportFile,
+  exportFileTest,
   handleCancel,
   getStatus,
   copyTest,
@@ -513,9 +522,6 @@ const {
 }
 .bet_detail {
   min-width: 200px;
-}
-.status_detail {
-  width: 120px;
 }
 .match_item {
   margin-bottom: 10px;
@@ -559,6 +565,9 @@ const {
   padding: 0 8px;
   color: #fff;
   border-radius: 4px;
+  width: auto;
+  display: inline-block;
+  min-width: max-content;
 }
 .odd_item {
   min-width: 80px;

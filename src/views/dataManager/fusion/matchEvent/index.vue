@@ -41,6 +41,16 @@
             <div> {{ handleNullValue(row.awayTeamNameCn) }} </div>
             <div> {{ handleNullValue(row.awayTeamNameEn) }} </div>
           </template>
+          <template #isDataSourceOdds="{ row }">
+            <el-switch
+              v-if="row.pairingType != 0"
+              v-model="row.isDataSourceOdds"
+              :active-value="1"
+              :inactive-value="0"
+              inline-prompt
+              @change="getOdds(row)"
+            />
+          </template>
           <template #operation="{ row }">
             <el-button
               class="reset-margin"
@@ -90,5 +100,6 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   form,
+  getOdds,
 } = matchCombineHook();
 </script>

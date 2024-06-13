@@ -41,6 +41,9 @@ export type setType = {
     page: number | null;
     matchType: number | null;
   }
+  playerListPageInfo: {
+    page: number | null;
+  }
 };
 
 export type userType = {
@@ -63,5 +66,6 @@ export type BetType = {
   gameplayData: {
     matchId: string;
     betItemsId: number | string;
-  }
+  },
+  isOpenVoice: boolean;
 };
