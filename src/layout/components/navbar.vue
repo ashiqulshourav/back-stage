@@ -91,6 +91,7 @@ const router = useRouter();
 
 const userStore = useUserStore();
 const riskNoticeStore = useRiskNoticeStore();
+
 const { layout, logout, onPanel, pureApp, userAvatar, toggleSideBar } =
   useNav();
 
@@ -123,9 +124,10 @@ const refreshRiskNoticeWithInterval = async () => {
   }, 5000);
 };
 
-onMounted(() => {
+onMounted(async () => {
   // riskNoticeStore.setRiskNotice();
-  refreshRiskNoticeWithInterval();
+  await riskNoticeStore.setRiskNotificationSwitch();
+  await refreshRiskNoticeWithInterval();
 });
 
 watch(
@@ -135,11 +137,11 @@ watch(
     riskNoticeStore.createTimeStart,
     riskNoticeStore.createTimeEnd
   ],
-  () => {
+  async () => {
     if (riskNoticeStore.createTimeStart && riskNoticeStore.createTimeEnd) {
-      refreshRiskNoticeWithInterval();
-    } else {
-      refreshRiskNoticeWithInterval();
+      await refreshRiskNoticeWithInterval();
+    } else if(riskNoticeStore.totalCount) {
+      await refreshRiskNoticeWithInterval();
     }
   }
 );
