@@ -248,6 +248,7 @@
                 class="match_item"
                 v-for="item in row.combineOrderDetails"
                 :key="item.betItemId"
+                :class="row.combineOrderDetails.length > 1 ? 'min-h-[100px]' : ''"
               >
                 <span v-if="row.combineOrderDetails.length < 2">
                   {{
@@ -298,6 +299,7 @@
               <div
                 v-for="item in row.combineOrderDetails"
                 :key="item.betItemId"
+                :class="row.combineOrderDetails.length > 1 ? 'min-h-[100px]' : ''"
               >
                 <div
                   class="flex item-center flex-col"
