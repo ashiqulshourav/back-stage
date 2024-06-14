@@ -85,24 +85,31 @@ export const useSettileHook = () => {
     });
   };
 
+  /*  */
+
   //- 跳转详情页面
   const router = useRouter();
 
-  const goDetailPage = row => {
+  const goDetailPage = (row: SattleDataAPI.getSettlementDataList) => {
     settingStore.save_selttle_page_info({
       page: pagination.currentPage,
       matchType: currentSportId.value
     });
     const params = JSON.parse(JSON.stringify(row));
     router.push({
-      name: SPORT_LIST_MAP.find(item => item.value === currentSportId.value)
+      name: SPORT_LIST_MAP.find(item => item.value === currentSportId.value)!
         .linkName,
       state: { params }
     });
   };
 
+  //- 跳转到特殊结算页面
+  const goOtherSattlePage = (row: SattleDataAPI.getSettlementDataList) => {
+    router.push(`/settle/football_other_settle_detail/${row.matchId}`);
+  };
+
   const pagination = reactive<PaginationProps>({
-    total: 0,
+    total: 0, 
     pageSize: 10,
     currentPage: settingStore.settlePageInfo.page ?? 1
   });
@@ -171,6 +178,7 @@ export const useSettileHook = () => {
     goDetailPage,
     currentSportId,
     cancelClick,
-    loading
+    loading,
+    goOtherSattlePage
   };
 };

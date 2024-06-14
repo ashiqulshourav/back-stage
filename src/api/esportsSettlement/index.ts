@@ -14,6 +14,8 @@ export const esportsSettlement = {
 
   //- 获取冠军赛事信息列表
   getChampionEvents: (data: { matchId: number }) => http.request<EsportsSettlementAPI.getChampionEventsResType>("post", "/championSettle/v1/getChampionEvents", { data }),
+  //- 获取足球其他玩法事件列表
+  getSpecialSettlementEvents: (data: { matchId: number }) => http.request<EsportsSettlementAPI.getChampionEventsResType>("post", "/specialSettle/v1/getSpecialSettlementEvents", { data }),
 
   manualSettleESportHandicap: (data: {
     matchId: number;
@@ -36,6 +38,20 @@ export const esportsSettlement = {
       betItemsName: string;
     }[]
   }) => http.request<EsportsSettlementAPI.manualSettleESportHandicapResType>("post", "/championSettle/v1/manualSettleChampionHandicap", { data }),
+
+  //- 足球特殊玩法结算
+  manualSettleSpecial: (data: {
+    matchId: number;
+    betItemsName: string;
+    betResultItems: {
+      betItemId: number;
+      betResult: number;
+      handicap: string;
+      kindsCode: string;
+      betItemsName: string;
+    }[]
+  }) => http.request<EsportsSettlementAPI.manualSettleESportHandicapResType>("post", "/specialSettle/v1/manualSettleSpecial", { data }),
+
   //- 重新结算(二次结算)
   eSportReSettlement: (data: {
     matchId: number;
@@ -58,4 +74,15 @@ export const esportsSettlement = {
       sourceBetItemsMid: number;
     }[]
   }) => http.request<EsportsSettlementAPI.manualSettleESportHandicapResType>("post", "/championSettle/v1/reSettleChampionHandicap", { data }),
+  //- 足球重新结算
+  reSettleSpecial: (data: {
+    matchId: number;
+    betResultItems: {
+      betItemId: number;
+      betResult: number;
+      handicap: string;
+      kindsCode: string;
+      sourceBetItemsMid: number;
+    }[]
+  }) => http.request<EsportsSettlementAPI.manualSettleESportHandicapResType>("post", "/specialSettle/v1/reSettleSpecial", { data }),
 };

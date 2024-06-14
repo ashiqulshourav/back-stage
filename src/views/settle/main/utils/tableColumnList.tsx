@@ -72,7 +72,6 @@ const baseColumns: TableColumnList = [
       ),
     headerRenderer: d => handleTableWidth(d, t('全场结算'))
   },
-
   {
     label: t('操作'),
     slot: 'operation',
