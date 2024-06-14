@@ -59,7 +59,7 @@ export function useEsportsSettlement() {
 
   //-
   const multipBetResultCheck = (list: number[], index: number) => {
-    return list.includes(index) ? 4 : 3;
+    return list?.includes(index) ? 4 : 3;
   };
 
   //- 结算提交
@@ -67,7 +67,7 @@ export function useEsportsSettlement() {
     row: EsportsSettlementAPI.ChampionEventList,
     type?: 'cancel'
   ) => {
-    if (row.betOptions < 0 && !row.multipartBetOptions.length && !type)
+    if (row.betOptions < 0 && !row.multipartBetOptions?.length && !type)
       return message(t('请先选择投注项'), { type: 'error' });
 
     ElMessageBox.confirm(
@@ -90,7 +90,7 @@ export function useEsportsSettlement() {
             betItemId: item.betItemsId,
             betResult: type
               ? 24
-              : row.multipartBetOptions.length > 0
+              : row.multipartBetOptions?.length > 0
               ? multipBetResultCheck(row.multipartBetOptions, index)
               : row.betOptions === index
               ? 4
