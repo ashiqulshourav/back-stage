@@ -129,9 +129,10 @@ const renderColumnList = computed(() => {
       hide: () => currentSport.value?.value != SPORT_NAME_TYPE.football
     }
   ];
-
   const _ = [...columns];
   _.splice(_.length - 2, 0, ...fillList);
+  // if (currentSport.value?.value === SPORT_NAME_TYPE.football) {
+  // }
   return _;
 });
 </script>

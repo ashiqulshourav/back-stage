@@ -25,6 +25,11 @@ export const useSettileHook = () => {
     endTime: ''
   });
 
+  //- 跳转到特殊结算页面
+  const goOtherSattlePage = (row: SattleDataAPI.getSettlementDataList) => {
+    router.push(`/settle/football_other_settle_detail/${row.matchId}`);
+  };
+
   //- 取消注单
   const cancelClick = async (row: SattleDataAPI.getSettlementDataList) => {
     const remark = ref('');
@@ -166,6 +171,7 @@ export const useSettileHook = () => {
     goDetailPage,
     currentSportId,
     cancelClick,
+    goOtherSattlePage,
     loading
   };
 };

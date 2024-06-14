@@ -17,24 +17,12 @@
         <span class="mr-2 text-sm font-bold">{{ item.title }}:</span>
         <span class="text-sm">{{ item.val }}</span>
       </el-col>
-      <el-col :span="6" :offset="3">
-        <el-button
-          class="ml-2"
-          size="small"
-          type="primary"
-          :disabled="dataInfo?.isSale === 0"
-          @click="closeSettle"
-          v-if="hasAuth('CLOSEDSALE')"
-          >{{ t('关闭开售') }}</el-button
-        >
-      </el-col>
     </el-row>
   </div>
 </template>
 
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
-import { hasAuth } from '@/router/utils';
 import {
   ESPORT_ID_MAP,
   ESPORT_MATCH_STATUS,
@@ -47,10 +35,6 @@ const props = defineProps<{
 
 const emits = defineEmits(['closeSettle']);
 
-const closeSettle = () => {
-  emits('closeSettle');
-};
-
 const renderList = computed(() => {
   const _ = props.dataInfo;
   return [
@@ -61,7 +45,10 @@ const renderList = computed(() => {
       val: ESPORT_ID_MAP.concat(SPORT_ID_MAP).find(r => r.value === +_?.sportId)
         ?.label
     },
-    { title: t('比赛状态'), val: ESPORT_MATCH_STATUS[_?.status] },
+    {
+      title: t('比赛状态'),
+      val: ESPORT_MATCH_STATUS[_?.status as keyof typeof ESPORT_MATCH_STATUS]
+    },
     {
       title: t('联赛名称'),
       val: _?.leagueNameCn ?? '-'
