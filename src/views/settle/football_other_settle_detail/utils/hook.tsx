@@ -179,6 +179,7 @@ export function useOtherFootballSettlement() {
     getSiginMatchData();
     getFootballMatchInfo();
   });
+  
   //- 单个赛事信息获取
   const getSiginMatchData = async () => {
     const res = await API.getPreSaleInfo({ matchId: +route.params.matchId });
