@@ -23,7 +23,10 @@
         <div
           :class="[
             'flex justify-center items-center',
-            currentSportId === 1 && dataList[0].status !== 'over'
+            currentSportId === 1 &&
+            dataList[0].status !== 'over' &&
+            row.isShowCancelBtn &&
+            hasAuth('OTHERSETTLEMENT')
               ? 'flex-col'
               : 'flex-row'
           ]"
@@ -48,6 +51,7 @@
           </el-button>
           <el-button
             v-if="row.isShowCancelBtn && hasAuth('CANCELMATCH')"
+            class="reset-margin"
             type="danger"
             size="small"
             :disabled="row.cancelOrderTimes > 0"

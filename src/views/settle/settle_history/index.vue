@@ -24,7 +24,8 @@
             'flex justify-center items-center',
             currentSportId === 1 &&
             dataList[0].status !== 'over' &&
-            row.isShowCancelBtn
+            row.isShowCancelBtn &&
+            hasAuth('OTHERSETTLEMENT')
               ? 'flex-col'
               : 'flex-row'
           ]"
