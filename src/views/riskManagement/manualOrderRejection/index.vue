@@ -108,7 +108,7 @@
 
           <template #matchMessage="{ row }">
             <div
-              class="match_item"
+              class="match_item eq-height"
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -174,7 +174,7 @@
 
           <template #betDetail="{ row }">
             <div
-              class="match_item"
+              class="match_item eq-height"
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -245,10 +245,9 @@
           <template #orderAcceptanceStatus="{ row }">
             <div class="h-full">
               <div
-                class="match_item"
+                class="match_item eq-height"
                 v-for="item in row.combineOrderDetails"
                 :key="item.betItemId"
-                :class="row.combineOrderDetails.length > 1 ? 'min-h-[100px]' : ''"
               >
                 <span v-if="row.combineOrderDetails.length < 2">
                   {{
@@ -278,7 +277,7 @@
           </template>
           <template #odd="{ row }">
             <div
-              class="match_item odd_item"
+              class="match_item odd_item eq-height al"
               v-for="item in row.combineOrderDetails"
               :key="item.id"
             >
@@ -297,9 +296,9 @@
           <template #operation="{ row }">
             <div class="h-full" v-if="form.queryType !== 1">
               <div
+                class="eq-height"
                 v-for="item in row.combineOrderDetails"
                 :key="item.betItemId"
-                :class="row.combineOrderDetails.length > 1 ? 'min-h-[100px]' : ''"
               >
                 <div
                   class="flex item-center flex-col"
@@ -361,6 +360,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import { onMounted, onUpdated } from 'vue';
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useManualOrderRejectionHook } from './util/hook';
 import SearchForm from './component/SearchForm.vue';
@@ -384,6 +384,29 @@ import { usePublicHooks } from '@/hooks';
 
 defineOptions({ name: 'RISKMANAGEMENT_MANUALORDERREJECTION' });
 const { tableHeaderStyle } = usePublicHooks();
+
+const adjustContentWithRowHeight = () => {
+  const childElements = document.querySelectorAll('.getParent');
+
+  childElements.forEach((element: HTMLElement) => {
+    const hasChild = element.querySelector('.eq-height');
+    if(hasChild && element.querySelectorAll('.eq-height').length > 1){
+      const childElements = element.querySelectorAll('.eq-height');
+      const individualHeight = (element.offsetHeight - 17 - ((childElements.length - 1)* 10)) / childElements.length;
+      childElements.forEach((childElement: HTMLElement) => {
+        childElement.style.minHeight = `${individualHeight}px`;
+      })
+    }
+  })
+}
+
+onMounted(() => {
+  adjustContentWithRowHeight();
+})
+
+onUpdated (() => {
+  adjustContentWithRowHeight();
+})
 
 const getVal = (s1, s2, s3, s4) => {
   let val = '-';
@@ -496,9 +519,6 @@ const {
   color: #fff;
   border-radius: 4px;
 }
-.odd_item {
-  min-height: 100px;
-}
 
 .operate {
   width: 100px;
@@ -510,5 +530,12 @@ const {
   display: inline-block;
   color: white;
   border-radius: 4px;
+}
+
+.eq-height{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
 }
 </style>
