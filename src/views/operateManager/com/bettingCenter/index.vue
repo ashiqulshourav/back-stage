@@ -261,8 +261,10 @@
                   )
                 "
               >
-                {{ t('赛果：')
-                }}{{ displayHomeAwayScore(item.settleScore, item.sportId) }}
+                <span v-if="item.kindsCode !== 'TeamToKickOff'">
+                  {{ t('赛果：')
+                  }}{{ displayHomeAwayScore(item.settleScore, item.sportId) }}
+                </span>
               </div>
             </div>
           </template>
