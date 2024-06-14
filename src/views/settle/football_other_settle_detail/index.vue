@@ -40,13 +40,13 @@
                 <template v-if="item.handicap.length > 20">
                   <el-tooltip
                     effect="dark"
-                    :content="item.handicap"
+                    :content="item.n"
                     placement="top-start"
                   >
-                    <span>{{ item.handicap }}</span>
+                    <span>{{ item.n }}</span>
                   </el-tooltip>
                 </template>
-                <span v-else>{{ item.handicap }}</span>
+                <span v-else>{{ item.n }}</span>
                 <span class="ml-3">{{ item.odds }}</span>
               </el-radio>
             </el-radio-group>
@@ -74,20 +74,20 @@
                     :content="item.handicap"
                     placement="top-start"
                   >
-                    <span>{{ item.handicap }}</span>
+                    <span>{{ item.n }}</span>
                   </el-tooltip>
                 </template>
-                <span v-else>{{ item.handicap }}</span>
+                <span v-else>{{ item.n }}</span>
                 <span class="ml-3">{{ item.odds }}</span>
               </el-checkbox>
             </el-checkbox-group>
           </template>
 
-          <!-- - 操作 -->
+          <!-- - 操作 -->·
           <template #operaction="{ row }">
             <template v-if="row.settleStatus === 0">
               <el-button
-                v-if="hasAuth('CONFIRMSETTLE')"
+                v-if="hasAuth('MANUALSETTLESPECIAL')"
                 :disabled="row.settleStatus === 1"
                 size="small"
                 :type="row.win === null ? 'primary' : 'info'"
@@ -97,7 +97,7 @@
               <el-button
                 :disabled="row.win !== null"
                 size="small"
-                v-if="hasAuth('CANCELHANDICAP')"
+                v-if="hasAuth('MANUALSETTLESPECIAL')"
                 type="danger"
                 @click="manualSettleESportHandicapClick(row, 'cancel')"
                 >{{ t('取消盘口') }}</el-button
@@ -108,7 +108,7 @@
               <div v-else>
                 <el-button
                   size="small"
-                  v-if="row.isEdit === false && hasAuth('RESETTLEMENT')"
+                  v-if="row.isEdit === false && hasAuth('RESETTLESPECIAL')"
                   @click="row.isEdit = true"
                   type="danger"
                   >{{ t('重新结算') }}</el-button
@@ -117,13 +117,12 @@
                   <el-button
                     size="small"
                     type="primary"
-                    v-if="hasAuth('RESETTLEMENT')"
                     @click="row.isEdit = false"
                     >{{ t('取消') }}</el-button
                   >
                   <el-button
                     size="small"
-                    v-if="hasAuth('RESETTLEMENT')"
+                    v-if="hasAuth('RESETTLESPECIAL')"
                     type="danger"
                     :loading="resetLoading"
                     @click="resetManualSettleESportHandicapClick(row)"

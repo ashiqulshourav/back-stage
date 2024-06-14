@@ -19,23 +19,43 @@
       @handleCurrentChange="handleCurrentChange"
     >
       <template #default="{ row }">
-        <el-button
-          v-auth="['DETAIL']"
-          class="reset-margin"
-          type="primary"
-          size="small"
-          @click="goDetailPage(row)"
+        <div
+          :class="[
+            'flex justify-center items-center',
+            currentSportId === 1 &&
+            dataList[0].status !== 'over' &&
+            row.isShowCancelBtn
+              ? 'flex-col'
+              : 'flex-row'
+          ]"
         >
-          {{ t('结算详情') }}
-        </el-button>
-        <el-button
-          v-if="row.isShowCancelBtn"
-          type="danger"
-          size="small"
-          :disabled="row.cancelOrderTimes > 0"
-          @click="cancelClick(row)"
-          >{{ t('取消比赛') }}</el-button
-        >
+          <el-button
+            v-auth="['DETAIL']"
+            class="reset-margin"
+            type="primary"
+            size="small"
+            @click="goDetailPage(row)"
+          >
+            {{ t('结算详情') }}
+          </el-button>
+          <el-button
+            v-if="currentSportId === 1"
+            class="reset-margin my-1"
+            type="primary"
+            size="small"
+            @click="goOtherSattlePage(row)"
+          >
+            {{ t('其他玩法结算') }}
+          </el-button>
+          <el-button
+            v-if="row.isShowCancelBtn"
+            type="danger"
+            size="small"
+            :disabled="row.cancelOrderTimes > 0"
+            @click="cancelClick(row)"
+            >{{ t('取消比赛') }}</el-button
+          >
+        </div>
       </template>
     </SportTable>
   </div>
@@ -99,6 +119,7 @@ const {
   goDetailPage,
   currentSportId,
   cancelClick,
+  goOtherSattlePage,
   loading
 } = useSettileHook();
 </script>

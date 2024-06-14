@@ -43,11 +43,14 @@ export function useOtherFootballSettlement() {
     res.data.forEach(item => {
       if (item.settleStatus === 1) {
         item.betOptions = item.handicapList.findIndex(item => item.win === 4);
-        item.multipartBetOptions = item.handicapList
-          .map((item, index) => {
-            return item.win === 4 ? index : -1;
-          })
-          .filter(_ => _ !== -1);
+        item.multipartBetOptions =
+          item.handicapList.length > 2
+            ? item.handicapList
+                .map((item, index) => {
+                  return item.win === 4 ? index : -1;
+                })
+                .filter(_ => _ !== -1)
+            : [];
       } else {
         item.betOptions = -1;
       }
@@ -67,7 +70,7 @@ export function useOtherFootballSettlement() {
     row: EsportsSettlementAPI.ChampionEventList,
     type?: 'cancel'
   ) => {
-    if (row.betOptions < 0 && !row.multipartBetOptions.length && !type)
+    if (row.betOptions < 0 && !row.multipartBetOptions?.length && !type)
       return message(t('请先选择投注项'), { type: 'error' });
 
     ElMessageBox.confirm(
@@ -90,8 +93,8 @@ export function useOtherFootballSettlement() {
             betItemId: item.betItemsId,
             betResult: type
               ? 24
-              : row.multipartBetOptions.length > 0
-              ? multipBetResultCheck(row.multipartBetOptions, index)
+              : row?.multipartBetOptions?.length > 0
+              ? multipBetResultCheck(row?.multipartBetOptions, index)
               : row.betOptions === index
               ? 4
               : 3,
@@ -150,8 +153,8 @@ export function useOtherFootballSettlement() {
           return {
             betItemId: item.betItemsId,
             betResult:
-              row.multipartBetOptions.length > 0
-                ? multipBetResultCheck(row.multipartBetOptions, index)
+              row.multipartBetOptions?.length > 0
+                ? multipBetResultCheck(row?.multipartBetOptions, index)
                 : row.betOptions === index
                 ? 4
                 : 3,
