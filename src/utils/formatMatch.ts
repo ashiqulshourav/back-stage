@@ -128,12 +128,14 @@ export enum EBetResultType {
   CANCELL = 21,
   AUTO_CANCEL = 22,
   HANDLE_CANCEL = 23,
+  HANDICAPS_CANCEL = 24,
   FLAT_MATCH_ROLLBACK = 51,
   RISK_REJECT = 61
 }
 export const BET_RESULT_TYPE_MAP: { [key in EBetResultType]: string } = {
   [EBetResultType.NO_RESULT]: t('无结果'),
   [EBetResultType.FLAT]: t('走水'),
+  [EBetResultType.HANDICAPS_CANCEL]: t('盘口取消'),
   [EBetResultType.LOSE]: t('输'),
   [EBetResultType.WIN]: t('赢'),
   [EBetResultType.WIN_HALF]: t('赢半'),
@@ -167,7 +169,7 @@ export const getViewOddFn = (od: number, type: EOddType, currentOddType: number)
   return truncateDecimals(od, 2);
 };
 
-export const formatSeriesType=(seriesType: number, len: number)=>{
+export const formatSeriesType = (seriesType: number, len: number) => {
   switch (seriesType) {
     case 10001013: return '10串1013';
     case 10001: return '10串1';
