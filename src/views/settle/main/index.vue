@@ -38,7 +38,7 @@
             {{ t('结算详情') }}
           </el-button>
           <el-button
-            v-if="currentSportId === 1"
+            v-if="currentSportId === 1 && hasAuth('OTHERSETTLEMENT')"
             class="reset-margin my-1"
             type="primary"
             size="small"
@@ -131,8 +131,6 @@ const renderColumnList = computed(() => {
   ];
   const _ = [...columns];
   _.splice(_.length - 2, 0, ...fillList);
-  // if (currentSport.value?.value === SPORT_NAME_TYPE.football) {
-  // }
   return _;
 });
 </script>

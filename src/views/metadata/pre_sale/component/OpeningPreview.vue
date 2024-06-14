@@ -160,7 +160,9 @@ onMounted(() => {
       3: { formatList: [], value: t('加时赛进球') },
       4: { formatList: [], value: t('加时赛角球') },
       5: { formatList: [], value: t('点球大战') },
-      6: { formatList: [], value: t('点球大战-独赢') }
+      6: { formatList: [], value: t('点球大战-独赢') },
+      /* todo 临时处理 */
+      7: { formatList: [], value: t('其他') }
     });
   } else {
     Object.assign(mData, {
@@ -181,11 +183,14 @@ const getBetItemsList = async () => {
     matchId: props.matchId
   });
   if (res.code) return;
-  Object.keys(mData).forEach(key => (mData[key].formatList.length = 0));
+  Object.keys(mData).forEach(key => (mData[key as any].formatList.length = 0));
   openLen.value = 0;
   res.data.forEach(item => {
     item.source_handicap = item.handicap;
     item.isSale === 2 && (openLen.value += 1);
+
+    if (item.kindsCode === 'TeamToKickOff') mData[7].formatList.push(item);
+
     if (mData[item.ctid]) {
       mData[item.ctid].formatList.push(item);
     } else if (props.matchInfo.sportId !== 1) {
@@ -199,9 +204,9 @@ const getBetItemsList = async () => {
   Object.values(mData).forEach(d => {
     const o = {};
     d.formatList
-      .sort((a, b) => a.displayIndex - b.displayIndex)
-      .forEach(item => {
-        if (!o[item.kindsCode]) o[item.kindsCode] = [];
+      .sort((a: any, b: any) => a.displayIndex - b.displayIndex)
+      .forEach((item: any) => {
+        if (!o[item.kindsCode as keyof typeof o]) o[item.kindsCode] = [];
         o[item.kindsCode].push(item);
       });
     d.formatList = Object.values(o)
