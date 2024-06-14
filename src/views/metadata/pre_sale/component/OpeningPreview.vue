@@ -160,7 +160,9 @@ onMounted(() => {
       3: { formatList: [], value: t('加时赛进球') },
       4: { formatList: [], value: t('加时赛角球') },
       5: { formatList: [], value: t('点球大战') },
-      6: { formatList: [], value: t('点球大战-独赢') }
+      6: { formatList: [], value: t('点球大战-独赢') },
+      /* todo 临时处理 */
+      7: { formatList: [], value: t('其他') }
     });
   } else {
     Object.assign(mData, {
@@ -186,6 +188,9 @@ const getBetItemsList = async () => {
   res.data.forEach(item => {
     item.source_handicap = item.handicap;
     item.isSale === 2 && (openLen.value += 1);
+
+    if (item.kindsCode === 'TeamToKickOff') mData[7].formatList.push(item);
+
     if (mData[item.ctid]) {
       mData[item.ctid].formatList.push(item);
     } else if (props.matchInfo.sportId !== 1) {
