@@ -31,6 +31,9 @@
           <template #score="{ row }">
             <span> {{ row.t1 }} - {{ row.t2 }} </span>
           </template>
+          <template #canceled="{ row }">
+            <span class="text-red-500"> {{row.canceled == 0 ? '' : '是'}}</span>
+          </template>
         </pure-table>
       </template>
     </PureTableBar>
