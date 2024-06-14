@@ -39,7 +39,7 @@
             {{ t('结算详情') }}
           </el-button>
           <el-button
-            v-if="currentSportId === 1"
+            v-if="currentSportId === 1 && hasAuth('OTHERSETTLEMENT')"
             class="reset-margin my-1"
             type="primary"
             size="small"
@@ -70,6 +70,8 @@ import SportTable from '../main/component/SportTable.vue';
 import { SPORT_LIST_MAP, SPORT_NAME_TYPE } from '../main/utils/map';
 import { handleTableWidth } from '@/utils/getTableWidth';
 import { TableColumnRenderer } from '@pureadmin/table';
+import { hasAuth } from '@/router/utils';
+
 defineOptions({ name: 'SETTLE_SETTLE_HISTORY' });
 const currentSport = computed(() =>
   SPORT_LIST_MAP.find(item => item.value === currentSportId.value)

@@ -183,7 +183,7 @@ const getBetItemsList = async () => {
     matchId: props.matchId
   });
   if (res.code) return;
-  Object.keys(mData).forEach(key => (mData[key].formatList.length = 0));
+  Object.keys(mData).forEach(key => (mData[key as any].formatList.length = 0));
   openLen.value = 0;
   res.data.forEach(item => {
     item.source_handicap = item.handicap;
@@ -204,9 +204,9 @@ const getBetItemsList = async () => {
   Object.values(mData).forEach(d => {
     const o = {};
     d.formatList
-      .sort((a, b) => a.displayIndex - b.displayIndex)
-      .forEach(item => {
-        if (!o[item.kindsCode]) o[item.kindsCode] = [];
+      .sort((a: any, b: any) => a.displayIndex - b.displayIndex)
+      .forEach((item: any) => {
+        if (!o[item.kindsCode as keyof typeof o]) o[item.kindsCode] = [];
         o[item.kindsCode].push(item);
       });
     d.formatList = Object.values(o)

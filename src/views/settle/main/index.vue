@@ -38,7 +38,7 @@
             {{ t('结算详情') }}
           </el-button>
           <el-button
-            v-if="currentSportId === 1"
+            v-if="currentSportId === 1 && hasAuth('OTHERSETTLEMENT')"
             class="reset-margin my-1"
             type="primary"
             size="small"
