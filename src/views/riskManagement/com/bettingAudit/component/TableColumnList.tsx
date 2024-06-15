@@ -16,22 +16,26 @@ export const columns: TableColumnList = [
     label: t("赛事信息"),
     slot: 'matchMessage',
     align:'left',
+    className: 'getParent',
   },
   {
     label: t("注单详情"),
     slot: 'betDetail',
     align:'left',
+    className: 'getParent',
   },
   {
     label: t("赔率"),
     slot: "odd",
     minWidth: 100,
     align:'center',
+    className: 'getParent',
   },
   {
     label: t("审核状态"),
     slot: "riskStatus",
-    align: 'center'
+    align: 'center',
+    className: 'getParent',
   },
 
   {
@@ -52,12 +56,14 @@ export const columns: TableColumnList = [
     label: t('通过'),
     slot: 'approve',
     align:'center',
+    className: 'getParent',
     // fixed:"right"
   },
   {
     label: t('划单'),
     slot: 'cancel',
     align:'center',
+    className: 'getParent',
     // fixed:"right"
   },
   {
@@ -65,6 +71,7 @@ export const columns: TableColumnList = [
     slot: 'operation',
     align:'center',
     minWidth: 100,
+    className: 'getParent',
     // fixed:"right"
   }
 ]
