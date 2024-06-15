@@ -7,6 +7,7 @@ declare namespace EventAPI {
     endTime?: number | string;
     pageSize?: number;
     pageNum?: number;
+    canceled?: string | number;
   };
 
   type MatchInfo = {
@@ -109,7 +110,7 @@ declare namespace EventAPI {
     navigateLastPage: number;
   };
 
-  type getMatchEventByMatchIdResType = COMMON.BASE_RES_TYPE<matchEventList>
+  type getMatchEventByMatchIdResType = COMMON.BASE_RES_TYPE<matchEventList>;
 
   type lType = {
     teamName: string;
@@ -119,18 +120,18 @@ declare namespace EventAPI {
     corner: number;
     yellow_card: number;
     red_card: number;
-  }
+  };
 
   type EventData = {
     type: Partial<lType>;
     n: number | string;
     time: number | string;
-  }
+  };
 
   type Event = {
     away: EventData[];
     home: EventData[];
-  }
+  };
 
   type getMatchStatusticData = {
     beginTime: string;
@@ -145,10 +146,9 @@ declare namespace EventAPI {
     }[];
     event: Event[];
     matchStatus: string;
-  }
+  };
 
-  type getMatchStatusticResType = COMMON.BASE_RES_TYPE<getMatchStatusticData>
-
+  type getMatchStatusticResType = COMMON.BASE_RES_TYPE<getMatchStatusticData>;
 
   type CombineOrderDetail = {
     detailId: string;
@@ -189,7 +189,7 @@ declare namespace EventAPI {
     riskTimes: number;
     riskType: string;
     orderDetailRemark: string;
-  }
+  };
 
   type PageData = {
     id: string;
@@ -218,7 +218,7 @@ declare namespace EventAPI {
     isSpecialSettle: number;
     orderRemark: string;
     riskControlLabelList?: any;
-  }
+  };
 
   type getMatchBetListResTypeData = {
     count: number;
@@ -227,7 +227,8 @@ declare namespace EventAPI {
     pageSize: number;
     pageData: PageData[];
     otherData?: any;
-  }
+  };
 
-  type getMatchBetListResType = COMMON.BASE_RES_TYPE<getMatchBetListResTypeData>
+  type getMatchBetListResType =
+    COMMON.BASE_RES_TYPE<getMatchBetListResTypeData>;
 }
