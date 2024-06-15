@@ -85,6 +85,19 @@
         </el-tree-select>
       </el-form-item>
 
+      <el-form-item class="!mr-2" :label="`${t('取消事件')}:`" prop="canceled">
+        <el-select
+          v-model="form.canceled"
+          :placeholder="t('选择')"
+          clearable
+          class="!w-[150px]"
+        >
+          <el-option label="选择" value='' />
+          <el-option label="否" value=0 />
+          <el-option label="是" value=1 />
+        </el-select>
+      </el-form-item>
+
       <el-form-item>
         <el-button
           type="primary"
@@ -152,6 +165,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
   props.form.matchId = '';
   props.form.dataSourceCode = '';
   props.form.eventCode = [];
+  props.form.canceled = '';
   emits('onSearch', ...['reload']);
 };
 

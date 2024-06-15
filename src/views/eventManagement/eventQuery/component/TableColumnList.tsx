@@ -27,11 +27,8 @@ export const columns: TableColumnList = [
   },
   {
     label: t('取消事件'),
-    prop: 'canceled',
+    slot: 'canceled',
     minWidth: 150,
-    formatter({ canceled }: { canceled: number }) {
-      return canceled == 0 ? '否' : '是';
-    }
   },
   {
     label: t('场次/局数/盘数'),

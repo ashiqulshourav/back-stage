@@ -28,7 +28,8 @@ export function useEventQueryHook() {
     dataSourceCode: '',
     eventCode: [],
     endTime: '',
-    startTime: ''
+    startTime: '',
+    canceled: ''
   });
 
   async function onSearch(type?: string) {
@@ -50,7 +51,7 @@ export function useEventQueryHook() {
       loading.value = true;
       form.eventCode = form.eventCode?.length ? form.eventCode?.toString() : '';
       const res = await API.getMatchEventByMatchId({
-        ...removeEmptyStringKeys({ ...form }),
+        ...removeEmptyStringKeys({ ...form, canceled: form?.canceled && Number(form.canceled) }),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
