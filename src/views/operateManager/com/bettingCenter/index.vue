@@ -215,6 +215,9 @@
                 }}
               </div>
               <div class="item_line">
+                <span v-if="item.kindsCode === 'FT_TTS'">
+                  {{ enterGoalMap[item.betHandicap.toUpperCase()] }}
+                </span>
                 {{ useSportFormatDetail(item)[3] }} @{{
                   getViewOddFn(
                     item.oddFinally,
@@ -464,7 +467,8 @@ import {
   calculateSeriesTypeTotal,
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
-  getIsInplay
+  getIsInplay,
+  enterGoalMap
 } from '@/utils/formatMatch';
 import { betStatus, betStatusMap } from './util/types';
 import { usePublicHooks } from '@/hooks';
