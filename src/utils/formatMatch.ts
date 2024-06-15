@@ -304,6 +304,12 @@ export const getNameByhoa = (name: string, kc?: string, TOrder?: TOrder, inMainL
       return name;
   }
 };
+
+export const enterGoalMap = {
+  FIRST: t('首个击球'),
+  LAST: t('最后进球')
+}
+
 export const assertHomeAwayScore = (scoreString: string) => {
   if (!scoreString) return '';
   const score = scoreString.replace('A', ' ').replace('H', '').split(' ');
