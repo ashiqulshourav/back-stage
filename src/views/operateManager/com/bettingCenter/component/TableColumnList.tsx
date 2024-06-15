@@ -19,12 +19,14 @@ export const columns: TableColumnList = [
     slot: 'matchMessage',
     minWidth: 200,
     align:'left',
+    className: 'getParent',
   },
   {
     label: t("注单详情"),
     slot: 'betDetail',
     minWidth: 100,
     align:'left',
+    className: 'getParent',
   },
 
   {
@@ -38,6 +40,7 @@ export const columns: TableColumnList = [
     slot: "odd",
     minWidth: 50,
     align:'center',
+    className: 'getParent',
   },
   {
     label: t("投注额"),
