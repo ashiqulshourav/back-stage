@@ -369,6 +369,7 @@ import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
 import { rejectReasonMap } from './util/types'
 import Copy from '@iconify-icons/ep/copy-document';
+import { adjustContentWithRowHeight } from '@/utils/adjustRowCoulmnHeight';
 import {
   formatSeriesType,
   useSportFormatDetail,
@@ -384,21 +385,6 @@ import { usePublicHooks } from '@/hooks';
 
 defineOptions({ name: 'RISKMANAGEMENT_MANUALORDERREJECTION' });
 const { tableHeaderStyle } = usePublicHooks();
-
-const adjustContentWithRowHeight = () => {
-  const childElements = document.querySelectorAll('.getParent');
-
-  childElements.forEach((element: HTMLElement) => {
-    const hasChild = element.querySelector('.eq-height');
-    if(hasChild && element.querySelectorAll('.eq-height').length > 1){
-      const childElements = element.querySelectorAll('.eq-height');
-      const individualHeight = (element.offsetHeight - 17 - ((childElements.length - 1)* 10)) / childElements.length;
-      childElements.forEach((childElement: HTMLElement) => {
-        childElement.style.minHeight = `${individualHeight}px`;
-      })
-    }
-  })
-}
 
 onMounted(() => {
   adjustContentWithRowHeight();
