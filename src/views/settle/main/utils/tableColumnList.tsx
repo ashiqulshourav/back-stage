@@ -8,8 +8,7 @@ const baseColumns: TableColumnList = [
     label: t('序号'),
     fixed: true,
     type: 'index',
-    minWidth: 100,
-    headerRenderer: d => handleTableWidth(d, t('序号'), 'auto')
+    minWidth: 100
   },
   {
     prop: 'leagueNameCn',

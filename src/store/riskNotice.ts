@@ -26,37 +26,41 @@ export const useRiskNoticeStore = defineStore('RISKNOTICESTATE', {
       });
 
       if (!riskNoticeRes.code) {
-        const res = await API.getRiskNotification();
-
-        if (!res.code) {
-          this.riskNotificationSwitch = res.data.riskNotificationSwitch;
-
-          if (this.riskNotificationSwitch) {
-            const existingValue =
-              Number(this.esportAuditCount) +
-              Number(this.jjAuditCount) +
-              Number(this.sportAuditCount);
-            const newValue =
-              Number(riskNoticeRes.data.esportAuditCount) +
-              Number(riskNoticeRes.data.jjAuditCount) +
-              Number(riskNoticeRes.data.sportAuditCount);
-            // play sound
-            if (newValue > existingValue) {
-              const audio = new Audio(sound);
-              audio.play();
-            }
+        if (this.riskNotificationSwitch) {
+          const existingValue =
+            Number(this.esportAuditCount) +
+            Number(this.jjAuditCount) +
+            Number(this.sportAuditCount);
+          const newValue =
+            Number(riskNoticeRes.data.esportAuditCount) +
+            Number(riskNoticeRes.data.jjAuditCount) +
+            Number(riskNoticeRes.data.sportAuditCount);
+          // play sound
+          if (newValue > existingValue) {
+            const audio = new Audio(sound);
+            audio.play();
           }
-
-          this.esportAuditCount = riskNoticeRes.data.esportAuditCount;
-          this.jjAuditCount = riskNoticeRes.data.jjAuditCount;
-          this.sportAuditCount = riskNoticeRes.data.sportAuditCount;
         }
+
+        this.esportAuditCount = riskNoticeRes.data.esportAuditCount;
+        this.jjAuditCount = riskNoticeRes.data.jjAuditCount;
+        this.sportAuditCount = riskNoticeRes.data.sportAuditCount;
       }
     },
     setRiskNoticeRefreshSecond(second: string) {
       this.riskNotificationRefresh = second;
     },
-    setRiskNoticeTimeFrame(date: { createTimeStart: number, createTimeEnd: number }) {
+    async setRiskNotificationSwitch() {
+      const res = await API.getRiskNotification();
+
+      if (!res.code) {
+        this.riskNotificationSwitch = res.data.riskNotificationSwitch;
+      }
+    },
+    setRiskNoticeTimeFrame(date: {
+      createTimeStart: number;
+      createTimeEnd: number;
+    }) {
       this.createTimeStart = date.createTimeStart;
       this.createTimeEnd = date.createTimeEnd;
     }

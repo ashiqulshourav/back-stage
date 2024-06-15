@@ -20,6 +20,7 @@ export const columns: TableColumnList = [
     slot: 'matchMessage',
     minWidth: 200,
     align: 'left',
+    className: 'getParent',
     headerRenderer: d => handleTableWidth(d, t('赛事信息'), 'auto')
   },
   {
@@ -27,13 +28,14 @@ export const columns: TableColumnList = [
     slot: 'betDetail',
     minWidth: 200,
     align: 'left',
+    className: 'getParent',
     headerRenderer: d => handleTableWidth(d, t('注单详情'), 'auto')
   },
   {
     label: t('接拒状态'),
     slot: 'orderAcceptanceStatus',
     minWidth: 100,
-    className: 'position',
+    className: 'position getParent',
     headerRenderer: d => handleTableWidth(d, t('接拒状态'), 'auto')
   },
   // {
@@ -46,6 +48,7 @@ export const columns: TableColumnList = [
     slot: 'odd',
     minWidth: 100,
     align: 'center',
+    className: 'getParent',
     headerRenderer: d => handleTableWidth(d, t('赔率'), 'auto')
   },
   {
@@ -66,7 +69,7 @@ export const columns: TableColumnList = [
   {
     label: t('操作'),
     slot: 'operation',
-    className: 'position',
+    className: 'position getParent',
     minWidth: 150,
     headerRenderer: d => handleTableWidth(d, t('操作'), 'auto'),
     align: 'center'

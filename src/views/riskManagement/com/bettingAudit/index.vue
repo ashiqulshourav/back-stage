@@ -146,7 +146,7 @@
           </template>
           <template #matchMessage="{ row }">
             <div
-              class="match_detail match_item match_detail text-left"
+              class="match_detail eq-height match_item match_detail text-left"
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -217,7 +217,7 @@
           </template>
           <template #betDetail="{ row }">
             <div
-              class="match_item bet_detail text-left"
+              class="match_item eq-height bet_detail text-left"
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -287,7 +287,7 @@
           </template>
           <template #odd="{ row }">
             <div
-              class="match_item odd_item odd_detail text-center"
+              class="match_item eq-height odd_item odd_detail text-center"
               v-for="item in row.combineOrderDetails"
               :key="item.id"
             >
@@ -327,7 +327,7 @@
           </template>
           <template #riskStatus="{ row }">
             <div
-              class="match_item odd_item riskStatus_detail text-center"
+              class="match_item eq-height odd_item riskStatus_detail text-center"
               v-for="(item, idx) in row.combineOrderDetails"
               :key="idx"
             >
@@ -365,63 +365,67 @@
           </template>
           <template #cancel="{ row }">
             <div
-              class="match_item cancel flex justify-between items-center text-center"
+              class="match_item eq-height cancel flex justify-between items-center text-center"
               v-for="(item, index) in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <el-checkbox
-                v-if="
-                  item.riskStatus === riskStatus.rejectBetting &&
-                  hasAuth('REJECT')
-                "
-                :checked="item.rejectSelected"
-                @change="data => selectReject(data, row.index - 1, index)"
-              />
+              <div class="flex items-center gap-3">
+                <el-checkbox
+                  v-if="
+                    item.riskStatus === riskStatus.rejectBetting &&
+                    hasAuth('REJECT')
+                  "
+                  :checked="item.rejectSelected"
+                  @change="data => selectReject(data, row.index - 1, index)"
+                />
 
-              <el-button
-                v-if="
-                  item.riskStatus === riskStatus.rejectBetting &&
-                  hasAuth('REJECT')
-                "
-                size="small"
-                type="danger"
-                @click="handleCancel(row, index)"
-              >
-                {{ t('风控划单') }}
-              </el-button>
+                <el-button
+                  v-if="
+                    item.riskStatus === riskStatus.rejectBetting &&
+                    hasAuth('REJECT')
+                  "
+                  size="small"
+                  type="danger"
+                  @click="handleCancel(row, index)"
+                >
+                  {{ t('风控划单') }}
+                </el-button>
+              </div>
             </div>
           </template>
           <template #approve="{ row }">
             <div
-              class="match_item approve_detail approve flex justify-between items-center text-center"
+              class="match_item eq-height approve_detail approve flex justify-between items-center text-center"
               v-for="(item, index) in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <el-checkbox
-                :checked="item.approveSelected"
-                v-if="
-                  item.riskStatus === riskStatus.rejectBetting &&
-                  hasAuth('APPROVE')
-                "
-                @change="data => selectApprove(data, row.index - 1, index)"
-              />
-              <el-button
-                @change="data => selectApprove(data, row.index - 1, index)"
-                v-if="
-                  item.riskStatus === riskStatus.rejectBetting &&
-                  hasAuth('APPROVE')
-                "
-                size="small"
-                type="primary"
-                @click="handleApprove(row, index)"
-              >
-                {{ t('审核通过') }}
-              </el-button>
+              <div class="flex items-center gap-3">
+                <el-checkbox
+                  :checked="item.approveSelected"
+                  v-if="
+                    item.riskStatus === riskStatus.rejectBetting &&
+                    hasAuth('APPROVE')
+                  "
+                  @change="data => selectApprove(data, row.index - 1, index)"
+                />
+                <el-button
+                  @change="data => selectApprove(data, row.index - 1, index)"
+                  v-if="
+                    item.riskStatus === riskStatus.rejectBetting &&
+                    hasAuth('APPROVE')
+                  "
+                  size="small"
+                  type="primary"
+                  @click="handleApprove(row, index)"
+                >
+                  {{ t('审核通过') }}
+                </el-button>
+              </div>
             </div>
           </template>
           <template #operation="{ row }">
             <div
-              class="match_item approve flex justify-center items-center text-center width-auto"
+              class="match_item eq-height approve flex justify-center items-center text-center width-auto"
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -511,9 +515,10 @@ import {
 import { riskStatus } from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { hasAuth } from '@/router/utils';
-import { ref } from 'vue';
+import { ref, onMounted, onUpdated } from 'vue';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import EditPen from '@iconify-icons/ep/edit-pen';
+import { adjustContentWithRowHeight } from '@/utils/adjustRowCoulmnHeight';
 
 const { tableHeaderStyle } = usePublicHooks();
 const rejectSelectedCount = ref(0);
@@ -575,6 +580,15 @@ watch(
   },
   { deep: true }
 );
+
+onMounted(() => {
+  adjustContentWithRowHeight();
+})
+
+onUpdated (() => {
+  adjustContentWithRowHeight();
+})
+
 </script>
 
 <style lang="scss">
@@ -649,7 +663,7 @@ watch(
 .odd_item,
 .cancel,
 .approve {
-  min-height: 100px;
+  // min-height: 100px;
 }
 .cancel,
 .approve {
@@ -669,5 +683,11 @@ watch(
 }
 .mw-50 > .cell {
   min-width: 55px;
+}
+.eq-height{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  // width: 100%;
 }
 </style>

@@ -74,10 +74,11 @@ import { PureTableBar } from '@/components/RePureTableBar';
 import { matchCombineHook } from './utils/hook';
 import SearchForm from './component/ModalSearchForm.vue';
 import { usePublicHooks } from '@/hooks';
-import { matchColumns, selectedEventColumns } from './component/TableColumnList';
+import { tableColumnList } from './component/TableColumnList';
 import VerticalTable from '@/components/VerticalTable/index.vue';
 import { useDataThemeChange } from '@/layout/hooks/useDataThemeChange';
 
+const { matchColumns, selectedEventColumns } = tableColumnList();
 const { dataTheme } = useDataThemeChange();
 const { tableHeaderStyle } = usePublicHooks();
 const {

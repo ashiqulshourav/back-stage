@@ -31,14 +31,14 @@ declare namespace BetOrderAPI {
     "betResult": number;
     "category": number;
     "betN": string;
-    betResultHomeScore?:string;
-    betResultAwayScore?:string;
-    detailId:string;
-    index?:number;
-    riskStatus:number;
-    riskTimes:number;
-    rejectSelected:boolean;
-    approveSelected:boolean
+    betResultHomeScore?: string;
+    betResultAwayScore?: string;
+    detailId: string;
+    index?: number;
+    riskStatus: number;
+    riskTimes: number;
+    rejectSelected: boolean;
+    approveSelected: boolean
   }
 
   type BetOrderList = {
@@ -62,8 +62,10 @@ declare namespace BetOrderAPI {
     combineOrderDetails: Detail[];
     isSettlementAgain: number;
     riskStatusArr?: number[];
-    betResultArr:number[];
+    isReserve: number;
+    betResultArr: number[];
     orderRemark?: string;
+    [key: string]: any;
   };
 
   type otherDataType = {

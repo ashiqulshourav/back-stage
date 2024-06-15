@@ -1,7 +1,7 @@
 import type { App } from "vue";
 import * as echarts from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
-import { PieChart, BarChart, LineChart } from "echarts/charts";
+import { PieChart, BarChart, LineChart, ScatterChart } from "echarts/charts";
 import {
   GridComponent,
   TitleComponent,
@@ -27,7 +27,8 @@ use([
   ToolboxComponent,
   TooltipComponent,
   DataZoomComponent,
-  VisualMapComponent
+  VisualMapComponent,
+  ScatterChart
 ]);
 
 /**

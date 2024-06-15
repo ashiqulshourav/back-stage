@@ -4,7 +4,6 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { message } from '@/utils/message';
 
 export function useEventQueryHook() {
-  const downloading = ref(false);
   const matchEventList = reactive<EventAPI.MatchEvent[]>([]);
   const matchInfo = reactive<EventAPI.MatchInfo>({
     aTeamName: '',
@@ -24,29 +23,17 @@ export function useEventQueryHook() {
   });
 
   const form = reactive<searchFormType>({
+    // matchId: '302309',
     matchId: '',
     dataSourceCode: '',
     eventCode: [],
     endTime: '',
-    startTime: ''
+    startTime: '',
+    canceled: ''
   });
 
-  const exportFile = async () => {
-    downloading.value = true;
-    message(t('导出报表开始'), { type: 'warning' });
-    const res = await API.matchEventDataExport({
-      ...removeEmptyStringKeys({
-        ...form,
-        eventCode: form.eventCode?.length ? form.eventCode?.toString() : ''
-      })
-    });
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    downloading.value = false;
-  }
-
   async function onSearch(type?: string) {
-    if (type === 'reload') pagination.currentPage = 1;
-
+    if (type === 'reload' || type === 'init') pagination.currentPage = 1;
     if (!form.matchId) {
       matchEventList.length = 0;
       pagination.total = 0;
@@ -62,39 +49,41 @@ export function useEventQueryHook() {
 
     try {
       loading.value = true;
+      form.eventCode = form.eventCode?.length ? form.eventCode?.toString() : '';
       const res = await API.getMatchEventByMatchId({
-        ...removeEmptyStringKeys({
-          ...form,
-          eventCode: form.eventCode?.length ? form.eventCode?.toString() : ''
-        }),
+        ...removeEmptyStringKeys({ ...form, canceled: form?.canceled && Number(form.canceled) }),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
 
       loading.value = false;
 
-      if (res?.code) return message(res?.msg, { type: 'error' });
+      if (res.code) return message(res.msg, { type: 'error' });
       matchEventList.length = 0;
 
-      const matchInfoRes = await API.getMatchInfoByMatchId({
-        matchId: form.matchId
-      });
+      if (type === 'init') {
+        const matchInfoRes = await API.getMatchInfoByMatchId({
+          matchId: form.matchId
+        });
 
-      if (matchInfoRes?.code) return message(res?.msg, { type: 'error' });
+        if (matchInfoRes?.code) return message(res?.msg, { type: 'error' });
 
-      matchInfo.aTeamName = matchInfoRes.data.aTeamName;
-      matchInfo.aTeamName = matchInfoRes.data.aTeamName;
-      matchInfo.hTeamName = matchInfoRes.data.hTeamName;
-      matchInfo.league = matchInfoRes.data.league;
-      matchInfo.matchId = matchInfoRes.data.matchId;
-      matchInfo.sportName = matchInfoRes.data.sportName;
-      matchInfo.startDateTime = matchInfoRes.data.startDateTime;
+        matchInfo.aTeamName = matchInfoRes.data.aTeamName;
+        matchInfo.aTeamName = matchInfoRes.data.aTeamName;
+        matchInfo.hTeamName = matchInfoRes.data.hTeamName;
+        matchInfo.league = matchInfoRes.data.league;
+        matchInfo.matchId = matchInfoRes.data.matchId;
+        matchInfo.sportName = matchInfoRes.data.sportName;
+        matchInfo.startDateTime = matchInfoRes.data.startDateTime;
+      }
 
       matchEventList.push(...res.data.list);
       pagination.total = res.data.total;
-      document
-        .querySelector('.table_container .el-scrollbar__wrap')
+      document!
+        .querySelector('.table_container .el-scrollbar__wrap')!
         .scroll(0, 0);
+      const resizeEvent = new Event('resize');
+      window.dispatchEvent(resizeEvent);
     } catch (error) {
       loading.value = false;
     }
@@ -114,14 +103,6 @@ export function useEventQueryHook() {
     onSearch();
   }
 
-  function handleSelectionChange(val: any) {
-    console.log('handleSelectionChange', val);
-  }
-
-  onMounted(() => {
-    // onSearch();
-  });
-
   return {
     loading,
     pagination,
@@ -129,12 +110,8 @@ export function useEventQueryHook() {
     form,
     handleTableWidthChange,
     handleCurrentChange,
-    handleSelectionChange,
-    // openDialog,
     matchEventList,
     handlePageSizeChange,
-    matchInfo,
-    downloading,
-    exportFile,
+    matchInfo
   };
 }

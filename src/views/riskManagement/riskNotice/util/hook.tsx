@@ -25,6 +25,7 @@ export function useRiskNotice() {
 
     if (!res.code) {
       await riskNoticeStore.setRiskNotice();
+      await riskNoticeStore.setRiskNotificationSwitch();
     }
   }
 

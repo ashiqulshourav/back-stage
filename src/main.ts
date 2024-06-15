@@ -5,7 +5,7 @@ import ElementPlus from 'element-plus';
 import { useI18n } from '@/plugins/i18n';
 import { getServerConfig } from './config';
 import { createApp, Directive } from 'vue';
-// import { useEcharts } from "@/plugins/echarts";
+import { useEcharts } from "@/plugins/echarts";
 import { injectResponsiveStorage } from '@/utils/responsive';
 
 import Table from '@pureadmin/table';
@@ -56,8 +56,8 @@ getServerConfig(app).then(async config => {
   app.use(router);
   await router.isReady();
   injectResponsiveStorage(app, config as unknown as ServerConfigs);
-  app.use(Table).use(store).use(useI18n).use(ElementPlus);
-  // .use(useEcharts);
+  app.use(Table).use(store).use(useI18n).use(ElementPlus)
+    .use(useEcharts);
   // .use(PureDescriptions);
   app.mount('#app');
 });

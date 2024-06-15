@@ -2,11 +2,12 @@ declare namespace EventAPI {
   type PandaMatchEventListParams = {
     matchId?: number | string;
     dataSourceCode?: string | number;
-    eventCode?: [];
+    eventCode?: string[] | string | '';
     startTime?: number | string;
     endTime?: number | string;
     pageSize?: number;
     pageNum?: number;
+    canceled?: string | number;
   };
 
   type MatchInfo = {
@@ -109,18 +110,28 @@ declare namespace EventAPI {
     navigateLastPage: number;
   };
 
-  type MatchInfoRes = COMMON.BASE_RES_TYPE<MatchInfo>;
-  type MatchEventRes = COMMON.BASE_RES_TYPE<COMMON.ListData<MatchEvent>>;
+  type getMatchEventByMatchIdResType = COMMON.BASE_RES_TYPE<matchEventList>;
+
+  type lType = {
+    teamName: string;
+    ht1: number;
+    ht2: number;
+    goal: number;
+    corner: number;
+    yellow_card: number;
+    red_card: number;
+  };
 
   type EventData = {
-    type: string;
-    n: number;
-  }
+    type: Partial<lType>;
+    n: number | string;
+    time: number | string;
+  };
 
   type Event = {
     away: EventData[];
     home: EventData[];
-  }
+  };
 
   type getMatchStatusticData = {
     beginTime: string;
@@ -128,15 +139,16 @@ declare namespace EventAPI {
     awayTeamNameCn: string;
     homeTeamLogo: string;
     awayTeamLogo: string;
-    bet: number[];
+    bet: {
+      n: string;
+      o: string;
+      t: string;
+    }[];
     event: Event[];
     matchStatus: string;
-  }
+  };
 
-
-
-  type getMatchStatusticResType = COMMON.BASE_RES_TYPE<getMatchStatusticData>
-
+  type getMatchStatusticResType = COMMON.BASE_RES_TYPE<getMatchStatusticData>;
 
   type CombineOrderDetail = {
     detailId: string;
@@ -177,7 +189,7 @@ declare namespace EventAPI {
     riskTimes: number;
     riskType: string;
     orderDetailRemark: string;
-  }
+  };
 
   type PageData = {
     id: string;
@@ -206,7 +218,7 @@ declare namespace EventAPI {
     isSpecialSettle: number;
     orderRemark: string;
     riskControlLabelList?: any;
-  }
+  };
 
   type getMatchBetListResTypeData = {
     count: number;
@@ -215,7 +227,8 @@ declare namespace EventAPI {
     pageSize: number;
     pageData: PageData[];
     otherData?: any;
-  }
+  };
 
-  type getMatchBetListResType = COMMON.BASE_RES_TYPE<getMatchBetListResTypeData>
+  type getMatchBetListResType =
+    COMMON.BASE_RES_TYPE<getMatchBetListResTypeData>;
 }

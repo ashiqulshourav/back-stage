@@ -50,18 +50,19 @@ export const metaData = {
   matchPairing: (data: {
     dpMatchId: number;
     dpMatchId188bet: number;
-    matchId:number;
-    matchId188bet:number;
-    pairingUser:string
+    matchId: number;
+    matchId188bet: number;
+    pairingUser: string
   }) => http.request<MatchCombineAPI.matchSourceData>("post", "/pairing/v1/matchPairing", { data }),
   cancelMatchPairing: (data: {
     dpMatchId: number;
     dpMatchId188bet: number;
-    matchId:number;
-    matchId188bet:number;
-    pairingUser:string
+    matchId: number;
+    matchId188bet: number;
+    pairingUser: string
   }) => http.request<MatchCombineAPI.matchSourceData>("post", "/pairing/v1/cancelPairing", { data }),
 
   updateOdds: (data: udpateOddsType) => http.request<MatchCombineAPI.matchSourceData>("post", "/pairing/v1/updateOdds", { data }),
 
+  getGlobalOddsSwitch: () => http.request<MatchCombineAPI.matchSourceData>("post", "/pairing/v1/getGlobalOddsSwitch ", {}),
 };

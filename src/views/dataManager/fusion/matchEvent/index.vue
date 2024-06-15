@@ -48,7 +48,8 @@
               :active-value="1"
               :inactive-value="0"
               inline-prompt
-              @change="getOdds(row)"
+              :disabled="isOn"
+              @change="getOdds(row, 0)"
             />
           </template>
           <template #operation="{ row }">
@@ -75,7 +76,7 @@ import EditPen from '@iconify-icons/ep/edit-pen';
 import { matchCombineHook } from './utils/hook';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import SearchForm from './component/SearchForm.vue';
-import { columns } from './component/TableColumnList';
+import { tableColumnList } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 import {onMounted} from "vue";
@@ -85,6 +86,7 @@ onMounted(() => {
     onSearch();
 });
 const { tableHeaderStyle } = usePublicHooks();
+const { columns, isOn } = tableColumnList();
 
 const handleNullValue = (value: string | number) => {
   return value ? value : '-';
@@ -102,4 +104,13 @@ const {
   form,
   getOdds,
 } = matchCombineHook();
+
+watch(
+  () => isOn.value,
+  () => {
+    dataList.filter(data => data.pairingType != 0).map(item => {
+      item.isDataSourceOdds = isOn.value ? 1 : 0
+    })
+  }
+)
 </script>
