@@ -1,23 +1,38 @@
 import { http } from "@/utils/http";
 import { searchFormType } from '@/views/operateManager/com/bettingCenter/util/types'
 
+
+/* 
+      "orderId": "1800839211834676453",
+      "queryType": 1,
+      "pageSize": 20,
+      "pageNum": 1,
+      "export": false
+ */
+
 export const bettingCenter = {
   //-结算中心列表
   bettingCenterList: (data: searchFormType) => http.request<any>("post", "/bet-center/list", { data }),
   bettingCenterExport: (data: searchFormType) => http.request<any>("post", "/bet-center/listExport", { data }),
   betcenterRisk: (data: searchFormType) => http.request<any>("post", "/bet-center/risk", { data }),
-  // export request
   riskExport: (data: searchFormType) => http.request<any>("post", "/bet-center/riskExport", { data }),
   orderCancel: (data: {
     orderId: number;
   }) => http.request<any>("post", "/bet-center/cancel", { data }),
   //- 特殊结算
+  getCurrentBet: (data: {
+    orderId: string;
+    queryType: number;
+    pageSize: number;
+    pageNum: number;
+    export: boolean;
+  }) => http.request<any>("post", "/bet-center/list", { data }),
   betSettle: (data: number[]) => http.request<BetOrderAPI.betCenterCancelResType>("post", "/bet-settle/settle", { data }),
 
   getTenantList: (data?: {
     category?: number;
   }) => http.request<any>("post", "/bet-center/getTenantList", { data }),
-  
+
   queryTenantList: (data: {
     category: number;
   }) => http.request<any>("post", "/bet-center/queryTenant", { data }),

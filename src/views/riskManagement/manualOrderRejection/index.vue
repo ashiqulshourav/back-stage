@@ -108,7 +108,7 @@
 
           <template #matchMessage="{ row }">
             <div
-              class="match_item"
+              class="match_item eq-height"
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -174,7 +174,7 @@
 
           <template #betDetail="{ row }">
             <div
-              class="match_item"
+              class="match_item eq-height"
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -245,12 +245,14 @@
           <template #orderAcceptanceStatus="{ row }">
             <div class="h-full">
               <div
-                class="match_item"
+                class="match_item eq-height"
                 v-for="item in row.combineOrderDetails"
                 :key="item.betItemId"
-                :class="row.combineOrderDetails.length > 1 ? 'min-h-[100px]' : ''"
               >
-                <span v-if="row.combineOrderDetails.length < 2">
+                <span v-if="row.combineOrderDetails.length < 2"
+                  class="status_btn"
+                  :style="{ background: getBackgroundColor(row.billStatus).bgColor}"
+                >
                   {{
                     getVal(
                       row.billStatus,
@@ -260,7 +262,9 @@
                     )
                   }}
                 </span>
-                <span v-else>
+                <span v-else :style="{ background: getBackgroundColor(row.billStatus).bgColor}"
+                  class="status_btn"
+                >
                   {{
                     getVal1(
                       row.billStatus,
@@ -278,7 +282,7 @@
           </template>
           <template #odd="{ row }">
             <div
-              class="match_item odd_item"
+              class="match_item odd_item eq-height al"
               v-for="item in row.combineOrderDetails"
               :key="item.id"
             >
@@ -297,9 +301,9 @@
           <template #operation="{ row }">
             <div class="h-full" v-if="form.queryType !== 1">
               <div
+                class="eq-height"
                 v-for="item in row.combineOrderDetails"
                 :key="item.betItemId"
-                :class="row.combineOrderDetails.length > 1 ? 'min-h-[100px]' : ''"
               >
                 <div
                   class="flex item-center flex-col"
@@ -361,6 +365,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import { onMounted, onUpdated } from 'vue';
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useManualOrderRejectionHook } from './util/hook';
 import SearchForm from './component/SearchForm.vue';
@@ -369,6 +374,7 @@ import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
 import { rejectReasonMap } from './util/types'
 import Copy from '@iconify-icons/ep/copy-document';
+import { adjustContentWithRowHeight } from '@/utils/adjustRowCoulmnHeight';
 import {
   formatSeriesType,
   useSportFormatDetail,
@@ -384,6 +390,14 @@ import { usePublicHooks } from '@/hooks';
 
 defineOptions({ name: 'RISKMANAGEMENT_MANUALORDERREJECTION' });
 const { tableHeaderStyle } = usePublicHooks();
+
+onMounted(() => {
+  adjustContentWithRowHeight();
+})
+
+onUpdated (() => {
+  adjustContentWithRowHeight();
+})
 
 const getVal = (s1, s2, s3, s4) => {
   let val = '-';
@@ -490,14 +504,12 @@ const {
 }
 .status_btn {
   text-align: center;
-  height: 25px;
   line-height: 25px;
-  width: 80px;
+  width: max-content;
   color: #fff;
   border-radius: 4px;
-}
-.odd_item {
-  min-height: 100px;
+  padding: 0 8px;
+  margin: 0 auto;
 }
 
 .operate {
@@ -510,5 +522,12 @@ const {
   display: inline-block;
   color: white;
   border-radius: 4px;
+}
+
+.eq-height{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
 }
 </style>

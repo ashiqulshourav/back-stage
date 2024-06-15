@@ -6,17 +6,21 @@
       :model="form"
       :rules="searchFormRules"
     >
-      <el-form-item :label="`${t('输入赛事ID')}`" prop="matchId">
+      <el-form-item class="!mr-2" :label="`${t('输入赛事ID')}`" prop="matchId">
         <el-input
           v-model="form.matchId"
           :placeholder="t('输入赛事ID')"
           v-enter="search"
           clearable
-          :formatter="v => formatNumber(v)"
+          :formatter="(v:string) => formatNumber(v)"
           class="!w-[150px]"
         />
       </el-form-item>
-      <el-form-item :label="`${t('输入时间段')}:`" prop="startTime">
+      <el-form-item
+        class="!mr-2"
+        :label="`${t('输入时间段')}:`"
+        prop="startTime"
+      >
         <el-date-picker
           v-model="time"
           type="datetimerange"
@@ -28,13 +32,12 @@
         />
       </el-form-item>
 
-      <el-form-item :label="`${t('事件源')}:`" prop="eventName">
+      <el-form-item class="!mr-2" :label="`${t('事件源')}:`" prop="eventName">
         <el-select
           v-model="form.dataSourceCode"
           :placeholder="t('事件源')"
           clearable
           class="!w-[150px]"
-          @change="changeEventName"
         >
           <el-option
             :label="item.label"
@@ -71,7 +74,7 @@
             <el-checkbox
               v-model="removeAll"
               @change="handleRemoveAll"
-              :disabled="form?.eventCode.length == 0"
+              :disabled="form!.eventCode!.length == 0"
             >
               {{ t('全不选') }}
             </el-checkbox>
@@ -80,6 +83,19 @@
             </el-checkbox>
           </template>
         </el-tree-select>
+      </el-form-item>
+
+      <el-form-item class="!mr-2" :label="`${t('取消事件')}:`" prop="canceled">
+        <el-select
+          v-model="form.canceled"
+          :placeholder="t('选择')"
+          clearable
+          class="!w-[150px]"
+        >
+          <el-option label="选择" value='' />
+          <el-option label="否" value=0 />
+          <el-option label="是" value=1 />
+        </el-select>
       </el-form-item>
 
       <el-form-item>
@@ -93,16 +109,6 @@
         </el-button>
         <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
           {{ t('重置') }}
-        </el-button>
-
-        <el-button
-          type="primary"
-          :icon="useRenderIcon(Download)"
-          :loading="downloading"
-          v-if="form.matchId&&hasAuth('export'.toUpperCase())"
-          @click="exportFile()"
-        >
-          {{ t('导出报表') }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -118,25 +124,20 @@ import Search from '@iconify-icons/ep/search';
 import Refresh from '@iconify-icons/ep/refresh';
 import type { FormInstance, CheckboxValueType } from 'element-plus';
 import { PandaMatch, searchFormType } from '../utils/types';
-import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { EVENT_SOURCE } from '../utils/map';
 import { searchFormRules } from '../utils/rule';
-import Download from '@iconify-icons/ep/download';
-import { hasAuth } from '@/router/utils';
 
 const time = ref('');
 const formRef = ref<FormInstance>();
 const emits = defineEmits(['onSearch', 'exportFile']);
-const eventNames = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
 const pandaMatchList = reactive<PandaMatch[]>([]);
 
 const props = defineProps<{
   loading: boolean;
   form: searchFormType;
-  downloading: boolean;
 }>();
 
-const changeDate = t => {
+const changeDate = (t: any) => {
   if (!t) {
     props.form.startTime = '';
     props.form.endTime = '';
@@ -164,6 +165,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
   props.form.matchId = '';
   props.form.dataSourceCode = '';
   props.form.eventCode = [];
+  props.form.canceled = '';
   emits('onSearch', ...['reload']);
 };
 
@@ -171,13 +173,9 @@ const search = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate(async v => {
     if (v) {
-      emits('onSearch', ...['reload']);
+      emits('onSearch', ...['init']);
     }
   });
-};
-
-const changeEventName = e => {
-  // props.form.eventName = '';
 };
 
 const checkAll = ref(false);
@@ -186,7 +184,7 @@ const checkRevert = ref(false);
 
 watch(
   () => props.form.eventCode,
-  val => {
+  (val: any) => {
     if (!val || val.length === 0) {
       checkAll.value = false;
     } else if (val.length === pandaMatchList.length) {
@@ -204,7 +202,7 @@ const handleCheckAll = (val: CheckboxValueType) => {
     props.form.eventCode = [];
   }
 };
-const handleRemoveAll = (val: CheckboxValueType) => {
+const handleRemoveAll = () => {
   props.form.eventCode = [];
 };
 const handleCheckRevert = () => {
@@ -214,10 +212,6 @@ const handleCheckRevert = () => {
       .filter(_ => !oldArray.includes(_.eventCode))
       .map(_ => _.eventCode);
   }
-};
-
-const exportFile = () => {
-  emits('exportFile');
 };
 </script>
 

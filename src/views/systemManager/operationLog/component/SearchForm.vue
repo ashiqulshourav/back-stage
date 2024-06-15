@@ -74,14 +74,14 @@
           {{ t('重置') }}
         </el-button>
 
-        <!-- <el-button
+         <el-button
           type="primary"
           v-if="hasAuth('EXPORT')"
           @click="exportFile"
           :loading="exportLoading"
           :icon="useRenderIcon(Download)"
           >{{ t('报表异步导出') }}
-        </el-button> -->
+        </el-button>
       </el-form-item>
     </el-form>
     <el-button

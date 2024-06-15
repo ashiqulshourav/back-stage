@@ -127,7 +127,7 @@
           </template>
           <template #matchMessage="{ row }">
             <div
-              class="match_item match_detail"
+              class="match_item match_detail eq-height"
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -198,7 +198,7 @@
           </template>
           <template #betDetail="{ row }">
             <div
-              class="match_item bet_detail"
+              class="match_item bet_detail eq-height"
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -215,6 +215,9 @@
                 }}
               </div>
               <div class="item_line">
+                <span v-if="item.kindsCode === 'FT_TTS'">
+                  {{ enterGoalMap[item.betHandicap.toUpperCase()] }}
+                </span>
                 {{ useSportFormatDetail(item)[3] }} @{{
                   getViewOddFn(
                     item.oddFinally,
@@ -270,7 +273,7 @@
           </template>
           <template #odd="{ row }">
             <div
-              class="match_item odd_item"
+              class="match_item odd_item eq-height"
               v-for="item in row.combineOrderDetails"
               :key="item.id"
             >
@@ -447,6 +450,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import { onMounted, onUpdated } from 'vue';
 import { PureTableBar } from '@/components/RePureTableBar';
 import { useBettingCenterHook } from './util/hook';
 import SearchForm from './component/SearchForm.vue';
@@ -455,6 +459,7 @@ import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
 import RiskLabelList from './component/riskLabelList.vue';
 import { hasAuth } from '@/router/utils';
+import { adjustContentWithRowHeight } from '@/utils/adjustRowCoulmnHeight';
 import {
   formatSeriesType,
   useSportFormatDetail,
@@ -464,7 +469,8 @@ import {
   calculateSeriesTypeTotal,
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
-  getIsInplay
+  getIsInplay,
+  enterGoalMap
 } from '@/utils/formatMatch';
 import { betStatus, betStatusMap } from './util/types';
 import { usePublicHooks } from '@/hooks';
@@ -502,6 +508,15 @@ const {
   getOddStatus,
   downloading
 } = useBettingCenterHook(props.category, props.venueType);
+
+  onMounted(() => {
+    adjustContentWithRowHeight();
+  })
+  
+  onUpdated (() => {
+    adjustContentWithRowHeight();
+  })
+
 </script>
 
 <style lang="scss">
@@ -573,10 +588,15 @@ const {
 }
 .odd_item {
   min-width: 80px;
-  min-height: 100px;
 }
 
 .operate {
   width: 100px;
+}
+
+.eq-height{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 </style>
