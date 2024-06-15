@@ -426,6 +426,7 @@ export function useBettingAuditHook(venueType: number) {
 
   const openCancelDialog = async list => {
     _clearInterval();
+    console.log({ list });
     const r = await openPasswordInput();
     if (!r) {
       await fetchListDataWithInterval();
@@ -444,6 +445,11 @@ export function useBettingAuditHook(venueType: number) {
           onCloseDialog: async () => {
             isEditDialogClick.value = false;
             // onSearch('reload');
+            list.forEach(async (item: any) => {
+              if (item.orderId) {
+                await getRowByOrderId(item.orderId);
+              }
+            });
             await fetchListDataWithInterval();
             await riskNoticeStore.setRiskNotice();
             closeDialog(options, index);
@@ -515,6 +521,7 @@ export function useBettingAuditHook(venueType: number) {
 
   const openApproveDialog = async list => {
     _clearInterval();
+    console.log({ list });
     try {
       const action = await ElMessageBox.confirm(
         t('确定审核通过吗？'),
@@ -532,10 +539,18 @@ export function useBettingAuditHook(venueType: number) {
       if (!r) {
         return;
       }
+
       API.bettingAuditConfirm(list).then(async res => {
-        res.code === 0
-          ? message(res.msg, { type: 'success' })
-          : message(res.msg, { type: 'error' });
+        if (!res.code) {
+          message(res.msg, { type: 'success' });
+          list.forEach(async (item: any) => {
+            if (item.orderId) {
+              await getRowByOrderId(item.orderId);
+            }
+          });
+        } else {
+          message(res.msg, { type: 'error' });
+        }
       });
     } catch (error) {
       await fetchListDataWithInterval();
