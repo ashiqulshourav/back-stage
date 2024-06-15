@@ -38,6 +38,7 @@ export type editSearchFormType = {
 export type udpateOddsType = {
   matchId: number;
   isDataSourceOdds: number;
+  type: number;
 }
 
 export type { FormProps };

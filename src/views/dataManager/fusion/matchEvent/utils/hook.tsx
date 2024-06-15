@@ -12,6 +12,7 @@ export function matchCombineHook() {
   const matchInfoDataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
   const matchInfo = reactive<MatchCombineAPI.matchSourceDetail>({} as MatchCombineAPI.matchSourceDetail);
   const loading = ref(true);
+  const globalOddsSwitch = ref(null);
   const alreadyMatch = ref<Boolean>(false);
   const pagination = reactive<PaginationProps>({
     total: 0,
@@ -51,6 +52,7 @@ export function matchCombineHook() {
   const updateOddsParams = reactive<udpateOddsType>({
     matchId: null,
     isDataSourceOdds: null,
+    type: null,
   });
 
   function handleTableWidthChange(val: number) {
@@ -77,13 +79,23 @@ export function matchCombineHook() {
     console.log('handleSelectionChange', val);
   }
 
-  async function getOdds(row: MatchCombineAPI.matchSourceDetail) {
-    updateOddsParams.matchId = row.matchId
-    updateOddsParams.isDataSourceOdds = row.isDataSourceOdds
-    await API.updateOdds({
-      matchId: updateOddsParams.matchId,
-      isDataSourceOdds: updateOddsParams.isDataSourceOdds,
-    });
+  async function getOdds(row: MatchCombineAPI.matchSourceDetail, type: number) {
+    try {
+      updateOddsParams.matchId = row.matchId
+      updateOddsParams.isDataSourceOdds = row.isDataSourceOdds
+      await API.updateOdds({
+        matchId: updateOddsParams.matchId,
+        isDataSourceOdds: updateOddsParams.isDataSourceOdds,
+        type: type,
+      });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function getGlobalOddsSwitch() {
+    const response = await API.getGlobalOddsSwitch();
+    globalOddsSwitch.value = response.data == 0 ? false : true;
   }
 
   async function onSearch(type?: string) {
@@ -212,5 +224,7 @@ export function matchCombineHook() {
     editPagination,
     getOdds,
     updateOddsParams,
+    globalOddsSwitch,
+    getGlobalOddsSwitch,
   };
 }

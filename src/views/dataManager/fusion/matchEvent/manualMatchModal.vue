@@ -39,9 +39,10 @@ import {removeEmptyStringKeys} from "@/utils/utilFn";
 import {message} from "@/utils/message";
 import { useUserStore } from "@/store/user";
 import { matchCombineHook } from './utils/hook';
-import { selectedEventColumns } from './component/TableColumnList';
+import { tableColumnList } from './component/TableColumnList';
 import VerticalTable from '@/components/VerticalTable/index.vue';
 
+const { selectedEventColumns } = tableColumnList();
 const modalHeader = (value: boolean) => {
   return value ? t('确认取消匹配比赛数据？') : t('确认匹配比赛数据？');
 }
