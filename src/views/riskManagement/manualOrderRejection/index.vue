@@ -249,7 +249,10 @@
                 v-for="item in row.combineOrderDetails"
                 :key="item.betItemId"
               >
-                <span v-if="row.combineOrderDetails.length < 2">
+                <span v-if="row.combineOrderDetails.length < 2"
+                  class="status_btn"
+                  :style="{ background: getBackgroundColor(row.billStatus).bgColor}"
+                >
                   {{
                     getVal(
                       row.billStatus,
@@ -259,7 +262,9 @@
                     )
                   }}
                 </span>
-                <span v-else>
+                <span v-else :style="{ background: getBackgroundColor(row.billStatus).bgColor}"
+                  class="status_btn"
+                >
                   {{
                     getVal1(
                       row.billStatus,
@@ -499,11 +504,12 @@ const {
 }
 .status_btn {
   text-align: center;
-  height: 25px;
   line-height: 25px;
-  width: 80px;
+  width: max-content;
   color: #fff;
   border-radius: 4px;
+  padding: 0 8px;
+  margin: 0 auto;
 }
 
 .operate {
