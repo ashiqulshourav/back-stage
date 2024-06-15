@@ -80,7 +80,7 @@ declare namespace UserAPI {
     riskControlLabelList: labelType[];
     attributeLabelList: labelType[];
   };
-  type GetLabelListRes = BASE_RES_TYPE<GetLabelList>;
+  type GetLabelListRes = COMMON.BASE_RES_TYPE<GetLabelList>;
   type UserLevelLimitListResData = COMMON.BASE_RES_TYPE<
     UserLevelLimitListRes[]
   >;
