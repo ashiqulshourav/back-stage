@@ -94,8 +94,6 @@ import { t } from '@/plugins/i18n';
 import { getMD5 } from '@/utils/caypto';
 import { useResetPasswordHook } from '@/hooks/resetPasswordHook';
 import { REGEXP_PWD } from '@/components/ResetDialog/rule';
-import { useRiskNoticeStore } from '@/store/riskNotice';
-import { hasAuth } from '@/router/utils';
 
 defineOptions({ name: 'Login' });
 const router = useRouter();
@@ -107,7 +105,6 @@ const { dataTheme, dataThemeChange } = useDataThemeChange();
 dataThemeChange();
 const { title } = useNav();
 const userStore = useUserStore();
-const riskStoreStore = useRiskNoticeStore();
 const buildType = import.meta.env.VITE_BUILD_TYPE;
 const ruleForm = reactive({
   username: '',
@@ -118,12 +115,11 @@ const ruleForm = reactive({
 const onLogin = async (formEl: FormInstance | undefined) => {
   loading.value = true;
   if (!formEl) return;
-  await formEl.validate((valid, fields) => {
+  await formEl.validate((valid: boolean) => {
     if (valid) {
       _loginRequest();
     } else {
       loading.value = false;
-      return fields;
     }
   });
 };
@@ -150,13 +146,12 @@ const _loginRequest = async () => {
     initRouter()
       .then(async () => {
         message(t('登录成功'), { type: 'success' });
-
-        router.push(getTopMenu(true).path);
+        router.push(getTopMenu(true).path as string);
       })
       .catch(err => {
         message(err, { type: 'error' });
       });
-  } catch (error) {
+  } catch (error: any) {
     message(error.message, { type: 'error' });
     loading.value = false;
   }

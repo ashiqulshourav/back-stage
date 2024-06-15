@@ -132,7 +132,7 @@ declare namespace RiskManagementDataAPI {
     esportWholeMaxBetRolling?: null | number;
     delFlag?: null | number; // 1是删除 其他则无感
   };
-  type RiskNotice {
+  type RiskNotice = {
     esportAuditCount?: number;
     jjAuditCount?: number;
     sportAuditCount?: number;
@@ -140,6 +140,7 @@ declare namespace RiskManagementDataAPI {
     riskNotificationSwitch?: number;
     createTimeStart?: number;
     createTimeEnd?: number;
+    isLoop: boolean;
   }
   type RiskTagListRes = COMMON.BASE_RES_TYPE<RiskTagListType>;
   type RiskTagRes = COMMON.BASE_RES_TYPE<RiskTagType>;

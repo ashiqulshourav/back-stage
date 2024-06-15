@@ -83,7 +83,6 @@ import { useResetPasswordHook } from '@/hooks/resetPasswordHook';
 import { UserFilled } from '@element-plus/icons-vue';
 import { useRiskNoticeStore } from '@/store/riskNotice';
 import { useRouter } from 'vue-router';
-import { hasAuth } from '@/router/utils';
 
 const { openResetDialog } = useResetPasswordHook();
 const interval = ref<NodeJS.Timeout>();
@@ -124,8 +123,10 @@ const refreshRiskNoticeWithInterval = async () => {
 };
 
 onMounted(() => {
+  if (riskNoticeStore.isLoop) {
+    refreshRiskNoticeWithInterval();
+  }
   // riskNoticeStore.setRiskNotice();
-  refreshRiskNoticeWithInterval();
 });
 
 watch(
