@@ -49,7 +49,7 @@
         >
           <img
             :src="i === 0 ? homePic : awayPic"
-            class="h-[30px]"
+            class="h-[30px] w-[30px]"
             :alt="i === 0 ? matchData.homeTeamNameCn : matchData.awayTeamNameCn"
           />
         </el-tooltip>
