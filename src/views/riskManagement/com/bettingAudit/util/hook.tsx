@@ -445,11 +445,7 @@ export function useBettingAuditHook(venueType: number) {
           onCloseDialog: async () => {
             isEditDialogClick.value = false;
             // onSearch('reload');
-            list.forEach(async (item: any) => {
-              if (item.orderId) {
-                await getRowByOrderId(item.orderId);
-              }
-            });
+            await fetchData();
             await fetchListDataWithInterval();
             await riskNoticeStore.setRiskNotice();
             closeDialog(options, index);
@@ -543,11 +539,7 @@ export function useBettingAuditHook(venueType: number) {
       API.bettingAuditConfirm(list).then(async res => {
         if (!res.code) {
           message(res.msg, { type: 'success' });
-          list.forEach(async (item: any) => {
-            if (item.orderId) {
-              await getRowByOrderId(item.orderId);
-            }
-          });
+          await fetchData();
         } else {
           message(res.msg, { type: 'error' });
         }
