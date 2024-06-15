@@ -1,5 +1,4 @@
 import { http } from '@/utils/http';
-import mockAPI from './mock';
 
 export const riskManagementData = {
   //- 风控管理
@@ -113,9 +112,9 @@ export const riskManagementData = {
       { data }
     ),
 
-  getRiskNoticeAggregate: (data: {createTimeStart: number, createTimeEnd: number}) => http.request<RiskManagementDataAPI.RiskNoticeRes>('post', '/risk/notice/aggregate', { data }, {noNprogress : true}),
+  getRiskNoticeAggregate: (data: { createTimeStart: number, createTimeEnd: number }) => http.request<RiskManagementDataAPI.RiskNoticeRes>('post', '/risk/notice/aggregate', { data }, { noNprogress: true }),
 
-  getRiskNotification: () => http.request<RiskManagementDataAPI.RiskNoticeRes>('post', '/kmg/matchUser/getRiskNotification', {}, {noNprogress : true}),
+  getRiskNotification: () => http.request<RiskManagementDataAPI.RiskNoticeRes>('post', '/kmg/matchUser/getRiskNotification', {}, { noNprogress: true }),
 
-  setRiskNotification: (data: RiskManagementDataAPI.RiskNotice) => http.request('post', '/kmg/matchUser/setRiskNotification', { data }, {noNprogress : true}),
+  setRiskNotification: (data: RiskManagementDataAPI.RiskNotice) => http.request('post', '/kmg/matchUser/setRiskNotification', { data }, { noNprogress: true }),
 };

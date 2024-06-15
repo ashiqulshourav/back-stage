@@ -48,7 +48,7 @@
             </el-dropdown-item>
             <el-dropdown-item @click="logout">
               <IconifyIconOffline
-                :icon="LogoutCircleRLine"
+                icon="LogoutCircleRLine"
                 style="margin: 5px"
               />
               {{ t('退出系统') }}
@@ -61,21 +61,17 @@
         @click="onPanel"
         :title="t('打开项目配置')"
       >
-        <IconifyIconOffline :icon="Setting" />
+        <IconifyIconOffline icon="Setting" />
       </span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-// import Search from './search/index.vue';
-// import Notice from './notice/index.vue';
-// import mixNav from "./sidebar/mixNav.vue";
 import { useNav } from '@/layout/hooks/useNav';
 import Breadcrumb from './sidebar/breadCrumb.vue';
 import topCollapse from './sidebar/topCollapse.vue';
-import LogoutCircleRLine from '@iconify-icons/ri/logout-circle-r-line';
-import Setting from '@iconify-icons/ri/settings-3-line';
+
 import LanguageNav from '@/components/LanguageNav/index.vue';
 import { t } from '@/plugins/i18n';
 import { useUserStore } from '@/store/user';

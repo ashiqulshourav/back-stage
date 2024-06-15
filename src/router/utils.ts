@@ -3,7 +3,8 @@ import {
   RouteRecordRaw,
   RouteComponent,
   createWebHistory,
-  createWebHashHistory
+  createWebHashHistory,
+  RouteRecordName
 } from "vue-router";
 import { router } from "./index";
 import { isProxy, toRaw } from "vue";
@@ -265,12 +266,17 @@ function initRouter() {
   else {
     return new Promise(resolve => {
       const userInfo = storageSession().getItem<DataInfo<{ id: number; name: string; resources: null }>>(sessionKey);
+      //@ts-ignore
       const permissionRoute = [];
+      //@ts-ignore
       userInfo.roles.forEach((item) => {
+        //@ts-ignore
         if (permissionData[item.name]) {
+          //@ts-ignore
           permissionRoute.push(...permissionData[item.name])
         }
       })
+      //@ts-ignore
       handleAsyncRoutes(cloneDeep(permissionRoute));
       resolve(router);
     });
@@ -315,6 +321,7 @@ function formatTwoStageRoutes(routesList: RouteRecordRaw[]) {
         children: []
       });
     } else {
+      //@ts-ignore
       newRoutesList[0]?.children.push({ ...v });
     }
   });
@@ -322,7 +329,7 @@ function formatTwoStageRoutes(routesList: RouteRecordRaw[]) {
 }
 
 /** 处理缓存路由（添加、删除、刷新） */
-function handleAliveRoute({ name }: ToRouteType, mode?: string) {
+function handleAliveRoute({ name }: { name: RouteRecordName }, mode?: string) {
   switch (mode) {
     case "add":
       usePermissionStoreHook().cacheOperate({
@@ -363,6 +370,7 @@ function addAsyncRoutes(arrRoutes: Array<RouteRecordRaw>) {
   arrRoutes.forEach((v: RouteRecordRaw) => {
     // 将backstage属性加入meta，标识此路由为后端返回路由
     const path = v.path.replace(/\/:[^/]+/, '');
+    //@ts-ignore
     v.meta.backstage = true;
     // 父级的redirect属性取值：如果子级存在且父级的redirect属性不存在，默认取第一个子级的path；如果子级存在且父级的redirect属性存在，取存在的redirect属性，会覆盖默认值
     if (v?.children && v.children.length && !v.redirect)
@@ -387,6 +395,7 @@ function addAsyncRoutes(arrRoutes: Array<RouteRecordRaw>) {
 }
 
 /** 获取路由历史模式 https://next.router.vuejs.org/zh/guide/essentials/history-mode.html */
+//@ts-ignore
 function getHistoryMode(routerHistory): RouterHistory {
   // len为1 代表只有历史模式 为2 代表历史模式中存在base参数 https://next.router.vuejs.org/zh/api/#%E5%8F%82%E6%95%B0-1
   const historyMode = routerHistory.split(",");
@@ -429,6 +438,7 @@ function hasAuth(value: string | Array<string>): boolean {
 
 /** 获取所有菜单中的第一个菜单（顶级菜单）*/
 function getTopMenu(tag = false): menuType {
+  //@ts-ignore
   const topMenu = usePermissionStoreHook().wholeMenus[0]?.children[0];
   tag && useMultiTagsStoreHook().handleTags("push", topMenu);
   return topMenu;
