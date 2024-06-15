@@ -38,6 +38,7 @@ declare namespace UserAPI {
   };
 
   type ChildResourceList = {
+    [x: string]: any;
     id: number;
     name: string;
     enName: string;

@@ -10,9 +10,13 @@ export const useRiskNoticeStore = defineStore('RISKNOTICESTATE', {
     riskNotificationRefresh: '30',
     riskNotificationSwitch: 0,
     createTimeStart: 0,
-    createTimeEnd: 0
+    createTimeEnd: 0,
+    isLoop: false,
   }),
   actions: {
+    set_is_loop(_: boolean) {
+      this.isLoop = _;
+    },
     async setRiskNotice() {
       const riskNoticeRes = await API.getRiskNoticeAggregate({
         createTimeStart:

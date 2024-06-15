@@ -25,6 +25,7 @@ import { usePermissionStoreHook } from "@/store/permission";
 const IFrame = () => import("@/layout/frameView.vue");
 const modulesRoutes = import.meta.glob("/src/views/**/*.{vue,tsx}");
 import { useUserStore } from "@/store/user";
+import { useRiskNoticeStore } from "@/store/riskNotice";
 
 // 动态路由
 import { permissionData } from "./permissionRouter";
@@ -239,6 +240,20 @@ function initRouter() {
             reject(t('请联系上级进行用户角色权限设置'))
           } else {
             data = data.map(transformItem) as any;
+            const riskList = data.find(item => item.name === 'RISKMANAGEMENT')
+            const n = riskList?.children?.find(item => {
+              return item.name === 'RISKMANAGEMENT_RISKNOTICE'
+            })
+            if (n) {
+              const hasNoticeAuth = n.meta.childResourceList.find((item: any) => {
+                return item.enName === 'RISKNOTICEAGGREGATE'
+              })
+              if (hasNoticeAuth) {
+                const riskStore = useRiskNoticeStore()
+                riskStore.set_is_loop(!!hasNoticeAuth)
+
+              }
+            }
             handleAsyncRoutes(cloneDeep(data));
             storageSession().setItem('async-routes', data);
             resolve(router);
