@@ -6,7 +6,7 @@ import { getConfig } from "@/config";
 export const useSettingStore = defineStore({
   id: "pure-setting",
   state: (): setType => ({
-    title: getConfig().Title,
+    title: getConfig().Title as string,
     fixedHeader: getConfig().FixedHeader,
     hiddenSideBar: getConfig().HiddenSideBar,
     settlePageInfo: {
@@ -20,7 +20,7 @@ export const useSettingStore = defineStore({
     playerListPageInfo: {
       page: null,
     },
-    
+
   }),
   getters: {
     getTitle(state) {
@@ -43,14 +43,14 @@ export const useSettingStore = defineStore({
       this.CHANGE_SETTING(data);
     },
     //- 结算页面信息保存
-    save_selttle_page_info(info: { page: number; matchType: number }) {
+    save_selttle_page_info(info: { page: number | null; matchType: number | null }) {
       this.settlePageInfo = info;
     },
     //- 结算历史页面信息保存
     save_selttle_history_page_info(info: { page: number | null; matchType: number | null }) {
       this.settleHistoryPageInfo = info;
     },
-    save_player_info(info: { page: number | null;}) {
+    save_player_info(info: { page: number | null; }) {
       this.playerListPageInfo = info;
     },
   }

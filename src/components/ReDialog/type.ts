@@ -172,7 +172,7 @@ interface DialogOptions extends DialogProps {
     args
   }: {
     options: DialogOptions;
-    index: number;
+    index?: number;
     args: any;
   }) => void;
   /** 输入焦点聚焦在 `Dialog` 内容时的回调 */

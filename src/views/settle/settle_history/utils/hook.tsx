@@ -7,6 +7,7 @@ import { SearchFormType } from '../../main/utils/type';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { columns } from '../../main/utils/tableColumnList';
 import { SPORT_LIST_MAP } from '../../main/utils/map';
+import { BtnClickDialog } from '@/components/ReDialog/type';
 
 export const useSettileHook = () => {
   const dataList = reactive<SattleDataAPI.getSettlementDataList[]>([]);
@@ -40,8 +41,12 @@ export const useSettileHook = () => {
       footerButtons: [
         {
           label: t('取消'),
-          btnClick: ({ dialog: { options, index } }) => {
-            closeDialog(options as DialogOptions, index as number);
+          btnClick: ({
+            dialog: { options, index }
+          }: {
+            dialog: BtnClickDialog;
+          }) => {
+            closeDialog(options, index);
           }
         },
         {
