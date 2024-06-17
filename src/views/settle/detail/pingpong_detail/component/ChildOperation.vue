@@ -80,6 +80,11 @@ const saveItem = () => {
       errMsg = t('客队比分不能为空');
       props.row.t2Error = true;
       break;
+    case props.row.firstT1 === props.row.firstT2:
+      errMsg = t('乒乓球比分无法输入平局，请再次确定结果');
+      props.row.t2Error = true;
+      props.row.t1Error = true;
+      break;
   }
   if (!errMsg) {
     props.row.isEdit = false;
@@ -102,3 +107,11 @@ const settleJunClick = () => {
   emits('settlementHandicap');
 };
 </script>
+
+<style lang="scss">
+.confirm_dialog {
+  .el-message-box__message {
+    width: 100%;
+  }
+}
+</style>

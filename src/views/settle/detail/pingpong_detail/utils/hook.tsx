@@ -49,6 +49,10 @@ export function useBilliardsHook() {
 
   //- 开启重新结算
   const resetBtnClick = async (row: SattleDataAPI.volleyballData) => {
+    if (+row.firstT1 === +row.firstT2)
+      return message('乒乓球比分无法输入平局，请再次确定结果', {
+        type: 'error'
+      });
     ElMessageBox.confirm(t('确定要重新结算该事件么？'), {
       dangerouslyUseHTMLString: true,
       confirmButtonText: t('确认结算'),
@@ -98,7 +102,8 @@ export function useBilliardsHook() {
         dangerouslyUseHTMLString: true,
         confirmButtonText: t('确认结算'),
         cancelButtonText: t('取消'),
-        center: true
+        center: true,
+        customClass: 'confirm_dialog'
       }
     ).then(async () => {
       loading.value = true;
