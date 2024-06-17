@@ -144,10 +144,12 @@ const shortcuts = !props.isShowShortCuts
           const date = new Date(timestamp);
           const weekday = date.getDay();
           const we = weekday === 0 ? -1 : 0;
-
           const startOfWeek =
-            dayjs().add(we, 'week').startOf('week').format('YYYY-MM-DD') +
-            '00:00:00';
+            dayjs()
+              .add(we, 'week')
+              .startOf('week')
+              .day(1)
+              .format('YYYY-MM-DD') + '00:00:00';
           const endOfWeek =
             dayjs()
               .add(we, 'week')
