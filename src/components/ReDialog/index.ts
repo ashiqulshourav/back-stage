@@ -26,11 +26,11 @@ const addDialog = (options: DialogOptions) => {
 };
 
 /** 关闭弹框 */
-const closeDialog = (options: DialogOptions, index: number, args?: any) => {
-  dialogStore.value[index].visible = false;
-  options.closeCallBack && options.closeCallBack({ options, index, args });
+const closeDialog = (options?: DialogOptions, index?: number, args?: any) => {
+  dialogStore.value[index as number].visible = false;
+  options?.closeCallBack && options?.closeCallBack({ options, index, args });
   useTimeoutFn(() => {
-    dialogStore.value.splice(index, 1);
+    dialogStore.value.splice((index as number), 1);
   }, 200);
 };
 

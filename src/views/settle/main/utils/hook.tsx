@@ -1,4 +1,4 @@
-import { addDialog, closeDialog } from '@/components/ReDialog';
+import { DialogOptions, addDialog, closeDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { message } from '@/utils/message';
@@ -28,7 +28,7 @@ export const useSettileHook = () => {
   const { openPasswordInput } = usePasswordInputHook();
 
   //- 取消注单
-  const cancelClick = async row => {
+  const cancelClick = async (row: SattleDataAPI.getSettlementDataList) => {
     const remark = ref('');
     const r = await openPasswordInput();
     if (!r) return;
@@ -40,7 +40,7 @@ export const useSettileHook = () => {
         {
           label: t('取消'),
           btnClick: ({ dialog: { options, index } }) => {
-            closeDialog(options, index);
+            closeDialog(options as DialogOptions, index as number);
           }
         },
         {
@@ -58,9 +58,9 @@ export const useSettileHook = () => {
                 t('电竞')
             };
 
-            options.footerButtons[1].loading = true;
+            options!.footerButtons![1].loading = true;
             const res = await API.cancelBetOrder(params);
-            options.footerButtons[1].loading = false;
+            options!.footerButtons![1].loading = false;
 
             closeDialog(options, index);
             if (!res.code && res.code !== undefined) {
@@ -85,11 +85,8 @@ export const useSettileHook = () => {
     });
   };
 
-  /*  */
-
   //- 跳转详情页面
   const router = useRouter();
-
   const goDetailPage = (row: SattleDataAPI.getSettlementDataList) => {
     settingStore.save_selttle_page_info({
       page: pagination.currentPage,
@@ -109,7 +106,7 @@ export const useSettileHook = () => {
   };
 
   const pagination = reactive<PaginationProps>({
-    total: 0, 
+    total: 0,
     pageSize: 10,
     currentPage: settingStore.settlePageInfo.page ?? 1
   });
@@ -149,7 +146,7 @@ export const useSettileHook = () => {
       dataList.push(...res.data.list);
       pagination.total = res.data.total;
       document
-        .querySelector('.table_container .el-scrollbar__wrap')
+        .querySelector('.table_container .el-scrollbar__wrap')!
         .scroll(0, 0);
     } catch (error) {
       loading.value = false;
@@ -157,7 +154,7 @@ export const useSettileHook = () => {
   };
 
   //- 修改分类切换
-  const changeNavType = v => {
+  const changeNavType = (v: number) => {
     currentSportId.value = v;
     settingStore.save_selttle_page_info({ page: null, matchType: null });
     onSearch('reload');

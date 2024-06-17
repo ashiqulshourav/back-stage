@@ -34,8 +34,8 @@ export type setType = {
   fixedHeader: boolean;
   hiddenSideBar: boolean;
   settlePageInfo: {
-    page: number;
-    matchType: number;
+    page: number | null;
+    matchType: number | null;
   }
   settleHistoryPageInfo: {
     page: number | null;
