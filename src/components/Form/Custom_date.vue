@@ -116,20 +116,46 @@ const shortcuts = !props.isShowShortCuts
       {
         text: t('上周'),
         value: () => {
+          const timestamp = Math.round(+new Date());
+          const date = new Date(timestamp);
+          const weekday = date.getDay();
+          const we = weekday === 0 ? -1 : 0;
+
           const startOfWeek =
-            dayjs().subtract(1, 'week').day(1).format('YYYY-MM-DD') +
-            '00:00:00';
+            dayjs()
+              .add(we, 'week')
+              .subtract(1, 'week')
+              .day(1)
+              .format('YYYY-MM-DD') + '00:00:00';
           const endOfWeek =
-            dayjs().subtract(1, 'week').day(7).format('YYYY-MM-DD') +
-            '23:59:59';
+            dayjs()
+              .add(we, 'week')
+              .subtract(1, 'week')
+              .day(7)
+              .format('YYYY-MM-DD') + '23:59:59';
+
           return [startOfWeek, endOfWeek];
         }
       },
       {
         text: t('本周'),
         value: () => {
-          const startOfWeek = dayjs().day(1).format('YYYY-MM-DD') + '00:00:00';
-          const endOfWeek = dayjs().day(7).format('YYYY-MM-DD') + '23:59:59';
+          const timestamp = Math.round(+new Date());
+          const date = new Date(timestamp);
+          const weekday = date.getDay();
+          const we = weekday === 0 ? -1 : 0;
+          const startOfWeek =
+            dayjs()
+              .add(we, 'week')
+              .startOf('week')
+              .day(1)
+              .format('YYYY-MM-DD') + '00:00:00';
+          const endOfWeek =
+            dayjs()
+              .add(we, 'week')
+              .endOf('week')
+              .add(1, 'day')
+              .format('YYYY-MM-DD') + '23:59:59';
           return [startOfWeek, endOfWeek];
         }
       },
