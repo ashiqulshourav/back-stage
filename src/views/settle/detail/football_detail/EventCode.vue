@@ -10,7 +10,9 @@
     <el-option :label="t('红牌')" :value="2" />
     <el-option :label="t('黄牌')" :value="1" />
   </el-select>
-  <span v-else>{{ MATCH_EVENT_CODE[row.eventCode] }}</span>
+  <span v-else>{{
+    MATCH_EVENT_CODE[row.eventCode as keyof typeof MATCH_EVENT_CODE]
+  }}</span>
 </template>
 
 <script setup lang="ts">
@@ -24,7 +26,7 @@ defineProps<
   }
 >();
 const emits = defineEmits(['teamChangeEvent']);
-const teamChangeEvent = (...data) => emits('teamChangeEvent', ...data);
+const teamChangeEvent = (...data: any[]) => emits('teamChangeEvent', ...data);
 </script>
 
 <style scoped></style>
