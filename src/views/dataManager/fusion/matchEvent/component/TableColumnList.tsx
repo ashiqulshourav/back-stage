@@ -43,18 +43,21 @@ export function tableColumnList() {
     },
     {
       label: t('联赛'),
+      showOverflowTooltip: true,
       slot: 'leagueName',
       align: 'left',
       minWidth: 150,
     },
     {
       label: t('主队'),
+      showOverflowTooltip: true,
       slot: 'homeTeamName',
       align: 'left',
       minWidth: 150,
     },
     {
       label: t('客队'),
+      showOverflowTooltip: true,
       slot: 'awayTeamName',
       align: 'left',
       minWidth: 150,
@@ -80,10 +83,9 @@ export function tableColumnList() {
     {
       // label: t('获取赔率数据'),
       slot: 'isDataSourceOdds',
-      minWidth: 150,
       headerRenderer: () => {
         return (
-          <template class="flex items-center">
+          <template class="flex items-center justify-center">
             {t('获取赔率数据')}
             <ElSwitch
               modelValue={isOn.value}
@@ -101,17 +103,17 @@ export function tableColumnList() {
     {
       label: t('操作人'),
       prop: 'pairingUser',
-      minWidth: 150,
+      minWidth: 100,
     },
     {
       label: t('操作时间'),
       prop: 'pairingTime',
-      minWidth: 150,
+      minWidth: 100,
     },
     {
       label: t('操作'),
       fixed: 'right',
-      width: 150,
+      width: 100,
       slot: 'operation',
     }
   ];

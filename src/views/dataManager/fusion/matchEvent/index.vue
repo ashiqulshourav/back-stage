@@ -15,7 +15,6 @@
         <pure-table
           class="table_container"
           align-whole="center"
-          showOverflowTooltip
           table-layout="auto"
           :loading="loading"
           :size="size"
