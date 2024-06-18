@@ -10,7 +10,9 @@ export function useEventQueryHook() {
     hTeamName: '',
     league: '',
     matchId: '',
+    level: '',
     sportName: '',
+    leagueId: '',
     startDateTime: ''
   });
   const loading = ref(false);
@@ -38,9 +40,10 @@ export function useEventQueryHook() {
       matchEventList.length = 0;
       pagination.total = 0;
       matchInfo.aTeamName = '';
-      matchInfo.aTeamName = '';
       matchInfo.hTeamName = '';
+      matchInfo.leagueId = '';
       matchInfo.league = '';
+      matchInfo.level = '';
       matchInfo.matchId = '';
       matchInfo.sportName = '';
       matchInfo.startDateTime = '';
@@ -51,7 +54,10 @@ export function useEventQueryHook() {
       loading.value = true;
       form.eventCode = form.eventCode?.length ? form.eventCode?.toString() : '';
       const res = await API.getMatchEventByMatchId({
-        ...removeEmptyStringKeys({ ...form, canceled: form?.canceled && Number(form.canceled) }),
+        ...removeEmptyStringKeys({
+          ...form,
+          canceled: form?.canceled && Number(form.canceled)
+        }),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
@@ -69,9 +75,10 @@ export function useEventQueryHook() {
         if (matchInfoRes?.code) return message(res?.msg, { type: 'error' });
 
         matchInfo.aTeamName = matchInfoRes.data.aTeamName;
-        matchInfo.aTeamName = matchInfoRes.data.aTeamName;
         matchInfo.hTeamName = matchInfoRes.data.hTeamName;
+        matchInfo.leagueId = matchInfoRes.data.leagueId;
         matchInfo.league = matchInfoRes.data.league;
+        matchInfo.level = matchInfoRes.data.level;
         matchInfo.matchId = matchInfoRes.data.matchId;
         matchInfo.sportName = matchInfoRes.data.sportName;
         matchInfo.startDateTime = matchInfoRes.data.startDateTime;
