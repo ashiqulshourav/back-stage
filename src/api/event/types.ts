@@ -13,9 +13,11 @@ declare namespace EventAPI {
   type MatchInfo = {
     aTeamName: string;
     hTeamName: string;
+    leagueId: string;
     league: string;
     matchId: string;
     sportName: string;
+    level: string;
     startDateTime: string;
   };
 

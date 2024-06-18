@@ -6,8 +6,12 @@
     <div class="flex flex-col flex-shrink-0 mr-20">
       <div
         class="flex items-center cursor-pointer"
-        @click="copyTxt(matchInfo.league, 'league')"
+        @click="copyTxt(matchInfo.leagueId, 'league')"
       >
+        <span
+          class="bg-red-500 min-w-4 h-4 rounded-full text-[10px] p-1 text-white flex justify-center items-center mr-1"
+          >{{ matchInfo.level }}</span
+        >
         <span class="text-sm mr-1">{{ matchInfo.league }}</span>
         <IconifyIconOffline icon="copyIcon" />
       </div>
@@ -16,7 +20,8 @@
         @click="copyTxt(matchInfo.matchId.toString(), 'match')"
       >
         <span class="text-sm mr-1"
-          >{{ matchInfo.hTeamName }} vs {{ matchInfo.aTeamName }}
+          >{{ matchInfo.hTeamName }} ({{ t('主') }}) vs
+          {{ matchInfo.aTeamName }}
         </span>
         <IconifyIconOffline icon="copyIcon" />
       </div>
