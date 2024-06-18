@@ -78,7 +78,7 @@ export const columns: TableColumnList = [
     prop: 'scoreBenchmark',
   },
   {
-    label: t('赛果比分'),
+    label: t('结算比分'),
     prop: 'settleScore',
   },
   {

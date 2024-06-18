@@ -280,7 +280,7 @@
                   )
                 "
               >
-                {{ t('赛果：')
+                {{ t('结算比分：')
                 }}{{ displayHomeAwayScore(item.settleScore, item.sportId) }}
               </div>
             </div>
