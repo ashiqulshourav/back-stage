@@ -123,7 +123,7 @@ declare namespace EventAPI {
   };
 
   type EventData = {
-    type: Partial<lType>;
+    type: keyof lType;
     n: number | string;
     time: number | string;
   };
