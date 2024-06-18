@@ -83,10 +83,9 @@ export function tableColumnList() {
     {
       // label: t('获取赔率数据'),
       slot: 'isDataSourceOdds',
-      minWidth: 150,
       headerRenderer: () => {
         return (
-          <template class="flex items-center">
+          <template class="flex items-center justify-center">
             {t('获取赔率数据')}
             <ElSwitch
               modelValue={isOn.value}
@@ -104,17 +103,17 @@ export function tableColumnList() {
     {
       label: t('操作人'),
       prop: 'pairingUser',
-      minWidth: 150,
+      minWidth: 100,
     },
     {
       label: t('操作时间'),
       prop: 'pairingTime',
-      minWidth: 150,
+      minWidth: 100,
     },
     {
       label: t('操作'),
       fixed: 'right',
-      width: 150,
+      width: 100,
       slot: 'operation',
     }
   ];
