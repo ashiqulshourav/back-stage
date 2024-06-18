@@ -43,18 +43,21 @@ export function tableColumnList() {
     },
     {
       label: t('联赛'),
+      showOverflowTooltip: true,
       slot: 'leagueName',
       align: 'left',
       minWidth: 150,
     },
     {
       label: t('主队'),
+      showOverflowTooltip: true,
       slot: 'homeTeamName',
       align: 'left',
       minWidth: 150,
     },
     {
       label: t('客队'),
+      showOverflowTooltip: true,
       slot: 'awayTeamName',
       align: 'left',
       minWidth: 150,
