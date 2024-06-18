@@ -52,10 +52,11 @@ export function useEventQueryHook() {
 
     try {
       loading.value = true;
-      form.eventCode = form.eventCode?.length ? form.eventCode?.toString() : '';
+      const temp = Array.isArray(form.eventCode) ? [...form.eventCode] : [];
       const res = await API.getMatchEventByMatchId({
         ...removeEmptyStringKeys({
           ...form,
+          eventCode: temp?.length ? temp.toString() : '',
           canceled: form?.canceled && Number(form.canceled)
         }),
         pageSize: pagination.pageSize,
