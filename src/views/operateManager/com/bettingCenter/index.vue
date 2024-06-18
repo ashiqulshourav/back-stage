@@ -509,14 +509,13 @@ const {
   downloading
 } = useBettingCenterHook(props.category, props.venueType);
 
-  onMounted(() => {
-    adjustContentWithRowHeight();
-  })
-  
-  onUpdated (() => {
-    adjustContentWithRowHeight();
-  })
+onMounted(() => {
+  adjustContentWithRowHeight();
+});
 
+onUpdated(() => {
+  adjustContentWithRowHeight();
+});
 </script>
 
 <style lang="scss">
@@ -594,7 +593,7 @@ const {
   width: 100px;
 }
 
-.eq-height{
+.eq-height {
   display: flex;
   flex-direction: column;
   justify-content: center;
