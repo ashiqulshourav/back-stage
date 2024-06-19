@@ -56,8 +56,7 @@ export function useEventQueryHook() {
       const res = await API.getMatchEventByMatchId({
         ...removeEmptyStringKeys({
           ...form,
-          eventCode: temp?.length ? temp.toString() : '',
-          canceled: form?.canceled && Number(form.canceled)
+          eventCode: temp?.length ? temp.toString() : ''
         }),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
