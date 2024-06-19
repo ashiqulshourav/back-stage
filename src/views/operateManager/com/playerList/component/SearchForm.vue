@@ -132,7 +132,7 @@
           {{ t('重置') }}
         </el-button>
 
-        <!--   <el-button
+          <el-button
             type="primary"
             :icon="useRenderIcon(Download)"
             :loading="downloading"
@@ -140,7 +140,7 @@
             @click="exportFile()"
           >
             {{ t('报表异步导出') }}
-          </el-button> -->
+          </el-button>
       </el-form-item>
     </el-form>
   </div>
