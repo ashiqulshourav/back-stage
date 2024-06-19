@@ -31,7 +31,7 @@ export function useEventQueryHook() {
     eventCode: [],
     endTime: '',
     startTime: '',
-    canceled: ''
+    canceled: ' '
   });
 
   async function onSearch(type?: string) {
