@@ -10,7 +10,7 @@
       >
         <span
           class="bg-red-500 min-w-4 h-4 rounded-full text-[10px] p-1 text-white flex justify-center items-center mr-1"
-          >{{ matchInfo.level }}</span
+          >{{ +matchInfo.level >= 200 ? t('未') : matchInfo.level }}</span
         >
         <span class="text-sm mr-1">{{ matchInfo.league }}</span>
         <IconifyIconOffline icon="copyIcon" />
@@ -175,6 +175,10 @@ const betMapCLick = () => {
       })
   });
 };
+
+onUnmounted(() => {
+  loopTimer.value && clearInterval(loopTimer.value);
+});
 </script>
 
 <style scoped></style>
