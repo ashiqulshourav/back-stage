@@ -74,7 +74,7 @@
           <template #userMessage="{ row }">
             <div
               class="user_detail item_line cursor-pointer"
-              @dblclick="
+              @click="
                 copyTest(
                   row.userId,
                   t('用户ID：{value}', { value: row.userId })
@@ -86,7 +86,7 @@
             </div>
             <div
               class="item_line cursor-pointer"
-              @dblclick="
+              @click="
                 copyTest(
                   row.userName,
                   t('用户名：{value}', { value: row.userName })
@@ -98,7 +98,7 @@
             </div>
             <div
               class="item_line cursor-pointer"
-              @dblclick="
+              @click="
                 copyTest(
                   tenantObj[row.tenantId]?.tenantName,
                   t('商户名：{value}', {
@@ -112,7 +112,7 @@
             </div>
             <div
               class="item_line cursor-pointer"
-              @dblclick="
+              @click="
                 copyTest(
                   row.tenantId,
                   t('商户编码：{value}', {
@@ -162,7 +162,7 @@
               <div v-else class="item_line">
                 <span
                   class="cursor-pointer"
-                  @dblclick="
+                  @click="
                     copyTest(
                       item.homeTeamNameCn,
                       t('主队：{value}', { value: item.homeTeamNameCn })
@@ -173,7 +173,7 @@
                 vs
                 <span
                   class="cursor-pointer"
-                  @dblclick="
+                  @click="
                     copyTest(
                       item.awayTeamNameCn,
                       t('客队：{value}', { value: item.awayTeamNameCn })
@@ -184,7 +184,7 @@
               </div>
               <div
                 class="item_line cursor-pointer"
-                @dblclick="
+                @click="
                   copyTest(
                     item.leagueNameCn,
                     t('联赛名：{value}', { value: item.leagueNameCn })
@@ -195,7 +195,7 @@
               </div>
               <div
                 class="item_line cursor-pointer"
-                @dblclick="
+                @click="
                   copyTest(
                     item.matchId,
                     t('赛事ID：{value}', { value: item.matchId })
@@ -244,7 +244,7 @@
               </div>
               <div
                 class="item_line cursor-pointer"
-                @dblclick="
+                @click="
                   copyTest(row.id, t('注单号：{value}', { value: row.id }))
                 "
               >
