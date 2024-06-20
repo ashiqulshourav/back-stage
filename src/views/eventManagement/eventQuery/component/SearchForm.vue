@@ -231,6 +231,7 @@ const exportFile = () => {
 };
 </script>
 
+<style scoped lang="scss">
 :deep(.el-dropdown-menu__item i) {
   margin: 0;
 }
