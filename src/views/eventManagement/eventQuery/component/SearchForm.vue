@@ -92,9 +92,9 @@
           clearable
           class="!w-[150px]"
         >
-          <el-option label="选择" value='' />
-          <el-option label="否" value=0 />
-          <el-option label="是" value=1 />
+          <el-option label="选择" value="" />
+          <el-option label="否" value="0" />
+          <el-option label="是" value="1" />
         </el-select>
       </el-form-item>
 
