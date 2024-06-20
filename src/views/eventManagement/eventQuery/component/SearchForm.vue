@@ -110,6 +110,18 @@
         <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
           {{ t('重置') }}
         </el-button>
+
+
+        
+        <el-button
+          type="primary"
+          :icon="useRenderIcon(Download)"
+          :loading="downloading"
+          v-if="form.matchId&&hasAuth('export'.toUpperCase())"
+          @click="exportFile()"
+        >
+          {{ t('导出报表') }}
+        </el-button>
       </el-form-item>
     </el-form>
   </div>
