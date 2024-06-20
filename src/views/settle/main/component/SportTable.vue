@@ -21,6 +21,28 @@
         @page-size-change="handleTableWidthChange"
         @page-current-change="handleCurrentChange"
       >
+        <template #leagueNameCn="{ row }">
+          <div 
+            class="cursor-pointer" 
+            @click="copyTest(row.leagueNameCn, t('联赛名：{value}', { value: row.leagueNameCn }))"
+          >
+            {{ row.leagueNameCn }} 
+            <span class="inline-block">
+              <IconifyIconOffline :icon="Copy" />
+            </span>
+          </div>
+        </template>
+        <template #matchId="{ row }">
+          <div 
+            class="cursor-pointer" 
+            @click="copyTest(row.matchId, t('赛事ID：{value}', { value: row.matchId }))"
+          >
+            {{ row.matchId }} 
+            <span class="inline-block">
+              <IconifyIconOffline :icon="Copy" />
+            </span>
+          </div>
+        </template>
         <template #operation="{ row }">
           <slot :row="row"></slot>
         </template>
@@ -30,7 +52,10 @@
 </template>
 
 <script setup lang="ts">
+import { message } from '@/utils/message';
+import { copyTextToClipboard } from '@pureadmin/utils';
 import { PureTableBar } from '@/components/RePureTableBar';
+import Copy from '@iconify-icons/ep/copy-document';
 import { usePublicHooks } from '@/hooks';
 import type { PaginationProps } from '@pureadmin/table';
 import { sport_list_map_type } from '../utils/type';
@@ -49,6 +74,16 @@ const emites = defineEmits([
   'handleTableWidthChange',
   'handleCurrentChange'
 ]);
+
+function copyTest(str: string, tip: string) {
+    if (!str) return;
+    const success = copyTextToClipboard(str.toString());
+    success
+      ? message(t('复制{value}成功!', { value: tip || str || '' }), {
+          type: 'success'
+        })
+      : message(t('复制失败'), { type: 'error' });
+  }
 
 const { tableHeaderStyle } = usePublicHooks();
 const onSearch = () => emites('onSearch', 'reload');
