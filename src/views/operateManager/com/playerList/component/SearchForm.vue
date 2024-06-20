@@ -68,7 +68,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item prop="attributeLabelList" :label="t('属性标签:')">
+      <!-- <el-form-item prop="attributeLabelList" :label="t('属性标签:')">
         <el-select
           multiple
           clearable
@@ -82,7 +82,41 @@
             :value="label.id"
           />
         </el-select>
+      </el-form-item> -->
+
+      <el-form-item prop="attributeLabelList" :label="t('属性标签:')">
+        <el-tree-select
+          v-model="props.form.attributeLabelList"
+          :data="
+            labelList.attr.map(item => ({
+              value: item.id,
+              label: item.name
+            }))
+          "
+          filterable
+          clearable
+          multiple
+          collapse-tags
+          :render-after-expand="false"
+          show-checkbox
+          check-strictly
+          check-on-click-node
+          style="width: 200px"
+        >
+          <template #header>
+            <el-checkbox v-model="checkAll" @change="handleCheckAll">
+              {{ t('全选') }}
+            </el-checkbox>
+            <el-checkbox v-mode="removeAll" @change="handleRemoveAll" :disabled="form?.attributeLabelList.length==0">
+              {{ t('全不选') }}
+            </el-checkbox>
+            <el-checkbox v-model="checkRevert" @change="handleCheckRevert">
+              {{ t('反选') }}
+            </el-checkbox>
+          </template>
+        </el-tree-select>
       </el-form-item>
+
       <el-form-item prop="limitLevel" :label="t('限额等级:')">
         <el-select
           v-model="form.limitLevel"
@@ -156,7 +190,7 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import Search from '@iconify-icons/ep/search';
 import Refresh from '@iconify-icons/ep/refresh';
 import { labelListType, tenantType } from '../utils/types';
-import type { FormInstance } from 'element-plus';
+import type { FormInstance, CheckboxValueType } from 'element-plus';
 import Download from '@iconify-icons/ep/download';
 import { hasAuth } from '@/router/utils';
 
@@ -168,6 +202,10 @@ const idList = reactive<string[]>([]);
 const userIds = reactive<string[]>([]);
 const sportLimmitList = reactive<string[]>([]);
 
+const checkAll = ref(false);
+const removeAll = ref(false);
+const checkRevert = ref(false);
+
 const props = defineProps<{
   loading: boolean;
   form: searchFormType;
@@ -176,6 +214,39 @@ const props = defineProps<{
   tenantList: tenantType[];
   downloading: boolean;
 }>();
+
+watch(
+  () => props.form.attributeLabelList,
+  val => {
+    if(!val || val.length === 0){
+      checkAll.value = false;
+    } else if(val.length === props.labelList.attr.length){
+      checkAll.value = true;
+      removeAll.value = false;
+    }
+  }
+)
+
+const handleCheckAll = (val: CheckboxValueType) => {
+  if(val){
+    props.form.attributeLabelList = props.labelList.attr.map(_ => _.id)
+  } else {
+    props.form.attributeLabelList = [];
+  }
+}
+
+const handleRemoveAll = (val: CheckboxValueType) => {
+  props.form.attributeLabelList = [];
+}
+
+const handleCheckRevert = () => {
+  if(true){
+    const oldArray = [...props.form.attributeLabelList];
+    props.form.attributeLabelList = props.labelList.attr
+    .filter(_ => !oldArray.includes(_.id))
+    .map(_ => _.id)
+  }
+}
 
 const form = ref(props.form);
 const formatterUserNames = v => {
@@ -231,6 +302,7 @@ onMounted(() => {
   // initTenantList();
   getLimmitLevelList();
 });
+
 </script>
 
 <style lang="scss">
