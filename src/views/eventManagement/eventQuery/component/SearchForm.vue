@@ -111,8 +111,6 @@
           {{ t('重置') }}
         </el-button>
 
-
-        
         <el-button
           type="primary"
           :icon="useRenderIcon(Download)"
@@ -138,6 +136,8 @@ import type { FormInstance, CheckboxValueType } from 'element-plus';
 import { PandaMatch, searchFormType } from '../utils/types';
 import { EVENT_SOURCE } from '../utils/map';
 import { searchFormRules } from '../utils/rule';
+import { hasAuth } from '@/router/utils';
+import Download from '@iconify-icons/ep/download';
 
 const time = ref('');
 const formRef = ref<FormInstance>();
@@ -145,6 +145,7 @@ const emits = defineEmits(['onSearch', 'exportFile']);
 const pandaMatchList = reactive<PandaMatch[]>([]);
 
 const props = defineProps<{
+  downloading: boolean;
   loading: boolean;
   form: searchFormType;
 }>();
@@ -225,9 +226,11 @@ const handleCheckRevert = () => {
       .map(_ => _.eventCode);
   }
 };
+const exportFile = () => {
+  emits('exportFile');
+};
 </script>
 
-<style scoped lang="scss">
 :deep(.el-dropdown-menu__item i) {
   margin: 0;
 }
