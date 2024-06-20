@@ -53,7 +53,7 @@
           class="!w-[120px]"
         />
       </el-form-item>
-      <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
+      <!-- <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
         <el-select
           multiple
           clearable
@@ -67,28 +67,13 @@
             :value="label.id"
           />
         </el-select>
-      </el-form-item>
-      <!-- <el-form-item prop="attributeLabelList" :label="t('属性标签:')">
-        <el-select
-          multiple
-          clearable
-          class="!w-[150px]"
-          v-model="form.attributeLabelList"
-        >
-          <el-option
-            v-for="label in labelList.attr"
-            :key="label.id"
-            :label="label.name"
-            :value="label.id"
-          />
-        </el-select>
       </el-form-item> -->
 
-      <el-form-item prop="attributeLabelList" :label="t('属性标签:')">
+      <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
         <el-tree-select
-          v-model="props.form.attributeLabelList"
+          v-model="props.form.riskControlLabelList"
           :data="
-            labelList.attr.map(item => ({
+            labelList.risk.map(item => ({
               value: item.id,
               label: item.name
             }))
@@ -107,7 +92,7 @@
             <el-checkbox v-model="checkAll" @change="handleCheckAll">
               {{ t('全选') }}
             </el-checkbox>
-            <el-checkbox v-mode="removeAll" @change="handleRemoveAll" :disabled="form?.attributeLabelList.length==0">
+            <el-checkbox v-mode="removeAll" @change="handleRemoveAll" :disabled="form?.riskControlLabelList.length == 0">
               {{ t('全不选') }}
             </el-checkbox>
             <el-checkbox v-model="checkRevert" @change="handleCheckRevert">
@@ -115,6 +100,22 @@
             </el-checkbox>
           </template>
         </el-tree-select>
+      </el-form-item>
+
+      <el-form-item prop="attributeLabelList" :label="t('属性标签:')">
+        <el-select
+          multiple
+          clearable
+          class="!w-[150px]"
+          v-model="form.attributeLabelList"
+        >
+          <el-option
+            v-for="label in labelList.attr"
+            :key="label.id"
+            :label="label.name"
+            :value="label.id"
+          />
+        </el-select>
       </el-form-item>
 
       <el-form-item prop="limitLevel" :label="t('限额等级:')">
@@ -216,11 +217,11 @@ const props = defineProps<{
 }>();
 
 watch(
-  () => props.form.attributeLabelList,
+  () => props.form.riskControlLabelList,
   val => {
     if(!val || val.length === 0){
       checkAll.value = false;
-    } else if(val.length === props.labelList.attr.length){
+    } else if(val.length === props.labelList.risk.length){
       checkAll.value = true;
       removeAll.value = false;
     }
@@ -229,20 +230,20 @@ watch(
 
 const handleCheckAll = (val: CheckboxValueType) => {
   if(val){
-    props.form.attributeLabelList = props.labelList.attr.map(_ => _.id)
+    props.form.riskControlLabelList = props.labelList.risk.map(_ => _.id)
   } else {
-    props.form.attributeLabelList = [];
+    props.form.riskControlLabelList = [];
   }
 }
 
 const handleRemoveAll = (val: CheckboxValueType) => {
-  props.form.attributeLabelList = [];
+  props.form.riskControlLabelList = [];
 }
 
 const handleCheckRevert = () => {
   if(true){
-    const oldArray = [...props.form.attributeLabelList];
-    props.form.attributeLabelList = props.labelList.attr
+    const oldArray = [...props.form.riskControlLabelList];
+    props.form.riskControlLabelList = props.labelList.risk
     .filter(_ => !oldArray.includes(_.id))
     .map(_ => _.id)
   }
