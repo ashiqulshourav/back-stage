@@ -61,8 +61,6 @@ export function useOperationLog() {
   // export to excel
   const exportFile = async () => {
     exportLoading.value = true;
-    message(t('导出报表开始'), { type: 'warning' });
-
     const res = await API.operationLogExport({
       ...removeEmptyStringKeys(form),
       pageNum: 1,
@@ -77,7 +75,6 @@ export function useOperationLog() {
   //- 导出excel表格
   const exportFileClick = async () => {
     exportLoading.value = true;
-    message(t('导出报表开始'), { type: 'warning' });
     const o = JSON.parse(JSON.stringify(removeEmptyStringKeys(form)));
     o.operateMenu && (o.operateMenu = o.operateMenu.join('-'));
     const r = await API.getOperateLogList({
