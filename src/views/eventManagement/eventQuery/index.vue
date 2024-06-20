@@ -1,6 +1,12 @@
 <template>
   <div class="main">
-    <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
+    <SearchForm 
+    :form="form" 
+    :loading="loading" 
+    @exportFile="exportFile"
+    @on-search="onSearch" 
+    :downloading="downloading"
+  />
 
     <MatchDetail :matchInfo="matchInfo"></MatchDetail>
     <PureTableBar :columns="columns" @refresh="onSearch('reload')">

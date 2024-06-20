@@ -11,7 +11,7 @@ const baseColumns: TableColumnList = [
     minWidth: 100
   },
   {
-    prop: 'leagueNameCn',
+    slot: 'leagueNameCn',
     label: t('联赛名称'),
     fixed: true,
     align: 'left',
@@ -20,7 +20,7 @@ const baseColumns: TableColumnList = [
   },
   {
     label: t('赛事ID'),
-    prop: 'matchId',
+    slot: 'matchId',
     headerRenderer: d => handleTableWidth(d, t('赛事ID'))
   },
   {

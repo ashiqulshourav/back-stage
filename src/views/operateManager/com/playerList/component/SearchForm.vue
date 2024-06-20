@@ -53,7 +53,7 @@
           class="!w-[120px]"
         />
       </el-form-item>
-      <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
+      <!-- <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
         <el-select
           multiple
           clearable
@@ -67,7 +67,41 @@
             :value="label.id"
           />
         </el-select>
+      </el-form-item> -->
+
+      <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
+        <el-tree-select
+          v-model="props.form.riskControlLabelList"
+          :data="
+            labelList.risk.map(item => ({
+              value: item.id,
+              label: item.name
+            }))
+          "
+          filterable
+          clearable
+          multiple
+          collapse-tags
+          :render-after-expand="false"
+          show-checkbox
+          check-strictly
+          check-on-click-node
+          style="width: 200px"
+        >
+          <template #header>
+            <el-checkbox v-model="checkAll" @change="handleCheckAll">
+              {{ t('全选') }}
+            </el-checkbox>
+            <el-checkbox v-mode="removeAll" @change="handleRemoveAll" :disabled="form?.riskControlLabelList.length == 0">
+              {{ t('全不选') }}
+            </el-checkbox>
+            <el-checkbox v-model="checkRevert" @change="handleCheckRevert">
+              {{ t('反选') }}
+            </el-checkbox>
+          </template>
+        </el-tree-select>
       </el-form-item>
+
       <el-form-item prop="attributeLabelList" :label="t('属性标签:')">
         <el-select
           multiple
@@ -83,6 +117,7 @@
           />
         </el-select>
       </el-form-item>
+
       <el-form-item prop="limitLevel" :label="t('限额等级:')">
         <el-select
           v-model="form.limitLevel"
@@ -132,7 +167,7 @@
           {{ t('重置') }}
         </el-button>
 
-        <!--   <el-button
+          <el-button
             type="primary"
             :icon="useRenderIcon(Download)"
             :loading="downloading"
@@ -140,7 +175,7 @@
             @click="exportFile()"
           >
             {{ t('报表异步导出') }}
-          </el-button> -->
+          </el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -156,7 +191,7 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import Search from '@iconify-icons/ep/search';
 import Refresh from '@iconify-icons/ep/refresh';
 import { labelListType, tenantType } from '../utils/types';
-import type { FormInstance } from 'element-plus';
+import type { FormInstance, CheckboxValueType } from 'element-plus';
 import Download from '@iconify-icons/ep/download';
 import { hasAuth } from '@/router/utils';
 
@@ -168,6 +203,10 @@ const idList = reactive<string[]>([]);
 const userIds = reactive<string[]>([]);
 const sportLimmitList = reactive<string[]>([]);
 
+const checkAll = ref(false);
+const removeAll = ref(false);
+const checkRevert = ref(false);
+
 const props = defineProps<{
   loading: boolean;
   form: searchFormType;
@@ -176,6 +215,39 @@ const props = defineProps<{
   tenantList: tenantType[];
   downloading: boolean;
 }>();
+
+watch(
+  () => props.form.riskControlLabelList,
+  val => {
+    if(!val || val.length === 0){
+      checkAll.value = false;
+    } else if(val.length === props.labelList.risk.length){
+      checkAll.value = true;
+      removeAll.value = false;
+    }
+  }
+)
+
+const handleCheckAll = (val: CheckboxValueType) => {
+  if(val){
+    props.form.riskControlLabelList = props.labelList.risk.map(_ => _.id)
+  } else {
+    props.form.riskControlLabelList = [];
+  }
+}
+
+const handleRemoveAll = (val: CheckboxValueType) => {
+  props.form.riskControlLabelList = [];
+}
+
+const handleCheckRevert = () => {
+  if(true){
+    const oldArray = [...props.form.riskControlLabelList];
+    props.form.riskControlLabelList = props.labelList.risk
+    .filter(_ => !oldArray.includes(_.id))
+    .map(_ => _.id)
+  }
+}
 
 const form = ref(props.form);
 const formatterUserNames = v => {
@@ -231,6 +303,7 @@ onMounted(() => {
   // initTenantList();
   getLimmitLevelList();
 });
+
 </script>
 
 <style lang="scss">
