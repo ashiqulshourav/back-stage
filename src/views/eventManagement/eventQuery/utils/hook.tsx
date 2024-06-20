@@ -2,6 +2,7 @@ import { searchFormType } from './types';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { message } from '@/utils/message';
+import { ElMessageBox } from 'element-plus';
 
 export function useEventQueryHook() {
   const matchEventList = reactive<EventAPI.MatchEvent[]>([]);
@@ -31,7 +32,7 @@ export function useEventQueryHook() {
     eventCode: [],
     endTime: '',
     startTime: '',
-    canceled: ''
+    canceled: ' '
   });
 
   async function onSearch(type?: string) {
@@ -56,8 +57,7 @@ export function useEventQueryHook() {
       const res = await API.getMatchEventByMatchId({
         ...removeEmptyStringKeys({
           ...form,
-          eventCode: temp?.length ? temp.toString() : '',
-          canceled: form?.canceled && Number(form.canceled)
+          eventCode: temp?.length ? temp.toString() : ''
         }),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
@@ -111,6 +111,50 @@ export function useEventQueryHook() {
     onSearch();
   }
 
+  const router = useRouter();
+  const exportFile = async () => {
+    ElMessageBox.confirm(
+      <div class="flex flex-col pl-4">
+        <span class="font-bold text-[16px]">{t('导出当前事件列表数据?')}</span>
+        <span>{t('点击确认立即导出')}</span>
+      </div>,
+      t('操作确认'),
+      {
+        confirmButtonText: t('确定'),
+        cancelButtonText: t('取消'),
+        customClass: 'export_dialog',
+        dangerouslyUseHTMLString: true
+      }
+    )
+      .then(async () => {
+        const res = await API.matchEventDataExport({
+          ...removeEmptyStringKeys({
+            ...form,
+            eventCode: form.eventCode?.length ? form.eventCode?.toString() : ''
+          })
+        });
+        if (res.code) return message(res.msg, { type: 'error' });
+        ElMessageBox.confirm(
+          <div class="flex flex-col pl-4">
+            <span class="font-bold text-[16px]">{t('正在执行导出任务')}</span>
+            <span>{t('点击确认前往任务中心?')}</span>
+          </div>,
+          t(''),
+          {
+            confirmButtonText: t('确定'),
+            cancelButtonText: t('留在当前页面'),
+            customClass: 'export_dialog',
+            dangerouslyUseHTMLString: true
+          }
+        ).then(() => {
+          router.push('/taskCenter');
+        });
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+
   return {
     loading,
     pagination,
@@ -120,6 +164,7 @@ export function useEventQueryHook() {
     handleCurrentChange,
     matchEventList,
     handlePageSizeChange,
-    matchInfo
+    matchInfo,
+    exportFile
   };
 }
