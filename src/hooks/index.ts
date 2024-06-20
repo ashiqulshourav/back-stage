@@ -1,6 +1,8 @@
 // 抽离可公用的工具函数等用于系统管理页面逻辑
 import { computed } from "vue";
 import { useDark } from "@pureadmin/utils";
+import { ElMessageBox } from "element-plus";
+import { useRouter } from 'vue-router'
 
 export function usePublicHooks() {
   const { isDark } = useDark();
@@ -42,6 +44,53 @@ export function usePublicHooks() {
     }
   })
 
+  const router = useRouter();
+  const exportDialog = ({
+    firstTitle,
+    callback
+  }: {
+    callback: () => {};
+    firstTitle?: string;
+    secondContent?: string;
+  }) => {
+    ElMessageBox.confirm(
+      `<div class="flex flex-col pl-4">
+        <span class="font-bold text-[16px]">${firstTitle}</span>
+        <span>${t('点击确认立即导出')}</span>
+      </div>`,
+      t('操作确认'),
+      {
+        confirmButtonText: t('确定'),
+        cancelButtonText: t('取消'),
+        customClass: 'export_dialog',
+        dangerouslyUseHTMLString: true
+      }
+    )
+      .then(async () => {
+        await callback();
+        ElMessageBox.confirm(
+          `<div class="flex flex-col pl-4">
+            <span class="font-bold text-[16px]">${t('正在执行导出任务')}</span>
+            <span>${t('点击确认前往任务中心?')}</span>
+          </div>`,
+          t(''),
+          {
+            confirmButtonText: t('确定'),
+            cancelButtonText: t('留在当前页面'),
+            customClass: 'export_dialog',
+            dangerouslyUseHTMLString: true
+          }
+        ).then(() => {
+          console.log('index.ts文件 84==============行打印=', router);
+          router.push('/taskCenter');
+        });
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+
+
   return {
     /** 当前网页是否为`dark`模式 */
     isDark,
@@ -49,6 +98,7 @@ export function usePublicHooks() {
     switchStyle,
     /** 表现更鲜明的`el-tag`组件  */
     tagStyle,
+    exportDialog,
     tableHeaderStyle,
     tableHeaderStyleBlue
   };

@@ -3,6 +3,7 @@ import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { message } from '@/utils/message';
 import { ElMessageBox } from 'element-plus';
+import { usePublicHooks } from '@/hooks';
 
 export function useEventQueryHook() {
   const matchEventList = reactive<EventAPI.MatchEvent[]>([]);
@@ -111,22 +112,11 @@ export function useEventQueryHook() {
     onSearch();
   }
 
-  const router = useRouter();
   const exportFile = async () => {
-    ElMessageBox.confirm(
-      <div class="flex flex-col pl-4">
-        <span class="font-bold text-[16px]">{t('导出当前事件列表数据?')}</span>
-        <span>{t('点击确认立即导出')}</span>
-      </div>,
-      t('操作确认'),
-      {
-        confirmButtonText: t('确定'),
-        cancelButtonText: t('取消'),
-        customClass: 'export_dialog',
-        dangerouslyUseHTMLString: true
-      }
-    )
-      .then(async () => {
+    const { exportDialog } = usePublicHooks();
+    exportDialog({
+      firstTitle: t('导出当前事件列表数据?'),
+      callback: async () => {
         const res = await API.matchEventDataExport({
           ...removeEmptyStringKeys({
             ...form,
@@ -134,25 +124,8 @@ export function useEventQueryHook() {
           })
         });
         if (res.code) return message(res.msg, { type: 'error' });
-        ElMessageBox.confirm(
-          <div class="flex flex-col pl-4">
-            <span class="font-bold text-[16px]">{t('正在执行导出任务')}</span>
-            <span>{t('点击确认前往任务中心?')}</span>
-          </div>,
-          t(''),
-          {
-            confirmButtonText: t('确定'),
-            cancelButtonText: t('留在当前页面'),
-            customClass: 'export_dialog',
-            dangerouslyUseHTMLString: true
-          }
-        ).then(() => {
-          router.push('/taskCenter');
-        });
-      })
-      .catch(e => {
-        console.log(e);
-      });
+      }
+    });
   };
 
   return {
