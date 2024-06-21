@@ -6,7 +6,6 @@ import { usePublicHooks } from '@/hooks';
 const { exportDialog } = usePublicHooks();
 
 export function useEventQueryHook() {
-  const downloading = ref(false);
   const matchEventList = reactive<EventAPI.MatchEvent[]>([]);
   const matchInfo = reactive<EventAPI.MatchInfo>({
     aTeamName: '',
