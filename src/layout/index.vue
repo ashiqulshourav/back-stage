@@ -83,7 +83,6 @@ const appStore = useAppStore();
 
 const set: setType = reactive({
   sidebar: computed(() => {
-    console.log('index.vue文件 86==============行打印=', appStore.sidebar);
     return appStore.sidebar;
   }),
 
