@@ -276,7 +276,6 @@ export function useBettingAuditHook(venueType: number) {
   //- 导出excel表格
   const exportFile = async () => {
     downloading.value = true;
-    message(t('导出报表开始'), { type: 'warning' });
     const res: BetOrderAPI.BetOrderResType = await API.bettingAuditList(
       formatParams({ pageNum: 1, pageSize: 50000 }) as searchFormType
     );
@@ -402,7 +401,6 @@ export function useBettingAuditHook(venueType: number) {
   // export to excel
   const exportFileTest = async () => {
     downloading.value = true;
-    message(t('导出报表开始'), { type: 'warning' });
     const res: BetOrderAPI.BetOrderResType = await API.bettingAuditListExport(
       formatParams({ pageNum: 1, pageSize: 50000, venueType }) as searchFormType
     );

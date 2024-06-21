@@ -48,7 +48,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     total: 0,
     pageSize: 20,
     currentPage: 1,
-    pageSizes: [20, 50, 100, 200, 500],
+    pageSizes: [20, 50, 100, 200, 500, 5000],
     background: true
   });
   const form = reactive<searchFormType>({
@@ -251,7 +251,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
    //- 导出excel表格
    const exportFile = async () => {
     downloading.value = true;
-    message(t('导出报表开始'), { type: 'warning' });
     const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
       formatParams({
         pageNum: 1,
@@ -403,7 +402,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
 
   const exportFileTest = async () => {
     downloading.value = true;
-    message(t('导出报表开始'), { type: 'warning' });
     const res: BetOrderAPI.BetOrderResType = await API.bettingCenterExport(
       formatParams({
         pageNum: 1,
