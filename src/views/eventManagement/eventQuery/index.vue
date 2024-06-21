@@ -10,7 +10,7 @@
             {{ t('事件列表') }}
           </span>
           <el-button
-            v-if="form.matchId"
+            v-if="form.matchId && hasAuth('EXPORT')"
             class="mr-5"
             type="primary"
             size="small"
@@ -60,6 +60,7 @@ import { usePublicHooks } from '@/hooks';
 import { t } from '@/plugins/i18n';
 import { columns } from './component/TableColumnList';
 import SearchForm from './component/SearchForm.vue';
+import { hasAuth } from '@/router/utils';
 import MatchDetail from './component/MatchDetail.vue';
 
 defineOptions({ name: 'EVENTMANAGEMENT_EVENTQUERY' });
