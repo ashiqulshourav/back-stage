@@ -2,8 +2,8 @@ import { searchFormType } from './types';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { message } from '@/utils/message';
-import { ElMessageBox } from 'element-plus';
 import { usePublicHooks } from '@/hooks';
+const { exportDialog } = usePublicHooks();
 
 export function useEventQueryHook() {
   const matchEventList = reactive<EventAPI.MatchEvent[]>([]);
@@ -27,10 +27,10 @@ export function useEventQueryHook() {
   });
 
   const form = reactive<searchFormType>({
-    // matchId: '302309',
     matchId: '',
     dataSourceCode: '',
     eventCode: [],
+    operationMethod: ' ',
     endTime: '',
     startTime: '',
     canceled: ' '
@@ -111,11 +111,11 @@ export function useEventQueryHook() {
     pagination.pageSize = val;
     onSearch();
   }
-
+  const router = useRouter();
   const exportFile = async () => {
-    const { exportDialog } = usePublicHooks();
     exportDialog({
       firstTitle: t('导出当前事件列表数据?'),
+      router,
       callback: async () => {
         const res = await API.matchEventDataExport({
           ...removeEmptyStringKeys({

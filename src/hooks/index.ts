@@ -2,7 +2,6 @@
 import { computed } from "vue";
 import { useDark } from "@pureadmin/utils";
 import { ElMessageBox } from "element-plus";
-import { useRouter } from 'vue-router'
 
 export function usePublicHooks() {
   const { isDark } = useDark();
@@ -44,14 +43,15 @@ export function usePublicHooks() {
     }
   })
 
-  const router = useRouter();
   const exportDialog = ({
     firstTitle,
-    callback
+    callback,
+    router
   }: {
-    callback: () => {};
+    callback: () => void;
     firstTitle?: string;
     secondContent?: string;
+    router: any
   }) => {
     ElMessageBox.confirm(
       `<div class="flex flex-col pl-4">
@@ -81,7 +81,6 @@ export function usePublicHooks() {
             dangerouslyUseHTMLString: true
           }
         ).then(() => {
-          console.log('index.ts文件 84==============行打印=', router);
           router.push('/taskCenter');
         });
       })
