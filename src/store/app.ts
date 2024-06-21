@@ -49,6 +49,7 @@ export const useAppStore = defineStore({
         this.sidebar.isClickCollapse = !this.sidebar.opened;
         layout.sidebarStatus = this.sidebar.opened;
       }
+      console.log('app.ts文件 52==============行打印=', this.sidebar);
       storageLocal().setItem(`${responsiveStorageNameSpace()}layout`, layout);
     },
     async toggleSideBar(opened?: boolean, resize?: string) {

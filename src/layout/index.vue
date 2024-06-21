@@ -94,7 +94,6 @@ const set: setType = reactive({
   }),
 
   classes: computed(() => {
-    console.log('index.vue文件 97==============行打印=', set.sidebar.opened);
     return {
       hideSidebar: !set.sidebar.opened,
       openSidebar: set.sidebar.opened,
