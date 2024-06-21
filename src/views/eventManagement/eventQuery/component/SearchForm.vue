@@ -121,8 +121,7 @@
         <el-button
           type="primary"
           :icon="useRenderIcon(Download)"
-          :loading="downloading"
-          v-if="form.matchId&&hasAuth('export'.toUpperCase())"
+          v-if="form.matchId && hasAuth('export'.toUpperCase())"
           @click="exportFile()"
         >
           {{ t('导出报表') }}
@@ -152,7 +151,6 @@ const emits = defineEmits(['onSearch', 'exportFile']);
 const pandaMatchList = reactive<PandaMatch[]>([]);
 
 const props = defineProps<{
-  downloading: boolean;
   loading: boolean;
   form: searchFormType;
 }>();
