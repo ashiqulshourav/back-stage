@@ -16,7 +16,7 @@ export const columns: TableColumnList = [
     }
   },
   {
-    label: t('比赛开赛时间'),
+    label: t('距离比赛开赛时间'),
     prop: 'playingTime',
     minWidth: 200,
     formatter({ playingTime }) {
