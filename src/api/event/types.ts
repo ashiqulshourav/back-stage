@@ -7,6 +7,7 @@ declare namespace EventAPI {
     endTime?: number | string;
     pageSize?: number;
     pageNum?: number;
+    operationMethod?: string;
     canceled?: string | number;
   };
 
