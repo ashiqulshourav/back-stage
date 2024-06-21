@@ -6,7 +6,7 @@
       :model="form"
       :rules="searchFormRules"
     >
-      <el-form-item :label="`${t('输入赛事ID')}`" prop="matchId">
+      <el-form-item class="!mb-4" :label="`${t('输入赛事ID')}`" prop="matchId">
         <el-input
           v-model="form.matchId"
           :placeholder="t('输入赛事ID')"
@@ -16,7 +16,11 @@
           class="!w-[150px]"
         />
       </el-form-item>
-      <el-form-item :label="`${t('输入时间段')}:`" prop="startTime">
+      <el-form-item
+        class="!mb-4"
+        :label="`${t('输入时间段')}:`"
+        prop="startTime"
+      >
         <el-date-picker
           v-model="time"
           type="datetimerange"
@@ -28,7 +32,7 @@
         />
       </el-form-item>
 
-      <el-form-item :label="`${t('事件源')}:`" prop="eventName">
+      <el-form-item class="!mb-4" :label="`${t('事件源')}:`" prop="eventName">
         <el-select
           v-model="form.dataSourceCode"
           :placeholder="t('事件源')"
@@ -44,7 +48,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="`${t('操作方式')}:`">
+      <el-form-item class="!mb-4" :label="`${t('操作方式')}:`">
         <el-select
           v-model="form.operationMethod"
           :placeholder="t('操作方式')"
@@ -55,7 +59,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="`${t('事件名称')}:`" prop="eventName">
+      <el-form-item class="!mb-4" :label="`${t('事件名称')}:`" prop="eventName">
         <el-tree-select
           v-model="props.form.eventCode"
           :data="
@@ -92,7 +96,7 @@
         </el-tree-select>
       </el-form-item>
 
-      <el-form-item :label="`${t('取消事件')}:`" prop="canceled">
+      <el-form-item class="!mb-4" :label="`${t('取消事件')}:`" prop="canceled">
         <el-select
           v-model="form.canceled"
           :placeholder="t('选择')"
@@ -105,7 +109,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item>
+      <el-form-item class="!mb-4">
         <el-button
           type="primary"
           :icon="useRenderIcon(Search)"

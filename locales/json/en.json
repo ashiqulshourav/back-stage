@@ -1041,7 +1041,6 @@
   "k25c5c308": "Broadcast control",
   "k-229a4763": "Event Source",
   "k-2de5d529": "Invert Selection",
-  "k-78d2d8cb": "Event Source Occurrence Time",
   "k6175649e": "Session/Round/Set",
   "k-5bd6f419": "Home/Away",
   "k-2d984472": "Player Name",
@@ -1226,5 +1225,14 @@
   "k-437d8959": "用户名:",
   "k43f0c2bd": "商户名:",
   "k-37d3bf7e": "Ping pong scores cannot result in a tie. Please confirm the result again.",
-  "k7b2c5414": "选择"
+  "k7b2c5414": "选择",
+  "k7d4f745d": "点击确认立即导出",
+  "k-40f2b828": "正在执行导出任务",
+  "k-592cee74": "点击确认前往任务中心?",
+  "k-a0b9dd": "留在当前页面",
+  "k-16b2c3d5": "操作方式",
+  "k-1344e083": "收到事件源时间",
+  "k-2164adb4": "比赛开赛时间",
+  "k130cc590": "事件列表",
+  "kd67061": "导出当前事件列表数据?"
 }
