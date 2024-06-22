@@ -23,7 +23,7 @@ export function useLeague() {
     countryId: '',
     leagueId: '',
     leagueId188Bet: '',
-    sportId: 1,
+    sportId: '',
     riskLevel: '',
     category: 0
   });
