@@ -1172,7 +1172,6 @@
   "k-2ff974a4": "Action IP",
   "k7eff8ee7": "Operation Log List",
   "k-5af08606": "Modified Parameter",
-  "k72df3930": "Export Report Start",
   "k-277660fd": "Operation Log Report",
   "k-35fc732b": "Export Report Success",
   "k-8ecb699": "Previous Parameter",
@@ -1226,5 +1225,9 @@
   "k-437d8959": "用户名:",
   "k43f0c2bd": "商户名:",
   "k7b2c5414": "选择",
-  "k-37d3bf7e": "Ping pong scores cannot result in a tie. Please confirm the result again."
+  "k-37d3bf7e": "Ping pong scores cannot result in a tie. Please confirm the result again.",
+  "k-19201ac4": "结算比分：",
+  "k-7d0ee8c3": "结算比分",
+  "k-1e1a6aa2": "First of all ，please open extraTime settlement switch",
+  "kfe7a56a": "First of all ，please close Penalty shoot-out switch"
 }

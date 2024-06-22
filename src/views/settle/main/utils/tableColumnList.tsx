@@ -16,7 +16,7 @@ const baseColumns: TableColumnList = [
     fixed: true,
     align: 'left',
     headerRenderer: d => handleTableWidth(d, t('联赛名称'), 'auto'),
-    minWidth: 160
+    minWidth: 240
   },
   {
     label: t('赛事ID'),

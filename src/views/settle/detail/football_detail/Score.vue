@@ -85,6 +85,15 @@ const updateStatus = async (index: number) => {
     message(t('自动结算下无法进行状态更改'), { type: 'error' });
     return Promise.resolve(false);
   }
+  if (index === 2 && !props.penaltyKickStatus && !props.overTimeStatus) {
+    message(t('请先开启加时赛结算开关后再继续操作'), { type: 'error' });
+    return Promise.resolve(false);
+  } else if (index === 1 && props.penaltyKickStatus && props.overTimeStatus) {
+    message(t('请先关闭点球大战结算开关后再继续操作'), {
+      type: 'error'
+    });
+    return Promise.resolve(false);
+  }
 
   let strVal = '';
   if (index === 1) {
