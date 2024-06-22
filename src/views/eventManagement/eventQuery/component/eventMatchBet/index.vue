@@ -58,235 +58,252 @@
         </el-tooltip>
       </div>
     </div>
-    <div class="pr-4 pl-10 pt-3" v-if="Object.keys(betInfo).length">
-      <el-descriptions
-        :title="t('注单信息')"
-        direction="vertical"
-        :column="8"
-        size="small"
-        border
-      >
-        <el-descriptions-item :label="t('用户信息')" align="center">
-          <div class="flex flex-col">
-            <div>
-              <span>{{ t('用户ID:') }}</span>
-              <span>{{ betInfo.userId }}</span>
+    <!-- 注单信息 -->
+    <el-scrollbar height="300px" v-if="betInfo.length">
+      <div class="pr-4 pl-10 pt-3">
+        <el-descriptions
+          :title="t('注单信息')"
+          direction="vertical"
+          v-for="(item, index) in betInfo"
+          :key="index"
+          :column="8"
+          size="small"
+          border
+        >
+          <el-descriptions-item :label="t('用户信息')" align="center">
+            <div class="flex flex-col">
+              <div>
+                <span>{{ t('用户ID:') }}</span>
+                <span>{{ item.userId }}</span>
+              </div>
+              <div>
+                <span>{{ t('用户名:') }}</span>
+                <span>{{ item.userName }}</span>
+              </div>
+              <div>
+                <span>{{ t('商户名:') }}</span>
+                <span>{{ tenantObj[item.tenantId]?.tenantName }}</span>
+              </div>
+              <div>
+                <span>{{ t('商户编码:') }}</span>
+                <span>{{ tenantObj[item.tenantId]?.name }}</span>
+              </div>
             </div>
+          </el-descriptions-item>
+          <el-descriptions-item :label="t('赛事信息')" align="center">
             <div>
-              <span>{{ t('用户名:') }}</span>
-              <span>{{ betInfo.userName }}</span>
+              <div>
+                {{ item.combineOrderDetails[0].homeTeamNameCn }}
+                vs
+                {{ item.combineOrderDetails[0].awayTeamNameCn }}
+              </div>
+              <div>
+                {{ item.combineOrderDetails[0].sportNameCn }}/{{
+                  item.combineOrderDetails[0].leagueNameCn
+                }}
+              </div>
+              <div>
+                {{ t('赛事ID:') }}{{ item.combineOrderDetails[0].matchId }}
+              </div>
+              <div>
+                {{ t('开赛时间:')
+                }}{{
+                  dayjs(
+                    item.combineOrderDetails[0].beginTime ?? Date.now()
+                  ).format('MM-DD HH:mm:ss')
+                }}
+              </div>
             </div>
+          </el-descriptions-item>
+          <el-descriptions-item :label="t('注单详情')" :span="2" align="center">
             <div>
-              <span>{{ t('商户名:') }}</span>
-              <span>{{ tenantObj[betInfo.tenantId]?.tenantName }}</span>
-            </div>
-            <div>
-              <span>{{ t('商户编码:') }}</span>
-              <span>{{ tenantObj[betInfo.tenantId]?.name }}</span>
-            </div>
-          </div>
-        </el-descriptions-item>
-        <el-descriptions-item :label="t('赛事信息')" align="center">
-          <div>
-            {{ betInfo.combineOrderDetails[0].homeTeamNameCn }}
-            vs
-            {{ betInfo.combineOrderDetails[0].awayTeamNameCn }}
-          </div>
-          <div>
-            {{ betInfo.combineOrderDetails[0].sportNameCn }}/{{
-              betInfo.combineOrderDetails[0].leagueNameCn
-            }}
-          </div>
-          <div>
-            {{ t('赛事ID:') }}{{ betInfo.combineOrderDetails[0].matchId }}
-          </div>
-          <div>
-            {{ t('开赛时间:')
-            }}{{
-              dayjs(
-                betInfo.combineOrderDetails[0].beginTime ?? Date.now()
-              ).format('MM-DD HH:mm:ss')
-            }}
-          </div>
-        </el-descriptions-item>
-        <el-descriptions-item :label="t('注单详情')" :span="2" align="center">
-          <div>
-            {{
-              `玩法：${
-                useSportFormatDetail(betInfo.combineOrderDetails[0])[4]
-              } ${getIsInplay(betInfo.combineOrderDetails[0].isInplay)}`
-            }}
-            {{
-              betInfo.combineOrderDetails[0].isInplay == 1
-                ? displayHomeAwayScore(
-                    betInfo.combineOrderDetails[0].scoreBenchmark,
-                    betInfo.combineOrderDetails[0].sportId
+              <div>
+                {{
+                  `玩法：${
+                    useSportFormatDetail(item.combineOrderDetails[0])[4]
+                  } ${getIsInplay(item.combineOrderDetails[0].isInplay)}`
+                }}
+                {{
+                  item.combineOrderDetails[0].isInplay == 1
+                    ? displayHomeAwayScore(
+                        item.combineOrderDetails[0].scoreBenchmark,
+                        item.combineOrderDetails[0].sportId
+                      )
+                    : ''
+                }}
+              </div>
+              <div>
+                {{ useSportFormatDetail(item.combineOrderDetails[0])[3] }} @{{
+                  getViewOddFn(
+                    item.combineOrderDetails[0].oddFinally,
+                    item.combineOrderDetails[0].marketTypeFinally,
+                    item.combineOrderDetails[0].marketType
                   )
-                : ''
-            }}
-          </div>
-          <div>
-            {{ useSportFormatDetail(betInfo.combineOrderDetails[0])[3] }} @{{
-              getViewOddFn(
-                betInfo.combineOrderDetails[0].oddFinally,
-                betInfo.combineOrderDetails[0].marketTypeFinally,
-                betInfo.combineOrderDetails[0].marketType
-              )
-            }}
-          </div>
-          <div>{{ t('注单号:') }} {{ betInfo.id }}</div>
-          <div>
-            {{ t('投注时间:')
-            }}{{
-              betInfo.createTime
-                ? dayjs(betInfo.createTime).format('MM-DD HH:mm:ss')
-                : ''
-            }}
-          </div>
-          <div
-            v-if="
-              betInfo.billStatus === 1 &&
-              betInfo.combineOrderDetails[0].settleScore &&
-              !(
-                displayHomeAwayScore(
-                  betInfo.combineOrderDetails[0].settleScore,
-                  betInfo.combineOrderDetails[0].sportId,
-                  'home'
-                ) == '' ||
-                displayHomeAwayScore(
-                  betInfo.combineOrderDetails[0].settleScore,
-                  betInfo.combineOrderDetails[0].sportId,
-                  'away'
-                ) == ''
-              )
-            "
-          >
-            {{ t('赛果：')
-            }}{{
-              displayHomeAwayScore(
-                betInfo.combineOrderDetails[0].settleScore,
-                betInfo.combineOrderDetails[0].sportId
-              )
-            }}
-          </div>
-        </el-descriptions-item>
-        <el-descriptions-item :label="t('状态')" align="center">
-          <div class="flex flex-col items-center">
-            <div
-              :style="{
-                background: getStatus(
-                  betInfo.status,
-                  betInfo.billStatus,
-                  betInfo.betResultArr,
-                  betInfo.isReserve,
-                  betInfo.riskStatusArr,
-                  betInfo.isSpecialSettle
-                ).bgColor
-              }"
-              class="flex justify-center items-center rounded-md text-white px-5"
-            >
-              {{
-                betStatusMap[
+                }}
+              </div>
+              <div>{{ t('注单号:') }} {{ item.id }}</div>
+              <div>
+                {{ t('投注时间:')
+                }}{{
+                  item.createTime
+                    ? dayjs(item.createTime).format('MM-DD HH:mm:ss')
+                    : ''
+                }}
+              </div>
+              <div
+                v-if="
+                  item.billStatus === 1 &&
+                  item.combineOrderDetails[0].settleScore &&
+                  !(
+                    displayHomeAwayScore(
+                      item.combineOrderDetails[0].settleScore,
+                      item.combineOrderDetails[0].sportId,
+                      'home'
+                    ) == '' ||
+                    displayHomeAwayScore(
+                      item.combineOrderDetails[0].settleScore,
+                      item.combineOrderDetails[0].sportId,
+                      'away'
+                    ) == ''
+                  )
+                "
+              >
+                {{ t('赛果：')
+                }}{{
+                  displayHomeAwayScore(
+                    item.combineOrderDetails[0].settleScore,
+                    item.combineOrderDetails[0].sportId
+                  )
+                }}
+              </div>
+            </div>
+          </el-descriptions-item>
+          <el-descriptions-item :label="t('状态')" align="center">
+            <div class="flex flex-col items-center" :key="index">
+              <div
+                :style="{
+                  background: getStatus(
+                    item.status,
+                    item.billStatus,
+                    item.betResultArr,
+                    item.isReserve,
+                    item.riskStatusArr,
+                    item.isSpecialSettle
+                  ).bgColor
+                }"
+                class="flex justify-center items-center rounded-md text-white px-5"
+              >
+                {{
+                  betStatusMap[
+                    getStatus(
+                      item.status,
+                      item.billStatus,
+                      item.betResultArr,
+                      item.isReserve as number,
+                      item.riskStatusArr,
+                      item.isSpecialSettle
+                    ).status as keyof typeof betStatusMap
+                  ]
+                }}
+              </div>
+              <div
+                class="text-center"
+                v-if="
                   getStatus(
-                    betInfo.status,
-                    betInfo.billStatus,
-                    betInfo.betResultArr,
-                    betInfo.isReserve as number,
-                    betInfo.riskStatusArr,
-                    betInfo.isSpecialSettle
-                  ).status as keyof typeof betStatusMap
-                ]
-              }}
+                    item.status,
+                    item.billStatus,
+                    item.betResultArr,
+                    item.isReserve,
+                    item.riskStatusArr,
+                    item.isSpecialSettle
+                  ).status === betStatus.settlementBet
+                "
+              >
+                {{
+                  item.settleTime
+                    ? dayjs(item.settleTime).format('MM-DD HH:mm:ss')
+                    : ''
+                }}
+              </div>
+              <div v-if="String(item.seriesType).slice(-3) === '001'">
+                {{ t('总赔率:')
+                }}{{
+                  String(item.seriesType).slice(-3) === '001'
+                    ? calculateSeriesTypeTotal(item.combineOrderDetails)
+                    : ''
+                }}
+              </div>
             </div>
-            <div
-              class="text-center"
-              v-if="
-                getStatus(
-                  betInfo.status,
-                  betInfo.billStatus,
-                  betInfo.betResultArr,
-                  betInfo.isReserve,
-                  betInfo.riskStatusArr,
-                  betInfo.isSpecialSettle
-                ).status === betStatus.settlementBet
-              "
-            >
-              {{
-                betInfo.settleTime
-                  ? dayjs(betInfo.settleTime).format('MM-DD HH:mm:ss')
-                  : ''
-              }}
+          </el-descriptions-item>
+          <el-descriptions-item :label="t('赔率')" align="center">
+            <div>
+              <div class="text-center">
+                {{
+                  getViewOddFn(
+                    item.combineOrderDetails[0].oddFinally,
+                    item.combineOrderDetails[0].marketTypeFinally,
+                    item.combineOrderDetails[0].marketType
+                  )
+                }}
+              </div>
+              <div class="text-center">
+                {{
+                  markeTypeMap[
+                    item.combineOrderDetails[0]
+                      .marketType as keyof typeof markeTypeMap
+                  ]
+                }}
+              </div>
+              <div
+                class="text-center"
+                v-if="
+                  getOddStatus(
+                    item.combineOrderDetails[0]?.betResult,
+                    item.combineOrderDetails[0].riskStatus
+                  )
+                "
+              >
+                <span
+                  :class="
+                    [EBetResultType.WIN, EBetResultType.WIN_HALF].includes(
+                      item.combineOrderDetails[0]?.betResult
+                    )
+                      ? 'win'
+                      : 'lose'
+                  "
+                >
+                  {{
+                    getOddStatus(
+                      item.combineOrderDetails[0]?.betResult,
+                      item.combineOrderDetails[0].riskStatus
+                    )
+                  }}
+                </span>
+              </div>
             </div>
-            <div v-if="String(betInfo.seriesType).slice(-3) === '001'">
-              {{ t('总赔率:')
-              }}{{
-                String(betInfo.seriesType).slice(-3) === '001'
-                  ? calculateSeriesTypeTotal(betInfo.combineOrderDetails)
-                  : ''
-              }}
+          </el-descriptions-item>
+          <el-descriptions-item :label="t('投注额')" align="center">
+            <div>
+              <div class="text-center">
+                {{
+                  addThousandSeparator((+item.productAmountTotal).toFixed(2))
+                }}
+              </div>
             </div>
-          </div>
-        </el-descriptions-item>
-        <el-descriptions-item :label="t('赔率')" align="center">
-          <div class="text-center">
-            {{
-              getViewOddFn(
-                betInfo.combineOrderDetails[0].oddFinally,
-                betInfo.combineOrderDetails[0].marketTypeFinally,
-                betInfo.combineOrderDetails[0].marketType
-              )
-            }}
-          </div>
-          <div class="text-center">
-            {{
-              markeTypeMap[
-                betInfo.combineOrderDetails[0]
-                  .marketType as keyof typeof markeTypeMap
-              ]
-            }}
-          </div>
-          <div
-            class="text-center"
-            v-if="
-              getOddStatus(
-                betInfo.combineOrderDetails[0]?.betResult,
-                betInfo.combineOrderDetails[0].riskStatus
-              )
-            "
-          >
-            <span
-              :class="
-                [EBetResultType.WIN, EBetResultType.WIN_HALF].includes(
-                  betInfo.combineOrderDetails[0]?.betResult
-                )
-                  ? 'win'
-                  : 'lose'
-              "
-            >
-              {{
-                getOddStatus(
-                  betInfo.combineOrderDetails[0]?.betResult,
-                  betInfo.combineOrderDetails[0].riskStatus
-                )
-              }}
-            </span>
-          </div>
-        </el-descriptions-item>
-        <el-descriptions-item :label="t('投注额')" align="center">
-          <div class="text-center">
-            {{ addThousandSeparator((+betInfo.productAmountTotal).toFixed(2)) }}
-          </div>
-        </el-descriptions-item>
-        <el-descriptions-item :label="t('用户输赢')" align="center">
-          <span
-            v-if="betInfo.profitAmount"
-            :class="betInfo.profitAmount > 0 ? 'win' : 'lose'"
-            >{{ (+betInfo.profitAmount).toFixed(2) }}</span
-          >
-          <span v-else>-</span>
-        </el-descriptions-item>
-      </el-descriptions>
-    </div>
+          </el-descriptions-item>
+          <el-descriptions-item :label="t('用户输赢')" align="center">
+            <div>
+              <span
+                v-if="item.profitAmount"
+                :class="item.profitAmount > 0 ? 'win' : 'lose'"
+                >{{ (+item.profitAmount).toFixed(2) }}</span
+              >
+              <span v-else>-</span>
+            </div>
+          </el-descriptions-item>
+        </el-descriptions>
+      </div>
+    </el-scrollbar>
   </div>
 </template>
 
@@ -295,7 +312,6 @@ import { t } from '@/plugins/i18n';
 import EventIcon from './com/EventIcon.vue';
 import TimeLine from './com/TimeLine.vue';
 import BetAmount from './com/BetAmount.vue';
-import { message } from '@/utils/message';
 import dayjs from 'dayjs';
 import { addThousandSeparator } from '@/utils/formatNumber';
 import {
@@ -340,20 +356,37 @@ const awayPic = computed(() => {
   }
 });
 
-const betInfo = reactive<BetOrderAPI.BetOrderList>(
-  {} as BetOrderAPI.BetOrderList
-);
+const betInfo = reactive<BetOrderAPI.BetOrderList[]>([]);
 
-const getBetDetail = async (orderId: string) => {
-  const res = await API.getCurrentBet({
-    orderId,
-    queryType: 1,
-    pageSize: 20,
-    pageNum: 1,
-    export: false
+const getBetDetail = async (orderIdList: (string | number)[]) => {
+  const res = await Promise.allSettled(
+    orderIdList.map((orderId: string) => {
+      return API.getCurrentBet({
+        orderId,
+        queryType: 1,
+        pageSize: 20,
+        pageNum: 1,
+        export: false
+      });
+    })
+  );
+  betInfo.length = 0;
+  res.forEach(item => {
+    if (item.status === 'fulfilled') {
+      const fulfilledItem = item as PromiseFulfilledResult<any>;
+      if (fulfilledItem.value.code) return;
+      betInfo.push(fulfilledItem.value.data.pageData[0]);
+    }
   });
-  if (res.code) return message(res.msg, { type: 'error' });
-  Object.assign(betInfo, res.data.pageData[0]);
+  //   const res = await API.getCurrentBet({
+  //     orderId: orderIdList[0],
+  //     queryType: 1,
+  //     pageSize: 20,
+  //     pageNum: 1,
+  //     export: false
+  //   });
+  //   if (res.code) return message(res.msg, { type: 'error' });
+  //   Object.assign(betInfo, res.data.pageData[0]);
 };
 
 onMounted(() => {

@@ -3,6 +3,7 @@
     <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
 
     <MatchDetail :matchInfo="matchInfo"></MatchDetail>
+
     <PureTableBar :columns="columns" @refresh="onSearch('reload')">
       <template #title>
         <div class="flex w-full justify-between items-center">
