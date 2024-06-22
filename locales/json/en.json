@@ -1171,7 +1171,6 @@
   "k-2ff974a4": "Action IP",
   "k7eff8ee7": "Operation Log List",
   "k-5af08606": "Modified Parameter",
-  "k72df3930": "Export Report Start",
   "k-277660fd": "Operation Log Report",
   "k-35fc732b": "Export Report Success",
   "k-8ecb699": "Previous Parameter",
@@ -1235,5 +1234,9 @@
   "k130cc590": "Event list",
   "kd67061": "Export current event list data?",
   "k-196fd4": "Time remaining until the start of the game",
-  "k-2b1c31d": "加载失败"
+  "k-2b1c31d": "加载失败",
+  "k-19201ac4": "结算比分：",
+  "k-7d0ee8c3": "结算比分",
+  "k-1e1a6aa2": "First of all ，please open extraTime settlement switch",
+  "kfe7a56a": "First of all ，please close Penalty shoot-out switch"
 }
