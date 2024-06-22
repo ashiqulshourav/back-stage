@@ -49,7 +49,7 @@ import '@/components/ReIcon/src/offlineIcon';
 import { setType } from './types';
 import { useLayout } from './hooks/useLayout';
 import { useResizeObserver } from '@vueuse/core';
-import { useAppStoreHook } from '@/store/app';
+import { useAppStore, useAppStoreHook } from '@/store/app';
 import { useSettingStoreHook } from '@/store/settings';
 import { deviceDetection, useDark, useGlobal } from '@pureadmin/utils';
 import { useDataThemeChange } from '@/layout/hooks/useDataThemeChange';
@@ -79,10 +79,11 @@ const isMobile = deviceDetection();
 const pureSetting = useSettingStoreHook();
 const { $storage } = useGlobal<GlobalPropertiesApi>();
 const matchStore = useMatchStore();
+const appStore = useAppStore();
 
 const set: setType = reactive({
   sidebar: computed(() => {
-    return useAppStoreHook().sidebar;
+    return appStore.sidebar;
   }),
 
   device: computed(() => {
@@ -95,10 +96,10 @@ const set: setType = reactive({
 
   classes: computed(() => {
     return {
-      hideSidebar: !set.sidebar.opened,
-      openSidebar: set.sidebar.opened,
-      withoutAnimation: set.sidebar.withoutAnimation,
-      mobile: set.device === 'mobile'
+      hideSidebar: !appStore.sidebar.opened,
+      openSidebar: appStore.sidebar.opened,
+      withoutAnimation: appStore.sidebar.withoutAnimation,
+      mobile: appStore.device === 'mobile'
     };
   }),
 

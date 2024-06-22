@@ -10,15 +10,15 @@ export const columns: TableColumnList = [
   {
     label: t('收到事件源时间'),
     prop: 'createdAt',
-    minWidth: 150,
+    minWidth: 200,
     formatter({ createdAt }: { createdAt: string }) {
       return dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss');
     }
   },
   {
-    label: t('比赛开赛时间'),
+    label: t('距离比赛开赛时间'),
     prop: 'playingTime',
-    minWidth: 150,
+    minWidth: 200,
     formatter({ playingTime }) {
       return playingTime ? playingTime : '-';
     }

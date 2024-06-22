@@ -12,8 +12,14 @@ export const columns: TableColumnList = [
     prop: 'betItemsNameEn',
     minWidth: 300,
     headerRenderer: d => handleTableWidth(d, t('盘口名称'), 'auto'),
-    formatter: ({ betItemsNameEn, betItemsName }) =>
-      betItemsNameEn ? betItemsNameEn : betItemsName
+    formatter: ({ betItemsNameEn, betItemsName }) => {
+      return (
+        <div class="flex items-center flex-col">
+          <span>{betItemsNameEn}</span>
+          <span>{betItemsName}</span>
+        </div>
+      );
+    }
   },
   {
     label: t('所属局数'),
@@ -22,7 +28,9 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('所属局数'), 'auto'),
     formatter: ({ handicapFilter }) => {
       return handicapFilter
-        ? NAV_TITLE_NAME[JSON.parse(handicapFilter).toString()]
+        ? NAV_TITLE_NAME[
+            JSON.parse(handicapFilter).toString() as keyof typeof NAV_TITLE_NAME
+          ]
         : '-';
     }
   },

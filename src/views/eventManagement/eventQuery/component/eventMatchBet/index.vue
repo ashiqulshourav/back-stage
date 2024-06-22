@@ -47,11 +47,14 @@
           "
           placement="top-start"
         >
-          <img
+          <el-image
             :src="i === 0 ? homePic : awayPic"
             class="h-[30px] w-[30px]"
-            :alt="i === 0 ? matchData.homeTeamNameCn : matchData.awayTeamNameCn"
-          />
+          >
+            <template #error>
+              <div class="text-xs text-black">{{ t('加载失败') }}</div>
+            </template>
+          </el-image>
         </el-tooltip>
       </div>
     </div>
