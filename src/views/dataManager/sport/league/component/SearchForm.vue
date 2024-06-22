@@ -73,37 +73,27 @@ const columns: PlusColumn[] = [
     label: t('赛事类型'),
     prop: 'category',
     valueType: 'select',
+
     options: SPORT_CATEGORY,
     fieldProps: {
       onChange: chagenMatchType
     }
   },
   {
-    label: t('游戏种类'),
+    label: t('赛种'),
     prop: 'sportId',
     valueType: 'select',
     options: computed(() => gameClassify.value)
   },
   {
-    label: t('联赛ID'),
-    prop: 'leagueId',
-    fieldProps: {
-      formatter: (v: string) => formatNumber(v, 10),
-      onChange: search
-    }
-  },
-  {
-    label: t('热门排序'),
-    prop: 'level',
-    fieldProps: {
-      formatter: (v: string) => inputRestrictions(v),
-      placeholder: t('请输入1-200之间的数字')
-    }
-  },
-  {
     label: t('联赛等级'),
     prop: 'riskLevel',
     valueType: 'select',
+    fieldProps: computed(() => {
+      return {
+        disabled: props.form.category !== 1 && props.form.sportId === ''
+      };
+    }),
     options: computed(() => {
       const sportidMap = { 1: 0, 2: 1 };
       let list = [];
@@ -125,11 +115,25 @@ const columns: PlusColumn[] = [
         label: item.league_level === -1 ? t('未评级') : item.league_level,
         value: item.league_level
       }));
-    }),
-    hideInSearch: computed(() => {
-      return props.form.category !== 1 && props.form.sportId === '';
     })
   },
+  {
+    label: t('联赛ID'),
+    prop: 'leagueId',
+    fieldProps: {
+      formatter: (v: string) => formatNumber(v, 10),
+      onChange: search
+    }
+  },
+  {
+    label: t('热门排序'),
+    prop: 'level',
+    fieldProps: {
+      formatter: (v: string) => inputRestrictions(v),
+      placeholder: t('请输入1-200之间的数字')
+    }
+  },
+
   {
     label: t('联赛中文名'),
     prop: 'leagueNameCn',
