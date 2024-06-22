@@ -91,54 +91,55 @@
             </div>
           </el-descriptions-item>
           <el-descriptions-item :label="t('赛事信息')" align="center">
-            <div>
+            <div
+              v-for="(d, i) in item.combineOrderDetails"
+              :key="i"
+              :class="[
+                item.combineOrderDetails.length > 1 &&
+                  'border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#303030] py-1',
+                i === item.combineOrderDetails.length - 1 && 'border-none'
+              ]"
+            >
               <div>
-                {{ item.combineOrderDetails[0].homeTeamNameCn }}
+                {{ d.homeTeamNameCn }}
                 vs
-                {{ item.combineOrderDetails[0].awayTeamNameCn }}
+                {{ d.awayTeamNameCn }}
               </div>
-              <div>
-                {{ item.combineOrderDetails[0].sportNameCn }}/{{
-                  item.combineOrderDetails[0].leagueNameCn
-                }}
-              </div>
-              <div>
-                {{ t('赛事ID:') }}{{ item.combineOrderDetails[0].matchId }}
-              </div>
+              <div>{{ d.sportNameCn }}/{{ d.leagueNameCn }}</div>
+              <div>{{ t('赛事ID:') }}{{ d.matchId }}</div>
               <div>
                 {{ t('开赛时间:')
                 }}{{
-                  dayjs(
-                    item.combineOrderDetails[0].beginTime ?? Date.now()
-                  ).format('MM-DD HH:mm:ss')
+                  dayjs(d.beginTime ?? Date.now()).format('MM-DD HH:mm:ss')
                 }}
               </div>
             </div>
           </el-descriptions-item>
           <el-descriptions-item :label="t('注单详情')" :span="2" align="center">
-            <div>
+            <div
+              v-for="(d, i) in item.combineOrderDetails"
+              :key="i"
+              :class="[
+                item.combineOrderDetails.length > 1 &&
+                  'border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#303030] py-1',
+                i === item.combineOrderDetails.length - 1 && 'border-none'
+              ]"
+            >
               <div>
                 {{
-                  `玩法：${
-                    useSportFormatDetail(item.combineOrderDetails[0])[4]
-                  } ${getIsInplay(item.combineOrderDetails[0].isInplay)}`
+                  `玩法：${useSportFormatDetail(d)[4]} ${getIsInplay(
+                    d.isInplay
+                  )}`
                 }}
                 {{
-                  item.combineOrderDetails[0].isInplay == 1
-                    ? displayHomeAwayScore(
-                        item.combineOrderDetails[0].scoreBenchmark,
-                        item.combineOrderDetails[0].sportId
-                      )
+                  d.isInplay == 1
+                    ? displayHomeAwayScore(d.scoreBenchmark, d.sportId)
                     : ''
                 }}
               </div>
               <div>
-                {{ useSportFormatDetail(item.combineOrderDetails[0])[3] }} @{{
-                  getViewOddFn(
-                    item.combineOrderDetails[0].oddFinally,
-                    item.combineOrderDetails[0].marketTypeFinally,
-                    item.combineOrderDetails[0].marketType
-                  )
+                {{ useSportFormatDetail(d)[3] }} @{{
+                  getViewOddFn(d.oddFinally, d.marketTypeFinally, d.marketType)
                 }}
               </div>
               <div>{{ t('注单号:') }} {{ item.id }}</div>
@@ -153,28 +154,16 @@
               <div
                 v-if="
                   item.billStatus === 1 &&
-                  item.combineOrderDetails[0].settleScore &&
+                  d.settleScore &&
                   !(
-                    displayHomeAwayScore(
-                      item.combineOrderDetails[0].settleScore,
-                      item.combineOrderDetails[0].sportId,
-                      'home'
-                    ) == '' ||
-                    displayHomeAwayScore(
-                      item.combineOrderDetails[0].settleScore,
-                      item.combineOrderDetails[0].sportId,
-                      'away'
-                    ) == ''
+                    displayHomeAwayScore(d.settleScore, d.sportId, 'home') ==
+                      '' ||
+                    displayHomeAwayScore(d.settleScore, d.sportId, 'away') == ''
                   )
                 "
               >
                 {{ t('赛果：')
-                }}{{
-                  displayHomeAwayScore(
-                    item.combineOrderDetails[0].settleScore,
-                    item.combineOrderDetails[0].sportId
-                  )
-                }}
+                }}{{ displayHomeAwayScore(d.settleScore, d.sportId) }}
               </div>
             </div>
           </el-descriptions-item>
@@ -236,48 +225,37 @@
             </div>
           </el-descriptions-item>
           <el-descriptions-item :label="t('赔率')" align="center">
-            <div>
+            <div
+              v-for="(d, i) in item.combineOrderDetails"
+              :key="i"
+              :class="[
+                item.combineOrderDetails.length > 1 &&
+                  'border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#303030] py-1',
+                i === item.combineOrderDetails.length - 1 && 'border-none'
+              ]"
+            >
               <div class="text-center">
                 {{
-                  getViewOddFn(
-                    item.combineOrderDetails[0].oddFinally,
-                    item.combineOrderDetails[0].marketTypeFinally,
-                    item.combineOrderDetails[0].marketType
-                  )
+                  getViewOddFn(d.oddFinally, d.marketTypeFinally, d.marketType)
                 }}
               </div>
               <div class="text-center">
-                {{
-                  markeTypeMap[
-                    item.combineOrderDetails[0]
-                      .marketType as keyof typeof markeTypeMap
-                  ]
-                }}
+                {{ markeTypeMap[d.marketType as keyof typeof markeTypeMap] }}
               </div>
               <div
                 class="text-center"
-                v-if="
-                  getOddStatus(
-                    item.combineOrderDetails[0]?.betResult,
-                    item.combineOrderDetails[0].riskStatus
-                  )
-                "
+                v-if="getOddStatus(d?.betResult, d.riskStatus)"
               >
                 <span
                   :class="
                     [EBetResultType.WIN, EBetResultType.WIN_HALF].includes(
-                      item.combineOrderDetails[0]?.betResult
+                      d?.betResult
                     )
                       ? 'win'
                       : 'lose'
                   "
                 >
-                  {{
-                    getOddStatus(
-                      item.combineOrderDetails[0]?.betResult,
-                      item.combineOrderDetails[0].riskStatus
-                    )
-                  }}
+                  {{ getOddStatus(d?.betResult, d.riskStatus) }}
                 </span>
               </div>
             </div>
