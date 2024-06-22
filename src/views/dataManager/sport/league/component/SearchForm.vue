@@ -7,6 +7,7 @@
     @search="search"
     @reset="handleRest"
     :has-unfold="true"
+    show-number="4"
     labelWidth="auto"
     :defaultValues="defaultValue"
     :searchText="t('筛选')"

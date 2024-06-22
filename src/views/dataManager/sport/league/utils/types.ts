@@ -11,7 +11,7 @@ export type searchFormType = {
   countryId: string;
   leagueId: string;
   leagueId188Bet: string;
-  sportId: string;
+  sportId: string | number;
   category: string | number;
   riskLevel: string | number;
 
