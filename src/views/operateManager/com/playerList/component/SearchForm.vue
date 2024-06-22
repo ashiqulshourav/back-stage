@@ -28,21 +28,39 @@
           </div>
         </el-popover>
       </el-form-item>
+
       <el-form-item prop="tenantIds" :label="t('商户:')">
-        <el-select
-          v-model="form.tenantIds"
+        <el-tree-select
           :placeholder="t('所属商户')"
+          v-model="props.form.tenantIds"
+          :data="
+            tenantList.map(item => ({
+              value: item.id,
+              label: item.tenantName
+            }))
+          "
+          filterable
           clearable
           multiple
-          class="!w-[150px]"
+          collapse-tags
+          :render-after-expand="false"
+          show-checkbox
+          check-strictly
+          check-on-click-node
+          style="width: 200px"
         >
-          <el-option
-            :label="item.tenantName"
-            :value="item.id"
-            v-for="item in tenantList"
-            :key="item.name"
-          />
-        </el-select>
+          <template #header>
+            <el-checkbox v-model="checkAllTIds" @change="handleCheckAllTIds">
+              {{ t('全选') }}
+            </el-checkbox>
+            <el-checkbox v-mode="removeAllTIds" @change="handleRemoveAllTIds" :disabled="form?.tenantIds.length == 0">
+              {{ t('全不选') }}
+            </el-checkbox>
+            <el-checkbox v-model="checkRevertTIds" @change="handleCheckRevertTIds">
+              {{ t('反选') }}
+            </el-checkbox>
+          </template>
+        </el-tree-select>
       </el-form-item>
       <el-form-item prop="tenantCode" :label="t('商户编码:')">
         <el-input
@@ -53,22 +71,6 @@
           class="!w-[120px]"
         />
       </el-form-item>
-      <!-- <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
-        <el-select
-          multiple
-          clearable
-          class="!w-[150px]"
-          v-model="form.riskControlLabelList"
-        >
-          <el-option
-            v-for="label in labelList.risk"
-            :key="label.id"
-            :label="label.name"
-            :value="label.id"
-          />
-        </el-select>
-      </el-form-item> -->
-
       <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
         <el-tree-select
           v-model="props.form.riskControlLabelList"
@@ -101,21 +103,37 @@
           </template>
         </el-tree-select>
       </el-form-item>
-
       <el-form-item prop="attributeLabelList" :label="t('属性标签:')">
-        <el-select
-          multiple
+        <el-tree-select
+          v-model="props.form.attributeLabelList"
+          :data="
+            labelList.attr.map(item => ({
+              value: item.id,
+              label: item.name
+            }))
+          "
+          filterable
           clearable
-          class="!w-[150px]"
-          v-model="form.attributeLabelList"
+          multiple
+          collapse-tags
+          :render-after-expand="false"
+          show-checkbox
+          check-strictly
+          check-on-click-node
+          style="width: 200px"
         >
-          <el-option
-            v-for="label in labelList.attr"
-            :key="label.id"
-            :label="label.name"
-            :value="label.id"
-          />
-        </el-select>
+          <template #header>
+            <el-checkbox v-model="checkAllTags" @change="handleCheckAllTags">
+              {{ t('全选') }}
+            </el-checkbox>
+            <el-checkbox v-mode="removeAllTags" @change="handleRemoveAllTags" :disabled="form?.attributeLabelList.length == 0">
+              {{ t('全不选') }}
+            </el-checkbox>
+            <el-checkbox v-model="checkRevertTags" @change="handleCheckRevertTags">
+              {{ t('反选') }}
+            </el-checkbox>
+          </template>
+        </el-tree-select>
       </el-form-item>
 
       <el-form-item prop="limitLevel" :label="t('限额等级:')">
@@ -203,6 +221,15 @@ const idList = reactive<string[]>([]);
 const userIds = reactive<string[]>([]);
 const sportLimmitList = reactive<string[]>([]);
 
+
+const checkAllTIds = ref(false);
+const removeAllTIds = ref(false);
+const checkRevertTIds = ref(false);
+
+const checkAllTags = ref(false);
+const removeAllTags = ref(false);
+const checkRevertTags = ref(false);
+
 const checkAll = ref(false);
 const removeAll = ref(false);
 const checkRevert = ref(false);
@@ -216,6 +243,7 @@ const props = defineProps<{
   downloading: boolean;
 }>();
 
+// watch, handleCheckAll, handleRemoveAll & handleCheckRevert for risk label
 watch(
   () => props.form.riskControlLabelList,
   val => {
@@ -248,6 +276,77 @@ const handleCheckRevert = () => {
     .map(_ => _.id)
   }
 }
+
+// watch, handleCheckAllTIds, handleRemoveAllTIds & handleCheckRevertTIds for risk Merchant
+watch(
+  () => props.form.tenantIds,
+  val => {
+    if(!val || val.length === 0){
+      checkAllTIds.value = false;
+    } else if(val.length === props.tenantList.length){
+      checkAllTIds.value = true;
+      removeAllTIds.value = false;
+    }
+  },
+)
+
+const handleCheckAllTIds = (val: CheckboxValueType) => {
+  if(val){
+    props.form.tenantIds = props.tenantList.map(_ => _.id)
+  } else {
+    props.form.tenantIds = [];
+  }
+}
+
+const handleRemoveAllTIds = (val: CheckboxValueType) => {
+  props.form.tenantIds = [];
+  checkRevertTIds.value = false;
+}
+
+const handleCheckRevertTIds = () => {
+  if(true){
+    const oldArray = [...props.form.tenantIds];
+    props.form.tenantIds = props.tenantList
+    .filter(_ => !oldArray.includes(_.id))
+    .map(_ => _.id)
+  }
+}
+
+// watch, handleCheckAllTags, handleRemoveAllTags & handleCheckRevertTags for label list attribute
+watch(
+  () => props.form.attributeLabelList,
+  val => {
+    if(!val || val.length === 0){
+      checkAllTags.value = false;
+    } else if(val.length === props.labelList.attr.length){
+      checkAllTags.value = true;
+      removeAllTags.value = false;
+    }
+  },
+)
+
+const handleCheckAllTags = (val: CheckboxValueType) => {
+  if(val){
+    props.form.attributeLabelList = props.labelList.attr.map(_ => _.id)
+  } else {
+    props.form.attributeLabelList = [];
+  }
+}
+
+const handleRemoveAllTags = (val: CheckboxValueType) => {
+  props.form.attributeLabelList = [];
+  checkRevertTags.value = false;
+}
+
+const handleCheckRevertTags = () => {
+  if(true){
+    const oldArray = [...props.form.attributeLabelList];
+    props.form.attributeLabelList = props.labelList.attr
+    .filter(_ => !oldArray.includes(_.id))
+    .map(_ => _.id)
+  }
+}
+
 
 const form = ref(props.form);
 const formatterUserNames = v => {
