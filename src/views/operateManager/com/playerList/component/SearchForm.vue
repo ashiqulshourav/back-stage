@@ -50,13 +50,13 @@
           style="width: 200px"
         >
           <template #header>
-            <el-checkbox v-model="checkAllTIds" @change="handleCheckAll">
+            <el-checkbox v-model="checkAllTIds" @change="handleCheckAllTIds">
               {{ t('全选') }}
             </el-checkbox>
-            <el-checkbox v-mode="removeAllTIds" @change="handleRemoveAll" :disabled="form?.tenantIds.length == 0">
+            <el-checkbox v-mode="removeAllTIds" @change="handleRemoveAllTIds" :disabled="form?.tenantIds.length == 0">
               {{ t('全不选') }}
             </el-checkbox>
-            <el-checkbox v-model="checkRevertTIds" @change="handleCheckRevert">
+            <el-checkbox v-model="checkRevertTIds" @change="handleCheckRevertTIds">
               {{ t('反选') }}
             </el-checkbox>
           </template>
@@ -123,13 +123,13 @@
           style="width: 200px"
         >
           <template #header>
-            <el-checkbox v-model="checkAllTags" @change="handleCheckAll">
+            <el-checkbox v-model="checkAllTags" @change="handleCheckAllTags">
               {{ t('全选') }}
             </el-checkbox>
-            <el-checkbox v-mode="removeAllTags" @change="handleRemoveAll" :disabled="form?.attributeLabelList.length == 0">
+            <el-checkbox v-mode="removeAllTags" @change="handleRemoveAllTags" :disabled="form?.attributeLabelList.length == 0">
               {{ t('全不选') }}
             </el-checkbox>
-            <el-checkbox v-model="checkRevertTags" @change="handleCheckRevert">
+            <el-checkbox v-model="checkRevertTags" @change="handleCheckRevertTags">
               {{ t('反选') }}
             </el-checkbox>
           </template>
@@ -243,6 +243,7 @@ const props = defineProps<{
   downloading: boolean;
 }>();
 
+// watch, handleCheckAll, handleRemoveAll & handleCheckRevert for risk label
 watch(
   () => props.form.riskControlLabelList,
   val => {
@@ -263,22 +264,6 @@ const handleCheckAll = (val: CheckboxValueType) => {
   }
 }
 
-const handleCheckAllTags = (val: CheckboxValueType) => {
-  if(val){
-    props.form.riskControlLabelList = props.labelList.risk.map(_ => _.id)
-  } else {
-    props.form.riskControlLabelList = [];
-  }
-}
-
-const handleCheckAllTags = (val: CheckboxValueType) => {
-  if(val){
-    props.form.riskControlLabelList = props.labelList.risk.map(_ => _.id)
-  } else {
-    props.form.riskControlLabelList = [];
-  }
-}
-
 const handleRemoveAll = (val: CheckboxValueType) => {
   props.form.riskControlLabelList = [];
 }
@@ -291,6 +276,77 @@ const handleCheckRevert = () => {
     .map(_ => _.id)
   }
 }
+
+// watch, handleCheckAllTIds, handleRemoveAllTIds & handleCheckRevertTIds for risk Merchant
+watch(
+  () => props.form.tenantIds,
+  val => {
+    if(!val || val.length === 0){
+      checkAllTIds.value = false;
+    } else if(val.length === props.tenantList.length){
+      checkAllTIds.value = true;
+      removeAllTIds.value = false;
+    }
+  },
+)
+
+const handleCheckAllTIds = (val: CheckboxValueType) => {
+  if(val){
+    props.form.tenantIds = props.tenantList.map(_ => _.id)
+  } else {
+    props.form.tenantIds = [];
+  }
+}
+
+const handleRemoveAllTIds = (val: CheckboxValueType) => {
+  props.form.tenantIds = [];
+  checkRevertTIds.value = false;
+}
+
+const handleCheckRevertTIds = () => {
+  if(true){
+    const oldArray = [...props.form.tenantIds];
+    props.form.tenantIds = props.tenantList
+    .filter(_ => !oldArray.includes(_.id))
+    .map(_ => _.id)
+  }
+}
+
+// watch, handleCheckAllTags, handleRemoveAllTags & handleCheckRevertTags for label list attribute
+watch(
+  () => props.form.attributeLabelList,
+  val => {
+    if(!val || val.length === 0){
+      checkAllTags.value = false;
+    } else if(val.length === props.labelList.attr.length){
+      checkAllTags.value = true;
+      removeAllTags.value = false;
+    }
+  },
+)
+
+const handleCheckAllTags = (val: CheckboxValueType) => {
+  if(val){
+    props.form.attributeLabelList = props.labelList.attr.map(_ => _.id)
+  } else {
+    props.form.attributeLabelList = [];
+  }
+}
+
+const handleRemoveAllTags = (val: CheckboxValueType) => {
+  props.form.attributeLabelList = [];
+  checkRevertTags.value = false;
+}
+
+const handleCheckRevertTags = () => {
+  if(true){
+    const oldArray = [...props.form.attributeLabelList];
+    props.form.attributeLabelList = props.labelList.attr
+    .filter(_ => !oldArray.includes(_.id))
+    .map(_ => _.id)
+  }
+}
+
 
 const form = ref(props.form);
 const formatterUserNames = v => {
