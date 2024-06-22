@@ -26,7 +26,7 @@
         </el-form-item>
         <el-form-item prop="tenantIds" :label="`${t('商户名')}:`">
           <el-tree-select
-            v-model="form.tenantIds"
+            v-model="props.form.tenantIds"
             :placeholder="t('请选择商户ID，多选项')"
             :data="tenantList.map(item => ({
               value: item.id,
@@ -34,6 +34,7 @@
             }))"
             filterable
             clearable
+            multiple
             collapse-tags
             :render-after-expand="false"
             show-checkbox
@@ -42,13 +43,13 @@
             style="width: 200px"
           >
             <template #header>
-              <el-checkbox>
+              <el-checkbox v-model="checkAllMName" @change="handleCheckAllMName">
                 {{ t('全选') }}
               </el-checkbox>
-              <el-checkbox>
+              <el-checkbox v-model="removeAllMName" @change="handleRemoveAllMName" :disabled="form?.tenantIds.length == 0">
                 {{ t('全不选') }}
               </el-checkbox>
-              <el-checkbox>
+              <el-checkbox v-model="checkRevertMName" @change="handleCheckRevertMName">
                 {{ t('反选') }}
               </el-checkbox>
             </template>
@@ -349,7 +350,7 @@ import { t } from '@/plugins/i18n';
 import SearchIcon from '@iconify-icons/ep/search';
 import RefreshIcon from '@iconify-icons/ep/refresh';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-import type { FormInstance } from 'element-plus';
+import type { FormInstance, CheckboxValueType } from 'element-plus';
 import dayjs from 'dayjs';
 import { formatNumber } from '@/utils/formatNumber';
 import {
@@ -498,6 +499,40 @@ onDeactivated(() => {
 const checkAllMName = ref(false);
 const removeAllMName = ref(false);
 const checkRevertMName = ref(false);
+
+const handleCheckAllMName = (val: CheckboxValueType) => {
+  if(val){
+    props.form.tenantIds = props.tenantList.map(_ =>_.id)
+  } else {
+    props.form.tenantIds = [];
+  }
+}
+
+const handleRemoveAllMName = (val: CheckboxValueType) => {
+  props.form.tenantIds = [];
+}
+
+const handleCheckRevertMName = () => {
+  if(true){
+    const oldArray = [...props.form.tenantIds];
+    props.form.tenantIds = props.tenantList
+    .filter(_ => !oldArray.includes(_.id))
+    .map(_ => _.id)
+  }
+}
+
+watch(
+  () => props.form.tenantIds,
+  val => {
+    if(!val || val.length === 0){
+      checkAllMName.value = false;
+    } else if(val.length === props.tenantList.length){
+      checkAllMName.value = true;
+      removeAllMName.value = false;
+    }
+  }
+)
+
 </script>
 
 <style scoped lang="scss">

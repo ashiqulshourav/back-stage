@@ -266,6 +266,7 @@ const handleCheckAll = (val: CheckboxValueType) => {
 
 const handleRemoveAll = (val: CheckboxValueType) => {
   props.form.riskControlLabelList = [];
+  checkRevert.value = false;
 }
 
 const handleCheckRevert = () => {
