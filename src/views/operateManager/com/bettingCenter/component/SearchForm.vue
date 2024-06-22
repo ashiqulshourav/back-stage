@@ -24,6 +24,36 @@
             />
           </el-select>
         </el-form-item>
+        <el-form-item prop="tenantIds" :label="`${t('商户名')}:`">
+          <el-tree-select
+            v-model="form.tenantIds"
+            :placeholder="t('请选择商户ID，多选项')"
+            :data="tenantList.map(item => ({
+              value: item.id,
+              label: item.tenantName
+            }))"
+            filterable
+            clearable
+            collapse-tags
+            :render-after-expand="false"
+            show-checkbox
+            check-strictly
+            check-on-click-node
+            style="width: 200px"
+          >
+            <template #header>
+              <el-checkbox>
+                {{ t('全选') }}
+              </el-checkbox>
+              <el-checkbox>
+                {{ t('全不选') }}
+              </el-checkbox>
+              <el-checkbox>
+                {{ t('反选') }}
+              </el-checkbox>
+            </template>
+          </el-tree-select>
+        </el-form-item>
         <el-form-item :label="`${t('赛种')}:`" prop="sportId">
           <el-select
             v-model="form.sportId"
@@ -314,6 +344,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import { t } from '@/plugins/i18n';
 import SearchIcon from '@iconify-icons/ep/search';
 import RefreshIcon from '@iconify-icons/ep/refresh';
@@ -462,6 +493,11 @@ onDeactivated(() => {
     search();
   }
 });
+
+// multiple select for merchant Name
+const checkAllMName = ref(false);
+const removeAllMName = ref(false);
+const checkRevertMName = ref(false);
 </script>
 
 <style scoped lang="scss">
