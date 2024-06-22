@@ -89,11 +89,11 @@ const columns: PlusColumn[] = [
     label: t('联赛等级'),
     prop: 'riskLevel',
     valueType: 'select',
-    fieldProps: computed(() => {
-      return {
-        disabled: props.form.category !== 1 && props.form.sportId === ''
-      };
-    }),
+    // fieldProps: computed(() => {
+    //   return {
+    //     disabled: props.form.category !== 1 && props.form.sportId === ''
+    //   };
+    // }),
     options: computed(() => {
       const sportidMap = { 1: 0, 2: 1 };
       let list = [];
