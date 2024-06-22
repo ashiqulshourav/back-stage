@@ -1,6 +1,5 @@
 import { parseCountry } from '@/utils/formatMatch';
 import { ESPORT_ID_MAP, SPORT_ID_MAP } from '@/utils/maps/sports_map';
-import TableColumnList from './co'
 
 export const columns: TableColumnList = [
   {
