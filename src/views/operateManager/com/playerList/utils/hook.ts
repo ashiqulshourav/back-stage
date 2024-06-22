@@ -113,7 +113,7 @@ export function userPlayerListHook(venueType: number, category: number) {
   };
 
   // export player list
-  const exportFileTest = async () =>{
+  const exportFile = async () =>{
     downloading.value = true;
     const res = await API.playerListExport({
       ...removeEmptyStringKeys(form),
@@ -310,8 +310,7 @@ export function userPlayerListHook(venueType: number, category: number) {
     dispatchUpdateUser,
     tenantObj,
     goChangeAccountPage,
-    tenantObj,
     downloading,
-    exportFileTest
+    exportFile
   };
 }
