@@ -25,7 +25,7 @@ export function matchCombineHook() {
     currentPage: 1,
   });
   const form = reactive<searchFormType>({
-    dataSourceCode: '',
+    dataSourceCode: ' ',
     category: 0,
     sportId: '',
     matchId: '',
