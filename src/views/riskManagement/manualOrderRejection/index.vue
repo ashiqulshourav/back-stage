@@ -6,6 +6,7 @@
       :loading="loading"
       :downloading="downloading"
       @on-search="onSearch"
+      @exportFile="exportFile"
       @exportFileTest="exportFileTest"
       :tenantList="tenantList"
     />
@@ -112,10 +113,16 @@
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <div v-if="item.kindsCode?.includes('Outright')||item.kindsCode?.includes('moutright')" class="item_line" >
+              <div
+                v-if="
+                  item.kindsCode?.includes('Outright') ||
+                  item.kindsCode?.includes('moutright')
+                "
+                class="item_line"
+              >
                 <span>冠军赛事</span>
               </div>
-              <div v-else  class="item_line">
+              <div v-else class="item_line">
                 <span
                   class="cursor-pointer"
                   @click="
@@ -249,9 +256,12 @@
                 v-for="item in row.combineOrderDetails"
                 :key="item.betItemId"
               >
-                <span v-if="row.combineOrderDetails.length < 2"
+                <span
+                  v-if="row.combineOrderDetails.length < 2"
                   class="status_btn"
-                  :style="{ background: getBackgroundColor(row.billStatus).bgColor}"
+                  :style="{
+                    background: getBackgroundColor(row.billStatus).bgColor
+                  }"
                 >
                   {{
                     getVal(
@@ -262,7 +272,11 @@
                     )
                   }}
                 </span>
-                <span v-else :style="{ background: getBackgroundColor(row.billStatus).bgColor}"
+                <span
+                  v-else
+                  :style="{
+                    background: getBackgroundColor(row.billStatus).bgColor
+                  }"
                   class="status_btn"
                 >
                   {{
@@ -275,7 +289,11 @@
                   }}
                 </span>
                 <span class="block">
-                  {{ rejectReasonMap[item.riskType as keyof typeof rejectReasonMap] }}
+                  {{
+                    rejectReasonMap[
+                      item.riskType as keyof typeof rejectReasonMap
+                    ]
+                  }}
                 </span>
               </div>
             </div>
@@ -372,7 +390,7 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
-import { rejectReasonMap } from './util/types'
+import { rejectReasonMap } from './util/types';
 import Copy from '@iconify-icons/ep/copy-document';
 import { adjustContentWithRowHeight } from '@/utils/adjustRowCoulmnHeight';
 import {
@@ -393,11 +411,11 @@ const { tableHeaderStyle } = usePublicHooks();
 
 onMounted(() => {
   adjustContentWithRowHeight();
-})
+});
 
-onUpdated (() => {
+onUpdated(() => {
   adjustContentWithRowHeight();
-})
+});
 
 const getVal = (s1, s2, s3, s4) => {
   let val = '-';
@@ -448,7 +466,8 @@ const {
   confirmBetClick,
   refuseBetClick,
   tenantObj,
-  getBackgroundColor,
+  exportFile,
+  getBackgroundColor
 } = useManualOrderRejectionHook();
 </script>
 
@@ -524,7 +543,7 @@ const {
   border-radius: 4px;
 }
 
-.eq-height{
+.eq-height {
   display: flex;
   flex-direction: column;
   justify-content: center;
