@@ -224,7 +224,7 @@
             {{ t('导出报表') }}
           </el-button>
 
-           <el-button
+          <!-- <el-button
             type="primary"
             :icon="useRenderIcon(Download)"
             :loading="downloading"
@@ -232,7 +232,7 @@
             @click="exportFileTest()"
           >
             {{ t('报表异步导出') }}
-          </el-button>
+          </el-button> -->
         </el-form-item>
       </div>
     </div>
@@ -292,7 +292,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
   props.form.createTimeEnd = dayjs().endOf('day').valueOf();
   riskNoticeStore.setRiskNoticeTimeFrame({
     createTimeStart: dayjs().subtract(30, 'day').startOf('day').valueOf(),
-    createTimeEnd: dayjs().endOf('day').valueOf(),
+    createTimeEnd: dayjs().endOf('day').valueOf()
   });
   search();
 };
@@ -304,7 +304,7 @@ const changeDate = t => {
 
     riskNoticeStore.setRiskNoticeTimeFrame({
       createTimeStart: 0,
-      createTimeEnd: 0,
+      createTimeEnd: 0
     });
   } else {
     props.form.createTimeStart = dayjs(t[0]).startOf('day').valueOf();
@@ -312,7 +312,7 @@ const changeDate = t => {
 
     riskNoticeStore.setRiskNoticeTimeFrame({
       createTimeStart: dayjs(t[0]).startOf('day').valueOf(),
-      createTimeEnd: dayjs(t[1]).endOf('day').valueOf(),
+      createTimeEnd: dayjs(t[1]).endOf('day').valueOf()
     });
   }
   search();

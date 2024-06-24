@@ -49,7 +49,7 @@
           <template #lock="{ row }">
             <div class="flex justify-center">
               <IconifyIconOffline
-                :icon="row.saleHandicaps === 0 ? 'lock' : 'unlock'"
+                :icon="row.whetherLock === 0 ? 'unlock' : 'lock'"
               />
             </div>
           </template>
@@ -57,7 +57,6 @@
           <template #isSale="{ row, index, props }">
             <el-switch
               :size="props.size === 'small' ? 'small' : 'default'"
-              :loading="switchLoadMap[index]?.loading"
               v-model="row.isSale"
               :active-value="1"
               :inactive-value="0"
@@ -109,7 +108,7 @@ import { usePublicHooks } from '@/hooks';
 defineOptions({ name: 'SALE_PRE_SALE' });
 const { tableHeaderStyle } = usePublicHooks();
 const openInfoDialog = (matchId: number, row: SaleDataAPI.PreSaleList) => {
-  if (row.saleHandicaps === 0)
+  if (row.whetherLock === 1)
     return message(
       row.allHandicaps === 0 ? t('赛事盘口未开售!') : t('请先解锁当前赛事!'),
       { type: 'error' }
@@ -136,7 +135,6 @@ const {
   handleTableWidthChange,
   handleCurrentChange,
   handleSelectionChange,
-  switchLoadMap,
   changeSwitch,
   openDialog,
   searchForm,
@@ -146,5 +144,5 @@ const {
   locakMatch,
   unLocakMatch,
   selectLockcList
-} =useChampionshipPreSaleHook();
+} = useChampionshipPreSaleHook();
 </script>

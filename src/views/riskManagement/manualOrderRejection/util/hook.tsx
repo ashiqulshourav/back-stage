@@ -204,7 +204,7 @@ export function useManualOrderRejectionHook() {
   };
 
   //- 导出excel表格
-  /*   const exportFile = async () => {
+  const exportFile = async () => {
     // 对于串关类型的选择处理
     let seriesDetails: any = [];
     if (form.seriesType == 2) {
@@ -352,7 +352,7 @@ export function useManualOrderRejectionHook() {
     message(t('导出成功'), {
       type: 'success'
     });
-  }; */
+  };
 
   const resetForm = formEl => {
     if (!formEl) return;
@@ -497,7 +497,7 @@ export function useManualOrderRejectionHook() {
     handleCurrentChange,
     handleSelectionChange,
     exportFileTest,
-    // exportFile,
+    exportFile,
     handleCancel,
     // getStatus,
     copyTest,
