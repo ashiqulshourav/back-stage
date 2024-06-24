@@ -7,23 +7,6 @@
   >
     <div class="flex">
       <div>
-        <el-form-item :label="`${t('商户名')}:`" prop="tenantIds">
-          <el-select
-            class="!min-w-[200px]"
-            :placeholder="t('请选择商户ID，多选项')"
-            multiple
-            v-model="form.tenantIds"
-            clearable
-            @change="search"
-          >
-            <el-option
-              v-for="item in tenantList"
-              :label="item.tenantName"
-              :value="item.id"
-              :key="item.id"
-            />
-          </el-select>
-        </el-form-item>
         <el-form-item prop="tenantIds" :label="`${t('商户名')}:`">
           <el-tree-select
             v-model="props.form.tenantIds"
@@ -32,6 +15,7 @@
               value: item.id,
               label: item.tenantName
             }))"
+            @change="search"
             filterable
             clearable
             multiple
@@ -189,20 +173,39 @@
             class="!w-[200px]"
           />
         </el-form-item>
-        <el-form-item :label="`${t('风控标签')}:`" prop="riskControlLabelList">
-          <el-select
-            v-model="form.riskControlLabelList"
+        
+        <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
+          <el-tree-select
+            v-model="props.form.riskControlLabelList"
+            :data="
+              riskLabelList.map(item => ({
+                value: item.id,
+                label: item.name
+              }))
+            "
             @change="search"
-            multiple
+            filterable
             clearable
-            class="!w-[150px]"
+            multiple
+            collapse-tags
+            :render-after-expand="false"
+            show-checkbox
+            check-strictly
+            check-on-click-node
+            style="width: 200px"
           >
-            <el-option
-              v-for="item in riskLabelList"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
+            <template #header>
+              <el-checkbox v-model="checkAllRLabel" @change="handleCheckAllRLabel">
+                {{ t('全选') }}
+              </el-checkbox>
+              <el-checkbox v-mode="removeAllRLabel" @change="handleRemoveAllRLabel" :disabled="form?.riskControlLabelList.length == 0">
+                {{ t('全不选') }}
+              </el-checkbox>
+              <el-checkbox v-model="checkRevertRLabel" @change="handleCheckRevertRLabel">
+                {{ t('反选') }}
+              </el-checkbox>
+            </template>
+          </el-tree-select>
         </el-form-item>
         <el-form-item
           v-if="props.venueType === 0"
@@ -510,6 +513,7 @@ const handleCheckAllMName = (val: CheckboxValueType) => {
 
 const handleRemoveAllMName = (val: CheckboxValueType) => {
   props.form.tenantIds = [];
+  removeAllMName.value = false;
 }
 
 const handleCheckRevertMName = () => {
@@ -529,6 +533,46 @@ watch(
     } else if(val.length === props.tenantList.length){
       checkAllMName.value = true;
       removeAllMName.value = false;
+    }
+  }
+)
+
+// multiple select for risk label
+const checkAllRLabel = ref(false);
+const removeAllRLabel = ref(false);
+const checkRevertRLabel = ref(false);
+
+const handleCheckAllRLabel = (val: CheckboxValueType) => {
+  if(val){
+    props.form.riskControlLabelList = props.riskLabelList.map(_ => _.id)
+    removeAllRLabel.value = false;
+  } else {
+    props.form.riskControlLabelList = [];
+  }
+}
+
+const handleRemoveAllRLabel = (val: CheckboxValueType) => {
+  props.form.riskControlLabelList = [];
+  checkRevertRLabel.value = false;
+}
+
+const handleCheckRevertRLabel = () => {
+  if(true){
+    const oldArray = [...props.form.riskControlLabelList];
+    props.form.riskControlLabelList = props.riskLabelList
+    .filter(_ => !oldArray.includes(_.id))
+    .map(_ => _.id)
+  }
+}
+
+watch(
+  () => props.form.riskControlLabelList,
+  val => {
+    if(!val || val.length === 0){
+      checkAllRLabel.value = false;
+    } else if(val.length === props.riskLabelList.length){
+      checkAllRLabel.value = true;
+      removeAllRLabel.value = false;
     }
   }
 )

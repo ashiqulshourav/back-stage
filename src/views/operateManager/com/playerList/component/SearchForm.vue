@@ -39,6 +39,7 @@
               label: item.tenantName
             }))
           "
+          @change="search"
           filterable
           clearable
           multiple
@@ -80,6 +81,7 @@
               label: item.name
             }))
           "
+          @change="search"
           filterable
           clearable
           multiple
@@ -112,6 +114,7 @@
               label: item.name
             }))
           "
+          @change="search"
           filterable
           clearable
           multiple
@@ -259,6 +262,7 @@ watch(
 const handleCheckAll = (val: CheckboxValueType) => {
   if(val){
     props.form.riskControlLabelList = props.labelList.risk.map(_ => _.id)
+    removeAll.value = false;
   } else {
     props.form.riskControlLabelList = [];
   }
@@ -294,6 +298,7 @@ watch(
 const handleCheckAllTIds = (val: CheckboxValueType) => {
   if(val){
     props.form.tenantIds = props.tenantList.map(_ => _.id)
+    removeAllTIds.value = false;
   } else {
     props.form.tenantIds = [];
   }
@@ -329,6 +334,7 @@ watch(
 const handleCheckAllTags = (val: CheckboxValueType) => {
   if(val){
     props.form.attributeLabelList = props.labelList.attr.map(_ => _.id)
+    removeAllTags.value = false;
   } else {
     props.form.attributeLabelList = [];
   }
