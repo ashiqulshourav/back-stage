@@ -237,7 +237,7 @@
             type="primary"
             :icon="useRenderIcon(Download)"
             v-if="hasAuth('EXPORT')"
-            @click="exportFile()"
+            @click="exportFileTest()"
           >
             {{ t('导出报表') }}
           </el-button>
