@@ -208,7 +208,14 @@
           />
         </el-form-item>
         <el-form-item prop="timeType" :label="`${t('注单时间')}:`">
-          <CustomDate v-model:val="selectDate" @changeDate="changeDate" :start-placeholder="dayjs().subtract(30, 'day').startOf('day').format('YYYY-MM-DD')" :end-placeholder="dayjs().startOf('day').format('YYYY-MM-DD')" />
+          <CustomDate
+            v-model:val="selectDate"
+            @changeDate="changeDate"
+            :start-placeholder="
+              dayjs().subtract(30, 'day').startOf('day').format('YYYY-MM-DD')
+            "
+            :end-placeholder="dayjs().startOf('day').format('YYYY-MM-DD')"
+          />
         </el-form-item>
 
         <el-form-item>
@@ -226,23 +233,23 @@
           >
             {{ t('重置') }}
           </el-button>
-          <!-- <el-button
+          <el-button
             type="primary"
             :icon="useRenderIcon(Download)"
             v-if="hasAuth('EXPORT')"
             @click="exportFile()"
           >
             {{ t('导出报表') }}
-          </el-button> -->
+          </el-button>
 
-           <el-button
+          <!-- <el-button
             type="primary"
             :icon="useRenderIcon(Download)"
             :loading="downloading"
             @click="exportFileTest()"
           >
             {{ t('报表异步导出') }}
-          </el-button>
+          </el-button> -->
         </el-form-item>
       </div>
     </div>
@@ -271,7 +278,7 @@ import { searchFormType } from '../util/types';
 } from '../util/types'; */
 
 import { hasAuth } from '@/router/utils';
-import CustomDate from "@/components/Form/Custom_date.vue";
+import CustomDate from '@/components/Form/Custom_date.vue';
 import { useRiskNoticeStore } from '@/store/riskNotice';
 
 const riskNoticeStore = useRiskNoticeStore();
@@ -305,7 +312,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
   props.form.timeEnd = dayjs().endOf('day').valueOf();
   riskNoticeStore.setRiskNoticeTimeFrame({
     createTimeStart: dayjs().subtract(30, 'day').startOf('day').valueOf(),
-    createTimeEnd: dayjs().endOf('day').valueOf(),
+    createTimeEnd: dayjs().endOf('day').valueOf()
   });
   search();
 };
@@ -316,7 +323,7 @@ const changeDate = t => {
     props.form.timeEnd = '';
     riskNoticeStore.setRiskNoticeTimeFrame({
       createTimeStart: 0,
-      createTimeEnd: 0,
+      createTimeEnd: 0
     });
   } else {
     props.form.timeStart = dayjs(t[0]).startOf('day').valueOf();
@@ -324,7 +331,7 @@ const changeDate = t => {
 
     riskNoticeStore.setRiskNoticeTimeFrame({
       createTimeStart: dayjs(t[0]).startOf('day').valueOf(),
-      createTimeEnd: dayjs(t[1]).endOf('day').valueOf(),
+      createTimeEnd: dayjs(t[1]).endOf('day').valueOf()
     });
   }
   search();
