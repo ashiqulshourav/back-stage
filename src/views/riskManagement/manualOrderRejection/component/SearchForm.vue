@@ -302,7 +302,7 @@ const dateRangetType = computed(() => {
   return o[dateType.value];
 });
 
-const emits = defineEmits(['onSearch', 'exportFileTest']);
+const emits = defineEmits(['onSearch', 'exportFileTest', 'exportFile']);
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
   selectDate.value = '';
@@ -346,9 +346,9 @@ const search = () => {
   emits('onSearch', ...['reload']);
 };
 
-// const exportFile = () => {
-//   emits('exportFile');
-// };
+const exportFile = () => {
+  emits('exportFile');
+};
 
 const exportFileTest = () => {
   emits('exportFileTest');
