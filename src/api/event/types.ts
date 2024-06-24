@@ -17,6 +17,7 @@ declare namespace EventAPI {
     leagueId: string;
     league: string;
     matchId: string;
+    riskLevel: string;
     sportName: string;
     level: string;
     startDateTime: string;
