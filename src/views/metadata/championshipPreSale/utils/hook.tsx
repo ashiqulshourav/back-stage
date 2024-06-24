@@ -12,7 +12,6 @@ export function useChampionshipPreSaleHook() {
   const formRef = ref();
   const dataList = reactive<SaleDataAPI.PreSaleList[]>([]);
   const loading = ref(true);
-  const switchLoadMap = ref({});
   const allSaleSatatus = ref(0);
   const { switchStyle } = usePublicHooks();
   const matchCondition = ref(1);
@@ -77,7 +76,7 @@ export function useChampionshipPreSaleHook() {
     onSearch();
   }
 
-  function handleSelectionChange(slectList) {
+  function handleSelectionChange(slectList: SaleDataAPI.PreSaleList[]) {
     selectLockcList.length = 0;
     selectLockcList.push(...slectList);
   }
@@ -140,10 +139,10 @@ export function useChampionshipPreSaleHook() {
           done();
           onSearch();
         }
-        FormRef.validate(valid => {
+        FormRef.validate((valid: boolean) => {
           if (valid) {
             if (row) {
-              updateSaleList(curData, () => chores());
+              updateSaleList(curData, async () => chores());
             } else {
               chores();
             }
@@ -154,7 +153,10 @@ export function useChampionshipPreSaleHook() {
   };
 
   //-更新开售状态
-  const updateSaleList = async (curData, cb) => {
+  const updateSaleList = async (
+    curData: SaleDataAPI.UpdateMatchParamsType,
+    cb: () => {}
+  ) => {
     const res = await API.updateMatch(curData);
     message(res.msg, { type: res.code ? 'error' : 'success' });
     if (res.code) return;
@@ -177,11 +179,7 @@ export function useChampionshipPreSaleHook() {
     dataList.push(...res.data.list);
     pagination.total = res.data.total;
   };
-  const resetForm = formEl => {
-    if (!formEl) return;
-    formEl.resetFields();
-    onSearch();
-  };
+
   const changeMatchCondition = (n: number) => {
     matchCondition.value = n;
     onSearch('reload');
@@ -196,9 +194,7 @@ export function useChampionshipPreSaleHook() {
     dataList,
     pagination,
     onSearch,
-    resetForm,
     handleTableWidthChange,
-    switchLoadMap,
     handleCurrentChange,
     handleSelectionChange,
     openDialog,

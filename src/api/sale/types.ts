@@ -29,6 +29,7 @@ declare namespace SaleDataAPI {
     saleHandicaps: number;
     allHandicaps: number;
     leagueNameCn: string;
+    whetherLock: number;
     handicapStatus: number;
     overTimeAndPenaltyKickStatus?: boolean;
   };
@@ -55,6 +56,7 @@ declare namespace SaleDataAPI {
     hasPreviousPage: boolean;
     hasNextPage: boolean;
     navigatePages: number;
+    whetherLock: number;
     leagueNameCn: string;
     navigatepageNums: number[];
     navigateFirstPage: number;
