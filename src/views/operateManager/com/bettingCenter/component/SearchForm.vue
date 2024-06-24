@@ -7,6 +7,23 @@
   >
     <div class="flex">
       <div>
+        <!-- <el-form-item :label="`${t('商户名')}:`" prop="tenantIds">
+          <el-select
+            class="!min-w-[200px]"
+            :placeholder="t('请选择商户ID，多选项')"
+            multiple
+            v-model="form.tenantIds"
+            clearable
+            @change="search"
+          >
+            <el-option
+              v-for="item in tenantList"
+              :label="item.tenantName"
+              :value="item.id"
+              :key="item.id"
+            />
+          </el-select>
+        </el-form-item> -->
         <el-form-item prop="tenantIds" :label="`${t('商户名')}:`">
           <el-tree-select
             v-model="props.form.tenantIds"
@@ -173,7 +190,21 @@
             class="!w-[200px]"
           />
         </el-form-item>
-        
+        <!-- <el-form-item :label="`${t('风控标签')}:`" prop="riskControlLabelList">
+          <el-select
+            v-model="form.riskControlLabelList"
+            @change="search"
+            multiple
+            clearable
+            class="!w-[150px]"
+          >
+            <el-option
+              v-for="item in riskLabelList"
+              :label="item.name"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item> -->
         <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
           <el-tree-select
             v-model="props.form.riskControlLabelList"
