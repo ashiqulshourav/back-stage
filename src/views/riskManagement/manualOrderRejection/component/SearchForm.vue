@@ -7,7 +7,7 @@
   >
     <div class="flex">
       <div>
-        <el-form-item :label="`${t('商户名')}:`" prop="tenantIds">
+        <!-- <el-form-item :label="`${t('商户名')}:`" prop="tenantIds">
           <el-select
             class="!min-w-[200px]"
             :placeholder="t('请选择商户ID，多选项')"
@@ -22,6 +22,38 @@
               :key="item.id"
             />
           </el-select>
+        </el-form-item> -->
+        <el-form-item prop="tenantIds" :label="`${t('商户名')}:`">
+          <el-tree-select
+            v-model="props.form.tenantIds"
+            :placeholder="t('请选择商户ID，多选项')"
+            :data="tenantList.map(item => ({
+              value: item.id,
+              label: item.tenantName
+            }))"
+            @change="search"
+            filterable
+            clearable
+            multiple
+            collapse-tags
+            :render-after-expand="false"
+            show-checkbox
+            check-strictly
+            check-on-click-node
+            style="width: 200px"
+          >
+            <template #header>
+              <el-checkbox v-model="checkAllMName" @change="handleCheckAllMName">
+                {{ t('全选') }}
+              </el-checkbox>
+              <el-checkbox v-model="removeAllMName" @change="handleRemoveAllMName" :disabled="form?.tenantIds.length == 0">
+                {{ t('全不选') }}
+              </el-checkbox>
+              <el-checkbox v-model="checkRevertMName" @change="handleCheckRevertMName">
+                {{ t('反选') }}
+              </el-checkbox>
+            </template>
+          </el-tree-select>
         </el-form-item>
         <!-- <el-form-item :label="`${t('赛事类型')}:`" prop="category">
           <el-select
@@ -261,7 +293,7 @@ import { t } from '@/plugins/i18n';
 import SearchIcon from '@iconify-icons/ep/search';
 import RefreshIcon from '@iconify-icons/ep/refresh';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-import type { FormInstance } from 'element-plus';
+import type { FormInstance, CheckboxValueType } from 'element-plus';
 import dayjs from 'dayjs';
 import { formatNumber } from '@/utils/formatNumber';
 import Download from '@iconify-icons/ep/download';
@@ -353,6 +385,46 @@ const exportFile = () => {
 const exportFileTest = () => {
   emits('exportFileTest');
 };
+
+// multiple select for merchant Name
+const checkAllMName = ref(false);
+const removeAllMName = ref(false);
+const checkRevertMName = ref(false);
+
+const handleCheckAllMName = (val: CheckboxValueType) => {
+  if(val){
+    props.form.tenantIds = props.tenantList.map(_ =>_.id)
+  } else {
+    props.form.tenantIds = [];
+  }
+}
+
+const handleRemoveAllMName = (val: CheckboxValueType) => {
+  props.form.tenantIds = [];
+  removeAllMName.value = false;
+}
+
+const handleCheckRevertMName = () => {
+  if(true){
+    const oldArray = [...props.form.tenantIds];
+    props.form.tenantIds = props.tenantList
+    .filter(_ => !oldArray.includes(_.id))
+    .map(_ => _.id)
+  }
+}
+
+watch(
+  () => props.form.tenantIds,
+  val => {
+    if(!val || val.length === 0){
+      checkAllMName.value = false;
+    } else if(val.length === props.tenantList.length){
+      checkAllMName.value = true;
+      removeAllMName.value = false;
+    }
+  }
+)
+
 </script>
 
 <style scoped lang="scss">

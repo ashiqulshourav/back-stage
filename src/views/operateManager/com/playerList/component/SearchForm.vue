@@ -28,7 +28,22 @@
           </div>
         </el-popover>
       </el-form-item>
-
+      <!-- <el-form-item prop="tenantIds" :label="t('商户:')">
+        <el-select
+          v-model="form.tenantIds"
+          :placeholder="t('所属商户')"
+          clearable
+          multiple
+          class="!w-[150px]"
+        >
+          <el-option
+            :label="item.tenantName"
+            :value="item.id"
+            v-for="item in tenantList"
+            :key="item.name"
+          />
+        </el-select>
+      </el-form-item> -->
       <el-form-item prop="tenantIds" :label="t('商户:')">
         <el-tree-select
           :placeholder="t('所属商户')"
@@ -39,6 +54,7 @@
               label: item.tenantName
             }))
           "
+          @change="search"
           filterable
           clearable
           multiple
@@ -71,6 +87,21 @@
           class="!w-[120px]"
         />
       </el-form-item>
+      <!-- <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
+        <el-select
+          multiple
+          clearable
+          class="!w-[150px]"
+          v-model="form.riskControlLabelList"
+        >
+          <el-option
+            v-for="label in labelList.risk"
+            :key="label.id"
+            :label="label.name"
+            :value="label.id"
+          />
+        </el-select>
+      </el-form-item>  -->
       <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
         <el-tree-select
           v-model="props.form.riskControlLabelList"
@@ -80,6 +111,7 @@
               label: item.name
             }))
           "
+          @change="search"
           filterable
           clearable
           multiple
@@ -103,6 +135,21 @@
           </template>
         </el-tree-select>
       </el-form-item>
+      <!-- <el-form-item prop="attributeLabelList" :label="t('属性标签:')">
+        <el-select
+          multiple
+          clearable
+          class="!w-[150px]"
+          v-model="form.attributeLabelList"
+        >
+          <el-option
+            v-for="label in labelList.attr"
+            :key="label.id"
+            :label="label.name"
+            :value="label.id"
+          />
+        </el-select>
+      </el-form-item> -->
       <el-form-item prop="attributeLabelList" :label="t('属性标签:')">
         <el-tree-select
           v-model="props.form.attributeLabelList"
@@ -112,6 +159,7 @@
               label: item.name
             }))
           "
+          @change="search"
           filterable
           clearable
           multiple
@@ -135,7 +183,6 @@
           </template>
         </el-tree-select>
       </el-form-item>
-
       <el-form-item prop="limitLevel" :label="t('限额等级:')">
         <el-select
           v-model="form.limitLevel"
@@ -259,6 +306,7 @@ watch(
 const handleCheckAll = (val: CheckboxValueType) => {
   if(val){
     props.form.riskControlLabelList = props.labelList.risk.map(_ => _.id)
+    removeAll.value = false;
   } else {
     props.form.riskControlLabelList = [];
   }
@@ -266,6 +314,7 @@ const handleCheckAll = (val: CheckboxValueType) => {
 
 const handleRemoveAll = (val: CheckboxValueType) => {
   props.form.riskControlLabelList = [];
+  checkRevert.value = false;
 }
 
 const handleCheckRevert = () => {
@@ -293,6 +342,7 @@ watch(
 const handleCheckAllTIds = (val: CheckboxValueType) => {
   if(val){
     props.form.tenantIds = props.tenantList.map(_ => _.id)
+    removeAllTIds.value = false;
   } else {
     props.form.tenantIds = [];
   }
@@ -328,6 +378,7 @@ watch(
 const handleCheckAllTags = (val: CheckboxValueType) => {
   if(val){
     props.form.attributeLabelList = props.labelList.attr.map(_ => _.id)
+    removeAllTags.value = false;
   } else {
     props.form.attributeLabelList = [];
   }
