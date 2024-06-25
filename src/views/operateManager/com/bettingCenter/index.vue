@@ -4,7 +4,6 @@
       :form="form"
       :loading="loading"
       @on-search="onSearch"
-      @exportFile="exportFile"
       @exportFileTest="exportFile"
       :tenantList="tenantList"
       :riskLabelList="riskLabelList"

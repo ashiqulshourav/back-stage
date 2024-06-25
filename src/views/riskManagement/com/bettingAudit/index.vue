@@ -5,7 +5,6 @@
       :loading="loading"
       @on-search="onSearch"
       @exportFile="exportFile"
-      @exportFile="exportFile"
       :tenantList="tenantList"
       :venueType="venueType"
       :downloading="downloading"
