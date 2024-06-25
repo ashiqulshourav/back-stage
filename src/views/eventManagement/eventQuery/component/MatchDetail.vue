@@ -38,6 +38,7 @@
           MATCH_STATUS[matchData.matchStatus as keyof typeof MATCH_STATUS]
         }}</span>
         <el-button
+          v-if="hasAuth('BET_MAP')"
           class="ml-4"
           size="small"
           type="primary"
@@ -74,6 +75,7 @@ import { titleColumn } from './TableColumnList';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import EventMatchBet from './eventMatchBet/index.vue';
 import { MATCH_STATUS } from '@/utils/maps/sports_map';
+import { hasAuth } from '@/router/utils';
 const props = defineProps<{
   matchInfo: EventAPI.MatchInfo;
 }>();
