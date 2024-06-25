@@ -73,7 +73,6 @@
         <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
           {{ t('重置') }}
         </el-button>
-
          <el-button
           type="primary"
           v-if="hasAuth('EXPORT')"
@@ -84,13 +83,6 @@
         </el-button>
       </el-form-item>
     </el-form>
-    <el-button
-      type="primary"
-      v-if="hasAuth('EXPORT')"
-      @click="exportFileClick"
-      :loading="exportLoading"
-      >{{ t('导出') }}</el-button
-    >
   </div>
 </template>
 
@@ -152,11 +144,6 @@ const initMenu = async () => {
   menusList.length = 0;
   menusList.push(...res.data);
 };
-
-const exportFileClick = () => {
-  emits('exportFileClick');
-};
-
 const exportFile = () => {
   emits('exportFile');
 };
