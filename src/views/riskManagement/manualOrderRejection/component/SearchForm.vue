@@ -265,23 +265,15 @@
           >
             {{ t('重置') }}
           </el-button>
-          <el-button
-            type="primary"
-            :icon="useRenderIcon(Download)"
-            v-if="hasAuth('EXPORT')"
-            @click="exportFileTest()"
-          >
-            {{ t('导出报表') }}
-          </el-button>
-
-          <!-- <el-button
+           <el-button
             type="primary"
             :icon="useRenderIcon(Download)"
             :loading="downloading"
-            @click="exportFileTest()"
+            @click="exportFile()"
+            v-if="hasAuth('EXPORT')"
           >
-            {{ t('报表异步导出') }}
-          </el-button> -->
+            {{ t('导出') }}
+          </el-button>
         </el-form-item>
       </div>
     </div>
@@ -334,7 +326,7 @@ const dateRangetType = computed(() => {
   return o[dateType.value];
 });
 
-const emits = defineEmits(['onSearch', 'exportFileTest', 'exportFile']);
+const emits = defineEmits(['onSearch', 'exportFile']);
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
   selectDate.value = '';
@@ -381,11 +373,6 @@ const search = () => {
 const exportFile = () => {
   emits('exportFile');
 };
-
-const exportFileTest = () => {
-  emits('exportFileTest');
-};
-
 // multiple select for merchant Name
 const checkAllMName = ref(false);
 const removeAllMName = ref(false);
