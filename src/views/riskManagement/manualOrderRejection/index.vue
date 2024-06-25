@@ -6,7 +6,7 @@
       :downloading="downloading"
       @on-search="onSearch"
       @exportFile="exportFile"
-      @exportFileTest="exportFile"
+      @exportFile="exportFile"
       :tenantList="tenantList"
     />
     <PureTableBar
