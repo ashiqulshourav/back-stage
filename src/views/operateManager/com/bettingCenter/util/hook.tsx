@@ -4,27 +4,19 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import type { FormInstance } from 'element-plus';
 import {
   betStatus,
-  betStatusMap,
   searchFormType,
   seriesTypesSingle,
   seriesTypesDuplex
 } from './types';
-import { columns } from './exportTableColumnList';
-import { utils, writeFile } from 'xlsx';
 import { addDialog, closeDialog } from '@/components/ReDialog/index';
 import editMatch from '../component/editMatch.vue';
 import { reactive, ref, onMounted, h } from 'vue';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 import {
-  markeTypeMap,
-  useSportFormatDetail,
-  displayHomeAwayScore,
   BET_RESULT_TYPE_MAP,
-  formatSeriesType,
-  getIsInplay
 } from '@/utils/formatMatch';
 import dayjs from 'dayjs';
-import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+import { addThousandSeparator } from '@/utils/formatNumber';
 import { ElMessageBox } from 'element-plus';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
@@ -61,7 +53,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
     matchId: '',
     awayTeamName: '',
     homeTeamName: '',
-    // status:[],
     betItemId: '',
     isInplay: '',
     seriesType: '',
@@ -180,54 +171,84 @@ export function useBettingCenterHook(category: number, venueType: number) {
   }
 
   async function onSearch(type?: string) {
-    if (type === 'reload') pagination.currentPage = 1;
-    try {
-      const params: searchFormType = formatParams({
-        export: false
-      }) as searchFormType;
-      if (Number(params.maxBetAmount) < Number(params.minBetAmount)) {
-        message(t('请检查投注额，最小值不能大于最大值'), { type: 'warning' });
-        return;
-      }
-      if (Number(params.maxProfitAmount) < Number(params.minProfitAmount)) {
-        message(t('请检查用户输赢，最小值不能大于最大值'), { type: 'warning' });
-        return;
-      }
-      loading.value = true;
+    return new Promise((resolve, reject)=>{
+      if (type === 'reload') pagination.currentPage = 1;
+      try {
+        const params: searchFormType = formatParams({
+          export: false
+        }) as searchFormType;
+        if (Number(params.maxBetAmount) < Number(params.minBetAmount)) {
+          message(t('请检查投注额，最小值不能大于最大值'), { type: 'warning' });
+          return;
+        }
+        if (Number(params.maxProfitAmount) < Number(params.minProfitAmount)) {
+          message(t('请检查用户输赢，最小值不能大于最大值'), { type: 'warning' });
+          return;
+        }
+        if(type!=='export'){
+          loading.value = true;
+        }
+        API.bettingCenterList( params ).then((res)=>{
+          loading.value = false;
+          if (res.code) return message(res.msg, { type: 'error' });
+          if (res.data !== null) {
 
-      const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
-        params
-      );
-      loading.value = false;
-      if (res.code) return message(res.msg, { type: 'error' });
-      dataList.length = 0;
-      if (res.data !== null) {
-        let list = res?.data?.pageData || [];
-        list = list.map((row: BetOrderAPI.BetOrderList) => {
-          row.riskStatusArr = [];
-          row.betResultArr = [];
-          row.combineOrderDetails.map((item2: BetOrderAPI.Detail) => {
-            row.riskStatusArr?.push(item2.riskStatus);
-            row.betResultArr.push(item2.betResult);
-          });
-          return row;
+            resolve(res?.data)
+            if(type==='export'){
+             return
+            }
+            dataList.length = 0;
+            let list = res?.data?.pageData || [];
+            list = list.map((row: BetOrderAPI.BetOrderList) => {
+              row.riskStatusArr = [];
+              row.betResultArr = [];
+              row.combineOrderDetails.map((item2: BetOrderAPI.Detail) => {
+                row.riskStatusArr?.push(item2.riskStatus);
+                row.betResultArr.push(item2.betResult);
+              });
+              return row;
+            });
+            dataList.push(...list);
+            dataList.map((item: any, index) => {
+              item.index = index + 1;
+            });
+            pagination.total = res.data?.count;
+            pagination.pageSize = res.data?.pageSize;
+            pagination.currentPage = res.data?.pageNum;
+            Object.assign(totalInfo, res.data?.otherData);
+          }else {
+            reject();
+            dataList.length = 0;
+          }
+          document
+              ?.querySelector('.table_container .el-scrollbar__wrap')
+              ?.scroll(0, 0);
         });
-        dataList.push(...list);
-        dataList.map((item: any, index) => {
-          item.index = index + 1;
-        });
-        pagination.total = res.data?.count;
-        pagination.pageSize = res.data?.pageSize;
-        pagination.currentPage = res.data?.pageNum;
-        Object.assign(totalInfo, res.data?.otherData);
+      } catch (error) {
+        loading.value = false;
+        reject()
       }
-      document
-        ?.querySelector('.table_container .el-scrollbar__wrap')
-        ?.scroll(0, 0);
-    } catch (error) {
-      loading.value = false;
-    }
+    })
   }
+  const exportFile = async () => {
+    downloading.value = true;
+    onSearch('export').then((res0:any)=>{
+      if(res0?.count>50000){
+        message(`当前条件下数据量为${addThousandSeparator(res0?.count)}，大于5万条，不支持导出!`, { type: 'error' });
+      }else if(res0?.count<1){
+        message('数据量为零，无法导出', { type: 'error' });
+      }else {
+        API.bettingCenterExport(
+            formatParams({
+              export: true
+            }) as searchFormType
+        ).then((res)=>{
+          message(res.msg, { type: res.code ? 'error' : 'success' });
+        });
+      }
+    })
+    downloading.value = false;
+  };
 
   const getTenantList = async () => {
     const res = await API.queryTenantList({
@@ -247,18 +268,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     formEl.resetFields();
     onSearch();
   };
-  const exportFile = async () => {
-    downloading.value = true;
-    const res: BetOrderAPI.BetOrderResType = await API.bettingCenterExport(
-      formatParams({
-        pageNum: 1,
-        pageSize: 50000,
-        export: true
-      }) as searchFormType
-    );
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    downloading.value = false;
-  };
+
 
   const handleCancel = (data: any) => {
     ElMessageBox.confirm(t('确定取消注单吗？'), t('警告'), {
@@ -377,7 +387,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
           data: row,
           onCloseDialog: (_: boolean) => {
             closeDialog(options, index);
-            // onSearch();
             getRowByOrderId(row.id);
           }
         })
