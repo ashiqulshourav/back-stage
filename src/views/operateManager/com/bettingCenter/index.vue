@@ -4,7 +4,7 @@
       :form="form"
       :loading="loading"
       @on-search="onSearch"
-      @exportFileTest="exportFile"
+      @exportFile="exportFile"
       :tenantList="tenantList"
       :riskLabelList="riskLabelList"
       :venueType="props.venueType"
