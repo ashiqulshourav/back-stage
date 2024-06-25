@@ -67,45 +67,9 @@ export function useOperationLog() {
       pageSize: 50000,
       export: true
     });
-
     message(res.msg, { type: res.code ? 'error' : 'success' });
     exportLoading.value = false;
   }
-
-  //- 导出excel表格
-  const exportFileClick = async () => {
-    exportLoading.value = true;
-    const o = JSON.parse(JSON.stringify(removeEmptyStringKeys(form)));
-    o.operateMenu && (o.operateMenu = o.operateMenu.join('-'));
-    const r = await API.getOperateLogList({
-      ...o,
-      pageNum: 1,
-      pageSize: 50000
-    });
-    if (r.code) return message(r.msg, { type: 'error' });
-
-    const res: string[][] = r.data.list.map(item => {
-      const arr: any = [];
-      columns.forEach(column => {
-        arr.push(
-          item[column.prop as keyof OperationLogDataAPI.OperationLogList] ?? '-'
-        );
-      });
-      return arr;
-    });
-    const titleList: string[] = [];
-    columns.forEach((column: TableColumns) => {
-      titleList.push(column?.label ?? '');
-    });
-    res.unshift(titleList);
-    const workSheet = utils.aoa_to_sheet(res);
-    const workBook = utils.book_new();
-    utils.book_append_sheet(workBook, workSheet, '数据报表');
-    writeFile(workBook, `${t('操作日志报表')}.xlsx`);
-    message(t('导出报表成功'), { type: 'success' });
-    exportLoading.value = false;
-  };
-
   //- 获取下拉菜单列表
   const getOperateTypes = async () => {
     const res = await API.getOperateType();
@@ -127,8 +91,6 @@ export function useOperationLog() {
     form,
     exportLoading,
     logTypeList,
-    exportFileClick,
-    exportFile,
     onSearch,
     handleTableWidthChange,
     handleCurrentChange,

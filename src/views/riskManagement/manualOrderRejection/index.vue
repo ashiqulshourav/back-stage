@@ -196,6 +196,9 @@
                 }}
               </div>
               <div class="item_line">
+                <span v-if="item.kindsCode === 'FT_TTS'">
+                  {{ enterGoalMap[item.betHandicap.toUpperCase()  as keyof typeof enterGoalMap] }}
+                </span>
                 {{ useSportFormatDetail(item)[3] }} @{{
                   getViewOddFn(
                     item.oddFinally,
@@ -394,13 +397,11 @@ import { adjustContentWithRowHeight } from '@/utils/adjustRowCoulmnHeight';
 import {
   formatSeriesType,
   useSportFormatDetail,
-  BET_RESULT_TYPE_MAP,
-  EBetResultType,
   getViewOddFn,
   markeTypeMap,
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
-  getIsInplay
+  getIsInplay, enterGoalMap
 } from '@/utils/formatMatch';
 import { usePublicHooks } from '@/hooks';
 

@@ -2,33 +2,18 @@ import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import {
-  betStatus,
-  betStatusMap,
   searchFormType,
   seriesTypesSingle,
   seriesTypesDuplex
 } from './types';
-import { columns } from './exportTableColumnList';
-import { utils, writeFile } from 'xlsx';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 import RejctDialogForm from '../component/RejctDialogForm.vue';
-import {
-  Detail,
-  getBetTeamType,
-  markeTypeMap,
-  useSportFormatDetail,
-  displayHomeAwayScore,
-  BET_RESULT_TYPE_MAP,
-  formatSeriesType
-} from '@/utils/formatMatch';
 import dayjs from 'dayjs';
-import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { ElMessageBox } from 'element-plus';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
 import { addDialog, closeDialog } from '@/components/ReDialog/index';
 import { useRiskNoticeStore } from '@/store/riskNotice';
-
 export function useManualOrderRejectionHook() {
   const riskNoticeStore = useRiskNoticeStore();
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);

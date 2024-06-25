@@ -4,7 +4,6 @@
       :loading="loading"
       :operationTypeList="operationTypeList"
       @on-search="onSearch"
-      @exportFileClick="exportFileClick"
       @exportFile="exportFile"
       :exportLoading="exportLoading"
       :form="form"
@@ -105,7 +104,6 @@ const {
   form,
   exportLoading,
   logTypeList,
-  exportFileClick,
   exportFile,
   onSearch,
   handleTableWidthChange,
