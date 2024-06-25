@@ -271,7 +271,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
         API.orderCancel(params).then(res => {
           if (res.code) {
           } else {
-            // onSearch();
             getRowByOrderId(data.id);
           }
           message(res.msg, { type: res.code ? 'error' : 'success' });

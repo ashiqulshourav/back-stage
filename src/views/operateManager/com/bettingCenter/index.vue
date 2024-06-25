@@ -5,7 +5,7 @@
       :loading="loading"
       @on-search="onSearch"
       @exportFile="exportFile"
-      @exportFileTest="exportFileTest"
+      @exportFileTest="exportFile"
       :tenantList="tenantList"
       :riskLabelList="riskLabelList"
       :venueType="props.venueType"
@@ -53,7 +53,7 @@
                   "
                 >
                   <span>{{ t('用户ID：') }}</span
-                  >{{ row.userId }} 
+                  >{{ row.userId }}
                 </div>
                 <div
                   class="item_line cursor-pointer"
@@ -503,7 +503,6 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   exportFile,
-  exportFileTest,
   handleCancel,
   getStatus,
   copyTest,

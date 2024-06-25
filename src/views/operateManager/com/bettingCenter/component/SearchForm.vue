@@ -359,7 +359,7 @@
             v-if="hasAuth('EXPORT')"
             @click="exportFile()"
           >
-            {{ t('报表异步导出') }}
+            {{ t('导出') }}
           </el-button>
         </el-form-item>
       </div>
@@ -407,7 +407,7 @@ import {
 import { hasAuth } from '@/router/utils';
 import CustomDate from '@/components/Form/Custom_date.vue';
 
-const emits = defineEmits(['onSearch', 'exportFile', 'exportFileTest']);
+const emits = defineEmits(['onSearch', 'exportFile']);
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl?.resetFields();
   selectDate.value = '';

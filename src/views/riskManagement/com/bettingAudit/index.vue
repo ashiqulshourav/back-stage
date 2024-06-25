@@ -5,7 +5,7 @@
       :loading="loading"
       @on-search="onSearch"
       @exportFile="exportFile"
-      @exportFileTest="exportFileTest"
+      @exportFile="exportFile"
       :tenantList="tenantList"
       :venueType="venueType"
       :downloading="downloading"
@@ -541,7 +541,6 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   exportFile,
-  exportFileTest,
   copyTest,
   tenantList,
   handleCancel,
