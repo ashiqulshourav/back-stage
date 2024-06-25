@@ -352,26 +352,15 @@
           >
             {{ t('重置') }}
           </el-button>
-
-          <el-button
+           <el-button
             type="primary"
             :icon="useRenderIcon(Download)"
             :loading="downloading"
             v-if="hasAuth('EXPORT')"
             @click="exportFile()"
           >
-            {{ t('导出报表') }}
-          </el-button>
-
-          <!-- <el-button
-            type="primary"
-            :icon="useRenderIcon(Download)"
-            :loading="downloading"
-            v-if="hasAuth('EXPORT')"
-            @click="exportFileTest()"
-          >
             {{ t('报表异步导出') }}
-          </el-button> -->
+          </el-button>
         </el-form-item>
       </div>
     </div>
@@ -454,11 +443,6 @@ const search = () => {
 const exportFile = () => {
   emits('exportFile');
 };
-
-const exportFileTest = () => {
-  emits('exportFileTest');
-};
-
 //- 操盘管理重置表单为初始值
 const setPropsForm = () => {
   Object.assign(props.form, {
