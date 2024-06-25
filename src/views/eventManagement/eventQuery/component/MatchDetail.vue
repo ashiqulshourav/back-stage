@@ -10,8 +10,11 @@
       >
         <span
           class="bg-red-500 min-w-4 h-4 rounded-full text-[10px] p-1 text-white flex justify-center items-center mr-1"
-          >{{
-            +matchInfo.riskLevel >= 200 ? t('未') : matchInfo.riskLevel
+        >
+          {{
+            +matchInfo.riskLevel >= 200 || +matchInfo.riskLevel == -1
+              ? t('未')
+              : matchInfo.riskLevel
           }}</span
         >
         <span class="text-sm mr-1">{{ matchInfo.league }}</span>

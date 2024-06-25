@@ -14,6 +14,7 @@ export function useEventQueryHook() {
     matchId: '',
     level: '',
     sportName: '',
+    riskLevel: '',
     leagueId: '',
     startDateTime: ''
   });
@@ -43,6 +44,7 @@ export function useEventQueryHook() {
       pagination.total = 0;
       matchInfo.aTeamName = '';
       matchInfo.hTeamName = '';
+      matchInfo.riskLevel = '';
       matchInfo.leagueId = '';
       matchInfo.league = '';
       matchInfo.level = '';
@@ -78,6 +80,7 @@ export function useEventQueryHook() {
 
         matchInfo.aTeamName = matchInfoRes.data.aTeamName;
         matchInfo.hTeamName = matchInfoRes.data.hTeamName;
+        matchInfo.riskLevel = matchInfoRes.data.riskLevel;
         matchInfo.leagueId = matchInfoRes.data.leagueId;
         matchInfo.league = matchInfoRes.data.league;
         matchInfo.level = matchInfoRes.data.level;
