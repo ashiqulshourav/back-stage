@@ -1,6 +1,8 @@
 import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { usePublicHooks } from '@/hooks';
+const { exportDialog } = usePublicHooks();
 import {
   searchFormType,
   seriesTypesSingle,
@@ -32,6 +34,7 @@ import { hasAuth } from '@/router/utils';
 import { useRiskNoticeStore } from '@/store/riskNotice';
 
 export function useBettingAuditHook(venueType: number) {
+  const router = useRouter();
   const riskNoticeStore = useRiskNoticeStore();
   const { openPasswordInput } = usePasswordInputHook({ showClose: false });
   const bettingAuditStore = useBettingAuditStore();
@@ -275,12 +278,18 @@ export function useBettingAuditHook(venueType: number) {
 
   // export to excel
   const exportFile = async () => {
-    downloading.value = true;
-    const res: BetOrderAPI.BetOrderResType = await API.bettingAuditListExport(
-      formatParams({ pageNum: 1, pageSize: 50000, venueType }) as searchFormType
-    );
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    downloading.value = false;
+    exportDialog({
+      firstTitle: t('导出当前投注审核列表数据?'),
+      router,
+      callback: async () => {
+        downloading.value = true;
+        const res: BetOrderAPI.BetOrderResType = await API.bettingAuditListExport(
+          formatParams({ pageNum: 1, pageSize: 50000, venueType }) as searchFormType
+        );
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        downloading.value = false;
+      }
+    })
   };
 
   const handleCancel = (row: any, index: number) => {
