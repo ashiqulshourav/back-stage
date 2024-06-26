@@ -11,11 +11,11 @@ export function useEventQueryHook() {
   const matchInfo = reactive<EventAPI.MatchInfo>({
     aTeamName: '',
     hTeamName: '',
-    leagueId: '',
     league: '',
     matchId: '',
     level: '',
     sportName: '',
+    riskLevel: '',
     leagueId: '',
     startDateTime: ''
   });
