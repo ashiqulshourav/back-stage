@@ -22,6 +22,15 @@
           @page-current-change="handleCurrentChange"
           @page-size-change="handlePageSizeChange"
         >
+          <template #status="{ row }">
+            <div
+            :style="{
+                color: getColor(row.status).color
+              }"
+            >
+              {{ statusMap[row.status as keyof typeof statusMap] }}
+            </div>
+          </template>
           <template #operation="{ row }">
             <el-button
               class="reset-margin"
@@ -65,6 +74,19 @@ import { statusMap } from './utils/map';
 defineOptions({ name: 'taskCenter' });
 const { tableHeaderStyle } = usePublicHooks();
 
+const getColor = (status: number) => {
+    const obj = { color: '' };
+
+    if (status === 1) {
+      obj.color = '#f56c6c';
+    } else if (status === 2) {
+      obj.color = '#4BB543';
+    } else {
+      obj.color = '';
+    }
+    return obj;
+  };
+
 const {
   loading,
   dataList,
@@ -77,3 +99,10 @@ const {
   handlePageSizeChange
 } = useTaskCenter();
 </script>
+
+
+<style scoped lang="scss">
+button:disabled:hover{
+  color: inherit;
+}
+</style>
