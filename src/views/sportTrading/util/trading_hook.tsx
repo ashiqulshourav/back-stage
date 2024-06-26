@@ -296,7 +296,7 @@ export function useTradingHook(type: 'early' | 'in') {
   };
 
   //- 鼠标进入后清空定时器
-  const clearMatchTime = (type: 1 | -1) => {
+  const clearMatchTime = (type: 1 | 0 | -1) => {
     if (type === 1) {
       clearInterval(loopTimer.value);
     } else {
