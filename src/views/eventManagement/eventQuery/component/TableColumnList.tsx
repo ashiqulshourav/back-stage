@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { handleTableWidth } from '@/utils/getTableWidth';
 const IconMap = {
   goal: new URL('@/assets/event_img/goal.png', import.meta.url).href,
   yellow_card: new URL('@/assets/event_img/yellow_card.png', import.meta.url)
@@ -19,6 +20,7 @@ export const columns: TableColumnList = [
     label: t('距离比赛开赛时间'),
     prop: 'playingTime',
     minWidth: 200,
+    headerRenderer: d => handleTableWidth(d, t('距离比赛开赛时间'), 'auto'),
     formatter({ playingTime }) {
       return playingTime ? playingTime : '-';
     }
@@ -45,6 +47,7 @@ export const columns: TableColumnList = [
   },
   {
     label: t('场次/局数/盘数'),
+    headerRenderer: d => handleTableWidth(d, t('场次/局数/盘数'), 'auto'),
     prop: 'extraInfo',
     minWidth: 150
   },
