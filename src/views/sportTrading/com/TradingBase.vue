@@ -9,13 +9,24 @@
     <div
       class="bg-bg_color w-[99/100] mt-2 pl-5 pt-[12px] flex-grow flex flex-col overflow-hidden"
     >
-      <div class="font-bold mb-2">{{ title }}</div>
+      <div class="font-bold mb-2 flex items-center">
+        <topCollapse
+          :isActive="isActive"
+          class="hamburger-container !pl-0"
+          @toggleClick="isActive = !isActive"
+        />
+        <span>{{ title }}</span>
+      </div>
       <div class="flex flex-grow h-full overflow-hidden max-h-full">
         <div class="w-full flex items-center justify-center" v-if="noMatchList">
           <el-empty :description="t('暂无数据')" :image-size="100" />
         </div>
         <template v-else>
-          <div v-loading="loading">
+          <div
+            v-loading="loading"
+            class="transition-all duration-200 ease-linear"
+            :style="{ width: isActive ? '400px' : '0px' }"
+          >
             <TabController
               :matchList="matchList"
               :currentMatch="currentMatch"
@@ -50,8 +61,11 @@ import { useTradingHook } from '../util/trading_hook';
 import TabController from './TabController.vue';
 import ContentMain from './ContentMain.vue';
 import { t } from '@/plugins/i18n';
+import topCollapse from '@/layout/components/sidebar/topCollapse.vue';
+import { is } from '@pureadmin/utils';
 
 const { type } = defineProps<{ type: 'early' | 'in' }>();
+const isActive = ref(true);
 
 const {
   searchForm,
@@ -81,5 +95,13 @@ const title = computed(() =>
 <style lang="scss">
 .el-scrollbar__view {
   height: calc(100% - 20px);
+}
+
+.hamburger-container {
+  float: left;
+  height: 100%;
+  line-height: 48px;
+  cursor: pointer;
+  margin-left: 0px;
 }
 </style>
