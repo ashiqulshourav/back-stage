@@ -7,6 +7,8 @@ import {
   seriesTypesDuplex
 } from './types';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
+import { usePublicHooks } from '@/hooks';
+const { exportDialog } = usePublicHooks();
 import RejctDialogForm from '../component/RejctDialogForm.vue';
 import dayjs from 'dayjs';
 import { ElMessageBox } from 'element-plus';
@@ -15,6 +17,7 @@ import { t } from '@/plugins/i18n';
 import { addDialog, closeDialog } from '@/components/ReDialog/index';
 import { useRiskNoticeStore } from '@/store/riskNotice';
 export function useManualOrderRejectionHook() {
+  const router = useRouter();
   const riskNoticeStore = useRiskNoticeStore();
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<any>([]);
@@ -132,49 +135,55 @@ export function useManualOrderRejectionHook() {
   }
 
   const exportFile = async () => {
-    downloading.value = true;
-    // 对于串关类型的选择处理
-    let seriesDetails: any = [];
-    if (form.seriesType == 2) {
-      if (form.seriesDetailsSingle.length) {
-        form.seriesDetailsSingle.map((item: any) => {
-          seriesDetails.push(...seriesTypesSingle[item].list);
-        });
-      } else {
-        for (const item in seriesTypesSingle) {
-          seriesDetails.push(...seriesTypesSingle[item].list);
+    exportDialog({
+      firstTitle: t('导出当前手工订单剔除列表数据?'),
+      router,
+      callback: async () => {
+        downloading.value = true;
+        // 对于串关类型的选择处理
+        let seriesDetails: any = [];
+        if (form.seriesType == 2) {
+          if (form.seriesDetailsSingle.length) {
+            form.seriesDetailsSingle.map((item: any) => {
+              seriesDetails.push(...seriesTypesSingle[item].list);
+            });
+          } else {
+            for (const item in seriesTypesSingle) {
+              seriesDetails.push(...seriesTypesSingle[item].list);
+            }
+          }
+        } else if (form.seriesType == 3) {
+          if (form.seriesDetailsDuplex.length) {
+            form.seriesDetailsDuplex.map((item: any) => {
+              seriesDetails.push(...seriesTypesDuplex[item].list);
+            });
+          } else {
+            for (const item in seriesTypesDuplex) {
+              seriesDetails.push(...seriesTypesDuplex[item].list);
+            }
+          }
+        } else {
+          seriesDetails = '';
         }
-      }
-    } else if (form.seriesType == 3) {
-      if (form.seriesDetailsDuplex.length) {
-        form.seriesDetailsDuplex.map((item: any) => {
-          seriesDetails.push(...seriesTypesDuplex[item].list);
-        });
-      } else {
-        for (const item in seriesTypesDuplex) {
-          seriesDetails.push(...seriesTypesDuplex[item].list);
+        if (seriesDetails.length > 1) {
+          seriesDetails = [...new Set(seriesDetails)];
         }
+        const res: BetOrderAPI.BetOrderResType = await API.riskExport({
+          ...removeEmptyStringKeys({
+            ...form,
+            seriesDetailsSingle: '',
+            seriesDetailsDuplex: '',
+            seriesDetails: seriesDetails,
+            seriesType: +form.seriesType > 2 ? 2 : form.seriesType
+          }),
+          pageSize: 1,
+          pageNum: 50000,
+          export: true
+        } as any);
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        downloading.value = false;
       }
-    } else {
-      seriesDetails = '';
-    }
-    if (seriesDetails.length > 1) {
-      seriesDetails = [...new Set(seriesDetails)];
-    }
-    const res: BetOrderAPI.BetOrderResType = await API.riskExport({
-      ...removeEmptyStringKeys({
-        ...form,
-        seriesDetailsSingle: '',
-        seriesDetailsDuplex: '',
-        seriesDetails: seriesDetails,
-        seriesType: +form.seriesType > 2 ? 2 : form.seriesType
-      }),
-      pageSize: 1,
-      pageNum: 50000,
-      export: true
-    } as any);
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    downloading.value = false;
+    })
   };
 
   const getTenantList1 = async () => {
