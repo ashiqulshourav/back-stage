@@ -5,7 +5,6 @@
       :loading="loading"
       @on-search="onSearch"
       @exportFile="exportFile"
-      @exportFileTest="exportFileTest"
       :tenantList="tenantList"
       :venueType="venueType"
       :downloading="downloading"
@@ -234,6 +233,9 @@
                 }}
               </div>
               <div class="item_line">
+                <span v-if="item.kindsCode === 'FT_TTS'">
+                  {{ enterGoalMap[item.betHandicap.toUpperCase()  as keyof typeof enterGoalMap] }}
+                </span>
                 {{ useSportFormatDetail(item)[3] }} @{{
                   getViewOddFn(
                     item.oddFinally,
@@ -510,7 +512,8 @@ import {
   markeTypeMap,
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
-  getIsInplay
+  getIsInplay,
+  enterGoalMap,
 } from '@/utils/formatMatch';
 import { riskStatus } from './util/types';
 import { usePublicHooks } from '@/hooks';
@@ -541,7 +544,6 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   exportFile,
-  exportFileTest,
   copyTest,
   tenantList,
   handleCancel,

@@ -273,133 +273,8 @@ export function useBettingAuditHook(venueType: number) {
     onSearch();
   };
 
-  //- 导出excel表格
-  const exportFile = async () => {
-    downloading.value = true;
-    const res: BetOrderAPI.BetOrderResType = await API.bettingAuditList(
-      formatParams({ pageNum: 1, pageSize: 50000 }) as searchFormType
-    );
-    const list = [];
-    res.data?.pageData?.map(row => {
-      row?.combineOrderDetails?.map(match => {
-        list.push({ ...row, ...match });
-      });
-    });
-    const r = list.map((item: any, i) => {
-      const arr = [];
-      const data = item;
-      columns.forEach((column: { prop: string }) => {
-        let str = '';
-        switch (column.prop.toString()) {
-          case 'sportId':
-            str =
-              SPORT_ID_MAP.find(_ => +_.value === +data[column.prop as string])
-                ?.label ?? data.sportNameCn;
-            break;
-          case 'beginTime':
-            str = data.beginTime
-              ? dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss')
-              : '';
-            break;
-          case 'createTime':
-            str = data.createTime
-              ? dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss')
-              : '';
-            break;
-          case 'settleTime':
-            str = data.settleTime
-              ? dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss')
-              : '';
-            break;
-          case 'index':
-            str = (i + 1).toString();
-            break;
-          case 'playType':
-            str = useSportFormatDetail(data)[4];
-            break;
-          case 'betName':
-            str = useSportFormatDetail(data)[3];
-            break;
-          case 'teamName':
-            if (
-              data.kindsCode?.includes('Outright') ||
-              data.kindsCode?.includes('moutright')
-            ) {
-              str = '冠军赛事';
-            } else {
-              str = `${data.homeTeamNameCn} vs ${data.awayTeamNameCn}`;
-            }
-            break;
-          case 'marketType':
-            str = markeTypeMap[data.marketType as keyof typeof markeTypeMap];
-            break;
-          case 'isSettlementAgain':
-            str = data.isSettlementAgain === 2 ? '是' : '否';
-            break;
-          case 'status':
-            // str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult,data.isReserve)?.status]
-            break;
-          case 'settleScore':
-            str = displayHomeAwayScore(data.settleScore, data.sportId);
-            break;
-          case 'betResult':
-            str =
-              BET_RESULT_TYPE_MAP[
-                data.betResult as keyof typeof BET_RESULT_TYPE_MAP
-              ];
-            break;
-          case 'scoreBenchmark':
-            str = displayHomeAwayScore(data.scoreBenchmark, data.sportId);
-            break;
-          case 'seriesType':
-            if (data.combineOrderDetails.length > 1) {
-              str =
-                String(data.seriesType).slice(-3) === '001' ? '串关' : '复式';
-              str +=
-                ' ' +
-                formatSeriesType(
-                  data?.seriesType,
-                  data.combineOrderDetails.length
-                );
-            }
-            break;
-          case 'isSeriesType': //单关 串关
-            str = data.seriesType === 1 ? '单关' : '串关';
-            break;
-          case 'tenantName': //商户名
-            str = tenantObj[data.tenantId]?.tenantName ?? '';
-            break;
-          case 'tenantCode': //商户编码
-            str = tenantObj[data.tenantId]?.name ?? '';
-            break;
-          case 'riskStatus': //审核状态
-            str = getRiskStatus(data.riskStatus).label;
-            break;
-          default:
-            str = data[column.prop as string];
-        }
-        arr.push(str);
-      });
-      return arr;
-    });
-    const titleList: string[] = [];
-    columns.forEach((column: { label: string }) => {
-      titleList.push(column.label);
-    });
-    r.unshift(titleList);
-    const workBook = utils.book_new();
-    const workSheet = utils.aoa_to_sheet(r);
-    workSheet['C1'].s = {
-      wrapText: true
-    };
-    utils.book_append_sheet(workBook, workSheet, '数据报表');
-    writeFile(workBook, '赛程_注单审核.xlsx');
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    downloading.value = false;
-  };
-
   // export to excel
-  const exportFileTest = async () => {
+  const exportFile = async () => {
     downloading.value = true;
     const res: BetOrderAPI.BetOrderResType = await API.bettingAuditListExport(
       formatParams({ pageNum: 1, pageSize: 50000, venueType }) as searchFormType
@@ -630,7 +505,6 @@ export function useBettingAuditHook(venueType: number) {
     handleCurrentChange,
     handleSelectionChange,
     exportFile,
-    exportFileTest,
     getRiskStatus,
     copyTest,
     tenantObj,

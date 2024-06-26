@@ -4,27 +4,19 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import type { FormInstance } from 'element-plus';
 import {
   betStatus,
-  betStatusMap,
   searchFormType,
   seriesTypesSingle,
   seriesTypesDuplex
 } from './types';
-import { columns } from './exportTableColumnList';
-import { utils, writeFile } from 'xlsx';
 import { addDialog, closeDialog } from '@/components/ReDialog/index';
 import editMatch from '../component/editMatch.vue';
 import { reactive, ref, onMounted, h } from 'vue';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 import {
-  markeTypeMap,
-  useSportFormatDetail,
-  displayHomeAwayScore,
   BET_RESULT_TYPE_MAP,
-  formatSeriesType,
-  getIsInplay
 } from '@/utils/formatMatch';
 import dayjs from 'dayjs';
-import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+import { addThousandSeparator } from '@/utils/formatNumber';
 import { ElMessageBox } from 'element-plus';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
@@ -34,7 +26,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
   const { openPasswordInput } = usePasswordInputHook();
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<
-    { name: string; id: number; tenantName: string }[]
+      { name: string; id: number; tenantName: string }[]
   >([]);
   const tenantObj = reactive<any>({});
   const riskLabelList = reactive<UserAPI.labelType[]>([]);
@@ -42,7 +34,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
   const loading = ref(true);
   const downloading = ref(false);
   const totalInfo = reactive<BetOrderAPI.otherDataType>(
-    {} as BetOrderAPI.otherDataType
+      {} as BetOrderAPI.otherDataType
   );
   const pagination = reactive<PaginationProps>({
     total: 0,
@@ -61,7 +53,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
     matchId: '',
     awayTeamName: '',
     homeTeamName: '',
-    // status:[],
     betItemId: '',
     isInplay: '',
     seriesType: '',
@@ -94,9 +85,9 @@ export function useBettingCenterHook(category: number, venueType: number) {
   }
 
   const formatParams = (
-    privateparams = {},
-    order_id?: number,
-    page?: number
+      privateparams = {},
+      order_id?: number,
+      page?: number
   ) => {
     let seriesDetails: any = [];
     if (form.seriesType == 2) {
@@ -107,7 +98,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
       } else {
         for (let item in seriesTypesSingle) {
           seriesDetails.push(
-            ...seriesTypesSingle[item as keyof typeof seriesTypesSingle].list
+              ...seriesTypesSingle[item as keyof typeof seriesTypesSingle].list
           );
         }
       }
@@ -115,13 +106,13 @@ export function useBettingCenterHook(category: number, venueType: number) {
       if (form.seriesDetailsDuplex.length) {
         form.seriesDetailsDuplex.map((item: keyof typeof seriesTypesSingle) => {
           seriesDetails.push(
-            ...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list
+              ...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list
           );
         });
       } else {
         for (let item in seriesTypesDuplex) {
           seriesDetails.push(
-            ...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list
+              ...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list
           );
         }
       }
@@ -155,7 +146,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
         pageNum: 1
       }) as searchFormType;
       const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
-        params
+          params
       );
       if (res.code) return message(res.msg, { type: 'error' });
       if (res.data !== null) {
@@ -180,54 +171,84 @@ export function useBettingCenterHook(category: number, venueType: number) {
   }
 
   async function onSearch(type?: string) {
-    if (type === 'reload') pagination.currentPage = 1;
-    try {
-      const params: searchFormType = formatParams({
-        export: false
-      }) as searchFormType;
-      if (Number(params.maxBetAmount) < Number(params.minBetAmount)) {
-        message(t('请检查投注额，最小值不能大于最大值'), { type: 'warning' });
-        return;
-      }
-      if (Number(params.maxProfitAmount) < Number(params.minProfitAmount)) {
-        message(t('请检查用户输赢，最小值不能大于最大值'), { type: 'warning' });
-        return;
-      }
-      loading.value = true;
+    return new Promise((resolve, reject)=>{
+      if (type === 'reload') pagination.currentPage = 1;
+      try {
+        const params: searchFormType = formatParams({
+          export: false
+        }) as searchFormType;
+        if (Number(params.maxBetAmount) < Number(params.minBetAmount)) {
+          message(t('请检查投注额，最小值不能大于最大值'), { type: 'warning' });
+          return;
+        }
+        if (Number(params.maxProfitAmount) < Number(params.minProfitAmount)) {
+          message(t('请检查用户输赢，最小值不能大于最大值'), { type: 'warning' });
+          return;
+        }
+        if(type!=='export'){
+          loading.value = true;
+        }
+        API.bettingCenterList( params ).then((res)=>{
+          loading.value = false;
+          if (res.code) return message(res.msg, { type: 'error' });
+          if (res.data !== null) {
 
-      const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
-        params
-      );
-      loading.value = false;
-      if (res.code) return message(res.msg, { type: 'error' });
-      dataList.length = 0;
-      if (res.data !== null) {
-        let list = res?.data?.pageData || [];
-        list = list.map((row: BetOrderAPI.BetOrderList) => {
-          row.riskStatusArr = [];
-          row.betResultArr = [];
-          row.combineOrderDetails.map((item2: BetOrderAPI.Detail) => {
-            row.riskStatusArr?.push(item2.riskStatus);
-            row.betResultArr.push(item2.betResult);
-          });
-          return row;
+            resolve(res?.data)
+            if(type==='export'){
+              return
+            }
+            dataList.length = 0;
+            let list = res?.data?.pageData || [];
+            list = list.map((row: BetOrderAPI.BetOrderList) => {
+              row.riskStatusArr = [];
+              row.betResultArr = [];
+              row.combineOrderDetails.map((item2: BetOrderAPI.Detail) => {
+                row.riskStatusArr?.push(item2.riskStatus);
+                row.betResultArr.push(item2.betResult);
+              });
+              return row;
+            });
+            dataList.push(...list);
+            dataList.map((item: any, index) => {
+              item.index = index + 1;
+            });
+            pagination.total = res.data?.count;
+            pagination.pageSize = res.data?.pageSize;
+            pagination.currentPage = res.data?.pageNum;
+            Object.assign(totalInfo, res.data?.otherData);
+          }else {
+            reject();
+            dataList.length = 0;
+          }
+          document
+              ?.querySelector('.table_container .el-scrollbar__wrap')
+              ?.scroll(0, 0);
         });
-        dataList.push(...list);
-        dataList.map((item: any, index) => {
-          item.index = index + 1;
-        });
-        pagination.total = res.data?.count;
-        pagination.pageSize = res.data?.pageSize;
-        pagination.currentPage = res.data?.pageNum;
-        Object.assign(totalInfo, res.data?.otherData);
+      } catch (error) {
+        loading.value = false;
+        reject()
       }
-      document
-        ?.querySelector('.table_container .el-scrollbar__wrap')
-        ?.scroll(0, 0);
-    } catch (error) {
-      loading.value = false;
-    }
+    })
   }
+  const exportFile = async () => {
+    downloading.value = true;
+    onSearch('export').then((res0:any)=>{
+      if(res0?.count>50000){
+        message(`当前条件下数据量为${addThousandSeparator(res0?.count)}，大于5万条，不支持导出!`, { type: 'error' });
+      }else if(res0?.count<1){
+        message('数据量为零，无法导出', { type: 'error' });
+      }else {
+        API.bettingCenterExport(
+            formatParams({
+              export: true
+            }) as searchFormType
+        ).then((res)=>{
+          message(res.msg, { type: res.code ? 'error' : 'success' });
+        });
+      }
+    })
+    downloading.value = false;
+  };
 
   const getTenantList = async () => {
     const res = await API.queryTenantList({
@@ -248,170 +269,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
     onSearch();
   };
 
-   //- 导出excel表格
-   const exportFile = async () => {
-    downloading.value = true;
-    const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
-      formatParams({
-        pageNum: 1,
-        pageSize: 50000,
-        export: true
-      }) as searchFormType
-    );
-    const r = res.data.pageData.map((item: any, i) => {
-      const arr: any[] = [];
-      const data = { ...item, ...item?.combineOrderDetails[0] };
-      data.combineOrderDetails.map((item2: BetOrderAPI.Detail) => {
-        data.riskStatusArr = [];
-        data.betResultArr = [];
-        data.riskStatusArr?.push(item2.riskStatus);
-        data.betResultArr.push(item2.betResult);
-      });
-
-      columns.forEach((column: { prop: string }) => {
-        let str = '';
-        switch (column.prop.toString()) {
-          case 'sportId':
-            str =
-              SPORT_ID_MAP.find(_ => +_.value === +data[column.prop as string])
-                ?.label ?? data.sportNameCn;
-            break;
-          case 'beginTime':
-            str = data.beginTime
-              ? dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss')
-              : '';
-            break;
-          case 'createTime':
-            str = data.createTime
-              ? dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss')
-              : '';
-            break;
-          case 'settleTime':
-            str = data.settleTime
-              ? dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss')
-              : '';
-            break;
-          case 'index':
-            str = (i + 1).toString();
-            break;
-          case 'playType':
-            str = useSportFormatDetail(data)[4];
-            break;
-          case 'betName':
-            str = useSportFormatDetail(data)[3];
-            break;
-          case 'teamName':
-            if (
-              data.kindsCodes?.includes('Outright') ||
-              data.kindsCodes?.includes('moutright')
-            ) {
-              str = '冠军赛事';
-            } else {
-              str = `${data.homeTeamNameCn} vs ${data.awayTeamNameCn}`;
-            }
-            break;
-          case 'marketType':
-            str = markeTypeMap[data.marketType as keyof typeof markeTypeMap];
-            break;
-          case 'isSettlementAgain':
-            str = data.isSettlementAgain === 2 ? '是' : '否';
-            break;
-          case 'status':
-            str =
-              betStatusMap[
-                getStatus(
-                  data.status,
-                  data.billStatus,
-                  data.betResultArr,
-                  data.isReserve,
-                  data.riskStatusArr,
-                  data.isSpecialSettle
-                )?.status as keyof typeof betStatusMap
-              ];
-            break;
-          case 'billStatus':
-            str =
-              betStatusMap[
-                getStatus(
-                  data.status,
-                  data.billStatus,
-                  data.betResultArr,
-                  data.isReserve,
-                  data.riskStatusArr,
-                  data.isSpecialSettle
-                )?.status as keyof typeof betStatusMap
-              ];
-            break;
-          case 'settleScore':
-            str = displayHomeAwayScore(data.settleScore, data.sportId);
-            break;
-          case 'betResult':
-            str = getOddStatus(data.betResult, data.riskStatus);
-            break;
-          case 'scoreBenchmark':
-            str = displayHomeAwayScore(data.scoreBenchmark, data.sportId);
-            break;
-          case 'seriesType':
-            if (data.combineOrderDetails.length > 1) {
-              str =
-                String(data.seriesType).slice(-3) === '001' ? '串关' : '复式';
-              str +=
-                ' ' +
-                formatSeriesType(
-                  data?.seriesType,
-                  data.combineOrderDetails.length
-                );
-            }
-            break;
-          case 'isSeriesType': //单关 串关
-            str = data.seriesType === 1 ? '单关' : '串关';
-            break;
-          case 'tenantName': //商户名
-            str = tenantObj[data.tenantId]?.tenantName ?? '';
-            break;
-          case 'tenantCode': //商户编码
-            str = tenantObj[data.tenantId]?.name ?? '';
-            break;
-          case 'betStage': //投注阶段
-            str = getIsInplay(data.isInplay);
-            break;
-          default:
-            str = data[column.prop as string];
-        }
-        arr.push(str);
-      });
-      return arr;
-    });
-    const titleList: string[] = [];
-    columns.forEach((column: { label: string }) => {
-      titleList.push(column.label);
-    });
-
-    r.unshift(titleList);
-    const workBook = utils.book_new();
-    const workSheet = utils.aoa_to_sheet(r);
-    workSheet['C1'].s = {
-      wrapText: true
-    };
-
-    utils.book_append_sheet(workBook, workSheet, '数据报表');
-    writeFile(workBook, '赛程_注单中心.xlsx');
-    message(t('导出成功'), { type: 'success' });
-    downloading.value = false;
-  };
-
-  const exportFileTest = async () => {
-    downloading.value = true;
-    const res: BetOrderAPI.BetOrderResType = await API.bettingCenterExport(
-      formatParams({
-        pageNum: 1,
-        pageSize: 50000,
-        export: true
-      }) as searchFormType
-    );
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    downloading.value = false;
-  };
 
   const handleCancel = (data: any) => {
     ElMessageBox.confirm(t('确定取消注单吗？'), t('警告'), {
@@ -424,7 +281,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
         API.orderCancel(params).then(res => {
           if (res.code) {
           } else {
-            // onSearch();
             getRowByOrderId(data.id);
           }
           message(res.msg, { type: res.code ? 'error' : 'success' });
@@ -433,12 +289,12 @@ export function useBettingCenterHook(category: number, venueType: number) {
     });
   };
   const getStatus = (
-    status: number,
-    billStatus: number,
-    betResultArr: number[],
-    isReserve: number,
-    riskStatusArr?: number[],
-    isSpecialSettle?: number
+      status: number,
+      billStatus: number,
+      betResultArr: number[],
+      isReserve: number,
+      riskStatusArr?: number[],
+      isSpecialSettle?: number
   ) => {
     let obj = { status: -1, bgColor: '' };
     if (isSpecialSettle === 1) {
@@ -454,12 +310,12 @@ export function useBettingCenterHook(category: number, venueType: number) {
       // 封控划单 203 204
       obj = { status: betStatus.riskReject, bgColor: '#F88D48' };
     }else if(riskStatusArr?.includes(riskStatus.reject1)||riskStatusArr?.includes(riskStatus.autoReject1)){
-       // 封控拒单 201 202
+      // 封控拒单 201 202
       obj = { status: betStatus.betFail, bgColor: '#F88D48' };
     } else if (
-      status == 2 &&
-      billStatus === 1 &&
-      (betResultArr?.includes(22) || betResultArr?.includes(23))
+        status == 2 &&
+        billStatus === 1 &&
+        (betResultArr?.includes(22) || betResultArr?.includes(23))
     ) {
       // 注单无效
       obj = { status: betStatus.betInvalid, bgColor: '#E54752' };
@@ -502,7 +358,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
       return '盘口取消';
     }else {
       return (
-        BET_RESULT_TYPE_MAP[betResult as keyof typeof BET_RESULT_TYPE_MAP] || ''
+          BET_RESULT_TYPE_MAP[betResult as keyof typeof BET_RESULT_TYPE_MAP] || ''
       );
     }
   };
@@ -526,35 +382,34 @@ export function useBettingCenterHook(category: number, venueType: number) {
       closeOnClickModal: false,
       hideFooter: true,
       contentRenderer: ({ options, index }) =>
-        h(editMatch, {
-          ref: editDialogRef,
-          data: row,
-          onCloseDialog: (_: boolean) => {
-            closeDialog(options, index);
-            // onSearch();
-            getRowByOrderId(row.id);
-          }
-        })
+          h(editMatch, {
+            ref: editDialogRef,
+            data: row,
+            onCloseDialog: (_: boolean) => {
+              closeDialog(options, index);
+              getRowByOrderId(row.id);
+            }
+          })
     });
   };
   function copyTest(str: string, tip: string) {
     if (!str) return;
     const success = copyTextToClipboard(str.toString());
     success
-      ? message(t('复制{value}成功!', { value: tip || str || '' }), {
+        ? message(t('复制{value}成功!', { value: tip || str || '' }), {
           type: 'success'
         })
-      : message(t('复制失败'), { type: 'error' });
+        : message(t('复制失败'), { type: 'error' });
   }
 
   const isShowCancel = (row: BetOrderAPI.BetOrderList) => {
     let flag = true;
     row.combineOrderDetails.map((item: BetOrderAPI.Detail) => {
       if (
-        item.riskStatus === riskStatus.rejectBetting ||
-        item.riskStatus === riskStatus.reject ||
-        item.riskStatus === riskStatus.approve ||
-        item.riskStatus === riskStatus.autoReject
+          item.riskStatus === riskStatus.rejectBetting ||
+          item.riskStatus === riskStatus.reject ||
+          item.riskStatus === riskStatus.approve ||
+          item.riskStatus === riskStatus.autoReject
       ) {
         flag = false;
       }
@@ -570,15 +425,15 @@ export function useBettingCenterHook(category: number, venueType: number) {
       closeOnClickModal: false,
       hideFooter: true,
       contentRenderer: ({ options, index }) =>
-        h(editOrder, {
-          ref: editDialogRef,
-          data: { orderId: id, orderRemark },
-          onCloseDialog: (_: boolean) => {
-            closeDialog(options, index);
-            //onSearch();
-            getRowByOrderId(id);
-          }
-        })
+          h(editOrder, {
+            ref: editDialogRef,
+            data: { orderId: id, orderRemark },
+            onCloseDialog: (_: boolean) => {
+              closeDialog(options, index);
+              //onSearch();
+              getRowByOrderId(id);
+            }
+          })
     });
   };
   const getRiskLabelList = async () => {
@@ -614,7 +469,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
     handleCurrentChange,
     handleSelectionChange,
     exportFile,
-    exportFileTest,
     handleCancel,
     getStatus,
     copyTest,

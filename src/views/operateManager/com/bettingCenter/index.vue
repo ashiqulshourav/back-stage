@@ -5,7 +5,6 @@
       :loading="loading"
       @on-search="onSearch"
       @exportFile="exportFile"
-      @exportFileTest="exportFileTest"
       :tenantList="tenantList"
       :riskLabelList="riskLabelList"
       :venueType="props.venueType"
@@ -53,7 +52,7 @@
                   "
                 >
                   <span>{{ t('用户ID：') }}</span
-                  >{{ row.userId }} 
+                  >{{ row.userId }}
                 </div>
                 <div
                   class="item_line cursor-pointer"
@@ -218,7 +217,7 @@
               </div>
               <div class="item_line">
                 <span v-if="item.kindsCode === 'FT_TTS'">
-                  {{ enterGoalMap[item.betHandicap.toUpperCase()] }}
+                    {{ enterGoalMap[item.betHandicap.toUpperCase()  as keyof typeof enterGoalMap] }}
                 </span>
                 {{ useSportFormatDetail(item)[3] }} @{{
                   getViewOddFn(
@@ -503,7 +502,6 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   exportFile,
-  exportFileTest,
   handleCancel,
   getStatus,
   copyTest,

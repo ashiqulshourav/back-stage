@@ -1,13 +1,11 @@
 <template>
   <div class="main">
-    <!-- @exportFile="exportFile" -->
     <SearchForm
       :form="form"
       :loading="loading"
       :downloading="downloading"
       @on-search="onSearch"
       @exportFile="exportFile"
-      @exportFileTest="exportFileTest"
       :tenantList="tenantList"
     />
     <PureTableBar
@@ -198,6 +196,9 @@
                 }}
               </div>
               <div class="item_line">
+                <span v-if="item.kindsCode === 'FT_TTS'">
+                  {{ enterGoalMap[item.betHandicap.toUpperCase()  as keyof typeof enterGoalMap] }}
+                </span>
                 {{ useSportFormatDetail(item)[3] }} @{{
                   getViewOddFn(
                     item.oddFinally,
@@ -396,13 +397,11 @@ import { adjustContentWithRowHeight } from '@/utils/adjustRowCoulmnHeight';
 import {
   formatSeriesType,
   useSportFormatDetail,
-  BET_RESULT_TYPE_MAP,
-  EBetResultType,
   getViewOddFn,
   markeTypeMap,
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
-  getIsInplay
+  getIsInplay, enterGoalMap
 } from '@/utils/formatMatch';
 import { usePublicHooks } from '@/hooks';
 
@@ -462,7 +461,6 @@ const {
   handleSelectionChange,
   copyTest,
   tenantList,
-  exportFileTest,
   confirmBetClick,
   refuseBetClick,
   tenantObj,
