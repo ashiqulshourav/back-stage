@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import {statusMap} from '../utils/map'
 export const columns: TableColumnList = [
   {
     label: t('序号'),
@@ -33,8 +32,7 @@ export const columns: TableColumnList = [
   {
     label: t('状态'),
     minWidth: 200,
-    prop: 'status',
-    formatter: ({ status }): string => statusMap[status]
+    slot: 'status',
   },
   {
     label: t('操作人'),
