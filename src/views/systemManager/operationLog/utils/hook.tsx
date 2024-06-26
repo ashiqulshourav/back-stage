@@ -2,9 +2,12 @@ import { message } from '@/utils/message';
 import type { PaginationProps, TableColumns } from '@pureadmin/table';
 import { columns } from '../component/TableColumnList';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { usePublicHooks } from '@/hooks';
+const { exportDialog } = usePublicHooks();
 import { utils, writeFile } from 'xlsx';
 
 export function useOperationLog() {
+  const router = useRouter();
   const dataList = reactive<OperationLogDataAPI.OperationLogList[]>([]);
   const loading = ref(true);
   const exportLoading = ref(false);
@@ -60,15 +63,21 @@ export function useOperationLog() {
 
   // export to excel
   const exportFile = async () => {
-    exportLoading.value = true;
-    const res = await API.operationLogExport({
-      ...removeEmptyStringKeys(form),
-      pageNum: 1,
-      pageSize: 50000,
-      export: true
+    exportDialog({
+      firstTitle: t('导出当前操作日志列表数据?'),
+      router,
+      callback: async () => {
+        exportLoading.value = true;
+        const res = await API.operationLogExport({
+          ...removeEmptyStringKeys(form),
+          pageNum: 1,
+          pageSize: 50000,
+          export: true
+        });
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        exportLoading.value = false;
+      }
     });
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    exportLoading.value = false;
   }
   //- 获取下拉菜单列表
   const getOperateTypes = async () => {
