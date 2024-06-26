@@ -2,6 +2,8 @@ import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import type { FormInstance } from 'element-plus';
+import { usePublicHooks } from '@/hooks';
+const { exportDialog } = usePublicHooks();
 import {
   betStatus,
   searchFormType,
@@ -23,6 +25,7 @@ import { t } from '@/plugins/i18n';
 import { riskStatus } from '@/views/riskManagement/com/bettingAudit/util/types';
 import editOrder from '../component/editOrder.vue';
 export function useBettingCenterHook(category: number, venueType: number) {
+  const router = useRouter();
   const { openPasswordInput } = usePasswordInputHook();
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<
@@ -238,13 +241,19 @@ export function useBettingCenterHook(category: number, venueType: number) {
       }else if(res0?.count<1){
         message('数据量为零，无法导出', { type: 'error' });
       }else {
-        API.bettingCenterExport(
-            formatParams({
-              export: true
-            }) as searchFormType
-        ).then((res)=>{
-          message(res.msg, { type: res.code ? 'error' : 'success' });
-        });
+        exportDialog({
+          firstTitle: t('导出当前投注单数据?'),
+          router,
+          callback: async () => {
+            API.bettingCenterExport(
+                formatParams({
+                  export: true
+                }) as searchFormType
+            ).then((res)=>{
+              message(res.msg, { type: res.code ? 'error' : 'success' });
+            });
+          }
+        })
       }
     })
     downloading.value = false;
