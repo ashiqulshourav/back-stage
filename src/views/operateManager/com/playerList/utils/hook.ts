@@ -10,6 +10,8 @@ import {
 } from './types';
 import { FormInstance } from 'element-plus';
 import { useSettingStoreHook } from '@/store/settings';
+import { usePublicHooks } from '@/hooks';
+const { exportDialog } = usePublicHooks();
 
 export function userPlayerListHook(venueType: number, category: number) {
   const route = useRoute();
@@ -114,16 +116,22 @@ export function userPlayerListHook(venueType: number, category: number) {
 
   // export player list
   const exportFile = async () =>{
-    downloading.value = true;
-    const res = await API.playerListExport({
-      ...removeEmptyStringKeys(form),
-      venueType: venueType,
-      pageSize: 50000,
-      pageNum: 1,
-      export: true,
+    exportDialog({
+      firstTitle: t('导出当前球员名单数据'),
+      router,
+      callback: async () => {
+        downloading.value = true;
+        const res = await API.playerListExport({
+          ...removeEmptyStringKeys(form),
+          venueType: venueType,
+          pageSize: 50000,
+          pageNum: 1,
+          export: true,
+        })
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        downloading.value = false;
+      }
     })
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    downloading.value = false;
   }
 
   async function onSearch(type?: string) {
