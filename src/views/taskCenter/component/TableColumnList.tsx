@@ -22,7 +22,7 @@ export const columns: TableColumnList = [
     prop: 'fileSize',
     minWidth: 150,
     formatter: ({ fileSize }) =>
-      ( fileSize ? (fileSize / 1024)?.toFixed(1) + 'KB' : 0)?.toString()
+      ( fileSize ? (fileSize / 1000)?.toFixed(1) + 'KB' : 0)?.toString()
   },
   {
     label: t('页面来源'),

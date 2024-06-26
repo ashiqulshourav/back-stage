@@ -7,23 +7,6 @@
   >
     <div class="flex">
       <div>
-        <!-- <el-form-item :label="`${t('商户名')}:`" prop="tenantIds">
-          <el-select
-            class="!min-w-[200px]"
-            :placeholder="t('请选择商户ID，多选项')"
-            multiple
-            v-model="form.tenantIds"
-            clearable
-            @change="search"
-          >
-            <el-option
-              v-for="item in tenantList"
-              :label="item.tenantName"
-              :value="item.id"
-              :key="item.id"
-            />
-          </el-select>
-        </el-form-item> -->
         <el-form-item prop="tenantIds" :label="`${t('商户名')}:`">
           <el-tree-select
             v-model="props.form.tenantIds"
@@ -344,7 +327,7 @@
             :loading="loading"
             @click="search"
           >
-            {{ t('筛选') }}
+            {{ t('查询') }}
           </el-button>
           <el-button
             :icon="useRenderIcon(RefreshIcon)"
