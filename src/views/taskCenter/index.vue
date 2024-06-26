@@ -28,7 +28,7 @@
               link
               type="primary"
               :size="size"
-              :disabled="row.disabled"
+              :disabled="row.status === 1"
               @click="getDownLoadUrl(row.id)"
             >
               下载
@@ -39,7 +39,7 @@
               link
               type="danger"
               :size="size"
-              :disabled="row.disabled"
+              :disabled="row.status === 1"
               :icon="useRenderIcon(Delete)"
             >
               {{ t('删除') }}
@@ -61,6 +61,7 @@ import { usePublicHooks } from '@/hooks';
 import Delete from '@iconify-icons/ep/delete';
 import EditPen from '@iconify-icons/ep/edit-pen';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import { statusMap } from './utils/map';
 defineOptions({ name: 'taskCenter' });
 const { tableHeaderStyle } = usePublicHooks();
 
