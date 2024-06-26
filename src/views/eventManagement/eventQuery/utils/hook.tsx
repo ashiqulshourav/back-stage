@@ -2,6 +2,7 @@ import { searchFormType } from './types';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { message } from '@/utils/message';
+import { addThousandSeparator } from '@/utils/formatNumber';
 import { usePublicHooks } from '@/hooks';
 const { exportDialog } = usePublicHooks();
 
@@ -37,65 +38,78 @@ export function useEventQueryHook() {
   });
 
   async function onSearch(type?: string) {
-    if (type === 'reload' || type === 'init') pagination.currentPage = 1;
-    if (!form.matchId) {
-      matchEventList.length = 0;
-      pagination.total = 0;
-      matchInfo.aTeamName = '';
-      matchInfo.hTeamName = '';
-      matchInfo.leagueId = '';
-      matchInfo.league = '';
-      matchInfo.level = '';
-      matchInfo.matchId = '';
-      matchInfo.sportName = '';
-      matchInfo.startDateTime = '';
-      return;
-    }
-
-    try {
-      loading.value = true;
-      const temp = Array.isArray(form.eventCode) ? [...form.eventCode] : [];
-      const res = await API.getMatchEventByMatchId({
-        ...removeEmptyStringKeys({
-          ...form,
-          eventCode: temp?.length ? temp.toString() : ''
-        }),
-        pageSize: pagination.pageSize,
-        pageNum: pagination.currentPage
-      });
-
-      loading.value = false;
-
-      if (res.code) return message(res.msg, { type: 'error' });
-      matchEventList.length = 0;
-
-      if (type === 'init') {
-        const matchInfoRes = await API.getMatchInfoByMatchId({
-          matchId: form.matchId
-        });
-
-        if (matchInfoRes?.code) return message(res?.msg, { type: 'error' });
-
-        matchInfo.aTeamName = matchInfoRes.data.aTeamName;
-        matchInfo.hTeamName = matchInfoRes.data.hTeamName;
-        matchInfo.leagueId = matchInfoRes.data.leagueId;
-        matchInfo.league = matchInfoRes.data.league;
-        matchInfo.level = matchInfoRes.data.level;
-        matchInfo.matchId = matchInfoRes.data.matchId;
-        matchInfo.sportName = matchInfoRes.data.sportName;
-        matchInfo.startDateTime = matchInfoRes.data.startDateTime;
+    return new Promise((resolve, reject)=>{
+      if (type === 'reload' || type === 'init') pagination.currentPage = 1;
+      if (!form.matchId) {
+        matchEventList.length = 0;
+        pagination.total = 0;
+        matchInfo.aTeamName = '';
+        matchInfo.hTeamName = '';
+        matchInfo.leagueId = '';
+        matchInfo.league = '';
+        matchInfo.level = '';
+        matchInfo.matchId = '';
+        matchInfo.sportName = '';
+        matchInfo.startDateTime = '';
+        return;
       }
 
-      matchEventList.push(...res.data.list);
-      pagination.total = res.data.total;
-      document!
-        .querySelector('.table_container .el-scrollbar__wrap')!
-        .scroll(0, 0);
-      const resizeEvent = new Event('resize');
-      window.dispatchEvent(resizeEvent);
-    } catch (error) {
-      loading.value = false;
-    }
+      try {
+        if(type!=='export'){
+          loading.value = true;
+        }
+        const temp = Array.isArray(form.eventCode) ? [...form.eventCode] : [];
+
+        API.getMatchEventByMatchId({
+          ...removeEmptyStringKeys({
+            ...form,
+            eventCode: temp?.length ? temp.toString() : ''
+          }),
+          pageSize: pagination.pageSize,
+          pageNum: pagination.currentPage
+        }).then((res) => {
+          loading.value = false;
+          if (res.code) return message(res.msg, { type: 'error' });
+          if(res.data !== null){
+            resolve(res?.data)
+            if(type==='export'){
+              return
+            }
+            matchEventList.length = 0;
+            if (type === 'init') {
+              API.getMatchInfoByMatchId({
+                matchId: form.matchId
+              }).then((matchInfoRes) => {
+                if (matchInfoRes?.code) return message(res?.msg, { type: 'error' });
+
+                matchInfo.aTeamName = matchInfoRes.data.aTeamName;
+                matchInfo.hTeamName = matchInfoRes.data.hTeamName;
+                matchInfo.leagueId = matchInfoRes.data.leagueId;
+                matchInfo.league = matchInfoRes.data.league;
+                matchInfo.level = matchInfoRes.data.level;
+                matchInfo.matchId = matchInfoRes.data.matchId;
+                matchInfo.sportName = matchInfoRes.data.sportName;
+                matchInfo.startDateTime = matchInfoRes.data.startDateTime;
+              })
+            }
+
+            matchEventList.push(...res.data.list);
+            pagination.total = res.data.total;
+          }else {
+            reject();
+            matchEventList.length = 0;
+          }
+          document!
+            .querySelector('.table_container .el-scrollbar__wrap')!
+            .scroll(0, 0);
+          const resizeEvent = new Event('resize');
+          window.dispatchEvent(resizeEvent);
+        });
+      } catch (error) {
+        loading.value = false;
+        reject()
+      }     
+    })
   }
 
   function handleTableWidthChange(val: number) {
@@ -113,19 +127,27 @@ export function useEventQueryHook() {
   }
   const router = useRouter();
   const exportFile = async () => {
-    exportDialog({
-      firstTitle: t('导出当前事件列表数据?'),
-      router,
-      callback: async () => {
-        const res = await API.matchEventDataExport({
-          ...removeEmptyStringKeys({
-            ...form,
-            eventCode: form.eventCode?.length ? form.eventCode?.toString() : ''
-          })
+    onSearch('export').then((expRes) => {
+      if(expRes?.list.length>50000){
+        message(`当前条件下数据量为${addThousandSeparator(expRes?.list.length)}，大于5万条，不支持导出!`, { type: 'error' });
+      } else if(expRes?.list.length<1){
+        message('数据量为零，无法导出', { type: 'error' });
+      } else {
+        exportDialog({
+          firstTitle: t('导出当前事件列表数据?'),
+          router,
+          callback: async () => {
+            const res = await API.matchEventDataExport({
+              ...removeEmptyStringKeys({
+                ...form,
+                eventCode: form.eventCode?.length ? form.eventCode?.toString() : ''
+              })
+            });
+            if (res.code) return message(res.msg, { type: 'error' });
+          }
         });
-        if (res.code) return message(res.msg, { type: 'error' });
       }
-    });
+    })
   };
 
   return {
