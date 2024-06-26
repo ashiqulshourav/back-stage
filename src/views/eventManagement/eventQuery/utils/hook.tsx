@@ -11,6 +11,7 @@ export function useEventQueryHook() {
   const matchInfo = reactive<EventAPI.MatchInfo>({
     aTeamName: '',
     hTeamName: '',
+    leagueId: '',
     league: '',
     matchId: '',
     level: '',
@@ -38,7 +39,7 @@ export function useEventQueryHook() {
   });
 
   async function onSearch(type?: string) {
-    return new Promise((resolve, reject)=>{
+    return new Promise((resolve, reject) => {
       if (type === 'reload' || type === 'init') pagination.currentPage = 1;
       if (!form.matchId) {
         matchEventList.length = 0;
@@ -51,11 +52,15 @@ export function useEventQueryHook() {
         matchInfo.matchId = '';
         matchInfo.sportName = '';
         matchInfo.startDateTime = '';
+        setTimeout(() => {
+          const resizeEvent = new Event('resize');
+          window.dispatchEvent(resizeEvent);
+        }, 200);
         return;
       }
 
       try {
-        if(type!=='export'){
+        if (type !== 'export') {
           loading.value = true;
         }
         const temp = Array.isArray(form.eventCode) ? [...form.eventCode] : [];
@@ -67,21 +72,21 @@ export function useEventQueryHook() {
           }),
           pageSize: pagination.pageSize,
           pageNum: pagination.currentPage
-        }).then((res) => {
+        }).then(res => {
           loading.value = false;
           if (res.code) return message(res.msg, { type: 'error' });
-          if(res.data !== null){
-            resolve(res?.data)
-            if(type==='export'){
-              return
+          if (res.data !== null) {
+            resolve(res?.data);
+            if (type === 'export') {
+              return;
             }
             matchEventList.length = 0;
             if (type === 'init') {
               API.getMatchInfoByMatchId({
                 matchId: form.matchId
-              }).then((matchInfoRes) => {
-                if (matchInfoRes?.code) return message(res?.msg, { type: 'error' });
-
+              }).then(matchInfoRes => {
+                if (matchInfoRes?.code)
+                  return message(res?.msg, { type: 'error' });
                 matchInfo.aTeamName = matchInfoRes.data.aTeamName;
                 matchInfo.hTeamName = matchInfoRes.data.hTeamName;
                 matchInfo.leagueId = matchInfoRes.data.leagueId;
@@ -90,26 +95,25 @@ export function useEventQueryHook() {
                 matchInfo.matchId = matchInfoRes.data.matchId;
                 matchInfo.sportName = matchInfoRes.data.sportName;
                 matchInfo.startDateTime = matchInfoRes.data.startDateTime;
-              })
+              });
             }
 
             matchEventList.push(...res.data.list);
             pagination.total = res.data.total;
-          }else {
+          } else {
             reject();
             matchEventList.length = 0;
           }
-          document!
-            .querySelector('.table_container .el-scrollbar__wrap')!
-            .scroll(0, 0);
-          const resizeEvent = new Event('resize');
-          window.dispatchEvent(resizeEvent);
+          setTimeout(() => {
+            const resizeEvent = new Event('resize');
+            window.dispatchEvent(resizeEvent);
+          }, 200);
         });
       } catch (error) {
         loading.value = false;
-        reject()
-      }     
-    })
+        reject();
+      }
+    });
   }
 
   function handleTableWidthChange(val: number) {
