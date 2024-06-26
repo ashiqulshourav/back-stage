@@ -205,9 +205,6 @@ import MatchCountDown from './MatchCountDown.vue';
 const contentRef = ref();
 const collapseRef = ref();
 const activeNames = ref([1]);
-const scrollRef = ref();
-const isShowScroll = ref(false);
-const scrollPostitonObj = reactive({ left: '0px', top: '0px' });
 const contentScrollRef = ref();
 const betItemsDtoList = reactive<sportTradingDataAPI.BetItemsDtoList[]>([]);
 const selectItem = ref<sportTradingDataAPI.BetItemsDtoList>(
@@ -259,13 +256,12 @@ const emits = defineEmits([
 ]);
 //- 鼠标滑入交互处理
 const mouseEvent = (
-  e: any,
+  _e: any,
   s: sportTradingDataAPI.BetItemsDtoList,
   type: 'enter' | 'leave',
   list?: sportTradingDataAPI.BetItemsDtoList[]
 ) => {
   if (type === 'enter') {
-    isShowScroll.value = false;
     //鼠标滑入之前所有为隐藏
     props.handicapList
       .find(item => item.listType === props.selectContentType)!
@@ -277,15 +273,11 @@ const mouseEvent = (
         });
       });
     selectItem.value = s;
-    scrollPostitonObj.left = `${
-      e.target.getBoundingClientRect().left + (s.dpOdds < 0 ? 76 : 70)
-    }px`;
-    scrollPostitonObj.top = `${e.target.getBoundingClientRect().top - 168}px`;
     betItemsDtoList.length = 0;
     betItemsDtoList.push(...(list as sportTradingDataAPI.BetItemsDtoList[]));
     s.sourceBetItemsId = 1;
   } else {
-    if (!isShowScroll.value) s.sourceBetItemsId = -1;
+    s.sourceBetItemsId = -1;
   }
   emits('clearMatchTime', s.sourceBetItemsId);
 };
@@ -299,7 +291,6 @@ const changeSelectType = (type: string) => {
 const selectNum = ref(0);
 const shortcutSelectNum = (_: number, type: string) => {
   if (_ === 0) return;
-  type === 'shortcut' && (selectNum.value = _);
   const params: { betItemsId: number; dpOdds: number }[] = [];
   //- 下盘需要递减
   if (betItemsDtoList.length === 2) {
@@ -341,11 +332,9 @@ const shortcutSelectNum = (_: number, type: string) => {
       emits('sendNewOdds', params);
     });
   }
-  nextTick(() => type === 'shortcut' && (selectNum.value = 0));
 };
 
 const clearTime = () => {
-  isShowScroll.value = false;
   selectItem.value.sourceBetItemsId = -1;
   emits('clearMatchTime', -1);
 };

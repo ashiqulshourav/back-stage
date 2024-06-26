@@ -7,7 +7,7 @@
       v-if="showNum"
       @mouseenter.stop="e => mouseEvent(e, props.s, 'enter')"
       :class="[
-        'text-[--el-color-primary] text-left h-full flex items-center w-[70px]',
+        'text-[--el-color-primary]  text-left h-full flex items-center w-[40px]',
         saleStatus !== 2 && '!text-[#909399]',
         s.dpOdds?.toFixed(2) < 0 && 'translate-x-[-6px]'
       ]"
@@ -18,9 +18,11 @@
       v-else
       class="text-[--el-color-primary] flex justify-start cursor-pointer h-full relative"
     >
-      <div class="w-[100px] flex justify-start items-center h-full">
+      <div
+        class="w-[100px] flex justify-start items-center h-full"
+        @mouseleave="showNum = true"
+      >
         <el-input-number
-          @mouseleave.native="showNum = true"
           class="!w-[100px]"
           size="small"
           :step="0.01"
@@ -164,7 +166,6 @@ const mouseEvent = (
   s: sportTradingDataAPI.BetItemsDtoList,
   type: 'enter' | 'leave'
 ) => {
-  console.log('InputCom.vue文件 167==============行打印=', type);
   if (!hasAuth('CHANGE_ODDS') || props.saleStatus !== 2) return;
   emits('changeMouse', e, s, type);
 };
