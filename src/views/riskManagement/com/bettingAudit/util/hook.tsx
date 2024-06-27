@@ -2,6 +2,7 @@ import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { usePublicHooks } from '@/hooks';
+import { addThousandSeparator } from '@/utils/formatNumber';
 const { exportDialog } = usePublicHooks();
 import {
   searchFormType,
@@ -160,11 +161,16 @@ export function useBettingAuditHook(venueType: number) {
         });
         return;
       }
-      loading.value = true;
+      if(type!=='export'){
+        loading.value = true;
+      }
       const res: BetOrderAPI.BetOrderResType = await API.bettingAuditList({
         ...params,
         venueType
       });
+      if(type==='export'){
+        return res?.data;
+      }
       loading.value = false;
       downloading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
@@ -278,18 +284,26 @@ export function useBettingAuditHook(venueType: number) {
 
   // export to excel
   const exportFile = async () => {
-    exportDialog({
-      firstTitle: t('导出当前投注审核列表数据?'),
-      router,
-      callback: async () => {
-        downloading.value = true;
-        const res: BetOrderAPI.BetOrderResType = await API.bettingAuditListExport(
-          formatParams({ pageNum: 1, pageSize: 50000, venueType }) as searchFormType
-        );
-        message(res.msg, { type: res.code ? 'error' : 'success' });
-        downloading.value = false;
+    fetchData('export').then((expRes: any) => {
+      if(expRes?.count>50000){
+        message(`当前条件下数据量为${addThousandSeparator(expRes?.count)}，大于5万条，不支持导出!`, { type: 'error' });
+      } else if(expRes?.count<1){
+        message('数据量为零，无法导出', { type: 'error' });
+      } else {
+        exportDialog({
+          firstTitle: t('导出当前投注审核列表数据?'),
+          router,
+          callback: async () => {
+            downloading.value = true;
+            const res: BetOrderAPI.BetOrderResType = await API.bettingAuditListExport(
+              formatParams({ pageNum: 1, pageSize: 50000, venueType }) as searchFormType
+            );
+            message(res.msg, { type: res.code ? 'error' : 'success' });
+            downloading.value = false;
+          }
+        })
       }
-    })
+    })    
   };
 
   const handleCancel = (row: any, index: number) => {
