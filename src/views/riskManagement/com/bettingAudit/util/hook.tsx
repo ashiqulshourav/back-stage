@@ -11,20 +11,11 @@ import {
   riskStatusMap,
   riskStatus
 } from './types';
-import { columns } from './exportTableColumnList';
-import { utils, writeFile } from 'xlsx';
+
 import { addDialog, closeDialog } from '@/components/ReDialog/index';
 import { reactive, ref, onMounted, h } from 'vue';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
-import {
-  markeTypeMap,
-  useSportFormatDetail,
-  displayHomeAwayScore,
-  BET_RESULT_TYPE_MAP,
-  formatSeriesType
-} from '@/utils/formatMatch';
 import dayjs from 'dayjs';
-import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
 import formDom from '../component/form.vue';
@@ -33,7 +24,6 @@ import editOrder from '../component/editOrder.vue';
 import { useBettingAuditStore } from '@/store/bettingAudit';
 import { hasAuth } from '@/router/utils';
 import { useRiskNoticeStore } from '@/store/riskNotice';
-
 export function useBettingAuditHook(venueType: number) {
   const router = useRouter();
   const riskNoticeStore = useRiskNoticeStore();
@@ -303,7 +293,7 @@ export function useBettingAuditHook(venueType: number) {
           }
         })
       }
-    })    
+    })
   };
 
   const handleCancel = (row: any, index: number) => {
