@@ -16,6 +16,7 @@ import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
 import { addDialog, closeDialog } from '@/components/ReDialog/index';
 import { useRiskNoticeStore } from '@/store/riskNotice';
+import { addThousandSeparator } from '@/utils/formatNumber';
 export function useManualOrderRejectionHook() {
   const router = useRouter();
   const riskNoticeStore = useRiskNoticeStore();
@@ -72,7 +73,9 @@ export function useManualOrderRejectionHook() {
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     try {
-      loading.value = true;
+      if(type!=='export'){
+        loading.value = true;
+      }
       // 对于串关类型的选择处理
       let seriesDetails: any = [];
       if (form.seriesType == 2) {
@@ -114,6 +117,9 @@ export function useManualOrderRejectionHook() {
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       } as any);
+      if(type==='export'){
+        return res?.data
+      }
       loading.value = false;
       downloading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
@@ -135,55 +141,64 @@ export function useManualOrderRejectionHook() {
   }
 
   const exportFile = async () => {
-    exportDialog({
-      firstTitle: t('导出当前手工订单剔除列表数据?'),
-      router,
-      callback: async () => {
-        downloading.value = true;
-        // 对于串关类型的选择处理
-        let seriesDetails: any = [];
-        if (form.seriesType == 2) {
-          if (form.seriesDetailsSingle.length) {
-            form.seriesDetailsSingle.map((item: any) => {
-              seriesDetails.push(...seriesTypesSingle[item].list);
-            });
-          } else {
-            for (const item in seriesTypesSingle) {
-              seriesDetails.push(...seriesTypesSingle[item].list);
+    onSearch('export').then((expRes: any) => {
+      if(expRes?.count>50000){
+        message(`当前条件下数据量为${addThousandSeparator(expRes?.count)}，大于5万条，不支持导出!`, { type: 'error' });
+      }else if(expRes?.count<1){
+        message('数据量为零，无法导出', { type: 'error' });
+      }else {
+        exportDialog({
+          firstTitle: t('导出当前手工订单剔除列表数据?'),
+          router,
+          callback: async () => {
+            downloading.value = true;
+            // 对于串关类型的选择处理
+            let seriesDetails: any = [];
+            if (form.seriesType == 2) {
+              if (form.seriesDetailsSingle.length) {
+                form.seriesDetailsSingle.map((item: any) => {
+                  seriesDetails.push(...seriesTypesSingle[item].list);
+                });
+              } else {
+                for (const item in seriesTypesSingle) {
+                  seriesDetails.push(...seriesTypesSingle[item].list);
+                }
+              }
+            } else if (form.seriesType == 3) {
+              if (form.seriesDetailsDuplex.length) {
+                form.seriesDetailsDuplex.map((item: any) => {
+                  seriesDetails.push(...seriesTypesDuplex[item].list);
+                });
+              } else {
+                for (const item in seriesTypesDuplex) {
+                  seriesDetails.push(...seriesTypesDuplex[item].list);
+                }
+              }
+            } else {
+              seriesDetails = '';
             }
-          }
-        } else if (form.seriesType == 3) {
-          if (form.seriesDetailsDuplex.length) {
-            form.seriesDetailsDuplex.map((item: any) => {
-              seriesDetails.push(...seriesTypesDuplex[item].list);
-            });
-          } else {
-            for (const item in seriesTypesDuplex) {
-              seriesDetails.push(...seriesTypesDuplex[item].list);
+            if (seriesDetails.length > 1) {
+              seriesDetails = [...new Set(seriesDetails)];
             }
+            const res: BetOrderAPI.BetOrderResType = await API.riskExport({
+              ...removeEmptyStringKeys({
+                ...form,
+                seriesDetailsSingle: '',
+                seriesDetailsDuplex: '',
+                seriesDetails: seriesDetails,
+                seriesType: +form.seriesType > 2 ? 2 : form.seriesType
+              }),
+              pageSize: 1,
+              pageNum: 50000,
+              export: true
+            } as any);
+            message(res.msg, { type: res.code ? 'error' : 'success' });
+            downloading.value = false;
           }
-        } else {
-          seriesDetails = '';
-        }
-        if (seriesDetails.length > 1) {
-          seriesDetails = [...new Set(seriesDetails)];
-        }
-        const res: BetOrderAPI.BetOrderResType = await API.riskExport({
-          ...removeEmptyStringKeys({
-            ...form,
-            seriesDetailsSingle: '',
-            seriesDetailsDuplex: '',
-            seriesDetails: seriesDetails,
-            seriesType: +form.seriesType > 2 ? 2 : form.seriesType
-          }),
-          pageSize: 1,
-          pageNum: 50000,
-          export: true
-        } as any);
-        message(res.msg, { type: res.code ? 'error' : 'success' });
-        downloading.value = false;
+        })
       }
     })
+    
   };
 
   const getTenantList1 = async () => {
