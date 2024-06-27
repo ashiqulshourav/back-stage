@@ -142,7 +142,7 @@ export function useEventQueryHook() {
           { type: 'error' }
         );
       } else if (expRes?.list.length < 1) {
-        message('数据量为零，无法导出', { type: 'error' });
+        message(t('数据量为零，无法导出'), { type: 'error' });
       } else {
         exportDialog({
           firstTitle: t('导出当前事件列表数据?'),

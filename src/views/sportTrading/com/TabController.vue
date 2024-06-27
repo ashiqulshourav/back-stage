@@ -59,11 +59,11 @@
                         >
                           <span class="font-bold scale-75">
                             {{
-                              item.level === 200
+                              item.riskLevel < 0
                                 ? t('未')
-                                : item.level > 100
+                                : item.riskLevel > 100
                                 ? '99+'
-                                : item.level
+                                : item.riskLevel
                             }}
                           </span>
                         </span>

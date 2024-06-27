@@ -28,22 +28,22 @@ export const columns: TableColumnList = [
   {
     label: t('事件名称'),
     prop: 'addition5',
-    minWidth: 300
+    headerRenderer: d => handleTableWidth(d, t('事件名称'), 'auto')
   },
   {
     label: t('事件源'),
     prop: 'dataSourceCode',
-    minWidth: 150
+    headerRenderer: d => handleTableWidth(d, t('事件源'), 'auto')
   },
   {
     label: t('操作方式'),
     prop: 'operationType',
-    minWidth: 150
+    headerRenderer: d => handleTableWidth(d, t('操作方式'), 'auto')
   },
   {
     label: t('取消事件'),
     slot: 'canceled',
-    minWidth: 150
+    headerRenderer: d => handleTableWidth(d, t('取消事件'), 'auto')
   },
   {
     label: t('场次/局数/盘数'),
@@ -54,17 +54,17 @@ export const columns: TableColumnList = [
   {
     label: t('主/客'),
     prop: 'homeAway',
-    minWidth: 150
+    headerRenderer: d => handleTableWidth(d, t('主/客'), 'auto')
   },
   {
     label: t('球员名称'),
     prop: 'player1Name',
-    minWidth: 150
+    headerRenderer: d => handleTableWidth(d, t('球员名称'), 'auto')
   },
   {
     label: t('比分'),
     slot: 'score',
-    minWidth: 150
+    headerRenderer: d => handleTableWidth(d, t('比分'), 'auto')
   }
 ];
 

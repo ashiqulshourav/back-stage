@@ -10,11 +10,11 @@
         >
           <span class="scale-75 font-bold">
             {{
-              currentMatch?.level === 200
+              currentMatch.riskLevel < 0
                 ? t('未')
-                : currentMatch?.level > 100
+                : currentMatch.riskLevel > 100
                 ? '99+'
-                : currentMatch?.level
+                : currentMatch.riskLevel
             }}
           </span>
         </span>

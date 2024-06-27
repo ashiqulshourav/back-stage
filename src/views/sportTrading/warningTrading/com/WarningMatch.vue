@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col">
+  <div class="flex flex-col mb-2">
     <MatchTitle @changeStatus="changeStatus" :current-match="matchData" />
 
     <!-- - 赛事内容列表 -->
@@ -67,7 +67,6 @@
                 :key="i"
                 class="border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#503e3e]"
               >
-                <!-- @mouseleave="e => mouseEvent(e, s, 'leave')" -->
                 <div
                   :class="[
                     'flex w-full items-center h-[35px]',
@@ -147,20 +146,11 @@ import { PLAY_MATCH_NAME, goalScoring } from '../../util/playMap';
 import InputCom from '../../com/InputCom.vue';
 import { useBetStore } from '@/store/bet';
 
-const scrollRef = ref();
 const betItemsDtoList = reactive<sportTradingDataAPI.BetItemsDtoList[]>([]);
 const props = defineProps<{
   matchData: sportTradingDataAPI.getAlarmMatchListType;
   matchList: sportTradingDataAPI.getAlarmMatchListType[];
 }>();
-
-watch(
-  () => props.matchData,
-  () => {
-    nextTick(() => scrollRef.value.scrollTo(0, 520));
-  },
-  { deep: true }
-);
 
 //-快捷选择数字事件
 const selectNum = ref(0);
