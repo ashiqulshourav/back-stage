@@ -131,10 +131,10 @@ export function useEventQueryHook() {
   }
   const router = useRouter();
   const exportFile = async () => {
-    onSearch('export').then((expRes) => {
+    onSearch('export').then((expRes: any) => {
       if(expRes?.list.length>50000){
         message(`当前条件下数据量为${addThousandSeparator(expRes?.list.length)}，大于5万条，不支持导出!`, { type: 'error' });
-      } else if(expRes?.list.length<1){
+      } else if(expRes?.list.length<1 || expRes === null){
         message('数据量为零，无法导出', { type: 'error' });
       } else {
         exportDialog({
