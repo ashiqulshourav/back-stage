@@ -141,7 +141,7 @@ export function useEventQueryHook() {
           )}，大于5万条，不支持导出!`,
           { type: 'error' }
         );
-      } else if (expRes?.list.length < 1) {
+      } else if (expRes?.list.length < 1 || expRes === null) {
         message('数据量为零，无法导出', { type: 'error' });
       } else {
         exportDialog({
