@@ -198,7 +198,7 @@ export function useManualOrderRejectionHook() {
         })
       }
     })
-    
+
   };
 
   const getTenantList1 = async () => {
@@ -286,7 +286,7 @@ export function useManualOrderRejectionHook() {
   };
 
   //- 确认注单
-  const confirmBetClick = async detailId => {
+  const confirmBetClick = async (detailId:number) => {
     ElMessageBox.confirm(`${t('是否确定当前注单么?')} `, '警告', {
       center: true
     }).then(async () => {
@@ -320,7 +320,6 @@ export function useManualOrderRejectionHook() {
     handleSelectionChange,
     exportFile,
     handleCancel,
-    // getStatus,
     copyTest,
     confirmBetClick,
     refuseBetClick,
