@@ -163,10 +163,10 @@
             class="!w-[150px]"
           />
         </el-form-item>
-        <el-form-item :label="`${t('玩家号')}:`" prop="userIdOrName">
+        <el-form-item :label="`${t('用户名/用户ID')}:`" prop="userIdOrName">
           <el-input
             v-model="form.userIdOrName"
-            :placeholder="t('请输入会员账号/ID')"
+            :placeholder="t('请输入用户账号账号/账号ID')"
             clearable
             maxLenght="20"
             v-enter="search"
