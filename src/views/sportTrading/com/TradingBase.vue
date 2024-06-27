@@ -62,7 +62,6 @@ import TabController from './TabController.vue';
 import ContentMain from './ContentMain.vue';
 import { t } from '@/plugins/i18n';
 import topCollapse from '@/layout/components/sidebar/topCollapse.vue';
-import { is } from '@pureadmin/utils';
 
 const { type } = defineProps<{ type: 'early' | 'in' }>();
 const isActive = ref(true);
