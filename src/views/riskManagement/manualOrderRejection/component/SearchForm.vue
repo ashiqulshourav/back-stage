@@ -219,10 +219,10 @@
           />
         </el-form-item>
 
-        <el-form-item :label="`${t('会员账号')}:`" prop="userIdOrName">
+        <el-form-item :label="`${t('用户名/用户ID')}:`" prop="userIdOrName">
           <el-input
             v-model="form.userIdOrName"
-            :placeholder="t('请输入会员账号/ID')"
+            :placeholder="t('请输入用户名/用户ID')"
             clearable
             maxLenght="20"
             v-enter="search"

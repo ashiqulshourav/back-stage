@@ -238,7 +238,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     onSearch('export').then((res0:any)=>{
       if(res0?.count>50000){
         message(`当前条件下数据量为${addThousandSeparator(res0?.count)}，大于5万条，不支持导出!`, { type: 'error' });
-      }else if(res0?.count<1){
+      }else if(res0?.count<1 || res0 === null){
         message('数据量为零，无法导出', { type: 'error' });
       }else {
         exportDialog({

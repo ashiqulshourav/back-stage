@@ -49,11 +49,11 @@ export const orderPlacementColumns: TableColumnList = [
     slot: 'eventName'
   },
   {
-    label: t('投注前'),
+    label: t('事件前'),
     slot: 'beforeBetting'
   },
   {
-    label: t('投注后'),
+    label: t('事件后'),
     slot: 'afterBetting'
   },
   {
@@ -76,11 +76,11 @@ export const rejectOrderColumns: TableColumnList = [
     slot: 'eventName'
   },
   {
-    label: t('投注前'),
+    label: t('事件前'),
     slot: 'beforeBetting'
   },
   {
-    label: t('投注后'),
+    label: t('事件后'),
     slot: 'afterBetting'
   }
 ];
@@ -103,11 +103,11 @@ export const autoFreezeColumns: TableColumnList = [
     slot: 'eventName'
   },
   {
-    label: t('投注前'),
+    label: t('事件前'),
     slot: 'betBeforeTime'
   },
   {
-    label: t('投注后'),
+    label: t('事件后'),
     slot: 'betAfterTime'
   },
   {
