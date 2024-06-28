@@ -13,10 +13,7 @@ export const autoLabelColumns: TableColumnList = [
     label: t('注单数量'),
     slot: 'numberOfBets'
   },
-  // {
-  //   label: t('用户输赢金额'),
-  //   slot: 'winLossAmount'
-  // },
+
   {
     label: t('用户输赢金额'),
     slot: 'betAmount'
@@ -76,11 +73,11 @@ export const rejectOrderColumns: TableColumnList = [
     slot: 'eventName'
   },
   {
-    label: t('事件前'),
+    label: t('投注前'),
     slot: 'beforeBetting'
   },
   {
-    label: t('事件后'),
+    label: t('投注后'),
     slot: 'afterBetting'
   }
 ];
