@@ -9,6 +9,8 @@
       :riskLabelList="riskLabelList"
       :venueType="props.venueType"
       :downloading="downloading"
+      @formatParams="formatParams"
+      :total="total"
     />
 
     <PureTableBar
@@ -512,12 +514,15 @@ const {
   editOrderRemark,
   riskLabelList,
   getOddStatus,
-  downloading
+  downloading,
+  formatParams,
+  total
 } = useBettingCenterHook(props.category, props.venueType);
 
 onMounted(() => {
   adjustContentWithRowHeight();
 });
+
 
 onUpdated(() => {
   adjustContentWithRowHeight();

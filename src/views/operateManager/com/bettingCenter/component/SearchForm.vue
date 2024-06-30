@@ -173,21 +173,6 @@
             class="!w-[200px]"
           />
         </el-form-item>
-        <!-- <el-form-item :label="`${t('风控标签')}:`" prop="riskControlLabelList">
-          <el-select
-            v-model="form.riskControlLabelList"
-            @change="search"
-            multiple
-            clearable
-            class="!w-[150px]"
-          >
-            <el-option
-              v-for="item in riskLabelList"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-        </el-form-item> -->
         <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
           <el-tree-select
             v-model="props.form.riskControlLabelList"
@@ -346,6 +331,7 @@
           >
             {{ t('导出') }}
           </el-button>
+          <ExportFile @search="search" exportUrl='/bet-center/listExport' :form="form" :total="total" @formatParams="props.formatParams" :privateParams ='{ export: true}'></ExportFile>
         </el-form-item>
       </div>
     </div>
@@ -369,6 +355,7 @@ import {
 import { searchFormType } from '../util/types';
 import Download from '@iconify-icons/ep/download';
 import { useBetStore } from '@/store/bet';
+import ExportFile from '@/components/ExportFile/index.vue'
 
 const props = defineProps<{
   loading: boolean;
@@ -377,6 +364,9 @@ const props = defineProps<{
   tenantList: [];
   venueType: number;
   downloading: boolean;
+  formatParams:Function;
+  total:Number;
+  onSearch:Function;
 }>();
 
 const formRef = ref();
