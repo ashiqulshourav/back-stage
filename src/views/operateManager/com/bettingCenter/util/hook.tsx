@@ -46,7 +46,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
     pageSizes: [20, 50, 100, 200, 500, 5000],
     background: true
   });
-  const total= ref(0);
   const form = reactive<searchFormType>({
     sportId: '',
     userIdOrName: '',
@@ -175,6 +174,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
   }
 
   async function onSearch(type?: string) {
+    return new Promise((resolve, reject)=>{
       if (type === 'reload') pagination.currentPage = 1;
       try {
         const params: searchFormType = formatParams({
@@ -195,6 +195,8 @@ export function useBettingCenterHook(category: number, venueType: number) {
           loading.value = false;
           if (res.code) return message(res.msg, { type: 'error' });
           if (res.data !== null) {
+
+            resolve(res?.data)
             if(type==='export'){
               return
             }
@@ -214,11 +216,11 @@ export function useBettingCenterHook(category: number, venueType: number) {
               item.index = index + 1;
             });
             pagination.total = res.data?.count;
-            total.value= res.data?.count;
             pagination.pageSize = res.data?.pageSize;
             pagination.currentPage = res.data?.pageNum;
             Object.assign(totalInfo, res.data?.otherData);
           }else {
+            reject();
             dataList.length = 0;
           }
           document
@@ -227,15 +229,16 @@ export function useBettingCenterHook(category: number, venueType: number) {
         });
       } catch (error) {
         loading.value = false;
+        reject()
       }
-
+    })
   }
   const exportFile = async () => {
     downloading.value = true;
-    await onSearch();
-      if(pagination.total>50000){
-        message(`当前条件下数据量为${addThousandSeparator(pagination.total?.toString())}，大于5万条，不支持导出!`, { type: 'error' });
-      }else if(pagination.total<1 ){
+    onSearch('export').then((res0:any)=>{
+      if(res0?.count>50000){
+        message(`当前条件下数据量为${addThousandSeparator(res0?.count)}，大于5万条，不支持导出!`, { type: 'error' });
+      }else if(res0?.count<1 || res0 === null){
         message('数据量为零，无法导出', { type: 'error' });
       }else {
         exportDialog({
@@ -252,8 +255,10 @@ export function useBettingCenterHook(category: number, venueType: number) {
           }
         })
       }
+    })
     downloading.value = false;
   };
+
   const getTenantList = async () => {
     const res = await API.queryTenantList({
       category: category
@@ -483,8 +488,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
     editOrderRemark,
     riskLabelList,
     getOddStatus,
-    downloading,
-    formatParams,
-    total,
+    downloading
   };
 }
