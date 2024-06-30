@@ -40,5 +40,5 @@ export type parentRowType = {
 
 export type MatchEventRowType = {
   row: SattleDataAPI.newBasketballEventsList;
-  index?: number;
+  index: number;
 };

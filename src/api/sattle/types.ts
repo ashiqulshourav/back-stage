@@ -1,3 +1,5 @@
+
+
 declare namespace SattleDataAPI {
   type MatchEventsList = {
     canceled?: number | boolean;
