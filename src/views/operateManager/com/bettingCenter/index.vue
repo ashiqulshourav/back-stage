@@ -6,6 +6,7 @@
       @on-search="onSearch"
       @exportFile="exportFile"
       @exportFileTest="exportFileTest"
+      :category="category"
       :tenantList="tenantList"
       :riskLabelList="riskLabelList"
       :venueType="props.venueType"
