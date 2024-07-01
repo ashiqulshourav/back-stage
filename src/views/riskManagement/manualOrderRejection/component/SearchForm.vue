@@ -212,9 +212,11 @@
             v-model:val="selectDate"
             @changeDate="changeDate"
             :start-placeholder="
-              dayjs().subtract(30, 'day').startOf('day').format('YYYY-MM-DD')
+              dayjs().subtract(30, 'day').startOf('day').format('YYYY-MM-DD HH:mm:ss')
             "
-            :end-placeholder="dayjs().startOf('day').format('YYYY-MM-DD')"
+            :end-placeholder="dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')"
+            :isDateTime="true"
+            :format="'YYYY-MM-DD HH:mm:ss'"
           />
         </el-form-item>
 
@@ -326,12 +328,12 @@ const changeDate = t => {
       createTimeEnd: 0
     });
   } else {
-    props.form.timeStart = dayjs(t[0]).startOf('day').valueOf();
-    props.form.timeEnd = dayjs(t[1]).endOf('day').valueOf();
+    props.form.timeStart = dayjs(t[0]).valueOf();
+    props.form.timeEnd = dayjs(t[1]).valueOf();
 
     riskNoticeStore.setRiskNoticeTimeFrame({
-      createTimeStart: dayjs(t[0]).startOf('day').valueOf(),
-      createTimeEnd: dayjs(t[1]).endOf('day').valueOf()
+      createTimeStart: dayjs(t[0]).valueOf(),
+      createTimeEnd: dayjs(t[1]).valueOf()
     });
   }
   search();
