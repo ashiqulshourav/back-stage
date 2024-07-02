@@ -557,7 +557,7 @@ const {
   editMatchDetailRemark,
   hasDataFetching,
   dataFetchingTime
-} = useBettingAuditHook(venueType);
+} = useBettingAuditHook(venueType, category);
 watch(
   dataList,
   dataList => {

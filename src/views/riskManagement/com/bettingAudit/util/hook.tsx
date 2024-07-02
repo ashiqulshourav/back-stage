@@ -31,7 +31,7 @@ import { useBettingAuditStore } from '@/store/bettingAudit';
 import { hasAuth } from '@/router/utils';
 import { useRiskNoticeStore } from '@/store/riskNotice';
 
-export function useBettingAuditHook(venueType: number) {
+export function useBettingAuditHook(venueType: number, category: number) {
   const riskNoticeStore = useRiskNoticeStore();
   const { openPasswordInput } = usePasswordInputHook({ showClose: false });
   const bettingAuditStore = useBettingAuditStore();
@@ -136,7 +136,8 @@ export function useBettingAuditHook(venueType: number) {
         seriesDetailsSingle: '',
         seriesDetailsDuplex: '',
         seriesDetails: seriesDetails,
-        seriesType: form.seriesType > 2 ? 2 : form.seriesType
+        seriesType: form.seriesType > 2 ? 2 : form.seriesType,
+        category: venueType === 0 ? form.category : 1
       }),
       pageSize: pageNum || pagination.pageSize,
       pageNum: pagination.currentPage,
