@@ -133,15 +133,6 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item :label="`${t('联赛ID')}:`" prop="leagueId">
-          <el-input
-            v-model="form.leagueId"
-            :placeholder="t('联赛ID')"
-            clearable
-            v-enter="search"
-            class="!w-[150px]"
-          />
-        </el-form-item>
         <el-form-item
           :label="`${t('联赛查询')}:`"
           :prop="leagueQuery === 'leagueName' ? 'leagueName' : 'leagueId'"
