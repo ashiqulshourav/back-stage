@@ -245,7 +245,7 @@
             @changeDate="changeDate"
             :start-placeholder="
               dayjs().subtract(30, 'day').startOf('day').format('YYYY-MM-DD HH:mm:ss')
-              "
+            "
             :end-placeholder="dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')"
             :isDateTime="true"
             :format="'YYYY-MM-DD HH:mm:ss'"

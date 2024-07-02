@@ -3,7 +3,7 @@
     <el-date-picker
       class="ml-4 !w-[260px]"
       v-model="timeVal"
-      :type="isSingle ? 'date' : isDateTime ? 'datetimerange' : 'daterange'"
+      :type="isSingle ? 'date' : isDateTime ? 'datetimerange' :  'daterange'"
       :placeholder="placeholder"
       value-format="x"
       :format="format"
@@ -30,6 +30,7 @@ const props = withDefaults(
     isShowShortCuts?: boolean;
     isDateTime?: boolean;
     isSingle?: boolean;
+    isDateTime?: boolean;
     startPlaceholder?: string;
     endPlaceholder?: string;
   }>(),
