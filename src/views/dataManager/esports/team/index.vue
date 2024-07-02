@@ -16,7 +16,7 @@
           adaptive
           :data="dataList"
           :columns="dynamicColumns"
-          :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
+          :pagination="{ ...pagination, pageSizes: pageSizeArr }"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
           @selection-change="handleSelectionChange"
@@ -28,7 +28,7 @@
               preview-teleported
               loading="lazy"
               :src="row.teamLogo"
-              :preview-src-list="dataList.map(v => v.teamLogo)"
+              :preview-src-list="dataList.map(v => v.teamLogo as string)"
               :initial-index="index"
               fit="fill"
               class="!w-[80px] h-[30px]"
@@ -67,6 +67,7 @@ import SearchForm from './component/SearchForm.vue';
 import { usePublicHooks } from '@/hooks';
 import { t } from '@/plugins/i18n';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import { pageSizeArr } from '@/utils/math';
 
 defineOptions({ name: 'ESPORTS_TEAM' });
 const { tableHeaderStyle } = usePublicHooks();

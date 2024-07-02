@@ -15,7 +15,7 @@
         adaptive
         :data="dataList"
         :columns="dynamicColumns"
-        :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
+        :pagination="{ ...pagination, pageSizes: pageSizeArr }"
         :paginationSmall="size === 'small' ? true : false"
         :header-cell-style="tableHeaderStyle"
         @page-size-change="handleTableWidthChange"
@@ -60,6 +60,7 @@ import { usePublicHooks } from '@/hooks';
 import type { PaginationProps } from '@pureadmin/table';
 import { sport_list_map_type } from '../utils/type';
 import { t } from '@/plugins/i18n';
+import { pageSizeArr } from '@/utils/math';
 
 defineProps<{
   columns: TableColumnList;

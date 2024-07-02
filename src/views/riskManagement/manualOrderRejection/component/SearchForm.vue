@@ -271,9 +271,9 @@
             type="primary"
             :icon="useRenderIcon(Download)"
             :loading="downloading"
-            @click="exportFile()"
             v-if="hasAuth('EXPORT')"
-          >
+            @click="exportFile()"
+            >
             {{ t('导出') }}
           </el-button>
         </el-form-item>

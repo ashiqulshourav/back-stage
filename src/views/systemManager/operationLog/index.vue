@@ -26,7 +26,7 @@
           border
           :data="dataList"
           :columns="dynamicColumns"
-          :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
+          :pagination="{ ...pagination, pageSizes: pageSizeArr }"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
           @page-size-change="handleTableWidthChange"
@@ -77,6 +77,7 @@ import RequestDialog from './component/RequestDialog.vue';
 import { t } from '@/plugins/i18n';
 import { addDialog } from '@/components/ReDialog';
 import { usePublicHooks } from '@/hooks';
+import { pageSizeArr } from '@/utils/math';
 
 defineOptions({ name: 'OPERATIONLOG' });
 const { tableHeaderStyle } = usePublicHooks();

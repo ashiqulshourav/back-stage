@@ -17,7 +17,7 @@
           adaptive
           :data="dataList"
           :columns="dynamicColumns"
-          :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
+          :pagination="{ ...pagination, pageSizes: pageSizeArr }"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
           @selection-change="handleSelectionChange"
@@ -29,7 +29,7 @@
               preview-teleported
               loading="lazy"
               :src="row.teamLogo"
-              :preview-src-list="dataList.map(v => v.teamLogo)"
+              :preview-src-list="dataList.map(v => v.teamLogo as string)"
               :initial-index="index"
               fit="fill"
               class="w-[80px] h-[30px]"
@@ -68,6 +68,7 @@ import { useTeam } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
+import { pageSizeArr } from '@/utils/math';
 
 defineOptions({ name: 'METADATA_TEAM' });
 const { tableHeaderStyle } = usePublicHooks();

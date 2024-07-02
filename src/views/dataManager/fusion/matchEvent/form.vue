@@ -1,8 +1,16 @@
 <template>
-  <div class="modal-container" :style="`background-color: ${dataTheme ? '#020409' : '#F0F2F5'}`">
+  <div
+    class="modal-container"
+    :style="`background-color: ${dataTheme ? '#020409' : '#F0F2F5'}`"
+  >
     <div class="place-content-center col-span-1 ml-2">
-      <div class="text-center text-lg font-bold mb-5">{{ t('正在编辑的赛事信息') }}</div>
-      <VerticalTable :columns="selectedEventColumns" :dataList="matchSourceDetails"/>
+      <div class="text-center text-lg font-bold mb-5">
+        {{ t('正在编辑的赛事信息') }}
+      </div>
+      <VerticalTable
+        :columns="selectedEventColumns"
+        :dataList="matchSourceDetails"
+      />
     </div>
     <div class="col-span-4 m-2">
       <SearchForm
@@ -29,32 +37,44 @@
             :data="matchInfoDataList"
             :columns="dynamicColumns"
             :header-cell-style="tableHeaderStyle"
-            :pagination="{ ...editPagination, pageSizes: [5, 10, 20, 50, 100] }"
+            :pagination="{ ...editPagination, pageSizes: pageSizeArr }"
             :paginationSmall="size === 'small' ? true : false"
             @selection-change="handleSelectionChange"
             @page-size-change="handleModalTableWidthChange"
             @page-current-change="handleModalCurrentChange"
           >
             <template #leagueName="{ row }">
-              <div> {{ handleNullValue(row.leagueNameCn) }} </div>
-              <div> {{ handleNullValue(row.leagueNameEn) }} </div>
+              <div>{{ handleNullValue(row.leagueNameCn) }}</div>
+              <div>{{ handleNullValue(row.leagueNameEn) }}</div>
             </template>
             <template #homeTeamName="{ row }">
-              <div> {{ handleNullValue(row.homeTeamNameCn) }} </div>
-              <div> {{ handleNullValue(row.homeTeamNameEn) }} </div>
+              <div>{{ handleNullValue(row.homeTeamNameCn) }}</div>
+              <div>{{ handleNullValue(row.homeTeamNameEn) }}</div>
             </template>
             <template #awayTeamName="{ row }">
-              <div> {{ handleNullValue(row.awayTeamNameCn) }} </div>
-              <div> {{ handleNullValue(row.awayTeamNameEn) }} </div>
+              <div>{{ handleNullValue(row.awayTeamNameCn) }}</div>
+              <div>{{ handleNullValue(row.awayTeamNameEn) }}</div>
             </template>
             <template #operation="{ row }">
               <el-button
-                :type= "!alreadyMatch ? 'success' : row.pairingStatus === 1 ? 'warning' : 'default'"
+                :type="
+                  !alreadyMatch
+                    ? 'success'
+                    : row.pairingStatus === 1
+                    ? 'warning'
+                    : 'default'
+                "
                 :size="size"
                 :disabled="alreadyMatch && row.pairingStatus === 0"
-                @click="openManualMatchDialog(row.pairingStatus === 1 ? t('取消匹配确认') : t('匹配确认'), rowData, row)"
+                @click="
+                  openManualMatchDialog(
+                    row.pairingStatus === 1 ? t('取消匹配确认') : t('匹配确认'),
+                    rowData,
+                    row
+                  )
+                "
               >
-                {{ row.pairingStatus === 0?t('立即匹配'):t('取消匹配') }}
+                {{ row.pairingStatus === 0 ? t('立即匹配') : t('取消匹配') }}
               </el-button>
             </template>
           </pure-table>
@@ -63,7 +83,9 @@
     </div>
   </div>
   <div class="flex justify-center mt-5">
-    <el-button type="primary" @click="closeDialog">{{ t('关闭对话框') }}</el-button>
+    <el-button type="primary" @click="closeDialog">{{
+      t('关闭对话框')
+    }}</el-button>
   </div>
 </template>
 
@@ -77,6 +99,7 @@ import { usePublicHooks } from '@/hooks';
 import { tableColumnList } from './component/TableColumnList';
 import VerticalTable from '@/components/VerticalTable/index.vue';
 import { useDataThemeChange } from '@/layout/hooks/useDataThemeChange';
+import { pageSizeArr } from '@/utils/math';
 
 const { matchColumns, selectedEventColumns } = tableColumnList();
 const { dataTheme } = useDataThemeChange();
@@ -91,24 +114,27 @@ const {
   editPagination,
   handleSelectionChange,
   handleModalTableWidthChange,
-  handleModalCurrentChange,
+  handleModalCurrentChange
 } = matchCombineHook();
 
-const props = withDefaults(defineProps<{rowData: MatchCombineAPI.matchPairingDetail}>(), {});
+const props = withDefaults(
+  defineProps<{ rowData: MatchCombineAPI.matchPairingDetail }>(),
+  {}
+);
 const emits = defineEmits(['reloadTable', 'closeDialog']);
 const matchSourceDetails = ref(props.rowData);
 alreadyMatch.value = matchSourceDetails.value.pairingType !== 0;
 
 onMounted(() => {
-    const date = props?.rowData?.beginTime?.split(' ');
-    if(date?.length){
-      editFrom.startTime = date[0] +' '+ '00:00:00';
-      editFrom.endTime = date[0] +' '+ '23:59:59'
-    }
-    editFrom.sportId=   props?.rowData?.sportId;
-    editFrom.matchId188bet= props?.rowData.matchId188bet;
-    editFrom.beginTime
-    onModalSearch();
+  const date = props?.rowData?.beginTime?.split(' ');
+  if (date?.length) {
+    editFrom.startTime = date[0] + ' ' + '00:00:00';
+    editFrom.endTime = date[0] + ' ' + '23:59:59';
+  }
+  editFrom.sportId = props?.rowData?.sportId;
+  editFrom.matchId188bet = props?.rowData.matchId188bet;
+  editFrom.beginTime;
+  onModalSearch();
 });
 
 const closeDialog = () => {
@@ -117,12 +143,12 @@ const closeDialog = () => {
 
 const handleNullValue = (value: string | number) => {
   return value ? value : '-';
-}
+};
 </script>
 
 <style lang="scss">
 .container {
-	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
 }
 .modal-container {
   display: grid;

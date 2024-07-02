@@ -5,6 +5,7 @@
       :loading="loading"
       @on-search="onSearch"
       @exportFile="exportFile"
+      :category="category"
       :tenantList="tenantList"
       :venueType="venueType"
       :downloading="downloading"
@@ -528,8 +529,9 @@ const rejectSelectedCount = ref(0);
 const approveSelectedCount = ref(0);
 const isDataFetching = ref(1);
 
-const { venueType } = defineProps<{
+const { venueType, category } = defineProps<{
   venueType: number;
+  category: number;
 }>();
 
 const {
@@ -557,7 +559,7 @@ const {
   editMatchDetailRemark,
   hasDataFetching,
   dataFetchingTime
-} = useBettingAuditHook(venueType);
+} = useBettingAuditHook(venueType, category);
 watch(
   dataList,
   dataList => {
