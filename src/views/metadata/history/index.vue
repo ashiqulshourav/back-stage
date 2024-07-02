@@ -81,7 +81,6 @@ const {
   loading,
   columns,
   dataList,
-  switchStyle,
   pagination,
   onSearch,
   // resetForm,
