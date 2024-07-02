@@ -1,5 +1,5 @@
 <template>
-  <BettingAudit :venueType="1" />
+  <BettingAudit :venueType="1" :category="0"/>
 </template>
 
 <script setup lang="ts">

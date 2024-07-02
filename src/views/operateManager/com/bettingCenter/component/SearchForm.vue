@@ -136,23 +136,54 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item :label="`${t('联赛ID')}:`" prop="leagueId">
+        <el-form-item
+          :label="`${t('联赛查询')}:`"
+          :prop="leagueQuery === 'leagueName' ? 'leagueName' : 'leagueId'"
+        >
+          <el-select v-model="leagueQuery" class="!w-[100px] flex-shrink-0">
+            <el-option :label="t('联赛ID')" value="leagueId" />
+            <el-option :label="t('联赛名')" value="leagueName" />
+          </el-select>
           <el-input
+            class="!w-[200px] flex-shrink-0"
+            v-if="leagueQuery === 'leagueId'"
+            filterable
+            v-enter="search"
             v-model="form.leagueId"
             :placeholder="t('联赛ID')"
-            clearable
-            v-enter="search"
-            class="!w-[150px]"
           />
-        </el-form-item>
-        <el-form-item :label="`${t('联赛名')}:`" prop="leagueName">
-          <el-input
+          <el-select
+            v-else
             v-model="form.leagueName"
-            :placeholder="t('联赛名')"
             clearable
-            v-enter="search"
-            class="!w-[150px]"
-          />
+            filterable
+            remote
+            @change="search"
+            @focus="matchStore.reset_lagueList"
+            :remote-method="
+              debounce(
+                query =>
+                  matchStore.search_league_list(
+                    query,
+                    form.sportId,
+                    category
+                  ),
+                1000
+              )
+            "
+            class="!w-[200px] flex-shrink-0"
+            :placeholder="t('联赛名')"
+            :loading="matchStore.matchSearchLoading"
+          >
+            <el-option
+              v-for="item in category === 0
+                ? matchStore.sportLeagueList
+                : matchStore.esportLeagueList"
+              :key="item.leagueId"
+              :label="item.leagueNameCn"
+              :value="item.leagueNameCn"
+            />
+          </el-select>       
         </el-form-item>
         <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
           <el-input
@@ -361,6 +392,8 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import type { FormInstance, CheckboxValueType } from 'element-plus';
 import dayjs from 'dayjs';
 import { formatNumber } from '@/utils/formatNumber';
+import { useMatchStore } from '@/store/match';
+import { debounce } from '@pureadmin/utils';
 import {
   SPORT_ID_MAP,
   ESPORT_ID_MAP,
@@ -369,6 +402,7 @@ import {
 import { searchFormType } from '../util/types';
 import Download from '@iconify-icons/ep/download';
 import { useBetStore } from '@/store/bet';
+const matchStore = useMatchStore();
 
 const props = defineProps<{
   loading: boolean;
@@ -376,8 +410,11 @@ const props = defineProps<{
   form: searchFormType;
   tenantList: [];
   venueType: number;
+  category: number;
   downloading: boolean;
 }>();
+
+const leagueQuery = ref<'leagueName' | 'leagueId'>('leagueName');
 
 const formRef = ref();
 const selectDate = ref('');
@@ -401,6 +438,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
   props.form.timeEnd = dayjs().endOf('day').valueOf();
   props.form.betItemId = '';
   props.form.matchId = '';
+  leagueQuery.value = 'leagueName';
   search();
 };
 
