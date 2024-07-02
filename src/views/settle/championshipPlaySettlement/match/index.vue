@@ -26,7 +26,7 @@
           adaptive
           :data="dataList"
           :columns="dynamicColumns"
-          :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
+          :pagination="{ ...pagination, pageSizes: pageSizeArr }"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
           @page-size-change="handleTableWidthChange"
@@ -84,6 +84,7 @@ import { EsportMatchRowType } from './utils/types';
 import { usePublicHooks } from '@/hooks';
 import { hasAuth } from '@/router/utils';
 import { ESPORT_ID_MAP, SPORT_ID_MAP } from '@/utils/maps/sports_map';
+import { pageSizeArr } from '@/utils/math';
 
 defineOptions({ name: 'ESPORTSSETTLEMENT' });
 const { tableHeaderStyle } = usePublicHooks();

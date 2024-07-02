@@ -24,7 +24,7 @@
           :default-sort="{ prop: 'level', order: 'descending' }"
           :data="dataList"
           :columns="dynamicColumns"
-          :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
+          :pagination="{ ...pagination, pageSizes: pageSizeArr }"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
           @selection-change="handleSelectionChange"
@@ -107,7 +107,7 @@ import { hasAuth } from '@/router/utils';
 import Delete from '@iconify-icons/ep/delete';
 import EditPen from '@iconify-icons/ep/edit-pen';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-
+import { pageSizeArr } from '@/utils/math';
 
 const { switchStyle } = usePublicHooks();
 const { tableHeaderStyle } = usePublicHooks();

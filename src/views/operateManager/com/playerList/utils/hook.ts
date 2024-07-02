@@ -10,6 +10,7 @@ import {
 } from './types';
 import { FormInstance } from 'element-plus';
 import { useSettingStoreHook } from '@/store/settings';
+import { pageSizeArr } from '@/utils/math';
 
 export function userPlayerListHook(venueType: number, category: number) {
   const route = useRoute();
@@ -43,7 +44,7 @@ export function userPlayerListHook(venueType: number, category: number) {
     pageSize: 10,
     currentPage: 1,
     background: true,
-    pageSizes: [5, 10, 20, 50, 100]
+    pageSizes: pageSizeArr
   });
 
   const recordPagination = reactive<PaginationProps>({
@@ -113,7 +114,7 @@ export function userPlayerListHook(venueType: number, category: number) {
   };
 
   // export player list
-  const exportFileTest = async () =>{
+  const exportFileTest = async () => {
     downloading.value = true;
     const res = await API.playerListExport({
       ...removeEmptyStringKeys(form),
@@ -310,7 +311,6 @@ export function userPlayerListHook(venueType: number, category: number) {
     dispatchUpdateUser,
     tenantObj,
     goChangeAccountPage,
-    tenantObj,
     downloading,
     exportFileTest
   };

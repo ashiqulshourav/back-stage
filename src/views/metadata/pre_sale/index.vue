@@ -40,7 +40,7 @@
           :data="dataList"
           show-overflow-tooltip
           :columns="dynamicColumns"
-          :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
+          :pagination="{ ...pagination, pageSizes: pageSizeArr }"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
           @selection-change="handleSelectionChange"
@@ -122,6 +122,7 @@ import OpeningPreview from './component/OpeningPreview.vue';
 import { addDialog } from '@/components/ReDialog';
 import { message } from '@/utils/message';
 import { usePublicHooks } from '@/hooks';
+import { pageSizeArr } from '@/utils/math';
 
 defineOptions({ name: 'SALE_PRE_SALE' });
 const { tableHeaderStyle } = usePublicHooks();
