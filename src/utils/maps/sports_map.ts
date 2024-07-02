@@ -239,7 +239,7 @@ export const PLAY_MATCH = (code: string) => {
 };
 //- 玩法声明映射
 export const PLAY_MATCH2 = (code: string, home: string, away: string) => {
-  const t1 = ['Q1_OU', 'Q2_OU', 'Q3_OU', 'Q4_OU', 'HT_OU', 'S1_OU', 'S2_OU', 'S3_OU', 'S4_OU', 'FTS_OU', 'FT_OU', 'PT_OU']
+  const t1 = ['Q1_OU', 'Q2_OU', 'Q3_OU', 'Q4_OU', 'HT_OU', 'S1_OU', 'S2_OU', 'S3_OU', 'S4_OU', 'FTS_OU', 'FT_OU', 'PT_OU', 'FT_OU']
   const t2 = ['HT_AH', 'FT_AH', 'FTS_AH', 'Q4_AH', 'Q3_AH', 'Q1_AH', 'Q2_AH', 'S1_AH', 'S2_AH', 'S3_AH', 'S4_AH', 'PT_AH']
   const t3 = ['FT_OE', 'HT_OE']
   const t4 = ['FT_1X2', 'HT_1X2', 'S1_ML', 'S2_ML', 'S3_ML', 'S4_ML', 'Q1_ML', 'Q2_ML', 'Q3_ML', 'Q4_ML', 'FT_ML', 'HT_ML', 'Winner_2ndFrame', 'Winner_1stFrame', 'Winner', 'Winner_1X2', 'win_18280', 'BothTeamsToScore']

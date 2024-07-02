@@ -38,38 +38,40 @@
                 <div class="flex flex-wrap flex-grow">
                   <template
                     v-if="
-                      cItem[0].sourceCode !== 'FT_CS' &&
-                      cItem[0].sourceCode !== 'HT_CS'
+                      cItem[0]?.sourceCode !== 'FT_CS' &&
+                      cItem[0]?.sourceCode !== 'HT_CS'
                     "
                   >
                     <el-button
                       class="flex-grow text-center flex justify-between w-1/4 mb-1 break_word"
                       v-for="s in cItem"
-                      :key="s.sourceBetItemsId"
+                      :key="s?.sourceBetItemsId"
                     >
                       <span
                         class="text-ellipsis overflow-hidden whitespace-nowrap max-w-[33%]"
                         v-if="
-                          ['S1_AH', 'S2_AH', 'FTS_AH'].includes(s.sourceCode) &&
-                          matchInfo.sportId === 3
+                          ['S1_AH', 'S2_AH', 'FTS_AH'].includes(
+                            s?.sourceCode
+                          ) && matchInfo.sportId === 3
                         "
                       >
-                        {{ nameMap[s.homeOrAway] }}
+                        {{ nameMap[s?.homeOrAway] }}
                       </span>
                       <span v-else>
                         {{
-                          s.n
-                            ? s.n
-                            : PLAY_MATCH(s.sourceCode)[
-                                s.homeOrAway || s.handicap
-                              ] ?? s.handicap
+                          s?.n
+                            ? s?.n
+                            : PLAY_MATCH(s?.kindsCode)[
+                                s?.homeOrAway || s?.handicap
+                              ]?.replace('&', ' ') ??
+                              s?.handicap.replace('&', ' ')
                         }}
                       </span>
                       <span
-                        v-if="!PLAY_MATCH(s.sourceCode).hideMiddle && !s.n"
-                        >{{ s.handicap }}</span
+                        v-if="!PLAY_MATCH(s?.kindsCode)?.hideMiddle && !s?.n"
+                        >{{ s?.handicap }}</span
                       >
-                      <span>{{ s.odds.toFixed(2) }}</span>
+                      <span>{{ s?.odds.toFixed(2) }}</span>
                     </el-button>
                   </template>
                   <template v-else>
@@ -82,8 +84,8 @@
                       :key="idx"
                     >
                       <template v-if="s">
-                        <span>{{ s.handicap }}</span>
-                        <span>{{ s.odds.toFixed(2) }}</span>
+                        <span>{{ s?.handicap }}</span>
+                        <span>{{ s?.odds.toFixed(2) }}</span>
                       </template>
                     </el-button>
                   </template>
@@ -98,7 +100,7 @@
                   >
                     <template #reference>
                       <IconifyIconOffline
-                        :icon="cItem[0].isSale === 2 ? 'unlock' : 'lock'"
+                        :icon="cItem[0]?.isSale === 2 ? 'unlock' : 'lock'"
                       />
                     </template>
                   </el-popconfirm>
