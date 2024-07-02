@@ -24,7 +24,8 @@ import editOrder from '../component/editOrder.vue';
 import { useBettingAuditStore } from '@/store/bettingAudit';
 import { hasAuth } from '@/router/utils';
 import { useRiskNoticeStore } from '@/store/riskNotice';
-export function useBettingAuditHook(venueType: number) {
+
+export function useBettingAuditHook(venueType: number, category: number) {
   const router = useRouter();
   const riskNoticeStore = useRiskNoticeStore();
   const { openPasswordInput } = usePasswordInputHook({ showClose: false });
@@ -57,6 +58,7 @@ export function useBettingAuditHook(venueType: number) {
     createTimeEnd: dayjs().endOf('day').valueOf(),
     orderId: '',
     leagueId: '',
+    leagueName: '',
     matchId: '',
     seriesType: '',
     category: '',
@@ -129,7 +131,8 @@ export function useBettingAuditHook(venueType: number) {
         seriesDetailsSingle: '',
         seriesDetailsDuplex: '',
         seriesDetails: seriesDetails,
-        seriesType: form.seriesType > 2 ? 2 : form.seriesType
+        seriesType: form.seriesType > 2 ? 2 : form.seriesType,
+        category: venueType === 0 ? form.category : 1
       }),
       pageSize: pageNum || pagination.pageSize,
       pageNum: pagination.currentPage,
