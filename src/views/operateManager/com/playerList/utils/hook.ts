@@ -12,6 +12,7 @@ import { FormInstance } from 'element-plus';
 import { useSettingStoreHook } from '@/store/settings';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
+import { pageSizeArr } from '@/utils/math';
 const { exportDialog } = usePublicHooks();
 
 export function userPlayerListHook(venueType: number, category: number) {
@@ -46,7 +47,7 @@ export function userPlayerListHook(venueType: number, category: number) {
     pageSize: 10,
     currentPage: 1,
     background: true,
-    pageSizes: [5, 10, 20, 50, 100]
+    pageSizes: pageSizeArr
   });
 
   const recordPagination = reactive<PaginationProps>({

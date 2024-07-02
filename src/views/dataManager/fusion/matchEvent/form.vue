@@ -29,7 +29,7 @@
             :data="matchInfoDataList"
             :columns="dynamicColumns"
             :header-cell-style="tableHeaderStyle"
-            :pagination="{ ...editPagination, pageSizes: [5, 10, 20, 50, 100] }"
+            :pagination="{ ...editPagination, pageSizes: pageSizeArr }"
             :paginationSmall="size === 'small' ? true : false"
             @selection-change="handleSelectionChange"
             @page-size-change="handleModalTableWidthChange"
@@ -77,6 +77,7 @@ import { usePublicHooks } from '@/hooks';
 import { tableColumnList } from './component/TableColumnList';
 import VerticalTable from '@/components/VerticalTable/index.vue';
 import { useDataThemeChange } from '@/layout/hooks/useDataThemeChange';
+import { pageSizeArr } from '@/utils/math';
 
 const { matchColumns, selectedEventColumns } = tableColumnList();
 const { dataTheme } = useDataThemeChange();

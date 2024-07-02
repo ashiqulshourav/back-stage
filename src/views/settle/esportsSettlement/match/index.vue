@@ -20,7 +20,7 @@
           adaptive
           :data="dataList"
           :columns="dynamicColumns"
-          :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
+          :pagination="{ ...pagination, pageSizes: pageSizeArr }"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
           @selection-change="handleSelectionChange"
@@ -85,6 +85,7 @@ import SearchForm from './component/SearchForm.vue';
 import { EsportMatchRowType } from './utils/types';
 import { usePublicHooks } from '@/hooks';
 import { hasAuth } from '@/router/utils';
+import { pageSizeArr } from '@/utils/math';
 
 defineOptions({ name: 'ESPORTSSETTLEMENT' });
 const { tableHeaderStyle } = usePublicHooks();

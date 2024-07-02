@@ -11,7 +11,7 @@
       adaptive
       :data="dataList"
       :columns="columns"
-      :pagination="{ ...pagination, pageSizes: [5, 10, 20, 50, 100] }"
+      :pagination="{ ...pagination, pageSizes: pageSizeArr }"
       :paginationSmall="true"
       :header-cell-style="tableHeaderStyle"
       @page-current-change="handleCurrentChange"
@@ -41,6 +41,7 @@ import { usePublicHooks } from '@/hooks';
 import { PaginationProps } from '@pureadmin/table';
 import { columns } from '../util/betColumn';
 import { useSportFormatDetail, getViewOddFn } from '@/utils/formatMatch';
+import { pageSizeArr } from '@/utils/math';
 
 const props = defineProps<{
   index: number;
