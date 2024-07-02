@@ -47,7 +47,6 @@ export const betStatusMap = {
   [betStatus.PendingApprove]: t('待审核'),
   [betStatus.unsettlementBet]: t('未结算'),
   [betStatus.settlementBet]: t('已结算'),
-  [betStatus.PendingApprove]: t('待审核'),
   [betStatus.betInvalid]: t('注单无效'),
   [betStatus.betFail]: t('投注失败'),
   [betStatus.eventAbnormal]: t('赛事异常'),
