@@ -142,6 +142,55 @@
             class="!w-[150px]"
           />
         </el-form-item>
+        <el-form-item
+          :label="`${t('联赛查询')}:`"
+          :prop="leagueQuery === 'leagueName' ? 'leagueName' : 'leagueId'"
+        >
+          <el-select v-model="leagueQuery" class="!w-[100px] flex-shrink-0">
+            <el-option :label="t('联赛ID')" value="leagueId" />
+            <el-option :label="t('联赛名')" value="leagueName" />
+          </el-select>
+          <el-input
+            class="!w-[200px] flex-shrink-0"
+            v-if="leagueQuery === 'leagueId'"
+            filterable
+            v-enter="search"
+            v-model="form.leagueId"
+            :placeholder="t('联赛ID')"
+          />
+          <el-select
+            v-else
+            v-model="form.leagueName"
+            clearable
+            filterable
+            remote
+            @change="search"
+            @focus="matchStore.reset_lagueList"
+            :remote-method="
+              debounce(
+                query =>
+                  matchStore.search_league_list(
+                    query,
+                    form.sportId,
+                    category
+                  ),
+                1000
+              )
+            "
+            class="!w-[200px] flex-shrink-0"
+            :placeholder="t('联赛名')"
+            :loading="matchStore.matchSearchLoading"
+          >
+            <el-option
+              v-for="item in category === 0
+                ? matchStore.sportLeagueList
+                : matchStore.esportLeagueList"
+              :key="item.leagueId"
+              :label="item.leagueNameCn"
+              :value="item.leagueNameCn"
+            />
+          </el-select>   
+        </el-form-item>
         <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
           <el-input
             v-model="form.matchId"
@@ -248,19 +297,24 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import type { FormInstance } from 'element-plus';
 import dayjs from 'dayjs';
 import { formatNumber } from '@/utils/formatNumber';
+import { useMatchStore } from '@/store/match';
+import { debounce } from '@pureadmin/utils';
 import {
   SPORT_ID_MAP,
   ESPORT_ID_MAP,
   SPORT_CATEGORY
 } from '@/utils/maps/sports_map';
 import { searchFormType } from '../util/types';
+const matchStore = useMatchStore();
 const props = defineProps<{
   loading: boolean;
   venueType: number;
   form: searchFormType;
   tenantList: [];
   downloading: boolean;
+  category: number;
 }>();
+const leagueQuery = ref<'leagueName' | 'leagueId'>('leagueName');
 
 const formRef = ref();
 const selectDate = ref('');
@@ -294,6 +348,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
     createTimeStart: dayjs().subtract(30, 'day').startOf('day').valueOf(),
     createTimeEnd: dayjs().endOf('day').valueOf()
   });
+  leagueQuery.value = 'leagueName';
   search();
 };
 

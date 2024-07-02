@@ -63,6 +63,7 @@ export function useBettingAuditHook(venueType: number) {
     createTimeEnd: dayjs().endOf('day').valueOf(),
     orderId: '',
     leagueId: '',
+    leagueName: '',
     matchId: '',
     seriesType: '',
     category: '',
