@@ -31,7 +31,6 @@ const props = withDefaults(
     isShowShortCuts?: boolean;
     isDateTime?: boolean;
     isSingle?: boolean;
-    isDateTime?: boolean;
     startPlaceholder?: string;
     endPlaceholder?: string;
   }>(),
