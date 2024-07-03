@@ -63,8 +63,9 @@
                             ? s?.n?.replace('&', ' ') // @ts-ignore: Ignore the implicit any error
                             : PLAY_MATCH(s?.kindsCode)[
                                 s?.homeOrAway || s?.handicap
-                              ] ??
-                              s?.handicap
+                              ] ?? s?.kindsCode === 'FT_TG'
+                            ? s?.handicap.split('').join('-')
+                            : s?.handicap
                                 ?.replace('3UP', '3+')
                                 .replace('7UP', '7+')
                         }}
