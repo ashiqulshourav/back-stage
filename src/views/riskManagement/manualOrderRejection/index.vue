@@ -4,6 +4,7 @@
       :form="form"
       :loading="loading"
       :downloading="downloading"
+      :category="0"
       @on-search="onSearch"
       @exportFile="exportFile"
       :tenantList="tenantList"
