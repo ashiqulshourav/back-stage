@@ -65,8 +65,8 @@
                                 s?.homeOrAway || s?.handicap
                               ] ??
                               s?.handicap
-                                ?.replace('3UP', t('3+'))
-                                .replace('7UP', t('7+'))
+                                ?.replace('3UP', '3+')
+                                .replace('7UP', '7+')
                         }}
                       </span>
                       <span
