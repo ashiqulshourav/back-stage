@@ -29,7 +29,7 @@ import { t } from '@/plugins/i18n';
 import { addDialog, closeDialog } from '@/components/ReDialog/index';
 import { useRiskNoticeStore } from '@/store/riskNotice';
 
-export function useManualOrderRejectionHook(category: number = 0) {
+export function useManualOrderRejectionHook() {
   const riskNoticeStore = useRiskNoticeStore();
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
   const tenantList = reactive<any>([]);

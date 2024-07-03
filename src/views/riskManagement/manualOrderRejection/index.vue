@@ -5,7 +5,7 @@
       :form="form"
       :loading="loading"
       :downloading="downloading"
-      :category="category"
+      :category="0"
       @on-search="onSearch"
       @exportFile="exportFile"
       @exportFileTest="exportFileTest"
@@ -410,10 +410,6 @@ import { usePublicHooks } from '@/hooks';
 defineOptions({ name: 'RISKMANAGEMENT_MANUALORDERREJECTION' });
 const { tableHeaderStyle } = usePublicHooks();
 
-const { category } = defineProps<{
-  category: number;
-}>();
-
 onMounted(() => {
   adjustContentWithRowHeight();
 });
@@ -473,7 +469,7 @@ const {
   tenantObj,
   exportFile,
   getBackgroundColor
-} = useManualOrderRejectionHook(category);
+} = useManualOrderRejectionHook();
 </script>
 
 <style lang="scss">

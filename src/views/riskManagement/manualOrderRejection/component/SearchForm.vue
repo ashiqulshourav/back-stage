@@ -140,25 +140,6 @@
             <el-option :label="t('风控拒单')" :value="1" />
           </el-select>
         </el-form-item>
-
-        <el-form-item :label="`${t('联赛ID')}:`" prop="leagueId">
-          <el-input
-            v-model="form.leagueId"
-            :placeholder="t('联赛ID')"
-            clearable
-            v-enter="search"
-            class="!w-[150px]"
-          />
-        </el-form-item>
-        <el-form-item :label="`${t('联赛名')}:`" prop="leagueName">
-          <el-input
-            v-model="form.leagueName"
-            :placeholder="t('联赛名')"
-            clearable
-            v-enter="search"
-            class="!w-[150px]"
-          />
-        </el-form-item>
         <el-form-item 
           :label="`${t('联赛查询')}:`"
           :prop="leagueQuery === 'leagueName' ? 'leagueName' : 'leagueId'"
