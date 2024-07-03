@@ -25,7 +25,7 @@
         <template v-if="o.formatList.length">
           <el-collapse v-model="colActiveNames" @change="handleChange">
             <el-collapse-item
-              :title="_[0][0].betItemsName"
+              :title="_[0][0].betItemsName.replace('&', ' ')"
               :name="i"
               v-for="(_, i) in o.formatList"
               :key="i"
@@ -55,16 +55,18 @@
                           ) && matchInfo.sportId === 3
                         "
                       >
-                        {{ nameMap[s?.homeOrAway] }}
+                        {{ nameMap[s?.homeOrAway as keyof typeof nameMap] }}
                       </span>
                       <span v-else>
                         {{
                           s?.n
-                            ? s?.n
+                            ? s?.n?.replace('&', ' ') // @ts-ignore: Ignore the implicit any error
                             : PLAY_MATCH(s?.kindsCode)[
                                 s?.homeOrAway || s?.handicap
-                              ]?.replace('&', ' ') ??
-                              s?.handicap.replace('&', ' ')
+                              ] ??
+                              s?.handicap
+                                ?.replace('3UP', t('3+'))
+                                .replace('7UP', t('7+'))
                         }}
                       </span>
                       <span
@@ -208,14 +210,18 @@ const getBetItemsList = async () => {
     d.formatList
       .sort((a: any, b: any) => a.displayIndex - b.displayIndex)
       .forEach((item: any) => {
+        // @ts-ignore: Ignore the implicit any error
         if (!o[item.kindsCode as keyof typeof o]) o[item.kindsCode] = [];
+        // @ts-ignore: Ignore the implicit any error
         o[item.kindsCode].push(item);
       });
     d.formatList = Object.values(o)
       .map((_: SaleDataAPI.getBetItemsListDataType[]) => {
         const o1 = {};
         _.forEach((h: SaleDataAPI.getBetItemsListDataType) => {
+          // @ts-ignore: Ignore the implicit any error
           if (!o1[h.sourceBetItemsMid]) o1[h.sourceBetItemsMid] = [];
+          // @ts-ignore: Ignore the implicit any error
           o1[h.sourceBetItemsMid].push(h);
         });
         if (_[0].kindsCode === 'FT_CS' || _[0].kindsCode === 'HT_CS') {
