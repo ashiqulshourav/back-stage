@@ -306,7 +306,7 @@ export const getNameByhoa = (name: string, kc?: string, TOrder?: TOrder, inMainL
 };
 
 export const enterGoalMap = {
-  FIRST: t('首个击球'),
+  FIRST: t('首个进球'),
   LAST: t('最后进球')
 }
 
