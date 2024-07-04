@@ -63,12 +63,18 @@
                             ? s?.n?.replace('&', ' ') // @ts-ignore: Ignore the implicit any error
                             : PLAY_MATCH(s?.kindsCode)[
                                 s?.homeOrAway || s?.handicap
-                              ] ?? s?.kindsCode === 'FT_TG'
+                              ] ??
+                              (s?.kindsCode === 'FT_TG' && !isNaN(s?.handicap)
+                                ? s?.handicap.split('').join('-')
+                                : s?.handicap
+                                    ?.replace('3UP', '3+')
+                                    .replace('7UP', '7+'))
+                        }}
+                        <!-- ?? s?.kindsCode === 'FT_TG'
                             ? s?.handicap.split('').join('-')
                             : s?.handicap
                                 ?.replace('3UP', '3+')
-                                .replace('7UP', '7+')
-                        }}
+                                .replace('7UP', '7+') -->
                       </span>
                       <span
                         v-if="!PLAY_MATCH(s?.kindsCode)?.hideMiddle && !s?.n"
@@ -191,6 +197,12 @@ const getBetItemsList = async () => {
   Object.keys(mData).forEach(key => (mData[key as any].formatList.length = 0));
   openLen.value = 0;
   res.data.forEach(item => {
+    console.log(
+      'OpeningPreview.vue文件 194==============行打印=',
+      item.betItemsName,
+      item.kindsCode,
+      item.handicap
+    );
     item.source_handicap = item.handicap;
     item.isSale === 2 && (openLen.value += 1);
 
