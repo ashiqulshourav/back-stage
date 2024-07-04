@@ -197,12 +197,6 @@ const getBetItemsList = async () => {
   Object.keys(mData).forEach(key => (mData[key as any].formatList.length = 0));
   openLen.value = 0;
   res.data.forEach(item => {
-    console.log(
-      'OpeningPreview.vue文件 194==============行打印=',
-      item.betItemsName,
-      item.kindsCode,
-      item.handicap
-    );
     item.source_handicap = item.handicap;
     item.isSale === 2 && (openLen.value += 1);
 
