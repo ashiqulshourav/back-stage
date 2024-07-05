@@ -2,6 +2,7 @@ declare namespace UserAPI {
   type LoginData = {
     token: string;
     name: string;
+    dept: string;
     id: number;
     status: number;
     isAdmin: number;
