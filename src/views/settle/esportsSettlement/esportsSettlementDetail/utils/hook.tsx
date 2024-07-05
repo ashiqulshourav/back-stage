@@ -2,7 +2,7 @@ import { message } from '@/utils/message';
 import { ElMessageBox } from 'element-plus';
 import { usePublicHooks } from '@/hooks';
 import { SPORT_LEVEL_LIST_TYPE } from './type';
-import { SPORT_LEVEL_LIST } from './map';
+import { NAV_TITLE_NAME, SPORT_LEVEL_LIST } from './map';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 
 export function useEsportsSettlement() {
@@ -16,6 +16,8 @@ export function useEsportsSettlement() {
   const renderObj = reactive<EsportsSettlementAPI.ESportMatchById>(
     {} as EsportsSettlementAPI.ESportMatchById
   );
+
+  const { openPasswordInput } = usePasswordInputHook();
 
   //- 分页点击
   const handleCurrentChange = (val: number, index: number) =>
@@ -107,8 +109,30 @@ export function useEsportsSettlement() {
     if (row.betOptions < 0 && !row.multipartBetOptions.length && !type)
       return message(t('请先选择投注项'), { type: 'error' });
 
+    if (type) {
+      const r = await openPasswordInput();
+      if (!r) return;
+    }
+    const formatKey = row.handicapFilter.replace(/\["|"\]/g, '');
     ElMessageBox.confirm(
-      type ? t('确认要取消盘口么?') : t('确认要结算该记录么?'),
+      type ? (
+        <div class="">
+          <div class="font-bold">{t('确认要取消盘口么?')}</div>
+          <div class="my-1">
+            <span>{t('盘口名称：')}</span>
+            <span class="ml-1 mr-1">{row.betItemsNameEn}</span>
+            <span>{row.betItemsName}</span>
+          </div>
+          <div>
+            <span>{t('所属局数：')}</span>
+            <span class="ml-1">
+              {NAV_TITLE_NAME[formatKey as keyof typeof NAV_TITLE_NAME]}
+            </span>
+          </div>
+        </div>
+      ) : (
+        t('确认要结算该记录么?')
+      ),
       '系统提示',
       {
         confirmButtonText: t('确认'),
@@ -159,9 +183,7 @@ export function useEsportsSettlement() {
       if (!res.code) getEsportMatchInfo();
     });
   };
-
   //- 确认二次结算
-  const { openPasswordInput } = usePasswordInputHook();
   const resetManualSettleESportHandicapClick = async (
     row: EsportsSettlementAPI.BetItemsMapData
   ) => {
