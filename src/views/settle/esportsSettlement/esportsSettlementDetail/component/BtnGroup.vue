@@ -4,7 +4,9 @@
       :label="index"
       v-for="(item, index) in mapList"
       :key="index"
-      >{{ NAV_TITLE_NAME[item] }}</el-radio-button
+      >{{
+        NAV_TITLE_NAME[item as keyof typeof NAV_TITLE_NAME]
+      }}</el-radio-button
     >
   </el-radio-group>
 </template>
@@ -55,7 +57,7 @@ const mapList = computed(() => {
   return r.filter(key => props.keyList.includes(key));
 });
 
-const changeIndex = index => emits('changeIndex', index);
+const changeIndex = (index: number) => emits('changeIndex', index);
 </script>
 
 <style scoped></style>

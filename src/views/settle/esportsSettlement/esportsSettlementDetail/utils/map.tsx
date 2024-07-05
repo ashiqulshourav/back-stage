@@ -1,5 +1,3 @@
-import { SPORT_LEVEL_LIST_TYPE } from './type';
-
 export const NAV_TITLE_NAME = {
   all: t('全部盘口'),
   final: t('全局'),

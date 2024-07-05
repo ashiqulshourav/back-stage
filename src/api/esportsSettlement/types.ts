@@ -97,6 +97,7 @@ declare namespace EsportsSettlementAPI {
     matchIdList?: any;
     kindsCode: string;
     betItemsName: string;
+    betItemsNameEn: string;
     sourceCode: string;
     sourceBetItemsId: number;
     sourceBetItemsMid: number;
