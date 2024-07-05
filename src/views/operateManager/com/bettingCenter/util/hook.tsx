@@ -43,7 +43,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     total: 0,
     pageSize: 20,
     currentPage: 1,
-    pageSizes: [20, 50, 100, 200, 500, 5000],
+    pageSizes: [20, 50, 100, 200],
     background: true
   });
   const form = reactive<searchFormType>({
