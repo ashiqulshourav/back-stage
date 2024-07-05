@@ -73,6 +73,7 @@ declare namespace BetOrderAPI {
     thisPageBetUserCount: number;
     thisPageBetTotalAmount: number;
     thisPageBetCount: number;
+    thisPageAvgOdds:number;
   };
 
   type RiskOtherDataType = {
