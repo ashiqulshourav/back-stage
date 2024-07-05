@@ -51,7 +51,12 @@ import { useLayout } from './hooks/useLayout';
 import { useResizeObserver } from '@vueuse/core';
 import { useAppStore, useAppStoreHook } from '@/store/app';
 import { useSettingStoreHook } from '@/store/settings';
-import { deviceDetection, useDark, useGlobal } from '@pureadmin/utils';
+import {
+  deviceDetection,
+  useDark,
+  useGlobal,
+  useWatermark
+} from '@pureadmin/utils';
 import { useDataThemeChange } from '@/layout/hooks/useDataThemeChange';
 import {
   h,
@@ -71,6 +76,8 @@ import Vertical from './components/sidebar/vertical.vue';
 import Horizontal from './components/sidebar/horizontal.vue';
 import backTop from '@/assets/svg/back_top.svg?component';
 import { useMatchStore } from '@/store/match';
+import { useUserStore } from '@/store/user';
+import dayjs from 'dayjs';
 
 const appWrapperRef = ref();
 const { isDark } = useDark();
@@ -80,6 +87,8 @@ const pureSetting = useSettingStoreHook();
 const { $storage } = useGlobal<GlobalPropertiesApi>();
 const matchStore = useMatchStore();
 const appStore = useAppStore();
+const { setWatermark, clear } = useWatermark();
+const userState = useUserStore();
 
 const set: setType = reactive({
   sidebar: computed(() => {
@@ -159,6 +168,18 @@ onMounted(() => {
     toggle('mobile', false);
   }
   matchStore.set_countryList();
+  nextTick(() => {
+    setWatermark(
+      `${userState.userInfo.name}-${userState.userInfo.dept}-${dayjs().format(
+        'YYYY-MM-DD'
+      )}`,
+      {
+        width: 350,
+        globalAlpha: 0.3,
+        height: 150
+      }
+    );
+  });
 });
 
 onBeforeMount(() => {
@@ -193,6 +214,10 @@ const layoutHeader = defineComponent({
       }
     );
   }
+});
+
+onBeforeUnmount(() => {
+  clear();
 });
 </script>
 
