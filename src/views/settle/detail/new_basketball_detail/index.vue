@@ -168,6 +168,10 @@
               }}...</span
             >
             <IconifyIconOffline
+              v-if="
+                (renderObj.periodType === 4 && eventList.length < 5) ||
+                (renderObj.periodType === 2 && eventList.length < 3)
+              "
               width="25px"
               icon="icon_circle_fill"
               @click="addChildRow"
