@@ -1219,7 +1219,6 @@
   "k-37ff2491": "盘口不显示",
   "k-1ab2d09": "Other settlement",
   "k-d134af0": "盘口取消",
-  "k-2318a815": "首个击球",
   "k-7900c35c": "注单信息",
   "k-7453b063": "用户ID:",
   "k-437d8959": "用户名:",
@@ -1229,5 +1228,10 @@
   "k-19201ac4": "结算比分：",
   "k-7d0ee8c3": "结算比分",
   "k-1e1a6aa2": "First of all ，please open extraTime settlement switch",
-  "kfe7a56a": "First of all ，please close Penalty shoot-out switch"
+  "kfe7a56a": "First of all ，please close Penalty shoot-out switch",
+  "k32556916": "上半场赛果",
+  "k-103c4f6d": "下半场赛果",
+  "k6834b85c": "全场赛果",
+  "k4a7cd427": "盘口名称：",
+  "k39f8d060": "所属局数："
 }
