@@ -20,20 +20,10 @@
       @handleCurrentChange="handleCurrentChange"
     >
       <template #default="{ row }">
-        <div
-          :class="[
-            'flex justify-center items-center',
-            currentSportId === 1 &&
-            dataList[0].status !== 'over' &&
-            row.isShowCancelBtn &&
-            hasAuth('OTHERSETTLEMENT')
-              ? 'flex-col'
-              : 'flex-row'
-          ]"
-        >
+        <div class="flex justify-center items-center">
           <el-button
             v-if="hasAuth('DETAIL')"
-            class="reset-margin"
+            class="!ml-1"
             type="primary"
             size="small"
             @click="goDetailPage(row)"
@@ -42,16 +32,16 @@
           </el-button>
           <el-button
             v-if="currentSportId === 1 && hasAuth('OTHERSETTLEMENT')"
-            class="reset-margin my-1"
-            type="primary"
+            class="!ml-1"
+            type="success"
             size="small"
             @click="goOtherSattlePage(row)"
           >
             {{ t('其他玩法结算') }}
           </el-button>
           <el-button
-            v-if="row.isShowCancelBtn && hasAuth('CANCELMATCH')"
-            class="reset-margin"
+            v-if="hasAuth('CANCELMATCH')"
+            class="!ml-1"
             type="danger"
             size="small"
             :disabled="row.cancelOrderTimes > 0"
@@ -134,6 +124,7 @@ const renderColumnList = computed(() => {
     }
   ];
   const _ = [...columns];
+  _[_.length - 1].minWidth = 270;
   _.splice(_.length - 2, 0, ...fillList);
   return _;
 });

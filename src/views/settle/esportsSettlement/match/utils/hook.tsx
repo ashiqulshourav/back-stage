@@ -156,14 +156,10 @@ export function useEsportSettlement() {
     if (res.code) return message(res.msg, { type: 'error' });
     dataList.length = 0;
     dataList.push(...res.data.list);
-    dataList.forEach(item => {
-      item.isShowCancelBtn =
-        item.status === 'nover' || item.status === 'nobegin';
-    });
     pagination.total = res.data.total;
   };
 
-  const resetForm = formEl => {
+  const resetForm = (formEl: { resetFields: () => void }) => {
     if (!formEl) return;
     formEl.resetFields();
     onSearch();
