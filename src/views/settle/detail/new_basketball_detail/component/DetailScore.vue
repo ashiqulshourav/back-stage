@@ -14,14 +14,14 @@
     </el-col>
     <el-col class="mb-2" :span="5">
       <div class="flex">
-        <span>{{ t('全场赛果') }}:</span>
-        <span class="ml-1">{{ scoreList[2] }}</span>
+        <span>{{ t('加时赛赛果') }}:</span>
+        <span class="ml-1">{{ scoreList[3] }}</span>
       </div>
     </el-col>
     <el-col class="mb-2" :span="5">
       <div class="flex">
-        <span>{{ t('加时赛赛果') }}:</span>
-        <span class="ml-1">{{ scoreList[3] }}</span>
+        <span>{{ t('全场赛果') }}:</span>
+        <span class="ml-1">{{ scoreList[2] }}</span>
       </div>
     </el-col>
   </el-row>
@@ -49,12 +49,20 @@ const scoreList = computed(() => {
     halfS2 = +(l[0]?.t2 || 0) + +(l[1]?.t2 || 0);
     secondHalfS1 = +(l[2]?.t1 || 0) + +(l[3]?.t1 || 0);
     secondHalfS2 = +(l[2]?.t2 || 0) + +(l[3]?.t2 || 0);
-    fullS1 =
-      +(l[0]?.t1 || 0) + +(l[1]?.t1 || 0) + +(l[2]?.t1 || 0) + +(l[3]?.t1 || 0);
-    fullS2 =
-      +(l[0]?.t2 || 0) + +(l[1]?.t2 || 0) + +(l[2]?.t2 || 0) + +(l[3]?.t2 || 0);
     overTimeS1 = +(l[4]?.t1 || 0);
     overTimeS2 = +(l[4]?.t2 || 0);
+    fullS1 =
+      +(l[0]?.t1 || 0) +
+      +(l[1]?.t1 || 0) +
+      +(l[2]?.t1 || 0) +
+      +(l[3]?.t1 || 0) +
+      +(l[4]?.t1 || 0);
+    fullS2 =
+      +(l[0]?.t2 || 0) +
+      +(l[1]?.t2 || 0) +
+      +(l[2]?.t2 || 0) +
+      +(l[3]?.t2 || 0) +
+      +(l[4]?.t2 || 0);
   } else {
     halfS1 = +(l[0]?.t1 || 0);
     halfS2 = +(l[0]?.t2 || 0);
@@ -62,8 +70,8 @@ const scoreList = computed(() => {
     secondHalfS2 = +(l[1]?.t2 || 0);
     overTimeS1 = +(l[2]?.t1 || 0);
     overTimeS2 = +(l[2]?.t2 || 0);
-    fullS1 = +(l[0]?.t1 || 0) + +(l[1]?.t1 || 0);
-    fullS2 = +(l[0]?.t2 || 0) + +(l[1]?.t2 || 0);
+    fullS1 = +(l[0]?.t1 || 0) + +(l[1]?.t1 || 0) + +(l[2]?.t1 || 0);
+    fullS2 = +(l[0]?.t2 || 0) + +(l[1]?.t2 || 0) + +(l[2]?.t2 || 0);
   }
 
   return [
