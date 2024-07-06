@@ -12,8 +12,8 @@ import { FormInstance } from 'element-plus';
 import { useSettingStoreHook } from '@/store/settings';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
-import { pageSizeArr } from '@/utils/math';
 const { exportDialog } = usePublicHooks();
+import { pageSizeArr } from '@/utils/math';
 
 export function userPlayerListHook(venueType: number, category: number) {
   const route = useRoute();
@@ -117,11 +117,11 @@ export function userPlayerListHook(venueType: number, category: number) {
   };
 
   // export player list
-  const exportFile = async () =>{
+  const exportFile = async () => {
     onSearch('export').then((expRes: any) => {
-      if(expRes?.count>50000){
+      if (expRes?.count > 50000) {
         message(`当前条件下数据量为${addThousandSeparator(expRes?.count)}，大于5万条，不支持导出!`, { type: 'error' });
-      } else if(expRes?.count<1 || expRes === null){
+      } else if (expRes?.count < 1 || expRes === null) {
         message('数据量为零，无法导出', { type: 'error' });
       } else {
         exportDialog({
