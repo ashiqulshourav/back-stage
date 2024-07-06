@@ -115,10 +115,6 @@ export function useChampionshipPlaySettlementHook() {
     if (res.code) return message(res.msg, { type: 'error' });
     dataList.length = 0;
     dataList.push(...res.data.list);
-    dataList.forEach(item => {
-      item.isShowCancelBtn =
-        item.status === 'nover' || item.status === 'nobegin';
-    });
     pagination.total = res.data.total;
   };
 

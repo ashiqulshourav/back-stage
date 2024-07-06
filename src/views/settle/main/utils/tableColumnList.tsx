@@ -1,6 +1,5 @@
 import { handleTableWidth } from '@/utils/getTableWidth';
 import { MATCH_STATUS } from '@/utils/maps/sports_map';
-import { getLan } from '@/utils/utilFn';
 import dayjs from 'dayjs';
 
 const baseColumns: TableColumnList = [
@@ -75,7 +74,7 @@ const baseColumns: TableColumnList = [
     label: t('操作'),
     slot: 'operation',
     showOverflowTooltip: false,
-    minWidth: getLan() === 'zh' ? 220 : 300,
+    minWidth: 270,
     fixed: 'right'
   }
 ];

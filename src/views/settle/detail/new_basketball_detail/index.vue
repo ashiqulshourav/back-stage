@@ -6,7 +6,9 @@
       :renderObj="renderObj"
       :allSettleLoading="loading"
       :hideAllSettleBtn="!hasAuth('FULLSETTLE')"
-    />
+    >
+      <DetailScore :eventList="eventList" />
+    </DetiltTitle>
     <PureTableBar :columns="childColumns" @refresh="reloadTable">
       <template #title>
         <div class="flex items-center text-sm">
@@ -192,6 +194,7 @@ import Delete from '@iconify-icons/ep/delete';
 import { MatchEventRowType } from './utils/type';
 import DetiltTitle from '../../component/Settle_detail_title.vue';
 import { hasAuth } from '@/router/utils';
+import DetailScore from './component/DetailScore.vue';
 
 defineOptions({ name: 'SETTLE_DETAIL_NEW_BASKETBALL_DETAIL' });
 
@@ -216,7 +219,10 @@ const {
 
 const { tableHeaderStyle } = usePublicHooks();
 
-const eventQuotientList = [
+const eventQuotientList: {
+  type: keyof SattleDataAPI.newBasketballEventsList;
+  val: string;
+}[] = [
   { type: 'xjFlag', val: t('188数据') },
   { type: 'psFlag', val: t('熊猫数据') },
   { type: 'vsFlag', val: t('播控数据') }

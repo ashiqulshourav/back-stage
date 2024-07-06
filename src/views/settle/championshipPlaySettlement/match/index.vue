@@ -60,7 +60,7 @@
               {{ t('结算详情') }}
             </el-button>
             <el-button
-              v-if="row.isShowCancelBtn && hasAuth('CANCELMATCH')"
+              v-if="hasAuth('CANCELMATCH')"
               type="danger"
               size="small"
               :disabled="(row.cancelOrderTimes as number) > 0"

@@ -42,7 +42,7 @@
           <el-button
             v-if="currentSportId === 1 && hasAuth('OTHERSETTLEMENT')"
             class="reset-margin my-1"
-            type="primary"
+            type="success"
             size="small"
             @click="goOtherSattlePage(row)"
           >
@@ -106,6 +106,7 @@ const renderColumnList = computed(() => {
     }
   ];
   const _ = [...columns];
+  _[_.length - 1].minWidth = 210;
   _.splice(_.length - 2, 0, ...fillList);
   return _;
 });

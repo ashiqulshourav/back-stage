@@ -119,12 +119,12 @@ export function useEsportsSettlement() {
         <div class="">
           <div class="font-bold">{t('确认要取消盘口么?')}</div>
           <div class="my-1">
-            <span>{t('盘口名称：')}</span>
+            <span>{t('盘口名称')}:</span>
             <span class="ml-1 mr-1">{row.betItemsNameEn}</span>
             <span>{row.betItemsName}</span>
           </div>
           <div>
-            <span>{t('所属局数：')}</span>
+            <span>{t('所属局数')}:</span>
             <span class="ml-1">
               {NAV_TITLE_NAME[formatKey as keyof typeof NAV_TITLE_NAME]}
             </span>
