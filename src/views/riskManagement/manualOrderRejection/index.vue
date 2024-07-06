@@ -377,6 +377,16 @@
               }}</span
             >
           </div>
+          <div>
+            <label>{{ t('注单均赔率：') }}</label>
+            <span class="ml-1">
+              {{
+                addThousandSeparator(
+                  totalInfo?.thisPageAvgOdds?.toFixed(2)
+                ) ?? '0.00'
+              }}</span
+            >
+          </div>
         </div>
       </template>
     </PureTableBar>
@@ -405,6 +415,7 @@ import {
   getIsInplay
 } from '@/utils/formatMatch';
 import { usePublicHooks } from '@/hooks';
+import {addThousandSeparator} from "@/utils/formatNumber";
 
 defineOptions({ name: 'RISKMANAGEMENT_MANUALORDERREJECTION' });
 const { tableHeaderStyle } = usePublicHooks();

@@ -487,6 +487,16 @@
               }}</span
             >
           </div>
+          <div>
+            <label>{{ t('注单均赔率：') }}</label>
+            <span class="ml-1">
+              {{
+                addThousandSeparator(
+                  totalInfo?.thisPageAvgOdds?.toFixed(2)
+                ) ?? '0.00'
+              }}</span
+            >
+          </div>
         </div>
       </template>
     </PureTableBar>
