@@ -137,7 +137,7 @@
           :label="`${t('联赛查询')}:`"
           :prop="leagueQuery === 'leagueName' ? 'leagueName' : 'leagueId'"
         >
-          <el-select v-model="leagueQuery" class="!w-[100px] flex-shrink-0">
+          <el-select v-model="leagueQuery"  @change="leagueQueryChange" class="!w-[100px] flex-shrink-0">
             <el-option :label="t('联赛ID')" value="leagueId" />
             <el-option :label="t('联赛名')" value="leagueName" />
           </el-select>
@@ -180,7 +180,7 @@
               :label="item.leagueNameCn"
               :value="item.leagueNameCn"
             />
-          </el-select>   
+          </el-select>
         </el-form-item>
         <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
           <el-input
@@ -355,7 +355,6 @@ const changeDate = t => {
   } else {
     props.form.createTimeStart = dayjs(t[0]).startOf('day').valueOf();
     props.form.createTimeEnd = dayjs(t[1]).endOf('day').valueOf();
-
     riskNoticeStore.setRiskNoticeTimeFrame({
       createTimeStart: dayjs(t[0]).startOf('day').valueOf(),
       createTimeEnd: dayjs(t[1]).endOf('day').valueOf()
@@ -373,6 +372,10 @@ const chagenMatchType = (type: 0 | 1 | 2) => {
 const search = () => {
   emits('onSearch', ...['reload']);
 };
+const leagueQueryChange = ()=>{
+  props.form.leagueName ='';
+  props.form.leagueId='';
+}
 
 const exportFile = () => {
   emits('exportFile');
