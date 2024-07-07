@@ -140,11 +140,11 @@
             <el-option :label="t('风控拒单')" :value="1" />
           </el-select>
         </el-form-item>
-        <el-form-item 
+        <el-form-item
           :label="`${t('联赛查询')}:`"
           :prop="leagueQuery === 'leagueName' ? 'leagueName' : 'leagueId'"
         >
-          <el-select v-model="leagueQuery" class="!w-[100px] flex-shrink-0">
+          <el-select v-model="leagueQuery"  @change="leagueQueryChange" class="!w-[100px] flex-shrink-0">
             <el-option :label="t('联赛ID')" value="leagueId" />
             <el-option :label="t('联赛名')" value="leagueName" />
           </el-select>
@@ -389,6 +389,11 @@ const exportFile = () => {
 const exportFileTest = () => {
   emits('exportFileTest');
 };
+const leagueQueryChange = ()=>{
+  props.form.leagueName ='';
+  props.form.leagueId='';
+}
+
 </script>
 
 <style scoped lang="scss">
