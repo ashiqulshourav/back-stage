@@ -8,23 +8,6 @@
   >
     <div class="flex">
       <div>
-        <!-- <el-form-item :label="`${t('商户名')}:`" prop="tenantIds">
-          <el-select
-            class="!min-w-[200px]"
-            :placeholder="t('请选择商户ID，多选项')"
-            multiple
-            v-model="form.tenantIds"
-            clearable
-            @change="search"
-          >
-            <el-option
-              v-for="item in tenantList"
-              :label="item.tenantName"
-              :value="item.id"
-              :key="item.id"
-            />
-          </el-select>
-        </el-form-item> -->
         <el-form-item prop="tenantIds" :label="`${t('商户名')}:`">
           <el-tree-select
             v-model="props.form.tenantIds"
@@ -212,7 +195,7 @@
               :label="item.leagueNameCn"
               :value="item.leagueNameCn"
             />
-          </el-select>   
+          </el-select>
         </el-form-item>
         <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
           <el-input
@@ -397,6 +380,10 @@ const chagenMatchType = (type: 0 | 1 | 2) => {
 const search = () => {
   emits('onSearch', ...['reload']);
 };
+const leagueQueryChange = ()=>{
+  props.form.leagueName ='';
+  props.form.leagueId='';
+}
 
 const exportFile = () => {
   emits('exportFile');
