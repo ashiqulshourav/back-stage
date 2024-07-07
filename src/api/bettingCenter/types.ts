@@ -77,10 +77,10 @@ declare namespace BetOrderAPI {
   };
 
   type RiskOtherDataType = {
-    profitTotal: number;
-    productAmountTotal: number;
-    totalUserCount: number;
-    totalCount: number;
+    thisPageBetTotalProfitAmount: number;
+    thisPageBetUserCount: number;
+    thisPageBetTotalAmount: number;
+    thisPageBetCount: number;
     thisPageAvgOdds:number;
   };
 
