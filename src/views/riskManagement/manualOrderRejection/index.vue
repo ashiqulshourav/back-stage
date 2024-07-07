@@ -351,9 +351,8 @@
             <div v-else>-</div>
           </template>
         </pure-table>
-
         <div
-          class="bottom_content absolute bottom-7 flex max-w-[50%] items-center text-sm flex-wrap"
+            class="bottom_content absolute bottom-7 flex max-w-[50%] items-center text-sm flex-wrap"
         >
           <div>
             <label>{{ t('总计：') }}</label>
@@ -361,13 +360,18 @@
           </div>
           <div>
             <label>{{ t('用户数：') }}</label>
-            <span>{{ totalInfo?.thisPageBetUserCount ?? 0 }}{{ t('人') }}</span>
+            <span
+            >{{ addThousandSeparator(totalInfo?.thisPageBetUserCount) ?? 0
+              }}{{ t('人') }}</span
+            >
           </div>
           <div>
             <label>{{ t('总计投注额：') }}</label>
             <span class="ml-1">
               {{
-                totalInfo?.thisPageBetTotalAmount?.toFixed(2) ?? '0.00'
+                addThousandSeparator(
+                    totalInfo?.thisPageBetTotalAmount?.toFixed(2)
+                ) ?? '0.00'
               }}</span
             >
           </div>
@@ -375,7 +379,9 @@
             <label>{{ t('总输赢：') }}</label>
             <span class="ml-1">
               {{
-                totalInfo?.thisPageBetTotalProfitAmount?.toFixed(2) ?? '0.00'
+                addThousandSeparator(
+                    totalInfo?.thisPageBetTotalProfitAmount?.toFixed(2)
+                ) ?? '0.00'
               }}</span
             >
           </div>
@@ -384,12 +390,13 @@
             <span class="ml-1">
               {{
                 addThousandSeparator(
-                  totalInfo?.thisPageAvgOdds?.toFixed(2)
+                    totalInfo?.thisPageAvgOdds?.toFixed(2)
                 ) ?? '0.00'
               }}</span
             >
           </div>
         </div>
+
       </template>
     </PureTableBar>
   </div>
