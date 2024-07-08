@@ -48,7 +48,7 @@
               :active-value="1"
               :inactive-value="0"
               inline-prompt
-              :disabled="isOn"
+              :disabled="isOn&&!row.isDataSourceOdds"
               @change="getOdds(row, 0)"
             />
           </template>
