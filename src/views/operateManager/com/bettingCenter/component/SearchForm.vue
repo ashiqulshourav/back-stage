@@ -139,6 +139,7 @@
         <el-form-item
           :label="`${t('联赛查询')}:`"
           :prop="leagueQuery === 'leagueName' ? 'leagueName' : 'leagueId'"
+          class="bold-label"
         >
           <el-select v-model="leagueQuery" class="!w-[100px] flex-shrink-0">
             <el-option :label="t('联赛ID')" value="leagueId" />
@@ -631,5 +632,10 @@ watch(
 }
 .arrange2 {
   margin-left: -25px;
+}
+:deep(){
+  .bold-label>.el-form-item__label{
+    font-weight: 700;
+  }
 }
 </style>
