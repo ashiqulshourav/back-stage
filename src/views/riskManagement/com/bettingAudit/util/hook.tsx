@@ -41,9 +41,7 @@ export function useBettingAuditHook(venueType: number, category: number) {
   const isEditDialogClick = ref(false);
   const isEditRemarkClick = ref(false);
 
-  const totalInfo = reactive<BetOrderAPI.RiskOtherDataType>(
-    {} as BetOrderAPI.RiskOtherDataType
-  );
+  const totalInfo =ref<BetOrderAPI.otherDataType>({} as BetOrderAPI.otherDataType );
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -180,7 +178,7 @@ export function useBettingAuditHook(venueType: number, category: number) {
         pagination.total = res?.data?.count;
         pagination.pageSize = res?.data?.pageSize;
         pagination.currentPage = res?.data?.pageNum;
-        Object.assign(totalInfo, res?.data?.otherData);
+        totalInfo.value = res.data?.otherData;
       }
       document
         .querySelector('.table_container .el-scrollbar__wrap')

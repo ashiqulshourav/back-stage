@@ -25,9 +25,7 @@ export function useManualOrderRejectionHook() {
   const tenantObj = reactive<any>({});
   const loading = ref(true);
   const downloading = ref(true);
-  const totalInfo = reactive<BetOrderAPI.otherDataType>(
-    {} as BetOrderAPI.otherDataType
-  );
+  const totalInfo =ref<BetOrderAPI.otherDataType>({} as BetOrderAPI.otherDataType );
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -130,7 +128,7 @@ export function useManualOrderRejectionHook() {
           item.index = index + 1;
         });
         pagination.total = res.data.count;
-        Object.assign(totalInfo, res.data.otherData);
+        totalInfo.value = res.data?.otherData;
       }
       document
         .querySelector('.table_container .el-scrollbar__wrap')

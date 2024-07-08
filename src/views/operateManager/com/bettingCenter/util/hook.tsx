@@ -37,9 +37,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
   const UDialogFlag = ref<Boolean>(false);
   const loading = ref(true);
   const downloading = ref(false);
-  const totalInfo = reactive<BetOrderAPI.otherDataType>(
-      {} as BetOrderAPI.otherDataType
-  );
+  const totalInfo =ref<BetOrderAPI.otherDataType>({} as BetOrderAPI.otherDataType );
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 20,
@@ -220,7 +218,8 @@ export function useBettingCenterHook(category: number, venueType: number) {
             pagination.total = res.data?.count;
             pagination.pageSize = res.data?.pageSize;
             pagination.currentPage = res.data?.pageNum;
-            Object.assign(totalInfo, res.data?.otherData);
+            totalInfo.value = res.data?.otherData;
+            //Object.assign(totalInfo, res.data?.otherData);
           }else {
             reject();
             dataList.length = 0;
