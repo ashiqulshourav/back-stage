@@ -185,7 +185,7 @@
               >
                 {{ t('赛事ID:') }} {{ item.matchId }}
                 <span class="inline-block">
-                  <IconifyIconOffline :icon="Copy" />
+                  <IconifyIconOffline icon="copyIcon" />
                 </span>
               </div>
               <div class="item_line">
@@ -218,7 +218,11 @@
               </div>
               <div class="item_line">
                 <span v-if="item.kindsCode === 'FT_TTS'">
-                    {{ enterGoalMap[item.betHandicap.toUpperCase()  as keyof typeof enterGoalMap] }}
+                  {{
+                    enterGoalMap[
+                      item.betHandicap.toUpperCase() as keyof typeof enterGoalMap
+                    ]
+                  }}
                 </span>
                 {{ useSportFormatDetail(item)[3] }} @{{
                   getViewOddFn(
@@ -236,7 +240,7 @@
               >
                 {{ t('注单号:') }} {{ row.id }}
                 <span class="inline-block">
-                  <IconifyIconOffline :icon="Copy" />
+                  <IconifyIconOffline icon="copyIcon" />
                 </span>
               </div>
               <div class="item_line">
@@ -246,6 +250,16 @@
                     ? dayjs(row.createTime).format('MM-DD HH:mm:ss')
                     : ''
                 }}
+              </div>
+              <div class="item_line">
+                {{ t('投注IP:') }}
+                <span
+                  v-if="item.ip"
+                  @click="openIpDialog(item.ip)"
+                  class="text-[#409EFF] cursor-pointer"
+                  >{{ item.ip }}</span
+                >
+                <span v-else>-</span>
               </div>
               <div
                 class="item_line"
@@ -422,7 +436,10 @@
           <div>
             <label>{{ t('用户数：') }}</label>
             <span
-              >{{ addThousandSeparator(totalInfo?.thisPageBetUserCount) ?? 0
+              >{{
+                addThousandSeparator(
+                  totalInfo?.thisPageBetUserCount?.toString()
+                ) ?? 0
               }}{{ t('人') }}</span
             >
           </div>
@@ -491,7 +508,7 @@ import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import EditPen from '@iconify-icons/ep/edit-pen';
-import Copy from '@iconify-icons/ep/copy-document';
+
 const props = defineProps<{
   category: number;
   venueType: number;
@@ -523,7 +540,8 @@ const {
   editOrderRemark,
   riskLabelList,
   getOddStatus,
-  downloading
+  downloading,
+  openIpDialog
 } = useBettingCenterHook(props.category, props.venueType);
 
 onMounted(() => {

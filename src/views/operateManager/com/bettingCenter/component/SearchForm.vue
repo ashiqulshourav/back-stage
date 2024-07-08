@@ -11,10 +11,12 @@
           <el-tree-select
             v-model="props.form.tenantIds"
             :placeholder="t('请选择商户ID，多选项')"
-            :data="tenantList.map(item => ({
-              value: item.id,
-              label: item.tenantName
-            }))"
+            :data="
+              tenantList.map(item => ({
+                value: item.id,
+                label: item.tenantName
+              }))
+            "
             @change="search"
             filterable
             clearable
@@ -27,13 +29,23 @@
             style="width: 200px"
           >
             <template #header>
-              <el-checkbox v-model="checkAllMName" @change="handleCheckAllMName">
+              <el-checkbox
+                v-model="checkAllMName"
+                @change="handleCheckAllMName"
+              >
                 {{ t('全选') }}
               </el-checkbox>
-              <el-checkbox v-model="removeAllMName" @change="handleRemoveAllMName" :disabled="form?.tenantIds.length == 0">
+              <el-checkbox
+                v-model="removeAllMName"
+                @change="handleRemoveAllMName"
+                :disabled="form?.tenantIds.length == 0"
+              >
                 {{ t('全不选') }}
               </el-checkbox>
-              <el-checkbox v-model="checkRevertMName" @change="handleCheckRevertMName">
+              <el-checkbox
+                v-model="checkRevertMName"
+                @change="handleCheckRevertMName"
+              >
                 {{ t('反选') }}
               </el-checkbox>
             </template>
@@ -164,11 +176,7 @@
             :remote-method="
               debounce(
                 query =>
-                  matchStore.search_league_list(
-                    query,
-                    form.sportId,
-                    category
-                  ),
+                  matchStore.search_league_list(query, form.sportId, category),
                 1000
               )
             "
@@ -184,7 +192,7 @@
               :label="item.leagueNameCn"
               :value="item.leagueNameCn"
             />
-          </el-select>       
+          </el-select>
         </el-form-item>
         <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
           <el-input
@@ -241,13 +249,23 @@
             style="width: 200px"
           >
             <template #header>
-              <el-checkbox v-model="checkAllRLabel" @change="handleCheckAllRLabel">
+              <el-checkbox
+                v-model="checkAllRLabel"
+                @change="handleCheckAllRLabel"
+              >
                 {{ t('全选') }}
               </el-checkbox>
-              <el-checkbox v-mode="removeAllRLabel" @change="handleRemoveAllRLabel" :disabled="form?.riskControlLabelList.length == 0">
+              <el-checkbox
+                v-mode="removeAllRLabel"
+                @change="handleRemoveAllRLabel"
+                :disabled="form?.riskControlLabelList.length == 0"
+              >
                 {{ t('全不选') }}
               </el-checkbox>
-              <el-checkbox v-model="checkRevertRLabel" @change="handleCheckRevertRLabel">
+              <el-checkbox
+                v-model="checkRevertRLabel"
+                @change="handleCheckRevertRLabel"
+              >
                 {{ t('反选') }}
               </el-checkbox>
             </template>
@@ -278,7 +296,7 @@
             v-model="form.orderId"
             :placeholder="t('注单流水号')"
             clearable
-            :formatter="v => formatNumber(v, 30)"
+            :formatter="(v:string) => formatNumber(v, 30)"
             v-enter="search"
             class="!w-[200px]"
           />
@@ -336,9 +354,14 @@
           <CustomDate
             v-model:val="selectDate"
             :start-placeholder="
-              dayjs().subtract(30, 'day').startOf('day').format('YYYY-MM-DD HH:mm:ss')
+              dayjs()
+                .subtract(30, 'day')
+                .startOf('day')
+                .format('YYYY-MM-DD HH:mm:ss')
             "
-            :end-placeholder="dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')"
+            :end-placeholder="
+              dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')
+            "
             @changeDate="changeDate"
             :isDateTime="true"
             :format="'YYYY-MM-DD HH:mm:ss'"
@@ -369,7 +392,7 @@
           >
             {{ t('重置') }}
           </el-button>
-           <el-button
+          <el-button
             type="primary"
             :icon="useRenderIcon(Download)"
             :loading="downloading"
@@ -392,9 +415,9 @@ import RefreshIcon from '@iconify-icons/ep/refresh';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import type { FormInstance, CheckboxValueType } from 'element-plus';
 import dayjs from 'dayjs';
-import { formatNumber } from '@/utils/formatNumber';
 import { useMatchStore } from '@/store/match';
 import { debounce } from '@pureadmin/utils';
+import { formatNumber, formatIp } from '@/utils/formatNumber';
 import {
   SPORT_ID_MAP,
   ESPORT_ID_MAP,
@@ -409,7 +432,7 @@ const props = defineProps<{
   loading: boolean;
   riskLabelList: UserAPI.labelType[];
   form: searchFormType;
-  tenantList: [];
+  tenantList: { name: string; id: number; tenantName: string }[];
   venueType: number;
   category: number;
   downloading: boolean;
@@ -543,38 +566,38 @@ const removeAllMName = ref(false);
 const checkRevertMName = ref(false);
 
 const handleCheckAllMName = (val: CheckboxValueType) => {
-  if(val){
-    props.form.tenantIds = props.tenantList.map(_ =>_.id)
+  if (val) {
+    props.form.tenantIds = props.tenantList.map(_ => _.id);
   } else {
     props.form.tenantIds = [];
   }
-}
+};
 
 const handleRemoveAllMName = (val: CheckboxValueType) => {
   props.form.tenantIds = [];
   removeAllMName.value = false;
-}
+};
 
 const handleCheckRevertMName = () => {
-  if(true){
+  if (true) {
     const oldArray = [...props.form.tenantIds];
     props.form.tenantIds = props.tenantList
-    .filter(_ => !oldArray.includes(_.id))
-    .map(_ => _.id)
+      .filter(_ => !oldArray.includes(_.id))
+      .map(_ => _.id);
   }
-}
+};
 
 watch(
   () => props.form.tenantIds,
   val => {
-    if(!val || val.length === 0){
+    if (!val || val.length === 0) {
       checkAllMName.value = false;
-    } else if(val.length === props.tenantList.length){
+    } else if (val.length === props.tenantList.length) {
       checkAllMName.value = true;
       removeAllMName.value = false;
     }
   }
-)
+);
 
 // multiple select for risk label
 const checkAllRLabel = ref(false);
@@ -582,40 +605,39 @@ const removeAllRLabel = ref(false);
 const checkRevertRLabel = ref(false);
 
 const handleCheckAllRLabel = (val: CheckboxValueType) => {
-  if(val){
-    props.form.riskControlLabelList = props.riskLabelList.map(_ => _.id)
+  if (val) {
+    props.form.riskControlLabelList = props.riskLabelList.map(_ => _.id);
     removeAllRLabel.value = false;
   } else {
     props.form.riskControlLabelList = [];
   }
-}
+};
 
 const handleRemoveAllRLabel = (val: CheckboxValueType) => {
   props.form.riskControlLabelList = [];
   checkRevertRLabel.value = false;
-}
+};
 
 const handleCheckRevertRLabel = () => {
-  if(true){
+  if (true) {
     const oldArray = [...props.form.riskControlLabelList];
     props.form.riskControlLabelList = props.riskLabelList
-    .filter(_ => !oldArray.includes(_.id))
-    .map(_ => _.id)
+      .filter(_ => !oldArray.includes(_.id))
+      .map(_ => _.id);
   }
-}
+};
 
 watch(
   () => props.form.riskControlLabelList,
   val => {
-    if(!val || val.length === 0){
+    if (!val || val.length === 0) {
       checkAllRLabel.value = false;
-    } else if(val.length === props.riskLabelList.length){
+    } else if (val.length === props.riskLabelList.length) {
       checkAllRLabel.value = true;
       removeAllRLabel.value = false;
     }
   }
-)
-
+);
 </script>
 
 <style scoped lang="scss">
@@ -633,8 +655,8 @@ watch(
 .arrange2 {
   margin-left: -25px;
 }
-:deep(){
-  .bold-label>.el-form-item__label{
+:deep() {
+  .bold-label > .el-form-item__label {
     font-weight: 700;
   }
 }

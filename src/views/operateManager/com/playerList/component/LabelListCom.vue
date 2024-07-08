@@ -18,7 +18,7 @@
         content="this is over"
       >
         <template #reference>
-          <el-button class="w-full"
+          <el-button size="small" class="w-full"
             ><el-icon><Plus /></el-icon
           ></el-button>
         </template>

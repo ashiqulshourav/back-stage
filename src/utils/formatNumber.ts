@@ -8,6 +8,26 @@ export const formatNumber = (val: string, len?: number) => {
     .slice(0, len ?? MAX_INPUT_NUMBER_LENGTH);
 };
 
+export const formatIp = (val: string): string => {
+  const partialIpPattern = /^(\d{0,3})(\.\d{0,3}){0,3}$/;
+
+  if (!partialIpPattern.test(val)) {
+    val = val.slice(0, -1);
+  } else {
+    const segments = val.split('.');
+    for (let i = 0; i < segments.length; i++) {
+      if (segments[i] && parseInt(segments[i], 10) > 255) {
+        val = val.slice(0, -1);
+        break;
+      }
+    }
+  }
+
+  // 重新拼接成IP地址格式，最多四个部分
+  return val;
+};
+
+
 export const formatNumberWithLength = (value: string, length: number) => {
   // Convert value to string
   let stringValue = String(value);
