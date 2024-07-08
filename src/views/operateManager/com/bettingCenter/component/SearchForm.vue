@@ -203,6 +203,16 @@
             class="!w-[150px]"
           />
         </el-form-item>
+        <el-form-item :label="`${t('投注IP')}:`" prop="ip">
+          <el-input
+            v-model="form.ip"
+            :placeholder="t('请输入IP')"
+            clearable
+            :formatter="(v:string) => formatIp(v)"
+            v-enter="search"
+            class="!w-[200px]"
+          />
+        </el-form-item>
         <el-form-item :label="`${t('用户名/用户ID')}:`" prop="userIdOrName">
           <el-input
             v-model="form.userIdOrName"
