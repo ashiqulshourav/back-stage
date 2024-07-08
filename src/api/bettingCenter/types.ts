@@ -93,4 +93,25 @@ declare namespace BetOrderAPI {
 
   type BetOrderResType = COMMON.BASE_RES_TYPE<BetOrderData>;
   type betCenterCancelResType = COMMON.BASE_RES_TYPE<null>;
+
+
+
+  type getUserByIpResPageData = {
+    userName: string;
+    tenantCode: string;
+    limitLevel: string;
+    macNo?: any;
+    isFreeze: string;
+    riskControlLabelList: any[];
+  }
+
+  type getUserByIpResData = {
+    count: number;
+    groupCount?: any;
+    pageNum: number;
+    pageSize: number;
+    pageData: getUserByIpResPageData[];
+    otherData?: any;
+  }
+  type getUserByIpResType = COMMON.BASE_RES_TYPE<getUserByIpResData>
 }

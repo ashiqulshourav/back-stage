@@ -30,6 +30,7 @@ import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
 import { riskStatus } from '@/views/riskManagement/com/bettingAudit/util/types';
 import editOrder from '../component/editOrder.vue';
+import IpDialog from '../component/IpDialog.vue';
 export function useBettingCenterHook(category: number, venueType: number) {
   const { openPasswordInput } = usePasswordInputHook();
   const dataList = reactive<BetOrderAPI.BetOrderList[]>([]);
@@ -617,8 +618,17 @@ export function useBettingCenterHook(category: number, venueType: number) {
 
   //- IP地址弹窗
 
-  const openIpDialog = () => {
-    console.log('hook.tsx文件 607==============行打印=', 111);
+  const openIpDialog = (ip: string) => {
+    addDialog({
+      title: t(''),
+      alignCenter: true,
+      class: 'reset_dialog',
+      width: '75%',
+      center: true,
+      closeOnClickModal: false,
+      hideFooter: true,
+      contentRenderer: () => h(IpDialog, { ip })
+    });
   };
 
   return {

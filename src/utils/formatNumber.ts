@@ -7,23 +7,26 @@ export const formatNumber = (val: string, len?: number) => {
     .replace(/^0{1,}/g, '')
     .slice(0, len ?? MAX_INPUT_NUMBER_LENGTH);
 };
-//- ip格式化
-export const formaterIp = (val: string) => {
-  if (val === '') return val;
-  val = val.replace(/[^0-9.]/g, '');
-  val = val.replace(/\.{2,}/g, '.');
-  // 防止以点号开始
-  if (val.startsWith('.')) {
-    val = val.slice(1);
+
+export const formatIp = (val: string): string => {
+  const partialIpPattern = /^(\d{0,3})(\.\d{0,3}){0,3}$/;
+
+  if (!partialIpPattern.test(val)) {
+    val = val.slice(0, -1);
+  } else {
+    const segments = val.split('.');
+    for (let i = 0; i < segments.length; i++) {
+      if (segments[i] && parseInt(segments[i], 10) > 255) {
+        val = val.slice(0, -1);
+        break;
+      }
+    }
   }
-  const segments = val.split('.').map(segment => {
-    let num = parseInt(segment, 10);
-    if (isNaN(num) || num < 0) num = 0;
-    if (num > 255) num = 255;
-    return num.toString();
-  });
-  return segments.slice(0, 4).join('.');
+
+  // 重新拼接成IP地址格式，最多四个部分
+  return val;
 };
+
 
 export const formatNumberWithLength = (value: string, length: number) => {
   // Convert value to string

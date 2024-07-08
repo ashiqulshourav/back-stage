@@ -252,10 +252,12 @@
               <div class="item_line">
                 {{ t('投注IP:') }}
                 <span
-                  @click="openIpDialog"
+                  v-if="item.ip"
+                  @click="openIpDialog(item.ip)"
                   class="text-[#409EFF] cursor-pointer"
                   >{{ item.ip }}</span
                 >
+                <span v-else>-</span>
               </div>
               <div
                 class="item_line"

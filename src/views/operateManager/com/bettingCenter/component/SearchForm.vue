@@ -153,7 +153,7 @@
             v-model="form.ip"
             :placeholder="t('请输入IP')"
             clearable
-            :formatter="(v:string) => formaterIp(v)"
+            :formatter="(v:string) => formatIp(v)"
             v-enter="search"
             class="!w-[200px]"
           />
@@ -330,7 +330,7 @@ import RefreshIcon from '@iconify-icons/ep/refresh';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import type { FormInstance } from 'element-plus';
 import dayjs from 'dayjs';
-import { formatNumber, formaterIp } from '@/utils/formatNumber';
+import { formatNumber, formatIp } from '@/utils/formatNumber';
 import {
   SPORT_ID_MAP,
   ESPORT_ID_MAP,
