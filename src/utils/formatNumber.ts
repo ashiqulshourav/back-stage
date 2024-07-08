@@ -7,6 +7,23 @@ export const formatNumber = (val: string, len?: number) => {
     .replace(/^0{1,}/g, '')
     .slice(0, len ?? MAX_INPUT_NUMBER_LENGTH);
 };
+//- ip格式化
+export const formaterIp = (val: string) => {
+  if (val === '') return val;
+  val = val.replace(/[^0-9.]/g, '');
+  val = val.replace(/\.{2,}/g, '.');
+  // 防止以点号开始
+  if (val.startsWith('.')) {
+    val = val.slice(1);
+  }
+  const segments = val.split('.').map(segment => {
+    let num = parseInt(segment, 10);
+    if (isNaN(num) || num < 0) num = 0;
+    if (num > 255) num = 255;
+    return num.toString();
+  });
+  return segments.slice(0, 4).join('.');
+};
 
 export const formatNumberWithLength = (value: string, length: number) => {
   // Convert value to string

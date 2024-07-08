@@ -321,7 +321,7 @@ export function useFootball() {
         id: row.id ?? null
       };
       if (row.matchPeriodId === 50) {
-        params.firstNum = row.firstNum;
+        params.firstNum = row.firstNum as number;
         params.firstT1 = row.firstT1;
         params.firstT2 = row.firstT2;
       }

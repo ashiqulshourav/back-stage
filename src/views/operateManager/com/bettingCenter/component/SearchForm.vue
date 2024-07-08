@@ -148,6 +148,16 @@
             class="!w-[150px]"
           />
         </el-form-item>
+        <el-form-item :label="`${t('投注IP')}:`" prop="ip">
+          <el-input
+            v-model="form.ip"
+            :placeholder="t('请输入IP')"
+            clearable
+            :formatter="(v:string) => formaterIp(v)"
+            v-enter="search"
+            class="!w-[200px]"
+          />
+        </el-form-item>
         <el-form-item :label="`${t('玩家号')}:`" prop="userIdOrName">
           <el-input
             v-model="form.userIdOrName"
@@ -198,7 +208,7 @@
             v-model="form.orderId"
             :placeholder="t('注单流水号')"
             clearable
-            :formatter="v => formatNumber(v, 30)"
+            :formatter="(v:string) => formatNumber(v, 30)"
             v-enter="search"
             class="!w-[200px]"
           />
@@ -320,7 +330,7 @@ import RefreshIcon from '@iconify-icons/ep/refresh';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import type { FormInstance } from 'element-plus';
 import dayjs from 'dayjs';
-import { formatNumber } from '@/utils/formatNumber';
+import { formatNumber, formaterIp } from '@/utils/formatNumber';
 import {
   SPORT_ID_MAP,
   ESPORT_ID_MAP,
@@ -334,7 +344,7 @@ const props = defineProps<{
   loading: boolean;
   riskLabelList: UserAPI.labelType[];
   form: searchFormType;
-  tenantList: [];
+  tenantList: { name: string; id: number; tenantName: string }[];
   venueType: number;
   downloading: boolean;
 }>();

@@ -77,7 +77,8 @@ export function useBettingCenterHook(category: number, venueType: number) {
     minProfitAmount: '',
     maxProfitAmount: '',
     riskControlLabelList: [],
-    venueType: venueType
+    venueType: venueType,
+    ip: ''
   });
   function handlePageSizeChange(val: number) {
     pagination.pageSize = val;
@@ -248,8 +249,8 @@ export function useBettingCenterHook(category: number, venueType: number) {
     onSearch();
   };
 
-   //- 导出excel表格
-   const exportFile = async () => {
+  //- 导出excel表格
+  const exportFile = async () => {
     downloading.value = true;
     const res: BetOrderAPI.BetOrderResType = await API.bettingCenterList(
       formatParams({
@@ -450,11 +451,18 @@ export function useBettingCenterHook(category: number, venueType: number) {
     } else if (riskStatusArr?.includes(riskStatus.rejectBetting)) {
       //待审核
       obj = { status: betStatus.PendingApprove, bgColor: '#F57582' };
-    }else if(betResultArr?.includes(61)&&(riskStatusArr?.includes(riskStatus.reject) ||riskStatusArr?.includes(riskStatus.autoReject))){
+    } else if (
+      betResultArr?.includes(61) &&
+      (riskStatusArr?.includes(riskStatus.reject) ||
+        riskStatusArr?.includes(riskStatus.autoReject))
+    ) {
       // 封控划单 203 204
       obj = { status: betStatus.riskReject, bgColor: '#F88D48' };
-    }else if(riskStatusArr?.includes(riskStatus.reject1)||riskStatusArr?.includes(riskStatus.autoReject1)){
-       // 封控拒单 201 202
+    } else if (
+      riskStatusArr?.includes(riskStatus.reject1) ||
+      riskStatusArr?.includes(riskStatus.autoReject1)
+    ) {
+      // 封控拒单 201 202
       obj = { status: betStatus.betFail, bgColor: '#F88D48' };
     } else if (
       status == 2 &&
@@ -463,7 +471,10 @@ export function useBettingCenterHook(category: number, venueType: number) {
     ) {
       // 注单无效
       obj = { status: betStatus.betInvalid, bgColor: '#E54752' };
-    }else if(riskStatusArr?.includes(riskStatus.autoApprove)&&betResultArr.includes(24)){
+    } else if (
+      riskStatusArr?.includes(riskStatus.autoApprove) &&
+      betResultArr.includes(24)
+    ) {
       // 注单无效
       obj = { status: betStatus.betInvalid, bgColor: '#E54752' };
     } else if (status === 2 && billStatus === 1 && betResultArr?.includes(21)) {
@@ -496,11 +507,14 @@ export function useBettingCenterHook(category: number, venueType: number) {
   const getOddStatus = (betResult: number, riskSt: number) => {
     if (riskSt === riskStatus.reject1 || riskSt === riskStatus.autoReject1) {
       return '投注失败';
-    }else if(riskSt === riskStatus.reject || riskSt === riskStatus.autoReject){
+    } else if (
+      riskSt === riskStatus.reject ||
+      riskSt === riskStatus.autoReject
+    ) {
       return '无效注单';
-    }else if(betResult===24&&riskSt==riskStatus.autoApprove){
+    } else if (betResult === 24 && riskSt == riskStatus.autoApprove) {
       return '盘口取消';
-    }else {
+    } else {
       return (
         BET_RESULT_TYPE_MAP[betResult as keyof typeof BET_RESULT_TYPE_MAP] || ''
       );
@@ -601,6 +615,12 @@ export function useBettingCenterHook(category: number, venueType: number) {
     getRiskLabelList();
   });
 
+  //- IP地址弹窗
+
+  const openIpDialog = () => {
+    console.log('hook.tsx文件 607==============行打印=', 111);
+  };
+
   return {
     loading,
     dataList,
@@ -625,6 +645,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     editOrderRemark,
     riskLabelList,
     getOddStatus,
-    downloading
+    downloading,
+    openIpDialog
   };
 }
