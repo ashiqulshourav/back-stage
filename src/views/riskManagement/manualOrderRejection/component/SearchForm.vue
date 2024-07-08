@@ -57,7 +57,7 @@
           :prop="leagueQuery === 'leagueName' ? 'leagueName' : 'leagueId'"
           class="bold-label"
         >
-          <el-select v-model="leagueQuery" class="!w-[100px] flex-shrink-0">
+          <el-select v-model="leagueQuery"  @change="leagueQueryChange" class="!w-[100px] flex-shrink-0">
             <el-option :label="t('联赛ID')" value="leagueId" />
             <el-option :label="t('联赛名')" value="leagueName" />
           </el-select>
@@ -205,14 +205,8 @@ import Download from '@iconify-icons/ep/download';
 import {
   SPORT_ID_MAP,
   ESPORT_ID_MAP
-  // SPORT_CATEGORY
 } from '@/utils/maps/sports_map';
 import { searchFormType } from '../util/types';
-/* import {
-  betStatusMap,
-  seriesTypesSingle,
-  seriesTypesDuplex
-} from '../util/types'; */
 
 import { hasAuth } from '@/router/utils';
 import CustomDate from '@/components/Form/Custom_date.vue';
@@ -279,11 +273,6 @@ const changeDate = t => {
   }
   search();
 };
-// const chagenMatchType = (type: 0 | 1 | 2) => {
-//   props.form.sportId = '';
-//   //- 电竞比赛 =1
-//   gameClassify.value = type === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
-// };
 
 const search = () => {
   emits('onSearch', ...['reload']);
@@ -319,9 +308,7 @@ const handleCheckRevertMName = () => {
   }
 }
 
-const exportFileTest = () => {
-  emits('exportFileTest');
-};
+
 const leagueQueryChange = ()=>{
   props.form.leagueName ='';
   props.form.leagueId='';

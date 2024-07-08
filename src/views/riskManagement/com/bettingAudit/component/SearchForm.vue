@@ -153,7 +153,7 @@
           :prop="leagueQuery === 'leagueName' ? 'leagueName' : 'leagueId'"
           class="bold-label"
         >
-          <el-select v-model="leagueQuery" class="!w-[100px] flex-shrink-0">
+          <el-select v-model="leagueQuery" @change="leagueQueryChange"  class="!w-[100px] flex-shrink-0">
             <el-option :label="t('联赛ID')" value="leagueId" />
             <el-option :label="t('联赛名')" value="leagueName" />
           </el-select>
