@@ -26,6 +26,11 @@ export const columns: TableColumnList = [
     width: 350
   },
   {
+    label: t('属性标签'),
+    slot: 'attributeLabel',
+    width: 350
+  },
+  {
     label: t('限额等级'),
     prop: 'limitLevel',
     minWidth: 150
