@@ -17,7 +17,7 @@
   </template>
   <template v-else>
     <el-select
-      :class="[row.canceled === 1 && 'canceled', '!w-[150px]']"
+      :class="[row.canceled === 1 && 'canceled', '!min-w-[150px]']"
       :disabled="!row.isEdit"
       @change="changeSwitch"
       v-model="row.matchPeriodId as number"

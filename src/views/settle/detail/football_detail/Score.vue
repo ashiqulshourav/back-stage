@@ -3,7 +3,7 @@
     class="mt-1 mb-2 pt-1 pb-1 pl-1 mr-5 text-sm bg-gray-100 dark:bg-[#ffffff1f]"
   >
     <el-row :gutter="20">
-      <el-col :span="3">
+      <el-col :span="locale === 'zh' ? 3 : 4">
         <div class="flex items-center text-sm">
           <el-switch
             v-if="index > 0 && renderObj.fullSettlementStatus !== 1"
@@ -52,10 +52,12 @@
 </template>
 
 <script setup lang="ts">
+import { useTranslationLang } from '@/layout/hooks/useTranslationLang';
 import { t } from '@/plugins/i18n';
 import { hasAuth } from '@/router/utils';
 import { message } from '@/utils/message';
 import { ElMessageBox } from 'element-plus';
+const { locale } = useTranslationLang();
 
 const props = defineProps<{
   renderObj: SattleDataAPI.getSettlementDataList;

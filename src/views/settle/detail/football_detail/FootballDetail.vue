@@ -8,7 +8,7 @@
         @click="$router.go(-1)"
       />
     </div>
-    <el-row :gutter="20">
+    <el-row>
       <el-col
         class="mb-2"
         v-for="(item, index) in renderList"
@@ -25,8 +25,11 @@
   </div>
 </template>
 <script setup lang="ts">
+import { useTranslationLang } from '@/layout/hooks/useTranslationLang';
 import { t } from '@/plugins/i18n';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
+const { locale } = useTranslationLang();
+
 const props = withDefaults(
   defineProps<{
     renderObj: SattleDataAPI.getSettlementDataList;
@@ -48,7 +51,7 @@ const renderList = computed(() => {
     {
       title: t('盘口状态'),
       val: _?.isSale === 0 ? t('未开售') : t('已开售'),
-      span: 2
+      span: locale.value === 'zh' ? 2 : 3
     },
     {
       title: t('赛种'),
@@ -62,7 +65,7 @@ const renderList = computed(() => {
       }</span> <span class="ml-1 mr-1 font-bold">VS</span> <span>${
         _?.awayTeamNameCn ?? '_'
       }</span>`,
-      span: 7
+      span: locale.value === 'zh' ? 7 : 6
     },
     {
       title: t('结算状态'),
