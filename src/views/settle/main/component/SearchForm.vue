@@ -36,7 +36,7 @@
         v-model.trim="form.matchId"
         :placeholder="t('赛事ID')"
         v-enter="searchVal"
-        :formatter="v => formatNumber(v)"
+        :formatter="(v:string) => formatNumber(v)"
         clearable
         class="!w-[150px]"
       />
@@ -49,9 +49,12 @@
         clearable
         class="!w-[150px]"
       >
-        <el-option :label="t('滚球')" value="nover" />
-        <el-option :label="t('比赛结束')" value="over" />
-        <el-option :label="t('未开始')" value="nobegin" />
+        <el-option
+          v-for="(d, index) in NEW_MATCH_STATUS"
+          :key="index"
+          :label="d.label"
+          :value="d.value"
+        />
       </el-select>
     </el-form-item>
 
@@ -100,6 +103,9 @@ import dayjs from 'dayjs';
 import { formatNumber } from '@/utils/formatNumber';
 import { debounce } from '@pureadmin/utils';
 import CustomDate from '@/components/Form/Custom_date.vue';
+import { NEW_MATCH_STATUS } from '../utils/map';
+import type { FormInstance } from 'element-plus';
+
 const formRef = ref();
 const matchStore = useMatchStore();
 const time = ref('');
@@ -109,7 +115,7 @@ const props = defineProps<{
   currentSportId: number;
 }>();
 
-const changeDate = t => {
+const changeDate = (t: number[]) => {
   if (!t) {
     props.form.startTime = '';
     props.form.endTime = '';
@@ -122,10 +128,12 @@ const changeDate = t => {
 
 const emits = defineEmits(['onSearch']);
 
-const resetForm = formRef => {
-  Object.keys(props.form).forEach(key => (props.form[key] = ''));
+const resetForm = (formRef: FormInstance | undefined) => {
+  Object.keys(props.form).forEach(
+    (key: keyof SearchFormType) => (props.form[key] = '')
+  );
   time.value = '';
-  formRef.resetFields();
+  formRef?.resetFields();
   searchVal();
 };
 

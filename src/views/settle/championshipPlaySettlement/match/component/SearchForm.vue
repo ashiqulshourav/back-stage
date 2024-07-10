@@ -76,7 +76,7 @@
           :placeholder="t('赛事ID')"
           v-enter="search"
           clearable
-          :formatter="v => formatNumber(v)"
+          :formatter="(v:string) => formatNumber(v)"
           class="!w-[150px]"
         />
       </el-form-item>
@@ -103,9 +103,10 @@
           @change="search"
         >
           <el-option
-            :label="item"
-            :value="index"
-            v-for="(item, index) in ESPORT_MATCH_STATUS"
+            v-for="(d, index) in NEW_MATCH_STATUS"
+            :key="index"
+            :label="d.label"
+            :value="d.value"
           />
         </el-select>
       </el-form-item>
@@ -151,6 +152,7 @@ import {
   ESPORT_MATCH_STATUS,
   ESPORT_ID_MAP
 } from '@/utils/maps/sports_map';
+import { NEW_MATCH_STATUS } from '@/views/settle/main/utils/map';
 
 const formRef = ref();
 const emits = defineEmits(['onSearch', 'changeMatchCondition']);
@@ -168,7 +170,9 @@ const props = withDefaults(
   {}
 );
 
-const changeDate = t => {
+const changeDate = (
+  t: (string | number | Date | dayjs.Dayjs | null | undefined)[]
+) => {
   if (!t) {
     props.form.startTime = '';
     props.form.endTime = '';
@@ -180,7 +184,7 @@ const changeDate = t => {
 };
 
 const resetForm = (formEl: FormInstance | undefined) => {
-  formEl.resetFields();
+  formEl?.resetFields();
   selectDate.value = '';
   props.form.startTime = '';
   props.form.endTime = '';

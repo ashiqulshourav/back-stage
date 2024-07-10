@@ -28,7 +28,7 @@
           >
             {{ row.leagueNameCn }} 
             <span class="inline-block">
-              <IconifyIconOffline :icon="Copy" />
+              <IconifyIconOffline icon="copyIcon" />
             </span>
           </div>
         </template>
@@ -39,7 +39,7 @@
           >
             {{ row.matchId }} 
             <span class="inline-block">
-              <IconifyIconOffline :icon="Copy" />
+              <IconifyIconOffline icon="copyIcon" />
             </span>
           </div>
         </template>
@@ -55,7 +55,6 @@
 import { message } from '@/utils/message';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { PureTableBar } from '@/components/RePureTableBar';
-import Copy from '@iconify-icons/ep/copy-document';
 import { usePublicHooks } from '@/hooks';
 import type { PaginationProps } from '@pureadmin/table';
 import { sport_list_map_type } from '../utils/type';

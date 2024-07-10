@@ -19,6 +19,37 @@ export enum SPORT_NAME_TYPE {
   baseball = 18
 }
 
+export const NEW_MATCH_STATUS = [
+  {
+    label: t('滚球'),
+    value: 'nover'
+  },
+  {
+    label: t('比赛结束'),
+    value: 'over'
+  },
+  {
+    label: t('未开始'),
+    value: 'nobegin'
+  },
+  {
+    label: t('比赛延迟'),
+    value: 'delay'
+  },
+  {
+    label: t('比赛中断'),
+    value: 'interrupt'
+  },
+  {
+    label: t('比赛放弃'),
+    value: 'abandon'
+  },
+  {
+    label: t('比赛延期'),
+    value: 'postponed'
+  }
+];
+
 export const SPORT_LIST_MAP: sport_list_map_type[] = [
   {
     label: t('足球'),
