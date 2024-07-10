@@ -111,7 +111,7 @@
             class="!w-[150px]"
           />
         </el-form-item>
-        <el-form-item :label="`${t('主队')}:`" prop="homeTeamName">
+        <!-- <el-form-item :label="`${t('主队')}:`" prop="homeTeamName">
           <el-input
             v-model="form.homeTeamName"
             :placeholder="t('主队名称')"
@@ -128,7 +128,7 @@
             v-enter="search"
             class="!w-[150px]"
           />
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item :label="`${t('用户名/用户ID')}:`" prop="userIdOrName">
           <el-input
