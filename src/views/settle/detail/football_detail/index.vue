@@ -72,6 +72,7 @@
               table-layout="auto"
               align-whole="center"
               :data="item.tableList"
+              :show-overflow-tooltip="false"
               adaptive
               lazy
               :loading="childloading"

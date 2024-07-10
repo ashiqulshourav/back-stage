@@ -1,7 +1,8 @@
 import dayjs from 'dayjs';
 import { handleTableWidth } from '@/utils/getTableWidth';
 import { MATCH_STATUS } from '@/utils/maps/sports_map';
-
+import { getLan } from '@/utils/utilFn';
+const lan = getLan();
 export const columns: TableColumnList = [
   {
     label: t('序号'),
@@ -175,7 +176,8 @@ export const childColumns: TableColumnList = [
   },
   {
     label: t('比赛阶段'),
-    slot: 'matchPeriodId'
+    slot: 'matchPeriodId',
+    width: lan === 'en' ? 240 : 180
   },
   {
     label: t('事件来源'),
