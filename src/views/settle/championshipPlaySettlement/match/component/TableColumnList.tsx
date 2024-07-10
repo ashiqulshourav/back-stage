@@ -1,13 +1,9 @@
 import { handleTableWidth } from '@/utils/getTableWidth';
 import dayjs from 'dayjs';
-import {
-  ESPORT_ID_MAP,
-  ESPORT_MATCH_STATUS,
-  HANDICAP_STATUS,
-  SPORT_ID_MAP
-} from '@/utils/maps/sports_map';
+import { ESPORT_ID_MAP, SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { getLan } from '@/utils/utilFn';
 import { parseCountry } from '@/utils/formatMatch';
+import { NEW_MATCH_STATUS } from '@/views/settle/main/utils/map';
 
 export const columns: TableColumnList = [
   {
@@ -65,7 +61,8 @@ export const columns: TableColumnList = [
     label: t('赛事状态'),
     headerRenderer: d => handleTableWidth(d, t('赛事状态'), 'auto'),
     minWidth: 180,
-    formatter: ({ status }) => ESPORT_MATCH_STATUS[status] ?? '-'
+    formatter: ({ status }) =>
+      NEW_MATCH_STATUS.find(item => item.value === status)?.label ?? '-'
   },
   // {
   //   label: t('开售状态'),

@@ -1,6 +1,6 @@
 import { handleTableWidth } from '@/utils/getTableWidth';
-import { MATCH_STATUS } from '@/utils/maps/sports_map';
 import dayjs from 'dayjs';
+import { NEW_MATCH_STATUS } from './map';
 
 const baseColumns: TableColumnList = [
   {
@@ -56,7 +56,7 @@ const baseColumns: TableColumnList = [
     prop: 'status',
     width: 150,
     formatter: ({ status }) =>
-      MATCH_STATUS[status as keyof typeof MATCH_STATUS] ?? '-',
+      NEW_MATCH_STATUS.find(item => item.value === status)?.label ?? '-',
     headerRenderer: d => handleTableWidth(d, t('比赛状态'), 'auto')
   },
   {

@@ -50,7 +50,7 @@
           :placeholder="t('请输入赛事ID')"
           v-enter="search"
           clearable
-          :formatter="v => formatNumber(v)"
+          :formatter="(v:string) => formatNumber(v)"
           class="!w-[180px]"
         />
       </el-form-item>
@@ -80,9 +80,10 @@
           @change="search"
         >
           <el-option
-            :label="item"
-            :value="index"
-            v-for="(item, index) in ESPORT_MATCH_STATUS"
+            v-for="(d, index) in NEW_MATCH_STATUS"
+            :key="index"
+            :label="d.label"
+            :value="d.value"
           />
         </el-select>
       </el-form-item>
@@ -131,12 +132,9 @@ import { useMatchStore } from '@/store/match';
 import { formatNumber } from '@/utils/formatNumber';
 import CustomDate from '@/components/Form/Custom_date.vue';
 
-import {
-  ESPORT_ID_MAP,
-  HANDICAP_STATUS,
-  ESPORT_MATCH_STATUS
-} from '@/utils/maps/sports_map';
+import { ESPORT_ID_MAP, HANDICAP_STATUS } from '@/utils/maps/sports_map';
 import { debounce } from '@pureadmin/utils';
+import { NEW_MATCH_STATUS } from '@/views/settle/main/utils/map';
 
 const formRef = ref();
 const emits = defineEmits(['onSearch', 'changeMatchCondition']);
@@ -151,7 +149,7 @@ const props = withDefaults(
   {}
 );
 
-const changeDate = t => {
+const changeDate = (t: number[]) => {
   if (!t) {
     props.form.startTime = '';
     props.form.endTime = '';
@@ -163,7 +161,9 @@ const changeDate = t => {
 };
 
 const resetForm = (_formEl: FormInstance | undefined) => {
-  Object.keys(props.form).forEach(key => (props.form[key] = ''));
+  Object.keys(props.form).forEach(
+    (key: keyof SearchFormType) => (props.form[key] = '')
+  );
   time.value = '';
   // formEl.resetFields();
   emits('onSearch', ...['reload']);
