@@ -41,4 +41,10 @@ export type udpateOddsType = {
   type: number;
 }
 
+export type pairingRuleSettingType = {
+  oppositeStatus: number;
+  dpMatchId: number;
+  matchId: number;
+}
+
 export type { FormProps };

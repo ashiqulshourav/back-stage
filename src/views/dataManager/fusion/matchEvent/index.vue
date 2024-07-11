@@ -82,9 +82,7 @@ import { usePublicHooks } from '@/hooks';
 import {onMounted} from "vue";
 
 defineOptions({ name: 'METADATA_LEAGUE' });
-onMounted(() => {
-    onSearch();
-});
+
 const { tableHeaderStyle } = usePublicHooks();
 const { columns, isOn } = tableColumnList();
 
@@ -113,4 +111,7 @@ watch(
     })
   }
 )
+onMounted(() => {
+  onSearch();
+});
 </script>

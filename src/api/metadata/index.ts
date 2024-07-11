@@ -1,5 +1,5 @@
 import { http } from "@/utils/http";
-import { udpateOddsType } from "@/views/dataManager/fusion/matchEvent/utils/types";
+import { udpateOddsType, pairingRuleSettingType } from "@/views/dataManager/fusion/matchEvent/utils/types";
 
 export const metaData = {
   //- 普通体育联赛列表获取
@@ -52,7 +52,8 @@ export const metaData = {
     dpMatchId188bet: number;
     matchId: number;
     matchId188bet: number;
-    pairingUser: string
+    pairingUser: string;
+    oppositeStatus: number;
   }) => http.request<MatchCombineAPI.matchSourceData>("post", "/pairing/v1/matchPairing", { data }),
   cancelMatchPairing: (data: {
     dpMatchId: number;
@@ -61,6 +62,8 @@ export const metaData = {
     matchId188bet: number;
     pairingUser: string
   }) => http.request<MatchCombineAPI.matchSourceData>("post", "/pairing/v1/cancelPairing", { data }),
+  
+  pairingRuleSetting: (data: pairingRuleSettingType) => http.request<MatchCombineAPI.matchSourceData>("post", "/pairing/v1/pairingRuleSetting", { data }),
 
   updateOdds: (data: udpateOddsType) => http.request<MatchCombineAPI.matchSourceData>("post", "/pairing/v1/updateOdds", { data }),
 

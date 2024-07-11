@@ -1,11 +1,13 @@
 import editForm from '../form.vue';
 import manualMatchModal from '../manualMatchModal.vue';
+import matchRuleModal from '../matchRuleModal.vue';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, h } from 'vue';
 import { editSearchFormType, searchFormType, udpateOddsType } from './types';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import dayjs from "dayjs";
+import { message } from "@/utils/message";
 
 export function matchCombineHook() {
   const dataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
@@ -14,6 +16,7 @@ export function matchCombineHook() {
   const loading = ref(true);
   const globalOddsSwitch = ref(null);
   const alreadyMatch = ref<Boolean>(false);
+  const isOppositeStatus = ref<Boolean>(false);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 20,
@@ -158,6 +161,18 @@ export function matchCombineHook() {
     }
   }
 
+  const handleMatchRule = (dpMatchId: number, matchId: number) => {
+    const param = {
+      oppositeStatus: isOppositeStatus.value ? 1 : 0,
+      dpMatchId: dpMatchId,
+      matchId: matchId,
+    }
+    const params = { ...removeEmptyStringKeys(param) }
+    API.pairingRuleSetting(params).then((res) => {
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+    })
+  }
+
   async function openDialog(title: string, row?: MatchCombineAPI.matchSourceDetail) {
     addDialog({
       title,
@@ -171,7 +186,8 @@ export function matchCombineHook() {
           matchInfoDataList: matchInfoDataList,
           onCloseDialog: (params: string) => {
             closeDialog(options, index);
-            params && onSearch();
+            // params && onSearch();
+            onSearch();
           }
         })
     });
@@ -203,6 +219,24 @@ export function matchCombineHook() {
     });
   }
 
+  async function openMatchRuleDialog(title: string, rowData: MatchCombineAPI.matchPairingDetail, row: MatchCombineAPI.matchSourceDetail) {
+    addDialog({
+      title,
+      width: 'auto',
+      alignCenter: true,
+      closeOnClickModal: false,
+      hideFooter: true,
+      contentRenderer: ({ options, index }) =>
+        h(matchRuleModal, {
+          matchSource: rowData,
+          matchSourcePair: row,
+          onCloseDialog: () => {
+            closeDialog(options, index);
+          }
+        })
+    });
+  }
+
   return {
     loading,
     dataList,
@@ -226,5 +260,8 @@ export function matchCombineHook() {
     updateOddsParams,
     globalOddsSwitch,
     getGlobalOddsSwitch,
+    openMatchRuleDialog,
+    handleMatchRule,
+    isOppositeStatus,
   };
 }

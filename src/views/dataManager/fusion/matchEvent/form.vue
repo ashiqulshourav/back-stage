@@ -49,12 +49,31 @@
             </template>
             <template #operation="{ row }">
               <el-button
+                v-if="row.pairingStatus === 1"
+                link
+                type="success"
+                :size="size"
+                :icon="useRenderIcon(Check)"
+              >
+                {{ t('已匹配') }}
+              </el-button>
+              <el-button
+                :style="`margin-left: ${row.pairingStatus === 0 && alreadyMatch ? `35px` : ``}`"
                 :type= "!alreadyMatch ? 'success' : row.pairingStatus === 1 ? 'warning' : 'default'"
                 :size="size"
                 :disabled="alreadyMatch && row.pairingStatus === 0"
                 @click="openManualMatchDialog(row.pairingStatus === 1 ? t('取消匹配确认') : t('匹配确认'), rowData, row)"
               >
                 {{ row.pairingStatus === 0?t('立即匹配'):t('取消匹配') }}
+              </el-button>
+              <el-button
+                v-if="row.pairingStatus === 1"
+                link
+                type="primary"
+                :size="size"
+                @click="openMatchRuleDialog(t('匹配规则设置'), rowData, row)"
+              >
+                {{ t('设置') }}
               </el-button>
             </template>
           </pure-table>
@@ -78,6 +97,8 @@ import { tableColumnList } from './component/TableColumnList';
 import VerticalTable from '@/components/VerticalTable/index.vue';
 import { useDataThemeChange } from '@/layout/hooks/useDataThemeChange';
 import { pageSizeArr } from '@/utils/math';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import Check from '@iconify-icons/ri/check-fill';
 
 const { matchColumns, selectedEventColumns } = tableColumnList();
 const { dataTheme } = useDataThemeChange();
@@ -93,6 +114,7 @@ const {
   handleSelectionChange,
   handleModalTableWidthChange,
   handleModalCurrentChange,
+  openMatchRuleDialog,
 } = matchCombineHook();
 
 const props = withDefaults(defineProps<{rowData: MatchCombineAPI.matchPairingDetail}>(), {});
