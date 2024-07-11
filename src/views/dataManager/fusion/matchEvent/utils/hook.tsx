@@ -16,7 +16,6 @@ export function matchCombineHook() {
   const loading = ref(true);
   const globalOddsSwitch = ref(null);
   const alreadyMatch = ref<Boolean>(false);
-  const isOppositeStatus = ref<Boolean>(false);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 20,
@@ -161,9 +160,9 @@ export function matchCombineHook() {
     }
   }
 
-  const handleMatchRule = (dpMatchId: number, matchId: number) => {
+  const handleMatchRule = (dpMatchId: number, matchId: number,oppositeStatus:number) => {
     const param = {
-      oppositeStatus: isOppositeStatus.value ? 1 : 0,
+      oppositeStatus: oppositeStatus ? 1 : 0,
       dpMatchId: dpMatchId,
       matchId: matchId,
     }
@@ -262,6 +261,5 @@ export function matchCombineHook() {
     getGlobalOddsSwitch,
     openMatchRuleDialog,
     handleMatchRule,
-    isOppositeStatus,
   };
 }

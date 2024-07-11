@@ -207,6 +207,7 @@ declare namespace MatchCombineAPI {
     category:number,
     dataSourceCode: string,
     pairingStatus: number,
+    oppositeStatus: number,
     pageSize: number,
     pageNum: number,
     isDataSourceOdds: number,
