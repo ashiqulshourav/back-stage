@@ -1,33 +1,47 @@
 <template>
-  <div class="text-left text-lg font-bold">
-    {{ modalHeader(matchSourcePairDetails.pairingStatus === 1) }}
-  </div>
-  <div class="text-left text-m mb-4">
-    {{ modalSubHeader(matchSourcePairDetails.pairingStatus === 1) }}
-  </div>
-  <div class="flex items-center">
-    <div>
-      <VerticalTable 
-        :columns="selectedEventColumns" 
-        :dataList="matchSourceDetails"
-        :title="'DP'"
-      />
+  <div class="flex">
+    <el-icon class="mr-1" size="30" color="orange"><QuestionFilled /></el-icon>
+    <div class="mr-[30px]">
+      <div class="ml-1">
+        <div class="text-left text-lg font-bold">
+          {{ modalHeader(matchSourcePairDetails.pairingStatus === 1) }}
+          <el-checkbox 
+            v-if="matchSourcePairDetails.pairingStatus === 0"
+            class="float-right"
+            v-model="isOppositeStatus"
+          >
+            {{ t('主客队对调') }}
+          </el-checkbox>
+        </div>
+        <div class="text-left text-m mb-4">
+          {{ modalSubHeader(matchSourcePairDetails.pairingStatus === 1) }}
+        </div>
+      </div>
+      <div class="flex items-center">
+        <div>
+          <VerticalTable 
+            :columns="selectedEventColumns" 
+            :dataList="matchSourceDetails"
+            :title="'DP'"
+          />
+        </div>
+        <IconifyIconOffline 
+          class="link-icon" 
+          :icon="matchSourcePairDetails.pairingStatus === 1 ? 'unlink' : 'link'"
+        />
+        <div>
+          <VerticalTable 
+            :columns="selectedEventColumns" 
+            :dataList="matchSourcePairDetails"
+            :title="matchSource.find(_ => _.value == matchSourcePairDetails.dataSourceCode)?.label ?? '-'"
+          />
+        </div>
+      </div>
+      <div class="flex justify-end mt-4">
+        <el-button @click="closeDialog">{{ t('取消') }}</el-button>
+        <el-button type="primary" @click="handleMatch">{{ t('确定') }}</el-button>
+      </div>
     </div>
-    <IconifyIconOffline 
-      class="link-icon" 
-      :icon="matchSourcePairDetails.pairingStatus === 1 ? 'unlink' : 'link'"
-    />
-    <div>
-      <VerticalTable 
-        :columns="selectedEventColumns" 
-        :dataList="matchSourcePairDetails"
-        :title="matchSource.find(_ => _.value == matchSourcePairDetails.dataSourceCode)?.label ?? '-'"
-      />
-    </div>
-  </div>
-  <div class="flex justify-end mt-4">
-    <el-button @click="closeDialog">{{ t('取消') }}</el-button>
-    <el-button type="primary" @click="handleMatch">{{ t('确定') }}</el-button>
   </div>
 </template>
 
@@ -41,6 +55,7 @@ import { useUserStore } from "@/store/user";
 import { matchCombineHook } from './utils/hook';
 import { tableColumnList } from './component/TableColumnList';
 import VerticalTable from '@/components/VerticalTable/index.vue';
+import { QuestionFilled } from '@element-plus/icons-vue';
 
 const { selectedEventColumns } = tableColumnList();
 const modalHeader = (value: boolean) => {
@@ -53,6 +68,7 @@ const modalSubHeader = (value: boolean) => {
 
 const {
   editFrom,
+  isOppositeStatus,
 } = matchCombineHook();
 
 const props = withDefaults(defineProps<{
@@ -74,8 +90,9 @@ const handleMatch = ()=>{
   const params = { ...removeEmptyStringKeys(param)}
   editFrom.sportId=   props?.matchSource?.sportId;
   editFrom.matchId188bet= props?.matchSourcePair.matchId188bet;
-  editFrom.matchId=props.matchSourcePair.matchId;
+  editFrom.matchId = props.matchSourcePair.matchId;
   if (props.matchSourcePair.pairingStatus === 0) {
+    params.oppositeStatus = isOppositeStatus.value ? 1 : 0;
     API.matchPairing(params).then((res)=>{
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if(res.code===0){

@@ -49,6 +49,7 @@ import ChangeAccount from '@iconify-icons/fa-solid/user-edit';
 import Back from '@iconify-icons/fa-solid/arrow-left';
 import LogoutCircleRLine from '@iconify-icons/ri/logout-circle-r-line';
 import Setting from '@iconify-icons/ri/settings-3-line';
+import Check from '@iconify-icons/ri/check-fill';
 
 addIcon("Setting", Setting);
 addIcon("dataSourceManager", dataManager);
@@ -106,3 +107,4 @@ addIcon('link', Link);
 addIcon('unlink', Unlink);
 addIcon('changeAccount', ChangeAccount);
 addIcon('back', Back);
+addIcon('check', Check);
