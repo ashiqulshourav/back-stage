@@ -178,7 +178,9 @@ export function useBettingAuditHook(venueType: number, category: number) {
         pagination.total = res?.data?.count;
         pagination.pageSize = res?.data?.pageSize;
         pagination.currentPage = res?.data?.pageNum;
-        totalInfo.value = res.data?.otherData;
+        if(pagination.currentPage===1){
+          totalInfo.value = res.data?.otherData;
+        }
       }
       document
         .querySelector('.table_container .el-scrollbar__wrap')

@@ -218,8 +218,9 @@ export function useBettingCenterHook(category: number, venueType: number) {
             pagination.total = res.data?.count;
             pagination.pageSize = res.data?.pageSize;
             pagination.currentPage = res.data?.pageNum;
-            totalInfo.value = res.data?.otherData;
-            //Object.assign(totalInfo, res.data?.otherData);
+            if(pagination.currentPage===1){
+              totalInfo.value = res.data?.otherData;
+            }
           }else {
             reject();
             dataList.length = 0;

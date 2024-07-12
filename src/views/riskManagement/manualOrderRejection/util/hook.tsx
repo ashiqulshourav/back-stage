@@ -128,7 +128,11 @@ export function useManualOrderRejectionHook() {
           item.index = index + 1;
         });
         pagination.total = res.data.count;
-        totalInfo.value = res.data?.otherData;
+
+        if(pagination.currentPage===1){
+          totalInfo.value = res.data?.otherData;
+        }
+
       }
       document
         .querySelector('.table_container .el-scrollbar__wrap')
