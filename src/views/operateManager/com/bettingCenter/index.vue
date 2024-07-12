@@ -431,7 +431,7 @@
         >
           <div>
             <label>{{ t('总计：') }}</label>
-            <span>{{ totalInfo?.thisPageBetCount ?? 0 }}{{ t('单') }}</span>
+            <span>{{ addThousandSeparator(totalInfo?.thisPageBetCount?.toString()||'0') }}{{ t('单') }}</span>
           </div>
           <div>
             <label>{{ t('用户数：') }}</label>

@@ -203,6 +203,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
             dataList.length = 0;
             let list = res?.data?.pageData || [];
             list = list.map((row: BetOrderAPI.BetOrderList) => {
+              item.index = index + 1;
               row.riskStatusArr = [];
               row.betResultArr = [];
               row.combineOrderDetails.map((item2: BetOrderAPI.Detail) => {
