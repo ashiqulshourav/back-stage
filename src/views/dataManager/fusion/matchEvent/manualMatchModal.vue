@@ -8,7 +8,9 @@
           <el-checkbox 
             v-if="matchSourcePairDetails.pairingStatus === 0"
             class="float-right"
-            v-model="isOppositeStatus"
+            v-model="oppositeStatus"
+            :true-value="1" 
+            :false-value="0"
           >
             {{ t('主客队对调') }}
           </el-checkbox>
@@ -68,7 +70,6 @@ const modalSubHeader = (value: boolean) => {
 
 const {
   editFrom,
-  isOppositeStatus,
 } = matchCombineHook();
 
 const props = withDefaults(defineProps<{
@@ -79,6 +80,7 @@ const userStore = useUserStore();
 const emits = defineEmits(['closeDialog']);
 const matchSourceDetails = ref(props.matchSource);
 const matchSourcePairDetails = ref(props.matchSourcePair)
+const oppositeStatus = ref(0);
 const handleMatch = ()=>{
   const param = {
     dpMatchId: props.matchSource.matchId,
@@ -92,11 +94,11 @@ const handleMatch = ()=>{
   editFrom.matchId188bet= props?.matchSourcePair.matchId188bet;
   editFrom.matchId = props.matchSourcePair.matchId;
   if (props.matchSourcePair.pairingStatus === 0) {
-    params.oppositeStatus = isOppositeStatus.value ? 1 : 0;
+    params.oppositeStatus = oppositeStatus.value;
     API.matchPairing(params).then((res)=>{
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if(res.code===0){
-        emits('closeDialog',{matchId:props.matchSourcePair.matchId,pairingStatus:1});
+        emits('closeDialog',{matchId: props.matchSourcePair.matchId, pairingStatus: 1, oppositeStatus: oppositeStatus.value});
       }
     })
   } else { // 取消匹配

@@ -211,6 +211,7 @@ declare namespace MatchCombineAPI {
     pageSize: number,
     pageNum: number,
     isDataSourceOdds: number,
+    pandaOppositeStatus: number,
   }
   type matchSourceData = {
     data:{

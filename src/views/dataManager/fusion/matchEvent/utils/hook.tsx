@@ -16,6 +16,7 @@ export function matchCombineHook() {
   const loading = ref(true);
   const globalOddsSwitch = ref(null);
   const alreadyMatch = ref<Boolean>(false);
+  const oppositeStatus = ref(null);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 20,
@@ -160,9 +161,9 @@ export function matchCombineHook() {
     }
   }
 
-  const handleMatchRule = (dpMatchId: number, matchId: number,oppositeStatus:number) => {
+  const handleMatchRule = (dpMatchId: number, matchId: number, oppositeStatus: number) => {
     const param = {
-      oppositeStatus: oppositeStatus ? 1 : 0,
+      oppositeStatus: oppositeStatus,
       dpMatchId: dpMatchId,
       matchId: matchId,
     }
@@ -206,19 +207,22 @@ export function matchCombineHook() {
           onCloseDialog: (params: string) => {
             closeDialog(options, index);
             // 匹配后更新列表数据状态；
-            alreadyMatch.value = params.pairingStatus === 1
+            alreadyMatch.value = params.pairingStatus === 1;
+            oppositeStatus.value = params.oppositeStatus;
             matchInfoDataList.map((item) => {
               if (item.matchId === params.matchId) {
                 item.pairingStatus = params.pairingStatus
               }
             })
-
           }
         })
     });
   }
 
   async function openMatchRuleDialog(title: string, rowData: MatchCombineAPI.matchPairingDetail, row: MatchCombineAPI.matchSourceDetail) {
+    if (oppositeStatus.value) {
+      rowData.pandaOppositeStatus = oppositeStatus.value;
+    }
     addDialog({
       title,
       width: 'auto',
@@ -261,5 +265,6 @@ export function matchCombineHook() {
     getGlobalOddsSwitch,
     openMatchRuleDialog,
     handleMatchRule,
+    oppositeStatus,
   };
 }
