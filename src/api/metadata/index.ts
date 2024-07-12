@@ -4,6 +4,8 @@ import { udpateOddsType } from "@/views/dataManager/fusion/matchEvent/utils/type
 export const metaData = {
   //- 普通体育联赛列表获取
   getLeagueList: (data: MetadataAPI.LeagueListParams) => http.request<MetadataAPI.LeagueListRes>("post", '/league/v1/getLeagueList', { data }),
+  // export data
+  getLeagueExport: (data: MetadataAPI.LeagueListParams) => http.request<MetadataAPI.LeagueListRes>("post", '/league/v1/getLeagueListExport', { data }),
   //- 联赛管理-修改
   updateLeague: (data: MetadataAPI.updateLeagueParamsType) => http.request<MetadataAPI.updateLeagueResType>("post", "/league/v1/updateLeague", { data }),
   //- 普通体育文件上传

@@ -10,6 +10,7 @@ export function useLeague() {
   const dataList = reactive<MetadataAPI.LeagueList[]>([]);
   const loading = ref(true);
   const levelList = reactive<ConfigCenterDataAPI.leagueLevelList[]>([]);
+  const downloading = ref(false);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -53,20 +54,34 @@ export function useLeague() {
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     try {
-      loading.value = true;
+      if (type !== 'export') {
+        loading.value = true;
+      }
       const res: MetadataAPI.LeagueListRes = await API.getLeagueList({
         ...removeEmptyStringKeys(form),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
-      loading.value = false;
-      if (res.code) return message(res.msg, { type: 'error' });
-      dataList.length = 0;
-      dataList.push(...res.data.list);
-      pagination.total = res.data.total;
+      if (type === 'export') {
+        return res?.data?.list
+      } else {
+        loading.value = false;
+        if (res.code) return message(res.msg, { type: 'error' });
+        dataList.length = 0;
+        dataList.push(...res.data.list);
+        pagination.total = res.data.total;
+      }
     } catch (error) {
       loading.value = false;
     }
+  }
+
+  const exportFile = async () => {
+    downloading.value = true;
+    onSearch('export').then((expRes: any) => {
+      console.log(expRes)
+    })
+    downloading.value = false;
   }
 
   async function openDialog(title: string, row?: MetadataAPI.LeagueList) {
@@ -116,6 +131,8 @@ export function useLeague() {
     handleTableWidthChange,
     handleCurrentChange,
     handleSelectionChange,
-    form
+    form, 
+    downloading,
+    exportFile
   };
 }
