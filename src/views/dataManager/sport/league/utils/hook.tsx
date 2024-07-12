@@ -4,9 +4,13 @@ import { addDialog, closeDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted, h } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { addThousandSeparator } from '@/utils/formatNumber';
+import { usePublicHooks } from '@/hooks';
+const  { exportDialog } = usePublicHooks();
 import { searchFormType } from './types';
 
 export function useLeague() {
+  const router = useRouter();
   const dataList = reactive<MetadataAPI.LeagueList[]>([]);
   const loading = ref(true);
   const levelList = reactive<ConfigCenterDataAPI.leagueLevelList[]>([]);
@@ -63,7 +67,7 @@ export function useLeague() {
         pageNum: pagination.currentPage
       });
       if (type === 'export') {
-        return res?.data?.list
+        return res?.data
       } else {
         loading.value = false;
         if (res.code) return message(res.msg, { type: 'error' });
@@ -77,11 +81,28 @@ export function useLeague() {
   }
 
   const exportFile = async () => {
-    downloading.value = true;
     onSearch('export').then((expRes: any) => {
-      console.log(expRes)
+      if(expRes?.total>50000){
+        message(`当前条件下数据量为${addThousandSeparator(expRes?.total)}，大于5万条，不支持导出!`, { type: 'error' });
+      } else if(expRes?.total<1 || expRes === null){
+        message('数据量为零，无法导出', { type: 'error' });
+      } else {
+        exportDialog({
+          firstTitle: t('导出当前球员名单数据'),
+          router,
+          callback: async () => {
+            downloading.value = true;
+            const res = await API.getLeagueExport({
+              ...removeEmptyStringKeys(form),
+              pageSize: pagination.pageSize,
+              pageNum: pagination.currentPage
+            })
+            message(res.msg, { type: res.code ? 'error' : 'success' });
+            downloading.value = false;
+          }
+        })
+      }
     })
-    downloading.value = false;
   }
 
   async function openDialog(title: string, row?: MetadataAPI.LeagueList) {

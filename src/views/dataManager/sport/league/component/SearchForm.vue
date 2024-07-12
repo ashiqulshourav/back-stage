@@ -21,7 +21,7 @@
     :searchLoading="loading"
     :rowProps="{ gutter: 10 }"
   >
-    <template #footer="{ handleReset, handleSearch, handleUnfold, isShowUnfold, exportFile }">
+    <template #footer="{ handleReset, handleSearch, handleUnfold, isShowUnfold }">
       <div style="display: flex">
         <el-button :icon="useRenderIcon(Refresh)" @click="handleReset">{{ t('重置') }}</el-button>
         <el-button type="primary" :icon="useRenderIcon(Search)" @click="handleSearch">{{t('筛选')}}</el-button>
@@ -94,6 +94,10 @@ const emits = defineEmits(['onSearch', 'exportFile']);
 const search = () => {
   Object.assign(props.form, selfForm.value);
   emits('onSearch', ...['reload']);
+};
+
+const exportFile = () => {
+  emits('exportFile');
 };
 
 
