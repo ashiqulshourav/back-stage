@@ -5,6 +5,8 @@
       :loading="loading"
       @on-search="onSearch"
       :levelList="levelList"
+      :downloading="downloading"
+      @exportFile="exportFile"
     />
 
     <PureTableBar
@@ -90,6 +92,8 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   form,
-  levelList
+  levelList,
+  downloading,
+  exportFile,
 } = useLeague();
 </script>

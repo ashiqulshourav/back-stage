@@ -4,12 +4,17 @@ import { addDialog, closeDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted, h } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { addThousandSeparator } from '@/utils/formatNumber';
+import { usePublicHooks } from '@/hooks';
+const  { exportDialog } = usePublicHooks();
 import { searchFormType } from './types';
 
 export function useLeague() {
+  const router = useRouter();
   const dataList = reactive<MetadataAPI.LeagueList[]>([]);
   const loading = ref(true);
   const levelList = reactive<ConfigCenterDataAPI.leagueLevelList[]>([]);
+  const downloading = ref(false);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -53,20 +58,51 @@ export function useLeague() {
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     try {
-      loading.value = true;
+      if (type !== 'export') {
+        loading.value = true;
+      }
       const res: MetadataAPI.LeagueListRes = await API.getLeagueList({
         ...removeEmptyStringKeys(form),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
-      loading.value = false;
-      if (res.code) return message(res.msg, { type: 'error' });
-      dataList.length = 0;
-      dataList.push(...res.data.list);
-      pagination.total = res.data.total;
+      if (type === 'export') {
+        return res?.data
+      } else {
+        loading.value = false;
+        if (res.code) return message(res.msg, { type: 'error' });
+        dataList.length = 0;
+        dataList.push(...res.data.list);
+        pagination.total = res.data.total;
+      }
     } catch (error) {
       loading.value = false;
     }
+  }
+
+  const exportFile = async () => {
+    onSearch('export').then((expRes: any) => {
+      if(expRes?.total>50000){
+        message(`当前条件下数据量为${addThousandSeparator(expRes?.total)}，大于5万条，不支持导出!`, { type: 'error' });
+      } else if(expRes?.total<1 || expRes === null){
+        message('数据量为零，无法导出', { type: 'error' });
+      } else {
+        exportDialog({
+          firstTitle: t('导出当前球员名单数据'),
+          router,
+          callback: async () => {
+            downloading.value = true;
+            const res = await API.getLeagueExport({
+              ...removeEmptyStringKeys(form),
+              pageSize: pagination.pageSize,
+              pageNum: pagination.currentPage
+            })
+            message(res.msg, { type: res.code ? 'error' : 'success' });
+            downloading.value = false;
+          }
+        })
+      }
+    })
   }
 
   async function openDialog(title: string, row?: MetadataAPI.LeagueList) {
@@ -116,6 +152,8 @@ export function useLeague() {
     handleTableWidthChange,
     handleCurrentChange,
     handleSelectionChange,
-    form
+    form, 
+    downloading,
+    exportFile
   };
 }
