@@ -160,9 +160,9 @@ export function matchCombineHook() {
     }
   }
 
-  const handleMatchRule = (dpMatchId: number, matchId: number,oppositeStatus:number) => {
+  const handleMatchRule = (dpMatchId: number, matchId: number, oppositeStatus: number) => {
     const param = {
-      oppositeStatus: oppositeStatus ? 1 : 0,
+      oppositeStatus: oppositeStatus,
       dpMatchId: dpMatchId,
       matchId: matchId,
     }

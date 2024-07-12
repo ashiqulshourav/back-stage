@@ -4,7 +4,7 @@
       {{ t('如果数据源的主客队位置相反，可以勾选开启主客队调换') }}
     </div>
     <div class="text-left text-m">
-      <el-checkbox v-model="props.matchSourcePair.oppositeStatus">
+      <el-checkbox v-model="oppositeStatus" :true-value="1" :false-value="0">
         {{ t('主客队对调') }}
       </el-checkbox>
     </div>
@@ -23,7 +23,8 @@ const props = withDefaults(defineProps<{
   matchSource: MatchCombineAPI.matchSourceDetail,
   matchSourcePair: MatchCombineAPI.matchSourceDetail,
 }>(), {});
-console.log(1111111111,props.matchSourcePair.oppositeStatus)
+const oppositeStatus = ref(props.matchSourcePair.pairingStatus)
+// console.log(1111111111, oppositeStatus.value)
 
 const {
   handleMatchRule,
@@ -32,7 +33,7 @@ const {
 const emits = defineEmits(['closeDialog']);
 
 const onMatchingRule = () => {
-  handleMatchRule(props.matchSource.matchId, props.matchSourcePair.matchId,props.matchSourcePair.oppositeStatus)
+  handleMatchRule(props.matchSource.matchId, props.matchSourcePair.matchId, oppositeStatus.value)
   emits('closeDialog');
 }
 
