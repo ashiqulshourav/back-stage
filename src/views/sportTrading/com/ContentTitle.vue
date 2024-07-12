@@ -9,7 +9,13 @@
           class="w-4 h-4 flex items-center text-[12px] flex-shrink-0 justify-center bg-primary text-center rounded-full leading-4 text-white mr-1"
         >
           <span class="scale-75 font-bold">
-            {{ currentMatch?.level === 200 ? t('未') : currentMatch?.level }}
+            {{
+              currentMatch.riskLevel < 0
+                ? t('未')
+                : currentMatch.riskLevel > 100
+                ? '99+'
+                : currentMatch.riskLevel
+            }}
           </span>
         </span>
         <ReText

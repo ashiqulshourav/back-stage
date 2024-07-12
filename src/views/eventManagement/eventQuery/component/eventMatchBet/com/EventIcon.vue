@@ -2,7 +2,8 @@
   <div
     class="absolute w-4 cursor-pointer flex items-center h-full -translate-x-1/2"
     :style="{
-      left: (s.time / 5400) * 100 === 100 ? '99%' : `${(s.time / 5400) * 100}%`
+      left:
+        (+s.time / 5400) * 100 === 100 ? '99%' : `${(+s.time / 5400) * 100}%`
     }"
     v-for="(s, l) in data"
     :key="l"
@@ -10,7 +11,7 @@
     <el-tooltip placement="top-start">
       <template #content>
         <span>{{ eMap[s.type as keyof typeof eMap] }}</span>
-        <span class="font-bold">&nbsp;{{ getSecond(s.time) }}'</span>
+        <span class="font-bold">&nbsp;{{ getSecond(+s.time) }}'</span>
       </template>
       <img
         :class="['w-4 h-4', s.type === 'goal' && 'animate-rotate360']"

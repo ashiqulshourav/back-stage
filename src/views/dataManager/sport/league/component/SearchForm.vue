@@ -11,6 +11,7 @@
     labelWidth="auto"
     :defaultValues="defaultValue"
     :searchText="t('筛选')"
+    @collapse="collapse"
     :resetText="t('重置')"
     :colProps="{
       xl: locale === 'zh' ? 5 : 8,
@@ -44,6 +45,11 @@ const props = defineProps<{
   form: searchFormType;
   levelList: ConfigCenterDataAPI.leagueLevelList[];
 }>();
+
+const collapse = () => {
+  const resizeEvent = new Event('resize');
+  window.dispatchEvent(resizeEvent);
+};
 
 const { locale } = useTranslationLang();
 const selfForm = ref<FieldValues>(props.form);

@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import {statusMap} from '../utils/map'
 export const columns: TableColumnList = [
   {
     label: t('序号'),
@@ -23,7 +22,7 @@ export const columns: TableColumnList = [
     prop: 'fileSize',
     minWidth: 150,
     formatter: ({ fileSize }) =>
-      ( fileSize ? (fileSize / 1024)?.toFixed(1) + 'KB' : 0)?.toString()
+      ( fileSize ? (fileSize / 1000)?.toFixed(1) + 'KB' : 0)?.toString()
   },
   {
     label: t('页面来源'),
@@ -33,8 +32,7 @@ export const columns: TableColumnList = [
   {
     label: t('状态'),
     minWidth: 200,
-    prop: 'status',
-    formatter: ({ status }): string => statusMap[status]
+    slot: 'status',
   },
   {
     label: t('操作人'),

@@ -13,10 +13,7 @@ export const autoLabelColumns: TableColumnList = [
     label: t('注单数量'),
     slot: 'numberOfBets'
   },
-  // {
-  //   label: t('用户输赢金额'),
-  //   slot: 'winLossAmount'
-  // },
+
   {
     label: t('用户输赢金额'),
     slot: 'betAmount'
@@ -49,11 +46,11 @@ export const orderPlacementColumns: TableColumnList = [
     slot: 'eventName'
   },
   {
-    label: t('投注前'),
+    label: t('事件前'),
     slot: 'beforeBetting'
   },
   {
-    label: t('投注后'),
+    label: t('事件后'),
     slot: 'afterBetting'
   },
   {
@@ -103,11 +100,11 @@ export const autoFreezeColumns: TableColumnList = [
     slot: 'eventName'
   },
   {
-    label: t('投注前'),
+    label: t('事件前'),
     slot: 'betBeforeTime'
   },
   {
-    label: t('投注后'),
+    label: t('事件后'),
     slot: 'betAfterTime'
   },
   {

@@ -130,14 +130,8 @@ import { t } from '@/plugins/i18n';
 
 import { usePublicHooks } from '@/hooks';
 import {
-  addThousandSeparator,
   formatNumberAndFillNull,
-  formatNumberWithLength
 } from '@/utils/formatNumber';
-import { labelListType } from '@/views/operateManager/com/playerList/utils/types';
-import { getLabelColor } from '@/components/RiskLabelList/utils';
-import { getLabelLevelByName } from '@/components/RiskLabelList/utils';
-import { PandaMatch } from '@/views/eventManagement/eventQuery/utils/types';
 import { EVENT_SOURCE } from '@/views/eventManagement/eventQuery/utils/map';
 import { EVENT_NAMES, LEAGUE_GRADLES, formatRanges } from '../utils/map';
 
@@ -171,7 +165,7 @@ const leagueDisabled = (row: any, leagueItem: any) => {
 
   if (selectedItem.sourceCode && selectedItem.eventCode && row.sourceCode && row.eventCode) {
     if (selectedItem.eventCode == row.eventCode && selectedItem.sourceCode == row.sourceCode) {
-      if (selectedItem.leagueGrades?.includes(leagueItem)) {        
+      if (selectedItem.leagueGrades?.includes(leagueItem)) {
         disable = true;
       }
     }
@@ -194,7 +188,7 @@ const eventDisabled = (eventCode: string, row: any) => {
        }
     }
 
-    if (found) {      
+    if (found) {
       if (selectedItem.sourceCode == row.sourceCode) {
         if (selectedItem.eventCode == eventCode) {
           disable = true;
@@ -220,7 +214,7 @@ const sourceDisabled = (sourceCode: string, row: any) => {
        }
     }
 
-    if (found) {      
+    if (found) {
       if (selectedItem.eventCode == row.eventCode) {
         if (selectedItem.sourceCode == sourceCode) {
           disable = true;

@@ -1,9 +1,10 @@
 <template>
   <div>
     <el-date-picker
-      class="ml-4 !w-[260px]"
+      class="ml-4"
+      :class="isDateTime ? '!w-[380px]' : '!w-[260px]'"
       v-model="timeVal"
-      :type="isSingle ? 'date' : 'daterange'"
+      :type="isSingle ? 'date' : isDateTime ? 'datetimerange' :  'daterange'"
       :placeholder="placeholder"
       value-format="x"
       :format="format"
@@ -28,6 +29,7 @@ const props = withDefaults(
     format?: string;
     disableDate?: Function;
     isShowShortCuts?: boolean;
+    isDateTime?: boolean;
     isSingle?: boolean;
     startPlaceholder?: string;
     endPlaceholder?: string;
@@ -37,6 +39,7 @@ const props = withDefaults(
     format: 'YYYY-MM-DD',
     isShowShortCuts: true,
     isSingle: false,
+    isDateTime: false,
     placeholder: t('请选择日期'),
     startPlaceholder: t('开始日期'),
     endPlaceholder: t('结束日期'),

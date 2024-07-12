@@ -10,6 +10,9 @@ import {
 } from './types';
 import { FormInstance } from 'element-plus';
 import { useSettingStoreHook } from '@/store/settings';
+import { usePublicHooks } from '@/hooks';
+import { addThousandSeparator } from '@/utils/formatNumber';
+const { exportDialog } = usePublicHooks();
 import { pageSizeArr } from '@/utils/math';
 
 export function userPlayerListHook(venueType: number, category: number) {
@@ -114,34 +117,54 @@ export function userPlayerListHook(venueType: number, category: number) {
   };
 
   // export player list
-  const exportFileTest = async () => {
-    downloading.value = true;
-    const res = await API.playerListExport({
-      ...removeEmptyStringKeys(form),
-      venueType: venueType,
-      pageSize: 50000,
-      pageNum: 1,
-      export: true,
+  const exportFile = async () => {
+    onSearch('export').then((expRes: any) => {
+      if (expRes?.count > 50000) {
+        message(`当前条件下数据量为${addThousandSeparator(expRes?.count)}，大于5万条，不支持导出!`, { type: 'error' });
+      } else if (expRes?.count < 1 || expRes === null) {
+        message('数据量为零，无法导出', { type: 'error' });
+      } else {
+        exportDialog({
+          firstTitle: t('导出当前球员名单数据'),
+          router,
+          callback: async () => {
+            downloading.value = true;
+            const res = await API.playerListExport({
+              ...removeEmptyStringKeys(form),
+              venueType: venueType,
+              pageSize: 50000,
+              pageNum: 1,
+              export: true,
+            })
+            message(res.msg, { type: res.code ? 'error' : 'success' });
+            downloading.value = false;
+          }
+        })
+      }
     })
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    downloading.value = false;
   }
 
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     try {
-      loading.value = true;
+      if (type !== 'export') {
+        loading.value = true;
+      }
       const res = await API.operateUserList({
         ...removeEmptyStringKeys(form),
         venueType: venueType,
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
-      loading.value = false;
-      if (res.code) return message(res.msg, { type: 'error' });
-      dataList.length = 0;
-      dataList.push(...res.data.pageData);
-      pagination.total = res.data.count;
+      if (type === 'export') {
+        return res?.data
+      } else {
+        loading.value = false;
+        if (res.code) return message(res.msg, { type: 'error' });
+        dataList.length = 0;
+        dataList.push(...res.data.pageData);
+        pagination.total = res.data.count;
+      }
     } catch (error) {
       loading.value = false;
     }
@@ -312,6 +335,6 @@ export function userPlayerListHook(venueType: number, category: number) {
     tenantObj,
     goChangeAccountPage,
     downloading,
-    exportFileTest
+    exportFile
   };
 }

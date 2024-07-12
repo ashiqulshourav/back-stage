@@ -5,7 +5,7 @@
       :loading="loading"
       @on-search="onSearch"
       @exportFile="exportFile"
-      @exportFileTest="exportFileTest"
+      :category="category"
       :tenantList="tenantList"
       :venueType="venueType"
       :downloading="downloading"
@@ -234,6 +234,9 @@
                 }}
               </div>
               <div class="item_line">
+                <span v-if="item.kindsCode === 'FT_TTS'">
+                  {{ enterGoalMap[item.betHandicap.toUpperCase()  as keyof typeof enterGoalMap] }}
+                </span>
                 {{ useSportFormatDetail(item)[3] }} @{{
                   getViewOddFn(
                     item.oddFinally,
@@ -452,19 +455,16 @@
           </template>
         </pure-table>
         <div
-          class="bottom_content absolute bottom-7 flex max-w-[50%] items-center text-sm flex-wrap"
+            class="bottom_content absolute bottom-7 flex max-w-[50%] items-center text-sm flex-wrap"
         >
           <div>
             <label>{{ t('总计：') }}</label>
-            <span
-              >{{ addThousandSeparator(totalInfo.totalCount)
-              }}{{ t('单') }}</span
-            >
+            <span>{{ totalInfo?.thisPageBetCount ?? 0 }}{{ t('单') }}</span>
           </div>
           <div>
             <label>{{ t('用户数：') }}</label>
             <span
-              >{{ addThousandSeparator(totalInfo?.totalUserCount) ?? 0
+            >{{ addThousandSeparator(totalInfo?.thisPageBetUserCount) ?? 0
               }}{{ t('人') }}</span
             >
           </div>
@@ -473,7 +473,7 @@
             <span class="ml-1">
               {{
                 addThousandSeparator(
-                  totalInfo?.productAmountTotal?.toFixed(2)
+                    totalInfo?.thisPageBetTotalAmount?.toFixed(2)
                 ) ?? '0.00'
               }}</span
             >
@@ -482,8 +482,19 @@
             <label>{{ t('总输赢：') }}</label>
             <span class="ml-1">
               {{
-                addThousandSeparator(totalInfo?.profitTotal?.toFixed(2)) ??
-                '0.00'
+                addThousandSeparator(
+                    totalInfo?.thisPageBetTotalProfitAmount?.toFixed(2)
+                ) ?? '0.00'
+              }}</span
+            >
+          </div>
+          <div>
+            <label>{{ t('注单均赔率：') }}</label>
+            <span class="ml-1">
+              {{
+                addThousandSeparator(
+                    totalInfo?.thisPageAvgOdds?.toFixed(2)
+                ) ?? '0.00'
               }}</span
             >
           </div>
@@ -510,7 +521,8 @@ import {
   markeTypeMap,
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
-  getIsInplay
+  getIsInplay,
+  enterGoalMap,
 } from '@/utils/formatMatch';
 import { riskStatus } from './util/types';
 import { usePublicHooks } from '@/hooks';
@@ -525,8 +537,9 @@ const rejectSelectedCount = ref(0);
 const approveSelectedCount = ref(0);
 const isDataFetching = ref(1);
 
-const { venueType } = defineProps<{
+const { venueType, category } = defineProps<{
   venueType: number;
+  category: number;
 }>();
 
 const {
@@ -541,7 +554,6 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   exportFile,
-  exportFileTest,
   copyTest,
   tenantList,
   handleCancel,
@@ -555,7 +567,7 @@ const {
   editMatchDetailRemark,
   hasDataFetching,
   dataFetchingTime
-} = useBettingAuditHook(venueType);
+} = useBettingAuditHook(venueType, category);
 watch(
   dataList,
   dataList => {

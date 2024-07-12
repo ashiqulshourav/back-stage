@@ -212,7 +212,10 @@ const {
 
 const { tableHeaderStyle } = usePublicHooks();
 
-const eventQuotientList = [
+const eventQuotientList: {
+  type: keyof SattleDataAPI.newBasketballEventsList;
+  val: string;
+}[] = [
   { type: 'xjFlag', val: t('188数据') },
   { type: 'psFlag', val: t('熊猫数据') },
   { type: 'vsFlag', val: t('播控数据') }

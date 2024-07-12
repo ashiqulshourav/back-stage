@@ -1,6 +1,9 @@
 import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
+import { usePublicHooks } from '@/hooks';
+import { addThousandSeparator } from '@/utils/formatNumber';
+const { exportDialog } = usePublicHooks();
 import {
   searchFormType,
   seriesTypesSingle,
@@ -8,20 +11,11 @@ import {
   riskStatusMap,
   riskStatus
 } from './types';
-import { columns } from './exportTableColumnList';
-import { utils, writeFile } from 'xlsx';
+
 import { addDialog, closeDialog } from '@/components/ReDialog/index';
 import { reactive, ref, onMounted, h } from 'vue';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
-import {
-  markeTypeMap,
-  useSportFormatDetail,
-  displayHomeAwayScore,
-  BET_RESULT_TYPE_MAP,
-  formatSeriesType
-} from '@/utils/formatMatch';
 import dayjs from 'dayjs';
-import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
 import formDom from '../component/form.vue';
@@ -31,7 +25,8 @@ import { useBettingAuditStore } from '@/store/bettingAudit';
 import { hasAuth } from '@/router/utils';
 import { useRiskNoticeStore } from '@/store/riskNotice';
 
-export function useBettingAuditHook(venueType: number) {
+export function useBettingAuditHook(venueType: number, category: number) {
+  const router = useRouter();
   const riskNoticeStore = useRiskNoticeStore();
   const { openPasswordInput } = usePasswordInputHook({ showClose: false });
   const bettingAuditStore = useBettingAuditStore();
@@ -46,9 +41,7 @@ export function useBettingAuditHook(venueType: number) {
   const isEditDialogClick = ref(false);
   const isEditRemarkClick = ref(false);
 
-  const totalInfo = reactive<BetOrderAPI.RiskOtherDataType>(
-    {} as BetOrderAPI.RiskOtherDataType
-  );
+  const totalInfo =ref<BetOrderAPI.otherDataType>({} as BetOrderAPI.otherDataType );
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -63,6 +56,7 @@ export function useBettingAuditHook(venueType: number) {
     createTimeEnd: dayjs().endOf('day').valueOf(),
     orderId: '',
     leagueId: '',
+    leagueName: '',
     matchId: '',
     seriesType: '',
     category: '',
@@ -135,7 +129,8 @@ export function useBettingAuditHook(venueType: number) {
         seriesDetailsSingle: '',
         seriesDetailsDuplex: '',
         seriesDetails: seriesDetails,
-        seriesType: form.seriesType > 2 ? 2 : form.seriesType
+        seriesType: form.seriesType > 2 ? 2 : form.seriesType,
+        category: venueType === 0 ? form.category : 1
       }),
       pageSize: pageNum || pagination.pageSize,
       pageNum: pagination.currentPage,
@@ -157,11 +152,16 @@ export function useBettingAuditHook(venueType: number) {
         });
         return;
       }
-      loading.value = true;
+      if(type!=='export'){
+        loading.value = true;
+      }
       const res: BetOrderAPI.BetOrderResType = await API.bettingAuditList({
         ...params,
         venueType
       });
+      if(type==='export'){
+        return res?.data;
+      }
       loading.value = false;
       downloading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
@@ -178,7 +178,7 @@ export function useBettingAuditHook(venueType: number) {
         pagination.total = res?.data?.count;
         pagination.pageSize = res?.data?.pageSize;
         pagination.currentPage = res?.data?.pageNum;
-        Object.assign(totalInfo, res?.data?.otherData);
+        totalInfo.value = res.data?.otherData;
       }
       document
         .querySelector('.table_container .el-scrollbar__wrap')
@@ -273,139 +273,28 @@ export function useBettingAuditHook(venueType: number) {
     onSearch();
   };
 
-  //- 导出excel表格
-  const exportFile = async () => {
-    downloading.value = true;
-    const res: BetOrderAPI.BetOrderResType = await API.bettingAuditList(
-      formatParams({ pageNum: 1, pageSize: 50000 }) as searchFormType
-    );
-    const list = [];
-    res.data?.pageData?.map(row => {
-      row?.combineOrderDetails?.map(match => {
-        list.push({ ...row, ...match });
-      });
-    });
-    const r = list.map((item: any, i) => {
-      const arr = [];
-      const data = item;
-      columns.forEach((column: { prop: string }) => {
-        let str = '';
-        switch (column.prop.toString()) {
-          case 'sportId':
-            str =
-              SPORT_ID_MAP.find(_ => +_.value === +data[column.prop as string])
-                ?.label ?? data.sportNameCn;
-            break;
-          case 'beginTime':
-            str = data.beginTime
-              ? dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss')
-              : '';
-            break;
-          case 'createTime':
-            str = data.createTime
-              ? dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss')
-              : '';
-            break;
-          case 'settleTime':
-            str = data.settleTime
-              ? dayjs(data[column.prop])?.format('YYYY-MM-DD HH:mm:ss')
-              : '';
-            break;
-          case 'index':
-            str = (i + 1).toString();
-            break;
-          case 'playType':
-            str = useSportFormatDetail(data)[4];
-            break;
-          case 'betName':
-            str = useSportFormatDetail(data)[3];
-            break;
-          case 'teamName':
-            if (
-              data.kindsCode?.includes('Outright') ||
-              data.kindsCode?.includes('moutright')
-            ) {
-              str = '冠军赛事';
-            } else {
-              str = `${data.homeTeamNameCn} vs ${data.awayTeamNameCn}`;
-            }
-            break;
-          case 'marketType':
-            str = markeTypeMap[data.marketType as keyof typeof markeTypeMap];
-            break;
-          case 'isSettlementAgain':
-            str = data.isSettlementAgain === 2 ? '是' : '否';
-            break;
-          case 'status':
-            // str=betStatusMap[getStatus(data.status,data.billStatus,data.betResult,data.isReserve)?.status]
-            break;
-          case 'settleScore':
-            str = displayHomeAwayScore(data.settleScore, data.sportId);
-            break;
-          case 'betResult':
-            str =
-              BET_RESULT_TYPE_MAP[
-                data.betResult as keyof typeof BET_RESULT_TYPE_MAP
-              ];
-            break;
-          case 'scoreBenchmark':
-            str = displayHomeAwayScore(data.scoreBenchmark, data.sportId);
-            break;
-          case 'seriesType':
-            if (data.combineOrderDetails.length > 1) {
-              str =
-                String(data.seriesType).slice(-3) === '001' ? '串关' : '复式';
-              str +=
-                ' ' +
-                formatSeriesType(
-                  data?.seriesType,
-                  data.combineOrderDetails.length
-                );
-            }
-            break;
-          case 'isSeriesType': //单关 串关
-            str = data.seriesType === 1 ? '单关' : '串关';
-            break;
-          case 'tenantName': //商户名
-            str = tenantObj[data.tenantId]?.tenantName ?? '';
-            break;
-          case 'tenantCode': //商户编码
-            str = tenantObj[data.tenantId]?.name ?? '';
-            break;
-          case 'riskStatus': //审核状态
-            str = getRiskStatus(data.riskStatus).label;
-            break;
-          default:
-            str = data[column.prop as string];
-        }
-        arr.push(str);
-      });
-      return arr;
-    });
-    const titleList: string[] = [];
-    columns.forEach((column: { label: string }) => {
-      titleList.push(column.label);
-    });
-    r.unshift(titleList);
-    const workBook = utils.book_new();
-    const workSheet = utils.aoa_to_sheet(r);
-    workSheet['C1'].s = {
-      wrapText: true
-    };
-    utils.book_append_sheet(workBook, workSheet, '数据报表');
-    writeFile(workBook, '赛程_注单审核.xlsx');
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    downloading.value = false;
-  };
-
   // export to excel
-  const exportFileTest = async () => {
-    downloading.value = true;
-    const res: BetOrderAPI.BetOrderResType = await API.bettingAuditListExport(
-      formatParams({ pageNum: 1, pageSize: 50000, venueType }) as searchFormType
-    );
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    downloading.value = false;
+  const exportFile = async () => {
+    fetchData('export').then((expRes: any) => {
+      if(expRes?.count>50000){
+        message(`当前条件下数据量为${addThousandSeparator(expRes?.count)}，大于5万条，不支持导出!`, { type: 'error' });
+      } else if(expRes?.count<1){
+        message('数据量为零，无法导出', { type: 'error' });
+      } else {
+        exportDialog({
+          firstTitle: t('导出当前投注审核列表数据?'),
+          router,
+          callback: async () => {
+            downloading.value = true;
+            const res: BetOrderAPI.BetOrderResType = await API.bettingAuditListExport(
+              formatParams({ pageNum: 1, pageSize: 50000, venueType }) as searchFormType
+            );
+            message(res.msg, { type: res.code ? 'error' : 'success' });
+            downloading.value = false;
+          }
+        })
+      }
+    })
   };
 
   const handleCancel = (row: any, index: number) => {
@@ -630,7 +519,6 @@ export function useBettingAuditHook(venueType: number) {
     handleCurrentChange,
     handleSelectionChange,
     exportFile,
-    exportFileTest,
     getRiskStatus,
     copyTest,
     tenantObj,

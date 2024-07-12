@@ -5,7 +5,7 @@
       :loading="loading"
       @on-search="onSearch"
       @exportFile="exportFile"
-      @exportFileTest="exportFileTest"
+      :category="category"
       :tenantList="tenantList"
       :riskLabelList="riskLabelList"
       :venueType="props.venueType"
@@ -191,7 +191,9 @@
               <div class="item_line">
                 {{ t('开赛时间:')
                 }}{{
-                  dayjs(item.beginTime ?? Date.now()).format('MM-DD HH:mm:ss')
+                  dayjs(item.beginTime ?? Date.now())
+                    .tz('Asia/Shanghai')
+                    .format('MM-DD HH:mm:ss')
                 }}
               </div>
             </div>
@@ -461,6 +463,16 @@
               }}</span
             >
           </div>
+          <div>
+            <label>{{ t('注单均赔率：') }}</label>
+            <span class="ml-1">
+              {{
+                addThousandSeparator(
+                  totalInfo?.thisPageAvgOdds?.toFixed(2)
+                ) ?? '0.00'
+              }}</span
+            >
+          </div>
         </div>
       </template>
     </PureTableBar>
@@ -474,6 +486,8 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import RiskLabelList from './component/riskLabelList.vue';
 import { hasAuth } from '@/router/utils';
 import { adjustContentWithRowHeight } from '@/utils/adjustRowCoulmnHeight';
@@ -500,6 +514,10 @@ const props = defineProps<{
   venueType: number;
 }>();
 defineOptions({ name: 'bettingCenter' });
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 const { tableHeaderStyle } = usePublicHooks();
 const {
   loading,
@@ -512,7 +530,6 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   exportFile,
-  exportFileTest,
   handleCancel,
   getStatus,
   copyTest,

@@ -1,13 +1,12 @@
 <template>
   <div class="main">
-    <!-- @exportFile="exportFile" -->
     <SearchForm
       :form="form"
       :loading="loading"
       :downloading="downloading"
+      :category="0"
       @on-search="onSearch"
       @exportFile="exportFile"
-      @exportFileTest="exportFileTest"
       :tenantList="tenantList"
     />
     <PureTableBar
@@ -198,6 +197,9 @@
                 }}
               </div>
               <div class="item_line">
+                <span v-if="item.kindsCode === 'FT_TTS'">
+                  {{ enterGoalMap[item.betHandicap.toUpperCase()  as keyof typeof enterGoalMap] }}
+                </span>
                 {{ useSportFormatDetail(item)[3] }} @{{
                   getViewOddFn(
                     item.oddFinally,
@@ -349,9 +351,8 @@
             <div v-else>-</div>
           </template>
         </pure-table>
-
         <div
-          class="bottom_content absolute bottom-7 flex max-w-[50%] items-center text-sm flex-wrap"
+            class="bottom_content absolute bottom-7 flex max-w-[50%] items-center text-sm flex-wrap"
         >
           <div>
             <label>{{ t('总计：') }}</label>
@@ -359,13 +360,18 @@
           </div>
           <div>
             <label>{{ t('用户数：') }}</label>
-            <span>{{ totalInfo?.thisPageBetUserCount ?? 0 }}{{ t('人') }}</span>
+            <span
+            >{{ addThousandSeparator(totalInfo?.thisPageBetUserCount) ?? 0
+              }}{{ t('人') }}</span
+            >
           </div>
           <div>
             <label>{{ t('总计投注额：') }}</label>
             <span class="ml-1">
               {{
-                totalInfo?.thisPageBetTotalAmount?.toFixed(2) ?? '0.00'
+                addThousandSeparator(
+                    totalInfo?.thisPageBetTotalAmount?.toFixed(2)
+                ) ?? '0.00'
               }}</span
             >
           </div>
@@ -373,11 +379,24 @@
             <label>{{ t('总输赢：') }}</label>
             <span class="ml-1">
               {{
-                totalInfo?.thisPageBetTotalProfitAmount?.toFixed(2) ?? '0.00'
+                addThousandSeparator(
+                    totalInfo?.thisPageBetTotalProfitAmount?.toFixed(2)
+                ) ?? '0.00'
+              }}</span
+            >
+          </div>
+          <div>
+            <label>{{ t('注单均赔率：') }}</label>
+            <span class="ml-1">
+              {{
+                addThousandSeparator(
+                    totalInfo?.thisPageAvgOdds?.toFixed(2)
+                ) ?? '0.00'
               }}</span
             >
           </div>
         </div>
+
       </template>
     </PureTableBar>
   </div>
@@ -396,15 +415,14 @@ import { adjustContentWithRowHeight } from '@/utils/adjustRowCoulmnHeight';
 import {
   formatSeriesType,
   useSportFormatDetail,
-  BET_RESULT_TYPE_MAP,
-  EBetResultType,
   getViewOddFn,
   markeTypeMap,
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
-  getIsInplay
+  getIsInplay, enterGoalMap
 } from '@/utils/formatMatch';
 import { usePublicHooks } from '@/hooks';
+import {addThousandSeparator} from "@/utils/formatNumber";
 
 defineOptions({ name: 'RISKMANAGEMENT_MANUALORDERREJECTION' });
 const { tableHeaderStyle } = usePublicHooks();
@@ -462,7 +480,6 @@ const {
   handleSelectionChange,
   copyTest,
   tenantList,
-  exportFileTest,
   confirmBetClick,
   refuseBetClick,
   tenantObj,

@@ -58,7 +58,13 @@
                           class="w-4 items-center h-4 flex flex-shrink-0 mr-1 text-[12px] justify-center bg-primary rounded-full text-white"
                         >
                           <span class="font-bold scale-75">
-                            {{ item.level === 200 ? t('未') : item.level }}
+                            {{
+                              item.riskLevel < 0
+                                ? t('未')
+                                : item.riskLevel > 100
+                                ? '99+'
+                                : item.riskLevel
+                            }}
                           </span>
                         </span>
                         <ReText

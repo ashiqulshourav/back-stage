@@ -10,7 +10,7 @@ export const useBetStore = defineStore('BETSTATE', {
     isOpenVoice: true
   }),
   actions: {
-    set_gameplay_data(d: Omit<BetType, 'gameplayData'>) {
+    set_gameplay_data(d: Partial<BetType['gameplayData']>) {
       Object.assign(this.gameplayData, d)
     },
     set_is_open_voice(_: boolean) {

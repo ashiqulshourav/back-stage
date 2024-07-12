@@ -7,15 +7,19 @@ declare namespace EventAPI {
     endTime?: number | string;
     pageSize?: number;
     pageNum?: number;
+    operationMethod?: string;
     canceled?: string | number;
   };
 
   type MatchInfo = {
     aTeamName: string;
     hTeamName: string;
+    leagueId: string;
     league: string;
     matchId: string;
+    riskLevel: string;
     sportName: string;
+    level: string;
     startDateTime: string;
   };
 
@@ -123,7 +127,7 @@ declare namespace EventAPI {
   };
 
   type EventData = {
-    type: Partial<lType>;
+    type: keyof lType;
     n: number | string;
     time: number | string;
   };

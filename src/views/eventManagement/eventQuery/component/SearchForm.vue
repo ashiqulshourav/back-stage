@@ -6,7 +6,7 @@
       :model="form"
       :rules="searchFormRules"
     >
-      <el-form-item class="!mr-2" :label="`${t('输入赛事ID')}`" prop="matchId">
+      <el-form-item class="!mb-4" :label="`${t('输入赛事ID')}`" prop="matchId">
         <el-input
           v-model="form.matchId"
           :placeholder="t('输入赛事ID')"
@@ -17,7 +17,7 @@
         />
       </el-form-item>
       <el-form-item
-        class="!mr-2"
+        class="!mb-4"
         :label="`${t('输入时间段')}:`"
         prop="startTime"
       >
@@ -32,7 +32,7 @@
         />
       </el-form-item>
 
-      <el-form-item class="!mr-2" :label="`${t('事件源')}:`" prop="eventName">
+      <el-form-item class="!mb-4" :label="`${t('事件源')}:`" prop="eventName">
         <el-select
           v-model="form.dataSourceCode"
           :placeholder="t('事件源')"
@@ -48,7 +48,18 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="`${t('事件名称')}:`" prop="eventName">
+      <el-form-item class="!mb-4" :label="`${t('操作方式')}:`">
+        <el-select
+          v-model="form.operationMethod"
+          :placeholder="t('操作方式')"
+          clearable
+          class="!w-[150px]"
+        >
+          <el-option :label="t('自动结算')" :value="' '" />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item class="!mb-4" :label="`${t('事件名称')}:`" prop="eventName">
         <el-tree-select
           v-model="props.form.eventCode"
           :data="
@@ -85,20 +96,20 @@
         </el-tree-select>
       </el-form-item>
 
-      <el-form-item class="!mr-2" :label="`${t('取消事件')}:`" prop="canceled">
+      <el-form-item class="!mb-4" :label="`${t('取消事件')}:`" prop="canceled">
         <el-select
           v-model="form.canceled"
           :placeholder="t('选择')"
           clearable
           class="!w-[150px]"
         >
-          <el-option label="选择" value='' />
-          <el-option label="否" value=0 />
-          <el-option label="是" value=1 />
+          <el-option label="全部" :value="' '" />
+          <el-option label="否" value="0" />
+          <el-option label="是" value="1" />
         </el-select>
       </el-form-item>
 
-      <el-form-item>
+      <el-form-item class="!mb-4">
         <el-button
           type="primary"
           :icon="useRenderIcon(Search)"
