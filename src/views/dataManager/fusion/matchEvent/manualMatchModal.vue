@@ -98,7 +98,7 @@ const handleMatch = ()=>{
     API.matchPairing(params).then((res)=>{
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if(res.code===0){
-        emits('closeDialog',{matchId: props.matchSourcePair.matchId, pairingStatus: 1});
+        emits('closeDialog',{matchId: props.matchSourcePair.matchId, pairingStatus: 1, oppositeStatus: oppositeStatus.value});
       }
     })
   } else { // 取消匹配
