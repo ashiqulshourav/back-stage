@@ -72,11 +72,11 @@ const saveItem = () => {
   props.row.eventTimeError = false;
   let errMsg = '';
   switch (true) {
-    case !props.row.firstT1:
+    case props.row.firstT1 === '':
       props.row.t1Error = true;
       errMsg = t('主队比分不能为空');
       break;
-    case !props.row.firstT2:
+    case props.row.firstT2 === '':
       errMsg = t('客队比分不能为空');
       props.row.t2Error = true;
       break;

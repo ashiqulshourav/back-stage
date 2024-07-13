@@ -18,8 +18,8 @@ export const user = {
       { data }
     ),
   //- 退出登录
-  loginOut: (data: { id: number; name: string }) =>
-    http.request<UserAPI.RouterResType>('post', '/kmg/auth/loginOut', { data }),
+  loginOut: () =>
+    http.request<UserAPI.RouterResType>('post', '/kmg/auth/loginOut', {}),
 
   //- 用户等级限额列表
   getUserLevelLimitList: (data: { type: number }) =>
@@ -51,7 +51,7 @@ export const user = {
     tenantIds?: number | string | string[];
     limitLevel?: number | string;
     limittenantCodeLevel?: number | string;
-  }) => 
+  }) =>
     http.request<UserAPI.operateUserListReqType>('post', '/operate/userListExport', {
       data
     }),
