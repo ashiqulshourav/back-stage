@@ -148,6 +148,25 @@
             />
           </el-select>
         </el-form-item>
+        <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
+          <el-input
+            v-model="form.matchId"
+            :placeholder="t('赛事ID')"
+            clearable
+            v-enter="search"
+            class="!w-[150px]"
+          />
+        </el-form-item>
+        <el-form-item :label="`${t('用户名/用户ID')}:`" prop="userIdOrName">
+          <el-input
+            v-model="form.userIdOrName"
+            :placeholder="t('请输入用户名/用户ID')"
+            clearable
+            maxLenght="20"
+            v-enter="search"
+            class="!w-[200px]"
+          />
+        </el-form-item>
         <el-form-item
           :label="`${t('联赛查询')}:`"
           :prop="leagueQuery === 'leagueName' ? 'leagueName' : 'leagueId'"
@@ -197,25 +216,6 @@
               :value="item.leagueNameCn"
             />
           </el-select>
-        </el-form-item>
-        <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
-          <el-input
-            v-model="form.matchId"
-            :placeholder="t('赛事ID')"
-            clearable
-            v-enter="search"
-            class="!w-[150px]"
-          />
-        </el-form-item>
-        <el-form-item :label="`${t('用户名/用户ID')}:`" prop="userIdOrName">
-          <el-input
-            v-model="form.userIdOrName"
-            :placeholder="t('请输入用户名/用户ID')"
-            clearable
-            maxLenght="20"
-            v-enter="search"
-            class="!w-[200px]"
-          />
         </el-form-item>
         <el-form-item :label="`${t('注单流水号')}:`" prop="orderId">
           <el-input
