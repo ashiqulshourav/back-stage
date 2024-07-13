@@ -158,7 +158,7 @@
             <el-option :label="t('联赛名')" value="leagueName" />
           </el-select>
           <el-input
-            class="!w-[200px] flex-shrink-0"
+            class="!w-[210px] flex-shrink-0"
             v-if="leagueQuery === 'leagueId'"
             filterable
             v-enter="search"
@@ -180,7 +180,7 @@
                 1000
               )
             "
-            class="!w-[200px] flex-shrink-0"
+            class="!w-[210px] flex-shrink-0"
             :placeholder="t('联赛名')"
             :loading="matchStore.matchSearchLoading"
           >
