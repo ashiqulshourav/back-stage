@@ -148,6 +148,15 @@
             />
           </el-select>
         </el-form-item>
+        <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
+          <el-input
+            v-model="form.matchId"
+            :placeholder="t('赛事ID')"
+            clearable
+            v-enter="search"
+            class="!w-[150px]"
+          />
+        </el-form-item>
         <el-form-item
           :label="`${t('联赛查询')}:`"
           :prop="leagueQuery === 'leagueName' ? 'leagueName' : 'leagueId'"
@@ -158,7 +167,7 @@
             <el-option :label="t('联赛名')" value="leagueName" />
           </el-select>
           <el-input
-            class="!w-[215px] flex-shrink-0"
+            class="!w-[200px] flex-shrink-0"
             v-if="leagueQuery === 'leagueId'"
             filterable
             v-enter="search"
@@ -180,7 +189,7 @@
                 1000
               )
             "
-            class="!w-[215px] flex-shrink-0"
+            class="!w-[200px] flex-shrink-0"
             :placeholder="t('联赛名')"
             :loading="matchStore.matchSearchLoading"
           >
@@ -193,16 +202,7 @@
               :value="item.leagueNameCn"
             />
           </el-select>
-        </el-form-item>
-        <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
-          <el-input
-            v-model="form.matchId"
-            :placeholder="t('赛事ID')"
-            clearable
-            v-enter="search"
-            class="!w-[150px]"
-          />
-        </el-form-item>
+        </el-form-item>        
         <el-form-item :label="`${t('投注IP')}:`" prop="ip">
           <el-input
             v-model="form.ip"
