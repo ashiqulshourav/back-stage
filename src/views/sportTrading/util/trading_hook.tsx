@@ -111,6 +111,7 @@ export function useTradingHook(type: 'early' | 'in') {
     checkHasData(res.data);
 
     const tempList = handicapList.slice(1);
+
     tempList.forEach(_ => {
       const o = {
         3: 0,
@@ -132,9 +133,11 @@ export function useTradingHook(type: 'early' | 'in') {
         pre.push(...next.betItemsIdList);
         return pre;
       }, [] as number[]);
+
       _.list.forEach(item => {
         o[item.isSale as keyof typeof o] += 1;
       });
+
       Object.keys(o).some(key => {
         if (
           _.list.length === +o[key as unknown as keyof typeof o] &&
@@ -324,15 +327,23 @@ export function useTradingHook(type: 'early' | 'in') {
     if (riotPrevention.value) return;
     riotPrevention.value = true;
     clearInterval(loopTimer.value);
-    const res = await API.updateHandicapStatus({
+
+    const reqUrl =
+      classify === 'match'
+        ? 'updateMatchHandicapStatus'
+        : 'updateHandicapStatus';
+
+    const res = await API[reqUrl]({
       operateMenu: '操盘管理-早盘管理',
       matchId: matchId ? matchId : currentMatch.matchId,
       isSale: status,
       betItemsIds: betItemsIdList ?? []
     });
+
     message(res.msg, { type: res.code ? 'error' : 'success' });
     runLoopMatch();
     riotPrevention.value = false;
+
     if (res.code) return;
     switch (classify) {
       case 'match':

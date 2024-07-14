@@ -50,7 +50,7 @@ export function useWarningHook() {
     });
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
-    if (res.data.list.length) {
+    if (res.data.list?.length) {
       //获取当前页面IDS
       matchIdList.length = 0;
       matchIdList.push(...res.data?.list.map(item => item.matchId));
@@ -108,8 +108,15 @@ export function useWarningHook() {
             );
           }
         });
-
         _.list = arr;
+        _.betItemsIdList = arr.reduce(
+          (pre: any[], next: { betItemsIdList: any }) => {
+            pre.push(...next.betItemsIdList);
+            return pre;
+          },
+          [] as number[]
+        );
+
         Object.keys(o).some(key => {
           if (
             _.list.length === +o[key as unknown as keyof typeof o] &&
@@ -201,7 +208,13 @@ export function useWarningHook() {
     if (riotPrevention.value) return;
     riotPrevention.value = true;
     clearInterval(loopTimer.value);
-    const res = await API.updateHandicapStatus({
+
+    const reqUrl =
+      classify === 'match'
+        ? 'updateMatchHandicapStatus'
+        : 'updateHandicapStatus';
+
+    const res = await API[reqUrl]({
       operateMenu: '操盘管理-早盘管理',
       matchId: matchId,
       isSale: status,

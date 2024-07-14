@@ -122,11 +122,16 @@
                       </div>
                       <div
                         :class="[
-                          'text-center w-1/6',
+                          'flex items-center text-center w-1/6',
                           s.odds < 0 && 'translate-x-[-2px]'
                         ]"
                       >
-                        {{ s.odds.toFixed(2) }}
+                        <el-text class="!text-xs" type="primary">{{
+                          ODDS_TYPE_MAP[s.oddsType]
+                        }}</el-text>
+                        <span class="ml-2">
+                          {{ s.odds.toFixed(2) }}
+                        </span>
                       </div>
                       <InputCom
                         :s="s"
@@ -195,7 +200,12 @@ import { handicapListType } from '../util/type';
 import IconGroup from './IconGroup.vue';
 import ContentTitle from './ContentTitle.vue';
 import { addition, subtraction } from '@pureadmin/utils';
-import { PLAY_MATCH_NAME, goalScoring, resetDpodds } from '../util/playMap';
+import {
+  ODDS_TYPE_MAP,
+  PLAY_MATCH_NAME,
+  goalScoring,
+  resetDpodds
+} from '../util/playMap';
 import InputCom from './InputCom.vue';
 import { t } from '@/plugins/i18n';
 import { useBetStore } from '@/store/bet';
@@ -291,7 +301,7 @@ const changeSelectType = (type: string) => {
 const selectNum = ref(0);
 const shortcutSelectNum = (_: number, type: string) => {
   if (_ === 0) return;
-  const params: { betItemsId: number; dpOdds: number }[] = [];
+  const params: { betItemsId: number; dpOdds: number; oddsType: string }[] = [];
   //- 下盘需要递减
   if (betItemsDtoList.length === 2) {
     const otherIdx = betItemsDtoList.findIndex(
@@ -310,9 +320,9 @@ const shortcutSelectNum = (_: number, type: string) => {
       }
       if (Math.abs(d.dpOdds) >= 1) d.dpOdds = resetDpodds(d.dpOdds);
     }
-
     params.push(
       ...betItemsDtoList.map((d, index: number) => ({
+        oddsType: d.oddsType,
         betItemsId: d.betItemsId,
         dpOdds: index !== otherIdx ? _ : _ * -1
       }))
@@ -326,6 +336,7 @@ const shortcutSelectNum = (_: number, type: string) => {
 
     nextTick(() => {
       params.push({
+        oddsType: d.oddsType,
         betItemsId: d.betItemsId,
         dpOdds: _
       });

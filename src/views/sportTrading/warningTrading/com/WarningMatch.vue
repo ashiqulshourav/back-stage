@@ -96,8 +96,18 @@
                       )?.replace('&', ' ')
                     }}
                   </div>
-                  <div class="text-center w-1/6">
-                    {{ s.odds.toFixed(2) }}
+                  <div
+                    :class="[
+                      'flex items-center text-center w-1/6',
+                      s.odds < 0 && 'translate-x-[-2px]'
+                    ]"
+                  >
+                    <el-text class="!text-xs" type="primary">{{
+                      ODDS_TYPE_MAP[s.oddsType]
+                    }}</el-text>
+                    <span class="ml-2">
+                      {{ s.odds.toFixed(2) }}
+                    </span>
                   </div>
                   <InputCom
                     :s="s"
@@ -142,7 +152,11 @@
 <script setup lang="ts">
 import MatchTitle from './MatchTitle.vue';
 import IconGroup from '../../com/IconGroup.vue';
-import { PLAY_MATCH_NAME, goalScoring } from '../../util/playMap';
+import {
+  ODDS_TYPE_MAP,
+  PLAY_MATCH_NAME,
+  goalScoring
+} from '../../util/playMap';
 import InputCom from '../../com/InputCom.vue';
 import { useBetStore } from '@/store/bet';
 
@@ -156,7 +170,7 @@ const props = defineProps<{
 const selectNum = ref(0);
 const shortcutSelectNum = (_: number) => {
   if (_ === 0) return;
-  const params: { betItemsId: number; dpOdds: number }[] = [];
+  const params: { betItemsId: number; dpOdds: number; oddsType: string }[] = [];
 
   //- 下盘需要递减
   if (betItemsDtoList.length === 2) {
@@ -166,6 +180,7 @@ const shortcutSelectNum = (_: number) => {
 
     params.push(
       ...betItemsDtoList.map((d, index: number) => ({
+        oddsType: d.oddsType,
         betItemsId: d.betItemsId,
         dpOdds: index !== otherIdx ? _ : _ * -1
       }))
@@ -179,6 +194,7 @@ const shortcutSelectNum = (_: number) => {
     ) as sportTradingDataAPI.BetItemsDtoList;
     nextTick(() => {
       params.push({
+        oddsType: d.oddsType,
         betItemsId: d.betItemsId,
         dpOdds: _
       });
