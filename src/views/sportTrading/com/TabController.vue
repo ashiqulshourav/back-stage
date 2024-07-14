@@ -71,10 +71,7 @@
                           class="leading-none"
                           type="primary"
                           size="small"
-                          v-copy:click="{
-                            val: item.leagueId,
-                            tip: t('联赛ID复制成功')
-                          }"
+                          @click.stop="copyTxt(item.leagueId, 'league')"
                           :tippyProps="{ content: item.leagueNameCn }"
                         >
                           {{ item.leagueNameCn }}
@@ -87,10 +84,7 @@
                   <div class="pr-2 ml-6 flex-grow-1">
                     <div
                       class="flex mb-2 text-xs w-[150px] items-center"
-                      v-copy:click="{
-                        val: item.matchId,
-                        tip: t('赛事ID复制成功')
-                      }"
+                      @click.stop="copyTxt(item.matchId.toString(), 'match')"
                     >
                       <div
                         class="text-[--el-color-primary] !text-xs flex items-center"
@@ -147,6 +141,8 @@ import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { ReText } from '@/components/ReText';
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller';
+import { copyTextToClipboard } from '@pureadmin/utils';
+import { message } from '@/utils/message';
 
 const collapseRef = ref();
 const emits = defineEmits(['changeSelectMatch', 'changeStatus']);
@@ -156,6 +152,16 @@ const props = defineProps<{
   currentMatch: sportTradingDataAPI.MatchDtoList;
   type: 'early' | 'in';
 }>();
+
+const copyTxt = (val: string, type: 'league' | 'match') => {
+  console.log('TabController.vue文件 157==============行打印=', 111);
+  const eMap = {
+    league: t('联赛ID复制成功'),
+    match: t('赛事ID复制成功')
+  };
+  copyTextToClipboard(val);
+  message(eMap[type], { type: 'success' });
+};
 
 const activeNames = computed({
   get() {
