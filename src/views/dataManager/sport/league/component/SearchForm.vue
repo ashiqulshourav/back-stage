@@ -14,32 +14,47 @@
     @collapse="collapse"
     :resetText="t('重置')"
     :colProps="{
-      xl: locale === 'zh' ? 5 : 8,
+      xl: locale === 'zh' ? 4 : 7,
       lg: 8,
       md: 8
     }"
     :searchLoading="loading"
     :rowProps="{ gutter: 10 }"
   >
-    <template #footer="{ handleReset, handleSearch, handleUnfold, isShowUnfold }">
+    <template
+      #footer="{ handleReset, handleSearch, handleUnfold, isShowUnfold }"
+    >
       <div style="display: flex">
-        <el-button :icon="useRenderIcon(Refresh)" @click="handleReset">{{ t('重置') }}</el-button>
-        <el-button type="primary" :icon="useRenderIcon(Search)" @click="handleSearch">{{t('筛选')}}</el-button>
+        <el-button :icon="useRenderIcon(Refresh)" @click="handleReset">{{
+          t('重置')
+        }}</el-button>
         <el-button
           type="primary"
+          :icon="useRenderIcon(Search)"
+          @click="handleSearch"
+          >{{ t('筛选') }}</el-button
+        >
+        <el-button
+          type="primary"
+          v-if="hasAuth('EXPORT')"
           :icon="useRenderIcon(Download)"
           :loading="downloading"
           @click="exportFile()"
-          >
-          <!-- v-if="hasAuth('EXPORT')" -->
-        {{ t('导出') }}
+        >
+          {{ t('导出') }}
         </el-button>
-        <el-button class="!border-none" :icon="isShowUnfold ? useRenderIcon(ArrowUp) : useRenderIcon(EpArrowDown)" @click="handleUnfold">
+        <el-button
+          class="!border-none"
+          :icon="
+            isShowUnfold ? useRenderIcon(ArrowUp) : useRenderIcon(EpArrowDown)
+          "
+          @click="handleUnfold"
+        >
           {{ isShowUnfold ? t('收起') : t('展开') }}
         </el-button>
       </div>
     </template>
-  </PlusSearch> 
+  </PlusSearch>
 </template>
 
 <script setup lang="ts">
@@ -53,8 +68,8 @@ import { searchFormType } from '../utils/types';
 import { formatNumber, inputRestrictions } from '@/utils/formatNumber';
 import Search from '@iconify-icons/ep/search';
 import Refresh from '@iconify-icons/ep/refresh';
-import ArrowUp from "@iconify-icons/ep/arrow-up-bold"
-import EpArrowDown from "@iconify-icons/ep/arrow-down-bold"
+import ArrowUp from '@iconify-icons/ep/arrow-up-bold';
+import EpArrowDown from '@iconify-icons/ep/arrow-down-bold';
 import Download from '@iconify-icons/ep/download';
 import { hasAuth } from '@/router/utils';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
@@ -99,7 +114,6 @@ const search = () => {
 const exportFile = () => {
   emits('exportFile');
 };
-
 
 //- 表单重置
 const handleRest = () => {
