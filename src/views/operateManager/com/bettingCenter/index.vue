@@ -191,7 +191,9 @@
               <div class="item_line">
                 {{ t('开赛时间:')
                 }}{{
-                  dayjs(item.beginTime ?? Date.now()).format('MM-DD HH:mm:ss')
+                  dayjs(item.beginTime ?? Date.now())
+                    .tz('Asia/Shanghai')
+                    .format('MM-DD HH:mm:ss')
                 }}
               </div>
             </div>
@@ -474,6 +476,8 @@ import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import RiskLabelList from './component/riskLabelList.vue';
 import { hasAuth } from '@/router/utils';
 import { adjustContentWithRowHeight } from '@/utils/adjustRowCoulmnHeight';
@@ -500,6 +504,10 @@ const props = defineProps<{
   venueType: number;
 }>();
 defineOptions({ name: 'bettingCenter' });
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 const { tableHeaderStyle } = usePublicHooks();
 const {
   loading,

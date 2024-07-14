@@ -3,11 +3,23 @@
     <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
 
     <MatchDetail :matchInfo="matchInfo"></MatchDetail>
-    <PureTableBar
-      :title="t('赛事列表')"
-      :columns="columns"
-      @refresh="onSearch('reload')"
-    >
+
+    <PureTableBar :columns="columns" @refresh="onSearch('reload')">
+      <template #title>
+        <div class="flex w-full justify-between items-center">
+          <span>
+            {{ t('事件列表') }}
+          </span>
+          <el-button
+            v-if="form.matchId && hasAuth('EXPORT')"
+            class="mr-5"
+            type="primary"
+            size="small"
+            @click="exportFile"
+            >{{ t('导出报表') }}</el-button
+          >
+        </div>
+      </template>
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           class="table_container"
@@ -32,9 +44,9 @@
             <span> {{ row.t1 }} - {{ row.t2 }} </span>
           </template>
           <template #canceled="{ row }">
-            <span class="text-red-500">
-              {{ row.canceled == 0 ? '' : t('是') }}</span
-            >
+            <span class="text-red-500">{{
+              row.canceled == 0 ? '' : t('是')
+            }}</span>
           </template>
         </pure-table>
       </template>
@@ -49,6 +61,7 @@ import { usePublicHooks } from '@/hooks';
 import { t } from '@/plugins/i18n';
 import { columns } from './component/TableColumnList';
 import SearchForm from './component/SearchForm.vue';
+import { hasAuth } from '@/router/utils';
 import MatchDetail from './component/MatchDetail.vue';
 
 defineOptions({ name: 'EVENTMANAGEMENT_EVENTQUERY' });
@@ -62,8 +75,15 @@ const {
   matchEventList,
   handleCurrentChange,
   handlePageSizeChange,
-  matchInfo
+  matchInfo,
+  exportFile
 } = useEventQueryHook();
 </script>
 
-<style scoped></style>
+<style lang="scss">
+.export_dialog {
+  .el-message-box__btns {
+    flex-direction: row;
+  }
+}
+</style>

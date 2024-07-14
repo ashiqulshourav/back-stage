@@ -8,17 +8,20 @@ const IconMap = {
 };
 export const columns: TableColumnList = [
   {
-    label: t('事件源发生时间'),
+    label: t('收到事件源时间'),
     prop: 'createdAt',
-    minWidth: 150,
+    minWidth: 200,
     formatter({ createdAt }: { createdAt: string }) {
       return dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss');
     }
   },
   {
-    label: t('事件源'),
-    prop: 'dataSourceCode',
-    minWidth: 150
+    label: t('距离比赛开赛时间'),
+    prop: 'playingTime',
+    minWidth: 200,
+    formatter({ playingTime }) {
+      return playingTime ? playingTime : '-';
+    }
   },
   {
     label: t('事件名称'),
@@ -26,9 +29,19 @@ export const columns: TableColumnList = [
     minWidth: 300
   },
   {
+    label: t('事件源'),
+    prop: 'dataSourceCode',
+    minWidth: 150
+  },
+  {
+    label: t('操作方式'),
+    prop: 'operationType',
+    minWidth: 150
+  },
+  {
     label: t('取消事件'),
     slot: 'canceled',
-    minWidth: 150,
+    minWidth: 150
   },
   {
     label: t('场次/局数/盘数'),

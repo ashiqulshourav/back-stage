@@ -6,8 +6,17 @@
     <div class="flex flex-col flex-shrink-0 mr-20">
       <div
         class="flex items-center cursor-pointer"
-        @click="copyTxt(matchInfo.league, 'league')"
+        @click="copyTxt(matchInfo.leagueId, 'league')"
       >
+        <span
+          class="bg-red-500 min-w-4 h-4 rounded-full text-[10px] p-1 text-white flex justify-center items-center mr-1"
+        >
+          {{
+            +matchInfo.riskLevel >= 200 || +matchInfo.riskLevel == -1
+              ? t('未')
+              : matchInfo.riskLevel
+          }}</span
+        >
         <span class="text-sm mr-1">{{ matchInfo.league }}</span>
         <IconifyIconOffline icon="copyIcon" />
       </div>
@@ -16,7 +25,8 @@
         @click="copyTxt(matchInfo.matchId.toString(), 'match')"
       >
         <span class="text-sm mr-1"
-          >{{ matchInfo.hTeamName }} vs {{ matchInfo.aTeamName }}
+          >{{ matchInfo.hTeamName }} ({{ t('主') }}) vs
+          {{ matchInfo.aTeamName }}
         </span>
         <IconifyIconOffline icon="copyIcon" />
       </div>
@@ -28,6 +38,7 @@
           MATCH_STATUS[matchData.matchStatus as keyof typeof MATCH_STATUS]
         }}</span>
         <el-button
+          v-if="hasAuth('BET_MAP')"
           class="ml-4"
           size="small"
           type="primary"
@@ -64,6 +75,7 @@ import { titleColumn } from './TableColumnList';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import EventMatchBet from './eventMatchBet/index.vue';
 import { MATCH_STATUS } from '@/utils/maps/sports_map';
+import { hasAuth } from '@/router/utils';
 const props = defineProps<{
   matchInfo: EventAPI.MatchInfo;
 }>();
@@ -170,6 +182,10 @@ const betMapCLick = () => {
       })
   });
 };
+
+onUnmounted(() => {
+  loopTimer.value && clearInterval(loopTimer.value);
+});
 </script>
 
 <style scoped></style>

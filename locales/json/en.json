@@ -1041,7 +1041,6 @@
   "k25c5c308": "Broadcast control",
   "k-229a4763": "Event Source",
   "k-2de5d529": "Invert Selection",
-  "k-78d2d8cb": "Event Source Occurrence Time",
   "k6175649e": "Session/Round/Set",
   "k-5bd6f419": "Home/Away",
   "k-2d984472": "Player Name",
@@ -1237,5 +1236,15 @@
   "k-33885aa2": "投注IP:",
   "k-3eeb573c": "IP关联详情",
   "k251b3f22": "登录用户名",
-  "k38af57ac": "会员状态"
+  "k38af57ac": "会员状态",
+  "k7d4f745d": "Click to confirm immediate export",
+  "k-40f2b828": "Executing export task",
+  "k-592cee74": "Click to confirm and go to the task center?",
+  "k-a0b9dd": "Stay on the current page",
+  "k-16b2c3d5": "Operation mode",
+  "k-1344e083": "Event source receipt time",
+  "k130cc590": "Event list",
+  "kd67061": "Export current event list data?",
+  "k-196fd4": "Time remaining until the start of the game",
+  "k-2b1c31d": "加载失败"
 }

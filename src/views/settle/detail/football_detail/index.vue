@@ -374,7 +374,8 @@ const cancelMatchOvertimeRace = async (type: string) => {
         loading: false,
         label: t('确认'),
         btnClick: async ({ dialog: { options, index } }) => {
-          const res = await API[type as keyof typeof API]({
+          //@ts-ignore
+          const res = await API[type]({
             matchId: renderObj.matchId,
             remark: remark.value,
             sportName: t('足球')
@@ -442,7 +443,6 @@ const recordArr = computed(() => {
 
 //- 点球不显示时间
 const columns = computed(() => {
-  // childColumns[3].hide = selectTabIndex.value === '6';
   return childColumns;
 });
 </script>

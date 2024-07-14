@@ -2,6 +2,8 @@ import { searchFormType } from './types';
 import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { message } from '@/utils/message';
+import { usePublicHooks } from '@/hooks';
+const { exportDialog } = usePublicHooks();
 
 export function useEventQueryHook() {
   const matchEventList = reactive<EventAPI.MatchEvent[]>([]);
@@ -10,7 +12,10 @@ export function useEventQueryHook() {
     hTeamName: '',
     league: '',
     matchId: '',
+    level: '',
     sportName: '',
+    riskLevel: '',
+    leagueId: '',
     startDateTime: ''
   });
   const loading = ref(false);
@@ -23,13 +28,13 @@ export function useEventQueryHook() {
   });
 
   const form = reactive<searchFormType>({
-    // matchId: '302309',
     matchId: '',
     dataSourceCode: '',
     eventCode: [],
+    operationMethod: ' ',
     endTime: '',
     startTime: '',
-    canceled: ''
+    canceled: ' '
   });
 
   async function onSearch(type?: string) {
@@ -38,9 +43,11 @@ export function useEventQueryHook() {
       matchEventList.length = 0;
       pagination.total = 0;
       matchInfo.aTeamName = '';
-      matchInfo.aTeamName = '';
       matchInfo.hTeamName = '';
+      matchInfo.riskLevel = '';
+      matchInfo.leagueId = '';
       matchInfo.league = '';
+      matchInfo.level = '';
       matchInfo.matchId = '';
       matchInfo.sportName = '';
       matchInfo.startDateTime = '';
@@ -49,9 +56,12 @@ export function useEventQueryHook() {
 
     try {
       loading.value = true;
-      form.eventCode = form.eventCode?.length ? form.eventCode?.toString() : '';
+      const temp = Array.isArray(form.eventCode) ? [...form.eventCode] : [];
       const res = await API.getMatchEventByMatchId({
-        ...removeEmptyStringKeys({ ...form, canceled: form?.canceled && Number(form.canceled) }),
+        ...removeEmptyStringKeys({
+          ...form,
+          eventCode: temp?.length ? temp.toString() : ''
+        }),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
@@ -69,9 +79,11 @@ export function useEventQueryHook() {
         if (matchInfoRes?.code) return message(res?.msg, { type: 'error' });
 
         matchInfo.aTeamName = matchInfoRes.data.aTeamName;
-        matchInfo.aTeamName = matchInfoRes.data.aTeamName;
         matchInfo.hTeamName = matchInfoRes.data.hTeamName;
+        matchInfo.riskLevel = matchInfoRes.data.riskLevel;
+        matchInfo.leagueId = matchInfoRes.data.leagueId;
         matchInfo.league = matchInfoRes.data.league;
+        matchInfo.level = matchInfoRes.data.level;
         matchInfo.matchId = matchInfoRes.data.matchId;
         matchInfo.sportName = matchInfoRes.data.sportName;
         matchInfo.startDateTime = matchInfoRes.data.startDateTime;
@@ -102,6 +114,22 @@ export function useEventQueryHook() {
     pagination.pageSize = val;
     onSearch();
   }
+  const router = useRouter();
+  const exportFile = async () => {
+    exportDialog({
+      firstTitle: t('导出当前事件列表数据?'),
+      router,
+      callback: async () => {
+        const res = await API.matchEventDataExport({
+          ...removeEmptyStringKeys({
+            ...form,
+            eventCode: form.eventCode?.length ? form.eventCode?.toString() : ''
+          })
+        });
+        if (res.code) return message(res.msg, { type: 'error' });
+      }
+    });
+  };
 
   return {
     loading,
@@ -112,6 +140,7 @@ export function useEventQueryHook() {
     handleCurrentChange,
     matchEventList,
     handlePageSizeChange,
-    matchInfo
+    matchInfo,
+    exportFile
   };
 }

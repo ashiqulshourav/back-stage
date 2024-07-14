@@ -70,14 +70,18 @@ const initEchart = async () => {
     {
       name: 'click',
       callback: params => {
-        getBetDetail(params.data[3]);
+        const orderNumList = props.renderList
+          .filter(item => item[0] === params.data[0])
+          .map(_ => _[3]);
+
+        getBetDetail(orderNumList);
       }
     }
   );
 };
 
 const emits = defineEmits(['getBetDetail']);
-const getBetDetail = (o: string) => {
+const getBetDetail = (o: (string | number)[]) => {
   emits('getBetDetail', o);
 };
 
