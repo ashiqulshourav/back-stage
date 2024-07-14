@@ -150,6 +150,8 @@ const _loginRequest = async () => {
       })
       .catch(err => {
         message(err, { type: 'error' });
+        loading.value = false;
+        userStore.clearUserInfo();
       });
   } catch (error: any) {
     message(error.message, { type: 'error' });
