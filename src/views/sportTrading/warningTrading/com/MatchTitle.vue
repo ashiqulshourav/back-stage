@@ -13,30 +13,32 @@
       <el-button size="small" color="#337ecc">{{ t('足球') }}</el-button>
     </div>
     <div class="flex items-start">
-      <div class="flex text-sm">
-        <div class="flex flex-col w-full">
-          <div
-            v-if="currentMatch.leagueId"
-            class="flex items-center cursor-pointer"
-            v-copy:click="{
-              val: currentMatch.leagueId,
-              tip: t('联赛ID复制成功')
-            }"
+      <div class="flex flex-col">
+        <div
+          v-if="currentMatch.leagueId"
+          class="flex items-center cursor-pointer"
+          v-copy:click="{
+            val: currentMatch.leagueId,
+            tip: t('联赛ID复制成功')
+          }"
+        >
+          <span
+            class="w-4 h-4 flex items-center text-[12px] justify-center bg-primary text-center rounded-full text-white"
           >
-            <span
-              class="w-4 h-4 flex items-center text-[12px] justify-center bg-primary text-center rounded-full text-white"
-            >
-              <span class="scale-75 font-bold">
-                {{
-                  currentMatch?.level === 200 ? t('未') : currentMatch?.level
-                }}
-              </span>
+            <span class="scale-75 font-bold">
+              {{
+                +currentMatch.riskLevel >= 200 || +currentMatch.riskLevel == -1
+                  ? t('未')
+                  : currentMatch.riskLevel
+              }}
             </span>
-            <span class="text-[#409EFF] text-xs ml-1 font-bold">
-              {{ currentMatch?.leagueNameCn }}
-            </span>
-          </div>
-          <span class="text-xs mt-1">{{ currentMatch?.beginTime }}</span>
+          </span>
+          <span class="text-[#409EFF] text-xs ml-1 font-bold">
+            {{ currentMatch?.leagueNameCn }}
+          </span>
+        </div>
+        <div class="text-xs mt-1" style="line-height: inherit">
+          {{ currentMatch?.beginTime }}
         </div>
       </div>
       <div
@@ -49,8 +51,9 @@
       >
         <div class="flex items-center">
           <div
+            style="line-height: inherit"
             :class="[
-              ' text-xs flex items-center',
+              ' text-xs flex items-center ',
               currentMatch.HandicapTeam?.toUpperCase() === 'HOME'
                 ? 'text-[--el-color-danger]'
                 : 'text-[--el-color-primary]'

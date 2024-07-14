@@ -7,7 +7,7 @@
       v-if="showNum"
       @mouseenter.stop="e => mouseEvent(e, props.s, 'enter')"
       :class="[
-        'text-[--el-color-primary] text-left h-full flex items-center w-[70px]',
+        'text-[--el-color-primary]  text-left h-full flex items-center w-[40px]',
         saleStatus !== 2 && '!text-[#909399]',
         s.dpOdds?.toFixed(2) < 0 && 'translate-x-[-6px]'
       ]"
@@ -19,17 +19,13 @@
       class="text-[--el-color-primary] flex justify-start cursor-pointer h-full relative"
     >
       <div
-        class="w-[120px] flex justify-start items-center h-full"
-        @mousemove="inputContainerMouseMove"
-        @mouseenter="inputContainerMouseEnter"
-        @mouseleave="inputContainerMouseLeave"
+        class="w-[100px] flex justify-start items-center h-full"
+        @mouseleave="showNum = true"
       >
         <el-input-number
-          class="!w-[70px]"
+          class="!w-[100px]"
           size="small"
           :step="0.01"
-          @focus="inputFoucs(true)"
-          controls-position="right"
           v-model="inputCom"
           @change="changeDpOdds"
         />
@@ -64,34 +60,6 @@ const props = defineProps<{
   selectItem: sportTradingDataAPI.BetItemsDtoList;
   betItemsDtoList: sportTradingDataAPI.BetItemsDtoList[];
 }>();
-
-// 快捷键鼠标事件
-let lastX = ref<number>(0);
-let direction = ref<string>('');
-
-const inputContainerMouseEnter = (e: any) => {
-  lastX.value = e.clientX;
-};
-
-const inputContainerMouseMove = (e: any) => {
-  const currentX = e.clientX;
-  if (lastX !== undefined) {
-    const diffX = currentX - (lastX.value as number);
-    if (diffX > 0) {
-      direction.value = 'right';
-    } else {
-      direction.value = 'left';
-    }
-  }
-};
-
-const inputContainerMouseLeave = () => {
-  if (direction.value === 'left') {
-    emits('hideScrollList');
-  }
-  lastX.value = 0;
-  direction.value = '';
-};
 
 const s1 = ref(0);
 const oldVal = ref(0);
@@ -200,11 +168,6 @@ const mouseEvent = (
 ) => {
   if (!hasAuth('CHANGE_ODDS') || props.saleStatus !== 2) return;
   emits('changeMouse', e, s, type);
-};
-
-//- 输入框获得焦点
-const inputFoucs = (status: boolean) => {
-  emits('showShortcutContainer', status, props.s);
 };
 </script>
 

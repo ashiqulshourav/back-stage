@@ -122,16 +122,20 @@
                       </div>
                       <div
                         :class="[
-                          'text-center w-1/6',
+                          'flex items-center text-center w-1/6',
                           s.odds < 0 && 'translate-x-[-2px]'
                         ]"
                       >
-                        {{ s.odds.toFixed(2) }}
+                        <el-text class="!text-xs" type="primary">{{
+                          ODDS_TYPE_MAP[s.oddsType]
+                        }}</el-text>
+                        <span class="ml-2">
+                          {{ s.odds.toFixed(2) }}
+                        </span>
                       </div>
                       <InputCom
                         :s="s"
                         :saleStatus="_.isSale"
-                        @showShortcutContainer="showShortcutContainer"
                         @changeMouse="
                           (e, s, type) =>
                             mouseEvent(e, s, type, d.betItemsDtoList)
@@ -139,7 +143,6 @@
                         :selectNum="selectNum"
                         :selectItem="selectItem"
                         :betItemsDtoList="betItemsDtoList"
-                        @hideScrollList="() => (isShowScroll = false)"
                         @changeSelectNum="(n:number) =>
                       shortcutSelectNum(n,'input')"
                       />
@@ -169,34 +172,6 @@
           </el-collapse>
         </el-scrollbar>
       </template>
-
-      <!-- scroll滚动条 -->
-      <div
-        :class="[
-          'fixed w-16 bg-[--el-color-primary-light-8] flex flex-col pt-2 pb-2 border-[1px] border-solid border-[#f0f0f0] dark:border-[#303030]',
-          isShowScroll ? 'visible' : 'invisible'
-        ]"
-        :style="scrollPostitonObj"
-        @mouseenter="mouseEnterScroll"
-        @mousemove="mouseMoveScroll"
-        @mouseleave="mouseLeaveScroll"
-      >
-        <el-scrollbar ref="scrollRef" height="180px">
-          <div class="flex flex-col">
-            <span
-              @click="shortcutSelectNum(item, 'shortcut')"
-              v-for="item in numberList()"
-              :key="item"
-              :class="[
-                'w-full text-[--el-color-primary] text-center cursor-pointer',
-                item === 0 && 'bg-[--el-color-primary-dark-2] !text-white'
-              ]"
-            >
-              {{ item > 0 ? '+' : '' }}{{ item }}
-            </span>
-          </div>
-        </el-scrollbar>
-      </div>
     </div>
 
     <el-dialog
@@ -225,7 +200,12 @@ import { handicapListType } from '../util/type';
 import IconGroup from './IconGroup.vue';
 import ContentTitle from './ContentTitle.vue';
 import { addition, subtraction } from '@pureadmin/utils';
-import { PLAY_MATCH_NAME, goalScoring, resetDpodds } from '../util/playMap';
+import {
+  ODDS_TYPE_MAP,
+  PLAY_MATCH_NAME,
+  goalScoring,
+  resetDpodds
+} from '../util/playMap';
 import InputCom from './InputCom.vue';
 import { t } from '@/plugins/i18n';
 import { useBetStore } from '@/store/bet';
@@ -235,9 +215,6 @@ import MatchCountDown from './MatchCountDown.vue';
 const contentRef = ref();
 const collapseRef = ref();
 const activeNames = ref([1]);
-const scrollRef = ref();
-const isShowScroll = ref(false);
-const scrollPostitonObj = reactive({ left: '0px', top: '0px' });
 const contentScrollRef = ref();
 const betItemsDtoList = reactive<sportTradingDataAPI.BetItemsDtoList[]>([]);
 const selectItem = ref<sportTradingDataAPI.BetItemsDtoList>(
@@ -260,14 +237,6 @@ const dialogStatus = computed({
   set(_) {}
 });
 
-const numberList = (): number[] => {
-  const arr = [];
-  for (let i = 0.3; i >= -0.3; i = subtraction(i, 0.01, 2)) {
-    arr.push(i);
-  }
-  return arr;
-};
-
 watch(
   () => props.currentMatch,
   () => {
@@ -278,17 +247,6 @@ watch(
   }
 );
 
-watch(
-  () => props.handicapList,
-  () => {
-    nextTick(() => {
-      scrollRef.value.scrollTo(0, 520);
-    });
-  },
-  {
-    deep: true
-  }
-);
 //- 监听内容分类改变
 watch(
   () => props.selectContentType,
@@ -308,13 +266,12 @@ const emits = defineEmits([
 ]);
 //- 鼠标滑入交互处理
 const mouseEvent = (
-  e: any,
+  _e: any,
   s: sportTradingDataAPI.BetItemsDtoList,
   type: 'enter' | 'leave',
   list?: sportTradingDataAPI.BetItemsDtoList[]
 ) => {
   if (type === 'enter') {
-    isShowScroll.value = false;
     //鼠标滑入之前所有为隐藏
     props.handicapList
       .find(item => item.listType === props.selectContentType)!
@@ -326,20 +283,14 @@ const mouseEvent = (
         });
       });
     selectItem.value = s;
-    scrollPostitonObj.left = `${
-      e.target.getBoundingClientRect().left + (s.dpOdds < 0 ? 76 : 70)
-    }px`;
-    scrollPostitonObj.top = `${e.target.getBoundingClientRect().top - 168}px`;
     betItemsDtoList.length = 0;
     betItemsDtoList.push(...(list as sportTradingDataAPI.BetItemsDtoList[]));
     s.sourceBetItemsId = 1;
   } else {
-    if (!isShowScroll.value) s.sourceBetItemsId = -1;
+    s.sourceBetItemsId = -1;
   }
   emits('clearMatchTime', s.sourceBetItemsId);
 };
-
-const showShortcutContainer = () => (isShowScroll.value = true);
 
 //- 修改选择类型
 const changeSelectType = (type: string) => {
@@ -350,8 +301,7 @@ const changeSelectType = (type: string) => {
 const selectNum = ref(0);
 const shortcutSelectNum = (_: number, type: string) => {
   if (_ === 0) return;
-  type === 'shortcut' && (selectNum.value = _);
-  const params: { betItemsId: number; dpOdds: number }[] = [];
+  const params: { betItemsId: number; dpOdds: number; oddsType: string }[] = [];
   //- 下盘需要递减
   if (betItemsDtoList.length === 2) {
     const otherIdx = betItemsDtoList.findIndex(
@@ -370,9 +320,9 @@ const shortcutSelectNum = (_: number, type: string) => {
       }
       if (Math.abs(d.dpOdds) >= 1) d.dpOdds = resetDpodds(d.dpOdds);
     }
-
     params.push(
       ...betItemsDtoList.map((d, index: number) => ({
+        oddsType: d.oddsType,
         betItemsId: d.betItemsId,
         dpOdds: index !== otherIdx ? _ : _ * -1
       }))
@@ -386,17 +336,16 @@ const shortcutSelectNum = (_: number, type: string) => {
 
     nextTick(() => {
       params.push({
+        oddsType: d.oddsType,
         betItemsId: d.betItemsId,
         dpOdds: _
       });
       emits('sendNewOdds', params);
     });
   }
-  nextTick(() => type === 'shortcut' && (selectNum.value = 0));
 };
 
 const clearTime = () => {
-  isShowScroll.value = false;
   selectItem.value.sourceBetItemsId = -1;
   emits('clearMatchTime', -1);
 };
@@ -425,32 +374,6 @@ const goBetOroderPage = (
     betItemsId: s.betItemsId
   });
   router.push('/operateManager/sportBettingCenter');
-};
-
-// 快捷键鼠标事件
-let lastX = ref<number>();
-let direction = ref<string>('');
-const mouseEnterScroll = (e: any) => {
-  lastX.value = e.clientX;
-};
-
-const mouseMoveScroll = (e: any) => {
-  const currentX = e.clientX;
-  if (lastX !== undefined) {
-    const diffX = currentX - (lastX.value as number);
-    if (diffX > 0) {
-      direction.value = 'right';
-    } else {
-      direction.value = 'left';
-    }
-  }
-};
-
-const mouseLeaveScroll = () => {
-  if (direction.value === 'right') {
-    selectItem.value.sourceBetItemsId = -1;
-  }
-  isShowScroll.value = false;
 };
 
 const onCloseDialog = () => emits('onCloseDialog');

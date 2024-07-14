@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col">
+  <div class="flex flex-col mb-2">
     <MatchTitle @changeStatus="changeStatus" :current-match="matchData" />
 
     <!-- - 赛事内容列表 -->
@@ -67,7 +67,6 @@
                 :key="i"
                 class="border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#503e3e]"
               >
-                <!-- @mouseleave="e => mouseEvent(e, s, 'leave')" -->
                 <div
                   :class="[
                     'flex w-full items-center h-[35px]',
@@ -97,8 +96,18 @@
                       )?.replace('&', ' ')
                     }}
                   </div>
-                  <div class="text-center w-1/6">
-                    {{ s.odds.toFixed(2) }}
+                  <div
+                    :class="[
+                      'flex items-center text-center w-1/6',
+                      s.odds < 0 && 'translate-x-[-2px]'
+                    ]"
+                  >
+                    <el-text class="!text-xs" type="primary">{{
+                      ODDS_TYPE_MAP[s.oddsType]
+                    }}</el-text>
+                    <span class="ml-2">
+                      {{ s.odds.toFixed(2) }}
+                    </span>
                   </div>
                   <InputCom
                     :s="s"
@@ -110,7 +119,7 @@
                     :selectItem="selectItem"
                     :betItemsDtoList="betItemsDtoList"
                     @hideScrollList="() => (isShowScroll = false)"
-                    @changeSelectNum="(n:number) => shortcutSelectNum(n,'input')"
+                    @changeSelectNum="(n:number) => shortcutSelectNum(n)"
                     @showShortcutContainer="showShortcutContainer"
                   />
                   <div
@@ -136,88 +145,42 @@
           </div>
         </div>
       </div>
-
-      <!-- scroll滚动条 -->
-      <div
-        :class="[
-          'fixed w-16 bg-[--el-color-primary-light-8] flex flex-col pt-2 pb-2 border-[1px] border-solid border-[#f0f0f0] dark:border-[#303030]',
-          isShowScroll ? 'visible' : 'invisible'
-        ]"
-        :style="scrollPostitonObj"
-        @mouseenter="mouseEnterScroll"
-        @mousemove="mouseMoveScroll"
-        @mouseleave="mouseLeaveScroll"
-      >
-        <el-scrollbar ref="scrollRef" height="180px">
-          <div class="flex flex-col">
-            <span
-              @click="shortcutSelectNum(item, 'shortcut')"
-              v-for="item in numberList()"
-              :key="item"
-              :class="[
-                'w-full text-[--el-color-primary] text-sm text-center cursor-pointer',
-                item === 0 && 'bg-[--el-color-primary-dark-2] !text-white'
-              ]"
-            >
-              {{ item > 0 ? '+' : '' }}{{ item }}
-            </span>
-          </div>
-        </el-scrollbar>
-      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import MatchTitle from './MatchTitle.vue';
-import { addition, subtraction } from '@pureadmin/utils';
 import IconGroup from '../../com/IconGroup.vue';
-import { PLAY_MATCH_NAME, goalScoring, resetDpodds } from '../../util/playMap';
+import {
+  ODDS_TYPE_MAP,
+  PLAY_MATCH_NAME,
+  goalScoring
+} from '../../util/playMap';
 import InputCom from '../../com/InputCom.vue';
 import { useBetStore } from '@/store/bet';
 
-const scrollRef = ref();
 const betItemsDtoList = reactive<sportTradingDataAPI.BetItemsDtoList[]>([]);
 const props = defineProps<{
   matchData: sportTradingDataAPI.getAlarmMatchListType;
   matchList: sportTradingDataAPI.getAlarmMatchListType[];
 }>();
 
-watch(
-  () => props.matchData,
-  () => {
-    nextTick(() => scrollRef.value.scrollTo(0, 520));
-  },
-  { deep: true }
-);
-
 //-快捷选择数字事件
 const selectNum = ref(0);
-const shortcutSelectNum = (_: number, type: string) => {
+const shortcutSelectNum = (_: number) => {
   if (_ === 0) return;
-  type === 'shortcut' && (selectNum.value = _);
-  const params: { betItemsId: number; dpOdds: number }[] = [];
+  const params: { betItemsId: number; dpOdds: number; oddsType: string }[] = [];
 
   //- 下盘需要递减
   if (betItemsDtoList.length === 2) {
     const otherIdx = betItemsDtoList.findIndex(
       item => item.betItemsId !== selectItem.value.betItemsId
     );
-    //- 快捷选择单独处理
-    if (type === 'shortcut') {
-      const d = betItemsDtoList.find(
-        item => item.betItemsId !== selectItem.value.betItemsId
-      ) as sportTradingDataAPI.BetItemsDtoList;
-      if (_ > 0) {
-        d.dpOdds = subtraction(d.dpOdds, Math.abs(_), 2);
-      } else {
-        d.dpOdds = addition(d.dpOdds, Math.abs(_), 2);
-      }
-      if (Math.abs(d.dpOdds) >= 1) d.dpOdds = resetDpodds(d.dpOdds);
-    }
 
     params.push(
       ...betItemsDtoList.map((d, index: number) => ({
+        oddsType: d.oddsType,
         betItemsId: d.betItemsId,
         dpOdds: index !== otherIdx ? _ : _ * -1
       }))
@@ -231,13 +194,13 @@ const shortcutSelectNum = (_: number, type: string) => {
     ) as sportTradingDataAPI.BetItemsDtoList;
     nextTick(() => {
       params.push({
+        oddsType: d.oddsType,
         betItemsId: d.betItemsId,
         dpOdds: _
       });
       emits('sendNewOdds', params);
     });
   }
-  nextTick(() => type === 'shortcut' && (selectNum.value = 0));
 };
 
 const selectItem = ref<sportTradingDataAPI.BetItemsDtoList>(
@@ -258,14 +221,6 @@ const clearTime = () => {
   emits('clearMatchTime', -1);
   selectItem.value.sourceBetItemsId = -1;
   isShowScroll.value = false;
-};
-
-const numberList = (): number[] => {
-  const arr = [];
-  for (let i = 0.3; i >= -0.3; i = subtraction(i, 0.01, 2)) {
-    arr.push(i);
-  }
-  return arr;
 };
 
 const mouseEvent = (
@@ -312,32 +267,6 @@ const changeStatus = (d: {
   item?: sportTradingDataAPI.renderListType;
 }) => {
   emits('changeStatus', d);
-};
-
-// 快捷键鼠标事件
-let lastX = ref<number>();
-let direction = ref<string>('');
-const mouseEnterScroll = (e: any) => {
-  lastX.value = e.clientX;
-};
-
-const mouseMoveScroll = (e: any) => {
-  const currentX = e.clientX;
-  if (lastX !== undefined) {
-    const diffX = currentX - (lastX.value as number);
-    if (diffX > 0) {
-      direction.value = 'right';
-    } else {
-      direction.value = 'left';
-    }
-  }
-};
-
-const mouseLeaveScroll = () => {
-  if (direction.value === 'right') {
-    selectItem.value.sourceBetItemsId = -1;
-  }
-  isShowScroll.value = false;
 };
 
 const showShortcutContainer = () => (isShowScroll.value = true);

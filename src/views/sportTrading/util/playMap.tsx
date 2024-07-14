@@ -225,3 +225,14 @@ export const resetDpodds = (dpOdds: number) => {
     return subtraction(2, Math.abs(dpOdds), 2);
   }
 };
+
+//- 盘口类型映射
+
+export const ODDS_TYPE_MAP: { [key: string]: string } = {
+  OU: t('欧洲盘'),
+  HK: t('香港盘'),
+  ML: t('马来盘'),
+  ID: t('印尼盘'),
+  US: t('美国盘'),
+  GB: t('英国盘')
+};
