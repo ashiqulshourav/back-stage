@@ -5,16 +5,13 @@
     @click="toggleClick"
   >
     <IconifyIconOffline
-      :icon="props.isActive ? MenuFold : MenuUnfold"
+      :icon="props.isActive ? 'MenuFold' : 'MenuUnfold'"
       class="inline-block align-middle hover:text-primary dark:hover:!text-white"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import MenuFold from "@iconify-icons/ri/menu-fold-fill";
-import MenuUnfold from "@iconify-icons/ri/menu-unfold-fill";
-
 const props = withDefaults(
   defineProps<{
     isActive: boolean;
@@ -25,10 +22,10 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-  (e: "toggleClick"): void;
+  (e: 'toggleClick'): void;
 }>();
 
 const toggleClick = () => {
-  emit("toggleClick");
+  emit('toggleClick');
 };
 </script>

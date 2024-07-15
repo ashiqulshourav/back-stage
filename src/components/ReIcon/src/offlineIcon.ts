@@ -50,8 +50,13 @@ import Back from '@iconify-icons/fa-solid/arrow-left';
 import LogoutCircleRLine from '@iconify-icons/ri/logout-circle-r-line';
 import Setting from '@iconify-icons/ri/settings-3-line';
 import Check from '@iconify-icons/ri/check-fill';
+import MenuFold from "@iconify-icons/ri/menu-fold-fill";
+import MenuUnfold from "@iconify-icons/ri/menu-unfold-fill";
+
 
 addIcon("Setting", Setting);
+addIcon("MenuFold", MenuFold);
+addIcon("MenuUnfold", MenuUnfold);
 addIcon("dataSourceManager", dataManager);
 addIcon("LogoutCircleRLine", LogoutCircleRLine);
 addIcon("sale", sale);
