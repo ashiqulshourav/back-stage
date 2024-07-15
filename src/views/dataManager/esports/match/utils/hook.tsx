@@ -5,13 +5,16 @@ import { usePublicHooks } from '@/hooks';
 import { columns } from '../component/TableColumnList';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { addDialog, closeDialog } from '@/components/ReDialog';
+import { addThousandSeparator } from '@/utils/formatNumber';
 
 export function useLeague() {
+  const router = useRouter();
   const dataList = reactive<ESportsAPI.ESportsLeagueListArrType[]>([]);
   const loading = ref(true);
+  const downloading = ref(false);
   const switchLoadMap = ref({});
   const levelList = reactive<ConfigCenterDataAPI.leagueLevelList[]>([]);
-  const { switchStyle } = usePublicHooks();
+  const { switchStyle, exportDialog } = usePublicHooks();
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -41,13 +44,18 @@ export function useLeague() {
 
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
-    loading.value = true;
+    if(type!=='export'){
+      loading.value = true;
+    }
     const res: ESportsAPI.ESportsLeagueListType =
       await API.getESportsLeagueList({
         ...removeEmptyStringKeys(form),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
+    if (type === 'export') {
+      return res?.data
+    }
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
     dataList.length = 0;
@@ -58,6 +66,32 @@ export function useLeague() {
       ) as HTMLDivElement
     ).scroll(0, 0);
     pagination.total = res.data.total;
+  }
+
+  const exportFile = async () => {
+    onSearch('export').then((expRes: any) => {
+      if(expRes?.total>50000){
+        message(`当前条件下数据量为${addThousandSeparator(expRes?.total)}，大于5万条，不支持导出!`, { type: 'error' });
+      }else if(expRes?.total<1 || expRes === null){
+        message('数据量为零，无法导出', { type: 'error' });
+      }else {
+        exportDialog({
+          firstTitle: t('导出当前电竞数据?'),
+          router,
+          callback: async () => {
+            downloading.value = true;
+            const res = await API.getLeagueExport({
+              ...removeEmptyStringKeys(form),
+              pageSize: pagination.pageSize,
+              pageNum: pagination.currentPage,
+              category: 1,
+            })
+            message(res.msg, { type: res.code ? 'error' : 'success' });
+            downloading.value = false;
+          }
+        })
+      }
+    })
   }
 
   function openDialog(
@@ -111,6 +145,8 @@ export function useLeague() {
     openDialog,
     switchStyle,
     form,
-    levelList
+    levelList,
+    exportFile, 
+    downloading
   };
 }
