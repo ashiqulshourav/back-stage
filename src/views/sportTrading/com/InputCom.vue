@@ -63,11 +63,15 @@ const props = defineProps<{
 
 const s1 = ref(0);
 const oldVal = ref(0);
+
 const inputCom = computed({
   get() {
     return props.s.dpOdds;
   },
   set(v: number) {
+    if (props.s.oddsType === 'OU') {
+      if (v > 201 || v < 1.01) return;
+    }
     if (!v || oldVal.value === v) return;
     oldVal.value = v;
     const n = subtraction(v, props.s.dpOdds, 2);
@@ -77,18 +81,22 @@ const inputCom = computed({
       s1.value = subtraction(s1.value, Math.abs(n), 2);
     }
     props.s.dpOdds = v;
-    if (Math.abs(props.s.dpOdds) >= 1) {
+
+    if (Math.abs(props.s.dpOdds) >= 1 && props.s.oddsType === 'ML') {
       props.s.dpOdds = resetDpodds(props.s.dpOdds);
     }
+
     if (props.betItemsDtoList.length === 2) {
       const d = props.betItemsDtoList.find(
         item => item.betItemsId !== props.selectItem.betItemsId
       ) as sportTradingDataAPI.BetItemsDtoList;
+
       if (n > 0) {
         d.dpOdds = subtraction(d.dpOdds, n, 2);
       } else {
         d.dpOdds = addition(d.dpOdds, Math.abs(n), 2);
       }
+
       if (Math.abs(d.dpOdds) >= 1) d.dpOdds = resetDpodds(d.dpOdds);
     }
 
@@ -97,7 +105,7 @@ const inputCom = computed({
 });
 
 const changeDpOdds = debounce(() => {
-  emits('changeSelectNum', s1.value);
+  emits('changeSelectNum', Number(tipData.value.val));
   s1.value = 0;
 }, 500);
 

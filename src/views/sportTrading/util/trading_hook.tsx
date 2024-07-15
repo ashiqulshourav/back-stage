@@ -102,6 +102,7 @@ export function useTradingHook(type: 'early' | 'in') {
     if (
       !checkisBeginMatch(
         res.data.status as 'nobegin' | 'canceled' | 'over',
+        // new Date('2024-07-15 16:53:00').getTime()
         res.data.beginTimeLong
       )
     ) {
@@ -243,6 +244,7 @@ export function useTradingHook(type: 'early' | 'in') {
     return true;
   };
 
+  //- 关闭倒计时弹窗
   const onCloseDialog = () => {
     isShowDialog.value = false;
     resetSearchForm();
