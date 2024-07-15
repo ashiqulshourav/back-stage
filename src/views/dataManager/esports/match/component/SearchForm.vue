@@ -104,6 +104,15 @@
         <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
           {{ t('重置') }}
         </el-button>
+        <el-button
+          type="primary"
+          :icon="useRenderIcon(Download)"
+          :loading="downloading"
+          @click="exportFile()"
+          v-if="hasAuth('EXPORT')"
+        >
+        {{ t('导出') }}
+        </el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -119,8 +128,11 @@ import { SearchFormType } from '../utils/types';
 import { formatNumber } from '@/utils/formatNumber';
 import { useMatchStore } from '@/store/match';
 import { ESPORT_ID_MAP } from '@/utils/maps/sports_map';
+import Download from '@iconify-icons/ep/download';
+import { hasAuth } from '@/router/utils';
 
 const props = defineProps<{
+  downloading: boolean;
   loading: boolean;
   form: SearchFormType;
   levelList: ConfigCenterDataAPI.leagueLevelList[];
@@ -128,7 +140,7 @@ const props = defineProps<{
 
 const matchStore = useMatchStore();
 const formRef = ref<FormInstance>();
-const emits = defineEmits(['onSearch']);
+const emits = defineEmits(['onSearch', 'exportFile']);
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl?.resetFields();
   search();
@@ -140,6 +152,10 @@ const renderLevelList = computed(() => {
 
 const search = () => {
   emits('onSearch', ...['reload']);
+};
+
+const exportFile = () => {
+  emits('exportFile');
 };
 </script>
 

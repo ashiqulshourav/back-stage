@@ -3,6 +3,8 @@
     <SearchForm
       :loading="loading"
       @onSearch="onSearch"
+      @exportFile="exportFile"
+      :downloading="downloading"
       :form="form"
       :levelList="levelList"
     />
@@ -88,7 +90,9 @@ const {
   handleCurrentChange,
   form,
   openDialog,
-  levelList
+  levelList, 
+  exportFile, 
+  downloading
 } = useLeague();
 </script>
 

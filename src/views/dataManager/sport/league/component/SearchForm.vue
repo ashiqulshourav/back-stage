@@ -30,8 +30,8 @@
           :icon="useRenderIcon(Download)"
           :loading="downloading"
           @click="exportFile()"
+          v-if="hasAuth('EXPORT')"
           >
-          <!-- v-if="hasAuth('EXPORT')" -->
         {{ t('导出') }}
         </el-button>
         <el-button class="!border-none" :icon="isShowUnfold ? useRenderIcon(ArrowUp) : useRenderIcon(EpArrowDown)" @click="handleUnfold">
