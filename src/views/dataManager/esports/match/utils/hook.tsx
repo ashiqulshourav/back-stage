@@ -82,8 +82,6 @@ export function useLeague() {
             downloading.value = true;
             const res = await API.getLeagueExport({
               ...removeEmptyStringKeys(form),
-              pageSize: pagination.pageSize,
-              pageNum: pagination.currentPage,
               category: 1,
             })
             message(res.msg, { type: res.code ? 'error' : 'success' });
