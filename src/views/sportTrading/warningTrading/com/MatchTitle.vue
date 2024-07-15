@@ -81,6 +81,7 @@
           <IconGroup
             :closeThreeIcon="true"
             :typeNum="currentMatch?.isSale"
+            :operateStatus="currentMatch.operateStatus"
             @changeMatchStatus="changeMatchStatus"
           />
         </div>

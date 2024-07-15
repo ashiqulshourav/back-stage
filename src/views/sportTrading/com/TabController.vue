@@ -120,6 +120,7 @@
                         :typeNum="item.isSale"
                         @changeMatchStatus="d => changeMatchStatus(d, item)"
                         :closeThreeIcon="true"
+                        :operateStatus="item.operateStatus"
                       />
                     </div>
                   </div>
@@ -154,7 +155,6 @@ const props = defineProps<{
 }>();
 
 const copyTxt = (val: string, type: 'league' | 'match') => {
-  console.log('TabController.vue文件 157==============行打印=', 111);
   const eMap = {
     league: t('联赛ID复制成功'),
     match: t('赛事ID复制成功')
@@ -185,6 +185,7 @@ const changeMatchStatus = (
   status: number,
   item: sportTradingDataAPI.MatchDtoList
 ) => {
+  item.isSale = status;
   emits('changeStatus', {
     status,
     classify: 'match',

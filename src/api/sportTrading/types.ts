@@ -29,6 +29,7 @@ declare namespace sportTradingDataAPI {
     homeTeamNameEn: string;
     awayTeamNameCn: string;
     awayTeamNameEn: string;
+    operateStatus: string;
     dateTime: string;
     status?: any;
     level: number;
@@ -193,6 +194,7 @@ declare namespace sportTradingDataAPI {
     betItemsResultDto: BetItemsResultDto;
     renderList: renderListType[];
     HandicapTeam: string;
+    operateStatus: string | number;
   }
 
   type renderListType = {

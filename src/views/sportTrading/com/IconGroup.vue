@@ -28,8 +28,9 @@
       :style="{
         color: typeNum === SALE_STATUS.lock ? '#F56C6C' : '#A8ABB2'
       }"
+      :class="[operateStatus === 1 && 'cursor-not-allowed']"
       icon="trading_lock"
-      @click.stop="changeType(SALE_STATUS.lock)"
+      @click.stop="operateStatus !== 1 && changeType(SALE_STATUS.lock)"
     />
   </template>
 </template>
@@ -41,6 +42,7 @@ const props = defineProps<{
   typeNum?: number | null;
   closeThreeIcon?: boolean;
   renderType?: string;
+  operateStatus?: number | string;
 }>();
 
 const emits = defineEmits(['changeMatchStatus']);

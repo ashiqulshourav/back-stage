@@ -88,6 +88,7 @@
         :close-three-icon="true"
         :typeNum="currentMatch?.isSale"
         @changeMatchStatus="changeMatchStatus"
+        :operateStatus="currentMatch.operateStatus"
       />
     </div>
   </div>
