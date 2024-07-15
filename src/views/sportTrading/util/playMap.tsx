@@ -216,6 +216,15 @@ export const PLAY_MATCH_NAME = (
   }
 };
 
+// export const resetDpodds = (dpOdds: number) => {
+//   if (Math.abs(dpOdds) === 1) {
+//     return -1;
+//   } else if (dpOdds > 0) {
+//     return subtraction(dpOdds, 2, 2);
+//   } else {
+//     return subtraction(2, Math.abs(dpOdds), 2);
+//   }
+// };
 export const resetDpodds = (dpOdds: number) => {
   if (Math.abs(dpOdds) === 1) {
     return -1;

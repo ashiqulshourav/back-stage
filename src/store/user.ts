@@ -28,6 +28,13 @@ export const useUserStore = defineStore('USERSTATE', {
       this.userInfo = {};
       window.location.reload();
     },
+    clearUserInfo() {
+      this.roles = [];
+      removeStorage();
+      useMultiTagsStoreHook().handleTags("equal", [...routerArrays]);
+      resetRouter();
+      this.userInfo = {};
+    },
     setUserInfo(_: UserAPI.LoginData) {
       this.userInfo = Object.assign(this.userInfo, _)
       this.token = _.token;
