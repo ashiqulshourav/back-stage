@@ -340,8 +340,16 @@ export function useTradingHook(type: 'early' | 'in') {
       isSale: status,
       betItemsIds: betItemsIdList ?? []
     });
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    if (res.code) return;
+
+    let msg =
+      res.code === 11227
+        ? t('请先在预开售进行赛事解锁')
+        : res.code === 11226
+        ? t('请先在预开售开启赛事开售')
+        : res.msg;
+
+    message(msg, { type: res.code ? 'error' : 'success' });
+
     runLoopMatch();
     riotPrevention.value = false;
     switch (classify) {
