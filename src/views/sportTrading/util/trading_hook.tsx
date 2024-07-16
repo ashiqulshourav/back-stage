@@ -369,7 +369,7 @@ export function useTradingHook(type: 'early' | 'in') {
     item: sportTradingDataAPI.MatchDtoList
   ) => {
     item.isSale = status;
-    currentMatch.isSale = status;
+    if (item.matchId === currentMatch.matchId) currentMatch.isSale = status;
   };
 
   //- 修改盘赛事图标状态
