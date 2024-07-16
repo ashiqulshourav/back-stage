@@ -1,13 +1,11 @@
 import editForm from '../form.vue';
 import manualMatchModal from '../manualMatchModal.vue';
-import matchRuleModal from '../matchRuleModal.vue';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, h } from 'vue';
 import { editSearchFormType, searchFormType, udpateOddsType } from './types';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import dayjs from "dayjs";
-import { message } from "@/utils/message";
 
 export function matchCombineHook() {
   const dataList = reactive<MatchCombineAPI.matchSourceDetail[]>([]);
@@ -16,7 +14,6 @@ export function matchCombineHook() {
   const loading = ref(true);
   const globalOddsSwitch = ref(null);
   const alreadyMatch = ref<Boolean>(false);
-  const oppositeStatus = ref(null);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 20,
@@ -161,18 +158,6 @@ export function matchCombineHook() {
     }
   }
 
-  const handleMatchRule = (dpMatchId: number, matchId: number, oppositeStatus: number) => {
-    const param = {
-      oppositeStatus: oppositeStatus,
-      dpMatchId: dpMatchId,
-      matchId: matchId,
-    }
-    const params = { ...removeEmptyStringKeys(param) }
-    API.pairingRuleSetting(params).then((res) => {
-      message(res.msg, { type: res.code ? 'error' : 'success' });
-    })
-  }
-
   async function openDialog(title: string, row?: MatchCombineAPI.matchSourceDetail) {
     addDialog({
       title,
@@ -186,8 +171,7 @@ export function matchCombineHook() {
           matchInfoDataList: matchInfoDataList,
           onCloseDialog: (params: string) => {
             closeDialog(options, index);
-            // params && onSearch();
-            onSearch();
+            params && onSearch();
           }
         })
     });
@@ -207,34 +191,13 @@ export function matchCombineHook() {
           onCloseDialog: (params: string) => {
             closeDialog(options, index);
             // 匹配后更新列表数据状态；
-            alreadyMatch.value = params.pairingStatus === 1;
-            oppositeStatus.value = params.oppositeStatus;
+            alreadyMatch.value = params.pairingStatus === 1
             matchInfoDataList.map((item) => {
               if (item.matchId === params.matchId) {
                 item.pairingStatus = params.pairingStatus
               }
             })
-          }
-        })
-    });
-  }
 
-  async function openMatchRuleDialog(title: string, rowData: MatchCombineAPI.matchPairingDetail, row: MatchCombineAPI.matchSourceDetail) {
-    if (oppositeStatus.value) {
-      rowData.pandaOppositeStatus = oppositeStatus.value;
-    }
-    addDialog({
-      title,
-      width: 'auto',
-      alignCenter: true,
-      closeOnClickModal: false,
-      hideFooter: true,
-      contentRenderer: ({ options, index }) =>
-        h(matchRuleModal, {
-          matchSource: rowData,
-          matchSourcePair: row,
-          onCloseDialog: () => {
-            closeDialog(options, index);
           }
         })
     });
@@ -263,8 +226,5 @@ export function matchCombineHook() {
     updateOddsParams,
     globalOddsSwitch,
     getGlobalOddsSwitch,
-    openMatchRuleDialog,
-    handleMatchRule,
-    oppositeStatus,
   };
 }
