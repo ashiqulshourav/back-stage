@@ -80,8 +80,10 @@ export function useOperationLog() {
           router,
           callback: async () => {
             exportLoading.value = true;
+            const o = JSON.parse(JSON.stringify(removeEmptyStringKeys(form)));
+            o.operateMenu && (o.operateMenu = o.operateMenu.join('-'));
             const res = await API.operationLogExport({
-              ...removeEmptyStringKeys(form),
+              ...o,
               pageNum: 1,
               pageSize: 50000,
               export: true
