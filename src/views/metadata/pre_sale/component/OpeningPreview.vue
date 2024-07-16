@@ -196,12 +196,11 @@ const getBetItemsList = async () => {
   if (res.code) return;
   Object.keys(mData).forEach(key => (mData[key as any].formatList.length = 0));
   openLen.value = 0;
+
   res.data.forEach(item => {
     item.source_handicap = item.handicap;
     item.isSale === 2 && (openLen.value += 1);
-
     if (item.kindsCode === 'TeamToKickOff') mData[7].formatList.push(item);
-
     if (mData[item.ctid]) {
       mData[item.ctid].formatList.push(item);
     } else if (props.matchInfo.sportId !== 1) {
@@ -218,9 +217,9 @@ const getBetItemsList = async () => {
       .sort((a: any, b: any) => a.displayIndex - b.displayIndex)
       .forEach((item: any) => {
         // @ts-ignore: Ignore the implicit any error
-        if (!o[item.kindsCode as keyof typeof o]) o[item.kindsCode] = [];
+        if (!o[item.kindsCode as keyof typeof o + item.ctid.toString()]) o[item.kindsCode + item.ctid.toString()] = [];
         // @ts-ignore: Ignore the implicit any error
-        o[item.kindsCode].push(item);
+        o[item.kindsCode + item.ctid.toString()].push(item);
       });
     d.formatList = Object.values(o)
       .map((_: SaleDataAPI.getBetItemsListDataType[]) => {
