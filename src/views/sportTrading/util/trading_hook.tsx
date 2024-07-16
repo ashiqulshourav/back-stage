@@ -347,11 +347,10 @@ export function useTradingHook(type: 'early' | 'in') {
         : res.code === 11226
         ? t('请先在预开售开启赛事开售')
         : res.msg;
-
     message(msg, { type: res.code ? 'error' : 'success' });
-
     runLoopMatch();
     riotPrevention.value = false;
+    if (res.code) return;
     switch (classify) {
       case 'match':
         upateMatchSale(status, item as sportTradingDataAPI.MatchDtoList);
