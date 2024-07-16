@@ -25,7 +25,7 @@
         <template v-if="o.formatList.length">
           <el-collapse v-model="colActiveNames" @change="handleChange">
             <el-collapse-item
-              :title="_[0][0].betItemsName"
+              :title="_[0][0].betItemsName.replace('&', ' ')"
               :name="i"
               v-for="(_, i) in o.formatList"
               :key="i"
@@ -38,38 +38,49 @@
                 <div class="flex flex-wrap flex-grow">
                   <template
                     v-if="
-                      cItem[0].sourceCode !== 'FT_CS' &&
-                      cItem[0].sourceCode !== 'HT_CS'
+                      cItem[0]?.sourceCode !== 'FT_CS' &&
+                      cItem[0]?.sourceCode !== 'HT_CS'
                     "
                   >
                     <el-button
                       class="flex-grow text-center flex justify-between w-1/4 mb-1 break_word"
                       v-for="s in cItem"
-                      :key="s.sourceBetItemsId"
+                      :key="s?.sourceBetItemsId"
                     >
                       <span
                         class="text-ellipsis overflow-hidden whitespace-nowrap max-w-[33%]"
                         v-if="
-                          ['S1_AH', 'S2_AH', 'FTS_AH'].includes(s.sourceCode) &&
-                          matchInfo.sportId === 3
+                          ['S1_AH', 'S2_AH', 'FTS_AH'].includes(
+                            s?.sourceCode
+                          ) && matchInfo.sportId === 3
                         "
                       >
-                        {{ nameMap[s.homeOrAway] }}
+                        {{ nameMap[s?.homeOrAway as keyof typeof nameMap] }}
                       </span>
                       <span v-else>
                         {{
-                          s.n
-                            ? s.n
-                            : PLAY_MATCH(s.sourceCode)[
-                                s.homeOrAway || s.handicap
-                              ] ?? s.handicap
+                          s?.n
+                            ? s?.n?.replace('&', ' ') // @ts-ignore: Ignore the implicit any error
+                            : PLAY_MATCH(s?.kindsCode)[
+                                s?.homeOrAway || s?.handicap
+                              ] ??
+                              (s?.kindsCode === 'FT_TG' && !isNaN(s?.handicap)
+                                ? s?.handicap.split('').join('-')
+                                : s?.handicap
+                                    ?.replace('3UP', '3+')
+                                    .replace('7UP', '7+'))
                         }}
+                        <!-- ?? s?.kindsCode === 'FT_TG'
+                            ? s?.handicap.split('').join('-')
+                            : s?.handicap
+                                ?.replace('3UP', '3+')
+                                .replace('7UP', '7+') -->
                       </span>
                       <span
-                        v-if="!PLAY_MATCH(s.sourceCode).hideMiddle && !s.n"
-                        >{{ s.handicap }}</span
+                        v-if="!PLAY_MATCH(s?.kindsCode)?.hideMiddle && !s?.n"
+                        >{{ s?.handicap }}</span
                       >
-                      <span>{{ s.odds.toFixed(2) }}</span>
+                      <span>{{ s?.odds.toFixed(2) }}</span>
                     </el-button>
                   </template>
                   <template v-else>
@@ -82,8 +93,8 @@
                       :key="idx"
                     >
                       <template v-if="s">
-                        <span>{{ s.handicap }}</span>
-                        <span>{{ s.odds.toFixed(2) }}</span>
+                        <span>{{ s?.handicap }}</span>
+                        <span>{{ s?.odds.toFixed(2) }}</span>
                       </template>
                     </el-button>
                   </template>
@@ -98,7 +109,7 @@
                   >
                     <template #reference>
                       <IconifyIconOffline
-                        :icon="cItem[0].isSale === 2 ? 'unlock' : 'lock'"
+                        :icon="cItem[0]?.isSale === 2 ? 'unlock' : 'lock'"
                       />
                     </template>
                   </el-popconfirm>
@@ -185,12 +196,11 @@ const getBetItemsList = async () => {
   if (res.code) return;
   Object.keys(mData).forEach(key => (mData[key as any].formatList.length = 0));
   openLen.value = 0;
+
   res.data.forEach(item => {
     item.source_handicap = item.handicap;
     item.isSale === 2 && (openLen.value += 1);
-
     if (item.kindsCode === 'TeamToKickOff') mData[7].formatList.push(item);
-
     if (mData[item.ctid]) {
       mData[item.ctid].formatList.push(item);
     } else if (props.matchInfo.sportId !== 1) {
@@ -202,18 +212,23 @@ const getBetItemsList = async () => {
   });
 
   Object.values(mData).forEach(d => {
-    const o = {};
+    const o: { [key: string]: any } = {};
     d.formatList
       .sort((a: any, b: any) => a.displayIndex - b.displayIndex)
       .forEach((item: any) => {
-        if (!o[item.kindsCode as keyof typeof o]) o[item.kindsCode] = [];
-        o[item.kindsCode].push(item);
+        // @ts-ignore: Ignore the implicit any error
+        if (!o[(item.kindsCode as keyof typeof o) + item.ctid.toString()])
+          o[item.kindsCode + item.ctid.toString()] = [];
+        // @ts-ignore: Ignore the implicit any error
+        o[item.kindsCode + item.ctid.toString()].push(item);
       });
     d.formatList = Object.values(o)
       .map((_: SaleDataAPI.getBetItemsListDataType[]) => {
         const o1 = {};
         _.forEach((h: SaleDataAPI.getBetItemsListDataType) => {
+          // @ts-ignore: Ignore the implicit any error
           if (!o1[h.sourceBetItemsMid]) o1[h.sourceBetItemsMid] = [];
+          // @ts-ignore: Ignore the implicit any error
           o1[h.sourceBetItemsMid].push(h);
         });
         if (_[0].kindsCode === 'FT_CS' || _[0].kindsCode === 'HT_CS') {
@@ -230,7 +245,6 @@ const getBetItemsList = async () => {
       })
       .sort((a, b) => a.length - b.length);
   });
-  
   isLoading.value = false;
 };
 

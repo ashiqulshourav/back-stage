@@ -323,13 +323,12 @@ export function useTradingHook(type: 'early' | 'in') {
     classify: 'match' | 'category' | 'pan';
     betItemsIdList?: number[];
     categoryData?: sportTradingDataAPI.MainBetItemsDtoList;
-    item?: handicapListType;
+    item?: handicapListType | sportTradingDataAPI.MatchDtoList;
     matchId?: number;
   }) => {
     if (riotPrevention.value) return;
     riotPrevention.value = true;
     clearInterval(loopTimer.value);
-
     const reqUrl =
       classify === 'match'
         ? 'updateMatchHandicapStatus'
@@ -341,15 +340,13 @@ export function useTradingHook(type: 'early' | 'in') {
       isSale: status,
       betItemsIds: betItemsIdList ?? []
     });
-
     message(res.msg, { type: res.code ? 'error' : 'success' });
+    if (res.code) return;
     runLoopMatch();
     riotPrevention.value = false;
-
-    if (res.code) return;
     switch (classify) {
       case 'match':
-        upateMatchSale(status);
+        upateMatchSale(status, item as sportTradingDataAPI.MatchDtoList);
         break;
       case 'pan':
         upatePanSale(
@@ -367,7 +364,11 @@ export function useTradingHook(type: 'early' | 'in') {
   };
 
   //- 修改赛事图标状态
-  const upateMatchSale = (status: number) => {
+  const upateMatchSale = (
+    status: number,
+    item: sportTradingDataAPI.MatchDtoList
+  ) => {
+    item.isSale = status;
     currentMatch.isSale = status;
   };
 
