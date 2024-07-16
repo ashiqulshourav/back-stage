@@ -185,11 +185,12 @@ const changeMatchStatus = (
   status: number,
   item: sportTradingDataAPI.MatchDtoList
 ) => {
-  item.isSale = status;
+  // item.isSale = status;
   emits('changeStatus', {
     status,
     classify: 'match',
-    matchId: item.matchId
+    matchId: item.matchId,
+    item
   });
 };
 

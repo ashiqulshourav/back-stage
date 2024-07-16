@@ -26,7 +26,10 @@
     />
     <IconifyIconOffline
       :style="{
-        color: typeNum === SALE_STATUS.lock ? '#F56C6C' : '#A8ABB2'
+        color:
+          typeNum === SALE_STATUS.lock || operateStatus === 1
+            ? '#F56C6C'
+            : '#A8ABB2'
       }"
       :class="[operateStatus === 1 && 'cursor-not-allowed']"
       icon="trading_lock"

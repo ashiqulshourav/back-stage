@@ -212,12 +212,13 @@ const getBetItemsList = async () => {
   });
 
   Object.values(mData).forEach(d => {
-    const o = {};
+    const o: { [key: string]: any } = {};
     d.formatList
       .sort((a: any, b: any) => a.displayIndex - b.displayIndex)
       .forEach((item: any) => {
         // @ts-ignore: Ignore the implicit any error
-        if (!o[item.kindsCode as keyof typeof o + item.ctid.toString()]) o[item.kindsCode + item.ctid.toString()] = [];
+        if (!o[(item.kindsCode as keyof typeof o) + item.ctid.toString()])
+          o[item.kindsCode + item.ctid.toString()] = [];
         // @ts-ignore: Ignore the implicit any error
         o[item.kindsCode + item.ctid.toString()].push(item);
       });
