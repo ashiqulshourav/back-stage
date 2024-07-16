@@ -230,6 +230,7 @@ const getBetItemsList = async () => {
       })
       .sort((a, b) => a.length - b.length);
   });
+  
   isLoading.value = false;
 };
 
