@@ -69,10 +69,17 @@
             <el-checkbox v-model="checkAllTIds" @change="handleCheckAllTIds">
               {{ t('全选') }}
             </el-checkbox>
-            <el-checkbox v-mode="removeAllTIds" @change="handleRemoveAllTIds" :disabled="form?.tenantIds.length == 0">
+            <el-checkbox
+              v-mode="removeAllTIds"
+              @change="handleRemoveAllTIds"
+              :disabled="form?.tenantIds.length == 0"
+            >
               {{ t('全不选') }}
             </el-checkbox>
-            <el-checkbox v-model="checkRevertTIds" @change="handleCheckRevertTIds">
+            <el-checkbox
+              v-model="checkRevertTIds"
+              @change="handleCheckRevertTIds"
+            >
               {{ t('反选') }}
             </el-checkbox>
           </template>
@@ -126,7 +133,11 @@
             <el-checkbox v-model="checkAll" @change="handleCheckAll">
               {{ t('全选') }}
             </el-checkbox>
-            <el-checkbox v-mode="removeAll" @change="handleRemoveAll" :disabled="form?.riskControlLabelList.length == 0">
+            <el-checkbox
+              v-mode="removeAll"
+              @change="handleRemoveAll"
+              :disabled="form?.riskControlLabelList.length == 0"
+            >
               {{ t('全不选') }}
             </el-checkbox>
             <el-checkbox v-model="checkRevert" @change="handleCheckRevert">
@@ -174,10 +185,17 @@
             <el-checkbox v-model="checkAllTags" @change="handleCheckAllTags">
               {{ t('全选') }}
             </el-checkbox>
-            <el-checkbox v-mode="removeAllTags" @change="handleRemoveAllTags" :disabled="form?.attributeLabelList.length == 0">
+            <el-checkbox
+              v-mode="removeAllTags"
+              @change="handleRemoveAllTags"
+              :disabled="form?.attributeLabelList.length == 0"
+            >
               {{ t('全不选') }}
             </el-checkbox>
-            <el-checkbox v-model="checkRevertTags" @change="handleCheckRevertTags">
+            <el-checkbox
+              v-model="checkRevertTags"
+              @change="handleCheckRevertTags"
+            >
               {{ t('反选') }}
             </el-checkbox>
           </template>
@@ -232,15 +250,23 @@
           {{ t('重置') }}
         </el-button>
 
-          <el-button
-            type="primary"
-            :icon="useRenderIcon(Download)"
-            :loading="downloading"
-            v-if="hasAuth('EXPORT')"
-            @click="exportFile()"
-          >
-            {{ t('导出') }}
-          </el-button>
+        <el-button
+          type="primary"
+          :icon="useRenderIcon(Upload)"
+          :loading="uploading"
+          @click="importFile(t('数据导入'))"
+        >
+          {{ t('导入标签') }}
+        </el-button>
+        <el-button
+          type="primary"
+          :icon="useRenderIcon(Download)"
+          :loading="downloading"
+          v-if="hasAuth('EXPORT')"
+          @click="exportFile()"
+        >
+          {{ t('导出') }}
+        </el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -258,16 +284,16 @@ import Refresh from '@iconify-icons/ep/refresh';
 import { labelListType, tenantType } from '../utils/types';
 import type { FormInstance, CheckboxValueType } from 'element-plus';
 import Download from '@iconify-icons/ep/download';
+import Upload from '@iconify-icons/ep/upload';
 import { hasAuth } from '@/router/utils';
 
 const formRef = ref();
 const buttonRef = ref();
 const buttonRef1 = ref();
-const emits = defineEmits(['onSearch', 'exportFile']);
+const emits = defineEmits(['onSearch', 'exportFile', 'importFile']);
 const idList = reactive<string[]>([]);
 const userIds = reactive<string[]>([]);
 const sportLimmitList = reactive<string[]>([]);
-
 
 const checkAllTIds = ref(false);
 const removeAllTIds = ref(false);
@@ -288,116 +314,116 @@ const props = defineProps<{
   labelList: labelListType;
   tenantList: tenantType[];
   downloading: boolean;
+  uploading: boolean;
 }>();
 
 // watch, handleCheckAll, handleRemoveAll & handleCheckRevert for risk label
 watch(
   () => props.form.riskControlLabelList,
   val => {
-    if(!val || val.length === 0){
+    if (!val || val.length === 0) {
       checkAll.value = false;
-    } else if(val.length === props.labelList.risk.length){
+    } else if (val.length === props.labelList.risk.length) {
       checkAll.value = true;
       removeAll.value = false;
     }
   }
-)
+);
 
 const handleCheckAll = (val: CheckboxValueType) => {
-  if(val){
-    props.form.riskControlLabelList = props.labelList.risk.map(_ => _.id)
+  if (val) {
+    props.form.riskControlLabelList = props.labelList.risk.map(_ => _.id);
     removeAll.value = false;
   } else {
     props.form.riskControlLabelList = [];
   }
-}
+};
 
 const handleRemoveAll = (val: CheckboxValueType) => {
   props.form.riskControlLabelList = [];
   checkRevert.value = false;
-}
+};
 
 const handleCheckRevert = () => {
-  if(true){
+  if (true) {
     const oldArray = [...props.form.riskControlLabelList];
     props.form.riskControlLabelList = props.labelList.risk
-    .filter(_ => !oldArray.includes(_.id))
-    .map(_ => _.id)
+      .filter(_ => !oldArray.includes(_.id))
+      .map(_ => _.id);
   }
-}
+};
 
 // watch, handleCheckAllTIds, handleRemoveAllTIds & handleCheckRevertTIds for risk Merchant
 watch(
   () => props.form.tenantIds,
   val => {
-    if(!val || val.length === 0){
+    if (!val || val.length === 0) {
       checkAllTIds.value = false;
-    } else if(val.length === props.tenantList.length){
+    } else if (val.length === props.tenantList.length) {
       checkAllTIds.value = true;
       removeAllTIds.value = false;
     }
-  },
-)
+  }
+);
 
 const handleCheckAllTIds = (val: CheckboxValueType) => {
-  if(val){
-    props.form.tenantIds = props.tenantList.map(_ => _.id)
+  if (val) {
+    props.form.tenantIds = props.tenantList.map(_ => _.id);
     removeAllTIds.value = false;
   } else {
     props.form.tenantIds = [];
   }
-}
+};
 
 const handleRemoveAllTIds = (val: CheckboxValueType) => {
   props.form.tenantIds = [];
   checkRevertTIds.value = false;
-}
+};
 
 const handleCheckRevertTIds = () => {
-  if(true){
+  if (true) {
     const oldArray = [...props.form.tenantIds];
     props.form.tenantIds = props.tenantList
-    .filter(_ => !oldArray.includes(_.id))
-    .map(_ => _.id)
+      .filter(_ => !oldArray.includes(_.id))
+      .map(_ => _.id);
   }
-}
+};
 
 // watch, handleCheckAllTags, handleRemoveAllTags & handleCheckRevertTags for label list attribute
 watch(
   () => props.form.attributeLabelList,
   val => {
-    if(!val || val.length === 0){
+    if (!val || val.length === 0) {
       checkAllTags.value = false;
-    } else if(val.length === props.labelList.attr.length){
+    } else if (val.length === props.labelList.attr.length) {
       checkAllTags.value = true;
       removeAllTags.value = false;
     }
-  },
-)
+  }
+);
 
 const handleCheckAllTags = (val: CheckboxValueType) => {
-  if(val){
-    props.form.attributeLabelList = props.labelList.attr.map(_ => _.id)
+  if (val) {
+    props.form.attributeLabelList = props.labelList.attr.map(_ => _.id);
     removeAllTags.value = false;
   } else {
     props.form.attributeLabelList = [];
   }
-}
+};
 
 const handleRemoveAllTags = (val: CheckboxValueType) => {
   props.form.attributeLabelList = [];
   checkRevertTags.value = false;
-}
+};
 
 const handleCheckRevertTags = () => {
-  if(true){
+  if (true) {
     const oldArray = [...props.form.attributeLabelList];
     props.form.attributeLabelList = props.labelList.attr
-    .filter(_ => !oldArray.includes(_.id))
-    .map(_ => _.id)
+      .filter(_ => !oldArray.includes(_.id))
+      .map(_ => _.id);
   }
-}
-
+};
 
 const form = ref(props.form);
 const formatterUserNames = v => {
@@ -445,6 +471,10 @@ const search = () => {
   emits('onSearch', 'reload');
 };
 
+const importFile = (title: string) => {
+  emits('importFile', title);
+};
+
 const exportFile = () => {
   emits('exportFile');
 };
@@ -453,7 +483,6 @@ onMounted(() => {
   // initTenantList();
   getLimmitLevelList();
 });
-
 </script>
 
 <style lang="scss">
