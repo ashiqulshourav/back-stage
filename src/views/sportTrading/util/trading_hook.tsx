@@ -377,6 +377,15 @@ export function useTradingHook(type: 'early' | 'in') {
   ) => {
     item.isSale = status;
     if (item.matchId === currentMatch.matchId) currentMatch.isSale = status;
+    /* title点击之后修改状态 */
+    matchList.forEach(s =>
+      s.matchDtoList.some(_ => {
+        if (_.matchId === item.matchId) {
+          _.isSale = status;
+        }
+      })
+    );
+     getHandicapltems(true);
   };
 
   //- 修改盘赛事图标状态
