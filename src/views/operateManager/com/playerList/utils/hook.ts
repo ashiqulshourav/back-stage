@@ -12,10 +12,12 @@ import { FormInstance } from 'element-plus';
 import { useSettingStoreHook } from '@/store/settings';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
-const { exportDialog } = usePublicHooks();
+import { addDialog, closeDialog } from '@/components/ReDialog';
 import { pageSizeArr } from '@/utils/math';
+import UploadForm from '../component/U/UploadForm.vue';
 
 export function userPlayerListHook(venueType: number, category: number) {
+  const { exportDialog } = usePublicHooks();
   const route = useRoute();
   const router = useRouter();
   const settingStore = useSettingStoreHook();
@@ -40,6 +42,7 @@ export function userPlayerListHook(venueType: number, category: number) {
   const isMultiModal = ref(false);
   const isMultiDel = ref(false);
   const downloading = ref(false);
+  const uploading = ref(false);
 
   const loading = ref(true);
   const pagination = reactive<PaginationProps>({
@@ -63,7 +66,7 @@ export function userPlayerListHook(venueType: number, category: number) {
 
   const goChangeAccountPage = (row: UserAPI.operateUserList) => {
     settingStore.save_player_info({
-      page: pagination.currentPage,
+      page: pagination.currentPage
     });
     const params = JSON.parse(JSON.stringify(row));
     router.push({
@@ -72,7 +75,7 @@ export function userPlayerListHook(venueType: number, category: number) {
           ? 'OPERATEMANAGER_SPORTCHANGEACCOUNTRECORD'
           : 'OPERATEMANAGER_ESPORTCHANGEACCOUNTRECORD',
       query: {
-        userId: row.id,
+        userId: row.id
       },
       state: { params }
     });
@@ -120,7 +123,12 @@ export function userPlayerListHook(venueType: number, category: number) {
   const exportFile = async () => {
     onSearch('export').then((expRes: any) => {
       if (expRes?.count > 50000) {
-        message(`当前条件下数据量为${addThousandSeparator(expRes?.count)}，大于5万条，不支持导出!`, { type: 'error' });
+        message(
+          `当前条件下数据量为${addThousandSeparator(
+            expRes?.count
+          )}，大于5万条，不支持导出!`,
+          { type: 'error' }
+        );
       } else if (expRes?.count < 1 || expRes === null) {
         message('数据量为零，无法导出', { type: 'error' });
       } else {
@@ -134,15 +142,32 @@ export function userPlayerListHook(venueType: number, category: number) {
               venueType: venueType,
               pageSize: 50000,
               pageNum: 1,
-              export: true,
-            })
+              export: true
+            });
             message(res.msg, { type: res.code ? 'error' : 'success' });
             downloading.value = false;
           }
-        })
+        });
       }
-    })
-  }
+    });
+  };
+
+  const importFile = (title: string) => {
+    addDialog({
+      title,
+      width: '40%',
+      draggable: true,
+      closeOnClickModal: false,
+      hideFooter: true,
+      contentRenderer: ({ options, index }) =>
+        h(UploadForm, {          
+          onCloseDialog: (params: string) => {
+            closeDialog(options, index);
+            onSearch();
+          }
+        })
+    });
+  };
 
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
@@ -157,7 +182,7 @@ export function userPlayerListHook(venueType: number, category: number) {
         pageNum: pagination.currentPage
       });
       if (type === 'export') {
-        return res?.data
+        return res?.data;
       } else {
         loading.value = false;
         if (res.code) return message(res.msg, { type: 'error' });
@@ -335,6 +360,8 @@ export function userPlayerListHook(venueType: number, category: number) {
     tenantObj,
     goChangeAccountPage,
     downloading,
-    exportFile
+    exportFile,
+    uploading,
+    importFile
   };
 }
