@@ -340,10 +340,17 @@ export function useTradingHook(type: 'early' | 'in') {
       isSale: status,
       betItemsIds: betItemsIdList ?? []
     });
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    if (res.code) return;
+
+    let msg =
+      res.code === 11227
+        ? t('请先在预开售进行赛事解锁')
+        : res.code === 11226
+        ? t('请先在预开售开启赛事开售')
+        : res.msg;
+    message(msg, { type: res.code ? 'error' : 'success' });
     runLoopMatch();
     riotPrevention.value = false;
+    if (res.code) return;
     switch (classify) {
       case 'match':
         upateMatchSale(status, item as sportTradingDataAPI.MatchDtoList);
@@ -369,7 +376,16 @@ export function useTradingHook(type: 'early' | 'in') {
     item: sportTradingDataAPI.MatchDtoList
   ) => {
     item.isSale = status;
-    currentMatch.isSale = status;
+    if (item.matchId === currentMatch.matchId) currentMatch.isSale = status;
+    /* title点击之后修改状态 */
+    matchList.forEach(s =>
+      s.matchDtoList.some(_ => {
+        if (_.matchId === item.matchId) {
+          _.isSale = status;
+        }
+      })
+    );
+     getHandicapltems(true);
   };
 
   //- 修改盘赛事图标状态
