@@ -24,6 +24,10 @@
       </el-select>
     </el-form-item>
 
+    <el-form-item :label="t('标签颜色')" prop="labelColor">
+      <el-color-picker v-model="labelColor" size="large"></el-color-picker>
+    </el-form-item>
+
     <el-form-item :label="t('备注')" prop="remark">
       <el-input
         v-model="newFormInline.remark"
@@ -48,7 +52,8 @@ const props = withDefaults(defineProps<FormProps>(), {
   formInline: () => ({
     name: undefined,
     level: undefined,
-    remark: ''
+    remark: '',
+    labelColor: '',
   })
 });
 
@@ -58,6 +63,27 @@ const newFormInline = reactive(props.formInline);
 function getRef() {
   return formRef.value;
 }
+
+const getLabelColor = (label: number) => {
+  switch(label) {
+    case 1: 
+      return "#1891FF"
+    case 2:
+      return "#19BE6B"
+    case 3:
+      return "#2E4050"
+  }
+}
+
+const labelColor = ref(getLabelColor(Number(newFormInline.level)));
+
+watch(
+  () => labelColor.value,
+  () => {
+    props.formInline.labelColor = labelColor.value
+  }
+)
+
 onMounted(() => {});
 
 defineExpose({ getRef });

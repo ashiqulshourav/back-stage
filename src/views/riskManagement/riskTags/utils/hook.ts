@@ -101,13 +101,15 @@ export function useTagsHook() {
   }
 
   function openDialog(title: string, row?: RiskManagementDataAPI.RiskTagType) {
+    console.log(row)
     addDialog({
       title,
       props: {
         formInline: {
           name: row?.name ?? '',
           remark: row?.remark ?? '',
-          level: row?.level ?? undefined
+          level: row?.level ?? undefined,
+          labelColor: row?.labelColor ?? ''
         }
       },
       width: '40%',
