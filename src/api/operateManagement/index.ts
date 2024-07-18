@@ -73,5 +73,5 @@ export const operateManagementData = {
     http.request('get', '/kmg/auth/export', { data }, { responseType: 'blob' }),
 
   operateUpload: (data?: any) =>
-    http.request('post', '/operate/upload', { data })
+    http.request('post', '/kmg/auth/upload', { data })
 };
