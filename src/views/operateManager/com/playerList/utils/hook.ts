@@ -14,7 +14,7 @@ import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import { pageSizeArr } from '@/utils/math';
-import UploadForm from '../component/U/UploadForm.vue';
+import UploadForm from '../component/UploadForm.vue';
 
 export function userPlayerListHook(venueType: number, category: number) {
   const { exportDialog } = usePublicHooks();

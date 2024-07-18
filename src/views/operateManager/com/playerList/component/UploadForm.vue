@@ -1,12 +1,19 @@
 <template>
-  <el-steps class="w-full mt-3" :active="active" finish-status="success">
+  <el-steps
+    class="w-full mt-3"
+    :active="active"
+    finish-status="success"
+    v-if="active != 3"
+  >
     <el-step title="上传文件" />
     <el-step title="数据预览" />
     <el-step title="导入数据" />
     <el-step title="导入完成" />
   </el-steps>
 
+  <!-- 0 -->
   <div v-if="active == 0">
+    <!-- download excel -->
     <div class="rounded my-5 border border-gray-300 flex">
       <div class="w-[100px] flex justify-center items-center bg-gray-100">
         <el-icon><Files /></el-icon>
@@ -22,11 +29,12 @@
             )
           }}
         </p>
-        <p class="text-blue-600">
+        <p class="text-blue-600 cursor-pointer" @click="downloadTemplate">
           {{ t('下载模板') }}
         </p>
       </div>
     </div>
+    <!-- upload excel -->
     <el-upload
       action=""
       :auto-upload="false"
@@ -61,8 +69,44 @@
         </div>
       </div>
     </el-upload>
+
+    <!-- excel error -->
+    <div class="rounded my-5 border border-gray-300 flex">
+      <div class="w-[100px] flex justify-center items-center bg-gray-100">
+        <el-icon><Files /></el-icon>
+      </div>
+      <div class="p-5">
+        <p class="font-bold mb-3">
+          {{ t('正常数量条数: ') }}
+          <span class="text-green-500">{{ t('100条') }}</span>
+        </p>
+        <p class="font-bold">
+          {{ t('异常数量条数: ') }}
+          <span class="text-red-500">{{ t('100条') }}</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="rounded my-5 border border-gray-300 flex p-5 bg-[#f9f9f9]">
+      <p class="font-bold mb-3">
+        {{ t('异常提示： ') }}
+      </p>
+      <div class="text-gray-500"></div>
+    </div>
   </div>
-  <div v-if="active == 1">2</div>
+  <!-- 1 -->
+  <div v-if="active == 1">
+    <!-- Data preview -->
+  </div>
+  <!-- 3 -->
+  <div v-if="active == 3">
+    <el-result
+      icon="success"
+      :title="t('数据导入完成')"
+      :sub-title="t('您已成功导入1000条数据')"
+    >
+    </el-result>
+  </div>
 
   <!-- Note -->
   <div
@@ -84,7 +128,7 @@
     </div>
   </div>
 
-  <div class="flex justify-end mt-10">
+  <div class="flex justify-end mt-10" v-if="active != 3">
     <el-button v-if="active != 0" @click="previous">{{
       t('上一步')
     }}</el-button>
@@ -104,15 +148,13 @@ const active = ref(0);
 const uploadFormFile = ref();
 
 const next = async () => {
-  if (uploadFormFile) {
+  console.log({ uploadFormFile });
+  if (uploadFormFile.value) {
     if (active.value == 0) {
       let formData = new FormData();
       formData.append('file', uploadFormFile.value);
       const res = await API.operateImportExcel(formData);
       console.log(res);
-
-      // const res2 = await API.operateExport();
-      // console.log(res2);
 
       // const res3 = await API.operateUpload(formData);
       // console.log(res3);
@@ -143,6 +185,23 @@ const onFileChange = (file: UploadFile) => {
       type: 'error'
     });
   }
+};
+
+const downloadTemplate = async () => {
+  const res: any = await API.operateExport();
+
+  const url = window.URL.createObjectURL(
+    new Blob([res.data], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    })
+  );
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `example.xls`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 };
 </script>
 

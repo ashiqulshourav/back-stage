@@ -7,6 +7,7 @@ declare namespace OperateManagementDataAPI {
     count?: number;
     remark?: string;
     category?: number;
+    labelColor?: string;
   };
   type OperateTagListSearchProps = COMMON.ListFetchProps & {
     id?: number;
@@ -14,6 +15,7 @@ declare namespace OperateManagementDataAPI {
     name?: string;
     category?: number;
     labelType?: number;
+    labelColor?: string;
   };
   type OperateTagListType = {
     records: OperateTagType[];
