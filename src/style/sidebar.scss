@@ -279,7 +279,7 @@
       }
     }
 
-    .el-menu-item{
+    .el-menu-item:not(.submenu-title-noDropdown){
       color: #fff!important;
     }
 
