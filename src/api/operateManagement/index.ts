@@ -68,8 +68,9 @@ export const operateManagementData = {
   operateImportExcel: (data?: any) =>
     http.request('post', '/operate/importExcel', { data }),
 
+  // download template
   operateExport: (data?: any) =>
-    http.request('post', '/kmg/auth/export ', { data }),
+    http.request('get', '/kmg/auth/export', { data }, { responseType: 'blob' }),
 
   operateUpload: (data?: any) =>
     http.request('post', '/operate/upload', { data })
