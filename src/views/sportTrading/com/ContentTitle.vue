@@ -131,7 +131,9 @@ const copyText = (type: string) => {
 const changeMatchStatus = (status: number) => {
   emits('changeStatus', {
     status,
-    classify: 'match'
+    classify: 'match',
+    matchId: props.currentMatch.matchId,
+    item: props.currentMatch
   });
 };
 </script>
