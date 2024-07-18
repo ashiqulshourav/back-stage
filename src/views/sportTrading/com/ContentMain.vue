@@ -38,6 +38,7 @@
                   <div class="flex justify-between ml-4">
                     <IconGroup
                       :typeNum="item.isSale"
+                      renderType="classify"
                       @changeMatchStatus="
                         status =>
                           changeStatus({
