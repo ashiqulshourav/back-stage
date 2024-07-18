@@ -116,16 +116,16 @@ export function userPlayerListHook(venueType: number, category: number) {
     isOpenRecord.value = true;
   };
 
-  // export player list
+  // -导出用户列表
   const exportFile = async () => {
     onSearch('export').then((expRes: any) => {
       if (expRes?.count > 50000) {
         message(`当前条件下数据量为${addThousandSeparator(expRes?.count)}，大于5万条，不支持导出!`, { type: 'error' });
       } else if (expRes?.count < 1 || expRes === null) {
-        message('数据量为零，无法导出', { type: 'error' });
+        message(t('数据量为零，无法导出'), { type: 'error' });
       } else {
         exportDialog({
-          firstTitle: t('导出当前球员名单数据'),
+          firstTitle: t('导出当前用户列表'),
           router,
           callback: async () => {
             downloading.value = true;
@@ -287,13 +287,13 @@ export function userPlayerListHook(venueType: number, category: number) {
 
   onMounted(() => {
     if (route.query.tagId) {
-      let labelType: any = route.query.labelType as string;
+      let labelType: string | number = route.query.labelType as string;
       labelType = parseInt(labelType);
-      let tagId: any = route.query.tagId as string;
+      let tagId: string | number = route.query.tagId as string;
       tagId = parseInt(tagId);
       labelType === 1
-        ? form.riskControlLabelList?.push(tagId)
-        : form.attributeLabelList?.push(tagId);
+        ? (form.riskControlLabelList as (string | number)[])?.push(tagId)
+        : (form.attributeLabelList as (string | number)[]).push(tagId);
     }
     dispatchGetLabelList();
     dispatchGetTenantList();

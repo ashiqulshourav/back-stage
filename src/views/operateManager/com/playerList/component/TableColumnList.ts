@@ -1,96 +1,117 @@
 import dayjs from 'dayjs';
+import { hasAuth } from '@/router/utils';
 
-export const columns: TableColumnList = [
-  {
-    type: 'selection',
-    align: 'left'
-  },
-  {
-    label: t('用户名'),
-    prop: 'userName',
-    minWidth: 150,
-  },
-  {
-    label: t('所属商户'),
-    prop: 'tenantName',
-    minWidth: 150
-  },
-  {
-    label: t('商户编码'),
-    slot: 'tenantCode',
-    minWidth: 150
-  },
-  {
-    label: t('风控标签'),
-    slot: 'riskControlLabel',
-    width: 350
-  },
-  {
-    label: t('属性标签'),
-    slot: 'attributeLabel',
-    width: 350
-  },
-  {
-    label: t('限额等级'),
-    prop: 'limitLevel',
-    minWidth: 150
-  },
-  {
-    label: t('账号是否冻结'),
-    prop: 'isFreeze',
-    formatter({ isFreeze }) {
-      return isFreeze === 1 ? t("冻结") : t('正常')
+export const columns = (category: number): TableColumnList => {
+  return [
+    {
+      type: 'selection',
+      align: 'left'
     },
-    minWidth: 150
-  },
-  {
-    label: t('特殊限额'),
-    minWidth: 150,
-    formatter: ({
-      maxWinAmountLimit,
-      productAmountTotalLimit,
-      seriesSingleDayCumulativeCompensationLimit,
-      singleEventAccumulatedCompensationLimit
-    }: {
-      maxWinAmountLimit: number;
-      productAmountTotalLimit: number;
-      seriesSingleDayCumulativeCompensationLimit: number;
-      singleEventAccumulatedCompensationLimit: number;
-    }) => {
-      if (
-        maxWinAmountLimit ||
-        productAmountTotalLimit ||
-        seriesSingleDayCumulativeCompensationLimit ||
+    {
+      label: t('用户账号'),
+      prop: 'userName',
+
+      minWidth: 150,
+    },
+    {
+      label: t('商户名称'),
+      prop: 'tenantName',
+      minWidth: 150,
+      formatter({ tenantName }) {
+        return tenantName ?? '-'
+      },
+    },
+    {
+      label: t('商户编码'),
+      slot: 'tenantCode',
+      minWidth: 150
+    },
+    {
+      label: t('风控标签'),
+      hide: !hasAuth('RISK_LABEL'),
+      slot: 'riskControlLabel',
+      width: 350
+    },
+    {
+      label: t('属性标签'),
+      hide: !hasAuth('ATTRIBUTE_LABEL'),
+      slot: 'attributeLabel',
+      width: 350
+    },
+    {
+      label: t('限额等级'),
+      hide: !hasAuth('LIMIT_LEVEL'),
+      prop: 'limitLevel',
+      minWidth: 150
+    },
+    {
+      label: t('账号是否冻结'),
+      prop: 'isFreeze',
+      formatter({ isFreeze }) {
+        return isFreeze === 1 ? t("冻结") : t('正常')
+      },
+      minWidth: 150
+    },
+    {
+      label: t('特殊限额'),
+      minWidth: 150,
+      hide: !hasAuth('SEPCIAL_LIMIT'),
+      formatter: ({
+        maxWinAmountLimit,
+        productAmountTotalLimit,
+        seriesSingleDayCumulativeCompensationLimit,
         singleEventAccumulatedCompensationLimit
-      )
-        return t('例外限额');
-      else return t('无');
-    }
-  },
-  {
-    label: t('注册日期'),
-    prop: 'createdAt',
-    formatter({ createdAt }) {
-      return dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss')
+      }: {
+        maxWinAmountLimit: number;
+        productAmountTotalLimit: number;
+        seriesSingleDayCumulativeCompensationLimit: number;
+        singleEventAccumulatedCompensationLimit: number;
+      }) => {
+        if (
+          maxWinAmountLimit ||
+          productAmountTotalLimit ||
+          seriesSingleDayCumulativeCompensationLimit ||
+          singleEventAccumulatedCompensationLimit
+        )
+          return t('例外限额');
+        else return t('无');
+      }
     },
-    minWidth: 250
-  },
-  {
-    label: t('备注'),
-    prop: 'remark',
-    formatter({ remark }) {
-      return remark ?? '-'
+    {
+      label: t('注册日期'),
+      prop: 'createdAt',
+      formatter({ createdAt }) {
+        return dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss')
+      },
+      minWidth: 250
     },
-    minWidth: 150
-  },
+    {
+      label: t('投注延时'),
+      prop: 'betDelay',
+      formatter({ betDelay, betDelayDj }) {
+        console.log('TableColumnList.ts文件 5==============行打印=', category);
+        return 123
+        // return dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss')
+      },
+      minWidth: 250
+    },
+    {
+      label: t('备注'),
+      prop: 'remark',
+      formatter({ remark }) {
+        return remark ?? '-'
+      },
+      minWidth: 150
+    },
 
-  {
-    label: t('操作'),
-    fixed: 'right',
-    minWidth: 150,
-    slot: 'operation'
-  }
-];
+    {
+      label: t('操作'),
+      fixed: 'right',
+      minWidth: 150,
+      slot: 'operation'
+    }
+  ];
+}
 
 export const recordColumns: TableColumnList = [
   {

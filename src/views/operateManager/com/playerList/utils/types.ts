@@ -1,9 +1,9 @@
 export type searchFormType = {
   ids?: string | number | string[];
   usernames?: string | number | string[];
-  riskControlLabelList?: string[];
-  attributeLabelList?: string[];
-  tenantIds?: number | string | string[] | number[];
+  riskControlLabelList?: string[] | number[];
+  attributeLabelList: string[] | number[];
+  tenantIds: number | string | string[] | number[];
   limitLevel?: number | string;
   tenantCode?: number | string;
   venueType?: number;
