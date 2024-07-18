@@ -185,7 +185,8 @@
     .el-menu .el-menu--inline .el-sub-menu__title,
     & .el-sub-menu .el-menu-item {
       min-width: $sideBarWidth !important;
-      font-size: 12px;
+      font-size: 14px;
+      font-weight: 600;
       background-color: $subMenuBg !important;
     }
 
@@ -276,6 +277,10 @@
       &:hover {
         color: $menuTitleHover !important;
       }
+    }
+
+    .el-menu-item:not(.submenu-title-noDropdown){
+      color: #fff!important;
     }
 
     .is-active {
