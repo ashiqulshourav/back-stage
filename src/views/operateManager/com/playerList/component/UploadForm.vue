@@ -40,7 +40,6 @@
       :auto-upload="false"
       :show-file-list="false"
       :on-change="onFileChange"
-      file
     >
       <div class="rounded my-5 border border-gray-300 flex cursor-pointer">
         <div class="w-[100px] flex justify-center items-center bg-gray-100">
@@ -143,6 +142,7 @@ import { Files } from '@element-plus/icons-vue';
 import { WarningFilled } from '@element-plus/icons-vue';
 import { UploadFile } from 'element-plus';
 import { message } from '@/utils/message';
+import XLSX from 'xlsx';
 
 const active = ref(0);
 const uploadFormFile = ref();
@@ -153,7 +153,10 @@ const next = async () => {
     if (active.value == 0) {
       let formData = new FormData();
       formData.append('file', uploadFormFile.value);
-      const res = await API.operateImportExcel(formData);
+      formData.append('fileUsageCategory', '3');
+      const res = await API.esFileUpload(formData);
+
+      // const res = await API.operateImportExcel(formData);
       console.log(res);
 
       // const res3 = await API.operateUpload(formData);
@@ -170,15 +173,19 @@ const previous = () => {
   }
 };
 
-const onFileChange = (file: UploadFile) => {
+const onFileChange = async (file: UploadFile) => {
   let name = file.name;
-  console.log({ file, name });
   let kb = 10000 * 1024;
   if (['xls', 'xlsx'].includes(name.toLowerCase().split('.').pop() as string)) {
     if ((file.size as number) > kb) {
       message(t('文件过大，请重新上传'), { type: 'error' });
     } else {
       uploadFormFile.value = file.raw;
+
+      let formData = new FormData();
+      formData.append('file', uploadFormFile.value);
+      const res = await API.operateUpload(formData);
+      console.log(res);
     }
   } else {
     message(t('上传文件格式不匹配,请上传excel格式文件'), {
@@ -188,20 +195,45 @@ const onFileChange = (file: UploadFile) => {
 };
 
 const downloadTemplate = async () => {
-  const res: any = await API.operateExport();
+  // const res: any = await API.operateExport();
 
-  const url = window.URL.createObjectURL(
-    new Blob([res.data], {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    })
-  );
+  // const url = window.URL.createObjectURL(
+  //   new Blob([res.data], {
+  //     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  //   })
+  // );
 
-  const link = document.createElement('a');
-  link.href = url;
-  link.setAttribute('download', `example.xls`);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  // const link = document.createElement('a');
+  // link.href = url;
+  // link.setAttribute('download', `example.xls`);
+  // document.body.appendChild(link);
+  // link.click();
+  // document.body.removeChild(link);
+
+  const data = [
+    ['用户ID', '风控标签', '属性标签'],
+    ['6654', '套利，水军', '老用户，高活跃'],
+    ['8967', '水军', '老用户']
+  ];
+
+  // Create a workbook and worksheet
+  const ws = XLSX.utils.aoa_to_sheet(data);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+  // Generate a Blob object containing the Excel file
+  const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+  const blob = new Blob([wbout], { type: 'application/octet-stream' });
+
+  // Create a link element, hide it, direct it towards the blob, and then 'click' it programatically
+  const a = document.createElement('a');
+  document.body.appendChild(a);
+  a.style = 'display: none';
+  const url = window.URL.createObjectURL(blob);
+  a.href = url;
+  a.download = 'example.xlsx';
+  a.click();
+  window.URL.revokeObjectURL(url);
 };
 </script>
 
