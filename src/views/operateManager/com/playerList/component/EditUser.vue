@@ -2,221 +2,278 @@
   <el-dialog
     v-model="isEditUser"
     class="divide-y divide-slate-200"
-    width="800"
+    width="850"
+    :align-center="true"
     @close="emits('onClose')"
   >
     <template #title>
-      <p class="pl-5 font-medium">{{ t('用户编辑') }}</p>
+      <p class="pl-5 font-medium">{{ t('用户设置') }}</p>
     </template>
-    <el-form class="p-5 max-h-[600px] overflow-y-scroll" label-width="160">
-      <el-form-item prop="" :label="userData.userName">
-        <el-text>{{ userData.id }}</el-text>
-      </el-form-item>
-      <el-text class="font-bold">{{ t('用户标签') }}</el-text>
-      <el-form-item prop="" :label="t('风控标签: ')">
-        <el-row class="flex w-full items-center justify-between">
-          <p>{{ t('每个用户最多添加20个风控标签') }}</p>
-          <p
-            @click="emits('onOpenRecord', form.id, 1)"
-            v-if="hasAuth('GETLABELLIST')"
-            class="text-primary text-right cursor-pointer"
-          >
-            {{ t('风控标签修改记录') }}>>
-          </p>
-        </el-row>
+    <div class="p-5 max-h-[600px] h-[600px]">
+      <el-scrollbar>
+        <div class="flex items-center mt-2">
+          <el-form-item :label="t('用户账号: ')" class="mr-10">
+            <el-text>{{ userData.userName }}</el-text>
+          </el-form-item>
+          <el-form-item :label="t('帐号启用: ')">
+            <el-switch
+              v-model="form.isFreeze"
+              inline-prompt
+              inactive-color="#a6a6a6"
+              active-text="开"
+              inactive-text="关"
+              :active-value="0"
+              :inactive-value="1"
+            />
+          </el-form-item>
+        </div>
 
-        <el-row :gutter="20" class="mt-2 w-full">
-          <LabelListCom
-            @onClose="handleDeleteLabel"
-            :labels="updatedLabels.risk"
-            type="risk"
-          />
-        </el-row>
-        <el-row class="mt-2 w-full" v-if="!isRiskLabelAdd">
-          <el-col :span="24" class="!flex justify-end">
-            <el-button
-              v-if="hasAuth('ADDUSERLABEL')"
-              :icon="Plus"
-              type="primary"
-              @click="isRiskLabelAdd = true"
-              class="text-primary"
-              >添加标签</el-button
-            >
-          </el-col>
-        </el-row>
-        <el-row class="mt-2 w-full" v-else>
-          <el-col :span="14">
-            <el-select multiple clearable filterable v-model="labelForm.risk">
-              <el-option
-                v-for="label in labelList.risk"
-                :key="label.id"
-                :label="label.name"
-                :value="label.id"
+        <el-collapse v-model="activeNames" @change="handleChange">
+          <el-collapse-item name="1">
+            <template #title>
+              <DialogListTitle
+                :title="t('属性标签')"
+                :content="t('每个用户最多添加20个属性标签')"
               />
-            </el-select>
-          </el-col>
-          <el-col :span="10" class="!flex justify-end">
-            <el-button
-              v-if="hasAuth('SETTING')"
-              type="primary"
-              @click="handleAddLabel(labelForm.risk)"
-              class="w-1/3"
-              >{{ t('添加') }}</el-button
-            >
-            <el-button
-              v-if="hasAuth('SETTING')"
-              class="w-1/3"
-              @click="handleDelLabel('risk')"
-              >{{ t('取消') }}</el-button
-            >
-          </el-col>
-        </el-row>
-      </el-form-item>
-      <el-form-item prop="" :label="t('属性标签:')">
-        <el-row class="flex w-full items-center justify-between">
-          <p>{{ t('每个用户最多添加20个属性标签') }}</p>
-          <p
-            @click="emits('onOpenRecord', form.id, 2)"
-            v-if="hasAuth('GETLABELLIST')"
-            class="text-primary text-right cursor-pointer"
-          >
-            {{ t('属性标签修改记录') }}>>
-          </p>
-        </el-row>
-        <el-row :gutter="20" class="mt-2 w-full">
-          <LabelListCom
-            @onClose="handleDeleteLabel"
-            :labels="updatedLabels.attr"
-            type="attr"
-          />
-        </el-row>
-        <el-row class="mt-2 w-full" v-if="!isAttrLabelAdd">
-          <el-col class="!flex justify-end">
-            <el-button
-              v-if="hasAuth('ADDUSERLABEL')"
-              :icon="Plus"
-              type="primary"
-              @click="isAttrLabelAdd = true"
-              class="text-primary"
-              >{{ t('添加标签') }}</el-button
-            >
-          </el-col>
-        </el-row>
-        <el-row class="mt-2 w-full" v-else>
-          <el-col :span="14">
-            <el-select multiple clearable filterable v-model="labelForm.attr">
-              <el-option
-                v-for="label in labelList.attr"
-                :key="label.id"
-                :label="label.name"
-                :value="label.id"
+            </template>
+            <div>
+              <p
+                @click="emits('onOpenRecord', form.id, 2)"
+                v-if="hasAuth('GETLABELLIST')"
+                class="text-primary text-right cursor-pointer"
+              >
+                {{ t('属性标签修改记录') }}>>
+              </p>
+              <el-row :gutter="20" class="mt-2 w-full">
+                <LabelListCom
+                  @onClose="handleDeleteLabel"
+                  :labels="updatedLabels.attr"
+                  type="attr"
+                />
+              </el-row>
+              <el-row class="mt-2 w-full" v-if="!isAttrLabelAdd">
+                <el-col class="!flex justify-end">
+                  <el-button
+                    v-if="hasAuth('ADDUSERLABEL')"
+                    :icon="Plus"
+                    type="primary"
+                    size="small"
+                    @click="isAttrLabelAdd = true"
+                    class="text-primary"
+                    >{{ t('添加标签') }}</el-button
+                  >
+                </el-col>
+              </el-row>
+              <el-row class="mt-2 w-full" v-else>
+                <el-col :span="14">
+                  <el-select
+                    multiple
+                    clearable
+                    filterable
+                    v-model="labelForm.attr"
+                  >
+                    <el-option
+                      v-for="label in labelList.attr"
+                      :key="label.id"
+                      :label="label.name"
+                      :value="label.id"
+                    />
+                  </el-select>
+                </el-col>
+                <el-col :span="10" class="!flex justify-end">
+                  <el-button
+                    type="primary"
+                    @click="handleAddLabel(labelForm.attr, 'attr')"
+                    class="w-1/3"
+                    size="small"
+                    >{{ t('添加') }}</el-button
+                  >
+                  <el-button
+                    size="small"
+                    class="w-1/3"
+                    @click="handleDelLabel('attr')"
+                    >{{ t('取消') }}</el-button
+                  >
+                </el-col>
+              </el-row>
+            </div>
+          </el-collapse-item>
+
+          <el-collapse-item name="2">
+            <template #title>
+              <DialogListTitle
+                :title="t('风控标签')"
+                :content="t('每个用户最多添加20个风控标签')"
               />
-            </el-select>
-          </el-col>
-          <el-col :span="10" class="!flex justify-end">
-            <el-button
-              type="primary"
-              @click="handleAddLabel(labelForm.attr, 'attr')"
-              class="w-1/3"
-              >{{ t('添加') }}</el-button
+            </template>
+
+            <el-row class="flex w-full items-center justify-between">
+              <p
+                @click="emits('onOpenRecord', form.id, 1)"
+                v-if="hasAuth('GETLABELLIST')"
+                class="text-primary text-right cursor-pointer"
+              >
+                {{ t('风控标签修改记录') }}>>
+              </p>
+            </el-row>
+
+            <el-row :gutter="20" class="mt-2 w-full">
+              <LabelListCom
+                @onClose="handleDeleteLabel"
+                :labels="updatedLabels.risk"
+                type="risk"
+              />
+            </el-row>
+            <el-row class="mt-2 w-full" v-if="!isRiskLabelAdd">
+              <el-col :span="24" class="!flex justify-end">
+                <el-button
+                  v-if="hasAuth('ADDUSERLABEL')"
+                  :icon="Plus"
+                  type="primary"
+                  @click="isRiskLabelAdd = true"
+                  class="text-primary"
+                  >添加标签</el-button
+                >
+              </el-col>
+            </el-row>
+            <el-row class="mt-2 w-full" v-else>
+              <el-col :span="14">
+                <el-select
+                  multiple
+                  clearable
+                  filterable
+                  v-model="labelForm.risk"
+                >
+                  <el-option
+                    v-for="label in labelList.risk"
+                    :key="label.id"
+                    :label="label.name"
+                    :value="label.id"
+                  />
+                </el-select>
+              </el-col>
+              <el-col :span="10" class="!flex justify-end">
+                <el-button
+                  v-if="hasAuth('SETTING')"
+                  type="primary"
+                  @click="handleAddLabel(labelForm.risk)"
+                  class="w-1/3"
+                  >{{ t('添加') }}</el-button
+                >
+                <el-button
+                  v-if="hasAuth('SETTING')"
+                  class="w-1/3"
+                  @click="handleDelLabel('risk')"
+                  >{{ t('取消') }}</el-button
+                >
+              </el-col>
+            </el-row>
+          </el-collapse-item>
+
+          <el-collapse-item>
+            <template #title>
+              {{ t('投注延时') }}
+            </template>
+            <div>
+              <p
+                @click="emits('onOpenRecord', form.id, 2)"
+                v-if="hasAuth('GETLABELLIST')"
+                class="text-primary text-right cursor-pointer"
+              >
+                {{ t('修改记录') }}>>
+              </p>
+              <ModifyContent />
+            </div>
+          </el-collapse-item>
+
+          <el-collapse-item :title="t('限额等级设置')" name="3">
+            <div class="mb-2">
+              <el-select v-model="form.limitLevel" clearable>
+                <el-option
+                  v-for="item in limitList"
+                  :key="item.levelLimit"
+                  :label="item.levelLimit"
+                  :value="item.levelLimit"
+                />
+              </el-select>
+            </div>
+            <pure-table
+              maxHeight="500"
+              align-whole="center"
+              size="small"
+              border
+              :data="tableData"
+              :columns="limitColumns"
+              :header-cell-style="tableHeaderStyleBlue"
+            />
+          </el-collapse-item>
+          <el-collapse-item :title="t('特殊限额')" name="4">
+            <el-radio-group v-model="isSpecial">
+              <el-radio class="w-full" :value="false">{{ t('无') }}</el-radio>
+              <el-radio class="w-full" :value="true">{{
+                t('例外限额')
+              }}</el-radio>
+            </el-radio-group>
+
+            <el-row
+              :gutter="5"
+              class="w-full items-center tex-xs"
+              v-if="isSpecial"
             >
-            <el-button class="w-1/3" @click="handleDelLabel('attr')">{{
-              t('取消')
-            }}</el-button>
-          </el-col>
-        </el-row>
-      </el-form-item>
-      <el-form-item :label="t('帐号启用: ')">
-        <el-switch
-          v-model="form.isFreeze"
-          inline-prompt
-          inactive-color="#a6a6a6"
-          active-text="开"
-          inactive-text="关"
-          :active-value="0"
-          :inactive-value="1"
-        />
-      </el-form-item>
-      <el-form-item :label="t('限额等级设置：')" prop="type">
-        <el-select v-model="form.limitLevel" clearable>
-          <el-option
-            v-for="item in limitList"
-            :key="item.levelLimit"
-            :label="item.levelLimit"
-            :value="item.levelLimit"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <pure-table
-          maxHeight="500"
-          align-whole="center"
-          size="small"
-          border
-          :data="tableData"
-          :columns="limitColumns"
-          :header-cell-style="tableHeaderStyleBlue"
-        />
-      </el-form-item>
-      <el-form-item :label="t('特殊限额: ')">
-        <el-radio-group v-model="isSpecial">
-          <el-radio class="w-full" :value="false">{{ t('无') }}</el-radio>
-          <el-radio class="w-full" :value="true">{{ t('例外限额') }}</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item v-if="isSpecial">
-        <el-row :gutter="5" class="w-full items-center">
-          <el-col :span="5" class="text-center">
-            <el-text>{{ t('单注投注限额') }}</el-text>
-          </el-col>
-          <el-col :span="5" class="text-center">
-            <el-text>{{ t('单注赔付限额') }}</el-text>
-          </el-col>
-          <el-col :span="7" class="text-center">
-            <el-text>{{ t('单场赛事累计赔付限额(不分早盘滚球)') }}</el-text>
-          </el-col>
-          <el-col :span="7" class="text-center">
-            <el-text>{{ t('串关单日累计赔付限额(不分早盘滚球)') }}</el-text>
-          </el-col>
-          <el-col :span="5" class="text-center">
+              <el-col :span="5" class="text-center">
+                <span>{{ t('单注投注限额') }}</span>
+              </el-col>
+              <el-col :span="5" class="text-center">
+                <span>{{ t('单注赔付限额') }}</span>
+              </el-col>
+              <el-col :span="7" class="text-center">
+                <span>{{ t('单场赛事累计赔付限额(不分早盘滚球)') }}</span>
+              </el-col>
+              <el-col :span="7" class="text-center">
+                <span>{{ t('串关单日累计赔付限额(不分早盘滚球)') }}</span>
+              </el-col>
+              <el-col :span="5" class="text-center">
+                <el-input
+                  v-model="form.specialLimit.productAmountTotalLimit"
+                  :formatter="(v: string) => formatNumber(v, 13)"
+                />
+              </el-col>
+              <el-col :span="5" class="text-center">
+                <el-input
+                  v-model="form.specialLimit.maxWinAmountLimit"
+                  :formatter="(v: string) => formatNumber(v, 13)"
+                />
+              </el-col>
+              <el-col :span="7" class="text-center">
+                <el-input
+                  v-model="
+                    form.specialLimit.singleEventAccumulatedCompensationLimit
+                  "
+                  :formatter="(v: string) => formatNumber(v, 13)"
+                />
+              </el-col>
+              <el-col :span="7" class="text-center">
+                <el-input
+                  v-model="
+                    form.specialLimit.seriesSingleDayCumulativeCompensationLimit
+                  "
+                  :formatter="(v: string) => formatNumber(v, 13)"
+                />
+              </el-col>
+            </el-row>
+          </el-collapse-item>
+          <el-collapse-item :title="t('备注')">
             <el-input
-              v-model="form.specialLimit.productAmountTotalLimit"
-              :formatter="(v: string) => formatNumber(v, 13)"
+              :placeholder="t('只能输入255个字符的内容')"
+              maxLength="255"
+              v-model="form.remark"
+              type="textarea"
             />
-          </el-col>
-          <el-col :span="5" class="text-center">
-            <el-input
-              v-model="form.specialLimit.maxWinAmountLimit"
-              :formatter="(v: string) => formatNumber(v, 13)"
-            />
-          </el-col>
-          <el-col :span="7" class="text-center">
-            <el-input
-              v-model="
-                form.specialLimit.singleEventAccumulatedCompensationLimit
-              "
-              :formatter="(v: string) => formatNumber(v, 13)"
-            />
-          </el-col>
-          <el-col :span="7" class="text-center">
-            <el-input
-              v-model="
-                form.specialLimit.seriesSingleDayCumulativeCompensationLimit
-              "
-              :formatter="(v: string) => formatNumber(v, 13)"
-            />
-          </el-col>
-        </el-row>
-      </el-form-item>
-      <el-form-item :label="t('备注：')">
-        <el-input
-          :placeholder="t('只能输入255个字符的内容')"
-          maxLength="255"
-          v-model="form.remark"
-          type="textarea"
-        />
-      </el-form-item>
-    </el-form>
+          </el-collapse-item>
+        </el-collapse>
+      </el-scrollbar>
+    </div>
+
     <template #footer>
       <div class="pr-5">
         <el-button v-if="hasAuth('SETTING')" @click="emits('onClose')">{{
@@ -241,7 +298,7 @@ import { Plus } from '@element-plus/icons-vue';
 import { message } from '@/utils/message';
 import { usePublicHooks } from '@/hooks';
 import { ElMessageBox } from 'element-plus';
-
+import DialogListTitle from './DialogListTitle.vue';
 import {
   labelListType,
   updateUserFormType,
@@ -250,6 +307,7 @@ import {
 } from '../utils/types';
 import { formatNumber } from '@/utils/formatNumber';
 import LabelListCom from './LabelListCom.vue';
+import ModifyContent from './ModifyContent.vue';
 
 const props = defineProps<{
   isEditUser: boolean;
@@ -257,6 +315,11 @@ const props = defineProps<{
   userData: UserAPI.operateUserList;
   category: number;
 }>();
+
+const activeNames = ref(['1']);
+const handleChange = (val: string[]) => {
+  console.log(val);
+};
 
 const { tableHeaderStyleBlue } = usePublicHooks();
 
@@ -338,14 +401,6 @@ const handleDeleteLabel = (label: number, type = 'risk') => {
     );
     if (index !== -1) updatedLabels.attr.splice(index, 1);
   }
-  // ElMessageBox.confirm(`${t('您确定要删除吗?')} `, '系统提示', {
-  //   type: 'warning',
-  //   center: true
-  // }).then(() => {
-  //   emits('onDel', [form.id], [label]);
-  //   if (labelForm.attr) labelForm.attr.length = 0;
-  //   if (labelForm.risk) labelForm.risk.length = 0;
-  // });
 };
 
 const handleAddLabel = (labels: number[], type = 'risk') => {

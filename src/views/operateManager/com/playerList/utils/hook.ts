@@ -19,7 +19,6 @@ export function userPlayerListHook(venueType: number, category: number) {
   const route = useRoute();
   const router = useRouter();
   const settingStore = useSettingStoreHook();
-  // data list
   const dataList = reactive<UserAPI.operateUserList[]>([]);
   const selectedDataList = reactive<UserAPI.operateUserList[]>([]);
   const labelList = reactive<labelListType>({
@@ -34,7 +33,6 @@ export function userPlayerListHook(venueType: number, category: number) {
   const userData = reactive<UserAPI.operateUserList>(
     {} as UserAPI.operateUserList
   );
-  // config variables
   const isEditUser = ref(false);
   const isOpenRecord = ref(false);
   const isMultiModal = ref(false);
@@ -103,6 +101,7 @@ export function userPlayerListHook(venueType: number, category: number) {
     selectedDataList.push(...val);
   }
 
+  //- 修改用户
   const handleUpdateUser = (row: UserAPI.operateUserList) => {
     Object.assign(userData, row);
     isEditUser.value = true;

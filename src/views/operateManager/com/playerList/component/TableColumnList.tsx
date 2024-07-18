@@ -11,15 +11,15 @@ export const columns = (category: number): TableColumnList => {
       label: t('用户账号'),
       prop: 'userName',
 
-      minWidth: 150,
+      minWidth: 150
     },
     {
       label: t('商户名称'),
       prop: 'tenantName',
       minWidth: 150,
       formatter({ tenantName }) {
-        return tenantName ?? '-'
-      },
+        return tenantName ?? '-';
+      }
     },
     {
       label: t('商户编码'),
@@ -48,7 +48,7 @@ export const columns = (category: number): TableColumnList => {
       label: t('账号是否冻结'),
       prop: 'isFreeze',
       formatter({ isFreeze }) {
-        return isFreeze === 1 ? t("冻结") : t('正常')
+        return isFreeze === 1 ? t('冻结') : t('正常');
       },
       minWidth: 150
     },
@@ -81,7 +81,7 @@ export const columns = (category: number): TableColumnList => {
       label: t('注册日期'),
       prop: 'createdAt',
       formatter({ createdAt }) {
-        return dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss')
+        return dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss');
       },
       minWidth: 250
     },
@@ -89,9 +89,16 @@ export const columns = (category: number): TableColumnList => {
       label: t('投注延时'),
       prop: 'betDelay',
       formatter({ betDelay, betDelayDj }) {
-        console.log('TableColumnList.ts文件 5==============行打印=', category);
-        return 123
-        // return dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss')
+        let str = '';
+        if (category === 0) {
+          str =
+            (betDelay ? betDelay + 's' : '-') +
+            ' , ' +
+            (betDelayDj ? betDelayDj + 's' : '-');
+        } else {
+          str = betDelayDj ? betDelayDj + 's' : '-';
+        }
+        return <span class="text-sm">{str}</span>;
       },
       minWidth: 250
     },
@@ -99,7 +106,7 @@ export const columns = (category: number): TableColumnList => {
       label: t('备注'),
       prop: 'remark',
       formatter({ remark }) {
-        return remark ?? '-'
+        return remark ?? '-';
       },
       minWidth: 150
     },
@@ -111,7 +118,7 @@ export const columns = (category: number): TableColumnList => {
       slot: 'operation'
     }
   ];
-}
+};
 
 export const recordColumns: TableColumnList = [
   {
