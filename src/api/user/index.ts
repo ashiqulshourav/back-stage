@@ -88,6 +88,12 @@ export const user = {
         data
       }
     ),
+
+  //- 投注延时操作记录请求
+  getBettingDelayRecord: (data: { userId: string }) =>
+    http.request<UserAPI.userBaseResType>('post', '/operate/getBettingDelayRecord', { data }
+    ),
+
   updateUserLevelLimit: (data: {
     list: UserAPI.updateLimmitReqType[];
     type: number;

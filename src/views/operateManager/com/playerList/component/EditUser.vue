@@ -28,7 +28,7 @@
           </el-form-item>
         </div>
 
-        <el-collapse v-model="activeNames" @change="handleChange">
+        <el-collapse v-model="activeNames">
           <el-collapse-item name="1">
             <template #title>
               <DialogListTitle
@@ -44,14 +44,14 @@
               >
                 {{ t('属性标签修改记录') }}>>
               </p>
-              <el-row :gutter="20" class="mt-2 w-full">
+              <el-row :gutter="20" class="mt-2 w-full !ml-2">
                 <LabelListCom
                   @onClose="handleDeleteLabel"
                   :labels="updatedLabels.attr"
                   type="attr"
                 />
               </el-row>
-              <el-row class="mt-2 w-full" v-if="!isAttrLabelAdd">
+              <el-row class="mt-2 mr w-full" v-if="!isAttrLabelAdd">
                 <el-col class="!flex justify-end">
                   <el-button
                     v-if="hasAuth('ADDUSERLABEL')"
@@ -176,13 +176,19 @@
             </template>
             <div>
               <p
-                @click="emits('onOpenRecord', form.id, 2)"
+                @click="openDelayDialog"
                 v-if="hasAuth('GETLABELLIST')"
                 class="text-primary text-right cursor-pointer"
               >
                 {{ t('修改记录') }}>>
               </p>
-              <ModifyContent />
+              <ModifyContent
+                v-model:betDelay="form.betDelay"
+                v-model:betDelayDj="form.betDelayDj"
+                v-model:sportIds="form.sportIds"
+                v-model:sportIdsDj="form.sportIdsDj"
+                :category="category"
+              />
             </div>
           </el-collapse-item>
 
@@ -317,9 +323,6 @@ const props = defineProps<{
 }>();
 
 const activeNames = ref(['1']);
-const handleChange = (val: string[]) => {
-  console.log(val);
-};
 
 const { tableHeaderStyleBlue } = usePublicHooks();
 
@@ -540,6 +543,15 @@ const handleUpdate = () => {
     });
     if (deletedIds.length !== 0) emits('onDel', [form.id], deletedIds);
 
+    //- 添加投注延时内容
+    if (
+      (form.betDelay && !form.sportIds) ||
+      (!form.betDelay && form.sportIds) ||
+      (form.betDelayDj && !form.sportIdsDj) ||
+      (!form.betDelayDj && form.sportIdsDj)
+    ) {
+      return message(t('投注延时时间或赛种不能为空'), { type: 'error' });
+    }
     if (isSpecial.value) {
       form.specialLimit.productAmountTotalLimit = parseInt(
         form.specialLimit.productAmountTotalLimit
@@ -560,6 +572,14 @@ const handleUpdate = () => {
   });
 };
 
+//- 打开投注延时弹窗
+const openDelayDialog = async () => {
+  const res = await API.getBettingDelayRecord({
+    userId: form.id
+  });
+  console.log('EditUser.vue文件 578==============行打印=', res);
+};
+
 onUpdated(() => {
   initLimitList();
   const {
@@ -567,6 +587,10 @@ onUpdated(() => {
     isFreeze,
     limitLevel,
     remark,
+    sportIds,
+    sportIdsDj,
+    betDelay,
+    betDelayDj,
     maxWinAmountLimit,
     productAmountTotalLimit,
     seriesSingleDayCumulativeCompensationLimit,
@@ -579,6 +603,10 @@ onUpdated(() => {
   form.limitLevel = limitLevel;
   form.remark = remark;
   form.specialLimit = {} as specialLimitType;
+  form.sportIds = sportIds;
+  form.sportIdsDj = sportIdsDj;
+  form.betDelay = betDelay;
+  form.betDelayDj = betDelayDj;
   if (
     maxWinAmountLimit ||
     productAmountTotalLimit ||

@@ -54,7 +54,6 @@ export function userPlayerListHook(venueType: number, category: number) {
     currentPage: 1,
     background: true
   });
-  //form data
   const form = reactive<searchFormType>({} as searchFormType);
 
   const recordForm = reactive<recordFormType>({} as recordFormType);
@@ -199,7 +198,7 @@ export function userPlayerListHook(venueType: number, category: number) {
   const handleCloseEditUser = () => {
     isEditUser.value = false;
   };
-
+  //- 修改记录表单
   const openRecordList = (id: string, labelType: number) => {
     isOpenRecord.value = true;
     recordForm.id = id;

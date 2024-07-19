@@ -119,6 +119,10 @@ declare namespace UserAPI {
     tenantName: string;
     tenantCode: string;
     isFreeze?: any;
+    sportIds: string | number;
+    sportIdsDj: string | number;
+    betDelay: number;
+    betDelayDj: number;
     remark?: string;
     limitLevel?: number;
     maxWinAmountLimit: number;

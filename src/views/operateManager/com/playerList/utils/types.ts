@@ -11,6 +11,7 @@ export type searchFormType = {
   timeVal?: string | number;
   beginTime?: string;
   endTime?: string;
+  betDelayed: number;
 };
 export type specialLimitType = {
   productAmountTotalLimit: number;
@@ -25,6 +26,7 @@ export type updateUserFormType = {
   isFreeze?: number;
   remark?: string;
   specialLimit: specialLimitType;
+  [key: string]: any;
   // singleBetLimit: number;
   // singleEventCompensationLimit: string;
   // createdAt: string | number;
