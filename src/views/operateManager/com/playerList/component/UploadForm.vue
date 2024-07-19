@@ -153,7 +153,7 @@ import { Files } from '@element-plus/icons-vue';
 import { WarningFilled } from '@element-plus/icons-vue';
 import { UploadFile } from 'element-plus';
 import { message } from '@/utils/message';
-import { utils } from 'xlsx';
+import { utils, write } from 'xlsx';
 import { userColumns } from './TableColumnList';
 import { usePublicHooks } from '@/hooks';
 
@@ -329,7 +329,7 @@ const downloadTemplate = async () => {
   utils.book_append_sheet(wb, ws, 'Sheet1');
 
   // Generate a Blob object containing the Excel file
-  const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+  const wbout = write(wb, { bookType: 'xlsx', type: 'array' });
   const blob = new Blob([wbout], { type: 'application/octet-stream' });
 
   // Create a link element, hide it, direct it towards the blob, and then 'click' it programatically
