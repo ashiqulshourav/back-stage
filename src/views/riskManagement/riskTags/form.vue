@@ -64,8 +64,9 @@ function getRef() {
   return formRef.value;
 }
 
-const getLabelColor = (label: number) => {
-  switch(label) {
+const getLabelColor = (level: number, labelColor?: string) => {
+  if(labelColor) return labelColor;
+  switch(level) {
     case 1: 
       return "#A30014"
     case 2:
@@ -75,7 +76,7 @@ const getLabelColor = (label: number) => {
   }
 }
 
-const labelColor = ref(getLabelColor(Number(newFormInline.level)));
+const labelColor = ref(getLabelColor(Number(newFormInline.level), newFormInline.labelColor));
 
 watch(
   () => labelColor.value,

@@ -70,7 +70,7 @@
     </el-upload>
 
     <!-- excel error -->
-    <div class="rounded my-5 border border-gray-300 flex">
+    <!-- <div class="rounded my-5 border border-gray-300 flex">
       <div class="w-[100px] flex justify-center items-center bg-gray-100">
         <el-icon><Files /></el-icon>
       </div>
@@ -91,11 +91,22 @@
         {{ t('异常提示： ') }}
       </p>
       <div class="text-gray-500"></div>
-    </div>
+    </div> -->
   </div>
   <!-- 1 -->
   <div v-if="active == 1">
     <!-- Data preview -->
+    <pure-table
+      class="my-5"
+      height="400"
+      align-whole="center"
+      table-layout="auto"
+      border
+      stripe
+      :data="users"
+      :columns="userColumns"
+      :header-cell-style="tableHeaderStyle"
+    ></pure-table>
   </div>
   <!-- 3 -->
   <div v-if="active == 3">
@@ -143,9 +154,90 @@ import { WarningFilled } from '@element-plus/icons-vue';
 import { UploadFile } from 'element-plus';
 import { message } from '@/utils/message';
 import { utils, write } from 'xlsx';
+import { userColumns } from './TableColumnList';
+import { usePublicHooks } from '@/hooks';
+
+const { tableHeaderStyle } = usePublicHooks();
 
 const active = ref(0);
 const uploadFormFile = ref();
+const users = reactive<OperateManagementDataAPI.userType[]>([
+  // {
+  //   userid: 234,
+  //   riskControlLabel: 'sdfsdf',
+  //   attributeLabel: 'dsfsdf'
+  // },
+  // {
+  //   userid: 234,
+  //   riskControlLabel: 'sdfsdf',
+  //   attributeLabel: 'dsfsdf'
+  // },
+  // {
+  //   userid: 234,
+  //   riskControlLabel: 'sdfsdf',
+  //   attributeLabel: 'dsfsdf'
+  // },
+  // {
+  //   userid: 234,
+  //   riskControlLabel: 'sdfsdf',
+  //   attributeLabel: 'dsfsdf'
+  // },
+  // {
+  //   userid: 234,
+  //   riskControlLabel: 'sdfsdf',
+  //   attributeLabel: 'dsfsdf'
+  // },
+  // {
+  //   userid: 234,
+  //   riskControlLabel: 'sdfsdf',
+  //   attributeLabel: 'dsfsdf'
+  // },
+  // {
+  //   userid: 234,
+  //   riskControlLabel: 'sdfsdf',
+  //   attributeLabel: 'dsfsdf'
+  // },
+  // {
+  //   userid: 234,
+  //   riskControlLabel: 'sdfsdf',
+  //   attributeLabel: 'dsfsdf'
+  // },
+  // {
+  //   userid: 234,
+  //   riskControlLabel: 'sdfsdf',
+  //   attributeLabel: 'dsfsdf'
+  // },
+  // {
+  //   userid: 234,
+  //   riskControlLabel: 'sdfsdf',
+  //   attributeLabel: 'dsfsdf'
+  // },
+  // {
+  //   userid: 234,
+  //   riskControlLabel: 'sdfsdf',
+  //   attributeLabel: 'dsfsdf'
+  // },
+  // {
+  //   userid: 234,
+  //   riskControlLabel: 'sdfsdf',
+  //   attributeLabel: 'dsfsdf'
+  // },
+  // {
+  //   userid: 234,
+  //   riskControlLabel: 'sdfsdf',
+  //   attributeLabel: 'dsfsdf'
+  // },
+  // {
+  //   userid: 234,
+  //   riskControlLabel: 'sdfsdf',
+  //   attributeLabel: 'dsfsdf'
+  // },
+  // {
+  //   userid: 234,
+  //   riskControlLabel: 'sdfsdf',
+  //   attributeLabel: 'dsfsdf'
+  // }
+]);
 
 const next = async () => {
   console.log({ uploadFormFile });
@@ -153,16 +245,15 @@ const next = async () => {
     if (active.value == 0) {
       let formData = new FormData();
       formData.append('file', uploadFormFile.value);
-      formData.append('fileUsageCategory', '3');
-      const res = await API.esFileUpload(formData);
+      const res = await API.operateImportExcel(formData);
 
-      // const res = await API.operateImportExcel(formData);
-      console.log(res);
-
-      // const res3 = await API.operateUpload(formData);
-      // console.log(res3);
-
-      // if (active.value++ > 3) active.value = 0;
+      if (!res.code) {
+        users.push(...res.data);
+        if (active.value++ > 3) active.value = 0;
+      }
+    }
+    if (active.value == 1) {
+      if (active.value++ > 3) active.value = 0;
     }
   }
 };
@@ -182,10 +273,27 @@ const onFileChange = async (file: UploadFile) => {
     } else {
       uploadFormFile.value = file.raw;
 
-      let formData = new FormData();
-      formData.append('file', uploadFormFile.value);
-      const res = await API.operateUpload(formData);
-      console.log(res);
+      // const reader = new FileReader();
+      // reader.onload = async (e: ProgressEvent<FileReader>) => {
+      //   const data = new Uint8Array(e.target!.result as ArrayBuffer);
+      //   const workbook = XLSX.read(data, { type: 'array' });
+
+      //   // Assuming your Excel file has only one sheet
+      //   const sheetName = workbook.SheetNames[0];
+      //   const sheet = workbook.Sheets[sheetName];
+
+      //   // Parse sheet data
+      //   const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+      //   console.log(jsonData);
+      //   // jsonData will contain the parsed Excel data as an array of objects
+      // };
+      // reader.readAsArrayBuffer(uploadFormFile.value);
+
+      // let formData = new FormData();
+      // formData.append('file', uploadFormFile.value);
+      // const res = await API.operateImportExcel(formData);
+      // console.log(res);
     }
   } else {
     message(t('上传文件格式不匹配,请上传excel格式文件'), {
@@ -208,9 +316,8 @@ const downloadTemplate = async () => {
   // link.click();
   // document.body.removeChild(link);
   const data = [
-    ['用户ID', '风控标签', '属性标签'],
-    ['6654', '套利，水军', '老用户，高活跃'],
-    ['8967', '水军', '老用户']
+    ['userid', 'attributeLabel', 'riskControlLabel'],
+    ['1', '套利，水军', '老用户，高活跃']
   ];
   // Create a workbook and worksheet
   const ws = utils.aoa_to_sheet(data);
