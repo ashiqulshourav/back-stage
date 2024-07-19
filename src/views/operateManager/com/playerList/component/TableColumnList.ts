@@ -8,7 +8,7 @@ export const columns: TableColumnList = [
   {
     label: t('用户名'),
     prop: 'userName',
-    minWidth: 150,
+    minWidth: 150
   },
   {
     label: t('所属商户'),
@@ -39,7 +39,7 @@ export const columns: TableColumnList = [
     label: t('账号是否冻结'),
     prop: 'isFreeze',
     formatter({ isFreeze }) {
-      return isFreeze === 1 ? t("冻结") : t('正常')
+      return isFreeze === 1 ? t('冻结') : t('正常');
     },
     minWidth: 150
   },
@@ -71,7 +71,7 @@ export const columns: TableColumnList = [
     label: t('注册日期'),
     prop: 'createdAt',
     formatter({ createdAt }) {
-      return dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss')
+      return dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss');
     },
     minWidth: 250
   },
@@ -79,7 +79,7 @@ export const columns: TableColumnList = [
     label: t('备注'),
     prop: 'remark',
     formatter({ remark }) {
-      return remark ?? '-'
+      return remark ?? '-';
     },
     minWidth: 150
   },
@@ -111,5 +111,20 @@ export const recordColumns: TableColumnList = [
     formatter({ updatedAt }: { updatedAt: string }) {
       return dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss');
     }
+  }
+];
+
+export const userColumns: TableColumnList = [
+  {
+    label: t('用户ID'),
+    prop: 'userid'
+  },
+  {
+    label: t('风控标签'),
+    prop: 'riskControlLabel'
+  },
+  {
+    label: t('属性标签'),
+    prop: 'attributeLabel'
   }
 ];
