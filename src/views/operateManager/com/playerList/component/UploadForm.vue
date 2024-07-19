@@ -142,7 +142,7 @@ import { Files } from '@element-plus/icons-vue';
 import { WarningFilled } from '@element-plus/icons-vue';
 import { UploadFile } from 'element-plus';
 import { message } from '@/utils/message';
-import XLSX from 'xlsx';
+// import XLSX from 'xlsx';
 
 const active = ref(0);
 const uploadFormFile = ref();
@@ -196,44 +196,38 @@ const onFileChange = async (file: UploadFile) => {
 
 const downloadTemplate = async () => {
   // const res: any = await API.operateExport();
-
   // const url = window.URL.createObjectURL(
   //   new Blob([res.data], {
   //     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
   //   })
   // );
-
   // const link = document.createElement('a');
   // link.href = url;
   // link.setAttribute('download', `example.xls`);
   // document.body.appendChild(link);
   // link.click();
   // document.body.removeChild(link);
-
-  const data = [
-    ['用户ID', '风控标签', '属性标签'],
-    ['6654', '套利，水军', '老用户，高活跃'],
-    ['8967', '水军', '老用户']
-  ];
-
-  // Create a workbook and worksheet
-  const ws = XLSX.utils.aoa_to_sheet(data);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-  // Generate a Blob object containing the Excel file
-  const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-  const blob = new Blob([wbout], { type: 'application/octet-stream' });
-
-  // Create a link element, hide it, direct it towards the blob, and then 'click' it programatically
-  const a = document.createElement('a');
-  document.body.appendChild(a);
-  a.style = 'display: none';
-  const url = window.URL.createObjectURL(blob);
-  a.href = url;
-  a.download = 'example.xlsx';
-  a.click();
-  window.URL.revokeObjectURL(url);
+  // const data = [
+  //   ['用户ID', '风控标签', '属性标签'],
+  //   ['6654', '套利，水军', '老用户，高活跃'],
+  //   ['8967', '水军', '老用户']
+  // ];
+  // // Create a workbook and worksheet
+  // const ws = XLSX.utils.aoa_to_sheet(data);
+  // const wb = XLSX.utils.book_new();
+  // XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  // // Generate a Blob object containing the Excel file
+  // const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+  // const blob = new Blob([wbout], { type: 'application/octet-stream' });
+  // // Create a link element, hide it, direct it towards the blob, and then 'click' it programatically
+  // const a = document.createElement('a');
+  // document.body.appendChild(a);
+  // a.style = 'display: none';
+  // const url = window.URL.createObjectURL(blob);
+  // a.href = url;
+  // a.download = 'example.xlsx';
+  // a.click();
+  // window.URL.revokeObjectURL(url);
 };
 </script>
 
