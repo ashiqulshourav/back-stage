@@ -153,7 +153,7 @@ import { Files } from '@element-plus/icons-vue';
 import { WarningFilled } from '@element-plus/icons-vue';
 import { UploadFile } from 'element-plus';
 import { message } from '@/utils/message';
-import XLSX, { utils } from 'xlsx';
+import { utils } from 'xlsx';
 import { userColumns } from './TableColumnList';
 import { usePublicHooks } from '@/hooks';
 
