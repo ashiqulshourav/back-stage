@@ -3,7 +3,7 @@
     class="w-full mt-3"
     :active="active"
     finish-status="success"
-    v-if="active != 3"
+    v-if="active == 0 || active == 1"
   >
     <el-step title="上传文件" />
     <el-step title="数据预览" />
@@ -109,7 +109,7 @@
     ></pure-table>
   </div>
   <!-- 3 -->
-  <div v-if="active == 3">
+  <div v-if="active == 2">
     <el-result
       icon="success"
       :title="t('数据导入完成')"
@@ -138,7 +138,7 @@
     </div>
   </div>
 
-  <div class="flex justify-end mt-10" v-if="active != 3">
+  <div class="flex justify-end mt-10" v-if="active == 0 || active == 1">
     <el-button v-if="active != 0" @click="previous">{{
       t('上一步')
     }}</el-button>
@@ -161,83 +161,7 @@ const { tableHeaderStyle } = usePublicHooks();
 
 const active = ref(0);
 const uploadFormFile = ref();
-const users = reactive<OperateManagementDataAPI.userType[]>([
-  // {
-  //   userid: 234,
-  //   riskControlLabel: 'sdfsdf',
-  //   attributeLabel: 'dsfsdf'
-  // },
-  // {
-  //   userid: 234,
-  //   riskControlLabel: 'sdfsdf',
-  //   attributeLabel: 'dsfsdf'
-  // },
-  // {
-  //   userid: 234,
-  //   riskControlLabel: 'sdfsdf',
-  //   attributeLabel: 'dsfsdf'
-  // },
-  // {
-  //   userid: 234,
-  //   riskControlLabel: 'sdfsdf',
-  //   attributeLabel: 'dsfsdf'
-  // },
-  // {
-  //   userid: 234,
-  //   riskControlLabel: 'sdfsdf',
-  //   attributeLabel: 'dsfsdf'
-  // },
-  // {
-  //   userid: 234,
-  //   riskControlLabel: 'sdfsdf',
-  //   attributeLabel: 'dsfsdf'
-  // },
-  // {
-  //   userid: 234,
-  //   riskControlLabel: 'sdfsdf',
-  //   attributeLabel: 'dsfsdf'
-  // },
-  // {
-  //   userid: 234,
-  //   riskControlLabel: 'sdfsdf',
-  //   attributeLabel: 'dsfsdf'
-  // },
-  // {
-  //   userid: 234,
-  //   riskControlLabel: 'sdfsdf',
-  //   attributeLabel: 'dsfsdf'
-  // },
-  // {
-  //   userid: 234,
-  //   riskControlLabel: 'sdfsdf',
-  //   attributeLabel: 'dsfsdf'
-  // },
-  // {
-  //   userid: 234,
-  //   riskControlLabel: 'sdfsdf',
-  //   attributeLabel: 'dsfsdf'
-  // },
-  // {
-  //   userid: 234,
-  //   riskControlLabel: 'sdfsdf',
-  //   attributeLabel: 'dsfsdf'
-  // },
-  // {
-  //   userid: 234,
-  //   riskControlLabel: 'sdfsdf',
-  //   attributeLabel: 'dsfsdf'
-  // },
-  // {
-  //   userid: 234,
-  //   riskControlLabel: 'sdfsdf',
-  //   attributeLabel: 'dsfsdf'
-  // },
-  // {
-  //   userid: 234,
-  //   riskControlLabel: 'sdfsdf',
-  //   attributeLabel: 'dsfsdf'
-  // }
-]);
+const users = reactive<OperateManagementDataAPI.userType[]>([]);
 
 const next = async () => {
   console.log({ uploadFormFile });
@@ -248,12 +172,94 @@ const next = async () => {
       const res = await API.operateUpload(formData);
 
       if (!res.code) {
-        users.push(...res.data);
-        if (active.value++ > 3) active.value = 0;
+        console.log(res.data);
+        users.push(
+          // ...[
+          //   {
+          //     userid: 234,
+          //     riskControlLabel: 'sdfsdf',
+          //     attributeLabel: 'dsfsdf'
+          //   },
+          //   {
+          //     userid: 234,
+          //     riskControlLabel: 'sdfsdf',
+          //     attributeLabel: 'dsfsdf'
+          //   },
+          //   {
+          //     userid: 234,
+          //     riskControlLabel: 'sdfsdf',
+          //     attributeLabel: 'dsfsdf'
+          //   },
+          //   {
+          //     userid: 234,
+          //     riskControlLabel: 'sdfsdf',
+          //     attributeLabel: 'dsfsdf'
+          //   },
+          //   {
+          //     userid: 234,
+          //     riskControlLabel: 'sdfsdf',
+          //     attributeLabel: 'dsfsdf'
+          //   },
+          //   {
+          //     userid: 234,
+          //     riskControlLabel: 'sdfsdf',
+          //     attributeLabel: 'dsfsdf'
+          //   },
+          //   {
+          //     userid: 234,
+          //     riskControlLabel: 'sdfsdf',
+          //     attributeLabel: 'dsfsdf'
+          //   },
+          //   {
+          //     userid: 234,
+          //     riskControlLabel: 'sdfsdf',
+          //     attributeLabel: 'dsfsdf'
+          //   },
+          //   {
+          //     userid: 234,
+          //     riskControlLabel: 'sdfsdf',
+          //     attributeLabel: 'dsfsdf'
+          //   },
+          //   {
+          //     userid: 234,
+          //     riskControlLabel: 'sdfsdf',
+          //     attributeLabel: 'dsfsdf'
+          //   },
+          //   {
+          //     userid: 234,
+          //     riskControlLabel: 'sdfsdf',
+          //     attributeLabel: 'dsfsdf'
+          //   },
+          //   {
+          //     userid: 234,
+          //     riskControlLabel: 'sdfsdf',
+          //     attributeLabel: 'dsfsdf'
+          //   },
+          //   {
+          //     userid: 234,
+          //     riskControlLabel: 'sdfsdf',
+          //     attributeLabel: 'dsfsdf'
+          //   },
+          //   {
+          //     userid: 234,
+          //     riskControlLabel: 'sdfsdf',
+          //     attributeLabel: 'dsfsdf'
+          //   },
+          //   {
+          //     userid: 234,
+          //     riskControlLabel: 'sdfsdf',
+          //     attributeLabel: 'dsfsdf'
+          //   }
+          // ]
+          ...res.data
+        );
+        active.value = 1;
+        return;
       }
     }
     if (active.value == 1) {
-      if (active.value++ > 3) active.value = 0;
+      active.value = 2;
+      return;
     }
   }
 };
