@@ -101,7 +101,6 @@ export function useTagsHook() {
   }
 
   function openDialog(title: string, row?: RiskManagementDataAPI.RiskTagType) {
-    console.log(row)
     addDialog({
       title,
       props: {
