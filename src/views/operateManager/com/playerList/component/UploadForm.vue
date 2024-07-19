@@ -319,7 +319,7 @@ const downloadTemplate = async () => {
   // document.body.removeChild(link);
 
   const data = [
-    ['userid', 'attributeLabel', 'riskControlLabel'],
+    ['用户ID', '风控标签', '属性标签'],
     ['1', '套利，水军', '老用户，高活跃']
   ];
 
