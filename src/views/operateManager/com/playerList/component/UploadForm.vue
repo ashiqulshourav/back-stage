@@ -153,7 +153,7 @@ import { Files } from '@element-plus/icons-vue';
 import { WarningFilled } from '@element-plus/icons-vue';
 import { UploadFile } from 'element-plus';
 import { message } from '@/utils/message';
-import XLSX from 'xlsx';
+import XLSX, { utils } from 'xlsx';
 import { userColumns } from './TableColumnList';
 import { usePublicHooks } from '@/hooks';
 
@@ -324,9 +324,9 @@ const downloadTemplate = async () => {
   ];
 
   // Create a workbook and worksheet
-  const ws = XLSX.utils.aoa_to_sheet(data);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  const ws = utils.aoa_to_sheet(data);
+  const wb = utils.book_new();
+  utils.book_append_sheet(wb, ws, 'Sheet1');
 
   // Generate a Blob object containing the Excel file
   const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
