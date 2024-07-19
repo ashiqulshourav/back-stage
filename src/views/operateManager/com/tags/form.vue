@@ -46,6 +46,7 @@ import { formRules } from './utils/rule';
 import { FormProps } from './utils/types';
 import { t } from '@/plugins/i18n';
 import { RISK_TAG_LEVEL } from '@/utils/maps/tags_map';
+import { defaultInitialZIndex } from 'element-plus';
 // import { inputRestrictions } from '@/utils/formatNumber';
 
 const props = withDefaults(defineProps<FormProps>(), {
@@ -64,8 +65,9 @@ function getRef() {
   return formRef.value;
 }
 
-const getLabelColor = (label: number) => {
-  switch(label) {
+const getLabelColor = (level: number, labelColor?: string) => {
+  if(labelColor) return labelColor    
+  switch(level) {
     case 1: 
       return "#1891FF"
     case 2:
@@ -75,7 +77,7 @@ const getLabelColor = (label: number) => {
   }
 }
 
-const labelColor = ref(getLabelColor(Number(newFormInline.level)));
+const labelColor = ref(getLabelColor(Number(newFormInline.level), newFormInline.labelColor));
 
 watch(
   () => labelColor.value,
