@@ -54,7 +54,9 @@ export function userPlayerListHook(venueType: number, category: number) {
     currentPage: 1,
     background: true
   });
-  const form = reactive<searchFormType>({} as searchFormType);
+  const form = reactive<searchFormType>({
+    betDelayed: ' ',
+  } as searchFormType);
 
   const recordForm = reactive<recordFormType>({} as recordFormType);
 

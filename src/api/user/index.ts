@@ -90,8 +90,8 @@ export const user = {
     ),
 
   //- 投注延时操作记录请求
-  getBettingDelayRecord: (data: { userId: string }) =>
-    http.request<UserAPI.userBaseResType>('post', '/operate/getBettingDelayRecord', { data }
+  getBettingDelayRecord: (data: { userId: string, pageSize: number; pageNum: number }) =>
+    http.request<UserAPI.getBettingDelayRecordResType>('post', '/operate/getBettingDelayRecord', { data }
     ),
 
   updateUserLevelLimit: (data: {

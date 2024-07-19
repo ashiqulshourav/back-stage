@@ -42,7 +42,7 @@
                 v-if="hasAuth('GETLABELLIST')"
                 class="text-primary text-right cursor-pointer"
               >
-                {{ t('属性标签修改记录') }}>>
+                {{ t('修改记录') }}>>
               </p>
               <el-row :gutter="20" class="mt-2 w-full !ml-2">
                 <LabelListCom
@@ -124,6 +124,7 @@
                 type="risk"
               />
             </el-row>
+
             <el-row class="mt-2 w-full" v-if="!isRiskLabelAdd">
               <el-col :span="24" class="!flex justify-end">
                 <el-button
@@ -136,6 +137,7 @@
                 >
               </el-col>
             </el-row>
+
             <el-row class="mt-2 w-full" v-else>
               <el-col :span="14">
                 <el-select
@@ -305,6 +307,7 @@ import { message } from '@/utils/message';
 import { usePublicHooks } from '@/hooks';
 import { ElMessageBox } from 'element-plus';
 import DialogListTitle from './DialogListTitle.vue';
+import DelayTimeDialog from './DelayTimeDialog.vue';
 import {
   labelListType,
   updateUserFormType,
@@ -314,6 +317,7 @@ import {
 import { formatNumber } from '@/utils/formatNumber';
 import LabelListCom from './LabelListCom.vue';
 import ModifyContent from './ModifyContent.vue';
+import { addDialog, closeDialog } from '@/components/ReDialog';
 
 const props = defineProps<{
   isEditUser: boolean;
@@ -529,9 +533,11 @@ const handleUpdate = () => {
       AddedIds.push(item.id);
     });
     if (AddedIds.length !== 0) emits('onAdd', [form.id], AddedIds);
+
     const deletedLabels = props.userData.riskControlLabelList.filter(
       (item: UserAPI.labelType) => !updatedLabels.risk.includes(item)
     );
+
     deletedLabels.push(
       ...props.userData.attributeLabelList.filter(
         (item: UserAPI.labelType) => !updatedLabels.attr.includes(item)
@@ -552,6 +558,7 @@ const handleUpdate = () => {
     ) {
       return message(t('投注延时时间或赛种不能为空'), { type: 'error' });
     }
+
     if (isSpecial.value) {
       form.specialLimit.productAmountTotalLimit = parseInt(
         form.specialLimit.productAmountTotalLimit
@@ -573,11 +580,19 @@ const handleUpdate = () => {
 };
 
 //- 打开投注延时弹窗
-const openDelayDialog = async () => {
-  const res = await API.getBettingDelayRecord({
-    userId: form.id
+const openDelayDialog = () => {
+  addDialog({
+    title: t('投注延时修改记录'),
+    class: 'reset_dialog',
+    width: '50%',
+    alignCenter: true,
+    closeOnClickModal: false,
+    hideFooter: true,
+    contentRenderer: () =>
+      h(DelayTimeDialog, {
+        id: form.id
+      })
   });
-  console.log('EditUser.vue文件 578==============行打印=', res);
 };
 
 onUpdated(() => {

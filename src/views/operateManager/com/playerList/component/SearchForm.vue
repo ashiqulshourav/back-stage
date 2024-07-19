@@ -177,6 +177,7 @@
           clearable
           class="!w-[150px]"
         >
+          <el-option :label="t('全部')" :value="' '" />
           <el-option :label="t('是')" :value="1" />
           <el-option :label="t('不是')" :value="2" />
         </el-select>
