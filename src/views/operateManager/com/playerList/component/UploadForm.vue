@@ -245,7 +245,7 @@ const next = async () => {
     if (active.value == 0) {
       let formData = new FormData();
       formData.append('file', uploadFormFile.value);
-      const res = await API.operateImportExcel(formData);
+      const res = await API.operateUpload(formData);
 
       if (!res.code) {
         users.push(...res.data);
