@@ -5,7 +5,6 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { addThousandSeparator } from '@/utils/formatNumber';
 import { usePublicHooks } from '@/hooks';
 const { exportDialog } = usePublicHooks();
-import { utils, writeFile } from 'xlsx';
 
 export function useOperationLog() {
   const router = useRouter();
@@ -43,7 +42,7 @@ export function useOperationLog() {
   //- 初始化列表渲染
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
-    if(type!=='export'){
+    if (type !== 'export') {
       loading.value = true;
     }
     const o = JSON.parse(JSON.stringify(removeEmptyStringKeys(form)));
@@ -54,8 +53,8 @@ export function useOperationLog() {
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
-      if(type==='export'){
-        return res?.data
+      if (type === 'export') {
+        return res?.data;
       }
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
@@ -70,11 +69,16 @@ export function useOperationLog() {
   // export to excel
   const exportFile = async () => {
     onSearch('export').then((expRes: any) => {
-      if(expRes?.total>50000){
-        message(`当前条件下数据量为${addThousandSeparator(expRes?.total)}，大于5万条，不支持导出!`, { type: 'error' });
-      }else if(expRes?.total<1 || expRes === null){
+      if (expRes?.total > 50000) {
+        message(
+          `当前条件下数据量为${addThousandSeparator(
+            expRes?.total
+          )}，大于5万条，不支持导出!`,
+          { type: 'error' }
+        );
+      } else if (expRes?.total < 1 || expRes === null) {
         message('数据量为零，无法导出', { type: 'error' });
-      }else {
+      } else {
         exportDialog({
           firstTitle: t('导出当前操作日志列表数据?'),
           router,
@@ -93,8 +97,8 @@ export function useOperationLog() {
           }
         });
       }
-    })
-  }
+    });
+  };
   //- 获取下拉菜单列表
   const getOperateTypes = async () => {
     const res = await API.getOperateType();
@@ -119,6 +123,6 @@ export function useOperationLog() {
     onSearch,
     handleTableWidthChange,
     handleCurrentChange,
-    exportFile,
+    exportFile
   };
 }
