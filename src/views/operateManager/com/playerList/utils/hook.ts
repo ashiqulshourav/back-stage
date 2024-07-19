@@ -15,8 +15,11 @@ import { addThousandSeparator } from '@/utils/formatNumber';
 import { addDialog, closeDialog } from '@/components/ReDialog';
 import { pageSizeArr } from '@/utils/math';
 import UploadForm from '../component/UploadForm.vue';
+import { usePasswordInputHook } from '@/hooks/passwordInputHook';
+
 
 export function userPlayerListHook(venueType: number, category: number) {
+  const { openPasswordInput } = usePasswordInputHook();
   const { exportDialog } = usePublicHooks();
   const route = useRoute();
   const router = useRouter();
@@ -152,7 +155,9 @@ export function userPlayerListHook(venueType: number, category: number) {
     });
   };
 
-  const importFile = (title: string) => {
+  const importFile = async (title: string) => {
+    const r = await openPasswordInput();
+  if (r) { 
     addDialog({
       title,
       width: '40%',
@@ -167,6 +172,7 @@ export function userPlayerListHook(venueType: number, category: number) {
           }
         })
     });
+  }
   };
 
   async function onSearch(type?: string) {
