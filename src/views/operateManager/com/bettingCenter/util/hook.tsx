@@ -240,11 +240,11 @@ export function useBettingCenterHook(category: number, venueType: number) {
   const exportFile = async () => {
     downloading.value = true;
     onSearch('export').then((res0: any) => {
-      if (res0?.count > 50000) {
+      if (res0?.count > 500000) {
         message(
           `当前条件下数据量为${addThousandSeparator(
             res0?.count
-          )}，大于5万条，不支持导出!`,
+          )}，大于50万条，不支持导出!`,
           { type: 'error' }
         );
       } else if (res0?.count < 1 || res0 === null) {
