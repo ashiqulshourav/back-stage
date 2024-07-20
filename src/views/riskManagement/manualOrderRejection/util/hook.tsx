@@ -145,7 +145,7 @@ export function useManualOrderRejectionHook() {
   const exportFile = async () => {
     onSearch('export').then((expRes: any) => {
       if(expRes?.count>50000){
-        message(`当前条件下数据量为${addThousandSeparator(expRes?.count)}，大于5万条，不支持导出!`, { type: 'error' });
+        message(`当前条件下数据量为${addThousandSeparator(expRes?.count)}，大于50万条，不支持导出!`, { type: 'error' });
       }else if(expRes?.count<1 || expRes === null){
         message('数据量为零，无法导出', { type: 'error' });
       }else {
