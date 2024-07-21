@@ -98,7 +98,7 @@
                       :key="`${i}-${l}`"
                     >
                       <div
-                        class="text-[--el-color-primary] text-center pl-2 pr-2 leading-none w-1/4"
+                        class="text-[--el-color-primary] text-left ml-2 pl-2 pr-2 leading-none w-1/4"
                       >
                         <ReText size="small">
                           {{
@@ -121,16 +121,11 @@
                           }}
                         </ReText>
                       </div>
-                      <div
-                        :class="[
-                          'flex items-center text-center w-1/6',
-                          s.odds < 0 && 'translate-x-[-2px]'
-                        ]"
-                      >
+                      <div class="flex items-center text-center w-1/6">
                         <el-text class="!text-xs" type="primary">{{
                           ODDS_TYPE_MAP[s.oddsType]
                         }}</el-text>
-                        <span class="ml-2">
+                        <span class="ml-2 min-w-[45px] text-right">
                           {{ s.odds.toFixed(2) }}
                         </span>
                       </div>
