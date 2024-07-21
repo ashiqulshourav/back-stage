@@ -134,11 +134,11 @@ export function useEventQueryHook() {
   const router = useRouter();
   const exportFile = async () => {
     onSearch('export').then((expRes: EventAPI.matchEventList) => {
-      if (expRes.list.length > 50000) {
+      if (expRes.list.length > 500000) {
         message(
           `当前条件下数据量为${addThousandSeparator(
             expRes.list.length.toString()
-          )}，大于5万条，不支持导出!`,
+          )}，大于50万条，不支持导出!`,
           { type: 'error' }
         );
       } else if (expRes?.list.length < 1 || expRes === null) {
