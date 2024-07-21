@@ -7,9 +7,8 @@
       v-if="showNum"
       @mouseenter.stop="e => mouseEvent(e, props.s, 'enter')"
       :class="[
-        'text-[--el-color-primary]  text-left h-full flex items-center w-[40px]',
-        saleStatus !== 2 && '!text-[#909399]',
-        s.dpOdds?.toFixed(2) < 0 && 'translate-x-[-6px]'
+        'text-[--el-color-primary]  justify-end h-full flex items-center w-[45px]',
+        saleStatus !== 2 && '!text-[#909399]'
       ]"
     >
       {{ s.dpOdds?.toFixed(2) }}
