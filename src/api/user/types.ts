@@ -127,11 +127,14 @@ declare namespace UserAPI {
     limitLevel?: number;
     maxWinAmountLimit: number;
     productAmountTotalLimit: number;
+    percentageLimit: number | null;
     singleEventAccumulatedCompensationLimit: number;
     seriesSingleDayCumulativeCompensationLimit: number;
     attributeLabelList: labelType[];
     riskControlLabelList: labelType[];
     balance: number;
+    beforeLimit: number | null
+
   };
 
   type operateUserData = {

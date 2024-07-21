@@ -131,7 +131,7 @@ export function userPlayerListHook(venueType: number, category: number) {
             downloading.value = true;
             const res = await API.playerListExport({
               ...removeEmptyStringKeys(form),
-              venueType: venueType,
+              venueType,
               pageSize: 50000,
               pageNum: 1,
               export: true,
@@ -163,6 +163,16 @@ export function userPlayerListHook(venueType: number, category: number) {
         if (res.code) return message(res.msg, { type: 'error' });
         dataList.length = 0;
         dataList.push(...res.data.pageData);
+        //- 用户未修改之前限额类型
+        dataList.forEach(item => {
+          if (!item.percentageLimit && !item.productAmountTotalLimit) {
+            item.beforeLimit = 1
+          } else if (item.productAmountTotalLimit) {
+            item.beforeLimit = 2
+          } else if (item.percentageLimit) {
+            item.beforeLimit = 3
+          }
+        })
         pagination.total = res.data.count;
       }
     } catch (error) {
@@ -267,13 +277,16 @@ export function userPlayerListHook(venueType: number, category: number) {
     }
   };
 
+  //- 修改用户记录
   const dispatchUpdateUser = async (form: updateUserFormType) => {
     try {
       loading.value = true;
       const res = await API.operateUpdateUser({
         ...removeEmptyStringKeys(form),
         id: form.id,
-        specialLimit: form.specialLimit
+        venueType,
+        specialLimit: form.specialLimit,
+        beforeLimit: form.beforeLimit
       });
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });

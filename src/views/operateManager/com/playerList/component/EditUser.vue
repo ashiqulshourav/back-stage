@@ -195,6 +195,13 @@
           </el-collapse-item>
 
           <el-collapse-item :title="t('限额等级设置')" name="3">
+            <p
+              @click="openLimitRecordDialog"
+              v-if="hasAuth('GETLABELLIST')"
+              class="text-primary text-right cursor-pointer mb-2"
+            >
+              {{ t('修改记录') }}>>
+            </p>
             <div class="mb-2">
               <el-select v-model="form.limitLevel" clearable>
                 <el-option
@@ -217,16 +224,17 @@
           </el-collapse-item>
           <el-collapse-item :title="t('特殊限额')" name="4">
             <el-radio-group v-model="isSpecial">
-              <el-radio class="w-full" :value="false">{{ t('无') }}</el-radio>
-              <el-radio class="w-full" :value="true">{{
-                t('例外限额')
+              <el-radio class="w-full" :value="1">{{ t('无') }}</el-radio>
+              <el-radio class="w-full" :value="2">{{ t('例外限额') }}</el-radio>
+              <el-radio class="w-full" :value="3">{{
+                t('百分比限额')
               }}</el-radio>
             </el-radio-group>
 
             <el-row
               :gutter="5"
               class="w-full items-center tex-xs"
-              v-if="isSpecial"
+              v-if="isSpecial === 2"
             >
               <el-col :span="5" class="text-center">
                 <span>{{ t('单注投注限额') }}</span>
@@ -308,6 +316,7 @@ import { usePublicHooks } from '@/hooks';
 import { ElMessageBox } from 'element-plus';
 import DialogListTitle from './DialogListTitle.vue';
 import DelayTimeDialog from './DelayTimeDialog.vue';
+import LimitRecordDialog from './limitRecordDialog.vue';
 import {
   labelListType,
   updateUserFormType,
@@ -317,7 +326,7 @@ import {
 import { formatNumber } from '@/utils/formatNumber';
 import LabelListCom from './LabelListCom.vue';
 import ModifyContent from './ModifyContent.vue';
-import { addDialog, closeDialog } from '@/components/ReDialog';
+import { addDialog } from '@/components/ReDialog';
 
 const props = defineProps<{
   isEditUser: boolean;
@@ -369,7 +378,7 @@ const limitColumns: TableColumnList = [
 const isEditUser = ref(props.isEditUser);
 const isRiskLabelAdd = ref(false);
 const isAttrLabelAdd = ref(false);
-const isSpecial = ref(false);
+const isSpecial = ref(1);
 const form = reactive<updateUserFormType>({} as updateUserFormType);
 const updatedLabels = reactive<labelListType>({
   attr: [],
@@ -466,7 +475,7 @@ const handleUpdate = () => {
       seriesSingleDayCumulativeCompensationLimit
     } = form.specialLimit;
     if (
-      isSpecial.value &&
+      isSpecial.value === 2 &&
       (!productAmountTotalLimit ||
         !maxWinAmountLimit ||
         !singleEventAccumulatedCompensationLimit ||
@@ -476,7 +485,7 @@ const handleUpdate = () => {
       return;
     }
     if (
-      isSpecial.value &&
+      isSpecial.value === 2 &&
       productAmountTotalLimit &&
       maxWinAmountLimit &&
       singleEventAccumulatedCompensationLimit &&
@@ -559,7 +568,9 @@ const handleUpdate = () => {
       return message(t('投注延时时间或赛种不能为空'), { type: 'error' });
     }
 
-    if (isSpecial.value) {
+    form.beforeLimit = props.userData.beforeLimit;
+
+    if (isSpecial.value === 2) {
       form.specialLimit.productAmountTotalLimit = parseInt(
         form.specialLimit.productAmountTotalLimit
       );
@@ -591,6 +602,23 @@ const openDelayDialog = () => {
     contentRenderer: () =>
       h(DelayTimeDialog, {
         id: form.id
+      })
+  });
+};
+
+//- 限额等级记录弹窗
+const openLimitRecordDialog = () => {
+  addDialog({
+    title: t('投注延时修改记录'),
+    class: 'reset_dialog',
+    width: '50%',
+    alignCenter: true,
+    closeOnClickModal: false,
+    hideFooter: true,
+    contentRenderer: () =>
+      h(LimitRecordDialog, {
+        id: form.id,
+        recordType: 1
       })
   });
 };
@@ -628,7 +656,7 @@ onUpdated(() => {
     seriesSingleDayCumulativeCompensationLimit ||
     singleEventAccumulatedCompensationLimit
   ) {
-    isSpecial.value = true;
+    isSpecial.value = 2;
     form.specialLimit.maxWinAmountLimit = maxWinAmountLimit;
     form.specialLimit.productAmountTotalLimit = productAmountTotalLimit;
     form.specialLimit.seriesSingleDayCumulativeCompensationLimit =
@@ -636,7 +664,7 @@ onUpdated(() => {
     form.specialLimit.singleEventAccumulatedCompensationLimit =
       singleEventAccumulatedCompensationLimit;
   } else {
-    isSpecial.value = false;
+    isSpecial.value = 1;
   }
   updatedLabels.risk.length = 0;
   if (riskControlLabelList) {

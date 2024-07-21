@@ -94,6 +94,11 @@ export const user = {
     http.request<UserAPI.getBettingDelayRecordResType>('post', '/operate/getBettingDelayRecord', { data }
     ),
 
+  //- 获取用户限额等级记录
+  getLimitModifyRecord: (data: { recordType: number; userId: string; pageSize: number; pageNum: number }) =>
+    http.request<UserAPI.getBettingDelayRecordResType>('post', '/operate/getLimitModifyRecord', { data }
+    ),
+
   updateUserLevelLimit: (data: {
     list: UserAPI.updateLimmitReqType[];
     type: number;
