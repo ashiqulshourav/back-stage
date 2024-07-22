@@ -128,3 +128,51 @@ export const userColumns: TableColumnList = [
     prop: 'attributeLabel'
   }
 ];
+
+export const specialLimitColumns: TableColumnList = [
+  {
+    label: t('特殊限额'),
+    prop: 'name'
+  },
+  {
+    label: t('单注投注限额'),
+    prop: 'productAmountTotalLimit'
+  },
+  {
+    label: t('单注赔付限额'),
+    prop: 'maxWinAmountLimit'
+  },
+  {
+    label: t('单场赛事限额'),
+    prop: 'singleEventLimit'
+  },
+  {
+    label: t('串关限额'),
+    prop: 'seriesSingleDayLimit'
+  },
+  {
+    label: t('百分比限额'),
+    prop: 'percentageLimit',
+    formatter({ percentageLimit }) {
+      return percentageLimit ? percentageLimit + '%' : '';
+    }
+  },
+  {
+    label: t('动作'),
+    prop: 'updateType',
+    formatter({ updateType }) {
+      return updateType === 1 ? t('编辑') : t('新增');
+    }
+  },
+  {
+    label: t('操作人'),
+    prop: 'createdBy'
+  },
+  {
+    label: t('修改时间'),
+    prop: 'updatedAt',
+    formatter({ updatedAt }: { updatedAt: string }) {
+      return dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss');
+    }
+  }
+];

@@ -2,7 +2,7 @@
   <div class="main">
     <SearchForm
       :form="form"
-      :category="props.category"
+      :category="category"
       :loading="loading"
       :labelList="labelList"
       :tenantList="tenantList"
@@ -53,7 +53,7 @@
           @page-current-change="handleCurrentChange"
         >
           <template #tenantCode="{ row }">
-            {{ tenantObj[row.tenantId]?.name }}
+            {{ tenantObj[row.tenantId]?.name ?? '-' }}
           </template>
           <template #riskControlLabel="{ row }">
             <el-row
