@@ -119,15 +119,22 @@ declare namespace UserAPI {
     tenantName: string;
     tenantCode: string;
     isFreeze?: any;
+    sportIds: string | number;
+    sportIdsDj: string | number;
+    betDelay: number;
+    betDelayDj: number;
     remark?: string;
     limitLevel?: number;
     maxWinAmountLimit: number;
     productAmountTotalLimit: number;
+    percentageLimit: number | null;
     singleEventAccumulatedCompensationLimit: number;
     seriesSingleDayCumulativeCompensationLimit: number;
     attributeLabelList: labelType[];
     riskControlLabelList: labelType[];
     balance: number;
+    beforeLimit: number | null
+
   };
 
   type operateUserData = {
@@ -144,6 +151,44 @@ declare namespace UserAPI {
   };
   type getRecordListDataRes = COMMON.BASE_RES_TYPE<getRecordListData>;
   type operateUserListReqType = COMMON.BASE_RES_TYPE<operateUserData>;
+
+
+  type getBettingDelayRecordDataList = {
+    id: number;
+    userId: number;
+    venueType: number;
+    sportIds: string;
+    updateType: number;
+    delaySeconds: string;
+    createdAt: string;
+    createdBy: string;
+    updatedAt: string;
+    updatedBy: string;
+    sportNames: string;
+  }
+
+  type getBettingDelayRecordData = {
+    total: number;
+    list: getBettingDelayRecordDataList[];
+    pageNum: number;
+    pageSize: number;
+    size: number;
+    startRow: number;
+    endRow: number;
+    pages: number;
+    prePage: number;
+    nextPage: number;
+    isFirstPage: boolean;
+    isLastPage: boolean;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
+    navigatePages: number;
+    navigatepageNums: number[];
+    navigateFirstPage: number;
+    navigateLastPage: number;
+  }
+
+  type getBettingDelayRecordResType = COMMON.BASE_RES_TYPE<getBettingDelayRecordData>
 
   type updateLimmitReqType = {
     id?: number;
