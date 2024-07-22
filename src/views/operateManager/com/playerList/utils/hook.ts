@@ -17,7 +17,6 @@ import { pageSizeArr } from '@/utils/math';
 import UploadForm from '../component/UploadForm.vue';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 
-
 export function userPlayerListHook(venueType: number, category: number) {
   const { openPasswordInput } = usePasswordInputHook();
   const { exportDialog } = usePublicHooks();
@@ -150,22 +149,25 @@ export function userPlayerListHook(venueType: number, category: number) {
 
   const importFile = async (title: string) => {
     const r = await openPasswordInput();
-  if (r) {
-    addDialog({
-      title,
-      width: '40%',
-      draggable: true,
-      closeOnClickModal: false,
-      hideFooter: true,
-      contentRenderer: ({ options, index }) =>
-        h(UploadForm, {
-          onCloseDialog: (params: string) => {
-            closeDialog(options, index);
-            onSearch();
-          }
-        })
-    });
-  }
+    if (r) {
+      addDialog({
+        title,
+        width: '40%',
+        draggable: true,
+        closeOnClickModal: false,
+        hideFooter: true,
+        closeCallBack: () => {
+          onSearch();
+        },
+        contentRenderer: ({ options, index }) =>
+          h(UploadForm, {
+            onCloseDialog: (params: string) => {
+              closeDialog(options, index);
+              onSearch();
+            }
+          })
+      });
+    }
   };
 
   async function onSearch(type?: string) {
