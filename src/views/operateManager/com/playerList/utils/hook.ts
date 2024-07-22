@@ -23,6 +23,7 @@ export function userPlayerListHook(venueType: number, category: number) {
   const route = useRoute();
   const router = useRouter();
   const settingStore = useSettingStoreHook();
+  // data list
   const dataList = reactive<UserAPI.operateUserList[]>([]);
   const selectedDataList = reactive<UserAPI.operateUserList[]>([]);
   const labelList = reactive<labelListType>({
@@ -37,6 +38,7 @@ export function userPlayerListHook(venueType: number, category: number) {
   const userData = reactive<UserAPI.operateUserList>(
     {} as UserAPI.operateUserList
   );
+  // config variables
   const isEditUser = ref(false);
   const isOpenRecord = ref(false);
   const isMultiModal = ref(false);
@@ -59,9 +61,8 @@ export function userPlayerListHook(venueType: number, category: number) {
     currentPage: 1,
     background: true
   });
-  const form = reactive<searchFormType>({
-    betDelayed: ' ',
-  } as searchFormType);
+  //form data
+  const form = reactive<searchFormType>({} as searchFormType);
 
   const recordForm = reactive<recordFormType>({} as recordFormType);
 
@@ -107,7 +108,6 @@ export function userPlayerListHook(venueType: number, category: number) {
     selectedDataList.push(...val);
   }
 
-  //- 修改用户
   const handleUpdateUser = (row: UserAPI.operateUserList) => {
     Object.assign(userData, row);
     isEditUser.value = true;
@@ -121,24 +121,22 @@ export function userPlayerListHook(venueType: number, category: number) {
     isOpenRecord.value = true;
   };
 
-  // -导出用户列表
+  // export player list
   const exportFile = async () => {
     onSearch('export').then((expRes: any) => {
       if (expRes?.count > 500000) {
         message(`当前条件下数据量为${addThousandSeparator(expRes?.count)}，大于50万条，不支持导出!`, { type: 'error' });
       } else if (expRes?.count < 1 || expRes === null) {
-        message(t('数据量为零，无法导出'), { type: 'error' });
+        message('数据量为零，无法导出', { type: 'error' });
       } else {
         exportDialog({
-          firstTitle: t('导出当前用户列表'),
+          firstTitle: t('导出当前球员名单数据'),
           router,
           callback: async () => {
             downloading.value = true;
             const res = await API.playerListExport({
               ...removeEmptyStringKeys(form),
-              venueType,
-              pageSize: 50000,
-              pageNum: 1,
+              venueType: venueType,
               export: true,
             })
             message(res.msg, { type: res.code ? 'error' : 'success' });
@@ -191,16 +189,6 @@ export function userPlayerListHook(venueType: number, category: number) {
         if (res.code) return message(res.msg, { type: 'error' });
         dataList.length = 0;
         dataList.push(...res.data.pageData);
-        //- 用户未修改之前限额类型
-        dataList.forEach(item => {
-          if (!item.percentageLimit && !item.productAmountTotalLimit) {
-            item.beforeLimit = 1
-          } else if (item.productAmountTotalLimit) {
-            item.beforeLimit = 2
-          } else if (item.percentageLimit) {
-            item.beforeLimit = 3
-          }
-        })
         pagination.total = res.data.count;
       }
     } catch (error) {
@@ -238,7 +226,7 @@ export function userPlayerListHook(venueType: number, category: number) {
   const handleCloseEditUser = () => {
     isEditUser.value = false;
   };
-  //- 修改记录表单
+
   const openRecordList = (id: string, labelType: number) => {
     isOpenRecord.value = true;
     recordForm.id = id;
@@ -305,16 +293,13 @@ export function userPlayerListHook(venueType: number, category: number) {
     }
   };
 
-  //- 修改用户记录
   const dispatchUpdateUser = async (form: updateUserFormType) => {
     try {
       loading.value = true;
       const res = await API.operateUpdateUser({
         ...removeEmptyStringKeys(form),
         id: form.id,
-        venueType,
-        specialLimit: form.specialLimit,
-        beforeLimit: form.beforeLimit
+        specialLimit: form.specialLimit
       });
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
@@ -328,13 +313,13 @@ export function userPlayerListHook(venueType: number, category: number) {
 
   onMounted(() => {
     if (route.query.tagId) {
-      let labelType: string | number = route.query.labelType as string;
+      let labelType: any = route.query.labelType as string;
       labelType = parseInt(labelType);
-      let tagId: string | number = route.query.tagId as string;
+      let tagId: any = route.query.tagId as string;
       tagId = parseInt(tagId);
       labelType === 1
-        ? (form.riskControlLabelList as (string | number)[])?.push(tagId)
-        : (form.attributeLabelList as (string | number)[]).push(tagId);
+        ? form.riskControlLabelList?.push(tagId)
+        : form.attributeLabelList?.push(tagId);
     }
     dispatchGetLabelList();
     dispatchGetTenantList();

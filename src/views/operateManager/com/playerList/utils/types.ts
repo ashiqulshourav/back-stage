@@ -1,9 +1,9 @@
 export type searchFormType = {
   ids?: string | number | string[];
   usernames?: string | number | string[];
-  riskControlLabelList?: string[] | number[];
-  attributeLabelList: string[] | number[];
-  tenantIds: number | string | string[] | number[];
+  riskControlLabelList?: string[];
+  attributeLabelList?: string[];
+  tenantIds?: number | string | string[] | number[];
   limitLevel?: number | string;
   tenantCode?: number | string;
   venueType?: number;
@@ -11,7 +11,6 @@ export type searchFormType = {
   timeVal?: string | number;
   beginTime?: string;
   endTime?: string;
-  betDelayed: number | string;
 };
 export type specialLimitType = {
   productAmountTotalLimit: number;
@@ -26,8 +25,6 @@ export type updateUserFormType = {
   isFreeze?: number;
   remark?: string;
   specialLimit: specialLimitType;
-  [key: string]: any;
-  percentageLimit?: number;
   // singleBetLimit: number;
   // singleEventCompensationLimit: string;
   // createdAt: string | number;

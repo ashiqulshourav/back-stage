@@ -23,8 +23,6 @@ export const SPORT_ID_MAP = [
 
 
 
-
-
 export const FULL_SPORT_ID_MAP = [
   { label: t('足球'), value: 1, type: 'FootBall' },
   { label: t('篮球'), value: 2, type: 'BasketBall' },
