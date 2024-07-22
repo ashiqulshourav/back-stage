@@ -335,7 +335,8 @@ import { usePublicHooks } from '@/hooks';
 import { ElMessageBox } from 'element-plus';
 import DialogListTitle from './DialogListTitle.vue';
 import DelayTimeDialog from './DelayTimeDialog.vue';
-import LimitRecordDialog from './limitRecordDialog.vue';
+import LimitRecordDialog from './LimitRecordDialog.vue';
+import SpecialLimitDialog from './SpecialLimitDialog.vue';
 import {
   labelListType,
   updateUserFormType,
@@ -655,7 +656,7 @@ const openSpecialLimitDialog = () => {
     closeOnClickModal: false,
     hideFooter: true,
     contentRenderer: () =>
-      h(LimitRecordDialog, {
+      h(SpecialLimitDialog, {
         id: form.id,
         recordType: 2
       })
@@ -678,7 +679,8 @@ onUpdated(() => {
     seriesSingleDayCumulativeCompensationLimit,
     singleEventAccumulatedCompensationLimit,
     riskControlLabelList,
-    attributeLabelList
+    attributeLabelList,
+    percentageLimit
   } = props.userData;
   form.id = id;
   form.isFreeze = isFreeze;
@@ -702,6 +704,8 @@ onUpdated(() => {
       seriesSingleDayCumulativeCompensationLimit;
     form.specialLimit.singleEventAccumulatedCompensationLimit =
       singleEventAccumulatedCompensationLimit;
+  } else if (percentageLimit) {
+    isSpecial.value = 3;
   } else {
     isSpecial.value = 1;
   }

@@ -49,3 +49,4 @@ export const columns: TableColumnList = [
     prop: 'updatedBy'
   }
 ];
+

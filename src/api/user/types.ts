@@ -133,8 +133,7 @@ declare namespace UserAPI {
     attributeLabelList: labelType[];
     riskControlLabelList: labelType[];
     balance: number;
-    beforeLimit: number | null
-
+    beforeLimit: number | null;
   };
 
   type operateUserData = {
@@ -152,6 +151,22 @@ declare namespace UserAPI {
   type getRecordListDataRes = COMMON.BASE_RES_TYPE<getRecordListData>;
   type operateUserListReqType = COMMON.BASE_RES_TYPE<operateUserData>;
 
+  type getSpecialRecordDataList = {
+    id: number;
+    name: string;
+    updateType: number;
+    createdAt: string;
+    createdBy: string;
+    updatedAt: string;
+    updatedBy: string;
+    userId: number;
+    productAmountTotalLimit: number;
+    maxWinAmountLimit: number;
+    singleEventLimit: number;
+    seriesSingleDayLimit: number;
+    percentageLimit: number;
+    recordTypenumber: number;
+  };
 
   type getBettingDelayRecordDataList = {
     id: number;
@@ -165,7 +180,7 @@ declare namespace UserAPI {
     updatedAt: string;
     updatedBy: string;
     sportNames: string;
-  }
+  };
 
   type getBettingDelayRecordData = {
     total: number;
@@ -186,9 +201,13 @@ declare namespace UserAPI {
     navigatepageNums: number[];
     navigateFirstPage: number;
     navigateLastPage: number;
-  }
+  };
 
-  type getBettingDelayRecordResType = COMMON.BASE_RES_TYPE<getBettingDelayRecordData>
+  type getBettingDelayRecordResType =
+    COMMON.BASE_RES_TYPE<getBettingDelayRecordData>;
+
+  type getSpecialRecordResType =
+    COMMON.BASE_RES_TYPE<getBettingDelayRecordDataList>;
 
   type updateLimmitReqType = {
     id?: number;
