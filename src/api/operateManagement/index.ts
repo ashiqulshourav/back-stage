@@ -70,6 +70,13 @@ export const operateManagementData = {
     http.request('get', '/kmg/auth/export', { data }, { responseType: 'blob' }),
 
   // upload excel
+  operateUpload: (data?: any) =>
+    http.request<OperateManagementDataAPI.userTypeRes>(
+      'post',
+      '/kmg/auth/upload',
+      { data }
+    ),
+  
   operateImportExcel: (data?: any) =>
     http.request<OperateManagementDataAPI.userTypeRes>(
       'post',
@@ -77,10 +84,4 @@ export const operateManagementData = {
       { data }
     ),
 
-  operateUpload: (data?: any) =>
-    http.request<OperateManagementDataAPI.userTypeRes>(
-      'post',
-      '/kmg/auth/upload',
-      { data }
-    )
 };
