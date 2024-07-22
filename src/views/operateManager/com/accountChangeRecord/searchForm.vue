@@ -19,7 +19,12 @@
           </div>
         </el-row>
       </div>
-      <el-button  v-if="hasAuth('changAccountAmount'.toUpperCase())" class="ml-auto" type="primary" @click="openModifyBalanceDialog()">
+      <el-button
+        v-if="hasAuth('changAccountAmount'.toUpperCase())"
+        class="ml-auto"
+        type="primary"
+        @click="openModifyBalanceDialog()"
+      >
         {{ t('修改余额') }}
       </el-button>
     </div>
@@ -30,6 +35,7 @@
         :placeholder="`${t('请选择账变类型')}`"
         clearable
         class="!w-[200px]"
+        multiple
       >
         <el-option :label="t('全部')" :value="' '" />
         <el-option
@@ -77,8 +83,8 @@ import type { FormInstance } from 'element-plus';
 import dayjs from 'dayjs';
 import { accountChangeRecordSearchFormType, userDataType } from './util/types';
 import { accountChangeTypeCodeList } from './columns';
-import { addThousandSeparator } from "@/utils/formatNumber";
-import {hasAuth} from "@/router/utils";
+import { addThousandSeparator } from '@/utils/formatNumber';
+import { hasAuth } from '@/router/utils';
 
 const props = defineProps<{
   loading: boolean;
@@ -95,13 +101,16 @@ const userInfo = (data: userDataType) => [
   { title: t('用户名'), value: data.userName },
   { title: t('用户ID'), value: data.userId },
   { title: t('用户币种'), value: t('人民币') },
-  { title: t('可用余额'), value: addThousandSeparator(data.balance.toFixed(2)) },
+  {
+    title: t('可用余额'),
+    value: addThousandSeparator(data.balance.toFixed(2))
+  },
   { title: t(''), value: '' },
   { title: t(''), value: '' },
   { title: t('所属商户'), value: data.tenantName },
   { title: t(''), value: '' },
-  { title: t(''), value: '' },
-]
+  { title: t(''), value: '' }
+];
 
 const emits = defineEmits([
   'onSearch',
