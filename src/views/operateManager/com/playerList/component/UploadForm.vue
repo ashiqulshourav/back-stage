@@ -179,8 +179,9 @@ const next = async () => {
       }
     }
     if (active.value == 1) {
-
-      const res = await API.operateImportExcel([...users]);
+      const res = await API.operateImportExcel({
+        userLabelListExcels: [...users]
+      });
 
       if (!res.code) {
         active.value = 2;
