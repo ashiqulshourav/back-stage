@@ -143,11 +143,11 @@ export const specialLimitColumns: TableColumnList = [
     prop: 'maxWinAmountLimit'
   },
   {
-    label: t('单场赛事限额'),
+    label: t('单场赛事累计赔付限额(不分早盘滚球)'),
     prop: 'singleEventLimit'
   },
   {
-    label: t('串关限额'),
+    label: t('串关单日累计赔付限额(不分早盘滚球)'),
     prop: 'seriesSingleDayLimit'
   },
   {
@@ -157,13 +157,13 @@ export const specialLimitColumns: TableColumnList = [
       return percentageLimit ? percentageLimit + '%' : '';
     }
   },
-  {
-    label: t('动作'),
-    prop: 'updateType',
-    formatter({ updateType }) {
-      return updateType === 1 ? t('编辑') : t('新增');
-    }
-  },
+  // {
+  //   label: t('动作'),
+  //   prop: 'updateType',
+  //   formatter({ updateType }) {
+  //     return updateType === 1 ? t('编辑') : t('新增');
+  //   }
+  // },
   {
     label: t('操作人'),
     prop: 'createdBy'

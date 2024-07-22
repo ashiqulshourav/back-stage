@@ -286,10 +286,10 @@
             </el-row>
             <el-row
               :gutter="5"
-              class="w-full items-center tex-xs"
+              class="w-[100px] items-center text-xs"
               v-if="isSpecial === 3"
             >
-              <el-col class="text-center w-full">
+              <el-col class="text-center">
                 <el-input
                   v-model="form.percentageLimit"
                   :formatter="(v: string) => formatNumber0to100(v, 13)"
@@ -649,7 +649,7 @@ const openLimitRecordDialog = () => {
 
 const openSpecialLimitDialog = () => {
   addDialog({
-    title: t('投注延时修改记录'),
+    title: t('特殊限额'),
     class: 'reset_dialog',
     width: '50%',
     alignCenter: true,
