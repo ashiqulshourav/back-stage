@@ -173,92 +173,21 @@ const next = async () => {
 
       if (!res.code) {
         console.log(res.data);
-        users.push(
-          // ...[
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   }
-          // ]
-          ...res.data
-        );
+        users.push(...res.data);
         active.value = 1;
         return;
       }
     }
     if (active.value == 1) {
-      active.value = 2;
+
+      let formData = new FormData();
+      formData.append('file', uploadFormFile.value);
+      const res = await API.operateImportExcel(formData);
+
+      if (!res.code) {
+        active.value = 2;
+        return;
+      }
       return;
     }
   }
