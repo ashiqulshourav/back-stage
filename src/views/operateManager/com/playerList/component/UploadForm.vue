@@ -180,9 +180,7 @@ const next = async () => {
     }
     if (active.value == 1) {
 
-      let formData = new FormData();
-      formData.append('file', uploadFormFile.value);
-      const res = await API.operateImportExcel(formData);
+      const res = await API.operateImportExcel([...users]);
 
       if (!res.code) {
         active.value = 2;
