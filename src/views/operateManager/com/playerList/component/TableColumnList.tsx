@@ -61,7 +61,7 @@ export const columns = (category: number): TableColumnList => {
         productAmountTotalLimit,
         seriesSingleDayCumulativeCompensationLimit,
         singleEventAccumulatedCompensationLimit,
-        percentageLimit,
+        percentageLimit
       }: {
         maxWinAmountLimit: number;
         productAmountTotalLimit: number;
@@ -76,9 +76,8 @@ export const columns = (category: number): TableColumnList => {
         )
           return t('例外限额');
         else if (percentageLimit) {
-          return('有')
-        }
-        else return t('无');
+          return '百分比限额';
+        } else return t('无');
       }
     },
     {
