@@ -163,7 +163,7 @@ export function userPlayerListHook(venueType: number, category: number) {
         },
         contentRenderer: ({ options, index }) =>
           h(UploadForm, {
-            onCloseDialog: (params: string) => {
+            onCloseDialog: () => {
               closeDialog(options, index);
               onSearch();
             }
