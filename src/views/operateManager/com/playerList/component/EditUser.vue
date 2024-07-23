@@ -690,6 +690,7 @@ onUpdated(() => {
   form.sportIdsDj = sportIdsDj;
   form.betDelay = betDelay;
   form.betDelayDj = betDelayDj;
+  form.percentageLimit = percentageLimit;
   if (
     maxWinAmountLimit ||
     productAmountTotalLimit ||

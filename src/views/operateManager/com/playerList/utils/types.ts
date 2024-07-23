@@ -27,7 +27,7 @@ export type updateUserFormType = {
   remark?: string;
   specialLimit: specialLimitType;
   [key: string]: any;
-  percentageLimit?: number;
+  percentageLimit: number;
   // singleBetLimit: number;
   // singleEventCompensationLimit: string;
   // createdAt: string | number;
