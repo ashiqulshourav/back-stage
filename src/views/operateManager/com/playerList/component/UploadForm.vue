@@ -167,12 +167,14 @@ const next = async () => {
   console.log({ uploadFormFile });
   if (uploadFormFile.value) {
     if (active.value == 0) {
+      users.length = 0;
       let formData = new FormData();
       formData.append('file', uploadFormFile.value);
       const res = await API.operateUpload(formData);
 
-      if (!res.code) {
-        console.log(res.data);
+      if (res.code) {
+        message(res.msg, { type: 'error' });
+      } else {
         users.push(...res.data);
         active.value = 1;
         return;
