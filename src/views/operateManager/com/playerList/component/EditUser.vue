@@ -286,10 +286,10 @@
             </el-row>
             <el-row
               :gutter="5"
-              class="w-full items-center tex-xs"
+              class="w-[100px] items-center text-xs"
               v-if="isSpecial === 3"
             >
-              <el-col class="text-center w-full">
+              <el-col class="text-center">
                 <el-input
                   v-model="form.percentageLimit"
                   :formatter="(v: string) => formatNumber0to100(v, 13)"
@@ -343,7 +343,7 @@ import {
   addLabelsType,
   specialLimitType
 } from '../utils/types';
-import { formatNumber0to100 } from '@/utils/formatNumber';
+import { formatNumber0to100, formatNumber } from '@/utils/formatNumber';
 import LabelListCom from './LabelListCom.vue';
 import ModifyContent from './ModifyContent.vue';
 import { addDialog } from '@/components/ReDialog';
@@ -356,7 +356,6 @@ const props = defineProps<{
 }>();
 
 const activeNames = ref(['1']);
-
 const { tableHeaderStyleBlue } = usePublicHooks();
 
 const emits = defineEmits([
@@ -649,7 +648,7 @@ const openLimitRecordDialog = () => {
 
 const openSpecialLimitDialog = () => {
   addDialog({
-    title: t('投注延时修改记录'),
+    title: t('特殊限额'),
     class: 'reset_dialog',
     width: '50%',
     alignCenter: true,
@@ -691,6 +690,7 @@ onUpdated(() => {
   form.sportIdsDj = sportIdsDj;
   form.betDelay = betDelay;
   form.betDelayDj = betDelayDj;
+  form.percentageLimit = percentageLimit;
   if (
     maxWinAmountLimit ||
     productAmountTotalLimit ||

@@ -141,3 +141,66 @@ export const recordColumns: TableColumnList = [
     }
   }
 ];
+
+export const userColumns: TableColumnList = [
+  {
+    label: t('用户ID'),
+    prop: 'userid'
+  },
+  {
+    label: t('风控标签'),
+    prop: 'riskControlLabel'
+  },
+  {
+    label: t('属性标签'),
+    prop: 'attributeLabel'
+  }
+];
+
+export const specialLimitColumns: TableColumnList = [
+  {
+    label: t('特殊限额'),
+    prop: 'name'
+  },
+  {
+    label: t('单注投注限额'),
+    prop: 'productAmountTotalLimit'
+  },
+  {
+    label: t('单注赔付限额'),
+    prop: 'maxWinAmountLimit'
+  },
+  {
+    label: t('单场赛事累计赔付限额(不分早盘滚球)'),
+    prop: 'singleEventLimit'
+  },
+  {
+    label: t('串关单日累计赔付限额(不分早盘滚球)'),
+    prop: 'seriesSingleDayLimit'
+  },
+  {
+    label: t('百分比限额'),
+    prop: 'percentageLimit',
+    formatter({ percentageLimit }) {
+      return percentageLimit ? percentageLimit + '%' : '';
+    }
+  },
+  // {
+  //   label: t('动作'),
+  //   prop: 'updateType',
+  //   formatter({ updateType }) {
+  //     return updateType === 1 ? t('编辑') : t('新增');
+  //   }
+  // },
+  {
+    label: t('操作人'),
+    prop: 'createdBy'
+  },
+  {
+    label: t('修改时间'),
+    prop: 'updatedAt',
+    formatter({ updatedAt }: { updatedAt: string }) {
+      return dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss');
+    }
+  }
+];

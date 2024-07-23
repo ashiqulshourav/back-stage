@@ -12,7 +12,7 @@
       :downloading="downloading"
       :uploading="uploading"
     />
-    <PureTableBar :columns="columns" @refresh="onSearch('reload')">
+    <PureTableBar :columns="columns(category)" @refresh="onSearch('reload')">
       <template #title>
         <div>
           <p v-if="selectedDataList.length === 0">{{ t('用户列表') }}</p>
