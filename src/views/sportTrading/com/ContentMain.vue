@@ -91,14 +91,14 @@
                   <div v-for="(d, i) in _.kindsCodeDtoList" :key="i">
                     <div
                       :class="[
-                        'flex w-full items-center h-[35px]',
+                        'flex w-full items-center h-[35px] ',
                         l === 0 && 'bg-[--el-color-primary-light-9]'
                       ]"
                       v-for="(s, l) in d.betItemsDtoList"
                       :key="`${i}-${l}`"
                     >
                       <div
-                        class="text-[--el-color-primary] text-left ml-2 pl-2 pr-2 leading-none w-1/4"
+                        class="text-[--el-color-primary] text-left ml-2 pl-[8px] leading-none w-1/4"
                       >
                         <ReText size="small">
                           {{
@@ -121,6 +121,7 @@
                           }}
                         </ReText>
                       </div>
+
                       <div class="flex items-center text-center w-1/6">
                         <el-text class="!text-xs" type="primary">{{
                           ODDS_TYPE_MAP[s.oddsType]
@@ -155,8 +156,10 @@
                         {{ s.betCount }}/{{ s.betAmount }}
                       </div>
                       <div
-                        class="text-[--el-color-primary] w-1/6 text-center"
-                        v-if="l === 0"
+                        :class="[
+                          'text-[--el-color-primary] w-1/6 text-center',
+                          l !== 0 && 'invisible'
+                        ]"
                       >
                         {{ d.betAmountDiffer ?? '' }}
                       </div>

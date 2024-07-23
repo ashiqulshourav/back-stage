@@ -36,6 +36,7 @@
         <div v-else class="flex flex-grow items-center">
           <el-input
             v-model="warningData.alarmPercent"
+            :parser="(v:string) => formatWarningNum(v, 3)"
             :formatter="(v:string) => formatWarningNum(v,3)"
           />
           <span class="ml-2">%</span>
