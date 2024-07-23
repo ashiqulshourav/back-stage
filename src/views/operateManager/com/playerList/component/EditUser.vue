@@ -598,6 +598,13 @@ const handleUpdate = () => {
     if (isSpecial.value == 3 && !form.percentageLimit) {
       form.percentageLimit = 100;
     }
+    if (
+      isSpecial.value == 3 &&
+      form.percentageLimit &&
+      form.percentageLimit > 100
+    ) {
+      form.percentageLimit = 100;
+    }
     if (isSpecial.value === 2) {
       form.specialLimit.productAmountTotalLimit = parseInt(
         form.specialLimit.productAmountTotalLimit
