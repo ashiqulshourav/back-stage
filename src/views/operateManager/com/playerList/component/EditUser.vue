@@ -343,7 +343,7 @@ import {
   addLabelsType,
   specialLimitType
 } from '../utils/types';
-import { formatNumber0to100 } from '@/utils/formatNumber';
+import { formatNumber0to100, formatNumber } from '@/utils/formatNumber';
 import LabelListCom from './LabelListCom.vue';
 import ModifyContent from './ModifyContent.vue';
 import { addDialog } from '@/components/ReDialog';
@@ -356,7 +356,6 @@ const props = defineProps<{
 }>();
 
 const activeNames = ref(['1']);
-
 const { tableHeaderStyleBlue } = usePublicHooks();
 
 const emits = defineEmits([

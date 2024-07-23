@@ -16,6 +16,7 @@
       :paginationSmall="true"
       @selection-change="handleSelectionChange"
       @page-size-change="handleSelectionChange"
+      @page-current-change="handleSelectionChange"
     >
     </pure-table>
   </div>
@@ -46,7 +47,8 @@ onMounted(() => {
   init();
 });
 
-const handleSelectionChange = () => {
+const handleSelectionChange = (n: number) => {
+  pagination.currentPage = n;
   init();
 };
 
