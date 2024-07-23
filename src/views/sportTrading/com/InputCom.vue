@@ -174,6 +174,7 @@ const mouseEvent = (
   type: 'enter' | 'leave'
 ) => {
   if (!hasAuth('CHANGE_ODDS') || props.saleStatus !== 2) return;
+  if (type === 'leave') showNum.value = true;
   emits('changeMouse', e, s, type);
 };
 </script>
