@@ -28,8 +28,7 @@
         {{ t('修改余额') }}
       </el-button>
     </div>
-
-    <el-form-item prop="accountChangeTypeCode">
+    <!-- <el-form-item prop="accountChangeTypeCode">
       <el-select
         v-model="form.accountChangeTypeCode"
         :placeholder="`${t('请选择账变类型')}`"
@@ -45,6 +44,50 @@
           :key="item.value"
         />
       </el-select>
+    </el-form-item> -->
+    <el-form-item prop="accountChangeTypeCode">
+      <el-tree-select
+        v-model="form.accountChangeTypeCode"
+        :placeholder="t('请选择账变类型')"
+        :data="
+          accountChangeTypeCodeList.map(item => ({
+            value: item.value,
+            label: item.label
+          }))
+        "
+        @change="search"
+        filterable
+        clearable
+        multiple
+        collapse-tags
+        :render-after-expand="false"
+        show-checkbox
+        check-strictly
+        check-on-click-node
+        style="width: 200px"
+      >
+        <template #header>
+          <el-checkbox
+            v-model="checkAllAcc"
+            @change="handleCheckAllAcc"
+          >
+            {{ t('全选') }}
+          </el-checkbox>
+          <el-checkbox 
+            v-model="removeAllAcc"
+            @change="handleRemoveAllAcc"
+            :disabled="form?.accountChangeTypeCode.length == 0"
+          >
+            {{ t('全不选') }}
+          </el-checkbox>
+          <el-checkbox
+            v-model="checkRevertAcc"
+            @change="handleCheckRevertAcc"
+          >
+            {{ t('反选') }}
+          </el-checkbox>
+        </template>
+      </el-tree-select>
     </el-form-item>
 
     <el-form-item :label="`${t('账变时间')}:`" prop="createTimeStart">
@@ -79,7 +122,7 @@ import { t } from '@/plugins/i18n';
 import SearchIcon from '@iconify-icons/ep/search';
 import RefreshIcon from '@iconify-icons/ep/refresh';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-import type { FormInstance } from 'element-plus';
+import type { FormInstance, CheckboxValueType } from 'element-plus';
 import dayjs from 'dayjs';
 import { accountChangeRecordSearchFormType, userDataType } from './util/types';
 import { accountChangeTypeCodeList } from './columns';
@@ -96,6 +139,47 @@ const props = defineProps<{
 
 const formRef = ref();
 const selectDate = ref();
+
+const checkAllAcc = ref(false);
+const removeAllAcc = ref(false);
+const checkRevertAcc = ref(false);
+
+watch(
+  () => props.form.accountChangeTypeCode,
+  val => {
+    if (!val || val.length === 0) {
+      checkAllAcc.value = false;
+    } else if (val.length === accountChangeTypeCodeList.length) {
+      checkAllAcc.value = true;
+      removeAllAcc.value = false;
+    }
+  }
+)
+
+const handleCheckAllAcc = (val: CheckboxValueType) => {
+  if(val){
+    props.form.accountChangeTypeCode = accountChangeTypeCodeList.map(_ => _.value);
+    removeAllAcc.value = false;
+    checkRevertAcc.value = false;
+  } else {
+    props.form.accountChangeTypeCode = [];
+  }
+}
+
+const handleRemoveAllAcc = () => {
+  props.form.accountChangeTypeCode = [];
+  removeAllAcc.value = false;
+  checkRevertAcc.value = false;
+}
+
+const handleCheckRevertAcc = () => {
+  if(true){
+    const oldArray = props.form.accountChangeTypeCode ? [...props.form.accountChangeTypeCode] : [];
+    props.form.accountChangeTypeCode = accountChangeTypeCodeList
+    .filter(_ => !oldArray.includes(_.value))
+    .map(_ => _.value)
+  }
+}
 
 const userInfo = (data: userDataType) => [
   { title: t('用户名'), value: data.userName },
