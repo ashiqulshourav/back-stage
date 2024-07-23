@@ -160,6 +160,7 @@ const handleCheckAllAcc = (val: CheckboxValueType) => {
   if(val){
     props.form.accountChangeTypeCode = accountChangeTypeCodeList.map(_ => _.value);
     removeAllAcc.value = false;
+    checkRevertAcc.value = false;
   } else {
     props.form.accountChangeTypeCode = [];
   }
@@ -168,6 +169,7 @@ const handleCheckAllAcc = (val: CheckboxValueType) => {
 const handleRemoveAllAcc = () => {
   props.form.accountChangeTypeCode = [];
   removeAllAcc.value = false;
+  checkRevertAcc.value = false;
 }
 
 const handleCheckRevertAcc = () => {
