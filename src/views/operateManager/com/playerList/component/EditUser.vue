@@ -286,14 +286,17 @@
             </el-row>
             <el-row
               :gutter="5"
-              class="w-[100px] items-center text-xs"
+              class="items-center text-xs"
               v-if="isSpecial === 3"
             >
-              <el-col class="text-center">
+              <el-col class="text-center" :span="5">
                 <el-input
                   v-model="form.percentageLimit"
                   :formatter="(v: string) => formatNumber0to100(v, 13)"
                 />
+              </el-col>
+              <el-col class="text-start" :span="6">
+                <span>%</span>
               </el-col>
             </el-row>
           </el-collapse-item>
