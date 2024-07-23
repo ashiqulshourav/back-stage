@@ -85,7 +85,6 @@
     <span>{{ currentMatch?.beginTime }}</span>
     <div class="flex pl-2 cursor-pointer">
       <IconGroup
-        :close-three-icon="true"
         :typeNum="currentMatch?.isSale"
         @changeMatchStatus="changeMatchStatus"
         :operateStatus="currentMatch.operateStatus"
