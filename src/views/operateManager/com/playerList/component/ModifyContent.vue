@@ -5,12 +5,11 @@
       <div class="w-28">
         <el-select clearable v-model="betDelay" @clear="clearAll('sport')">
           <el-option
-            v-for="item in 15"
+            v-for="item in [1, 5, 10, 30, 60]"
             :key="item"
-            :label="item + 's'"
+            :label="item === 60 ? '1min' : item + 's'"
             :value="item"
-            >{{ item }}</el-option
-          >
+          ></el-option>
         </el-select>
       </div>
       <div class="flex-grow ml-4 mr-40">
@@ -36,12 +35,11 @@
       <div class="w-28">
         <el-select clearable v-model="betDelayDj" @clear="clearAll('eSport')">
           <el-option
-            v-for="item in 60"
+            v-for="item in [1, 5, 10, 30, 60]"
             :key="item"
-            :label="item + 's'"
+            :label="item === 60 ? '1min' : item + 's'"
             :value="item"
-            >{{ item }}</el-option
-          >
+          ></el-option>
         </el-select>
       </div>
       <div class="flex-grow ml-4 mr-40">
