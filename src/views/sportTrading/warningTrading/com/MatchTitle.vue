@@ -79,7 +79,6 @@
         </div>
         <div class="flex mt-1 cursor-pointer text-xs">
           <IconGroup
-            :closeThreeIcon="true"
             :typeNum="currentMatch?.isSale"
             :operateStatus="currentMatch.operateStatus"
             @changeMatchStatus="changeMatchStatus"
