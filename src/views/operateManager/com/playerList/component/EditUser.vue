@@ -611,6 +611,7 @@ const handleUpdate = () => {
       form.specialLimit.seriesSingleDayCumulativeCompensationLimit = parseInt(
         form.specialLimit.seriesSingleDayCumulativeCompensationLimit
       );
+      form.percentageLimit = undefined;
       emits('onUpdateUser', form);
     } else {
       emits('onUpdateUser', { ...form, specialLimit: null });
