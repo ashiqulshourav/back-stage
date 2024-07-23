@@ -84,6 +84,7 @@ export function useTradingHook(type: 'early' | 'in') {
     Object.assign(currentMatch, matchList[0]?.matchDtoList[0]);
     //- 获取赛事盘口
     await getHandicapltems();
+
     //- 开启事件定时任务
     runLoopMatch();
     //- 后续列表填充
@@ -288,6 +289,7 @@ export function useTradingHook(type: 'early' | 'in') {
 
   //- 修改左侧选中比赛ID
   const changeSelectMatch = (data: sportTradingDataAPI.MatchDtoList) => {
+    isShowDialog.value = false;
     Object.assign(currentMatch, data);
     clearTimeout(loopTimer.value);
     getHandicapltems();
@@ -385,7 +387,7 @@ export function useTradingHook(type: 'early' | 'in') {
         }
       })
     );
-     getHandicapltems(true);
+    getHandicapltems(true);
   };
 
   //- 修改盘赛事图标状态

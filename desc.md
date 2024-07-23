@@ -145,3 +145,14 @@ import.meta.env.VITE_BUILD_TYPE === 'pro';
 ```js
 border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#303030]
 ```
+
+
+### input 输入框处理(保证值跟显示内容完全一致)
+
+```js
+ <el-input
+            v-model="warningData.alarmPercent"
+            :parser="(v:string) => formatWarningNum(v, 3)"
+            :formatter="(v:string) => formatWarningNum(v,3)"
+   />
+```
