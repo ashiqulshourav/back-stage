@@ -26,7 +26,7 @@ export type updateUserFormType = {
   isFreeze?: number;
   remark?: string;
   specialLimit: specialLimitType;
-  percentageLimit: number;
+  percentageLimit?: number;
   [key: string]: any;
   // singleBetLimit: number;
   // singleEventCompensationLimit: string;

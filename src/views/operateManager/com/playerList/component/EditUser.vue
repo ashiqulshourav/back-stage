@@ -592,10 +592,12 @@ const handleUpdate = () => {
 
     form.beforeLimit = props.userData.beforeLimit;
 
-    if (!form.percentageLimit) {
+    if (isSpecial.value == 1) {
+      form.percentageLimit = undefined;
+    }
+    if (isSpecial.value == 3 && !form.percentageLimit) {
       form.percentageLimit = 100;
     }
-
     if (isSpecial.value === 2) {
       form.specialLimit.productAmountTotalLimit = parseInt(
         form.specialLimit.productAmountTotalLimit
