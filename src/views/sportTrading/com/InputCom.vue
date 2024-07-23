@@ -26,8 +26,8 @@
           size="small"
           :step="0.01"
           v-model="inputCom"
-          @change="changeDpOdds"
         />
+        <!-- @change="changeDpOdds" -->
       </div>
     </div>
     <div
@@ -72,7 +72,7 @@ const inputCom = computed({
       if (v > 201 || v < 1.01) return;
     }
     if (!v || oldVal.value === v) return;
-    oldVal.value = v;
+
     const n = subtraction(v, props.s.dpOdds, 2);
     if (n > 0) {
       s1.value = addition(s1.value, n, 2);
@@ -98,21 +98,24 @@ const inputCom = computed({
 
       if (Math.abs(d.dpOdds) >= 1) d.dpOdds = resetDpodds(d.dpOdds);
     }
-
     changeDpOdds();
   }
 });
 
 const changeDpOdds = debounce(() => {
+  oldVal.value = props.s.dpOdds;
   emits('changeSelectNum', Number(tipData.value.val));
   s1.value = 0;
-}, 500);
+}, 1000);
 
 const showNum = ref(true);
 
 watch(
   () => props.s,
   d => {
+    setTimeout(() => {
+      oldVal.value = props.s.dpOdds;
+    }, 2000);
     showNum.value = d.sourceBetItemsId !== 1;
   },
   {

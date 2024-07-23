@@ -98,7 +98,7 @@
                       :key="`${i}-${l}`"
                     >
                       <div
-                        class="text-[--el-color-primary] text-left ml-2 pl-[8px] leading-none w-1/4 bg-red-200"
+                        class="text-[--el-color-primary] text-left ml-2 pl-[8px] leading-none w-1/4"
                       >
                         <ReText size="small">
                           {{
@@ -122,9 +122,7 @@
                         </ReText>
                       </div>
 
-                      <div
-                        class="flex items-center text-center w-1/6 bg-pink-300"
-                      >
+                      <div class="flex items-center text-center w-1/6">
                         <el-text class="!text-xs" type="primary">{{
                           ODDS_TYPE_MAP[s.oddsType]
                         }}</el-text>
@@ -158,8 +156,10 @@
                         {{ s.betCount }}/{{ s.betAmount }}
                       </div>
                       <div
-                        class="text-[--el-color-primary] w-1/6 text-center"
-                        v-if="l === 0"
+                        :class="[
+                          'text-[--el-color-primary] w-1/6 text-center',
+                          l !== 0 && 'invisible'
+                        ]"
                       >
                         {{ d.betAmountDiffer ?? '' }}
                       </div>
