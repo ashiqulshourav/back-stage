@@ -66,7 +66,7 @@
         show-checkbox
         check-strictly
         check-on-click-node
-        style="width: 200px"
+        style="width: 250px"
       >
         <template #header>
           <el-checkbox v-model="checkAllAcc" @change="handleCheckAllAcc">
