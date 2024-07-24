@@ -14,6 +14,7 @@ export function useRiskNotice() {
     if (!res.code) {
       riskNotificationRefresh.value = res.data.riskNotificationRefresh!;
       riskNotificationSwitch.value = res.data.riskNotificationSwitch!;
+      riskNoticeStore.set_is_loop(!!riskNotificationSwitch.value);
     }
   }
 
