@@ -54,7 +54,7 @@
               <el-row class="mt-2 mr w-full" v-if="!isAttrLabelAdd">
                 <el-col class="!flex justify-end">
                   <el-button
-                    v-if="hasAuth('ADDUSERLABEL')"
+                    v-if="hasAuth('addAttributeLabel'.toUpperCase())"
                     :icon="Plus"
                     type="primary"
                     size="small"
@@ -128,7 +128,7 @@
             <el-row class="mt-2 w-full" v-if="!isRiskLabelAdd">
               <el-col :span="24" class="!flex justify-end">
                 <el-button
-                  v-if="hasAuth('ADDUSERLABEL')"
+                  v-if="hasAuth('addRiskLabel'.toUpperCase())"
                   :icon="Plus"
                   type="primary"
                   @click="isRiskLabelAdd = true"
@@ -172,7 +172,7 @@
             </el-row>
           </el-collapse-item>
 
-          <el-collapse-item>
+          <el-collapse-item v-if="hasAuth('settingBetDelay'.toUpperCase())">
             <template #title>
               {{ t('投注延时') }}
             </template>
@@ -194,7 +194,11 @@
             </div>
           </el-collapse-item>
 
-          <el-collapse-item :title="t('限额等级设置')" name="3">
+          <el-collapse-item
+            :title="t('限额等级设置')"
+            name="3"
+            v-if="hasAuth('settingLimitLevel'.toUpperCase())"
+          >
             <p
               @click="openLimitRecordDialog"
               v-if="hasAuth('GETLABELLIST')"
@@ -222,7 +226,11 @@
               :header-cell-style="tableHeaderStyleBlue"
             />
           </el-collapse-item>
-          <el-collapse-item :title="t('特殊限额')" name="4">
+          <el-collapse-item
+            :title="t('特殊限额')"
+            name="4"
+            v-if="hasAuth('settingSepcialLimit'.toUpperCase())"
+          >
             <p
               @click="openSpecialLimitDialog"
               v-if="hasAuth('GETLABELLIST')"
