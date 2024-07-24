@@ -110,27 +110,30 @@ const noticeValueCount = computed(() => {
 });
 
 const refreshRiskNoticeWithInterval = async () => {
+  // console.log('leep', riskNoticeStore.isLoop);
   if (interval.value) clearInterval(interval.value);
-
-  await riskNoticeStore.setRiskNotice();
-  interval.value = setInterval(async () => {
+  if (riskNoticeStore.isLoop) {
     await riskNoticeStore.setRiskNotice();
-  }, 5000);
+    interval.value = setInterval(async () => {
+      await riskNoticeStore.setRiskNotice();
+    }, 5000);
+  } else await riskNoticeStore.setRiskNotice();
 };
 
 onMounted(() => {
-  if (riskNoticeStore.isLoop) {
-    refreshRiskNoticeWithInterval();
-  }
+  refreshRiskNoticeWithInterval();
+  // if (riskNoticeStore.isLoop) {
+  // }
   // riskNoticeStore.setRiskNotice();
 });
 
 watch(
   () => [
-    riskNoticeStore.riskNotificationSwitch,
+    // riskNoticeStore.riskNotificationSwitch,
     riskNoticeStore.riskNotificationRefresh,
     riskNoticeStore.createTimeStart,
-    riskNoticeStore.createTimeEnd
+    riskNoticeStore.createTimeEnd,
+    riskNoticeStore.isLoop
   ],
   () => {
     if (riskNoticeStore.createTimeStart && riskNoticeStore.createTimeEnd) {
