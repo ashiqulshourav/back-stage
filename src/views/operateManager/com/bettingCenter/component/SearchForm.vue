@@ -287,7 +287,6 @@
             </template>
           </el-tree-select>
         </el-form-item>
-
         <el-form-item :label="`${t('投注项ID')}:`" prop="betItemId">
           <el-input
               v-model="form.betItemId"
@@ -368,7 +367,6 @@
           />
         </el-form-item>
         <el-form-item>
-
           <el-button
             type="primary"
             :icon="useRenderIcon(SearchIcon)"
