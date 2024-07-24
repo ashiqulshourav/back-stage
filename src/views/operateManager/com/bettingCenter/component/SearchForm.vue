@@ -7,59 +7,49 @@
   >
     <div class="flex">
       <div>
-        <el-form-item prop="tenantIds" :label="`${t('商户名')}:`">
-          <el-tree-select
-            v-model="props.form.tenantIds"
-            :placeholder="t('请选择商户ID，多选项')"
-            :data="
-              tenantList.map(item => ({
-                value: item.id,
-                label: item.tenantName
-              }))
-            "
-            @change="search"
-            filterable
-            clearable
-            multiple
-            collapse-tags
-            :render-after-expand="false"
-            show-checkbox
-            check-strictly
-            check-on-click-node
-            style="width: 200px"
+        <el-form-item :label="`${t('注单状态')}:`" prop="queryType">
+          <el-select
+              class="!w-[180px]"
+              :placeholder="t('请选择状态')"
+              v-model="form.queryType"
+              @change="search"
           >
-            <template #header>
-              <el-checkbox
-                v-model="checkAllMName"
-                @change="handleCheckAllMName"
-              >
-                {{ t('全选') }}
-              </el-checkbox>
-              <el-checkbox
-                v-model="removeAllMName"
-                @change="handleRemoveAllMName"
-                :disabled="form?.tenantIds.length == 0"
-              >
-                {{ t('全不选') }}
-              </el-checkbox>
-              <el-checkbox
-                v-model="checkRevertMName"
-                @change="handleCheckRevertMName"
-              >
-                {{ t('反选') }}
-              </el-checkbox>
-            </template>
-          </el-tree-select>
+            <el-option
+                v-for="item in Object.entries(betStatusMap)"
+                :label="item[1]"
+                :value="Number(item[0])"
+                :key="item[0]"
+            />
+          </el-select>
         </el-form-item>
-        <el-form-item
+        <el-form-item :label="`${t('注单编号')}:`" prop="orderId">
+          <el-input
+              v-model="form.orderId"
+              :placeholder="t('注单流水号')"
+              clearable
+              :formatter="(v:string) => formatNumber(v, 30)"
+              v-enter="search"
+              class="!w-[180px]"
+          />
+        </el-form-item>
+        <el-form-item :label="`${t('会员账号')}:`" prop="userIdOrName">
+          <el-input
+              v-model="form.userIdOrName"
+              :placeholder="t('输入用户名/ID')"
+              clearable
+              maxLenght="20"
+              v-enter="search"
+              class="!w-[180px]"
+          />
+        </el-form-item>
+        <el-form-item  :label="`${t('赛事类型')}:`"
           v-if="props.venueType === 0"
-          :label="`${t('赛事类型')}:`"
           prop="category"
         >
           <el-select
             v-model="form.category"
             :placeholder="t('赛事类型')"
-            class="!w-[150px]"
+            class="!w-[180px]"
             @change="chagenMatchType"
           >
             <el-option :label="t('全部')" :value="' '" />
@@ -75,7 +65,7 @@
           <el-select
             v-model="form.sportId"
             :placeholder="t('赛种')"
-            class="!w-[160px]"
+            class="!w-[180px]"
             @change="search"
           >
             <el-option :label="t('全部')" :value="''" />
@@ -87,38 +77,11 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item :label="`${t('注单状态')}:`" prop="queryType">
-          <el-select
-            class="!w-[150px]"
-            :placeholder="t('请选择状态')"
-            v-model="form.queryType"
-            @change="search"
-          >
-            <el-option
-              v-for="item in Object.entries(betStatusMap)"
-              :label="item[1]"
-              :value="Number(item[0])"
-              :key="item[0]"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="`${t('投注阶段')}:`" prop="isInplay">
-          <el-select
-            v-model="form.isInplay"
-            clearable
-            class="!w-[120px]"
-            @change="search"
-          >
-            <el-option label="全部" value="" />
-            <el-option label="滚球" :value="1" />
-            <el-option label="早盘" :value="0" />
-          </el-select>
-        </el-form-item>
         <el-form-item :label="`${t('过关类型')}:`" prop="seriesType">
           <el-select
             v-model="form.seriesType"
             clearable
-            class="!w-[100px]"
+            class="!w-[180px]"
             @change="search"
           >
             <el-option :label="t('全部')" value="" />
@@ -127,13 +90,24 @@
             <el-option :label="t('复试串关')" :value="3" />
           </el-select>
         </el-form-item>
-        <el-form-item
+        <el-form-item :label="`${t('投注阶段')}:`" prop="isInplay">
+          <el-select
+              v-model="form.isInplay"
+              clearable
+              class="!w-[180px]"
+              @change="search"
+          >
+            <el-option label="全部" value="" />
+            <el-option label="滚球" :value="1" />
+            <el-option label="早盘" :value="0" />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="`${t('单式串关类型')}:`"
           v-if="form.seriesType === 2"
-          :label="`${t('单式串关类型')}:`"
           prop="seriesDetails"
         >
           <el-select
-            class="min-w100"
+            class="min-w180"
             :placeholder="t('请选择串关类型')"
             multiple
             v-model="form.seriesDetailsSingle"
@@ -147,14 +121,12 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item
+        <el-form-item  :label="`${t('复试串关类型')}:`"
           v-if="form.seriesType === 3"
-          :label="`${t('复试串关类型')}:`"
           prop="seriesDetails"
         >
-          <el-select
-            class="min-w100"
-            :placeholder="t('请选择串关类型')"
+          <el-select :placeholder="t('请选择串关类型')"
+            class="min-w180"
             multiple
             v-model="form.seriesDetailsDuplex"
             @change="search"
@@ -168,166 +140,76 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
-          <el-input
-            v-model="form.matchId"
-            :placeholder="t('赛事ID')"
-            clearable
-            v-enter="search"
-            class="!w-[150px]"
-          />
-        </el-form-item>
-        <el-form-item
-          :label="`${t('联赛查询')}:`"
-          :prop="leagueQuery === 'leagueName' ? 'leagueName' : 'leagueId'"
-          class="bold-label"
+        <el-form-item :label="`${t('联赛查询')}:`"
+                      :prop="leagueQuery === 'leagueName' ? 'leagueName' : 'leagueId'"
+                      class="bold-label"
         >
           <el-select v-model="leagueQuery" @change="leagueQueryChange" class="!w-[100px] flex-shrink-0">
             <el-option :label="t('联赛ID')" value="leagueId" />
             <el-option :label="t('联赛名')" value="leagueName" />
           </el-select>
           <el-input
-            class="!w-[200px] flex-shrink-0"
-            v-if="leagueQuery === 'leagueId'"
-            filterable
-            v-enter="search"
-            v-model="form.leagueId"
-            :placeholder="t('联赛ID')"
+              class="!w-[180px] flex-shrink-0"
+              v-if="leagueQuery === 'leagueId'"
+              filterable
+              v-enter="search"
+              v-model="form.leagueId"
+              :placeholder="t('联赛ID')"
           />
           <el-select
-            v-else
-            v-model="form.leagueName"
-            clearable
-            filterable
-            remote
-            @change="search"
-            @focus="matchStore.reset_lagueList"
-            :remote-method="
+              v-else
+              v-model="form.leagueName"
+              clearable
+              filterable
+              remote
+              @change="search"
+              @focus="matchStore.reset_lagueList"
+              :remote-method="
               debounce(
                 query =>
                   matchStore.search_league_list(query, form.sportId, category),
                 1000
               )
             "
-            class="!w-[200px] flex-shrink-0"
-            :placeholder="t('联赛名')"
-            :loading="matchStore.matchSearchLoading"
+              class="!w-[180px] flex-shrink-0"
+              :placeholder="t('联赛名')"
+              :loading="matchStore.matchSearchLoading"
           >
             <el-option
-              v-for="item in category === 0
+                v-for="item in category === 0
                 ? matchStore.sportLeagueList
                 : matchStore.esportLeagueList"
-              :key="item.leagueId"
-              :label="item.leagueNameCn"
-              :value="item.leagueNameCn"
+                :key="item.leagueId"
+                :label="item.leagueNameCn"
+                :value="item.leagueNameCn"
             />
           </el-select>
         </el-form-item>
-        <el-form-item :label="`${t('投注IP')}:`" prop="ip">
+        <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
           <el-input
-            v-model="form.ip"
-            :placeholder="t('请输入IP')"
+            v-model="form.matchId"
+            :placeholder="t('赛事ID')"
             clearable
-            :formatter="(v:string) => formatIp(v)"
             v-enter="search"
-            class="!w-[200px]"
-          />
-        </el-form-item>
-        <el-form-item :label="`${t('用户名/用户ID')}:`" prop="userIdOrName">
-          <el-input
-            v-model="form.userIdOrName"
-            :placeholder="t('请输入用户名/用户ID')"
-            clearable
-            maxLenght="20"
-            v-enter="search"
-            class="!w-[200px]"
-          />
-        </el-form-item>
-        <!-- <el-form-item :label="`${t('风控标签')}:`" prop="riskControlLabelList">
-          <el-select
-            v-model="form.riskControlLabelList"
-            @change="search"
-            multiple
-            clearable
-            class="!w-[150px]"
-          >
-            <el-option
-              v-for="item in riskLabelList"
-              :label="item.name"
-              :value="item.id"
-            />
-          </el-select>
-        </el-form-item> -->
-        <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
-          <el-tree-select
-            v-model="props.form.riskControlLabelList"
-            :data="
-              riskLabelList.map(item => ({
-                value: item.id,
-                label: item.name
-              }))
-            "
-            @change="search"
-            filterable
-            clearable
-            multiple
-            collapse-tags
-            :render-after-expand="false"
-            show-checkbox
-            check-strictly
-            check-on-click-node
-            style="width: 200px"
-          >
-            <template #header>
-              <el-checkbox
-                v-model="checkAllRLabel"
-                @change="handleCheckAllRLabel"
-              >
-                {{ t('全选') }}
-              </el-checkbox>
-              <el-checkbox
-                v-mode="removeAllRLabel"
-                @change="handleRemoveAllRLabel"
-                :disabled="form?.riskControlLabelList.length == 0"
-              >
-                {{ t('全不选') }}
-              </el-checkbox>
-              <el-checkbox
-                v-model="checkRevertRLabel"
-                @change="handleCheckRevertRLabel"
-              >
-                {{ t('反选') }}
-              </el-checkbox>
-            </template>
-          </el-tree-select>
-        </el-form-item>
-
-        <el-form-item :label="`${t('注单号')}:`" prop="orderId">
-          <el-input
-            v-model="form.orderId"
-            :placeholder="t('注单流水号')"
-            clearable
-            :formatter="(v:string) => formatNumber(v, 30)"
-            v-enter="search"
-            class="!w-[200px]"
+            class="!w-[180px]"
           />
         </el-form-item>
         <el-form-item :label="`${t('投注额')}:`" prop="minBetAmount">
           <el-input
-            v-model="form.minBetAmount"
-            :placeholder="t('最小值')"
-            clearable
-            class="!w-[110px]"
-            v-enter="search"
+              v-model="form.minBetAmount"
+              :placeholder="t('最小值')"
+              clearable
+              class="!w-[110px]"
+              v-enter="search"
           />
         </el-form-item>
         <el-form-item :label="`${t('')}-`" prop="maxBetAmount" class="arrange2">
           <el-input
-            v-model="form.maxBetAmount"
-            :placeholder="t('最大值')"
-            clearable
-            class="!w-[110px]"
-            v-enter="search"
+              v-model="form.maxBetAmount"
+              :placeholder="t('最大值')"
+              clearable
+              class="!w-[110px]"
+              v-enter="search"
           />
         </el-form-item>
         <el-form-item :label="`${t('用户输赢金额')}:`" prop="minProfitAmount">
@@ -352,10 +234,117 @@
             v-enter="search"
           />
         </el-form-item>
+        <el-form-item :label="`${t('投注IP')}:`" prop="ip">
+          <el-input
+              v-model="form.ip"
+              :placeholder="t('请输入IP')"
+              clearable
+              :formatter="(v:string) => formatIp(v)"
+              v-enter="search"
+              class="!w-[200px]"
+          />
+        </el-form-item>
+        <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
+          <el-tree-select
+              v-model="props.form.riskControlLabelList"
+              :data="
+              riskLabelList.map(item => ({
+                value: item.id,
+                label: item.name
+              }))
+            "
+              @change="search"
+              filterable
+              clearable
+              multiple
+              collapse-tags
+              :render-after-expand="false"
+              show-checkbox
+              check-strictly
+              check-on-click-node
+              style="width: 180px"
+          >
+            <template #header>
+              <el-checkbox
+                  v-model="checkAllRLabel"
+                  @change="handleCheckAllRLabel"
+              >
+                {{ t('全选') }}
+              </el-checkbox>
+              <el-checkbox
+                  v-mode="removeAllRLabel"
+                  @change="handleRemoveAllRLabel"
+                  :disabled="form?.riskControlLabelList.length == 0"
+              >
+                {{ t('全不选') }}
+              </el-checkbox>
+              <el-checkbox
+                  v-model="checkRevertRLabel"
+                  @change="handleCheckRevertRLabel"
+              >
+                {{ t('反选') }}
+              </el-checkbox>
+            </template>
+          </el-tree-select>
+        </el-form-item>
+
+        <el-form-item :label="`${t('投注项ID')}:`" prop="betItemId">
+          <el-input
+              v-model="form.betItemId"
+              :placeholder="t('投注项ID')"
+              clearable
+              class="!w-[180px]"
+              v-enter="search"
+          />
+        </el-form-item>
+        <el-form-item prop="tenantIds" :label="`${t('商户名')}:`">
+          <el-tree-select
+              v-model="props.form.tenantIds"
+              :placeholder="t('请选择商户ID，多选项')"
+              :data="
+              tenantList.map(item => ({
+                value: item.id,
+                label: item.tenantName
+              }))
+            "
+              @change="search"
+              filterable
+              clearable
+              multiple
+              collapse-tags
+              :render-after-expand="false"
+              show-checkbox
+              check-strictly
+              check-on-click-node
+              style="width: 200px"
+          >
+            <template #header>
+              <el-checkbox
+                  v-model="checkAllMName"
+                  @change="handleCheckAllMName"
+              >
+                {{ t('全选') }}
+              </el-checkbox>
+              <el-checkbox
+                  v-model="removeAllMName"
+                  @change="handleRemoveAllMName"
+                  :disabled="form?.tenantIds.length == 0"
+              >
+                {{ t('全不选') }}
+              </el-checkbox>
+              <el-checkbox
+                  v-model="checkRevertMName"
+                  @change="handleCheckRevertMName"
+              >
+                {{ t('反选') }}
+              </el-checkbox>
+            </template>
+          </el-tree-select>
+        </el-form-item>
         <el-form-item prop="timeType">
           <el-select
             v-model="form.timeType"
-            class="!w-[110px]"
+            class="!w-[100px]"
             @change="search"
           >
             <el-option :label="t('下注时间')" :value="1" />
@@ -379,15 +368,6 @@
           />
         </el-form-item>
         <el-form-item>
-          <el-form-item :label="`${t('投注项ID')}:`" prop="betItemId">
-            <el-input
-              v-model="form.betItemId"
-              :placeholder="t('投注项ID')"
-              clearable
-              class="!w-[180px]"
-              v-enter="search"
-            />
-          </el-form-item>
 
           <el-button
             type="primary"
