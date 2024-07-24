@@ -51,6 +51,26 @@
             </template>
           </el-tree-select>
         </el-form-item>
+        <el-form-item
+          v-if="props.venueType === 0"
+          :label="`${t('赛事类型')}:`"
+          prop="category"
+        >
+          <el-select
+            v-model="form.category"
+            :placeholder="t('赛事类型')"
+            class="!w-[150px]"
+            @change="chagenMatchType"
+          >
+            <el-option :label="t('全部')" :value="' '" />
+            <el-option
+              :label="item.label"
+              :value="item.value"
+              v-for="item in SPORT_CATEGORY"
+              :key="item.value"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item :label="`${t('赛种')}:`" prop="sportId">
           <el-select
             v-model="form.sportId"
@@ -202,7 +222,7 @@
               :value="item.leagueNameCn"
             />
           </el-select>
-        </el-form-item>        
+        </el-form-item>
         <el-form-item :label="`${t('投注IP')}:`" prop="ip">
           <el-input
             v-model="form.ip"
@@ -281,26 +301,7 @@
             </template>
           </el-tree-select>
         </el-form-item>
-        <el-form-item
-          v-if="props.venueType === 0"
-          :label="`${t('赛事类型')}:`"
-          prop="category"
-        >
-          <el-select
-            v-model="form.category"
-            :placeholder="t('赛事类型')"
-            class="!w-[150px]"
-            @change="chagenMatchType"
-          >
-            <el-option :label="t('全部')" :value="' '" />
-            <el-option
-              :label="item.label"
-              :value="item.value"
-              v-for="item in SPORT_CATEGORY"
-              :key="item.value"
-            />
-          </el-select>
-        </el-form-item>
+
         <el-form-item :label="`${t('注单号')}:`" prop="orderId">
           <el-input
             v-model="form.orderId"

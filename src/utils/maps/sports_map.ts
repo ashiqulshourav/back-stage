@@ -328,7 +328,6 @@ export const transferBoDan = (list: any[]) => {
 export const SPORT_CATEGORY = [
   { label: t('普通体育'), value: 0 },
   { label: t('电子竞技'), value: 1 },
-  { label: t('虚拟体育'), value: 2 }
 ];
 
 export enum LeagueClassifyType {
