@@ -85,7 +85,7 @@ onMounted(() => {
 })
 
 watch(
-  () => riskNotificationRefresh.value,
+  () => [riskNotificationRefresh.value, riskNoticeStore.isLoop],
   () => {
     currentSelectTimeIndex.value = timeList.indexOf(riskNotificationRefresh.value);
     refreshRiskNotice();
