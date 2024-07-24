@@ -128,6 +128,7 @@ const refreshRiskNoticeWithInterval = async () => {
 onMounted(() => {
   if (riskNoticeStore.isLoop) {
     refreshRiskNoticeWithInterval();
+    riskNoticeStore.setRiskNotificationSwitch();
   }
   // riskNoticeStore.setRiskNotice();
 });
