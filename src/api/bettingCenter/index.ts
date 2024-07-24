@@ -1,15 +1,5 @@
 import { http } from "@/utils/http";
 import { searchFormType } from '@/views/operateManager/com/bettingCenter/util/types'
-
-
-/* 
-      "orderId": "1800839211834676453",
-      "queryType": 1,
-      "pageSize": 20,
-      "pageNum": 1,
-      "export": false
- */
-
 export const bettingCenter = {
   //-结算中心列表
   bettingCenterList: (data: searchFormType) => http.request<any>("post", "/bet-center/list", { data }),
