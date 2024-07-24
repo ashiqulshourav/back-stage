@@ -212,6 +212,8 @@ export function useWarningHook() {
     const reqUrl =
       classify === 'match'
         ? 'updateMatchHandicapStatus'
+        : classify === 'category'
+        ? 'updateGroupHandicapStatus'
         : 'updateHandicapStatus';
 
     const res = await API[reqUrl]({
