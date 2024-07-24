@@ -342,6 +342,8 @@ export function useTradingHook(type: 'early' | 'in') {
     const reqUrl =
       classify === 'match'
         ? 'updateMatchHandicapStatus'
+        : classify === 'category'
+        ? 'updateGroupHandicapStatus'
         : 'updateHandicapStatus';
 
     const res = await API[reqUrl]({
