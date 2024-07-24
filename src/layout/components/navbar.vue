@@ -110,7 +110,7 @@ const noticeValueCount = computed(() => {
 });
 
 const refreshRiskNoticeWithInterval = async () => {
-  console.log('leep', riskNoticeStore.isLoop);
+  // console.log('leep', riskNoticeStore.isLoop);
   if (interval.value) clearInterval(interval.value);
   if (riskNoticeStore.isLoop) {
     await riskNoticeStore.setRiskNotice();
