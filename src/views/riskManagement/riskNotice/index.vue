@@ -70,7 +70,7 @@ const refreshRiskNotice = async () => {
   if (interval.value) clearInterval(interval.value);
 
   if (hasAuth('RISKNOTICEAGGREGATE')) {    
-    if (riskNoticeStore.isLoop) {
+    if (riskNoticeStore.riskNotificationSwitch) {
       interval.value = setInterval(async () => {
         await getRiskNoticeAggregate();
       }, Number(riskNotificationRefresh.value) * 1000);
@@ -85,7 +85,7 @@ onMounted(() => {
 })
 
 watch(
-  () => [riskNotificationRefresh.value, riskNoticeStore.isLoop],
+  () => [riskNotificationRefresh.value, riskNoticeStore.riskNotificationSwitch],
   () => {
     currentSelectTimeIndex.value = timeList.indexOf(riskNotificationRefresh.value);
     refreshRiskNotice();
