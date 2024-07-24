@@ -133,15 +133,13 @@
                       <InputCom
                         :s="s"
                         :saleStatus="_.isSale"
-                        @changeMouse="
-                          (e, s, type) =>
-                            mouseEvent(e, s, type, d.betItemsDtoList)
-                        "
+                        @clearMatchTime="v => $emit('clearMatchTime', v)"
                         :selectNum="selectNum"
                         :selectItem="selectItem"
-                        :betItemsDtoList="betItemsDtoList"
-                        @changeSelectNum="(n:number) =>
-                      shortcutSelectNum(n,'input')"
+                        :betItemsDtoList="d.betItemsDtoList"
+                        @changeSelectNum="
+                          (v, s) => shortcutSelectNum(v, s, d.betItemsDtoList)
+                        "
                       />
                       <div
                         :class="[
@@ -198,13 +196,7 @@
 import { handicapListType } from '../util/type';
 import IconGroup from './IconGroup.vue';
 import ContentTitle from './ContentTitle.vue';
-import { addition, subtraction } from '@pureadmin/utils';
-import {
-  ODDS_TYPE_MAP,
-  PLAY_MATCH_NAME,
-  goalScoring,
-  resetDpodds
-} from '../util/playMap';
+import { ODDS_TYPE_MAP, PLAY_MATCH_NAME, goalScoring } from '../util/playMap';
 import InputCom from './InputCom.vue';
 import { t } from '@/plugins/i18n';
 import { useBetStore } from '@/store/bet';
@@ -215,7 +207,6 @@ const contentRef = ref();
 const collapseRef = ref();
 const activeNames = ref([1]);
 const contentScrollRef = ref();
-const betItemsDtoList = reactive<sportTradingDataAPI.BetItemsDtoList[]>([]);
 const selectItem = ref<sportTradingDataAPI.BetItemsDtoList>(
   {} as sportTradingDataAPI.BetItemsDtoList
 );
@@ -263,33 +254,19 @@ const emits = defineEmits([
   'sendNewOdds',
   'onCloseDialog'
 ]);
-//- 鼠标滑入交互处理
-const mouseEvent = (
-  _e: any,
-  s: sportTradingDataAPI.BetItemsDtoList,
-  type: 'enter' | 'leave',
-  list?: sportTradingDataAPI.BetItemsDtoList[]
-) => {
-  if (type === 'enter') {
-    //鼠标滑入之前所有为隐藏
-    props.handicapList
-      .find(item => item.listType === props.selectContentType)!
-      .list.forEach(item => {
-        item.kindsCodeDtoList.forEach(_ => {
-          _.betItemsDtoList.forEach(r => {
-            r.sourceBetItemsId = -1;
-          });
-        });
-      });
-    selectItem.value = s;
-    betItemsDtoList.length = 0;
-    betItemsDtoList.push(...(list as sportTradingDataAPI.BetItemsDtoList[]));
-    s.sourceBetItemsId = 1;
-  } else {
-    s.sourceBetItemsId = -1;
-  }
-  emits('clearMatchTime', s.sourceBetItemsId);
-};
+// //- 鼠标滑入交互处理
+// const mouseEvent = (
+//   _e: any,
+//   s: sportTradingDataAPI.BetItemsDtoList,
+//   type: 'enter' | 'leave'
+// ) => {
+//   if (type === 'enter') {
+//     s.sourceBetItemsId = 1;
+//   } else {
+//     s.sourceBetItemsId = -1;
+//   }
+//   emits('clearMatchTime', s.sourceBetItemsId);
+// };
 
 //- 修改选择类型
 const changeSelectType = (type: string) => {
@@ -298,29 +275,19 @@ const changeSelectType = (type: string) => {
 
 //-快捷选择数字事件
 const selectNum = ref(0);
-const shortcutSelectNum = (_: number, type: string) => {
+const shortcutSelectNum = (
+  _: number,
+  s: sportTradingDataAPI.BetItemsDtoList,
+  list: sportTradingDataAPI.BetItemsDtoList[]
+) => {
   if (_ === 0) return;
   const params: { betItemsId: number; dpOdds: number; oddsType: string }[] = [];
   //- 下盘需要递减
-  if (betItemsDtoList.length === 2) {
-    const otherIdx = betItemsDtoList.findIndex(
-      item => item.betItemsId !== selectItem.value.betItemsId
-    );
+  if (list.length === 2) {
+    const otherIdx = list.findIndex(item => item.betItemsId !== s.betItemsId);
 
-    //- 快捷选择单独处理
-    if (type === 'shortcut') {
-      const d = betItemsDtoList.find(
-        item => item.betItemsId !== selectItem.value.betItemsId
-      ) as sportTradingDataAPI.BetItemsDtoList;
-      if (_ > 0) {
-        d.dpOdds = subtraction(d.dpOdds, Math.abs(_), 2);
-      } else {
-        d.dpOdds = addition(d.dpOdds, Math.abs(_), 2);
-      }
-      if (Math.abs(d.dpOdds) >= 1) d.dpOdds = resetDpodds(d.dpOdds);
-    }
     params.push(
-      ...betItemsDtoList.map((d, index: number) => ({
+      ...list.map((d, index: number) => ({
         oddsType: d.oddsType,
         betItemsId: d.betItemsId,
         dpOdds: index !== otherIdx ? _ : _ * -1
@@ -329,10 +296,9 @@ const shortcutSelectNum = (_: number, type: string) => {
     emits('sendNewOdds', params);
   } else {
     //- 长度大于3的盘口
-    const d = betItemsDtoList.find(
-      item => item.betItemsId === selectItem.value.betItemsId
+    const d = list.find(
+      item => item.betItemsId === s.betItemsId
     ) as sportTradingDataAPI.BetItemsDtoList;
-
     nextTick(() => {
       params.push({
         oddsType: d.oddsType,
