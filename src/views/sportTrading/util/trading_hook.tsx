@@ -12,6 +12,7 @@ import dayjs from 'dayjs';
 
 export function useTradingHook(type: 'early' | 'in') {
   const loading = ref(true);
+  const noLoop = ref(false);
   const noMatchList = ref(false);
   const matchStatus = ref<'nobegin' | 'canceled' | 'over'>('nobegin');
   const matchStartTime = ref<number>();
@@ -278,9 +279,16 @@ export function useTradingHook(type: 'early' | 'in') {
     });
   };
 
+  // todo 临时增加
+  const changeNoLoopStatus = () => {
+    noLoop.value = false;
+    clearInterval(loopTimer.value);
+  };
+
   //- 开启定时轮询任务
   const runLoopMatch = () => {
     if (loopTimer.value) clearInterval(loopTimer.value);
+    if (noLoop.value) return clearInterval(loopTimer.value);
     loopTimer.value = setInterval(() => {
       //- 轮询不现实进度条
       getHandicapltems(true);
@@ -474,6 +482,7 @@ export function useTradingHook(type: 'early' | 'in') {
     matchStartTime,
     panIsEmpty,
     isShowDialog,
-    onCloseDialog
+    onCloseDialog,
+    changeNoLoopStatus
   };
 }

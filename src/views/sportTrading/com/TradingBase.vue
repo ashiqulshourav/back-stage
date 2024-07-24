@@ -9,6 +9,8 @@
     <div
       class="bg-bg_color w-[99/100] mt-2 pl-5 pt-[12px] flex-grow flex flex-col overflow-hidden"
     >
+      <!-- todo -->
+      <el-button class="w-20" @click="changeNoLoopStatus">停止轮询</el-button>
       <div class="font-bold mb-2 flex items-center">
         <topCollapse
           :isActive="isActive"
@@ -21,6 +23,7 @@
         <div class="w-full flex items-center justify-center" v-if="noMatchList">
           <el-empty :description="t('暂无数据')" :image-size="100" />
         </div>
+        <!-- todo -->
         <template v-else>
           <div
             v-loading="loading"
@@ -83,7 +86,8 @@ const {
   panIsEmpty,
   isShowDialog,
   matchStatus,
-  onCloseDialog
+  onCloseDialog,
+  changeNoLoopStatus
 } = useTradingHook(type);
 
 const title = computed(() =>
