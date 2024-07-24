@@ -206,8 +206,8 @@ export const specialLimitColumns: TableColumnList = [
     prop: 'updateType',
     formatter({ updateType }) {
       if (updateType == 1) return t('禁用');
-      if (updateType == 2) return t('修改');
-      if (updateType == 3) return t('启用');
+      else if (updateType == 2) return t('修改');
+      else if (updateType == 3) return t('启用');
     }
   },
   {
