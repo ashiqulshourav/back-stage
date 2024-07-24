@@ -204,8 +204,23 @@ export const specialLimitColumns: TableColumnList = [
   {
     label: t('动作'),
     prop: 'updateType',
-    formatter({ updateType }) {
-      return updateType === 1 ? t('编辑') : t('新增');
+    formatter({
+      productAmountTotalLimit,
+      maxWinAmountLimit,
+      singleEventLimit,
+      seriesSingleDayLimit,
+      percentageLimit
+    }) {
+      if (
+        maxWinAmountLimit ||
+        productAmountTotalLimit ||
+        seriesSingleDayLimit ||
+        singleEventLimit
+      )
+        return t('启用');
+      else if (percentageLimit) {
+        return '修改';
+      } else return t('禁用');
     }
   },
   {
