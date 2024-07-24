@@ -26,6 +26,7 @@ const sportKeys = new Set([
   'handicapWholeMaxBetRolling',
   'otherMaxBetMoring',
   'otherMaxBetRolling',
+  'otherSingleMaxWin',
   'singleUserMaxWin',
   'winHalfMaxBetMoring',
   'winHalfMaxBetRolling',
@@ -128,7 +129,7 @@ export function useOrderLimitHook() {
       currentSportId.value === 3 ? (dataType = esportKeys) : (dataType = sportKeys)
       const existKey: { [key: number]: boolean } = {}
       sourceSportList.map((item) => {
-        const sport = sportList.find((l) => item.leagueLevel === l.leagueLevel)
+        const sport = sportList.find((l) => item.leagueLevel === l.leagueLevel);
         if (sport === null || sport === undefined) return;
         dataType.forEach((key: LimitListType) => {
           const leagueLevel: number = sport.leagueLevel;
