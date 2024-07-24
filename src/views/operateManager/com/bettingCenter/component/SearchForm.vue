@@ -341,7 +341,7 @@
             </template>
           </el-tree-select>
         </el-form-item>
-        <el-form-item prop="timeType">
+        <el-form-item v-if="!(form.matchId||form.orderId||form.userIdOrName)" prop="timeType">
           <el-select
             v-model="form.timeType"
             class="!w-[100px]"
