@@ -8,14 +8,14 @@ export const sportTradingData = {
   //- 赛事盘口列表获取
   getHandicapItems: (data: { matchId: number }, noNprogress?: boolean) => http.request<sportTradingDataAPI.getHandicapItemsRes>("post", "/operateHandicap/v1/getHandicapItems", { data }, { noNprogress }),
 
-  //- 赛事状态更新
+  //- 盘口状态更新
   updateHandicapStatus: (data: sportTradingDataAPI.updateHandicapStatusParams) => http.request<sportTradingDataAPI.updateHandicapStatus>("post", "/operateHandicap/v1/updateHandicapStatus", { data }),
 
-  //- 玩法分类状态更新
+  //-玩法分类状态更新
   updateGroupHandicapStatus: (data: sportTradingDataAPI.updateHandicapStatusParams) => http.request<sportTradingDataAPI.updateHandicapStatus>("post", "/operateHandicap/v1/updateGroupHandicapStatus", { data }),
 
-  //- 盘口状态更新
-  udateCategoryStatus: (data: sportTradingDataAPI.updateHandicapOddsParams) => http.request<sportTradingDataAPI.updateHandicapOddsParamsRes>("post", "/operateHandicap/v1/updateHandicapOdds", { data }),
+  //-  赛事状态更新
+  updateMatchHandicapStatus: (data: sportTradingDataAPI.updateHandicapStatusParams) => http.request<sportTradingDataAPI.updateHandicapOddsParamsRes>("post", "/operateHandicap/v1/updateMatchHandicapStatus", { data }),
 
   //- 盘口赔率更新
   updateHandicapOdds: (data: sportTradingDataAPI.updateHandicapOddsParams) => http.request<sportTradingDataAPI.updateHandicapOddsParamsRes>("post", "/operateHandicap/v1/updateHandicapOdds", { data }),
