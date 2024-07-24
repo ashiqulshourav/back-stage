@@ -189,7 +189,20 @@ const next = async () => {
         active.value = 2;
         return;
       } else {
-        message(res.msg, { type: 'error' });
+        let lines = res.msg.split('/n');
+
+        let errMessage = '';
+
+        // Process each line
+        lines.forEach((line, index) => {
+            // Trim any extra spaces from the beginning and end of the line
+            line = line.trim();
+            
+            // Construct the message with appropriate formatting
+            errMessage += `${line}\n`;
+        });
+
+        message(errMessage, { type: 'error' });
       }
       return;
     }
