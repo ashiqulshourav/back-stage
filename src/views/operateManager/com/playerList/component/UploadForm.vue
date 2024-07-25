@@ -84,17 +84,20 @@
           <span class="text-red-500">{{ t('100条') }}</span>
         </p>
       </div>
-    </div>
-
-    <div class="rounded my-5 border border-gray-300 flex p-5 bg-[#f9f9f9]">
-      <p class="font-bold mb-3">
-        {{ t('异常提示： ') }}
-      </p>
-      <div class="text-gray-500"></div>
     </div> -->
+
+    
   </div>
   <!-- 1 -->
-  <div v-if="active == 1">
+   <div class="rounded flex-col my-5 border border-gray-300 flex p-5 bg-[#f9f9f9]" v-if="active == 1 && errorMsg">
+    <div class="font-bold mb-3">
+      {{ t('异常提示： ') }}
+    </div>
+    <div class="text-gray-500">
+      {{ errorMsg }}
+    </div>
+  </div>
+  <div v-if="active == 1 && !errorMsg">
     <!-- Data preview -->
     <pure-table
       class="my-5"
@@ -161,10 +164,10 @@ const { tableHeaderStyle } = usePublicHooks();
 
 const active = ref(0);
 const uploadFormFile = ref();
+const errorMsg = ref(``);
 const users = reactive<OperateManagementDataAPI.userType[]>([]);
 
 const next = async () => {
-  console.log({ uploadFormFile });
   if (uploadFormFile.value) {
     if (active.value == 0) {
       users.length = 0;
@@ -189,7 +192,7 @@ const next = async () => {
         active.value = 2;
         return;
       } else {
-        message(res.msg, { type: 'error' });
+        errorMsg.value = res.msg
       }
       return;
     }
@@ -199,6 +202,9 @@ const next = async () => {
 const previous = () => {
   if (active.value != 0) {
     active.value--;
+  }
+  if (active.value != 1) {
+    errorMsg.value = "";
   }
 };
 
