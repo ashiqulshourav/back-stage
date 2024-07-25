@@ -89,17 +89,17 @@
     
   </div>
   <!-- 1 -->
-   <div class="rounded flex-col my-5 border border-gray-300 flex p-5 bg-[#f9f9f9]" v-if="active == 1 && errorMsg">
+   <div class="rounded flex-col my-5 border border-gray-300 flex p-5 bg-[#f9f9f9]" v-if="active == 1 && errorMsg.length">
     <div class="font-bold mb-3">
       {{ t('异常提示： ') }}
     </div>
     <div class="text-gray-500">
-      <div v-for="(text, idx) in errorMsg" :key="idx">
+      <div v-for="(text, idx) in errorMsg" :key="idx" class="mb-3">
         {{ text }}
       </div>
     </div>
   </div>
-  <div v-if="active == 1 && !errorMsg">
+  <div v-if="active == 1 && !errorMsg.length">
     <!-- Data preview -->
     <pure-table
       class="my-5"
