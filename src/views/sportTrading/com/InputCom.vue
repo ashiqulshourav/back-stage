@@ -1,33 +1,35 @@
 <template>
   <div
+    @mouseleave="showNum = true"
     class="w-1/4 text-center input_wrapper relative h-full input_container"
-    @mouseleave.stop="e => mouseEvent(e, props.s, 'leave')"
   >
     <span
-      v-if="showNum"
-      @mouseenter.stop="e => mouseEvent(e, props.s, 'enter')"
+      @mouseenter="toggleShowNum('enter')"
+      v-show="showNum"
       :class="[
-        'text-[--el-color-primary]  justify-end h-full flex items-center w-[45px]',
+        'text-[--el-color-primary] justify-end h-full flex items-center w-[45px]',
         saleStatus !== 2 && '!text-[#909399]'
       ]"
     >
       {{ s.dpOdds?.toFixed(2) }}
     </span>
     <div
-      v-else
-      class="text-[--el-color-primary] flex justify-start cursor-pointer h-full relative"
+      v-show="!showNum"
+      class="text-[--el-color-primary] flex justify-start cursor-pointer h-full items-center relative"
     >
       <div
-        class="w-[100px] flex justify-start items-center h-full"
-        @mouseleave="showNum = true"
+        @mouseleave="toggleShowNum('leave')"
+        class="flex justify-start items-center h-[80%]"
       >
-        <el-input-number
-          class="!w-[100px]"
-          size="small"
-          :step="0.01"
-          v-model="inputCom"
-        />
-        <!-- @change="changeDpOdds" -->
+        <div class="bg-red-100" @click.stop @mouseleave.stop>
+          <el-input-number
+            class="!w-[100px]"
+            size="small"
+            :step="0.01"
+            v-model="inputCom"
+            @change="changeDpOdds"
+          />
+        </div>
       </div>
     </div>
     <div
@@ -47,7 +49,7 @@ import { hasAuth } from '@/router/utils';
 import { resetDpodds } from '../util/playMap';
 
 const emits = defineEmits([
-  'changeMouse',
+  'clearMatchTime',
   'changeSelectNum',
   'showShortcutContainer',
   'hideScrollList'
@@ -60,8 +62,14 @@ const props = defineProps<{
   betItemsDtoList: sportTradingDataAPI.BetItemsDtoList[];
 }>();
 
+const toggleShowNum = (t: 'enter' | 'leave') => {
+  if (!hasAuth('CHANGE_ODDS') || props.saleStatus !== 2) return;
+  showNum.value = t === 'leave';
+  emits('clearMatchTime', !showNum.value ? 1 : -1);
+};
+
 const s1 = ref(0);
-const oldVal = ref(0);
+const oldVal = ref();
 
 const inputCom = computed({
   get() {
@@ -72,7 +80,6 @@ const inputCom = computed({
       if (v > 201 || v < 1.01) return;
     }
     if (!v || oldVal.value === v) return;
-
     const n = subtraction(v, props.s.dpOdds, 2);
     if (n > 0) {
       s1.value = addition(s1.value, n, 2);
@@ -80,48 +87,42 @@ const inputCom = computed({
       s1.value = subtraction(s1.value, Math.abs(n), 2);
     }
     props.s.dpOdds = v;
-
     if (Math.abs(props.s.dpOdds) >= 1 && props.s.oddsType === 'ML') {
       props.s.dpOdds = resetDpodds(props.s.dpOdds);
     }
-
     if (props.betItemsDtoList.length === 2) {
       const d = props.betItemsDtoList.find(
-        item => item.betItemsId !== props.selectItem.betItemsId
+        item => item.betItemsId !== props.s.betItemsId
       ) as sportTradingDataAPI.BetItemsDtoList;
-
       if (n > 0) {
         d.dpOdds = subtraction(d.dpOdds, n, 2);
       } else {
         d.dpOdds = addition(d.dpOdds, Math.abs(n), 2);
       }
-
       if (Math.abs(d.dpOdds) >= 1) d.dpOdds = resetDpodds(d.dpOdds);
     }
-    changeDpOdds();
   }
 });
 
-const changeDpOdds = debounce(() => {
+//- 赔率改变
+const changeDpOdds = debounce(_v => {
+  if (
+    Math.abs(
+      subtraction(Math.abs(props.s.previousDpOdds), Math.abs(props.s.dpOdds), 2)
+    ) > 0.3
+  ) {
+    props.s.dpOdds = props.s.previousDpOdds;
+    return;
+  }
+  //- 重置历史赔率
+  props.s.previousDpOdds = props.s.dpOdds;
   oldVal.value = props.s.dpOdds;
-  emits('changeSelectNum', Number(tipData.value.val));
+
+  emits('changeSelectNum', Number(tipData.value.val), props.s);
   s1.value = 0;
-}, 1000);
+}, 500);
 
 const showNum = ref(true);
-
-watch(
-  () => props.s,
-  d => {
-    setTimeout(() => {
-      oldVal.value = props.s.dpOdds;
-    }, 2000);
-    showNum.value = d.sourceBetItemsId !== 1;
-  },
-  {
-    deep: true
-  }
-);
 
 watch(
   () => props.selectNum,
@@ -169,17 +170,6 @@ const tipData = computed(() => {
     color: val > 0 ? '--el-color-success-light-3' : '--el-color-danger-light-3'
   };
 });
-
-//- 鼠标滑入交互处理
-const mouseEvent = (
-  e: any,
-  s: sportTradingDataAPI.BetItemsDtoList,
-  type: 'enter' | 'leave'
-) => {
-  if (!hasAuth('CHANGE_ODDS') || props.saleStatus !== 2) return;
-  if (type === 'leave') showNum.value = true;
-  emits('changeMouse', e, s, type);
-};
 </script>
 
 <style lang="scss">

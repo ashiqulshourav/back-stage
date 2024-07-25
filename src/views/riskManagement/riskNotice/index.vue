@@ -92,7 +92,6 @@ watch(
   }
 )
 
-
 function changeTime (index: number) {
   currentSelectTimeIndex.value = index;
   riskNoticeStore.setRiskNoticeRefreshSecond(timeList[index]);
