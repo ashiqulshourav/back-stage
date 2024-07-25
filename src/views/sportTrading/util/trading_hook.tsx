@@ -172,6 +172,7 @@ export function useTradingHook(type: 'early' | 'in') {
       handicapList[0].betItemsIdList.push(...item.betItemsIdList);
       item.kindsCodeDtoList.forEach((_, i: number) => {
         _.betItemsDtoList.forEach(l => {
+          l.previousDpOdds = l.dpOdds;
           if (l.kindsCode === 'FT_AH' && l.ctid === 0 && i === 0) {
             if (_.betItemsDtoList[0].handicap.startsWith('-')) {
               currentMatch.HandicapTeam = _.betItemsDtoList[0].homeOrAway;

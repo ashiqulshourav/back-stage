@@ -19,7 +19,7 @@
     >
       <div
         @mouseleave="toggleShowNum('leave')"
-        class="w-[95px] bg-red-100 flex justify-start items-center h-[80%]"
+        class="flex justify-start items-center h-[80%]"
       >
         <div class="bg-red-100" @click.stop @mouseleave.stop>
           <el-input-number
@@ -63,22 +63,19 @@ const props = defineProps<{
 }>();
 
 const toggleShowNum = (t: 'enter' | 'leave') => {
-  console.log('InputCom.vue文件 66==============行打印=', t);
   if (!hasAuth('CHANGE_ODDS') || props.saleStatus !== 2) return;
   showNum.value = t === 'leave';
-  // console.log('InputCom.vue文件 66==============行打印=', showNum.value);
   emits('clearMatchTime', !showNum.value ? 1 : -1);
 };
 
 const s1 = ref(0);
-const oldVal = ref(props.s.dpOdds);
+const oldVal = ref();
 
 const inputCom = computed({
   get() {
     return props.s.dpOdds;
   },
   set(v: number) {
-    console.log('InputCom.vue文件 80==============行打印=', v);
     if (props.s.oddsType === 'OU') {
       if (v > 201 || v < 1.01) return;
     }
@@ -95,7 +92,7 @@ const inputCom = computed({
     }
     if (props.betItemsDtoList.length === 2) {
       const d = props.betItemsDtoList.find(
-        item => item.betItemsId !== props.selectItem.betItemsId
+        item => item.betItemsId !== props.s.betItemsId
       ) as sportTradingDataAPI.BetItemsDtoList;
       if (n > 0) {
         d.dpOdds = subtraction(d.dpOdds, n, 2);
@@ -109,25 +106,23 @@ const inputCom = computed({
 
 //- 赔率改变
 const changeDpOdds = debounce(_v => {
-  // console.log(
-  //   'InputCom.vue文件 105==============行打印=',
-  //   Math.abs(subtraction(oldVal.value, props.s.dpOdds))
-  // );
-  // return;
-  // oldVal.value = props.s.dpOdds;
-  // emits('changeSelectNum', Number(tipData.value.val), props.s);
-  // s1.value = 0;
+  if (
+    Math.abs(
+      subtraction(Math.abs(props.s.previousDpOdds), Math.abs(props.s.dpOdds), 2)
+    ) > 0.3
+  ) {
+    props.s.dpOdds = props.s.previousDpOdds;
+    return;
+  }
+  //- 重置历史赔率
+  props.s.previousDpOdds = props.s.dpOdds;
+  oldVal.value = props.s.dpOdds;
+
+  emits('changeSelectNum', Number(tipData.value.val), props.s);
+  s1.value = 0;
 }, 500);
 
 const showNum = ref(true);
-
-watch(
-  () => props.s,
-  d => {
-    showNum.value = d.sourceBetItemsId !== 1;
-  },
-  { deep: true }
-);
 
 watch(
   () => props.selectNum,
