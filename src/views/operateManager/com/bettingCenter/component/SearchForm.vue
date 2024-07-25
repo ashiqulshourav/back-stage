@@ -162,7 +162,11 @@
           :prop="leagueQuery === 'leagueName' ? 'leagueName' : 'leagueId'"
           class="bold-label"
         >
-          <el-select v-model="leagueQuery" @change="leagueQueryChange" class="!w-[100px] flex-shrink-0">
+          <el-select
+            v-model="leagueQuery"
+            @change="leagueQueryChange"
+            class="!w-[100px] flex-shrink-0"
+          >
             <el-option :label="t('联赛ID')" value="leagueId" />
             <el-option :label="t('联赛名')" value="leagueName" />
           </el-select>
@@ -202,7 +206,7 @@
               :value="item.leagueNameCn"
             />
           </el-select>
-        </el-form-item>        
+        </el-form-item>
         <el-form-item :label="`${t('投注IP')}:`" prop="ip">
           <el-input
             v-model="form.ip"
@@ -540,7 +544,9 @@ watch(
     if (v.betItemsId) {
       setPropsForm();
       props.form.betItemId = v.betItemsId;
-      props.form.matchId = v.matchId;
+      props.form.matchId = v.matchId as string;
+      //- 只查询未结算注单
+      props.form.queryType = 3;
     }
   },
   {
@@ -553,7 +559,8 @@ onActivated(() => {
   if (betStore.gameplayData.betItemsId) {
     setPropsForm();
     props.form.betItemId = betStore.gameplayData.betItemsId;
-    props.form.matchId = betStore.gameplayData.matchId;
+    props.form.matchId = betStore.gameplayData.matchId as string;
+    props.form.queryType = 3;
     search();
   }
 });
@@ -562,6 +569,7 @@ onDeactivated(() => {
   if (betStore.gameplayData.betItemsId) {
     props.form.betItemId = '';
     props.form.matchId = '';
+    props.form.queryType = 1;
     betStore.set_gameplay_data({
       betItemsId: '',
       matchId: ''
@@ -627,10 +635,10 @@ const handleRemoveAllRLabel = (val: CheckboxValueType) => {
   props.form.riskControlLabelList = [];
   checkRevertRLabel.value = false;
 };
-const leagueQueryChange = ()=>{
-  props.form.leagueName ='';
-  props.form.leagueId='';
-}
+const leagueQueryChange = () => {
+  props.form.leagueName = '';
+  props.form.leagueId = '';
+};
 
 const handleCheckRevertRLabel = () => {
   if (true) {

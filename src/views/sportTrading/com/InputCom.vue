@@ -69,7 +69,6 @@ const toggleShowNum = (t: 'enter' | 'leave') => {
 };
 
 const s1 = ref(0);
-const oldVal = ref();
 
 const inputCom = computed({
   get() {
@@ -79,7 +78,7 @@ const inputCom = computed({
     if (props.s.oddsType === 'OU') {
       if (v > 201 || v < 1.01) return;
     }
-    if (!v || oldVal.value === v) return;
+    if (!v) return;
     const n = subtraction(v, props.s.dpOdds, 2);
     if (n > 0) {
       s1.value = addition(s1.value, n, 2);
@@ -90,8 +89,9 @@ const inputCom = computed({
     if (Math.abs(props.s.dpOdds) >= 1 && props.s.oddsType === 'ML') {
       props.s.dpOdds = resetDpodds(props.s.dpOdds);
     }
+    let d;
     if (props.betItemsDtoList.length === 2) {
-      const d = props.betItemsDtoList.find(
+      d = props.betItemsDtoList.find(
         item => item.betItemsId !== props.s.betItemsId
       ) as sportTradingDataAPI.BetItemsDtoList;
       if (n > 0) {
@@ -101,23 +101,27 @@ const inputCom = computed({
       }
       if (Math.abs(d.dpOdds) >= 1) d.dpOdds = resetDpodds(d.dpOdds);
     }
+
+    if (
+      Math.abs(
+        subtraction(
+          Math.abs(props.s.previousDpOdds),
+          Math.abs(props.s.dpOdds),
+          2
+        )
+      ) > 0.3
+    ) {
+      props.s.dpOdds = props.s.previousDpOdds;
+      if (d) d.dpOdds = d.previousDpOdds;
+      console.log('InputCom.vue文件 116==============行打印=', d);
+    }
   }
 });
 
 //- 赔率改变
 const changeDpOdds = debounce(_v => {
-  if (
-    Math.abs(
-      subtraction(Math.abs(props.s.previousDpOdds), Math.abs(props.s.dpOdds), 2)
-    ) > 0.3
-  ) {
-    props.s.dpOdds = props.s.previousDpOdds;
-    return;
-  }
   //- 重置历史赔率
   props.s.previousDpOdds = props.s.dpOdds;
-  oldVal.value = props.s.dpOdds;
-
   emits('changeSelectNum', Number(tipData.value.val), props.s);
   s1.value = 0;
 }, 500);
