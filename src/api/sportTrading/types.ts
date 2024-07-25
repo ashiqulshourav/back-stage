@@ -69,6 +69,7 @@ declare namespace sportTradingDataAPI {
     betAmount: number;
     oddsVariable: number;
     renderName?: string;
+    previousDpOdds: number;
   }
 
   type KindsCodeDtoList = {

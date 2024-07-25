@@ -87,6 +87,7 @@ export function useWarningHook() {
           o[d.isSale as keyof typeof o] += 1;
           d.kindsCodeDtoList.forEach((_, i: number) => {
             _.betItemsDtoList.forEach(l => {
+              l.previousDpOdds = l.dpOdds;
               if (l.kindsCode === 'FT_AH' && l.ctid === 0 && i === 0) {
                 if (_.betItemsDtoList[0].handicap.startsWith('-')) {
                   item.HandicapTeam = _.betItemsDtoList[0].homeOrAway;
@@ -212,6 +213,8 @@ export function useWarningHook() {
     const reqUrl =
       classify === 'match'
         ? 'updateMatchHandicapStatus'
+        : classify === 'category'
+        ? 'updateGroupHandicapStatus'
         : 'updateHandicapStatus';
 
     const res = await API[reqUrl]({

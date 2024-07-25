@@ -108,7 +108,6 @@ class PureHttp {
         return response.data;
       },
       (error: PureHttpError) => {
-        console.log('index.ts文件 114==============行打印=', error);
         switch (error!.response!.status) {
           case 403:
             useUserStore().logOut();
