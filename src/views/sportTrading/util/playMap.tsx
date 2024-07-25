@@ -238,9 +238,9 @@ export const resetDpodds = (dpOdds: number) => {
 //- 盘口类型映射
 
 export const ODDS_TYPE_MAP: { [key: string]: string } = {
-  OU: t('欧洲盘'),
+  OU: 'EU',
   HK: t('香港盘'),
-  ML: t('马来盘'),
+  ML: 'MY',
   ID: t('印尼盘'),
   US: t('美国盘'),
   GB: t('英国盘')

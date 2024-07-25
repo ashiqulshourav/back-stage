@@ -102,9 +102,12 @@
                       s.odds < 0 && 'translate-x-[-2px]'
                     ]"
                   >
-                    <el-text class="!text-xs" type="primary">{{
-                      ODDS_TYPE_MAP[s.oddsType]
-                    }}</el-text>
+                    <el-text
+                      class="!text-xs font-bold"
+                      :type="[s.oddsType === 'OU' ? 'primary' : 'danger']"
+                    >
+                      {{ ODDS_TYPE_MAP[s.oddsType] }}
+                    </el-text>
                     <span class="ml-2">
                       {{ s.odds.toFixed(2) }}
                     </span>
