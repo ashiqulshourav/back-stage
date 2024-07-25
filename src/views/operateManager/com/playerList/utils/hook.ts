@@ -119,8 +119,8 @@ export function userPlayerListHook(venueType: number, category: number) {
   // export player list
   const exportFile = async () => {
     onSearch('export').then((expRes: any) => {
-      if (expRes?.count > 50000) {
-        message(`当前条件下数据量为${addThousandSeparator(expRes?.count)}，大于5万条，不支持导出!`, { type: 'error' });
+      if (expRes?.count > 500000) {
+        message(`当前条件下数据量为${addThousandSeparator(expRes?.count)}，大于50万条，不支持导出!`, { type: 'error' });
       } else if (expRes?.count < 1 || expRes === null) {
         message('数据量为零，无法导出', { type: 'error' });
       } else {
@@ -132,8 +132,6 @@ export function userPlayerListHook(venueType: number, category: number) {
             const res = await API.playerListExport({
               ...removeEmptyStringKeys(form),
               venueType: venueType,
-              pageSize: 50000,
-              pageNum: 1,
               export: true,
             })
             message(res.msg, { type: res.code ? 'error' : 'success' });

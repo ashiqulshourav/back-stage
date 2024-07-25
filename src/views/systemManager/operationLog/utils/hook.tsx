@@ -70,8 +70,8 @@ export function useOperationLog() {
   // export to excel
   const exportFile = async () => {
     onSearch('export').then((expRes: any) => {
-      if(expRes?.total>50000){
-        message(`当前条件下数据量为${addThousandSeparator(expRes?.total)}，大于5万条，不支持导出!`, { type: 'error' });
+      if(expRes?.total>500000){
+        message(`当前条件下数据量为${addThousandSeparator(expRes?.total)}，大于50万条，不支持导出!`, { type: 'error' });
       }else if(expRes?.total<1 || expRes === null){
         message('数据量为零，无法导出', { type: 'error' });
       }else {
@@ -84,8 +84,6 @@ export function useOperationLog() {
             o.operateMenu && (o.operateMenu = o.operateMenu.join('-'));
             const res = await API.operationLogExport({
               ...o,
-              pageNum: 1,
-              pageSize: 50000,
               export: true
             });
             message(res.msg, { type: res.code ? 'error' : 'success' });
