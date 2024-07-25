@@ -23,9 +23,9 @@
       >
         <div class="bg-red-100" @click.stop @mouseleave.stop>
           <el-input-number
+            :step="0.01"
             class="!w-[100px]"
             size="small"
-            :step="0.01"
             v-model="inputCom"
             @change="changeDpOdds"
           />
@@ -68,8 +68,7 @@ const toggleShowNum = (t: 'enter' | 'leave') => {
   emits('clearMatchTime', !showNum.value ? 1 : -1);
 };
 
-const s1 = ref(0);
-
+const d = ref();
 const inputCom = computed({
   get() {
     return props.s.dpOdds;
@@ -78,52 +77,50 @@ const inputCom = computed({
     if (props.s.oddsType === 'OU') {
       if (v > 201 || v < 1.01) return;
     }
-    if (!v) return;
+    if (Math.abs(props.s.dpOdds) === 0 || Math.abs(d.value?.dpOdds) === 0 || !v)
+      return;
     const n = subtraction(v, props.s.dpOdds, 2);
-    if (n > 0) {
-      s1.value = addition(s1.value, n, 2);
-    } else {
-      s1.value = subtraction(s1.value, Math.abs(n), 2);
-    }
     props.s.dpOdds = v;
+
     if (Math.abs(props.s.dpOdds) >= 1 && props.s.oddsType === 'ML') {
       props.s.dpOdds = resetDpodds(props.s.dpOdds);
     }
-    let d;
     if (props.betItemsDtoList.length === 2) {
-      d = props.betItemsDtoList.find(
+      d.value = props.betItemsDtoList.find(
         item => item.betItemsId !== props.s.betItemsId
       ) as sportTradingDataAPI.BetItemsDtoList;
       if (n > 0) {
-        d.dpOdds = subtraction(d.dpOdds, n, 2);
+        d.value.dpOdds = subtraction(d.value.dpOdds, n, 2);
       } else {
-        d.dpOdds = addition(d.dpOdds, Math.abs(n), 2);
+        d.value.dpOdds = addition(d.value.dpOdds, Math.abs(n), 2);
       }
-      if (Math.abs(d.dpOdds) >= 1) d.dpOdds = resetDpodds(d.dpOdds);
-    }
-
-    if (
-      Math.abs(
-        subtraction(
-          Math.abs(props.s.previousDpOdds),
-          Math.abs(props.s.dpOdds),
-          2
-        )
-      ) > 0.3
-    ) {
-      props.s.dpOdds = props.s.previousDpOdds;
-      if (d) d.dpOdds = d.previousDpOdds;
-      console.log('InputCom.vue文件 116==============行打印=', d);
+      if (Math.abs(d.value.dpOdds) >= 1)
+        d.value.dpOdds = resetDpodds(d.value.dpOdds);
+    } else {
+      d.value = null;
     }
   }
 });
 
 //- 赔率改变
 const changeDpOdds = debounce(_v => {
-  //- 重置历史赔率
+  if (
+    Math.abs(
+      subtraction(Math.abs(props.s.previousDpOdds), Math.abs(props.s.dpOdds), 2)
+    ) > 0.3
+  ) {
+    // 调整双向盘越线处理
+    props.s.dpOdds = props.s.previousDpOdds;
+    if (d.value) d.value.dpOdds = d.value.previousDpOdds;
+    console.log('InputCom.vue文件 120==============行打印=');
+    return;
+  }
+
+  //- 重置历史赔率(包含双向盘)
   props.s.previousDpOdds = props.s.dpOdds;
+  if (d.value) d.value.previousDpOdds = d.value.dpOdds;
+  if (Number(tipData.value.val) === props.s.oddsVariable) return;
   emits('changeSelectNum', Number(tipData.value.val), props.s);
-  s1.value = 0;
 }, 500);
 
 const showNum = ref(true);
