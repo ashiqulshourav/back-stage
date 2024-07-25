@@ -112,15 +112,13 @@
                   <InputCom
                     :s="s"
                     :saleStatus="_.isSale"
-                    @changeMouse="
-                      (e, s, type) => mouseEvent(e, s, type, d.betItemsDtoList)
-                    "
+                    @clearMatchTime="v => $emit('clearMatchTime', v)"
                     :selectNum="selectNum"
                     :selectItem="selectItem"
-                    :betItemsDtoList="betItemsDtoList"
-                    @hideScrollList="() => (isShowScroll = false)"
-                    @changeSelectNum="(n:number) => shortcutSelectNum(n)"
-                    @showShortcutContainer="showShortcutContainer"
+                    :betItemsDtoList="d.betItemsDtoList"
+                    @changeSelectNum="
+                      (v, s) => shortcutSelectNum(v, s, d.betItemsDtoList)
+                    "
                   />
                   <div
                     :class="[
@@ -168,29 +166,29 @@ const props = defineProps<{
 
 //-快捷选择数字事件
 const selectNum = ref(0);
-const shortcutSelectNum = (_: number) => {
+const shortcutSelectNum = (
+  _: number,
+  s: sportTradingDataAPI.BetItemsDtoList,
+  list: sportTradingDataAPI.BetItemsDtoList[]
+) => {
   if (_ === 0) return;
   const params: { betItemsId: number; dpOdds: number; oddsType: string }[] = [];
-
   //- 下盘需要递减
-  if (betItemsDtoList.length === 2) {
-    const otherIdx = betItemsDtoList.findIndex(
-      item => item.betItemsId !== selectItem.value.betItemsId
-    );
+  if (list.length === 2) {
+    const otherIdx = list.findIndex(item => item.betItemsId !== s.betItemsId);
 
     params.push(
-      ...betItemsDtoList.map((d, index: number) => ({
+      ...list.map((d, index: number) => ({
         oddsType: d.oddsType,
         betItemsId: d.betItemsId,
         dpOdds: index !== otherIdx ? _ : _ * -1
       }))
     );
-
     emits('sendNewOdds', params);
   } else {
     //- 长度大于3的盘口
-    const d = betItemsDtoList.find(
-      item => item.betItemsId === selectItem.value.betItemsId
+    const d = list.find(
+      item => item.betItemsId === s.betItemsId
     ) as sportTradingDataAPI.BetItemsDtoList;
     nextTick(() => {
       params.push({

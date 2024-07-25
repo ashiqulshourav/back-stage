@@ -77,7 +77,11 @@ const inputCom = computed({
     if (props.s.oddsType === 'OU') {
       if (v > 201 || v < 1.01) return;
     }
-    if (Math.abs(props.s.dpOdds) === 0 || Math.abs(d.value?.dpOdds) === 0 || !v)
+    if (
+      Math.abs(props.s.dpOdds) === 0 ||
+      Math.abs(d.value?.dpOdds) === 0.01 ||
+      !v
+    )
       return;
     const n = subtraction(v, props.s.dpOdds, 2);
     props.s.dpOdds = v;
@@ -112,7 +116,6 @@ const changeDpOdds = debounce(_v => {
     // 调整双向盘越线处理
     props.s.dpOdds = props.s.previousDpOdds;
     if (d.value) d.value.dpOdds = d.value.previousDpOdds;
-    console.log('InputCom.vue文件 120==============行打印=');
     return;
   }
 
