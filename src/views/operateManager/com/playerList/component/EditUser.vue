@@ -15,7 +15,7 @@
           <el-form-item :label="t('用户账号: ')" class="mr-10">
             <el-text>{{ userData.userName }}</el-text>
           </el-form-item>
-          <el-form-item :label="t('帐号启用: ')">
+          <el-form-item :label="t('帐号启用: ')" v-if="hasAuth('UPDATESTATUS')">
             <el-switch
               v-model="form.isFreeze"
               inline-prompt
