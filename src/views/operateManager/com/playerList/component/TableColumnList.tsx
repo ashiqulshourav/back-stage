@@ -60,12 +60,14 @@ export const columns = (category: number): TableColumnList => {
         maxWinAmountLimit,
         productAmountTotalLimit,
         seriesSingleDayCumulativeCompensationLimit,
-        singleEventAccumulatedCompensationLimit
+        singleEventAccumulatedCompensationLimit,
+        percentageLimit
       }: {
         maxWinAmountLimit: number;
         productAmountTotalLimit: number;
         seriesSingleDayCumulativeCompensationLimit: number;
         singleEventAccumulatedCompensationLimit: number;
+        percentageLimit: number;
       }) => {
         if (
           maxWinAmountLimit ||
@@ -74,7 +76,9 @@ export const columns = (category: number): TableColumnList => {
           singleEventAccumulatedCompensationLimit
         )
           return t('例外限额');
-        else return t('无');
+        else if (percentageLimit) {
+          return '百分比限额: ' + percentageLimit + '%';
+        } else return t('无');
       }
     },
     {
@@ -164,34 +168,48 @@ export const specialLimitColumns: TableColumnList = [
   },
   {
     label: t('单注投注限额'),
-    prop: 'productAmountTotalLimit'
+    prop: 'productAmountTotalLimit',
+    formatter({ productAmountTotalLimit }) {
+      return productAmountTotalLimit ? productAmountTotalLimit : '-';
+    }
   },
   {
     label: t('单注赔付限额'),
-    prop: 'maxWinAmountLimit'
+    prop: 'maxWinAmountLimit',
+    formatter({ maxWinAmountLimit }) {
+      return maxWinAmountLimit ? maxWinAmountLimit : '-';
+    }
   },
   {
     label: t('单场赛事累计赔付限额(不分早盘滚球)'),
-    prop: 'singleEventLimit'
+    prop: 'singleEventLimit',
+    formatter({ singleEventLimit }) {
+      return singleEventLimit ? singleEventLimit : '-';
+    }
   },
   {
     label: t('串关单日累计赔付限额(不分早盘滚球)'),
-    prop: 'seriesSingleDayLimit'
+    prop: 'seriesSingleDayLimit',
+    formatter({ seriesSingleDayLimit }) {
+      return seriesSingleDayLimit ? seriesSingleDayLimit : '-';
+    }
   },
   {
     label: t('百分比限额'),
     prop: 'percentageLimit',
     formatter({ percentageLimit }) {
-      return percentageLimit ? percentageLimit + '%' : '';
+      return percentageLimit ? percentageLimit + '%' : '-';
     }
   },
-  // {
-  //   label: t('动作'),
-  //   prop: 'updateType',
-  //   formatter({ updateType }) {
-  //     return updateType === 1 ? t('编辑') : t('新增');
-  //   }
-  // },
+  {
+    label: t('动作'),
+    prop: 'updateType',
+    formatter({ updateType }) {
+      if (updateType == 1) return t('禁用');
+      else if (updateType == 2) return t('修改');
+      else if (updateType == 3) return t('启用');
+    }
+  },
   {
     label: t('操作人'),
     prop: 'createdBy'
