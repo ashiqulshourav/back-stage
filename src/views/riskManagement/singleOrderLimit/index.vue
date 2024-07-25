@@ -39,16 +39,20 @@
       >
         <!-- 单用户单场累计赔付限额 -->
         <template #singleUserMaxWin="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parser="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.singleUserMaxWin"
           />
           <span v-else>{{ addThousandSeparator(row.singleUserMaxWin) }}</span>
         </template>
         <!-- 单玩法累计期望赔付 -->
         <template #handicapSingleMaxWin="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parser="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.handicapSingleMaxWin"
           />
           <span v-else>{{
@@ -57,8 +61,10 @@
         </template>
         <!-- 全场-单注最高可投金额-早盘 -->
         <template #handicapWholeMaxBetMorning="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parser="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.handicapWholeMaxBetMorning"
           />
           <span v-else>{{
@@ -67,8 +73,10 @@
         </template>
         <!-- 全场-单注最高可投金额-滚球 -->
         <template #handicapWholeMaxBetRolling="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parser="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.handicapWholeMaxBetRolling"
           />
           <span v-else>{{
@@ -77,8 +85,10 @@
         </template>
         <!-- 半场-单注最高可投金额-早盘 -->
         <template #handicapHalfMaxBetMoring="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parser="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.handicapHalfMaxBetMoring"
           />
           <span v-else>{{
@@ -87,8 +97,10 @@
         </template>
         <!-- 大小-全场-单玩法累计期望赔付 -->
         <template #handicapHalfMaxBetRolling="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parser="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.handicapHalfMaxBetRolling"
           />
           <span v-else>{{
@@ -97,8 +109,10 @@
         </template>
         <!-- 大小单玩法累计赔付限额 -->
         <template #bigsmallSingleMaxWin="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parser="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.bigsmallSingleMaxWin"
           />
           <span v-else>{{
@@ -107,8 +121,10 @@
         </template>
         <!-- 大小全场单注最高可投早盘 -->
         <template #bigsmallWholeMaxBetMoring="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parser="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.bigsmallWholeMaxBetMoring"
           />
           <span v-else>{{
@@ -117,8 +133,10 @@
         </template>
         <!-- 大小全场单注最高可投滚球 -->
         <template #bigsmallWholeMaxBetRolling="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parser="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.bigsmallWholeMaxBetRolling"
           />
           <span v-else>{{
@@ -127,8 +145,10 @@
         </template>
         <!-- 大小半场单注最高可投早盘 -->
         <template #bigsmallHalfMaxBetMoring="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parser="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.bigsmallHalfMaxBetMoring"
           />
           <span v-else>{{
@@ -137,8 +157,10 @@
         </template>
         <!-- 大小半场单注最高可投滚球 -->
         <template #bigsmallHalfMaxBetRolling="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parser="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.bigsmallHalfMaxBetRolling"
           />
           <span v-else>{{
@@ -147,16 +169,20 @@
         </template>
         <!-- 独赢单玩法累计赔付限额 -->
         <template #winSingleMaxWin="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parser="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.winSingleMaxWin"
           />
           <span v-else>{{ addThousandSeparator(row.winSingleMaxWin) }}</span>
         </template>
         <!-- 独赢全场单注最高可投早盘 -->
         <template #winWholeMaxBetMoring="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parser="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.winWholeMaxBetMoring"
           />
           <span v-else>{{
@@ -165,8 +191,10 @@
         </template>
         <!-- 独赢全场单注最高可投滚球 -->
         <template #winWholeMaxBetRolling="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parser="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.winWholeMaxBetRolling"
           />
           <span v-else>{{
@@ -175,8 +203,10 @@
         </template>
         <!-- 独赢半场单注最高可投早盘 -->
         <template #winHalfMaxBetMoring="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parser="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.winHalfMaxBetMoring"
           />
           <span v-else>{{
@@ -185,8 +215,10 @@
         </template>
         <!-- 独赢半场单注最高可投滚球 -->
         <template #winHalfMaxBetRolling="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parser="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.winHalfMaxBetRolling"
           />
           <span v-else>{{
@@ -195,40 +227,50 @@
         </template>
         <!-- 其他玩法单玩法累计赔付限额 -->
         <template #otherSingleMaxWin="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parse="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.otherSingleMaxWin"
           />
           <span v-else>{{ addThousandSeparator(row.otherSingleMaxWin) }}</span>
         </template>
         <!-- 其他玩法全场单注最高可投早盘 -->
         <template #otherMaxBetMoring="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parse="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.otherMaxBetMoring"
           />
           <span v-else>{{ addThousandSeparator(row.otherMaxBetMoring) }}</span>
         </template>
         <!-- 其他玩法全场单注最高可投滚球 -->
         <template #otherMaxBetRolling="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parse="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.otherMaxBetRolling"
           />
           <span v-else>{{ addThousandSeparator(row.otherMaxBetRolling) }}</span>
         </template>
         <!-- 电竞单玩法累计赔付 -->
         <template #esportSingleMaxWin="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parse="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.esportSingleMaxWin"
           />
           <span v-else>{{ addThousandSeparator(row.esportSingleMaxWin) }}</span>
         </template>
         <!-- 电竞全局单注最高可投早盘 -->
         <template #esportWholeMaxBetMoring="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parse="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.esportWholeMaxBetMoring"
           />
           <span v-else>{{
@@ -237,8 +279,10 @@
         </template>
         <!-- 电竞全局单注最高可投滚球 -->
         <template #esportWholeMaxBetRolling="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parse="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.esportWholeMaxBetRolling"
           />
           <span v-else>{{
@@ -247,8 +291,10 @@
         </template>
         <!-- 电竞单局单注最高可投滚球 -->
         <template #esportSingleMaxBetRolling="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parse="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.esportSingleMaxBetRolling"
           />
           <span v-else>{{
@@ -257,8 +303,10 @@
         </template>
         <!-- 电竞单局单注最高可投早盘 -->
         <template #esportSingleMaxBetMoring="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parse="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.esportSingleMaxBetMoring"
           />
           <span v-else>{{
@@ -267,8 +315,10 @@
         </template>
         <!--  电竞回合单注最高可投滚球 -->
         <template #esportRoundMaxBetRolling="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parse="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.esportRoundMaxBetRolling"
           />
           <span v-else>{{
@@ -277,8 +327,10 @@
         </template>
         <!--  电竞回合单注最高可投早盘 -->
         <template #esportRoundMaxBetMoring="{ row }">
-           <el-input v-if="isEditSport"
+          <el-input
+            v-if="isEditSport"
             :formatter="(v:string) => formatNumberAndFillNull(v, 13)"
+            :parse="(v:string) => formatNumberAndFillNull(v, 13)"
             v-model="row.esportRoundMaxBetMoring"
           />
           <span v-else>{{
