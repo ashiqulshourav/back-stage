@@ -89,7 +89,7 @@
     
   </div>
   <!-- 1 -->
-   <div class="rounded flex-col my-5 border border-gray-300 flex p-5 bg-[#f9f9f9]" v-if="active == 1 && errorMsg">
+   <div class="rounded flex-col my-5 border border-gray-300 flex p-5 bg-[#f9f9f9]" >
     <div class="font-bold mb-3">
       {{ t('异常提示： ') }}
     </div>
@@ -164,7 +164,7 @@ const { tableHeaderStyle } = usePublicHooks();
 
 const active = ref(0);
 const uploadFormFile = ref();
-const errorMsg = ref(``);
+const errorMsg = ref<string[]>([]);
 const users = reactive<OperateManagementDataAPI.userType[]>([]);
 
 const next = async () => {
@@ -192,7 +192,10 @@ const next = async () => {
         active.value = 2;
         return;
       } else {
-        errorMsg.value = res.msg
+
+        const sentences = res.msg.split('\n');
+
+        errorMsg.value = [...sentences]
       }
       return;
     }
@@ -204,7 +207,7 @@ const previous = () => {
     active.value--;
   }
   if (active.value != 1) {
-    errorMsg.value = "";
+    errorMsg.value = [];
   }
 };
 
