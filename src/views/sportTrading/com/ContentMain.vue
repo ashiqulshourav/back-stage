@@ -123,9 +123,12 @@
                       </div>
 
                       <div class="flex items-center text-center w-1/6">
-                        <el-text class="!text-xs" type="primary">{{
-                          ODDS_TYPE_MAP[s.oddsType]
-                        }}</el-text>
+                        <el-text
+                          class="!text-xs font-bold"
+                          :type="[s.oddsType === 'OU' ? 'primary' : 'danger']"
+                        >
+                          {{ ODDS_TYPE_MAP[s.oddsType] }}
+                        </el-text>
                         <span class="ml-2 min-w-[45px] text-right">
                           {{ s.odds.toFixed(2) }}
                         </span>
