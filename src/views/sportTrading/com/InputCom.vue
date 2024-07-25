@@ -77,7 +77,11 @@ const inputCom = computed({
     if (props.s.oddsType === 'OU') {
       if (v > 201 || v < 1.01) return;
     }
-    if (Math.abs(props.s.dpOdds) === 0 || Math.abs(d.value?.dpOdds) === 0 || !v)
+    if (
+      Math.abs(props.s.dpOdds) === 0 ||
+      Math.abs(d.value?.dpOdds) === 0.01 ||
+      !v
+    )
       return;
     const n = subtraction(v, props.s.dpOdds, 2);
     props.s.dpOdds = v;
