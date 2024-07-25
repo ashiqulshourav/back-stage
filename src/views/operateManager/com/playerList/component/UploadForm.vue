@@ -84,17 +84,20 @@
           <span class="text-red-500">{{ t('100条') }}</span>
         </p>
       </div>
-    </div>
-
-    <div class="rounded my-5 border border-gray-300 flex p-5 bg-[#f9f9f9]">
-      <p class="font-bold mb-3">
-        {{ t('异常提示： ') }}
-      </p>
-      <div class="text-gray-500"></div>
     </div> -->
+
+    
   </div>
   <!-- 1 -->
-  <div v-if="active == 1">
+   <div class="rounded flex-col my-5 border border-gray-300 flex p-5 bg-[#f9f9f9]" v-if="active == 1 && errorMsg">
+    <div class="font-bold mb-3">
+      {{ t('异常提示： ') }}
+    </div>
+    <div class="text-gray-500">
+      {{ errorMsg }}
+    </div>
+  </div>
+  <div v-if="active == 1 && !errorMsg">
     <!-- Data preview -->
     <pure-table
       class="my-5"
@@ -161,10 +164,10 @@ const { tableHeaderStyle } = usePublicHooks();
 
 const active = ref(0);
 const uploadFormFile = ref();
+const errorMsg = ref(``);
 const users = reactive<OperateManagementDataAPI.userType[]>([]);
 
 const next = async () => {
-  console.log({ uploadFormFile });
   if (uploadFormFile.value) {
     if (active.value == 0) {
       users.length = 0;
@@ -189,20 +192,7 @@ const next = async () => {
         active.value = 2;
         return;
       } else {
-        let lines = res.msg.split('/n');
-
-        let errMessage = '';
-
-        // Process each line
-        lines.forEach((line, index) => {
-            // Trim any extra spaces from the beginning and end of the line
-            line = line.trim();
-            
-            // Construct the message with appropriate formatting
-            errMessage += `${line}\n`;
-        });
-
-        message(errMessage, { type: 'error' });
+        errorMsg.value = res.msg
       }
       return;
     }
@@ -212,6 +202,9 @@ const next = async () => {
 const previous = () => {
   if (active.value != 0) {
     active.value--;
+  }
+  if (active.value != 1) {
+    errorMsg.value = "";
   }
 };
 
@@ -223,28 +216,6 @@ const onFileChange = async (file: UploadFile) => {
       message(t('文件过大，请重新上传'), { type: 'error' });
     } else {
       uploadFormFile.value = file.raw;
-
-      // const reader = new FileReader();
-      // reader.onload = async (e: ProgressEvent<FileReader>) => {
-      //   const data = new Uint8Array(e.target!.result as ArrayBuffer);
-      //   const workbook = XLSX.read(data, { type: 'array' });
-
-      //   // Assuming your Excel file has only one sheet
-      //   const sheetName = workbook.SheetNames[0];
-      //   const sheet = workbook.Sheets[sheetName];
-
-      //   // Parse sheet data
-      //   const jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-
-      //   console.log(jsonData);
-      //   // jsonData will contain the parsed Excel data as an array of objects
-      // };
-      // reader.readAsArrayBuffer(uploadFormFile.value);
-
-      // let formData = new FormData();
-      // formData.append('file', uploadFormFile.value);
-      // const res = await API.operateImportExcel(formData);
-      // console.log(res);
     }
   } else {
     message(t('上传文件格式不匹配,请上传excel格式文件'), {
@@ -254,18 +225,6 @@ const onFileChange = async (file: UploadFile) => {
 };
 
 const downloadTemplate = async () => {
-  // const res: any = await API.operateExport();
-  // const url = window.URL.createObjectURL(
-  //   new Blob([res.data], {
-  //     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-  //   })
-  // );
-  // const link = document.createElement('a');
-  // link.href = url;
-  // link.setAttribute('download', `example.xls`);
-  // document.body.appendChild(link);
-  // link.click();
-  // document.body.removeChild(link);
   const data = [
     ['用户ID', '风控标签', '属性标签'],
     ['1', '套利，水军', '老用户，高活跃']
