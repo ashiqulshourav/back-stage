@@ -547,6 +547,7 @@ watch(
       props.form.matchId = v.matchId as string;
       //- 只查询未结算注单
       props.form.queryType = 3;
+      props.form.seriesType = 1;
     }
   },
   {
@@ -561,6 +562,7 @@ onActivated(() => {
     props.form.betItemId = betStore.gameplayData.betItemsId;
     props.form.matchId = betStore.gameplayData.matchId as string;
     props.form.queryType = 3;
+    props.form.seriesType = 1;
     search();
   }
 });
@@ -570,6 +572,7 @@ onDeactivated(() => {
     props.form.betItemId = '';
     props.form.matchId = '';
     props.form.queryType = 1;
+    props.form.seriesType = '';
     betStore.set_gameplay_data({
       betItemsId: '',
       matchId: ''

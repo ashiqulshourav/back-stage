@@ -65,7 +65,7 @@
                     :tippyProps="{ content: _.betItemsName }"
                   >
                     <span class="text-[#409EFF] font-bold leading-none">{{
-                      _.betItemsName
+                      _.betItemsName.replace('&', ' ')
                     }}</span>
                   </ReText>
 
