@@ -111,7 +111,11 @@
       :data="users"
       :columns="userColumns"
       :header-cell-style="tableHeaderStyle"
-    ></pure-table>
+    >
+     <template #userid="{ row }">
+      {{row.userid}}
+     </template>
+  </pure-table>
   </div>
   <!-- 3 -->
   <div v-if="active == 2">

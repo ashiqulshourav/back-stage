@@ -149,7 +149,7 @@ export const recordColumns: TableColumnList = [
 export const userColumns: TableColumnList = [
   {
     label: t('用户ID'),
-    prop: 'userid'
+    slot: 'userid'
   },
   {
     label: t('风控标签'),
