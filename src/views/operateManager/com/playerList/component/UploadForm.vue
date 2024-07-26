@@ -101,7 +101,6 @@
   </div>
   <div v-if="active == 1 && !errorMsg.length">
     <!-- Data preview -->
-     {{users}}
     <pure-table
       class="my-5"
       height="400"
