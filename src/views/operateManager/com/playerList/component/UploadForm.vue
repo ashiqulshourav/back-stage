@@ -118,7 +118,7 @@
     <el-result
       icon="success"
       :title="t('数据导入完成')"
-      :sub-title="t('您已成功导入1000条数据')"
+      :sub-title="t(`您已成功导入1000条数据`)"
     >
     </el-result>
   </div>
