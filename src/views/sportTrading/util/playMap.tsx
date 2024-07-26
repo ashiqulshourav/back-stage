@@ -162,7 +162,8 @@ export const PLAY_MATCH_NAME = (
     'S2_AH',
     'S3_AH',
     'S4_AH',
-    'PT_AH'
+    'PT_AH',
+    'WinningMargin'
   ];
   const t3 = ['FT_OE', 'HT_OE'];
   const t4 = [

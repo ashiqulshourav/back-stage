@@ -77,8 +77,14 @@ const inputCom = computed({
     if (props.s.oddsType === 'OU') {
       if (v > 201 || v < 1.01) return;
     }
-
     if (v === 0) return;
+
+    if (
+      Math.abs(subtraction(Math.abs(props.s.dpOdds), Math.abs(v), 2)) >
+      Math.abs(d.value?.dpOdds)
+    ) {
+      return;
+    }
 
     const n = subtraction(v, props.s.dpOdds, 2);
     props.s.dpOdds = v;
@@ -111,13 +117,7 @@ const inputCom = computed({
         d.value.dpOdds = resetDpodds(d.value.dpOdds);
     } else if (Math.abs(d.value?.dpOdds) === 0) {
       d.value.dpOdds = 0.01;
-      if (n > 0) {
-        props.s.dpOdds = subtraction(props.s.dpOdds, n, 2);
-      } else {
-        props.s.dpOdds = addition(props.s.dpOdds, Math.abs(n), 2);
-      }
-      if (Math.abs(d.value.dpOdds) >= 1)
-        props.s.dpOdds = resetDpodds(props.s.dpOdds);
+      props.s.dpOdds = subtraction(props.s.dpOdds, 0.01, 2);
     }
   }
 });
@@ -129,17 +129,14 @@ const changeDpOdds = debounce(_v => {
       subtraction(Math.abs(props.s.previousDpOdds), Math.abs(props.s.dpOdds), 2)
     ) > 0.3
   ) {
-    // 调整双向盘越线处理
     props.s.dpOdds = props.s.previousDpOdds;
     if (d.value) d.value.dpOdds = d.value.previousDpOdds;
     return;
   }
-
   //- 重置历史赔率(包含双向盘)
   props.s.previousDpOdds = props.s.dpOdds;
   if (d.value) d.value.previousDpOdds = d.value.dpOdds;
   if (Number(tipData.value.val) === props.s.oddsVariable) return;
-
   emits('changeSelectNum', Number(tipData.value.val), props.s);
 }, 500);
 
