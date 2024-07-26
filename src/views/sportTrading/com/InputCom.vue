@@ -77,15 +77,11 @@ const inputCom = computed({
     if (props.s.oddsType === 'OU') {
       if (v > 201 || v < 1.01) return;
     }
-    if (
-      Math.abs(props.s.dpOdds) === 0 ||
-      Math.abs(d.value?.dpOdds) === 0.01 ||
-      !v
-    )
-      return;
+
+    if (v === 0) return;
+
     const n = subtraction(v, props.s.dpOdds, 2);
     props.s.dpOdds = v;
-
     if (Math.abs(props.s.dpOdds) >= 1 && props.s.oddsType === 'ML') {
       props.s.dpOdds = resetDpodds(props.s.dpOdds);
     }
@@ -102,6 +98,26 @@ const inputCom = computed({
         d.value.dpOdds = resetDpodds(d.value.dpOdds);
     } else {
       d.value = null;
+    }
+
+    if (Math.abs(props.s.dpOdds) === 0.01) {
+      props.s.dpOdds = 0.01;
+      if (n > 0) {
+        d.value.dpOdds = subtraction(d.value.dpOdds, n, 2);
+      } else {
+        d.value.dpOdds = addition(d.value.dpOdds, Math.abs(n), 2);
+      }
+      if (Math.abs(d.value.dpOdds) >= 1)
+        d.value.dpOdds = resetDpodds(d.value.dpOdds);
+    } else if (Math.abs(d.value?.dpOdds) === 0) {
+      d.value.dpOdds = 0.01;
+      if (n > 0) {
+        props.s.dpOdds = subtraction(props.s.dpOdds, n, 2);
+      } else {
+        props.s.dpOdds = addition(props.s.dpOdds, Math.abs(n), 2);
+      }
+      if (Math.abs(d.value.dpOdds) >= 1)
+        props.s.dpOdds = resetDpodds(props.s.dpOdds);
     }
   }
 });
@@ -123,6 +139,7 @@ const changeDpOdds = debounce(_v => {
   props.s.previousDpOdds = props.s.dpOdds;
   if (d.value) d.value.previousDpOdds = d.value.dpOdds;
   if (Number(tipData.value.val) === props.s.oddsVariable) return;
+
   emits('changeSelectNum', Number(tipData.value.val), props.s);
 }, 500);
 
