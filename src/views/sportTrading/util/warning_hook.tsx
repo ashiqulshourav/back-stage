@@ -174,7 +174,7 @@ export function useWarningHook() {
   }) => {
     const res = await API.updateHandicapOdds({
       matchId: d.matchId,
-      operateMenu: '操盘管理-早盘管理',
+      operateMenu: '操盘管理-告警操盘',
       betItemsDtoList: d.params
     });
     message(res.msg, { type: res.code ? 'error' : 'success' });
@@ -218,7 +218,7 @@ export function useWarningHook() {
         : 'updateHandicapStatus';
 
     const res = await API[reqUrl]({
-      operateMenu: '操盘管理-早盘管理',
+      operateMenu: '操盘管理-告警操盘',
       matchId: matchId,
       isSale: status,
       betItemsIds: betItemsIdList ?? []

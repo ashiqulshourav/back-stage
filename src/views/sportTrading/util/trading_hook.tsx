@@ -348,7 +348,7 @@ export function useTradingHook(type: 'early' | 'in') {
         : 'updateHandicapStatus';
 
     const res = await API[reqUrl]({
-      operateMenu: '操盘管理-早盘管理',
+      operateMenu: `操盘管理-${type === 'early' ? '早盘管理' : '滚球管理'}`,
       matchId: matchId ? matchId : currentMatch.matchId,
       isSale: status,
       betItemsIds: betItemsIdList ?? []
@@ -444,7 +444,7 @@ export function useTradingHook(type: 'early' | 'in') {
   ) => {
     const res = await API.updateHandicapOdds({
       matchId: currentMatch.matchId,
-      operateMenu: '操盘管理-早盘管理',
+      operateMenu: `操盘管理-${type === 'early' ? '早盘管理' : '滚球管理'}`,
       betItemsDtoList
     });
     message(res.msg, { type: res.code ? 'error' : 'success' });
