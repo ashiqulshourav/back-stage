@@ -105,16 +105,16 @@ const inputCom = computed({
     } else {
       d.value = null;
     }
-
     if (Math.abs(props.s.dpOdds) === 0.01) {
       props.s.dpOdds = 0.01;
       if (n > 0) {
         d.value.dpOdds = subtraction(d.value.dpOdds, n, 2);
       } else {
-        d.value.dpOdds = addition(d.value.dpOdds, Math.abs(n), 2);
+        // d.value.dpOdds = addition(d.value.dpOdds, Math.abs(n), 2);
       }
-      if (Math.abs(d.value.dpOdds) >= 1)
+      if (Math.abs(d.value.dpOdds) >= 1) {
         d.value.dpOdds = resetDpodds(d.value.dpOdds);
+      }
     } else if (Math.abs(d.value?.dpOdds) === 0) {
       d.value.dpOdds = 0.01;
       props.s.dpOdds = subtraction(props.s.dpOdds, 0.01, 2);
