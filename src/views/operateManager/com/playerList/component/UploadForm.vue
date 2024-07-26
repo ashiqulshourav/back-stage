@@ -183,15 +183,15 @@ const next = async () => {
 
       if (res.code) {
         message(res.msg, { type: 'error' });
-      } else {
-        users.push(...res.data);
+      } else {        
+        users.push(...res.data.map(data => ({...data, userid: BigInt(data.userid).toString()})));
         active.value = 1;
         return;
       }
     }
     if (active.value == 1) {
       const res = await API.operateImportExcel({
-        userLabelListExcels: [...users]
+        userLabelListExcels: [...users.map(data => ({...data, userid: BigInt(data.userid).toString()}))]
       });
 
       if (res.msg == 'Operation successful') {
