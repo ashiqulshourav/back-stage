@@ -185,16 +185,16 @@ const next = async () => {
       if (res.code) {
         message(res.msg, { type: 'error' });
       } else {        
-        users.push(...res.data.map(data => ({...data, userid: BigInt(data.userid).toString()})));
+        users.push(...res.data.map(data => ({...data, userid: data.userid.toString()})));
         console.log({users})
         active.value = 1;
         return;
       }
     }
     if (active.value == 1) {
-      console.log({users: [...users.map(data => ({...data, userid: BigInt(data.userid).toString()}))]})
+      console.log({users: [...users.map(data => ({...data, userid: data.userid.toString()}))]})
       const res = await API.operateImportExcel({
-        userLabelListExcels: [...users.map(data => ({...data, userid: BigInt(data.userid).toString()}))]
+        userLabelListExcels: [...users.map(data => ({...data, userid: data.userid.toString()}))]
       });
 
       if (res.msg == 'Operation successful') {
