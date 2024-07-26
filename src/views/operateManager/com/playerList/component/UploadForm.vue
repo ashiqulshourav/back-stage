@@ -167,7 +167,7 @@ const { tableHeaderStyle } = usePublicHooks();
 const active = ref(0);
 const uploadFormFile = ref();
 const errorMsg = ref<string[]>([]);
-const users = reactive<OperateManagementDataAPI.userType[]>([]);
+const users = reactive<any[]>([]);
 
 const next = async () => {
   if (uploadFormFile.value) {
