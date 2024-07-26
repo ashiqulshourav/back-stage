@@ -62,7 +62,7 @@ declare namespace OperateManagementDataAPI {
   };
 
   type userType = {
-    userid: number;
+    userid: string;
     riskControlLabel: string;
     attributeLabel: string;
   };
