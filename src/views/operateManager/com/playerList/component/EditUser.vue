@@ -653,7 +653,7 @@ const openDelayDialog = () => {
 //- 限额等级记录弹窗
 const openLimitRecordDialog = () => {
   addDialog({
-    title: t('投注延时修改记录'),
+    title: t('限额等级修改记录'),
     class: 'reset_dialog',
     width: '50%',
     alignCenter: true,

@@ -5,9 +5,9 @@
       <div class="w-28">
         <el-select clearable v-model="betDelay" @clear="clearAll('sport')">
           <el-option
-            v-for="item in [1, 5, 10, 30, 60]"
+            v-for="item in timeArr.slice(0, 15)"
             :key="item"
-            :label="item === 60 ? '1min' : item + 's'"
+            :label="item + 's'"
             :value="item"
           ></el-option>
         </el-select>
@@ -35,9 +35,9 @@
       <div class="w-28">
         <el-select clearable v-model="betDelayDj" @clear="clearAll('eSport')">
           <el-option
-            v-for="item in [1, 5, 10, 30, 60]"
+            v-for="item in timeArr"
             :key="item"
-            :label="item === 60 ? '1min' : item + 's'"
+            :label="item + 's'"
             :value="item"
           ></el-option>
         </el-select>
@@ -74,6 +74,8 @@ const props = defineProps<{
   sportIdsDj: string;
   category: number;
 }>();
+
+const timeArr = Array.from({ length: 60 }, (_, i) => i + 1);
 
 //- 清空按钮点击
 const clearAll = (type: 'sport' | 'eSport') => {
