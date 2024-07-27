@@ -46,7 +46,11 @@
             </el-button>
           </template>
           <template #operateBefore="{ row }">
+            <el-text v-if="row.operateBefore.split('\n').length <= 2" class="whitespace-pre-wrap">
+              {{ row.operateBefore ?  row.operateBefore : "-"}}
+            </el-text>
             <el-button
+              v-else
               type="primary"
               :link="true"
               @click="openRequestLog(t('修改前参数'), row.operateBefore)"
