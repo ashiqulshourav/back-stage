@@ -603,15 +603,15 @@ const handleUpdate = () => {
     if (isSpecial.value == 1) {
       form.percentageLimit = undefined;
     }
-    if (isSpecial.value == 3 && !form.percentageLimit) {
-      form.percentageLimit = 100;
+    if (isSpecial.value == 3 && (form.percentageLimit == '' || form.percentageLimit == null || form.percentageLimit == undefined)) {
+      form.percentageLimit = "100";
     }
     if (
       isSpecial.value == 3 &&
       form.percentageLimit &&
-      form.percentageLimit > 100
+      Number(form.percentageLimit) > 100
     ) {
-      form.percentageLimit = 100;
+      form.percentageLimit = "100";
     }
     if (isSpecial.value === 2) {
       form.specialLimit.productAmountTotalLimit = parseInt(
@@ -702,6 +702,9 @@ onUpdated(() => {
     attributeLabelList,
     percentageLimit
   } = props.userData;
+
+  console.log({percentageLimit})
+
   form.id = id;
   form.isFreeze = isFreeze;
   form.limitLevel = limitLevel;
@@ -725,10 +728,11 @@ onUpdated(() => {
       seriesSingleDayCumulativeCompensationLimit;
     form.specialLimit.singleEventAccumulatedCompensationLimit =
       singleEventAccumulatedCompensationLimit;
-  } else if (percentageLimit) {
-    isSpecial.value = 3;
-  } else {
+  }else if(percentageLimit === null) {
     isSpecial.value = 1;
+  }
+  else {
+    isSpecial.value = 3;
   }
   updatedLabels.risk.length = 0;
   if (riskControlLabelList) {
@@ -750,5 +754,6 @@ watch(
     isEditUser.value = newValue;
   }
 );
+
 </script>
-3
+
