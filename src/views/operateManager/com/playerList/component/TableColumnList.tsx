@@ -28,19 +28,19 @@ export const columns = (category: number): TableColumnList => {
     },
     {
       label: t('风控标签'),
-      hide: !hasAuth('RISK_LABEL'),
+      hide: !hasAuth('viewRiskLabel'.toUpperCase()),
       slot: 'riskControlLabel',
       minWidth: 150
     },
     {
       label: t('属性标签'),
-      hide: !hasAuth('ATTRIBUTE_LABEL'),
+      hide: !hasAuth('viewAttributeLabel'.toUpperCase()),
       slot: 'attributeLabel',
       minWidth: 150
     },
     {
       label: t('限额等级'),
-      hide: !hasAuth('LIMIT_LEVEL'),
+      hide: !hasAuth('viewLimitLevel'.toUpperCase()),
       prop: 'limitLevel',
       minWidth: 150
     },
@@ -55,7 +55,7 @@ export const columns = (category: number): TableColumnList => {
     {
       label: t('特殊限额'),
       minWidth: 150,
-      hide: !hasAuth('SEPCIAL_LIMIT'),
+      hide: !hasAuth('viewSpecialLimit'.toUpperCase()),
       formatter: ({
         maxWinAmountLimit,
         productAmountTotalLimit,
