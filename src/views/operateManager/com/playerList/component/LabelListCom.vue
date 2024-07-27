@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between w-full items-center">
+  <div class="flex items-center">
     <div class="flex gap-2 flex-wrap">
       <LabelItem
         v-for="label in renderItem"
@@ -10,7 +10,7 @@
         @onClose="emits('onClose', label.id, type)"
       />
     </div>
-    <div v-if="expand && labels.length > 6" class="w-10">
+    <div v-if="expand && labels.length > 1" class="w-10">
       <el-popover
         placement="top-end"
         :width="300"
@@ -18,9 +18,7 @@
         content="this is over"
       >
         <template #reference>
-          <el-button size="small" class="w-full"
-            ><el-icon><Plus /></el-icon
-          ></el-button>
+          <span class="px-2 border border-slate-300 text-slate-500 rounded-full cursor-default inline-block">{{ labels.length }}</span>
         </template>
         <template #default>
           <div class="flex gap-2 flex-wrap">
@@ -39,7 +37,6 @@
 
 <script setup lang="ts">
 import LabelItem from './LabelItem.vue';
-import { Plus } from '@element-plus/icons-vue';
 
 const props = defineProps<{
   labels: UserAPI.labelType[];
@@ -48,7 +45,7 @@ const props = defineProps<{
 }>();
 const emits = defineEmits(['onClose']);
 const renderItem = computed(() => {
-  return props.expand ? props.labels.slice(0, 6) : props.labels;
+  return props.expand ? props.labels.slice(0, 1) : props.labels;
 });
 </script>
 <style lang="scss" scoped></style>
