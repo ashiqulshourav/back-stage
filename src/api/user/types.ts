@@ -98,6 +98,7 @@ declare namespace UserAPI {
     remark: number;
     createdAt: string;
     updatedAt: string;
+    labelColor: string;
   };
   type recordType = {
     id: number;
