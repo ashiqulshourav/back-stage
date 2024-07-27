@@ -30,13 +30,13 @@ export const columns = (category: number): TableColumnList => {
       label: t('风控标签'),
       hide: !hasAuth('viewRiskLabel'),
       slot: 'riskControlLabel',
-      minWidth: 150
+      width: 350
     },
     {
       label: t('属性标签'),
       hide: !hasAuth('viewAttributeLabel'),
       slot: 'attributeLabel',
-      minWidth: 150
+      width: 350
     },
     {
       label: t('限额等级'),
