@@ -38,16 +38,6 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
-          <template #level="{ row }">
-            <el-text :style="`color: ${getLabelColor(row.level, row.labelColor)}`">
-              {{ row.level ? row.level : "-" }}
-            </el-text>
-          </template>
-          <template #name="{ row }">
-            <el-text :style="`color: ${getLabelColor(row.level, row.labelColor)}`">
-              {{ row.name ? row.name : "-" }}
-            </el-text>
-          </template>
           <template #userCount="{ row }">
             <el-link @click="goToUserList(row)">{{ row.count }}</el-link>
           </template>
@@ -106,8 +96,7 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   form,
-  goToUserList, 
-  getLabelColor
+  goToUserList
 } = useTagsHook();
 </script>
 
