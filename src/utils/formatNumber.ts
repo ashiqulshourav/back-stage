@@ -9,13 +9,17 @@ export const formatNumber = (val: string, len?: number) => {
 };
 
 export const formatNumber0to100 = (val: string, len?: number) => {
-  const cleanedValue = val.replace(/\D/g, '').replace(/^0{1,}/g, '');
+  const cleanedValue = val.replace(/\D/g, '');
 
-  let numericValue = parseInt(cleanedValue, 10);
-
-  if (isNaN(numericValue)) {
+  if (cleanedValue === '') {
     return '';
   }
+
+  const normalizedValue = cleanedValue.replace(/^0+/, '');
+
+  const finalValue = normalizedValue === '' ? '0' : normalizedValue;
+
+  let numericValue = parseInt(finalValue, 10);
 
   numericValue = Math.min(Math.max(numericValue, 0), 100);
 

@@ -67,7 +67,7 @@ export const columns = (category: number): TableColumnList => {
         productAmountTotalLimit: number;
         seriesSingleDayCumulativeCompensationLimit: number;
         singleEventAccumulatedCompensationLimit: number;
-        percentageLimit: number;
+        percentageLimit: string;
       }) => {
         if (
           maxWinAmountLimit ||
@@ -76,9 +76,11 @@ export const columns = (category: number): TableColumnList => {
           singleEventAccumulatedCompensationLimit
         )
           return t('例外限额');
-        else if (percentageLimit) {
+        else if (percentageLimit === null) {
+          return t('无');
+        } else {
           return '百分比限额: ' + percentageLimit + '%';
-        } else return t('无');
+        }
       }
     },
     {
@@ -198,7 +200,7 @@ export const specialLimitColumns: TableColumnList = [
     label: t('百分比限额'),
     prop: 'percentageLimit',
     formatter({ percentageLimit }) {
-      return percentageLimit ? percentageLimit + '%' : '-';
+      return percentageLimit !== '' ? percentageLimit + '%' : '-';
     }
   },
   {
