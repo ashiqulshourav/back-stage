@@ -76,25 +76,7 @@
                   :key="`${i}-${l}`"
                 >
                   <div class="text-[--el-color-primary] text-center w-1/4">
-                    {{
-                      PLAY_MATCH_NAME(
-                        s.kindsCode,
-                        s.handicap,
-                        matchData.homeTeamNameCn,
-                        matchData.awayTeamNameCn
-                      )[s.homeOrAway ? s.homeOrAway : s.handicap]?.replace(
-                        '&',
-                        ' '
-                      ) ??
-                      goalScoring(
-                        s.kindsCode,
-                        s.handicap,
-                        s.n,
-                        matchData.homeTeamNameCn,
-                        matchData.awayTeamNameCn,
-                        s.renderName
-                      )?.replace('&', ' ')
-                    }}
+                    {{ panName(s, matchData) }}
                   </div>
                   <div
                     :class="[
@@ -167,6 +149,29 @@ const props = defineProps<{
   matchList: sportTradingDataAPI.getAlarmMatchListType[];
 }>();
 
+//- 求当前玩法名称
+const panName = (
+  s: sportTradingDataAPI.BetItemsDtoList,
+  currentMatch: sportTradingDataAPI.getAlarmMatchListType
+) => {
+  return (
+    PLAY_MATCH_NAME(
+      s.kindsCode,
+      s.handicap,
+      currentMatch.homeTeamNameCn,
+      currentMatch.awayTeamNameCn
+    )[s.homeOrAway ? s.homeOrAway : s.handicap]?.replace('&', ' ') ??
+    goalScoring(
+      s.kindsCode,
+      s.handicap,
+      s.n,
+      currentMatch.homeTeamNameCn,
+      currentMatch.awayTeamNameCn,
+      s.renderName
+    )?.replace('&', ' ')
+  );
+};
+
 //-快捷选择数字事件
 const selectNum = ref(0);
 const shortcutSelectNum = (
@@ -175,7 +180,14 @@ const shortcutSelectNum = (
   list: sportTradingDataAPI.BetItemsDtoList[]
 ) => {
   if (_ === 0) return;
-  const params: { betItemsId: number; dpOdds: number; oddsType: string }[] = [];
+  const params: {
+    betItemsId: number;
+    oddsType: string;
+    afterOdds: number;
+    beforeOdds: number;
+    betItemsName: string;
+    oddsVariable: number;
+  }[] = [];
   //- 下盘需要递减
   if (list.length === 2) {
     const otherIdx = list.findIndex(item => item.betItemsId !== s.betItemsId);
@@ -183,8 +195,11 @@ const shortcutSelectNum = (
     params.push(
       ...list.map((d, index: number) => ({
         oddsType: d.oddsType,
+        beforeOdds: d.odds,
+        afterOdds: d.dpOdds,
         betItemsId: d.betItemsId,
-        dpOdds: index !== otherIdx ? _ : _ * -1
+        betItemsName: `${d.betItemsName}-${panName(d, props.matchData)}`,
+        oddsVariable: index !== otherIdx ? _ : _ * -1
       }))
     );
     emits('sendNewOdds', params);
@@ -197,7 +212,10 @@ const shortcutSelectNum = (
       params.push({
         oddsType: d.oddsType,
         betItemsId: d.betItemsId,
-        dpOdds: _
+        beforeOdds: d.odds,
+        afterOdds: d.dpOdds,
+        betItemsName: `${d.betItemsName}-${panName(d, props.matchData)}`,
+        oddsVariable: _
       });
       emits('sendNewOdds', params);
     });
