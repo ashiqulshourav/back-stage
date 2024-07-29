@@ -149,7 +149,7 @@
 
   <div class="flex justify-end mt-10" v-if="active == 0 || active == 1">
     <el-button v-if="active != 0" @click="previous">{{
-      t('上一步')
+      errorMsg.length ? t('重新上传') : t('上一步')
     }}</el-button>
     <el-button type="primary" @click="next">{{ t('下一步') }}</el-button>
   </div>
@@ -195,7 +195,7 @@ const next = async () => {
         userLabelListExcels: [...users]
       });
 
-      if (res.msg == 'Operation successful') {
+      if (!res.code) {
         active.value = 2;
         return;
       } else {
