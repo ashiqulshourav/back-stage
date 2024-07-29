@@ -48,7 +48,6 @@ export function useTradingHook(type: 'early' | 'in') {
         : */ ''
   });
 
-  //- 盘口赛事列表接口
   const loopTimer = ref<NodeJS.Timeout>();
   //- 初始化搜索
   const onSearch = async (isInit?: boolean) => {
@@ -93,6 +92,7 @@ export function useTradingHook(type: 'early' | 'in') {
     });
   };
 
+  //- 盘口赛事列表接口
   const getHandicapltems = async (noNprogress: boolean = false) => {
     const res = await API.getHandicapItems(
       { matchId: currentMatch.matchId },
