@@ -9,8 +9,6 @@
     <div
       class="bg-bg_color w-[99/100] mt-2 pl-5 pt-[12px] flex-grow flex flex-col overflow-hidden"
     >
-      <!-- todo -->
-      <el-button class="w-20" @click="changeNoLoopStatus">停止轮询</el-button>
       <div class="font-bold mb-2 flex items-center">
         <topCollapse
           :isActive="isActive"
@@ -87,7 +85,7 @@ const {
   isShowDialog,
   matchStatus,
   onCloseDialog,
-  changeNoLoopStatus
+  
 } = useTradingHook(type);
 
 const title = computed(() =>

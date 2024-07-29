@@ -45,7 +45,7 @@ declare namespace sportTradingDataAPI {
   type getMorningSetMatchListRes = COMMON.BASE_RES_TYPE<getMorningSetMatchListData[]>
 
   type BetItemsDtoList = {
-    betItemsId: number;
+    betItemsId: string;
     matchId: number;
     kindsCode: string;
     betItemsName: string;
