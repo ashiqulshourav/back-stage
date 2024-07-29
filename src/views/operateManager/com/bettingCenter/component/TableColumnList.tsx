@@ -15,7 +15,7 @@ export const columns: TableColumnList = [
   },
   {
     label: t("注单信息"),
-    slot: 'betDetail',
+    slot: 'betMessage',
     minWidth: 100,
     align:'left',
     className: 'getParent',

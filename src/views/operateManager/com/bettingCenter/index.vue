@@ -198,7 +198,7 @@
               </div>
             </div>
           </template>
-          <template #betDetail="{ row }">
+          <template #betMessage="{ row }">
             <div
               class="match_item bet_detail eq-height"
               v-for="item in row.combineOrderDetails"
