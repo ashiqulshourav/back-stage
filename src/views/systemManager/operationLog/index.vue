@@ -41,7 +41,7 @@
               v-if="row.requestLog.includes('\n') && row.requestLog.split('\n').length <= 3"                     
               class="whitespace-pre-wrap">
             >
-              {{ row.requestLog ?  row.requestLog + "11" : "-"}}
+              {{ row.requestLog ?  row.requestLog : "-"}}
             </el-text>
             <el-button
               v-else
@@ -112,7 +112,7 @@ const openRequestLog = (title: string, row:OperationLogDataAPI.OperationLogList[
     title,
     alignCenter: true,
     width: 'auto',
-    hideFooter: true,
+    hideFooter: false,
     closeOnClickModal: false,
     contentRenderer: () => h(RequestDialog, { row: [row] })
   });
