@@ -195,7 +195,7 @@ const next = async () => {
         userLabelListExcels: [...users]
       });
 
-      if (res.msg == 'Operation successful') {
+      if (!res.code) {
         active.value = 2;
         return;
       } else {
