@@ -130,6 +130,7 @@ export function useWarningHook() {
             return false;
           }
         });
+        // if (!_.list.length) _.isSale = currentMatch.isSale;
       });
       item.renderList = baseDatat.filter(item => {
         return item.list.length;
