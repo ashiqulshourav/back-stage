@@ -218,9 +218,6 @@ watch(
   () => props.currentMatch,
   () => {
     activeNames.value = [1];
-  },
-  {
-    deep: true
   }
 );
 

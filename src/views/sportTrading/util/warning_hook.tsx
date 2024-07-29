@@ -130,6 +130,7 @@ export function useWarningHook() {
             return false;
           }
         });
+        // if (!_.list.length) _.isSale = currentMatch.isSale;
       });
       item.renderList = baseDatat.filter(item => {
         return item.list.length;
@@ -261,6 +262,9 @@ export function useWarningHook() {
       }
       return false;
     });
+    setTimeout(() => {
+      getLoopMatchData();
+    }, 800);
   };
 
   //- 修改盘赛事图标状态

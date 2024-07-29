@@ -222,4 +222,8 @@ const getSportType = (_: number) => {
     background: transparent !important;
   }
 }
+
+.el-collapse-item__content {
+  padding-bottom: 0;
+}
 </style>
