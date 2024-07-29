@@ -47,18 +47,6 @@
                   class="item_line cursor-pointer"
                   @click="
                     copyTest(
-                      row.userId,
-                      t('用户ID：{value}', { value: row.userId })
-                    )
-                  "
-                >
-                  <span>{{ t('用户ID：') }}</span
-                  >{{ row.userId }}
-                </div>
-                <div
-                  class="item_line cursor-pointer"
-                  @click="
-                    copyTest(
                       row.userName,
                       t('用户名：{value}', { value: row.userName })
                     )
@@ -66,6 +54,18 @@
                 >
                   <span>{{ t('用户名：') }}</span
                   >{{ row.userName }}
+                </div>
+                <div
+                  class="item_line cursor-pointer"
+                  @click="
+                    copyTest(
+                      row.userId,
+                      t('用户ID：{value}', { value: row.userId })
+                    )
+                  "
+                >
+                  <span>{{ t('用户ID：') }}</span
+                  >{{ row.userId }}
                 </div>
                 <div
                   class="item_line cursor-pointer"
@@ -198,40 +198,12 @@
               </div>
             </div>
           </template>
-          <template #betDetail="{ row }">
+          <template #betMessage="{ row }">
             <div
               class="match_item bet_detail eq-height"
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <div class="item_line">
-                {{
-                  `玩法：${useSportFormatDetail(item)[4]} ${getIsInplay(
-                    item.isInplay
-                  )}`
-                }}
-                {{
-                  item.isInplay == 1
-                    ? displayHomeAwayScore(item.scoreBenchmark, item.sportId)
-                    : ''
-                }}
-              </div>
-              <div class="item_line">
-                <span v-if="item.kindsCode === 'FT_TTS'">
-                  {{
-                    enterGoalMap[
-                      item.betHandicap.toUpperCase() as keyof typeof enterGoalMap
-                    ]
-                  }}
-                </span>
-                {{ useSportFormatDetail(item)[3] }} @{{
-                  getViewOddFn(
-                    item.oddFinally,
-                    item.marketTypeFinally,
-                    item.marketType
-                  )
-                }}
-              </div>
               <div
                 class="item_line cursor-pointer flex items-baseline gap-1"
                 @click="
@@ -257,9 +229,45 @@
                   v-if="item.ip"
                   @click="openIpDialog(item.ip)"
                   class="text-[#409EFF] cursor-pointer"
-                  >{{ item.ip }}</span
+                >{{ item.ip }}</span
                 >
                 <span v-else>-</span>
+              </div>
+            </div>
+          </template>
+          <template #betItem="{ row }">
+            <div
+              class="match_item bet_detail eq-height"
+              v-for="item in row.combineOrderDetails"
+              :key="item.betItemId"
+            >
+              <div class="item_line">
+                {{
+                  `玩法：${useSportFormatDetail(item)[4]} ${getIsInplay(
+                    item.isInplay
+                  )}`
+                }}
+                {{
+                  item.isInplay == 1
+                    ? displayHomeAwayScore(item.scoreBenchmark, item.sportId)
+                    : ''
+                }}
+              </div>
+              <div class="item_line">
+                <span v-if="item.kindsCode === 'FT_TTS'">
+                  {{
+                    enterGoalMap[
+                      item.betHandicap.toUpperCase() as keyof typeof enterGoalMap
+                      ]
+                  }}
+                </span>
+                {{ useSportFormatDetail(item)[3] }} @{{
+                  getViewOddFn(
+                    item.oddFinally,
+                    item.marketTypeFinally,
+                    item.marketType
+                  )
+                }}
               </div>
               <div
                 class="item_line"
