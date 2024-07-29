@@ -18,12 +18,12 @@
         content="this is over"
       >
         <template #reference>
-          <span class="px-2 border border-slate-300 text-slate-500 rounded-full cursor-default inline-block">{{ labels.length }}</span>
+          <span class="px-2 border border-slate-300 text-slate-500 rounded-full cursor-default inline-block">{{ labels.length - 1}}</span>
         </template>
         <template #default>
           <div class="flex gap-2 flex-wrap">
             <LabelItem
-              v-for="label in props.labels"
+              v-for="label in [...props.labels].slice(1)"
               :key="label.id"
               :label="label"
               :type="type"
