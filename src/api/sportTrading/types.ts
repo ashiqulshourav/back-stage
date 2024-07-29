@@ -35,6 +35,7 @@ declare namespace sportTradingDataAPI {
     level: number;
     riskLevel: number;
     HandicapTeam: string;
+    val?: string;
   }
 
   type getMorningSetMatchListData = {
@@ -112,6 +113,7 @@ declare namespace sportTradingDataAPI {
   type updateHandicapStatusParams = {
     matchId: number;
     operateMenu: string;
+    groupName: string;
     betItemsIds?: number[];
     isSale: number;
   }

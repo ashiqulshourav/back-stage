@@ -146,7 +146,7 @@ const changeDpOdds = debounce(_v => {
   //- 重置历史赔率(包含双向盘)
   props.s.previousDpOdds = props.s.dpOdds;
   if (d.value) d.value.previousDpOdds = d.value.dpOdds;
-  if (Number(tipData.value.val) === props.s.oddsVariable) return;
+  // if (Number(tipData.value.val) === props.s.oddsVariable) return;
   emits('changeSelectNum', Number(tipData.value.val), props.s);
 }, 500);
 
