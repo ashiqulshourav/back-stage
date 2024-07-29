@@ -100,7 +100,7 @@
                       <div
                         class="text-[--el-color-primary] text-left ml-2 pl-[8px] leading-none w-1/4"
                       >
-                        <ReText size="small">
+                        <ReText size="small" @click="copyText(s.betItemsId)">
                           {{ panName(s, currentMatch) }}
                         </ReText>
                       </div>
@@ -188,6 +188,7 @@ import { t } from '@/plugins/i18n';
 import { useBetStore } from '@/store/bet';
 import { ReText } from '@/components/ReText';
 import MatchCountDown from './MatchCountDown.vue';
+import { copyTextToClipboard } from '@pureadmin/utils';
 
 const contentRef = ref();
 const collapseRef = ref();
@@ -317,6 +318,11 @@ const shortcutSelectNum = (
       emits('sendNewOdds', params);
     });
   }
+};
+
+//- 粘贴
+const copyText = (str: string) => {
+  copyTextToClipboard(str);
 };
 
 const clearTime = () => {
