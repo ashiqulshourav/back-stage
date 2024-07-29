@@ -1,31 +1,42 @@
 <template>
-  <div v-if="list" class="items-center flex flex-wrap px-2 mt-1 gap-1">
+  <div v-if="list" class="items-center flex flex-wrap px-2 mt-1 gap-1 min-w-[120px]">
     <div v-for="label in list.slice(0, showNumber).sort((a, b) => a.level - b.level)" :key="label.id" class="custom">
       <el-tag
+        v-if="label.name.length <= 4"
         :style="`background-color: ${getLabelColor(label.level, 'risk')}`"
         class="rounded-lg w-full py-1"
       >
         {{ label.name }}
       </el-tag>
+      <el-tooltip
+        v-else
+        effect="light"
+        :content="label.name"
+        placement="top"
+      >
+        <el-text :style="`background-color: ${getLabelColor(label.level, 'risk')}`">{{ label.name.substring(0, 4) }}...</el-text>
+      </el-tooltip>
+      
     </div>
     <div v-if="list?.length > showNumber">
       <el-popover
         placement="top-end"
-        :width="200"
+        :width="220"
         trigger="hover"
         content="this is over"
       >
         <template #reference>
-          <span class="py-1 px-2 border border-slate-300 text-slate-500 rounded-full cursor-default">{{ list.length }}</span>
+          <span class="py-1 px-2 border border-slate-300 text-slate-500 rounded-full cursor-default">{{ list.length - 1 }}</span>
         </template>
         <template #default>
-          <div class="flex flex-wrap">
+          <div class="flex flex-wrap gap-1">
             <div
-              v-for="label in list.sort((a, b) => a.level - b.level)"
+              v-for="label in list.sort((a, b) => a.level - b.level).slice(1)"
               :key="label.id"
               class="custom"
             >
               <el-tag
+                v-if="label.name.length <= 4"
                 :style="`background-color: ${getLabelColor(
                   label.level,
                   'risk'
@@ -34,6 +45,18 @@
               >
                 {{ label.name }}
               </el-tag>
+              <el-tooltip
+                v-else
+                effect="light"
+                :content="label.name"
+                placement="top"
+                :style="`background-color: ${getLabelColor(
+                  label.level,
+                  'risk'
+                )}`"
+              >
+                <el-text>{{ label.name.substring(0, 4) }}...</el-text>
+              </el-tooltip>
             </div>
           </div>
         </template>
@@ -77,8 +100,6 @@ const getLabelColor = (level: number, type: string) => {
   row-gap: 0.5rem;
 }
 .custom {
-  flex: 0 0 0;
-  max-width: unset;
   .el-tag__content {
     color: white;
   }
