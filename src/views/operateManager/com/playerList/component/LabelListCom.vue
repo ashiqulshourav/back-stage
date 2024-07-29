@@ -23,7 +23,7 @@
         <template #default>
           <div class="flex gap-2 flex-wrap">
             <LabelItem
-              v-for="label in [...props.labels].slice(1)"
+              v-for="label in [...props.labels]"
               :key="label.id"
               :label="label"
               :type="type"
