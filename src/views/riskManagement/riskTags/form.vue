@@ -14,7 +14,7 @@
     </el-form-item>
 
     <el-form-item :label="t('标签级别')" prop="level">
-      <el-select v-model="newFormInline.level" :placeholder="t('标签级别')">
+      <el-select v-model="newFormInline.level" :placeholder="t('标签级别')" @change="changeColor">
         <el-option
           v-for="item in RISK_TAG_LEVEL"
           :label="item.label"
@@ -73,6 +73,16 @@ const getLabelColor = (level: number, labelColor?: string) => {
       return "#FF5C00"
     case 3:
       return "#FF9900"
+  }
+}
+
+const changeColor = (val: number) => {
+  if(val === 1){
+    labelColor.value = "#A30014"
+  } else if (val === 2){
+    labelColor.value = "#FF5C00"
+  } else if (val === 3){
+    labelColor.value = "#FF9900"
   }
 }
 
