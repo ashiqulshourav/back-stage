@@ -84,8 +84,7 @@ const {
   panIsEmpty,
   isShowDialog,
   matchStatus,
-  onCloseDialog,
-  
+  onCloseDialog
 } = useTradingHook(type);
 
 const title = computed(() =>

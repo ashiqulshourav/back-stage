@@ -343,6 +343,12 @@ export function useTradingHook(type: 'early' | 'in') {
 
     const res = await API[reqUrl]({
       operateMenu: `操盘管理-${type === 'early' ? '早盘管理' : '滚球管理'}`,
+      groupName:
+        classify === 'category'
+          ? (item?.val as string)
+          : classify === 'pan'
+          ? (categoryData?.betItemsName as string)
+          : '',
       matchId: matchId ? matchId : currentMatch.matchId,
       isSale: status,
       betItemsIds: betItemsIdList ?? []
@@ -354,6 +360,7 @@ export function useTradingHook(type: 'early' | 'in') {
         : res.code === 11226
         ? t('请先在预开售开启赛事开售')
         : res.msg;
+
     message(msg, { type: res.code ? 'error' : 'success' });
     runLoopMatch();
     riotPrevention.value = false;
