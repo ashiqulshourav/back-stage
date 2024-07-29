@@ -93,6 +93,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     page?: number
   ) => {
     let seriesDetails: any = [];
+    const newForm  = {...form}
     if (form.seriesType == 2) {
       if (form.seriesDetailsSingle.length) {
         form.seriesDetailsSingle.map((item: keyof typeof seriesTypesSingle) => {
@@ -125,9 +126,13 @@ export function useBettingCenterHook(category: number, venueType: number) {
     if (seriesDetails.length > 1) {
       seriesDetails = [...new Set(seriesDetails)];
     }
+    if(newForm.orderId||newForm.matchId||newForm.userIdOrName){
+        newForm.timeStart = '';
+        newForm.timeEnd = '';
+    }
     return {
       ...removeEmptyStringKeys({
-        ...form,
+        ...newForm,
         orderId: order_id || form.orderId,
         seriesDetailsSingle: '',
         seriesDetailsDuplex: '',
