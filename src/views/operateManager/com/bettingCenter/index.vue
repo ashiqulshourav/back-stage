@@ -201,8 +201,6 @@
           <template #betMessage="{ row }">
             <div
               class="match_item bet_detail eq-height"
-              v-for="item in row.combineOrderDetails"
-              :key="item.betItemId"
             >
               <div
                 class="item_line cursor-pointer flex items-baseline gap-1"
@@ -226,10 +224,10 @@
               <div class="item_line">
                 {{ t('投注IP:') }}
                 <span
-                  v-if="item.ip"
+                  v-if="row.combineOrderDetails[0].ip"
                   @click="openIpDialog(item.ip)"
                   class="text-[#409EFF] cursor-pointer"
-                >{{ item.ip }}</span
+                >{{ row.combineOrderDetails[0].ip }}</span
                 >
                 <span v-else>-</span>
               </div>
