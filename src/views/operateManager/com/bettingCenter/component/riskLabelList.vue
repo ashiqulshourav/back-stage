@@ -31,7 +31,7 @@
         <template #default>
           <div class="flex flex-wrap gap-1">
             <div
-              v-for="label in list.sort((a, b) => a.level - b.level).slice(1)"
+              v-for="label in list.sort((a, b) => a.level - b.level)"
               :key="label.id"
               class="custom"
             >
