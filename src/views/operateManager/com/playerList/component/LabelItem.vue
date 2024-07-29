@@ -11,7 +11,14 @@ import { columns } from './TableColumnList';
       :style="`background-color: ${getLabelColor(label.level, label.labelColor)}`"
       class="w-[10px] h-[10px] rounded-[50%] bg-blue-500"
     />
-    <el-text size="small">{{ props.label.name }}</el-text>
+    <el-text v-if="props.label.name.length <= 4" size="small">{{ props.label.name }}</el-text>
+    <el-tooltip
+      v-else
+      :content="props.label.name"
+      placement="top"
+    >
+      <el-text>{{ props.label.name.substring(0, 4) }}...</el-text>
+    </el-tooltip>
   </el-tag>
 </template>
 <script setup lang="ts">
