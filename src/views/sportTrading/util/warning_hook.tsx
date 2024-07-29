@@ -262,6 +262,9 @@ export function useWarningHook() {
       }
       return false;
     });
+    setTimeout(() => {
+      getLoopMatchData();
+    }, 800);
   };
 
   //- 修改盘赛事图标状态
