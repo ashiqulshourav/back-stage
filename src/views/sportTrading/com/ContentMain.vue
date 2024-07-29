@@ -108,7 +108,7 @@
                       <div class="flex items-center text-center w-1/6">
                         <el-text
                           class="!text-xs font-bold"
-                          :type="[s.oddsType === 'OU' ? 'primary' : 'danger']"
+                          :type="s.oddsType === 'OU' ? 'primary' : 'danger'"
                         >
                           {{ ODDS_TYPE_MAP[s.oddsType] }}
                         </el-text>
@@ -278,7 +278,7 @@ const shortcutSelectNum = (
 ) => {
   if (_ === 0) return;
   const params: {
-    betItemsId: number;
+    betItemsId: string;
     oddsType: string;
     afterOdds: number;
     beforeOdds: number;
@@ -294,7 +294,7 @@ const shortcutSelectNum = (
         oddsType: d.oddsType,
         beforeOdds: d.odds,
         afterOdds: d.dpOdds,
-        betItemsId: d.betItemsId,
+        betItemsId: d.betItemsId.toString(),
         betItemsName: `${d.betItemsName}-${panName(d, props.currentMatch)}`,
         oddsVariable: index !== otherIdx ? _ : _ * -1
       }))
@@ -308,7 +308,7 @@ const shortcutSelectNum = (
     nextTick(() => {
       params.push({
         oddsType: d.oddsType,
-        betItemsId: d.betItemsId,
+        betItemsId: d.betItemsId.toString(),
         beforeOdds: d.odds,
         afterOdds: d.dpOdds,
         betItemsName: `${d.betItemsName}-${panName(d, props.currentMatch)}`,

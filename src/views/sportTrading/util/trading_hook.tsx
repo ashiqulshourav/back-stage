@@ -101,10 +101,10 @@ export function useTradingHook(type: 'early' | 'in') {
     );
     if (res.code) return message(res.msg, { type: 'error' });
     //- 检测是否比赛开始
+
     if (
       !checkisBeginMatch(
         res.data.status as 'nobegin' | 'canceled' | 'over',
-        // new Date('2024-07-15 16:53:00').getTime()
         res.data.beginTimeLong
       )
     ) {

@@ -62,8 +62,18 @@ const props = defineProps<{
   betItemsDtoList: sportTradingDataAPI.BetItemsDtoList[];
 }>();
 
+//- 是否显示操盘按钮
 const toggleShowNum = (t: 'enter' | 'leave') => {
   if (!hasAuth('CHANGE_ODDS') || props.saleStatus !== 2) return;
+
+  if (props.betItemsDtoList.length === 2) {
+    const otherD = props.betItemsDtoList.find(
+      item => item.betItemsId !== props.s.betItemsId
+    ) as sportTradingDataAPI.BetItemsDtoList;
+    if (Math.abs(otherD.oddsVariable) !== Math.abs(props.s.oddsVariable))
+      return;
+  }
+
   showNum.value = t === 'leave';
   emits('clearMatchTime', !showNum.value ? 1 : -1);
 };
