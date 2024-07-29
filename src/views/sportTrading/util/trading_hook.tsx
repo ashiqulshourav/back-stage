@@ -109,7 +109,7 @@ export function useTradingHook(type: 'early' | 'in') {
     ) {
       return clearTimeout(loopTimer.value);
     }
-    //检测是否有盘数据返回
+    //- 检测是否有盘数据返回
     checkHasData(res.data);
 
     const tempList = handicapList.slice(1);
@@ -152,6 +152,8 @@ export function useTradingHook(type: 'early' | 'in') {
           return false;
         }
       });
+
+      if (!_.list.length) _.isSale = currentMatch.isSale;
     });
 
     //- 第一项单独处理
@@ -405,7 +407,6 @@ export function useTradingHook(type: 'early' | 'in') {
       0: 0,
       4: 0
     };
-
     categoryData.isSale = status;
     item.list.forEach(_ => {
       o[_.isSale as keyof typeof o] += 1;
@@ -426,8 +427,15 @@ export function useTradingHook(type: 'early' | 'in') {
 
   //- 修改玩法状态
   const upatePalySale = (status: number, item: handicapListType) => {
-    item.isSale = status;
-    item.list.forEach(item => (item.isSale = status));
+    if (item.listType === 'all') {
+      handicapList.forEach(_ => {
+        _.isSale = status;
+        _.list.forEach(d => (d.isSale = status));
+      });
+    } else {
+      item.isSale = status;
+      item.list.forEach(item => (item.isSale = status));
+    }
   };
 
   //- 点击快捷键修改赔率
