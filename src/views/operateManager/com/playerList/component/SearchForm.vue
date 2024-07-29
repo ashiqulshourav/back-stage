@@ -210,7 +210,7 @@
           v-if="hasAuth('EXPORT')"
           @click="exportFile()"
         >
-          {{ t('导出') }}
+          {{ t('导出列表') }}
         </el-button>
       </el-form-item>
     </el-form>

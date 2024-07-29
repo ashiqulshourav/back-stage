@@ -14,6 +14,7 @@ import { columns } from './TableColumnList';
     <el-text v-if="props.label.name.length <= 4" size="small">{{ props.label.name }}</el-text>
     <el-tooltip
       v-else
+      effect="light"
       :content="props.label.name"
       placement="top"
     >
