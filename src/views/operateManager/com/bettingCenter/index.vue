@@ -47,18 +47,6 @@
                   class="item_line cursor-pointer"
                   @click="
                     copyTest(
-                      row.userId,
-                      t('用户ID：{value}', { value: row.userId })
-                    )
-                  "
-                >
-                  <span>{{ t('用户ID：') }}</span
-                  >{{ row.userId }}
-                </div>
-                <div
-                  class="item_line cursor-pointer"
-                  @click="
-                    copyTest(
                       row.userName,
                       t('用户名：{value}', { value: row.userName })
                     )
@@ -66,6 +54,18 @@
                 >
                   <span>{{ t('用户名：') }}</span
                   >{{ row.userName }}
+                </div>
+                <div
+                  class="item_line cursor-pointer"
+                  @click="
+                    copyTest(
+                      row.userId,
+                      t('用户ID：{value}', { value: row.userId })
+                    )
+                  "
+                >
+                  <span>{{ t('用户ID：') }}</span
+                  >{{ row.userId }}
                 </div>
                 <div
                   class="item_line cursor-pointer"

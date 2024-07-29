@@ -42,6 +42,32 @@
               class="!w-[180px]"
           />
         </el-form-item>
+        <el-form-item v-if="!(form.matchId||form.orderId||form.userIdOrName)" prop="timeType">
+          <el-select
+            v-model="form.timeType"
+            class="!w-[100px]"
+            @change="search"
+          >
+            <el-option :label="t('下注时间')" :value="1" />
+            <el-option :label="t('结算时间')" :value="2" />
+            <el-option :label="t('开赛时间')" :value="3" />
+          </el-select>
+          <CustomDate
+            v-model:val="selectDate"
+            :start-placeholder="
+              dayjs()
+                .subtract(30, 'day')
+                .startOf('day')
+                .format('YYYY-MM-DD HH:mm:ss')
+            "
+            :end-placeholder="
+              dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')
+            "
+            @changeDate="changeDate"
+            :isDateTime="true"
+            :format="'YYYY-MM-DD HH:mm:ss'"
+          />
+        </el-form-item>
         <el-form-item  :label="`${t('赛事类型')}:`"
           v-if="props.venueType === 0"
           prop="category"
@@ -296,7 +322,7 @@
               v-enter="search"
           />
         </el-form-item>
-        <el-form-item prop="tenantIds" :label="`${t('商户名')}:`">
+        <el-form-item prop="tenantIds" :label="`${t('商户查询')}:`">
           <el-tree-select
               v-model="props.form.tenantIds"
               :placeholder="t('请选择商户ID，多选项')"
@@ -339,32 +365,6 @@
               </el-checkbox>
             </template>
           </el-tree-select>
-        </el-form-item>
-        <el-form-item v-if="!(form.matchId||form.orderId||form.userIdOrName)" prop="timeType">
-          <el-select
-            v-model="form.timeType"
-            class="!w-[100px]"
-            @change="search"
-          >
-            <el-option :label="t('下注时间')" :value="1" />
-            <el-option :label="t('结算时间')" :value="2" />
-            <el-option :label="t('开赛时间')" :value="3" />
-          </el-select>
-          <CustomDate
-            v-model:val="selectDate"
-            :start-placeholder="
-              dayjs()
-                .subtract(30, 'day')
-                .startOf('day')
-                .format('YYYY-MM-DD HH:mm:ss')
-            "
-            :end-placeholder="
-              dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')
-            "
-            @changeDate="changeDate"
-            :isDateTime="true"
-            :format="'YYYY-MM-DD HH:mm:ss'"
-          />
         </el-form-item>
         <el-form-item>
           <el-button
