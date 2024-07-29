@@ -14,7 +14,7 @@
     </el-form-item>
 
     <el-form-item :label="t('标签级别')" prop="level">
-      <el-select v-model="newFormInline.level" :placeholder="t('标签级别')">
+      <el-select v-model="newFormInline.level" :placeholder="t('标签级别')" @change="changeColor">
         <el-option
           v-for="item in RISK_TAG_LEVEL"
           :label="item.label"
@@ -46,7 +46,7 @@ import { formRules } from './utils/rule';
 import { FormProps } from './utils/types';
 import { t } from '@/plugins/i18n';
 import { RISK_TAG_LEVEL } from '@/utils/maps/tags_map';
-import { defaultInitialZIndex } from 'element-plus';
+import { defaultInitialZIndex, virtualizedGridProps } from 'element-plus';
 // import { inputRestrictions } from '@/utils/formatNumber';
 
 const props = withDefaults(defineProps<FormProps>(), {
@@ -74,6 +74,16 @@ const getLabelColor = (level: number, labelColor?: string) => {
       return "#19BE6B"
     case 3:
       return "#2E4050"
+  }
+}
+
+const changeColor = (val: number) => {
+  if(val === 1){
+    labelColor.value = "#1891FF"
+  } else if (val === 2){
+    labelColor.value = "#19BE6B"
+  } else if (val === 3){
+    labelColor.value = "#2E4050"
   }
 }
 
