@@ -237,7 +237,7 @@ const onFileChange = async (file: UploadFile) => {
 const downloadTemplate = async () => {
   const data = [
     ['用户ID', '风控标签', '属性标签'],
-    ['1', '套利，水军', '老用户，高活跃']
+    ['1', '套利,水军', '老用户,高活跃']
   ];
   // Create a workbook and worksheet
   const ws = utils.aoa_to_sheet(data);
