@@ -27,7 +27,7 @@ export const columns: TableColumnList = [
     label: t('操作参数'),
     slot: 'requestLog',
     prop: 'requestLog',
-    minWidth: 200,
+    minWidth: 250,
     headerRenderer: d => handleTableWidth(d, t('操作参数'), 'auto')
   },
   {
@@ -37,14 +37,14 @@ export const columns: TableColumnList = [
     },
     prop: 'operateBefore',
     slot: 'operateBefore',
-    minWidth: 200,
+    minWidth: 250,
     headerRenderer: d => handleTableWidth(d, t('修改前'), 'auto')
   },
   {
     label: t('修改后'),
     prop: 'operateAfter',
     slot: 'operateAfter',
-    minWidth: 150,
+    minWidth: 250,
     headerRenderer: d => handleTableWidth(d, t('修改后'), 'auto')
   },
   {
