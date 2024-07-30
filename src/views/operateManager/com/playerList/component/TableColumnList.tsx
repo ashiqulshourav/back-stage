@@ -30,13 +30,13 @@ export const columns = (category: number): TableColumnList => {
       label: t('风控标签'),
       hide: !hasAuth('viewRiskLabel'.toUpperCase()),
       slot: 'riskControlLabel',
-      minWidth: 150
+      width: 350
     },
     {
       label: t('属性标签'),
       hide: !hasAuth('viewAttributeLabel'.toUpperCase()),
       slot: 'attributeLabel',
-      minWidth: 150
+      width: 350
     },
     {
       label: t('限额等级'),
@@ -151,7 +151,7 @@ export const recordColumns: TableColumnList = [
 export const userColumns: TableColumnList = [
   {
     label: t('用户ID'),
-    slot: 'userid'
+    prop: 'userid'
   },
   {
     label: t('风控标签'),
