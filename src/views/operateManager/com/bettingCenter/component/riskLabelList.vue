@@ -1,12 +1,17 @@
 <template>
   <div v-if="list" class="items-center flex flex-wrap px-2 mt-1 gap-1 min-w-[120px]">
-    <div v-for="label in list.slice(0, showNumber).sort((a, b) => a.level - b.level)" :key="label.id" class="custom">
+    <div v-for="label in list.slice(0, showNumber).sort((a, b) => a.level - b.level)" :key="label.id">
       <el-tag
         v-if="label.name.length <= 4"
-        :style="`background-color: ${getLabelColor(label.level, label.labelColor)}`"
-        class="rounded-lg w-full py-1"
+        round
+        type="info"
+        class="!bg-transparent !text-black dark:!text-white"
       >
-        {{ label.name, "shourav"}}
+        <span
+          :style="`background-color: ${getLabelColor(label.level, label.labelColor)}`"
+          class="inline-block w-[10px] h-[10px] rounded-[50%] bg-blue-500 mr-1"
+        />
+        {{ label.name }}
       </el-tag>
       <el-tooltip
         v-else
@@ -14,48 +19,65 @@
         :content="label.name"
         placement="top"
       >
-        <el-tag :style="`background-color: ${getLabelColor(label.level, label.labelColor)}`">{{ label.name.substring(0, 4), "shourav 2" }}...</el-tag>
+        <el-tag
+          round 
+          type="info" 
+          class="!bg-transparent !text-black dark:!text-white"
+          >
+            <span
+              :style="`background-color: ${getLabelColor(label.level, label.labelColor)}`"
+              class="inline-block w-[10px] h-[10px] rounded-[50%] bg-blue-500 mr-1"
+            />
+          {{ label.name.substring(0, 4) }}...
+        </el-tag>
       </el-tooltip>
       
     </div>
     <div v-if="list?.length > showNumber">
       <el-popover
         placement="top-end"
-        :width="200"
+        :width="210"
         trigger="hover"
         content="this is over"
       >
         <template #reference>
-          <span class="py-1 px-2 border border-slate-300 text-slate-500 rounded-full cursor-default">{{ list.length - 1 }}</span>
+          <span class="py-1 px-2 border border-slate-300 text-slate-500 rounded-full cursor-default">{{ list.length }}</span>
         </template>
         <template #default>
           <div class="flex flex-wrap gap-1">
             <div
               v-for="label in list.sort((a, b) => a.level - b.level)"
               :key="label.id"
-              class="custom"
             >
               <el-tag
                 v-if="label.name.length <= 4"
-                :style="`background-color: ${getLabelColor(
-                  label.level,
-                  label.labelColor
-                )}`"
-                class="rounded-lg w-full py-1 text-white text-center"
-              >
-                {{ label.name }}
+                  round 
+                  type="info" 
+                  class="!bg-transparent !text-black dark:!text-white"
+                >
+                  <span
+                    :style="`background-color: ${getLabelColor(label.level, label.labelColor)}`"
+                    class="inline-block w-[10px] h-[10px] rounded-[50%] bg-blue-500 mr-1"
+                  />
+                  {{ label.name }}
               </el-tag>
               <el-tooltip
                 v-else
                 effect="light"
                 :content="label.name"
                 placement="top"
-                :style="`background-color: ${getLabelColor(
-                  label.level,
-                  label.labelColor
-                )}`"
               >
-                <el-tag :style="`background-color: ${getLabelColor(label.level, label.labelColor)}`">{{ label.name.substring(0, 4), "shourav 2" }}...</el-tag>
+                <el-tag
+                  round 
+                  type="info" 
+                  class="!bg-transparent !text-black dark:!text-white"
+                >
+                  <span
+                    :style="`background-color: ${getLabelColor(label.level, label.labelColor)}`"
+                    class="inline-block w-[10px] h-[10px] rounded-[50%] bg-blue-500 mr-1"
+                  />
+                  {{ label.name.substring(0, 4)}}...
+                </el-tag>
               </el-tooltip>
             </div>
           </div>
