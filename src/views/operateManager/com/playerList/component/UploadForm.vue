@@ -161,7 +161,7 @@ const { tableHeaderStyle } = usePublicHooks();
 
 const active = ref(0);
 const uploadFormFile = ref();
-const users = reactive<OperateManagementDataAPI.userType[]>([]);
+const users = reactive<any[]>([]);
 
 const next = async () => {
   console.log({ uploadFormFile });
@@ -173,86 +173,7 @@ const next = async () => {
 
       if (!res.code) {
         console.log(res.data);
-        users.push(
-          // ...[
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   },
-          //   {
-          //     userid: 234,
-          //     riskControlLabel: 'sdfsdf',
-          //     attributeLabel: 'dsfsdf'
-          //   }
-          // ]
-          ...res.data
-        );
+        users.push(...res.data);
         active.value = 1;
         return;
       }

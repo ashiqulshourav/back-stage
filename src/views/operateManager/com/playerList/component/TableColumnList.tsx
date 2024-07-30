@@ -28,19 +28,19 @@ export const columns = (category: number): TableColumnList => {
     },
     {
       label: t('风控标签'),
-      hide: !hasAuth('RISK_LABEL'),
+      hide: !hasAuth('viewRiskLabel'.toUpperCase()),
       slot: 'riskControlLabel',
       width: 350
     },
     {
       label: t('属性标签'),
-      hide: !hasAuth('ATTRIBUTE_LABEL'),
+      hide: !hasAuth('viewAttributeLabel'.toUpperCase()),
       slot: 'attributeLabel',
       width: 350
     },
     {
       label: t('限额等级'),
-      hide: !hasAuth('LIMIT_LEVEL'),
+      hide: !hasAuth('viewLimitLevel'.toUpperCase()),
       prop: 'limitLevel',
       minWidth: 150
     },
@@ -55,7 +55,7 @@ export const columns = (category: number): TableColumnList => {
     {
       label: t('特殊限额'),
       minWidth: 150,
-      hide: !hasAuth('SEPCIAL_LIMIT'),
+      hide: !hasAuth('viewSpecialLimit'.toUpperCase()),
       formatter: ({
         maxWinAmountLimit,
         productAmountTotalLimit,
@@ -67,7 +67,7 @@ export const columns = (category: number): TableColumnList => {
         productAmountTotalLimit: number;
         seriesSingleDayCumulativeCompensationLimit: number;
         singleEventAccumulatedCompensationLimit: number;
-        percentageLimit: number;
+        percentageLimit: string;
       }) => {
         if (
           maxWinAmountLimit ||
@@ -76,9 +76,11 @@ export const columns = (category: number): TableColumnList => {
           singleEventAccumulatedCompensationLimit
         )
           return t('例外限额');
-        else if (percentageLimit) {
+        else if (percentageLimit === null) {
+          return t('无');
+        } else {
           return '百分比限额: ' + percentageLimit + '%';
-        } else return t('无');
+        }
       }
     },
     {
@@ -198,7 +200,7 @@ export const specialLimitColumns: TableColumnList = [
     label: t('百分比限额'),
     prop: 'percentageLimit',
     formatter({ percentageLimit }) {
-      return percentageLimit ? percentageLimit + '%' : '-';
+      return percentageLimit !== '' ? percentageLimit + '%' : '-';
     }
   },
   {
