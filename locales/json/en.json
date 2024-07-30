@@ -580,7 +580,6 @@
   "k257d59a": "Event missing",
   "k-5925f3c3": "Are you sure you want to delete the user account?",
   "kdb27538": "Please select merchant ID, multiple options",
-  "k80952a3": "Please select status, multiple options",
   "k73177261": "Result",
   "k-191e002c": "League Name",
   "k6ae9ad4a": "Bet Time",
@@ -1176,7 +1175,6 @@
   "k-7c196fb9": "反恐精英2",
   "k-232c6b1c": "星际争霸2",
   "k-180725c9": "Get Odds Data",
-  "k-2699cda1": "报表异步导出",
   "k8d313de": "League level cannot be empty",
   "k4114ab0b": "Football auto accept/reject",
   "k-10bb9f9f": "Football auto settlement",
@@ -1223,8 +1221,6 @@
   "k-2a1debc0": "请输入用户名/用户ID",
   "k-fdd8980": "导出当前投注单数据?",
   "k1abe00a": "导出当前球员名单数据",
-  "k484e0f2d": "事件前",
-  "k4a47f78f": "事件后",
   "k7663f369": "导出当前投注审核列表数据?",
   "k-47acbb75": "导出当前手工订单剔除列表数据?",
   "k-143643b3": "导出当前操作日志列表数据?",
@@ -1247,5 +1243,6 @@
   "k44d1ce00": "主客队对调",
   "k-772666a6": "如果数据源的主客队位置相反，可以勾选开启主客队调换",
   "k6c802943": "美国盘",
-  "k203f6e30": "英国盘"
+  "k203f6e30": "英国盘",
+  "k24b2ab98": "导出当前电竞数据?"
 }
