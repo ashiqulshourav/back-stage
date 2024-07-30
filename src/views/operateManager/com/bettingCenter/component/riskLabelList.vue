@@ -3,10 +3,10 @@
     <div v-for="label in list.slice(0, showNumber).sort((a, b) => a.level - b.level)" :key="label.id" class="custom">
       <el-tag
         v-if="label.name.length <= 4"
-        :style="`background-color: ${getLabelColor(label.level, 'risk')}`"
+        :style="`background-color: ${getLabelColor(label.level, label.labelColor)}`"
         class="rounded-lg w-full py-1"
       >
-        {{ label.name }}
+        {{ label.name, "shourav"}}
       </el-tag>
       <el-tooltip
         v-else
@@ -14,14 +14,14 @@
         :content="label.name"
         placement="top"
       >
-        <el-text :style="`background-color: ${getLabelColor(label.level, 'risk')}`">{{ label.name.substring(0, 4) }}...</el-text>
+        <el-tag :style="`background-color: ${getLabelColor(label.level, label.labelColor)}`">{{ label.name.substring(0, 4), "shourav 2" }}...</el-tag>
       </el-tooltip>
       
     </div>
     <div v-if="list?.length > showNumber">
       <el-popover
         placement="top-end"
-        :width="220"
+        :width="200"
         trigger="hover"
         content="this is over"
       >
@@ -39,7 +39,7 @@
                 v-if="label.name.length <= 4"
                 :style="`background-color: ${getLabelColor(
                   label.level,
-                  'risk'
+                  label.labelColor
                 )}`"
                 class="rounded-lg w-full py-1 text-white text-center"
               >
@@ -52,10 +52,10 @@
                 placement="top"
                 :style="`background-color: ${getLabelColor(
                   label.level,
-                  'risk'
+                  label.labelColor
                 )}`"
               >
-                <el-text>{{ label.name.substring(0, 4) }}...</el-text>
+                <el-tag :style="`background-color: ${getLabelColor(label.level, label.labelColor)}`">{{ label.name.substring(0, 4), "shourav 2" }}...</el-tag>
               </el-tooltip>
             </div>
           </div>
@@ -72,27 +72,19 @@ const { list, showNumber } = defineProps<{
   showNumber: number;
 }>();
 
-const getLabelColor = (level: number, type: string) => {
-    if (type === 'risk') {
-      switch (level) {
-        case 1:
-          return 'rgba(163, 0, 20, 1)';
-        case 2:
-          return 'rgba(255, 92, 0, 1)';
-        case 3:
-          return 'rgba(255, 153, 0, 1)';
-      }
-    } else {
-      switch (level) {
-        case 1:
-          return 'rgba(24, 145, 255, 1)';
-        case 2:
-          return 'rgba(25, 190, 107, 1)';
-        case 3:
-          return 'rgba(46, 64, 80, 1)';
-      }
-    }
-  };
+
+const getLabelColor = (level: number, labelColor?: string) => {
+  console.log(labelColor)
+  if(labelColor) return labelColor    
+  switch(level) {
+    case 1: 
+      return "#1891FF"
+    case 2:
+      return "#19BE6B"
+    case 3:
+      return "#2E4050"
+  }
+}
 </script>
 
 <style lang="scss">
