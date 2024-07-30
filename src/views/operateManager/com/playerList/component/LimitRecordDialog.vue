@@ -48,7 +48,8 @@ onMounted(() => {
   init();
 });
 
-const handleSelectionChange = () => {
+const handleSelectionChange = (n: number) => {
+  pagination.currentPage = n;
   init();
 };
 
