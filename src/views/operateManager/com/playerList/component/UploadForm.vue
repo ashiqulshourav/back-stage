@@ -195,6 +195,9 @@ const next = async () => {
 
       if (!res.data.errorMsg) {
         active.value = 2;
+        return;
+      } else {
+
         const sentences = res.data.errorMsg.split('\n');
 
         errorMsg.value = [...sentences];
