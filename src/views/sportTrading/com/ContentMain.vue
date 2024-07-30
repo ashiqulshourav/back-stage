@@ -38,6 +38,7 @@
                   <div class="flex justify-between ml-4">
                     <IconGroup
                       :typeNum="item.isSale"
+                      renderType="classify"
                       @changeMatchStatus="
                         status =>
                           changeStatus({
@@ -64,7 +65,7 @@
                     :tippyProps="{ content: _.betItemsName }"
                   >
                     <span class="text-[#409EFF] font-bold leading-none">{{
-                      _.betItemsName
+                      _.betItemsName.replace('&', ' ')
                     }}</span>
                   </ReText>
 
@@ -90,61 +91,41 @@
                   <div v-for="(d, i) in _.kindsCodeDtoList" :key="i">
                     <div
                       :class="[
-                        'flex w-full items-center h-[35px]',
+                        'flex w-full items-center h-[35px] ',
                         l === 0 && 'bg-[--el-color-primary-light-9]'
                       ]"
                       v-for="(s, l) in d.betItemsDtoList"
                       :key="`${i}-${l}`"
                     >
                       <div
-                        class="text-[--el-color-primary] text-center pl-2 pr-2 leading-none w-1/4"
+                        class="text-[--el-color-primary] text-left ml-2 pl-[8px] leading-none w-1/4"
                       >
-                        <ReText size="small">
-                          {{
-                            PLAY_MATCH_NAME(
-                              s.kindsCode,
-                              s.handicap,
-                              currentMatch.homeTeamNameCn,
-                              currentMatch.awayTeamNameCn
-                            )[
-                              s.homeOrAway ? s.homeOrAway : s.handicap
-                            ]?.replace('&', ' ') ??
-                            goalScoring(
-                              s.kindsCode,
-                              s.handicap,
-                              s.n,
-                              currentMatch.homeTeamNameCn,
-                              currentMatch.awayTeamNameCn,
-                              s.renderName
-                            )?.replace('&', ' ')
-                          }}
+                        <ReText size="small" @click="copyText(s.betItemsId)">
+                          {{ panName(s, currentMatch) }}
                         </ReText>
                       </div>
-                      <div
-                        :class="[
-                          'flex items-center text-center w-1/6',
-                          s.odds < 0 && 'translate-x-[-2px]'
-                        ]"
-                      >
-                        <el-text class="!text-xs" type="primary">{{
-                          ODDS_TYPE_MAP[s.oddsType]
-                        }}</el-text>
-                        <span class="ml-2">
+
+                      <div class="flex items-center text-center w-1/6">
+                        <el-text
+                          class="!text-xs font-bold"
+                          :type="s.oddsType === 'OU' ? 'primary' : 'danger'"
+                        >
+                          {{ ODDS_TYPE_MAP[s.oddsType] }}
+                        </el-text>
+                        <span class="ml-2 min-w-[45px] text-right">
                           {{ s.odds.toFixed(2) }}
                         </span>
                       </div>
                       <InputCom
                         :s="s"
                         :saleStatus="_.isSale"
-                        @changeMouse="
-                          (e, s, type) =>
-                            mouseEvent(e, s, type, d.betItemsDtoList)
-                        "
+                        @clearMatchTime="v => $emit('clearMatchTime', v)"
                         :selectNum="selectNum"
                         :selectItem="selectItem"
-                        :betItemsDtoList="betItemsDtoList"
-                        @changeSelectNum="(n:number) =>
-                      shortcutSelectNum(n,'input')"
+                        :betItemsDtoList="d.betItemsDtoList"
+                        @changeSelectNum="
+                          (v, s) => shortcutSelectNum(v, s, d.betItemsDtoList)
+                        "
                       />
                       <div
                         :class="[
@@ -159,8 +140,10 @@
                         {{ s.betCount }}/{{ s.betAmount }}
                       </div>
                       <div
-                        class="text-[--el-color-primary] w-1/6 text-center"
-                        v-if="l === 0"
+                        :class="[
+                          'text-[--el-color-primary] w-1/6 text-center',
+                          l !== 0 && 'invisible'
+                        ]"
                       >
                         {{ d.betAmountDiffer ?? '' }}
                       </div>
@@ -199,24 +182,18 @@
 import { handicapListType } from '../util/type';
 import IconGroup from './IconGroup.vue';
 import ContentTitle from './ContentTitle.vue';
-import { addition, subtraction } from '@pureadmin/utils';
-import {
-  ODDS_TYPE_MAP,
-  PLAY_MATCH_NAME,
-  goalScoring,
-  resetDpodds
-} from '../util/playMap';
+import { ODDS_TYPE_MAP, PLAY_MATCH_NAME, goalScoring } from '../util/playMap';
 import InputCom from './InputCom.vue';
 import { t } from '@/plugins/i18n';
 import { useBetStore } from '@/store/bet';
 import { ReText } from '@/components/ReText';
 import MatchCountDown from './MatchCountDown.vue';
+import { copyTextToClipboard } from '@pureadmin/utils';
 
 const contentRef = ref();
 const collapseRef = ref();
 const activeNames = ref([1]);
 const contentScrollRef = ref();
-const betItemsDtoList = reactive<sportTradingDataAPI.BetItemsDtoList[]>([]);
 const selectItem = ref<sportTradingDataAPI.BetItemsDtoList>(
   {} as sportTradingDataAPI.BetItemsDtoList
 );
@@ -241,9 +218,6 @@ watch(
   () => props.currentMatch,
   () => {
     activeNames.value = [1];
-  },
-  {
-    deep: true
   }
 );
 
@@ -264,32 +238,28 @@ const emits = defineEmits([
   'sendNewOdds',
   'onCloseDialog'
 ]);
-//- 鼠标滑入交互处理
-const mouseEvent = (
-  _e: any,
+
+//- 求当前玩法名称
+const panName = (
   s: sportTradingDataAPI.BetItemsDtoList,
-  type: 'enter' | 'leave',
-  list?: sportTradingDataAPI.BetItemsDtoList[]
+  currentMatch: sportTradingDataAPI.MatchDtoList
 ) => {
-  if (type === 'enter') {
-    //鼠标滑入之前所有为隐藏
-    props.handicapList
-      .find(item => item.listType === props.selectContentType)!
-      .list.forEach(item => {
-        item.kindsCodeDtoList.forEach(_ => {
-          _.betItemsDtoList.forEach(r => {
-            r.sourceBetItemsId = -1;
-          });
-        });
-      });
-    selectItem.value = s;
-    betItemsDtoList.length = 0;
-    betItemsDtoList.push(...(list as sportTradingDataAPI.BetItemsDtoList[]));
-    s.sourceBetItemsId = 1;
-  } else {
-    s.sourceBetItemsId = -1;
-  }
-  emits('clearMatchTime', s.sourceBetItemsId);
+  return (
+    PLAY_MATCH_NAME(
+      s.kindsCode,
+      s.handicap,
+      currentMatch.homeTeamNameCn,
+      currentMatch.awayTeamNameCn
+    )[s.homeOrAway ? s.homeOrAway : s.handicap]?.replace('&', ' ') ??
+    goalScoring(
+      s.kindsCode,
+      s.handicap,
+      s.n,
+      currentMatch.homeTeamNameCn,
+      currentMatch.awayTeamNameCn,
+      s.renderName
+    )?.replace('&', ' ')
+  );
 };
 
 //- 修改选择类型
@@ -299,50 +269,57 @@ const changeSelectType = (type: string) => {
 
 //-快捷选择数字事件
 const selectNum = ref(0);
-const shortcutSelectNum = (_: number, type: string) => {
+const shortcutSelectNum = (
+  _: number,
+  s: sportTradingDataAPI.BetItemsDtoList,
+  list: sportTradingDataAPI.BetItemsDtoList[]
+) => {
   if (_ === 0) return;
-  const params: { betItemsId: number; dpOdds: number; oddsType: string }[] = [];
+  const params: {
+    betItemsId: string;
+    oddsType: string;
+    afterOdds: number;
+    beforeOdds: number;
+    betItemsName: string;
+    oddsVariable: number;
+  }[] = [];
   //- 下盘需要递减
-  if (betItemsDtoList.length === 2) {
-    const otherIdx = betItemsDtoList.findIndex(
-      item => item.betItemsId !== selectItem.value.betItemsId
-    );
+  if (list.length === 2) {
+    const otherIdx = list.findIndex(item => item.betItemsId !== s.betItemsId);
 
-    //- 快捷选择单独处理
-    if (type === 'shortcut') {
-      const d = betItemsDtoList.find(
-        item => item.betItemsId !== selectItem.value.betItemsId
-      ) as sportTradingDataAPI.BetItemsDtoList;
-      if (_ > 0) {
-        d.dpOdds = subtraction(d.dpOdds, Math.abs(_), 2);
-      } else {
-        d.dpOdds = addition(d.dpOdds, Math.abs(_), 2);
-      }
-      if (Math.abs(d.dpOdds) >= 1) d.dpOdds = resetDpodds(d.dpOdds);
-    }
     params.push(
-      ...betItemsDtoList.map((d, index: number) => ({
+      ...list.map((d, index: number) => ({
         oddsType: d.oddsType,
-        betItemsId: d.betItemsId,
-        dpOdds: index !== otherIdx ? _ : _ * -1
+        beforeOdds: d.odds,
+        afterOdds: d.dpOdds,
+        betItemsId: d.betItemsId.toString(),
+        betItemsName: `${d.betItemsName}-${panName(d, props.currentMatch)}`,
+        oddsVariable: index !== otherIdx ? _ : _ * -1
       }))
     );
     emits('sendNewOdds', params);
   } else {
     //- 长度大于3的盘口
-    const d = betItemsDtoList.find(
-      item => item.betItemsId === selectItem.value.betItemsId
+    const d = list.find(
+      item => item.betItemsId === s.betItemsId
     ) as sportTradingDataAPI.BetItemsDtoList;
-
     nextTick(() => {
       params.push({
         oddsType: d.oddsType,
-        betItemsId: d.betItemsId,
-        dpOdds: _
+        betItemsId: d.betItemsId.toString(),
+        beforeOdds: d.odds,
+        afterOdds: d.dpOdds,
+        betItemsName: `${d.betItemsName}-${panName(d, props.currentMatch)}`,
+        oddsVariable: _
       });
       emits('sendNewOdds', params);
     });
   }
+};
+
+//- 粘贴
+const copyText = (str: string) => {
+  copyTextToClipboard(str);
 };
 
 const clearTime = () => {

@@ -33,6 +33,10 @@ export const NEW_MATCH_STATUS = [
     value: 'nobegin'
   },
   {
+    label: t('比赛取消'),
+    value: 'canceled'
+  },
+  {
     label: t('比赛延迟'),
     value: 'delay'
   },

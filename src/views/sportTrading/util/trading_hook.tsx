@@ -48,7 +48,6 @@ export function useTradingHook(type: 'early' | 'in') {
         : */ ''
   });
 
-  //- 盘口赛事列表接口
   const loopTimer = ref<NodeJS.Timeout>();
   //- 初始化搜索
   const onSearch = async (isInit?: boolean) => {
@@ -84,6 +83,7 @@ export function useTradingHook(type: 'early' | 'in') {
     Object.assign(currentMatch, matchList[0]?.matchDtoList[0]);
     //- 获取赛事盘口
     await getHandicapltems();
+
     //- 开启事件定时任务
     runLoopMatch();
     //- 后续列表填充
@@ -92,6 +92,7 @@ export function useTradingHook(type: 'early' | 'in') {
     });
   };
 
+  //- 盘口赛事列表接口
   const getHandicapltems = async (noNprogress: boolean = false) => {
     const res = await API.getHandicapItems(
       { matchId: currentMatch.matchId },
@@ -99,16 +100,18 @@ export function useTradingHook(type: 'early' | 'in') {
     );
     if (res.code) return message(res.msg, { type: 'error' });
     //- 检测是否比赛开始
+    // res.data.
+    currentMatch.sourceCode = res.data.sourceCode;
+
     if (
       !checkisBeginMatch(
         res.data.status as 'nobegin' | 'canceled' | 'over',
-        // new Date('2024-07-15 16:53:00').getTime()
         res.data.beginTimeLong
       )
     ) {
       return clearTimeout(loopTimer.value);
     }
-    //检测是否有盘数据返回
+    //- 检测是否有盘数据返回
     checkHasData(res.data);
 
     const tempList = handicapList.slice(1);
@@ -151,6 +154,8 @@ export function useTradingHook(type: 'early' | 'in') {
           return false;
         }
       });
+
+      if (!_.list.length) _.isSale = currentMatch.isSale;
     });
 
     //- 第一项单独处理
@@ -170,6 +175,7 @@ export function useTradingHook(type: 'early' | 'in') {
       handicapList[0].betItemsIdList.push(...item.betItemsIdList);
       item.kindsCodeDtoList.forEach((_, i: number) => {
         _.betItemsDtoList.forEach(l => {
+          l.previousDpOdds = l.dpOdds;
           if (l.kindsCode === 'FT_AH' && l.ctid === 0 && i === 0) {
             if (_.betItemsDtoList[0].handicap.startsWith('-')) {
               currentMatch.HandicapTeam = _.betItemsDtoList[0].homeOrAway;
@@ -288,6 +294,7 @@ export function useTradingHook(type: 'early' | 'in') {
 
   //- 修改左侧选中比赛ID
   const changeSelectMatch = (data: sportTradingDataAPI.MatchDtoList) => {
+    isShowDialog.value = false;
     Object.assign(currentMatch, data);
     clearTimeout(loopTimer.value);
     getHandicapltems();
@@ -332,18 +339,34 @@ export function useTradingHook(type: 'early' | 'in') {
     const reqUrl =
       classify === 'match'
         ? 'updateMatchHandicapStatus'
+        : classify === 'category'
+        ? 'updateGroupHandicapStatus'
         : 'updateHandicapStatus';
 
     const res = await API[reqUrl]({
-      operateMenu: '操盘管理-早盘管理',
+      operateMenu: `操盘管理-${type === 'early' ? '早盘管理' : '滚球管理'}`,
+      groupName:
+        classify === 'category'
+          ? (item?.val as string)
+          : classify === 'pan'
+          ? (categoryData?.betItemsName as string)
+          : '',
       matchId: matchId ? matchId : currentMatch.matchId,
       isSale: status,
       betItemsIds: betItemsIdList ?? []
     });
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    if (res.code) return;
+
+    let msg =
+      res.code === 11227
+        ? t('请先在预开售进行赛事解锁')
+        : res.code === 11226
+        ? t('请先在预开售开启赛事开售')
+        : res.msg;
+
+    message(msg, { type: res.code ? 'error' : 'success' });
     runLoopMatch();
     riotPrevention.value = false;
+    if (res.code) return;
     switch (classify) {
       case 'match':
         upateMatchSale(status, item as sportTradingDataAPI.MatchDtoList);
@@ -369,7 +392,16 @@ export function useTradingHook(type: 'early' | 'in') {
     item: sportTradingDataAPI.MatchDtoList
   ) => {
     item.isSale = status;
-    currentMatch.isSale = status;
+    if (item.matchId === currentMatch.matchId) currentMatch.isSale = status;
+    /* title点击之后修改状态 */
+    matchList.forEach(s =>
+      s.matchDtoList.some(_ => {
+        if (_.matchId === item.matchId) {
+          _.isSale = status;
+        }
+      })
+    );
+    getHandicapltems(true);
   };
 
   //- 修改盘赛事图标状态
@@ -384,7 +416,6 @@ export function useTradingHook(type: 'early' | 'in') {
       0: 0,
       4: 0
     };
-
     categoryData.isSale = status;
     item.list.forEach(_ => {
       o[_.isSale as keyof typeof o] += 1;
@@ -405,8 +436,15 @@ export function useTradingHook(type: 'early' | 'in') {
 
   //- 修改玩法状态
   const upatePalySale = (status: number, item: handicapListType) => {
-    item.isSale = status;
-    item.list.forEach(item => (item.isSale = status));
+    if (item.listType === 'all') {
+      handicapList.forEach(_ => {
+        _.isSale = status;
+        _.list.forEach(d => (d.isSale = status));
+      });
+    } else {
+      item.isSale = status;
+      item.list.forEach(item => (item.isSale = status));
+    }
   };
 
   //- 点击快捷键修改赔率
@@ -415,7 +453,7 @@ export function useTradingHook(type: 'early' | 'in') {
   ) => {
     const res = await API.updateHandicapOdds({
       matchId: currentMatch.matchId,
-      operateMenu: '操盘管理-早盘管理',
+      operateMenu: `操盘管理-${type === 'early' ? '早盘管理' : '滚球管理'}`,
       betItemsDtoList
     });
     message(res.msg, { type: res.code ? 'error' : 'success' });

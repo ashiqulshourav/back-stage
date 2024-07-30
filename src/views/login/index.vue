@@ -48,6 +48,7 @@
             <el-form-item :prop="buildType === 'pro' ? 'ukeyPassword' : 'none'">
               <el-input
                 clearable
+                v-enter="() => onLogin(ruleFormRef)"
                 maxlength="30"
                 v-model.trim="ruleForm.ukeyPassword"
                 :placeholder="t('请输入U盾密码')"

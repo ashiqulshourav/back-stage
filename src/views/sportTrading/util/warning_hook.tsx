@@ -87,6 +87,7 @@ export function useWarningHook() {
           o[d.isSale as keyof typeof o] += 1;
           d.kindsCodeDtoList.forEach((_, i: number) => {
             _.betItemsDtoList.forEach(l => {
+              l.previousDpOdds = l.dpOdds;
               if (l.kindsCode === 'FT_AH' && l.ctid === 0 && i === 0) {
                 if (_.betItemsDtoList[0].handicap.startsWith('-')) {
                   item.HandicapTeam = _.betItemsDtoList[0].homeOrAway;
@@ -129,6 +130,7 @@ export function useWarningHook() {
             return false;
           }
         });
+        // if (!_.list.length) _.isSale = currentMatch.isSale;
       });
       item.renderList = baseDatat.filter(item => {
         return item.list.length;
@@ -173,7 +175,7 @@ export function useWarningHook() {
   }) => {
     const res = await API.updateHandicapOdds({
       matchId: d.matchId,
-      operateMenu: '操盘管理-早盘管理',
+      operateMenu: '操盘管理-告警操盘',
       betItemsDtoList: d.params
     });
     message(res.msg, { type: res.code ? 'error' : 'success' });
@@ -212,15 +214,23 @@ export function useWarningHook() {
     const reqUrl =
       classify === 'match'
         ? 'updateMatchHandicapStatus'
+        : classify === 'category'
+        ? 'updateGroupHandicapStatus'
         : 'updateHandicapStatus';
 
     const res = await API[reqUrl]({
-      operateMenu: '操盘管理-早盘管理',
+      operateMenu: '操盘管理-告警操盘',
       matchId: matchId,
       isSale: status,
       betItemsIds: betItemsIdList ?? []
     });
-    message(res.msg, { type: res.code ? 'error' : 'success' });
+    let msg =
+      res.code === 11227
+        ? t('请先在预开售进行赛事解锁')
+        : res.code === 11226
+        ? t('请先在预开售开启赛事开售')
+        : res.msg;
+    message(msg, { type: res.code ? 'error' : 'success' });
     runLoopMatch();
     riotPrevention.value = false;
     if (res.code) return;
@@ -252,6 +262,9 @@ export function useWarningHook() {
       }
       return false;
     });
+    setTimeout(() => {
+      getLoopMatchData();
+    }, 800);
   };
 
   //- 修改盘赛事图标状态
