@@ -219,6 +219,31 @@
           {{ t('重置') }}
         </el-button>
       </el-form-item> -->
+      <el-form-item prop="timeType">
+        <el-select
+          v-model="form.timeType"
+          class="!w-[110px]"
+          @change="search"
+        >
+          <el-option :label="t('注册时间')" :value="1" />
+          <el-option :label="t('修改时间')" :value="2" />
+        </el-select>
+        <CustomDate
+          v-model:val="selectDate"
+          :start-placeholder="
+            dayjs()
+              .subtract(30, 'day')
+              .startOf('day')
+              .format('YYYY-MM-DD HH:mm:ss')
+          "
+          :end-placeholder="
+            dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')
+          "
+          @changeDate="changeDate"
+          :isDateTime="true"
+          :format="'YYYY-MM-DD HH:mm:ss'"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -259,6 +284,7 @@ import { labelListType, tenantType } from '../utils/types';
 import type { FormInstance, CheckboxValueType } from 'element-plus';
 import Download from '@iconify-icons/ep/download';
 import { hasAuth } from '@/router/utils';
+import CustomDate from '@/components/Form/Custom_date.vue';
 
 const formRef = ref();
 const buttonRef = ref();
@@ -419,8 +445,8 @@ const changeDate = (t: string[]) => {
     form.value.beginTime = '';
     form.value.endTime = '';
   } else {
-    form.value.beginTime = dayjs(t[0]).format('YYYY-MM-DD');
-    form.value.endTime = dayjs(t[1]).format('YYYY-MM-DD');
+    form.value.beginTime = dayjs(t[0]).valueOf();
+    form.value.endTime = dayjs(t[1]).valueOf();
   }
 };
 const getLimmitLevelList = async () => {
@@ -434,6 +460,8 @@ const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.resetFields();
   selectDate.value = ['', ''];
+  form.value.beginTime = '';
+  form.value.endTime = '';
   emits('onSearch', 'reload');
 };
 

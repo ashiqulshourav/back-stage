@@ -14,6 +14,7 @@ import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
 const { exportDialog } = usePublicHooks();
 import { pageSizeArr } from '@/utils/math';
+import dayjs from 'dayjs';
 
 export function userPlayerListHook(venueType: number, category: number) {
   const route = useRoute();
@@ -57,7 +58,11 @@ export function userPlayerListHook(venueType: number, category: number) {
     background: true
   });
   //form data
-  const form = reactive<searchFormType>({} as searchFormType);
+  const form = reactive<searchFormType>({
+    // beginTime: dayjs().subtract(30, 'day').startOf('day').valueOf(),
+    // endTime: dayjs().endOf('day').valueOf(),
+    // timeType: 1,
+  } as searchFormType);
 
   const recordForm = reactive<recordFormType>({} as recordFormType);
 

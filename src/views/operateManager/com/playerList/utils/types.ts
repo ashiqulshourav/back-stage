@@ -9,8 +9,9 @@ export type searchFormType = {
   venueType?: number;
   offset?: number;
   timeVal?: string | number;
-  beginTime?: string;
-  endTime?: string;
+  timeType?: number;
+  beginTime?: string | number;
+  endTime?: string | number;
 };
 export type specialLimitType = {
   productAmountTotalLimit: number;
