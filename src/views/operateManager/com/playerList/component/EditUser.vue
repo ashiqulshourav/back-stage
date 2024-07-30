@@ -107,7 +107,7 @@
               />
             </template>
 
-            <el-row class="flex w-full items-center justify-between">
+            <div>
               <p
                 @click="emits('onOpenRecord', form.id, 1)"
                 v-if="hasAuth('GETLABELLIST')"
@@ -115,7 +115,7 @@
               >
                 {{ t('风控标签修改记录') }}>>
               </p>
-            </el-row>
+            </div>
 
             <el-row :gutter="20" class="mt-2 w-full !ml-2">
               <LabelListCom

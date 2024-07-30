@@ -3,7 +3,7 @@
     @mouseleave="showNum = true"
     class="w-1/4 text-center input_wrapper relative h-full input_container"
   >
-    <span
+    <div
       @mouseenter="toggleShowNum('enter')"
       v-show="showNum"
       :class="[
@@ -12,7 +12,8 @@
       ]"
     >
       {{ s.dpOdds?.toFixed(2) }}
-    </span>
+    </div>
+
     <div
       v-show="!showNum"
       class="text-[--el-color-primary] flex justify-start cursor-pointer h-full items-center relative"
@@ -32,6 +33,13 @@
         </div>
       </div>
     </div>
+    <!-- - 重置按钮 -->
+    <div
+      class="absolute right-[70px] top-1/2 translate-y-[-50%] cursor-pointer"
+    >
+      <IconifyIconOffline icon="refreshRight" @click="refreshIconClick" />
+    </div>
+
     <div
       v-if="s.odds !== s.dpOdds"
       class="absolute right-0 top-1/2 translate-y-[-50%] w-[60px] text-xs text-white"
@@ -47,6 +55,8 @@ import { subtraction, addition } from '@pureadmin/utils';
 import { debounce } from '@pureadmin/utils';
 import { hasAuth } from '@/router/utils';
 import { resetDpodds } from '../util/playMap';
+import { ElMessageBox } from 'element-plus';
+import { message } from '@/utils/message';
 
 const emits = defineEmits([
   'clearMatchTime',
@@ -173,6 +183,36 @@ watch(
     }
   }
 );
+
+//- 重置赔率按钮
+
+const refreshIconClick = () => {
+  ElMessageBox.confirm(`${t('点击后赔率将恢复成数据源原始赔率')} `, {
+    type: 'warning',
+    title: t('警告'),
+    center: true
+  }).then(reloadOdd);
+};
+
+const reloadOdd = async () => {
+  const betItemsIds = [props.s.betItemsId];
+  let otherD;
+  if (props.betItemsDtoList.length === 2) {
+    otherD = props.betItemsDtoList.find(
+      item => item.betItemsId !== props.s.betItemsId
+    ) as sportTradingDataAPI.BetItemsDtoList;
+    betItemsIds.push(otherD.betItemsId);
+  }
+  const res = await API.resetHandicapOdds({
+    betItemsIds,
+    matchId: props.s.matchId,
+    operateMenu: '操盘管理-重置赔率'
+  });
+  message(res.msg, { type: res.code ? 'error' : 'success' });
+  if (res.code) return;
+  props.s.dpOdds = props.s.odds;
+  otherD && (otherD.dpOdds = otherD?.odds);
+};
 
 const tipData = computed(() => {
   let baseN = 0;
