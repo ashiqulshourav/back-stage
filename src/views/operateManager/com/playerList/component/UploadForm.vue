@@ -7,7 +7,6 @@
   >
     <el-step title="上传文件" />
     <el-step title="数据预览" />
-    <el-step title="导入数据" />
     <el-step title="导入完成" />
   </el-steps>
 
