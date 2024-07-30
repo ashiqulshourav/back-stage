@@ -66,28 +66,25 @@
           </div>
         </div>
       </div>
-    </el-upload>
-
+    </el-upload>   
+  </div>
+  <!-- 1 -->
     <!-- excel error -->
-    <!-- <div class="rounded my-5 border border-gray-300 flex">
+    <div class="rounded my-5 border border-gray-300 flex" v-if="active == 1 && errorMsg.length">
       <div class="w-[100px] flex justify-center items-center bg-gray-100">
         <el-icon><Files /></el-icon>
       </div>
       <div class="p-5">
         <p class="font-bold mb-3">
           {{ t('正常数量条数: ') }}
-          <span class="text-green-500">{{ t('100条') }}</span>
+          <span class="text-green-500">{{ t(`${successNum}条`) }}</span>
         </p>
         <p class="font-bold">
           {{ t('异常数量条数: ') }}
-          <span class="text-red-500">{{ t('100条') }}</span>
+          <span class="text-red-500">{{ t(`${errorNum}条`) }}</span>
         </p>
       </div>
-    </div> -->
-
-    
-  </div>
-  <!-- 1 -->
+    </div>
    <div class="rounded flex-col my-5 border border-gray-300 flex p-5 bg-[#f9f9f9]" v-if="active == 1 && errorMsg.length">
     <div class="font-bold mb-3">
       {{ t('异常提示： ') }}
@@ -167,9 +164,11 @@ import { usePublicHooks } from '@/hooks';
 
 const { tableHeaderStyle } = usePublicHooks();
 
-const active = ref(0);
-const uploadFormFile = ref();
-const errorMsg = ref<string[]>([]);
+const active = ref(1);
+const uploadFormFile = ref(); 
+const successNum = ref(0);
+const errorNum = ref(0);
+const errorMsg = ref<string[]>(['324234']);
 const users = reactive<any[]>([]);
 
 const next = async () => {
@@ -194,14 +193,13 @@ const next = async () => {
         userLabelListExcels: [...users]
       });
 
-      if (!res.code) {
+      if (!res.data.errorMsg) {
         active.value = 2;
-        return;
-      } else {
+        const sentences = res.data.errorMsg.split('\n');
 
-        const sentences = res.msg.split('\n');
-
-        errorMsg.value = [...sentences]
+        errorMsg.value = [...sentences];
+        successNum.value = res.data.successNum;
+        errorNum.value = res.data.errorNum;
       }
       return;
     }

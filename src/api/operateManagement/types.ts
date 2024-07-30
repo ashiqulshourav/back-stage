@@ -67,10 +67,17 @@ declare namespace OperateManagementDataAPI {
     attributeLabel: string;
   };
 
+  type importExcel = {
+    errorNum: number;
+    successNum: number;
+    errorMsg: string;
+  }
+
   type OperateTagListRes = COMMON.BASE_RES_TYPE<OperateTagListType>;
   type OperateTagRes = COMMON.BASE_RES_TYPE<OperateTagType>;
   type BetBalanceRes = COMMON.BASE_RES_TYPE<BetBalanceType>;
   type userTypeRes = COMMON.BASE_RES_TYPE<userType[]>;
+  type importExcelRes = COMMON.BASE_RES_TYPE<importExcel>;
   type AccountChangeRecordRes =
     COMMON.BASE_RES_TYPE<AccountChangeRecordListType>;
   type AccountChangeRes = COMMON.BASE_RES_TYPE;
