@@ -7,6 +7,7 @@ declare namespace OperateManagementDataAPI {
     count?: number;
     remark?: string;
     category?: number;
+    labelColor?: string;
   };
   type OperateTagListSearchProps = COMMON.ListFetchProps & {
     id?: number;
@@ -14,6 +15,7 @@ declare namespace OperateManagementDataAPI {
     name?: string;
     category?: number;
     labelType?: number;
+    labelColor?: string;
   };
   type OperateTagListType = {
     records: OperateTagType[];
@@ -31,7 +33,7 @@ declare namespace OperateManagementDataAPI {
     seriesType1DayMaxLimit: number;
     seriesType2DayMaxLimit: number;
     championDayMaxLimit: number;
-  }
+  };
 
   type AccountChangeRecordType = {
     id: string;
@@ -49,19 +51,27 @@ declare namespace OperateManagementDataAPI {
     transNo: string;
     type: number;
     updatedAt: string;
-  }
+  };
 
   type AccountChangeRecordListType = {
     pageData: AccountChangeRecordType[];
     count: number;
     pageSize: number;
     pageNumber: number;
-    currentPage: number
-  }
+    currentPage: number;
+  };
+
+  type userType = {
+    userid: number;
+    riskControlLabel: string;
+    attributeLabel: string;
+  };
 
   type OperateTagListRes = COMMON.BASE_RES_TYPE<OperateTagListType>;
   type OperateTagRes = COMMON.BASE_RES_TYPE<OperateTagType>;
   type BetBalanceRes = COMMON.BASE_RES_TYPE<BetBalanceType>;
-  type AccountChangeRecordRes = COMMON.BASE_RES_TYPE<AccountChangeRecordListType>;
+  type userTypeRes = COMMON.BASE_RES_TYPE<userType[]>;
+  type AccountChangeRecordRes =
+    COMMON.BASE_RES_TYPE<AccountChangeRecordListType>;
   type AccountChangeRes = COMMON.BASE_RES_TYPE;
 }

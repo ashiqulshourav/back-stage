@@ -107,7 +107,8 @@ export function useTagsHook() {
         formInline: {
           name: row?.name ?? '',
           remark: row?.remark ?? '',
-          level: row?.level ?? undefined
+          level: row?.level ?? undefined,
+          labelColor: row?.labelColor ?? ''
         }
       },
       width: '40%',

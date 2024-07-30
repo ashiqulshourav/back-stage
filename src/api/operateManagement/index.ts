@@ -1,8 +1,9 @@
 import { http } from '@/utils/http';
 import { searchFormType } from '@/views/operateManager/com/bettingBalanceInquiry/utils/types';
-import { accountChangeRecordSearchFormType, modifyBalanceFormType } from '@/views/operateManager/com/accountChangeRecord/util/types';
-
-
+import {
+  accountChangeRecordSearchFormType,
+  modifyBalanceFormType
+} from '@/views/operateManager/com/accountChangeRecord/util/types';
 
 export const operateManagementData = {
   //- 运营管理
@@ -44,14 +45,42 @@ export const operateManagementData = {
     }),
   // mockAPI.deleteOperateTag(data)
   getBetBalance: (data: searchFormType) =>
-    http.request<OperateManagementDataAPI.BetBalanceRes>
-      ('post', '/operateBalance/canBetBalance', { data }),
+    http.request<OperateManagementDataAPI.BetBalanceRes>(
+      'post',
+      '/operateBalance/canBetBalance',
+      { data }
+    ),
 
   getAccountChangeRecord: (data: accountChangeRecordSearchFormType) =>
-    http.request<OperateManagementDataAPI.AccountChangeRecordRes>
-    ('post', '/operate/queryAccountChangeLog', { data }),
+    http.request<OperateManagementDataAPI.AccountChangeRecordRes>(
+      'post',
+      '/operate/queryAccountChangeLog',
+      { data }
+    ),
 
   getAccountChange: (data: modifyBalanceFormType) =>
-    http.request<OperateManagementDataAPI.AccountChangeRes>
-    ('post', '/operate/accountChange', { data }),
+    http.request<OperateManagementDataAPI.AccountChangeRes>(
+      'post',
+      '/operate/accountChange',
+      { data }
+    ),
+
+  // download template
+  operateExport: (data?: any) =>
+    http.request('get', '/kmg/auth/export', { data }, { responseType: 'blob' }),
+
+  // upload excel
+  operateImportExcel: (data?: any) =>
+    http.request<OperateManagementDataAPI.userTypeRes>(
+      'post',
+      '/operate/importExcel',
+      { data }
+    ),
+
+  operateUpload: (data?: any) =>
+    http.request<OperateManagementDataAPI.userTypeRes>(
+      'post',
+      '/kmg/auth/upload',
+      { data }
+    )
 };

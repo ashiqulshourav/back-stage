@@ -47,7 +47,7 @@
               :active-value="1"
               :inactive-value="0"
               inline-prompt
-              :disabled="isOn"
+              :disabled="isOn&&row.isDataSourceOdds"
               @change="getOdds(row, 0)"
             />
           </template>
@@ -81,9 +81,7 @@ import { usePublicHooks } from '@/hooks';
 import {onMounted} from "vue";
 
 defineOptions({ name: 'METADATA_LEAGUE' });
-onMounted(() => {
-    onSearch();
-});
+
 const { tableHeaderStyle } = usePublicHooks();
 const { columns, isOn } = tableColumnList();
 
@@ -112,4 +110,7 @@ watch(
     })
   }
 )
+onMounted(() => {
+  onSearch();
+});
 </script>
