@@ -28,22 +28,6 @@
           </div>
         </el-popover>
       </el-form-item>
-      <!-- <el-form-item prop="tenantIds" :label="t('商户:')">
-        <el-select
-          v-model="form.tenantIds"
-          :placeholder="t('所属商户')"
-          clearable
-          multiple
-          class="!w-[150px]"
-        >
-          <el-option
-            :label="item.tenantName"
-            :value="item.id"
-            v-for="item in tenantList"
-            :key="item.name"
-          />
-        </el-select>
-      </el-form-item> -->
       <el-form-item prop="tenantIds" :label="t('商户:')">
         <el-tree-select
           :placeholder="t('所属商户')"
@@ -69,10 +53,17 @@
             <el-checkbox v-model="checkAllTIds" @change="handleCheckAllTIds">
               {{ t('全选') }}
             </el-checkbox>
-            <el-checkbox v-mode="removeAllTIds" @change="handleRemoveAllTIds" :disabled="form?.tenantIds.length == 0">
+            <el-checkbox
+              v-mode="removeAllTIds"
+              @change="handleRemoveAllTIds"
+              :disabled="(form?.tenantIds as string[])?.length == 0"
+            >
               {{ t('全不选') }}
             </el-checkbox>
-            <el-checkbox v-model="checkRevertTIds" @change="handleCheckRevertTIds">
+            <el-checkbox
+              v-model="checkRevertTIds"
+              @change="handleCheckRevertTIds"
+            >
               {{ t('反选') }}
             </el-checkbox>
           </template>
@@ -87,21 +78,6 @@
           class="!w-[120px]"
         />
       </el-form-item>
-      <!-- <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
-        <el-select
-          multiple
-          clearable
-          class="!w-[150px]"
-          v-model="form.riskControlLabelList"
-        >
-          <el-option
-            v-for="label in labelList.risk"
-            :key="label.id"
-            :label="label.name"
-            :value="label.id"
-          />
-        </el-select>
-      </el-form-item>  -->
       <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
         <el-tree-select
           v-model="props.form.riskControlLabelList"
@@ -126,7 +102,11 @@
             <el-checkbox v-model="checkAll" @change="handleCheckAll">
               {{ t('全选') }}
             </el-checkbox>
-            <el-checkbox v-mode="removeAll" @change="handleRemoveAll" :disabled="form?.riskControlLabelList.length == 0">
+            <el-checkbox
+              v-mode="removeAll"
+              @change="handleRemoveAll"
+              :disabled="(form?.riskControlLabelList as string[])?.length == 0"
+            >
               {{ t('全不选') }}
             </el-checkbox>
             <el-checkbox v-model="checkRevert" @change="handleCheckRevert">
@@ -135,21 +115,6 @@
           </template>
         </el-tree-select>
       </el-form-item>
-      <!-- <el-form-item prop="attributeLabelList" :label="t('属性标签:')">
-        <el-select
-          multiple
-          clearable
-          class="!w-[150px]"
-          v-model="form.attributeLabelList"
-        >
-          <el-option
-            v-for="label in labelList.attr"
-            :key="label.id"
-            :label="label.name"
-            :value="label.id"
-          />
-        </el-select>
-      </el-form-item> -->
       <el-form-item prop="attributeLabelList" :label="t('属性标签:')">
         <el-tree-select
           v-model="props.form.attributeLabelList"
@@ -174,10 +139,17 @@
             <el-checkbox v-model="checkAllTags" @change="handleCheckAllTags">
               {{ t('全选') }}
             </el-checkbox>
-            <el-checkbox v-mode="removeAllTags" @change="handleRemoveAllTags" :disabled="form?.attributeLabelList.length == 0">
+            <el-checkbox
+              v-mode="removeAllTags"
+              @change="handleRemoveAllTags"
+              :disabled="form?.attributeLabelList.length == 0"
+            >
               {{ t('全不选') }}
             </el-checkbox>
-            <el-checkbox v-model="checkRevertTags" @change="handleCheckRevertTags">
+            <el-checkbox
+              v-model="checkRevertTags"
+              @change="handleCheckRevertTags"
+            >
               {{ t('反选') }}
             </el-checkbox>
           </template>
@@ -198,27 +170,18 @@
           />
         </el-select>
       </el-form-item>
-      <!--      <el-form-item prop="" label="日期范围选择:">
-        <Custom_date v-model:val="selectDate" @changeDate="changeDate" />
-      </el-form-item>-->
-      <!-- <el-form-item>
-        <el-button
-          type="primary"
-          :icon="useRenderIcon(Search)"
-          :loading="loading"
-          @click="search"
-          v-if="hasAuth('QUERY')"
+      <el-form-item :label="t('投注延时:')" prop="betDelayed">
+        <el-select
+          v-model="form.betDelayed"
+          :placeholder="t('投注延时')"
+          clearable
+          class="!w-[150px]"
         >
-          {{ t('筛选') }}
-        </el-button>
-        <el-button
-          v-if="hasAuth('QUERY')"
-          :icon="useRenderIcon(Refresh)"
-          @click="resetForm(formRef)"
-        >
-          {{ t('重置') }}
-        </el-button>
-      </el-form-item> -->
+          <el-option :label="t('全部')" :value="' '" />
+          <el-option :label="t('是')" :value="1" />
+          <el-option :label="t('不是')" :value="2" />
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -232,15 +195,23 @@
           {{ t('重置') }}
         </el-button>
 
-          <el-button
-            type="primary"
-            :icon="useRenderIcon(Download)"
-            :loading="downloading"
-            v-if="hasAuth('EXPORT')"
-            @click="exportFile()"
-          >
-            {{ t('导出') }}
-          </el-button>
+        <!-- <el-button
+          type="primary"
+          :icon="useRenderIcon(Upload)"
+          :loading="uploading"
+          @click="importFile(t('数据导入'))"
+        >
+          {{ t('导入标签') }}
+        </el-button> -->
+        <el-button
+          type="primary"
+          :icon="useRenderIcon(Download)"
+          :loading="downloading"
+          v-if="hasAuth('EXPORT')"
+          @click="exportFile()"
+        >
+          {{ t('导出') }}
+        </el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -250,24 +221,21 @@
 import { ref } from 'vue';
 import { t } from '@/plugins/i18n';
 import { searchFormType } from '../utils/types';
-import Custom_date from '@/components/Form/Custom_date.vue';
-import dayjs from 'dayjs';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import Search from '@iconify-icons/ep/search';
 import Refresh from '@iconify-icons/ep/refresh';
-import { labelListType, tenantType } from '../utils/types';
+import { labelListType } from '../utils/types';
 import type { FormInstance, CheckboxValueType } from 'element-plus';
 import Download from '@iconify-icons/ep/download';
+import Upload from '@iconify-icons/ep/upload';
 import { hasAuth } from '@/router/utils';
 
 const formRef = ref();
-const buttonRef = ref();
 const buttonRef1 = ref();
-const emits = defineEmits(['onSearch', 'exportFile']);
+const emits = defineEmits(['onSearch', 'exportFile', 'importFile']);
 const idList = reactive<string[]>([]);
 const userIds = reactive<string[]>([]);
 const sportLimmitList = reactive<string[]>([]);
-
 
 const checkAllTIds = ref(false);
 const removeAllTIds = ref(false);
@@ -286,143 +254,128 @@ const props = defineProps<{
   form: searchFormType;
   category: number;
   labelList: labelListType;
-  tenantList: tenantType[];
+  tenantList: { name: string; id: number; tenantName: string }[];
   downloading: boolean;
+  uploading: boolean;
 }>();
 
 // watch, handleCheckAll, handleRemoveAll & handleCheckRevert for risk label
 watch(
   () => props.form.riskControlLabelList,
   val => {
-    if(!val || val.length === 0){
+    if (!val || val.length === 0) {
       checkAll.value = false;
-    } else if(val.length === props.labelList.risk.length){
+    } else if (val.length === props.labelList.risk.length) {
       checkAll.value = true;
       removeAll.value = false;
     }
   }
-)
+);
 
 const handleCheckAll = (val: CheckboxValueType) => {
-  if(val){
-    props.form.riskControlLabelList = props.labelList.risk.map(_ => _.id)
+  if (val) {
+    props.form.riskControlLabelList = props.labelList.risk.map(_ => _.id);
     removeAll.value = false;
   } else {
     props.form.riskControlLabelList = [];
   }
-}
+};
 
-const handleRemoveAll = (val: CheckboxValueType) => {
+const handleRemoveAll = () => {
   props.form.riskControlLabelList = [];
   checkRevert.value = false;
-}
+};
 
 const handleCheckRevert = () => {
-  if(true){
-    const oldArray = [...props.form.riskControlLabelList];
+  if (true) {
+    const oldArray = [...(props.form.riskControlLabelList ?? [])];
     props.form.riskControlLabelList = props.labelList.risk
-    .filter(_ => !oldArray.includes(_.id))
-    .map(_ => _.id)
+      .filter(_ => !oldArray.includes(_.id))
+      .map(_ => _.id);
   }
-}
+};
 
 // watch, handleCheckAllTIds, handleRemoveAllTIds & handleCheckRevertTIds for risk Merchant
 watch(
   () => props.form.tenantIds,
   val => {
-    if(!val || val.length === 0){
+    if (!val || (val as number[])?.length === 0) {
       checkAllTIds.value = false;
-    } else if(val.length === props.tenantList.length){
+    } else if ((val as number[])?.length === props.tenantList.length) {
       checkAllTIds.value = true;
       removeAllTIds.value = false;
     }
-  },
-)
+  }
+);
 
 const handleCheckAllTIds = (val: CheckboxValueType) => {
-  if(val){
-    props.form.tenantIds = props.tenantList.map(_ => _.id)
+  if (val) {
+    props.form.tenantIds = props.tenantList.map(_ => _.id);
     removeAllTIds.value = false;
   } else {
     props.form.tenantIds = [];
   }
-}
+};
 
-const handleRemoveAllTIds = (val: CheckboxValueType) => {
+const handleRemoveAllTIds = () => {
   props.form.tenantIds = [];
   checkRevertTIds.value = false;
-}
+};
 
 const handleCheckRevertTIds = () => {
-  if(true){
-    const oldArray = [...props.form.tenantIds];
+  if (true) {
+    const oldArray = [...(props.form.tenantIds as number[])];
     props.form.tenantIds = props.tenantList
-    .filter(_ => !oldArray.includes(_.id))
-    .map(_ => _.id)
+      .filter(_ => !oldArray.includes(_.id))
+      .map(_ => _.id);
   }
-}
+};
 
-// watch, handleCheckAllTags, handleRemoveAllTags & handleCheckRevertTags for label list attribute
 watch(
   () => props.form.attributeLabelList,
   val => {
-    if(!val || val.length === 0){
+    if (!val || val.length === 0) {
       checkAllTags.value = false;
-    } else if(val.length === props.labelList.attr.length){
+    } else if (val.length === props.labelList.attr.length) {
       checkAllTags.value = true;
       removeAllTags.value = false;
     }
-  },
-)
+  }
+);
 
 const handleCheckAllTags = (val: CheckboxValueType) => {
-  if(val){
-    props.form.attributeLabelList = props.labelList.attr.map(_ => _.id)
+  if (val) {
+    props.form.attributeLabelList = props.labelList.attr.map(_ => _.id);
     removeAllTags.value = false;
   } else {
     props.form.attributeLabelList = [];
   }
-}
+};
 
-const handleRemoveAllTags = (val: CheckboxValueType) => {
+const handleRemoveAllTags = () => {
   props.form.attributeLabelList = [];
   checkRevertTags.value = false;
-}
+};
 
 const handleCheckRevertTags = () => {
-  if(true){
+  if (true) {
     const oldArray = [...props.form.attributeLabelList];
     props.form.attributeLabelList = props.labelList.attr
-    .filter(_ => !oldArray.includes(_.id))
-    .map(_ => _.id)
+      .filter(_ => !oldArray.includes(_.id))
+      .map(_ => _.id);
   }
-}
-
+};
 
 const form = ref(props.form);
-const formatterUserNames = v => {
+const formatterUserNames = (v: string) => {
   const l = new Set(v.split(','));
   userIds.length = 0;
   userIds.push(...(Array.from(l) as string[]));
   return v;
 };
-const formatterTxt = v => {
-  const l = new Set(v.split(','));
-  idList.length = 0;
-  idList.push(...(Array.from(l) as string[]));
-  return v;
-};
+
 const selectDate = ref<string[]>(['', '']);
 
-const changeDate = (t: string[]) => {
-  if (!t) {
-    form.value.beginTime = '';
-    form.value.endTime = '';
-  } else {
-    form.value.beginTime = dayjs(t[0]).format('YYYY-MM-DD');
-    form.value.endTime = dayjs(t[1]).format('YYYY-MM-DD');
-  }
-};
 const getLimmitLevelList = async () => {
   const res = await API.getLimitListDropDownBox();
   if (res.code) return;
@@ -445,6 +398,10 @@ const search = () => {
   emits('onSearch', 'reload');
 };
 
+const importFile = (title: string) => {
+  emits('importFile', title);
+};
+
 const exportFile = () => {
   emits('exportFile');
 };
@@ -453,7 +410,6 @@ onMounted(() => {
   // initTenantList();
   getLimmitLevelList();
 });
-
 </script>
 
 <style lang="scss">

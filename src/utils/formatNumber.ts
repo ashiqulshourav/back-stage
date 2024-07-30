@@ -8,6 +8,28 @@ export const formatNumber = (val: string, len?: number) => {
     .slice(0, len ?? MAX_INPUT_NUMBER_LENGTH);
 };
 
+export const formatNumber0to100 = (val: string, len?: number) => {
+  const cleanedValue = val.replace(/\D/g, '');
+
+  if (cleanedValue === '') {
+    return '';
+  }
+
+  const normalizedValue = cleanedValue.replace(/^0+/, '');
+
+  const finalValue = normalizedValue === '' ? '0' : normalizedValue;
+
+  let numericValue = parseInt(finalValue, 10);
+
+  numericValue = Math.min(Math.max(numericValue, 0), 100);
+
+  const formattedValue = numericValue
+    .toString()
+    .slice(0, len ?? numericValue.toString().length);
+
+  return formattedValue;
+};
+
 export const formatIp = (val: string): string => {
   const partialIpPattern = /^(\d{0,3})(\.\d{0,3}){0,3}$/;
 
@@ -26,7 +48,6 @@ export const formatIp = (val: string): string => {
   // 重新拼接成IP地址格式，最多四个部分
   return val;
 };
-
 
 export const formatNumberWithLength = (value: string, length: number) => {
   // Convert value to string
@@ -81,7 +102,6 @@ export const formatNumberAndFillZero = (val: string, len?: number) => {
     .replace(/^0{1,}/g, '')
     .slice(0, len ?? MAX_INPUT_NUMBER_LENGTH);
 };
-
 
 export const formatNumberAndFillNull = (val: string, len?: number) => {
   if (val === '0') return val;

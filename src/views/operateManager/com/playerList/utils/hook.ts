@@ -12,14 +12,17 @@ import { FormInstance } from 'element-plus';
 import { useSettingStoreHook } from '@/store/settings';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
-const { exportDialog } = usePublicHooks();
+import { addDialog, closeDialog } from '@/components/ReDialog';
 import { pageSizeArr } from '@/utils/math';
+import UploadForm from '../component/UploadForm.vue';
+import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 
 export function userPlayerListHook(venueType: number, category: number) {
+  const { openPasswordInput } = usePasswordInputHook();
+  const { exportDialog } = usePublicHooks();
   const route = useRoute();
   const router = useRouter();
   const settingStore = useSettingStoreHook();
-  // data list
   const dataList = reactive<UserAPI.operateUserList[]>([]);
   const selectedDataList = reactive<UserAPI.operateUserList[]>([]);
   const labelList = reactive<labelListType>({
@@ -34,12 +37,12 @@ export function userPlayerListHook(venueType: number, category: number) {
   const userData = reactive<UserAPI.operateUserList>(
     {} as UserAPI.operateUserList
   );
-  // config variables
   const isEditUser = ref(false);
   const isOpenRecord = ref(false);
   const isMultiModal = ref(false);
   const isMultiDel = ref(false);
   const downloading = ref(false);
+  const uploading = ref(false);
 
   const loading = ref(true);
   const pagination = reactive<PaginationProps>({
@@ -56,14 +59,15 @@ export function userPlayerListHook(venueType: number, category: number) {
     currentPage: 1,
     background: true
   });
-  //form data
-  const form = reactive<searchFormType>({} as searchFormType);
+  const form = reactive<searchFormType>({
+    betDelayed: ' ',
+  } as searchFormType);
 
   const recordForm = reactive<recordFormType>({} as recordFormType);
 
   const goChangeAccountPage = (row: UserAPI.operateUserList) => {
     settingStore.save_player_info({
-      page: pagination.currentPage,
+      page: pagination.currentPage
     });
     const params = JSON.parse(JSON.stringify(row));
     router.push({
@@ -72,7 +76,7 @@ export function userPlayerListHook(venueType: number, category: number) {
           ? 'OPERATEMANAGER_SPORTCHANGEACCOUNTRECORD'
           : 'OPERATEMANAGER_ESPORTCHANGEACCOUNTRECORD',
       query: {
-        userId: row.id,
+        userId: row.id
       },
       state: { params }
     });
@@ -103,6 +107,7 @@ export function userPlayerListHook(venueType: number, category: number) {
     selectedDataList.push(...val);
   }
 
+  //- 修改用户
   const handleUpdateUser = (row: UserAPI.operateUserList) => {
     Object.assign(userData, row);
     isEditUser.value = true;
@@ -116,31 +121,56 @@ export function userPlayerListHook(venueType: number, category: number) {
     isOpenRecord.value = true;
   };
 
-  // export player list
+  // -导出用户列表
   const exportFile = async () => {
     onSearch('export').then((expRes: any) => {
       if (expRes?.count > 500000) {
         message(`当前条件下数据量为${addThousandSeparator(expRes?.count)}，大于50万条，不支持导出!`, { type: 'error' });
       } else if (expRes?.count < 1 || expRes === null) {
-        message('数据量为零，无法导出', { type: 'error' });
+        message(t('数据量为零，无法导出'), { type: 'error' });
       } else {
         exportDialog({
-          firstTitle: t('导出当前球员名单数据'),
+          firstTitle: t('导出当前用户列表'),
           router,
           callback: async () => {
             downloading.value = true;
             const res = await API.playerListExport({
               ...removeEmptyStringKeys(form),
-              venueType: venueType,
+              venueType,
+              pageSize: 50000,
+              pageNum: 1,
               export: true,
             })
             message(res.msg, { type: res.code ? 'error' : 'success' });
             downloading.value = false;
           }
-        })
+        });
       }
-    })
-  }
+    });
+  };
+
+  const importFile = async (title: string) => {
+    const r = await openPasswordInput();
+    if (r) {
+      addDialog({
+        title,
+        width: '40%',
+        draggable: true,
+        closeOnClickModal: false,
+        hideFooter: true,
+        closeCallBack: () => {
+          onSearch();
+        },
+        contentRenderer: ({ options, index }) =>
+          h(UploadForm, {
+            onCloseDialog: () => {
+              closeDialog(options, index);
+              onSearch();
+            }
+          })
+      });
+    }
+  };
 
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
@@ -155,12 +185,22 @@ export function userPlayerListHook(venueType: number, category: number) {
         pageNum: pagination.currentPage
       });
       if (type === 'export') {
-        return res?.data
+        return res?.data;
       } else {
         loading.value = false;
         if (res.code) return message(res.msg, { type: 'error' });
         dataList.length = 0;
         dataList.push(...res.data.pageData);
+        //- 用户未修改之前限额类型
+        dataList.forEach(item => {
+          if (!item.percentageLimit && !item.productAmountTotalLimit) {
+            item.beforeLimit = 1
+          } else if (item.productAmountTotalLimit) {
+            item.beforeLimit = 2
+          } else if (item.percentageLimit) {
+            item.beforeLimit = 3
+          }
+        })
         pagination.total = res.data.count;
       }
     } catch (error) {
@@ -198,7 +238,7 @@ export function userPlayerListHook(venueType: number, category: number) {
   const handleCloseEditUser = () => {
     isEditUser.value = false;
   };
-
+  //- 修改记录表单
   const openRecordList = (id: string, labelType: number) => {
     isOpenRecord.value = true;
     recordForm.id = id;
@@ -265,13 +305,16 @@ export function userPlayerListHook(venueType: number, category: number) {
     }
   };
 
+  //- 修改用户记录
   const dispatchUpdateUser = async (form: updateUserFormType) => {
     try {
       loading.value = true;
       const res = await API.operateUpdateUser({
         ...removeEmptyStringKeys(form),
         id: form.id,
-        specialLimit: form.specialLimit
+        venueType,
+        specialLimit: form.specialLimit,
+        beforeLimit: form.beforeLimit
       });
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
@@ -285,13 +328,13 @@ export function userPlayerListHook(venueType: number, category: number) {
 
   onMounted(() => {
     if (route.query.tagId) {
-      let labelType: any = route.query.labelType as string;
+      let labelType: string | number = route.query.labelType as string;
       labelType = parseInt(labelType);
-      let tagId: any = route.query.tagId as string;
+      let tagId: string | number = route.query.tagId as string;
       tagId = parseInt(tagId);
       labelType === 1
-        ? form.riskControlLabelList?.push(tagId)
-        : form.attributeLabelList?.push(tagId);
+        ? (form.riskControlLabelList as (string | number)[])?.push(tagId)
+        : (form.attributeLabelList as (string | number)[]).push(tagId);
     }
     dispatchGetLabelList();
     dispatchGetTenantList();
@@ -333,6 +376,8 @@ export function userPlayerListHook(venueType: number, category: number) {
     tenantObj,
     goChangeAccountPage,
     downloading,
-    exportFile
+    exportFile,
+    uploading,
+    importFile
   };
 }

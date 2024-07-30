@@ -24,6 +24,10 @@
       </el-select>
     </el-form-item>
 
+    <el-form-item :label="t('标签颜色')" prop="labelColor">
+      <el-color-picker v-model="labelColor" size="large"></el-color-picker>
+    </el-form-item>
+
     <el-form-item :label="t('备注')" prop="remark">
       <el-input
         v-model="newFormInline.remark"
@@ -42,13 +46,15 @@ import { formRules } from './utils/rule';
 import { FormProps } from './utils/types';
 import { t } from '@/plugins/i18n';
 import { RISK_TAG_LEVEL } from '@/utils/maps/tags_map';
+import { defaultInitialZIndex } from 'element-plus';
 // import { inputRestrictions } from '@/utils/formatNumber';
 
 const props = withDefaults(defineProps<FormProps>(), {
   formInline: () => ({
     name: undefined,
     level: undefined,
-    remark: ''
+    remark: '',
+    labelColor: '',
   })
 });
 
@@ -58,6 +64,28 @@ const newFormInline = reactive(props.formInline);
 function getRef() {
   return formRef.value;
 }
+
+const getLabelColor = (level: number, labelColor?: string) => {
+  if(labelColor) return labelColor    
+  switch(level) {
+    case 1: 
+      return "#1891FF"
+    case 2:
+      return "#19BE6B"
+    case 3:
+      return "#2E4050"
+  }
+}
+
+const labelColor = ref(getLabelColor(Number(newFormInline.level), newFormInline.labelColor));
+
+watch(
+  () => labelColor.value,
+  () => {
+    props.formInline.labelColor = labelColor.value
+  }
+)
+
 onMounted(() => {});
 
 defineExpose({ getRef });

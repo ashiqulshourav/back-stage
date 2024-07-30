@@ -66,13 +66,17 @@ const {
 const currentSelectTimeIndex = ref<number>(0);
 const interval = ref<NodeJS.Timeout>();
 
-const refreshRiskNotice = () => {
+const refreshRiskNotice = async () => {
   if (interval.value) clearInterval(interval.value);
 
   if (hasAuth('RISKNOTICEAGGREGATE')) {    
-    interval.value = setInterval(async () => {
-      await getRiskNoticeAggregate();
-    }, Number(riskNotificationRefresh.value) * 1000);
+    if (riskNoticeStore.riskNotificationSwitch) {
+      interval.value = setInterval(async () => {
+        await getRiskNoticeAggregate();
+      }, Number(riskNotificationRefresh.value) * 1000);
+    }else {
+        await getRiskNoticeAggregate();
+    }
   }
 };
 
@@ -81,7 +85,7 @@ onMounted(() => {
 })
 
 watch(
-  () => riskNotificationRefresh.value,
+  () => [riskNotificationRefresh.value, riskNoticeStore.riskNotificationSwitch],
   () => {
     currentSelectTimeIndex.value = timeList.indexOf(riskNotificationRefresh.value);
     refreshRiskNotice();

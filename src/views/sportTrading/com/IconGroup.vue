@@ -50,7 +50,7 @@ const props = defineProps<{
 
 const emits = defineEmits(['changeMatchStatus']);
 const changeType = (status: number) => {
-  if (props.typeNum === status) return;
+  if (props.typeNum === status && props.renderType !== 'classify') return;
   emits('changeMatchStatus', status);
 };
 </script>

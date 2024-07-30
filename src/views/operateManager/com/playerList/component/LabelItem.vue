@@ -5,7 +5,7 @@ import { columns } from './TableColumnList';
     round
     type="info"
     effect="plain"
-    :closable="expand && hasAuth(['DELUSERLABEL'])"
+    :closable="expand && hasAuth('DELUSERLABEL')"
   >
     <div
       :style="`background-color: ${getLabelColor(label.level, type)}`"
