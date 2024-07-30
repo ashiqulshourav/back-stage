@@ -12,7 +12,7 @@
       :data="dataList"
       :header-cell-style="tableHeaderStyle"
       :pagination="{ ...pagination, pageSizes: pageSizeArr }"
-      :columns="columns"
+      :columns="specialLimitColumns"
       :paginationSmall="true"
       @selection-change="handleSelectionChange"
       @page-size-change="handleSelectionChange"
@@ -22,7 +22,8 @@
 </template>
 
 <script setup lang="ts">
-import { columns } from '../utils/DelayTimeTableList';
+// import { columns } from '../utils/DelayTimeTableList';
+import { specialLimitColumns } from './TableColumnList';
 import { PaginationProps } from '@pureadmin/table';
 import { pageSizeArr } from '@/utils/math';
 import { usePublicHooks } from '@/hooks';
@@ -47,7 +48,8 @@ onMounted(() => {
   init();
 });
 
-const handleSelectionChange = () => {
+const handleSelectionChange = (n: number) => {
+  pagination.currentPage = n;
   init();
 };
 
@@ -63,7 +65,7 @@ const init = async () => {
   if (res.code) return;
   dataList.length = 0;
   pagination.total = res.data.total;
-  dataList.push(...res.data.list);
+  dataList.push(...res.data.records);
 };
 </script>
 
