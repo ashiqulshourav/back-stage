@@ -164,11 +164,11 @@ import { usePublicHooks } from '@/hooks';
 
 const { tableHeaderStyle } = usePublicHooks();
 
-const active = ref(1);
+const active = ref(0);
 const uploadFormFile = ref(); 
 const successNum = ref(0);
 const errorNum = ref(0);
-const errorMsg = ref<string[]>(['324234']);
+const errorMsg = ref<string[]>([]);
 const users = reactive<any[]>([]);
 
 const next = async () => {
