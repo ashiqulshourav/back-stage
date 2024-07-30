@@ -38,7 +38,7 @@
 
           <template #requestLog="{ row }">
             <el-text
-              v-if="row.requestLog.includes('\n') && row.requestLog.split('\n').length <= 3"                     
+              v-if="row.requestLog.split('\n').length <= 3"                     
               class="whitespace-pre-wrap"
             >
               {{ row.requestLog ?  row.requestLog : "-"}}
