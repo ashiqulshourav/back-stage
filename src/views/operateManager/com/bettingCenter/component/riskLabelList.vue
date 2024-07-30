@@ -41,7 +41,7 @@
         content="this is over"
       >
         <template #reference>
-          <span class="py-1 px-2 border border-slate-300 text-slate-500 rounded-full cursor-default">{{ list.length }}</span>
+          <span class="py-1 px-2 text-slate-500 rounded-full cursor-default bg-slate-200">{{ list.length }}</span>
         </template>
         <template #default>
           <div class="flex flex-wrap gap-1">
