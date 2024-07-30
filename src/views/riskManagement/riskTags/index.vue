@@ -48,8 +48,11 @@
               {{ row.name ? row.name : "-" }}
             </el-text>
           </template>
-          <template #userCount="{ row }">
-            <el-link @click="goToUserList(row)">{{ row.count }}</el-link>
+          <template #countTy="{ row }">
+            <el-link @click="goToUserList(0,row)">{{ row.countTy }}</el-link>
+          </template>
+          <template #countDj="{ row }">
+            <el-link @click="goToUserList(1,row)">{{ row.countDj }}</el-link>
           </template>
           <template #operation="{ row }">
             <el-button
@@ -106,7 +109,7 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   form,
-  goToUserList, 
+  goToUserList,
   getLabelColor
 } = useTagsHook();
 </script>
