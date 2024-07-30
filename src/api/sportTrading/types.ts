@@ -36,6 +36,7 @@ declare namespace sportTradingDataAPI {
     riskLevel: number;
     HandicapTeam: string;
     val?: string;
+    sourceCode: string;
   }
 
   type getMorningSetMatchListData = {
@@ -107,13 +108,14 @@ declare namespace sportTradingDataAPI {
     overtimeBetItemsSize: number;
     penaltyKickBetItemsSize: number;
     specialBetItemsSize: number;
+    sourceCode: string;
   }
   type getHandicapItemsRes = COMMON.BASE_RES_TYPE<getHandicapItemsData>
 
   type updateHandicapStatusParams = {
     matchId: number;
     operateMenu: string;
-    groupName: string;
+    groupName?: string;
     betItemsIds?: number[];
     isSale: number;
   }
@@ -167,6 +169,7 @@ declare namespace sportTradingDataAPI {
     status?: any;
     beginTimeLong?: any;
     currentTime?: any;
+    sourceCode: string;
   }
 
   type getAlarmMatchListType = {
