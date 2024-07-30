@@ -86,7 +86,7 @@
                   >
                     <el-text
                       class="!text-xs font-bold"
-                      :type="[s.oddsType === 'OU' ? 'primary' : 'danger']"
+                      :type="s.oddsType === 'OU' ? 'primary' : 'danger'"
                     >
                       {{ ODDS_TYPE_MAP[s.oddsType] }}
                     </el-text>
@@ -181,7 +181,7 @@ const shortcutSelectNum = (
 ) => {
   if (_ === 0) return;
   const params: {
-    betItemsId: number;
+    betItemsId: string;
     oddsType: string;
     afterOdds: number;
     beforeOdds: number;
