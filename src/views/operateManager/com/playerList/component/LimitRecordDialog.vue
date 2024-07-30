@@ -63,7 +63,7 @@ const init = async () => {
   if (res.code) return;
   dataList.length = 0;
   pagination.total = res.data.total;
-  dataList.push(...res.data.list);
+  dataList.push(...res.data.records);
 };
 </script>
 
