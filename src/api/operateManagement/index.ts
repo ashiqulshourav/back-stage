@@ -78,7 +78,7 @@ export const operateManagementData = {
     ),
 
   operateImportExcel: (data?: any) =>
-    http.request<OperateManagementDataAPI.userTypeRes>(
+    http.request<OperateManagementDataAPI.importExcelRes>(
       'post',
       '/operate/importExcel',
       { data }

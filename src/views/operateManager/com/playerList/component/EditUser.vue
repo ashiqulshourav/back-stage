@@ -117,7 +117,7 @@
               </p>
             </el-row>
 
-            <el-row :gutter="20" class="mt-2 w-full">
+            <el-row :gutter="20" class="mt-2 w-full !ml-2">
               <LabelListCom
                 @onClose="handleDeleteLabel"
                 :labels="updatedLabels.risk"
