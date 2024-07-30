@@ -240,6 +240,7 @@ declare namespace sportTradingDataAPI {
   type getOperateHandicapConfigRes = COMMON.BASE_RES_TYPE<getOperateHandicapConfigData>
 
   type updateOperateHandicapConfigRes = COMMON.BASE_RES_TYPE<null>
+  type resetHandicapOddsRes = COMMON.BASE_RES_TYPE<null>
 
   type loopAlarmMatchListParams = {
     sportId: number | string;
@@ -249,5 +250,11 @@ declare namespace sportTradingDataAPI {
     pages: number;
     size: number;
     matchIdList: number[]
+  }
+
+  type resetHandicapOddsParams = {
+    betItemsIds: string[];
+    matchId: number;
+    operateMenu: string;
   }
 }

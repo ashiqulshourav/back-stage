@@ -8,6 +8,7 @@ import { addIcon } from '@iconify/vue/dist/offline';
 import HomeFilled from '@iconify-icons/ep/home-filled';
 import InformationLine from '@iconify-icons/ri/information-line';
 import Lollipop from '@iconify-icons/ep/lollipop';
+import RefreshRight from '@iconify-icons/ep/refresh-right';
 import Crown from '@iconify-icons/ri/vip-crown-2-line';
 import StoreFill from '@iconify-icons/ri/store-2-fill';
 import FolderFill from '@iconify-icons/ri/folder-2-fill';
@@ -77,6 +78,7 @@ addIcon("SportTrading", metadata);
 addIcon("eventManagement", EventManagementIcon);
 addIcon("copyIcon", Copy);
 addIcon("infoFilled", infoFilled);
+addIcon("refreshRight", RefreshRight);
 
 /* 菜单icon结束 */
 //- 操盘图标开始
