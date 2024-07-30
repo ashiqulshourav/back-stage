@@ -38,14 +38,14 @@ export const columns: TableColumnList = [
     }
   },
   {
-    label: t('createdAt'),
+    label: t('修改时间'),
     prop: 'createdAt',
     formatter({ createdAt }) {
       return dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss');
     }
   },
   {
-    label: t('updatedBy'),
+    label: t('操作人'),
     prop: 'updatedBy'
   }
 ];
