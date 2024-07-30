@@ -9,8 +9,17 @@ export const sportTradingData = {
   getHandicapItems: (data: { matchId: number }, noNprogress?: boolean) => http.request<sportTradingDataAPI.getHandicapItemsRes>("post", "/operateHandicap/v1/getHandicapItems", { data }, { noNprogress }),
   //- 盘口状态更新
   updateHandicapStatus: (data: sportTradingDataAPI.updateHandicapStatusParams) => http.request<sportTradingDataAPI.updateHandicapStatus>("post", "/operateHandicap/v1/updateHandicapStatus", { data }),
-  //- 赛事状态更新
-  updateMatchHandicapStatus: (data: sportTradingDataAPI.updateHandicapStatusParams) => http.request<sportTradingDataAPI.updateHandicapStatus>("post", "/operateHandicap/v1/updateMatchHandicapStatus", { data }),
+  /* 
+  {"betItemsIds":["123123","2123123","3123123"],"matchId":123123,"operateMenu":"操作菜单-记录日志用"}
+   */
+  //- 重置赔率（赔率清零）
+  resetHandicapOdds: (data: sportTradingDataAPI.resetHandicapOddsParams) => http.request<sportTradingDataAPI.resetHandicapOddsRes>("post", "/operateHandicap/v1/resetHandicapOdds", { data }),
+  //-玩法分类状态更新
+  updateGroupHandicapStatus: (data: sportTradingDataAPI.updateHandicapStatusParams) => http.request<sportTradingDataAPI.updateHandicapStatus>("post", "/operateHandicap/v1/updateGroupHandicapStatus", { data }),
+
+  //-  赛事状态更新
+  updateMatchHandicapStatus: (data: sportTradingDataAPI.updateHandicapStatusParams) => http.request<sportTradingDataAPI.updateHandicapOddsParamsRes>("post", "/operateHandicap/v1/updateMatchHandicapStatus", { data }),
+
   //- 盘口赔率更新
   updateHandicapOdds: (data: sportTradingDataAPI.updateHandicapOddsParams) => http.request<sportTradingDataAPI.updateHandicapOddsParamsRes>("post", "/operateHandicap/v1/updateHandicapOdds", { data }),
   //- 告警赛事列表
