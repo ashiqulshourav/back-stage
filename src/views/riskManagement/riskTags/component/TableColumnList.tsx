@@ -15,9 +15,14 @@ export const columns: TableColumnList = [
     minWidth: 150,
   },
   {
-    label: t('用户人数'),
+    label: t('体育人数'),
     minWidth: 150,
-    slot: 'userCount'
+    slot: 'countTy'
+  },
+  {
+    label: t('电竞人数'),
+    minWidth: 150,
+    slot: 'countDj'
   },
   {
     label: t('备注'),
