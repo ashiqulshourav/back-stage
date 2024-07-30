@@ -21,7 +21,6 @@
         <div class="w-full flex items-center justify-center" v-if="noMatchList">
           <el-empty :description="t('暂无数据')" :image-size="100" />
         </div>
-        <!-- todo -->
         <template v-else>
           <div
             v-loading="loading"
