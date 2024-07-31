@@ -2,6 +2,11 @@
   <div class="main">
     <div class="mb-5">
       <div class="flex justify-between item-center mb-4">
+        <el-radio-group v-model="currency" style="margin-bottom: 15px" @change="onCurrencyChange">
+          <el-radio-button v-for="item in CURRENCY_LIST_MAP" :value="item.value" :key="item.value" :label="item.label">{{ item.label }}</el-radio-button>
+        </el-radio-group>
+      </div>
+      <div class="flex justify-between item-center mb-4">
         <span class="font-bold">{{ t('体育-用户等级限额') }}</span>
         <el-button
           v-if="!isEditSport"
@@ -224,6 +229,7 @@
 import { useClassifySettingHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
+import { CURRENCY_LIST_MAP } from './utils/map';
 import {
   addThousandSeparator,
   formatNumberAndFillZero
@@ -231,7 +237,9 @@ import {
 
 defineOptions({ name: 'RISKMANAGEMENT_USERLEVELLIMIT' });
 const { tableHeaderStyleBlue } = usePublicHooks();
-
+const onCurrencyChange = (currency: number) => {
+  onSearch();
+}
 const {
   loading,
   columns,
@@ -246,7 +254,9 @@ const {
   delSportItem,
   delESportItem,
   cancelSportEdit,
-  cancelESportEdit
+  cancelESportEdit, 
+  currency, 
+  onSearch
 } = useClassifySettingHook();
 </script>
 
