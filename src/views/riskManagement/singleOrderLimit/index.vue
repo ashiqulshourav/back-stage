@@ -26,7 +26,10 @@
         </div>
       </div>
       <div>
-       <div v-for="item in CURRENCY_LIST_MAP">{{item.label}}</div>
+        <el-radio-group v-model="currency" style="margin-bottom: 30px" @change="onTabChange">
+          <el-radio-button v-for="item in CURRENCY_LIST_MAP" :value="item.value" :key="item.value" :label="item.label">{{ item.label }}</el-radio-button>
+        </el-radio-group>
+       <!-- <div v-for="item in CURRENCY_LIST_MAP">{{item.label}}</div> -->
       </div>
       <pure-table
         height="700"
@@ -359,6 +362,10 @@ import {
 defineOptions({ name: 'RISKMANAGEMENT_SINGLEORDERLIMIT' });
 const { tableHeaderStyleBlue } = usePublicHooks();
 
+const onTabChange = (currency: number) => {
+  onSearch();
+}
+
 const {
   loading,
   columns,
@@ -369,7 +376,9 @@ const {
   cancelSportEdit,
   currentSportId,
   changeType,
-  toggle
+  toggle,
+  onSearch,
+  currency
 } = useOrderLimitHook();
 </script>
 

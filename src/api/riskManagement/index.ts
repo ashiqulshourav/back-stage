@@ -39,9 +39,9 @@ export const riskManagementData = {
       data
     }),
   // 单关限额列表 0足球 1篮球 2其他 3电竞
-  getGameLimitList: (gameType: number) =>
+  getGameLimitList: (gameType: number, currency: number) =>
     http.request<RiskManagementDataAPI.LimitRes>('post', '/betLimit/list', {
-      data: { gameType }
+      data: { gameType, currency }
     }),
 
   //- 修改单关限额列表
