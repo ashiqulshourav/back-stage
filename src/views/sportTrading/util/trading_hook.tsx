@@ -100,6 +100,8 @@ export function useTradingHook(type: 'early' | 'in') {
     );
     if (res.code) return message(res.msg, { type: 'error' });
     //- 检测是否比赛开始
+    // res.data.
+    currentMatch.sourceCode = res.data.sourceCode;
 
     if (
       !checkisBeginMatch(
