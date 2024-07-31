@@ -111,9 +111,9 @@
               <p
                 @click="emits('onOpenRecord', form.id, 1)"
                 v-if="hasAuth('GETLABELLIST')"
-                class="text-primary text-right cursor-pointer"
+                class="text-primary text-right cursor-pointer mb-2"
               >
-                {{ t('风控标签修改记录') }}>>
+                {{ t('修改记录') }}>>
               </p>
             </div>
 
