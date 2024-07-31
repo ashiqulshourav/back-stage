@@ -201,10 +201,10 @@
                     : ''
                 }}
               </div>
-              <div class="item_line color_blue" v-if="row.combineOrderDetails.length > 1">
+              <div class="item_line text-[#409EFF]" v-if="row.combineOrderDetails.length > 1">
                <span>
                      {{
-                   String(row.seriesType).slice(-3) === '001' ? '单式串关' : '复式串关'
+                   String(row.seriesType).slice(-3) === '001' ? '单式串关：' : '复式串关：'
                  }}
                 </span>
                 <span>{{
@@ -213,6 +213,14 @@
                       row.combineOrderDetails.length
                     )
                   }}</span>
+                <span>
+                  {{
+                    String(row.seriesType).slice(-3) === '001'
+                      ? calculateSeriesTypeTotal(row.combineOrderDetails)
+                      : ''
+                  }}
+                </span>
+
               </div>
               <div class="item_line" v-if="row.combineOrderDetails.length > 1">
                 总共：{{
@@ -379,14 +387,6 @@
               {{
                 row.settleTime
                   ? dayjs(row.settleTime).format('MM-DD HH:mm:ss')
-                  : ''
-              }}
-            </div>
-            <div v-if="String(row.seriesType).slice(-3) === '001'">
-              {{ t('总赔率:')
-              }}{{
-                String(row.seriesType).slice(-3) === '001'
-                  ? calculateSeriesTypeTotal(row.combineOrderDetails)
                   : ''
               }}
             </div>
