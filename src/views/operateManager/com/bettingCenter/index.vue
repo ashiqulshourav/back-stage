@@ -95,27 +95,7 @@
                   <span>{{ t('商户编码：') }}</span
                   >{{ tenantObj[row.tenantId]?.name }}
                 </div>
-                <div
-                  v-if="row.combineOrderDetails.length > 1"
-                  class="item_line mt-2 color_blue"
-                >
-                  {{
-                    String(row.seriesType).slice(-3) === '001' ? '串关' : '复式'
-                  }}
-                  <span>{{
-                    formatSeriesType(
-                      row?.seriesType,
-                      row.combineOrderDetails.length
-                    )
-                  }}</span>
-                  <span class="ml-1"
-                    >总计：{{
-                      `${calculateSeriesTypeTotalBets(
-                        row?.seriesType
-                      )}注 每注：${row.orderAmount}`
-                    }}</span
-                  >
-                </div>
+
               </div>
               <div>
                 <RiskLabelList
@@ -221,16 +201,39 @@
                     : ''
                 }}
               </div>
+              <div class="item_line color_blue" v-if="row.combineOrderDetails.length > 1">
+               <span>
+                     {{
+                   String(row.seriesType).slice(-3) === '001' ? '单式串关' : '复式串关'
+                 }}
+                </span>
+                <span>{{
+                    formatSeriesType(
+                      row?.seriesType,
+                      row.combineOrderDetails.length
+                    )
+                  }}</span>
+              </div>
+              <div class="item_line" v-if="row.combineOrderDetails.length > 1">
+                总共：{{
+                  calculateSeriesTypeTotalBets(
+                    row?.seriesType
+                  )}}注
+              </div>
+              <div class="item_line" v-if="row.combineOrderDetails.length > 1">
+                每注：{{row.orderAmount}} {{row.currency}}
+              </div>
               <div class="item_line">
                 {{ t('投注IP:') }}
                 <span
                   v-if="row.combineOrderDetails[0].ip"
                   @click="openIpDialog(item.ip)"
                   class="text-[#409EFF] cursor-pointer"
-                >{{ row.combineOrderDetails[0].ip }} {{row.ipArea||''}}</span
+                >{{ row.combineOrderDetails[0].ip }} {{row.ipArea}}</span
                 >
                 <span v-else>-</span>
               </div>
+
             </div>
           </template>
           <template #betItem="{ row }">
