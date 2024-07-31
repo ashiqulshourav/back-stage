@@ -1,4 +1,4 @@
-import { sport_list_map_type } from './types';
+import { sport_list_map_type,currency_list_map_type } from './types';
 
 export enum SPORT_NAME_TYPE {
   football = 0,
@@ -32,3 +32,16 @@ export const SPORT_LIST_MAP: sport_list_map_type[] = [
   // { label: t('特别项目'), value: 7, type: 'SpecialProjects' },
   // { label: t('电子竞技'), value: 4, type: 'FootBall' },
 ];
+
+export const CURRENCY_LIST_MAP:currency_list_map_type[] = [
+  {
+    label:t('人民币'),
+    value:0
+  },
+  {
+    label:t('USDT'),
+    value:1
+  }
+]
+
+

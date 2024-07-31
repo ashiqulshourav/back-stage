@@ -25,6 +25,9 @@
           }}</el-button>
         </div>
       </div>
+      <div>
+       <div v-for="item in CURRENCY_LIST_MAP">{{item.label}}</div>
+      </div>
       <pure-table
         height="700"
         align-whole="center"
@@ -344,7 +347,7 @@
 
 <script setup lang="ts">
 import { useOrderLimitHook } from './utils/hook';
-import { SPORT_LIST_MAP, SPORT_NAME_TYPE } from './utils/map';
+import { SPORT_LIST_MAP, SPORT_NAME_TYPE,CURRENCY_LIST_MAP } from './utils/map';
 import CustomButton from '@/components/Form/CustomButton.vue';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
