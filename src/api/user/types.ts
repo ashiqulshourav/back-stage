@@ -76,6 +76,7 @@ declare namespace UserAPI {
     bunchMatchPay: number;
     championDailyPay: number;
     type?: number;
+    currency: number;
   };
   type GetLabelList = {
     riskControlLabelList: labelType[];

@@ -77,6 +77,7 @@ addIcon("download", Download);
 addIcon("SportTrading", metadata);
 addIcon("eventManagement", EventManagementIcon);
 addIcon("copyIcon", Copy);
+addIcon("refreshRight", RefreshRight);
 addIcon("infoFilled", infoFilled);
 addIcon("refreshRight", RefreshRight);
 

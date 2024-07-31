@@ -10,14 +10,15 @@ export function useClassifySettingHook() {
   const eSportSourceList = reactive<UserAPI.UserLevelLimitListRes[]>([]);
   const isEditSport = ref(false);
   const isEditESport = ref(false);
+  const currency = ref(1);
   const loading = ref(true);
 
   //- 初始化
   async function onSearch() {
     loading.value = true;
     const resList = await Promise.allSettled([
-      API.getUserLevelLimitList({ type: 0 }),
-      API.getUserLevelLimitList({ type: 1 })
+      API.getUserLevelLimitList({ type: 0, currency: currency.value }),
+      API.getUserLevelLimitList({ type: 1, currency: currency.value })
     ]);
 
     if (resList[0].status === 'fulfilled' && !resList[0].value.code) {
@@ -134,6 +135,7 @@ export function useClassifySettingHook() {
     delSportItem,
     delESportItem,
     cancelSportEdit,
-    cancelESportEdit
+    cancelESportEdit, 
+    currency,
   };
 }
