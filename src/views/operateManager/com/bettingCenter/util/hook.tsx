@@ -94,9 +94,9 @@ export function useBettingCenterHook(category: number, venueType: number) {
   ) => {
     let seriesDetails: any = [];
     const newForm  = {...form}
-    if (form.seriesType == 2) {
-      if (form.seriesDetailsSingle.length) {
-        form.seriesDetailsSingle.map((item: keyof typeof seriesTypesSingle) => {
+    if (newForm.seriesType == 2) {
+      if (newForm.seriesDetailsSingle.length) {
+        newForm.seriesDetailsSingle.map((item: keyof typeof seriesTypesSingle) => {
           seriesDetails.push(...seriesTypesSingle[item].list);
         });
       } else {
@@ -106,9 +106,9 @@ export function useBettingCenterHook(category: number, venueType: number) {
           );
         }
       }
-    } else if (form.seriesType == 3) {
-      if (form.seriesDetailsDuplex.length) {
-        form.seriesDetailsDuplex.map((item: keyof typeof seriesTypesSingle) => {
+    } else if (newForm.seriesType == 3) {
+      if (newForm.seriesDetailsDuplex.length) {
+        newForm.seriesDetailsDuplex.map((item: keyof typeof seriesTypesSingle) => {
           seriesDetails.push(
             ...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list
           );
