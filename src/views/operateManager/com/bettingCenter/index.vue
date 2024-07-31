@@ -86,13 +86,13 @@
                   @click="
                     copyTest(
                       row.tenantId,
-                      t('商户编码：{value}', {
+                      t('商户id：{value}', {
                         value: tenantObj[row.tenantId]?.name
                       })
                     )
                   "
                 >
-                  <span>{{ t('商户编码：') }}</span
+                  <span>{{ t('商户id：') }}</span
                   >{{ tenantObj[row.tenantId]?.name }}
                 </div>
 
