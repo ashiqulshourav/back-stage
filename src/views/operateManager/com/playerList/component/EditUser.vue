@@ -131,6 +131,7 @@
                   v-if="hasAuth('addRiskLabel'.toUpperCase())"
                   :icon="Plus"
                   type="primary"
+                  size="small"
                   @click="isRiskLabelAdd = true"
                   class="text-primary"
                   >添加标签</el-button
