@@ -136,7 +136,7 @@ export function useOrderLimitHook() {
           const leagueLevel: number = sport.leagueLevel;
           if (existKey[leagueLevel]) return;
           if (item[key] !== sport[key]) {
-            list.push(sport);
+            list.push({...sport, currency: currency.value});
             existKey[leagueLevel] = true;
             return;
           }
