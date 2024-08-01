@@ -170,6 +170,21 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item prop="currency" :label="t('结算币种:')">
+        <el-select
+          v-model="form.currency"
+          clearable
+          class="!w-[150px]"
+        >
+          <el-option label="全部" value=""></el-option>
+          <el-option
+            :label="value"
+            :value="Number(key)"
+            v-for="[key, value] in Object.entries(CURRENCY_TYPE)"
+            :key="value"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item :label="t('投注延时:')" prop="betDelayed">
         <el-select
           v-model="form.betDelayed"
@@ -229,6 +244,7 @@ import type { FormInstance, CheckboxValueType } from 'element-plus';
 import Download from '@iconify-icons/ep/download';
 import Upload from '@iconify-icons/ep/upload';
 import { hasAuth } from '@/router/utils';
+import { CURRENCY_TYPE } from '../utils/map';
 
 const formRef = ref();
 const buttonRef1 = ref();

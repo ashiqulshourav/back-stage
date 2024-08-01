@@ -124,6 +124,7 @@ export const user = {
   updateUserLevelLimit: (data: {
     list: UserAPI.updateLimmitReqType[];
     type: number;
+    currency: number;
   }) =>
     http.request<UserAPI.updateUserLevelLimitResType>(
       'post',

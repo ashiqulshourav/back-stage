@@ -628,9 +628,9 @@ const handleUpdate = () => {
         form.specialLimit.seriesSingleDayCumulativeCompensationLimit
       );
       form.percentageLimit = undefined;
-      emits('onUpdateUser', form);
+      emits('onUpdateUser', {...form, currency: props.userData.currency});
     } else {
-      emits('onUpdateUser', { ...form, specialLimit: null });
+      emits('onUpdateUser', { ...form, specialLimit: null, currency: props.userData.currency });
     }
   });
 };
