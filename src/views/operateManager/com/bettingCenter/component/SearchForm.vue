@@ -116,24 +116,12 @@
             <el-option :label="t('复试串关')" :value="3" />
           </el-select>
         </el-form-item>
-        <el-form-item :label="`${t('投注阶段')}:`" prop="isInplay">
-          <el-select
-              v-model="form.isInplay"
-              clearable
-              class="!w-[180px]"
-              @change="search"
-          >
-            <el-option label="全部" value="" />
-            <el-option label="滚球" :value="1" />
-            <el-option label="早盘" :value="0" />
-          </el-select>
-        </el-form-item>
         <el-form-item :label="`${t('单式串关类型')}:`"
           v-if="form.seriesType === 2"
           prop="seriesDetails"
         >
           <el-select
-            class="min-w180"
+            class="!w-[180px]"
             :placeholder="t('请选择串关类型')"
             multiple
             v-model="form.seriesDetailsSingle"
@@ -152,7 +140,7 @@
           prop="seriesDetails"
         >
           <el-select :placeholder="t('请选择串关类型')"
-            class="min-w180"
+            class="!w-[180px]"
             multiple
             v-model="form.seriesDetailsDuplex"
             @change="search"
@@ -164,6 +152,18 @@
               :value="item.value"
               :key="item.value"
             />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="`${t('投注阶段')}:`" prop="isInplay">
+          <el-select
+            v-model="form.isInplay"
+            clearable
+            class="!w-[180px]"
+            @change="search"
+          >
+            <el-option label="全部" value="" />
+            <el-option label="滚球" :value="1" />
+            <el-option label="早盘" :value="0" />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('联赛查询')}:`"
