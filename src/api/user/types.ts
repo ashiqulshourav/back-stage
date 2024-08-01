@@ -135,7 +135,9 @@ declare namespace UserAPI {
     riskControlLabelList: labelType[];
     balance: number;
     beforeLimit: number | null;
+    currency: number;
   };
+
 
   type operateUserData = {
     count: number;
