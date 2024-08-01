@@ -811,11 +811,6 @@
   "k-20970136": "Please enter user name or user id",
   "k43934f6d": "Search",
   "k1c5f6d71": "User Id",
-  "k-5ba4dd90": "User Edit",
-  "k-1c2f7fa6": "User Tags",
-  "k15b1cbb9": "riskLabel: ",
-  "k6b9c59ea": "Quota Level Settings:",
-  "k10af5ac2": "Remarks:",
   "k51547786": "Total Payout Limit for a Single Event (Early Market and In-play)",
   "k357d48c8": "Total Payout Limit for Multiple Bets in a Day (Early Market and In-play)",
   "k52a7f25d": "Are you sure you want to delete?",
@@ -1244,8 +1239,6 @@
   "k-30a55091": "延时秒数",
   "k-62d1719": "体育/电竞",
   "k-2710369d": "赛种/游戏类型",
-  "k-793596c4": "createdAt",
-  "k-17218e90": "updatedBy",
   "k6561e3db": "百分比限额",
   "k-3f89d399": "数据导入",
   "k782c57fc": "导入标签",
@@ -1280,6 +1273,10 @@
   "k-2061bfce": "导出列表",
   "k7cb52132": "重新上传",
   "k668a8755": "体育人数",
-  "k-60e48ddc": "电竞人数"
+  "k-60e48ddc": "电竞人数",
+  "k3728bc27": "结算币种",
+  "k4b7eaf89": "USDT",
+  "k-7a61aec5": "USD",
+  "k177878bc": "TWD",
+  "kc8f7741": "点击后赔率将恢复成数据源原始赔率"
 }
-
