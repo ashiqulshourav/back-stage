@@ -46,7 +46,8 @@ export function useClassifySettingHook() {
       singleMatchPay: 0,
       championDailyPay: 0,
       bunchMatchPay: 0,
-      type: 0
+      type: 0,
+      currency: currency.value,
     });
   };
   //- 新增电竞体育限额
@@ -59,7 +60,8 @@ export function useClassifySettingHook() {
       singleMatchPay: 0,
       championDailyPay: 0,
       bunchMatchPay: 0,
-      type: 1
+      type: 1,
+      currency: currency.value,
     });
   };
 
@@ -99,13 +101,15 @@ export function useClassifySettingHook() {
   const cancelSportEdit = () => {
     isEditSport.value = false;
     sportList.length = 0;
-    sportList.push(...sourceSportList);
+    // sportList.push(...sourceSportList);
+    onSearch();
   };
   //- 电竞编辑取消
   const cancelESportEdit = () => {
     isEditESport.value = false;
     eSportList.length = 0;
-    eSportList.push(...eSportSourceList);
+    // eSportList.push(...eSportSourceList);
+    onSearch();
   };
 
   //- 删除体育
