@@ -54,15 +54,8 @@
           </el-select>
           <CustomDate
             v-model:val="selectDate"
-            :start-placeholder="
-              dayjs()
-                .subtract(30, 'day')
-                .startOf('day')
-                .format('YYYY-MM-DD HH:mm:ss')
-            "
-            :end-placeholder="
-              dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')
-            "
+            :start-placeholder="dayjs(form.timeStart)?.format('YYYY-MM-DD HH:mm:ss')||''"
+            :end-placeholder="dayjs(form.timeEnd)?.format('YYYY-MM-DD HH:mm:ss')||''"
             @changeDate="changeDate"
             :isDateTime="true"
             :format="'YYYY-MM-DD HH:mm:ss'"
