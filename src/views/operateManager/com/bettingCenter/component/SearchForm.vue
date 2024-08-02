@@ -34,11 +34,10 @@
         </el-form-item>
         <el-form-item :label="`${t('会员账号')}:`" prop="userIdOrName">
           <el-input
-              v-model="form.userIdOrName"
+              v-model.lazy="form.userIdOrName"
               :placeholder="t('输入用户名/ID')"
               clearable
               maxLenght="20"
-              v-enter="search"
               class="!w-[180px]"
           />
         </el-form-item>
@@ -54,8 +53,8 @@
           </el-select>
           <CustomDate
             v-model:val="selectDate"
-            :start-placeholder="dayjs(form.timeStart)?.format('YYYY-MM-DD HH:mm:ss')||''"
-            :end-placeholder="dayjs(form.timeEnd)?.format('YYYY-MM-DD HH:mm:ss')||''"
+            :start-placeholder="form.timeStart?dayjs(form.timeStart)?.format('YYYY-MM-DD HH:mm:ss'):'选择开始时间'"
+            :end-placeholder="form.timeEnd?dayjs(form.timeEnd)?.format('YYYY-MM-DD HH:mm:ss'):'选择结束时间'"
             @changeDate="changeDate"
             :isDateTime="true"
             :format="'YYYY-MM-DD HH:mm:ss'"
@@ -466,6 +465,7 @@ const chagenMatchType = (type: 0 | 1 | 2) => {
 };
 
 const search = () => {
+  console.log(11111111222)
   emits('onSearch', ...['reload']);
 };
 
@@ -546,7 +546,6 @@ onDeactivated(() => {
 const checkAllMName = ref(false);
 const removeAllMName = ref(false);
 const checkRevertMName = ref(false);
-
 const handleCheckAllMName = (val: CheckboxValueType) => {
   if (val) {
     props.form.tenantIds = props.tenantList.map(_ => _.id);
@@ -624,6 +623,21 @@ watch(
     }
   }
 );
+
+watch(
+    () => props.form.userIdOrName,
+    () => {
+      if(props.form.userIdOrName){
+        props.form.timeStart='';
+        props.form.timeEnd='';
+      }else {
+        props.form.timeStart= dayjs().subtract(30, 'day').startOf('day').valueOf();
+        props.form.timeEnd= dayjs().endOf('day').valueOf();
+      }
+
+    }
+);
+
 </script>
 
 <style scoped lang="scss">

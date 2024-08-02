@@ -126,7 +126,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     if (seriesDetails.length > 1) {
       seriesDetails = [...new Set(seriesDetails)];
     }
-    if(newForm.orderId||newForm.matchId||newForm.userIdOrName){
+    if(newForm.orderId||newForm.matchId){
         newForm.timeStart = '';
         newForm.timeEnd = '';
     }
