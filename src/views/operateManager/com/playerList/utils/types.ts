@@ -12,6 +12,7 @@ export type searchFormType = {
   beginTime?: string;
   endTime?: string;
   betDelayed: number | string;
+  currency?: number;
 };
 export type specialLimitType = {
   productAmountTotalLimit: number;
@@ -31,6 +32,7 @@ export type updateUserFormType = {
   // singleBetLimit: number;
   // singleEventCompensationLimit: string;
   // createdAt: string | number;
+  currency?: number;
 };
 
 export type recordFormType = {

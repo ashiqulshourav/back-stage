@@ -362,7 +362,7 @@ export const calculateSeriesTypeTotal = (list: any) => {
     //先转换为欧洲盘再计算
     oddTotal *= Number(getViewOddFn(item.oddFinally, item.marketTypeFinally, EOddType.EUROPE))
   })
-  return truncateDecimals(oddTotal, 2)
+  return '@' + truncateDecimals(oddTotal, 2)
 }
 
 

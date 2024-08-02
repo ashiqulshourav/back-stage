@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { hasAuth } from '@/router/utils';
+import { CURRENCY_TYPE } from '../utils/map';
 
 export const columns = (category: number): TableColumnList => {
   return [
@@ -27,16 +28,24 @@ export const columns = (category: number): TableColumnList => {
       minWidth: 150
     },
     {
+      label: t('结算币种'),
+      prop: 'currency',
+      minWidth: 150,
+      formatter({ currency }) {
+        return  CURRENCY_TYPE[currency as keyof typeof CURRENCY_TYPE]
+      }
+    },
+    {
       label: t('风控标签'),
       hide: !hasAuth('viewRiskLabel'.toUpperCase()),
       slot: 'riskControlLabel',
-      width: 350
+      width: 150
     },
     {
       label: t('属性标签'),
       hide: !hasAuth('viewAttributeLabel'.toUpperCase()),
       slot: 'attributeLabel',
-      width: 350
+      width: 150
     },
     {
       label: t('限额等级'),

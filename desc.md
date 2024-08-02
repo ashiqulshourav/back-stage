@@ -157,6 +157,10 @@ border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#303030]
    />
 ```
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 80f5c4a4b161a6833468bfd773e53b9cf44f63aa
 ### 多级表头设置
 
 ```js
@@ -199,4 +203,8 @@ border-b-[1px] border-solid border-[#f0f0f0] dark:border-[#303030]
       <pure-table :data="tableDataMore" :columns="columns" alignWhole="center" />
     </template>
 
+<<<<<<< HEAD
 ```
+=======
+```
+>>>>>>> 80f5c4a4b161a6833468bfd773e53b9cf44f63aa

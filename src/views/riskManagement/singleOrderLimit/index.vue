@@ -25,6 +25,11 @@
           }}</el-button>
         </div>
       </div>
+      <div>
+        <el-radio-group v-model="currency" style="margin-bottom: 30px" @change="onCurrencyChange">
+          <el-radio-button v-for="item in CURRENCY_LIST_MAP" :value="item.value" :key="item.value" :label="item.label">{{ item.label }}</el-radio-button>
+        </el-radio-group>
+      </div>
       <pure-table
         height="700"
         align-whole="center"
@@ -344,7 +349,7 @@
 
 <script setup lang="ts">
 import { useOrderLimitHook } from './utils/hook';
-import { SPORT_LIST_MAP, SPORT_NAME_TYPE } from './utils/map';
+import { SPORT_LIST_MAP, SPORT_NAME_TYPE,CURRENCY_LIST_MAP } from './utils/map';
 import CustomButton from '@/components/Form/CustomButton.vue';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
@@ -356,6 +361,10 @@ import {
 defineOptions({ name: 'RISKMANAGEMENT_SINGLEORDERLIMIT' });
 const { tableHeaderStyleBlue } = usePublicHooks();
 
+const onCurrencyChange = (currency: number) => {
+  onSearch();
+}
+
 const {
   loading,
   columns,
@@ -366,7 +375,9 @@ const {
   cancelSportEdit,
   currentSportId,
   changeType,
-  toggle
+  toggle,
+  onSearch,
+  currency
 } = useOrderLimitHook();
 </script>
 

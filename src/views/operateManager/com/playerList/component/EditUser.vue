@@ -111,9 +111,9 @@
               <p
                 @click="emits('onOpenRecord', form.id, 1)"
                 v-if="hasAuth('GETLABELLIST')"
-                class="text-primary text-right cursor-pointer"
+                class="text-primary text-right cursor-pointer mb-2"
               >
-                {{ t('风控标签修改记录') }}>>
+                {{ t('修改记录') }}>>
               </p>
             </div>
 
@@ -131,6 +131,7 @@
                   v-if="hasAuth('addRiskLabel'.toUpperCase())"
                   :icon="Plus"
                   type="primary"
+                  size="small"
                   @click="isRiskLabelAdd = true"
                   class="text-primary"
                   >添加标签</el-button
@@ -427,7 +428,7 @@ const tableData = computed(() => {
 
 const initLimitList = async () => {
   try {
-    const res = await API.getUserLevelLimitList({ type: props.category });
+    const res = await API.getUserLevelLimitList({ type: props.category, currency: props.userData.currency });
     limitList.length = 0;
     limitList.push(...res.data);
   } catch (error) {
@@ -627,9 +628,9 @@ const handleUpdate = () => {
         form.specialLimit.seriesSingleDayCumulativeCompensationLimit
       );
       form.percentageLimit = undefined;
-      emits('onUpdateUser', form);
+      emits('onUpdateUser', {...form, currency: props.userData.currency});
     } else {
-      emits('onUpdateUser', { ...form, specialLimit: null });
+      emits('onUpdateUser', { ...form, specialLimit: null, currency: props.userData.currency });
     }
   });
 };
