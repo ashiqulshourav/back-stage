@@ -427,7 +427,7 @@ const tableData = computed(() => {
 
 const initLimitList = async () => {
   try {
-    const res = await API.getUserLevelLimitList({ type: props.category });
+    const res = await API.getUserLevelLimitList({ type: props.category, currency: props.userData.currency });
     limitList.length = 0;
     limitList.push(...res.data);
   } catch (error) {
