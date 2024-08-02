@@ -14,7 +14,7 @@ export const columns: TableColumnList = [
   {
     label: t('联赛名称'),
     prop: 'leagueNameCn',
-    headerRenderer: d => handleTableWidth(d, t('联赛名称'), 'auto'),
+    // headerRenderer: d => handleTableWidth(d, t('联赛名称'), 'auto'),
     formatter: ({ leagueNameCn }) => leagueNameCn || '-',
     align: 'left',
     minWidth: 200
@@ -46,8 +46,8 @@ export const columns: TableColumnList = [
   {
     label: t('比赛队伍'),
     slot: 'matchTeam',
-    minWidth: 260,
-    headerRenderer: d => handleTableWidth(d, t('比赛队伍'), 'auto'),
+    width: 260,
+    // headerRenderer: d => handleTableWidth(d, t('比赛队伍'), 'auto'),
     align: 'left'
   },
   {
