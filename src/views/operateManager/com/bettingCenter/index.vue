@@ -235,7 +235,7 @@
                 {{ t('投注IP:') }}
                 <span
                   v-if="row.combineOrderDetails[0].ip"
-                  @click="openIpDialog(item.ip)"
+                  @click="openIpDialog(row.combineOrderDetails[0].ip)"
                   class="text-[#409EFF] cursor-pointer"
                 >{{ row.combineOrderDetails[0].ip }} {{row.ipArea}}</span
                 >
