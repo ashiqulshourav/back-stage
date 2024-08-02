@@ -34,11 +34,10 @@
         </el-form-item>
         <el-form-item :label="`${t('会员账号')}:`" prop="userIdOrName">
           <el-input
-              v-model="form.userIdOrName"
+              v-model.lazy="form.userIdOrName"
               :placeholder="t('输入用户名/ID')"
               clearable
               maxLenght="20"
-              v-enter="search"
               class="!w-[180px]"
           />
         </el-form-item>
@@ -54,15 +53,8 @@
           </el-select>
           <CustomDate
             v-model:val="selectDate"
-            :start-placeholder="
-              dayjs()
-                .subtract(30, 'day')
-                .startOf('day')
-                .format('YYYY-MM-DD HH:mm:ss')
-            "
-            :end-placeholder="
-              dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')
-            "
+            :start-placeholder="form.timeStart?dayjs(form.timeStart)?.format('YYYY-MM-DD HH:mm:ss'):'选择开始时间'"
+            :end-placeholder="form.timeEnd?dayjs(form.timeEnd)?.format('YYYY-MM-DD HH:mm:ss'):'选择结束时间'"
             @changeDate="changeDate"
             :isDateTime="true"
             :format="'YYYY-MM-DD HH:mm:ss'"
@@ -116,24 +108,12 @@
             <el-option :label="t('复试串关')" :value="3" />
           </el-select>
         </el-form-item>
-        <el-form-item :label="`${t('投注阶段')}:`" prop="isInplay">
-          <el-select
-              v-model="form.isInplay"
-              clearable
-              class="!w-[180px]"
-              @change="search"
-          >
-            <el-option label="全部" value="" />
-            <el-option label="滚球" :value="1" />
-            <el-option label="早盘" :value="0" />
-          </el-select>
-        </el-form-item>
         <el-form-item :label="`${t('单式串关类型')}:`"
           v-if="form.seriesType === 2"
           prop="seriesDetails"
         >
           <el-select
-            class="min-w180"
+            class="!w-[180px]"
             :placeholder="t('请选择串关类型')"
             multiple
             v-model="form.seriesDetailsSingle"
@@ -152,7 +132,7 @@
           prop="seriesDetails"
         >
           <el-select :placeholder="t('请选择串关类型')"
-            class="min-w180"
+            class="!w-[180px]"
             multiple
             v-model="form.seriesDetailsDuplex"
             @change="search"
@@ -164,6 +144,18 @@
               :value="item.value"
               :key="item.value"
             />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="`${t('投注阶段')}:`" prop="isInplay">
+          <el-select
+            v-model="form.isInplay"
+            clearable
+            class="!w-[180px]"
+            @change="search"
+          >
+            <el-option label="全部" value="" />
+            <el-option label="滚球" :value="1" />
+            <el-option label="早盘" :value="0" />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('联赛查询')}:`"
@@ -477,6 +469,7 @@ const chagenMatchType = (type: 0 | 1 | 2) => {
 };
 
 const search = () => {
+  console.log(11111111222)
   emits('onSearch', ...['reload']);
 };
 
@@ -564,7 +557,6 @@ onDeactivated(() => {
 const checkAllMName = ref(false);
 const removeAllMName = ref(false);
 const checkRevertMName = ref(false);
-
 const handleCheckAllMName = (val: CheckboxValueType) => {
   if (val) {
     props.form.tenantIds = props.tenantList.map(_ => _.id);
@@ -642,6 +634,21 @@ watch(
     }
   }
 );
+
+watch(
+    () => props.form.userIdOrName,
+    () => {
+      if(props.form.userIdOrName){
+        props.form.timeStart='';
+        props.form.timeEnd='';
+      }else {
+        props.form.timeStart= dayjs().subtract(30, 'day').startOf('day').valueOf();
+        props.form.timeEnd= dayjs().endOf('day').valueOf();
+      }
+
+    }
+);
+
 </script>
 
 <style scoped lang="scss">
