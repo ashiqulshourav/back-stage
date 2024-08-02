@@ -1,16 +1,8 @@
 <template>
   <div class="main">
-    <SearchForm
-        :form="form"
-        :loading="loading"
-        @on-search="onSearch"
-    />
+    <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
 
-    <PureTableBar
-      :title="``"
-      :columns="columns"
-      @refresh="onSearch('reload')"
-    >
+    <PureTableBar :title="``" :columns="columns" @refresh="onSearch('reload')">
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           class="table_container"
@@ -20,6 +12,7 @@
           :size="size"
           adaptive
           :data="dataList"
+          show-overflow-tooltip
           :columns="dynamicColumns"
           :pagination="{ ...pagination, pageSizes: [20, 50, 100] }"
           :paginationSmall="size === 'small' ? true : false"
@@ -29,16 +22,20 @@
           @page-current-change="handleCurrentChange"
         >
           <template #leagueName="{ row }">
-            <div> {{ handleNullValue(row.leagueNameCn) }} </div>
-            <div> {{ handleNullValue(row.leagueNameEn) }} </div>
+            <div class="flex flex-col">
+              <div class="whitespace-break-spaces">
+                {{ handleNullValue(row.leagueNameCn) }}
+              </div>
+              <div>{{ handleNullValue(row.leagueNameEn) }}</div>
+            </div>
           </template>
           <template #homeTeamName="{ row }">
-            <div> {{ handleNullValue(row.homeTeamNameCn) }} </div>
-            <div> {{ handleNullValue(row.homeTeamNameEn) }} </div>
+            <div>{{ handleNullValue(row.homeTeamNameCn) }}</div>
+            <div>{{ handleNullValue(row.homeTeamNameEn) }}</div>
           </template>
           <template #awayTeamName="{ row }">
-            <div> {{ handleNullValue(row.awayTeamNameCn) }} </div>
-            <div> {{ handleNullValue(row.awayTeamNameEn) }} </div>
+            <div>{{ handleNullValue(row.awayTeamNameCn) }}</div>
+            <div>{{ handleNullValue(row.awayTeamNameEn) }}</div>
           </template>
           <template #isDataSourceOdds="{ row }">
             <el-switch
@@ -47,7 +44,7 @@
               :active-value="1"
               :inactive-value="0"
               inline-prompt
-              :disabled="isOn&&row.isDataSourceOdds"
+              :disabled="isOn && row.isDataSourceOdds"
               @change="getOdds(row, 0)"
             />
           </template>
@@ -78,7 +75,7 @@ import SearchForm from './component/SearchForm.vue';
 import { tableColumnList } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
-import {onMounted} from "vue";
+import { onMounted } from 'vue';
 
 defineOptions({ name: 'METADATA_LEAGUE' });
 
@@ -87,7 +84,7 @@ const { columns, isOn } = tableColumnList();
 
 const handleNullValue = (value: string | number) => {
   return value ? value : '-';
-}
+};
 
 const {
   loading,
@@ -99,17 +96,19 @@ const {
   handleCurrentChange,
   handleSelectionChange,
   form,
-  getOdds,
+  getOdds
 } = matchCombineHook();
 
 watch(
   () => isOn.value,
   () => {
-    dataList.filter(data => data.pairingType != 0).map(item => {
-      item.isDataSourceOdds = isOn.value ? 1 : 0
-    })
+    dataList
+      .filter(data => data.pairingType != 0)
+      .map(item => {
+        item.isDataSourceOdds = isOn.value ? 1 : 0;
+      });
   }
-)
+);
 onMounted(() => {
   onSearch();
 });

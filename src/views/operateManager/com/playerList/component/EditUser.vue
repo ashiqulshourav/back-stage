@@ -172,7 +172,7 @@
             </el-row>
           </el-collapse-item>
 
-          <!-- <el-collapse-item v-if="hasAuth('settingBetDelay'.toUpperCase())">
+          <el-collapse-item v-if="hasAuth('settingBetDelay'.toUpperCase())">
             <template #title>
               {{ t('投注延时') }}
             </template>
@@ -192,20 +192,20 @@
                 :category="category"
               />
             </div>
-          </el-collapse-item> -->
+          </el-collapse-item>
 
           <el-collapse-item
             :title="t('限额等级设置')"
             name="3"
             v-if="hasAuth('settingLimitLevel'.toUpperCase())"
           >
-            <!-- <p
+            <p
               @click="openLimitRecordDialog"
               v-if="hasAuth('GETLABELLIST')"
               class="text-primary text-right cursor-pointer mb-2"
             >
               {{ t('修改记录') }}>>
-            </p> -->
+            </p>
             <div class="mb-2">
               <el-select v-model="form.limitLevel" clearable>
                 <el-option
@@ -231,13 +231,13 @@
             name="4"
             v-if="hasAuth('settingSepcialLimit'.toUpperCase())"
           >
-            <!-- <p
+            <p
               @click="openSpecialLimitDialog"
               v-if="hasAuth('GETLABELLIST')"
               class="text-primary text-right cursor-pointer mb-2"
             >
               {{ t('修改记录') }}>>
-            </p> -->
+            </p>
             <el-radio-group v-model="isSpecial">
               <el-radio class="w-full" :value="1">{{ t('无') }}</el-radio>
               <el-radio class="w-full" :value="2">{{ t('例外限额') }}</el-radio>
