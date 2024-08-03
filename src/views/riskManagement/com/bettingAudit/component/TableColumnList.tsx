@@ -10,20 +10,32 @@ export const columns: TableColumnList = [
   {
     label: t("用户信息"),
     slot: 'userMessage',
+    minWidth: 100,
     align:'left',
+  },
+  {
+    label: t("注单信息"),
+    slot: 'betMessage',
+    minWidth: 100,
+    align:'left',
+    className: 'getParent',
   },
   {
     label: t("赛事信息"),
     slot: 'matchMessage',
+    minWidth: 200,
     align:'left',
     className: 'getParent',
   },
+
   {
-    label: t("注单详情"),
-    slot: 'betDetail',
+    label: t("投注项"),
+    slot: 'betItem',
+    minWidth: 200,
     align:'left',
-    className: 'getParent',
+    className: 'betItem',
   },
+
   {
     label: t("赔率"),
     slot: "odd",
