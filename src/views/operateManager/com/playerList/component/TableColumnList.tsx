@@ -94,6 +94,7 @@ export const columns = (category: number): TableColumnList => {
     {
       label: t('投注延时'),
       prop: 'betDelay',
+      slot: 'betDelay',
       formatter({ betDelay, betDelayDj }) {
         let str = '';
         if (category === 0) {
