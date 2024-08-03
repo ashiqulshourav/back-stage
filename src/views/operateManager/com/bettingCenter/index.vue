@@ -510,7 +510,8 @@ import {
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
   getIsInplay,
-  enterGoalMap
+  enterGoalMap,
+  openIpDialog
 } from '@/utils/formatMatch';
 import { betStatus, betStatusMap } from './util/types';
 import { usePublicHooks } from '@/hooks';
@@ -550,7 +551,6 @@ const {
   riskLabelList,
   getOddStatus,
   downloading,
-  openIpDialog
 } = useBettingCenterHook(props.category, props.venueType);
 
 onMounted(() => {

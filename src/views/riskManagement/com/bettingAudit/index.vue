@@ -557,7 +557,6 @@ import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
 import { addThousandSeparator } from '@/utils/formatNumber';
-import Copy from '@iconify-icons/ep/copy-document';
 import {
   formatSeriesType,
   useSportFormatDetail,
@@ -568,7 +567,7 @@ import {
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
   getIsInplay,
-  enterGoalMap, calculateSeriesTypeTotal,
+  enterGoalMap, calculateSeriesTypeTotal,openIpDialog
 } from '@/utils/formatMatch';
 import { riskStatus } from './util/types';
 import { usePublicHooks } from '@/hooks';

@@ -453,7 +453,6 @@ import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
 import { rejectReasonMap } from './util/types';
-import Copy from '@iconify-icons/ep/copy-document';
 import { adjustContentWithRowHeight } from '@/utils/adjustRowCoulmnHeight';
 import {
   formatSeriesType,
@@ -462,7 +461,7 @@ import {
   markeTypeMap,
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
-  getIsInplay, enterGoalMap, calculateSeriesTypeTotal
+  getIsInplay, enterGoalMap, calculateSeriesTypeTotal,openIpDialog
 } from '@/utils/formatMatch';
 import { usePublicHooks } from '@/hooks';
 import {addThousandSeparator} from "@/utils/formatNumber";
