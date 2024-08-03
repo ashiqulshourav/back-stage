@@ -133,7 +133,7 @@
                   type="primary"
                   @click="isRiskLabelAdd = true"
                   class="text-primary"
-                  >添加标签</el-button
+                  >{{ t('添加标签') }}</el-button
                 >
               </el-col>
             </el-row>
