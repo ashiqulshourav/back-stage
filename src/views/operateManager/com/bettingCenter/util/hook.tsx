@@ -94,9 +94,9 @@ export function useBettingCenterHook(category: number, venueType: number) {
   ) => {
     let seriesDetails: any = [];
     const newForm  = {...form}
-    if (form.seriesType == 2) {
-      if (form.seriesDetailsSingle.length) {
-        form.seriesDetailsSingle.map((item: keyof typeof seriesTypesSingle) => {
+    if (newForm.seriesType == 2) {
+      if (newForm.seriesDetailsSingle.length) {
+        newForm.seriesDetailsSingle.map((item: keyof typeof seriesTypesSingle) => {
           seriesDetails.push(...seriesTypesSingle[item].list);
         });
       } else {
@@ -106,9 +106,9 @@ export function useBettingCenterHook(category: number, venueType: number) {
           );
         }
       }
-    } else if (form.seriesType == 3) {
-      if (form.seriesDetailsDuplex.length) {
-        form.seriesDetailsDuplex.map((item: keyof typeof seriesTypesSingle) => {
+    } else if (newForm.seriesType == 3) {
+      if (newForm.seriesDetailsDuplex.length) {
+        newForm.seriesDetailsDuplex.map((item: keyof typeof seriesTypesSingle) => {
           seriesDetails.push(
             ...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list
           );
@@ -126,7 +126,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     if (seriesDetails.length > 1) {
       seriesDetails = [...new Set(seriesDetails)];
     }
-    if(newForm.orderId||newForm.matchId||newForm.userIdOrName){
+    if(newForm.orderId||newForm.matchId){
         newForm.timeStart = '';
         newForm.timeEnd = '';
     }
@@ -493,18 +493,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
 
   //- IP地址弹窗
 
-  const openIpDialog = (ip: string) => {
-    addDialog({
-      title: t(''),
-      alignCenter: true,
-      class: 'reset_dialog',
-      width: '75%',
-      center: true,
-      closeOnClickModal: false,
-      hideFooter: true,
-      contentRenderer: () => h(IpDialog, { ip })
-    });
-  };
+
 
   return {
     loading,
@@ -530,6 +519,5 @@ export function useBettingCenterHook(category: number, venueType: number) {
     riskLabelList,
     getOddStatus,
     downloading,
-    openIpDialog
   };
 }
