@@ -61,15 +61,15 @@
         <Custom_date v-model:val="selectDate" @changeDate="changeDate" />
       </el-form-item>
       <el-form-item prop="matchId" :label="`${t('事件 ID')}:`">
-          <el-input
-            v-model="form.matchId"
-            :placeholder="t('请输入您的活动 ID')"
-            clearable
-            :formatter="v => formatNumber(v, 30)"
-            v-enter="search"
-            class="!w-[200px]"
-          />
-        </el-form-item>
+        <el-input
+          v-model="form.matchId"
+          :placeholder="t('请输入您的活动 ID')"
+          clearable
+          :formatter="v => formatNumber(v, 30)"
+          v-enter="search"
+          class="!w-[200px]"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
