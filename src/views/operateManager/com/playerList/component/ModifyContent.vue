@@ -21,7 +21,7 @@
           multiple
           tag-type="primary"
           collapse-tags
-          :max-collapse-tags="4"
+          :max-collapse-tags="3"
           :render-after-expand="false"
           show-checkbox
           check-strictly
