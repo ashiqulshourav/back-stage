@@ -72,81 +72,73 @@
           @page-current-change="handleCurrentChange"
         >
           <template #userMessage="{ row }">
-            <div
-              class="user_detail item_line cursor-pointer"
-              @click="
-                copyTest(
-                  row.userId,
-                  t('用户ID：{value}', { value: row.userId })
-                )
-              "
-            >
-              <span>{{ t('用户ID：') }}</span
-              >{{ row.userId }}
-            </div>
-            <div
-              class="item_line cursor-pointer"
-              @click="
-                copyTest(
-                  row.userName,
-                  t('用户名：{value}', { value: row.userName })
-                )
-              "
-            >
-              <span>{{ t('用户名：') }}</span
-              >{{ row.userName }}
-            </div>
-            <div
-              class="item_line cursor-pointer"
-              @click="
-                copyTest(
-                  tenantObj[row.tenantId]?.tenantName,
-                  t('商户名：{value}', {
-                    value: tenantObj[row.tenantId]?.tenantName
-                  })
-                )
-              "
-            >
-              <span>{{ t('商户名：') }}</span
-              >{{ tenantObj[row.tenantId]?.tenantName }}
-            </div>
-            <div
-              class="item_line cursor-pointer"
-              @click="
-                copyTest(
-                  row.tenantId,
-                  t('商户编码：{value}', {
-                    value: tenantObj[row.tenantId]?.name
-                  })
-                )
-              "
-            >
-              <span>{{ t('商户编码：') }}</span
-              >{{ tenantObj[row.tenantId]?.name }}
-            </div>
-            <div
-              v-if="row.combineOrderDetails.length > 1"
-              class="item_line mt-2 color_blue"
-            >
-              {{ String(row.seriesType).slice(-3) === '001' ? '串关' : '复式' }}
-              <span>{{
-                formatSeriesType(
-                  row?.seriesType,
-                  row.combineOrderDetails.length
-                )
-              }}</span>
-              <span class="ml-1"
-                >总计：{{
-                  `${calculateSeriesTypeTotalBets(row?.seriesType)}注 每注：${
-                    row.orderAmount
-                  }`
-                }}</span
-              >
+            <div class="flex">
+              <div>
+                <div
+                  class="item_line cursor-pointer"
+                  @click="
+                    copyTest(
+                      row.userName,
+                      t('用户名：{value}', { value: row.userName })
+                    )
+                  "
+                >
+                  <span>{{ t('用户名：') }}</span
+                  >{{ row.userName }}
+                </div>
+                <div
+                  class="item_line cursor-pointer"
+                  @click="
+                    copyTest(
+                      row.userId,
+                      t('用户ID：{value}', { value: row.userId })
+                    )
+                  "
+                >
+                  <span>{{ t('用户ID：') }}</span
+                  >{{ row.userId }}
+                </div>
+                <div
+                  class="item_line cursor-pointer"
+                  @click="
+                    copyTest(
+                      tenantObj[row.tenantId]?.tenantName,
+                      t('商户名：{value}', {
+                        value: tenantObj[row.tenantId]?.tenantName
+                      })
+                    )
+                  "
+                >
+                  <span>{{ t('商户名：') }}</span
+                  >{{ tenantObj[row.tenantId]?.tenantName }}
+                </div>
+                <div
+                  class="item_line cursor-pointer"
+                  @click="
+                    copyTest(
+                      row.tenantId,
+                      t('商户id：{value}', {
+                        value: tenantObj[row.tenantId]?.name
+                      })
+                    )
+                  "
+                >
+                  <span>{{ t('商户id：') }}</span
+                  >{{ tenantObj[row.tenantId]?.name }}
+                </div>
+
+              </div>
+              <div>
+                <RiskLabelList
+                  :list="row.riskControlLabelList"
+                  :showNumber="1"
+                />
+              </div>
             </div>
           </template>
           <template #matchMessage="{ row }">
             <div
-              class="match_detail eq-height match_item match_detail text-left"
+              class="match_item match_detail eq-height"
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -168,7 +160,7 @@
                       t('主队：{value}', { value: item.homeTeamNameCn })
                     )
                   "
-                  >{{ item.homeTeamNameCn }}</span
+                >{{ item.homeTeamNameCn }}</span
                 >
                 vs
                 <span
@@ -179,7 +171,7 @@
                       t('客队：{value}', { value: item.awayTeamNameCn })
                     )
                   "
-                  >{{ item.awayTeamNameCn }}</span
+                >{{ item.awayTeamNameCn }}</span
                 >
               </div>
               <div
@@ -194,7 +186,7 @@
                 {{ item.sportNameCn }}/{{ item.leagueNameCn }}
               </div>
               <div
-                class="item_line cursor-pointer"
+                class="item_line cursor-pointer flex items-baseline gap-1"
                 @click="
                   copyTest(
                     item.matchId,
@@ -204,20 +196,87 @@
               >
                 {{ t('赛事ID:') }} {{ item.matchId }}
                 <span class="inline-block">
-                  <IconifyIconOffline :icon="Copy" />
+                  <IconifyIconOffline icon="copyIcon" />
                 </span>
               </div>
               <div class="item_line">
                 {{ t('开赛时间:')
                 }}{{
-                  dayjs(item.beginTime ?? Date.now()).format('MM-DD HH:mm:ss')
+                  dayjs(item.beginTime)
+                    ?.format('MM-DD HH:mm:ss')
                 }}
               </div>
             </div>
           </template>
-          <template #betDetail="{ row }">
+          <template #betMessage="{ row }">
             <div
-              class="match_item eq-height bet_detail text-left"
+              class="match_item bet_detail eq-height"
+            >
+              <div
+                class="item_line cursor-pointer flex items-baseline gap-1"
+                @click="
+                  copyTest(row.id, t('注单号：{value}', { value: row.id }))
+                "
+              >
+                {{ t('注单号:') }} {{ row.id }}
+                <span class="inline-block">
+                  <IconifyIconOffline icon="copyIcon" />
+                </span>
+              </div>
+              <div class="item_line">
+                {{ t('投注时间:')
+                }}{{
+                  row.createTime
+                    ? dayjs(row.createTime).format('MM-DD HH:mm:ss')
+                    : ''
+                }}
+              </div>
+              <div class="item_line text-[#409EFF]" v-if="row.combineOrderDetails.length > 1">
+               <span>
+                     {{
+                   String(row.seriesType).slice(-3) === '001' ? '单式串关：' : '复式串关：'
+                 }}
+                </span>
+                <span>{{
+                    formatSeriesType(
+                      row?.seriesType,
+                      row.combineOrderDetails.length
+                    )
+                  }}</span>
+                <span>
+                  {{
+                    String(row.seriesType).slice(-3) === '001'
+                      ? calculateSeriesTypeTotal(row.combineOrderDetails)
+                      : ''
+                  }}
+                </span>
+
+              </div>
+              <div class="item_line" v-if="row.combineOrderDetails.length > 1">
+                总共：{{
+                  calculateSeriesTypeTotalBets(
+                    row?.seriesType
+                  )}}注
+              </div>
+              <div class="item_line" v-if="row.combineOrderDetails.length > 1">
+                每注：{{row.orderAmount}} {{row.currency}}
+              </div>
+              <div class="item_line">
+                {{ t('投注IP:') }}
+                <span
+                  v-if="row.combineOrderDetails[0].ip"
+                  @click="openIpDialog(row.combineOrderDetails[0].ip)"
+                  class="text-[#409EFF] cursor-pointer"
+                >{{ row.combineOrderDetails[0].ip }} {{row.ipArea}}</span
+                >
+                <span v-else>-</span>
+              </div>
+
+            </div>
+          </template>
+          <template #betItem="{ row }">
+            <div
+              class="match_item bet_detail eq-height"
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
@@ -235,7 +294,11 @@
               </div>
               <div class="item_line">
                 <span v-if="item.kindsCode === 'FT_TTS'">
-                  {{ enterGoalMap[item.betHandicap.toUpperCase()  as keyof typeof enterGoalMap] }}
+                  {{
+                    enterGoalMap[
+                      item.betHandicap.toUpperCase() as keyof typeof enterGoalMap
+                      ]
+                  }}
                 </span>
                 {{ useSportFormatDetail(item)[3] }} @{{
                   getViewOddFn(
@@ -243,25 +306,6 @@
                     item.marketTypeFinally,
                     item.marketType
                   )
-                }}
-              </div>
-              <div
-                class="item_line cursor-pointer"
-                @click="
-                  copyTest(row.id, t('注单号：{value}', { value: row.id }))
-                "
-              >
-                {{ t('注单号:') }} {{ row.id }}
-                <span class="inline-block">
-                  <IconifyIconOffline :icon="Copy" />
-                </span>
-              </div>
-              <div class="item_line">
-                {{ t('投注时间:')
-                }}{{
-                  row.createTime
-                    ? dayjs(row.createTime).format('MM-DD HH:mm:ss')
-                    : ''
                 }}
               </div>
               <div
@@ -283,8 +327,10 @@
                   )
                 "
               >
-                {{ t('结算比分：')
-                }}{{ displayHomeAwayScore(item.settleScore, item.sportId) }}
+                <span v-if="item.kindsCode !== 'TeamToKickOff'">
+                  {{ t('结算比分：')
+                  }}{{ displayHomeAwayScore(item.settleScore, item.sportId) }}
+                </span>
               </div>
             </div>
           </template>
@@ -511,7 +557,6 @@ import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import dayjs from 'dayjs';
 import { addThousandSeparator } from '@/utils/formatNumber';
-import Copy from '@iconify-icons/ep/copy-document';
 import {
   formatSeriesType,
   useSportFormatDetail,
@@ -522,7 +567,7 @@ import {
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
   getIsInplay,
-  enterGoalMap,
+  enterGoalMap, calculateSeriesTypeTotal,openIpDialog
 } from '@/utils/formatMatch';
 import { riskStatus } from './util/types';
 import { usePublicHooks } from '@/hooks';
@@ -531,6 +576,7 @@ import { ref, onMounted, onUpdated } from 'vue';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import EditPen from '@iconify-icons/ep/edit-pen';
 import { adjustContentWithRowHeight } from '@/utils/adjustRowCoulmnHeight';
+import RiskLabelList from "@/views/operateManager/com/bettingCenter/component/riskLabelList.vue";
 
 const { tableHeaderStyle } = usePublicHooks();
 const rejectSelectedCount = ref(0);

@@ -171,9 +171,9 @@
               <div class="item_line">
                 {{ t('开赛时间:')
                 }}{{
-                  dayjs(item.beginTime ?? Date.now())
-                    .tz('Asia/Shanghai')
-                    .format('MM-DD HH:mm:ss')
+                  dayjs(item.beginTime)
+                    ?.tz('Asia/Shanghai')
+                    ?.format('MM-DD HH:mm:ss')
                 }}
               </div>
             </div>
@@ -510,7 +510,8 @@ import {
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
   getIsInplay,
-  enterGoalMap
+  enterGoalMap,
+  openIpDialog
 } from '@/utils/formatMatch';
 import { betStatus, betStatusMap } from './util/types';
 import { usePublicHooks } from '@/hooks';
@@ -550,7 +551,6 @@ const {
   riskLabelList,
   getOddStatus,
   downloading,
-  openIpDialog
 } = useBettingCenterHook(props.category, props.venueType);
 
 onMounted(() => {

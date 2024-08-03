@@ -493,18 +493,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
 
   //- IP地址弹窗
 
-  const openIpDialog = (ip: string) => {
-    addDialog({
-      title: t(''),
-      alignCenter: true,
-      class: 'reset_dialog',
-      width: '75%',
-      center: true,
-      closeOnClickModal: false,
-      hideFooter: true,
-      contentRenderer: () => h(IpDialog, { ip })
-    });
-  };
+
 
   return {
     loading,
@@ -530,6 +519,5 @@ export function useBettingCenterHook(category: number, venueType: number) {
     riskLabelList,
     getOddStatus,
     downloading,
-    openIpDialog
   };
 }
