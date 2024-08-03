@@ -639,4 +639,7 @@ onUpdated(() => {
   flex-direction: column;
   justify-content: center;
 }
+.mw-250px{
+  min-width: 275px!important;
+}
 </style>

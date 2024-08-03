@@ -618,7 +618,9 @@ onUpdated (() => {
     }
   }
 }
-.user_detail,
+.user_detail{
+  min-width: 210px
+}
 .match_detail,
 .bet_detail {
   min-width: 250px;
