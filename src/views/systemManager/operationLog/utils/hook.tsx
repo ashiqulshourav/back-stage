@@ -26,7 +26,8 @@ export function useOperationLog() {
     requestLog: '',
     userName: '',
     beginTime: '',
-    endTime: ''
+    endTime: '',
+    matchId: '',
   });
 
   function handleTableWidthChange(val: number) {

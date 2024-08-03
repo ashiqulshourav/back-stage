@@ -37,28 +37,53 @@
           </template>
 
           <template #requestLog="{ row }">
+            <el-text
+              v-if="row.requestLog.split('\n').length <= 3"                     
+              class="whitespace-pre-wrap"
+            >
+              {{ row.requestLog ?  row.requestLog : "-"}}
+            </el-text>
             <el-button
+              v-else
               type="primary"
               :link="true"
-              @click="openRequestLog(t('操作参数'), row.requestLog)"
+              @click="openRequestLog(t('查看操作日志'), row)"
             >
               {{ t('点击查看') }}
             </el-button>
           </template>
           <template #operateBefore="{ row }">
+            <span 
+              v-if="row.operateBefore.split('\n').length <= 3"
+              class="whitespace-pre-wrap">
+              {{ row.operateBefore ?  row.operateBefore : "-"}}
+              <span :class="row.operateBefore !== row.operateAfter?'text-red-400 block':''">
+                {{ row.operateBefore !== row.operateAfter ? "Open" : ""}}
+              </span>
+            </span>
             <el-button
+              v-else
               type="primary"
               :link="true"
-              @click="openRequestLog(t('修改前参数'), row.operateBefore)"
+              @click="openRequestLog(t('查看操作日志'), row)"
             >
               {{ t('点击查看') }}
             </el-button>
           </template>
           <template #operateAfter="{ row }">
+            <el-text 
+              v-if="row.operateAfter.split('\n').length <= 3"
+              class="whitespace-pre-wrap">
+              {{ row.operateAfter ?  row.operateAfter : "-"}}
+              <span :class="row.operateBefore !== row.operateAfter?'text-red-400 block':''">
+                {{ row.operateBefore !== row.operateAfter ? "Closure" : ""}}
+              </span>
+            </el-text>
             <el-button
+              v-else
               type="primary"
               :link="true"
-              @click="openRequestLog(t('修改后参数'), row.operateAfter)"
+              @click="openRequestLog(t('查看操作日志'), row)"
             >
               {{ t('点击查看') }}
             </el-button>
@@ -82,17 +107,14 @@ import { pageSizeArr } from '@/utils/math';
 defineOptions({ name: 'OPERATIONLOG' });
 const { tableHeaderStyle } = usePublicHooks();
 
-const openRequestLog = (title: string, val: string) => {
+const openRequestLog = (title: string, row:OperationLogDataAPI.OperationLogList[]) => {
   addDialog({
     title,
     alignCenter: true,
-    props: {
-      requestLog: JSON.parse(JSON.stringify(val)) ?? {}
-    },
-    width: '20%',
-    hideFooter: true,
+    width: 'auto',
+    hideFooter: false,
     closeOnClickModal: false,
-    contentRenderer: () => h(RequestDialog)
+    contentRenderer: () => h(RequestDialog, { row: [row] })
   });
 };
 
