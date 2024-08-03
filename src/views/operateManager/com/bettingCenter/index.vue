@@ -171,9 +171,9 @@
               <div class="item_line">
                 {{ t('开赛时间:')
                 }}{{
-                  dayjs(item.beginTime ?? Date.now())
-                    .tz('Asia/Shanghai')
-                    .format('MM-DD HH:mm:ss')
+                  dayjs(item.beginTime)
+                    ?.tz('Asia/Shanghai')
+                    ?.format('MM-DD HH:mm:ss')
                 }}
               </div>
             </div>
