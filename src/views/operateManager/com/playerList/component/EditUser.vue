@@ -37,13 +37,13 @@
               />
             </template>
             <div>
-              <p
+              <div
                 @click="emits('onOpenRecord', form.id, 2)"
                 v-if="hasAuth('GETLABELLIST')"
-                class="text-primary text-right cursor-pointer"
+                class="text-primary float-right w-fit mb-2 cursor-pointer"
               >
                 {{ t('修改记录') }}>>
-              </p>
+              </div>
               <el-row :gutter="20" class="mt-2 w-full !ml-2">
                 <LabelListCom
                   @onClose="handleDeleteLabel"
@@ -108,13 +108,13 @@
             </template>
 
             <div>
-              <p
+              <div
                 @click="emits('onOpenRecord', form.id, 1)"
                 v-if="hasAuth('GETLABELLIST')"
-                class="text-primary text-right cursor-pointer mb-2"
+                class="text-primary float-right w-fit mb-2 cursor-pointer"
               >
                 {{ t('修改记录') }}>>
-              </p>
+              </div>
             </div>
 
             <el-row :gutter="20" class="mt-2 w-full !ml-2">
@@ -177,14 +177,14 @@
             <template #title>
               {{ t('投注延时') }}
             </template>
-            <div>
-              <p
+            <div
                 @click="openDelayDialog"
                 v-if="hasAuth('GETLABELLIST')"
-                class="text-primary text-right cursor-pointer"
+                class="text-primary float-right w-fit mb-2 cursor-pointer"
               >
-                {{ t('修改记录') }}>>
-              </p>
+              {{ t('修改记录') }}>>
+            </div>
+            <el-row  :gutter="20" class="mt-2 w-full !ml-2">
               <ModifyContent
                 v-model:betDelay="form.betDelay"
                 v-model:betDelayDj="form.betDelayDj"
@@ -192,7 +192,7 @@
                 v-model:sportIdsDj="form.sportIdsDj"
                 :category="category"
               />
-            </div>
+            </el-row>
           </el-collapse-item>
 
           <el-collapse-item
@@ -200,13 +200,13 @@
             name="3"
             v-if="hasAuth('settingLimitLevel'.toUpperCase())"
           >
-            <p
+            <div
               @click="openLimitRecordDialog"
               v-if="hasAuth('GETLABELLIST')"
-              class="text-primary text-right cursor-pointer mb-2"
+              class="text-primary float-right w-fit mb-2 cursor-pointer"
             >
               {{ t('修改记录') }}>>
-            </p>
+            </div>
             <div class="mb-2">
               <el-select v-model="form.limitLevel" clearable>
                 <el-option
@@ -232,20 +232,22 @@
             name="4"
             v-if="hasAuth('settingSepcialLimit'.toUpperCase())"
           >
-            <p
+            <div
               @click="openSpecialLimitDialog"
               v-if="hasAuth('GETLABELLIST')"
-              class="text-primary text-right cursor-pointer mb-2"
+              class="text-primary float-right w-fit mb-2 cursor-pointer"
             >
               {{ t('修改记录') }}>>
-            </p>
-            <el-radio-group v-model="isSpecial">
-              <el-radio class="w-full" :value="1">{{ t('无') }}</el-radio>
-              <el-radio class="w-full" :value="2">{{ t('例外限额') }}</el-radio>
-              <el-radio class="w-full" :value="3">{{
-                t('百分比限额')
-              }}</el-radio>
-            </el-radio-group>
+            </div>
+            <el-row :gutter="20" class="mt-2 w-full !ml-2">
+              <el-radio-group v-model="isSpecial">
+                <el-radio class="w-full" :value="1">{{ t('无') }}</el-radio>
+                <el-radio class="w-full" :value="2">{{ t('例外限额') }}</el-radio>
+                <el-radio class="w-full" :value="3">{{
+                  t('百分比限额')
+                }}</el-radio>
+              </el-radio-group>
+            </el-row>
 
             <el-row
               :gutter="5"
