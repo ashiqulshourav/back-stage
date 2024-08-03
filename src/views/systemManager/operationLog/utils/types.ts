@@ -7,5 +7,5 @@ export type SearchFormType = {
   requestLog: string;
   beginTime: string | number;
   endTime: string | number;
-  eventId: number;
+  matchId: string | number;
 }
