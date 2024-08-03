@@ -197,6 +197,31 @@
           <el-option :label="t('不是')" :value="2" />
         </el-select>
       </el-form-item>
+      <el-form-item prop="timeType">
+        <el-select
+          v-model="form.timeType"
+          class="!w-[110px]"
+          @change="search"
+        >
+          <el-option :label="t('注册时间')" :value="1" />
+          <el-option :label="t('修改时间')" :value="2" />
+        </el-select>
+        <CustomDate
+          v-model:val="selectDate"
+          :start-placeholder="
+            dayjs()
+              .subtract(30, 'day')
+              .startOf('day')
+              .format('YYYY-MM-DD HH:mm:ss')
+          "
+          :end-placeholder="
+            dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')
+          "
+          @changeDate="changeDate"
+          :isDateTime="true"
+          :format="'YYYY-MM-DD HH:mm:ss'"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -245,6 +270,8 @@ import Download from '@iconify-icons/ep/download';
 import Upload from '@iconify-icons/ep/upload';
 import { hasAuth } from '@/router/utils';
 import { CURRENCY_TYPE } from '../utils/map';
+import CustomDate from '@/components/Form/Custom_date.vue';
+import dayjs from "dayjs";
 
 const formRef = ref();
 const buttonRef1 = ref();
@@ -392,6 +419,15 @@ const formatterUserNames = (v: string) => {
 
 const selectDate = ref<string[]>(['', '']);
 
+const changeDate = (t: string[]) => {
+  if (!t) {
+    form.value.beginTime = '';
+    form.value.endTime = '';
+  } else {
+    form.value.beginTime = dayjs(t[0]).valueOf();
+    form.value.endTime = dayjs(t[1]).valueOf();
+  }
+};
 const getLimmitLevelList = async () => {
   const res = await API.getLimitListDropDownBox();
   if (res.code) return;
@@ -403,6 +439,8 @@ const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.resetFields();
   selectDate.value = ['', ''];
+  form.value.beginTime = '';
+  form.value.endTime = '';
   emits('onSearch', 'reload');
 };
 
