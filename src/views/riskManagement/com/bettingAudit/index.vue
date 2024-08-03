@@ -750,4 +750,7 @@ onUpdated (() => {
   justify-content: center;
   // width: 100%;
 }
+.mw-230{
+  min-width: 230px!important;
+}
 </style>

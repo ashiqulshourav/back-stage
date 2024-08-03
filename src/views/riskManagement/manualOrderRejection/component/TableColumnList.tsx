@@ -13,13 +13,14 @@ export const columns: TableColumnList = [
     slot: 'userMessage',
     minWidth: 100,
     align:'left',
+    className: 'getParent mw-230'
   },
   {
     label: t("注单信息"),
     slot: 'betMessage',
     minWidth: 100,
     align:'left',
-    className: 'getParent',
+    className: 'getParent mw-250',
   },
   {
     label: t("赛事信息"),
@@ -34,7 +35,7 @@ export const columns: TableColumnList = [
     slot: 'betItem',
     minWidth: 200,
     align:'left',
-    className: 'betItem',
+    className: 'betItem getParent',
   },
   {
     label: t('接拒状态'),
