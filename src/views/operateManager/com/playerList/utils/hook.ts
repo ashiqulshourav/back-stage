@@ -276,6 +276,7 @@ export function userPlayerListHook(venueType: number, category: number) {
       tenantList.map(item => {
         tenantObj[item.id] = item;
       });
+      console.log('hook.ts文件 279==============行打印=', tenantObj);
     }
   };
 
