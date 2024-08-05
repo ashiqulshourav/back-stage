@@ -14,8 +14,6 @@ import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
 const { exportDialog } = usePublicHooks();
 import { pageSizeArr } from '@/utils/math';
-import dayjs from 'dayjs';
-
 export function userPlayerListHook(venueType: number, category: number) {
   const route = useRoute();
   const router = useRouter();
