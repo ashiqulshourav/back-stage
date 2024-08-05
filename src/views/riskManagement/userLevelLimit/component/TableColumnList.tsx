@@ -32,21 +32,21 @@ export const columns: TableColumnList = [
     slot: 'maxWinAmountLimit'
   },
   {
-    label: addTooltip(t('单场赛事累计赔付限额(不分早盘滚球)'), t('单场(早盘+滚球)，累计赔付')),
+    label: addTooltip(t('赛事限额'), t('单场(早盘+滚球)，累计赔付')),
     slot: 'userSingleGamePay',
     width: 150
   },
   {
-    label: addTooltip(t('单关单日累计赔付'), t('单日（早盘＋滚球），累计赔付')),
+    label: addTooltip(t('单关限額'), t('单日（早盘＋滚球），累计赔付')),
     slot: 'singleMatchPay'
   },
   {
-    label: addTooltip(t('串关单日累计赔付限额(不分早盘滚球)'), t('单日（早盘＋滚球），累计赔付')),
+    label: addTooltip(t('串关限额'), t('单日（早盘＋滚球），累计赔付')),
     slot: 'bunchMatchPay',
     width: 150
   },
   {
-    label: addTooltip(t('冠军单日累计赔付'), t('单日累计赔付')),
+    label: addTooltip(t('冠军限額'), t('单日累计赔付')),
     slot: 'championDailyPay'
   }
 ];
