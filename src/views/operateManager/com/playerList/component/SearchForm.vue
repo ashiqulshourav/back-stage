@@ -230,15 +230,8 @@
         </el-select>
         <CustomDate
           v-model:val="selectDate"
-          :start-placeholder="
-            dayjs()
-              .subtract(30, 'day')
-              .startOf('day')
-              .format('YYYY-MM-DD HH:mm:ss')
-          "
-          :end-placeholder="
-            dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')
-          "
+          start-placeholder="开始时间"
+          end-placeholder="结束时间"
           @changeDate="changeDate"
           :isDateTime="true"
           :format="'YYYY-MM-DD HH:mm:ss'"
@@ -256,7 +249,6 @@
         <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
           {{ t('重置') }}
         </el-button>
-
           <el-button
             type="primary"
             :icon="useRenderIcon(Download)"
