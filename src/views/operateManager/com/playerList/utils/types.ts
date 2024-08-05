@@ -9,10 +9,11 @@ export type searchFormType = {
   venueType?: number;
   offset?: number;
   timeVal?: string | number;
+  timeType?: number | string;
+  currency?: number | string;
   beginTime?: string;
   endTime?: string;
   betDelayed: number | string;
-  currency?: number | string;
   specialLimited:number | string;
 };
 export type specialLimitType = {

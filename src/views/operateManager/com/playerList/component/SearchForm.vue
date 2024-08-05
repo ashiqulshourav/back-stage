@@ -154,22 +154,48 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item prop="currency" :label="t('结算币种:')">
+        <el-select
+            v-model="form.currency"
+            clearable
+            class="!w-[150px]"
+        >
+          <el-option label="全部" value=" "></el-option>
+          <el-option
+              :label="item.label"
+              :value="item.value"
+              v-for="item in currency_map"
+              :key="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item prop="specialLimited" :label="t('特殊限额:')">
+        <el-select
+            v-model="form.currency"
+            clearable
+            class="!w-[150px]"
+        >
+          <el-option label="全部" value=" "></el-option>
+          <el-option label="是" :value="1"></el-option>
+          <el-option label="不是" :value="2"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item prop="timeType">
         <el-select
-          v-model="form.timeType"
-          class="!w-[140px]"
-          @change="search"
+            v-model="form.timeType"
+            class="!w-[140px]"
+            @change="search"
         >
           <el-option :label="t('用户注册时间')" value="1" />
           <el-option :label="t('用户修改时间')" value="2" />
         </el-select>
         <CustomDate
-          v-model:val="selectDate"
-          start-placeholder="开始时间"
-          end-placeholder="结束时间"
-          @changeDate="changeDate"
-          :isDateTime="true"
-          :format="'YYYY-MM-DD HH:mm:ss'"
+            v-model:val="selectDate"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            @changeDate="changeDate"
+            :isDateTime="true"
+            :format="'YYYY-MM-DD HH:mm:ss'"
         />
       </el-form-item>
       <el-form-item>
@@ -183,6 +209,16 @@
         </el-button>
         <el-button :icon="useRenderIcon(Refresh)" @click="resetForm(formRef)">
           {{ t('重置') }}
+        </el-button>
+
+        <el-button
+          type="primary"
+          :icon="useRenderIcon(Download)"
+          :loading="downloading"
+          v-if="hasAuth('EXPORT')"
+          @click="exportFile()"
+        >
+          {{ t('导出') }}
         </el-button>
           <el-button
             type="primary"
@@ -202,25 +238,24 @@
 import { ref } from 'vue';
 import { t } from '@/plugins/i18n';
 import { searchFormType } from '../utils/types';
-import Custom_date from '@/components/Form/Custom_date.vue';
-import dayjs from 'dayjs';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import Search from '@iconify-icons/ep/search';
 import Refresh from '@iconify-icons/ep/refresh';
-import { labelListType, tenantType } from '../utils/types';
+import { labelListType } from '../utils/types';
 import type { FormInstance, CheckboxValueType } from 'element-plus';
 import Download from '@iconify-icons/ep/download';
-import { hasAuth } from '@/router/utils';
+import Upload from '@iconify-icons/ep/upload';
+import dayjs from "dayjs";
 import CustomDate from '@/components/Form/Custom_date.vue';
+import { hasAuth } from '@/router/utils';
+import {currency_map} from "@/utils/maps/currency_map";
 
 const formRef = ref();
-const buttonRef = ref();
 const buttonRef1 = ref();
-const emits = defineEmits(['onSearch', 'exportFile']);
+const emits = defineEmits(['onSearch', 'exportFile', 'importFile']);
 const idList = reactive<string[]>([]);
 const userIds = reactive<string[]>([]);
 const sportLimmitList = reactive<string[]>([]);
-
 
 const checkAllTIds = ref(false);
 const removeAllTIds = ref(false);
@@ -239,134 +274,130 @@ const props = defineProps<{
   form: searchFormType;
   category: number;
   labelList: labelListType;
-  tenantList: tenantType[];
+  tenantList: { name: string; id: number; tenantName: string }[];
   downloading: boolean;
+  uploading: boolean;
 }>();
 
 // watch, handleCheckAll, handleRemoveAll & handleCheckRevert for risk label
 watch(
   () => props.form.riskControlLabelList,
   val => {
-    if(!val || val.length === 0){
+    if (!val || val.length === 0) {
       checkAll.value = false;
-    } else if(val.length === props.labelList.risk.length){
+    } else if (val.length === props.labelList.risk.length) {
       checkAll.value = true;
       removeAll.value = false;
     }
   }
-)
+);
 
 const handleCheckAll = (val: CheckboxValueType) => {
-  if(val){
-    props.form.riskControlLabelList = props.labelList.risk.map(_ => _.id)
+  if (val) {
+    props.form.riskControlLabelList = props.labelList.risk.map(_ => _.id);
     removeAll.value = false;
   } else {
     props.form.riskControlLabelList = [];
   }
-}
+};
 
-const handleRemoveAll = (val: CheckboxValueType) => {
+const handleRemoveAll = () => {
   props.form.riskControlLabelList = [];
   checkRevert.value = false;
-}
+};
 
 const handleCheckRevert = () => {
-  if(true){
-    const oldArray = [...props.form.riskControlLabelList];
+  if (true) {
+    const oldArray = [...(props.form.riskControlLabelList ?? [])];
     props.form.riskControlLabelList = props.labelList.risk
-    .filter(_ => !oldArray.includes(_.id))
-    .map(_ => _.id)
+      .filter(_ => !oldArray.includes(_.id))
+      .map(_ => _.id);
   }
-}
+};
 
 // watch, handleCheckAllTIds, handleRemoveAllTIds & handleCheckRevertTIds for risk Merchant
 watch(
   () => props.form.tenantIds,
   val => {
-    if(!val || val.length === 0){
+    if (!val || (val as number[])?.length === 0) {
       checkAllTIds.value = false;
-    } else if(val.length === props.tenantList.length){
+    } else if ((val as number[])?.length === props.tenantList.length) {
       checkAllTIds.value = true;
       removeAllTIds.value = false;
     }
-  },
-)
+  }
+);
 
 const handleCheckAllTIds = (val: CheckboxValueType) => {
-  if(val){
-    props.form.tenantIds = props.tenantList.map(_ => _.id)
+  if (val) {
+    props.form.tenantIds = props.tenantList.map(_ => _.id);
     removeAllTIds.value = false;
   } else {
     props.form.tenantIds = [];
   }
-}
+};
 
-const handleRemoveAllTIds = (val: CheckboxValueType) => {
+const handleRemoveAllTIds = () => {
   props.form.tenantIds = [];
   checkRevertTIds.value = false;
-}
+};
 
 const handleCheckRevertTIds = () => {
-  if(true){
-    const oldArray = [...props.form.tenantIds];
+  if (true) {
+    const oldArray = [...(props.form.tenantIds as number[])];
     props.form.tenantIds = props.tenantList
-    .filter(_ => !oldArray.includes(_.id))
-    .map(_ => _.id)
+      .filter(_ => !oldArray.includes(_.id))
+      .map(_ => _.id);
   }
-}
+};
 
-// watch, handleCheckAllTags, handleRemoveAllTags & handleCheckRevertTags for label list attribute
 watch(
   () => props.form.attributeLabelList,
   val => {
-    if(!val || val.length === 0){
+    if (!val || val.length === 0) {
       checkAllTags.value = false;
-    } else if(val.length === props.labelList.attr.length){
+    } else if (val.length === props.labelList.attr.length) {
       checkAllTags.value = true;
       removeAllTags.value = false;
     }
-  },
-)
+  }
+);
 
 const handleCheckAllTags = (val: CheckboxValueType) => {
-  if(val){
-    props.form.attributeLabelList = props.labelList.attr.map(_ => _.id)
+  if (val) {
+    props.form.attributeLabelList = props.labelList.attr.map(_ => _.id);
     removeAllTags.value = false;
   } else {
     props.form.attributeLabelList = [];
   }
-}
+};
 
-const handleRemoveAllTags = (val: CheckboxValueType) => {
+const handleRemoveAllTags = () => {
   props.form.attributeLabelList = [];
   checkRevertTags.value = false;
-}
+};
 
 const handleCheckRevertTags = () => {
-  if(true){
+  if (true) {
     const oldArray = [...props.form.attributeLabelList];
     props.form.attributeLabelList = props.labelList.attr
-    .filter(_ => !oldArray.includes(_.id))
-    .map(_ => _.id)
+      .filter(_ => !oldArray.includes(_.id))
+      .map(_ => _.id);
   }
-}
-
+};
 
 const form = ref(props.form);
-const formatterUserNames = v => {
+const formatterUserNames = (v: string) => {
   const l = new Set(v.split(','));
   userIds.length = 0;
   userIds.push(...(Array.from(l) as string[]));
   return v;
 };
-const formatterTxt = v => {
-  const l = new Set(v.split(','));
-  idList.length = 0;
-  idList.push(...(Array.from(l) as string[]));
-  return v;
-};
+
 const selectDate = ref<string[]>(['', '']);
 
+<<<<<<<<< Temporary merge branch 1
+=========
 const changeDate = (t: string[]) => {
   if (!t) {
     form.value.beginTime = '';
@@ -376,6 +407,7 @@ const changeDate = (t: string[]) => {
     form.value.endTime = dayjs(t[1]).valueOf();
   }
 };
+>>>>>>>>> Temporary merge branch 2
 const getLimmitLevelList = async () => {
   const res = await API.getLimitListDropDownBox();
   if (res.code) return;

@@ -16,7 +16,7 @@ import { addDialog, closeDialog } from '@/components/ReDialog';
 import { pageSizeArr } from '@/utils/math';
 import UploadForm from '../component/UploadForm.vue';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
-
+import dayJs from "dayjs";
 export function userPlayerListHook(venueType: number, category: number) {
   const { openPasswordInput } = usePasswordInputHook();
   const { exportDialog } = usePublicHooks();
@@ -63,6 +63,7 @@ export function userPlayerListHook(venueType: number, category: number) {
     betDelayed: ' ',
     specialLimited:' ',
     currency:' ',
+    timeType: "2",
   } as searchFormType);
 
   const recordForm = reactive<recordFormType>({} as recordFormType);
