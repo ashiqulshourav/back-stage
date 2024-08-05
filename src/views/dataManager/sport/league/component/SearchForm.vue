@@ -16,11 +16,6 @@
     :searchLoading="loading"
     :rowProps="{ gutter: 20 }"
   >
-    <!-- :colProps="{
-      xl: locale === 'zh' ? 5 : 5,
-      lg: locale === 'zh' ? 5 : 5,
-      md: locale === 'zh' ? 5 : 5
-    }" -->
     <template
       #footer="{ handleReset, handleSearch, handleUnfold, isShowUnfold }"
     >
@@ -98,6 +93,7 @@ const selfForm = ref<FieldValues>(props.form);
 const defaultValue = ref<FieldValues>(JSON.parse(JSON.stringify(props.form)));
 const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
 const matchStore = useMatchStore();
+
 //- 联赛更改
 const chagenMatchType = (type: 0 | 1 | 2) => {
   props.form.sportId = '';
@@ -137,8 +133,8 @@ const columns: PlusColumn[] = [
     prop: 'sportId',
     valueType: 'select',
     fieldProps: {
-      placeholder: t('赛种'),
-      onChange: chagenMatchType
+      placeholder: t('赛种')
+      // onChange: chagenMatchType
     },
     options: computed(() => gameClassify.value)
   },
@@ -149,11 +145,6 @@ const columns: PlusColumn[] = [
     fieldProps: {
       placeholder: t('联赛等级')
     },
-    // fieldProps: computed(() => {
-    //   return {
-    //     disabled: props.form.category !== 1 && props.form.sportId === ''
-    //   };
-    // }),
     options: computed(() => {
       const sportidMap = { 1: 0, 2: 1 };
       let list = [];
