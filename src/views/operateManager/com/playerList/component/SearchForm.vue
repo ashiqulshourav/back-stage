@@ -172,43 +172,48 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item prop="timeType">
-        <el-select
-          v-model="form.timeType"
-          class="!w-[140px]"
-          @change="search"
       <el-form-item prop="currency" :label="t('结算币种:')">
         <el-select
-          v-model="form.currency"
-          clearable
-          class="!w-[150px]"
-        >
-          <el-option label="全部" value=" "></el-option>
-          <el-option
-            :label="value"
-            :value="Number(key)"
-            v-for="[key, value] in Object.entries(CURRENCY_TYPE)"
-            :key="value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item :label="t('特殊限额:')" prop="specialLimited">
-        <el-select
-            v-model="form.betDelayed"
-            :placeholder="t('特殊限额')"
+            v-model="form.currency"
             clearable
             class="!w-[150px]"
         >
-          <el-option :label="t('用户修改时间')" value="2" />
+          <el-option label="全部" value=" "></el-option>
+          <el-option
+              :label="item.label"
+              :value="item.value"
+              v-for="item in currency_map"
+              :key="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item prop="specialLimited" :label="t('特殊限额:')">
+        <el-select
+            v-model="form.currency"
+            clearable
+            class="!w-[150px]"
+        >
+          <el-option label="全部" value=" "></el-option>
+          <el-option label="是" :value="1"></el-option>
+          <el-option label="不是" :value="2"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item prop="timeType">
+        <el-select
+            v-model="form.timeType"
+            class="!w-[140px]"
+            @change="search"
+        >
           <el-option :label="t('用户注册时间')" value="1" />
+          <el-option :label="t('用户修改时间')" value="2" />
         </el-select>
         <CustomDate
-          v-model:val="selectDate"
-          start-placeholder="开始时间"
-          end-placeholder="结束时间"
-          @changeDate="changeDate"
-          :isDateTime="true"
-          :format="'YYYY-MM-DD HH:mm:ss'"
+            v-model:val="selectDate"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            @changeDate="changeDate"
+            :isDateTime="true"
+            :format="'YYYY-MM-DD HH:mm:ss'"
         />
       </el-form-item>
       <el-form-item>
@@ -249,7 +254,10 @@ import { labelListType } from '../utils/types';
 import type { FormInstance, CheckboxValueType } from 'element-plus';
 import Download from '@iconify-icons/ep/download';
 import Upload from '@iconify-icons/ep/upload';
+import dayjs from "dayjs";
+import CustomDate from '@/components/Form/Custom_date.vue';
 import { hasAuth } from '@/router/utils';
+import {currency_map} from "@/utils/maps/currency_map";
 
 const formRef = ref();
 const buttonRef1 = ref();
