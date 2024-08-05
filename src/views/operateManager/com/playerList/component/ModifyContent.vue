@@ -14,6 +14,7 @@
       </div>
       <div class="flex-grow ml-4 mr-40">
         <el-tree-select
+          class="!min-w-52"
           v-model="sportIdsData"
           :data="SPORT_ID_MAP"
           filterable
