@@ -82,6 +82,7 @@
         <el-form-item :label="`${t('赛种')}:`" prop="sportId">
           <el-select
             v-model="form.sportId"
+            :disabled="form.category===' '"
             :placeholder="t('赛种')"
             class="!w-[180px]"
             @change="search"
