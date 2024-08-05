@@ -2,8 +2,13 @@
   <div class="main">
     <div class="mb-5">
       <span class="font-bold">{{ t('单关限额列表') }}</span>
-      <div class="flex justify-between item-center mb-4">
-        <div class="flex mt-4 flex-wrap w-full">
+      <div class="mt-4">
+        <el-radio-group v-model="currency"  @change="onCurrencyChange">
+          <el-radio-button v-for="item in CURRENCY_LIST_MAP" :value="item.value" :key="item.value" :label="item.label">{{ item.label }}</el-radio-button>
+        </el-radio-group>
+      </div>
+      <div class="flex justify-between item-center mb-4 mt-4">
+        <div class="flex flex-wrap w-full">
           <CustomButton
             class="mb-2 !ml-0 mr-2"
             v-for="item in SPORT_LIST_MAP"
@@ -24,11 +29,6 @@
             t('确认')
           }}</el-button>
         </div>
-      </div>
-      <div>
-        <el-radio-group v-model="currency" style="margin-bottom: 30px" @change="onCurrencyChange">
-          <el-radio-button v-for="item in CURRENCY_LIST_MAP" :value="item.value" :key="item.value" :label="item.label">{{ item.label }}</el-radio-button>
-        </el-radio-group>
       </div>
       <pure-table
         height="700"

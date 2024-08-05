@@ -17,17 +17,11 @@
     <template #operateBefore="{ row }">
       <el-text class="whitespace-pre-wrap">
         {{ row.operateBefore ?  row.operateBefore : "-"}}
-        <span :class="row.operateBefore !== row.operateAfter?'text-red-400 block':''">
-          {{ row.operateBefore !== row.operateAfter ? "Open" : ""}}
-        </span>
       </el-text>
     </template>
     <template #operateAfter="{ row }">
       <el-text class="whitespace-pre-wrap">
         {{ row.operateAfter ?  row.operateAfter : "-"}}
-        <span :class="row.operateBefore !== row.operateAfter?'text-red-400 block':''">
-          {{ row.operateBefore !== row.operateAfter ? "Closure" : ""}}
-        </span>
       </el-text>
     </template>
   </pure-table>

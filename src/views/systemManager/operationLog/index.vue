@@ -57,9 +57,6 @@
               v-if="row.operateBefore.split('\n').length <= 3"
               class="whitespace-pre-wrap">
               {{ row.operateBefore ?  row.operateBefore : "-"}}
-              <span :class="row.operateBefore !== row.operateAfter?'text-red-400 block':''">
-                {{ row.operateBefore !== row.operateAfter ? "Open" : ""}}
-              </span>
             </span>
             <el-button
               v-else
@@ -75,9 +72,6 @@
               v-if="row.operateAfter.split('\n').length <= 3"
               class="whitespace-pre-wrap">
               {{ row.operateAfter ?  row.operateAfter : "-"}}
-              <span :class="row.operateBefore !== row.operateAfter?'text-red-400 block':''">
-                {{ row.operateBefore !== row.operateAfter ? "Closure" : ""}}
-              </span>
             </el-text>
             <el-button
               v-else
