@@ -225,8 +225,8 @@
           class="!w-[110px]"
           @change="search"
         >
-          <el-option :label="t('注册时间')" :value="1" />
-          <el-option :label="t('修改时间')" :value="2" />
+          <el-option :label="t('用户注册时间')" :value="1" />
+          <el-option :label="t('用户修改时间')" :value="2" />
         </el-select>
         <CustomDate
           v-model:val="selectDate"
