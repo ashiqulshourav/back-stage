@@ -157,7 +157,7 @@
       <el-form-item prop="timeType">
         <el-select
           v-model="form.timeType"
-          class="!w-[110px]"
+          class="!w-[140px]"
           @change="search"
         >
           <el-option :label="t('用户注册时间')" value="1" />
