@@ -49,7 +49,7 @@ export function userPlayerListHook(venueType: number, category: number) {
     currentPage: 1,
     background: true,
     pageSizes: pageSizeArr
-  });s
+  });
 
   const recordPagination = reactive<PaginationProps>({
     total: 0,
@@ -61,7 +61,7 @@ export function userPlayerListHook(venueType: number, category: number) {
   const form = reactive<searchFormType>({
     // beginTime: dayjs().subtract(30, 'day').startOf('day').valueOf(),
     // endTime: dayjs().endOf('day').valueOf(),
-    timeType: 2,
+    timeType: "2",
   } as searchFormType);
 
   const recordForm = reactive<recordFormType>({} as recordFormType);
