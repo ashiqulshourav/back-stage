@@ -396,8 +396,7 @@ const formatterUserNames = (v: string) => {
 
 const selectDate = ref<string[]>(['', '']);
 
-<<<<<<<<< Temporary merge branch 1
-=========
+
 const changeDate = (t: string[]) => {
   if (!t) {
     form.value.beginTime = '';
@@ -407,7 +406,7 @@ const changeDate = (t: string[]) => {
     form.value.endTime = dayjs(t[1]).valueOf();
   }
 };
->>>>>>>>> Temporary merge branch 2
+
 const getLimmitLevelList = async () => {
   const res = await API.getLimitListDropDownBox();
   if (res.code) return;
