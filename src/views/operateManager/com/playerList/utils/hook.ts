@@ -16,7 +16,6 @@ import { addDialog, closeDialog } from '@/components/ReDialog';
 import { pageSizeArr } from '@/utils/math';
 import UploadForm from '../component/UploadForm.vue';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
-import dayjs from 'dayjs';
 
 export function userPlayerListHook(venueType: number, category: number) {
   const { openPasswordInput } = usePasswordInputHook();
@@ -60,11 +59,10 @@ export function userPlayerListHook(venueType: number, category: number) {
     currentPage: 1,
     background: true
   });
-  //form data
   const form = reactive<searchFormType>({
-    // beginTime: dayjs().subtract(30, 'day').startOf('day').valueOf(),
-    // endTime: dayjs().endOf('day').valueOf(),
-    timeType: "2",
+    betDelayed: ' ',
+    specialLimited:' ',
+    currency:' ',
   } as searchFormType);
 
   const recordForm = reactive<recordFormType>({} as recordFormType);
@@ -280,7 +278,6 @@ export function userPlayerListHook(venueType: number, category: number) {
       tenantList.map(item => {
         tenantObj[item.id] = item;
       });
-      console.log('hook.ts文件 279==============行打印=', tenantObj);
     }
   };
 

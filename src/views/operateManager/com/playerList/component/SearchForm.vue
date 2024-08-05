@@ -171,14 +171,30 @@
         </el-select>
       </el-form-item>
       <el-form-item prop="currency" :label="t('结算币种:')">
-        <el-select v-model="form.currency" clearable class="!w-[150px]">
-          <el-option label="全部" value=""></el-option>
+        <el-select
+          v-model="form.currency"
+          clearable
+          class="!w-[150px]"
+        >
+          <el-option label="全部" value=" "></el-option>
           <el-option
             :label="value"
             :value="Number(key)"
             v-for="[key, value] in Object.entries(CURRENCY_TYPE)"
             :key="value"
           />
+        </el-select>
+      </el-form-item>
+      <el-form-item :label="t('特殊限额:')" prop="specialLimited">
+        <el-select
+            v-model="form.betDelayed"
+            :placeholder="t('特殊限额')"
+            clearable
+            class="!w-[150px]"
+        >
+          <el-option :label="t('全部')" :value="' '" />
+          <el-option :label="t('是')" :value="1" />
+          <el-option :label="t('不是')" :value="2" />
         </el-select>
       </el-form-item>
       <el-form-item
@@ -245,7 +261,7 @@
           v-if="hasAuth('EXPORT')"
           @click="exportFile()"
         >
-          {{ t('导出列表') }}
+          {{ t('导出') }}
         </el-button>
       </el-form-item>
     </el-form>
@@ -414,15 +430,6 @@ const formatterUserNames = (v: string) => {
 
 const selectDate = ref<string[]>(['', '']);
 
-const changeDate = (t: string[]) => {
-  if (!t) {
-    form.value.beginTime = '';
-    form.value.endTime = '';
-  } else {
-    form.value.beginTime = dayjs(t[0]).valueOf();
-    form.value.endTime = dayjs(t[1]).valueOf();
-  }
-};
 const getLimmitLevelList = async () => {
   const res = await API.getLimitListDropDownBox();
   if (res.code) return;
@@ -434,8 +441,6 @@ const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.resetFields();
   selectDate.value = ['', ''];
-  form.value.beginTime = '';
-  form.value.endTime = '';
   emits('onSearch', 'reload');
 };
 
