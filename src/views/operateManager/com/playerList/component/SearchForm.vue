@@ -176,13 +176,25 @@
           clearable
           class="!w-[150px]"
         >
-          <el-option label="全部" value=""></el-option>
+          <el-option label="全部" value=" "></el-option>
           <el-option
             :label="value"
             :value="Number(key)"
             v-for="[key, value] in Object.entries(CURRENCY_TYPE)"
             :key="value"
           />
+        </el-select>
+      </el-form-item>
+      <el-form-item :label="t('特殊限额:')" prop="specialLimited">
+        <el-select
+            v-model="form.betDelayed"
+            :placeholder="t('特殊限额')"
+            clearable
+            class="!w-[150px]"
+        >
+          <el-option :label="t('全部')" :value="' '" />
+          <el-option :label="t('是')" :value="1" />
+          <el-option :label="t('不是')" :value="2" />
         </el-select>
       </el-form-item>
       <el-form-item :label="t('投注延时:')" prop="betDelayed">
@@ -210,14 +222,6 @@
           {{ t('重置') }}
         </el-button>
 
-        <!-- <el-button
-          type="primary"
-          :icon="useRenderIcon(Upload)"
-          :loading="uploading"
-          @click="importFile(t('数据导入'))"
-        >
-          {{ t('导入标签') }}
-        </el-button> -->
         <el-button
           type="primary"
           :icon="useRenderIcon(Download)"
