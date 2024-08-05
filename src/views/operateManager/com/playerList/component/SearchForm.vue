@@ -192,13 +192,25 @@
           clearable
           class="!w-[150px]"
         >
-          <el-option :label="t('用户注册时间')" value="1" />
-          <el-option :label="t('用户修改时间')" value="2" />
+          <el-option :label="t('全部')" :value="' '" />
+          <el-option :label="t('是')" :value="1" />
+          <el-option :label="t('不是')" :value="2" />
+        </el-select>
+      </el-form-item>
+      <el-form-item prop="timeType">
+        <el-select v-model="form.timeType" class="!w-[110px]" @change="search">
+          <el-option :label="t('注册时间')" value="1" />
+          <el-option :label="t('修改时间')" value="2" />
         </el-select>
         <CustomDate
           v-model:val="selectDate"
-          start-placeholder="开始时间"
-          end-placeholder="结束时间"
+          :start-placeholder="
+            dayjs()
+              .subtract(30, 'day')
+              .startOf('day')
+              .format('YYYY-MM-DD HH:mm:ss')
+          "
+          :end-placeholder="dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')"
           @changeDate="changeDate"
           :isDateTime="true"
           :format="'YYYY-MM-DD HH:mm:ss'"
