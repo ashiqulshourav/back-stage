@@ -97,6 +97,16 @@
       />
     </el-form-item>
 
+    <el-form-item prop="trans_no" :label="t('注单号:')">
+      <el-input
+        v-model="form.trans_no"
+        :placeholder="t('请输入商户编码')"
+        v-enter="search"
+        clearable
+        class="!w-[200px]"
+      />
+    </el-form-item>
+
     <el-form-item>
       <el-button :icon="useRenderIcon(RefreshIcon)" @click="resetForm(formRef)">
         {{ t('重置') }}
@@ -206,6 +216,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
   selectDate.value = '';
   props.form.startCreatedAt = '';
   props.form.endCreatedAt = '';
+  props.form.trans_no = '';
   // props.form.startCreatedAt = dayjs()
   //   .startOf('month')
   //   .format('YYYY-MM-DD HH:mm:ss');

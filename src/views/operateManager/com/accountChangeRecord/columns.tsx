@@ -77,6 +77,11 @@ export const columns: TableColumnList = [
     formatter: ({ updatedAt }) => dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss')
   },
   {
+    label: t('注单号'),
+    prop: 'transNo',
+    minWidth: 200,
+  },
+  {
     label: t('备注'),
     minWidth: 100,
     prop: 'remark'
