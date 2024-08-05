@@ -28,22 +28,7 @@
           </div>
         </el-popover>
       </el-form-item>
-      <!-- <el-form-item prop="tenantIds" :label="t('商户:')">
-        <el-select
-          v-model="form.tenantIds"
-          :placeholder="t('所属商户')"
-          clearable
-          multiple
-          class="!w-[150px]"
-        >
-          <el-option
-            :label="item.tenantName"
-            :value="item.id"
-            v-for="item in tenantList"
-            :key="item.name"
-          />
-        </el-select>
-      </el-form-item> -->
+
       <el-form-item prop="tenantIds" :label="t('商户:')">
         <el-tree-select
           :placeholder="t('所属商户')"
@@ -87,21 +72,6 @@
           class="!w-[120px]"
         />
       </el-form-item>
-      <!-- <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
-        <el-select
-          multiple
-          clearable
-          class="!w-[150px]"
-          v-model="form.riskControlLabelList"
-        >
-          <el-option
-            v-for="label in labelList.risk"
-            :key="label.id"
-            :label="label.name"
-            :value="label.id"
-          />
-        </el-select>
-      </el-form-item>  -->
       <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
         <el-tree-select
           v-model="props.form.riskControlLabelList"
@@ -135,21 +105,7 @@
           </template>
         </el-tree-select>
       </el-form-item>
-      <!-- <el-form-item prop="attributeLabelList" :label="t('属性标签:')">
-        <el-select
-          multiple
-          clearable
-          class="!w-[150px]"
-          v-model="form.attributeLabelList"
-        >
-          <el-option
-            v-for="label in labelList.attr"
-            :key="label.id"
-            :label="label.name"
-            :value="label.id"
-          />
-        </el-select>
-      </el-form-item> -->
+
       <el-form-item prop="attributeLabelList" :label="t('属性标签:')">
         <el-tree-select
           v-model="props.form.attributeLabelList"
@@ -198,27 +154,6 @@
           />
         </el-select>
       </el-form-item>
-      <!--      <el-form-item prop="" label="日期范围选择:">
-        <Custom_date v-model:val="selectDate" @changeDate="changeDate" />
-      </el-form-item>-->
-      <!-- <el-form-item>
-        <el-button
-          type="primary"
-          :icon="useRenderIcon(Search)"
-          :loading="loading"
-          @click="search"
-          v-if="hasAuth('QUERY')"
-        >
-          {{ t('筛选') }}
-        </el-button>
-        <el-button
-          v-if="hasAuth('QUERY')"
-          :icon="useRenderIcon(Refresh)"
-          @click="resetForm(formRef)"
-        >
-          {{ t('重置') }}
-        </el-button>
-      </el-form-item> -->
       <el-form-item prop="timeType">
         <el-select
           v-model="form.timeType"
