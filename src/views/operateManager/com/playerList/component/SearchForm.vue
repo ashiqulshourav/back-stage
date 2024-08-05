@@ -28,6 +28,7 @@
           </div>
         </el-popover>
       </el-form-item>
+
       <el-form-item prop="tenantIds" :label="t('商户:')">
         <el-tree-select
           :placeholder="t('所属商户')"
@@ -115,6 +116,7 @@
           </template>
         </el-tree-select>
       </el-form-item>
+
       <el-form-item prop="attributeLabelList" :label="t('属性标签:')">
         <el-tree-select
           v-model="props.form.attributeLabelList"
@@ -170,6 +172,11 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item prop="timeType">
+        <el-select
+          v-model="form.timeType"
+          class="!w-[140px]"
+          @change="search"
       <el-form-item prop="currency" :label="t('结算币种:')">
         <el-select
           v-model="form.currency"
@@ -192,22 +199,17 @@
             clearable
             class="!w-[150px]"
         >
-          <el-option :label="t('全部')" :value="' '" />
-          <el-option :label="t('是')" :value="1" />
-          <el-option :label="t('不是')" :value="2" />
+          <el-option :label="t('用户修改时间')" value="2" />
+          <el-option :label="t('用户注册时间')" value="1" />
         </el-select>
-      </el-form-item>
-      <el-form-item :label="t('投注延时:')" prop="betDelayed">
-        <el-select
-          v-model="form.betDelayed"
-          :placeholder="t('投注延时')"
-          clearable
-          class="!w-[150px]"
-        >
-          <el-option :label="t('全部')" :value="' '" />
-          <el-option :label="t('是')" :value="1" />
-          <el-option :label="t('不是')" :value="2" />
-        </el-select>
+        <CustomDate
+          v-model:val="selectDate"
+          start-placeholder="开始时间"
+          end-placeholder="结束时间"
+          @changeDate="changeDate"
+          :isDateTime="true"
+          :format="'YYYY-MM-DD HH:mm:ss'"
+        />
       </el-form-item>
       <el-form-item>
         <el-button
@@ -248,7 +250,6 @@ import type { FormInstance, CheckboxValueType } from 'element-plus';
 import Download from '@iconify-icons/ep/download';
 import Upload from '@iconify-icons/ep/upload';
 import { hasAuth } from '@/router/utils';
-import { CURRENCY_TYPE } from '../utils/map';
 
 const formRef = ref();
 const buttonRef1 = ref();
@@ -396,6 +397,15 @@ const formatterUserNames = (v: string) => {
 
 const selectDate = ref<string[]>(['', '']);
 
+const changeDate = (t: string[]) => {
+  if (!t) {
+    form.value.beginTime = '';
+    form.value.endTime = '';
+  } else {
+    form.value.beginTime = dayjs(t[0]).format('YYYY-MM-DD');
+    form.value.endTime = dayjs(t[1]).format('YYYY-MM-DD');
+  }
+};
 const getLimmitLevelList = async () => {
   const res = await API.getLimitListDropDownBox();
   if (res.code) return;
@@ -407,6 +417,8 @@ const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.resetFields();
   selectDate.value = ['', ''];
+  form.value.beginTime = '';
+  form.value.endTime = '';
   emits('onSearch', 'reload');
 };
 
