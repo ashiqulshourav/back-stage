@@ -608,4 +608,10 @@ const {
   justify-content: center;
   width: 100%;
 }
+.mw-250{
+  min-width: 250px!important;
+}
+.mw-230{
+  min-width: 230px!important;
+}
 </style>

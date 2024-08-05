@@ -18,7 +18,7 @@ export const columns: TableColumnList = [
     slot: 'betMessage',
     minWidth: 100,
     align:'left',
-    className: 'getParent',
+    className: 'getParent mw-250px',
   },
   {
     label: t("赛事信息"),
@@ -33,7 +33,7 @@ export const columns: TableColumnList = [
     slot: 'betItem',
     minWidth: 200,
     align:'left',
-    className: 'betItem',
+    className: 'betItem getParent',
   },
 
   {

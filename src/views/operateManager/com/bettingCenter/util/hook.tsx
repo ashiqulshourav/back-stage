@@ -58,7 +58,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     betItemId: '',
     isInplay: '',
     seriesType: '',
-    category: '',
+    category: ' ',
     timeType: 1,
     leagueName: '',
     tenantIds: [],
