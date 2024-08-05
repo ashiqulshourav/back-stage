@@ -28,6 +28,7 @@
           </div>
         </el-popover>
       </el-form-item>
+
       <el-form-item prop="tenantIds" :label="t('商户:')">
         <el-tree-select
           :placeholder="t('所属商户')"
@@ -115,6 +116,7 @@
           </template>
         </el-tree-select>
       </el-form-item>
+
       <el-form-item prop="attributeLabelList" :label="t('属性标签:')">
         <el-tree-select
           v-model="props.form.attributeLabelList"
@@ -170,7 +172,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item prop="currency" :label="t('结算币种:')">
+      <el-form-item prop="timeType">
         <el-select
           v-model="form.currency"
           clearable
@@ -214,22 +216,21 @@
         </el-select>
       </el-form-item>
       <el-form-item prop="timeType">
-        <el-select v-model="form.timeType" class="!w-[110px]" @change="search">
-          <el-option :label="t('注册时间')" value="1" />
-          <el-option :label="t('修改时间')" value="2" />
+        <el-select
+            v-model="form.timeType"
+            class="!w-[110px]"
+            @change="search"
+        >
+          <el-option :label="t('用户注册时间')" value="1" />
+          <el-option :label="t('用户修改时间')" value="2" />
         </el-select>
         <CustomDate
-          v-model:val="selectDate"
-          :start-placeholder="
-            dayjs()
-              .subtract(30, 'day')
-              .startOf('day')
-              .format('YYYY-MM-DD HH:mm:ss')
-          "
-          :end-placeholder="dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')"
-          @changeDate="changeDate"
-          :isDateTime="true"
-          :format="'YYYY-MM-DD HH:mm:ss'"
+            v-model:val="selectDate"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            @changeDate="changeDate"
+            :isDateTime="true"
+            :format="'YYYY-MM-DD HH:mm:ss'"
         />
       </el-form-item>
 
