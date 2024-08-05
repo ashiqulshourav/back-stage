@@ -170,7 +170,11 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item :label="t('投注延时:')" prop="betDelayed">
+      <el-form-item
+        :label="t('投注延时:')"
+        prop="betDelayed"
+        v-if="hasAuth('viewBetDelay'.toUpperCase())"
+      >
         <el-select
           v-model="form.betDelayed"
           :placeholder="t('投注延时')"
@@ -182,6 +186,7 @@
           <el-option :label="t('不是')" :value="2" />
         </el-select>
       </el-form-item>
+
       <el-form-item>
         <el-button
           type="primary"
