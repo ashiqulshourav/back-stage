@@ -1,9 +1,27 @@
 import { t } from '@/plugins/i18n';
+import { h } from 'vue';
+import { ElTooltip, ElIcon } from 'element-plus';
+import { InfoFilled } from '@element-plus/icons-vue';
+
+const addTooltip = (labelText: string, tooltipContent: string) => {
+  return h('div', { class: 'flex items-center justify-center' }, [
+    h('span', labelText),
+    h(ElTooltip, 
+      { 
+        content: tooltipContent,
+        placement: 'top',
+      }, {
+      default: () => h(ElIcon, { class: 'ml-1 cursor-pointer'}, [
+        h(InfoFilled)
+      ])
+    })
+  ]);
+};
 
 export const columns: TableColumnList = [
   {
-    label: t('用户限额等级'),
-    prop: 'levelLimit'
+    label: addTooltip(t('用户限额等级'), "Hello"),
+    prop: 'levelLimit',
   },
   {
     label: t('单注投注限额'),
