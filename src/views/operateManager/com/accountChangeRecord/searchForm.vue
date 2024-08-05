@@ -87,14 +87,22 @@
     </el-form-item>
 
     <el-form-item :label="`${t('账变时间')}:`" prop="createTimeStart">
-      <el-date-picker
+      <!-- <el-date-picker
         type="datetimerange"
         format="YYYY-MM-DD HH:mm:ss"
         v-model="selectDate"
         :start-placeholder="dayjs().startOf('month').format('YYYY-MM-DD')"
         :end-placeholder="dayjs().endOf('day').format('YYYY-MM-DD')"
         @change="changeDate"
-      />
+      /> -->
+        <CustomDate
+          v-model:val="selectDate"
+          @changeDate="changeDate"
+          :start-placeholder="form.startCreatedAt ? dayjs(form.startCreatedAt)?.format('YYYY-MM-DD HH:mm:ss') : '选择开始时间'"
+          :end-placeholder="form.endCreatedAt ? dayjs(form.endCreatedAt)?.format('YYYY-MM-DD HH:mm:ss') : '选择结束时间'"
+          :isDateTime="true"
+          :format="'YYYY-MM-DD HH:mm:ss'"
+      ></CustomDate>
     </el-form-item>
 
     <el-form-item prop="trans_no" :label="t('注单号:')">
@@ -134,6 +142,7 @@ import { accountChangeRecordSearchFormType, userDataType } from './util/types';
 import { accountChangeTypeCodeList } from './columns';
 import { addThousandSeparator } from '@/utils/formatNumber';
 import { hasAuth } from '@/router/utils';
+import CustomDate from "@/components/Form/Custom_date.vue"
 
 const props = defineProps<{
   loading: boolean;
