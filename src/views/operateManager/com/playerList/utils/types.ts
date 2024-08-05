@@ -9,7 +9,7 @@ export type searchFormType = {
   venueType?: number;
   offset?: number;
   timeVal?: string | number;
-  timeType?: number;
+  timeType?: number | string;
   beginTime?: string | number;
   endTime?: string | number;
 };
