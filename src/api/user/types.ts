@@ -129,7 +129,7 @@ declare namespace UserAPI {
     limitLevel?: number;
     maxWinAmountLimit: number;
     productAmountTotalLimit: number;
-    percentageLimit: string | null;
+    percentageLimit?: string;
     singleEventAccumulatedCompensationLimit: number;
     seriesSingleDayCumulativeCompensationLimit: number;
     attributeLabelList: labelType[];
