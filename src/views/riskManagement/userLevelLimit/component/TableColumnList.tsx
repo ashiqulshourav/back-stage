@@ -20,7 +20,7 @@ const addTooltip = (labelText: string, tooltipContent: string) => {
 
 export const columns: TableColumnList = [
   {
-    label: addTooltip(t('用户限额等级'), "Hello"),
+    label: t('用户限额等级'),
     prop: 'levelLimit',
   },
   {
@@ -32,21 +32,21 @@ export const columns: TableColumnList = [
     slot: 'maxWinAmountLimit'
   },
   {
-    label: t('单场赛事累计赔付限额(不分早盘滚球)'),
+    label: addTooltip(t('单场赛事累计赔付限额(不分早盘滚球)'), t('单场(早盘+滚球)，累计赔付')),
     slot: 'userSingleGamePay',
     width: 150
   },
   {
-    label: t('单关单日累计赔付'),
+    label: addTooltip(t('单关单日累计赔付'), t('单日（早盘＋滚球），累计赔付')),
     slot: 'singleMatchPay'
   },
   {
-    label: t('串关单日累计赔付限额(不分早盘滚球)'),
+    label: addTooltip(t('串关单日累计赔付限额(不分早盘滚球)'), t('单日（早盘＋滚球），累计赔付')),
     slot: 'bunchMatchPay',
     width: 150
   },
   {
-    label: t('冠军单日累计赔付'),
+    label: addTooltip(t('冠军单日累计赔付'), t('单日累计赔付')),
     slot: 'championDailyPay'
   }
 ];
