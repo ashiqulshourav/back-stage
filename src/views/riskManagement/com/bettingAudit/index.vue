@@ -664,7 +664,9 @@ onUpdated (() => {
     }
   }
 }
-.user_detail,
+.user_detail{
+  min-width: 210px
+}
 .match_detail,
 .bet_detail {
   min-width: 250px;
@@ -747,5 +749,8 @@ onUpdated (() => {
   flex-direction: column;
   justify-content: center;
   // width: 100%;
+}
+.mw-230{
+  min-width: 230px!important;
 }
 </style>

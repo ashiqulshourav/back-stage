@@ -11,7 +11,7 @@ export type searchFormType = {
   timeVal?: string | number;
   betDelayed: number | string;
   currency?: number;
-  timeType?: number;
+  timeType?: number | string;
   beginTime?: string | number;
   endTime?: string | number;
 };
