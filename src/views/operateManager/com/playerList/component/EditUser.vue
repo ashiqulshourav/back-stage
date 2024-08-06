@@ -195,19 +195,17 @@
           </el-collapse-item>
 
           <el-collapse-item
-            :title="t('限额等级设置')"
+            :title="t('限额等级')"
             name="3"
             v-if="hasAuth('settingLimitLevel'.toUpperCase())"
           >
-            <p
-              @click="openLimitRecordDialog"
-              v-if="hasAuth('GETLABELLIST')"
-              class="text-primary text-right cursor-pointer mb-2"
-            >
-              {{ t('修改记录') }}>>
-            </p>
-            <div class="mb-2">
-              <el-select v-model="form.limitLevel" clearable>
+            <div class="mb-2 flex justify-between">
+              <el-select
+                size="small"
+                v-model="form.limitLevel"
+                clearable
+                class="!w-20"
+              >
                 <el-option
                   v-for="item in limitList"
                   :key="item.levelLimit"
@@ -215,6 +213,13 @@
                   :value="item.levelLimit"
                 />
               </el-select>
+              <p
+                @click="openLimitRecordDialog"
+                v-if="hasAuth('GETLABELLIST')"
+                class="text-primary text-right cursor-pointer mb-2"
+              >
+                {{ t('修改记录') }}>>
+              </p>
             </div>
             <pure-table
               maxHeight="500"
@@ -336,7 +341,7 @@
   </el-dialog>
 </template>
 
-<script setup lang="ts">
+<script setup lang="tsx">
 import { ref, watch } from 'vue';
 import { t } from '@/plugins/i18n';
 import { hasAuth } from '@/router/utils';
@@ -387,22 +392,37 @@ const limitColumns: TableColumnList = [
     label: t('单注赔付限额'),
     prop: 'maxWinAmountLimit'
   },
+
   {
-    label: t('单场赛事累计赔付限额(不分早盘滚球)'),
-    prop: 'userSingleGamePay'
+    label: t('单场赛事限额'),
+    prop: 'userSingleGamePay',
+    headerRenderer: () => {
+      return (
+        <div class="flex justify-center">
+          <DialogListTitle
+            title={t('单场赛事限额')}
+            iconColor="' '"
+            content={t('单场（早盘＋滚球），累计赔付')}
+          />
+        </div>
+      );
+    }
   },
-  // {
-  //   label: t('单关单日累计赔付'),
-  //   prop: 'singleMatchPay'
-  // },
   {
-    label: t('串关单日累计赔付限额(不分早盘滚球)'),
-    prop: 'bunchMatchPay'
+    label: t('串关限额'),
+    prop: 'bunchMatchPay',
+    headerRenderer: () => {
+      return (
+        <div class="flex  justify-center">
+          <DialogListTitle
+            title={t('串关限额')}
+            iconColor="' '"
+            content={t('单日（早盘＋滚球），累计赔付')}
+          />
+        </div>
+      );
+    }
   }
-  // {
-  //   label: t('冠军单日累计赔付'),
-  //   prop: 'championDailyPay'
-  // }
 ];
 
 const isEditUser = ref(props.isEditUser);
