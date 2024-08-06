@@ -9,6 +9,7 @@
     <template #title>
       <p class="pl-5 font-medium">{{ t('用户设置') }}</p>
     </template>
+
     <div class="p-5 max-h-[600px] h-[600px]">
       <el-scrollbar>
         <div class="flex items-center mt-2">
@@ -231,75 +232,80 @@
               :header-cell-style="tableHeaderStyleBlue"
             />
           </el-collapse-item>
+
           <el-collapse-item
             :title="t('特殊限额')"
             name="4"
             v-if="hasAuth('settingSepcialLimit'.toUpperCase())"
           >
-            <p
-              @click="openSpecialLimitDialog"
-              v-if="hasAuth('GETLABELLIST')"
-              class="text-primary text-right cursor-pointer mb-2"
-            >
-              {{ t('修改记录') }}>>
-            </p>
-            <el-radio-group v-model="isSpecial">
-              <el-radio class="w-full" :value="1">{{ t('无') }}</el-radio>
-              <el-radio class="w-full" :value="2">{{ t('例外限额') }}</el-radio>
-              <el-radio class="w-full" :value="3">{{
-                t('百分比限额')
-              }}</el-radio>
-            </el-radio-group>
+            <div class="flex justify-between">
+              <div>
+                <el-radio-group v-model="isSpecial">
+                  <div class="flex">
+                    <el-radio class="w-full" :value="1">{{ t('无') }}</el-radio>
+                    <el-radio class="w-full" :value="2">{{
+                      t('例外限额')
+                    }}</el-radio>
+                    <el-radio class="w-full" :value="3">{{
+                      t('百分比限额')
+                    }}</el-radio>
+                  </div>
+                </el-radio-group>
+              </div>
+              <p
+                @click="openSpecialLimitDialog"
+                v-if="hasAuth('GETLABELLIST')"
+                class="text-primary text-right cursor-pointer mb-2"
+              >
+                {{ t('修改记录') }}>>
+              </p>
+            </div>
 
-            <el-row
-              :gutter="5"
-              class="w-full items-center tex-xs"
+            <pure-table
+              maxHeight="500"
+              align-whole="center"
+              size="small"
               v-if="isSpecial === 2"
+              border
+              :data="tableData"
+              :columns="exceptionLimitColumns"
+              :header-cell-style="tableHeaderStyleBlue"
             >
-              <el-col :span="5" class="text-center">
-                <span>{{ t('单注投注限额') }}</span>
-              </el-col>
-              <el-col :span="5" class="text-center">
-                <span>{{ t('单注赔付限额') }}</span>
-              </el-col>
-              <el-col :span="7" class="text-center">
-                <span>{{ t('单场赛事累计赔付限额(不分早盘滚球)') }}</span>
-              </el-col>
-              <el-col :span="7" class="text-center">
-                <span>{{ t('串关单日累计赔付限额(不分早盘滚球)') }}</span>
-              </el-col>
-              <el-col :span="5" class="text-center">
+              <template #productAmountTotalLimit>
                 <el-input
                   v-model="form.specialLimit.productAmountTotalLimit"
                   :formatter="(v: string) => formatNumber(v, 13)"
                 />
-              </el-col>
-              <el-col :span="5" class="text-center">
+              </template>
+              <template #maxWinAmountLimit>
                 <el-input
                   v-model="form.specialLimit.maxWinAmountLimit"
                   :formatter="(v: string) => formatNumber(v, 13)"
                 />
-              </el-col>
-              <el-col :span="7" class="text-center">
+              </template>
+
+              <template #userSingleGamePay>
                 <el-input
                   v-model="
                     form.specialLimit.singleEventAccumulatedCompensationLimit
                   "
                   :formatter="(v: string) => formatNumber(v, 13)"
                 />
-              </el-col>
-              <el-col :span="7" class="text-center">
+              </template>
+
+              <template #bunchMatchPay>
                 <el-input
                   v-model="
                     form.specialLimit.seriesSingleDayCumulativeCompensationLimit
                   "
                   :formatter="(v: string) => formatNumber(v, 13)"
                 />
-              </el-col>
-            </el-row>
+              </template>
+            </pure-table>
+
             <el-row
               :gutter="5"
-              class="items-center text-xs"
+              class="items-center text-xs mt-4"
               v-if="isSpecial === 3"
             >
               <el-col class="text-center" :span="5">
@@ -313,6 +319,7 @@
               </el-col>
             </el-row>
           </el-collapse-item>
+
           <el-collapse-item :title="t('备注')">
             <el-input
               :placeholder="t('只能输入255个字符的内容')"
@@ -411,6 +418,48 @@ const limitColumns: TableColumnList = [
   {
     label: t('串关限额'),
     prop: 'bunchMatchPay',
+    headerRenderer: () => {
+      return (
+        <div class="flex  justify-center">
+          <DialogListTitle
+            title={t('串关限额')}
+            iconColor="' '"
+            content={t('单日（早盘＋滚球），累计赔付')}
+          />
+        </div>
+      );
+    }
+  }
+];
+
+const exceptionLimitColumns: TableColumnList = [
+  {
+    label: t('单注投注限额'),
+    slot: 'productAmountTotalLimit'
+  },
+  {
+    label: t('单注赔付限额'),
+    slot: 'maxWinAmountLimit'
+  },
+
+  {
+    label: t('单场赛事赔付'),
+    slot: 'userSingleGamePay',
+    headerRenderer: () => {
+      return (
+        <div class="flex justify-center">
+          <DialogListTitle
+            title={t('单场赛事赔付')}
+            iconColor="' '"
+            content={t('单场（早盘＋滚球），累计赔付')}
+          />
+        </div>
+      );
+    }
+  },
+  {
+    label: t('串关限额'),
+    slot: 'bunchMatchPay',
     headerRenderer: () => {
       return (
         <div class="flex  justify-center">
@@ -727,8 +776,6 @@ onUpdated(() => {
     attributeLabelList,
     percentageLimit
   } = props.userData;
-
-  console.log({ percentageLimit });
 
   form.id = id;
   form.isFreeze = isFreeze;
