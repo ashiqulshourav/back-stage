@@ -8,7 +8,39 @@
     <div class="flex">
       <div>
         <el-form-item :label="`${t('注单状态')}:`" prop="queryType">
-          <el-select
+          <el-tree-select              
+              v-model="form.queryType"
+              :data="Object.entries(betStatusMap).map(item => ({
+                value: Number(item[0]),
+                label: item[1]
+              }))"
+              @change="search"
+              filterable
+              clearable
+              multiple
+              collapse-tags
+              :render-after-expand="false"
+              show-checkbox
+              check-strictly
+              check-on-click-node
+              style="width: 180px"
+          >
+            <template #header>
+              <el-checkbox
+                  v-model="checkAllQueryTypeLabel"
+                  @change="handleCheckAllQueryTypeLabel"
+              >
+                {{ t('全选') }}
+              </el-checkbox>
+              <el-checkbox
+                  v-model="checkRevertQueryTypeLabel"
+                  @change="handleCheckRevertQueryTypeLabel"
+              >
+                {{ t('反选') }}
+              </el-checkbox>
+            </template>
+          </el-tree-select>    
+          <!-- <el-select
               class="!w-[180px]"
               :placeholder="t('请选择状态')"
               v-model="form.queryType"
@@ -20,7 +52,7 @@
                 :value="Number(item[0])"
                 :key="item[0]"
             />
-          </el-select>
+          </el-select> -->
         </el-form-item>
         <el-form-item :label="`${t('注单编号')}:`" prop="orderId">
           <el-input
@@ -80,7 +112,42 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('赛种')}:`" prop="sportId">
-          <el-select
+          <el-tree-select              
+              v-model="props.form.sportId"
+              :disabled="form.category===' '"
+              :data="
+              gameClassify.map(item => ({
+                value: item.value,
+                label: item.label
+              }))
+            "
+              @change="search"
+              filterable
+              clearable
+              multiple
+              collapse-tags
+              :render-after-expand="false"
+              show-checkbox
+              check-strictly
+              check-on-click-node
+              style="width: 180px"
+          >
+            <template #header>
+              <el-checkbox
+                  v-model="checkAllSportLabel"
+                  @change="handleCheckAllSportLabel"
+              >
+                {{ t('全选') }}
+              </el-checkbox>
+              <el-checkbox
+                  v-model="checkRevertSportLabel"
+                  @change="handleCheckRevertSportLabel"
+              >
+                {{ t('反选') }}
+              </el-checkbox>
+            </template>
+          </el-tree-select>          
+          <!-- <el-select
             v-model="form.sportId"
             :disabled="form.category===' '"
             :placeholder="t('赛种')"
@@ -94,10 +161,39 @@
               v-for="item in gameClassify"
               :key="item.value"
             />
-          </el-select>
+          </el-select> -->
         </el-form-item>
         <el-form-item :label="`${t('过关类型')}:`" prop="seriesType">
-          <el-select
+          <el-tree-select              
+              v-model="form.seriesType"
+              :data="seriesTypeList"
+              @change="search"
+              filterable
+              clearable
+              multiple
+              collapse-tags
+              :render-after-expand="false"
+              show-checkbox
+              check-strictly
+              check-on-click-node
+              style="width: 200px"
+          >
+            <template #header>
+              <el-checkbox
+                  v-model="checkAllSeriesTypeLabel"
+                  @change="handleCheckAllSeriesTypeLabel"
+              >
+                {{ t('全选') }}
+              </el-checkbox>
+              <el-checkbox
+                  v-model="checkRevertSeriesTypeLabel"
+                  @change="handleCheckSeriesSportLabel"
+              >
+                {{ t('反选') }}
+              </el-checkbox>
+            </template>
+          </el-tree-select>              
+          <!-- <el-select
             v-model="form.seriesType"
             clearable
             class="!w-[180px]"
@@ -107,7 +203,7 @@
             <el-option :label="t('单关')" :value="1" />
             <el-option :label="t('单式串关')" :value="2" />
             <el-option :label="t('复试串关')" :value="3" />
-          </el-select>
+          </el-select> -->
         </el-form-item>
         <el-form-item :label="`${t('单式串关类型')}:`"
           v-if="form.seriesType === 2"
@@ -290,13 +386,13 @@
               >
                 {{ t('全选') }}
               </el-checkbox>
-              <el-checkbox
+              <!-- <el-checkbox
                   v-mode="removeAllRLabel"
                   @change="handleRemoveAllRLabel"
                   :disabled="form?.riskControlLabelList.length == 0"
               >
                 {{ t('全不选') }}
-              </el-checkbox>
+              </el-checkbox> -->
               <el-checkbox
                   v-model="checkRevertRLabel"
                   @change="handleCheckRevertRLabel"
@@ -343,13 +439,13 @@
               >
                 {{ t('全选') }}
               </el-checkbox>
-              <el-checkbox
+              <!-- <el-checkbox
                   v-model="removeAllMName"
                   @change="handleRemoveAllMName"
                   :disabled="form?.tenantIds.length == 0"
               >
                 {{ t('全不选') }}
-              </el-checkbox>
+              </el-checkbox> -->
               <el-checkbox
                   v-model="checkRevertMName"
                   @change="handleCheckRevertMName"
@@ -405,7 +501,7 @@ import {
   ESPORT_ID_MAP,
   SPORT_CATEGORY
 } from '@/utils/maps/sports_map';
-import { searchFormType } from '../util/types';
+import { searchFormType, seriesTypeList } from '../util/types';
 import Download from '@iconify-icons/ep/download';
 import { useBetStore } from '@/store/bet';
 const matchStore = useMatchStore();
@@ -585,6 +681,19 @@ const checkAllRLabel = ref(false);
 const removeAllRLabel = ref(false);
 const checkRevertRLabel = ref(false);
 
+const checkAllSportLabel = ref(false);
+const removeAllSportLabel = ref(false);
+const checkRevertSportLabel = ref(false);
+
+
+const checkAllQueryTypeLabel = ref(false);
+const removeAllQueryTypeLabel = ref(false);
+const checkRevertQueryTypeLabel = ref(false);
+
+const checkAllSeriesTypeLabel = ref(false);
+const removeAllSeriesTypeLabel = ref(false);
+const checkRevertSeriesTypeLabel = ref(false);
+
 const handleCheckAllRLabel = (val: CheckboxValueType) => {
   if (val) {
     props.form.riskControlLabelList = props.riskLabelList.map(_ => _.id);
@@ -610,6 +719,54 @@ const handleCheckRevertRLabel = () => {
       .filter(_ => !oldArray.includes(_.id))
       .map(_ => _.id);
   }
+};
+
+const handleCheckAllSportLabel = (val: CheckboxValueType) => {
+  if (val) {
+    props.form.sportId = gameClassify.value.map(_ => _.value);
+    removeAllSportLabel.value = false;
+  } else {
+    props.form.sportId = [];
+  }
+};
+
+const handleCheckRevertSportLabel = () => {
+  const oldArray = [...props.form.sportId];
+  props.form.sportId = gameClassify.value
+    .filter(_ => !oldArray.includes(_.value))
+    .map(_ => _.value);
+};
+
+const handleCheckAllQueryTypeLabel = (val: CheckboxValueType) => {
+  if (val) {
+    props.form.queryType = Object.entries(betStatusMap).map(item => Number(item[0]));
+    removeAllQueryTypeLabel.value = false;
+  } else {
+    props.form.queryType = [];
+  }
+};
+
+const handleCheckRevertQueryTypeLabel = () => {
+  const oldArray = [...props.form.queryType];
+  props.form.queryType = Object.entries(betStatusMap)
+    .filter(item => !oldArray.includes(Number(item[0])))
+    .map(item => Number(item[0]));
+};
+
+const handleCheckAllSeriesTypeLabel = (val: CheckboxValueType) => {
+  if (val) {
+    props.form.seriesType = seriesTypeList.map(_ => _.value);
+    removeAllSeriesTypeLabel.value = false;
+  } else {
+    props.form.seriesType = [];
+  }
+};
+
+const handleCheckSeriesSportLabel = () => {
+  const oldArray = [...props.form.seriesType];
+  props.form.seriesType = seriesTypeList
+    .filter(_ => !oldArray.includes(_.value))
+    .map(_ => _.value);
 };
 
 watch(
