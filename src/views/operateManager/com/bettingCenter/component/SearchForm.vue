@@ -8,11 +8,11 @@
     <div class="flex">
       <div>
         <el-form-item :label="`${t('注单状态')}:`" prop="queryType">
-          <el-tree-select              
-              v-model="form.queryType"
-              :data="Object.entries(betStatusMap).map(item => ({
-                value: Number(item[0]),
-                label: item[1]
+          <el-tree-select
+              v-model="form.orderStatus"
+              :data="Object.keys(betStatusMap).map(key => ({
+                value:Number(key),
+                label:betStatusMap[key]
               }))"
               @change="search"
               filterable
@@ -39,7 +39,7 @@
                 {{ t('反选') }}
               </el-checkbox>
             </template>
-          </el-tree-select>    
+          </el-tree-select>
           <!-- <el-select
               class="!w-[180px]"
               :placeholder="t('请选择状态')"
@@ -53,6 +53,43 @@
                 :key="item[0]"
             />
           </el-select> -->
+        </el-form-item>
+        <el-form-item prop="queryType" :label="`${t('注单状态')}:`">
+          <el-tree-select
+            v-model="props.form.tenantIds"
+            :placeholder="t('请选择注单状态，多选项')"
+            :data="
+              Object.keys(betStatusMap).map((key:string) => ({
+                value: betStatusMap,
+                label: betStatusMap[key]
+              }))
+            "
+            @change="search"
+            filterable
+            clearable
+            multiple
+            collapse-tags
+            :render-after-expand="false"
+            show-checkbox
+            check-strictly
+            check-on-click-node
+            style="width: 200px"
+          >
+            <template #header>
+              <el-checkbox
+                v-model="checkAllMName"
+                @change="handleCheckAllMName"
+              >
+                {{ t('全选') }}
+              </el-checkbox>
+              <el-checkbox
+                v-model="checkRevertMName"
+                @change="handleCheckRevertMName"
+              >
+                {{ t('反选') }}
+              </el-checkbox>
+            </template>
+          </el-tree-select>
         </el-form-item>
         <el-form-item :label="`${t('注单编号')}:`" prop="orderId">
           <el-input
@@ -112,7 +149,7 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('赛种')}:`" prop="sportId">
-          <el-tree-select              
+          <el-tree-select
               v-model="props.form.sportId"
               :disabled="form.category===' '"
               :data="
@@ -146,7 +183,7 @@
                 {{ t('反选') }}
               </el-checkbox>
             </template>
-          </el-tree-select>          
+          </el-tree-select>
           <!-- <el-select
             v-model="form.sportId"
             :disabled="form.category===' '"
@@ -164,7 +201,7 @@
           </el-select> -->
         </el-form-item>
         <el-form-item :label="`${t('过关类型')}:`" prop="seriesType">
-          <el-tree-select              
+          <el-tree-select
               v-model="form.seriesType"
               :data="seriesTypeList"
               @change="search"
@@ -192,7 +229,7 @@
                 {{ t('反选') }}
               </el-checkbox>
             </template>
-          </el-tree-select>              
+          </el-tree-select>
           <!-- <el-select
             v-model="form.seriesType"
             clearable
@@ -562,6 +599,7 @@ const chagenMatchType = (type: 0 | 1 | 2) => {
 };
 
 const search = () => {
+  console.log(1111,Object.keys(betStatusMap))
   emits('onSearch', ...['reload']);
 };
 

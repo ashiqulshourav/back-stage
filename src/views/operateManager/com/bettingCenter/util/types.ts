@@ -4,6 +4,7 @@ export type searchFormType = {
   pageSize?: number | string;
   pageNum?: number | string;
   sportId: string[] | number[];
+  orderStatus:string[] | number[];
   userIdOrName: string;
   timeStart?: number | string;
   timeEnd?: number | string;
