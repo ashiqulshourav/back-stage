@@ -34,7 +34,12 @@
     <div class="flex items-center mt-4">
       <span class="flex-shrink mr-4">{{ t('电竞') }}</span>
       <div class="w-28">
-        <el-select clearable v-model="betDelayDj" @clear="clearAll('eSport')">
+        <el-select
+          clearable
+          v-model="betDelayDj"
+          @clear="clearAll('eSport')"
+          class="!min-w-52"
+        >
           <el-option
             v-for="item in timeArr"
             :key="item"
@@ -45,6 +50,7 @@
       </div>
       <div class="flex-grow ml-4 mr-40">
         <el-tree-select
+          class="!min-w-52"
           v-model="sportIdsDjData"
           :data="ESPORT_ID_MAP"
           filterable
