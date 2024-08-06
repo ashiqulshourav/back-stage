@@ -50,6 +50,11 @@ export const columns: TableColumnList = [
     }
   },
   {
+    label: t('预约'),
+    slot: 'reservationSwitch',
+    minWidth: 150
+  },
+  {
     label: t('操作'),
     slot: 'operation'
   }

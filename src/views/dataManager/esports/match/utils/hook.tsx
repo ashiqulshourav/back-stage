@@ -44,7 +44,7 @@ export function useLeague() {
 
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
-    if(type!=='export'){
+    if (type !== 'export') {
       loading.value = true;
     }
     const res: ESportsAPI.ESportsLeagueListType =
@@ -54,7 +54,7 @@ export function useLeague() {
         pageNum: pagination.currentPage
       });
     if (type === 'export') {
-      return res?.data
+      return res?.data;
     }
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
@@ -70,11 +70,16 @@ export function useLeague() {
 
   const exportFile = async () => {
     onSearch('export').then((expRes: any) => {
-      if(expRes?.total>500000){
-        message(`当前条件下数据量为${addThousandSeparator(expRes?.total)}，大于50万条，不支持导出!`, { type: 'error' });
-      }else if(expRes?.total<1 || expRes === null){
+      if (expRes?.total > 500000) {
+        message(
+          `当前条件下数据量为${addThousandSeparator(
+            expRes?.total
+          )}，大于50万条，不支持导出!`,
+          { type: 'error' }
+        );
+      } else if (expRes?.total < 1 || expRes === null) {
         message('数据量为零，无法导出', { type: 'error' });
-      }else {
+      } else {
         exportDialog({
           firstTitle: t('导出当前电竞数据?'),
           router,
@@ -82,15 +87,15 @@ export function useLeague() {
             downloading.value = true;
             const res = await API.getLeagueExport({
               ...removeEmptyStringKeys(form),
-              category: 1,
-            })
+              category: 1
+            });
             message(res.msg, { type: res.code ? 'error' : 'success' });
             downloading.value = false;
           }
-        })
+        });
       }
-    })
-  }
+    });
+  };
 
   function openDialog(
     title: string,
@@ -127,6 +132,16 @@ export function useLeague() {
     levelList.push(...res.data);
   };
 
+  //- 修改联赛预约状态开关
+  const changeReservationSwitchStatus = async (row: MetadataAPI.LeagueList) => {
+    const res = await API.updateReservationSwitch({
+      leagueId: row.leagueId as string,
+      reservationSwitch: row.reservationSwitch as number
+    });
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    if (res.code) row.reservationSwitch = row.reservationSwitch === 0 ? 1 : 0;
+  };
+
   onMounted(() => {
     onSearch();
     initLevelList();
@@ -145,6 +160,7 @@ export function useLeague() {
     form,
     levelList,
     exportFile,
-    downloading
+    downloading,
+    changeReservationSwitchStatus
   };
 }

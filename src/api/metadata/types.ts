@@ -1,7 +1,7 @@
 declare namespace MetadataAPI {
   type LeagueListParams = {
-    pageNum: number;
-    pageSize: number;
+    pageNum?: number;
+    pageSize?: number;
     countryId?: number;
     leagueId?: number;
     leagueId188Bet?: number;
