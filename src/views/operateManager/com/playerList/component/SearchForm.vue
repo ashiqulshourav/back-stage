@@ -219,12 +219,11 @@
 
         <el-button
           type="primary"
-          :icon="useRenderIcon(Download)"
-          :loading="downloading"
-          v-if="hasAuth('EXPORT')"
-          @click="exportFile()"
+          :icon="useRenderIcon(Upload)"
+          :loading="uploading"
+          @click="importFile(t('数据导入'))"
         >
-          {{ t('导出') }}
+          {{ t('导入标签') }}
         </el-button>
       </el-form-item>
     </el-form>
