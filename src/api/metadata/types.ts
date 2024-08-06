@@ -39,6 +39,7 @@ declare namespace MetadataAPI {
     riskLevel?: number | string;
     isEsportType?: boolean;
     leagueTagsId?: ConfigCenterDataAPI.LeagueTagType[];
+    reservationSwitch?: number;
   };
   type LeagueListData = {
     total: number;
@@ -186,9 +187,9 @@ declare namespace MetadataAPI {
 }
 
 declare namespace MatchCombineAPI {
-  type matchSourceDetail= {
+  type matchSourceDetail = {
     id: number,
-    matchId:number,
+    matchId: number,
     sportNameCn: string,
     sportNameEn: string,
     leagueNameCn: string,
@@ -204,7 +205,7 @@ declare namespace MatchCombineAPI {
     endTime: null,
     videoMatchId: number,
     matchId188bet: number,
-    category:number,
+    category: number,
     dataSourceCode: string,
     pairingStatus: number,
     oppositeStatus: number,
@@ -214,14 +215,14 @@ declare namespace MatchCombineAPI {
     pandaOppositeStatus: number,
   }
   type matchSourceData = {
-    data:{
-      list:matchSourceDetail[],
+    data: {
+      list: matchSourceDetail[],
       pageSize: number,
       pageNum: number,
       total: number,
     }
   }
-  type matchPairingDetail= {
+  type matchPairingDetail = {
     "matchId": number,
     "countryId": null,
     "sportId": number,
@@ -287,10 +288,10 @@ declare namespace MatchCombineAPI {
     "dataSourceCode": string
   }
   type matchPairingData = {
-    data:{
-      list:matchPairingDetail[],
-      pageSize:number,
-      pageNum:number,
+    data: {
+      list: matchPairingDetail[],
+      pageSize: number,
+      pageNum: number,
     }
   }
 

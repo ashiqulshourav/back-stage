@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
+    <SearchForm :loading="loading" @changeNavType="changeNavType" />
 
     <pure-table
       class="table_container"
@@ -17,8 +17,14 @@
         color: 'var(--el-text-color-primary)'
       }"
     >
-      <template #userCount="{ row }">
-        <el-link @click="goToUserList(row)">{{ row.count }}</el-link>
+      <template #reservationSwitch="{ row }">
+        <el-switch
+          v-model="row.reservationSwitch"
+          :active-value="1"
+          :inactive-value="0"
+          inline-prompt
+          @change="upateLeagueStatus(row)"
+        />
       </template>
     </pure-table>
   </div>
@@ -31,13 +37,6 @@ import { columns } from './component/TableColumnList';
 
 defineOptions({ name: 'RISKMANAGEMENT_APPOINTMENT' });
 
-const { loading, dataList, onSearch, form, goToUserList } =
+const { loading, dataList, changeNavType, upateLeagueStatus } =
   useAppointmentHook();
 </script>
-
-<style>
-.el-message-box .el-message-box__btns {
-  display: flex;
-  flex-direction: row;
-}
-</style>
