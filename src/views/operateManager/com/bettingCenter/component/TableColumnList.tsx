@@ -38,8 +38,8 @@ export const columns: TableColumnList = [
 
   {
     label: t("状态"),
-    slot: "status",
-    minWidth: 50,
+    prop: "orderStatusView",
+    minWidth: 100,
     align:'center',
   },
   {
