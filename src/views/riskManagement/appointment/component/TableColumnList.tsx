@@ -4,7 +4,9 @@ export const columns: TableColumnList = [
   {
     label: t('联赛等级'),
     prop: 'leagueLevel',
-    minWidth: 100
+    minWidth: 100,
+    formatter: ({ leagueLevel }) =>
+      leagueLevel === -1 ? t('未评级') : leagueLevel
   },
   {
     label: t('联赛数量'),
@@ -19,7 +21,8 @@ export const columns: TableColumnList = [
   {
     label: t('操作人'),
     minWidth: 150,
-    prop: 'updatedBy'
+    prop: 'updatedBy',
+    formatter: ({ updatedBy }) => updatedBy ?? '-'
   },
   {
     label: t('最近操作时间'),

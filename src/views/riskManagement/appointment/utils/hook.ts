@@ -14,6 +14,7 @@ export function useAppointmentHook() {
         });
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
+      res.data.list.push(res.data.list.shift() as RiskManagementDataAPI.getLeagueConfigListType)
       dataList.length = 0;
       dataList.push(...res.data.list);
     } catch (error) {
