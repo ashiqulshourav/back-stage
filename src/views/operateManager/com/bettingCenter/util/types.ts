@@ -13,7 +13,7 @@ export type searchFormType = {
   matchId: string;
   awayTeamName?: string;
   homeTeamName?: string;
-  seriesType: number[] | string[];
+  seriesTypes: number[] | string[];
   // status:any;
   isInplay?: number | string;
   category: string | number;
@@ -31,7 +31,6 @@ export type searchFormType = {
 }
 
 export enum betStatus {
-  all = 1,
   PendingApprove = 2,
   unsettlementBet = 3,
   settlementBet = 4,
@@ -44,7 +43,6 @@ export enum betStatus {
   reverseCancel = 12
 }
 export const betStatusMap = {
-  [betStatus.all]: t('全部'),
   [betStatus.PendingApprove]: t('待审核'),
   [betStatus.unsettlementBet]: t('未结算'),
   [betStatus.settlementBet]: t('已结算'),

@@ -200,9 +200,9 @@
             />
           </el-select> -->
         </el-form-item>
-        <el-form-item :label="`${t('过关类型')}:`" prop="seriesType">
+        <el-form-item :label="`${t('过关类型')}:`" prop="seriesTypes">
           <el-tree-select
-              v-model="form.seriesType"
+              v-model="form.seriesTypes"
               :data="seriesTypeList"
               @change="search"
               filterable
@@ -290,6 +290,7 @@
             <el-option label="全部" value="" />
             <el-option label="滚球" :value="1" />
             <el-option label="早盘" :value="0" />
+            <el-option label="冠军盘" :value="2" />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('联赛查询')}:`"
@@ -625,7 +626,7 @@ const setPropsForm = () => {
     // status:[],
     betItemId: '',
     isInplay: '',
-    seriesType: '',
+    seriesTypes: '',
     category: '',
     timeType: 1,
     leagueName: '',
@@ -807,13 +808,13 @@ const handleCheckAllSeriesTypeLabel = (val: CheckboxValueType) => {
     props.form.seriesType = seriesTypeList.map(_ => _.value);
     removeAllSeriesTypeLabel.value = false;
   } else {
-    props.form.seriesType = [];
+    props.form.seriesTypes = [];
   }
 };
 
 const handleCheckSeriesSportLabel = () => {
-  const oldArray = [...props.form.seriesType];
-  props.form.seriesType = seriesTypeList
+  const oldArray = [...props.form.seriesTypes];
+  props.form.seriesTypes = seriesTypeList
     .filter(_ => !oldArray.includes(_.value))
     .map(_ => _.value);
 };

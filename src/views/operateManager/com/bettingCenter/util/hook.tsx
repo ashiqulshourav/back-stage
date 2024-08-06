@@ -57,7 +57,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     homeTeamName: '',
     betItemId: '',
     isInplay: '',
-    seriesType: '',
+    seriesTypes: [],
     category: ' ',
     timeType: 1,
     leagueName: '',
@@ -94,7 +94,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
   ) => {
     let seriesDetails: any = [];
     const newForm  = {...form}
-    if (newForm.seriesType == 2) {
+    if (newForm.seriesTypes == 2) {
       if (newForm.seriesDetailsSingle.length) {
         newForm.seriesDetailsSingle.map((item: keyof typeof seriesTypesSingle) => {
           seriesDetails.push(...seriesTypesSingle[item].list);
@@ -106,7 +106,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
           );
         }
       }
-    } else if (newForm.seriesType == 3) {
+    } else if (newForm.seriesTypes == 3) {
       if (newForm.seriesDetailsDuplex.length) {
         newForm.seriesDetailsDuplex.map((item: keyof typeof seriesTypesSingle) => {
           seriesDetails.push(
@@ -143,7 +143,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
         seriesDetailsSingle: '',
         seriesDetailsDuplex: '',
         seriesDetails: seriesDetails,
-        seriesType: +form.seriesType > 2 ? 2 : form.seriesType,
+        seriesTypes: +form.seriesTypes > 2 ? 2 : form.seriesTypes,
         venueType: venueType,
         category: venueType === 0 ? form.category : 1
       }),
