@@ -64,7 +64,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     tenantIds: [],
     seriesDetailsSingle: [],
     seriesDetailsDuplex: [],
-    queryType: 1,
+      orderStatus: [],
     minBetAmount: '',
     maxBetAmount: '',
     minProfitAmount: '',
@@ -130,6 +130,12 @@ export function useBettingCenterHook(category: number, venueType: number) {
         newForm.timeStart = '';
         newForm.timeEnd = '';
     }
+    if(newForm.timeStart){
+        newForm.timeStart = dayjs(newForm.timeStart).format('YYYY-MM-DD HH:mm:ss')
+    }
+      if(newForm.timeEnd){
+          newForm.timeEnd = dayjs(newForm.timeEnd).format('YYYY-MM-DD HH:mm:ss')
+      }
     return {
       ...removeEmptyStringKeys({
         ...newForm,
