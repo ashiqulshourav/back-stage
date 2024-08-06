@@ -225,6 +225,15 @@
         >
           {{ t('导入标签') }}
         </el-button>
+        <el-button
+          type="primary"
+          :icon="useRenderIcon(Download)"
+          :loading="downloading"
+          v-if="hasAuth('EXPORT')"
+          @click="exportFile()"
+        >
+          {{ t('导出') }}
+        </el-button>
       </el-form-item>
     </el-form>
   </div>
