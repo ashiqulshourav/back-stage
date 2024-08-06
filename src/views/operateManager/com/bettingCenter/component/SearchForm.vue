@@ -260,7 +260,7 @@
               clearable
               :formatter="(v:string) => formatIp(v)"
               v-enter="search"
-              class="!w-[200px]"
+              class="!w-[180px]"
           />
         </el-form-item>
         <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
@@ -466,7 +466,6 @@ const chagenMatchType = (type: 0 | 1 | 2) => {
 };
 
 const search = () => {
-  console.log(11111111222)
   emits('onSearch', ...['reload']);
 };
 
