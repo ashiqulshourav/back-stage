@@ -54,10 +54,17 @@
             <el-checkbox v-model="checkAllTIds" @change="handleCheckAllTIds">
               {{ t('全选') }}
             </el-checkbox>
-            <el-checkbox v-mode="removeAllTIds" @change="handleRemoveAllTIds" :disabled="form?.tenantIds.length == 0">
+            <el-checkbox
+              v-mode="removeAllTIds"
+              @change="handleRemoveAllTIds"
+              :disabled="form?.tenantIds.length == 0"
+            >
               {{ t('全不选') }}
             </el-checkbox>
-            <el-checkbox v-model="checkRevertTIds" @change="handleCheckRevertTIds">
+            <el-checkbox
+              v-model="checkRevertTIds"
+              @change="handleCheckRevertTIds"
+            >
               {{ t('反选') }}
             </el-checkbox>
           </template>
@@ -96,7 +103,11 @@
             <el-checkbox v-model="checkAll" @change="handleCheckAll">
               {{ t('全选') }}
             </el-checkbox>
-            <el-checkbox v-mode="removeAll" @change="handleRemoveAll" :disabled="form?.riskControlLabelList.length == 0">
+            <el-checkbox
+              v-mode="removeAll"
+              @change="handleRemoveAll"
+              :disabled="form?.riskControlLabelList.length == 0"
+            >
               {{ t('全不选') }}
             </el-checkbox>
             <el-checkbox v-model="checkRevert" @change="handleCheckRevert">
@@ -130,10 +141,17 @@
             <el-checkbox v-model="checkAllTags" @change="handleCheckAllTags">
               {{ t('全选') }}
             </el-checkbox>
-            <el-checkbox v-mode="removeAllTags" @change="handleRemoveAllTags" :disabled="form?.attributeLabelList.length == 0">
+            <el-checkbox
+              v-mode="removeAllTags"
+              @change="handleRemoveAllTags"
+              :disabled="form?.attributeLabelList.length == 0"
+            >
               {{ t('全不选') }}
             </el-checkbox>
-            <el-checkbox v-model="checkRevertTags" @change="handleCheckRevertTags">
+            <el-checkbox
+              v-model="checkRevertTags"
+              @change="handleCheckRevertTags"
+            >
               {{ t('反选') }}
             </el-checkbox>
           </template>
@@ -155,47 +173,35 @@
         </el-select>
       </el-form-item>
       <el-form-item prop="currency" :label="t('结算币种:')">
-        <el-select
-            v-model="form.currency"
-            clearable
-            class="!w-[150px]"
-        >
+        <el-select v-model="form.currency" clearable class="!w-[150px]">
           <el-option label="全部" value=" "></el-option>
           <el-option
-              :label="item.label"
-              :value="item.value"
-              v-for="item in currency_map"
-              :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            v-for="item in currency_map"
+            :key="item.value"
           />
         </el-select>
       </el-form-item>
       <el-form-item prop="specialLimited" :label="t('特殊限额:')">
-        <el-select
-            v-model="form.currency"
-            clearable
-            class="!w-[150px]"
-        >
+        <el-select v-model="form.currency" clearable class="!w-[150px]">
           <el-option label="全部" value=" "></el-option>
           <el-option label="是" :value="1"></el-option>
           <el-option label="不是" :value="2"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item prop="timeType">
-        <el-select
-            v-model="form.timeType"
-            class="!w-[140px]"
-            @change="search"
-        >
+        <el-select v-model="form.timeType" class="!w-[140px]" @change="search">
           <el-option :label="t('用户注册时间')" value="1" />
           <el-option :label="t('用户修改时间')" value="2" />
         </el-select>
         <CustomDate
-            v-model:val="selectDate"
-            start-placeholder="开始时间"
-            end-placeholder="结束时间"
-            @changeDate="changeDate"
-            :isDateTime="true"
-            :format="'YYYY-MM-DD HH:mm:ss'"
+          v-model:val="selectDate"
+          start-placeholder="开始时间"
+          end-placeholder="结束时间"
+          @changeDate="changeDate"
+          :isDateTime="true"
+          :format="'YYYY-MM-DD HH:mm:ss'"
         />
       </el-form-item>
       <el-form-item>
@@ -220,15 +226,6 @@
         >
           {{ t('导出') }}
         </el-button>
-          <el-button
-            type="primary"
-            :icon="useRenderIcon(Download)"
-            :loading="downloading"
-            v-if="hasAuth('EXPORT')"
-            @click="exportFile()"
-          >
-            {{ t('导出') }}
-          </el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -245,10 +242,10 @@ import { labelListType } from '../utils/types';
 import type { FormInstance, CheckboxValueType } from 'element-plus';
 import Download from '@iconify-icons/ep/download';
 import Upload from '@iconify-icons/ep/upload';
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 import CustomDate from '@/components/Form/Custom_date.vue';
 import { hasAuth } from '@/router/utils';
-import {currency_map} from "@/utils/maps/currency_map";
+import { currency_map } from '@/utils/maps/currency_map';
 
 const formRef = ref();
 const buttonRef1 = ref();
@@ -395,7 +392,6 @@ const formatterUserNames = (v: string) => {
 };
 
 const selectDate = ref<string[]>(['', '']);
-
 
 const changeDate = (t: string[]) => {
   if (!t) {

@@ -12,7 +12,7 @@
       :data="dataList"
       :header-cell-style="tableHeaderStyle"
       :pagination="{ ...pagination, pageSizes: pageSizeArr }"
-      :columns="specialLimitColumns"
+      :columns="specialLimitColumns1"
       :paginationSmall="true"
       @selection-change="handleSelectionChange"
       @page-size-change="handleSelectionChange"
@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { specialLimitColumns } from './TableColumnList';
+import { specialLimitColumns1 } from './TableColumnList';
 import { PaginationProps } from '@pureadmin/table';
 import { pageSizeArr } from '@/utils/math';
 import { usePublicHooks } from '@/hooks';

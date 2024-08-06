@@ -1241,7 +1241,6 @@
   "k-5cb50107": "Betting Delay",
   "k-38ccb5ba": "User Account: ",
   "k4afa5531": "Modification Record",
-  "k-5a99fc80": "Limit Level Settings",
   "k-f612c57": "Sports",
   "k-482bc193": "Betting delay time or sport type cannot be empty",
   "k-2f33c987": "Betting Delay:",
@@ -1291,6 +1290,10 @@
   "k5a936b7f": "Expand",
   "k619eb314": "Limit Level Modification Record",
   "kc8f7741": "After clicking, the odds will be restored to the original odds from the data source.",
+  "k-271bba18": "单场赛事限额",
+  "k72521dff": "单场（早盘＋滚球），累计赔付",
+  "k-3eb4ebd1": "串关限额",
+  "k-2e179c17": "单日（早盘＋滚球），累计赔付",
   "k-2dd432cc": "联赛数量",
   "k105ed091": "预约开关",
   "k9ff9895": "最近操作时间"
