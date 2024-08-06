@@ -220,6 +220,7 @@ export const specialLimitColumns: TableColumnList = [
   {
     label: t('修改时间'),
     prop: 'updatedAt',
+    minWidth: 180,
     formatter({ updatedAt }: { updatedAt: string }) {
       return dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss');
     }

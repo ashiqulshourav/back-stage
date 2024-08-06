@@ -660,7 +660,7 @@ const openLimitRecordDialog = () => {
   addDialog({
     title: t('限额等级修改记录'),
     class: 'reset_dialog',
-    width: '50%',
+    width: '70%',
     alignCenter: true,
     closeOnClickModal: false,
     hideFooter: true,
