@@ -1,44 +1,31 @@
+import dayjs from 'dayjs';
+
 export const columns: TableColumnList = [
   {
     label: t('联赛等级'),
-    prop: 'id',
+    prop: 'leagueLevel',
     minWidth: 100
   },
   {
     label: t('联赛数量'),
-    prop: 'level',
-    minWidth: 150,
-    formatter: ({ level }) => {
-      switch (level) {
-        case 1:
-          return (
-            <el-text class="risk-tag-red" style="">
-              {level}
-            </el-text>
-          );
-        case 2:
-          return <el-text class="risk-tag-orange">{level}</el-text>;
-        case 3:
-          return <el-text class="risk-tag-yellow">{level}</el-text>;
-        default:
-          return '-';
-      }
-    }
+    prop: 'leagueCount',
+    minWidth: 150
   },
   {
     label: t('预约开关'),
-    prop: 'name',
-    slot: 'name',
+    slot: 'reservationSwitch',
     minWidth: 150
   },
   {
     label: t('操作人'),
     minWidth: 150,
-    slot: 'userCount'
+    prop: 'updatedBy'
   },
   {
     label: t('最近操作时间'),
-    prop: 'remark',
+    prop: 'updatedAt',
+    formatter: ({ updatedAt }) =>
+      dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss'),
     minWidth: 150
   }
 ];

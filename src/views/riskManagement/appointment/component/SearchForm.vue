@@ -43,6 +43,7 @@ const renderList = computed(() => {
 
 const changeType = (_: sport_list_map_type | (typeof ESPORT_ID_MAP)[0]) => {
   if (_.value === currentSportId.value) return;
+  currentSportId.value = _.value;
   emits('changeNavType', _.value);
 };
 </script>

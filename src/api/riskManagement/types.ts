@@ -154,4 +154,40 @@ declare namespace RiskManagementDataAPI {
   type OrderPlacementTypesRes = COMMON.BASE_RES_TYPE<OrderPlacementTypes[]>;
   type RiskControlTypesRes = COMMON.BASE_RES_TYPE<RiskControlTypes[]>;
   type RiskNoticeRes = COMMON.BASE_RES_TYPE<RiskNotice>;
+
+
+  type getLeagueConfigListType = {
+    id: string;
+    sportId: number;
+    leagueLevel: number;
+    category: number;
+    reservationSwitch: number;
+    updatedAt: string;
+    updatedBy: string;
+    leagueCount: number;
+  }
+
+  type getLeagueConfigListData = {
+    total: number;
+    list: getLeagueConfigListType[];
+    pageNum: number;
+    pageSize: number;
+    size: number;
+    startRow: number;
+    endRow: number;
+    pages: number;
+    prePage: number;
+    nextPage: number;
+    isFirstPage: boolean;
+    isLastPage: boolean;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
+    navigatePages: number;
+    navigatepageNums: number[];
+    navigateFirstPage: number;
+    navigateLastPage: number;
+  }
+
+
+  type getLeagueConfigListRes = COMMON.BASE_RES_TYPE<getLeagueConfigListData>
 }
