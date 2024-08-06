@@ -56,6 +56,12 @@ export const columns: TableColumnList = [
     }
   },
   {
+    label: t('预约'),
+    slot: 'reservationSwitch',
+    minWidth: 150,
+    headerRenderer: d => handleTableWidth(d, t('预约'), 'auto')
+  },
+  {
     label: t('赛种'),
     prop: 'sportId',
     headerRenderer: d => handleTableWidth(d, t('赛种'), 'auto'),

@@ -49,6 +49,15 @@
               </template>
             </el-image>
           </template>
+          <template #reservationSwitch="{ row }">
+            <el-switch
+              v-model="row.reservationSwitch"
+              :active-value="1"
+              :inactive-value="0"
+              inline-prompt
+              @change="changeReservationSwitchStatus(row)"
+            />
+          </template>
           <template #operation="{ row }">
             <el-button
               v-auth="['UPDATE']"
@@ -95,5 +104,6 @@ const {
   levelList,
   downloading,
   exportFile,
+  changeReservationSwitchStatus
 } = useLeague();
 </script>

@@ -187,7 +187,6 @@ declare namespace RiskManagementDataAPI {
     navigateFirstPage: number;
     navigateLastPage: number;
   }
-
-
   type getLeagueConfigListRes = COMMON.BASE_RES_TYPE<getLeagueConfigListData>
+  type updateLeagueConfigRes = COMMON.BASE_RES_TYPE<null>
 }

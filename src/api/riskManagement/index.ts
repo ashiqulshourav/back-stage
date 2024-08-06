@@ -122,8 +122,5 @@ export const riskManagementData = {
   getLeagueConfigList: (data: { sportId: number }) => http.request<RiskManagementDataAPI.getLeagueConfigListRes>('post', '/leagueConfig/v1/getLeagueConfigList', { data }),
 
   //- 修改联赛预约开关
-  updateLeagueConfig: (data: { id: string; reservationSwitch: number; updatedBy: string }) => http.request<RiskManagementDataAPI.getLeagueConfigListRes>('post', '/leagueConfig/v1/updateLeagueConfig', { data }),
-
-
-  /* /leagueConfig/v1/addLeagueConfig     新增联赛预约配置，入参：{"sportId":100000,"reservationSwitch":0,"leagueLevel":10,"category":0} */
+  updateLeagueConfig: (data: { id: string; reservationSwitch: number; updatedBy: string }) => http.request<RiskManagementDataAPI.updateLeagueConfigRes>('post', '/leagueConfig/v1/updateLeagueConfig', { data }),
 };

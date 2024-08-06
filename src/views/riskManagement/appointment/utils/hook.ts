@@ -36,7 +36,6 @@ export function useAppointmentHook() {
   })
 
   //- 游戏切换
-
   const changeNavType = (v: number) => onSearch(v)
 
   return {
