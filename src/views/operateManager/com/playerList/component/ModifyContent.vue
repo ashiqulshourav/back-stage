@@ -34,12 +34,7 @@
     <div class="flex items-center mt-4">
       <span class="flex-shrink mr-4">{{ t('电竞') }}</span>
       <div class="w-28">
-        <el-select
-          clearable
-          v-model="betDelayDj"
-          @clear="clearAll('eSport')"
-          class="!min-w-52"
-        >
+        <el-select clearable v-model="betDelayDj" @clear="clearAll('eSport')">
           <el-option
             v-for="item in timeArr"
             :key="item"
