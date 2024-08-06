@@ -290,6 +290,7 @@
             <el-option label="全部" value="" />
             <el-option label="滚球" :value="1" />
             <el-option label="早盘" :value="0" />
+            <el-option label="冠军盘" :value="2" />
           </el-select>
         </el-form-item>
         <el-form-item :label="`${t('联赛查询')}:`"
