@@ -257,7 +257,7 @@ import Upload from '@iconify-icons/ep/upload';
 import dayjs from "dayjs";
 import CustomDate from '@/components/Form/Custom_date.vue';
 import { hasAuth } from '@/router/utils';
-import {currency_map} from "@/utils/maps/currency_map";
+import {currency_map} from "@/utils/maps/currency_map"
 
 const formRef = ref();
 const buttonRef1 = ref();
