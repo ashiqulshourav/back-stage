@@ -1,7 +1,6 @@
 <template>
   <div class="main">
     <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
-
     <pure-table
       class="table_container"
       align-whole="center"
