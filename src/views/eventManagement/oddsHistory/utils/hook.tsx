@@ -1,122 +1,37 @@
-import { searchFormType } from './types';
-import type { PaginationProps } from '@pureadmin/table';
-import { removeEmptyStringKeys } from '@/utils/utilFn';
+import editForm from '../form.vue';
 import { message } from '@/utils/message';
+import { addDialog, closeDialog } from '@/components/ReDialog';
+import type { PaginationProps } from '@pureadmin/table';
+import { reactive, ref, onMounted, h } from 'vue';
+import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { addThousandSeparator } from '@/utils/formatNumber';
 import { usePublicHooks } from '@/hooks';
-const { exportDialog } = usePublicHooks();
+const  { exportDialog } = usePublicHooks();
+import { searchFormType } from './types';
 
-export function useEventQueryHook() {
-  const matchEventList = reactive<EventAPI.MatchEvent[]>([]);
-  const matchInfo = reactive<EventAPI.MatchInfo>({
-    aTeamName: '',
-    hTeamName: '',
-    league: '',
-    matchId: '',
-    level: '',
-    sportName: '',
-    riskLevel: '',
-    leagueId: '',
-    startDateTime: ''
-  });
-  const loading = ref(false);
-
+export function useLeague() {
+  const router = useRouter();
+  const dataList = reactive<MetadataAPI.LeagueList[]>([]);
+  const loading = ref(true);
+  const levelList = reactive<ConfigCenterDataAPI.leagueLevelList[]>([]);
+  const downloading = ref(false);
   const pagination = reactive<PaginationProps>({
     total: 0,
-    pageSize: 30,
+    pageSize: 10,
     currentPage: 1,
     background: true
   });
-
   const form = reactive<searchFormType>({
-    matchId: '',
-    dataSourceCode: '',
-    eventCode: [],
-    operationMethod: ' ',
-    endTime: '',
-    startTime: '',
-    canceled: ' '
+    leagueNameCn: '',
+    leagueNameEn: '',
+    level: '',
+    countryId: '',
+    leagueId: '',
+    leagueId188Bet: '',
+    sportId: '',
+    riskLevel: '',
+    category: 0
   });
-
-  async function onSearch(type?: string) {
-    return new Promise((resolve, reject) => {
-      if (type === 'reload' || type === 'init') pagination.currentPage = 1;
-      if (!form.matchId) {
-        matchEventList.length = 0;
-        pagination.total = 0;
-        matchInfo.aTeamName = '';
-        matchInfo.hTeamName = '';
-        matchInfo.leagueId = '';
-        matchInfo.league = '';
-        matchInfo.riskLevel = '';
-        matchInfo.level = '';
-        matchInfo.matchId = '';
-        matchInfo.sportName = '';
-        matchInfo.startDateTime = '';
-        setTimeout(() => {
-          const resizeEvent = new Event('resize');
-          window.dispatchEvent(resizeEvent);
-        }, 200);
-        return;
-      }
-
-      try {
-        if (type !== 'export') {
-          loading.value = true;
-        }
-        const temp = Array.isArray(form.eventCode) ? [...form.eventCode] : [];
-
-        API.getMatchEventByMatchId({
-          ...removeEmptyStringKeys({
-            ...form,
-            eventCode: temp?.length ? temp.toString() : ''
-          }),
-          pageSize: pagination.pageSize,
-          pageNum: pagination.currentPage
-        }).then(res => {
-          loading.value = false;
-          if (res.code) return message(res.msg, { type: 'error' });
-          if (res.data !== null) {
-            resolve(res?.data);
-            if (type === 'export') {
-              return;
-            }
-            matchEventList.length = 0;
-            if (type === 'init') {
-              API.getMatchInfoByMatchId({
-                matchId: form.matchId
-              }).then(matchInfoRes => {
-                if (matchInfoRes?.code)
-                  return message(res?.msg, { type: 'error' });
-                matchInfo.aTeamName = matchInfoRes.data.aTeamName;
-                matchInfo.hTeamName = matchInfoRes.data.hTeamName;
-                matchInfo.leagueId = matchInfoRes.data.leagueId;
-                matchInfo.league = matchInfoRes.data.league;
-                matchInfo.level = matchInfoRes.data.level;
-                matchInfo.riskLevel = matchInfoRes.data.riskLevel;
-                matchInfo.matchId = matchInfoRes.data.matchId;
-                matchInfo.sportName = matchInfoRes.data.sportName;
-                matchInfo.startDateTime = matchInfoRes.data.startDateTime;
-              });
-            }
-
-            matchEventList.push(...res.data.list);
-            pagination.total = res.data.total;
-          } else {
-            reject();
-            matchEventList.length = 0;
-          }
-          setTimeout(() => {
-            const resizeEvent = new Event('resize');
-            window.dispatchEvent(resizeEvent);
-          }, 200);
-        });
-      } catch (error) {
-        loading.value = false;
-        reject();
-      }
-    });
-  }
 
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -127,52 +42,118 @@ export function useEventQueryHook() {
     pagination.currentPage = val;
     onSearch();
   }
-  function handlePageSizeChange(val: number) {
-    pagination.pageSize = val;
-    onSearch();
+
+  function handleSelectionChange(val: number) {
+    console.log('handleSelectionChange', val);
   }
-  const router = useRouter();
+
+  //- 获取联赛等级列表
+  const initLevelList = async () => {
+    const res = await API.getLevelList();
+    if (res.code) return;
+    levelList.length = 0;
+    levelList.push(...res.data);
+  };
+
+  async function onSearch(type?: string) {
+    if (type === 'reload') pagination.currentPage = 1;
+    try {
+      if (type !== 'export') {
+        loading.value = true;
+      }
+      const res: MetadataAPI.LeagueListRes = await API.getLeagueList({
+        ...removeEmptyStringKeys(form),
+        pageSize: pagination.pageSize,
+        pageNum: pagination.currentPage
+      });
+      if (type === 'export') {
+        return res?.data
+      } else {
+        loading.value = false;
+        if (res.code) return message(res.msg, { type: 'error' });
+        dataList.length = 0;
+        dataList.push(...res.data.list);
+        pagination.total = res.data.total;
+      }
+    } catch (error) {
+      loading.value = false;
+    }
+  }
+
   const exportFile = async () => {
-    onSearch('export').then((expRes: EventAPI.matchEventList) => {
-      if (expRes.list.length > 500000) {
-        message(
-          `当前条件下数据量为${addThousandSeparator(
-            expRes.list.length.toString()
-          )}，大于50万条，不支持导出!`,
-          { type: 'error' }
-        );
-      } else if (expRes?.list.length < 1 || expRes === null) {
+    onSearch('export').then((expRes: any) => {
+      if(expRes?.total>500000){
+        message(`当前条件下数据量为${addThousandSeparator(expRes?.total)}，大于50万条，不支持导出!`, { type: 'error' });
+      } else if(expRes?.total<1 || expRes === null){
         message('数据量为零，无法导出', { type: 'error' });
       } else {
         exportDialog({
-          firstTitle: t('导出当前事件列表数据?'),
+          firstTitle: t('导出当前球员名单数据'),
           router,
           callback: async () => {
-            const res = await API.matchEventDataExport({
-              ...removeEmptyStringKeys({
-                ...form,
-                eventCode: form.eventCode?.length
-                  ? form.eventCode?.toString()
-                  : ''
-              })
-            });
-            if (res.code) return message(res.msg, { type: 'error' });
+            downloading.value = true;
+            const res = await API.getLeagueExport({
+              ...removeEmptyStringKeys(form),
+              pageSize: pagination.pageSize,
+              pageNum: pagination.currentPage
+            })
+            message(res.msg, { type: res.code ? 'error' : 'success' });
+            downloading.value = false;
           }
-        });
+        })
       }
+    })
+  }
+
+  async function openDialog(title: string, row?: MetadataAPI.LeagueList) {
+    addDialog({
+      title,
+      width: '40%',
+      draggable: true,
+      closeOnClickModal: false,
+      hideFooter: true,
+      contentRenderer: ({ options, index }) =>
+        h(editForm, {
+          levelList,
+          formInline: {
+            leagueLogo: row?.leagueLogo ?? '',
+            leagueId: row?.leagueId ?? '',
+            countryId: row?.countryId ?? '',
+            leagueId188Bet: row?.leagueId188Bet ?? '',
+            leagueNameCn: row?.leagueNameCn ?? '',
+            leagueNameEn: row?.leagueNameEn ?? '',
+            level: row?.level ?? '',
+            sportId: row?.sportId ?? '',
+            category: row?.category ?? '',
+            leagueTagsId: row?.leagueTagsId ?? [],
+            isEsportType: form.category === 1,
+            riskLevel: row?.riskLevel ?? ''
+          },
+          onCloseDialog: (params: string) => {
+            closeDialog(options, index);
+            params && onSearch();
+          }
+        })
     });
-  };
+  }
+
+  onMounted(() => {
+    onSearch();
+    initLevelList();
+  });
 
   return {
     loading,
+    dataList,
     pagination,
     onSearch,
-    form,
+    openDialog,
+    levelList,
     handleTableWidthChange,
     handleCurrentChange,
-    matchEventList,
-    handlePageSizeChange,
-    matchInfo,
+    handleSelectionChange,
+    form,
+    downloading,
     exportFile
   };
 }

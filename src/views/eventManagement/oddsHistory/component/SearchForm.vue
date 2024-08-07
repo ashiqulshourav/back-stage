@@ -1,120 +1,131 @@
 <template>
   <div class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]">
-    <el-form
-      ref="formRef"
-      :inline="true"
-      :model="form"
-      :rules="searchFormRules"
-    >
-      <el-form-item class="!mb-4" :label="`${t('输入赛事ID')}`" prop="matchId">
+    
+    <el-form ref="formRef" :inline="true" :model="form">
+      <el-form-item :label="`${t('联赛')}:`" prop="leagueId">
+        <el-select
+          v-model="form.leagueId"
+          clearable
+          filterable
+          remote
+          @change="search"
+          @focus="matchStore.reset_lagueList"
+          :remote-method="
+            debounce(
+              query =>
+                matchStore.search_league_list(
+                  query,
+                  1,
+                  form.category as LeagueClassifyType
+                ),
+              1000
+            )
+          "
+          class="!w-[280px]"
+          :placeholder="t('请选择联赛')"
+          :loading="matchStore.matchSearchLoading"
+        >
+          <el-option
+            v-for="item in matchStore.sportLeagueList"
+            :key="item.leagueId"
+            :label="item.leagueNameCn"
+            :value="item.leagueId"
+          />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
         <el-input
           v-model="form.matchId"
-          :placeholder="t('输入赛事ID')"
+          :placeholder="t('赛事ID')"
           v-enter="search"
           clearable
           :formatter="(v:string) => formatNumber(v)"
           class="!w-[150px]"
         />
       </el-form-item>
+
+      <el-form-item :label="`${t('开售状态')}:`" prop="isSale">
+        <el-select
+          class="!w-[150px]"
+          v-model="form.isSale"
+          clearable
+          :placeholder="t('请选择')"
+          @change="search"
+        >
+          <el-option :label="t('开售')" :value="1" />
+          <el-option :label="t('未开售')" :value="0" />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item :label="`${t('盘口状态')}:`" prop="handicapStatus">
+        <el-select
+          class="!w-[150px]"
+          v-model="form.handicapStatus"
+          clearable
+          :placeholder="t('请选择')"
+          @change="search"
+        >
+          <el-option :label="t('未开售')" :value="0" />
+          <el-option :label="t('早盘')" :value="1" />
+          <el-option :label="t('滚球')" :value="2" />
+          <el-option :label="t('进行中')" :value="3" />
+        </el-select>
+      </el-form-item>
+
       <el-form-item
-        class="!mb-4"
-        :label="`${t('输入时间段')}:`"
-        prop="startTime"
+        :label="`${t('加时点球开售状态')}:`"
+        prop="overTimeAndPenaltyKickStatus"
       >
+        <el-select
+          class="!w-[150px]"
+          v-model="form.overTimeAndPenaltyKickStatus"
+          clearable
+          :placeholder="t('请选择')"
+          @change="search"
+        >
+          <el-option :label="t('开启')" :value="true" />
+          <el-option :label="t('关闭')" :value="false" />
+        </el-select>
+      </el-form-item>
+
+      <el-form-item :label="`${t('比赛时间')}:`" prop="startTime">
+        <el-button
+          v-for="(item, index) in nextDayArr"
+          :key="index"
+          :type="selectIndex === index ? 'primary' : ''"
+          @click="changeSelectDate(index)"
+          >{{ item }}</el-button
+        >
+        <CustomDate
+          :placeholder="t('其他日期')"
+          :disableDate="disableDate"
+          v-model:val="form.startTime"
+          @changeDate="changeDate"
+          :isShowShortCuts="true"
+          :isSingle="true"
+        />
+      </el-form-item>
+
+      <el-form-item prop="endTime" class="!hidden">
         <el-date-picker
-          v-model="time"
-          type="datetimerange"
-          :start-placeholder="t('开始日期')"
-          :end-placeholder="t('结束日期')"
+          class="ml-4"
+          v-model="form.endTime"
+          type="date"
+          :placeholder="t('其他日期')"
           value-format="x"
-          format="YYYY-MM-DD HH:mm:ss"
+          format="YYYY-MM-DD"
+          :disabled-date="disableDate"
           @change="changeDate"
         />
       </el-form-item>
 
-      <el-form-item class="!mb-4" :label="`${t('事件源')}:`" prop="eventName">
-        <el-select
-          v-model="form.dataSourceCode"
-          :placeholder="t('事件源')"
-          clearable
-          class="!w-[150px]"
-        >
-          <el-option
-            :label="item.label"
-            :value="item.value"
-            v-for="item in EVENT_SOURCE"
-            :key="item.value"
-          />
-        </el-select>
-      </el-form-item>
-
-      <el-form-item class="!mb-4" :label="`${t('操作方式')}:`">
-        <el-select
-          v-model="form.operationMethod"
-          :placeholder="t('操作方式')"
-          clearable
-          class="!w-[150px]"
-        >
-          <el-option :label="t('自动结算')" :value="' '" />
-        </el-select>
-      </el-form-item>
-
-      <el-form-item class="!mb-4" :label="`${t('事件名称')}:`" prop="eventName">
-        <el-tree-select
-          v-model="props.form.eventCode"
-          :data="
-            pandaMatchList.map(item => ({
-              value: item.eventCode,
-              label: item.eventName
-            }))
-          "
-          filterable
-          clearable
-          multiple
-          collapse-tags
-          :render-after-expand="false"
-          show-checkbox
-          check-strictly
-          check-on-click-node
-          style="width: 200px"
-        >
-          <template #header>
-            <el-checkbox v-model="checkAll" @change="handleCheckAll">
-              {{ t('全选') }}
-            </el-checkbox>
-            <el-checkbox
-              v-model="removeAll"
-              @change="handleRemoveAll"
-              :disabled="form!.eventCode!.length == 0"
-            >
-              {{ t('全不选') }}
-            </el-checkbox>
-            <el-checkbox v-model="checkRevert" @change="handleCheckRevert">
-              {{ t('反选') }}
-            </el-checkbox>
-          </template>
-        </el-tree-select>
-      </el-form-item>
-
-      <el-form-item class="!mb-4" :label="`${t('取消事件')}:`" prop="canceled">
-        <el-select
-          v-model="form.canceled"
-          :placeholder="t('选择')"
-          clearable
-          class="!w-[150px]"
-        >
-          <el-option label="全部" :value="' '" />
-          <el-option label="否" value="0" />
-          <el-option label="是" value="1" />
-        </el-select>
-      </el-form-item>
-
-      <el-form-item class="!mb-4">
+      <el-form-item>
         <el-button
           type="primary"
           :icon="useRenderIcon(Search)"
           :loading="loading"
-          @click="search(formRef)"
+          @click="search"
         >
           {{ t('筛选') }}
         </el-button>
@@ -128,102 +139,91 @@
 
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
-import { formatNumber } from '@/utils/formatNumber';
-import dayjs from 'dayjs';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import Search from '@iconify-icons/ep/search';
 import Refresh from '@iconify-icons/ep/refresh';
-import type { FormInstance, CheckboxValueType } from 'element-plus';
-import { PandaMatch, searchFormType } from '../utils/types';
-import { EVENT_SOURCE } from '../utils/map';
-import { searchFormRules } from '../utils/rule';
+import type { FormInstance } from 'element-plus';
+import { searchFormType } from '../utils/types';
+import dayjs from 'dayjs';
+import { disableDate } from '@/utils/formatDate';
+import { useMatchStore } from '@/store/match';
+import { formatNumber } from '@/utils/formatNumber';
+import { debounce } from '@pureadmin/utils';
+import CustomDate from '@/components/Form/Custom_date.vue';
 
-const time = ref('');
-const formRef = ref<FormInstance>();
-const emits = defineEmits(['onSearch', 'exportFile']);
-const pandaMatchList = reactive<PandaMatch[]>([]);
+import {
+  ESPORT_ID_MAP,
+  SPORT_ID_MAP,
+  LeagueClassifyType
+} from '@/utils/maps/sports_map';
 
-const props = defineProps<{
-  loading: boolean;
-  form: searchFormType;
-}>();
+const formRef = ref();
+const emits = defineEmits(['onSearch', 'changeMatchCondition']);
+const selectIndex = ref(-1);
+const matchStore = useMatchStore();
+const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
+const searchLoading = ref(false);
 
-const changeDate = (t: any) => {
+const props = withDefaults(
+  defineProps<{
+    loading: boolean;
+    form: searchFormType;
+    matchCondition: number;
+  }>(),
+  {}
+);
+
+const changeDate = (
+  t: string | number | Date | dayjs.Dayjs | null | undefined
+) => {
   if (!t) {
     props.form.startTime = '';
     props.form.endTime = '';
+    selectIndex.value = -1;
   } else {
-    props.form.startTime = dayjs(t[0]).format('YYYY-MM-DD HH:mm:ss');
-    props.form.endTime = dayjs(t[1]).format('YYYY-MM-DD HH:mm:ss');
+    const d = dayjs(t).format('YYYY-MM-DD');
+    selectIndex.value = nextDayArr.value.findIndex(_ => _ === d);
+    props.form.startTime = dayjs(t).format('YYYY-MM-DD HH:mm:ss');
+    props.form.endTime = dayjs(t).endOf('day').format('YYYY-MM-DD HH:mm:ss');
   }
-  emits('onSearch', ...['reload']);
+  search();
 };
-
-const getPandaMatchEventList = async () => {
-  const res = await API.getPandaMatchEventList();
-  pandaMatchList.push(...res.data);
-};
-
-onMounted(() => {
-  getPandaMatchEventList();
-});
 
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl?.resetFields();
-  time.value = '';
-  props.form.startTime = '';
-  props.form.endTime = '';
-  props.form.matchId = '';
-  props.form.dataSourceCode = '';
-  props.form.eventCode = [];
-  props.form.canceled = '';
+  selectIndex.value = -1;
+  gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
   emits('onSearch', ...['reload']);
 };
 
-const search = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return;
-  await formEl.validate(async v => {
-    if (v) {
-      emits('onSearch', ...['init']);
-    }
-  });
+const changeSelectDate = (_: number) => {
+  selectIndex.value = _;
+  props.form.startTime = dayjs(nextDayArr.value[_])
+    .startOf('day')
+    .format('YYYY-MM-DD HH:mm:ss');
+  props.form.endTime = dayjs(nextDayArr.value[_])
+    .endOf('day')
+    .format('YYYY-MM-DD HH:mm:ss');
+  search();
 };
 
-const checkAll = ref(false);
-const removeAll = ref(false);
-const checkRevert = ref(false);
+const search = () => {
+  emits('onSearch', ...['reload']);
+};
 
-watch(
-  () => props.form.eventCode,
-  (val: any) => {
-    if (!val || val.length === 0) {
-      checkAll.value = false;
-    } else if (val.length === pandaMatchList.length) {
-      checkAll.value = true;
-      removeAll.value = false;
-    }
-    // checkRevert.value = false
-  }
-);
+const chagenMatchType = (type: 0 | 1 | 2) => {
+  props.form.sportId = '';
+  gameClassify.value = type === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
+  search();
+};
 
-const handleCheckAll = (val: CheckboxValueType) => {
-  if (val) {
-    props.form.eventCode = pandaMatchList.map(_ => _.eventCode);
-  } else {
-    props.form.eventCode = [];
+const nextDayArr = computed(() => {
+  const nextDayList = [];
+  for (let i = 0; i < 5; i++) {
+    nextDayList.push(dayjs().add(i, 'day').format('YYYY-MM-DD'));
   }
-};
-const handleRemoveAll = () => {
-  props.form.eventCode = [];
-};
-const handleCheckRevert = () => {
-  if (true) {
-    const oldArray = props.form.eventCode ? [...props.form.eventCode] : [];
-    props.form.eventCode = pandaMatchList
-      .filter(_ => !oldArray.includes(_.eventCode))
-      .map(_ => _.eventCode);
-  }
-};
+  return nextDayList;
+});
 </script>
 
 <style scoped lang="scss">
@@ -236,3 +236,4 @@ const handleCheckRevert = () => {
   }
 }
 </style>
+@/utils/formatDate

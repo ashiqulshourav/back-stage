@@ -3,55 +3,64 @@
     <SearchForm
       :form="form"
       :loading="loading"
-      @exportFile="exportFile"
       @on-search="onSearch"
+      :levelList="levelList"
+      :downloading="downloading"
+      @exportFile="exportFile"
     />
 
-    <MatchDetail :matchInfo="matchInfo"></MatchDetail>
-
-    <PureTableBar :columns="columns" @refresh="onSearch('reload')">
-      <template #title>
-        <div class="flex w-full justify-between items-center">
-          <span>
-            {{ t('事件列表') }}
-          </span>
-          <el-button
-            v-if="form.matchId && hasAuth('EXPORT')"
-            class="mr-5"
-            type="primary"
-            size="small"
-            @click="exportFile"
-            >{{ t('导出报表') }}</el-button
-          >
-        </div>
-      </template>
+    <PureTableBar
+      :title="t('联赛列表')"
+      :columns="columns"
+      @refresh="onSearch('reload')"
+    >
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           class="table_container"
           align-whole="center"
           showOverflowTooltip
+          table-layout="auto"
           :loading="loading"
           :size="size"
           adaptive
-          :default-sort="{ prop: 'level', order: 'descending' }"
-          :data="matchEventList"
+          :data="dataList"
           :columns="dynamicColumns"
-          :pagination="{
-            ...pagination,
-            pageSizes: [30, 50, 100, 200, 500, 1000]
-          }"
+          :pagination="{ ...pagination, pageSizes: pageSizeArr }"
           :paginationSmall="size === 'small' ? true : false"
           :header-cell-style="tableHeaderStyle"
+          @selection-change="handleSelectionChange"
+          @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
-          @page-size-change="handlePageSizeChange"
         >
-          <template #score="{ row }">
-            <span> {{ row.t1 }} - {{ row.t2 }} </span>
+          <template #leagueLogo="{ row, index }">
+            <el-image
+              preview-teleported
+              loading="lazy"
+              :src="row.leagueLogo"
+              :preview-src-list="dataList.map(v => v.leagueLogo) as string[]"
+              :initial-index="index"
+              fit="fill"
+              class="!w-[80px] h-[30px]"
+            >
+              <template #placeholder>
+                <div class="loading_container">
+                  <IconifyIconOffline icon="loadingIcon"></IconifyIconOffline>
+                </div>
+              </template>
+            </el-image>
           </template>
-          <template #canceled="{ row }">
-            <span class="text-red-500">{{
-              row.canceled == 0 ? '' : t('是')
-            }}</span>
+          <template #operation="{ row }">
+            <el-button
+              v-auth="['UPDATE']"
+              class="reset-margin"
+              link
+              type="primary"
+              :size="size"
+              :icon="useRenderIcon(EditPen)"
+              @click="openDialog(t('编辑联赛'), row)"
+            >
+              {{ t('编辑') }}
+            </el-button>
           </template>
         </pure-table>
       </template>
@@ -61,34 +70,30 @@
 
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
-import { useEventQueryHook } from './utils/hook';
-import { usePublicHooks } from '@/hooks';
-import { t } from '@/plugins/i18n';
-import { columns } from './component/TableColumnList';
+import EditPen from '@iconify-icons/ep/edit-pen';
+import { useLeague } from './utils/hook';
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import SearchForm from './component/SearchForm.vue';
-import { hasAuth } from '@/router/utils';
-import MatchDetail from './component/MatchDetail.vue';
+import { columns } from './component/TableColumnList';
+import { t } from '@/plugins/i18n';
+import { usePublicHooks } from '@/hooks';
+import { pageSizeArr } from '@/utils/math';
 
-defineOptions({ name: 'EVENTMANAGEMENT_EVENTQUERY' });
+defineOptions({ name: 'METADATA_LEAGUE' });
 const { tableHeaderStyle } = usePublicHooks();
 
 const {
   loading,
+  dataList,
   pagination,
   onSearch,
-  form,
-  matchEventList,
+  openDialog,
+  handleTableWidthChange,
   handleCurrentChange,
-  handlePageSizeChange,
-  matchInfo,
+  handleSelectionChange,
+  form,
+  levelList,
+  downloading,
   exportFile
-} = useEventQueryHook();
+} = useLeague();
 </script>
-
-<style lang="scss">
-.export_dialog {
-  .el-message-box__btns {
-    flex-direction: row;
-  }
-}
-</style>

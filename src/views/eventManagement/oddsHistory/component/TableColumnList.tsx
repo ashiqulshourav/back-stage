@@ -1,125 +1,74 @@
-import dayjs from 'dayjs';
+import { parseCountry } from '@/utils/formatMatch';
 import { handleTableWidth } from '@/utils/getTableWidth';
-const IconMap = {
-  goal: new URL('@/assets/event_img/goal.png', import.meta.url).href,
-  yellow_card: new URL('@/assets/event_img/yellow_card.png', import.meta.url)
-    .href,
-  corner: new URL('@/assets/event_img/corner.png', import.meta.url).href,
-  red_card: new URL('@/assets/event_img/red.png', import.meta.url).href
-};
+import { ESPORT_ID_MAP, SPORT_ID_MAP } from '@/utils/maps/sports_map';
+
 export const columns: TableColumnList = [
   {
-    label: t('收到事件源时间'),
-    prop: 'createdAt',
-    minWidth: 200,
-    formatter({ createdAt }: { createdAt: string }) {
-      return dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss');
-    }
+    label: t('联赛ID'),
+    prop: 'leagueId',
+    minWidth: 100
   },
   {
-    label: t('距离比赛开赛时间'),
-    prop: 'playingTime',
-    minWidth: 200,
-    headerRenderer: d => handleTableWidth(d, t('距离比赛开赛时间'), 'auto'),
-    formatter({ playingTime }) {
-      return playingTime ? playingTime : '-';
-    }
+    label: t('联赛Logo'),
+    slot: 'leagueLogo',
+    minWidth: 120
   },
   {
-    label: t('事件名称'),
-    prop: 'addition5',
-    headerRenderer: d => handleTableWidth(d, t('事件名称'), 'auto')
+    label: t('国家地区'),
+    prop: 'countryId',
+    minWidth: 150,
+    headerRenderer: d => handleTableWidth(d, t('国家地区'), 'auto'),
+    formatter: ({ countryId }) => parseCountry(countryId)
   },
   {
-    label: t('事件源'),
-    prop: 'dataSourceCode',
-    headerRenderer: d => handleTableWidth(d, t('事件源'), 'auto')
-  },
-  {
-    label: t('操作方式'),
-    prop: 'operationType',
-    headerRenderer: d => handleTableWidth(d, t('操作方式'), 'auto')
-  },
-  {
-    label: t('取消事件'),
-    slot: 'canceled',
-    headerRenderer: d => handleTableWidth(d, t('取消事件'), 'auto')
-  },
-  {
-    label: t('场次/局数/盘数'),
-    headerRenderer: d => handleTableWidth(d, t('场次/局数/盘数'), 'auto'),
-    prop: 'extraInfo',
+    label: t('188数据源联赛ID'),
+    prop: 'leagueId188Bet',
+    headerRenderer: d => handleTableWidth(d, t('188数据源联赛ID'), 'auto'),
     minWidth: 150
   },
   {
-    label: t('主/客'),
-    prop: 'homeAway',
-    headerRenderer: d => handleTableWidth(d, t('主/客'), 'auto')
+    label: t('联赛中文名'),
+    prop: 'leagueNameCn',
+    headerRenderer: d => handleTableWidth(d, t('联赛中文名'), 'auto'),
+    minWidth: 150,
+    align: 'left'
   },
   {
-    label: t('球员名称'),
-    prop: 'player1Name',
-    headerRenderer: d => handleTableWidth(d, t('球员名称'), 'auto')
+    label: t('联赛英文名'),
+    prop: 'leagueNameEn',
+    headerRenderer: d => handleTableWidth(d, t('联赛英文名'), 'auto'),
+    minWidth: 150,
+    align: 'left'
   },
   {
-    label: t('比分'),
-    slot: 'score',
-    headerRenderer: d => handleTableWidth(d, t('比分'), 'auto')
-  }
-];
-
-export const titleColumn: TableColumnList = [
-  {
-    label: t('队伍名称'),
-    prop: 'teamName',
-    minWidth: 200
+    label: t('热门排序'),
+    prop: 'level',
+    headerRenderer: d => handleTableWidth(d, t('热门排序'), 'auto'),
+    minWidth: 150
   },
   {
-    label: t('HT1'),
-    prop: 'ht1'
-  },
-  {
-    label: t('HT2'),
-    prop: 'ht2'
-  },
-  {
-    prop: 'goal',
-    headerRenderer() {
-      return (
-        <div class="flex justify-center">
-          <img src={IconMap.goal} class="h-4 w-4" />
-        </div>
-      );
+    label: t('联赛等级'),
+    prop: 'riskLevel',
+    minWidth: 150,
+    headerRenderer: d => handleTableWidth(d, t('联赛等级'), 'auto'),
+    formatter: ({ riskLevel }): string => {
+      return riskLevel < 0 ? t('未评级') : riskLevel;
     }
   },
   {
-    prop: 'corner',
-    headerRenderer() {
-      return (
-        <div class="flex justify-center">
-          <img src={IconMap.corner} class="h-4 w-4" />
-        </div>
-      );
-    }
+    label: t('赛种'),
+    prop: 'sportId',
+    headerRenderer: d => handleTableWidth(d, t('赛种'), 'auto'),
+    formatter: ({ sportId, category }): string => {
+      const arr = category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
+      return arr.find(_ => _.value === sportId)?.label ?? '-';
+    },
+    minWidth: 150
   },
   {
-    prop: 'yellow_card',
-    headerRenderer() {
-      return (
-        <div class="flex justify-center">
-          <img src={IconMap.yellow_card} class="h-4 w-4" />
-        </div>
-      );
-    }
-  },
-  {
-    prop: 'red_card',
-    headerRenderer() {
-      return (
-        <div class="flex justify-center">
-          <img src={IconMap.red_card} class="h-4 w-4" />
-        </div>
-      );
-    }
+    label: t('操作'),
+    fixed: 'right',
+    width: 240,
+    slot: 'operation'
   }
 ];
