@@ -54,9 +54,6 @@
             <el-checkbox v-model="checkAllTIds" @change="handleCheckAllTIds">
               {{ t('全选') }}
             </el-checkbox>
-            <el-checkbox v-mode="removeAllTIds" @change="handleRemoveAllTIds" :disabled="form?.tenantIds.length == 0">
-              {{ t('全不选') }}
-            </el-checkbox>
             <el-checkbox v-model="checkRevertTIds" @change="handleCheckRevertTIds">
               {{ t('反选') }}
             </el-checkbox>
@@ -96,9 +93,6 @@
             <el-checkbox v-model="checkAll" @change="handleCheckAll">
               {{ t('全选') }}
             </el-checkbox>
-            <el-checkbox v-mode="removeAll" @change="handleRemoveAll" :disabled="form?.riskControlLabelList.length == 0">
-              {{ t('全不选') }}
-            </el-checkbox>
             <el-checkbox v-model="checkRevert" @change="handleCheckRevert">
               {{ t('反选') }}
             </el-checkbox>
@@ -129,9 +123,6 @@
           <template #header>
             <el-checkbox v-model="checkAllTags" @change="handleCheckAllTags">
               {{ t('全选') }}
-            </el-checkbox>
-            <el-checkbox v-mode="removeAllTags" @change="handleRemoveAllTags" :disabled="form?.attributeLabelList.length == 0">
-              {{ t('全不选') }}
             </el-checkbox>
             <el-checkbox v-model="checkRevertTags" @change="handleCheckRevertTags">
               {{ t('反选') }}
