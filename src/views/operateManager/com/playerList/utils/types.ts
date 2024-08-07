@@ -12,6 +12,7 @@ export type searchFormType = {
   timeType?: number | string;
   beginTime?: string | number;
   endTime?: string | number;
+  betDelayed:string | number;
 };
 export type specialLimitType = {
   productAmountTotalLimit: number;

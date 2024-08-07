@@ -154,6 +154,18 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item :label="t('投注延时:')" prop="betDelayed">
+        <el-select
+          v-model="form.betDelayed"
+          :placeholder="t('投注延时')"
+          clearable
+          class="!w-[150px]"
+        >
+          <el-option :label="t('全部')" :value="' '" />
+          <el-option :label="t('是')" :value="1" />
+          <el-option :label="t('不是')" :value="2" />
+        </el-select>
+      </el-form-item>
       <el-form-item prop="timeType">
         <el-select
           v-model="form.timeType"

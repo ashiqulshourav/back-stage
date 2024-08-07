@@ -60,6 +60,7 @@ export function userPlayerListHook(venueType: number, category: number) {
     // beginTime: dayjs().subtract(30, 'day').startOf('day').valueOf(),
     // endTime: dayjs().endOf('day').valueOf(),
     timeType: "2",
+    betDelayed:' '
   } as searchFormType);
 
   const recordForm = reactive<recordFormType>({} as recordFormType);
