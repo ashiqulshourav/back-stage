@@ -95,7 +95,7 @@
     <template #betItem="{ row }">
       <div
         class="match_item bet_detail eq-height"
-        v-for="item in row.combineOrderDetails"
+        v-for="item in row.details"
         :key="item.betItemId"
       >
         <div class="item_line">
@@ -152,81 +152,18 @@
         </div>
       </div>
     </template>
-<!--    <template #betItem="{ row }">
-      <div
-        class="match_item bet_detail eq-height"
-        v-for="item in row.combineOrderDetails"
-        :key="item.betItemId"
-      >
-        <div class="item_line">
-          {{
-            `玩法：${useSportFormatDetail(item)[4]} ${getIsInplay(
-              item.isInplay
-            )}`
-          }}
-          {{
-            item.isInplay == 1
-              ? displayHomeAwayScore(item.scoreBenchmark, item.sportId)
-              : ''
-          }}
-        </div>
-        <div class="item_line">
-          <span v-if="item.kindsCode === 'FT_TTS'">
-            {{
-              enterGoalMap[
-                item.betHandicap.toUpperCase() as keyof typeof enterGoalMap
-                ]
-            }}
-          </span>
-          {{ useSportFormatDetail(item)[3] }} @{{
-            getViewOddFn(
-              item.oddFinally,
-              item.marketTypeFinally,
-              item.marketType
-            )
-          }}
-        </div>
-        <div
-          class="item_line"
-          v-if="
-            row.billStatus === 1 &&
-            item.settleScore &&
-            !(
-              displayHomeAwayScore(
-                item.settleScore,
-                item.sportId,
-                'home'
-              ) == '' ||
-              displayHomeAwayScore(
-                item.settleScore,
-                item.sportId,
-                'away'
-              ) == ''
-            )
-          "
-        >
-          <span v-if="item.kindsCode !== 'TeamToKickOff'">
-            {{ t('结算比分：')
-            }}{{ displayHomeAwayScore(item.settleScore, item.sportId) }}
-          </span>
-        </div>
-      </div>
-    </template>
-    <template #orderStatusView="{row}">
-      {{ row.orderStatusView }}
-    </template>
     <template #odd="{ row }">
       <div
-        class="match_item odd_item eq-height"
-        v-for="item in row.combineOrderDetails"
-        :key="item.id"
+          class="match_item odd_item eq-height"
+          v-for="item in item in row.details"
+          :key="item.id"
       >
         <div>
           {{
             getViewOddFn(
-              item.oddFinally,
-              item.marketTypeFinally,
-              item.marketType
+                item.oddFinally,
+                item.marketTypeFinally,
+                item.marketType
             )
           }}
         </div>
@@ -234,74 +171,20 @@
           {{ markeTypeMap[item.marketType as keyof typeof markeTypeMap] }}
         </div>
         <div v-if="getOddStatus(item?.betResult, item.riskStatus)">
-          <span
-            :class="
-              [EBetResultType.WIN, EBetResultType.WIN_HALF].includes(
-                item?.betResult
-              )
-                ? 'win'
-                : 'lose'
-            "
-          >
-            {{ getOddStatus(item?.betResult, item.riskStatus) }}
-          </span>
+                <span
+                    :class="
+                    [EBetResultType.WIN, EBetResultType.WIN_HALF].includes(
+                      item?.betResult
+                    )
+                      ? 'win'
+                      : 'lose'
+                  "
+                >
+                  {{ getOddStatus(item?.betResult, item.riskStatus) }}
+                </span>
         </div>
       </div>
     </template>
-    <template #profitAmount="{ row }">
-      <span
-        v-if="row.profitAmount"
-        :class="row.profitAmount > 0 ? 'win' : 'lose'"
-        >{{ row.profitAmount > 0 ? "+" + row.profitAmount.toFixed(2): row.profitAmount.toFixed(2) }}</span
-      >
-      <span v-else>-</span>
-    </template>
-    <template #status="{ row }">
-      <div
-        :style="{
-          background: getStatus(
-            row.status,
-            row.billStatus,
-            row.betResultArr,
-            row.isReserve,
-            row.riskStatusArr,
-            row.isSpecialSettle
-          ).bgColor
-        }"
-        class="status_detail status_btn mb-1 mx-auto"
-      >
-        {{
-          betStatusMap[
-            getStatus(
-              row.status,
-              row.billStatus,
-              row.betResultArr,
-              row.isReserve,
-              row.riskStatusArr,
-              row.isSpecialSettle
-            ).status as keyof typeof betStatusMap
-          ]
-        }}
-      </div>
-      <div
-        v-if="
-          getStatus(
-            row.status,
-            row.billStatus,
-            row.betResultArr,
-            row.isReserve,
-            row.riskStatusArr,
-            row.isSpecialSettle
-          ).status === betStatus.settlementBet
-        "
-      >
-        {{
-          row.settleTime
-            ? dayjs(row.settleTime).format('MM-DD HH:mm:ss')
-            : ''
-        }}
-      </div>
-    </template>-->
   </pure-table>
 </template>
 
