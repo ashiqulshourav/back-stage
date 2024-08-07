@@ -34,7 +34,12 @@ export const columns: TableColumnList = [
     label: t('动作'),
     prop: 'updateType',
     formatter({ updateType }) {
-      return updateType === 1 ? t('编辑') : t('新增');
+      const _ = {
+        1: t('编辑'),
+        2: t('新增'),
+        3: t('删除')
+      };
+      return _[updateType as keyof typeof _] ?? '_';
     }
   },
   {
