@@ -117,7 +117,7 @@
                   item.kindsCode?.includes('moutright')
                 "
                 class="item_line"
-              >
+              > 
                 <span>冠军赛事</span>
               </div>
               <div v-else class="item_line">
