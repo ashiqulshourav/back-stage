@@ -1,5 +1,8 @@
 import { t } from "@/plugins/i18n";
 import { addThousandSeparator } from '@/utils/formatNumber'
+import {settleTypeMap} from '../util/map'
+import dayjs from "dayjs";
+import {BET_RESULT_TYPE_MAP} from "@/utils/formatMatch";
 
 export const columns: TableColumnList = [
   {
@@ -41,6 +44,8 @@ export const columns: TableColumnList = [
     slot: "orderStatusView",
     minWidth: 100,
     align: 'center',
+    formatter: ({ betResult }) => BET_RESULT_TYPE_MAP[betResult as keyof typeof BET_RESULT_TYPE_MAP] || '' // (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
+
   },
   {
     label: t("赔率"),
@@ -78,6 +83,8 @@ export const columns: TableColumnList = [
 ]
 
 
+
+
 export const settleHistoryColumns: TableColumnList = [
   {
     label: t("赛事信息"),
@@ -112,30 +119,32 @@ export const settleHistoryColumns: TableColumnList = [
     prop: "productAmountTotal",
     minWidth: 50,
     align: 'center',
-    formatter: ({ productAmountTotal }) => addThousandSeparator(productAmountTotal.toFixed(2))  // (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
+    formatter: ({ settleTime }) => dayjs(settleTime).format('YYYY-MM-DD HH:mm:ss')
   },
-  {
-    label: t("用户输赢"),
-    slot: "profitAmount",
-    minWidth: 50,
-    align: 'center',
-    formatter: ({ profitAmount }) => addThousandSeparator(profitAmount.toFixed(2))
-  },
+  // {
+  //   label: t("用户输赢"),
+  //   slot: "profitAmount",
+  //   minWidth: 50,
+  //   align: 'center',
+  //   formatter: ({ profitAmount }) => addThousandSeparator(profitAmount.toFixed(2))
+  // },
   {
     label: t('帐变'),
-    slot: 'operation',
+    prop: 'accountChangeAmount',
     minWidth: 50,
     align: 'center',
+    formatter: ({ accountChangeAmount }) => accountChangeAmount?addThousandSeparator(accountChangeAmount.toFixed(2)):''
   },
   {
     label: t('结算类型'),
-    slot: 'operationRemark',
+    prop: 'settleType',
     align: 'center',
     minWidth: 50,
+    formatter: ({ settleType }) => settleTypeMap.find((item:any) => item.value === settleType).label
   },
   {
     label: t('操作人'),
-    prop: 'operationRemark',
+    prop: 'settlementOperator',
     align: 'center',
     minWidth: 50,
   }

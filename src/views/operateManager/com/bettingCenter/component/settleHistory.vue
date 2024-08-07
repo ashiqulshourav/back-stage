@@ -1,4 +1,4 @@
-<template>  
+<template>
   <div class="w-1/2" v-if="bettingHistory">
     <div class="flex gap-2 mb-3">
       <span>{{ t('注单编号') }}:</span>
@@ -55,34 +55,16 @@
         <div v-else class="item_line">
           <span
             class="cursor-pointer"
-            @click="
-              copyTest(
-                item.homeTeamNameCn,
-                t('主队：{value}', { value: item.homeTeamNameCn })
-              )
-            "
             >{{ item.homeTeamNameCn }}</span
           >
           vs
           <span
             class="cursor-pointer"
-            @click="
-              copyTest(
-                item.awayTeamNameCn,
-                t('客队：{value}', { value: item.awayTeamNameCn })
-              )
-            "
             >{{ item.awayTeamNameCn }}</span
           >
         </div>
         <div
           class="item_line cursor-pointer"
-          @click="
-            copyTest(
-              item.leagueNameCn,
-              t('联赛名：{value}', { value: item.leagueNameCn })
-            )
-          "
         >
           {{ item.sportNameCn }}/{{ item.leagueNameCn }}
         </div>
@@ -109,8 +91,68 @@
           }}
         </div>
       </div>
-    </template>    
+    </template>
     <template #betItem="{ row }">
+      <div
+        class="match_item bet_detail eq-height"
+        v-for="item in row.combineOrderDetails"
+        :key="item.betItemId"
+      >
+        <div class="item_line">
+          {{
+            `玩法：${useSportFormatDetail(item)[4]} ${getIsInplay(
+              item.marketType
+            )}`
+          }}
+          {{
+            item.marketType == 1
+              ? displayHomeAwayScore(item.scoreBenchmark, item.sportId)
+              : ''
+          }}
+        </div>
+        <div class="item_line">
+                <span v-if="item.kindsCode === 'FT_TTS'">
+                  {{
+                    enterGoalMap[
+                      item.betHandicap.toUpperCase() as keyof typeof enterGoalMap
+                      ]
+                  }}
+                </span>
+          {{ useSportFormatDetail(item)[3] }} @{{
+            getViewOddFn(
+              item.oddFinally,
+              item.marketTypeFinally,
+              item.marketType
+            )
+          }}
+        </div>
+        <div
+          class="item_line"
+          v-if="
+                  row.billStatus === 1 &&
+                  item.settleScore &&
+                  !(
+                    displayHomeAwayScore(
+                      item.settleScore,
+                      item.sportId,
+                      'home'
+                    ) == '' ||
+                    displayHomeAwayScore(
+                      item.settleScore,
+                      item.sportId,
+                      'away'
+                    ) == ''
+                  )
+                "
+        >
+                <span v-if="item.kindsCode !== 'TeamToKickOff'">
+                  {{ t('结算比分：')
+                  }}{{ displayHomeAwayScore(item.settleScore, item.sportId) }}
+                </span>
+        </div>
+      </div>
+    </template>
+<!--    <template #betItem="{ row }">
       <div
         class="match_item bet_detail eq-height"
         v-for="item in row.combineOrderDetails"
@@ -169,10 +211,10 @@
           </span>
         </div>
       </div>
-    </template>    
-    <template #orderStatusView="{row}">            
+    </template>
+    <template #orderStatusView="{row}">
       {{ row.orderStatusView }}
-    </template>    
+    </template>
     <template #odd="{ row }">
       <div
         class="match_item odd_item eq-height"
@@ -205,7 +247,7 @@
           </span>
         </div>
       </div>
-    </template>    
+    </template>
     <template #profitAmount="{ row }">
       <span
         v-if="row.profitAmount"
@@ -259,12 +301,7 @@
             : ''
         }}
       </div>
-    </template>
-    <template #operationRemark="{ row }">
-      <div>
-        <div>{{ row.orderRemark }}</div>
-      </div>
-    </template>    
+    </template>-->
   </pure-table>
 </template>
 
@@ -294,7 +331,7 @@ import { betStatus, betStatusMap } from '../util/types';
 
 const { tableHeaderStyle } = usePublicHooks();
 
-const bettingHistory = ref();
+const bettingHistory = ref<any>({});
 const bettingHistoryList = reactive<any>([]);
 
 const props = defineProps<{
@@ -306,14 +343,14 @@ const init = async () => {
     const res = await API.getSettleHistory(props.order_id)
     if (!res.code) {
       bettingHistory.value = res.data;
-      res.data.settleHistorys.forEach((item: any) => {
-        bettingHistoryList.push(item.details[0])
-      })
-      console.log({bettingHistoryList})
+      bettingHistoryList.length = 0;
+      bettingHistoryList.push(...res.data.settleHistorys)
+
+      console.log(33333,bettingHistoryList)
     }
-      
+
   } catch (e) {
-    
+
   }
 }
 
