@@ -304,6 +304,18 @@
               </div>
             </div>
           </template>
+            <template #orderStatusView="{row}">            
+            {{ row.orderStatusView }}
+            <span v-if="row.settleTimes > 1">
+              <el-tag
+                @click="() => handleSettleHistoryDialog(row)"
+                :style="`background-color: white`"
+                class="rounded-lg w-full cursor-pointer"
+              >
+              {{ row.settleTimes }}
+              </el-tag>
+            </span>
+          </template>
           <template #odd="{ row }">
             <div
               class="match_item odd_item eq-height"
@@ -551,6 +563,7 @@ const {
   riskLabelList,
   getOddStatus,
   downloading,
+  handleSettleHistoryDialog
 } = useBettingCenterHook(props.category, props.venueType);
 
 onMounted(() => {
