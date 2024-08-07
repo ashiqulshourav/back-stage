@@ -1,19 +1,19 @@
 export type searchFormType = {
   ids?: string | number | string[];
   usernames?: string | number | string[];
-  riskControlLabelList?: string[] | number[];
-  attributeLabelList: string[] | number[];
-  tenantIds: number | string | string[] | number[];
+  riskControlLabelList?: string[];
+  attributeLabelList?: string[];
+  tenantIds?: number | string | string[] | number[];
   limitLevel?: number | string;
   tenantCode?: number | string;
   venueType?: number;
   offset?: number;
   timeVal?: string | number;
   timeType?: number | string;
+  beginTime?: string | number;
+  endTime?: string | number;
+  betDelayed:string | number;
   currency?: number | string;
-  beginTime?: string;
-  endTime?: string;
-  betDelayed: number | string;
   specialLimited:number | string;
 };
 export type specialLimitType = {
