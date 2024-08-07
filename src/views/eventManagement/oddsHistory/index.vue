@@ -51,15 +51,12 @@
           </template>
           <template #operation="{ row }">
             <el-button
-              v-auth="['UPDATE']"
               class="reset-margin"
-              link
               type="primary"
               :size="size"
-              :icon="useRenderIcon(EditPen)"
               @click="openDialog(t('编辑联赛'), row)"
             >
-              {{ t('编辑') }}
+              {{ t('查看数据') }}
             </el-button>
           </template>
         </pure-table>
@@ -70,16 +67,14 @@
 
 <script setup lang="ts">
 import { PureTableBar } from '@/components/RePureTableBar';
-import EditPen from '@iconify-icons/ep/edit-pen';
-import { useLeague } from './utils/hook';
-import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import { useOddsHistory } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 import { pageSizeArr } from '@/utils/math';
 
-defineOptions({ name: 'METADATA_LEAGUE' });
+defineOptions({ name: 'EVENTMANAGEMENT_ODDSHISTORY' });
 const { tableHeaderStyle } = usePublicHooks();
 
 const {
@@ -95,5 +90,5 @@ const {
   levelList,
   downloading,
   exportFile
-} = useLeague();
+} = useOddsHistory();
 </script>

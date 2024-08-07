@@ -5,16 +5,12 @@ interface FormProps {
 }
 
 export type searchFormType = {
-  leagueNameCn: string;
-  leagueNameEn: string;
-  level: string;
-  countryId: string;
   leagueId: string;
-  leagueId188Bet: string;
-  sportId: string | number;
+  matchId: string;
+  status: string;
+  timeStart: string | number;
+  timeEnd: string | number;
   category: string | number;
-  riskLevel: string | number;
-
 }
 
 export type { FormProps };

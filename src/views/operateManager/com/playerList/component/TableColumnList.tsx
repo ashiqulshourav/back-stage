@@ -261,6 +261,13 @@ export const specialLimitColumns1: TableColumnList = [
     }
   },
   {
+    label: t('百分比限额'),
+    prop: 'percentageLimit',
+    formatter({ percentageLimit }) {
+      return percentageLimit ? percentageLimit + '%' : '-';
+    }
+  },
+  {
     label: t('动作'),
     prop: 'updateType',
     formatter({ updateType }) {

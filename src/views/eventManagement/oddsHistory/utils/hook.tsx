@@ -6,10 +6,10 @@ import { reactive, ref, onMounted, h } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { addThousandSeparator } from '@/utils/formatNumber';
 import { usePublicHooks } from '@/hooks';
-const  { exportDialog } = usePublicHooks();
+const { exportDialog } = usePublicHooks();
 import { searchFormType } from './types';
 
-export function useLeague() {
+export function useOddsHistory() {
   const router = useRouter();
   const dataList = reactive<MetadataAPI.LeagueList[]>([]);
   const loading = ref(true);
@@ -22,14 +22,11 @@ export function useLeague() {
     background: true
   });
   const form = reactive<searchFormType>({
-    leagueNameCn: '',
-    leagueNameEn: '',
-    level: '',
-    countryId: '',
     leagueId: '',
-    leagueId188Bet: '',
-    sportId: '',
-    riskLevel: '',
+    matchId: '',
+    status: '',
+    timeStart: '',
+    timeEnd: '',
     category: 0
   });
 
@@ -61,13 +58,13 @@ export function useLeague() {
       if (type !== 'export') {
         loading.value = true;
       }
-      const res: MetadataAPI.LeagueListRes = await API.getLeagueList({
+      const res: MetadataAPI.LeagueListRes = await API.oddsHistoryMatchList({
         ...removeEmptyStringKeys(form),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
       if (type === 'export') {
-        return res?.data
+        return res?.data;
       } else {
         loading.value = false;
         if (res.code) return message(res.msg, { type: 'error' });
@@ -82,9 +79,14 @@ export function useLeague() {
 
   const exportFile = async () => {
     onSearch('export').then((expRes: any) => {
-      if(expRes?.total>500000){
-        message(`当前条件下数据量为${addThousandSeparator(expRes?.total)}，大于50万条，不支持导出!`, { type: 'error' });
-      } else if(expRes?.total<1 || expRes === null){
+      if (expRes?.total > 500000) {
+        message(
+          `当前条件下数据量为${addThousandSeparator(
+            expRes?.total
+          )}，大于50万条，不支持导出!`,
+          { type: 'error' }
+        );
+      } else if (expRes?.total < 1 || expRes === null) {
         message('数据量为零，无法导出', { type: 'error' });
       } else {
         exportDialog({
@@ -96,14 +98,14 @@ export function useLeague() {
               ...removeEmptyStringKeys(form),
               pageSize: pagination.pageSize,
               pageNum: pagination.currentPage
-            })
+            });
             message(res.msg, { type: res.code ? 'error' : 'success' });
             downloading.value = false;
           }
-        })
+        });
       }
-    })
-  }
+    });
+  };
 
   async function openDialog(title: string, row?: MetadataAPI.LeagueList) {
     addDialog({

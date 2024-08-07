@@ -50,4 +50,32 @@ export const eventData = {
         noNprogress: true
       }
     ),
+
+  //- 赛事赔率记录列表
+  /* /match/v1/oddsHistoryMatchList */
+  /*
+  @Schema(description = "联赛杯赛ID")
+    Integer leagueId;
+@Schema(description = "赛事ID")
+    Long matchId;
+@Schema(description = "赛事状态:nover未结束，over已结束,delay比赛延迟,interrupt比赛中断,abandon比赛放弃,postponed 比赛延期")
+    String status;
+@Schema(description = "查询开始时间")
+    private String startTime;
+@Schema(description = "查询结束时间")
+    private String endTime;
+
+   */
+  oddsHistoryMatchList: (data: {
+    leagueId?: number | string;
+    matchId: number | string;
+    pageSize: number;
+    pageNum: number;
+  }) =>
+    http.request<EventAPI.getMatchBetListResType>('post', '/v1/oddsHistoryMatchList',
+      { data },
+      {
+        noNprogress: true
+      }
+    ),
 };
