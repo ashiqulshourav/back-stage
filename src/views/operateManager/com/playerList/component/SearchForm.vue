@@ -172,6 +172,7 @@
           />
         </el-select>
       </el-form-item>
+      </el-form-item>
       <el-form-item prop="currency" :label="t('结算币种:')">
         <el-select v-model="form.currency" clearable class="!w-[150px]">
           <el-option label="全部" value=" "></el-option>
@@ -188,6 +189,18 @@
           <el-option label="全部" value=" "></el-option>
           <el-option label="是" :value="1"></el-option>
           <el-option label="不是" :value="2"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item :label="t('投注延时:')" prop="betDelayed">
+        <el-select
+          v-model="form.betDelayed"
+          :placeholder="t('投注延时')"
+          clearable
+          class="!w-[150px]"
+        >
+          <el-option :label="t('全部')" :value="' '" />
+          <el-option :label="t('是')" :value="1" />
+          <el-option :label="t('不是')" :value="2" />
         </el-select>
       </el-form-item>
       <el-form-item prop="timeType">
@@ -406,8 +419,8 @@ const changeDate = (t: string[]) => {
     form.value.beginTime = '';
     form.value.endTime = '';
   } else {
-    form.value.beginTime = dayjs(t[0]).valueOf();
-    form.value.endTime = dayjs(t[1]).valueOf();
+    form.value.beginTime = dayjs(t[0]).format('YYYY-MM-DD HH:mm:ss');
+    form.value.endTime = dayjs(t[1]).format('YYYY-MM-DD HH:mm:ss');
   }
 };
 
