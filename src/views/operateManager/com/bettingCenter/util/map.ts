@@ -1,0 +1,26 @@
+export const settleTypeMap =[
+  {
+    value:0,
+    label:'未结算'
+  },
+  {
+    value:1,
+    label:'特殊结算'
+  },
+  {
+    value:2,
+    label:'正常结算'
+  },
+  {
+    value:3,
+    label:'风控划单结算'
+  },
+  {
+    value:4,
+    label:'即时结算'
+  },
+  {
+    value:4,
+    label:'提前结算'
+  }
+]

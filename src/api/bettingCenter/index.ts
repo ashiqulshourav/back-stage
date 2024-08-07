@@ -42,4 +42,6 @@ export const bettingCenter = {
   editOrderRemark: (data: { orderId: number, remark: string }) => http.request<any>("post", "/bet-center/betOrder/editRemark", { data }),
   //- 根据IP地址查询用户
   getUserByIp: (data: { ip: string, pageSize: number; pageNum: number }) => http.request<BetOrderAPI.getUserByIpResType>("post", "/bet-center/getUserByIp", { data }),
+
+  getSettleHistory: (data: any) => http.request<any>("post", `/bet-order/record/settle/history/record/${data}`)
 };
