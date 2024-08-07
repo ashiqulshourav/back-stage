@@ -23,6 +23,8 @@ import { t } from '@/plugins/i18n';
 import { riskStatus } from '@/views/riskManagement/com/bettingAudit/util/types';
 import editOrder from '../component/editOrder.vue';
 import IpDialog from '../component/IpDialog.vue';
+import SettleHistory from '../component/settleHistory.vue';
+
 export function useBettingCenterHook(category: number, venueType: number) {
   const router = useRouter();
   const { openPasswordInput } = usePasswordInputHook();
@@ -64,7 +66,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     tenantIds: [],
     seriesDetailsSingle: [],
     seriesDetailsDuplex: [],
-      orderStatus: [],
+    orderStatus: [],
     minBetAmount: '',
     maxBetAmount: '',
     minProfitAmount: '',
@@ -93,7 +95,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     page?: number
   ) => {
     let seriesDetails: any = [];
-    const newForm  = {...form}
+    const newForm = { ...form }
     if (newForm.seriesTypes == 2) {
       if (newForm.seriesDetailsSingle.length) {
         newForm.seriesDetailsSingle.map((item: keyof typeof seriesTypesSingle) => {
@@ -126,16 +128,16 @@ export function useBettingCenterHook(category: number, venueType: number) {
     if (seriesDetails.length > 1) {
       seriesDetails = [...new Set(seriesDetails)];
     }
-    if(newForm.orderId||newForm.matchId){
-        newForm.timeStart = '';
-        newForm.timeEnd = '';
+    if (newForm.orderId || newForm.matchId) {
+      newForm.timeStart = '';
+      newForm.timeEnd = '';
     }
-    if(newForm.timeStart){
-        newForm.timeStart = dayjs(newForm.timeStart).format('YYYY-MM-DD HH:mm:ss')
+    if (newForm.timeStart) {
+      newForm.timeStart = dayjs(newForm.timeStart).format('YYYY-MM-DD HH:mm:ss')
     }
-      if(newForm.timeEnd){
-          newForm.timeEnd = dayjs(newForm.timeEnd).format('YYYY-MM-DD HH:mm:ss')
-      }
+    if (newForm.timeEnd) {
+      newForm.timeEnd = dayjs(newForm.timeEnd).format('YYYY-MM-DD HH:mm:ss')
+    }
     return {
       ...removeEmptyStringKeys({
         ...newForm,
@@ -433,13 +435,34 @@ export function useBettingCenterHook(category: number, venueType: number) {
         })
     });
   };
+
+
+  const handleSettleHistoryDialog = (row: any) => {
+    addDialog({
+      title: t(''),
+      center: true,
+      closeOnClickModal: false,
+      hideFooter: true,
+      contentRenderer: ({ options, index }) =>
+        h(SettleHistory, {
+          order_id: row.id,
+          ref: editDialogRef,
+          data: row,
+          onCloseDialog: (_: boolean) => {
+            closeDialog(options, index);
+            getRowByOrderId(row.id);
+          }
+        })
+    });
+  }
+
   function copyTest(str: string, tip: string) {
     if (!str) return;
     const success = copyTextToClipboard(str.toString());
     success
       ? message(t('复制{value}成功!', { value: tip || str || '' }), {
-          type: 'success'
-        })
+        type: 'success'
+      })
       : message(t('复制失败'), { type: 'error' });
   }
 
@@ -525,5 +548,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
     riskLabelList,
     getOddStatus,
     downloading,
+    handleSettleHistoryDialog
   };
 }
