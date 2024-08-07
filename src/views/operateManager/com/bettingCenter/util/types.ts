@@ -38,6 +38,8 @@ export enum betStatus {
   betFail = 5,
   unsettlementBet = 6,
   settlementBet = 7,
+  waitApprove = 8,
+  betInvalid = 9,
 }
 export const betStatusMap = {
   [betStatus.onReverse]: t('预约中'),
@@ -47,6 +49,8 @@ export const betStatusMap = {
   [betStatus.betFail]: t('投注失败'),
   [betStatus.unsettlementBet]: t('未结算'),
   [betStatus.settlementBet]: t('已结算'),
+  [betStatus.waitApprove]: t('待审核'),
+  [betStatus.betInvalid]: t('注单无效'),
 }
 
 export const seriesTypeList = [
