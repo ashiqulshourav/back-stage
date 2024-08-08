@@ -79,6 +79,7 @@ export const columns: TableColumnList = [
     slot: 'operationRemark',
     align: 'center',
     minWidth: 50,
+    fixed: 'right'
   }
 ]
 
@@ -89,7 +90,7 @@ export const settleHistoryColumns: TableColumnList = [
   {
     label: t("赛事信息"),
     slot: 'matchMessage',
-    minWidth: 200,
+    minWidth: 100,
     align: 'left',
     className: 'getParent',
   },
@@ -116,8 +117,8 @@ export const settleHistoryColumns: TableColumnList = [
   },
   {
     label: t("结算时问"),
-    prop: "productAmountTotal",
-    minWidth: 50,
+    prop: "settleTime",
+    minWidth: 70,
     align: 'center',
     formatter: ({ settleTime }) => dayjs(settleTime).format('YYYY-MM-DD HH:mm:ss')
   },
