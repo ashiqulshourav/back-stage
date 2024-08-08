@@ -79,7 +79,7 @@
           class="!w-[120px]"
         />
       </el-form-item>
-      <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
+      <el-form-item prop="riskControlLabelList" :label="t('风控标签:')" v-if="hasAuth('viewRiskLabel'.toUpperCase())">
         <el-tree-select
           v-model="props.form.riskControlLabelList"
           :data="
@@ -116,8 +116,7 @@
           </template>
         </el-tree-select>
       </el-form-item>
-
-      <el-form-item prop="attributeLabelList" :label="t('属性标签:')">
+      <el-form-item prop="attributeLabelList" :label="t('属性标签:')" v-if="hasAuth('viewAttributeLabel'.toUpperCase())" >
         <el-tree-select
           v-model="props.form.attributeLabelList"
           :data="
@@ -157,7 +156,7 @@
           </template>
         </el-tree-select>
       </el-form-item>
-      <el-form-item prop="limitLevel" :label="t('限额等级:')">
+      <el-form-item  :label="t('限额等级:')" v-if="hasAuth('viewLimitLevel'.toUpperCase())" prop="limitLevel">
         <el-select
           v-model="form.limitLevel"
           :placeholder="t('限额等级')"
@@ -172,30 +171,42 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item prop="currency" :label="t('结算币种:')">
+      <el-form-item  :label="t('特殊限额:')"   v-if="hasAuth('viewSpecialLimit'.toUpperCase())"  prop="specialLimited">
         <el-select
-            v-model="form.currency"
-            clearable
-            class="!w-[150px]"
-        >
-          <el-option label="全部" value=" "></el-option>
-          <el-option
-              :label="item.label"
-              :value="item.value"
-              v-for="item in currency_map"
-              :key="item.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item prop="specialLimited" :label="t('特殊限额:')">
-        <el-select
-            v-model="form.currency"
+            v-model="form.specialLimited"
             clearable
             class="!w-[150px]"
         >
           <el-option label="全部" value=" "></el-option>
           <el-option label="是" :value="1"></el-option>
-          <el-option label="不是" :value="2"></el-option>
+          <el-option label="否" :value="2"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item :label="t('投注延时:')" v-if="hasAuth('viewBetDelay'.toUpperCase())"  prop="betDelayed" >
+        <el-select
+          v-model="form.betDelayed"
+          :placeholder="t('投注延时')"
+          clearable
+          class="!w-[150px]"
+        >
+          <el-option :label="t('全部')" :value="' '" />
+          <el-option :label="t('是')" :value="1" />
+          <el-option :label="t('不是')" :value="2" />
+        </el-select>
+      </el-form-item>
+      <el-form-item prop="currency" :label="t('结算币种:')">
+        <el-select
+          v-model="form.currency"
+          clearable
+          class="!w-[150px]"
+        >
+          <el-option label="全部" value=" "></el-option>
+          <el-option
+            :label="item.label"
+            :value="item.value"
+            v-for="item in currency_map"
+            :key="item.value"
+          />
         </el-select>
       </el-form-item>
       <el-form-item prop="timeType">
