@@ -101,6 +101,13 @@ export const columns = (category: number): TableColumnList => {
       minWidth: 250
     },
     {
+      label: t('修改时间'),
+      prop: 'updatedAt',
+      formatter({ updatedAt }: { updatedAt: string }) {
+        return dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss');
+      }
+    },
+    {
       label: t('投注延时'),
       prop: 'betDelay',
       slot: 'betDelay',
@@ -156,6 +163,7 @@ export const recordColumns: TableColumnList = [
       return dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss');
     }
   }
+
 ];
 
 export const userColumns: TableColumnList = [
