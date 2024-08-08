@@ -443,6 +443,10 @@ export function useBettingCenterHook(category: number, venueType: number) {
       center: true,
       closeOnClickModal: false,
       hideFooter: true,
+      width: '60%',
+      style: {
+        "min-height": '700px'
+      },
       contentRenderer: ({ options, index }) =>
         h(SettleHistory, {
           order_id: row.id,

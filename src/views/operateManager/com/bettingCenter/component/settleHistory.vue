@@ -14,7 +14,7 @@
         <span>{{ bettingHistory.orderAmount }}</span>
       </p>
     </div>
-    <div class="flex mb-3">
+    <div class="flex mb-6">
       <p class="flex-1 flex gap-2">
         <span>{{ t('过关类型') }}:</span>
         <span>{{ bettingHistory.seriesType }}</span>
