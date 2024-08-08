@@ -1,6 +1,10 @@
 import { IconifyIconOffline } from '@/components/ReIcon';
 import { handleTableWidth } from '@/utils/getTableWidth';
-import { ESPORT_ID_MAP, SPORT_ID_MAP } from '@/utils/maps/sports_map';
+import {
+  ESPORT_ID_MAP,
+  MATCH_STATUS,
+  SPORT_ID_MAP
+} from '@/utils/maps/sports_map';
 
 export const columns: TableColumnList = [
   {
@@ -17,47 +21,41 @@ export const columns: TableColumnList = [
   },
   {
     label: t('主队'),
-    prop: 'leagueId188Bet',
+    prop: 'homeTeamNameCn',
     headerRenderer: d => handleTableWidth(d, t('主队'), 'auto'),
     minWidth: 150
   },
 
   {
     label: t('客队'),
-    prop: 'leagueNameEn',
+    prop: 'awayTeamNameCn',
     headerRenderer: d => handleTableWidth(d, t('客队'), 'auto'),
     minWidth: 150,
     align: 'left'
   },
   {
     label: t('赛事ID'),
-    prop: 'level',
+    prop: 'matchId',
     headerRenderer: d => handleTableWidth(d, t('赛事ID'), 'auto'),
     minWidth: 150
   },
   {
     label: t('开赛时间'),
-    prop: 'riskLevel',
+    prop: 'beginTime',
     minWidth: 150,
-    headerRenderer: d => handleTableWidth(d, t('开赛时间'), 'auto'),
-    formatter: ({ riskLevel }): string => {
-      return riskLevel < 0 ? t('未评级') : riskLevel;
-    }
+    headerRenderer: d => handleTableWidth(d, t('开赛时间'), 'auto')
   },
   {
     label: t('比赛状态'),
-    prop: 'sportId',
+    prop: 'status',
     headerRenderer: d => handleTableWidth(d, t('比赛状态'), 'auto'),
-    formatter: ({ sportId, category }): string => {
-      const arr = category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
-      return arr.find(_ => _.value === sportId)?.label ?? '-';
-    },
+    formatter: ({ status }): string =>
+      MATCH_STATUS[status as keyof typeof MATCH_STATUS],
     minWidth: 150
   },
   {
     label: t('数据有效期'),
-    prop: 'level',
-    headerAlign: 'center',
+    prop: 'dataValidityPeriod',
     headerRenderer: () => {
       return (
         <div class="flex justify-center w-full cursor-pointer">
@@ -67,6 +65,7 @@ export const columns: TableColumnList = [
         </div>
       );
     },
+    formatter: ({ dataValidityPeriod }): string => dataValidityPeriod + t('天'),
     minWidth: 150
   },
   {

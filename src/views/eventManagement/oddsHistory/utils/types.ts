@@ -10,7 +10,6 @@ export type searchFormType = {
   status: string;
   timeStart: string | number;
   timeEnd: string | number;
-  category: string | number;
 }
 
 export type { FormProps };
