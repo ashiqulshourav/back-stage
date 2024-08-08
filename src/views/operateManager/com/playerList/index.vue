@@ -14,7 +14,7 @@
     />
     <PureTableBar :columns="columns(category)" @refresh="onSearch('reload')">
       <template #title>
-        <div>
+        <div class="user_title">
           <p v-if="selectedDataList.length === 0">{{ t('用户列表') }}</p>
           <div v-else class="flex gap-3 items-center">
             <p>{{ t('已选择') + selectedDataList.length + t('个用户') }}</p>
@@ -248,5 +248,9 @@ const {
   .el-tag .el-tag__close {
     color: white;
   }
+}
+
+.user_title + div {
+  display: none;
 }
 </style>

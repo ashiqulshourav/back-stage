@@ -26,8 +26,7 @@ export function useOddsHistory() {
     matchId: '',
     status: '',
     timeStart: '',
-    timeEnd: '',
-    category: 0
+    timeEnd: ''
   });
 
   function handleTableWidthChange(val: number) {

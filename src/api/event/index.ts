@@ -72,7 +72,7 @@ export const eventData = {
     pageSize: number;
     pageNum: number;
   }) =>
-    http.request<EventAPI.getMatchBetListResType>('post', '/v1/oddsHistoryMatchList',
+    http.request<EventAPI.getMatchBetListResType>('post', '/match/v1/oddsHistoryMatchList',
       { data },
       {
         noNprogress: true
