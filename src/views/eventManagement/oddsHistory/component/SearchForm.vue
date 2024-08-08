@@ -9,11 +9,7 @@
           remote
           @change="search"
           @focus="matchStore.reset_lagueList"
-          :remote-method="(query:string)=>matchStore.search_league_list(
-                  query.trim(),
-                  1,
-                  form.category as LeagueClassifyType
-                )"
+          :remote-method="(query:string)=>matchStore.search_league_list(query.trim(),1,0)"
           class="!w-full"
           :placeholder="t('请选择联赛')"
           :loading="matchStore.matchSearchLoading"
@@ -46,28 +42,29 @@
           :placeholder="t('选择比赛状态')"
           @change="search"
         >
-          <el-option :label="t('未开始')" :value="1" />
-          <el-option :label="t('滚球')" :value="2" />
-          <el-option :label="t('比赛结束')" :value="3" />
+          <el-option :label="t('未开始')" value="nobegin" />
+          <el-option :label="t('滚球')" value="nover" />
+          <el-option :label="t('比赛结束')" value="over" />
         </el-select>
       </el-form-item>
 
       <el-form-item :label="`${t('比赛时间范围')}:`" prop="startTime">
         <CustomDate
-          className="!w-full"
+          className="!w-full !ml-0"
           :placeholder="t('选择时间范围')"
           :disableDate="disableDate"
           :isDateTime="true"
           v-model:val="selectDate"
+          format="YYYY-MM-DD HH:mm:ss"
           @changeDate="changeDate"
           :isShowShortCuts="true"
         />
       </el-form-item>
 
-      <el-form-item :label="`${t('数据有效期')}:`" prop="isSale">
+      <el-form-item :label="`${t('数据有效期')}:`" prop="dataValidityPeriod">
         <el-select
           class="!w-full"
-          v-model="selectDate"
+          v-model="form.dataValidityPeriod"
           clearable
           :placeholder="t('选择数据有效期天数')"
           @change="search"
@@ -111,17 +108,9 @@ import { useMatchStore } from '@/store/match';
 import { formatNumber } from '@/utils/formatNumber';
 import CustomDate from '@/components/Form/Custom_date.vue';
 
-import {
-  ESPORT_ID_MAP,
-  SPORT_ID_MAP,
-  LeagueClassifyType
-} from '@/utils/maps/sports_map';
-
 const formRef = ref();
 const emits = defineEmits(['onSearch', 'changeMatchCondition']);
-const selectIndex = ref(-1);
 const matchStore = useMatchStore();
-const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
 const selectDate = ref('');
 
 const props = withDefaults(
@@ -136,27 +125,24 @@ const changeDate = (
   t: (string | number | Date | dayjs.Dayjs | null | undefined)[]
 ) => {
   if (!t) {
-    props.form.timeStart = '';
-    props.form.timeEnd = '';
+    props.form.startTime = '';
+    props.form.endTime = '';
   } else {
-    props.form.timeStart = dayjs(t[0]).valueOf();
-    props.form.timeEnd = dayjs(t[1]).valueOf();
+    props.form.startTime = dayjs(t[0]).format('YYYY-MM-DD HH:mm:ss');
+    props.form.endTime = dayjs(t[1]).format('YYYY-MM-DD HH:mm:ss');
   }
   search();
 };
 
 const resetForm = (formEl: FormInstance | undefined) => {
-  props.form.timeStart = '';
-  props.form.timeEnd = '';
+  props.form.startTime = '';
+  props.form.endTime = '';
   formEl?.resetFields();
-  selectIndex.value = -1;
-  gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
-  emits('onSearch', ...['reload']);
+  selectDate.value = '';
+  search();
 };
 
-const search = () => {
-  emits('onSearch', ...['reload']);
-};
+const search = () => emits('onSearch', ...['reload']);
 </script>
 
 <style scoped lang="scss">

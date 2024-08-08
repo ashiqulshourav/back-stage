@@ -11,7 +11,7 @@ import { searchFormType } from './types';
 
 export function useOddsHistory() {
   const router = useRouter();
-  const dataList = reactive<MetadataAPI.LeagueList[]>([]);
+  const dataList = reactive<EventAPI.PageData[]>([]);
   const loading = ref(true);
   const levelList = reactive<ConfigCenterDataAPI.leagueLevelList[]>([]);
   const downloading = ref(false);
@@ -25,8 +25,9 @@ export function useOddsHistory() {
     leagueId: '',
     matchId: '',
     status: '',
-    timeStart: '',
-    timeEnd: ''
+    startTime: '',
+    endTime: '',
+    dataValidityPeriod: ''
   });
 
   function handleTableWidthChange(val: number) {
@@ -57,8 +58,8 @@ export function useOddsHistory() {
       if (type !== 'export') {
         loading.value = true;
       }
-      const res: MetadataAPI.LeagueListRes = await API.oddsHistoryMatchList({
-        ...removeEmptyStringKeys(form),
+      const res = await API.oddsHistoryMatchList({
+        ...(removeEmptyStringKeys(form) as searchFormType),
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
       });
