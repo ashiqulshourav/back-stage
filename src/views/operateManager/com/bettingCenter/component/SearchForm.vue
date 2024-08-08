@@ -7,53 +7,6 @@
   >
     <div class="flex">
       <div>
-        <el-form-item :label="`${t('注单状态')}:`" prop="queryType">
-          <el-tree-select
-              v-model="form.orderStatus"
-              :data="Object.keys(betStatusMap).map(key => ({
-                value:Number(key),
-                label:betStatusMap[key]
-              }))"
-              @change="search"
-              filterable
-              clearable
-              multiple
-              collapse-tags
-              :render-after-expand="false"
-              show-checkbox
-              check-strictly
-              check-on-click-node
-              style="width: 180px"
-          >
-            <template #header>
-              <el-checkbox
-                  v-model="checkAllQueryTypeLabel"
-                  @change="handleCheckAllQueryTypeLabel"
-              >
-                {{ t('全选') }}
-              </el-checkbox>
-              <el-checkbox
-                  v-model="checkRevertQueryTypeLabel"
-                  @change="handleCheckRevertQueryTypeLabel"
-              >
-                {{ t('反选') }}
-              </el-checkbox>
-            </template>
-          </el-tree-select>
-          <!-- <el-select
-              class="!w-[180px]"
-              :placeholder="t('请选择状态')"
-              v-model="form.queryType"
-              @change="search"
-          >
-            <el-option
-                v-for="item in Object.entries(betStatusMap)"
-                :label="item[1]"
-                :value="Number(item[0])"
-                :key="item[0]"
-            />
-          </el-select> -->
-        </el-form-item>
         <el-form-item prop="queryType" :label="`${t('注单状态')}:`">
           <el-tree-select
             v-model="props.form.tenantIds"
