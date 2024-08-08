@@ -103,13 +103,13 @@ export const settleHistoryColumns: TableColumnList = [
 
   {
     label: t("赔率"),
-    slot: "orderStatusView",
+    slot: "odd",
     minWidth: 60,
     align: 'center',
   },
   {
     label: t("注单状态"),
-    slot: "odd",
+    prop: "orderStatusView",
     minWidth: 50,
     align: 'center',
     className: 'getParent',
@@ -121,19 +121,19 @@ export const settleHistoryColumns: TableColumnList = [
     align: 'center',
     formatter: ({ settleTime }) => dayjs(settleTime).format('YYYY-MM-DD HH:mm:ss')
   },
-  // {
-  //   label: t("用户输赢"),
-  //   slot: "profitAmount",
-  //   minWidth: 50,
-  //   align: 'center',
-  //   formatter: ({ profitAmount }) => addThousandSeparator(profitAmount.toFixed(2))
-  // },
+  {
+    label: t("用户输赢"),
+    prop: "profitAmount",
+    minWidth: 50,
+    align: 'center',
+    formatter: ({ profitAmount }) => profitAmount?addThousandSeparator(profitAmount.toFixed(2)):'-'
+  },
   {
     label: t('帐变'),
     prop: 'accountChangeAmount',
     minWidth: 50,
     align: 'center',
-    formatter: ({ accountChangeAmount }) => accountChangeAmount?addThousandSeparator(accountChangeAmount.toFixed(2)):''
+    formatter: ({ accountChangeAmount }) => accountChangeAmount?addThousandSeparator(accountChangeAmount.toFixed(2)):'-'
   },
   {
     label: t('结算类型'),

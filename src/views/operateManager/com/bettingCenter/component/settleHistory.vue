@@ -70,12 +70,6 @@
         </div>
         <div
           class="item_line cursor-pointer flex items-baseline gap-1"
-          @click="
-            copyTest(
-              item.matchId,
-              t('赛事ID：{value}', { value: item.matchId })
-            )
-          "
         >
           {{ t('赛事ID:') }} {{ item.matchId }}
           <span class="inline-block">
@@ -105,7 +99,7 @@
             )}`
           }}
           {{
-            item.marketType == 1
+            item.isInplay == 1
               ? displayHomeAwayScore(item.scoreBenchmark, item.sportId)
               : ''
           }}
@@ -118,7 +112,7 @@
                       ]
                   }}
                 </span>
-          {{ useSportFormatDetail(item)[3] }} @{{
+          {{ item.betN ? `${item.betN}` : `${item.betHomeOrAway} ${item.betHandicap}` }} @{{
             getViewOddFn(
               item.oddFinally,
               item.marketTypeFinally,
@@ -155,7 +149,7 @@
     <template #odd="{ row }">
       <div
           class="match_item odd_item eq-height"
-          v-for="item in item in row.details"
+          v-for="item in row.details"
           :key="item.id"
       >
         <div>
@@ -193,7 +187,6 @@ import { t } from '@/plugins/i18n';
 import dayjs from "dayjs";
 import { settleHistoryColumns } from './TableColumnList';
 import { usePublicHooks } from '@/hooks';
-import { copyTextToClipboard } from '@pureadmin/utils';
 import { message } from '@/utils/message';
 import {
   formatSeriesType,
@@ -228,8 +221,6 @@ const init = async () => {
       bettingHistory.value = res.data;
       bettingHistoryList.length = 0;
       bettingHistoryList.push(...res.data.settleHistorys)
-
-      console.log(33333,bettingHistoryList)
     }
 
   } catch (e) {
@@ -240,16 +231,6 @@ const init = async () => {
 onMounted(() => {
   init();
 })
-
-function copyTest(str: string, tip: string) {
-  if (!str) return;
-  const success = copyTextToClipboard(str.toString());
-  success
-    ? message(t('复制{value}成功!', { value: tip || str || '' }), {
-      type: 'success'
-    })
-    : message(t('复制失败'), { type: 'error' });
-}
 
 const getOddStatus = (betResult: number, riskSt: number) => {
   if (riskSt === riskStatus.reject1 || riskSt === riskStatus.autoReject1) {
@@ -268,76 +249,7 @@ const getOddStatus = (betResult: number, riskSt: number) => {
   }
 };
 
-const getStatus = (
-  status: number,
-  billStatus: number,
-  betResultArr: number[],
-  isReserve: number,
-  riskStatusArr?: number[],
-  isSpecialSettle?: number
-) => {
-  let obj = { status: -1, bgColor: '' };
-  if (isSpecialSettle === 1) {
-    // 特殊结算也算已结算
-    obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
-  } else if (betResultArr?.includes(22) || betResultArr?.includes(25)) {
-    //预约取消
-    obj = { status: betStatus.reverseCancel, bgColor: '#F57582' };
-  } else if (riskStatusArr?.includes(riskStatus.rejectBetting)) {
-    //待审核
-    obj = { status: betStatus.PendingApprove, bgColor: '#F57582' };
-  } else if (
-    betResultArr?.includes(61) &&
-    (riskStatusArr?.includes(riskStatus.reject) ||
-      riskStatusArr?.includes(riskStatus.autoReject))
-  ) {
-    // 封控划单 203 204
-    obj = { status: betStatus.riskReject, bgColor: '#F88D48' };
-  } else if (
-    riskStatusArr?.includes(riskStatus.reject1) ||
-    riskStatusArr?.includes(riskStatus.autoReject1)
-  ) {
-    // 封控拒单 201 202
-    obj = { status: betStatus.betFail, bgColor: '#F88D48' };
-  } else if (
-    status == 2 &&
-    billStatus === 1 &&
-    (betResultArr?.includes(22) || betResultArr?.includes(23) || betResultArr?.includes(25))
-  ) {
-    // 注单无效
-    obj = { status: betStatus.betInvalid, bgColor: '#E54752' };
-  } else if (
-    riskStatusArr?.includes(riskStatus.autoApprove) &&
-    betResultArr.includes(24)
-  ) {
-    // 注单无效
-    obj = { status: betStatus.betInvalid, bgColor: '#E54752' };
-  } else if (status === 2 && billStatus === 1 && betResultArr?.includes(21)) {
-    // 预约失败
-    obj = { status: betStatus.reserveFail, bgColor: '#F57582' };
-  } else if (status === 0 && billStatus === 0) {
-    // 未结算
-    if (isReserve === 1) {
-      // 预约中
-      obj = { status: betStatus.onReverse, bgColor: '#F57582' };
-    } else {
-      obj = { status: betStatus.unsettlementBet, bgColor: '#FFC53D' };
-    }
-  } else if (status === 1 && billStatus === 1) {
-    // 已结算
-    obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
-  } else if (status === 3) {
-    // 待确认
-    obj = { status: betStatus.PendingApprove, bgColor: '#FFC53D' };
-  } else if (status === 4) {
-    // 投注失败
-    obj = { status: betStatus.betFail, bgColor: '#F57582' };
-  } else if (status === 5) {
-    // 赛事异常
-    obj = { status: betStatus.eventAbnormal, bgColor: '#F88D48' };
-  }
-  return obj;
-};
+
 </script>
 
 <style lang="scss">
