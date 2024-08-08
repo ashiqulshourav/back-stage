@@ -7,168 +7,143 @@ const IconMap = {
   corner: new URL('@/assets/event_img/corner.png', import.meta.url).href,
   red_card: new URL('@/assets/event_img/red.png', import.meta.url).href
 };
-export const columns = (): TableColumnList => {
+export const columns = () => {
   return [
     {
-      label: t('比赛时间'),
-      prop: 'createdAt',
+      field: 'createdAt',
+      title: t('比赛时间'),
       minWidth: 200,
-      formatter({ createdAt }: { createdAt: string }) {
-        return dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss');
+      formatter({ cellValue }: { cellValue: string }) {
+        return dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss');
       }
     },
     {
-      label: t('事件'),
-      prop: 'playingTime',
-      minWidth: 200,
-      headerRenderer: d => handleTableWidth(d, t('事件'), 'auto'),
-      formatter({ playingTime }) {
-        return playingTime ? playingTime : '-';
+      field: 'playingTime',
+      title: t('事件'),
+      minWidth: 150,
+      formatter({ cellValue }: { cellValue: string }) {
+        return cellValue ? cellValue : '-';
       }
     },
     {
-      label: t('188'),
+      title: t('188'),
       children: [
         {
-          label: t('状态'),
-          prop: 'addition5',
-          headerRenderer: d => handleTableWidth(d, t('状态'), 'auto')
+          title: t('状态'),
+          field: 'addition5'
         },
         {
-          label: t('比分'),
-          prop: 'dataSourceCode',
-          headerRenderer: d => handleTableWidth(d, t('比分'), 'auto')
+          title: t('比分'),
+          field: 'dataSourceCode'
         },
         {
-          label: t('主胜'),
-          prop: 'operationType',
-          headerRenderer: d => handleTableWidth(d, t('主胜'), 'auto')
+          title: t('主胜'),
+          field: 'operationType'
         },
         {
-          label: t('平'),
-          slot: 'canceled',
-          headerRenderer: d => handleTableWidth(d, t('平'), 'auto')
+          title: t('平'),
+          slot: 'canceled'
         },
         {
-          label: t('客胜'),
-          prop: 'operationType',
-          headerRenderer: d => handleTableWidth(d, t('客胜'), 'auto')
+          title: t('客胜'),
+          field: 'operationType'
         },
         {
-          label: t('返还率'),
-          slot: 'canceled',
-          headerRenderer: d => handleTableWidth(d, t('返还率'), 'auto')
+          title: t('返还率'),
+          slot: 'canceled'
         }
       ]
     },
     {
-      label: t('188'),
+      title: t('188'),
       children: [
         {
-          label: t('状态'),
-          prop: 'addition5',
-          headerRenderer: d => handleTableWidth(d, t('状态'), 'auto')
+          title: t('状态'),
+          field: 'addition5'
         },
         {
-          label: t('比分'),
-          prop: 'dataSourceCode',
-          headerRenderer: d => handleTableWidth(d, t('比分'), 'auto')
+          title: t('比分'),
+          field: 'dataSourceCode'
         },
         {
-          label: t('主胜'),
-          prop: 'operationType',
-          headerRenderer: d => handleTableWidth(d, t('主胜'), 'auto')
+          title: t('主胜'),
+          field: 'operationType'
         },
         {
-          label: t('平'),
-          slot: 'canceled',
-          headerRenderer: d => handleTableWidth(d, t('平'), 'auto')
+          title: t('平'),
+          slot: 'canceled'
         },
         {
-          label: t('客胜'),
-          prop: 'operationType',
-          headerRenderer: d => handleTableWidth(d, t('客胜'), 'auto')
+          title: t('客胜'),
+          field: 'operationType'
         },
         {
-          label: t('返还率'),
-          slot: 'canceled',
-          headerRenderer: d => handleTableWidth(d, t('返还率'), 'auto')
+          title: t('返还率'),
+          slot: 'canceled'
         }
       ]
     },
     {
-      label: t('188'),
+      title: t('188'),
       children: [
         {
-          label: t('状态'),
-          prop: 'addition5',
-          headerRenderer: d => handleTableWidth(d, t('状态'), 'auto')
+          title: t('状态'),
+          field: 'addition5'
         },
         {
-          label: t('比分'),
-          prop: 'dataSourceCode',
-          headerRenderer: d => handleTableWidth(d, t('比分'), 'auto')
+          title: t('比分'),
+          field: 'dataSourceCode'
         },
         {
-          label: t('主胜'),
-          prop: 'operationType',
-          headerRenderer: d => handleTableWidth(d, t('主胜'), 'auto')
+          title: t('主胜'),
+          field: 'operationType'
         },
         {
-          label: t('平'),
-          slot: 'canceled',
-          headerRenderer: d => handleTableWidth(d, t('平'), 'auto')
+          title: t('平'),
+          slot: 'canceled'
         },
         {
-          label: t('客胜'),
-          prop: 'operationType',
-          headerRenderer: d => handleTableWidth(d, t('客胜'), 'auto')
+          title: t('客胜'),
+          field: 'operationType'
         },
         {
-          label: t('返还率'),
-          slot: 'canceled',
-          headerRenderer: d => handleTableWidth(d, t('返还率'), 'auto')
+          title: t('返还率'),
+          slot: 'canceled'
         }
       ]
     },
     {
-      label: t('188'),
+      title: t('188'),
       children: [
         {
-          label: t('状态'),
-          prop: 'addition5',
-          headerRenderer: d => handleTableWidth(d, t('状态'), 'auto')
+          title: t('状态'),
+          field: 'addition5'
         },
         {
-          label: t('比分'),
-          prop: 'dataSourceCode',
-          headerRenderer: d => handleTableWidth(d, t('比分'), 'auto')
+          title: t('比分'),
+          field: 'dataSourceCode'
         },
         {
-          label: t('主胜'),
-          prop: 'operationType',
-          headerRenderer: d => handleTableWidth(d, t('主胜'), 'auto')
+          title: t('主胜'),
+          field: 'operationType'
         },
         {
-          label: t('平'),
-          slot: 'canceled',
-          headerRenderer: d => handleTableWidth(d, t('平'), 'auto')
+          title: t('平'),
+          slot: 'canceled'
         },
         {
-          label: t('客胜'),
-          prop: 'operationType',
-          headerRenderer: d => handleTableWidth(d, t('客胜'), 'auto')
+          title: t('客胜'),
+          field: 'operationType'
         },
         {
-          label: t('返还率'),
-          slot: 'canceled',
-          headerRenderer: d => handleTableWidth(d, t('返还率'), 'auto')
+          title: t('返还率'),
+          slot: 'canceled'
         }
       ]
     },
     {
-      label: t('数据获取时间'),
-      prop: 'score',
+      title: t('数据获取时间'),
+      field: 'score',
       headerRenderer: d => handleTableWidth(d, t('数据获取时间'), 'auto')
     }
   ];
