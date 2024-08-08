@@ -1,13 +1,6 @@
 <template>
   <div class="main">
-    <SearchForm
-      :form="form"
-      :loading="loading"
-      @on-search="onSearch"
-      :levelList="levelList"
-      :downloading="downloading"
-      @exportFile="exportFile"
-    />
+    <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
 
     <PureTableBar
       :title="t('联赛列表')"
@@ -32,29 +25,12 @@
           @page-size-change="handleTableWidthChange"
           @page-current-change="handleCurrentChange"
         >
-          <template #leagueLogo="{ row, index }">
-            <el-image
-              preview-teleported
-              loading="lazy"
-              :src="row.leagueLogo"
-              :preview-src-list="dataList.map(v => v.leagueLogo) as string[]"
-              :initial-index="index"
-              fit="fill"
-              class="!w-[80px] h-[30px]"
-            >
-              <template #placeholder>
-                <div class="loading_container">
-                  <IconifyIconOffline icon="loadingIcon"></IconifyIconOffline>
-                </div>
-              </template>
-            </el-image>
-          </template>
           <template #operation="{ row }">
             <el-button
               class="reset-margin"
               type="primary"
               :size="size"
-              @click="openDialog(t('编辑联赛'), row)"
+              @click="goOddsHistoryPage(row)"
             >
               {{ t('查看数据') }}
             </el-button>
@@ -82,13 +58,10 @@ const {
   dataList,
   pagination,
   onSearch,
-  openDialog,
+  goOddsHistoryPage,
   handleTableWidthChange,
   handleCurrentChange,
   handleSelectionChange,
-  form,
-  levelList,
-  downloading,
-  exportFile
+  form
 } = useOddsHistory();
 </script>

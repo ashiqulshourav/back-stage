@@ -1,20 +1,13 @@
-import editForm from '../form.vue';
 import { message } from '@/utils/message';
-import { addDialog, closeDialog } from '@/components/ReDialog';
 import type { PaginationProps } from '@pureadmin/table';
 import { reactive, ref, onMounted, h } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
-import { addThousandSeparator } from '@/utils/formatNumber';
-import { usePublicHooks } from '@/hooks';
-const { exportDialog } = usePublicHooks();
 import { searchFormType } from './types';
 
 export function useOddsHistory() {
-  const router = useRouter();
   const dataList = reactive<EventAPI.PageData[]>([]);
   const loading = ref(true);
   const levelList = reactive<ConfigCenterDataAPI.leagueLevelList[]>([]);
-  const downloading = ref(false);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -77,67 +70,10 @@ export function useOddsHistory() {
     }
   }
 
-  const exportFile = async () => {
-    onSearch('export').then((expRes: any) => {
-      if (expRes?.total > 500000) {
-        message(
-          `当前条件下数据量为${addThousandSeparator(
-            expRes?.total
-          )}，大于50万条，不支持导出!`,
-          { type: 'error' }
-        );
-      } else if (expRes?.total < 1 || expRes === null) {
-        message('数据量为零，无法导出', { type: 'error' });
-      } else {
-        exportDialog({
-          firstTitle: t('导出当前球员名单数据'),
-          router,
-          callback: async () => {
-            downloading.value = true;
-            const res = await API.getLeagueExport({
-              ...removeEmptyStringKeys(form),
-              pageSize: pagination.pageSize,
-              pageNum: pagination.currentPage
-            });
-            message(res.msg, { type: res.code ? 'error' : 'success' });
-            downloading.value = false;
-          }
-        });
-      }
-    });
+  const router = useRouter();
+  const goOddsHistoryPage = (row: ConfigCenterDataAPI.leagueLevelList) => {
+    router.push('')
   };
-
-  async function openDialog(title: string, row?: MetadataAPI.LeagueList) {
-    addDialog({
-      title,
-      width: '40%',
-      draggable: true,
-      closeOnClickModal: false,
-      hideFooter: true,
-      contentRenderer: ({ options, index }) =>
-        h(editForm, {
-          levelList,
-          formInline: {
-            leagueLogo: row?.leagueLogo ?? '',
-            leagueId: row?.leagueId ?? '',
-            countryId: row?.countryId ?? '',
-            leagueId188Bet: row?.leagueId188Bet ?? '',
-            leagueNameCn: row?.leagueNameCn ?? '',
-            leagueNameEn: row?.leagueNameEn ?? '',
-            level: row?.level ?? '',
-            sportId: row?.sportId ?? '',
-            category: row?.category ?? '',
-            leagueTagsId: row?.leagueTagsId ?? [],
-            isEsportType: form.category === 1,
-            riskLevel: row?.riskLevel ?? ''
-          },
-          onCloseDialog: (params: string) => {
-            closeDialog(options, index);
-            params && onSearch();
-          }
-        })
-    });
-  }
 
   onMounted(() => {
     onSearch();
@@ -149,13 +85,10 @@ export function useOddsHistory() {
     dataList,
     pagination,
     onSearch,
-    openDialog,
-    levelList,
     handleTableWidthChange,
     handleCurrentChange,
     handleSelectionChange,
     form,
-    downloading,
-    exportFile
+    goOddsHistoryPage
   };
 }
