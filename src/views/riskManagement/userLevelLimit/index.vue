@@ -8,7 +8,7 @@
     <div class="grid grid-cols-2 gap-3 justify-between">
       <div class="mb-5">
         <div class="flex justify-between item-center mb-4">
-          <span class="font-bold">{{ t('体育-用户等级限额') }}</span>
+          <span class="font-bold">{{ t('体育场馆') }}</span>
           <el-button
             v-if="!isEditSport"
             @click="isEditSport = true"
@@ -115,7 +115,7 @@
       </div>
       <div>
         <div class="flex justify-between item-center mb-4">
-          <span class="font-bold">{{ t('电竞-用户等级限额') }}</span>
+          <span class="font-bold">{{ t('电竞场馆') }}</span>
           <el-button
             v-if="!isEditESport"
             @click="isEditESport = true"
@@ -256,8 +256,8 @@ const {
   delSportItem,
   delESportItem,
   cancelSportEdit,
-  cancelESportEdit, 
-  currency, 
+  cancelESportEdit,
+  currency,
   onSearch
 } = useClassifySettingHook();
 </script>
