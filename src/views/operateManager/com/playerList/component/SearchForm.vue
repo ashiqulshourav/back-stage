@@ -170,6 +170,7 @@
           />
         </el-select>
       </el-form-item>
+
       <el-form-item
         :label="t('投注延时:')"
         prop="betDelayed"
