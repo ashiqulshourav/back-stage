@@ -225,11 +225,11 @@ declare namespace EventAPI {
   };
 
   type getMatchBetListResTypeData = {
-    count: number;
+    total: number;
     groupCount?: any;
     pageNum: number;
     pageSize: number;
-    pageData: PageData[];
+    list: PageData[];
     otherData?: any;
   };
 

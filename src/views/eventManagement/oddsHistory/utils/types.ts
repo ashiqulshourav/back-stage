@@ -8,8 +8,9 @@ export type searchFormType = {
   leagueId: string;
   matchId: string;
   status: string;
-  timeStart: string | number;
-  timeEnd: string | number;
+  startTime: string | number;
+  endTime: string | number;
+  dataValidityPeriod: string | number;
 }
 
 export type { FormProps };
