@@ -124,7 +124,7 @@ export const settleHistoryColumns: TableColumnList = [
   },
   {
     label: t("用户输赢"),
-    prop: "profitAmount",
+    slot: "profitAmount",
     minWidth: 50,
     align: 'center',
     formatter: ({ profitAmount }) => profitAmount?addThousandSeparator(profitAmount.toFixed(2)):'-'

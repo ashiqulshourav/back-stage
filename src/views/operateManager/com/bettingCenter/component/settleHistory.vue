@@ -179,6 +179,13 @@
         </div>
       </div>
     </template>
+    <template #profitAmount="{ row }">
+      <div v-if="row.profitAmount">
+        <span v-if="row.profitAmount > 0" class="text-[#dd5454]">{{ "+" + addThousandSeparator(row.profitAmount.toFixed(2)) }}</span>
+        <span v-else-if="row.profitAmount < 0" class="text-[green]">{{ addThousandSeparator(row.profitAmount.toFixed(2)) }}</span>
+        <span v-else >{{ addThousandSeparator(row.profitAmount.toFixed(2)) }}</span>
+      </div>
+    </template>
   </pure-table>
 </template>
 
@@ -204,6 +211,7 @@ import {
 } from '@/utils/formatMatch';
 import { riskStatus } from '@/views/riskManagement/com/bettingAudit/util/types';
 import { betStatus, betStatusMap } from '../util/types';
+import { addThousandSeparator } from '@/utils/formatNumber'
 
 const { tableHeaderStyle } = usePublicHooks();
 
