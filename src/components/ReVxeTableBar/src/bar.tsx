@@ -11,11 +11,11 @@ import {
   getCurrentInstance
 } from 'vue';
 
-import DragIcon from '@/assets/table-bar/drag.svg?component';
-import ExpandIcon from '@/assets/table-bar/expand.svg?component';
-import RefreshIcon from '@/assets/table-bar/refresh.svg?component';
-import SettingIcon from '@/assets/table-bar/settings.svg?component';
-import CollapseIcon from '@/assets/table-bar/collapse.svg?component';
+// import DragIcon from '@/assets/table-bar/drag.svg?component';
+// import ExpandIcon from '@/assets/table-bar/expand.svg?component';
+// import RefreshIcon from '@/assets/table-bar/refresh.svg?component';
+// import SettingIcon from '@/assets/table-bar/settings.svg?component';
+// import CollapseIcon from '@/assets/table-bar/collapse.svg?component';
 
 const props = {
   /** 头部最左边的标题 */
@@ -223,14 +223,14 @@ export default defineComponent({
       };
     };
 
-    const reference = {
-      reference: () => (
-        <SettingIcon
-          class={['w-[16px]', iconClass.value]}
-          v-tippy={rendTippyProps('列设置')}
-        />
-      )
-    };
+    // const reference = {
+    //   reference: () => (
+    //     <SettingIcon
+    //       class={['w-[16px]', iconClass.value]}
+    //       v-tippy={rendTippyProps('列设置')}
+    //     />
+    //   )
+    // };
 
     return () => (
       <>
