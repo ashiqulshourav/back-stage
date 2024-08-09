@@ -64,15 +64,14 @@ export const columns: TableColumnList = [
   {
     label: t("用户输赢"),
     slot: "profitAmount",
-    minWidth: 50,
+    minWidth: 100,
     align: 'center',
     formatter: ({ profitAmount }) => addThousandSeparator(profitAmount.toFixed(2)),
-    className: 'mw-100'
+    className: 'mw-100',
   },
   {
     label: t('操作'),
     slot: 'operation',
-    minWidth: 100,
     align: 'center',
     fixed: 'right',
   },
@@ -80,7 +79,7 @@ export const columns: TableColumnList = [
     label: t('备注'),
     slot: 'operationRemark',
     align: 'center',
-    minWidth: 70,
+    width: 70,
     fixed: 'right'
   }
 ]

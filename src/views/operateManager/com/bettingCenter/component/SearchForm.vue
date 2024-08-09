@@ -156,7 +156,12 @@
         <el-form-item :label="`${t('过关类型')}:`" prop="seriesTypes">
           <el-tree-select
               v-model="form.seriesTypes"
-              :data="seriesTypeList"
+              :data="
+                seriesTypeList.map(item => ({
+                  value: item.value,
+                  label: item.label
+                }))
+              "
               @change="search"
               filterable
               clearable
@@ -717,7 +722,7 @@ const handleCheckRevertQueryTypeLabel = () => {
 
 const handleCheckAllSeriesTypeLabel = (val: CheckboxValueType) => {
   if (val) {
-    props.form.seriesType = seriesTypeList.map(_ => _.value);
+    props.form.seriesTypes = seriesTypeList.map(_ => _.value);
   } else {
     props.form.seriesTypes = [];
   }
@@ -729,6 +734,18 @@ const handleCheckSeriesSportLabel = () => {
     .filter(_ => !oldArray.includes(_.value))
     .map(_ => _.value);
 };
+
+watch(
+  () => props.form.seriesTypes,
+  val => {
+    if (!val || val.length === 0 || val.length !== seriesTypeList.length) {
+      checkAllSeriesTypeLabel.value = false;
+    } else if (val.length === seriesTypeList.length) {
+      checkAllSeriesTypeLabel.value = true;
+      checkRevertSeriesTypeLabel.value = false;
+    }
+  }
+);
 
 watch(
   () => props.form.riskControlLabelList,
