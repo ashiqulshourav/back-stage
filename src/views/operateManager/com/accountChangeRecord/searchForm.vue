@@ -28,6 +28,7 @@
         {{ t('修改余额') }}
       </el-button>
     </div>
+
     <!-- <el-form-item prop="accountChangeTypeCode">
       <el-select
         v-model="form.accountChangeTypeCode"
@@ -45,6 +46,7 @@
         />
       </el-select>
     </el-form-item> -->
+
     <el-form-item prop="accountChangeTypeCode">
       <el-tree-select
         v-model="form.accountChangeTypeCode"
