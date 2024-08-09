@@ -48,7 +48,7 @@ declare namespace OperateManagementDataAPI {
     remark: string;
     sign: string;
     transAmount: number;
-    transNo: string;
+    betId: string;
     type: number;
     updatedAt: string;
   };
