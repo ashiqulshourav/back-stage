@@ -31,18 +31,21 @@
         <template #type="{row}">
           <div class="flex items-center gap-2">
             <el-icon 
+              :size="20"
               color="red"
               v-if="accountChangeTypeCodeList.filter(item => row.type === item.value)[0].icon == 'add'"
               >
-              <CirclePlusFilled />
+              <CirclePlusFilled/>
             </el-icon>
             <el-icon 
+              :size="20"
               color="green"
               v-if="accountChangeTypeCodeList.filter(item => row.type === item.value)[0].icon == 'deduct'"
               >
               <RemoveFilled />
             </el-icon>
             <el-icon 
+              :size="20"
               color="#888"
               v-if="accountChangeTypeCodeList.filter(item => row.type === item.value)[0].icon == 'transfer'"
               >
