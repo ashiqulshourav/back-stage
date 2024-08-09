@@ -7,37 +7,37 @@
   >
     <div class="flex">
       <div>
-        <el-form-item prop="queryType" :label="`${t('注单状态')}:`">
+        <el-form-item prop="orderStatus" :label="`${t('注单状态')}:`">
           <el-tree-select
-            v-model="props.form.queryType"
-            :placeholder="t('请选择注单状态，多选项')"
-            :data="
-              Object.keys(betStatusMap).map((key:string) => ({
-                value: betStatusMap,
+              v-model="props.form.orderStatus"
+              :placeholder="t('请选择注单状态，多选项')"
+              :data="
+              Object.keys(betStatusMap).map((key:string, value: number) => ({
+                value: value,
                 label: betStatusMap[key]
               }))
             "
-            @change="search"
-            filterable
-            clearable
-            multiple
-            collapse-tags
-            :render-after-expand="false"
-            show-checkbox
-            check-strictly
-            check-on-click-node
-            style="width: 200px"
+              @change="search"
+              filterable
+              clearable
+              multiple
+              collapse-tags
+              :render-after-expand="false"
+              show-checkbox
+              check-strictly
+              check-on-click-node
+              style="width: 200px"
           >
             <template #header>
               <el-checkbox
-                v-model="checkAllQueryTypeLabel"
-                @change="handleCheckAllQueryTypeLabel"
+                  v-model="checkAllQueryTypeLabel"
+                  @change="handleCheckAllQueryTypeLabel"
               >
                 {{ t('全选') }}
               </el-checkbox>
               <el-checkbox
-                v-model="checkRevertQueryTypeLabel"
-                @change="handleCheckRevertQueryTypeLabel"
+                  v-model="checkRevertQueryTypeLabel"
+                  @change="handleCheckRevertQueryTypeLabel"
               >
                 {{ t('反选') }}
               </el-checkbox>
@@ -567,7 +567,6 @@ const setPropsForm = () => {
     tenantIds: [],
     seriesDetailsSingle: [],
     seriesDetailsDuplex: [],
-    queryType: 1,
     minBetAmount: '',
     maxBetAmount: '',
     minProfitAmount: '',
@@ -698,18 +697,23 @@ const handleCheckRevertSportLabel = () => {
 
 const handleCheckAllQueryTypeLabel = (val: CheckboxValueType) => {
   if (val) {
-    props.form.queryType = Object.keys(betStatusMap).map(item => Number(item[0]));
-    // console.log(Object.keys(betStatusMap).map(value => value));
+    props.form.orderStatus = Object.keys(betStatusMap).map((key, value) => value);
   } else {
-    props.form.queryType = [];
+    props.form.orderStatus = [];
   }
 };
 
 const handleCheckRevertQueryTypeLabel = () => {
-  const oldArray = [...props.form.queryType];
-  props.form.queryType = Object.entries(betStatusMap)
-    .filter(item => !oldArray.includes(Number(item[0])))
-    .map(item => Number(item[0]));
+  const oldArray = [...props.form.orderStatus];
+  props.form.orderStatus = Object.keys(betStatusMap)
+  .map((key:string, value: number) => ({
+    value: value,
+    label: betStatusMap[key]
+  }))
+  .filter(_ => !oldArray.includes(_.value))
+  .map(_ => _.value)
+
+  console.log(oldArray, props.form.orderStatus)
 };
 
 const handleCheckAllSeriesTypeLabel = (val: CheckboxValueType) => {
@@ -755,7 +759,6 @@ watch(
 watch(
   () => props.form.queryType,
   val => {
-    console.log(betStatusMap)
     if (!val || val.length === 0) {
       checkAllQueryTypeLabel.value = false;
     } else if (val.length === Object.keys(betStatusMap).length) {
@@ -763,6 +766,7 @@ watch(
     }
   }
 );
+
 
 </script>
 
