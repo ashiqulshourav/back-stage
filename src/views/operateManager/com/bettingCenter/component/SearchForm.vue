@@ -712,6 +712,7 @@ const handleCheckRevertQueryTypeLabel = () => {
   }))
   .filter(_ => !oldArray.includes(_.value))
   .map(_ => _.value)
+
 };
 
 const handleCheckAllSeriesTypeLabel = (val: CheckboxValueType) => {
@@ -728,6 +729,18 @@ const handleCheckSeriesSportLabel = () => {
     .filter(_ => !oldArray.includes(_.value))
     .map(_ => _.value);
 };
+
+watch(
+  () => props.form.seriesTypes,
+  val => {
+    if (!val || val.length === 0 || val.length !== seriesTypeList.length) {
+      checkAllSeriesTypeLabel.value = false;
+    } else if (val.length === seriesTypeList.length) {
+      checkAllSeriesTypeLabel.value = true;
+      checkRevertSeriesTypeLabel.value = false;
+    }
+  }
+);
 
 watch(
   () => props.form.riskControlLabelList,
@@ -755,9 +768,9 @@ watch(
 );
 
 watch(
-  () => props.form.queryType,
+  () => props.form.orderStatus,
   val => {
-    if (!val || val.length === 0) {
+    if (!val || val.length === 0 || val.length !== Object.keys(betStatusMap).length) {
       checkAllQueryTypeLabel.value = false;
     } else if (val.length === Object.keys(betStatusMap).length) {
       checkAllQueryTypeLabel.value = true;
