@@ -113,10 +113,6 @@ const resetForm = (formEl: FormInstance | undefined) => {
   selectDate.value = '';
   props.form.startCreatedAt = '';
   props.form.endCreatedAt = '';
-  // props.form.startCreatedAt = dayjs()
-  //   .startOf('month')
-  //   .format('YYYY-MM-DD HH:mm:ss');
-  // props.form.endCreatedAt = dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss');
   search();
 };
 
