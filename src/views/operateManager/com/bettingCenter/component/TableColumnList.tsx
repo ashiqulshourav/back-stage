@@ -97,7 +97,7 @@ export const settleHistoryColumns: TableColumnList = [
   {
     label: t("投注项"),
     slot: 'betItem',
-    minWidth: 70,
+    minWidth: 80,
     align: 'left',
     className: 'betItem getParent',
   },

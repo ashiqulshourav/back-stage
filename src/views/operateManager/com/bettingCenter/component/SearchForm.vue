@@ -9,7 +9,7 @@
       <div>
         <el-form-item prop="queryType" :label="`${t('注单状态')}:`">
           <el-tree-select
-            v-model="props.form.tenantIds"
+            v-model="props.form.queryType"
             :placeholder="t('请选择注单状态，多选项')"
             :data="
               Object.keys(betStatusMap).map((key:string) => ({
@@ -30,14 +30,14 @@
           >
             <template #header>
               <el-checkbox
-                v-model="checkAllMName"
-                @change="handleCheckAllMName"
+                v-model="checkAllQueryTypeLabel"
+                @change="handleCheckAllQueryTypeLabel"
               >
                 {{ t('全选') }}
               </el-checkbox>
               <el-checkbox
-                v-model="checkRevertMName"
-                @change="handleCheckRevertMName"
+                v-model="checkRevertQueryTypeLabel"
+                @change="handleCheckRevertQueryTypeLabel"
               >
                 {{ t('反选') }}
               </el-checkbox>
@@ -377,13 +377,6 @@
               >
                 {{ t('全选') }}
               </el-checkbox>
-              <!-- <el-checkbox
-                  v-mode="removeAllRLabel"
-                  @change="handleRemoveAllRLabel"
-                  :disabled="form?.riskControlLabelList.length == 0"
-              >
-                {{ t('全不选') }}
-              </el-checkbox> -->
               <el-checkbox
                   v-model="checkRevertRLabel"
                   @change="handleCheckRevertRLabel"
@@ -430,13 +423,6 @@
               >
                 {{ t('全选') }}
               </el-checkbox>
-              <!-- <el-checkbox
-                  v-model="removeAllMName"
-                  @change="handleRemoveAllMName"
-                  :disabled="form?.tenantIds.length == 0"
-              >
-                {{ t('全不选') }}
-              </el-checkbox> -->
               <el-checkbox
                   v-model="checkRevertMName"
                   @change="handleCheckRevertMName"
@@ -553,7 +539,6 @@ const chagenMatchType = (type: 0 | 1 | 2) => {
 };
 
 const search = () => {
-  console.log(1111,Object.keys(betStatusMap))
   emits('onSearch', ...['reload']);
 };
 
@@ -632,7 +617,6 @@ onDeactivated(() => {
 
 // multiple select for merchant Name
 const checkAllMName = ref(false);
-const removeAllMName = ref(false);
 const checkRevertMName = ref(false);
 const handleCheckAllMName = (val: CheckboxValueType) => {
   if (val) {
@@ -640,11 +624,6 @@ const handleCheckAllMName = (val: CheckboxValueType) => {
   } else {
     props.form.tenantIds = [];
   }
-};
-
-const handleRemoveAllMName = (val: CheckboxValueType) => {
-  props.form.tenantIds = [];
-  removeAllMName.value = false;
 };
 
 const handleCheckRevertMName = () => {
@@ -663,42 +642,31 @@ watch(
       checkAllMName.value = false;
     } else if (val.length === props.tenantList.length) {
       checkAllMName.value = true;
-      removeAllMName.value = false;
     }
   }
 );
 
 // multiple select for risk label
 const checkAllRLabel = ref(false);
-const removeAllRLabel = ref(false);
 const checkRevertRLabel = ref(false);
 
 const checkAllSportLabel = ref(false);
-const removeAllSportLabel = ref(false);
 const checkRevertSportLabel = ref(false);
 
-
 const checkAllQueryTypeLabel = ref(false);
-const removeAllQueryTypeLabel = ref(false);
 const checkRevertQueryTypeLabel = ref(false);
 
 const checkAllSeriesTypeLabel = ref(false);
-const removeAllSeriesTypeLabel = ref(false);
 const checkRevertSeriesTypeLabel = ref(false);
 
 const handleCheckAllRLabel = (val: CheckboxValueType) => {
   if (val) {
     props.form.riskControlLabelList = props.riskLabelList.map(_ => _.id);
-    removeAllRLabel.value = false;
   } else {
     props.form.riskControlLabelList = [];
   }
 };
 
-const handleRemoveAllRLabel = (val: CheckboxValueType) => {
-  props.form.riskControlLabelList = [];
-  checkRevertRLabel.value = false;
-};
 const leagueQueryChange = ()=>{
   props.form.leagueName ='';
   props.form.leagueId='';
@@ -716,7 +684,6 @@ const handleCheckRevertRLabel = () => {
 const handleCheckAllSportLabel = (val: CheckboxValueType) => {
   if (val) {
     props.form.sportId = gameClassify.value.map(_ => _.value);
-    removeAllSportLabel.value = false;
   } else {
     props.form.sportId = [];
   }
@@ -731,8 +698,8 @@ const handleCheckRevertSportLabel = () => {
 
 const handleCheckAllQueryTypeLabel = (val: CheckboxValueType) => {
   if (val) {
-    props.form.queryType = Object.entries(betStatusMap).map(item => Number(item[0]));
-    removeAllQueryTypeLabel.value = false;
+    props.form.queryType = Object.keys(betStatusMap).map(item => Number(item[0]));
+    // console.log(Object.keys(betStatusMap).map(value => value));
   } else {
     props.form.queryType = [];
   }
@@ -748,7 +715,6 @@ const handleCheckRevertQueryTypeLabel = () => {
 const handleCheckAllSeriesTypeLabel = (val: CheckboxValueType) => {
   if (val) {
     props.form.seriesType = seriesTypeList.map(_ => _.value);
-    removeAllSeriesTypeLabel.value = false;
   } else {
     props.form.seriesTypes = [];
   }
@@ -768,7 +734,6 @@ watch(
       checkAllRLabel.value = false;
     } else if (val.length === props.riskLabelList.length) {
       checkAllRLabel.value = true;
-      removeAllRLabel.value = false;
     }
   }
 );
@@ -785,6 +750,18 @@ watch(
       }
 
     }
+);
+
+watch(
+  () => props.form.queryType,
+  val => {
+    console.log(betStatusMap)
+    if (!val || val.length === 0) {
+      checkAllQueryTypeLabel.value = false;
+    } else if (val.length === Object.keys(betStatusMap).length) {
+      checkAllQueryTypeLabel.value = true;
+    }
+  }
 );
 
 </script>
