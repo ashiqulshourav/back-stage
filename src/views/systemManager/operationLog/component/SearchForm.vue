@@ -60,10 +60,10 @@
       <el-form-item prop="createTimeStart" :label="`${t('操作时间')}:`">
         <Custom_date v-model:val="selectDate" @changeDate="changeDate" />
       </el-form-item>
-      <el-form-item prop="matchId" :label="`${t('事件 ID')}:`">
+      <el-form-item prop="matchId" :label="`${t('赛事ID')}:`">
         <el-input
           v-model="form.matchId"
-          :placeholder="t('请输入您的活动 ID')"
+          :placeholder="t('请输入赛事ID')"
           clearable
           :formatter="v => formatNumber(v, 30)"
           v-enter="search"
