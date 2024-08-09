@@ -41,8 +41,8 @@
             <span>{{ row.index }}</span>
           </template>
           <template #userMessage="{ row }">
-            <div class="flex">
-              <div>
+            <div>
+              <div class="flex items-center">
                 <div
                   class="item_line cursor-pointer"
                   @click="
@@ -55,53 +55,50 @@
                   <span>{{ t('用户名：') }}</span
                   >{{ row.userName }}
                 </div>
-                <div
-                  class="item_line cursor-pointer"
-                  @click="
-                    copyTest(
-                      row.userId,
-                      t('用户ID：{value}', { value: row.userId })
-                    )
-                  "
-                >
-                  <span>{{ t('用户ID：') }}</span
-                  >{{ row.userId }}
-                </div>
-                <div
-                  class="item_line cursor-pointer"
-                  @click="
-                    copyTest(
-                      tenantObj[row.tenantId]?.tenantName,
-                      t('商户名：{value}', {
-                        value: tenantObj[row.tenantId]?.tenantName
-                      })
-                    )
-                  "
-                >
-                  <span>{{ t('商户名：') }}</span
-                  >{{ tenantObj[row.tenantId]?.tenantName }}
-                </div>
-                <div
-                  class="item_line cursor-pointer"
-                  @click="
-                    copyTest(
-                      row.tenantId,
-                      t('商户id：{value}', {
-                        value: tenantObj[row.tenantId]?.name
-                      })
-                    )
-                  "
-                >
-                  <span>{{ t('商户id：') }}</span
-                  >{{ tenantObj[row.tenantId]?.name }}
-                </div>
-
-              </div>
-              <div>
                 <RiskLabelList
                   :list="row.riskControlLabelList"
                   :showNumber="1"
                 />
+              </div>
+              <div
+                class="item_line cursor-pointer"
+                @click="
+                  copyTest(
+                    row.userId,
+                    t('用户ID：{value}', { value: row.userId })
+                  )
+                "
+              >
+                <span>{{ t('用户ID：') }}</span
+                >{{ row.userId }}
+              </div>
+              <div
+                class="item_line cursor-pointer"
+                @click="
+                  copyTest(
+                    tenantObj[row.tenantId]?.tenantName,
+                    t('商户名：{value}', {
+                      value: tenantObj[row.tenantId]?.tenantName
+                    })
+                  )
+                "
+              >
+                <span>{{ t('商户名：') }}</span
+                >{{ tenantObj[row.tenantId]?.tenantName }}
+              </div>
+              <div
+                class="item_line cursor-pointer"
+                @click="
+                  copyTest(
+                    row.tenantId,
+                    t('商户id：{value}', {
+                      value: tenantObj[row.tenantId]?.name
+                    })
+                  )
+                "
+              >
+                <span>{{ t('商户id：') }}</span
+                >{{ tenantObj[row.tenantId]?.name }}
               </div>
             </div>
           </template>
