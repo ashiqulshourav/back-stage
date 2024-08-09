@@ -300,9 +300,9 @@
               </div>
             </div>
           </template>
-            <template #orderStatusView="{row}">            
+            <template #orderStatusView="{row}">
             {{ row.orderStatusView }}
-            <span v-if="row.settleTimes > 1">
+            <span v-if="row.settleTimes > 0">
               <el-tag
                 @click="() => handleSettleHistoryDialog(row)"
                 :style="`background-color: white`"
@@ -311,6 +311,13 @@
               {{ row.settleTimes }}
               </el-tag>
             </span>
+              <div>
+                {{
+                  row.settleTime
+                    ? dayjs(row.settleTime).format('MM-DD HH:mm:ss')
+                    : ''
+                }}
+              </div>
           </template>
           <template #odd="{ row }">
             <div
