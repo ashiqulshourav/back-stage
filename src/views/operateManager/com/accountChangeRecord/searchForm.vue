@@ -129,7 +129,7 @@
         type="primary"
         :icon="useRenderIcon(Download)"
         :loading="downloading"
-        v-if="hasAuth('EXPORT')"
+        v-if="hasAuth('export'.toUpperCase())"
         @click="exportFile()"
       >
         {{ t('导出') }}
@@ -153,6 +153,7 @@ import CustomDate from "@/components/Form/Custom_date.vue"
 import Download from '@iconify-icons/ep/download';
 
 const props = defineProps<{
+  downloading: downloading;
   loading: boolean;
   form: accountChangeRecordSearchFormType;
   userData: userDataType;
