@@ -21,7 +21,6 @@ export type searchFormType = {
   timeType?: number;
   leagueName: string;
   tenantIds: any;
-  queryType: number[] | string[];
   minBetAmount: number | string;
   maxBetAmount: number | string;
   minProfitAmount: number | string;
