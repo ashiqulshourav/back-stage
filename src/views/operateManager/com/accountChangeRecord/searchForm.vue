@@ -28,25 +28,6 @@
         {{ t('修改余额') }}
       </el-button>
     </div>
-
-    <!-- <el-form-item prop="accountChangeTypeCode">
-      <el-select
-        v-model="form.accountChangeTypeCode"
-        :placeholder="`${t('请选择账变类型')}`"
-        clearable
-        class="!w-[200px]"
-        multiple
-      >
-        <el-option :label="t('全部')" :value="' '" />
-        <el-option
-          :label="item.label"
-          :value="item.value"
-          v-for="item in accountChangeTypeCodeList"
-          :key="item.value"
-        />
-      </el-select>
-    </el-form-item> -->
-
     <el-form-item prop="accountChangeTypeCode">
       <el-tree-select
         v-model="form.accountChangeTypeCode"
@@ -87,14 +68,6 @@
     </el-form-item>
 
     <el-form-item :label="`${t('账变时间')}:`" prop="createTimeStart">
-      <!-- <el-date-picker
-        type="datetimerange"
-        format="YYYY-MM-DD HH:mm:ss"
-        v-model="selectDate"
-        :start-placeholder="dayjs().startOf('month').format('YYYY-MM-DD')"
-        :end-placeholder="dayjs().endOf('day').format('YYYY-MM-DD')"
-        @change="changeDate"
-      /> -->
         <CustomDate
           v-model:val="selectDate"
           @changeDate="changeDate"
