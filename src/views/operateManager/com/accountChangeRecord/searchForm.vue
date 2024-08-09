@@ -103,10 +103,10 @@
       ></CustomDate>
     </el-form-item>
 
-    <el-form-item prop="trans_no" :label="t('注单号:')">
+    <el-form-item prop="identifier" :label="t('注单号:')">
       <el-input
-        v-model="form.trans_no"
-        :placeholder="t('请输入商户编码')"
+        v-model="form.identifier"
+        :placeholder="t('请输入注单号')"
         v-enter="search"
         clearable
         class="!w-[200px]"
@@ -125,6 +125,15 @@
       >
         {{ t('筛选') }}
       </el-button>
+      <el-button
+        type="primary"
+        :icon="useRenderIcon(Download)"
+        :loading="downloading"
+        v-if="hasAuth('EXPORT')"
+        @click="exportFile()"
+      >
+        {{ t('导出') }}
+      </el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -141,6 +150,7 @@ import { accountChangeTypeCodeList } from './columns';
 import { addThousandSeparator } from '@/utils/formatNumber';
 import { hasAuth } from '@/router/utils';
 import CustomDate from "@/components/Form/Custom_date.vue"
+import Download from '@iconify-icons/ep/download';
 
 const props = defineProps<{
   loading: boolean;
@@ -223,7 +233,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
   selectDate.value = '';
   props.form.startCreatedAt = '';
   props.form.endCreatedAt = '';
-  props.form.trans_no = '';
+  props.form.identifier = '';
   // props.form.startCreatedAt = dayjs()
   //   .startOf('month')
   //   .format('YYYY-MM-DD HH:mm:ss');

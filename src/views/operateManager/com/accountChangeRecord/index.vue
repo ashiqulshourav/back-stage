@@ -10,6 +10,8 @@
       :loading="loading"
       @on-search="onSearch"
       @openModifyBalanceDialog="openModifyBalanceDialog"
+      @exportFile="exportFile"
+      :downloading="downloading"
       :userData="userData"
       />
       <pure-table
@@ -80,6 +82,8 @@ const {
   openModifyBalanceDialog,
   userData,
   goToUserListPage,
+  downloading, 
+  exportFile
 } = useAccountChangeRecordHook();
 onMounted(() => {
   onSearch();
