@@ -1,84 +1,39 @@
 <template>
-  <div v-if="list" class="items-center flex flex-wrap px-2 mt-1 gap-1 min-w-[120px]">
-    <div v-for="label in list.slice(0, showNumber).sort((a, b) => a.level - b.level)" :key="label.id">
+  <div v-if="list" class="items-center flex flex-nowrap px-2 mt-1 gap-1">
+    <div v-for="label in list.slice(0, showNumber).sort((a, b) => a.level - b.level)" :key="label.id" class="custom">
       <el-tag
-        v-if="label.name.length <= 4"
-        round
-        type="info"
-        class="!bg-transparent !text-black dark:!text-white"
+        :style="`background-color: ${getLabelColor(label.level, 'risk')}`"
+        class="rounded-lg w-full py-1"
       >
-        <span
-          :style="`background-color: ${getLabelColor(label.level, label.labelColor)}`"
-          class="inline-block w-[10px] h-[10px] rounded-[50%] bg-blue-500 mr-1"
-        />
         {{ label.name }}
       </el-tag>
-      <el-tooltip
-        v-else
-        effect="light"
-        :content="label.name"
-        placement="top"
-      >
-        <el-tag
-          round 
-          type="info" 
-          class="!bg-transparent !text-black dark:!text-white"
-          >
-            <span
-              :style="`background-color: ${getLabelColor(label.level, label.labelColor)}`"
-              class="inline-block w-[10px] h-[10px] rounded-[50%] bg-blue-500 mr-1"
-            />
-          {{ label.name.substring(0, 4) }}...
-        </el-tag>
-      </el-tooltip>
-      
     </div>
     <div v-if="list?.length > showNumber">
       <el-popover
         placement="top-end"
-        :width="210"
+        :width="200"
         trigger="hover"
         content="this is over"
       >
         <template #reference>
-          <span class="py-1 px-2 text-slate-500 rounded-full cursor-default bg-[#dbdbdb] dark:bg-[#262727]">{{ list.length }}</span>
+          <span class="py-1 px-2 border border-slate-300 text-slate-500 rounded-full cursor-default">{{ list.length }}</span>
         </template>
         <template #default>
-          <div class="flex flex-wrap gap-1">
+          <div class="flex flex-wrap">
             <div
               v-for="label in list.sort((a, b) => a.level - b.level)"
               :key="label.id"
+              class="custom"
             >
               <el-tag
-                v-if="label.name.length <= 4"
-                  round 
-                  type="info" 
-                  class="!bg-transparent !text-black dark:!text-white"
-                >
-                  <span
-                    :style="`background-color: ${getLabelColor(label.level, label.labelColor)}`"
-                    class="inline-block w-[10px] h-[10px] rounded-[50%] bg-blue-500 mr-1"
-                  />
-                  {{ label.name }}
-              </el-tag>
-              <el-tooltip
-                v-else
-                effect="light"
-                :content="label.name"
-                placement="top"
+                :style="`background-color: ${getLabelColor(
+                  label.level,
+                  'risk'
+                )}`"
+                class="rounded-lg w-full py-1 text-white text-center"
               >
-                <el-tag
-                  round 
-                  type="info" 
-                  class="!bg-transparent !text-black dark:!text-white"
-                >
-                  <span
-                    :style="`background-color: ${getLabelColor(label.level, label.labelColor)}`"
-                    class="inline-block w-[10px] h-[10px] rounded-[50%] bg-blue-500 mr-1"
-                  />
-                  {{ label.name.substring(0, 4)}}...
-                </el-tag>
-              </el-tooltip>
+                {{ label.name }}
+              </el-tag>
             </div>
           </div>
         </template>
@@ -94,19 +49,27 @@ const { list, showNumber } = defineProps<{
   showNumber: number;
 }>();
 
-
-const getLabelColor = (level: number, labelColor?: string) => {
-  console.log(labelColor)
-  if(labelColor) return labelColor    
-  switch(level) {
-    case 1: 
-      return "#1891FF"
-    case 2:
-      return "#19BE6B"
-    case 3:
-      return "#2E4050"
-  }
-}
+const getLabelColor = (level: number, type: string) => {
+    if (type === 'risk') {
+      switch (level) {
+        case 1:
+          return 'rgba(163, 0, 20, 1)';
+        case 2:
+          return 'rgba(255, 92, 0, 1)';
+        case 3:
+          return 'rgba(255, 153, 0, 1)';
+      }
+    } else {
+      switch (level) {
+        case 1:
+          return 'rgba(24, 145, 255, 1)';
+        case 2:
+          return 'rgba(25, 190, 107, 1)';
+        case 3:
+          return 'rgba(46, 64, 80, 1)';
+      }
+    }
+  };
 </script>
 
 <style lang="scss">
@@ -114,6 +77,8 @@ const getLabelColor = (level: number, labelColor?: string) => {
   row-gap: 0.5rem;
 }
 .custom {
+  flex: 0 0 0;
+  max-width: unset;
   .el-tag__content {
     color: white;
   }

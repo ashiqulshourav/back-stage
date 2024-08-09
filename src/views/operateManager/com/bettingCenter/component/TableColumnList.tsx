@@ -13,7 +13,7 @@ export const columns: TableColumnList = [
   {
     label: t("用户信息"),
     slot: 'userMessage',
-    minWidth: 100,
+    minWidth: 200,
     align: 'left',
   },
   {
@@ -79,6 +79,7 @@ export const columns: TableColumnList = [
     slot: 'operationRemark',
     align: 'center',
     minWidth: 50,
+    fixed: 'right'
   }
 ]
 
@@ -89,14 +90,14 @@ export const settleHistoryColumns: TableColumnList = [
   {
     label: t("赛事信息"),
     slot: 'matchMessage',
-    minWidth: 200,
+    minWidth: 100,
     align: 'left',
     className: 'getParent',
   },
   {
     label: t("投注项"),
     slot: 'betItem',
-    minWidth: 70,
+    minWidth: 80,
     align: 'left',
     className: 'betItem getParent',
   },
@@ -116,14 +117,14 @@ export const settleHistoryColumns: TableColumnList = [
   },
   {
     label: t("结算时问"),
-    prop: "productAmountTotal",
-    minWidth: 50,
+    prop: "settleTime",
+    minWidth: 70,
     align: 'center',
     formatter: ({ settleTime }) => dayjs(settleTime).format('YYYY-MM-DD HH:mm:ss')
   },
   {
     label: t("用户输赢"),
-    prop: "profitAmount",
+    slot: "profitAmount",
     minWidth: 50,
     align: 'center',
     formatter: ({ profitAmount }) => profitAmount?addThousandSeparator(profitAmount.toFixed(2)):'-'

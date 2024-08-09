@@ -2,7 +2,7 @@
   <div class="w-1/2" v-if="bettingHistory">
     <div class="flex gap-2 mb-3">
       <span>{{ t('注单编号') }}:</span>
-      <span>{{ bettingHistory.orderId }}</span>
+      <span>{{ props.order_id }}</span>
     </div>
     <div class="flex mb-3">
       <p class="flex-1 flex gap-2">
@@ -179,6 +179,13 @@
         </div>
       </div>
     </template>
+    <template #profitAmount="{ row }">
+      <div v-if="row.profitAmount">
+        <span v-if="row.profitAmount > 0" class="text-[#dd5454]">{{ "+" + addThousandSeparator(row.profitAmount.toFixed(2)) }}</span>
+        <span v-else-if="row.profitAmount < 0" class="text-[green]">{{ addThousandSeparator(row.profitAmount.toFixed(2)) }}</span>
+        <span v-else >{{ addThousandSeparator(row.profitAmount.toFixed(2)) }}</span>
+      </div>
+    </template>
   </pure-table>
 </template>
 
@@ -187,23 +194,19 @@ import { t } from '@/plugins/i18n';
 import dayjs from "dayjs";
 import { settleHistoryColumns } from './TableColumnList';
 import { usePublicHooks } from '@/hooks';
-import { message } from '@/utils/message';
 import {
-  formatSeriesType,
   useSportFormatDetail,
   EBetResultType,
   getViewOddFn,
   markeTypeMap,
-  calculateSeriesTypeTotal,
-  calculateSeriesTypeTotalBets,
+
   displayHomeAwayScore,
   getIsInplay,
   enterGoalMap,
-  openIpDialog,
   BET_RESULT_TYPE_MAP
 } from '@/utils/formatMatch';
 import { riskStatus } from '@/views/riskManagement/com/bettingAudit/util/types';
-import { betStatus, betStatusMap } from '../util/types';
+import { addThousandSeparator } from '@/utils/formatNumber'
 
 const { tableHeaderStyle } = usePublicHooks();
 
