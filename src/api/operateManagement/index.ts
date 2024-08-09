@@ -57,6 +57,13 @@ export const operateManagementData = {
       '/operate/queryAccountChangeLog',
       { data }
     ),
+  
+  getAccountChangeRecordExport: (data: accountChangeRecordSearchFormType) =>
+    http.request<OperateManagementDataAPI.AccountChangeRecordRes>(
+      'post',
+      '/operate/accountChangeLogExport',
+      { data }
+    ),
 
   getAccountChange: (data: modifyBalanceFormType) =>
     http.request<OperateManagementDataAPI.AccountChangeRes>(

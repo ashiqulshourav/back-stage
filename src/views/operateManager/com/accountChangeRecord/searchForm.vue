@@ -127,6 +127,15 @@
       >
         {{ t('筛选') }}
       </el-button>
+      <el-button
+        type="primary"
+        :icon="useRenderIcon(Download)"
+        :loading="downloading"
+        v-if="hasAuth('EXPORT')"
+        @click="exportFile()"
+      >
+        {{ t('导出') }}
+      </el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -143,6 +152,7 @@ import { accountChangeTypeCodeList } from './columns';
 import { addThousandSeparator } from '@/utils/formatNumber';
 import { hasAuth } from '@/router/utils';
 import CustomDate from "@/components/Form/Custom_date.vue"
+import Download from '@iconify-icons/ep/download';
 
 const props = defineProps<{
   loading: boolean;
