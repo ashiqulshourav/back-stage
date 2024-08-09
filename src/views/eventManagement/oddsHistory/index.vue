@@ -1,12 +1,7 @@
 <template>
   <div class="main">
     <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
-
-    <PureTableBar
-      :title="t('联赛列表')"
-      :columns="columns"
-      @refresh="onSearch('reload')"
-    >
+    <PureTableBar :title="''" :columns="columns" @refresh="onSearch('reload')">
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           class="table_container"

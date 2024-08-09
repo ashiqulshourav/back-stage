@@ -1,25 +1,54 @@
 import dayjs from 'dayjs';
-import { handleTableWidth } from '@/utils/getTableWidth';
-const IconMap = {
-  goal: new URL('@/assets/event_img/goal.png', import.meta.url).href,
-  yellow_card: new URL('@/assets/event_img/yellow_card.png', import.meta.url)
-    .href,
-  corner: new URL('@/assets/event_img/corner.png', import.meta.url).href,
-  red_card: new URL('@/assets/event_img/red.png', import.meta.url).href
+/* 
+
+times
+: 
+null
+xhReturnRate
+: 
+1.1245766811804547
+xjAwayOdds
+: 
+6
+xjCurrentScore
+: 
+"0:0"
+xjDrawOdds
+: 
+5.3
+xjHomeOdds
+: 
+1.3
+xjIsSale
+: 
+2
+ */
+const STATUS_MAP = {
+  2: t('开'),
+  3: '-',
+  4: t('关')
 };
 export const columns = () => {
   return [
     {
-      field: 'createdAt',
+      field: 'matchStartTime',
       title: t('比赛时间'),
       minWidth: 200,
       formatter({ cellValue }: { cellValue: string }) {
-        return dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss');
+        return cellValue ? dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss') : '-';
       }
     },
     {
-      field: 'playingTime',
+      field: 'eventName',
       title: t('事件'),
+      minWidth: 150,
+      formatter({ cellValue }: { cellValue: string }) {
+        return cellValue ? cellValue : '-';
+      }
+    },
+    {
+      field: 'eventCurrentScore',
+      title: t('当前比分'),
       minWidth: 150,
       formatter({ cellValue }: { cellValue: string }) {
         return cellValue ? cellValue : '-';
@@ -30,121 +59,161 @@ export const columns = () => {
       children: [
         {
           title: t('状态'),
-          field: 'addition5'
+          field: 'xjIsSale',
+          type: 'html',
+          formatter({ cellValue }: { cellValue: number }) {
+            return `<div class="w-full justify-center flex items-center ">
+            <div class="rounded-full w-[20px] h-[20px] text-white  justify-center flex items-center text-xs ${
+              cellValue === 2 ? 'bg-[#00bf6f]' : 'bg-[#ff5e1d]'
+            }">${STATUS_MAP[cellValue as keyof typeof STATUS_MAP]}</div>
+            </div>`;
+          }
         },
         {
           title: t('比分'),
-          field: 'dataSourceCode'
+          field: 'xjCurrentScore',
+          formatter: ({ cellValue }: { cellValue: string }) =>
+            cellValue ? cellValue : '-'
         },
         {
           title: t('主胜'),
-          field: 'operationType'
+          field: 'xjHomeOdds',
+          formatter: ({ cellValue }: { cellValue: string }) =>
+            cellValue ? cellValue : '-'
         },
         {
           title: t('平'),
-          slot: 'canceled'
+          slot: 'xjDrawOdds',
+          formatter: ({ cellValue }: { cellValue: string }) =>
+            cellValue ? cellValue : '-'
         },
         {
           title: t('客胜'),
-          field: 'operationType'
+          field: 'xjAwayOdds',
+          formatter: ({ cellValue }: { cellValue: string }) =>
+            cellValue ? cellValue : '-'
         },
         {
           title: t('返还率'),
-          slot: 'canceled'
+          field: 'xhReturnRate',
+          formatter: ({ cellValue }: { cellValue: string }) =>
+            cellValue ? cellValue : '-'
         }
       ]
     },
     {
-      title: t('188'),
+      title: t('播控'),
       children: [
         {
           title: t('状态'),
-          field: 'addition5'
+          field: 'addition5',
+          visible: false
         },
         {
           title: t('比分'),
-          field: 'dataSourceCode'
+          field: 'dataSourceCode',
+          visible: false
         },
         {
           title: t('主胜'),
-          field: 'operationType'
+          field: 'operationType',
+          visible: false
         },
         {
           title: t('平'),
-          slot: 'canceled'
+          slot: 'canceled',
+          visible: false
         },
         {
           title: t('客胜'),
-          field: 'operationType'
+          field: 'operationType',
+          visible: false
         },
         {
           title: t('返还率'),
-          slot: 'canceled'
+          slot: 'canceled',
+          visible: false
         }
       ]
     },
     {
-      title: t('188'),
+      title: t('熊猫'),
+      visible: false,
       children: [
         {
           title: t('状态'),
-          field: 'addition5'
+          field: 'addition5',
+          visible: false
         },
         {
           title: t('比分'),
-          field: 'dataSourceCode'
+          field: 'dataSourceCode',
+          visible: false
         },
         {
           title: t('主胜'),
-          field: 'operationType'
+          field: 'operationType',
+          visible: false
         },
         {
           title: t('平'),
-          slot: 'canceled'
+          field: 'canceled',
+          visible: false
         },
         {
           title: t('客胜'),
-          field: 'operationType'
+          field: 'operationType',
+          visible: false
         },
         {
           title: t('返还率'),
-          slot: 'canceled'
+          field: '123',
+          visible: false
         }
       ]
     },
     {
-      title: t('188'),
+      title: t('操盘'),
+      visible: false,
       children: [
         {
           title: t('状态'),
+          visible: false,
           field: 'addition5'
         },
         {
           title: t('比分'),
+          visible: false,
           field: 'dataSourceCode'
         },
         {
           title: t('主胜'),
+          visible: false,
           field: 'operationType'
         },
         {
           title: t('平'),
+          visible: false,
           slot: 'canceled'
         },
         {
           title: t('客胜'),
+          visible: false,
           field: 'operationType'
         },
         {
           title: t('返还率'),
+          visible: false,
           slot: 'canceled'
         }
       ]
     },
     {
       title: t('数据获取时间'),
-      field: 'score',
-      headerRenderer: d => handleTableWidth(d, t('数据获取时间'), 'auto')
+      field: 'createdTime',
+      minWidth: 150,
+      formatter: ({ cellValue }: { cellValue: string }) =>
+        cellValue ? dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss') : '-'
     }
   ];
 };

@@ -8,55 +8,46 @@ const { exportDialog } = usePublicHooks();
 import { columns } from '../component/TableColumnList';
 
 export function useOddsHistoryDetailHook() {
-  const matchEventList = reactive<EventAPI.MatchEvent[]>([]);
-  const matchInfo = reactive<EventAPI.MatchInfo>({
-    aTeamName: '',
-    hTeamName: '',
-    league: '',
-    matchId: '',
-    level: '',
-    sportName: '',
-    riskLevel: '',
-    leagueId: '',
-    startDateTime: ''
-  });
+  const list = reactive<EventAPI.getMatchEventWithOddsHistoryResData[]>([]);
+  const route = useRoute();
   const loading = ref(false);
-
-  const pagination = reactive({
-    total: 0,
-    currentPage: 1,
-    pageSize: 10,
-    pageSizes: [5, 10, 15, 20]
-  });
 
   const vxeTableRef = ref();
   const tableData = ref([]);
 
-  async function onSearch(type?: string) {
-    loading.value = true;
-    // 模拟数据
-    const mockList = [];
-    for (let index = 0; index < 5000; index++) {
-      mockList.push({
-        id: index,
-        name: 'Test' + index,
-        role: 'Developer123122312321',
-        sex: '男'
-      });
-    }
-    pagination.total = 50000;
-    tableData.value = mockList;
-    console.log('hook.tsx文件 58==============行打印=', tableData);
-    setTimeout(() => {
-      loading.value = false;
-    }, 500);
-  }
+  const selectData = reactive<EventAPI.getMatchEventWithOddsHistoryReqType>({
+    matchId: '316066' /*  route.params.type as string */,
+    dataSourceCode: ['XJ'],
+    oddsType: 'OU',
+    kindsCode: 'FT_1X2'
+  });
 
-  const handlePageChange = ({ currentPage, pageSize }) => {
-    pagination.currentPage = currentPage;
-    pagination.pageSize = pageSize;
-    onSearch();
-  };
+  async function onSearch() {
+    loading.value = true;
+    const res = await API.getMatchEventWithOddsHistory({
+      ...selectData,
+      dataSourceCode: (selectData.dataSourceCode as string[]).join('')
+    });
+    loading.value = false;
+    if (res.code) return message(res.msg, { type: 'error' });
+    list.length = 0;
+    list.push(...res.data);
+    // const mockList = [];
+    // for (let index = 0; index < 5000; index++) {
+    //   mockList.push({
+    //     id: index,
+    //     name: 'Test' + index,
+    //     role: 'Developer123122312321',
+    //     sex: '男'
+    //   });
+    // }
+    // pagination.total = 50000;
+    // tableData.value = mockList;
+    // console.log('hook.tsx文件 58==============行打印=', tableData);
+    // setTimeout(() => {
+    //   loading.value = false;
+    // }, 500);
+  }
 
   const changeColumn = () => {
     columns1.value[0].visible = !columns1.value[0].visible;
@@ -64,20 +55,40 @@ export function useOddsHistoryDetailHook() {
     vxeTableRef.value.refreshColumn();
   };
 
-  onMounted(() => {
+  onMounted(() => init());
+
+  const init = async () => {
+    await getMatchDetail();
     onSearch();
-  });
+  };
+
+  const matchDetail = reactive<EventAPI.oddsHistoryMatchDetailData>(
+    {} as EventAPI.oddsHistoryMatchDetailData
+  );
+  const getMatchDetail = async () => {
+    const matchId = +route.params.type;
+    const res = await API.oddsHistoryMatchDetail({ matchId });
+    if (res.code) return;
+    Object.assign(matchDetail, res.data);
+  };
+
+  const changeList = (d: { type: string; val: string }) => {
+    if (d.type === 'kindsCode') {
+    } else if (d.type === 'odds') {
+    }
+    console.log('hook.tsx文件 76==============行打印=', d);
+  };
 
   return {
     loading,
-    pagination,
     tableData,
     vxeTableRef,
     onSearch,
     changeColumn,
-    matchEventList,
-    handlePageChange,
-    matchInfo,
-    columns
+    matchDetail,
+    columns,
+    selectData,
+    list,
+    changeList
   };
 }

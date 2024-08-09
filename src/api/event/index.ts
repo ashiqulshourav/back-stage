@@ -67,4 +67,13 @@ export const eventData = {
         noNprogress: true
       }
     ),
+
+  //- 赔率详情界面获取赛事信息
+  oddsHistoryMatchDetail: (data: { matchId: number }) =>
+    http.request<EventAPI.oddsHistoryMatchDetailResType>('post', '/match/v1/oddsHistoryMatchDetail', { data }),
+
+  //-  赔率记录获取
+  getMatchEventWithOddsHistory: (data: EventAPI.getMatchEventWithOddsHistoryReqType) =>
+    http.request<EventAPI.getMatchEventWithOddsHistoryResType>('post', '/event/v1/getMatchEventWithOddsHistory', { data }),
+
 };

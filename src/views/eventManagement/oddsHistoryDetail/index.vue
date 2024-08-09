@@ -1,33 +1,41 @@
 <template>
-  <div class="main">
-    <MatchTitle />
-    <SelectContainer />
+  <div class="main relative h-full">
+    <IconifyIconOffline
+      icon="cancelIcon"
+      class="absolute right-4 top-4 text-[26px] cursor-pointer"
+      @click="$router.go(-1)"
+    />
+    <MatchTitle :matchDetail="matchDetail" />
+    <SelectContainer :selectData="selectData" @changeList="changeList" />
 
-    <VxeTableBar
-      :vxeTableRef="vxeTableRef"
-      :columns="columns()"
-      title=""
-      @refresh="onSearch"
-    >
-      <template v-slot="{ dynamicColumns }">
-        <vxe-grid
-          ref="vxeTableRef"
-          headerAlign="center"
-          cellAlign="center"
-          v-loading="loading"
-          border
-          height="460"
-          :show-overflow="true"
-          size="small"
-          :column-config="{ resizable: true }"
-          :columns="dynamicColumns"
-          :scroll-y="{ enabled: true }"
-          :pagerConfig="pagination"
-          :data="tableData"
-          @page-change="handlePageChange"
-        />
-      </template>
-    </VxeTableBar>
+    <div class="h-[calc(100%-324px)]" ref="tableRef">
+      <VxeTableBar
+        :vxeTableRef="vxeTableRef"
+        :columns="columns()"
+        title=""
+        @refresh="onSearch"
+      >
+        <template v-slot="{ dynamicColumns }">
+          <vxe-grid
+            ref="vxeTableRef"
+            headerAlign="center"
+            align="center"
+            v-loading="loading"
+            border
+            :rowConfig="{
+              useKey: true
+            }"
+            :height="h"
+            :show-overflow="true"
+            size="small"
+            :column-config="{ resizable: true, useKey: true }"
+            :columns="dynamicColumns"
+            :scroll-y="{ enabled: true }"
+            :data="list"
+          />
+        </template>
+      </VxeTableBar>
+    </div>
   </div>
 </template>
 
@@ -40,10 +48,13 @@ import MatchTitle from './component/MathcTitle.vue';
 import SelectContainer from './component/SelectContainer.vue';
 
 defineOptions({ name: 'EVENTMANAGEMENT_EVENTQUERY' });
+const tableRef = ref();
+const h = ref(0);
+onMounted(() => {
+  h.value = tableRef.value.offsetHeight ?? 500;
+});
 
-const columns1 = ref<VxeTableDefines.ColumnInfo<any>[]>([]);
-
-setTimeout(() => {
+/* setTimeout(() => {
   nextTick(() => {
     // 获取所有列配置
     const $table = vxeTableRef.value;
@@ -55,18 +66,17 @@ setTimeout(() => {
       }, 800);
     }
   });
-}, 100);
+}, 100); */
 
 const {
   loading,
-  pagination,
   onSearch,
   vxeTableRef,
-  tableData,
-  matchEventList,
-  matchInfo,
+  matchDetail,
   columns,
-  handlePageChange
+  selectData,
+  list,
+  changeList
 } = useOddsHistoryDetailHook();
 </script>
 
@@ -74,6 +84,12 @@ const {
 .export_dialog {
   .el-message-box__btns {
     flex-direction: row;
+  }
+}
+.EVENTMANAGEMENT_ODDSHISTORYDETAIL {
+  .el-scrollbar__view {
+    min-height: 98%;
+    height: 98%;
   }
 }
 </style>

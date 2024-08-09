@@ -1,13 +1,12 @@
 import { message } from '@/utils/message';
 import type { PaginationProps } from '@pureadmin/table';
-import { reactive, ref, onMounted, h } from 'vue';
+import { reactive, ref, onMounted } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { searchFormType } from './types';
 
 export function useOddsHistory() {
   const dataList = reactive<EventAPI.PageData[]>([]);
   const loading = ref(true);
-  const levelList = reactive<ConfigCenterDataAPI.leagueLevelList[]>([]);
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 10,
@@ -37,14 +36,6 @@ export function useOddsHistory() {
     console.log('handleSelectionChange', val);
   }
 
-  //- 获取联赛等级列表
-  const initLevelList = async () => {
-    const res = await API.getLevelList();
-    if (res.code) return;
-    levelList.length = 0;
-    levelList.push(...res.data);
-  };
-
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     try {
@@ -70,14 +61,14 @@ export function useOddsHistory() {
     }
   }
 
+  //- 跳转到详情页面
   const router = useRouter();
-  const goOddsHistoryPage = (row: ConfigCenterDataAPI.leagueLevelList) => {
-    router.push('')
+  const goOddsHistoryPage = (row: EventAPI.PageData) => {
+    router.push(`/eventManagement/oddsHistoryDetail/${row.matchId}`);
   };
 
   onMounted(() => {
     onSearch();
-    initLevelList();
   });
 
   return {
