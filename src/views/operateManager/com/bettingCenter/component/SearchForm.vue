@@ -432,6 +432,21 @@
             </template>
           </el-tree-select>
         </el-form-item>
+        <el-form-item prop="currency" :label="t('结算币种:')">
+          <el-select
+            v-model="form.currency"
+            clearable
+            class="!w-[150px]"
+          >
+            <el-option label="全部" value=" "></el-option>
+            <el-option
+              :label="item.label"
+              :value="item.value"
+              v-for="item in currency_map"
+              :key="item.value"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button
             type="primary"
@@ -473,6 +488,7 @@ import dayjs from 'dayjs';
 import { useMatchStore } from '@/store/match';
 import { debounce } from '@pureadmin/utils';
 import { formatNumber, formatIp } from '@/utils/formatNumber';
+import {currency_map} from "@/utils/maps/currency_map";
 import {
   SPORT_ID_MAP,
   ESPORT_ID_MAP,

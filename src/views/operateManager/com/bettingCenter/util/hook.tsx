@@ -73,7 +73,8 @@ export function useBettingCenterHook(category: number, venueType: number) {
     maxProfitAmount: '',
     riskControlLabelList: [],
     venueType: venueType,
-    ip: ''
+    ip: '',
+    currency:''
   });
   function handlePageSizeChange(val: number) {
     pagination.pageSize = val;

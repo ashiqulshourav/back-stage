@@ -66,6 +66,7 @@ export function useBettingAuditHook(venueType: number, category: number) {
     minBetAmount: '',
     maxBetAmount: '',
     riskStatus: window?.location?.href?.indexOf('riskStatus=2') ? 2 : ''
+    currency:' ',
   });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;

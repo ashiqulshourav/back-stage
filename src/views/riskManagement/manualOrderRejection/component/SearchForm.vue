@@ -162,6 +162,21 @@
             :format="'YYYY-MM-DD HH:mm:ss'"
           />
         </el-form-item>
+        <el-form-item prop="currency" :label="t('结算币种:')">
+          <el-select
+            v-model="form.currency"
+            clearable
+            class="!w-[150px]"
+          >
+            <el-option label="全部" value=" "></el-option>
+            <el-option
+              :label="item.label"
+              :value="item.value"
+              v-for="item in currency_map"
+              :key="item.value"
+            />
+          </el-select>
+        </el-form-item>
 
         <el-form-item>
           <el-button
@@ -213,6 +228,7 @@ import CustomDate from '@/components/Form/Custom_date.vue';
 import { useRiskNoticeStore } from '@/store/riskNotice';
 import { useMatchStore } from '@/store/match';
 import { debounce } from '@pureadmin/utils';
+import {currency_map} from "@/utils/maps/currency_map";
 const riskNoticeStore = useRiskNoticeStore();
 const matchStore = useMatchStore();
 
