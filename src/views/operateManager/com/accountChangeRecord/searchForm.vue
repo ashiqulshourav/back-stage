@@ -105,9 +105,9 @@
       ></CustomDate>
     </el-form-item>
 
-    <el-form-item prop="betId" :label="t('注单号:')">
+    <el-form-item prop="identifier" :label="t('注单号:')">
       <el-input
-        v-model="form.betId"
+        v-model="form.identifier"
         :placeholder="t('请输入注单号')"
         v-enter="search"
         clearable
@@ -235,7 +235,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
   selectDate.value = '';
   props.form.startCreatedAt = '';
   props.form.endCreatedAt = '';
-  props.form.betId = '';
+  props.form.identifier = '';
   // props.form.startCreatedAt = dayjs()
   //   .startOf('month')
   //   .format('YYYY-MM-DD HH:mm:ss');
