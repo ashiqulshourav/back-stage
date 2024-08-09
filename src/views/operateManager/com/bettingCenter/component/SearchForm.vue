@@ -706,14 +706,12 @@ const handleCheckAllQueryTypeLabel = (val: CheckboxValueType) => {
 const handleCheckRevertQueryTypeLabel = () => {
   const oldArray = [...props.form.orderStatus];
   props.form.orderStatus = Object.keys(betStatusMap)
-  .map((key:string, value: number) => ({
-    value: value,
+  .map((key:string) => ({
+    value: Number(key),
     label: betStatusMap[key]
   }))
   .filter(_ => !oldArray.includes(_.value))
   .map(_ => _.value)
-
-  console.log(oldArray, props.form.orderStatus)
 };
 
 const handleCheckAllSeriesTypeLabel = (val: CheckboxValueType) => {
