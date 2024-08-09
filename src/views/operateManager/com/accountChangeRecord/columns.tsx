@@ -42,7 +42,6 @@ export const columns: TableColumnList = [
   {
     label: t('帐变类型'),
     slot: 'type',
-    // formatter: ({ type }) => accountChangeTypeCodeList.find(item => item.value == type)?.label2
   },
   {
     label: t('交易类型'),
