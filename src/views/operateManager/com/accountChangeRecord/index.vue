@@ -4,60 +4,58 @@
       <IconifyIconOffline class="mx-1" icon="back"></IconifyIconOffline>
       {{ t('返回上一页') }}
     </button>
-    <div>
-      <SearchForm
-      :form="form"
+    <SearchForm
+    :form="form"
+    :loading="loading"
+    @on-search="onSearch"
+    @openModifyBalanceDialog="openModifyBalanceDialog"
+    @exportFile="exportFile"
+    :downloading="downloading"
+    :userData="userData"
+    />
+    <pure-table
+      align-whole="center"
+      table-layout="auto"
       :loading="loading"
-      @on-search="onSearch"
-      @openModifyBalanceDialog="openModifyBalanceDialog"
-      @exportFile="exportFile"
-      :downloading="downloading"
-      :userData="userData"
-      />
-      <pure-table
-        align-whole="center"
-        table-layout="auto"
-        :loading="loading"
-        adaptive
-        :data="dataList"
-        :columns="columns"
-        :pagination="pagination"
-        :paginationSmall="true"
-        :header-cell-style="tableHeaderStyle"
-        @selection-change="handleSelectionChange"
-        @page-size-change="handleTableWidthChange"
-        @page-current-change="handleCurrentChange"
-      >
-        <template #type="{row}">
-          <div class="flex items-center gap-2">
-            <el-icon
-              :size="20"
-              color="red"
-              v-if="accountChangeTypeCodeList.filter(item => row.type === item.value)[0].icon == 'add'"
-              >
-              <CirclePlusFilled/>
-            </el-icon>
-            <el-icon
-              :size="20"
-              color="green"
-              v-if="accountChangeTypeCodeList.filter(item => row.type === item.value)[0].icon == 'deduct'"
-              >
-              <RemoveFilled />
-            </el-icon>
-            <el-icon
-              :size="20"
-              color="#888"
-              v-if="accountChangeTypeCodeList.filter(item => row.type === item.value)[0].icon == 'transfer'"
-              >
-              <CreditCard />
-            </el-icon>
-            <span>
-              {{ accountChangeTypeCodeList.find(item => item.value == row.type)?.label2 }}
-            </span>
-          </div>
-        </template>
-      </pure-table>
-    </div>
+      adaptive
+      :data="dataList"
+      :columns="columns"
+      :pagination="pagination"
+      :paginationSmall="size === 'small' ? true : false"
+      :header-cell-style="tableHeaderStyle"
+      @selection-change="handleSelectionChange"
+      @page-size-change="handleTableWidthChange"
+      @page-current-change="handleCurrentChange"
+    >
+      <template #type="{row}">
+        <div class="flex items-center gap-2">
+          <el-icon
+            :size="20"
+            color="red"
+            v-if="accountChangeTypeCodeList.filter(item => row.type === item.value)[0].icon == 'add'"
+            >
+            <CirclePlusFilled/>
+          </el-icon>
+          <el-icon
+            :size="20"
+            color="green"
+            v-if="accountChangeTypeCodeList.filter(item => row.type === item.value)[0].icon == 'deduct'"
+            >
+            <RemoveFilled />
+          </el-icon>
+          <el-icon
+            :size="20"
+            color="#888"
+            v-if="accountChangeTypeCodeList.filter(item => row.type === item.value)[0].icon == 'transfer'"
+            >
+            <CreditCard />
+          </el-icon>
+          <span>
+            {{ accountChangeTypeCodeList.find(item => item.value == row.type)?.label2 }}
+          </span>
+        </div>
+      </template>
+    </pure-table>
   </div>
 </template>
 
@@ -107,5 +105,10 @@ onMounted(() => {
   color: #409eff;
   font-size: 14px;
   line-height: 20px;
+}
+.el-pagination.is-background{
+  background: white!important;
+  padding: 16px 5px;
+  margin: 0 auto!important;
 }
 </style>

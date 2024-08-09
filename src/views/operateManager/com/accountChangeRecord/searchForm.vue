@@ -3,11 +3,11 @@
     ref="formRef"
     :inline="true"
     :model="form"
-    class="search-form bg-bg_color w-[99/100] px-8 pt-[12px]"
+    class="search-form bg-bg_color w-[99/100] px-8 pt-[12px] pb-[20px]"
   >
     <div class="mb-6 font-bold">{{ t('用户信息') }}</div>
     <div class="flex">
-      <div class="mb-10 w-2/3 grid grid-rows-3 grid-flow-col">
+      <div class="mb-2 w-2/3 grid grid-rows-3 grid-flow-col">
         <el-row
           class="mb-2.5"
           v-for="(item, index) in userInfo(userData)"
