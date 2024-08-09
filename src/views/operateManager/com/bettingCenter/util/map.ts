@@ -20,7 +20,11 @@ export const settleTypeMap =[
     label:'即时结算'
   },
   {
-    value:4,
+    value:5,
     label:'提前结算'
+  },
+  {
+    value:6,
+    label:'正常二次结算'
   }
 ]

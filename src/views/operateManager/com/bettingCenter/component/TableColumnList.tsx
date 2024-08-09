@@ -141,7 +141,7 @@ export const settleHistoryColumns: TableColumnList = [
     prop: 'settleType',
     align: 'center',
     minWidth: 50,
-    formatter: ({ settleType }) => settleTypeMap.find((item:any) => item.value === settleType).label
+    formatter: ({ settleType }) => settleTypeMap.find((item:any) => item.value === settleType)?.label
   },
   {
     label: t('操作人'),
