@@ -155,6 +155,7 @@ import CustomDate from "@/components/Form/Custom_date.vue"
 import Download from '@iconify-icons/ep/download';
 
 const props = defineProps<{
+  downloading: downloading;
   loading: boolean;
   form: accountChangeRecordSearchFormType;
   userData: userDataType;
