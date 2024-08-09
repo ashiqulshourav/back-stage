@@ -26,6 +26,7 @@ const sportKeys = new Set([
   'handicapWholeMaxBetRolling',
   'otherMaxBetMoring',
   'otherMaxBetRolling',
+  'otherSingleMaxWin',
   'singleUserMaxWin',
   'winHalfMaxBetMoring',
   'winHalfMaxBetRolling',
@@ -41,12 +42,13 @@ export function useOrderLimitHook() {
   const isEditSport = ref(false);
   const currentSportId = ref(0);
   const loading = ref(true);
+  const currency = ref(1);
   const { openPasswordInput } = usePasswordInputHook();
 
   // 初始化
   async function onSearch() {
     loading.value = true;
-    const res = await API.getGameLimitList(currentSportId.value);
+    const res = await API.getGameLimitList(currentSportId.value, currency.value);
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
     sportList.length = 0;
@@ -128,13 +130,13 @@ export function useOrderLimitHook() {
       currentSportId.value === 3 ? (dataType = esportKeys) : (dataType = sportKeys)
       const existKey: { [key: number]: boolean } = {}
       sourceSportList.map((item) => {
-        const sport = sportList.find((l) => item.leagueLevel === l.leagueLevel)
+        const sport = sportList.find((l) => item.leagueLevel === l.leagueLevel);
         if (sport === null || sport === undefined) return;
         dataType.forEach((key: LimitListType) => {
           const leagueLevel: number = sport.leagueLevel;
           if (existKey[leagueLevel]) return;
           if (item[key] !== sport[key]) {
-            list.push(sport);
+            list.push({...sport, currency: currency.value});
             existKey[leagueLevel] = true;
             return;
           }
@@ -187,5 +189,6 @@ export function useOrderLimitHook() {
     currentSportId,
     toggle,
     changeType,
+    currency,
   };
 }

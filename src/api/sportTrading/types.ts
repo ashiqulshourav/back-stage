@@ -35,6 +35,8 @@ declare namespace sportTradingDataAPI {
     level: number;
     riskLevel: number;
     HandicapTeam: string;
+    val?: string;
+    sourceCode: string;
   }
 
   type getMorningSetMatchListData = {
@@ -45,7 +47,7 @@ declare namespace sportTradingDataAPI {
   type getMorningSetMatchListRes = COMMON.BASE_RES_TYPE<getMorningSetMatchListData[]>
 
   type BetItemsDtoList = {
-    betItemsId: number;
+    betItemsId: string;
     matchId: number;
     kindsCode: string;
     betItemsName: string;
@@ -69,6 +71,7 @@ declare namespace sportTradingDataAPI {
     betAmount: number;
     oddsVariable: number;
     renderName?: string;
+    previousDpOdds: number;
   }
 
   type KindsCodeDtoList = {
@@ -105,12 +108,14 @@ declare namespace sportTradingDataAPI {
     overtimeBetItemsSize: number;
     penaltyKickBetItemsSize: number;
     specialBetItemsSize: number;
+    sourceCode: string;
   }
   type getHandicapItemsRes = COMMON.BASE_RES_TYPE<getHandicapItemsData>
 
   type updateHandicapStatusParams = {
     matchId: number;
     operateMenu: string;
+    groupName?: string;
     betItemsIds?: number[];
     isSale: number;
   }
@@ -164,6 +169,7 @@ declare namespace sportTradingDataAPI {
     status?: any;
     beginTimeLong?: any;
     currentTime?: any;
+    sourceCode: string;
   }
 
   type getAlarmMatchListType = {
@@ -237,6 +243,7 @@ declare namespace sportTradingDataAPI {
   type getOperateHandicapConfigRes = COMMON.BASE_RES_TYPE<getOperateHandicapConfigData>
 
   type updateOperateHandicapConfigRes = COMMON.BASE_RES_TYPE<null>
+  type resetHandicapOddsRes = COMMON.BASE_RES_TYPE<null>
 
   type loopAlarmMatchListParams = {
     sportId: number | string;
@@ -246,5 +253,11 @@ declare namespace sportTradingDataAPI {
     pages: number;
     size: number;
     matchIdList: number[]
+  }
+
+  type resetHandicapOddsParams = {
+    betItemsIds: string[];
+    matchId: number;
+    operateMenu: string;
   }
 }

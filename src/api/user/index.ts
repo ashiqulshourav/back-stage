@@ -6,7 +6,12 @@ export const user = {
   login: (data: { name: string; pwd: string; ukeyPassword: string }) =>
     http.request<UserAPI.Login>('post', '/kmg/auth/login', { data }),
   //- 修改密码
-  updatePwd: (data: { id: number; pwd: string; newPwd: string, flag: number }) =>
+  updatePwd: (data: {
+    id: number;
+    pwd: string;
+    newPwd: string;
+    flag: number;
+  }) =>
     http.request<UserAPI.LoginResType>('post', '/kmg/matchUser/v1/updatePwd', {
       data
     }),
@@ -22,7 +27,7 @@ export const user = {
     http.request<UserAPI.RouterResType>('post', '/kmg/auth/loginOut', {}),
 
   //- 用户等级限额列表
-  getUserLevelLimitList: (data: { type: number }) =>
+  getUserLevelLimitList: (data: { type: number, currency: number }) =>
     http.request<UserAPI.UserLevelLimitListResData>(
       'post',
       '/userLevelLimit/v1/getUserLevelLimitList',
@@ -52,9 +57,13 @@ export const user = {
     limitLevel?: number | string;
     limittenantCodeLevel?: number | string;
   }) =>
-    http.request<UserAPI.operateUserListReqType>('post', '/operate/userListExport', {
-      data
-    }),
+    http.request<UserAPI.operateUserListReqType>(
+      'post',
+      '/operate/userListExport',
+      {
+        data
+      }
+    ),
   addLabels: (data: { id: string[]; labelId: number[] }) =>
     http.request<UserAPI.updateUserLevelLimitResType>(
       'post',
@@ -88,9 +97,34 @@ export const user = {
         data
       }
     ),
+
+  //- 投注延时操作记录请求
+  getBettingDelayRecord: (data: {
+    userId: string;
+    pageSize: number;
+    pageNum: number;
+  }) =>
+    http.request<UserAPI.getBettingDelayRecordResType>(
+      'post',
+      '/operate/getBettingDelayRecord',
+      { data }
+    ),
+
+  //- 获取用户限额等级记录
+  getLimitModifyRecord: (data: {
+    recordType: number;
+    userId: string;
+    pageSize: number;
+    pageNum: number;
+  }) =>
+    http.request<
+      UserAPI.getBettingDelayRecordResType | getSpecialRecordResType
+    >('post', '/operate/getLimitModifyRecord', { data }),
+
   updateUserLevelLimit: (data: {
     list: UserAPI.updateLimmitReqType[];
     type: number;
+    currency: number;
   }) =>
     http.request<UserAPI.updateUserLevelLimitResType>(
       'post',

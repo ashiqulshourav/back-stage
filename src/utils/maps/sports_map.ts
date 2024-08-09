@@ -21,8 +21,6 @@ export const SPORT_ID_MAP = [
   // { label: t('电子竞技'), value: 4, type: 'FootBall' },
 ];
 
-
-
 export const FULL_SPORT_ID_MAP = [
   { label: t('足球'), value: 1, type: 'FootBall' },
   { label: t('篮球'), value: 2, type: 'BasketBall' },
@@ -328,7 +326,6 @@ export const transferBoDan = (list: any[]) => {
 export const SPORT_CATEGORY = [
   { label: t('普通体育'), value: 0 },
   { label: t('电子竞技'), value: 1 },
-  { label: t('虚拟体育'), value: 2 }
 ];
 
 export enum LeagueClassifyType {

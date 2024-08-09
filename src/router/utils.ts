@@ -418,9 +418,34 @@ function getHistoryMode(routerHistory): RouterHistory {
   }
 }
 
+// /** 获取当前页面按钮级别的权限 */
+// function getAuths(): Array<string> {
+//   return (router.currentRoute.value.meta.childResourceList as any[]).map(item => {
+//     console.log('utils.ts文件 424==============行打印=', item);
+//     return item.enName
+//   });
+//   // return router.currentRoute.value.meta.auths as Array<string>;
+// }
+
 /** 获取当前页面按钮级别的权限 */
 function getAuths(): Array<string> {
-  return (router.currentRoute.value.meta.childResourceList as any[]).map(item => item.enName);
+  const extractEnNames = (resources: any[]): string[] => {
+    let enNames: string[] = [];
+
+    resources.forEach(item => {
+      if (item.enName) {
+        enNames.push(item.enName.toUpperCase());
+      }
+      if (item.childResourceList && item.childResourceList.length > 0) {
+        enNames = enNames.concat(extractEnNames(item.childResourceList));
+      }
+    });
+
+    return enNames;
+  };
+
+  const childResourceList = router.currentRoute.value.meta.childResourceList as any[];
+  return extractEnNames(childResourceList);
   // return router.currentRoute.value.meta.auths as Array<string>;
 }
 

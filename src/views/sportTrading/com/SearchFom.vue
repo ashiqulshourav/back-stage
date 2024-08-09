@@ -95,7 +95,9 @@ import dayjs from 'dayjs';
 import CustomDate from '@/components/Form/Custom_date.vue';
 import { SPORT_ID_MAP } from '@/utils/maps/sports_map';
 import { formatNumber } from '@/utils/formatNumber';
+import { useTranslationLang } from '@/layout/hooks/useTranslationLang';
 
+const { locale } = useTranslationLang();
 const formRef = ref();
 const emits = defineEmits(['onSearch']);
 const selectIndex = ref(-1);
@@ -174,7 +176,11 @@ const preDayArr = computed(() => {
     preDayList.push({
       label: dayjs()
         .add(i, 'day')
-        .format(`MM${t('月')}DD${t('日')}`),
+        .format(
+          `MM${locale.value === 'zh' ? t('月') : '/'}DD${
+            locale.value === 'zh' ? t('日') : ''
+          }`
+        ),
       val: dayjs()
         .add(i, 'day')
         .set('hour', 12)

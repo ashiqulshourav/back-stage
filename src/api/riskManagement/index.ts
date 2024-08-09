@@ -39,9 +39,9 @@ export const riskManagementData = {
       data
     }),
   // 单关限额列表 0足球 1篮球 2其他 3电竞
-  getGameLimitList: (gameType: number) =>
+  getGameLimitList: (gameType: number, currency: number) =>
     http.request<RiskManagementDataAPI.LimitRes>('post', '/betLimit/list', {
-      data: { gameType }
+      data: { gameType, currency }
     }),
 
   //- 修改单关限额列表
@@ -117,4 +117,10 @@ export const riskManagementData = {
   getRiskNotification: () => http.request<RiskManagementDataAPI.RiskNoticeRes>('post', '/kmg/matchUser/getRiskNotification', {}, { noNprogress: true }),
 
   setRiskNotification: (data: RiskManagementDataAPI.RiskNotice) => http.request('post', '/kmg/matchUser/setRiskNotification', { data }, { noNprogress: true }),
+
+  //- 风控管理-联赛预约管理
+  getLeagueConfigList: (data: { sportId: number }) => http.request<RiskManagementDataAPI.getLeagueConfigListRes>('post', '/leagueConfig/v1/getLeagueConfigList', { data }),
+
+  //- 修改联赛预约开关
+  updateLeagueConfig: (data: { id: string; reservationSwitch: number; updatedBy: string }) => http.request<RiskManagementDataAPI.updateLeagueConfigRes>('post', '/leagueConfig/v1/updateLeagueConfig', { data }),
 };

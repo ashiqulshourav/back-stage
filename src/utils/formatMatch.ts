@@ -5,6 +5,10 @@ import { EHandicapType, EOddType, ESportType, } from '@/core/constants/enum/spor
 import { TOrder } from '@/core/services/Table';
 import { useMatchStore } from "@/store/match";
 import { useI18n } from "vue-i18n";
+import {addDialog} from "@/components/ReDialog/index";
+import {t} from "@/plugins/i18n";
+import {h} from "vue";
+import IpDialog from "@/views/operateManager/com/bettingCenter/component/IpDialog.vue";
 
 //- 解析当前比分
 export const parseMatchScore = (s: string) => {
@@ -362,7 +366,7 @@ export const calculateSeriesTypeTotal = (list: any) => {
     //先转换为欧洲盘再计算
     oddTotal *= Number(getViewOddFn(item.oddFinally, item.marketTypeFinally, EOddType.EUROPE))
   })
-  return truncateDecimals(oddTotal, 2)
+  return '@' + truncateDecimals(oddTotal, 2)
 }
 
 
@@ -394,3 +398,16 @@ export const displayHomeAwayScore = (scoreString: string, sprotId?: ESportType, 
 export const getIsInplay = (type: number) => {
   return type === 1 ? t('滚球') : t('早盘')
 }
+
+export const openIpDialog = (ip: string) => {
+  addDialog({
+    title: t(''),
+    alignCenter: true,
+    class: 'reset_dialog',
+    width: '75%',
+    center: true,
+    closeOnClickModal: false,
+    hideFooter: true,
+    contentRenderer: () => h(IpDialog, { ip })
+  });
+};

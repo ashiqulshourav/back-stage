@@ -29,6 +29,18 @@ export function useTagsHook() {
     name: ''
   });
 
+  const getLabelColor = (level: number, labelColor?: string) => {
+    if(labelColor) return labelColor    
+    switch(level) {
+      case 1: 
+        return "#1891FF"
+      case 2:
+        return "#19BE6B"
+      case 3:
+        return "#2E4050"
+    }
+  }
+
   function handleDelete(row: OperateManagementDataAPI.OperateTagType) {
     ElMessageBox.confirm(
       h('div', null, [
@@ -112,7 +124,8 @@ export function useTagsHook() {
         formInline: {
           name: row?.name ?? '',
           remark: row?.remark ?? '',
-          level: row?.level ?? undefined
+          level: row?.level ?? undefined,
+          labelColor: row?.labelColor ?? ''
         }
       },
       width: '40%',
@@ -228,6 +241,7 @@ export function useTagsHook() {
     handleTableWidthChange,
     handleCurrentChange,
     handleSelectionChange,
-    goToUserList
+    goToUserList,
+    getLabelColor
   };
 }

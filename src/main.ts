@@ -7,7 +7,7 @@ import { getServerConfig } from './config';
 import { createApp, Directive } from 'vue';
 import { useEcharts } from "@/plugins/echarts";
 import { injectResponsiveStorage } from '@/utils/responsive';
-
+import { useVxeTable } from "@/plugins/vxeTable";
 import Table from '@pureadmin/table';
 // import PureDescriptions from "@pureadmin/descriptions";
 
@@ -56,7 +56,7 @@ getServerConfig(app).then(async config => {
   app.use(router);
   await router.isReady();
   injectResponsiveStorage(app, config as unknown as ServerConfigs);
-  app.use(Table).use(store).use(useI18n).use(ElementPlus)
+  app.use(Table).use(store).use(useVxeTable).use(useI18n).use(ElementPlus)
     .use(useEcharts);
   // .use(PureDescriptions);
   app.mount('#app');

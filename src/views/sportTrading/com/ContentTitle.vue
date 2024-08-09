@@ -71,7 +71,7 @@
       <el-button
         round
         size="small"
-        class="xl:!ml-1 w-[61px]"
+        :class="['xl:!ml-1', locale === 'en' ? '!w-[90px]' : '!w-[61px]']"
         v-for="(item, index) in handicapList"
         :key="index"
         :type="selectContentType === item.listType ? 'primary' : ''"
@@ -83,14 +83,14 @@
 
   <div class="flex items-center pl-3 pt-1 mb-2">
     <span>{{ currentMatch?.beginTime }}</span>
-    <div class="flex pl-2 cursor-pointer">
+    <div class="flex pl-2 cursor-pointer mr-4">
       <IconGroup
-        :close-three-icon="true"
         :typeNum="currentMatch?.isSale"
         @changeMatchStatus="changeMatchStatus"
         :operateStatus="currentMatch.operateStatus"
       />
     </div>
+    <el-text type="primary">{{ currentMatch.sourceCode }}</el-text>
   </div>
 </template>
 
@@ -101,7 +101,9 @@ import IconGroup from './IconGroup.vue';
 import { ReText } from '@/components/ReText';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { message } from '@/utils/message';
+import { useTranslationLang } from '@/layout/hooks/useTranslationLang';
 
+const { locale } = useTranslationLang();
 const props = defineProps<{
   currentMatch: sportTradingDataAPI.MatchDtoList;
   handicapList: handicapListType[];
@@ -131,7 +133,9 @@ const copyText = (type: string) => {
 const changeMatchStatus = (status: number) => {
   emits('changeStatus', {
     status,
-    classify: 'match'
+    classify: 'match',
+    matchId: props.currentMatch.matchId,
+    item: props.currentMatch
   });
 };
 </script>

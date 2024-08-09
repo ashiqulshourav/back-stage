@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <button @click="goToUserListPage"class="back-button =">
+    <button @click="goToUserListPage" class="back-button =">
       <IconifyIconOffline class="mx-1" icon="back"></IconifyIconOffline>
       {{ t('返回上一页') }}
     </button>
@@ -10,6 +10,8 @@
       :loading="loading"
       @on-search="onSearch"
       @openModifyBalanceDialog="openModifyBalanceDialog"
+      @exportFile="exportFile"
+      :downloading="downloading"
       :userData="userData"
       />
       <pure-table
@@ -26,6 +28,31 @@
         @page-size-change="handleTableWidthChange"
         @page-current-change="handleCurrentChange"
       >
+        <template #type="{row}">
+          <div class="flex items-center gap-2">
+            <el-icon 
+              color="red"
+              v-if="accountChangeTypeCodeList.filter(item => row.type === item.value)[0].icon == 'add'"
+              >
+              <CirclePlusFilled />
+            </el-icon>
+            <el-icon 
+              color="green"
+              v-if="accountChangeTypeCodeList.filter(item => row.type === item.value)[0].icon == 'deduct'"
+              >
+              <RemoveFilled />
+            </el-icon>
+            <el-icon 
+              color="#888"
+              v-if="accountChangeTypeCodeList.filter(item => row.type === item.value)[0].icon == 'transfer'"
+              >
+              <CreditCard />
+            </el-icon>
+            <span>
+              {{ accountChangeTypeCodeList.filter(item => row.type === item.value)[0].label }}
+            </span>          
+          </div>
+        </template>
       </pure-table>
     </div>
   </div>
@@ -34,12 +61,13 @@
 <script setup lang="ts">
 import { useAccountChangeRecordHook } from './util/hook';
 import SearchForm from './searchForm.vue';
-import { columns } from './columns';
+import { columns, accountChangeTypeCodeList } from './columns';
 import { usePublicHooks } from '@/hooks';
 import { onMounted } from "vue";
 import { t } from '@/plugins/i18n';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import Back from '@iconify-icons/ep/back';
+import { CirclePlusFilled, RemoveFilled, CreditCard } from '@element-plus/icons-vue';
 
 const { tableHeaderStyle } = usePublicHooks();
 const {
@@ -54,6 +82,8 @@ const {
   openModifyBalanceDialog,
   userData,
   goToUserListPage,
+  downloading, 
+  exportFile
 } = useAccountChangeRecordHook();
 onMounted(() => {
   onSearch();

@@ -9,27 +9,33 @@ export const columns: TableColumnList = [
     minWidth: 50
   },
   {
-    label: t('用户信息'),
+    label: t("用户信息"),
     slot: 'userMessage',
     minWidth: 100,
-    align: 'left',
-    headerRenderer: d => handleTableWidth(d, t('用户信息'), 'auto')
+    align:'left',
+    className: 'getParent mw-230'
   },
   {
-    label: t('赛事信息'),
+    label: t("注单信息"),
+    slot: 'betMessage',
+    minWidth: 100,
+    align:'left',
+    className: 'getParent mw-250',
+  },
+  {
+    label: t("赛事信息"),
     slot: 'matchMessage',
     minWidth: 200,
-    align: 'left',
+    align:'left',
     className: 'getParent',
-    headerRenderer: d => handleTableWidth(d, t('赛事信息'), 'auto')
   },
+
   {
-    label: t('注单详情'),
-    slot: 'betDetail',
+    label: t("投注项"),
+    slot: 'betItem',
     minWidth: 200,
-    align: 'left',
-    className: 'getParent',
-    headerRenderer: d => handleTableWidth(d, t('注单详情'), 'auto')
+    align:'left',
+    className: 'betItem getParent',
   },
   {
     label: t('接拒状态'),

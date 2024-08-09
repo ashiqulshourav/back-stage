@@ -23,6 +23,8 @@ import { t } from '@/plugins/i18n';
 import { riskStatus } from '@/views/riskManagement/com/bettingAudit/util/types';
 import editOrder from '../component/editOrder.vue';
 import IpDialog from '../component/IpDialog.vue';
+import SettleHistory from '../component/settleHistory.vue';
+
 export function useBettingCenterHook(category: number, venueType: number) {
   const router = useRouter();
   const { openPasswordInput } = usePasswordInputHook();
@@ -57,14 +59,14 @@ export function useBettingCenterHook(category: number, venueType: number) {
     homeTeamName: '',
     betItemId: '',
     isInplay: '',
-    seriesType: '',
-    category: '',
+    seriesTypes: [],
+    category: ' ',
     timeType: 1,
     leagueName: '',
     tenantIds: [],
     seriesDetailsSingle: [],
     seriesDetailsDuplex: [],
-    queryType: 1,
+    orderStatus: [],
     minBetAmount: '',
     maxBetAmount: '',
     minProfitAmount: '',
@@ -93,9 +95,10 @@ export function useBettingCenterHook(category: number, venueType: number) {
     page?: number
   ) => {
     let seriesDetails: any = [];
-    if (form.seriesType == 2) {
-      if (form.seriesDetailsSingle.length) {
-        form.seriesDetailsSingle.map((item: keyof typeof seriesTypesSingle) => {
+    const newForm = { ...form }
+    if (newForm.seriesTypes == 2) {
+      if (newForm.seriesDetailsSingle.length) {
+        newForm.seriesDetailsSingle.map((item: keyof typeof seriesTypesSingle) => {
           seriesDetails.push(...seriesTypesSingle[item].list);
         });
       } else {
@@ -105,9 +108,9 @@ export function useBettingCenterHook(category: number, venueType: number) {
           );
         }
       }
-    } else if (form.seriesType == 3) {
-      if (form.seriesDetailsDuplex.length) {
-        form.seriesDetailsDuplex.map((item: keyof typeof seriesTypesSingle) => {
+    } else if (newForm.seriesTypes == 3) {
+      if (newForm.seriesDetailsDuplex.length) {
+        newForm.seriesDetailsDuplex.map((item: keyof typeof seriesTypesSingle) => {
           seriesDetails.push(
             ...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list
           );
@@ -125,14 +128,24 @@ export function useBettingCenterHook(category: number, venueType: number) {
     if (seriesDetails.length > 1) {
       seriesDetails = [...new Set(seriesDetails)];
     }
+    if (newForm.orderId || newForm.matchId) {
+      newForm.timeStart = '';
+      newForm.timeEnd = '';
+    }
+    if (newForm.timeStart) {
+      newForm.timeStart = dayjs(newForm.timeStart).format('YYYY-MM-DD HH:mm:ss')
+    }
+    if (newForm.timeEnd) {
+      newForm.timeEnd = dayjs(newForm.timeEnd).format('YYYY-MM-DD HH:mm:ss')
+    }
     return {
       ...removeEmptyStringKeys({
-        ...form,
+        ...newForm,
         orderId: order_id || form.orderId,
         seriesDetailsSingle: '',
         seriesDetailsDuplex: '',
         seriesDetails: seriesDetails,
-        seriesType: +form.seriesType > 2 ? 2 : form.seriesType,
+        seriesTypes: +form.seriesTypes > 2 ? 2 : form.seriesTypes,
         venueType: venueType,
         category: venueType === 0 ? form.category : 1
       }),
@@ -317,7 +330,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     if (isSpecialSettle === 1) {
       // 特殊结算也算已结算
       obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
-    } else if (betResultArr?.includes(22) || betResultArr?.includes(25)) {
+    } else if (betResultArr?.includes(22)||betResultArr?.includes(25)) {
       //预约取消
       obj = { status: betStatus.reverseCancel, bgColor: '#F57582' };
     } else if (riskStatusArr?.includes(riskStatus.rejectBetting)) {
@@ -339,7 +352,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     } else if (
       status == 2 &&
       billStatus === 1 &&
-      (betResultArr?.includes(22) || betResultArr?.includes(23) || betResultArr?.includes(25))
+      (betResultArr?.includes(22) || betResultArr?.includes(23)||betResultArr?.includes(25))
     ) {
       // 注单无效
       obj = { status: betStatus.betInvalid, bgColor: '#E54752' };
@@ -422,13 +435,38 @@ export function useBettingCenterHook(category: number, venueType: number) {
         })
     });
   };
+
+
+  const handleSettleHistoryDialog = (row: any) => {
+    addDialog({
+      title: t(''),
+      center: true,
+      closeOnClickModal: false,
+      hideFooter: true,
+      width: '70%',
+      style: {
+        "min-height": '700px'
+      },
+      contentRenderer: ({ options, index }) =>
+        h(SettleHistory, {
+          order_id: row.id,
+          ref: editDialogRef,
+          data: row,
+          onCloseDialog: (_: boolean) => {
+            closeDialog(options, index);
+            getRowByOrderId(row.id);
+          }
+        })
+    });
+  }
+
   function copyTest(str: string, tip: string) {
     if (!str) return;
     const success = copyTextToClipboard(str.toString());
     success
       ? message(t('复制{value}成功!', { value: tip || str || '' }), {
-          type: 'success'
-        })
+        type: 'success'
+      })
       : message(t('复制失败'), { type: 'error' });
   }
 
@@ -488,18 +526,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
 
   //- IP地址弹窗
 
-  const openIpDialog = (ip: string) => {
-    addDialog({
-      title: t(''),
-      alignCenter: true,
-      class: 'reset_dialog',
-      width: '75%',
-      center: true,
-      closeOnClickModal: false,
-      hideFooter: true,
-      contentRenderer: () => h(IpDialog, { ip })
-    });
-  };
+
 
   return {
     loading,
@@ -525,6 +552,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
     riskLabelList,
     getOddStatus,
     downloading,
-    openIpDialog
+    handleSettleHistoryDialog
   };
 }

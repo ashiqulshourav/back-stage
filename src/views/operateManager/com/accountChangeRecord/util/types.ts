@@ -5,7 +5,8 @@ export type accountChangeRecordSearchFormType = {
   endCreatedAt: string | number,
   startCreatedAt: string | number,
   userId: string
-  accountChangeTypeCode: string | number
+  accountChangeTypeCode: string | number | string [] | number [];
+  trans_no: string | number,
 }
 
 

@@ -5,13 +5,21 @@ import { columns } from './TableColumnList';
     round
     type="info"
     effect="plain"
-    :closable="expand && hasAuth(['DELUSERLABEL'])"
+    :closable="expand && hasAuth('DELUSERLABEL')"
   >
     <div
-      :style="`background-color: ${getLabelColor(label.level, type)}`"
+      :style="`background-color: ${getLabelColor(label.level, label.labelColor)}`"
       class="w-[10px] h-[10px] rounded-[50%] bg-blue-500"
     />
-    <el-text size="small">{{ props.label.name }}</el-text>
+    <el-text v-if="props.label.name.length <= 4" size="small">{{ props.label.name }}</el-text>
+    <el-tooltip
+      v-else
+      effect="light"
+      :content="props.label.name"
+      placement="top"
+    >
+      <el-text>{{ props.label.name.substring(0, 4) }}...</el-text>
+    </el-tooltip>
   </el-tag>
 </template>
 <script setup lang="ts">
@@ -24,27 +32,17 @@ const props = defineProps<{
 }>();
 const emits = defineEmits(['onClose']);
 
-const getLabelColor = (label: number, type: string) => {
-  if (type === 'risk') {
-    switch (label) {
-      case 1:
-        return 'rgba(163, 0, 20, 1)';
-      case 2:
-        return 'rgba(255, 92, 0, 1)';
-      case 3:
-        return 'rgba(255, 153, 0, 1)';
-    }
-  } else {
-    switch (label) {
-      case 1:
-        return 'rgba(24, 145, 255, 1)';
-      case 2:
-        return 'rgba(25, 190, 107, 1)';
-      case 3:
-        return 'rgba(46, 64, 80, 1)';
-    }
+const getLabelColor = (level: number, labelColor?: string) => {
+  if(labelColor) return labelColor    
+  switch(level) {
+    case 1: 
+      return "#1891FF"
+    case 2:
+      return "#19BE6B"
+    case 3:
+      return "#2E4050"
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

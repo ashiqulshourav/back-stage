@@ -19,17 +19,22 @@
           </div>
         </el-row>
       </div>
-      <el-button  v-if="hasAuth('changAccountAmount'.toUpperCase())" class="ml-auto" type="primary" @click="openModifyBalanceDialog()">
+      <el-button
+        v-if="hasAuth('changAccountAmount'.toUpperCase())"
+        class="ml-auto"
+        type="primary"
+        @click="openModifyBalanceDialog()"
+      >
         {{ t('修改余额') }}
       </el-button>
     </div>
-
-    <el-form-item prop="accountChangeTypeCode">
+    <!-- <el-form-item prop="accountChangeTypeCode">
       <el-select
         v-model="form.accountChangeTypeCode"
         :placeholder="`${t('请选择账变类型')}`"
         clearable
         class="!w-[200px]"
+        multiple
       >
         <el-option :label="t('全部')" :value="' '" />
         <el-option
@@ -39,16 +44,72 @@
           :key="item.value"
         />
       </el-select>
+    </el-form-item> -->
+    <el-form-item prop="accountChangeTypeCode">
+      <el-tree-select
+        v-model="form.accountChangeTypeCode"
+        :placeholder="t('请选择账变类型')"
+        :data="
+          accountChangeTypeCodeList.map(item => ({
+            value: item.value,
+            label: item.label
+          }))
+        "
+        @change="search"
+        filterable
+        clearable
+        multiple
+        collapse-tags
+        :render-after-expand="false"
+        show-checkbox
+        check-strictly
+        check-on-click-node
+        style="width: 250px"
+      >
+        <template #header>
+          <el-checkbox v-model="checkAllAcc" @change="handleCheckAllAcc">
+            {{ t('全选') }}
+          </el-checkbox>
+          <el-checkbox
+            v-model="removeAllAcc"
+            @change="handleRemoveAllAcc"
+            :disabled="form?.accountChangeTypeCode.length == 0"
+          >
+            {{ t('全不选') }}
+          </el-checkbox>
+          <el-checkbox v-model="checkRevertAcc" @change="handleCheckRevertAcc">
+            {{ t('反选') }}
+          </el-checkbox>
+        </template>
+      </el-tree-select>
     </el-form-item>
 
     <el-form-item :label="`${t('账变时间')}:`" prop="createTimeStart">
-      <el-date-picker
+      <!-- <el-date-picker
         type="datetimerange"
         format="YYYY-MM-DD HH:mm:ss"
         v-model="selectDate"
         :start-placeholder="dayjs().startOf('month').format('YYYY-MM-DD')"
         :end-placeholder="dayjs().endOf('day').format('YYYY-MM-DD')"
         @change="changeDate"
+      /> -->
+        <CustomDate
+          v-model:val="selectDate"
+          @changeDate="changeDate"
+          :start-placeholder="form.startCreatedAt ? dayjs(form.startCreatedAt)?.format('YYYY-MM-DD HH:mm:ss') : '选择开始时间'"
+          :end-placeholder="form.endCreatedAt ? dayjs(form.endCreatedAt)?.format('YYYY-MM-DD HH:mm:ss') : '选择结束时间'"
+          :isDateTime="true"
+          :format="'YYYY-MM-DD HH:mm:ss'"
+      ></CustomDate>
+    </el-form-item>
+
+    <el-form-item prop="identifier" :label="t('注单号:')">
+      <el-input
+        v-model="form.identifier"
+        :placeholder="t('请输入注单号')"
+        v-enter="search"
+        clearable
+        class="!w-[200px]"
       />
     </el-form-item>
 
@@ -64,6 +125,15 @@
       >
         {{ t('筛选') }}
       </el-button>
+      <el-button
+        type="primary"
+        :icon="useRenderIcon(Download)"
+        :loading="downloading"
+        v-if="hasAuth('export'.toUpperCase())"
+        @click="exportFile()"
+      >
+        {{ t('导出') }}
+      </el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -73,14 +143,17 @@ import { t } from '@/plugins/i18n';
 import SearchIcon from '@iconify-icons/ep/search';
 import RefreshIcon from '@iconify-icons/ep/refresh';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-import type { FormInstance } from 'element-plus';
+import type { FormInstance, CheckboxValueType } from 'element-plus';
 import dayjs from 'dayjs';
 import { accountChangeRecordSearchFormType, userDataType } from './util/types';
 import { accountChangeTypeCodeList } from './columns';
-import { addThousandSeparator } from "@/utils/formatNumber";
-import {hasAuth} from "@/router/utils";
+import { addThousandSeparator } from '@/utils/formatNumber';
+import { hasAuth } from '@/router/utils';
+import CustomDate from "@/components/Form/Custom_date.vue"
+import Download from '@iconify-icons/ep/download';
 
 const props = defineProps<{
+  downloading: downloading;
   loading: boolean;
   form: accountChangeRecordSearchFormType;
   userData: userDataType;
@@ -91,17 +164,65 @@ const props = defineProps<{
 const formRef = ref();
 const selectDate = ref();
 
+const checkAllAcc = ref(false);
+const removeAllAcc = ref(false);
+const checkRevertAcc = ref(false);
+
+watch(
+  () => props.form.accountChangeTypeCode,
+  val => {
+    if (!val || val.length === 0) {
+      checkAllAcc.value = false;
+    } else if (val.length === accountChangeTypeCodeList.length) {
+      checkAllAcc.value = true;
+      removeAllAcc.value = false;
+    }
+  }
+);
+
+const handleCheckAllAcc = (val: CheckboxValueType) => {
+  if (val) {
+    props.form.accountChangeTypeCode = accountChangeTypeCodeList.map(
+      _ => _.value
+    );
+    removeAllAcc.value = false;
+    checkRevertAcc.value = false;
+  } else {
+    props.form.accountChangeTypeCode = [];
+  }
+};
+
+const handleRemoveAllAcc = () => {
+  props.form.accountChangeTypeCode = [];
+  removeAllAcc.value = false;
+  checkRevertAcc.value = false;
+};
+
+const handleCheckRevertAcc = () => {
+  if (true) {
+    const oldArray = props.form.accountChangeTypeCode
+      ? [...props.form.accountChangeTypeCode]
+      : [];
+    props.form.accountChangeTypeCode = accountChangeTypeCodeList
+      .filter(_ => !oldArray.includes(_.value))
+      .map(_ => _.value);
+  }
+};
+
 const userInfo = (data: userDataType) => [
   { title: t('用户名'), value: data.userName },
   { title: t('用户ID'), value: data.userId },
   { title: t('用户币种'), value: t('人民币') },
-  { title: t('可用余额'), value: addThousandSeparator(data.balance.toFixed(2)) },
+  {
+    title: t('可用余额'),
+    value: addThousandSeparator(data.balance.toFixed(2))
+  },
   { title: t(''), value: '' },
   { title: t(''), value: '' },
   { title: t('所属商户'), value: data.tenantName },
   { title: t(''), value: '' },
-  { title: t(''), value: '' },
-]
+  { title: t(''), value: '' }
+];
 
 const emits = defineEmits([
   'onSearch',
@@ -113,6 +234,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
   selectDate.value = '';
   props.form.startCreatedAt = '';
   props.form.endCreatedAt = '';
+  props.form.identifier = '';
   // props.form.startCreatedAt = dayjs()
   //   .startOf('month')
   //   .format('YYYY-MM-DD HH:mm:ss');

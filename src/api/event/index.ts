@@ -50,4 +50,21 @@ export const eventData = {
         noNprogress: true
       }
     ),
+
+  oddsHistoryMatchList: (data: {
+    leagueId?: number | string;
+    matchId: number | string;
+    pageSize: number;
+    pageNum: number;
+    status: string;
+    startTime: string | number;
+    endTime: string | number;
+    dataValidityPeriod: string | number;
+  }) =>
+    http.request<EventAPI.getMatchBetListResType>('post', '/match/v1/oddsHistoryMatchList',
+      { data },
+      {
+        noNprogress: true
+      }
+    ),
 };
