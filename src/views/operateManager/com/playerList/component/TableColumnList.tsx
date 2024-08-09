@@ -103,6 +103,7 @@ export const columns = (category: number): TableColumnList => {
     {
       label: t('修改时间'),
       prop: 'updatedAt',
+      prop: 'updatedAt',
       formatter({ updatedAt }: { updatedAt: string }) {
         return dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss');
       }
