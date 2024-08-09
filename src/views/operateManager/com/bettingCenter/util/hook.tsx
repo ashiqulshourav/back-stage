@@ -443,7 +443,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
       center: true,
       closeOnClickModal: false,
       hideFooter: true,
-      width: '60%',
+      width: '70%',
       style: {
         "min-height": '700px'
       },

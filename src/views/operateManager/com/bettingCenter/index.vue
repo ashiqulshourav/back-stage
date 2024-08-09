@@ -61,7 +61,7 @@
                 />
               </div>
               <div
-                class="item_line cursor-pointer"
+                class="item_line cursor-pointer  min-w-[210px]"
                 @click="
                   copyTest(
                     row.userId,
@@ -69,8 +69,7 @@
                   )
                 "
               >
-                <span>{{ t('用户ID：') }}</span
-                >{{ row.userId }}
+                {{ t('用户ID：') }}{{ row.userId }}
               </div>
               <div
                 class="item_line cursor-pointer"
