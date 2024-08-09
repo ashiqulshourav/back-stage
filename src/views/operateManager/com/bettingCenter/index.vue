@@ -654,4 +654,10 @@ onUpdated(() => {
 .mw-250px{
   min-width: 275px!important;
 }
+.mw-70{
+  min-width: 70px!important;
+}
+.mw-100{
+  min-width: 100px!important;
+}
 </style>

@@ -706,14 +706,13 @@ const handleCheckAllQueryTypeLabel = (val: CheckboxValueType) => {
 const handleCheckRevertQueryTypeLabel = () => {
   const oldArray = [...props.form.orderStatus];
   props.form.orderStatus = Object.keys(betStatusMap)
-  .map((key:string, value: number) => ({
-    value: value,
+  .map((key:string) => ({
+    value: Number(key),
     label: betStatusMap[key]
   }))
   .filter(_ => !oldArray.includes(_.value))
   .map(_ => _.value)
 
-  console.log(oldArray, props.form.orderStatus)
 };
 
 const handleCheckAllSeriesTypeLabel = (val: CheckboxValueType) => {
@@ -730,6 +729,18 @@ const handleCheckSeriesSportLabel = () => {
     .filter(_ => !oldArray.includes(_.value))
     .map(_ => _.value);
 };
+
+watch(
+  () => props.form.seriesTypes,
+  val => {
+    if (!val || val.length === 0 || val.length !== seriesTypeList.length) {
+      checkAllSeriesTypeLabel.value = false;
+    } else if (val.length === seriesTypeList.length) {
+      checkAllSeriesTypeLabel.value = true;
+      checkRevertSeriesTypeLabel.value = false;
+    }
+  }
+);
 
 watch(
   () => props.form.riskControlLabelList,
@@ -757,9 +768,9 @@ watch(
 );
 
 watch(
-  () => props.form.queryType,
+  () => props.form.orderStatus,
   val => {
-    if (!val || val.length === 0) {
+    if (!val || val.length === 0 || val.length !== Object.keys(betStatusMap).length) {
       checkAllQueryTypeLabel.value = false;
     } else if (val.length === Object.keys(betStatusMap).length) {
       checkAllQueryTypeLabel.value = true;
