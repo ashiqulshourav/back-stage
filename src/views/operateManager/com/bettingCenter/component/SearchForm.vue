@@ -712,8 +712,7 @@ const handleCheckRevertQueryTypeLabel = () => {
   }))
   .filter(_ => !oldArray.includes(_.value))
   .map(_ => _.value)
-
-  console.log(oldArray, props.form.orderStatus)
+  
 };
 
 const handleCheckAllSeriesTypeLabel = (val: CheckboxValueType) => {
@@ -757,12 +756,13 @@ watch(
 );
 
 watch(
-  () => props.form.queryType,
+  () => props.form.orderStatus,
   val => {
-    if (!val || val.length === 0) {
+    if (!val || val.length === 0 || val.length !== Object.keys(betStatusMap).length) {
       checkAllQueryTypeLabel.value = false;
     } else if (val.length === Object.keys(betStatusMap).length) {
       checkAllQueryTypeLabel.value = true;
+      checkRevertQueryTypeLabel.value = false;
     }
   }
 );

@@ -44,8 +44,8 @@ export const columns: TableColumnList = [
     slot: "orderStatusView",
     minWidth: 100,
     align: 'center',
-    formatter: ({ betResult }) => BET_RESULT_TYPE_MAP[betResult as keyof typeof BET_RESULT_TYPE_MAP] || '' // (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
-
+    formatter: ({ betResult }) => BET_RESULT_TYPE_MAP[betResult as keyof typeof BET_RESULT_TYPE_MAP] || '', // (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
+    className: 'mw-70'
   },
   {
     label: t("赔率"),
@@ -66,19 +66,21 @@ export const columns: TableColumnList = [
     slot: "profitAmount",
     minWidth: 50,
     align: 'center',
-    formatter: ({ profitAmount }) => addThousandSeparator(profitAmount.toFixed(2))
+    formatter: ({ profitAmount }) => addThousandSeparator(profitAmount.toFixed(2)),
+    className: 'mw-100'
   },
   {
     label: t('操作'),
     slot: 'operation',
-    minWidth: 50,
+    minWidth: 100,
     align: 'center',
+    fixed: 'right',
   },
   {
     label: t('备注'),
     slot: 'operationRemark',
     align: 'center',
-    minWidth: 50,
+    minWidth: 70,
     fixed: 'right'
   }
 ]
