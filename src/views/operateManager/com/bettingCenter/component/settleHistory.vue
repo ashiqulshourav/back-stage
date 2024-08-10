@@ -17,7 +17,11 @@
     <div class="flex mb-6">
       <p class="flex-1 flex gap-2">
         <span>{{ t('过关类型') }}:</span>
-        <span>{{ bettingHistory.seriesType }}</span>
+        <span v-if="props.data?.combineOrderDetails>1">{{String(props.data?.seriesType)?.slice(-3) === '001' ? '单式串关' : '复式串关'}} {{formatSeriesType(
+            props.data?.seriesType,
+            props.data?.combineOrderDetails?.length
+        )}}</span>
+        <span v-else>单关</span>
       </p>
       <p class="flex-1 flex gap-2">
         <span>{{ t('投注时间') }}:</span>
@@ -203,7 +207,7 @@ import {
   displayHomeAwayScore,
   getIsInplay,
   enterGoalMap,
-  BET_RESULT_TYPE_MAP
+  BET_RESULT_TYPE_MAP, formatSeriesType
 } from '@/utils/formatMatch';
 import { riskStatus } from '@/views/riskManagement/com/bettingAudit/util/types';
 import { addThousandSeparator } from '@/utils/formatNumber'
@@ -215,6 +219,7 @@ const bettingHistoryList = reactive<any>([]);
 
 const props = defineProps<{
   order_id: string;
+  data:any;
 }>();
 
 const init = async () => {
