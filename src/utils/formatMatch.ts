@@ -126,8 +126,8 @@ export enum EBetResultType {
   GAME_ABANDONED = 15, //比赛放弃
   ABNORMAL = 16, //盘口异常
   UNKNOWN_STATUS = 17,
-  GAME_CANCEL = 18,
-  GAME_POSTPONED = 19,// 比赛延期
+  GAME_CANCEL = 18,//比赛取消
+  GAME_POSTPONED = 19,//  比赛延期
   ROLLBACK = 20,
   CANCELL = 21,
   AUTO_CANCEL = 22,

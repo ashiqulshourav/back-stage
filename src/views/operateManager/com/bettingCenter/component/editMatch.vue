@@ -68,6 +68,18 @@
         </li>
       </ul>
     </div>
+    <div class="mt-5">
+      <el-text type="primary">{{ t('是否为最终结算') }}</el-text>
+      <ul class="mt-2">
+         <li :class="`result_item ${
+            item?.value === data.combineOrderDetails[0].betResult
+              ? 'result_item_disable'
+              : item.value === newRow.combineOrderDetails[0].betResult
+              ? 'result_item_active cursor-pointer'
+              : 'cursor-pointer'
+          }`" v-for="item in tabsList">{{item.label}}</li>
+      </ul>
+    </div>
   </div>
   <div v-else>
     <PureTableBar
@@ -230,8 +242,43 @@ const resultList = [
   {
     value: EBetResultType.FLAT,
     title: BET_RESULT_TYPE_MAP[EBetResultType.FLAT]
-  }
+  },
+  {
+    value: EBetResultType.GAME_CANCEL,
+    title: BET_RESULT_TYPE_MAP[EBetResultType.GAME_CANCEL]
+  },
+  {
+    value: EBetResultType.GAME_POSTPONED,
+    title: BET_RESULT_TYPE_MAP[EBetResultType.GAME_POSTPONED]
+  },
+  {
+    value: EBetResultType.GAME_INTERRUPTED,
+    title: BET_RESULT_TYPE_MAP[EBetResultType.GAME_INTERRUPTED]
+  },
+  {
+    value: EBetResultType.GAME_ABANDONED,
+    title: BET_RESULT_TYPE_MAP[EBetResultType.GAME_ABANDONED]
+  },
+ {
+   value: EBetResultType.HANDICAPS_CANCEL,
+       title: BET_RESULT_TYPE_MAP[EBetResultType.HANDICAPS_CANCEL]
+ },
+  {
+    value: EBetResultType.ABNORMAL,
+    title: BET_RESULT_TYPE_MAP[EBetResultType.ABNORMAL]
+  },
+
 ];
+const tabsList = [
+  {
+    label:'是',
+    value:0
+  },
+  {
+    label:'否',
+    value:1
+  }
+]
 const editColumnList = [
   {
     label: t('赛事信息'),

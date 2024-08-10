@@ -65,7 +65,7 @@ export function useBettingAuditHook(venueType: number, category: number) {
     seriesDetailsDuplex: [],
     minBetAmount: '',
     maxBetAmount: '',
-    riskStatus: window?.location?.href?.indexOf('riskStatus=2') ? 2 : ''
+    riskStatus: window?.location?.href?.indexOf('riskStatus=2') ? 2 : '',
     currency:' ',
   });
   function handleTableWidthChange(val: number) {
