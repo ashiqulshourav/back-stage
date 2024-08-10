@@ -347,7 +347,7 @@
                       : 'lose'
                   "
                 >
-                  {{ getOddStatus(item?.betResult, item.riskStatus) }}
+                  {{item.betItemResultDesc}}
                 </span>
               </div>
             </div>
