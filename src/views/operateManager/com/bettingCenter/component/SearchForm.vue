@@ -12,8 +12,8 @@
               v-model="props.form.orderStatus"
               :placeholder="t('请选择注单状态，多选项')"
               :data="
-              Object.keys(betStatusMap).map((key:string, value: number) => ({
-                value: value,
+              Object.keys(betStatusMap).map((key:string) => ({
+                value: Number(key),
                 label: betStatusMap[key]
               }))
             "
@@ -137,21 +137,7 @@
               </el-checkbox>
             </template>
           </el-tree-select>
-          <!-- <el-select
-            v-model="form.sportId"
-            :disabled="form.category===' '"
-            :placeholder="t('赛种')"
-            class="!w-[180px]"
-            @change="search"
-          >
-            <el-option :label="t('全部')" :value="''" />
-            <el-option
-              :label="item.label"
-              :value="item.value"
-              v-for="item in gameClassify"
-              :key="item.value"
-            />
-          </el-select> -->
+
         </el-form-item>
         <el-form-item :label="`${t('过关类型')}:`" prop="seriesTypes">
           <el-tree-select
@@ -183,20 +169,9 @@
               </el-checkbox>
             </template>
           </el-tree-select>
-          <!-- <el-select
-            v-model="form.seriesType"
-            clearable
-            class="!w-[180px]"
-            @change="search"
-          >
-            <el-option :label="t('全部')" value="" />
-            <el-option :label="t('单关')" :value="1" />
-            <el-option :label="t('单式串关')" :value="2" />
-            <el-option :label="t('复试串关')" :value="3" />
-          </el-select> -->
         </el-form-item>
         <el-form-item :label="`${t('单式串关类型')}:`"
-          v-if="form.seriesType === 2"
+          v-if="form.seriesTypes.includes(2)"
           prop="seriesDetails"
         >
           <el-select
@@ -215,7 +190,7 @@
           </el-select>
         </el-form-item>
         <el-form-item  :label="`${t('复试串关类型')}:`"
-          v-if="form.seriesType === 3"
+          v-if="form.seriesTypes.includes(3)"
           prop="seriesDetails"
         >
           <el-select :placeholder="t('请选择串关类型')"
@@ -713,7 +688,7 @@ const handleCheckRevertSportLabel = () => {
 
 const handleCheckAllQueryTypeLabel = (val: CheckboxValueType) => {
   if (val) {
-    props.form.orderStatus = Object.keys(betStatusMap).map((key, value) => value);
+    props.form.orderStatus = Object.keys(betStatusMap).map((key) => Number(key));
   } else {
     props.form.orderStatus = [];
   }
