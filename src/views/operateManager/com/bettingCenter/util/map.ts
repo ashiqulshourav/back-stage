@@ -5,7 +5,7 @@ export const settleTypeMap =[
   },
   {
     value:1,
-    label:'特殊结算'
+    label:'特殊终态结算'
   },
   {
     value:2,
@@ -26,5 +26,13 @@ export const settleTypeMap =[
   {
     value:6,
     label:'正常二次结算'
+  },
+  {
+    value:7,
+    label:'走水'
+  },
+  {
+    value:11,
+    label:'特殊非终态结算'
   }
 ]
