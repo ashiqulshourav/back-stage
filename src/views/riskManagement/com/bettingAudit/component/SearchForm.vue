@@ -268,7 +268,7 @@
               :label="item.label"
               :value="item.value"
               v-for="item in currency_map"
-              :key="item.value"
+              :key="item.value2"
             />
           </el-select>
         </el-form-item>
