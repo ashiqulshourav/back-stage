@@ -52,7 +52,8 @@ export function useManualOrderRejectionHook() {
     category: '',
     timeType: 1,
     seriesDetailsSingle: [],
-    seriesDetailsDuplex: []
+    seriesDetailsDuplex: [],
+    currency:' '
   });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;

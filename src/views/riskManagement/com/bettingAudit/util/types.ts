@@ -16,6 +16,7 @@ export type searchFormType = {
   minBetAmount:number|string;
   maxBetAmount:number|string;
   riskStatus:number|string;
+  currency: number|string;
 }
 
 export const seriesTypesSingle = {

@@ -257,6 +257,21 @@
             :format="'YYYY-MM-DD HH:mm:ss'"
           />
         </el-form-item>
+        <el-form-item prop="currency" :label="t('结算币种:')">
+          <el-select
+            v-model="form.currency"
+            clearable
+            class="!w-[150px]"
+          >
+            <el-option label="全部" value=" "></el-option>
+            <el-option
+              :label="item.label"
+              :value="item.value"
+              v-for="item in currency_map"
+              :key="item.value"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button
             type="primary"
@@ -304,6 +319,8 @@ import {
   SPORT_CATEGORY
 } from '@/utils/maps/sports_map';
 import { searchFormType } from '../util/types';
+import {currency_map} from "@/utils/maps/currency_map";
+
 const matchStore = useMatchStore();
 const props = defineProps<{
   loading: boolean;
