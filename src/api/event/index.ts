@@ -75,5 +75,8 @@ export const eventData = {
   //-  赔率记录获取
   getMatchEventWithOddsHistory: (data: EventAPI.getMatchEventWithOddsHistoryReqType) =>
     http.request<EventAPI.getMatchEventWithOddsHistoryResType>('post', '/event/v1/getMatchEventWithOddsHistory', { data }),
+  //-  导出报表
+  exportMatchEventWithOddsHistoryExcel: (data: EventAPI.getMatchEventWithOddsHistoryReqType) =>
+    http.request<EventAPI.getMatchEventWithOddsHistoryResType>('post', '/event/v1/exportMatchEventWithOddsHistoryExcel', { data }),
 
 };

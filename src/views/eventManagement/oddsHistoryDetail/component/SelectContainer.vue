@@ -73,6 +73,7 @@ import { usePublicHooks } from '@/hooks';
 const props = defineProps<{
   selectData: EventAPI.getMatchEventWithOddsHistoryReqType;
   list: EventAPI.getMatchEventWithOddsHistoryResData[];
+  matchId: string;
 }>();
 
 const emits = defineEmits(['changeList']);
@@ -87,11 +88,22 @@ const exportFile = () => {
     message('数据量为零，无法导出', { type: 'error' });
   } else {
     exportDialog({
-      firstTitle: t('导出当前事件列表数据?'),
+      firstTitle: t('导出当前列表数据?'),
       router,
       callback: async () => {
-        const res = await API.matchEventDataExport({});
-        if (res.code) return message(res.msg, { type: 'error' });
+        const res = await API.exportMatchEventWithOddsHistoryExcel({
+          // matchId: props.matchId,
+          matchId: '316066',
+          dataSourceCode: (props.selectData.dataSourceCode as string[]).join(
+            ','
+          ),
+          oddsType: props.selectData.oddsType,
+          kindsCode: props.selectData.kindsCode
+        });
+        if (res.code) {
+          message(res.msg, { type: 'error' });
+          throw 'error';
+        }
       }
     });
   }
