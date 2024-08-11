@@ -1,21 +1,38 @@
 <template>
-  <div class="search-form bg-bg_color w-[99/100] pl-8 py-[12px] text-sm">
+  <div
+    class="search-form bg-bg_color w-[99/100] pl-8 py-[12px] text-sm relative"
+  >
     <div class="flex items-center">
       <span class="mr-5 font-bold">{{ t('选择数据源') }}:</span>
-      <el-checkbox-group v-model="checkList">
-        <el-checkbox label="188" value="Value A" />
-        <el-checkbox :label="t('熊猫')" value="Value B" />
-        <el-checkbox :label="t('播控')" value="Value C" />
-        <el-checkbox :label="t('操盘')" value="Value C" />
+      <el-checkbox-group v-model="selectData.dataSourceCode">
+        <el-checkbox :disabled="true" label="188" value="XJ" />
+        <el-checkbox :disabled="true" :label="t('熊猫')" value="PS" />
+        <el-checkbox :disabled="true" :label="t('播控')" value="VS" />
+        <el-checkbox :disabled="true" :label="t('操盘')" value="Value C" />
       </el-checkbox-group>
     </div>
 
     <div class="flex items-center my-4">
       <span class="mr-5 font-bold">{{ t('赔率切换') }}:</span>
       <el-button-group>
-        <el-button size="small" type="primary">{{ t('欧赔') }}</el-button>
-        <el-button size="small" type="default">{{ t('亚赔') }}</el-button>
-        <el-button size="small" type="default">{{ t('马来赔') }}</el-button>
+        <el-button
+          size="small"
+          :type="selectData.oddsType === 'OU' ? 'primary' : 'default'"
+          @click="changeList({ type: 'oddsType', val: 'OU' })"
+          >{{ t('欧赔') }}</el-button
+        >
+        <el-button
+          size="small"
+          :type="selectData.oddsType === 'HK' ? 'primary' : 'default'"
+          @click="changeList({ type: 'oddsType', val: 'HK' })"
+          >{{ t('亚赔') }}</el-button
+        >
+        <el-button
+          size="small"
+          :type="selectData.oddsType === 'ML' ? 'primary' : 'default'"
+          @click="changeList({ type: 'oddsType', val: 'ML' })"
+          >{{ t('马来赔') }}</el-button
+        >
       </el-button-group>
     </div>
 
@@ -27,10 +44,21 @@
           v-for="item in playMethodsList"
           round
           :key="item.key"
-          type="default"
+          :type="selectData.kindsCode === item.key ? 'primary' : 'default'"
+          @click="changeList({ type: 'kindsCode', val: item.key })"
           >{{ item.title }}</el-button
         >
       </div>
+    </div>
+    <div class="absolute right-0 bottom-2">
+      <el-button
+        class="mr-5"
+        type="primary"
+        size="small"
+        @click="exportFile"
+        :icon="useRenderIcon(Download)"
+        >{{ t('导出报表') }}</el-button
+      >
     </div>
   </div>
 </template>
@@ -38,22 +66,41 @@
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import { playMethodsList } from '../utils/map';
-const checkList = ref([]);
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import Download from '@iconify-icons/ep/download';
+import { message } from '@/utils/message';
+import { usePublicHooks } from '@/hooks';
+const props = defineProps<{
+  selectData: EventAPI.getMatchEventWithOddsHistoryReqType;
+  list: EventAPI.getMatchEventWithOddsHistoryResData[];
+}>();
 
-// import { formatNumber } from '@/utils/formatNumber';
-// import dayjs from 'dayjs';
-// import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-// import Search from '@iconify-icons/ep/search';
-// import Refresh from '@iconify-icons/ep/refresh';
-// import type { FormInstance, CheckboxValueType } from 'element-plus';
-// import { PandaMatch, searchFormType } from '../utils/types';
-// import { EVENT_SOURCE } from '../utils/map';
-// import { searchFormRules } from '../utils/rule';
+const emits = defineEmits(['changeList']);
+const { exportDialog } = usePublicHooks();
+const router = useRouter();
+const exportFile = () => {
+  if (props.list.length > 500000) {
+    message(`当前条件下数据量为${props.list.length}，大于50万条，不支持导出!`, {
+      type: 'error'
+    });
+  } else if (!props.list.length) {
+    message('数据量为零，无法导出', { type: 'error' });
+  } else {
+    exportDialog({
+      firstTitle: t('导出当前事件列表数据?'),
+      router,
+      callback: async () => {
+        const res = await API.matchEventDataExport({});
+        if (res.code) return message(res.msg, { type: 'error' });
+      }
+    });
+  }
+};
 
-// const props = defineProps<{
-//   loading: boolean;
-//   form: searchFormType;
-// }>();
+//- 分类切换
+const changeList = (d: { type: string; val: string }) => {
+  emits('changeList', d);
+};
 </script>
 
 <style scoped lang="scss"></style>
