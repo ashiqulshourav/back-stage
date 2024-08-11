@@ -6,7 +6,7 @@
       @click="$router.go(-1)"
     />
     <MatchTitle :matchDetail="matchDetail" />
-    <SelectContainer :selectData="selectData" @changeList="changeList" />
+    <SelectContainer :selectData="selectData" @changeList="changeList" :list="list" />
 
     <div class="h-[calc(100%-324px)]" ref="tableRef">
       <VxeTableBar
@@ -41,8 +41,6 @@
 
 <script setup lang="ts">
 import { VxeTableBar } from '@/components/ReVxeTableBar';
-import { VxeTableDefines } from 'vxe-table';
-import { t } from '@/plugins/i18n';
 import { useOddsHistoryDetailHook } from './utils/hook';
 import MatchTitle from './component/MathcTitle.vue';
 import SelectContainer from './component/SelectContainer.vue';
@@ -53,20 +51,6 @@ const h = ref(0);
 onMounted(() => {
   h.value = tableRef.value.offsetHeight ?? 500;
 });
-
-/* setTimeout(() => {
-  nextTick(() => {
-    // 获取所有列配置
-    const $table = vxeTableRef.value;
-    if ($table) {
-      loading.value = true;
-      columns1.value = $table.getColumns();
-      setTimeout(() => {
-        loading.value = false;
-      }, 800);
-    }
-  });
-}, 100); */
 
 const {
   loading,

@@ -1,5 +1,7 @@
 <template>
-  <div class="search-form bg-bg_color w-[99/100] pl-8 py-[12px] text-sm">
+  <div
+    class="search-form bg-bg_color w-[99/100] pl-8 py-[12px] text-sm relative"
+  >
     <div class="flex items-center">
       <span class="mr-5 font-bold">{{ t('选择数据源') }}:</span>
       <el-checkbox-group v-model="selectData.dataSourceCode">
@@ -16,19 +18,19 @@
         <el-button
           size="small"
           :type="selectData.oddsType === 'OU' ? 'primary' : 'default'"
-          @click="changeList({ type: 'odds', val: 'OU' })"
+          @click="changeList({ type: 'oddsType', val: 'OU' })"
           >{{ t('欧赔') }}</el-button
         >
         <el-button
           size="small"
           :type="selectData.oddsType === 'HK' ? 'primary' : 'default'"
-          @click="changeList({ type: 'odds', val: 'HK' })"
+          @click="changeList({ type: 'oddsType', val: 'HK' })"
           >{{ t('亚赔') }}</el-button
         >
         <el-button
           size="small"
           :type="selectData.oddsType === 'ML' ? 'primary' : 'default'"
-          @click="changeList({ type: 'odds', val: 'ML' })"
+          @click="changeList({ type: 'oddsType', val: 'ML' })"
           >{{ t('马来赔') }}</el-button
         >
       </el-button-group>
@@ -48,18 +50,52 @@
         >
       </div>
     </div>
+    <div class="absolute right-0 bottom-2">
+      <el-button
+        class="mr-5"
+        type="primary"
+        size="small"
+        @click="exportFile"
+        :icon="useRenderIcon(Download)"
+        >{{ t('导出报表') }}</el-button
+      >
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { t } from '@/plugins/i18n';
 import { playMethodsList } from '../utils/map';
-
-defineProps<{
+import { useRenderIcon } from '@/components/ReIcon/src/hooks';
+import Download from '@iconify-icons/ep/download';
+import { message } from '@/utils/message';
+import { usePublicHooks } from '@/hooks';
+const props = defineProps<{
   selectData: EventAPI.getMatchEventWithOddsHistoryReqType;
+  list: EventAPI.getMatchEventWithOddsHistoryResData[];
 }>();
 
 const emits = defineEmits(['changeList']);
+const { exportDialog } = usePublicHooks();
+const router = useRouter();
+const exportFile = () => {
+  if (props.list.length > 500000) {
+    message(`当前条件下数据量为${props.list.length}，大于50万条，不支持导出!`, {
+      type: 'error'
+    });
+  } else if (!props.list.length) {
+    message('数据量为零，无法导出', { type: 'error' });
+  } else {
+    exportDialog({
+      firstTitle: t('导出当前事件列表数据?'),
+      router,
+      callback: async () => {
+        const res = await API.matchEventDataExport({});
+        if (res.code) return message(res.msg, { type: 'error' });
+      }
+    });
+  }
+};
 
 //- 分类切换
 const changeList = (d: { type: string; val: string }) => {

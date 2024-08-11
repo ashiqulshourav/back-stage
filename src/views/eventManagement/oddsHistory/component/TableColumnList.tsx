@@ -1,10 +1,6 @@
 import { IconifyIconOffline } from '@/components/ReIcon';
 import { handleTableWidth } from '@/utils/getTableWidth';
-import {
-  ESPORT_ID_MAP,
-  MATCH_STATUS,
-  SPORT_ID_MAP
-} from '@/utils/maps/sports_map';
+import { MATCH_STATUS } from '@/utils/maps/sports_map';
 
 export const columns: TableColumnList = [
   {
@@ -16,7 +12,7 @@ export const columns: TableColumnList = [
     label: t('联赛名称'),
     prop: 'leagueNameCn',
     headerRenderer: d => handleTableWidth(d, t('联赛名称'), 'auto'),
-    minWidth: 150,
+    minWidth: 200,
     align: 'left'
   },
   {

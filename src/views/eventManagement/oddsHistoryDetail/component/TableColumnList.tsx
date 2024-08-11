@@ -1,28 +1,5 @@
 import dayjs from 'dayjs';
-/* 
 
-times
-: 
-null
-xhReturnRate
-: 
-1.1245766811804547
-xjAwayOdds
-: 
-6
-xjCurrentScore
-: 
-"0:0"
-xjDrawOdds
-: 
-5.3
-xjHomeOdds
-: 
-1.3
-xjIsSale
-: 
-2
- */
 const STATUS_MAP = {
   2: t('开'),
   3: '-',
@@ -34,9 +11,7 @@ export const columns = () => {
       field: 'matchStartTime',
       title: t('比赛时间'),
       minWidth: 200,
-      formatter({ cellValue }: { cellValue: string }) {
-        return cellValue ? dayjs(cellValue).format('YYYY-MM-DD HH:mm:ss') : '-';
-      }
+      formatter: ({ cellValue }: { cellValue: string }) => cellValue ?? '-'
     },
     {
       field: 'eventName',
@@ -48,7 +23,15 @@ export const columns = () => {
     },
     {
       field: 'eventCurrentScore',
-      title: t('当前比分'),
+      title: t('DP当前比分'),
+      minWidth: 150,
+      formatter({ cellValue }: { cellValue: string }) {
+        return cellValue ? cellValue : '-';
+      }
+    },
+    {
+      field: 'handicapValue',
+      title: t('盘口值'),
       minWidth: 150,
       formatter({ cellValue }: { cellValue: string }) {
         return cellValue ? cellValue : '-';
@@ -65,7 +48,7 @@ export const columns = () => {
             return `<div class="w-full justify-center flex items-center ">
             <div class="rounded-full w-[20px] h-[20px] text-white  justify-center flex items-center text-xs ${
               cellValue === 2 ? 'bg-[#00bf6f]' : 'bg-[#ff5e1d]'
-            }">${STATUS_MAP[cellValue as keyof typeof STATUS_MAP]}</div>
+            }">${STATUS_MAP[cellValue as keyof typeof STATUS_MAP] ?? '-'}</div>
             </div>`;
           }
         },
@@ -78,26 +61,70 @@ export const columns = () => {
         {
           title: t('主胜'),
           field: 'xjHomeOdds',
-          formatter: ({ cellValue }: { cellValue: string }) =>
-            cellValue ? cellValue : '-'
+          type: 'html',
+          formatter: ({ cellValue }: { cellValue: string }) => {
+            return `<div class="text-[#0893fb]">${
+              cellValue ? cellValue : '-'
+            }</div>`;
+          }
+        },
+        {
+          title: t('大'),
+          field: 'xjBigOdds',
+          type: 'html',
+          formatter: ({ cellValue }: { cellValue: string }) => {
+            return `<div class="text-[#0893fb]">${
+              cellValue ? cellValue : '-'
+            }</div>`;
+          }
         },
         {
           title: t('平'),
-          slot: 'xjDrawOdds',
-          formatter: ({ cellValue }: { cellValue: string }) =>
-            cellValue ? cellValue : '-'
+          field: 'xjDrawOdds',
+          type: 'html',
+          formatter: ({ cellValue }: { cellValue: string }) => {
+            return `<div class="text-[#ff5e1d]">${
+              cellValue ? cellValue : '-'
+            }</div>`;
+          }
         },
+
         {
           title: t('客胜'),
           field: 'xjAwayOdds',
-          formatter: ({ cellValue }: { cellValue: string }) =>
-            cellValue ? cellValue : '-'
+          type: 'html',
+          formatter: ({ cellValue }: { cellValue: string }) => {
+            return `<div class="text-[#00bf6f]">${
+              cellValue ? cellValue : '-'
+            }</div>`;
+          }
+        },
+        {
+          title: t('小'),
+          field: 'xjSmallOdds',
+          type: 'html',
+          formatter: ({ cellValue }: { cellValue: string }) => {
+            return `<div class="text-[#00bf6f]">${
+              cellValue ? cellValue : '-'
+            }</div>`;
+          }
+        },
+        {
+          title: t('赔率'),
+          field: 'xjCsOdds',
+          type: 'html',
+          formatter: ({ cellValue }: { cellValue: string }) => {
+            return `<div class="text-[#0893fb]">${
+              cellValue ? cellValue : '-'
+            }</div>`;
+          }
         },
         {
           title: t('返还率'),
-          field: 'xhReturnRate',
-          formatter: ({ cellValue }: { cellValue: string }) =>
-            cellValue ? cellValue : '-'
+          field: 'xjReturnRate',
+          formatter: ({ cellValue }: { cellValue: string }) => {
+            return cellValue ? (+cellValue * 100).toFixed(2) + '%' : '-';
+          }
         }
       ]
     },
