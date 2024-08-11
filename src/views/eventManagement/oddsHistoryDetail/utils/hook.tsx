@@ -9,8 +9,8 @@ export function useOddsHistoryDetailHook() {
   const tableData = ref([]);
 
   const selectData = reactive<EventAPI.getMatchEventWithOddsHistoryReqType>({
-    // matchId: route.params.type as string /*'316066' */,
-    matchId: '316066',
+    matchId: route.params.type as string,
+    // matchId: '316066',
     dataSourceCode: ['XJ'],
     oddsType: 'OU',
     kindsCode: 'FT_1X2'
@@ -77,30 +77,21 @@ export function useOddsHistoryDetailHook() {
   };
 
   //- 修改赔率 + 玩法
-  const changeList = (d: { type: 'kindsCode' | 'oddsType'; val: string }) => {
+  const changeList = (d: {
+    type: 'kindsCode' | 'oddsType';
+    val: string;
+    c: number;
+  }) => {
     if (d.type !== 'oddsType') {
-      tableColumn.value[3].visible = d.val !== 'FT_1X2' && d.val !== 'HT_1X2';
-
-      if (d.val === 'FT_CS' || d.val === 'HT_CS') {
-        tableColumn.value[11].visible = true;
-        tableColumn.value[12].visible = false;
-      } else {
-        tableColumn.value[11].visible = false;
-        tableColumn.value[12].visible = true;
-      }
-      if (d.val === 'FT_OU' || d.val == 'HT_OU') {
-        tableColumn.value[6].visible = false;
-        tableColumn.value[7].visible = true;
-        tableColumn.value[8].visible = false;
-        tableColumn.value[9].visible = false;
-        tableColumn.value[10].visible = true;
-      } else {
-        tableColumn.value[6].visible = true;
-        tableColumn.value[7].visible = false;
-        tableColumn.value[8].visible = true;
-        tableColumn.value[9].visible = true;
-        tableColumn.value[10].visible = false;
-      }
+      // 盘口值显示
+      tableColumn.value[3].visible = d.c !== 1;
+      tableColumn.value[6].visible = d.c === 1 || d.c === 2;
+      tableColumn.value[7].visible = d.c === 3;
+      tableColumn.value[8].visible = d.c === 1;
+      tableColumn.value[9].visible = d.c === 1 || d.c === 2;
+      tableColumn.value[10].visible = d.c === 3;
+      tableColumn.value[11].visible = d.c === 4;
+      tableColumn.value[12].visible = d.c !== 4;
       vxeTableRef.value.refreshColumn();
     }
 

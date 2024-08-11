@@ -45,7 +45,9 @@
           round
           :key="item.key"
           :type="selectData.kindsCode === item.key ? 'primary' : 'default'"
-          @click="changeList({ type: 'kindsCode', val: item.key })"
+          @click="
+            changeList({ type: 'kindsCode', val: item.key, c: item.type })
+          "
           >{{ item.title }}</el-button
         >
       </div>
@@ -92,8 +94,8 @@ const exportFile = () => {
       router,
       callback: async () => {
         const res = await API.exportMatchEventWithOddsHistoryExcel({
-          // matchId: props.matchId,
-          matchId: '316066',
+          matchId: props.matchId,
+          // matchId: '316066',
           dataSourceCode: (props.selectData.dataSourceCode as string[]).join(
             ','
           ),
