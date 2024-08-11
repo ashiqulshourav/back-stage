@@ -6,7 +6,12 @@
       @click="$router.go(-1)"
     />
     <MatchTitle :matchDetail="matchDetail" />
-    <SelectContainer :selectData="selectData" @changeList="changeList" :list="list" />
+    <SelectContainer
+      :matchId="matchDetail.matchId?.toString()"
+      :selectData="selectData"
+      @changeList="changeList"
+      :list="list"
+    />
 
     <div class="h-[calc(100%-324px)]" ref="tableRef">
       <VxeTableBar
