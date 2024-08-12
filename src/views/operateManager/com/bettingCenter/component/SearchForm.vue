@@ -10,7 +10,7 @@
         <el-form-item prop="orderStatus" :label="`${t('注单状态')}:`">
           <el-tree-select
               v-model="props.form.orderStatus"
-              :placeholder="t('请选择注单状态，多选项')"
+              :placeholder="t('请选择，多选项')"
               :data="
               Object.keys(betStatusMap).map((key:string) => ({
                 value: Number(key),
@@ -26,7 +26,7 @@
               show-checkbox
               check-strictly
               check-on-click-node
-              style="width: 200px"
+              class="!w-[180px]"
           >
             <template #header>
               <el-checkbox
