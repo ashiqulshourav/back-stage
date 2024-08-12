@@ -65,9 +65,7 @@ export function userPlayerListHook(venueType: number, category: number) {
     currency:' ',
     timeType: "2",
   } as searchFormType);
-
   const recordForm = reactive<recordFormType>({} as recordFormType);
-
   const goChangeAccountPage = (row: UserAPI.operateUserList) => {
     settingStore.save_player_info({
       page: pagination.currentPage,
