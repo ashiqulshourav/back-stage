@@ -42,12 +42,13 @@ export function useOrderLimitHook() {
   const isEditSport = ref(false);
   const currentSportId = ref(0);
   const loading = ref(true);
+  const currency = ref(1);
   const { openPasswordInput } = usePasswordInputHook();
 
   // 初始化
   async function onSearch() {
     loading.value = true;
-    const res = await API.getGameLimitList(currentSportId.value);
+    const res = await API.getGameLimitList(currentSportId.value, currency.value);
     loading.value = false;
     if (res.code) return message(res.msg, { type: 'error' });
     sportList.length = 0;
@@ -135,7 +136,7 @@ export function useOrderLimitHook() {
           const leagueLevel: number = sport.leagueLevel;
           if (existKey[leagueLevel]) return;
           if (item[key] !== sport[key]) {
-            list.push(sport);
+            list.push({...sport, currency: currency.value});
             existKey[leagueLevel] = true;
             return;
           }
@@ -188,5 +189,6 @@ export function useOrderLimitHook() {
     currentSportId,
     toggle,
     changeType,
+    currency,
   };
 }

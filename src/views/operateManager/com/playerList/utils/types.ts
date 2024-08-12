@@ -9,9 +9,12 @@ export type searchFormType = {
   venueType?: number;
   offset?: number;
   timeVal?: string | number;
-  beginTime?: string;
-  endTime?: string;
+  timeType?: number | string;
+  beginTime?: string | number;
+  endTime?: string | number;
   betDelayed: number | string;
+  currency?: number | string;
+  specialLimited:number | string;
 };
 export type specialLimitType = {
   productAmountTotalLimit: number;
@@ -31,6 +34,7 @@ export type updateUserFormType = {
   // singleBetLimit: number;
   // singleEventCompensationLimit: string;
   // createdAt: string | number;
+  currency?: number;
 };
 
 export type recordFormType = {

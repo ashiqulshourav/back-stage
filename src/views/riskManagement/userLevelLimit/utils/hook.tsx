@@ -10,14 +10,15 @@ export function useClassifySettingHook() {
   const eSportSourceList = reactive<UserAPI.UserLevelLimitListRes[]>([]);
   const isEditSport = ref(false);
   const isEditESport = ref(false);
+  const currency = ref(1);
   const loading = ref(true);
 
   //- 初始化
   async function onSearch() {
     loading.value = true;
     const resList = await Promise.allSettled([
-      API.getUserLevelLimitList({ type: 0 }),
-      API.getUserLevelLimitList({ type: 1 })
+      API.getUserLevelLimitList({ type: 0, currency: currency.value }),
+      API.getUserLevelLimitList({ type: 1, currency: currency.value })
     ]);
 
     if (resList[0].status === 'fulfilled' && !resList[0].value.code) {
@@ -45,7 +46,8 @@ export function useClassifySettingHook() {
       singleMatchPay: 0,
       championDailyPay: 0,
       bunchMatchPay: 0,
-      type: 0
+      type: 0,
+      currency: currency.value,
     });
   };
   //- 新增电竞体育限额
@@ -58,7 +60,8 @@ export function useClassifySettingHook() {
       singleMatchPay: 0,
       championDailyPay: 0,
       bunchMatchPay: 0,
-      type: 1
+      type: 1,
+      currency: currency.value,
     });
   };
 
@@ -68,7 +71,7 @@ export function useClassifySettingHook() {
       center: true
     }).then(async () => {
       loading.value = true;
-      const res = await API.updateUserLevelLimit({ list: sportList, type: 0 });
+      const res = await API.updateUserLevelLimit({ list: sportList, type: 0, currency: currency.value });
       loading.value = false;
       isEditSport.value = false;
       message(res.msg, { type: res.code ? 'error' : 'success' });
@@ -84,7 +87,8 @@ export function useClassifySettingHook() {
       loading.value = true;
       const res = await API.updateUserLevelLimit({
         list: eSportList,
-        type: 1
+        type: 1,
+        currency: currency.value
       });
       loading.value = false;
       isEditESport.value = false;
@@ -97,13 +101,15 @@ export function useClassifySettingHook() {
   const cancelSportEdit = () => {
     isEditSport.value = false;
     sportList.length = 0;
-    sportList.push(...sourceSportList);
+    // sportList.push(...sourceSportList);
+    onSearch();
   };
   //- 电竞编辑取消
   const cancelESportEdit = () => {
     isEditESport.value = false;
     eSportList.length = 0;
-    eSportList.push(...eSportSourceList);
+    // eSportList.push(...eSportSourceList);
+    onSearch();
   };
 
   //- 删除体育
@@ -134,6 +140,7 @@ export function useClassifySettingHook() {
     delSportItem,
     delESportItem,
     cancelSportEdit,
-    cancelESportEdit
+    cancelESportEdit, 
+    currency,
   };
 }
