@@ -16,6 +16,13 @@ export const columns: TableColumnList = [
     align: 'left'
   },
   {
+    label: t('联赛ID'),
+    prop: 'leagueId',
+    headerRenderer: d => handleTableWidth(d, t('联赛ID'), 'auto'),
+    minWidth: 100,
+    align: 'left'
+  },
+  {
     label: t('主队'),
     prop: 'homeTeamNameCn',
     headerRenderer: d => handleTableWidth(d, t('主队'), 'auto'),

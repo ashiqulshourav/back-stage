@@ -34,7 +34,7 @@
         />
       </el-form-item>
 
-      <el-form-item :label="`${t('比赛状态')}:`" prop="isSale">
+      <el-form-item :label="`${t('比赛状态')}:`" prop="status">
         <el-select
           class="!w-full"
           v-model="form.status"
