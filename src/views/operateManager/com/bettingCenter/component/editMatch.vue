@@ -248,8 +248,8 @@ const resultList = [
     title: BET_RESULT_TYPE_MAP[EBetResultType.GAME_CANCEL]
   },
   {
-    value: EBetResultType.GAME_POSTPONED,
-    title: BET_RESULT_TYPE_MAP[EBetResultType.GAME_POSTPONED]
+    value: EBetResultType.GAME_DELAY,
+    title: BET_RESULT_TYPE_MAP[EBetResultType.GAME_DELAY]
   },
   {
     value: EBetResultType.GAME_INTERRUPTED,
