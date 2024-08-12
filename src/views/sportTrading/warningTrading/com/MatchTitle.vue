@@ -77,13 +77,15 @@
             {{ currentMatch?.awayTeamNameCn }}
           </div>
         </div>
-        <div class="flex mt-1 cursor-pointer text-xs">
+        <div class="flex mt-1 cursor-pointer text-xs items-center">
           <IconGroup
-            :closeThreeIcon="true"
             :typeNum="currentMatch?.isSale"
             :operateStatus="currentMatch.operateStatus"
             @changeMatchStatus="changeMatchStatus"
           />
+          <el-text class="!ml-4" type="primary">{{
+            currentMatch.betItemsResultDto.sourceCode
+          }}</el-text>
         </div>
       </div>
     </div>

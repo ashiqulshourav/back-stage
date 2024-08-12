@@ -83,14 +83,14 @@
 
   <div class="flex items-center pl-3 pt-1 mb-2">
     <span>{{ currentMatch?.beginTime }}</span>
-    <div class="flex pl-2 cursor-pointer">
+    <div class="flex pl-2 cursor-pointer mr-4">
       <IconGroup
-        :close-three-icon="true"
         :typeNum="currentMatch?.isSale"
         @changeMatchStatus="changeMatchStatus"
         :operateStatus="currentMatch.operateStatus"
       />
     </div>
+    <el-text type="primary">{{ currentMatch.sourceCode }}</el-text>
   </div>
 </template>
 
@@ -131,7 +131,9 @@ const copyText = (type: string) => {
 const changeMatchStatus = (status: number) => {
   emits('changeStatus', {
     status,
-    classify: 'match'
+    classify: 'match',
+    matchId: props.currentMatch.matchId,
+    item: props.currentMatch
   });
 };
 </script>

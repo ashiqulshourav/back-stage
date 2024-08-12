@@ -119,7 +119,6 @@
                       <IconGroup
                         :typeNum="item.isSale"
                         @changeMatchStatus="d => changeMatchStatus(d, item)"
-                        :closeThreeIcon="true"
                         :operateStatus="item.operateStatus"
                       />
                     </div>
@@ -222,5 +221,9 @@ const getSportType = (_: number) => {
     width: 6px;
     background: transparent !important;
   }
+}
+
+.el-collapse-item__content {
+  padding-bottom: 0;
 }
 </style>

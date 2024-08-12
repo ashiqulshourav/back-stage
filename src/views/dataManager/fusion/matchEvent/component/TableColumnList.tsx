@@ -151,7 +151,8 @@ export function tableColumnList() {
     },
     {
       label: t('操作'),
-      slot: 'operation'
+      slot: 'operation',
+      minWidth: 120,
     }
   ];
 

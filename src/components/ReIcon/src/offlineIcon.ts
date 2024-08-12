@@ -8,12 +8,14 @@ import { addIcon } from '@iconify/vue/dist/offline';
 import HomeFilled from '@iconify-icons/ep/home-filled';
 import InformationLine from '@iconify-icons/ri/information-line';
 import Lollipop from '@iconify-icons/ep/lollipop';
+import RefreshRight from '@iconify-icons/ep/refresh-right';
 import Crown from '@iconify-icons/ri/vip-crown-2-line';
 import StoreFill from '@iconify-icons/ri/store-2-fill';
 import FolderFill from '@iconify-icons/ri/folder-2-fill';
 import LockUnlockFill from '@iconify-icons/ri/lock-unlock-line';
 import LockFill from '@iconify-icons/ri/lock-fill';
 import Monitor from '@iconify-icons/ep/monitor';
+import infoFilled from '@iconify-icons/ep/info-filled';
 import Files from '@iconify-icons/ep/files';
 import OperationLog from '@iconify-icons/icon-park-outline/log';
 import icon_circle_fill from '@iconify-icons/ri/add-circle-fill';
@@ -75,6 +77,8 @@ addIcon("download", Download);
 addIcon("SportTrading", metadata);
 addIcon("eventManagement", EventManagementIcon);
 addIcon("copyIcon", Copy);
+addIcon("refreshRight", RefreshRight);
+addIcon("infoFilled", infoFilled);
 
 /* 菜单icon结束 */
 //- 操盘图标开始

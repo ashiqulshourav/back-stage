@@ -33,6 +33,7 @@
                 v-model="ruleForm.username"
                 :placeholder="t('输入您的用户名')"
                 :prefix-icon="useRenderIcon(User)"
+                @keyup.enter="onLogin(ruleFormRef)"
               />
             </el-form-item>
 
@@ -43,15 +44,18 @@
                 v-model="ruleForm.password"
                 :placeholder="t('输入密码')"
                 :prefix-icon="useRenderIcon(Lock)"
+                @keyup.enter="onLogin(ruleFormRef)"
               />
             </el-form-item>
             <el-form-item :prop="buildType === 'pro' ? 'ukeyPassword' : 'none'">
               <el-input
                 clearable
+                v-enter="() => onLogin(ruleFormRef)"
                 maxlength="30"
                 v-model.trim="ruleForm.ukeyPassword"
                 :placeholder="t('请输入U盾密码')"
                 :prefix-icon="useRenderIcon(Lock)"
+                @keyup.enter="onLogin(ruleFormRef)"
               />
             </el-form-item>
 
