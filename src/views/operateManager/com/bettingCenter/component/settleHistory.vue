@@ -17,7 +17,7 @@
     <div class="flex mb-6">
       <p class="flex-1 flex gap-2">
         <span>{{ t('过关类型') }}:</span>
-        <span v-if="props.data?.combineOrderDetails>1">{{String(props.data?.seriesType)?.slice(-3) === '001' ? '单式串关' : '复式串关'}} {{formatSeriesType(
+        <span v-if="props.data?.combineOrderDetails?.length>1">{{String(props.data?.seriesType)?.slice(-3) === '001' ? '单式串关' : '复式串关'}} {{formatSeriesType(
             props.data?.seriesType,
             props.data?.combineOrderDetails?.length
         )}}</span>
@@ -124,26 +124,8 @@
             )
           }}
         </div>
-        <div
-          class="item_line"
-          v-if="
-                  row.billStatus === 1 &&
-                  item.settleScore &&
-                  !(
-                    displayHomeAwayScore(
-                      item.settleScore,
-                      item.sportId,
-                      'home'
-                    ) == '' ||
-                    displayHomeAwayScore(
-                      item.settleScore,
-                      item.sportId,
-                      'away'
-                    ) == ''
-                  )
-                "
-        >
-                <span v-if="item.kindsCode !== 'TeamToKickOff'">
+        <div  class="item_line" >
+                <span v-if="item.kindsCode !== 'TeamToKickOff' && displayHomeAwayScore(item.settleScore, item.sportId)">
                   {{ t('结算比分：')
                   }}{{ displayHomeAwayScore(item.settleScore, item.sportId) }}
                 </span>
@@ -221,6 +203,9 @@ const props = defineProps<{
   order_id: string;
   data:any;
 }>();
+
+
+console.log(111111, props)
 
 const init = async () => {
   try {
