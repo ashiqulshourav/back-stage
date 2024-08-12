@@ -33,6 +33,7 @@
           />
         </div>
       </div>
+      VS
       <div class="result_r">
         <div>{{ newRow.combineOrderDetails[0].awayTeamNameCn }}</div>
         <div class="mt-2 flex max-w-full justify-center">
@@ -94,6 +95,7 @@
           adaptive
           :data="newRow.combineOrderDetails"
           :columns="dynamicColumns"
+           :span-method="objectSpanMethod"
         >
           <template #matchMessage="{ row }">
             <div class="match_item">
@@ -157,6 +159,17 @@
                 {{ item.title }}
               </li>
             </ul>
+          </template>
+          <template #fianlResult="{row}">
+            <div class="mt-5" >
+              <ul class="mt-2">
+                <li :class="`result_item ${
+                    resultTabValue === item.value
+                      ? 'result_item_active cursor-pointer'
+                      : 'cursor-pointer'
+                  }`" v-for="item in tabsList" @click="resultClick(item)">{{item.label}}</li>
+              </ul>
+            </div>
           </template>
         </pure-table>
       </template>
@@ -223,6 +236,28 @@ function formatRow() {
 
   return JSON.parse(JSON.stringify(data));
 }
+
+const objectSpanMethod = ({
+  row,
+  column,
+  rowIndex,
+  columnIndex,
+}: any) => {
+  if (columnIndex === 3) {
+    if (rowIndex % data.combineOrderDetails.length === 0) {
+      return {
+        rowspan: data.combineOrderDetails.length,
+        colspan: 1,
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0,
+      }
+    }
+  }
+}
+
 const resultList = [
   {
     value: EBetResultType.WIN,
@@ -298,6 +333,10 @@ const editColumnList = [
     slot: 'matchResult',
     prop: 'matchResult',
     align: 'left'
+  },
+  {
+    label: t('是否为最终结算'),
+    slot: 'fianlResult',
   }
 ];
 const closeDialog = () => {
