@@ -44,8 +44,8 @@ const props = defineProps<{
 }>();
 
 const score = computed(() => {
-  if (!props.matchDetail!.score) return [0, 0];
-  return props.matchDetail!.score!.slice(1).split('A').join(',');
+  if (!props.matchDetail!.currentScore) return [0, 0];
+  return props.matchDetail!.currentScore!.slice(1).split('A').join('');
 });
 </script>
 
