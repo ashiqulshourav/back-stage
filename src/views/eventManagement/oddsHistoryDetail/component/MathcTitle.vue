@@ -1,29 +1,36 @@
 <template>
-  <div class="search-form bg-bg_color w-[99/100] pl-8 pt-[12px]">
+  <div class="search-form bg-bg_color w-[99/100] pt-[12px]">
     <div class="flex flex-col items-center">
-      <div class="tex-xs py-2">
+      <div class="tex-xs py-2 flex justify-center">
         <span class="mr-1">{{ t('联赛ID') }}:</span>
         <span class="mr-1">{{ matchDetail.leagueId }}</span>
         <span>{{ matchDetail.leagueNameCn }}</span>
       </div>
-      <div class="flex items-center justify-center">
-        <span>{{ matchDetail.homeTeamNameCn }} ({{ t('主') }})</span>
-        <div class="flex mx-6 items-center text-3xl">
-          {{ score[0] }} VS {{ score[1] }}
-        </div>
-        <span>{{ matchDetail.awayTeamNameCn }}（{{ t('客') }}）</span>
-      </div>
-      <div class="text-sm mb-1">
-        {{ MATCH_STATUS[matchDetail.status as keyof typeof MATCH_STATUS] }}
-      </div>
-      <div class="flex text-sm">
-        <span class="mr-1">{{ t('赛事ID') }}:</span>
-        <span class="mr-1">{{ matchDetail.matchId }}</span>
-        <span class="mr-1">{{ t('比赛时间') }}: </span>
-        <span
-          >{{ matchDetail.beginTime }}
-          {{ WEEK_MAP[dayjs(matchDetail.beginTime).day()] }}</span
+      <div class="flex items-start justify-center">
+        <span class="mt-2 min-w-[140px] text-center"
+          >{{ matchDetail.homeTeamNameCn }} ({{ t('主') }})</span
         >
+        <div class="flex items-center text-3xl flex-col">
+          <span> {{ score[0] }} VS {{ score[1] }} </span>
+          <div class="text-sm mb-1">
+            {{ MATCH_STATUS[matchDetail.status as keyof typeof MATCH_STATUS] }}
+          </div>
+        </div>
+        <span class="mt-2 min-w-[140px] text-center"
+          >{{ matchDetail.awayTeamNameCn }}（{{ t('客') }}）</span
+        >
+      </div>
+
+      <div class="flex text-sm flex-col">
+        <div class="flex items-center">
+          <span class="mr-1">{{ t('赛事ID') }}:</span>
+          <span class="mr-1">{{ matchDetail.matchId }}</span>
+          <span class="mr-1">{{ t('比赛时间') }}: </span>
+          <span
+            >{{ matchDetail.beginTime }}
+            {{ WEEK_MAP[dayjs(matchDetail.beginTime).day()] }}</span
+          >
+        </div>
       </div>
       <div class="text-sm my-2">
         {{ t('数据有效期') }}: {{ matchDetail.dataValidityPeriod }}{{ t('天') }}
