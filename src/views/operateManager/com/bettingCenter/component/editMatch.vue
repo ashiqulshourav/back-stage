@@ -86,7 +86,7 @@
       :columns="editColumnList"
       class="relative"
       :isShowHeader="false"
-    >
+    > 
       <template v-slot="{ dynamicColumns }">
         <pure-table
           align-whole="center"
