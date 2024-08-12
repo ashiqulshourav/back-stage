@@ -47,7 +47,7 @@ export const columns = () => {
           formatter({ cellValue }: { cellValue: number }) {
             return `<div class="w-full justify-center flex items-center ">
             <div class="rounded-full w-[20px] h-[20px] text-white  justify-center flex items-center text-xs ${
-              cellValue === 2 ? 'bg-[#00bf6f]' : 'bg-[#ff5e1d]'
+              cellValue == 2 ? 'bg-[#00bf6f]' : 'bg-[#ff5e1d]'
             }">${STATUS_MAP[cellValue as keyof typeof STATUS_MAP] ?? '-'}</div>
             </div>`;
           }

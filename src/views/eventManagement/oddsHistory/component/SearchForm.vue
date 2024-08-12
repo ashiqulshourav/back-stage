@@ -52,7 +52,6 @@
         <CustomDate
           className="!w-full !ml-0"
           :placeholder="t('选择时间范围')"
-          :disableDate="disableDate"
           :isDateTime="true"
           v-model:val="selectDate"
           format="YYYY-MM-DD HH:mm:ss"
