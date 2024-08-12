@@ -124,26 +124,8 @@
             )
           }}
         </div>
-        <div
-          class="item_line"
-          v-if="
-                  row.billStatus === 1 &&
-                  item.settleScore &&
-                  !(
-                    displayHomeAwayScore(
-                      item.settleScore,
-                      item.sportId,
-                      'home'
-                    ) == '' ||
-                    displayHomeAwayScore(
-                      item.settleScore,
-                      item.sportId,
-                      'away'
-                    ) == ''
-                  )
-                "
-        >
-                <span v-if="item.kindsCode !== 'TeamToKickOff'">
+        <div  class="item_line" >
+                <span v-if="item.kindsCode !== 'TeamToKickOff' && displayHomeAwayScore(item.settleScore, item.sportId)">
                   {{ t('结算比分：')
                   }}{{ displayHomeAwayScore(item.settleScore, item.sportId) }}
                 </span>
