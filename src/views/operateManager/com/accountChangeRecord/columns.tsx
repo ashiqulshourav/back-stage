@@ -4,10 +4,10 @@ import { addThousandSeparator } from '@/utils/formatNumber';
 export const accountChangeTypeCodeList = [
   { label: t('系统自动结算'),label2:'', value: 30, icon: '' },
   { label: t('取消注单'), label2:'',value: 21, icon: '' },
-  { label: t('投注'),label2:'扣款', value: 20, icon: 'deduct' },
+  { label: t('投注'),label2:'扣钱', value: 20, icon: 'deduct' },
   { label: t('手动结算'),label2:'扣钱', value: 90, icon: 'deduct' },
-  { label: t('二次结算'), label2:'扣款',value: 40, icon: 'deduct' },
-  { label: t('结算返还'), label2:'加款',value: 31, icon: 'add' },
+  { label: t('二次结算'), label2:'扣钱',value: 40, icon: 'deduct' },
+  { label: t('结算返还'), label2:'加钱',value: 31, icon: 'add' },
   { label: t('手动结算'),label2:'加钱', value: 91, icon: 'add' },
   { label: t('二次结算'), label2:'加钱',value: 41, icon: 'add' },
   { label: t('钱包上分'),label2:'转入', value: 11, icon: 'transfer' },

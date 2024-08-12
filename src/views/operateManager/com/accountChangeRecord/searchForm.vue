@@ -50,7 +50,7 @@
     <el-form-item prop="accountChangeTypeCode">
       <el-tree-select
         v-model="form.accountChangeTypeCode"
-        :placeholder="t('请选择账变类型')"
+        :placeholder="t('请选择交易类型')"
         :data="
           accountChangeTypeCodeList.map(item => ({
             value: item.value,
