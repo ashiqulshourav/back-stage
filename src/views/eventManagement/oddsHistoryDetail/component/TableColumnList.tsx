@@ -14,7 +14,7 @@ export const columns = () => {
       formatter: ({ cellValue }: { cellValue: string }) => {
         if (cellValue) {
           const s = cellValue.split(':');
-          if (s[1].length === 1) s[1] = s[1] + '0';
+          if (s[1].length === 1) s[1] = '0' + s[1];
           return s.join(':');
         } else {
           return '-';
