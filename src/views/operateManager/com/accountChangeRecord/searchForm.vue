@@ -53,13 +53,6 @@
           <el-checkbox v-model="checkAllAcc" @change="handleCheckAllAcc">
             {{ t('全选') }}
           </el-checkbox>
-          <el-checkbox
-            v-model="removeAllAcc"
-            @change="handleRemoveAllAcc"
-            :disabled="form?.accountChangeTypeCode.length == 0"
-          >
-            {{ t('全不选') }}
-          </el-checkbox>
           <el-checkbox v-model="checkRevertAcc" @change="handleCheckRevertAcc">
             {{ t('反选') }}
           </el-checkbox>
@@ -140,7 +133,6 @@ const formRef = ref();
 const selectDate = ref();
 
 const checkAllAcc = ref(false);
-const removeAllAcc = ref(false);
 const checkRevertAcc = ref(false);
 
 watch(
@@ -150,7 +142,6 @@ watch(
       checkAllAcc.value = false;
     } else if (val.length === accountChangeTypeCodeList.length) {
       checkAllAcc.value = true;
-      removeAllAcc.value = false;
     }
   }
 );
@@ -160,17 +151,10 @@ const handleCheckAllAcc = (val: CheckboxValueType) => {
     props.form.accountChangeTypeCode = accountChangeTypeCodeList.map(
       _ => _.value
     );
-    removeAllAcc.value = false;
     checkRevertAcc.value = false;
   } else {
     props.form.accountChangeTypeCode = [];
   }
-};
-
-const handleRemoveAllAcc = () => {
-  props.form.accountChangeTypeCode = [];
-  removeAllAcc.value = false;
-  checkRevertAcc.value = false;
 };
 
 const handleCheckRevertAcc = () => {
