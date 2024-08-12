@@ -121,6 +121,7 @@
                   />
                 </div>
               </div>
+              VS
               <div class="result_r">
                 <div>{{ row.awayTeamNameCn }}</div>
                 <div class="mt-2 flex max-w-full justify-center">
