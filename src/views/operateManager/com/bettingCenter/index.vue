@@ -301,16 +301,19 @@
             </div>
           </template>
             <template #orderStatusView="{row}">
-            {{ row.orderStatusView }}
-            <span v-if="row.settleTimes > 0">
-              <el-tag
-                @click="() => handleSettleHistoryDialog(row)"
-                :style="`background-color: white`"
-                class="rounded-lg w-full cursor-pointer"
-              >
-              {{ row.settleTimes }}
-              </el-tag>
-            </span>
+              <div class="flex gap-2 items-center">
+                {{ row.orderStatusView }}
+                <span v-if="row.settleTimes > 0">
+                  <el-tag
+                    :round="true"
+                    @click="() => handleSettleHistoryDialog(row)"
+                    :style="`background-color: white`"
+                    class="rounded-lg w-full cursor-pointer text-white"
+                  >
+                  {{ row.settleTimes }}
+                  </el-tag>
+                </span>
+              </div>            
               <div>
                 {{
                   row.settleTime

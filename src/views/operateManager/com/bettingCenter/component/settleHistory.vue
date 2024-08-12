@@ -204,9 +204,6 @@ const props = defineProps<{
   data:any;
 }>();
 
-
-console.log(111111, props)
-
 const init = async () => {
   try {
     const res = await API.getSettleHistory(props.order_id)
