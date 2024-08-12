@@ -11,7 +11,16 @@ export const columns = () => {
       field: 'matchStartTime',
       title: t('比赛时间'),
       minWidth: 200,
-      formatter: ({ cellValue }: { cellValue: string }) => cellValue ?? '-'
+      formatter: ({ cellValue }: { cellValue: string }) => {
+        if (cellValue) {
+          const s = cellValue.split(':');
+          if (s[1].length === 1) s[1] = '0' + s[1];
+          return s.join(':');
+        } else {
+          return '-';
+        }
+        return cellValue ?? '-';
+      }
     },
     {
       field: 'eventName',
@@ -47,7 +56,7 @@ export const columns = () => {
           formatter({ cellValue }: { cellValue: number }) {
             return `<div class="w-full justify-center flex items-center ">
             <div class="rounded-full w-[20px] h-[20px] text-white  justify-center flex items-center text-xs ${
-              cellValue === 2 ? 'bg-[#00bf6f]' : 'bg-[#ff5e1d]'
+              cellValue == 2 ? 'bg-[#00bf6f]' : 'bg-[#ff5e1d]'
             }">${STATUS_MAP[cellValue as keyof typeof STATUS_MAP] ?? '-'}</div>
             </div>`;
           }
@@ -64,7 +73,7 @@ export const columns = () => {
           type: 'html',
           formatter: ({ cellValue }: { cellValue: string }) => {
             return `<div class="text-[#0893fb]">${
-              cellValue ? cellValue : '-'
+              cellValue ? (+cellValue).toFixed(2) : '-'
             }</div>`;
           }
         },
@@ -74,7 +83,7 @@ export const columns = () => {
           type: 'html',
           formatter: ({ cellValue }: { cellValue: string }) => {
             return `<div class="text-[#0893fb]">${
-              cellValue ? cellValue : '-'
+              cellValue ? (+cellValue).toFixed(2) : '-'
             }</div>`;
           }
         },
@@ -84,7 +93,7 @@ export const columns = () => {
           type: 'html',
           formatter: ({ cellValue }: { cellValue: string }) => {
             return `<div class="text-[#ff5e1d]">${
-              cellValue ? cellValue : '-'
+              cellValue ? (+cellValue).toFixed(2) : '-'
             }</div>`;
           }
         },
@@ -95,7 +104,7 @@ export const columns = () => {
           type: 'html',
           formatter: ({ cellValue }: { cellValue: string }) => {
             return `<div class="text-[#00bf6f]">${
-              cellValue ? cellValue : '-'
+              cellValue ? (+cellValue).toFixed(2) : '-'
             }</div>`;
           }
         },
@@ -115,7 +124,7 @@ export const columns = () => {
           type: 'html',
           formatter: ({ cellValue }: { cellValue: string }) => {
             return `<div class="text-[#0893fb]">${
-              cellValue ? cellValue : '-'
+              cellValue ? (+cellValue).toFixed(2) : '-'
             }</div>`;
           }
         },

@@ -171,7 +171,7 @@
             <el-option label="全部" value=" "></el-option>
             <el-option
               :label="item.label"
-              :value="item.value"
+              :value="item.value2"
               v-for="item in currency_map"
               :key="item.value2"
             />

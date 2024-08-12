@@ -72,12 +72,10 @@
       <el-text type="primary">{{ t('是否为最终结算') }}</el-text>
       <ul class="mt-2">
          <li :class="`result_item ${
-            item?.value === data.combineOrderDetails[0].betResult
-              ? 'result_item_disable'
-              : item.value === newRow.combineOrderDetails[0].betResult
+            resultTabValue === item.value
               ? 'result_item_active cursor-pointer'
               : 'cursor-pointer'
-          }`" v-for="item in tabsList">{{item.label}}</li>
+          }`" v-for="item in tabsList" @click="resultClick(item)">{{item.label}}</li>
       </ul>
     </div>
   </div>
@@ -123,6 +121,7 @@
                   />
                 </div>
               </div>
+              VS
               <div class="result_r">
                 <div>{{ row.awayTeamNameCn }}</div>
                 <div class="mt-2 flex max-w-full justify-center">
@@ -188,6 +187,8 @@ const emits = defineEmits(['closeDialog']);
 const newRow = ref<BetOrderAPI.Detail & BetOrderAPI.BetOrderList>(
   formatRow() as BetOrderAPI.Detail & BetOrderAPI.BetOrderList
 );
+const resultTabValue = ref<Number>(1)
+resultTabValue.value = data?.isSpecialSettle || 1
 const selectBetResult = (
   index: number,
   betResult: number,
@@ -248,8 +249,8 @@ const resultList = [
     title: BET_RESULT_TYPE_MAP[EBetResultType.GAME_CANCEL]
   },
   {
-    value: EBetResultType.GAME_POSTPONED,
-    title: BET_RESULT_TYPE_MAP[EBetResultType.GAME_POSTPONED]
+    value: EBetResultType.GAME_DELAY,
+    title: BET_RESULT_TYPE_MAP[EBetResultType.GAME_DELAY]
   },
   {
     value: EBetResultType.GAME_INTERRUPTED,
@@ -272,11 +273,11 @@ const resultList = [
 const tabsList = [
   {
     label:'是',
-    value:0
+    value:1
   },
   {
     label:'否',
-    value:1
+    value:11
   }
 ]
 const editColumnList = [
@@ -302,6 +303,10 @@ const editColumnList = [
 const closeDialog = () => {
   emits('closeDialog');
 };
+
+const resultClick = (item) => {
+  resultTabValue.value = item.value
+}
 const confirmClick = () => {
   let isRisk = false;
 
@@ -346,6 +351,7 @@ const confirmClick = () => {
       );
       const params: any = {
         id: newRow.value.id,
+        isFinalSettle: resultTabValue.value === 11 ? 0 : 1,
         betOrderDetails
       };
       API.betSettle(params)

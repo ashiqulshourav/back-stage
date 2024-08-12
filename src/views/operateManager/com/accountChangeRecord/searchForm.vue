@@ -50,7 +50,7 @@
     <el-form-item prop="accountChangeTypeCode">
       <el-tree-select
         v-model="form.accountChangeTypeCode"
-        :placeholder="t('请选择账变类型')"
+        :placeholder="t('请选择交易类型')"
         :data="
           accountChangeTypeCodeList.map(item => ({
             value: item.value,
@@ -71,13 +71,6 @@
         <template #header>
           <el-checkbox v-model="checkAllAcc" @change="handleCheckAllAcc">
             {{ t('全选') }}
-          </el-checkbox>
-          <el-checkbox
-            v-model="removeAllAcc"
-            @change="handleRemoveAllAcc"
-            :disabled="form?.accountChangeTypeCode.length == 0"
-          >
-            {{ t('全不选') }}
           </el-checkbox>
           <el-checkbox v-model="checkRevertAcc" @change="handleCheckRevertAcc">
             {{ t('反选') }}
@@ -131,7 +124,6 @@
         type="primary"
         :icon="useRenderIcon(Download)"
         :loading="downloading"
-        v-if="hasAuth('export'.toUpperCase())"
         @click="exportFile()"
       >
         {{ t('导出') }}
@@ -167,7 +159,6 @@ const formRef = ref();
 const selectDate = ref();
 
 const checkAllAcc = ref(false);
-const removeAllAcc = ref(false);
 const checkRevertAcc = ref(false);
 
 watch(
@@ -177,7 +168,6 @@ watch(
       checkAllAcc.value = false;
     } else if (val.length === accountChangeTypeCodeList.length) {
       checkAllAcc.value = true;
-      removeAllAcc.value = false;
     }
   }
 );
@@ -187,17 +177,10 @@ const handleCheckAllAcc = (val: CheckboxValueType) => {
     props.form.accountChangeTypeCode = accountChangeTypeCodeList.map(
       _ => _.value
     );
-    removeAllAcc.value = false;
     checkRevertAcc.value = false;
   } else {
     props.form.accountChangeTypeCode = [];
   }
-};
-
-const handleRemoveAllAcc = () => {
-  props.form.accountChangeTypeCode = [];
-  removeAllAcc.value = false;
-  checkRevertAcc.value = false;
 };
 
 const handleCheckRevertAcc = () => {
