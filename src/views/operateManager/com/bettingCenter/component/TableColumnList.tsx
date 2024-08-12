@@ -1,8 +1,8 @@
 import { t } from "@/plugins/i18n";
 import { addThousandSeparator } from '@/utils/formatNumber'
-import { settleTypeMap } from '../util/map'
+import {settleTypeMap} from '../util/map'
 import dayjs from "dayjs";
-import { BET_RESULT_TYPE_MAP } from "@/utils/formatMatch";
+import {BET_RESULT_TYPE_MAP} from "@/utils/formatMatch";
 
 export const columns: TableColumnList = [
   {
@@ -127,21 +127,21 @@ export const settleHistoryColumns: TableColumnList = [
     slot: "profitAmount",
     minWidth: 50,
     align: 'center',
-    formatter: ({ profitAmount }) => profitAmount ? addThousandSeparator(profitAmount.toFixed(2)) : '-'
+    formatter: ({ profitAmount }) => profitAmount?addThousandSeparator(profitAmount.toFixed(2)):'-'
   },
   {
     label: t('帐变'),
     prop: 'accountChangeAmount',
     minWidth: 50,
     align: 'center',
-    formatter: ({ accountChangeAmount }) => accountChangeAmount ? addThousandSeparator(accountChangeAmount.toFixed(2)) : '-'
+    formatter: ({ accountChangeAmount }) => accountChangeAmount?addThousandSeparator(accountChangeAmount.toFixed(2)):'-'
   },
   {
     label: t('结算类型'),
     prop: 'settleType',
     align: 'center',
     minWidth: 50,
-    formatter: ({ settleType }) => settleTypeMap.find((item: any) => item.value === settleType)?.label
+    formatter: ({ settleType }) => settleTypeMap.find((item:any) => item.value === settleType)?.label
   },
   {
     label: t('操作人'),
