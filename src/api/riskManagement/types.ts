@@ -133,6 +133,7 @@ declare namespace RiskManagementDataAPI {
     esportRoundMaxBetMoring?: null | number;
     esportWholeMaxBetRolling?: null | number;
     delFlag?: null | number; // 1是删除 其他则无感
+    currency?: null | number;
   };
   type RiskNotice = {
     esportAuditCount?: number;

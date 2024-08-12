@@ -27,7 +27,7 @@ export const user = {
     http.request<UserAPI.RouterResType>('post', '/kmg/auth/loginOut', {}),
 
   //- 用户等级限额列表
-  getUserLevelLimitList: (data: { type: number }) =>
+  getUserLevelLimitList: (data: { type: number, currency: number }) =>
     http.request<UserAPI.UserLevelLimitListResData>(
       'post',
       '/userLevelLimit/v1/getUserLevelLimitList',
@@ -124,6 +124,7 @@ export const user = {
   updateUserLevelLimit: (data: {
     list: UserAPI.updateLimmitReqType[];
     type: number;
+    currency: number;
   }) =>
     http.request<UserAPI.updateUserLevelLimitResType>(
       'post',

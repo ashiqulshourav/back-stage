@@ -427,7 +427,7 @@ const tableData = computed(() => {
 
 const initLimitList = async () => {
   try {
-    const res = await API.getUserLevelLimitList({ type: props.category });
+    const res = await API.getUserLevelLimitList({ type: props.category, currency: props.userData.currency });
     limitList.length = 0;
     limitList.push(...res.data);
   } catch (error) {
@@ -632,9 +632,9 @@ const handleUpdate = () => {
         form.specialLimit.seriesSingleDayCumulativeCompensationLimit
       );
       form.percentageLimit = undefined;
-      emits('onUpdateUser', form);
+      emits('onUpdateUser', {...form, currency: props.userData.currency});
     } else {
-      emits('onUpdateUser', { ...form, specialLimit: null });
+      emits('onUpdateUser', { ...form, specialLimit: null, currency: props.userData.currency });
     }
   });
 };
