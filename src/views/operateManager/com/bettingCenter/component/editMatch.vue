@@ -69,16 +69,6 @@
         </li>
       </ul>
     </div>
-    <div class="mt-5">
-      <el-text type="primary">{{ t('是否为最终结算') }}</el-text>
-      <ul class="mt-2">
-         <li :class="`result_item ${
-            resultTabValue === item.value
-              ? 'result_item_active cursor-pointer'
-              : 'cursor-pointer'
-          }`" v-for="item in tabsList" @click="resultClick(item)">{{item.label}}</li>
-      </ul>
-    </div>
   </div>
   <div v-else>
     <PureTableBar
@@ -86,7 +76,7 @@
       :columns="editColumnList"
       class="relative"
       :isShowHeader="false"
-    > 
+    >
       <template v-slot="{ dynamicColumns }">
         <pure-table
           align-whole="center"
@@ -174,6 +164,16 @@
         </pure-table>
       </template>
     </PureTableBar>
+  </div>
+  <div class="mt-5">
+    <el-text type="primary">{{ t('是否为最终结算') }}</el-text>
+    <ul class="mt-2">
+      <li :class="`result_item ${
+            resultTabValue === item.value
+              ? 'result_item_active cursor-pointer'
+              : 'cursor-pointer'
+          }`" v-for="item in tabsList" @click="resultClick(item)">{{item.label}}</li>
+    </ul>
   </div>
   <div class="flex justify-end mt-10">
     <el-button @click="closeDialog">{{ t('取消') }}</el-button>
@@ -334,10 +334,6 @@ const editColumnList = [
     prop: 'matchResult',
     align: 'left'
   },
-  {
-    label: t('是否为最终结算'),
-    slot: 'fianlResult',
-  }
 ];
 const closeDialog = () => {
   emits('closeDialog');
