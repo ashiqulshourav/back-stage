@@ -528,7 +528,7 @@ const changeDate = t => {
   search();
 };
 const chagenMatchType = (type: 0 | 1 | 2) => {
-  props.form.sportId = '';
+  props.form.sportId = [];
   //- 电竞比赛 =1
   gameClassify.value = type === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
   search();
