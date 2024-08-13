@@ -6,45 +6,13 @@ export const columns: TableColumnList = [
   },
   {
     label: t('标签级别'),
-    prop: 'level',
+    slot: 'level',
     minWidth: 150,
-    formatter: ({ level }) => {
-      switch (level) {
-        case 1:
-          return (
-            <el-text class="risk-tag-blue" style="">
-              {level}
-            </el-text>
-          );
-        case 2:
-          return <el-text class="risk-tag-green">{level}</el-text>;
-        case 3:
-          return <el-text class="risk-tag-black-blue">{level}</el-text>;
-        default:
-          return '-';
-      }
-    }
   },
   {
     label: t('标签名称'),
-    prop: 'name',
+    slot: 'name',
     minWidth: 150,
-    formatter: ({ level, name }) => {
-      switch (level) {
-        case 1:
-          return (
-            <el-text class="risk-tag-blue" style="">
-              {name}
-            </el-text>
-          );
-        case 2:
-          return <el-text class="risk-tag-green">{name}</el-text>;
-        case 3:
-          return <el-text class="risk-tag-black-blue">{name}</el-text>;
-        default:
-          return '-';
-      }
-    }
   },
   {
     label: t('用户人数'),

@@ -30,13 +30,13 @@ export const columns = (category: number): TableColumnList => {
       label: t('风控标签'),
       hide: !hasAuth('viewRiskLabel'.toUpperCase()),
       slot: 'riskControlLabel',
-      width: 350
+      minWidth: 150
     },
     {
       label: t('属性标签'),
       hide: !hasAuth('viewAttributeLabel'.toUpperCase()),
       slot: 'attributeLabel',
-      width: 350
+      minWidth: 150
     },
     {
       label: t('限额等级'),
@@ -67,7 +67,7 @@ export const columns = (category: number): TableColumnList => {
         productAmountTotalLimit: number;
         seriesSingleDayCumulativeCompensationLimit: number;
         singleEventAccumulatedCompensationLimit: number;
-        percentageLimit: string;
+        percentageLimit: number;
       }) => {
         if (
           maxWinAmountLimit ||
@@ -76,11 +76,9 @@ export const columns = (category: number): TableColumnList => {
           singleEventAccumulatedCompensationLimit
         )
           return t('例外限额');
-        else if (percentageLimit === null) {
-          return t('无');
-        } else {
+        else if (percentageLimit) {
           return '百分比限额: ' + percentageLimit + '%';
-        }
+        } else return t('无');
       }
     },
     {
@@ -200,16 +198,14 @@ export const specialLimitColumns: TableColumnList = [
     label: t('百分比限额'),
     prop: 'percentageLimit',
     formatter({ percentageLimit }) {
-      return percentageLimit !== '' ? percentageLimit + '%' : '-';
+      return percentageLimit ? percentageLimit + '%' : '-';
     }
   },
   {
     label: t('动作'),
     prop: 'updateType',
     formatter({ updateType }) {
-      if (updateType == 1) return t('禁用');
-      else if (updateType == 2) return t('修改');
-      else if (updateType == 3) return t('启用');
+      return updateType === 1 ? t('编辑') : t('新增');
     }
   },
   {
