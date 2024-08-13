@@ -148,7 +148,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
         orderId: order_id || form.orderId,
         seriesDetailsSingle: '',
         seriesDetailsDuplex: '',
-        seriesDetails: seriesDetails,
+        seriesTypes: realSeriesTypes,
         venueType: venueType,
         category: venueType === 0 ? form.category : 1
       }),
