@@ -315,7 +315,7 @@
                 {{ row.settleTimes }}
                 </el-tag>
               </span>
-            </div>            
+            </div>
             <div>
               {{
                 row.settleTime
@@ -342,18 +342,8 @@
               <div>
                 {{ markeTypeMap[item.marketType as keyof typeof markeTypeMap] }}
               </div>
-              <div v-if="getOddStatus(item?.betResult, item.riskStatus)">
-                <span
-                  :class="
-                    [EBetResultType.WIN, EBetResultType.WIN_HALF].includes(
-                      item?.betResult
-                    )
-                      ? 'win'
-                      : 'lose'
-                  "
-                >
-                  {{item.betItemResultDesc}}
-                </span>
+              <div >
+                {{item.betItemResultDesc}}
               </div>
             </div>
           </template>
