@@ -142,7 +142,12 @@
         <el-form-item :label="`${t('过关类型')}:`" prop="seriesTypes">
           <el-tree-select
               v-model="form.seriesTypes"
-              :data="seriesTypeList"
+              :data="
+              seriesTypeList.map(item => ({
+                value: item.value,
+                label: item.label
+              }))
+              "
               @change="search"
               filterable
               clearable
@@ -171,7 +176,7 @@
           </el-tree-select>
         </el-form-item>
         <el-form-item :label="`${t('单式串关类型')}:`"
-          v-if="form.seriesTypes.includes(2)"
+          v-if="form.seriesTypes.includes(2) && form.seriesTypes.length==1"
           prop="seriesDetails"
         >
           <el-select
@@ -190,7 +195,7 @@
           </el-select>
         </el-form-item>
         <el-form-item  :label="`${t('复试串关类型')}:`"
-          v-if="form.seriesTypes.includes(3)"
+          v-if="form.seriesTypes.includes(3)&&form.seriesTypes.length==1"
           prop="seriesDetails"
         >
           <el-select :placeholder="t('请选择串关类型')"
@@ -548,10 +553,9 @@ const setPropsForm = () => {
     matchId: '',
     awayTeamName: '',
     homeTeamName: '',
-    // status:[],
     betItemId: '',
     isInplay: '',
-    seriesTypes: '',
+    seriesTypes: [],
     category: '',
     timeType: 1,
     leagueName: '',
@@ -708,7 +712,7 @@ const handleCheckRevertQueryTypeLabel = () => {
 
 const handleCheckAllSeriesTypeLabel = (val: CheckboxValueType) => {
   if (val) {
-    props.form.seriesType = seriesTypeList.map(_ => _.value);
+    props.form.seriesTypes = seriesTypeList.map(_ => _.value);
   } else {
     props.form.seriesTypes = [];
   }

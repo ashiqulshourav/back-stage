@@ -124,6 +124,7 @@
         type="primary"
         :icon="useRenderIcon(Download)"
         :loading="downloading"
+        v-if="hasAuth('export'.toUpperCase())"
         @click="exportFile()"
       >
         {{ t('导出') }}
