@@ -8,7 +8,7 @@ import {
   betStatus,
   searchFormType,
 } from './types';
-import {seriesTypesSingle,seriesTypesDuplex,AllSeriesTypesSingle,AllSeriesTypesDuplex} from '@/utils/maps/seriesTypes_map'
+import {seriesTypesSingle,seriesTypesDuplex,AllSeriesTypesSingle,AllSeriesTypesDuplex} from '@/utils/maps/seriesTypes_map';
 import { addDialog, closeDialog } from '@/components/ReDialog/index';
 import editMatch from '../component/editMatch.vue';
 import { reactive, ref, onMounted, h } from 'vue';
@@ -97,7 +97,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
     let seriesDetails: any = [];
     const newForm = { ...form }
     const realSeriesTypes = [];
-
     if(newForm.seriesTypes.length===1){
       if(newForm.seriesTypes.includes(2)){
         if (newForm.seriesDetailsSingle.length) {
@@ -142,13 +141,16 @@ export function useBettingCenterHook(category: number, venueType: number) {
     if (newForm.timeEnd) {
       newForm.timeEnd = dayjs(newForm.timeEnd).format('YYYY-MM-DD HH:mm:ss')
     }
+    if((newForm.isInplay ===0||newForm.isInplay ===1||newForm.isInplay ===2)){
+      newForm.isInplay = [newForm.isInplay]
+    }
     return {
       ...removeEmptyStringKeys({
         ...newForm,
         orderId: order_id || form.orderId,
         seriesDetailsSingle: '',
         seriesDetailsDuplex: '',
-        seriesTypes: realSeriesTypes,
+        seriesTypes:  [...new Set(realSeriesTypes)],
         venueType: venueType,
         category: venueType === 0 ? form.category : 1
       }),
@@ -321,76 +323,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
       }
     });
   };
-  const getStatus = (
-    status: number,
-    billStatus: number,
-    betResultArr: number[],
-    isReserve: number,
-    riskStatusArr?: number[],
-    isSpecialSettle?: number
-  ) => {
-    let obj = { status: -1, bgColor: '' };
-    if (isSpecialSettle === 1) {
-      // 特殊结算也算已结算
-      obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
-    } else if (betResultArr?.includes(22)||betResultArr?.includes(25)) {
-      //预约取消
-      obj = { status: betStatus.reverseCancel, bgColor: '#F57582' };
-    } else if (riskStatusArr?.includes(riskStatus.rejectBetting)) {
-      //待审核
-      obj = { status: betStatus.PendingApprove, bgColor: '#F57582' };
-    } else if (
-      betResultArr?.includes(61) &&
-      (riskStatusArr?.includes(riskStatus.reject) ||
-        riskStatusArr?.includes(riskStatus.autoReject))
-    ) {
-      // 封控划单 203 204
-      obj = { status: betStatus.riskReject, bgColor: '#F88D48' };
-    } else if (
-      riskStatusArr?.includes(riskStatus.reject1) ||
-      riskStatusArr?.includes(riskStatus.autoReject1)
-    ) {
-      // 封控拒单 201 202
-      obj = { status: betStatus.betFail, bgColor: '#F88D48' };
-    } else if (
-      status == 2 &&
-      billStatus === 1 &&
-      (betResultArr?.includes(22) || betResultArr?.includes(23)||betResultArr?.includes(25))
-    ) {
-      // 注单无效
-      obj = { status: betStatus.betInvalid, bgColor: '#E54752' };
-    } else if (
-      riskStatusArr?.includes(riskStatus.autoApprove) &&
-      betResultArr.includes(24)
-    ) {
-      // 注单无效
-      obj = { status: betStatus.betInvalid, bgColor: '#E54752' };
-    } else if (status === 2 && billStatus === 1 && betResultArr?.includes(21)) {
-      // 预约失败
-      obj = { status: betStatus.reserveFail, bgColor: '#F57582' };
-    } else if (status === 0 && billStatus === 0) {
-      // 未结算
-      if (isReserve === 1) {
-        // 预约中
-        obj = { status: betStatus.onReverse, bgColor: '#F57582' };
-      } else {
-        obj = { status: betStatus.unsettlementBet, bgColor: '#FFC53D' };
-      }
-    } else if (status === 1 && billStatus === 1) {
-      // 已结算
-      obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
-    } else if (status === 3) {
-      // 待确认
-      obj = { status: betStatus.PendingApprove, bgColor: '#FFC53D' };
-    } else if (status === 4) {
-      // 投注失败
-      obj = { status: betStatus.betFail, bgColor: '#F57582' };
-    } else if (status === 5) {
-      // 赛事异常
-      obj = { status: betStatus.eventAbnormal, bgColor: '#F88D48' };
-    }
-    return obj;
-  };
 
   const getOddStatus = (betResult: number, riskSt: number) => {
     if (riskSt === riskStatus.reject1 || riskSt === riskStatus.autoReject1) {
@@ -545,7 +477,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
     handleSelectionChange,
     exportFile,
     handleCancel,
-    getStatus,
     copyTest,
     tenantObj,
     UDialogFlag,
