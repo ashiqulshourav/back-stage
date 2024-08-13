@@ -61,13 +61,16 @@ export function userPlayerListHook(venueType: number, category: number) {
   });
   const form = reactive<searchFormType>({
     betDelayed: ' ',
+    specialLimited:' ',
+    currency:' ',
+    timeType: "2",
   } as searchFormType);
 
   const recordForm = reactive<recordFormType>({} as recordFormType);
 
   const goChangeAccountPage = (row: UserAPI.operateUserList) => {
     settingStore.save_player_info({
-      page: pagination.currentPage
+      page: pagination.currentPage,
     });
     const params = JSON.parse(JSON.stringify(row));
     router.push({
@@ -76,7 +79,7 @@ export function userPlayerListHook(venueType: number, category: number) {
           ? 'OPERATEMANAGER_SPORTCHANGEACCOUNTRECORD'
           : 'OPERATEMANAGER_ESPORTCHANGEACCOUNTRECORD',
       query: {
-        userId: row.id
+        userId: row.id,
       },
       state: { params }
     });
@@ -107,7 +110,6 @@ export function userPlayerListHook(venueType: number, category: number) {
     selectedDataList.push(...val);
   }
 
-  //- 修改用户
   const handleUpdateUser = (row: UserAPI.operateUserList) => {
     Object.assign(userData, row);
     isEditUser.value = true;
@@ -305,7 +307,6 @@ export function userPlayerListHook(venueType: number, category: number) {
     }
   };
 
-  //- 修改用户记录
   const dispatchUpdateUser = async (form: updateUserFormType) => {
     try {
       loading.value = true;
