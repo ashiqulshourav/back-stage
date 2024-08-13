@@ -7,9 +7,8 @@ const { exportDialog } = usePublicHooks();
 import {
   betStatus,
   searchFormType,
-  seriesTypesSingle,
-  seriesTypesDuplex
 } from './types';
+import {seriesTypesSingle,seriesTypesDuplex,AllSeriesTypesSingle,AllSeriesTypesDuplex} from '@/utils/maps/seriesTypes_map'
 import { addDialog, closeDialog } from '@/components/ReDialog/index';
 import editMatch from '../component/editMatch.vue';
 import { reactive, ref, onMounted, h } from 'vue';
@@ -97,40 +96,42 @@ export function useBettingCenterHook(category: number, venueType: number) {
   ) => {
     let seriesDetails: any = [];
     const newForm = { ...form }
-    if (newForm.seriesTypes.includes(2)&& newForm.seriesTypes.length===1) {
-      if (newForm.seriesDetailsSingle.length) {
-        newForm.seriesDetailsSingle.map((item: keyof typeof seriesTypesSingle) => {
-          seriesDetails.push(...seriesTypesSingle[item].list);
-        });
+    const realSeriesTypes = [];
+
+    if(newForm.seriesTypes.length===1){
+      if(newForm.seriesTypes.includes(2)){
+        if (newForm.seriesDetailsSingle.length) {
+          newForm.seriesDetailsSingle.map((item: keyof typeof seriesTypesSingle) => {
+            realSeriesTypes.push(...seriesTypesSingle[item].list);
+          });
+        }else {
+          realSeriesTypes.push(...AllSeriesTypesSingle);
+        }
+      }else if(newForm.seriesTypes.includes(3)){
+        if (newForm.seriesDetailsDuplex.length) {
+          newForm.seriesDetailsDuplex.map((item: keyof typeof seriesTypesSingle) => {
+            realSeriesTypes.push(
+                ...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list
+            );
+          });
+        }else {
+          realSeriesTypes.push(...AllSeriesTypesDuplex);
+        }
+      }else{
+        realSeriesTypes.push(1)
       }
-      // else {
-      //   for (let item in seriesTypesSingle) {
-      //     seriesDetails.push(
-      //       ...seriesTypesSingle[item as keyof typeof seriesTypesSingle].list
-      //     );
-      //   }
-      // }
-    } else if (newForm.seriesTypes.includes(3)&& newForm.seriesTypes.length===1) {
-      if (newForm.seriesDetailsDuplex.length) {
-        newForm.seriesDetailsDuplex.map((item: keyof typeof seriesTypesSingle) => {
-          seriesDetails.push(
-            ...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list
-          );
-        });
+    }else {
+      if(newForm.seriesTypes.includes(1)){
+        realSeriesTypes.push(1);
       }
-      // else {
-      //   for (let item in seriesTypesDuplex) {
-      //     seriesDetails.push(
-      //       ...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list
-      //     );
-      //   }
-      // }
-    } else {
-      seriesDetails = '';
+      if(newForm.seriesTypes.includes(2)){
+        realSeriesTypes.push(...AllSeriesTypesSingle);
+      }
+      if(newForm.seriesTypes.includes(3)){
+        realSeriesTypes.push(...AllSeriesTypesDuplex);
+      }
     }
-    if (seriesDetails.length > 1) {
-      seriesDetails = [...new Set(seriesDetails)];
-    }
+
     if (newForm.orderId || newForm.matchId) {
       newForm.timeStart = '';
       newForm.timeEnd = '';
