@@ -355,6 +355,14 @@
               </div>
             </div>
           </template>
+          <template #profitAmountOfRmb="{ row }">
+            <span
+              v-if="row.profitAmountOfRmb"
+              :class="row.profitAmountOfRmb > 0 ? 'win' : 'lose'"
+              >{{ row.profitAmountOfRmb > 0 ? "+" + row.profitAmountOfRmb.toFixed(2): row.profitAmountOfRmb.toFixed(2) }}</span
+            >
+            <span v-else>-</span>
+          </template>
           <template #profitAmount="{ row }">
             <span
               v-if="row.profitAmount"
