@@ -14,6 +14,7 @@
       </div>
       <div class="flex-grow ml-4 mr-40">
         <el-tree-select
+          class="!min-w-52"
           v-model="sportIdsData"
           :data="SPORT_ID_MAP"
           filterable
@@ -21,7 +22,7 @@
           multiple
           tag-type="primary"
           collapse-tags
-          :max-collapse-tags="4"
+          :max-collapse-tags="3"
           :render-after-expand="false"
           show-checkbox
           check-strictly
@@ -44,6 +45,7 @@
       </div>
       <div class="flex-grow ml-4 mr-40">
         <el-tree-select
+          class="!min-w-52"
           v-model="sportIdsDjData"
           :data="ESPORT_ID_MAP"
           filterable
@@ -51,7 +53,7 @@
           multiple
           tag-type="primary"
           collapse-tags
-          :max-collapse-tags="4"
+          :max-collapse-tags="3"
           :render-after-expand="false"
           show-checkbox
           check-strictly

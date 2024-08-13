@@ -71,7 +71,7 @@
       <el-button
         round
         size="small"
-        class="xl:!ml-1 w-[61px]"
+        :class="['xl:!ml-1', locale === 'en' ? '!w-[90px]' : '!w-[61px]']"
         v-for="(item, index) in handicapList"
         :key="index"
         :type="selectContentType === item.listType ? 'primary' : ''"
@@ -101,7 +101,9 @@ import IconGroup from './IconGroup.vue';
 import { ReText } from '@/components/ReText';
 import { copyTextToClipboard } from '@pureadmin/utils';
 import { message } from '@/utils/message';
+import { useTranslationLang } from '@/layout/hooks/useTranslationLang';
 
+const { locale } = useTranslationLang();
 const props = defineProps<{
   currentMatch: sportTradingDataAPI.MatchDtoList;
   handicapList: handicapListType[];

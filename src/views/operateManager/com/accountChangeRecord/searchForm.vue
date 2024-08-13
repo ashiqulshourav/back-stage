@@ -28,7 +28,6 @@
         {{ t('修改余额') }}
       </el-button>
     </div>
-
     <!-- <el-form-item prop="accountChangeTypeCode">
       <el-select
         v-model="form.accountChangeTypeCode"
@@ -46,7 +45,6 @@
         />
       </el-select>
     </el-form-item> -->
-
     <el-form-item prop="accountChangeTypeCode">
       <el-tree-select
         v-model="form.accountChangeTypeCode"
@@ -66,20 +64,26 @@
         show-checkbox
         check-strictly
         check-on-click-node
-        style="width: 250px"
+        style="width: 200px"
       >
         <template #header>
-          <el-checkbox v-model="checkAllAcc" @change="handleCheckAllAcc">
+          <el-checkbox
+            v-model="checkAllAcc"
+            @change="handleCheckAllAcc"
+          >
             {{ t('全选') }}
           </el-checkbox>
-          <el-checkbox
+          <el-checkbox 
             v-model="removeAllAcc"
             @change="handleRemoveAllAcc"
             :disabled="form?.accountChangeTypeCode.length == 0"
           >
             {{ t('全不选') }}
           </el-checkbox>
-          <el-checkbox v-model="checkRevertAcc" @change="handleCheckRevertAcc">
+          <el-checkbox
+            v-model="checkRevertAcc"
+            @change="handleCheckRevertAcc"
+          >
             {{ t('反选') }}
           </el-checkbox>
         </template>
@@ -150,36 +154,32 @@ watch(
       removeAllAcc.value = false;
     }
   }
-);
+)
 
 const handleCheckAllAcc = (val: CheckboxValueType) => {
-  if (val) {
-    props.form.accountChangeTypeCode = accountChangeTypeCodeList.map(
-      _ => _.value
-    );
+  if(val){
+    props.form.accountChangeTypeCode = accountChangeTypeCodeList.map(_ => _.value);
     removeAllAcc.value = false;
     checkRevertAcc.value = false;
   } else {
     props.form.accountChangeTypeCode = [];
   }
-};
+}
 
 const handleRemoveAllAcc = () => {
   props.form.accountChangeTypeCode = [];
   removeAllAcc.value = false;
   checkRevertAcc.value = false;
-};
+}
 
 const handleCheckRevertAcc = () => {
-  if (true) {
-    const oldArray = props.form.accountChangeTypeCode
-      ? [...props.form.accountChangeTypeCode]
-      : [];
+  if(true){
+    const oldArray = props.form.accountChangeTypeCode ? [...props.form.accountChangeTypeCode] : [];
     props.form.accountChangeTypeCode = accountChangeTypeCodeList
-      .filter(_ => !oldArray.includes(_.value))
-      .map(_ => _.value);
+    .filter(_ => !oldArray.includes(_.value))
+    .map(_ => _.value)
   }
-};
+}
 
 const userInfo = (data: userDataType) => [
   { title: t('用户名'), value: data.userName },

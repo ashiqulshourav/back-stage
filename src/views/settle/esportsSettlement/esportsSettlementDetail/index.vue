@@ -22,7 +22,7 @@
             :paginationSmall="size === 'small' ? true : false"
             :header-cell-style="tableHeaderStyle"
             @page-current-change="
-              index => handleCurrentChange(index, selectIndex)
+              (index:number) => handleCurrentChange(index, selectIndex)
             "
             @page-size-change="handleTableWidthChange"
           >

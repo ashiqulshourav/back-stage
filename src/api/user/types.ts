@@ -76,6 +76,7 @@ declare namespace UserAPI {
     bunchMatchPay: number;
     championDailyPay: number;
     type?: number;
+    currency: number;
   };
   type GetLabelList = {
     riskControlLabelList: labelType[];
@@ -98,6 +99,7 @@ declare namespace UserAPI {
     remark: number;
     createdAt: string;
     updatedAt: string;
+    labelColor: string;
   };
   type recordType = {
     id: number;
@@ -127,14 +129,16 @@ declare namespace UserAPI {
     limitLevel?: number;
     maxWinAmountLimit: number;
     productAmountTotalLimit: number;
-    percentageLimit: string | null;
+    percentageLimit?: string;
     singleEventAccumulatedCompensationLimit: number;
     seriesSingleDayCumulativeCompensationLimit: number;
     attributeLabelList: labelType[];
     riskControlLabelList: labelType[];
     balance: number;
     beforeLimit: number | null;
+    currency: number;
   };
+
 
   type operateUserData = {
     count: number;

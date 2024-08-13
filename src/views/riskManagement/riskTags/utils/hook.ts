@@ -28,6 +28,18 @@ export function useTagsHook() {
     name: ''
   });
 
+  const getLabelColor = (level: number, labelColor?: string) => {
+    if(labelColor) return labelColor
+    switch(level) {
+      case 1:
+        return "#1891FF"
+      case 2:
+        return "#19BE6B"
+      case 3:
+        return "#2E4050"
+    }
+  }
+
   function handleDelete(row: RiskManagementDataAPI.RiskTagType) {
     ElMessageBox.confirm(
       h('div', null, [
@@ -193,9 +205,9 @@ export function useTagsHook() {
     message(res.msg, { type: res.code ? 'error' : 'success' });
   };
 
-  const goToUserList = (row: RiskManagementDataAPI.RiskTagType) => {
+  const goToUserList = (type:number,row: RiskManagementDataAPI.RiskTagType) => {
     router.push({
-      name: 'OPERATEMANAGER_SPORTPLAYERLIST',
+      name: type===0?'OPERATEMANAGER_SPORTPLAYERLIST':'OPERATEMANAGER_ESPORTPLAYERLIST',
       query: {
         tagId: row.id,
         labelType: row.labelType
@@ -214,6 +226,7 @@ export function useTagsHook() {
     handleTableWidthChange,
     handleCurrentChange,
     handleSelectionChange,
-    goToUserList
+    goToUserList,
+    getLabelColor
   };
 }

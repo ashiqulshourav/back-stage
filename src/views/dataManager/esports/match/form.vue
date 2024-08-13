@@ -32,22 +32,22 @@
         </el-upload>
       </el-form-item>
 
-      <!-- <el-form-item :label="t('国家地区')" prop="countryId">
-      <el-select
-        v-model="newFormInline.countryId"
-        filterable
-        clearable
-        class="!w-[280px]"
-        :placeholder="t('请选择国家')"
-      >
-        <el-option
-          v-for="item in matchStore.countryList"
-          :key="item.countryId"
-          :label="item.countryNameCn"
-          :value="item.countryId"
-        />
-      </el-select>
-    </el-form-item> -->
+      <el-form-item :label="t('国家地区')" prop="countryId">
+        <el-select
+          v-model="newFormInline.countryId"
+          filterable
+          clearable
+          class="!w-[280px]"
+          :placeholder="t('请选择国家')"
+        >
+          <el-option
+            v-for="item in matchStore.countryList"
+            :key="item.countryId"
+            :label="item.countryNameCn"
+            :value="item.countryId"
+          />
+        </el-select>
+      </el-form-item>
 
       <!-- <el-form-item :label="t('188数据源联赛杯赛')" prop="leagueId188Bet">
       <el-input
@@ -55,20 +55,20 @@
         :placeholder="t('188数据源联赛杯赛')"
       />
     </el-form-item> -->
-      <!-- <el-form-item :label="t('联赛杯赛中文名')" prop="leagueNameCn">
-      <el-input
-        v-model="newFormInline.leagueNameCn"
-        maxLength="35"
-        :placeholder="t('联赛杯赛中文名')"
-      />
-    </el-form-item>
-    <el-form-item :label="t('联赛杯英文名称')" prop="leagueNameEn">
-      <el-input
-        v-model="newFormInline.leagueNameEn"
-        :placeholder="t('联赛杯英文名称')"
-        maxLength="35"
-      />
-    </el-form-item> -->
+      <el-form-item :label="t('联赛杯赛中文名')" prop="leagueNameCn">
+        <el-input
+          v-model="newFormInline.leagueNameCn"
+          maxLength="35"
+          :placeholder="t('联赛杯赛中文名')"
+        />
+      </el-form-item>
+      <el-form-item :label="t('联赛杯英文名称')" prop="leagueNameEn">
+        <el-input
+          v-model="newFormInline.leagueNameEn"
+          :placeholder="t('联赛杯英文名称')"
+          maxLength="35"
+        />
+      </el-form-item>
       <el-form-item :label="t('热门排序')" prop="level">
         <el-input
           :formatter="(v:string) => inputRestrictions(v)"

@@ -1,25 +1,20 @@
 <template>
   <PlusSearch
-    class="bg-bg_color w-[99/100] pl-8 pt-[12px] pb-[12px]"
+    class="bg-bg_color w-[99/100] pl-8 pr-8 pt-[12px] pb-[12px]"
     v-model="selfForm"
     :columns="columns"
     label-position="right"
     @search="search"
     @reset="handleRest"
     :has-unfold="true"
-    show-number="4"
+    :show-number="4"
     labelWidth="auto"
     :defaultValues="defaultValue"
     :searchText="t('筛选')"
     @collapse="collapse"
     :resetText="t('重置')"
-    :colProps="{
-      xl: locale === 'zh' ? 4 : 7,
-      lg: 8,
-      md: 8
-    }"
     :searchLoading="loading"
-    :rowProps="{ gutter: 10 }"
+    :rowProps="{ gutter: 20 }"
   >
     <template
       #footer="{ handleReset, handleSearch, handleUnfold, isShowUnfold }"
@@ -80,7 +75,7 @@ import {
   ESPORT_ID_MAP,
   SPORT_CATEGORY
 } from '@/utils/maps/sports_map';
-import { useTranslationLang } from '@/layout/hooks/useTranslationLang';
+// import { useTranslationLang } from '@/layout/hooks/useTranslationLang';
 
 const props = defineProps<{
   loading: boolean;
@@ -94,11 +89,11 @@ const collapse = () => {
   window.dispatchEvent(resizeEvent);
 };
 
-const { locale } = useTranslationLang();
 const selfForm = ref<FieldValues>(props.form);
 const defaultValue = ref<FieldValues>(JSON.parse(JSON.stringify(props.form)));
 const gameClassify = ref<{ label: string; value: number }[]>(SPORT_ID_MAP);
 const matchStore = useMatchStore();
+
 //- 联赛更改
 const chagenMatchType = (type: 0 | 1 | 2) => {
   props.form.sportId = '';
@@ -127,9 +122,9 @@ const columns: PlusColumn[] = [
     label: t('赛事类型'),
     prop: 'category',
     valueType: 'select',
-
     options: SPORT_CATEGORY,
     fieldProps: {
+      placeholder: t('赛事类型'),
       onChange: chagenMatchType
     }
   },
@@ -137,17 +132,19 @@ const columns: PlusColumn[] = [
     label: t('赛种'),
     prop: 'sportId',
     valueType: 'select',
+    fieldProps: {
+      placeholder: t('赛种')
+      // onChange: chagenMatchType
+    },
     options: computed(() => gameClassify.value)
   },
   {
     label: t('联赛等级'),
     prop: 'riskLevel',
     valueType: 'select',
-    // fieldProps: computed(() => {
-    //   return {
-    //     disabled: props.form.category !== 1 && props.form.sportId === ''
-    //   };
-    // }),
+    fieldProps: {
+      placeholder: t('联赛等级')
+    },
     options: computed(() => {
       const sportidMap = { 1: 0, 2: 1 };
       let list = [];
