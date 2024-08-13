@@ -414,9 +414,11 @@
         </el-form-item>
         <el-form-item prop="currency" :label="t('结算币种:')">
           <el-select
+
             v-model="form.currency"
             clearable
-            class="!w-[150px]"
+            class="!w-[180px]"
+            v-enter="search"
           >
             <el-option label="全部" value=" "></el-option>
             <el-option
