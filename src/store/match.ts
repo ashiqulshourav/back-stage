@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { MatchType } from './types';
 import { LeagueClassifyType } from '@/utils/maps/sports_map';
+import {removeEmptyStringKeys} from "@/utils/utilFn";
 
 export const useMatchStore = defineStore('MATCHSTATE', {
   state: (): MatchType => ({
@@ -31,7 +32,7 @@ export const useMatchStore = defineStore('MATCHSTATE', {
         listType = 'esportLeagueList';
       }
       this.matchSearchLoading = true;
-      const res: MetadataAPI.LeagueListRes = await API.getLeagueList(params);
+      const res: MetadataAPI.LeagueListRes = await API.getLeagueList(removeEmptyStringKeys(params));
       this.matchSearchLoading = false;
       if (res.code) {
         this.reset_lagueList();

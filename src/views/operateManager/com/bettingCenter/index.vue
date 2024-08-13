@@ -237,7 +237,9 @@
                 >
                 <span v-else>-</span>
               </div>
-
+              <div class="item_line">
+                客户端: {{ row.clientType }}
+              </div>
             </div>
           </template>
           <template #betItem="{ row }">
