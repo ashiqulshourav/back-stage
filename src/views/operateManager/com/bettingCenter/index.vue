@@ -367,7 +367,7 @@
             <span
               v-if="row.profitAmount"
               :class="row.profitAmount > 0 ? 'win' : 'lose'"
-              >{{ row.profitAmount > 0 ? "+" + row.profitAmount.toFixed(2): row.profitAmount.toFixed(2) }}</span
+              >{{ row.profitAmount > 0 ? "+" + row.profitAmount.toFixed(2): row.profitAmount.toFixed(2)}} {{ ' ' + row.currency }}</span
             >
             <span v-else>-</span>
           </template>

@@ -1,4 +1,5 @@
 import { t } from "@/plugins/i18n";
+import { addThousandSeparator } from '@/utils/formatNumber'
 
 export const columns: TableColumnList = [
   {
@@ -50,20 +51,37 @@ export const columns: TableColumnList = [
     align: 'center',
     className: 'getParent',
   },
-
   {
+    label: t("投注额 RMB"),
+    prop: "orderAmountOfRmb",
+    minWidth: 100,
+    align: 'center',
+    formatter: ({ orderAmountOfRmb }) => addThousandSeparator(orderAmountOfRmb.toFixed(2)),  // (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
+    className: 'mw-100'
+  },
+  {
+    label: t("用户输赢 RMB"),
+    slot: "profitAmountOfRmb",
+    minWidth: 100,
+    align: 'center',
+    formatter: ({ profitAmountOfRmb }) => addThousandSeparator(profitAmountOfRmb.toFixed(2)),
+    className: 'mw-100',
+  },
+   {
     label: t("投注额"),
-    prop: "productAmountTotal",
-    minWidth: 120,
-    align:'center',
-    className: 'mw-120',
-    formatter: ({ productAmountTotal }) => (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
+    prop: "orderAmount",
+    minWidth: 100,
+    align: 'center',
+    formatter: ({ orderAmount,currency }) => addThousandSeparator(orderAmount.toFixed(2)) + " " + currency,  // (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
+    className: 'mw-100'
   },
   {
     label: t("用户输赢"),
     slot: "profitAmount",
-    minWidth: 120,
-    align:'center',
+    minWidth: 100,
+    align: 'center',
+    formatter: ({ profitAmount, currency}) => addThousandSeparator(profitAmount.toFixed(2)) + " " + currency,
+    className: 'mw-100',
   },
   {
     label: t('通过'),
