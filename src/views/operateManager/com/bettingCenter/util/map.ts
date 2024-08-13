@@ -32,7 +32,15 @@ export const settleTypeMap =[
     label:'走水'
   },
   {
+    value:8,
+    label:'终态结算,结算结果为走水'
+  },
+  {
     value:11,
     label:'特殊非终态结算'
+  },
+  {
+    value:12,
+    label:'人工结算'
   }
 ]
