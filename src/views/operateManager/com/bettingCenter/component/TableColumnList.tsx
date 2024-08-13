@@ -57,9 +57,10 @@ export const columns: TableColumnList = [
   {
     label: t("投注额 RMB"),
     prop: "orderAmountOfRmb",
-    minWidth: 50,
+    minWidth: 100,
     align: 'center',
-    formatter: ({ orderAmountOfRmb }) => addThousandSeparator(orderAmountOfRmb.toFixed(2))  // (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
+    formatter: ({ orderAmountOfRmb }) => addThousandSeparator(orderAmountOfRmb.toFixed(2)),  // (productAmountTotal ? productAmountTotal.toFixed(2) : 0),
+    className: 'mw-100',
   },
   {
     label: t("用户输赢 RMB"),
@@ -72,9 +73,10 @@ export const columns: TableColumnList = [
    {
     label: t("投注额"),
     prop: "orderAmount",
-    minWidth: 50,
+    minWidth: 100,
     align: 'center',
-    formatter: ({ orderAmount,currency }) => addThousandSeparator(orderAmount.toFixed(2)) + " " + currency  // (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
+    formatter: ({ orderAmount,currency }) => addThousandSeparator(orderAmount.toFixed(2)) + " " + currency,  // (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
+    className: 'mw-100',
   },
   {
     label: t("用户输赢"),
@@ -82,7 +84,6 @@ export const columns: TableColumnList = [
     minWidth: 100,
     align: 'center',
     formatter: ({ profitAmount, currency}) => addThousandSeparator(profitAmount.toFixed(2)) + " " + currency,
-    className: 'mw-100',
   },
   {
     label: t('操作'),

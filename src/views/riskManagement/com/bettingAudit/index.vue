@@ -365,14 +365,21 @@
               </div>
             </div>
           </template>
+          <template #profitAmountOfRmb="{ row }">
+            <span
+              v-if="row.profitAmountOfRmb"
+              :class="row.profitAmountOfRmb > 0 ? 'win' : 'lose'"
+              >{{ row.profitAmountOfRmb > 0 ? "+" + row.profitAmountOfRmb.toFixed(2): row.profitAmountOfRmb.toFixed(2) }}</span
+            >
+            <span v-else>-</span>
+          </template>
           <template #profitAmount="{ row }">
             <span
               v-if="row.profitAmount"
               :class="row.profitAmount > 0 ? 'win' : 'lose'"
-              class="min-w-[100px] inline-block"
-              >{{ row.profitAmount.toFixed(2) }}</span
+              >{{ row.profitAmount > 0 ? "+" + row.profitAmount.toFixed(2): row.profitAmount.toFixed(2)}} {{ ' ' + row.currency }}</span
             >
-            <span v-else class="min-w-[100px] inline-block">-</span>
+            <span v-else>-</span>
           </template>
           <template #riskStatus="{ row }">
             <div
