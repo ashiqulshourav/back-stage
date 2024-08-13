@@ -42,9 +42,10 @@ export const columns: TableColumnList = [
   {
     label: t("状态"),
     slot: "orderStatusView",
-    minWidth: 500,
+    minWidth: 250,
     align: 'left',
     formatter: ({ betResult }) => BET_RESULT_TYPE_MAP[betResult as keyof typeof BET_RESULT_TYPE_MAP] || '', // (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
+    className: 'mw-250px'
   },
   {
     label: t("赔率"),
