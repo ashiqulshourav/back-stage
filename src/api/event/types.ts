@@ -212,6 +212,7 @@ declare namespace EventAPI {
     settleTimes: number;
     status: number;
     displayStatus: number;
+    matchId: number;
     billStatus: number;
     isReserve: number;
     seriesType: number;
@@ -225,14 +226,119 @@ declare namespace EventAPI {
   };
 
   type getMatchBetListResTypeData = {
-    count: number;
+    total: number;
     groupCount?: any;
     pageNum: number;
     pageSize: number;
-    pageData: PageData[];
+    list: PageData[];
     otherData?: any;
   };
 
   type getMatchBetListResType =
     COMMON.BASE_RES_TYPE<getMatchBetListResTypeData>;
+
+
+  type oddsHistoryMatchDetailData = {
+    matchId: number;
+    countryId?: any;
+    sportId?: any;
+    sportIds?: any;
+    leagueId: number;
+    matchName?: any;
+    matchNameEn?: any;
+    homeTeamId?: any;
+    awayTeamId: number;
+    beginTime: string;
+    staticTimeFrom?: any;
+    staticTimeEnd?: any;
+    beginTimeLong?: any;
+    playingField?: any;
+    isNeutral?: any;
+    level?: any;
+    isSale?: any;
+    videoUrl?: any;
+    status: string;
+    hb?: any;
+    hip?: any;
+    score?: string;
+    ip?: any;
+    mt?: any;
+    uc?: any;
+    currentScore?: any;
+    currentTime?: any;
+    currentPc?: any;
+    pandaResult?: any;
+    pandaMatchId?: any;
+    pandaVideoId?: any;
+    pandaOppositeStatus?: any;
+    pandaLinkId?: any;
+    matchId188bet?: any;
+    videoMatchId?: any;
+    videoReverse?: any;
+    category?: any;
+    periodType?: any;
+    isChampion?: any;
+    settlementStatus?: any;
+    halfSettlementStatus?: any;
+    fullSettlementStatus?: any;
+    handicapStatus?: any;
+    unSettlementEvents?: any;
+    leagueNameCn: string;
+    leagueNameEn?: any;
+    homeTeamNameCn: string;
+    homeTeamNameEn?: any;
+    awayTeamNameCn: string;
+    awayTeamNameEn?: any;
+    settlementType?: any;
+    matchCondition?: any;
+    startTime?: any;
+    endTime?: any;
+    dataValidityPeriod: number;
+    leagueIds?: any;
+    saleHandicaps?: any;
+    allHandicaps?: any;
+    pageSize: number;
+    pageNum: number;
+    cancelOrderTimes?: any;
+    reSettleStatus?: any;
+    overTimeAndPenaltyKickStatus?: any;
+    openMatchIds?: any;
+    filterMatchIds?: any;
+    isDPTY?: any;
+    isDPDJ?: any;
+    pairingType?: any;
+    pairingTime?: any;
+    pairingUser?: any;
+    dataSourceCode?: any;
+    dateTime?: any;
+    isDataSourceOdds?: any;
+    whetherLock?: any;
+  }
+
+  type getMatchEventWithOddsHistoryReqType = {
+    matchId: string;
+    dataSourceCode: string[] | string;
+    oddsType: string;
+    kindsCode: string;
+  }
+
+  type getMatchEventWithOddsHistoryResData = {
+    matchStartTime?: any;
+    eventName?: any;
+    eventCurrentScore?: any;
+    createdTime: string;
+    xjIsSale: number;
+    xjCurrentScore: string;
+    xjHomeOdds: number;
+    xjDrawOdds: number;
+    xjAwayOdds: number;
+    xhReturnRate: number;
+    times?: any;
+  }
+
+
+  type getMatchEventWithOddsHistoryResType = COMMON.BASE_RES_TYPE<getMatchEventWithOddsHistoryResData[]>
+
+
+  type oddsHistoryMatchDetailResType = COMMON.BASE_RES_TYPE<oddsHistoryMatchDetailData>;
 }

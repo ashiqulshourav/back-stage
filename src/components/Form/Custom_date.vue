@@ -1,20 +1,17 @@
 <template>
-  <div>
-    <el-date-picker
-      class="ml-4"
-      :class="isDateTime ? '!w-[380px]' : '!w-[260px]'"
-      v-model="timeVal"
-      :type="isSingle ? 'date' : isDateTime ? 'datetimerange' :  'daterange'"
-      :placeholder="placeholder"
-      value-format="x"
-      :format="format"
-      :start-placeholder="startPlaceholder"
-      :end-placeholder="endPlaceholder"
-      :disabled-date="disableDate"
-      @change="changeDate"
-      :shortcuts="shortcuts"
-    />
-  </div>
+  <el-date-picker
+    :class="['ml-4', isDateTime ? '!w-[380px]' : '!w-[260px]', className]"
+    v-model="timeVal"
+    :type="isSingle ? 'date' : isDateTime ? 'datetimerange' : 'daterange'"
+    :placeholder="placeholder"
+    value-format="x"
+    :format="format"
+    :start-placeholder="startPlaceholder"
+    :end-placeholder="endPlaceholder"
+    :disabled-date="disableDate"
+    @change="changeDate"
+    :shortcuts="shortcuts"
+  />
 </template>
 
 <script setup lang="ts">
@@ -31,6 +28,7 @@ const props = withDefaults(
     isShowShortCuts?: boolean;
     isDateTime?: boolean;
     isSingle?: boolean;
+    className?: string;
     startPlaceholder?: string;
     endPlaceholder?: string;
   }>(),
@@ -43,7 +41,8 @@ const props = withDefaults(
     placeholder: t('请选择日期'),
     startPlaceholder: t('开始日期'),
     endPlaceholder: t('结束日期'),
-    disabledDefaut: false
+    disabledDefaut: false,
+    className: ''
   }
 );
 

@@ -44,3 +44,14 @@ export const compareTime = (time: string) => {
   const [hours, minutes, seconds] = time.split(':').map(Number);
   return hours * 3600 + minutes * 60 + seconds;
 };
+
+
+export const WEEK_MAP = {
+  0: t('星期日'),
+  1: t('星期一'),
+  2: t('星期二'),
+  3: t('星期三'),
+  4: t('星期四'),
+  5: t('星期五'),
+  6: t('星期六')
+};

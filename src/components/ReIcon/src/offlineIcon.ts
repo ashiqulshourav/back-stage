@@ -35,6 +35,7 @@ import sale from '@iconify-icons/ri/store-2-fill';
 import moneyDollarCircleFill from '@iconify-icons/ri/money-cny-circle-line';
 import metadata from '@iconify-icons/ep/monitor';
 import operateManager from '@iconify-icons/ep/files';
+import clock from '@iconify-icons/ep/clock';
 import menuTree from '@iconify-icons/ri/list-unordered';
 import configCenter from '@iconify-icons/ri/settings-3-line';
 import TaskCenterIcon from '@iconify-icons/ri/apps-fill';
@@ -50,6 +51,7 @@ import Copy from '@iconify-icons/ep/copy-document';
 import ChangeAccount from '@iconify-icons/fa-solid/user-edit';
 import Back from '@iconify-icons/fa-solid/arrow-left';
 import LogoutCircleRLine from '@iconify-icons/ri/logout-circle-r-line';
+import clock1 from '@iconify-icons/ri/alarm-fill';
 import Setting from '@iconify-icons/ri/settings-3-line';
 import Check from '@iconify-icons/ri/check-fill';
 import MenuFold from "@iconify-icons/ri/menu-fold-fill";
@@ -79,6 +81,7 @@ addIcon("eventManagement", EventManagementIcon);
 addIcon("copyIcon", Copy);
 addIcon("refreshRight", RefreshRight);
 addIcon("infoFilled", infoFilled);
+addIcon("clockIcon", clock1);
 
 /* 菜单icon结束 */
 //- 操盘图标开始

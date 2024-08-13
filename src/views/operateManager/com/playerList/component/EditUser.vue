@@ -9,6 +9,7 @@
     <template #title>
       <p class="pl-5 font-medium">{{ t('用户设置') }}</p>
     </template>
+
     <div class="p-5 max-h-[600px] h-[600px]">
       <el-scrollbar>
         <div class="flex items-center mt-2">
@@ -133,7 +134,7 @@
                   type="primary"
                   @click="isRiskLabelAdd = true"
                   class="text-primary"
-                  >添加标签</el-button
+                  >{{ t('添加标签') }}</el-button
                 >
               </el-col>
             </el-row>
@@ -172,7 +173,7 @@
             </el-row>
           </el-collapse-item>
 
-          <!-- <el-collapse-item v-if="hasAuth('settingBetDelay'.toUpperCase())">
+          <el-collapse-item v-if="hasAuth('settingBetDelay'.toUpperCase())">
             <template #title>
               {{ t('投注延时') }}
             </template>
@@ -192,22 +193,20 @@
                 :category="category"
               />
             </div>
-          </el-collapse-item> -->
+          </el-collapse-item>
 
           <el-collapse-item
-            :title="t('限额等级设置')"
+            :title="t('限额等级')"
             name="3"
             v-if="hasAuth('settingLimitLevel'.toUpperCase())"
           >
-            <!-- <p
-              @click="openLimitRecordDialog"
-              v-if="hasAuth('GETLABELLIST')"
-              class="text-primary text-right cursor-pointer mb-2"
-            >
-              {{ t('修改记录') }}>>
-            </p> -->
-            <div class="mb-2">
-              <el-select v-model="form.limitLevel" clearable>
+            <div class="mb-2 flex justify-between">
+              <el-select
+                size="small"
+                v-model="form.limitLevel"
+                clearable
+                class="!w-20"
+              >
                 <el-option
                   v-for="item in limitList"
                   :key="item.levelLimit"
@@ -215,6 +214,13 @@
                   :value="item.levelLimit"
                 />
               </el-select>
+              <p
+                @click="openLimitRecordDialog"
+                v-if="hasAuth('GETLABELLIST')"
+                class="text-primary text-right cursor-pointer mb-2"
+              >
+                {{ t('修改记录') }}>>
+              </p>
             </div>
             <pure-table
               maxHeight="500"
@@ -226,75 +232,80 @@
               :header-cell-style="tableHeaderStyleBlue"
             />
           </el-collapse-item>
+
           <el-collapse-item
             :title="t('特殊限额')"
             name="4"
             v-if="hasAuth('settingSepcialLimit'.toUpperCase())"
           >
-            <!-- <p
-              @click="openSpecialLimitDialog"
-              v-if="hasAuth('GETLABELLIST')"
-              class="text-primary text-right cursor-pointer mb-2"
-            >
-              {{ t('修改记录') }}>>
-            </p> -->
-            <el-radio-group v-model="isSpecial">
-              <el-radio class="w-full" :value="1">{{ t('无') }}</el-radio>
-              <el-radio class="w-full" :value="2">{{ t('例外限额') }}</el-radio>
-              <el-radio class="w-full" :value="3">{{
-                t('百分比限额')
-              }}</el-radio>
-            </el-radio-group>
+            <div class="flex justify-between">
+              <div>
+                <el-radio-group v-model="isSpecial">
+                  <div class="flex">
+                    <el-radio class="w-full" :value="1">{{ t('无') }}</el-radio>
+                    <el-radio class="w-full" :value="2">{{
+                      t('例外限额')
+                    }}</el-radio>
+                    <el-radio class="w-full" :value="3">{{
+                      t('百分比限额')
+                    }}</el-radio>
+                  </div>
+                </el-radio-group>
+              </div>
+              <p
+                @click="openSpecialLimitDialog"
+                v-if="hasAuth('GETLABELLIST')"
+                class="text-primary text-right cursor-pointer mb-2"
+              >
+                {{ t('修改记录') }}>>
+              </p>
+            </div>
 
-            <el-row
-              :gutter="5"
-              class="w-full items-center tex-xs"
+            <pure-table
+              maxHeight="500"
+              align-whole="center"
+              size="small"
               v-if="isSpecial === 2"
+              border
+              :data="tableData"
+              :columns="exceptionLimitColumns"
+              :header-cell-style="tableHeaderStyleBlue"
             >
-              <el-col :span="5" class="text-center">
-                <span>{{ t('单注投注限额') }}</span>
-              </el-col>
-              <el-col :span="5" class="text-center">
-                <span>{{ t('单注赔付限额') }}</span>
-              </el-col>
-              <el-col :span="7" class="text-center">
-                <span>{{ t('单场赛事累计赔付限额(不分早盘滚球)') }}</span>
-              </el-col>
-              <el-col :span="7" class="text-center">
-                <span>{{ t('串关单日累计赔付限额(不分早盘滚球)') }}</span>
-              </el-col>
-              <el-col :span="5" class="text-center">
+              <template #productAmountTotalLimit>
                 <el-input
                   v-model="form.specialLimit.productAmountTotalLimit"
                   :formatter="(v: string) => formatNumber(v, 13)"
                 />
-              </el-col>
-              <el-col :span="5" class="text-center">
+              </template>
+              <template #maxWinAmountLimit>
                 <el-input
                   v-model="form.specialLimit.maxWinAmountLimit"
                   :formatter="(v: string) => formatNumber(v, 13)"
                 />
-              </el-col>
-              <el-col :span="7" class="text-center">
+              </template>
+
+              <template #userSingleGamePay>
                 <el-input
                   v-model="
                     form.specialLimit.singleEventAccumulatedCompensationLimit
                   "
                   :formatter="(v: string) => formatNumber(v, 13)"
                 />
-              </el-col>
-              <el-col :span="7" class="text-center">
+              </template>
+
+              <template #bunchMatchPay>
                 <el-input
                   v-model="
                     form.specialLimit.seriesSingleDayCumulativeCompensationLimit
                   "
                   :formatter="(v: string) => formatNumber(v, 13)"
                 />
-              </el-col>
-            </el-row>
+              </template>
+            </pure-table>
+
             <el-row
               :gutter="5"
-              class="items-center text-xs"
+              class="items-center text-xs mt-4"
               v-if="isSpecial === 3"
             >
               <el-col class="text-center" :span="5">
@@ -308,6 +319,7 @@
               </el-col>
             </el-row>
           </el-collapse-item>
+
           <el-collapse-item :title="t('备注')">
             <el-input
               :placeholder="t('只能输入255个字符的内容')"
@@ -336,7 +348,7 @@
   </el-dialog>
 </template>
 
-<script setup lang="ts">
+<script setup lang="tsx">
 import { ref, watch } from 'vue';
 import { t } from '@/plugins/i18n';
 import { hasAuth } from '@/router/utils';
@@ -387,22 +399,79 @@ const limitColumns: TableColumnList = [
     label: t('单注赔付限额'),
     prop: 'maxWinAmountLimit'
   },
+
   {
-    label: t('单场赛事累计赔付限额(不分早盘滚球)'),
-    prop: 'userSingleGamePay'
+    label: t('单场赛事限额'),
+    prop: 'userSingleGamePay',
+    headerRenderer: () => {
+      return (
+        <div class="flex justify-center">
+          <DialogListTitle
+            title={t('单场赛事限额')}
+            iconColor="' '"
+            content={t('单场（早盘＋滚球），累计赔付')}
+          />
+        </div>
+      );
+    }
   },
-  // {
-  //   label: t('单关单日累计赔付'),
-  //   prop: 'singleMatchPay'
-  // },
   {
-    label: t('串关单日累计赔付限额(不分早盘滚球)'),
-    prop: 'bunchMatchPay'
+    label: t('串关限额'),
+    prop: 'bunchMatchPay',
+    headerRenderer: () => {
+      return (
+        <div class="flex  justify-center">
+          <DialogListTitle
+            title={t('串关限额')}
+            iconColor="' '"
+            content={t('单日（早盘＋滚球），累计赔付')}
+          />
+        </div>
+      );
+    }
   }
-  // {
-  //   label: t('冠军单日累计赔付'),
-  //   prop: 'championDailyPay'
-  // }
+];
+
+const exceptionLimitColumns: TableColumnList = [
+  {
+    label: t('单注投注限额'),
+    slot: 'productAmountTotalLimit'
+  },
+  {
+    label: t('单注赔付限额'),
+    slot: 'maxWinAmountLimit'
+  },
+
+  {
+    label: t('单场赛事赔付'),
+    slot: 'userSingleGamePay',
+    headerRenderer: () => {
+      return (
+        <div class="flex justify-center">
+          <DialogListTitle
+            title={t('单场赛事赔付')}
+            iconColor="' '"
+            content={t('单场（早盘＋滚球），累计赔付')}
+          />
+        </div>
+      );
+    }
+  },
+  {
+    label: t('串关限额'),
+    slot: 'bunchMatchPay',
+    headerRenderer: () => {
+      return (
+        <div class="flex  justify-center">
+          <DialogListTitle
+            title={t('串关限额')}
+            iconColor="' '"
+            content={t('单日（早盘＋滚球），累计赔付')}
+          />
+        </div>
+      );
+    }
+  }
 ];
 
 const isEditUser = ref(props.isEditUser);
@@ -667,7 +736,7 @@ const openLimitRecordDialog = () => {
   addDialog({
     title: t('限额等级修改记录'),
     class: 'reset_dialog',
-    width: '50%',
+    width: '70%',
     alignCenter: true,
     closeOnClickModal: false,
     hideFooter: true,
@@ -714,8 +783,6 @@ onUpdated(() => {
     attributeLabelList,
     percentageLimit
   } = props.userData;
-
-  console.log({ percentageLimit });
 
   form.id = id;
   form.isFreeze = isFreeze;

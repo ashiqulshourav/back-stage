@@ -1,6 +1,5 @@
 import { handleTableWidth } from '@/utils/getTableWidth';
 import dayjs from 'dayjs';
-import { parseCountry } from '@/utils/formatMatch';
 import {
   ESPORT_ID_MAP,
   OPENING_STATUS,
@@ -22,7 +21,6 @@ export const columns: TableColumnList = [
   {
     label: t('联赛名称'),
     prop: 'leagueNameCn',
-    // headerRenderer: d => handleTableWidth(d, t('联赛名称'), 'auto'),
     formatter: ({ leagueNameCn, leagueNameEn }) => {
       const d = { zh: leagueNameCn, en: leagueNameEn };
       return d[lan] ?? leagueNameCn ?? '-';
@@ -77,14 +75,15 @@ export const columns: TableColumnList = [
     label: t('盘口状态'),
     prop: 'handicapStatus',
     headerRenderer: d => handleTableWidth(d, t('盘口状态'), 'auto'),
-    formatter: ({ handicapStatus }): string => OPENING_STATUS[handicapStatus],
+    formatter: ({ handicapStatus }): string =>
+      OPENING_STATUS[handicapStatus as keyof typeof OPENING_STATUS],
     minWidth: 150
   },
   {
     label: t('加时点球开售控制'),
     slot: 'overTimeAndPenaltyKickStatus',
-    headerRenderer: d => handleTableWidth(d, t('加时点球开售控制'), 'auto'),
-    minWidth: 150
+    // headerRenderer: d => handleTableWidth(d, t('加时点球开售控制'), 'auto'),
+    minWidth: 240
   },
   {
     label: t('开售盘口/总盘口数'),

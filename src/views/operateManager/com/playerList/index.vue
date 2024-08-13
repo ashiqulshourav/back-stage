@@ -14,7 +14,7 @@
     />
     <PureTableBar :columns="columns(category)" @refresh="onSearch('reload')">
       <template #title>
-        <div>
+        <div class="user_title">
           <p v-if="selectedDataList.length === 0">{{ t('用户列表') }}</p>
           <div v-else class="flex gap-3 items-center">
             <p>{{ t('已选择') + selectedDataList.length + t('个用户') }}</p>
@@ -55,6 +55,7 @@
           <template #tenantCode="{ row }">
             {{ tenantObj[row.tenantId]?.name ?? '-' }}
           </template>
+
           <template #riskControlLabel="{ row }">
             <el-row
               v-if="row.riskControlLabelList"
@@ -67,6 +68,17 @@
                 expand
               />
             </el-row>
+          </template>
+
+          <!--- 投注限额提示框 -->
+          <template #betDelay="{ row }">
+            <LimitTip
+              :category="category"
+              :betDelay="row.betDelay"
+              :betDelayDj="row.betDelayDj"
+              :sportIds="row.sportIds"
+              :sportIdsDj="row.sportIdsDj"
+            />
           </template>
 
           <template #attributeLabel="{ row }">
@@ -159,6 +171,7 @@ import EditPen from '@iconify-icons/ep/edit-pen';
 import ChangeAccount from '@iconify-icons/fa-solid/user-edit';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import LabelListCom from './component/LabelListCom.vue';
+import LimitTip from './component/LimitTip.vue';
 
 defineOptions({ name: 'OPERATEMANAGER_SPORTPLAYERLIST' });
 const { tableHeaderStyle } = usePublicHooks();
@@ -235,5 +248,9 @@ const {
   .el-tag .el-tag__close {
     color: white;
   }
+}
+
+.user_title + div {
+  display: none;
 }
 </style>

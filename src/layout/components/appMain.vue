@@ -9,6 +9,7 @@ const props = defineProps({
 });
 
 const { $storage, $config } = useGlobal<GlobalPropertiesApi>();
+const route = useRoute();
 
 const keepAlive = computed(() => {
   return $config?.KeepAlive;
@@ -75,7 +76,10 @@ const transitionMain = defineComponent({
 
 <template>
   <section
-    :class="[props.fixedHeader ? 'app-main' : 'app-main-nofixed-header']"
+    :class="[
+      props.fixedHeader ? 'app-main' : 'app-main-nofixed-header',
+      (route.name as string).slice(0, (route.name as string).lastIndexOf('_'))
+    ]"
     :style="getSectionStyle"
   >
     <router-view>

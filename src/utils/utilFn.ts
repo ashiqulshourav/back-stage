@@ -5,7 +5,7 @@ interface MyObj {
 }
 
 interface ILocaleType {
-  locale: 'zh' | 'en' | 'fr';
+  locale: 'zh' | 'en';
 }
 
 
@@ -18,7 +18,7 @@ export const removeEmptyStringKeys = (obj: MyObj): MyObj => {
   }, {});
 };
 
-export const getLan = (): 'zh' | 'en' | 'fr' => {
+export const getLan = (): 'zh' | 'en' => {
   const lan =
     (storageLocal().getItem('responsive-locale') as ILocaleType)?.locale ?? 'zh';
   return lan;
