@@ -253,7 +253,7 @@
               :remote-method="
               debounce(
                 query =>
-                  matchStore.search_league_list(query, form.sportId, category),
+                  matchStore.search_league_list(query, '', category),
                 1000
               )
             "

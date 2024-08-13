@@ -21,7 +21,6 @@ import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
 import { riskStatus } from '@/views/riskManagement/com/bettingAudit/util/types';
 import editOrder from '../component/editOrder.vue';
-import IpDialog from '../component/IpDialog.vue';
 import SettleHistory from '../component/settleHistory.vue';
 
 export function useBettingCenterHook(category: number, venueType: number) {
@@ -97,7 +96,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     let seriesDetails: any = [];
     const newForm = { ...form }
     const realSeriesTypes = [];
-    if(newForm.seriesTypes.length===1){
+    if(newForm.seriesTypes.length===1){  // 只选一个选项
       if(newForm.seriesTypes.includes(2)){
         if (newForm.seriesDetailsSingle.length) {
           newForm.seriesDetailsSingle.map((item: keyof typeof seriesTypesSingle) => {
@@ -119,7 +118,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
       }else{
         realSeriesTypes.push(1)
       }
-    }else {
+    }else { //选择多个选项
       if(newForm.seriesTypes.includes(1)){
         realSeriesTypes.push(1);
       }
