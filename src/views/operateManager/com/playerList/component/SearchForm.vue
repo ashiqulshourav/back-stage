@@ -408,8 +408,8 @@ const changeDate = (t: string[]) => {
     form.value.beginTime = '';
     form.value.endTime = '';
   } else {
-    form.value.beginTime = dayjs(t[0]).format('YYYY-MM-DD');
-    form.value.endTime = dayjs(t[1]).format('YYYY-MM-DD');
+    form.value.beginTime = dayjs(t[0]).format('YYYY-MM-DD HH:mm:ss');
+    form.value.endTime = dayjs(t[1]).format('YYYY-MM-DD HH:mm:ss');
   }
 };
 const getLimmitLevelList = async () => {
