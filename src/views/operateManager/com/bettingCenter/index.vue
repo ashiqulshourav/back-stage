@@ -300,28 +300,28 @@
               </div>
             </div>
           </template>
-            <template #orderStatusView="{row}">
-              <div class="flex gap-2 items-center">
-                {{ row.orderStatusView }}
-                <span v-if="row.settleTimes > 0">
-                  <el-tag
-                    :round="true"
-                    @click="() => handleSettleHistoryDialog(row)"
-                    :style="`background-color: white`"
-                    class="rounded-lg w-full cursor-pointer text-white"
-                  >
-                  {{ row.settleTimes }}
-                  </el-tag>
-                </span>
-              </div>            
-              <div>
-                {{
-                  row.settleTime
-                    ? dayjs(row.settleTime).format('MM-DD HH:mm:ss')
-                    : ''
-                }}
-              </div>
-          </template>
+          <template #orderStatusView="{row}">
+            <div class="flex gap-2 items-center">
+              {{ row.orderStatusView }}
+              <span v-if="row.settleTimes > 0">
+                <el-tag
+                  :round="true"
+                  @click="() => handleSettleHistoryDialog(row)"
+                  :style="`background-color: white`"
+                  class="rounded-lg w-full cursor-pointer text-white"
+                >
+                {{ row.settleTimes }}
+                </el-tag>
+              </span>
+            </div>            
+            <div>
+              {{
+                row.settleTime
+                  ? dayjs(row.settleTime).format('MM-DD HH:mm:ss')
+                  : ''
+              }}
+            </div>
+        </template>
           <template #odd="{ row }">
             <div
               class="match_item odd_item eq-height"
@@ -367,7 +367,7 @@
             <span
               v-if="row.profitAmount"
               :class="row.profitAmount > 0 ? 'win' : 'lose'"
-              >{{ row.profitAmount > 0 ? "+" + row.profitAmount.toFixed(2): row.profitAmount.toFixed(2) }}</span
+              >{{ row.profitAmount > 0 ? "+" + row.profitAmount.toFixed(2): row.profitAmount.toFixed(2)}} {{ ' ' + row.currency }}</span
             >
             <span v-else>-</span>
           </template>
