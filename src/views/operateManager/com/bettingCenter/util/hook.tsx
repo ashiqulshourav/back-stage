@@ -97,32 +97,34 @@ export function useBettingCenterHook(category: number, venueType: number) {
   ) => {
     let seriesDetails: any = [];
     const newForm = { ...form }
-    if (newForm.seriesTypes == 2) {
+    if (newForm.seriesTypes.includes(2)&& newForm.seriesTypes.length===1) {
       if (newForm.seriesDetailsSingle.length) {
         newForm.seriesDetailsSingle.map((item: keyof typeof seriesTypesSingle) => {
           seriesDetails.push(...seriesTypesSingle[item].list);
         });
-      } else {
-        for (let item in seriesTypesSingle) {
-          seriesDetails.push(
-            ...seriesTypesSingle[item as keyof typeof seriesTypesSingle].list
-          );
-        }
       }
-    } else if (newForm.seriesTypes == 3) {
+      // else {
+      //   for (let item in seriesTypesSingle) {
+      //     seriesDetails.push(
+      //       ...seriesTypesSingle[item as keyof typeof seriesTypesSingle].list
+      //     );
+      //   }
+      // }
+    } else if (newForm.seriesTypes.includes(3)&& newForm.seriesTypes.length===1) {
       if (newForm.seriesDetailsDuplex.length) {
         newForm.seriesDetailsDuplex.map((item: keyof typeof seriesTypesSingle) => {
           seriesDetails.push(
             ...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list
           );
         });
-      } else {
-        for (let item in seriesTypesDuplex) {
-          seriesDetails.push(
-            ...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list
-          );
-        }
       }
+      // else {
+      //   for (let item in seriesTypesDuplex) {
+      //     seriesDetails.push(
+      //       ...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list
+      //     );
+      //   }
+      // }
     } else {
       seriesDetails = '';
     }
@@ -146,7 +148,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
         seriesDetailsSingle: '',
         seriesDetailsDuplex: '',
         seriesDetails: seriesDetails,
-        seriesTypes: +form.seriesTypes > 2 ? 2 : form.seriesTypes,
         venueType: venueType,
         category: venueType === 0 ? form.category : 1
       }),
