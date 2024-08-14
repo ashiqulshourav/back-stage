@@ -84,6 +84,7 @@ export const columns: TableColumnList = [
     minWidth: 100,
     align: 'center',
     formatter: ({ profitAmount, currency}) => addThousandSeparator(profitAmount.toFixed(2)) + " " + currency,
+    className: 'mw-100',
   },
   {
     label: t('操作'),

@@ -244,7 +244,7 @@
           />
           <el-select
               v-else
-              v-model="form.leagueName"
+              v-model="form.leagueId"
               clearable
               filterable
               remote
@@ -267,7 +267,7 @@
                 : matchStore.esportLeagueList"
                 :key="item.leagueId"
                 :label="item.leagueNameCn"
-                :value="item.leagueNameCn"
+                :value="item.leagueId"
             />
           </el-select>
         </el-form-item>
