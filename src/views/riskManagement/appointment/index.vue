@@ -22,6 +22,7 @@
           v-model="row.reservationSwitch"
           :active-value="1"
           :inactive-value="0"
+          :disabled="!hasAuth('SWITCH')"
           inline-prompt
           @change="upateLeagueStatus(row)"
         />
@@ -34,6 +35,7 @@
 import { useAppointmentHook } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
+import { hasAuth } from '@/router/utils';
 
 defineOptions({ name: 'RISKMANAGEMENT_APPOINTMENT' });
 
