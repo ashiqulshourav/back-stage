@@ -33,7 +33,7 @@ export const getPlayNameByKc = ({ code, name, ctid, sportId }: { code: string, n
   if (ctid !== undefined && name !== undefined && ctid !== 0) return name;
   switch (code) {
     case 'FT_OU':
-      switch (sportId) {
+      switch (Number(sportId)) {
         case 5:
           return t('总局数');
         default:
@@ -48,7 +48,7 @@ export const getPlayNameByKc = ({ code, name, ctid, sportId }: { code: string, n
     case 'HT_OE':
       return t('单双-上半场');
     case 'FT_AH':
-      switch (sportId) {
+      switch (Number(sportId)) {
         case 3:
         case 6:
         case 23:
@@ -86,7 +86,7 @@ export const getPlayNameByKc = ({ code, name, ctid, sportId }: { code: string, n
     case 'PT_AH':
       return t('让分');
     case 'PT_OU':
-      switch (sportId) {
+      switch (Number(sportId)) {
         case 19:
           return t('全场总分');
         default:
