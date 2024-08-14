@@ -40,7 +40,7 @@
           v-for="item in parentList"
           :key="item.id"
           :label="item.tableName"
-          :value="item.id as number"
+          :value="item.id"
         />
       </el-select>
     </el-form-item>
