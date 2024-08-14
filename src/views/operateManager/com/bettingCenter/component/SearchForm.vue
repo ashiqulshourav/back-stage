@@ -320,7 +320,7 @@
             v-enter="search"
           />
         </el-form-item>
-        <!-- <el-form-item :label="`${t('客户端')}:`" prop="clientType">
+        <el-form-item :label="`${t('客户端')}:`" prop="clientType">
           <el-tree-select
               v-model="props.form.clientType"
               :data="
@@ -355,7 +355,7 @@
               </el-checkbox>
             </template>
           </el-tree-select>
-        </el-form-item> -->
+        </el-form-item>
         <el-form-item :label="`${t('投注IP')}:`" prop="ip">
           <el-input
               v-model="form.ip"
