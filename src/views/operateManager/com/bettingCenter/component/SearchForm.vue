@@ -320,6 +320,42 @@
             v-enter="search"
           />
         </el-form-item>
+        <el-form-item :label="`${t('客户端')}:`" prop="clientType">
+          <el-tree-select
+              v-model="props.form.clientType"
+              :data="
+              clientTypes_map.map(item => ({
+                value: item.value,
+                label: item.label
+              }))
+            "
+              @change="search"
+              filterable
+              clearable
+              multiple
+              collapse-tags
+              :render-after-expand="false"
+              show-checkbox
+              check-strictly
+              check-on-click-node
+              style="width: 180px"
+          >
+            <template #header>
+              <el-checkbox
+                  v-model="checkAllClientTypeLabel"
+                  @change="handleCheckAllClientTypeLabel"
+              >
+                {{ t('全选') }}
+              </el-checkbox>
+              <el-checkbox
+                  v-model="checkRevertCilentTypeLabel"
+                  @change="handleCheckRevertClientTypeLabel"
+              >
+                {{ t('反选') }}
+              </el-checkbox>
+            </template>
+          </el-tree-select>
+        </el-form-item>
         <el-form-item :label="`${t('投注IP')}:`" prop="ip">
           <el-input
               v-model="form.ip"
@@ -505,6 +541,7 @@ import {
 } from '../util/types';
 import { hasAuth } from '@/router/utils';
 import CustomDate from '@/components/Form/Custom_date.vue';
+import { clientTypes_map } from '@/utils/maps/clientType_map';
 
 const emits = defineEmits(['onSearch', 'exportFile']);
 const resetForm = (formEl: FormInstance | undefined) => {
@@ -655,6 +692,9 @@ const checkRevertQueryTypeLabel = ref(false);
 const checkAllSeriesTypeLabel = ref(false);
 const checkRevertSeriesTypeLabel = ref(false);
 
+const checkAllClientTypeLabel = ref(false);
+const checkRevertCilentTypeLabel = ref(false);
+
 const handleCheckAllRLabel = (val: CheckboxValueType) => {
   if (val) {
     props.form.riskControlLabelList = props.riskLabelList.map(_ => _.id);
@@ -682,6 +722,23 @@ const handleCheckAllSportLabel = (val: CheckboxValueType) => {
     props.form.sportId = gameClassify.value.map(_ => _.value);
   } else {
     props.form.sportId = [];
+  }
+};
+
+const handleCheckAllClientTypeLabel = (val: CheckboxValueType) => {
+  if (val) {
+    props.form.clientType = clientTypes_map.map(_ => _.value);
+  } else {
+    props.form.clientType = [];
+  }
+};
+
+const handleCheckRevertClientTypeLabel = () => {
+  if (true) {
+    const oldArray = [...props.form.clientType];
+    props.form.clientType = clientTypes_map
+      .filter(_ => !oldArray.includes(_.value))
+      .map(_ => _.value);
   }
 };
 
