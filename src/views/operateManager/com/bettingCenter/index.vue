@@ -11,7 +11,6 @@
       :venueType="props.venueType"
       :downloading="downloading"
     />
-
     <PureTableBar
       title=""
       :columns="columns"
@@ -315,7 +314,7 @@
                 {{ row.settleTimes }}
                 </el-tag>
               </span>
-            </div>            
+            </div>
             <div>
               {{
                 row.settleTime
@@ -342,18 +341,8 @@
               <div>
                 {{ markeTypeMap[item.marketType as keyof typeof markeTypeMap] }}
               </div>
-              <div v-if="getOddStatus(item?.betResult, item.riskStatus)">
-                <span
-                  :class="
-                    [EBetResultType.WIN, EBetResultType.WIN_HALF].includes(
-                      item?.betResult
-                    )
-                      ? 'win'
-                      : 'lose'
-                  "
-                >
-                  {{item.betItemResultDesc}}
-                </span>
+              <div >
+                {{item.betItemResultDesc}}
               </div>
             </div>
           </template>
@@ -375,43 +364,14 @@
           </template>
           <template #status="{ row }">
             <div
-              :style="{
-                background: getStatus(
-                  row.status,
-                  row.billStatus,
-                  row.betResultArr,
-                  row.isReserve,
-                  row.riskStatusArr,
-                  row.isSpecialSettle
-                ).bgColor
-              }"
+
               class="status_detail status_btn mb-1 mx-auto"
             >
               {{
-                betStatusMap[
-                  getStatus(
-                    row.status,
-                    row.billStatus,
-                    row.betResultArr,
-                    row.isReserve,
-                    row.riskStatusArr,
-                    row.isSpecialSettle
-                  ).status as keyof typeof betStatusMap
-                ]
+               row.orderStatusView
               }}
             </div>
-            <div
-              v-if="
-                getStatus(
-                  row.status,
-                  row.billStatus,
-                  row.betResultArr,
-                  row.isReserve,
-                  row.riskStatusArr,
-                  row.isSpecialSettle
-                ).status === betStatus.settlementBet
-              "
-            >
+            <div  >
               {{
                 row.settleTime
                   ? dayjs(row.settleTime).format('MM-DD HH:mm:ss')
@@ -533,7 +493,6 @@ import { adjustContentWithRowHeight } from '@/utils/adjustRowCoulmnHeight';
 import {
   formatSeriesType,
   useSportFormatDetail,
-  EBetResultType,
   getViewOddFn,
   markeTypeMap,
   calculateSeriesTypeTotal,
@@ -543,7 +502,6 @@ import {
   enterGoalMap,
   openIpDialog
 } from '@/utils/formatMatch';
-import { betStatus, betStatusMap } from './util/types';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
@@ -573,7 +531,6 @@ const {
   handleSelectionChange,
   exportFile,
   handleCancel,
-  getStatus,
   copyTest,
   tenantList,
   switchDialog,
@@ -581,7 +538,6 @@ const {
   isShowCancel,
   editOrderRemark,
   riskLabelList,
-  getOddStatus,
   downloading,
   handleSettleHistoryDialog
 } = useBettingCenterHook(props.category, props.venueType);
