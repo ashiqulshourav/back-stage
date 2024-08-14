@@ -129,7 +129,7 @@
         </el-form-item>
         <el-form-item
           v-if="form.seriesType === 3"
-          :label="`${t('复试串关类型')}:`"
+          :label="`${t('复式串关类型')}:`"
           prop="seriesDetails"
         >
           <el-select

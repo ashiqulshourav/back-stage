@@ -405,7 +405,7 @@
                 <el-icon class="mr-4" size="20" v-if="row.isSpecialSettle == 11" color="green"><Unlock /></el-icon>
                 <el-icon class="mr-4" size="20" v-if="row.isSpecialSettle == 1" color="grey"><Lock /></el-icon>
                 <span>{{ t('特殊结算') }}</span>
-              </el-button>
+              </el-button>2
             </div>
           </template>
           <template #operationRemark="{ row }">

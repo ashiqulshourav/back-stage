@@ -196,7 +196,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item  :label="`${t('复试串关类型')}:`"
+        <el-form-item  :label="`${t('复式串关类型')}:`"
           v-if="form.seriesTypes.includes(3)&&form.seriesTypes.length==1"
           prop="seriesDetails"
         >
