@@ -72,7 +72,11 @@
           class="!w-[120px]"
         />
       </el-form-item>
-      <el-form-item prop="riskControlLabelList" :label="t('风控标签:')" v-if="hasAuth('viewRiskLabel'.toUpperCase())">
+      <el-form-item
+        prop="riskControlLabelList"
+        :label="t('风控标签:')"
+        v-if="hasAuth('viewRiskLabel'.toUpperCase())"
+      >
         <el-tree-select
           v-model="props.form.riskControlLabelList"
           :data="
@@ -102,7 +106,11 @@
           </template>
         </el-tree-select>
       </el-form-item>
-      <el-form-item prop="attributeLabelList" :label="t('属性标签:')" v-if="hasAuth('viewAttributeLabel'.toUpperCase())" >
+      <el-form-item
+        prop="attributeLabelList"
+        :label="t('属性标签:')"
+        v-if="hasAuth('viewAttributeLabel'.toUpperCase())"
+      >
         <el-tree-select
           v-model="props.form.attributeLabelList"
           :data="
@@ -135,7 +143,11 @@
           </template>
         </el-tree-select>
       </el-form-item>
-      <el-form-item  :label="t('限额等级:')" v-if="hasAuth('viewLimitLevel'.toUpperCase())" prop="limitLevel">
+      <el-form-item
+        :label="t('限额等级:')"
+        v-if="hasAuth('viewLimitLevel'.toUpperCase())"
+        prop="limitLevel"
+      >
         <el-select
           v-model="form.limitLevel"
           :placeholder="t('限额等级')"
@@ -150,18 +162,22 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item  :label="t('特殊限额:')"   v-if="hasAuth('viewSpecialLimit'.toUpperCase())"  prop="specialLimited">
-        <el-select
-            v-model="form.specialLimited"
-            clearable
-            class="!w-[150px]"
-        >
+      <el-form-item
+        :label="t('特殊限额:')"
+        v-if="hasAuth('viewSpecialLimit'.toUpperCase())"
+        prop="specialLimited"
+      >
+        <el-select v-model="form.specialLimited" clearable class="!w-[150px]">
           <el-option label="全部" value=" "></el-option>
           <el-option label="是" :value="1"></el-option>
           <el-option label="否" :value="2"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item :label="t('投注延时:')" v-if="hasAuth('viewBetDelay'.toUpperCase())"  prop="betDelayed" >
+      <el-form-item
+        :label="t('投注延时:')"
+        v-if="hasAuth('viewBetDelay'.toUpperCase())"
+        prop="betDelayed"
+      >
         <el-select
           v-model="form.betDelayed"
           :placeholder="t('投注延时')"
@@ -174,11 +190,7 @@
         </el-select>
       </el-form-item>
       <el-form-item prop="currency" :label="t('结算币种:')">
-        <el-select
-          v-model="form.currency"
-          clearable
-          class="!w-[150px]"
-        >
+        <el-select v-model="form.currency" clearable class="!w-[150px]">
           <el-option label="全部" value=" "></el-option>
           <el-option
             :label="item.label"
@@ -189,21 +201,17 @@
         </el-select>
       </el-form-item>
       <el-form-item prop="timeType">
-        <el-select
-            v-model="form.timeType"
-            class="!w-[140px]"
-            @change="search"
-        >
+        <el-select v-model="form.timeType" class="!w-[140px]" @change="search">
           <el-option :label="t('用户注册时间')" value="1" />
           <el-option :label="t('用户修改时间')" value="2" />
         </el-select>
         <CustomDate
-            v-model:val="selectDate"
-            start-placeholder="开始时间"
-            end-placeholder="结束时间"
-            @changeDate="changeDate"
-            :isDateTime="true"
-            :format="'YYYY-MM-DD HH:mm:ss'"
+          v-model:val="selectDate"
+          start-placeholder="开始时间"
+          end-placeholder="结束时间"
+          @changeDate="changeDate"
+          :isDateTime="true"
+          :format="'YYYY-MM-DD HH:mm:ss'"
         />
       </el-form-item>
       <el-form-item>
@@ -220,6 +228,7 @@
         </el-button>
 
         <el-button
+          v-if="hasAuth('EXPORT TAG')"
           type="primary"
           :icon="useRenderIcon(Upload)"
           :loading="uploading"
@@ -252,10 +261,10 @@ import { labelListType } from '../utils/types';
 import type { FormInstance, CheckboxValueType } from 'element-plus';
 import Download from '@iconify-icons/ep/download';
 import Upload from '@iconify-icons/ep/upload';
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 import CustomDate from '@/components/Form/Custom_date.vue';
 import { hasAuth } from '@/router/utils';
-import {currency_map} from "@/utils/maps/currency_map"
+import { currency_map } from '@/utils/maps/currency_map';
 
 const formRef = ref();
 const buttonRef1 = ref();
