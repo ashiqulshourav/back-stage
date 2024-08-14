@@ -433,16 +433,18 @@
                 {{ t('取消') }}
               </el-button>
             </div>
-            <div>
+            <div >
               <el-button
                 class="mb-1 w-100"
-                @click="switchDialog(true, row)"
+                @click="row.isSpecialSettle != 1 && switchDialog(true, row)"
                 v-if="
                   !(row.status == 2 || row.isReserve === 1) &&
                   hasAuth('specialSettlement'.toUpperCase())
                 "
               >
-                {{ t('特殊结算') }}
+                <el-icon size="20" v-if="row.isSpecialSettle == 11" color="green"><Unlock /></el-icon>
+                <el-icon size="20" v-if="row.isSpecialSettle == 1" color="grey"><Lock /></el-icon>
+                <span class="ml-4">{{ t('特殊结算') }}</span>
               </el-button>
             </div>
           </template>
@@ -547,6 +549,7 @@ import { addThousandSeparator } from '@/utils/formatNumber';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import EditPen from '@iconify-icons/ep/edit-pen';
 import {currency_map} from "../../../../utils/maps/currency_map";
+import { Unlock, Lock } from '@element-plus/icons-vue';
 
 const props = defineProps<{
   category: number;
