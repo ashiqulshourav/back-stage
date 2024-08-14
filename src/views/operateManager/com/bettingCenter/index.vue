@@ -396,15 +396,15 @@
             <div >
               <el-button
                 class="mb-1 w-100"
-                @click="row.isSpecialSettle != 1 && switchDialog(true, row)"
+                @click="row.isSpecialSettle !== 1&&switchDialog(true, row)"
                 v-if="
                   !(row.status == 2 || row.isReserve === 1) &&
                   hasAuth('specialSettlement'.toUpperCase())
                 "
               >
-                <el-icon size="20" v-if="row.isSpecialSettle == 8" color="green"><Unlock /></el-icon>
-                <el-icon size="20" v-if="row.isSpecialSettle == 1" color="grey"><Lock /></el-icon>
-                <span class="ml-4">{{ t('特殊结算') }}</span>
+                <el-icon class="mr-4" size="20" v-if="row.isSpecialSettle == 11" color="green"><Unlock /></el-icon>
+                <el-icon class="mr-4" size="20" v-if="row.isSpecialSettle == 1" color="grey"><Lock /></el-icon>
+                <span>{{ t('特殊结算') }}</span>
               </el-button>
             </div>
           </template>

@@ -10,7 +10,7 @@
         <el-form-item prop="orderStatus" :label="`${t('注单状态')}:`">
           <el-tree-select
               v-model="props.form.orderStatus"
-              :placeholder="t('请选择，多选项')"
+              :placeholder="t('请选择，可多选')"
               :data="
               Object.keys(betStatusMap).map((key:string) => ({
                 value: Number(key),
@@ -104,7 +104,8 @@
         <el-form-item :label="`${t('赛种')}:`" prop="sportId">
           <el-tree-select
               v-model="props.form.sportId"
-              :disabled="form.category===' '"
+              :disabled="form.category===' '&&props.category === 0"
+              :placeholder="t('请选择，可多选')"
               :data="
               gameClassify.map(item => ({
                 value: item.value,
@@ -148,6 +149,7 @@
                 label: item.label
               }))
               "
+              :placeholder="t('请选择，可多选')"
               @change="search"
               filterable
               clearable
@@ -157,7 +159,7 @@
               show-checkbox
               check-strictly
               check-on-click-node
-              style="width: 200px"
+              style="width: 180px"
           >
             <template #header>
               <el-checkbox
@@ -320,9 +322,10 @@
             v-enter="search"
           />
         </el-form-item>
-        <!-- <el-form-item :label="`${t('客户端')}:`" prop="clientType">
+        <el-form-item :label="`${t('客户端')}:`" prop="clientType">
           <el-tree-select
               v-model="props.form.clientType"
+              :placeholder="t('请选择，可多选')"
               :data="
               clientTypes_map.map(item => ({
                 value: item.value,
@@ -355,7 +358,7 @@
               </el-checkbox>
             </template>
           </el-tree-select>
-        </el-form-item> -->
+        </el-form-item>
         <el-form-item :label="`${t('投注IP')}:`" prop="ip">
           <el-input
               v-model="form.ip"
@@ -369,6 +372,7 @@
         <el-form-item prop="riskControlLabelList" :label="t('风控标签:')">
           <el-tree-select
               v-model="props.form.riskControlLabelList"
+              :placeholder="t('请选择，可多选')"
               :data="
               riskLabelList.map(item => ({
                 value: item.id,
@@ -414,7 +418,7 @@
         <el-form-item prop="tenantIds" :label="`${t('商户查询')}:`">
           <el-tree-select
               v-model="props.form.tenantIds"
-              :placeholder="t('请选择商户ID，多选项')"
+              :placeholder="t('请选择，可多选')"
               :data="
               tenantList.map(item => ({
                 value: item.id,
