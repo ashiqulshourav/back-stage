@@ -51,11 +51,12 @@ export const getPlayNameByKc = ({ code, name, ctid, sportId }: { code: string, n
       switch (Number(sportId)) {
         case 3:
         case 6:
-        case 23:
           return t('全场让盘');
         case 5:
         case 19:
           return t('全场让局');
+        case 23:
+          return '让局';
         default:
           return t('全场让球');
       };
