@@ -5,9 +5,9 @@ import { EHandicapType, EOddType, ESportType, } from '@/core/constants/enum/spor
 import { TOrder } from '@/core/services/Table';
 import { useMatchStore } from "@/store/match";
 import { useI18n } from "vue-i18n";
-import {addDialog} from "@/components/ReDialog/index";
-import {t} from "@/plugins/i18n";
-import {h} from "vue";
+import { addDialog } from "@/components/ReDialog/index";
+import { t } from "@/plugins/i18n";
+import { h } from "vue";
 import IpDialog from "@/views/operateManager/com/bettingCenter/component/IpDialog.vue";
 
 //- 解析当前比分
@@ -33,7 +33,7 @@ export const parseCountry = (countryId: number) => {
   return (locale.value === 'zh' ? country?.countryNameCn : country?.countryNameEn)
 }
 
-export const getPlayNameByKc = ({ code, name, ctid, sportId }: { code: string, name?: string, ctid?: number, sportId?: number }) => {
+export const getPlayNameByKc = ({ code, name, ctid, sportId }: { code: string, name?: string, ctid?: number, sportId?: number | string }) => {
   if (ctid !== undefined && name !== undefined && ctid !== 0) return name;
   switch (code) {
     case 'FT_OU':
@@ -54,11 +54,14 @@ export const getPlayNameByKc = ({ code, name, ctid, sportId }: { code: string, n
     case 'FT_AH':
       switch (sportId) {
         case 6:
+        case 3:
+        case '3':
           return t('全场让盘');
         case 23:
           return t('全场让分');
         case 5:
         case 19:
+        case '23':
           return t('全场让局');
         default:
           return t('全场让球');
@@ -217,6 +220,8 @@ export const useSportFormatDetail = (row) => {
   const thirdLine = `${row.homeTeamNameCn} vs ${row.awayTeamNameCn}`;
   const fourthLine = row.betN ? `${row.betN}` : `${row.betHomeOrAway} ${row.betHandicap}`;
   const fifthLine = `${getPlayNameByKc({ code: row.kindsCode, name: row.betItemName, ctid: row.betItemCTID, sportId: row.sportId }) ?? '-'}`;
+
+  console.log('formatMatch.ts文件 221==============行打印=', fifthLine);
   return [firstLine, secondLine, thirdLine, fourthLine, fifthLine, score];
 }
 // 盘口类型, OU:欧盘,1; HK:香港盘,2; ML:马来盘,3; ID:印尼盘,4; US:美式盘,5; GB:英式盘,6;
