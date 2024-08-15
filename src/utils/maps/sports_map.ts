@@ -22,9 +22,6 @@ export const SPORT_ID_MAP = [
 ];
 
 
-
-
-
 export const FULL_SPORT_ID_MAP = [
   { label: t('足球'), value: 1, type: 'FootBall' },
   { label: t('篮球'), value: 2, type: 'BasketBall' },
@@ -84,6 +81,47 @@ export const MATCH_EVENT_CODE = {
   red_card: t('红牌')
   // match_status: t('比赛阶段'),
 };
+
+
+export const MATCH_FORMAT = {
+  16: t('Boxing'),
+  2: t('BasketBall'),
+  1: t('两节制（上下半场）'),
+  3: t('其它'),
+  6: t('其它'),
+  5: t('其它'),
+  11: t('两节制（上下半场）'),
+  12: t('三节制'),
+  19: t('三节制'),
+  23: t('其它'),
+  9: t('两节制（上下半场）'),
+  13: t('其它'),
+  28: t('四节制'),
+  8: t('其它'),
+  18: t('其它'),
+  10: t('其它'),
+  276: t('其它'),
+  277: t('其它'),
+  278: t('其它'),
+  279: t('其它'),
+  280: t('其它:激斗峡谷'),
+  281: t('其它'),
+  282: t('其它'),
+  285: t('其它'),
+  286: t('其它'),
+  287: t('其它'),
+  288: t('其它'),
+  289: t('其它'),
+  290: t('其它'),
+  291: t('其它'),
+  292: t('其它'),
+  293: t('其它'),
+  294: t('其它'),
+  295: t('其它'),
+  296: t('其它'),
+  297: t('其它'),
+}
+
 
 export const MATCH_STATUS = {
   nover: t('滚球'),

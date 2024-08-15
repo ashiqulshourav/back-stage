@@ -80,6 +80,15 @@ export const columns: TableColumnList = [
     minWidth: 150
   },
   {
+    label: t('赛制'),
+    prop: 'periodType',
+    headerRenderer: d => handleTableWidth(d, t('赛制'), 'auto'),
+    formatter: ({ periodType }): string => {
+      return periodType;
+    },
+    minWidth: 150
+  },
+  {
     label: t('加时点球开售控制'),
     slot: 'overTimeAndPenaltyKickStatus',
     // headerRenderer: d => handleTableWidth(d, t('加时点球开售控制'), 'auto'),
