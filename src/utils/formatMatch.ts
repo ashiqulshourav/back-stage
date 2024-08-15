@@ -360,7 +360,7 @@ export const getOrderBetTypeAtBetting = (order: TOrder) => {
   return orderName;
 };
 
-//计算串关的总赔率，非复试
+//计算串关的总赔率，非复式
 export const calculateSeriesTypeTotal = (list: any) => {
   let oddTotal = 1
   list.forEach((item: { oddFinally: number, marketTypeFinally: EOddType, marketType: number }) => {
