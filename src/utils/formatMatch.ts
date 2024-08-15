@@ -53,16 +53,18 @@ export const getPlayNameByKc = ({ code, name, ctid, sportId }: { code: string, n
       return t('单双-上半场');
     case 'FT_AH':
       switch (sportId) {
+        case 3:
         case 6:
         case 3:
         case '3':
           return t('全场让盘');
         case 23:
-          return t('全场让分');
+          return t('全场让盘');
         case 5:
         case 19:
         case '23':
           return t('全场让局');
+
         default:
           return t('全场让球');
       };
