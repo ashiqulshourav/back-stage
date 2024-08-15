@@ -82,10 +82,20 @@ export const MATCH_EVENT_CODE = {
   // match_status: t('比赛阶段'),
 };
 
+type MatchFormatType = {
+  [key: number]: string | { [key: number]: string };
+};
 
-export const MATCH_FORMAT = {
-  16: t('Boxing'),
-  2: t('BasketBall'),
+export const MATCH_FORMAT: MatchFormatType = {
+  2: {
+    2: t('两节制（上下半场）'),
+    4: t('四节制')
+  },
+  16: {
+    2: t('两节制（上下半场）'),
+    3: t('三节制'),
+    4: t('四节制')
+  },
   1: t('两节制（上下半场）'),
   3: t('其它'),
   6: t('其它'),

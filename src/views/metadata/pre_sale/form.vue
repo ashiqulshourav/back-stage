@@ -30,6 +30,28 @@
         format="YYYY-MM-DD HH:mm:ss"
       />
     </el-form-item>
+
+    <el-form-item :label="`${t('赛制')}:`" prop="periodType">
+      <el-input
+        readonly
+        v-if="newFormInline.sportId !== 2 && newFormInline.sportId !== 16"
+        v-model="MATCH_FORMAT[
+      newFormInline.sportId as keyof typeof MATCH_FORMAT
+    ]"
+      />
+      <el-select
+        v-model="newFormInline.periodType"
+        :placeholder="t('请选择')"
+        v-else
+      >
+        <el-option
+          :label="item"
+          :value="item"
+          v-for="item in periodList"
+          :key="item"
+        />
+      </el-select>
+    </el-form-item>
   </el-form>
 </template>
 
@@ -38,6 +60,7 @@ import { ref } from 'vue';
 import { formRules } from './utils/rule';
 import { TeamFormProps } from './utils/types';
 import { t } from '@/plugins/i18n';
+import { MATCH_FORMAT } from '@/utils/maps/sports_map';
 
 const props = withDefaults(defineProps<TeamFormProps>(), {
   formInline: () => ({
@@ -56,6 +79,25 @@ const newFormInline = ref(props.formInline);
 function getRef() {
   return ruleFormRef.value;
 }
+
+//- 当前比赛赛制获取
+
+const periodList = computed(() => {
+  if (newFormInline.value.sportId === 2) {
+    return [
+      {
+        key: 2,
+        val: t('两节制（上下半场）')
+      },
+      {
+        key: 4,
+        val: t('四节制')
+      }
+    ];
+  } else if (newFormInline.value.sportId === 16) {
+  }
+ 
+});
 
 defineExpose({ getRef });
 </script>

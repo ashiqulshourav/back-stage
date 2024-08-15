@@ -122,6 +122,7 @@ export function usePreSale() {
           matchName: row?.matchName ?? '',
           beginTime: row?.beginTime ?? '',
           level: row?.level ?? '',
+          periodType: row?.periodType ?? '',
           countryId: row?.countryId ?? '',
           overTimeAndPenaltyKickStatus: row?.overTimeAndPenaltyKickStatus ?? ''
         }
