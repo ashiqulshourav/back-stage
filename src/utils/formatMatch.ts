@@ -223,7 +223,6 @@ export const useSportFormatDetail = (row) => {
   const fourthLine = row.betN ? `${row.betN}` : `${row.betHomeOrAway} ${row.betHandicap}`;
   const fifthLine = `${getPlayNameByKc({ code: row.kindsCode, name: row.betItemName, ctid: row.betItemCTID, sportId: row.sportId }) ?? '-'}`;
 
-  console.log('formatMatch.ts文件 221==============行打印=', fifthLine);
   return [firstLine, secondLine, thirdLine, fourthLine, fifthLine, score];
 }
 // 盘口类型, OU:欧盘,1; HK:香港盘,2; ML:马来盘,3; ID:印尼盘,4; US:美式盘,5; GB:英式盘,6;
