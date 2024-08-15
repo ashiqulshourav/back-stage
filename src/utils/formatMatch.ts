@@ -37,7 +37,7 @@ export const getPlayNameByKc = ({ code, name, ctid, sportId }: { code: string, n
   if (ctid !== undefined && name !== undefined && ctid !== 0) return name;
   switch (code) {
     case 'FT_OU':
-      switch (sportId) {
+      switch (Number(sportId)) {
         case 5:
           return t('总局数');
         default:
@@ -64,6 +64,8 @@ export const getPlayNameByKc = ({ code, name, ctid, sportId }: { code: string, n
         case 19:
         case '23':
           return t('全场让局');
+        case 23:
+          return '让局';
         default:
           return t('全场让球');
       };
@@ -94,7 +96,7 @@ export const getPlayNameByKc = ({ code, name, ctid, sportId }: { code: string, n
     case 'PT_AH':
       return t('让分');
     case 'PT_OU':
-      switch (sportId) {
+      switch (Number(sportId)) {
         case 19:
           return t('全场总分');
         default:
@@ -364,7 +366,7 @@ export const getOrderBetTypeAtBetting = (order: TOrder) => {
   return orderName;
 };
 
-//计算串关的总赔率，非复试
+//计算串关的总赔率，非复式
 export const calculateSeriesTypeTotal = (list: any) => {
   let oddTotal = 1
   list.forEach((item: { oddFinally: number, marketTypeFinally: EOddType, marketType: number }) => {

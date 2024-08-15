@@ -12,10 +12,12 @@
           <el-tree-select
             v-model="props.form.tenantIds"
             :placeholder="t('请选择商户ID，多选项')"
-            :data="tenantList.map(item => ({
-              value: item.id,
-              label: item.tenantName
-            }))"
+            :data="
+              tenantList.map(item => ({
+                value: item.id,
+                label: item.tenantName
+              }))
+            "
             @change="search"
             filterable
             clearable
@@ -28,13 +30,23 @@
             style="width: 200px"
           >
             <template #header>
-              <el-checkbox v-model="checkAllMName" @change="handleCheckAllMName">
+              <el-checkbox
+                v-model="checkAllMName"
+                @change="handleCheckAllMName"
+              >
                 {{ t('全选') }}
               </el-checkbox>
-              <el-checkbox v-model="removeAllMName" @change="handleRemoveAllMName" :disabled="form?.tenantIds.length == 0">
+              <el-checkbox
+                v-model="removeAllMName"
+                @change="handleRemoveAllMName"
+                :disabled="form?.tenantIds.length == 0"
+              >
                 {{ t('全不选') }}
               </el-checkbox>
-              <el-checkbox v-model="checkRevertMName" @change="handleCheckRevertMName">
+              <el-checkbox
+                v-model="checkRevertMName"
+                @change="handleCheckRevertMName"
+              >
                 {{ t('反选') }}
               </el-checkbox>
             </template>
@@ -104,7 +116,7 @@
             <el-option label="全部" value="" />
             <el-option label="单关" :value="1" />
             <el-option label="单式串关" :value="2" />
-            <el-option label="复试串关" :value="3" />
+            <el-option label="复式串关" :value="3" />
           </el-select>
         </el-form-item>
         <el-form-item
@@ -129,7 +141,7 @@
         </el-form-item>
         <el-form-item
           v-if="form.seriesType === 3"
-          :label="`${t('复试串关类型')}:`"
+          :label="`${t('复式串关类型')}:`"
           prop="seriesDetails"
         >
           <el-select
@@ -172,7 +184,11 @@
           :prop="leagueQuery === 'leagueName' ? 'leagueName' : 'leagueId'"
           class="bold-label"
         >
-          <el-select v-model="leagueQuery" @change="leagueQueryChange"  class="!w-[100px] flex-shrink-0">
+          <el-select
+            v-model="leagueQuery"
+            @change="leagueQueryChange"
+            class="!w-[100px] flex-shrink-0"
+          >
             <el-option :label="t('联赛ID')" value="leagueId" />
             <el-option :label="t('联赛名')" value="leagueName" />
           </el-select>
@@ -195,11 +211,7 @@
             :remote-method="
               debounce(
                 query =>
-                  matchStore.search_league_list(
-                    query,
-                    form.sportId,
-                    category
-                  ),
+                  matchStore.search_league_list(query, form.sportId, category),
                 1000
               )
             "
@@ -249,20 +261,21 @@
           <CustomDate
             v-model:val="selectDate"
             :start-placeholder="
-              dayjs().subtract(30, 'day').startOf('day').format('YYYY-MM-DD HH:mm:ss')
+              dayjs()
+                .subtract(30, 'day')
+                .startOf('day')
+                .format('YYYY-MM-DD HH:mm:ss')
             "
-            :end-placeholder="dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')"
+            :end-placeholder="
+              dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')
+            "
             @changeDate="changeDate"
             :isDateTime="true"
             :format="'YYYY-MM-DD HH:mm:ss'"
           />
         </el-form-item>
         <el-form-item prop="currency" :label="t('结算币种:')">
-          <el-select
-            v-model="form.currency"
-            clearable
-            class="!w-[150px]"
-          >
+          <el-select v-model="form.currency" clearable class="!w-[150px]">
             <el-option label="全部" value=" "></el-option>
             <el-option
               :label="item.label"
@@ -287,7 +300,7 @@
           >
             {{ t('重置') }}
           </el-button>
-           <el-button
+          <el-button
             type="primary"
             :icon="useRenderIcon(Download)"
             :loading="downloading"
@@ -308,7 +321,7 @@ import SearchIcon from '@iconify-icons/ep/search';
 import RefreshIcon from '@iconify-icons/ep/refresh';
 import Download from '@iconify-icons/ep/download';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
-import type { FormInstance, CheckboxValueType} from 'element-plus';
+import type { FormInstance, CheckboxValueType } from 'element-plus';
 import dayjs from 'dayjs';
 import { formatNumber } from '@/utils/formatNumber';
 import { useMatchStore } from '@/store/match';
@@ -319,7 +332,7 @@ import {
   SPORT_CATEGORY
 } from '@/utils/maps/sports_map';
 import { searchFormType } from '../util/types';
-import {currency_map} from "@/utils/maps/currency_map";
+import { currency_map } from '@/utils/maps/currency_map';
 
 const matchStore = useMatchStore();
 const props = defineProps<{
@@ -398,10 +411,10 @@ const chagenMatchType = (type: 0 | 1 | 2) => {
 const search = () => {
   emits('onSearch', ...['reload']);
 };
-const leagueQueryChange = ()=>{
-  props.form.leagueName ='';
-  props.form.leagueId='';
-}
+const leagueQueryChange = () => {
+  props.form.leagueName = '';
+  props.form.leagueId = '';
+};
 
 const exportFile = () => {
   emits('exportFile');
@@ -412,38 +425,38 @@ const removeAllMName = ref(false);
 const checkRevertMName = ref(false);
 
 const handleCheckAllMName = (val: CheckboxValueType) => {
-  if(val){
-    props.form.tenantIds = props.tenantList.map(_ =>_.id)
+  if (val) {
+    props.form.tenantIds = props.tenantList.map(_ => _.id);
   } else {
     props.form.tenantIds = [];
   }
-}
+};
 
 const handleRemoveAllMName = (val: CheckboxValueType) => {
   props.form.tenantIds = [];
   removeAllMName.value = false;
-}
+};
 
 const handleCheckRevertMName = () => {
-  if(true){
+  if (true) {
     const oldArray = [...props.form.tenantIds];
     props.form.tenantIds = props.tenantList
-    .filter(_ => !oldArray.includes(_.id))
-    .map(_ => _.id)
+      .filter(_ => !oldArray.includes(_.id))
+      .map(_ => _.id);
   }
-}
+};
 
 watch(
   () => props.form.tenantIds,
   val => {
-    if(!val || val.length === 0){
+    if (!val || val.length === 0) {
       checkAllMName.value = false;
-    } else if(val.length === props.tenantList.length){
+    } else if (val.length === props.tenantList.length) {
       checkAllMName.value = true;
       removeAllMName.value = false;
     }
   }
-)
+);
 </script>
 
 <style scoped lang="scss">
@@ -461,8 +474,8 @@ watch(
 .arrange2 {
   margin-left: -25px;
 }
-:deep(){
-  .bold-label>.el-form-item__label{
+:deep() {
+  .bold-label > .el-form-item__label {
     font-weight: 700;
   }
 }

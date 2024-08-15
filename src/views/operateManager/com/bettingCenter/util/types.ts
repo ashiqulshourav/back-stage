@@ -56,7 +56,7 @@ export const betStatusMap = {
 export const seriesTypeList = [
   { label: t('单关'), value: 1 },
   { label: t('单式串关'), value: 2 },
-  { label: t('复试串关'), value: 3 }
+  { label: t('复式串关'), value: 3 }
 ]
 
 export const seriesTypesSingle = {

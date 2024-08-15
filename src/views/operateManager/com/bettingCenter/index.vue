@@ -344,7 +344,14 @@
                 {{ markeTypeMap[item.marketType as keyof typeof markeTypeMap] }}
               </div>
               <div>
-                {{ item.betItemResultDesc }}
+                <span
+                  :class="{
+                    win: item.betItemResultStatus === 4,
+                    lose: item.betItemResultStatus === 3
+                  }"
+                >
+                  {{ item.betItemResultDesc }}
+                </span>
               </div>
             </div>
           </template>
@@ -423,7 +430,7 @@
                   ><Lock
                 /></el-icon>
                 <span>{{ t('特殊结算') }}</span>
-              </el-button>
+              </el-button>2
             </div>
           </template>
           <template #operationRemark="{ row }">
