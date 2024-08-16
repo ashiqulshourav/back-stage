@@ -165,7 +165,7 @@
       </template>
     </PureTableBar>
   </div>
-  <div class="mt-5">
+  <!-- <div class="mt-5">
     <el-text type="primary">{{ t('是否为最终结算') }}</el-text>
     <ul class="mt-2">
       <li :class="`result_item ${
@@ -174,7 +174,7 @@
               : 'cursor-pointer'
           }`" v-for="item in tabsList" @click="resultClick(item)">{{item.label}}</li>
     </ul>
-  </div>
+  </div> -->
   <div class="flex justify-end mt-10">
     <el-button @click="closeDialog">{{ t('取消') }}</el-button>
     <el-button type="primary" @click="confirmClick">{{ t('确定') }}</el-button>
@@ -332,6 +332,12 @@ const editColumnList = [
     label: t('投注结果'),
     slot: 'matchResult',
     prop: 'matchResult',
+    align: 'left'
+  },
+  {
+    label: t('是否为最终结算'),
+    slot: 'fianlResult',
+    prop: 'fianlResult',
     align: 'left'
   },
 ];

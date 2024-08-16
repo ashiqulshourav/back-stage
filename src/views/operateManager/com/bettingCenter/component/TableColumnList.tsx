@@ -9,6 +9,7 @@ export const columns: TableColumnList = [
     label: t("序号"),
     prop: 'index',
     align: 'left',
+    width: 200,
   },
   {
     label: t("用户信息"),

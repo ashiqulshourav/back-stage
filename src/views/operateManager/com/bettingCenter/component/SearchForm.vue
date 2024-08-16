@@ -97,7 +97,7 @@
         >
           <el-select
             v-model="form.category"
-            :placeholder="t('赛事类型')"
+            :placeholder="t('请选择赛事类型')"
             class="!w-[180px]"
             @change="chagenMatchType"
           >
