@@ -47,7 +47,7 @@
         <el-form-item :label="`${t('注单编号')}:`" prop="orderId">
           <el-input
             v-model="form.orderId"
-            :placeholder="t('注单流水号')"
+            :placeholder="t('请输入')"
             clearable
             :formatter="(v:string) => formatNumber(v, 30)"
             v-enter="search"
@@ -267,7 +267,7 @@
         <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
           <el-input
             v-model="form.matchId"
-            :placeholder="t('赛事ID')"
+            :placeholder="t('请输入')"
             clearable
             v-enter="search"
             class="!w-[180px]"
@@ -353,7 +353,7 @@
         <el-form-item :label="`${t('投注IP')}:`" prop="ip">
           <el-input
             v-model="form.ip"
-            :placeholder="t('请输入IP')"
+            :placeholder="t('请输入')"
             clearable
             :formatter="(v:string) => formatIp(v)"
             v-enter="search"
@@ -400,7 +400,7 @@
         <el-form-item :label="`${t('投注项ID')}:`" prop="betItemId">
           <el-input
             v-model="form.betItemId"
-            :placeholder="t('投注项ID')"
+            :placeholder="t('请输入')"
             clearable
             class="!w-[180px]"
             v-enter="search"
