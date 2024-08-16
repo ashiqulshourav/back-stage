@@ -58,7 +58,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     betItemId: '',
     isInplay: '',
     seriesTypes: [],
-    category: ' ',
+    category: '',
     timeType: 1,
     leagueName: '',
     tenantIds: [],
@@ -72,7 +72,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     riskControlLabelList: [],
     venueType: venueType,
     ip: '',
-    currency:' '
+    currency:''
   });
   function handlePageSizeChange(val: number) {
     pagination.pageSize = val;

@@ -573,6 +573,9 @@ const resetForm = (formEl: FormInstance | undefined) => {
   props.form.betItemId = '';
   props.form.matchId = '';
   leagueQuery.value = 'leagueName';
+  props.form.leagueId = '';
+  props.form.currency = '';
+  props.form.category = '';
   search();
 };
 
