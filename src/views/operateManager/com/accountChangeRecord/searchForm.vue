@@ -61,13 +61,21 @@
     </el-form-item>
 
     <el-form-item :label="`${t('账变时间')}:`" prop="createTimeStart">
-        <CustomDate
-          v-model:val="selectDate"
-          @changeDate="changeDate"
-          :start-placeholder="form.startCreatedAt ? dayjs(form.startCreatedAt)?.format('YYYY-MM-DD HH:mm:ss') : '选择开始时间'"
-          :end-placeholder="form.endCreatedAt ? dayjs(form.endCreatedAt)?.format('YYYY-MM-DD HH:mm:ss') : '选择结束时间'"
-          :isDateTime="true"
-          :format="'YYYY-MM-DD HH:mm:ss'"
+      <CustomDate
+        v-model:val="selectDate"
+        @changeDate="changeDate"
+        :start-placeholder="
+          form.startCreatedAt
+            ? dayjs(form.startCreatedAt)?.format('YYYY-MM-DD HH:mm:ss')
+            : '选择开始时间'
+        "
+        :end-placeholder="
+          form.endCreatedAt
+            ? dayjs(form.endCreatedAt)?.format('YYYY-MM-DD HH:mm:ss')
+            : '选择结束时间'
+        "
+        :isDateTime="true"
+        :format="'YYYY-MM-DD HH:mm:ss'"
       ></CustomDate>
     </el-form-item>
 
@@ -117,7 +125,7 @@ import { accountChangeRecordSearchFormType, userDataType } from './util/types';
 import { accountChangeTypeCodeList } from './columns';
 import { addThousandSeparator } from '@/utils/formatNumber';
 import { hasAuth } from '@/router/utils';
-import CustomDate from "@/components/Form/Custom_date.vue"
+import CustomDate from '@/components/Form/Custom_date.vue';
 import Download from '@iconify-icons/ep/download';
 
 const props = defineProps<{

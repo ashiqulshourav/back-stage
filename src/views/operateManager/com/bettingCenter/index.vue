@@ -250,11 +250,7 @@
               :key="item.betItemId"
             >
               <div class="item_line">
-                {{
-                  `玩法：${useSportFormatDetail(item)[4]} ${getIsInplay(
-                    item.isInplay
-                  )}`
-                }}
+                {{ `玩法：${item.betItemName}` }}
                 {{
                   item.isInplay == 1
                     ? displayHomeAwayScore(item.scoreBenchmark, item.sportId)
@@ -422,8 +418,8 @@
                   color="grey"
                   ><Lock
                 /></el-icon>
-                <span>{{ t('特殊结算') }}</span>
-              </el-button>2
+                <span>{{ t('特殊结算') }}</span> </el-button
+              >2
             </div>
           </template>
           <template #operationRemark="{ row }">
