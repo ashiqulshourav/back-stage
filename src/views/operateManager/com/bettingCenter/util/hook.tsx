@@ -37,6 +37,17 @@ export function useBettingCenterHook(category: number, venueType: number) {
   const totalInfo = ref<BetOrderAPI.otherDataType>(
     {} as BetOrderAPI.otherDataType
   );
+  const tagColor = ref<Object>({
+    1: 'FFC53D', // 预约中
+    2: 'FFC53D', // 确认中
+    3: '#F57582', // 预约失败
+    4: '#F57582', // 预约取消
+    5: '#F57582', // 投注失败
+    6: '#F57582', // 未结算
+    7: '#40A9FF', // 已结算
+    8: 'FFC53D', // 待审核
+    9: '#F57582', // 注单无效
+  })
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 20,
@@ -476,6 +487,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     riskLabelList,
     getOddStatus,
     downloading,
-    handleSettleHistoryDialog
+    handleSettleHistoryDialog,
+    tagColor
   };
 }
