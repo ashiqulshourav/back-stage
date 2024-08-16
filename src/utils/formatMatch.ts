@@ -379,8 +379,9 @@ export const calculateSeriesTypeTotalBets = (seriesType: number) => {
 
 // 获取比分
 export const displayHomeAwayScore = (scoreString: string, sprotId?: ESportType, witchTeam?: TeamType) => {
-  if (sprotId > 33) return '';
-  if (sprotId === ESportType.TENNIS || sprotId === ESportType.VOLLEYBALL) return '';
+  const _sprotId = Number(sprotId)
+  if (_sprotId > 33) return '';
+  if (_sprotId === ESportType.TENNIS || _sprotId === ESportType.VOLLEYBALL) return '';
   const [home, away] = assertHomeAwayScore(scoreString);
   if (home === undefined || away === undefined) {
     return ''
