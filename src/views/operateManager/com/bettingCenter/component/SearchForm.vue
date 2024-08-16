@@ -554,9 +554,11 @@ const gameClassify = ref<{ label: string; value: number }[]>(
 );
 import {
   betStatusMap,
+} from '../util/types';
+import {
   seriesTypesSingle,
   seriesTypesDuplex
-} from '../util/types';
+} from '@/utils/maps/seriesTypes_map';
 import { hasAuth } from '@/router/utils';
 import CustomDate from '@/components/Form/Custom_date.vue';
 import { clientTypes_map } from '@/utils/maps/clientType_map';
