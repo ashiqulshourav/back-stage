@@ -83,11 +83,11 @@
               >
                 <span>{{ t('商户名：') }}</span
                 >{{ tenantObj[row.tenantId]?.tenantName }}
-                {{
+                [{{
                   currency_map.find(
                     item => item.value === tenantObj[row.tenantId]?.currency
                   )?.label
-                }}
+                }}]
               </div>
               <div
                 class="item_line cursor-pointer"

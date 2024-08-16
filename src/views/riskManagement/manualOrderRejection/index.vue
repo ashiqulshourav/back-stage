@@ -72,6 +72,11 @@
                 >
                   <span>{{ t('商户名：') }}</span
                   >{{ tenantObj[row.tenantId]?.tenantName }}
+                  [{{
+                  currency_map.find(
+                    item => item.value === tenantObj[row.tenantId]?.currency
+                  )?.label
+                }}]
                 </div>
                 <div
                   class="item_line cursor-pointer"
@@ -481,6 +486,7 @@ import {
 } from '@/utils/formatMatch';
 import { usePublicHooks } from '@/hooks';
 import {addThousandSeparator} from "@/utils/formatNumber";
+import { currency_map } from '@/utils/maps/currency_map';
 
 defineOptions({ name: 'RISKMANAGEMENT_MANUALORDERREJECTION' });
 const { tableHeaderStyle } = usePublicHooks();
