@@ -352,9 +352,11 @@ const gameClassify = ref<{ label: string; value: number }[]>(
 );
 import {
   riskStatusMap,
+} from '../util/types';
+import {
   seriesTypesSingle,
   seriesTypesDuplex
-} from '../util/types';
+} from '@/utils/maps/seriesTypes_map';
 import { hasAuth } from '@/router/utils';
 import CustomDate from '@/components/Form/Custom_date.vue';
 import { formRules } from '@/views/configCenter/classify_setting/utils/rule';

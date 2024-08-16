@@ -344,14 +344,7 @@
                 {{ markeTypeMap[item.marketType as keyof typeof markeTypeMap] }}
               </div>
               <div>
-                <span
-                  :class="{
-                    win: item.betItemResultStatus === 4,
-                    lose: item.betItemResultStatus === 3
-                  }"
-                >
-                  {{ item.betItemResultDesc }}
-                </span>
+                {{ item.betItemResultDesc }}
               </div>
             </div>
           </template>
