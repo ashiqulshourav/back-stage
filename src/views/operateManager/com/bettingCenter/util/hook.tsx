@@ -5,7 +5,6 @@ import type { FormInstance } from 'element-plus';
 import { usePublicHooks } from '@/hooks';
 const { exportDialog } = usePublicHooks();
 import {
-  betStatus,
   searchFormType,
 } from './types';
 import {seriesTypesSingle,seriesTypesDuplex,AllSeriesTypesSingle,AllSeriesTypesDuplex} from '@/utils/maps/seriesTypes_map';
@@ -57,8 +56,8 @@ export function useBettingCenterHook(category: number, venueType: number) {
     homeTeamName: '',
     betItemId: '',
     isInplay: '',
-    seriesTypes: [],
-    category: ' ',
+    seriesType:'',
+    category: '',
     timeType: 1,
     leagueName: '',
     tenantIds: [],
@@ -72,7 +71,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     riskControlLabelList: [],
     venueType: venueType,
     ip: '',
-    currency:' '
+    currency:''
   });
   function handlePageSizeChange(val: number) {
     pagination.pageSize = val;
@@ -93,41 +92,33 @@ export function useBettingCenterHook(category: number, venueType: number) {
     order_id?: number,
     page?: number
   ) => {
-    let seriesDetails: any = [];
     const newForm = { ...form }
-    const realSeriesTypes = [];
-    if(newForm.seriesTypes.length===1){  // 只选一个选项
-      if(newForm.seriesTypes.includes(2)){
-        if (newForm.seriesDetailsSingle.length) {
-          newForm.seriesDetailsSingle.map((item: keyof typeof seriesTypesSingle) => {
-            realSeriesTypes.push(...seriesTypesSingle[item].list);
-          });
-        }else {
-          realSeriesTypes.push(...AllSeriesTypesSingle);
-        }
-      }else if(newForm.seriesTypes.includes(3)){
-        if (newForm.seriesDetailsDuplex.length) {
-          newForm.seriesDetailsDuplex.map((item: keyof typeof seriesTypesSingle) => {
-            realSeriesTypes.push(
-                ...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list
-            );
-          });
-        }else {
-          realSeriesTypes.push(...AllSeriesTypesDuplex);
-        }
-      }else{
-        realSeriesTypes.push(1)
-      }
-    }else { //选择多个选项
-      if(newForm.seriesTypes.includes(1)){
-        realSeriesTypes.push(1);
-      }
-      if(newForm.seriesTypes.includes(2)){
+    let realSeriesTypes = [];
+    if(form.seriesType == 1){
+      realSeriesTypes.push(1)
+    }
+
+    if (form.seriesType == 2) {
+      if (form.seriesDetailsSingle.length) {
+        form.seriesDetailsSingle.map((item: keyof typeof seriesTypesSingle) => {
+          realSeriesTypes.push(...seriesTypesSingle[item].list);
+        });
+      } else {
         realSeriesTypes.push(...AllSeriesTypesSingle);
       }
-      if(newForm.seriesTypes.includes(3)){
+    } else if (form.seriesType == 3) {
+      if (form.seriesDetailsDuplex.length) {
+        form.seriesDetailsDuplex.map((item: keyof typeof seriesTypesSingle) => {
+          realSeriesTypes.push(
+              ...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list
+          );
+        });
+      } else {
         realSeriesTypes.push(...AllSeriesTypesDuplex);
       }
+    }
+    if (realSeriesTypes.length > 1) {
+      realSeriesTypes = [...new Set(realSeriesTypes)];
     }
 
     if (newForm.orderId || newForm.matchId) {
