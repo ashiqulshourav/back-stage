@@ -1,3 +1,4 @@
+
 export const settleTypeMap =[
   {
     value:0,
@@ -36,11 +37,24 @@ export const settleTypeMap =[
     label:'终态结算,结算结果为走水'
   },
   {
+    value:9,
+    label:'预约自动取消'
+  },
+  {
+    value:10,
+    label:'预约人工取消'
+  },
+  {
     value:11,
     label:'特殊非终态结算'
   },
   {
     value:12,
     label:'人工结算'
-  }
+  },
+  {
+    value:13,
+    label:' 普通注单后台取消'
+  },
 ]
+
