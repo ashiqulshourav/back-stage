@@ -275,24 +275,8 @@
               </div>
               <div
                 class="item_line"
-                v-if="
-                  row.billStatus === 1 &&
-                  item.settleScore &&
-                  !(
-                    displayHomeAwayScore(
-                      item.settleScore,
-                      item.sportId,
-                      'home'
-                    ) == '' ||
-                    displayHomeAwayScore(
-                      item.settleScore,
-                      item.sportId,
-                      'away'
-                    ) == ''
-                  )
-                "
-              >
-                <span v-if="item.kindsCode !== 'TeamToKickOff'">
+                v-if="item.settleScore">
+                <span v-if="item.settleScore&&displayHomeAwayScore(item.settleScore,item.sportId)">
                   {{ t('结算比分：')
                   }}{{ displayHomeAwayScore(item.settleScore, item.sportId) }}
                 </span>
@@ -305,7 +289,7 @@
                 effect="dark"
                 style="width: 100px; border: none"
                 @click="() => handleSettleHistoryDialog(row)"
-                :color="tagColor[row.orderStatus] || ''"
+                :color="tagColor[row.orderStatus as keyof typeof tagColor] || ''"
                 class="rounded-lg w-full cursor-pointer text-white"
               >
                 {{ row.orderStatusView }}
@@ -383,18 +367,6 @@
               {{ ' ' + row.currency }}</span
             >
             <span v-else>-</span>
-          </template>
-          <template #status="{ row }">
-            <div class="status_detail status_btn mb-1 mx-auto">
-              {{ row.orderStatusView }}
-            </div>
-            <div>
-              {{
-                row.settleTime
-                  ? dayjs(row.settleTime).format('MM-DD HH:mm:ss')
-                  : ''
-              }}
-            </div>
           </template>
           <template #operation="{ row }">
             <div>
@@ -532,7 +504,6 @@ import {
   calculateSeriesTypeTotal,
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
-  getIsInplay,
   enterGoalMap,
   openIpDialog
 } from '@/utils/formatMatch';
@@ -542,7 +513,6 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import EditPen from '@iconify-icons/ep/edit-pen';
 import { currency_map } from '../../../../utils/maps/currency_map';
 import { Unlock, Lock } from '@element-plus/icons-vue';
-import { any } from 'vue-types';
 
 const props = defineProps<{
   category: number;
