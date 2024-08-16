@@ -148,46 +148,22 @@
             </template>
           </el-tree-select>
         </el-form-item>
-        <el-form-item :label="`${t('过关类型')}:`" prop="seriesTypes">
-          <el-tree-select
-            v-model="form.seriesTypes"
-            :data="
-              seriesTypeList.map(item => ({
-                value: item.value,
-                label: item.label
-              }))
-            "
-            :placeholder="t('请选择，可多选')"
-            @change="search"
-            filterable
-            clearable
-            multiple
-            collapse-tags
-            :render-after-expand="false"
-            show-checkbox
-            check-strictly
-            check-on-click-node
-            style="width: 180px"
+        <el-form-item :label="`${t('过关类型')}:`" prop="seriesType">
+          <el-select
+              v-model="form.seriesType"
+              clearable
+              class="!w-[180px]"
+              @change="search"
           >
-            <template #header>
-              <el-checkbox
-                v-model="checkAllSeriesTypeLabel"
-                @change="handleCheckAllSeriesTypeLabel"
-              >
-                {{ t('全选') }}
-              </el-checkbox>
-              <el-checkbox
-                v-model="checkRevertSeriesTypeLabel"
-                @change="handleCheckSeriesSportLabel"
-              >
-                {{ t('反选') }}
-              </el-checkbox>
-            </template>
-          </el-tree-select>
+            <el-option :label="t('全部')" value=" " />
+            <el-option :label="t('单关')" :value="1" />
+            <el-option :label="t('单式串关')" :value="2" />
+            <el-option :label="t('复试串关')" :value="3" />
+          </el-select>
         </el-form-item>
         <el-form-item
           :label="`${t('单式串关类型')}:`"
-          v-if="form.seriesTypes.includes(2) && form.seriesTypes.length == 1"
+          v-if="form.seriesType===2"
           prop="seriesDetails"
         >
           <el-select
@@ -207,7 +183,7 @@
         </el-form-item>
         <el-form-item
           :label="`${t('复式串关类型')}:`"
-          v-if="form.seriesTypes.includes(3) && form.seriesTypes.length == 1"
+          v-if="form.seriesType===3"
           prop="seriesDetails"
         >
           <el-select
