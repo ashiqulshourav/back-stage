@@ -83,11 +83,11 @@
               >
                 <span>{{ t('商户名：') }}</span
                 >{{ tenantObj[row.tenantId]?.tenantName }}
-                {{
+                [{{
                   currency_map.find(
                     item => item.value === tenantObj[row.tenantId]?.currency
                   )?.label
-                }}
+                }}]
               </div>
               <div
                 class="item_line cursor-pointer"
@@ -301,12 +301,20 @@
           </template>
           <template #orderStatusView="{ row }">
             <div class="flex gap-2 items-center">
-              {{ row.orderStatusView }}
+              <el-tag
+                effect="dark"
+                style="width: 100px; border: none"
+                @click="() => handleSettleHistoryDialog(row)"
+                :color="tagColor[row.orderStatus] || ''"
+                class="rounded-lg w-full cursor-pointer text-white"
+              >
+                {{ row.orderStatusView }}
+              </el-tag>
               <span v-if="row.settleTimes > 0">
                 <el-tag
+                  effect="dark"
                   :round="true"
                   @click="() => handleSettleHistoryDialog(row)"
-                  :style="`background-color: white`"
                   class="rounded-lg w-full cursor-pointer text-white"
                 >
                   {{ row.settleTimes }}
@@ -340,7 +348,14 @@
                 {{ markeTypeMap[item.marketType as keyof typeof markeTypeMap] }}
               </div>
               <div>
-                {{ item.betItemResultDesc }}
+                <span
+                  :class="{
+                    win: item.betItemResultStatus === 4,
+                    lose: item.betItemResultStatus !== 4
+                  }"
+                >
+                  {{ item.betItemResultDesc }}
+                </span>
               </div>
             </div>
           </template>
@@ -527,6 +542,7 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import EditPen from '@iconify-icons/ep/edit-pen';
 import { currency_map } from '../../../../utils/maps/currency_map';
 import { Unlock, Lock } from '@element-plus/icons-vue';
+import { any } from 'vue-types';
 
 const props = defineProps<{
   category: number;
@@ -558,7 +574,8 @@ const {
   editOrderRemark,
   riskLabelList,
   downloading,
-  handleSettleHistoryDialog
+  handleSettleHistoryDialog,
+  tagColor
 } = useBettingCenterHook(props.category, props.venueType);
 
 onMounted(() => {
