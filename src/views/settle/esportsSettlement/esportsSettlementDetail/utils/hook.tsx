@@ -4,6 +4,7 @@ import { usePublicHooks } from '@/hooks';
 import { SPORT_LEVEL_LIST_TYPE } from './type';
 import { NAV_TITLE_NAME, SPORT_LEVEL_LIST } from './map';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
+import { RESULT_MAP } from '@/utils/maps/sports_map';
 
 export function useEsportsSettlement() {
   const route = useRoute();
@@ -77,11 +78,17 @@ export function useEsportsSettlement() {
       item.list.length = 0;
       Object.values(o).forEach((arr: any[]) => {
         const selectIndex = arr.findIndex(item => {
-          return item.win === 4;
+          return (
+            item.win === RESULT_MAP.new_win || item.win === RESULT_MAP.old_win
+          );
         });
         const multipartBetOptions: number[] = [];
         arr.forEach((item, index) => {
-          if (item.win === 4 && arr.length > 2) {
+          if (
+            (item.win === RESULT_MAP.new_win ||
+              item.win === RESULT_MAP.old_win) &&
+            arr.length > 2
+          ) {
             multipartBetOptions.push(index);
           }
         });

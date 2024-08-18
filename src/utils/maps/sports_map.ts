@@ -156,6 +156,14 @@ export const HOME_AWAY = {
   away: t('客队')
 };
 
+//- 冠军 + 电竞 + 足球特殊结算 赢
+export enum RESULT_MAP {
+  new_win = 4,
+  old_win = 1,
+  new_lose = 3,
+  old_lose = 0
+}
+
 // export const PANDA_MATCH_STATUS = {
 //   0: t('未匹配'),
 //   1: t('成功匹配'),
