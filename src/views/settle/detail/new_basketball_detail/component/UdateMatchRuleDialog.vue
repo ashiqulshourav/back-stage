@@ -22,7 +22,9 @@
       </div>
     </div>
     <div v-else-if="step === 2">
-      <div class="mb-2">{{ t('5秒后立即清空所有结算事件') }}</div>
+      <div class="mb-2">
+        {{ t('{n}秒后立即清空所有结算事件', { n: countDownNum }) }}
+      </div>
       <el-progress
         :text-inside="true"
         :stroke-width="18"
@@ -82,6 +84,7 @@ const emits = defineEmits(['closeDialog']);
 const ruleFormRef = ref();
 const step = ref(1);
 const percentage = ref(0);
+const countDownNum = ref(5);
 
 const { matchId, sportId, periodType } = defineProps<{
   matchId: number;
@@ -135,6 +138,9 @@ const firstStepClick = () => {
 //- 开启动画效果
 const timer = ref();
 const runPercentage = () => {
+  setInterval(() => {
+    countDownNum.value--;
+  }, 1000);
   timer.value = setInterval(() => {
     if (percentage.value === 100) {
       clearInterval(timer.value);

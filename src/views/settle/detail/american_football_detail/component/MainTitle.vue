@@ -21,7 +21,7 @@
           <el-text
             class="!ml-2 cursor-pointer"
             type="primary"
-            v-if="index === 7 && hasAuth('ENABLEMANUALSETTLE') && showEditBtn"
+            v-if="index === 7 && hasAuth('ENABLEMANUALSETTLE')"
             @click="eidtMatchRule"
             >{{ t('编辑') }}</el-text
           >
@@ -72,15 +72,6 @@ const props = withDefaults(
 
 const emits = defineEmits(['allSettleBtnClick', 'reloadMatch']);
 const allSettleBtnClick = () => emits('allSettleBtnClick');
-
-//- 是否显示编辑按钮
-const showEditBtn = computed(() => {
-  return (
-    props.renderObj.settlementType === 2 ||
-    (props.renderObj.fullSettlementStatus === 1 &&
-      props.renderObj.reSettleStatus === 1)
-  );
-});
 
 //- 编辑赛事规则
 const eidtMatchRule = () => {

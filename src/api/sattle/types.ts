@@ -152,7 +152,7 @@ declare namespace SattleDataAPI {
     childrenData?: ChildrenDataList[];
     settlementType: number; //1 自动结算 //2 手动结算
     isShowCancelBtn?: boolean;
-    periodType?: number;
+    periodType: number;
     reSettleStatus?: number; //1 重新结算姐main
   };
 
