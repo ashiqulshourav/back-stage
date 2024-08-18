@@ -4,10 +4,14 @@ import { removeEmptyStringKeys } from '@/utils/utilFn';
 import type { FormInstance } from 'element-plus';
 import { usePublicHooks } from '@/hooks';
 const { exportDialog } = usePublicHooks();
+import { useClipboard } from '@vueuse/core';
+import { searchFormType } from './types';
 import {
-  searchFormType,
-} from './types';
-import {seriesTypesSingle,seriesTypesDuplex,AllSeriesTypesSingle,AllSeriesTypesDuplex} from '@/utils/maps/seriesTypes_map';
+  seriesTypesSingle,
+  seriesTypesDuplex,
+  AllSeriesTypesSingle,
+  AllSeriesTypesDuplex
+} from '@/utils/maps/seriesTypes_map';
 import { addDialog, closeDialog } from '@/components/ReDialog/index';
 import editMatch from '../component/editMatch.vue';
 import { reactive, ref, onMounted, h } from 'vue';
@@ -16,7 +20,7 @@ import { BET_RESULT_TYPE_MAP } from '@/utils/formatMatch';
 import dayjs from 'dayjs';
 import { addThousandSeparator } from '@/utils/formatNumber';
 import { ElMessageBox } from 'element-plus';
-import { copyTextToClipboard } from '@pureadmin/utils';
+// import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
 import { riskStatus } from '@/views/riskManagement/com/bettingAudit/util/types';
 import editOrder from '../component/editOrder.vue';
@@ -46,8 +50,8 @@ export function useBettingCenterHook(category: number, venueType: number) {
     6: '#F57582', // 未结算
     7: '#40A9FF', // 已结算
     8: 'FFC53D', // 待审核
-    9: '#F57582', // 注单无效
-  })
+    9: '#F57582' // 注单无效
+  });
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 20,
@@ -67,7 +71,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     homeTeamName: '',
     betItemId: '',
     isInplay: '',
-    seriesType:'',
+    seriesType: '',
     category: '',
     timeType: 1,
     leagueName: '',
@@ -82,7 +86,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     riskControlLabelList: [],
     venueType: venueType,
     ip: '',
-    currency:''
+    currency: ''
   });
   function handlePageSizeChange(val: number) {
     pagination.pageSize = val;
@@ -103,10 +107,10 @@ export function useBettingCenterHook(category: number, venueType: number) {
     order_id?: number,
     page?: number
   ) => {
-    const newForm = { ...form }
+    const newForm = { ...form };
     let realSeriesTypes = [];
-    if(form.seriesType == 1){
-      realSeriesTypes.push(1)
+    if (form.seriesType == 1) {
+      realSeriesTypes.push(1);
     }
 
     if (form.seriesType == 2) {
@@ -121,7 +125,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
       if (form.seriesDetailsDuplex.length) {
         form.seriesDetailsDuplex.map((item: keyof typeof seriesTypesSingle) => {
           realSeriesTypes.push(
-              ...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list
+            ...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list
           );
         });
       } else {
@@ -137,13 +141,19 @@ export function useBettingCenterHook(category: number, venueType: number) {
       newForm.timeEnd = '';
     }
     if (newForm.timeStart) {
-      newForm.timeStart = dayjs(newForm.timeStart).format('YYYY-MM-DD HH:mm:ss')
+      newForm.timeStart = dayjs(newForm.timeStart).format(
+        'YYYY-MM-DD HH:mm:ss'
+      );
     }
     if (newForm.timeEnd) {
-      newForm.timeEnd = dayjs(newForm.timeEnd).format('YYYY-MM-DD HH:mm:ss')
+      newForm.timeEnd = dayjs(newForm.timeEnd).format('YYYY-MM-DD HH:mm:ss');
     }
-    if((newForm.isInplay ===0||newForm.isInplay ===1||newForm.isInplay ===2)){
-      newForm.isInplay = [newForm.isInplay]
+    if (
+      newForm.isInplay === 0 ||
+      newForm.isInplay === 1 ||
+      newForm.isInplay === 2
+    ) {
+      newForm.isInplay = [newForm.isInplay];
     }
     return {
       ...removeEmptyStringKeys({
@@ -151,7 +161,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
         orderId: order_id || form.orderId,
         seriesDetailsSingle: '',
         seriesDetailsDuplex: '',
-        seriesTypes:  [...new Set(realSeriesTypes)],
+        seriesTypes: [...new Set(realSeriesTypes)],
         venueType: venueType,
         category: venueType === 0 ? form.category : 1
       }),
@@ -372,10 +382,9 @@ export function useBettingCenterHook(category: number, venueType: number) {
     });
   };
 
-
   const handleSettleHistoryDialog = (row: any) => {
     if (row.orderStatus !== 7) {
-      return
+      return;
     }
     addDialog({
       title: t(''),
@@ -384,7 +393,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
       hideFooter: true,
       width: '70%',
       style: {
-        "min-height": '700px'
+        'min-height': '700px'
       },
       contentRenderer: ({ options, index }) =>
         h(SettleHistory, {
@@ -397,16 +406,23 @@ export function useBettingCenterHook(category: number, venueType: number) {
           }
         })
     });
-  }
+  };
 
   function copyTest(str: string, tip: string) {
     if (!str) return;
-    const success = copyTextToClipboard(str.toString());
+    const { copy } = useClipboard({ source: str.toString(), legacy: true });
+    copy(str.toString());
+    message(t('复制{value}成功!', { value: tip || str || '' }), {
+      type: 'success'
+    });
+    /* const success = copyTextToClipboard(str.toString(), {
+      target: document.body
+    });
     success
       ? message(t('复制{value}成功!', { value: tip || str || '' }), {
-        type: 'success'
-      })
-      : message(t('复制失败'), { type: 'error' });
+          type: 'success'
+        })
+      : message(t('复制失败'), { type: 'error' }); */
   }
 
   const isShowCancel = (row: BetOrderAPI.BetOrderList) => {
@@ -464,8 +480,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
   });
 
   //- IP地址弹窗
-
-
 
   return {
     loading,
