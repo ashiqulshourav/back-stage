@@ -41,7 +41,9 @@ export function useNewBasketBallHook() {
         isSave: false,
         periodType: renderObj.periodType,
         matchPeriodId:
-          NEW_ROW_TYPE[renderObj.periodType][eventList.length.toString()]
+          NEW_ROW_TYPE[renderObj.periodType as number][
+            eventList.length.toString()
+          ]
       };
       eventList.push(
         tempList as unknown as SattleDataAPI.newBasketballEventsList
@@ -49,7 +51,7 @@ export function useNewBasketBallHook() {
     }
   };
   //- 是否输入了完整的内容
-  const isTheFormComplete = row => {
+  const isTheFormComplete = (row: any) => {
     const requireDdata = {
       t1: row.t1,
       t2: row.t2
@@ -57,7 +59,7 @@ export function useNewBasketBallHook() {
     return !Object.keys(requireDdata).every(key => {
       return key === 't1' || key === 't2'
         ? parseInt(requireDdata[key]) >= 0
-        : requireDdata[key];
+        : requireDdata[key as keyof typeof requireDdata];
     });
   };
 
@@ -84,8 +86,8 @@ export function useNewBasketBallHook() {
       eventTime: 1,
       matchId,
       matchPeriodId: row.matchPeriodId,
-      t1: +row.t1,
-      t2: +row.t2
+      t1: row.t1 as number,
+      t2: row.t2 as number
     };
 
     ElMessageBox.confirm(t('确定要增加一条事件么?'), t('警告'), {
@@ -130,7 +132,9 @@ export function useNewBasketBallHook() {
     }
   };
 
-  const reloadTable = async () => {};
+  const reloadTable = () => {
+    initMatchData();
+  };
 
   //- 开启人工结算
   const changeSettleType = async () => {
@@ -178,8 +182,8 @@ export function useNewBasketBallHook() {
           id: row.id,
           matchId,
           matchPeriodId: row.matchPeriodId,
-          t1: row.t1,
-          t2: row.t2
+          t1: row.t1 as number,
+          t2: row.t2 as number
         });
         message(res.msg, { type: res.code ? 'error' : 'success' });
         if (!res.code) getEventList();

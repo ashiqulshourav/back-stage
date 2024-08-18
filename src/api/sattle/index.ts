@@ -710,4 +710,7 @@ export const sattleData = {
   //- 足球盘口取消点球
   cancelFootballPenaltyKickOrder: (data: SattleDataAPI.cancelFootballPenaltyKickOrderReqParams) => request<SattleDataAPI.cancelFootballPenaltyKickOrderRes>(
     'post', '/event/v1/cancelFootballPenaltyKickOrder', { data }),
+  //- 篮球  + 美式足球修改赛制
+  updateMatchPeriodType: (data: { matchId: number; periodType: number }) => request<SattleDataAPI.updateMatchPeriodType>(
+    'post', '/match/v1/updateMatchPeriodType', { data }),
 };

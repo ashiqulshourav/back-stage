@@ -1,6 +1,7 @@
 import { handleTableWidth } from '@/utils/getTableWidth';
 import dayjs from 'dayjs';
 import { NEW_MATCH_STATUS } from './map';
+import { MATCH_FORMAT } from '@/utils/maps/sports_map';
 
 const baseColumns: TableColumnList = [
   {
@@ -58,6 +59,19 @@ const baseColumns: TableColumnList = [
     formatter: ({ status }) =>
       NEW_MATCH_STATUS.find(item => item.value === status)?.label ?? '-',
     headerRenderer: d => handleTableWidth(d, t('比赛状态'), 'auto')
+  },
+  {
+    label: t('赛制'),
+    prop: 'periodType',
+    headerRenderer: d => handleTableWidth(d, t('赛制'), 'auto'),
+    formatter: ({ periodType, sportId }): string => {
+      if (+sportId === 2 || +sportId === 16) {
+        return MATCH_FORMAT[sportId][periodType];
+      } else {
+        return MATCH_FORMAT[sportId] as string;
+      }
+    },
+    minWidth: 200
   },
   {
     label: t('全场结算'),

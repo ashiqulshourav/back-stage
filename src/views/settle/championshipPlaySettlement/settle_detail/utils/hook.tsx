@@ -42,10 +42,10 @@ export function useEsportsSettlement() {
     if (res.code) return message(res.msg, { type: 'error' });
     res.data.forEach(item => {
       if (item.settleStatus === 1) {
-        item.betOptions = item.handicapList.findIndex(item => item.win === 1);
+        item.betOptions = item.handicapList.findIndex(item => item.win === 4);
         item.multipartBetOptions = item.handicapList
           .map((item, index) => {
-            return item.win === 1 ? index : -1;
+            return item.win === 4 ? index : -1;
           })
           .filter(_ => _ !== -1);
       } else {

@@ -22,6 +22,7 @@ export const useSettileHook = () => {
     leagueId: '',
     matchId: '',
     status: '',
+    periodType: '',
     startTime: '',
     endTime: ''
   });
@@ -32,7 +33,6 @@ export const useSettileHook = () => {
     const remark = ref('');
     const r = await openPasswordInput();
     if (!r) return;
-
     addDialog({
       title: t('取消比赛'),
       width: '20%',
@@ -152,6 +152,7 @@ export const useSettileHook = () => {
   const changeNavType = (v: number) => {
     currentSportId.value = v;
     settingStore.save_selttle_page_info({ page: null, matchType: null });
+    form.periodType = '';
     onSearch('reload');
   };
 

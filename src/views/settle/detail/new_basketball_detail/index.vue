@@ -1,20 +1,21 @@
 <template>
   <div class="main">
     <!-- -盘口详情 -->
-    <DetiltTitle
+    <MainTitle
       @allSettleBtnClick="allSettleBtnClick"
       :renderObj="renderObj"
       :allSettleLoading="loading"
       :hideAllSettleBtn="!hasAuth('FULLSETTLE')"
+      :baseTitle="baseTitle"
+      :eventList="eventList"
+      @reloadMatch="reloadTable"
     >
       <DetailScore :eventList="eventList" />
-    </DetiltTitle>
+    </MainTitle>
     <PureTableBar :columns="childColumns" @refresh="reloadTable">
       <template #title>
         <div class="flex items-center text-sm">
-          <span class="mr-2">
-            {{ baseTitle }}
-          </span>
+          <span class="mr-2"></span>
           <div v-if="renderObj.fullSettlementStatus === 1">
             <el-button
               @click="openSecondSettleClick"
@@ -39,7 +40,7 @@
       <template v-slot="{ size, dynamicColumns }">
         <pure-table
           align-whole="center"
-          :row-key="row => row.id"
+          :row-key="(row:any) => row.id"
           :data="eventList"
           :loading="loading"
           :columns="dynamicColumns"
@@ -196,9 +197,9 @@ import { useNewBasketBallHook } from './utils/hook';
 import { usePublicHooks } from '@/hooks';
 import Delete from '@iconify-icons/ep/delete';
 import { MatchEventRowType } from './utils/type';
-import DetiltTitle from '../../component/Settle_detail_title.vue';
 import { hasAuth } from '@/router/utils';
 import DetailScore from './component/DetailScore.vue';
+import MainTitle from './component/MainTitle.vue';
 
 defineOptions({ name: 'SETTLE_DETAIL_NEW_BASKETBALL_DETAIL' });
 
@@ -231,27 +232,6 @@ const eventQuotientList: {
   { type: 'psFlag', val: t('熊猫数据') },
   { type: 'vsFlag', val: t('播控数据') }
 ];
-
-//- 人工结算是否需要加时赛 暂时不添加验证
-/* const isShowSettleBen = computed(() => {
-  if (
-    eventList[eventList.length - 1]?.matchPeriodId === 40 &&
-    eventList[eventList.length - 1]?.id
-  ) {
-    return false;
-  }
-  let homeScore = 0;
-  let awayScore = 0;
-  const matchType = renderObj.periodType;
-  if (matchType === eventList.length) {
-    eventList.forEach(item => {
-      homeScore += +item.t1;
-      awayScore += +item.t2;
-    });
-    return homeScore === awayScore;
-  }
-  return true;
-}); */
 
 //- 取消事件置灰
 const tableRowClassName = ({ row }: MatchEventRowType) =>

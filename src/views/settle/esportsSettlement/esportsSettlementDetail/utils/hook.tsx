@@ -77,11 +77,11 @@ export function useEsportsSettlement() {
       item.list.length = 0;
       Object.values(o).forEach((arr: any[]) => {
         const selectIndex = arr.findIndex(item => {
-          return item.win === 1;
+          return item.win === 4;
         });
         const multipartBetOptions: number[] = [];
         arr.forEach((item, index) => {
-          if (item.win === 1 && arr.length > 2) {
+          if (item.win === 4 && arr.length > 2) {
             multipartBetOptions.push(index);
           }
         });

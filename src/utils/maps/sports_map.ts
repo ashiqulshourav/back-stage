@@ -41,7 +41,7 @@ export const FULL_SPORT_ID_MAP = [
 export const MATH_RULE = {
   basketBall: [
     { key: 2, val: t('上下半场制') },
-    { key: 4, val: t('4节比赛制') },
+    { key: 4, val: t('四节制') },
   ],
   otherMatch: [
     { key: 3, val: t('三盘两胜制') },
@@ -80,6 +80,57 @@ export const MATCH_EVENT_CODE = {
   red_card: t('红牌')
   // match_status: t('比赛阶段'),
 };
+
+type MatchFormatType = {
+  [key: number]: string | { [key: number]: string };
+};
+
+export const MATCH_FORMAT: MatchFormatType = {
+  2: {
+    2: t('两节制（上下半场）'),
+    4: t('四节制')
+  },
+  16: {
+    2: t('两节制（上下半场）'),
+    3: t('三节制'),
+    4: t('四节制')
+  },
+  1: t('两节制（上下半场）'),
+  3: t('其它'),
+  6: t('其它'),
+  5: t('其它'),
+  11: t('两节制（上下半场）'),
+  12: t('三节制'),
+  19: t('三节制'),
+  23: t('其它'),
+  9: t('两节制（上下半场）'),
+  13: t('其它'),
+  28: t('四节制'),
+  8: t('其它'),
+  18: t('其它'),
+  10: t('其它'),
+  276: t('其它'),
+  277: t('其它'),
+  278: t('其它'),
+  279: t('其它'),
+  280: t('其它:激斗峡谷'),
+  281: t('其它'),
+  282: t('其它'),
+  285: t('其它'),
+  286: t('其它'),
+  287: t('其它'),
+  288: t('其它'),
+  289: t('其它'),
+  290: t('其它'),
+  291: t('其它'),
+  292: t('其它'),
+  293: t('其它'),
+  294: t('其它'),
+  295: t('其它'),
+  296: t('其它'),
+  297: t('其它'),
+}
+
 
 export const MATCH_STATUS = {
   nover: t('滚球'),

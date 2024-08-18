@@ -25,6 +25,7 @@ declare namespace SaleDataAPI {
     homeTeamNameCn: string;
     halfSettlementStatus: number;
     fullSettlementStatus: number;
+    periodType?: number | string;
     showPopover?: boolean;
     saleHandicaps: number;
     allHandicaps: number;
