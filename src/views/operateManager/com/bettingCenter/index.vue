@@ -333,8 +333,8 @@
               <div>
                 <span
                   :class="{
-                    win: item.betItemResultStatus === 4,
-                    lose: item.betItemResultStatus !== 4
+                    win: item.betItemResultStatus === 4 || item.betItemResultStatus === 5,
+                    lose: item.betItemResultStatus === 3 || item.betItemResultStatus === 6
                   }"
                 >
                   {{ item.betItemResultDesc }}
