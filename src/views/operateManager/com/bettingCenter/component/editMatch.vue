@@ -69,6 +69,15 @@
         </li>
       </ul>
     </div>
+    <div class="mt-5" >
+      <ul class="mt-2">
+        <li :class="`result_item ${
+            resultTabValue === item.value
+              ? 'result_item_active cursor-pointer'
+              : 'cursor-pointer'
+          }`" v-for="item in tabsList" @click="resultClick(item)">{{item.label}}</li>
+      </ul>
+    </div>
   </div>
   <div v-else>
     <PureTableBar
