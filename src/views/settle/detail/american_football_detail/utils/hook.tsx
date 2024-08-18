@@ -130,7 +130,9 @@ export function useAmericanFootballHook() {
     }
   };
 
-  const reloadTable = async () => {};
+  const reloadTable = async () => {
+    initMatchData();
+  };
 
   //- 开启人工结算
   const changeSettleType = async () => {
