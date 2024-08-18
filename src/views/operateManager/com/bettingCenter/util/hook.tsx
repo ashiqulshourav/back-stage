@@ -374,6 +374,9 @@ export function useBettingCenterHook(category: number, venueType: number) {
 
 
   const handleSettleHistoryDialog = (row: any) => {
+    if (row.orderStatus !== 7) {
+      return
+    }
     addDialog({
       title: t(''),
       center: true,
