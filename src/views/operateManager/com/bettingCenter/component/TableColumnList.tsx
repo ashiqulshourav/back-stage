@@ -9,7 +9,8 @@ export const columns: TableColumnList = [
     label: t("序号"),
     prop: 'index',
     align: 'left',
-    width: 200,
+    minWidth: 100,
+    className: 'getParent mw-100',
   },
   {
     label: t("用户信息"),
@@ -22,7 +23,7 @@ export const columns: TableColumnList = [
     slot: 'betMessage',
     minWidth: 100,
     align: 'left',
-    className: 'getParent mw-250px',
+    className: 'getParent mw-250',
   },
   {
     label: t("赛事信息"),
@@ -46,7 +47,7 @@ export const columns: TableColumnList = [
     minWidth: 250,
     align: 'left',
     formatter: ({ betResult }) => BET_RESULT_TYPE_MAP[betResult as keyof typeof BET_RESULT_TYPE_MAP] || '', // (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
-    className: 'mw-250px'
+    className: 'mw-250'
   },
   {
     label: t("赔率"),
