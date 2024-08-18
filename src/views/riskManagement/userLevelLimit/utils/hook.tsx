@@ -2,6 +2,7 @@ import { message } from '@/utils/message';
 import { reactive, ref, onMounted } from 'vue';
 import { columns } from '../component/TableColumnList';
 import { ElMessageBox } from 'element-plus';
+import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 
 export function useClassifySettingHook() {
   const sportList = reactive<UserAPI.UserLevelLimitListRes[]>([]);
@@ -47,7 +48,7 @@ export function useClassifySettingHook() {
       championDailyPay: 0,
       bunchMatchPay: 0,
       type: 0,
-      currency: currency.value,
+      currency: currency.value
     });
   };
   //- 新增电竞体育限额
@@ -61,7 +62,7 @@ export function useClassifySettingHook() {
       championDailyPay: 0,
       bunchMatchPay: 0,
       type: 1,
-      currency: currency.value,
+      currency: currency.value
     });
   };
 
@@ -71,7 +72,11 @@ export function useClassifySettingHook() {
       center: true
     }).then(async () => {
       loading.value = true;
-      const res = await API.updateUserLevelLimit({ list: sportList, type: 0, currency: currency.value });
+      const res = await API.updateUserLevelLimit({
+        list: sportList,
+        type: 0,
+        currency: currency.value
+      });
       loading.value = false;
       isEditSport.value = false;
       message(res.msg, { type: res.code ? 'error' : 'success' });
@@ -121,6 +126,15 @@ export function useClassifySettingHook() {
     eSportList.pop();
   };
 
+  //- 修改限额开关
+  const { openPasswordInput } = usePasswordInputHook();
+  const updateEidtStatus = async (type: 'isEditSport' | 'isEditESport') => {
+    const r = await openPasswordInput();
+    if (!r) return;
+    if (type === 'isEditSport') isEditSport.value = true;
+    else isEditESport.value = true;
+  };
+
   onMounted(() => {
     onSearch();
   });
@@ -132,6 +146,7 @@ export function useClassifySettingHook() {
     eSportList,
     onSearch,
     isEditSport,
+    updateEidtStatus,
     isEditESport,
     addSportItem,
     confirmSportClick,
@@ -140,7 +155,7 @@ export function useClassifySettingHook() {
     delSportItem,
     delESportItem,
     cancelSportEdit,
-    cancelESportEdit, 
-    currency,
+    cancelESportEdit,
+    currency
   };
 }
