@@ -167,26 +167,25 @@ export function usePreSale() {
     cb: (isReload?: boolean) => {}
   ) => {
     const res = await API.updateMatch(curData);
+    // //- 修改赛事错误（未改变赛事为人工结算）
     if (res.code === 11230 || res.code === 11231) {
-      //- 修改赛事错误（未改变赛事为人工结算）
       const t1 =
         res.code === 11230
           ? t('请手动清空所有结算事件后再试，点击确认进入结算管理页。')
           : t('请手动开启人工结算模式，点击确认进入结算管理页。');
+
       ElMessageBox.confirm(t1, t('赛制编辑'), {
         confirmButtonText: t('确定'),
         cancelButtonText: t('留在当前页面'),
         center: true
-      })
-        .then(async () => {
-          cb(false);
-          const params = JSON.parse(JSON.stringify(currentMatch));
-          router.push({
-            name: SPORT_LIST_MAP.find(item => item.value === 2)!.linkName,
-            state: { params }
-          });
-        })
-        .catch(e => console.log(e));
+      }).then(() => {
+        cb(false);
+        const params = JSON.parse(JSON.stringify(currentMatch));
+        router.push({
+          name: SPORT_LIST_MAP.find(item => item.value === 2)!.linkName,
+          state: { params }
+        });
+      });
     } else {
       message(res.msg, { type: res.code ? 'error' : 'success' });
       if (res.code) return;
