@@ -3,6 +3,7 @@
     ref="ruleFormRef"
     :model="newFormInline"
     :rules="formRules"
+    class="pr-10"
     label-width="150px"
   >
     <el-form-item :label="`${t('赛事ID')}:`" prop="matchId">
@@ -45,10 +46,10 @@
         v-else
       >
         <el-option
-          :label="item"
-          :value="item"
+          :label="item.val"
+          :value="item.key"
           v-for="item in periodList"
-          :key="item"
+          :key="item.key"
         />
       </el-select>
     </el-form-item>
@@ -81,22 +82,24 @@ function getRef() {
 }
 
 //- 当前比赛赛制获取
-
 const periodList = computed(() => {
-  if (newFormInline.value.sportId === 2) {
-    return [
-      {
-        key: 2,
-        val: t('两节制（上下半场）')
-      },
-      {
-        key: 4,
-        val: t('四节制')
-      }
-    ];
-  } else if (newFormInline.value.sportId === 16) {
+  const arr = [
+    {
+      key: 2,
+      val: t('两节制（上下半场）')
+    },
+    {
+      key: 4,
+      val: t('四节制')
+    }
+  ];
+  if (newFormInline.value.sportId === 16) {
+    arr.splice(1, 0, {
+      key: 3,
+      val: t('三节制')
+    });
   }
- 
+  return arr;
 });
 
 defineExpose({ getRef });

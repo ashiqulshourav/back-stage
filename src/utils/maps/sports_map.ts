@@ -42,7 +42,7 @@ export const FULL_SPORT_ID_MAP = [
 export const MATH_RULE = {
   basketBall: [
     { key: 2, val: t('上下半场制') },
-    { key: 4, val: t('4节比赛制') },
+    { key: 4, val: t('四节制') },
   ],
   otherMatch: [
     { key: 3, val: t('三盘两胜制') },

@@ -86,11 +86,9 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('赛制'), 'auto'),
     formatter: ({ periodType, sportId }): string => {
       if (+sportId === 2 || +sportId === 16) {
-        return MATCH_FORMAT[sportId.toString][periodType];
+        return MATCH_FORMAT[sportId][periodType];
       } else {
-        return MATCH_FORMAT[
-          sportId.toString() as keyof typeof MATCH_FORMAT
-        ] as string;
+        return MATCH_FORMAT[sportId] as string;
       }
     },
     minWidth: 200

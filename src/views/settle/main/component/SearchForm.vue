@@ -58,6 +58,23 @@
       </el-select>
     </el-form-item>
 
+    <el-form-item :label="`${t('赛制')}:`" prop="periodType">
+      <el-select
+        :disabled="currentSportId !== 2 && currentSportId !== 16"
+        v-model="form.periodType"
+        :placeholder="t('请选择')"
+        clearable
+        class="!w-[200px]"
+      >
+        <el-option
+          :label="item.val"
+          :value="item.key"
+          v-for="item in periodList"
+          :key="item.key"
+        />
+      </el-select>
+    </el-form-item>
+
     <el-form-item :label="`${t('比赛时间')}:`" prop="startTime">
       <CustomDate v-model:val="time" @changeDate="changeDate" />
     </el-form-item>
@@ -136,6 +153,27 @@ const resetForm = (formRef: FormInstance | undefined) => {
   formRef?.resetFields();
   searchVal();
 };
+
+//- 当前比赛赛制获取
+const periodList = computed(() => {
+  const arr = [
+    {
+      key: 2,
+      val: t('两节制（上下半场）')
+    },
+    {
+      key: 4,
+      val: t('四节制')
+    }
+  ];
+  if (props.currentSportId === 16) {
+    arr.splice(1, 0, {
+      key: 3,
+      val: t('三节制')
+    });
+  }
+  return arr;
+});
 
 const searchVal = () => emits('onSearch', 'reload');
 </script>

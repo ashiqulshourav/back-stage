@@ -421,7 +421,6 @@
   "k-2d45d456": "Uploaded file format does not match, please upload a PNG format file",
   "k-72974c1d": "Please settle the previous event first",
   "k-552696aa": "Half-time system",
-  "k-19aace05": "4-quarter system",
   "k2dc9eca1": "Best of three sets",
   "k-6e19490c": "Best of five sets",
   "k-581600f1": "minutes",
@@ -1334,5 +1333,17 @@
   "k47ee5a30": "冠军限額",
   "k1161e744": "单日累计赔付",
   "k-2c25c640": "体育场馆",
-  "k2a4bccb1": "电竞场馆"
+  "k2a4bccb1": "电竞场馆",
+  "k2b693f8a": "请手动清空所有结算事件后再试，点击确认进入结算管理页。",
+  "k-40b079c0": "请手动开启人工结算模式，点击确认进入结算管理页。",
+  "k-721c1ca4": "赛制编辑",
+  "k-4bfe7742": "切换赛制需要清空所有结算事件",
+  "k2bf14cef": "请手动清空所有结算事件后再试。",
+  "k794a0a4b": "打开赛事预开售列表编辑？",
+  "k-2dac45f5": "点击确认进入预开售列表",
+  "k-52ed74da": "现在立即自动清空所有结算事件？",
+  "k1cd9eaef": "选择本场赛事的赛制：",
+  "k-5e8fac5c": "赛制不能为空",
+  "k-247c399f": "5秒后立即清空所有结算事件",
+  "k-1f6d7bcc": "立即清空"
 }
