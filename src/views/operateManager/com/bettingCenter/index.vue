@@ -82,8 +82,7 @@
                 "
               >
                 <span>{{ t('商户名：') }}</span
-                >{{ tenantObj[row.tenantId]?.tenantName }}
-                [{{
+                >{{ tenantObj[row.tenantId]?.tenantName }} [{{
                   currency_map.find(
                     item => item.value === tenantObj[row.tenantId]?.currency
                   )?.label
@@ -405,8 +404,8 @@
                   color="grey"
                   ><Lock
                 /></el-icon>
-                <span>{{ t('特殊结算') }}</span> </el-button
-              >
+                <span>{{ t('特殊结算') }}</span>
+              </el-button>
             </div>
           </template>
           <template #operationRemark="{ row }">
