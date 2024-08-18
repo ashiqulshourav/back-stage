@@ -44,6 +44,11 @@ export const MATH_RULE = {
     { key: 2, val: t('上下半场制') },
     { key: 4, val: t('四节制') },
   ],
+  americanFootball: [
+    { key: 2, val: t('上下半场制') },
+    { key: 3, val: t('三节制') },
+    { key: 4, val: t('四节制') },
+  ],
   otherMatch: [
     { key: 3, val: t('三盘两胜制') },
     { key: 5, val: t('五盘三胜制') },

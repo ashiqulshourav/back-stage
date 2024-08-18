@@ -230,8 +230,9 @@ const tableRowClassName = ({ row }: MatchEventRowType) =>
   row.canceled === 1 ? 'pure-warning-row' : '';
 
 const baseTitle = computed(() => {
-  return MATH_RULE.basketBall.find(item => item.key === renderObj.periodType)
-    ?.val;
+  return MATH_RULE.americanFootball.find(
+    item => item.key === renderObj.periodType
+  )?.val;
 });
 </script>
 

@@ -22,7 +22,7 @@
       </div>
     </div>
     <div v-else-if="step === 2">
-      <div class="mb-2">{{ t('5秒后立即清空所有结算事件') }}</div>
+      {{ t('{n}秒后立即清空所有结算事件', { n: countDownNum }) }}
       <el-progress
         :text-inside="true"
         :stroke-width="18"
@@ -82,6 +82,7 @@ const emits = defineEmits(['closeDialog']);
 const ruleFormRef = ref();
 const step = ref(1);
 const percentage = ref(0);
+const countDownNum = ref(5);
 
 const { matchId, sportId, periodType } = defineProps<{
   matchId: number;
@@ -111,6 +112,7 @@ const periodList = computed(() => {
       val: t('四节制')
     }
   ];
+  console.log('UdateMatchRuleDialog.vue文件 115==============行打印=', sportId);
   if (sportId === 16) {
     arr.splice(1, 0, {
       key: 3,
