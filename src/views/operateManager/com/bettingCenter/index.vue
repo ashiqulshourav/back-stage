@@ -25,6 +25,7 @@
           :loading="loading"
           :size="size"
           class="table_container"
+          :row-key="row => row.id"
           adaptive
           :default-sort="{ prop: 'level', order: 'descending' }"
           :data="dataList"
@@ -282,9 +283,9 @@
             <div class="flex gap-2 items-center">
               <el-tag
                 effect="dark"
-                style="width: 100px; border: none"
+                :style="{ width: '100px', border: 'none' }"
                 @click="() => handleSettleHistoryDialog(row)"
-                :color="tagColor[row.orderStatus as keyof typeof tagColor] || ''"
+                :color="tagColor[row.orderStatus]"
                 class="cursor-pointer"
               >
                 {{ row.orderStatusView }}
