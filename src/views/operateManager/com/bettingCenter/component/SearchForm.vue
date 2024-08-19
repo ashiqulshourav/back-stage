@@ -109,7 +109,7 @@
               :key="item.value"
             />
           </el-select>
-        </el-form-item> 
+        </el-form-item>
         <el-form-item :label="`${t('赛种')}:`" prop="sportId">
           <el-tree-select
             v-model="props.form.sportId"
@@ -158,7 +158,7 @@
             <el-option :label="t('全部')" value=" " />
             <el-option :label="t('单关')" :value="1" />
             <el-option :label="t('单式串关')" :value="2" />
-            <el-option :label="t('复试串关')" :value="3" />
+            <el-option :label="t('复式串关')" :value="3" />
           </el-select>
         </el-form-item>
         <el-form-item

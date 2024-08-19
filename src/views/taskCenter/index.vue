@@ -76,7 +76,6 @@ const { tableHeaderStyle } = usePublicHooks();
 
 const getColor = (status: number) => {
     const obj = { color: '' };
-
     if (status === 1) {
       obj.color = '#f56c6c';
     } else if (status === 2) {
