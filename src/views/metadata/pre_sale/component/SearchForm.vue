@@ -125,6 +125,24 @@
         </el-select>
       </el-form-item>
 
+      <el-form-item :label="`${t('赛制')}:`" prop="periodType">
+        <el-select
+          :disabled="form.sportId !== 16 && form.sportId !== 2"
+          v-model="form.periodType"
+          :placeholder="t('请选择')"
+          clearable
+          class="!w-[200px]"
+        >
+          <el-option :label="t('全部')" :value="' '" />
+          <el-option
+            :label="item.val"
+            :value="item.key"
+            v-for="item in periodList"
+            :key="item.key"
+          />
+        </el-select>
+      </el-form-item>
+
       <el-form-item :label="`${t('比赛时间')}:`" prop="startTime">
         <el-button
           v-for="(item, index) in nextDayArr"
@@ -210,6 +228,27 @@ const props = withDefaults(
   {}
 );
 
+//- 当前比赛赛制获取
+const periodList = computed(() => {
+  const arr = [
+    {
+      key: 2,
+      val: t('两节制（上下半场）')
+    },
+    {
+      key: 4,
+      val: t('四节制')
+    }
+  ];
+  if (props.form.sportId === 16) {
+    arr.splice(1, 0, {
+      key: 3,
+      val: t('三节制')
+    });
+  }
+  return arr;
+});
+
 const changeDate = (
   t: string | number | Date | dayjs.Dayjs | null | undefined
 ) => {
@@ -245,6 +284,8 @@ const changeSelectDate = (_: number) => {
 };
 
 const search = () => {
+  if (props.form.sportId !== 16 && props.form.sportId !== 2)
+    props.form.periodType = ' ';
   emits('onSearch', ...['reload']);
 };
 
