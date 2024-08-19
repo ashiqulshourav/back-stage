@@ -150,10 +150,10 @@
         </el-form-item>
         <el-form-item :label="`${t('过关类型')}:`" prop="seriesType">
           <el-select
-              v-model="form.seriesType"
-              clearable
-              class="!w-[180px]"
-              @change="search"
+            v-model="form.seriesType"
+            clearable
+            class="!w-[180px]"
+            @change="search"
           >
             <el-option :label="t('全部')" value=" " />
             <el-option :label="t('单关')" :value="1" />
@@ -163,7 +163,7 @@
         </el-form-item>
         <el-form-item
           :label="`${t('单式串关类型')}:`"
-          v-if="form.seriesType===2"
+          v-if="form.seriesType === 2"
           prop="seriesDetails"
         >
           <el-select
@@ -183,7 +183,7 @@
         </el-form-item>
         <el-form-item
           :label="`${t('复式串关类型')}:`"
-          v-if="form.seriesType===3"
+          v-if="form.seriesType === 3"
           prop="seriesDetails"
         >
           <el-select
@@ -528,9 +528,7 @@ const selectDate = ref('');
 const gameClassify = ref<{ label: string; value: number }[]>(
   props.venueType === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP
 );
-import {
-  betStatusMap,
-} from '../util/types';
+import { betStatusMap } from '../util/types';
 import {
   seriesTypesSingle,
   seriesTypesDuplex
@@ -666,13 +664,13 @@ const handleCheckRevertMName = () => {
       .map(_ => _.id);
   }
 };
-
 watch(
   () => props.form.tenantIds,
   val => {
-    if (!val || val.length === 0) {
+    if (!val || val.length === 0 || val.length !== props.tenantList.length) {
       checkAllMName.value = false;
     } else if (val.length === props.tenantList.length) {
+      checkRevertMName.value = false;
       checkAllMName.value = true;
     }
   }
@@ -809,10 +807,11 @@ watch(
 watch(
   () => props.form.riskControlLabelList,
   val => {
-    if (!val || val.length === 0) {
+    if (!val || val.length === 0 || val.length !== props.riskLabelList.length) {
       checkAllRLabel.value = false;
     } else if (val.length === props.riskLabelList.length) {
       checkAllRLabel.value = true;
+      checkRevertRLabel.value = false;
     }
   }
 );

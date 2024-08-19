@@ -47,7 +47,7 @@
                   @click="
                     copyTest(
                       row.userName,
-                      t('用户名：{value}', { value: row.userName })
+                      t(`用户名：${value}`, { value: row.userName })
                     )
                   "
                 >
@@ -82,8 +82,7 @@
                 "
               >
                 <span>{{ t('商户名：') }}</span
-                >{{ tenantObj[row.tenantId]?.tenantName }}
-                [{{
+                >{{ tenantObj[row.tenantId]?.tenantName }} [{{
                   currency_map.find(
                     item => item.value === tenantObj[row.tenantId]?.currency
                   )?.label
@@ -91,17 +90,10 @@
               </div>
               <div
                 class="item_line cursor-pointer"
-                @click="
-                  copyTest(
-                    row.tenantId,
-                    t('商户id：{value}', {
-                      value: tenantObj[row.tenantId]?.name
-                    })
-                  )
-                "
+                @click="copyTest(row.tenantId, t(`商户id：${row.tenantId}`))"
               >
                 <span>{{ t('商户id：') }}</span
-                >{{ tenantObj[row.tenantId]?.name }}
+                >{{ row.tenantId }}
               </div>
             </div>
           </template>
@@ -273,10 +265,13 @@
                   )
                 }}
               </div>
-              <div
-                class="item_line"
-                v-if="item.settleScore">
-                <span v-if="item.settleScore&&displayHomeAwayScore(item.settleScore,item.sportId)">
+              <div class="item_line" v-if="item.settleScore">
+                <span
+                  v-if="
+                    item.settleScore &&
+                    displayHomeAwayScore(item.settleScore, item.sportId)
+                  "
+                >
                   {{ t('结算比分：')
                   }}{{ displayHomeAwayScore(item.settleScore, item.sportId) }}
                 </span>
@@ -290,7 +285,7 @@
                 style="width: 100px; border: none"
                 @click="() => handleSettleHistoryDialog(row)"
                 :color="tagColor[row.orderStatus as keyof typeof tagColor] || ''"
-                class="rounded-lg w-full cursor-pointer text-white"
+                class="cursor-pointer"
               >
                 {{ row.orderStatusView }}
               </el-tag>
@@ -334,8 +329,12 @@
               <div>
                 <span
                   :class="{
-                    win: item.betItemResultStatus === 4,
-                    lose: item.betItemResultStatus !== 4
+                    win:
+                      item.betItemResultStatus === 4 ||
+                      item.betItemResultStatus === 5,
+                    lose:
+                      item.betItemResultStatus === 3 ||
+                      item.betItemResultStatus === 6
                   }"
                 >
                   {{ item.betItemResultDesc }}
@@ -405,8 +404,8 @@
                   color="grey"
                   ><Lock
                 /></el-icon>
-                <span>{{ t('特殊结算') }}</span> </el-button
-              >
+                <span>{{ t('特殊结算') }}</span>
+              </el-button>
             </div>
           </template>
           <template #operationRemark="{ row }">
