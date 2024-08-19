@@ -36,20 +36,23 @@
               {{ t('批量通过') }}
             </el-button>
           </div>
-          <div v-if="hasAuth('refreshSetting'.toUpperCase())" class="flex gap-3 items-center">
+          <div
+            v-if="hasAuth('refreshSetting'.toUpperCase())"
+            class="flex gap-3 items-center"
+          >
             <el-switch
               v-model="hasDataFetching"
               inline-prompt
               active-text="开"
               inactive-text="关"
-              style="--el-switch-on-color: #f88d48;"
+              style="--el-switch-on-color: #f88d48"
             />
-            <span>{{t('列表刷新频率')}}</span>
+            <span>{{ t('列表刷新频率') }}</span>
             <el-select v-model="dataFetchingTime" style="width: 80px">
-              <el-option label="30" :value="30"/>
-              <el-option label="60" :value="60"/>
-              <el-option label="120" :value="120"/>
-              <el-option label="180" :value="180"/>
+              <el-option label="30" :value="30" />
+              <el-option label="60" :value="60" />
+              <el-option label="120" :value="120" />
+              <el-option label="180" :value="180" />
             </el-select>
             <span>S</span>
           </div>
@@ -110,12 +113,11 @@
                   "
                 >
                   <span>{{ t('商户名：') }}</span
-                  >{{ tenantObj[row.tenantId]?.tenantName }}
-                  [{{
-                  currency_map.find(
-                    item => item.value === tenantObj[row.tenantId]?.currency
-                  )?.label
-                }}]
+                  >{{ tenantObj[row.tenantId]?.tenantName }} [{{
+                    currency_map.find(
+                      item => item.value === tenantObj[row.tenantId]?.currency
+                    )?.label
+                  }}]
                 </div>
                 <div
                   class="item_line cursor-pointer"
@@ -131,7 +133,6 @@
                   <span>{{ t('商户id：') }}</span
                   >{{ tenantObj[row.tenantId]?.name }}
                 </div>
-
               </div>
               <div>
                 <RiskLabelList
@@ -165,7 +166,7 @@
                       t('主队：{value}', { value: item.homeTeamNameCn })
                     )
                   "
-                >{{ item.homeTeamNameCn }}</span
+                  >{{ item.homeTeamNameCn }}</span
                 >
                 vs
                 <span
@@ -176,7 +177,7 @@
                       t('客队：{value}', { value: item.awayTeamNameCn })
                     )
                   "
-                >{{ item.awayTeamNameCn }}</span
+                  >{{ item.awayTeamNameCn }}</span
                 >
               </div>
               <div
@@ -206,17 +207,12 @@
               </div>
               <div class="item_line">
                 {{ t('开赛时间:')
-                }}{{
-                  dayjs(item.beginTime)
-                    ?.format('MM-DD HH:mm:ss')
-                }}
+                }}{{ dayjs(item.beginTime)?.format('MM-DD HH:mm:ss') }}
               </div>
             </div>
           </template>
           <template #betMessage="{ row }">
-            <div
-              class="match_item bet_detail eq-height"
-            >
+            <div class="match_item bet_detail eq-height">
               <div
                 class="item_line cursor-pointer flex items-baseline gap-1"
                 @click="
@@ -236,18 +232,23 @@
                     : ''
                 }}
               </div>
-              <div class="item_line text-[#409EFF]" v-if="row.combineOrderDetails.length > 1">
-               <span>
-                     {{
-                   String(row.seriesType).slice(-3) === '001' ? '单式串关：' : '复式串关：'
-                 }}
+              <div
+                class="item_line text-[#409EFF]"
+                v-if="row.combineOrderDetails.length > 1"
+              >
+                <span>
+                  {{
+                    String(row.seriesType).slice(-3) === '001'
+                      ? '单式串关：'
+                      : '复式串关：'
+                  }}
                 </span>
                 <span>{{
-                    formatSeriesType(
-                      row?.seriesType,
-                      row.combineOrderDetails.length
-                    )
-                  }}</span>
+                  formatSeriesType(
+                    row?.seriesType,
+                    row.combineOrderDetails.length
+                  )
+                }}</span>
                 <span>
                   {{
                     String(row.seriesType).slice(-3) === '001'
@@ -255,16 +256,12 @@
                       : ''
                   }}
                 </span>
-
               </div>
               <div class="item_line" v-if="row.combineOrderDetails.length > 1">
-                总共：{{
-                  calculateSeriesTypeTotalBets(
-                    row?.seriesType
-                  )}}注
+                总共：{{ calculateSeriesTypeTotalBets(row?.seriesType) }}注
               </div>
               <div class="item_line" v-if="row.combineOrderDetails.length > 1">
-                每注：{{row.orderAmount}} {{row.currency}}
+                每注：{{ row.orderAmount }} {{ row.currency }}
               </div>
               <div class="item_line">
                 {{ t('投注IP:') }}
@@ -272,11 +269,10 @@
                   v-if="row.combineOrderDetails[0].ip"
                   @click="openIpDialog(row.combineOrderDetails[0].ip)"
                   class="text-[#409EFF] cursor-pointer"
-                >{{ row.combineOrderDetails[0].ip }} ({{row.ipArea}})</span
+                  >{{ row.combineOrderDetails[0].ip }} ({{ row.ipArea }})</span
                 >
                 <span v-else>-</span>
               </div>
-
             </div>
           </template>
           <template #betItem="{ row }">
@@ -302,7 +298,7 @@
                   {{
                     enterGoalMap[
                       item.betHandicap.toUpperCase() as keyof typeof enterGoalMap
-                      ]
+                    ]
                   }}
                 </span>
                 {{ useSportFormatDetail(item)[3] }} @{{
@@ -374,7 +370,11 @@
             <span
               v-if="row.profitAmountOfRmb"
               :class="row.profitAmountOfRmb > 0 ? 'win' : 'lose'"
-              >{{ row.profitAmountOfRmb > 0 ? "+" + row.profitAmountOfRmb.toFixed(2): row.profitAmountOfRmb.toFixed(2) }}</span
+              >{{
+                row.profitAmountOfRmb > 0
+                  ? '+' + row.profitAmountOfRmb.toFixed(2)
+                  : row.profitAmountOfRmb.toFixed(2)
+              }}</span
             >
             <span v-else>-</span>
           </template>
@@ -382,7 +382,12 @@
             <span
               v-if="row.profitAmount"
               :class="row.profitAmount > 0 ? 'win' : 'lose'"
-              >{{ row.profitAmount > 0 ? "+" + row.profitAmount.toFixed(2): row.profitAmount.toFixed(2)}} {{ ' ' + row.currency }}</span
+              >{{
+                row.profitAmount > 0
+                  ? '+' + row.profitAmount.toFixed(2)
+                  : row.profitAmount.toFixed(2)
+              }}
+              {{ ' ' + row.currency }}</span
             >
             <span v-else>-</span>
           </template>
@@ -513,7 +518,7 @@
           </template>
         </pure-table>
         <div
-            class="bottom_content absolute bottom-7 flex max-w-[50%] items-center text-sm flex-wrap"
+          class="bottom_content absolute bottom-7 flex max-w-[50%] items-center text-sm flex-wrap"
         >
           <div>
             <label>{{ t('总计：') }}</label>
@@ -522,7 +527,7 @@
           <div>
             <label>{{ t('用户数：') }}</label>
             <span
-            >{{ addThousandSeparator(totalInfo?.thisPageBetUserCount) ?? 0
+              >{{ addThousandSeparator(totalInfo?.thisPageBetUserCount) ?? 0
               }}{{ t('人') }}</span
             >
           </div>
@@ -531,7 +536,7 @@
             <span class="ml-1">
               {{
                 addThousandSeparator(
-                    totalInfo?.thisPageBetTotalAmount?.toFixed(2)
+                  totalInfo?.thisPageBetTotalAmount?.toFixed(2)
                 ) ?? '0.00'
               }}</span
             >
@@ -541,7 +546,7 @@
             <span class="ml-1">
               {{
                 addThousandSeparator(
-                    totalInfo?.thisPageBetTotalProfitAmount?.toFixed(2)
+                  totalInfo?.thisPageBetTotalProfitAmount?.toFixed(2)
                 ) ?? '0.00'
               }}</span
             >
@@ -550,9 +555,8 @@
             <label>{{ t('注单均赔率：') }}</label>
             <span class="ml-1">
               {{
-                addThousandSeparator(
-                    totalInfo?.thisPageAvgOdds?.toFixed(2)
-                ) ?? '0.00'
+                addThousandSeparator(totalInfo?.thisPageAvgOdds?.toFixed(2)) ??
+                '0.00'
               }}</span
             >
           </div>
@@ -579,7 +583,9 @@ import {
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
   getIsInplay,
-  enterGoalMap, calculateSeriesTypeTotal,openIpDialog
+  enterGoalMap,
+  calculateSeriesTypeTotal,
+  openIpDialog
 } from '@/utils/formatMatch';
 import { riskStatus } from './util/types';
 import { usePublicHooks } from '@/hooks';
@@ -588,7 +594,7 @@ import { ref, onMounted, onUpdated } from 'vue';
 import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import EditPen from '@iconify-icons/ep/edit-pen';
 import { adjustContentWithRowHeight } from '@/utils/adjustRowCoulmnHeight';
-import RiskLabelList from "@/views/operateManager/com/bettingCenter/component/riskLabelList.vue";
+import RiskLabelList from '@/views/operateManager/com/bettingCenter/component/riskLabelList.vue';
 import { currency_map } from '@/utils/maps/currency_map';
 
 const { tableHeaderStyle } = usePublicHooks();
@@ -654,12 +660,11 @@ watch(
 
 onMounted(() => {
   adjustContentWithRowHeight();
-})
+});
 
-onUpdated (() => {
+onUpdated(() => {
   adjustContentWithRowHeight();
-})
-
+});
 </script>
 
 <style lang="scss">
@@ -677,8 +682,8 @@ onUpdated (() => {
     }
   }
 }
-.user_detail{
-  min-width: 210px
+.user_detail {
+  min-width: 210px;
 }
 .match_detail,
 .bet_detail {
@@ -757,13 +762,13 @@ onUpdated (() => {
 .mw-50 > .cell {
   min-width: 55px;
 }
-.eq-height{
+.eq-height {
   display: flex;
   flex-direction: column;
   justify-content: center;
   // width: 100%;
 }
-.mw-230{
-  min-width: 230px!important;
+.mw-230 {
+  min-width: 230px !important;
 }
 </style>

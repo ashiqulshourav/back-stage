@@ -458,6 +458,8 @@ export function useBettingAuditHook(venueType: number, category: number) {
       };
     } else if (rStatus === riskStatus.autoReject) {
       obj = { label: riskStatusMap[riskStatus.autoReject], bgColor: '#F88D48' };
+    } else if (rStatus === riskStatus.preReject) {
+      obj = { label: riskStatusMap[riskStatus.preReject], bgColor: '#F88D48' };
     }
     return obj;
   };
