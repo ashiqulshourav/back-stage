@@ -76,12 +76,12 @@ export const columns: TableColumnList = [
     minWidth: 200,
     formatter: ({ updatedAt }) => dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss')
   },
-  {
-    label: t("操作人"),
-    prop: "operatorId",
-    minWidth: 200,
-    formatter: ({ operatorId }) => operatorId===0?t('系统'):operatorId===1?'SFERSF':operatorId
-  },
+  // {
+  //   label: t("操作人"),
+  //   prop: "operatorId",
+  //   minWidth: 200,
+  //   formatter: ({ operatorId }) => operatorId===0?t('系统'):operatorId===1?'SFERSF':operatorId
+  // },
   {
     label: t('备注'),
     minWidth: 100,
