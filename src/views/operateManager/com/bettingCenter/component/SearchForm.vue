@@ -109,11 +109,11 @@
               :key="item.value"
             />
           </el-select>
-        </el-form-item>
+        </el-form-item> 
         <el-form-item :label="`${t('赛种')}:`" prop="sportId">
           <el-tree-select
             v-model="props.form.sportId"
-            :disabled="form.category && props.category === 0"
+            :disabled="form.category === '' || form.category === ' '"
             :placeholder="t('请选择，可多选')"
             :data="
               gameClassify.map(item => ({
