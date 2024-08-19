@@ -1,7 +1,6 @@
-
 export type searchFormType = {
-  pageSize?:number|string;
-  pageNum?:number|string;
+  pageSize?: number | string;
+  pageNum?: number | string;
   sportId: string;
   userIdOrName: string;
   createTimeStart: number | string;
@@ -9,26 +8,27 @@ export type searchFormType = {
   orderId: string;
   leagueId: string;
   matchId: string;
-  seriesType:number|string;
-  category:string|number;
+  seriesType: number | string;
+  category: string | number;
   [key: string]: any;
-  tenantIds:any ;
-  minBetAmount:number|string;
-  maxBetAmount:number|string;
-  riskStatus:number|string;
-  currency: number|string;
-}
+  tenantIds: any;
+  minBetAmount: number | string;
+  maxBetAmount: number | string;
+  riskStatus: number | string;
+  currency: number | string;
+};
 
 export enum riskStatus {
-  rejectBetting=2,
-  autoApprove=103,
-  approve=104,
-  reject=204, //
-  autoReject=203, //
-  reject1=201, // 手动拒绝
-  autoReject1=202, //自动拒绝
+  rejectBetting = 2,
+  autoApprove = 103,
+  approve = 104,
+  reject = 204, //
+  autoReject = 203, //
+  reject1 = 201, // 手动拒绝
+  autoReject1 = 202, //自动拒绝
+  preReject = 206 // 提前划单
 }
-export const riskStatusMap ={
+export const riskStatusMap = {
   [riskStatus.rejectBetting]: t('待审核'),
   [riskStatus.autoApprove]: t('自动通过'),
   [riskStatus.approve]: t('手动通过'),
@@ -36,4 +36,5 @@ export const riskStatusMap ={
   [riskStatus.autoReject]: t('自动划单'),
   [riskStatus.reject1]: t('手动拒绝'),
   [riskStatus.autoReject1]: t('自动拒绝'),
-}
+  [riskStatus.preReject]: t('提前划单')
+};
