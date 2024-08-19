@@ -72,6 +72,11 @@
                 >
                   <span>{{ t('商户名：') }}</span
                   >{{ tenantObj[row.tenantId]?.tenantName }}
+                  [{{
+                  currency_map.find(
+                    item => item.value === tenantObj[row.tenantId]?.currency
+                  )?.label
+                }}]
                 </div>
                 <div
                   class="item_line cursor-pointer"
@@ -227,7 +232,7 @@
                   v-if="row.combineOrderDetails[0].ip"
                   @click="openIpDialog(row.combineOrderDetails[0].ip)"
                   class="text-[#409EFF] cursor-pointer"
-                >{{ row.combineOrderDetails[0].ip }} {{row.ipArea}}</span
+                >({{ row.combineOrderDetails[0].ip }} ({{row.ipArea}})</span
                 >
                 <span v-else>-</span>
               </div>
@@ -361,6 +366,22 @@
               <div>{{ markeTypeMap[item.marketType] }}</div>
             </div>
           </template>
+          <template #profitAmountOfRmb="{ row }">
+            <span
+              v-if="row.profitAmountOfRmb"
+              :class="row.profitAmountOfRmb > 0 ? 'win' : 'lose'"
+              >{{ row.profitAmountOfRmb > 0 ? "+" + row.profitAmountOfRmb.toFixed(2): row.profitAmountOfRmb.toFixed(2) }}</span
+            >
+            <span v-else>-</span>
+          </template>
+         <template #profitAmount="{ row }">
+            <span
+              v-if="row.profitAmount"
+              :class="row.profitAmount > 0 ? 'win' : 'lose'"
+              >{{ row.profitAmount > 0 ? "+" + row.profitAmount.toFixed(2): row.profitAmount.toFixed(2)}} {{ ' ' + row.currency }}</span
+            >
+            <span v-else>-</span>
+          </template>
           <template #operation="{ row }">
             <div class="h-full" v-if="form.queryType !== 1">
               <div
@@ -465,6 +486,7 @@ import {
 } from '@/utils/formatMatch';
 import { usePublicHooks } from '@/hooks';
 import {addThousandSeparator} from "@/utils/formatNumber";
+import { currency_map } from '@/utils/maps/currency_map';
 
 defineOptions({ name: 'RISKMANAGEMENT_MANUALORDERREJECTION' });
 const { tableHeaderStyle } = usePublicHooks();

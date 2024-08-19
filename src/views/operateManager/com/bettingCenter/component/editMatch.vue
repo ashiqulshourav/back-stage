@@ -33,6 +33,7 @@
           />
         </div>
       </div>
+      VS
       <div class="result_r">
         <div>{{ newRow.combineOrderDetails[0].awayTeamNameCn }}</div>
         <div class="mt-2 flex max-w-full justify-center">
@@ -68,16 +69,6 @@
         </li>
       </ul>
     </div>
-    <div class="mt-5">
-      <el-text type="primary">{{ t('是否为最终结算') }}</el-text>
-      <ul class="mt-2">
-         <li :class="`result_item ${
-            resultTabValue === item.value
-              ? 'result_item_active cursor-pointer'
-              : 'cursor-pointer'
-          }`" v-for="item in tabsList" @click="resultClick(item)">{{item.label}}</li>
-      </ul>
-    </div>
   </div>
   <div v-else>
     <PureTableBar
@@ -94,6 +85,7 @@
           adaptive
           :data="newRow.combineOrderDetails"
           :columns="dynamicColumns"
+           :span-method="objectSpanMethod"
         >
           <template #matchMessage="{ row }">
             <div class="match_item">
@@ -158,10 +150,31 @@
               </li>
             </ul>
           </template>
+          <template #fianlResult="{row}">
+            <div class="mt-5" >
+              <ul class="mt-2">
+                <li :class="`result_item ${
+                    resultTabValue === item.value
+                      ? 'result_item_active cursor-pointer'
+                      : 'cursor-pointer'
+                  }`" v-for="item in tabsList" @click="resultClick(item)">{{item.label}}</li>
+              </ul>
+            </div>
+          </template>
         </pure-table>
       </template>
     </PureTableBar>
   </div>
+  <!-- <div class="mt-5">
+    <el-text type="primary">{{ t('是否为最终结算') }}</el-text>
+    <ul class="mt-2">
+      <li :class="`result_item ${
+            resultTabValue === item.value
+              ? 'result_item_active cursor-pointer'
+              : 'cursor-pointer'
+          }`" v-for="item in tabsList" @click="resultClick(item)">{{item.label}}</li>
+    </ul>
+  </div> -->
   <div class="flex justify-end mt-10">
     <el-button @click="closeDialog">{{ t('取消') }}</el-button>
     <el-button type="primary" @click="confirmClick">{{ t('确定') }}</el-button>
@@ -223,6 +236,28 @@ function formatRow() {
 
   return JSON.parse(JSON.stringify(data));
 }
+
+const objectSpanMethod = ({
+  row,
+  column,
+  rowIndex,
+  columnIndex,
+}: any) => {
+  if (columnIndex === 3) {
+    if (rowIndex % data.combineOrderDetails.length === 0) {
+      return {
+        rowspan: data.combineOrderDetails.length,
+        colspan: 1,
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0,
+      }
+    }
+  }
+}
+
 const resultList = [
   {
     value: EBetResultType.WIN,
@@ -298,7 +333,13 @@ const editColumnList = [
     slot: 'matchResult',
     prop: 'matchResult',
     align: 'left'
-  }
+  },
+  {
+    label: t('是否为最终结算'),
+    slot: 'fianlResult',
+    prop: 'fianlResult',
+    align: 'left'
+  },
 ];
 const closeDialog = () => {
   emits('closeDialog');

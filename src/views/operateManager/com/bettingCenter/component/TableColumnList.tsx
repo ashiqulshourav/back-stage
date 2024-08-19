@@ -9,6 +9,7 @@ export const columns: TableColumnList = [
     label: t("序号"),
     prop: 'index',
     align: 'left',
+    width: 200,
   },
   {
     label: t("用户信息"),
@@ -42,10 +43,10 @@ export const columns: TableColumnList = [
   {
     label: t("状态"),
     slot: "orderStatusView",
-    minWidth: 100,
-    align: 'center',
+    minWidth: 250,
+    align: 'left',
     formatter: ({ betResult }) => BET_RESULT_TYPE_MAP[betResult as keyof typeof BET_RESULT_TYPE_MAP] || '', // (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
-    className: 'mw-70'
+    className: 'mw-250px'
   },
   {
     label: t("赔率"),
@@ -55,18 +56,35 @@ export const columns: TableColumnList = [
     className: 'getParent',
   },
   {
-    label: t("投注额"),
-    prop: "productAmountTotal",
-    minWidth: 50,
+    label: t("投注额 RMB"),
+    prop: "orderAmountOfRmb",
+    minWidth: 100,
     align: 'center',
-    formatter: ({ productAmountTotal }) => addThousandSeparator(productAmountTotal.toFixed(2))  // (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
+    formatter: ({ orderAmountOfRmb }) => addThousandSeparator(orderAmountOfRmb.toFixed(2)),  // (productAmountTotal ? productAmountTotal.toFixed(2) : 0),
+    className: 'mw-100',
+  },
+  {
+    label: t("用户输赢 RMB"),
+    slot: "profitAmountOfRmb",
+    minWidth: 100,
+    align: 'center',
+    formatter: ({ profitAmountOfRmb }) => addThousandSeparator(profitAmountOfRmb.toFixed(2)),
+    className: 'mw-100',
+  },
+   {
+    label: t("投注额"),
+    prop: "orderAmount",
+    minWidth: 100,
+    align: 'center',
+    formatter: ({ orderAmount,currency }) => addThousandSeparator(orderAmount.toFixed(2)) + " " + currency,  // (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
+    className: 'mw-100',
   },
   {
     label: t("用户输赢"),
     slot: "profitAmount",
     minWidth: 100,
     align: 'center',
-    formatter: ({ profitAmount }) => addThousandSeparator(profitAmount.toFixed(2)),
+    formatter: ({ profitAmount, currency}) => addThousandSeparator(profitAmount.toFixed(2)) + " " + currency,
     className: 'mw-100',
   },
   {

@@ -37,7 +37,7 @@ export const getPlayNameByKc = ({ code, name, ctid, sportId }: { code: string, n
   if (ctid !== undefined && name !== undefined && ctid !== 0) return name;
   switch (code) {
     case 'FT_OU':
-      switch (sportId) {
+      switch (Number(sportId)) {
         case 5:
           return t('总局数');
         default:
@@ -52,13 +52,13 @@ export const getPlayNameByKc = ({ code, name, ctid, sportId }: { code: string, n
     case 'HT_OE':
       return t('单双-上半场');
     case 'FT_AH':
-      switch (sportId) {
+      switch (Number(sportId)) {
+        case 3:
         case 6:
           return t('全场让盘');
-        case 23:
-          return t('全场让分');
         case 5:
         case 19:
+        case 23:
           return t('全场让局');
         default:
           return t('全场让球');
@@ -90,7 +90,7 @@ export const getPlayNameByKc = ({ code, name, ctid, sportId }: { code: string, n
     case 'PT_AH':
       return t('让分');
     case 'PT_OU':
-      switch (sportId) {
+      switch (Number(sportId)) {
         case 19:
           return t('全场总分');
         default:
@@ -359,7 +359,7 @@ export const getOrderBetTypeAtBetting = (order: TOrder) => {
   return orderName;
 };
 
-//计算串关的总赔率，非复试
+//计算串关的总赔率，非复式
 export const calculateSeriesTypeTotal = (list: any) => {
   let oddTotal = 1
   list.forEach((item: { oddFinally: number, marketTypeFinally: EOddType, marketType: number }) => {
@@ -379,8 +379,9 @@ export const calculateSeriesTypeTotalBets = (seriesType: number) => {
 
 // 获取比分
 export const displayHomeAwayScore = (scoreString: string, sprotId?: ESportType, witchTeam?: TeamType) => {
-  if (sprotId > 33) return '';
-  if (sprotId === ESportType.TENNIS || sprotId === ESportType.VOLLEYBALL) return '';
+  const _sprotId = Number(sprotId)
+  if (_sprotId > 33) return '';
+  if (_sprotId === ESportType.TENNIS || _sprotId === ESportType.VOLLEYBALL) return '';
   const [home, away] = assertHomeAwayScore(scoreString);
   if (home === undefined || away === undefined) {
     return ''

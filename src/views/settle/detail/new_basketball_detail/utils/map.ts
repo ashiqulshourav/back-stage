@@ -9,7 +9,11 @@ export const BASKETBALL_EVENT_TYPE = {
   2: t('下半场'),
 }
 
-export const NEW_ROW_TYPE = {
+type new_row_type = {
+  [key: string | number]: { [key: string | number]: number }
+}
+
+export const NEW_ROW_TYPE: new_row_type = {
   2: {
     0: 1,
     1: 2,

@@ -1,8 +1,18 @@
 <template>
   <div class="main">
     <div class="flex justify-between item-center mb-4">
-      <el-radio-group v-model="currency" style="margin-bottom: 15px" @change="onCurrencyChange">
-        <el-radio-button v-for="item in CURRENCY_LIST_MAP" :value="item.value" :key="item.value" :label="item.label">{{ item.label }}</el-radio-button>
+      <el-radio-group
+        v-model="currency"
+        style="margin-bottom: 15px"
+        @change="onCurrencyChange"
+      >
+        <el-radio-button
+          v-for="item in CURRENCY_LIST_MAP"
+          :value="item.value"
+          :key="item.value"
+          :label="item.label"
+          >{{ item.label }}</el-radio-button
+        >
       </el-radio-group>
     </div>
     <div class="grid grid-cols-2 gap-3 justify-between">
@@ -11,7 +21,7 @@
           <span class="font-bold">{{ t('体育场馆') }}</span>
           <el-button
             v-if="!isEditSport"
-            @click="isEditSport = true"
+            @click="updateEidtStatus('isEditSport')"
             type="primary"
             >{{ t('编辑') }}</el-button
           >
@@ -118,7 +128,7 @@
           <span class="font-bold">{{ t('电竞场馆') }}</span>
           <el-button
             v-if="!isEditESport"
-            @click="isEditESport = true"
+            @click="updateEidtStatus('isEditESport')"
             type="primary"
             >{{ t('编辑') }}</el-button
           >
@@ -241,13 +251,14 @@ defineOptions({ name: 'RISKMANAGEMENT_USERLEVELLIMIT' });
 const { tableHeaderStyleBlue } = usePublicHooks();
 const onCurrencyChange = (currency: number) => {
   onSearch();
-}
+};
 const {
   loading,
   columns,
   sportList,
   eSportList,
   isEditSport,
+  updateEidtStatus,
   isEditESport,
   addSportItem,
   confirmSportClick,

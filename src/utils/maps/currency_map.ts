@@ -1,4 +1,3 @@
-
 export const currency_map = [
   { label: t('人民币'), value: 1, value2:'CNY' },
   { label: t('USDT'), value: 2, value2:'USDT' },

@@ -25,6 +25,7 @@ export const columns: TableColumnList = [
   {
     label: t('主队'),
     prop: 'homeTeamNameCn',
+    align: 'left',
     headerRenderer: d => handleTableWidth(d, t('主队'), 'auto'),
     minWidth: 150
   },

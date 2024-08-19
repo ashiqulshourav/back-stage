@@ -152,8 +152,8 @@ declare namespace SattleDataAPI {
     childrenData?: ChildrenDataList[];
     settlementType: number; //1 自动结算 //2 手动结算
     isShowCancelBtn?: boolean;
-    periodType?: number;
-    reSettleStatus?: number;
+    periodType: number;
+    reSettleStatus?: number; //1 重新结算姐main
   };
 
   type ChildrenDataList = {
@@ -596,4 +596,5 @@ declare namespace SattleDataAPI {
   }
 
   type cancelFootballPenaltyKickOrderRes = COMMON.BASE_RES_TYPE<null>
+  type updateMatchPeriodType = COMMON.BASE_RES_TYPE<null>
 }

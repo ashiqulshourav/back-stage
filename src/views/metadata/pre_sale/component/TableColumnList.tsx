@@ -6,6 +6,7 @@ import {
   SPORT_ID_MAP
 } from '@/utils/maps/sports_map';
 import { getLan } from '@/utils/utilFn';
+import { MATCH_FORMAT } from '@/utils/maps/sports_map';
 const lan = getLan();
 export const columns: TableColumnList = [
   {
@@ -78,6 +79,19 @@ export const columns: TableColumnList = [
     formatter: ({ handicapStatus }): string =>
       OPENING_STATUS[handicapStatus as keyof typeof OPENING_STATUS],
     minWidth: 150
+  },
+  {
+    label: t('赛制'),
+    prop: 'periodType',
+    headerRenderer: d => handleTableWidth(d, t('赛制'), 'auto'),
+    formatter: ({ periodType, sportId }): string => {
+      if (+sportId === 2 || +sportId === 16) {
+        return MATCH_FORMAT[sportId][periodType];
+      } else {
+        return MATCH_FORMAT[sportId] as string;
+      }
+    },
+    minWidth: 200
   },
   {
     label: t('加时点球开售控制'),

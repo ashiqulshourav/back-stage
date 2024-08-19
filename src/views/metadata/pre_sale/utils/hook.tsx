@@ -1,12 +1,13 @@
 import { message } from '@/utils/message';
 import editForm from '../form.vue';
 import type { PaginationProps } from '@pureadmin/table';
-import { ElMessageBox } from 'element-plus';
+import { ElDialog, ElMessageBox } from 'element-plus';
 import { addDialog } from '@/components/ReDialog';
 import { SearchFormType } from './types';
 import { usePublicHooks } from '@/hooks';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import dayJs from 'dayjs';
+import { SPORT_LIST_MAP } from '@/views/settle/main/utils/map';
 
 export function usePreSale() {
   const formRef = ref();
@@ -112,7 +113,11 @@ export function usePreSale() {
     });
   };
 
+  const currentMatch = reactive<SaleDataAPI.PreSaleList>(
+    {} as SaleDataAPI.PreSaleList
+  );
   const openDialog = (title: string, row?: SaleDataAPI.PreSaleList) => {
+    Object.assign(currentMatch, row);
     addDialog({
       title,
       props: {
@@ -122,14 +127,14 @@ export function usePreSale() {
           matchName: row?.matchName ?? '',
           beginTime: row?.beginTime ?? '',
           level: row?.level ?? '',
+          periodType: row?.periodType ?? '',
           countryId: row?.countryId ?? '',
           overTimeAndPenaltyKickStatus: row?.overTimeAndPenaltyKickStatus ?? ''
         }
       },
-      width: '40%',
-      draggable: true,
-      fullscreenIcon: true,
+      width: '35%',
       closeOnClickModal: false,
+      alignCenter: true,
       contentRenderer: () => h(editForm, { ref: formRef }),
       beforeSure: (done, { options }) => {
         const FormRef = formRef.value.getRef();
@@ -137,14 +142,14 @@ export function usePreSale() {
         curData.beginTime = dayJs(curData.beginTime).format(
           'YYYY-MM-DD HH:mm:ss'
         );
-        function chores() {
+        function chores(noReload?: boolean) {
           done();
-          onSearch();
+          !noReload && onSearch();
         }
         FormRef.validate((valid: boolean) => {
           if (valid) {
             if (row) {
-              updateSaleList(curData, async () => chores());
+              updateSaleList(curData, async (_?: boolean) => chores(_));
             } else {
               chores();
             }
@@ -154,14 +159,38 @@ export function usePreSale() {
     });
   };
 
+  //- 修改赛事
+  const router = useRouter();
+
   const updateSaleList = async (
     curData: SaleDataAPI.UpdateMatchParamsType,
-    cb: () => {}
+    cb: (isReload?: boolean) => {}
   ) => {
     const res = await API.updateMatch(curData);
-    message(res.msg, { type: res.code ? 'error' : 'success' });
-    if (res.code) return;
-    cb();
+    // //- 修改赛事错误（未改变赛事为人工结算）
+    if (res.code === 11230 || res.code === 11231) {
+      const t1 =
+        res.code === 11230
+          ? t('请手动清空所有结算事件后再试，点击确认进入结算管理页。')
+          : t('请手动开启人工结算模式，点击确认进入结算管理页。');
+
+      ElMessageBox.confirm(t1, t('赛制编辑'), {
+        confirmButtonText: t('确定'),
+        cancelButtonText: t('留在当前页面'),
+        center: true
+      }).then(() => {
+        cb(false);
+        const params = JSON.parse(JSON.stringify(currentMatch));
+        router.push({
+          name: SPORT_LIST_MAP.find(item => item.value === 2)!.linkName,
+          state: { params }
+        });
+      });
+    } else {
+      message(res.msg, { type: res.code ? 'error' : 'success' });
+      if (res.code) return;
+      cb();
+    }
   };
 
   //- 初始化搜索
@@ -214,6 +243,7 @@ export function usePreSale() {
           overTimeAndPenaltyKickStatus: row.overTimeAndPenaltyKickStatus,
           matchId: row.matchId
         });
+
         message(res.msg, { type: res.code ? 'error' : 'success' });
         if (!res.code) onSearch();
       })

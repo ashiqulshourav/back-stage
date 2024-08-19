@@ -3,6 +3,7 @@ import { ElMessageBox } from 'element-plus';
 import { usePublicHooks } from '@/hooks';
 import { SPORT_LEVEL_LIST_TYPE } from './type';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
+import { RESULT_MAP } from '@/utils/maps/sports_map';
 
 export function useOtherFootballSettlement() {
   const route = useRoute();
@@ -42,12 +43,18 @@ export function useOtherFootballSettlement() {
     if (res.code) return message(res.msg, { type: 'error' });
     res.data.forEach(item => {
       if (item.settleStatus === 1) {
-        item.betOptions = item.handicapList.findIndex(item => item.win === 4);
+        item.betOptions = item.handicapList.findIndex(
+          item =>
+            item.win === RESULT_MAP.new_win || item.win === RESULT_MAP.old_win
+        );
         item.multipartBetOptions =
           item.handicapList.length > 2
             ? item.handicapList
                 .map((item, index) => {
-                  return item.win === 4 ? index : -1;
+                  return item.win === RESULT_MAP.new_win ||
+                    item.win === RESULT_MAP.old_win
+                    ? index
+                    : -1;
                 })
                 .filter(_ => _ !== -1)
             : [];
@@ -179,7 +186,7 @@ export function useOtherFootballSettlement() {
     getSiginMatchData();
     getFootballMatchInfo();
   });
-  
+
   //- 单个赛事信息获取
   const getSiginMatchData = async () => {
     const res = await API.getPreSaleInfo({ matchId: +route.params.matchId });

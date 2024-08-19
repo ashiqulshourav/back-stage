@@ -26,6 +26,7 @@ export type SearchFormType = {
   status: string;
   startTime: string;
   endTime: string;
+  periodType: number | string;
 };
 
 export type sport_list_map_type = {

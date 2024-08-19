@@ -1,30 +1,28 @@
 <template>
-  <el-row :gutter="20" class="text-sm">
-    <el-col class="mb-2" :span="5">
-      <div class="flex">
-        <span>{{ t('上半场赛果') }}:</span>
-        <span class="ml-1">{{ scoreList[0] }}</span>
-      </div>
-    </el-col>
-    <el-col class="mb-2" :span="9">
-      <div class="flex">
-        <span>{{ t('下半场赛果') }}:</span>
-        <span class="ml-1">{{ scoreList[1] }}</span>
-      </div>
-    </el-col>
-    <el-col class="mb-2" :span="5">
-      <div class="flex">
-        <span>{{ t('加时赛赛果') }}:</span>
-        <span class="ml-1">{{ scoreList[3] }}</span>
-      </div>
-    </el-col>
-    <el-col class="mb-2" :span="5">
-      <div class="flex">
-        <span>{{ t('全场赛果') }}:</span>
-        <span class="ml-1">{{ scoreList[2] }}</span>
-      </div>
-    </el-col>
-  </el-row>
+  <el-col class="mb-2" :span="4">
+    <div class="flex">
+      <span>{{ t('上半场赛果') }}:</span>
+      <span class="ml-1">{{ scoreList[0] }}</span>
+    </div>
+  </el-col>
+  <el-col class="mb-2" :span="6">
+    <div class="flex">
+      <span>{{ t('下半场赛果') }}:</span>
+      <span class="ml-1">{{ scoreList[1] }}</span>
+    </div>
+  </el-col>
+  <el-col class="mb-2" :span="4">
+    <div class="flex">
+      <span>{{ t('加时赛赛果') }}:</span>
+      <span class="ml-1">{{ scoreList[3] }}</span>
+    </div>
+  </el-col>
+  <el-col class="mb-2" :span="6">
+    <div class="flex">
+      <span>{{ t('全场赛果') }}:</span>
+      <span class="ml-1">{{ scoreList[2] }}</span>
+    </div>
+  </el-col>
 </template>
 
 <script setup lang="ts">

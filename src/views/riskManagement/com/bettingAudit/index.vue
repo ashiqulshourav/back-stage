@@ -111,6 +111,11 @@
                 >
                   <span>{{ t('商户名：') }}</span
                   >{{ tenantObj[row.tenantId]?.tenantName }}
+                  [{{
+                  currency_map.find(
+                    item => item.value === tenantObj[row.tenantId]?.currency
+                  )?.label
+                }}]
                 </div>
                 <div
                   class="item_line cursor-pointer"
@@ -267,7 +272,7 @@
                   v-if="row.combineOrderDetails[0].ip"
                   @click="openIpDialog(row.combineOrderDetails[0].ip)"
                   class="text-[#409EFF] cursor-pointer"
-                >{{ row.combineOrderDetails[0].ip }} {{row.ipArea}}</span
+                >{{ row.combineOrderDetails[0].ip }} ({{row.ipArea}})</span
                 >
                 <span v-else>-</span>
               </div>
@@ -365,14 +370,21 @@
               </div>
             </div>
           </template>
+          <template #profitAmountOfRmb="{ row }">
+            <span
+              v-if="row.profitAmountOfRmb"
+              :class="row.profitAmountOfRmb > 0 ? 'win' : 'lose'"
+              >{{ row.profitAmountOfRmb > 0 ? "+" + row.profitAmountOfRmb.toFixed(2): row.profitAmountOfRmb.toFixed(2) }}</span
+            >
+            <span v-else>-</span>
+          </template>
           <template #profitAmount="{ row }">
             <span
               v-if="row.profitAmount"
               :class="row.profitAmount > 0 ? 'win' : 'lose'"
-              class="min-w-[100px] inline-block"
-              >{{ row.profitAmount.toFixed(2) }}</span
+              >{{ row.profitAmount > 0 ? "+" + row.profitAmount.toFixed(2): row.profitAmount.toFixed(2)}} {{ ' ' + row.currency }}</span
             >
-            <span v-else class="min-w-[100px] inline-block">-</span>
+            <span v-else>-</span>
           </template>
           <template #riskStatus="{ row }">
             <div
@@ -577,6 +589,7 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import EditPen from '@iconify-icons/ep/edit-pen';
 import { adjustContentWithRowHeight } from '@/utils/adjustRowCoulmnHeight';
 import RiskLabelList from "@/views/operateManager/com/bettingCenter/component/riskLabelList.vue";
+import { currency_map } from '@/utils/maps/currency_map';
 
 const { tableHeaderStyle } = usePublicHooks();
 const rejectSelectedCount = ref(0);

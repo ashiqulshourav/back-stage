@@ -6,11 +6,15 @@ import { addThousandSeparator } from '@/utils/formatNumber';
 const { exportDialog } = usePublicHooks();
 import {
   searchFormType,
-  seriesTypesSingle,
-  seriesTypesDuplex,
   riskStatusMap,
   riskStatus
 } from './types';
+import {
+  seriesTypesSingle,
+  seriesTypesDuplex
+} from '@/utils/maps/seriesTypes_map';
+
+
 
 import { addDialog, closeDialog } from '@/components/ReDialog/index';
 import { reactive, ref, onMounted, h } from 'vue';

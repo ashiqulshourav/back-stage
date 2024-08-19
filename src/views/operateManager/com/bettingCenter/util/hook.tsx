@@ -5,11 +5,9 @@ import type { FormInstance } from 'element-plus';
 import { usePublicHooks } from '@/hooks';
 const { exportDialog } = usePublicHooks();
 import {
-  betStatus,
   searchFormType,
-  seriesTypesSingle,
-  seriesTypesDuplex
 } from './types';
+import {seriesTypesSingle,seriesTypesDuplex,AllSeriesTypesSingle,AllSeriesTypesDuplex} from '@/utils/maps/seriesTypes_map';
 import { addDialog, closeDialog } from '@/components/ReDialog/index';
 import editMatch from '../component/editMatch.vue';
 import { reactive, ref, onMounted, h } from 'vue';
@@ -22,7 +20,6 @@ import { copyTextToClipboard } from '@pureadmin/utils';
 import { t } from '@/plugins/i18n';
 import { riskStatus } from '@/views/riskManagement/com/bettingAudit/util/types';
 import editOrder from '../component/editOrder.vue';
-import IpDialog from '../component/IpDialog.vue';
 import SettleHistory from '../component/settleHistory.vue';
 
 export function useBettingCenterHook(category: number, venueType: number) {
@@ -40,6 +37,17 @@ export function useBettingCenterHook(category: number, venueType: number) {
   const totalInfo = ref<BetOrderAPI.otherDataType>(
     {} as BetOrderAPI.otherDataType
   );
+  const tagColor = ref<Object>({
+    1: 'FFC53D', // 预约中
+    2: 'FFC53D', // 确认中
+    3: '#F57582', // 预约失败
+    4: '#F57582', // 预约取消
+    5: '#F57582', // 投注失败
+    6: '#F57582', // 未结算
+    7: '#40A9FF', // 已结算
+    8: 'FFC53D', // 待审核
+    9: '#F57582', // 注单无效
+  })
   const pagination = reactive<PaginationProps>({
     total: 0,
     pageSize: 20,
@@ -59,8 +67,8 @@ export function useBettingCenterHook(category: number, venueType: number) {
     homeTeamName: '',
     betItemId: '',
     isInplay: '',
-    seriesTypes: [],
-    category: ' ',
+    seriesType:'',
+    category: '',
     timeType: 1,
     leagueName: '',
     tenantIds: [],
@@ -95,40 +103,35 @@ export function useBettingCenterHook(category: number, venueType: number) {
     order_id?: number,
     page?: number
   ) => {
-    let seriesDetails: any = [];
     const newForm = { ...form }
-    if (newForm.seriesTypes == 2) {
-      if (newForm.seriesDetailsSingle.length) {
-        newForm.seriesDetailsSingle.map((item: keyof typeof seriesTypesSingle) => {
-          seriesDetails.push(...seriesTypesSingle[item].list);
+    let realSeriesTypes = [];
+    if(form.seriesType == 1){
+      realSeriesTypes.push(1)
+    }
+
+    if (form.seriesType == 2) {
+      if (form.seriesDetailsSingle.length) {
+        form.seriesDetailsSingle.map((item: keyof typeof seriesTypesSingle) => {
+          realSeriesTypes.push(...seriesTypesSingle[item].list);
         });
       } else {
-        for (let item in seriesTypesSingle) {
-          seriesDetails.push(
-            ...seriesTypesSingle[item as keyof typeof seriesTypesSingle].list
-          );
-        }
+        realSeriesTypes.push(...AllSeriesTypesSingle);
       }
-    } else if (newForm.seriesTypes == 3) {
-      if (newForm.seriesDetailsDuplex.length) {
-        newForm.seriesDetailsDuplex.map((item: keyof typeof seriesTypesSingle) => {
-          seriesDetails.push(
-            ...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list
+    } else if (form.seriesType == 3) {
+      if (form.seriesDetailsDuplex.length) {
+        form.seriesDetailsDuplex.map((item: keyof typeof seriesTypesSingle) => {
+          realSeriesTypes.push(
+              ...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list
           );
         });
       } else {
-        for (let item in seriesTypesDuplex) {
-          seriesDetails.push(
-            ...seriesTypesDuplex[item as keyof typeof seriesTypesDuplex].list
-          );
-        }
+        realSeriesTypes.push(...AllSeriesTypesDuplex);
       }
-    } else {
-      seriesDetails = '';
     }
-    if (seriesDetails.length > 1) {
-      seriesDetails = [...new Set(seriesDetails)];
+    if (realSeriesTypes.length > 1) {
+      realSeriesTypes = [...new Set(realSeriesTypes)];
     }
+
     if (newForm.orderId || newForm.matchId) {
       newForm.timeStart = '';
       newForm.timeEnd = '';
@@ -139,14 +142,16 @@ export function useBettingCenterHook(category: number, venueType: number) {
     if (newForm.timeEnd) {
       newForm.timeEnd = dayjs(newForm.timeEnd).format('YYYY-MM-DD HH:mm:ss')
     }
+    if((newForm.isInplay ===0||newForm.isInplay ===1||newForm.isInplay ===2)){
+      newForm.isInplay = [newForm.isInplay]
+    }
     return {
       ...removeEmptyStringKeys({
         ...newForm,
         orderId: order_id || form.orderId,
         seriesDetailsSingle: '',
         seriesDetailsDuplex: '',
-        seriesDetails: seriesDetails,
-        seriesTypes: +form.seriesTypes > 2 ? 2 : form.seriesTypes,
+        seriesTypes:  [...new Set(realSeriesTypes)],
         venueType: venueType,
         category: venueType === 0 ? form.category : 1
       }),
@@ -319,76 +324,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
       }
     });
   };
-  const getStatus = (
-    status: number,
-    billStatus: number,
-    betResultArr: number[],
-    isReserve: number,
-    riskStatusArr?: number[],
-    isSpecialSettle?: number
-  ) => {
-    let obj = { status: -1, bgColor: '' };
-    if (isSpecialSettle === 1) {
-      // 特殊结算也算已结算
-      obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
-    } else if (betResultArr?.includes(22)||betResultArr?.includes(25)) {
-      //预约取消
-      obj = { status: betStatus.reverseCancel, bgColor: '#F57582' };
-    } else if (riskStatusArr?.includes(riskStatus.rejectBetting)) {
-      //待审核
-      obj = { status: betStatus.PendingApprove, bgColor: '#F57582' };
-    } else if (
-      betResultArr?.includes(61) &&
-      (riskStatusArr?.includes(riskStatus.reject) ||
-        riskStatusArr?.includes(riskStatus.autoReject))
-    ) {
-      // 封控划单 203 204
-      obj = { status: betStatus.riskReject, bgColor: '#F88D48' };
-    } else if (
-      riskStatusArr?.includes(riskStatus.reject1) ||
-      riskStatusArr?.includes(riskStatus.autoReject1)
-    ) {
-      // 封控拒单 201 202
-      obj = { status: betStatus.betFail, bgColor: '#F88D48' };
-    } else if (
-      status == 2 &&
-      billStatus === 1 &&
-      (betResultArr?.includes(22) || betResultArr?.includes(23)||betResultArr?.includes(25))
-    ) {
-      // 注单无效
-      obj = { status: betStatus.betInvalid, bgColor: '#E54752' };
-    } else if (
-      riskStatusArr?.includes(riskStatus.autoApprove) &&
-      betResultArr.includes(24)
-    ) {
-      // 注单无效
-      obj = { status: betStatus.betInvalid, bgColor: '#E54752' };
-    } else if (status === 2 && billStatus === 1 && betResultArr?.includes(21)) {
-      // 预约失败
-      obj = { status: betStatus.reserveFail, bgColor: '#F57582' };
-    } else if (status === 0 && billStatus === 0) {
-      // 未结算
-      if (isReserve === 1) {
-        // 预约中
-        obj = { status: betStatus.onReverse, bgColor: '#F57582' };
-      } else {
-        obj = { status: betStatus.unsettlementBet, bgColor: '#FFC53D' };
-      }
-    } else if (status === 1 && billStatus === 1) {
-      // 已结算
-      obj = { status: betStatus.settlementBet, bgColor: '#40A9FF' };
-    } else if (status === 3) {
-      // 待确认
-      obj = { status: betStatus.PendingApprove, bgColor: '#FFC53D' };
-    } else if (status === 4) {
-      // 投注失败
-      obj = { status: betStatus.betFail, bgColor: '#F57582' };
-    } else if (status === 5) {
-      // 赛事异常
-      obj = { status: betStatus.eventAbnormal, bgColor: '#F88D48' };
-    }
-    return obj;
-  };
 
   const getOddStatus = (betResult: number, riskSt: number) => {
     if (riskSt === riskStatus.reject1 || riskSt === riskStatus.autoReject1) {
@@ -543,7 +478,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
     handleSelectionChange,
     exportFile,
     handleCancel,
-    getStatus,
     copyTest,
     tenantObj,
     UDialogFlag,
@@ -553,6 +487,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
     riskLabelList,
     getOddStatus,
     downloading,
-    handleSettleHistoryDialog
+    handleSettleHistoryDialog,
+    tagColor
   };
 }
