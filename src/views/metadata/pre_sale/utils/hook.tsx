@@ -35,8 +35,7 @@ export function usePreSale() {
     handicapStatus: '',
     category: 0,
     overTimeAndPenaltyKickStatus: null,
-    periodTypeList: [],
-    partOfPeriod: ''
+    periodType: ' '
   });
 
   function changeSwitch({

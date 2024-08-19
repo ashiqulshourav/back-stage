@@ -23,8 +23,7 @@ export type SearchFormType = {
   handicapStatus: number | string;
   category: number | string;
   overTimeAndPenaltyKickStatus: boolean | null;
-  periodTypeList: number[]; //- 赛制集合
-  partOfPeriod: number | string; //- 1-属于 0-不属于
+  periodType: number | string;
 }
 
 export type {
