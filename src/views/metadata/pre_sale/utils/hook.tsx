@@ -34,7 +34,8 @@ export function usePreSale() {
     leagueId: '',
     handicapStatus: '',
     category: 0,
-    overTimeAndPenaltyKickStatus: null
+    overTimeAndPenaltyKickStatus: null,
+    periodType: ' '
   });
 
   function changeSwitch({
