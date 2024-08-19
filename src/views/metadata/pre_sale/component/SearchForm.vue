@@ -125,6 +125,24 @@
         </el-select>
       </el-form-item>
 
+      <el-form-item :label="`${t('赛制')}:`" prop="matchRule">
+        <el-select
+          v-model="matchRule"
+          :placeholder="t('请选择')"
+          clearable
+          class="!w-[200px]"
+          @change="changeRule"
+        >
+          <el-option :label="t('全部')" :value="' '" />
+          <el-option
+            :label="item.val"
+            :value="item.key"
+            v-for="item in periodList"
+            :key="item.key"
+          />
+        </el-select>
+      </el-form-item>
+
       <el-form-item :label="`${t('比赛时间')}:`" prop="startTime">
         <el-button
           v-for="(item, index) in nextDayArr"
@@ -210,6 +228,45 @@ const props = withDefaults(
   {}
 );
 
+const matchRule = ref(' ');
+
+///- 修改联赛规则
+const changeRule = (v: number) => {
+  if (!v) {
+    props.form.periodTypeList = [];
+    props.form.partOfPeriod = '';
+  } else if (v == 1) {
+    props.form.periodTypeList = [2, 3, 4];
+    props.form.partOfPeriod = 0;
+  } else {
+    props.form.periodTypeList = [v];
+    props.form.partOfPeriod = 1;
+  }
+};
+
+//- 当前比赛赛制获取
+const periodList = computed(() => {
+  const arr = [
+    {
+      key: 2,
+      val: t('两节制（上下半场）')
+    },
+    {
+      key: 3,
+      val: t('三节制')
+    },
+    {
+      key: 4,
+      val: t('四节制')
+    },
+    {
+      key: 1,
+      val: t('其他')
+    }
+  ];
+  return arr;
+});
+
 const changeDate = (
   t: string | number | Date | dayjs.Dayjs | null | undefined
 ) => {
@@ -230,6 +287,9 @@ const resetForm = (formEl: FormInstance | undefined) => {
   formEl?.resetFields();
   selectIndex.value = -1;
   gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
+  props.form.periodTypeList = [];
+  props.form.partOfPeriod = '';
+  matchRule.value = '';
   emits('onSearch', ...['reload']);
 };
 

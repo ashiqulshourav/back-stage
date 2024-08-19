@@ -7,6 +7,10 @@ interface TeamFormProps {
   formInline: Partial<SaleDataAPI.PreSaleList>;
 }
 
+/* 
+ 是否属于赛制集合中的赛制 1-属于 0-不属于
+ */
+
 export type SearchFormType = {
   matchId: string;
   matchName: string;
@@ -19,6 +23,8 @@ export type SearchFormType = {
   handicapStatus: number | string;
   category: number | string;
   overTimeAndPenaltyKickStatus: boolean | null;
+  periodTypeList: number[]; //- 赛制集合
+  partOfPeriod: number | string; //- 1-属于 0-不属于
 }
 
 export type {
