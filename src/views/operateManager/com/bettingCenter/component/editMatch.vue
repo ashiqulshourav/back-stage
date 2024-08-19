@@ -69,6 +69,22 @@
         </li>
       </ul>
     </div>
+    <div class="mt-5">
+      <el-text type="primary">{{ t('请选择注单的投注结果') }}</el-text>
+      <ul class="mt-2">
+        <li
+          :class="`result_item ${
+            resultTabValue === item.value
+              ? 'result_item_active cursor-pointer'
+              : 'cursor-pointer'
+          }`"
+          v-for="item in tabsList"
+          @click="resultClick(item)"
+        >
+          {{ item.label }}
+        </li>
+      </ul>
+    </div>
   </div>
   <div v-else>
     <PureTableBar
@@ -85,7 +101,7 @@
           adaptive
           :data="newRow.combineOrderDetails"
           :columns="dynamicColumns"
-           :span-method="objectSpanMethod"
+          :span-method="objectSpanMethod"
         >
           <template #matchMessage="{ row }">
             <div class="match_item">
@@ -150,14 +166,20 @@
               </li>
             </ul>
           </template>
-          <template #fianlResult="{row}">
-            <div class="mt-5" >
+          <template #fianlResult="{ row }">
+            <div class="mt-5">
               <ul class="mt-2">
-                <li :class="`result_item ${
+                <li
+                  :class="`result_item ${
                     resultTabValue === item.value
                       ? 'result_item_active cursor-pointer'
                       : 'cursor-pointer'
-                  }`" v-for="item in tabsList" @click="resultClick(item)">{{item.label}}</li>
+                  }`"
+                  v-for="item in tabsList"
+                  @click="resultClick(item)"
+                >
+                  {{ item.label }}
+                </li>
               </ul>
             </div>
           </template>
@@ -200,8 +222,8 @@ const emits = defineEmits(['closeDialog']);
 const newRow = ref<BetOrderAPI.Detail & BetOrderAPI.BetOrderList>(
   formatRow() as BetOrderAPI.Detail & BetOrderAPI.BetOrderList
 );
-const resultTabValue = ref<Number>(1)
-resultTabValue.value = data?.isSpecialSettle || 1
+const resultTabValue = ref<Number>(1);
+resultTabValue.value = data?.isSpecialSettle || 1;
 const selectBetResult = (
   index: number,
   betResult: number,
@@ -237,26 +259,21 @@ function formatRow() {
   return JSON.parse(JSON.stringify(data));
 }
 
-const objectSpanMethod = ({
-  row,
-  column,
-  rowIndex,
-  columnIndex,
-}: any) => {
+const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
   if (columnIndex === 3) {
     if (rowIndex % data.combineOrderDetails.length === 0) {
       return {
         rowspan: data.combineOrderDetails.length,
-        colspan: 1,
-      }
+        colspan: 1
+      };
     } else {
       return {
         rowspan: 0,
-        colspan: 0,
-      }
+        colspan: 0
+      };
     }
   }
-}
+};
 
 const resultList = [
   {
@@ -295,26 +312,25 @@ const resultList = [
     value: EBetResultType.GAME_ABANDONED,
     title: BET_RESULT_TYPE_MAP[EBetResultType.GAME_ABANDONED]
   },
- {
-   value: EBetResultType.HANDICAPS_CANCEL,
-       title: BET_RESULT_TYPE_MAP[EBetResultType.HANDICAPS_CANCEL]
- },
+  {
+    value: EBetResultType.HANDICAPS_CANCEL,
+    title: BET_RESULT_TYPE_MAP[EBetResultType.HANDICAPS_CANCEL]
+  },
   {
     value: EBetResultType.ABNORMAL,
     title: BET_RESULT_TYPE_MAP[EBetResultType.ABNORMAL]
-  },
-
+  }
 ];
 const tabsList = [
   {
-    label:'是',
-    value:1
+    label: '是',
+    value: 1
   },
   {
-    label:'否',
-    value:11
+    label: '否',
+    value: 11
   }
-]
+];
 const editColumnList = [
   {
     label: t('赛事信息'),
@@ -339,15 +355,15 @@ const editColumnList = [
     slot: 'fianlResult',
     prop: 'fianlResult',
     align: 'left'
-  },
+  }
 ];
 const closeDialog = () => {
   emits('closeDialog');
 };
 
-const resultClick = (item) => {
-  resultTabValue.value = item.value
-}
+const resultClick = item => {
+  resultTabValue.value = item.value;
+};
 const confirmClick = () => {
   let isRisk = false;
 
