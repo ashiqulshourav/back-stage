@@ -26,7 +26,7 @@ export function useAppointmentHook() {
     const res = await API.updateLeagueConfig({
       id: row.id,
       reservationSwitch: row.reservationSwitch,
-      updatedBy: row.updatedBy
+      updatedBy: ''
     })
     message(res.msg, { type: res.code ? 'error' : 'success' })
     if (res.code) row.reservationSwitch = row.reservationSwitch === 0 ? 1 : 0
