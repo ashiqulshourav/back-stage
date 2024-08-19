@@ -1,6 +1,10 @@
 <template>
   <div class="main">
-    <SearchForm :loading="loading" @changeNavType="changeNavType" />
+    <SearchForm
+      :loading="loading"
+      @changeNavType="changeNavType"
+      :currentSportId="currentSportId"
+    />
 
     <pure-table
       class="table_container"
@@ -39,6 +43,6 @@ import { hasAuth } from '@/router/utils';
 
 defineOptions({ name: 'RISKMANAGEMENT_APPOINTMENT' });
 
-const { loading, dataList, changeNavType, upateLeagueStatus } =
+const { loading, dataList, changeNavType, upateLeagueStatus, currentSportId } =
   useAppointmentHook();
 </script>
