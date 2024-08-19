@@ -4,13 +4,14 @@ import { reactive, ref } from 'vue';
 export function useAppointmentHook() {
   const dataList = reactive<RiskManagementDataAPI.getLeagueConfigListType[]>([]);
   const loading = ref(true);
+  const currentSportId = ref(1);
 
-  async function onSearch(sportId: number) {
+  async function onSearch() {
     try {
       loading.value = true;
       const res =
         await API.getLeagueConfigList({
-          sportId: sportId
+          sportId: currentSportId.value
         });
       loading.value = false;
       if (res.code) return message(res.msg, { type: 'error' });
@@ -30,17 +31,22 @@ export function useAppointmentHook() {
     })
     message(res.msg, { type: res.code ? 'error' : 'success' })
     if (res.code) row.reservationSwitch = row.reservationSwitch === 0 ? 1 : 0
+    if (!res.code) onSearch();
+
   }
 
   onMounted(() => {
-    onSearch(1)
+    onSearch()
   })
 
   //- 游戏切换
-  const changeNavType = (v: number) => onSearch(v)
+  const changeNavType = (v: number) => {
+    currentSportId.value = v;
+    onSearch()
+  }
 
   return {
     loading, dataList, onSearch, upateLeagueStatus,
-    changeNavType
+    changeNavType, currentSportId
   };
 }
