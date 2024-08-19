@@ -30,7 +30,7 @@ export const settleTypeMap =[
   },
   {
     value:7,
-    label:'走水'
+    label:'风控拒单'
   },
   {
     value:8,
