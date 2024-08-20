@@ -388,7 +388,7 @@
             <div>
               <el-button
                 class="mb-1 w-100"
-                @click="row.isSpecialSettle !== 1 && switchDialog(true, row)"
+                @click="switchDialog(true, row)"
                 v-if="
                   !(row.status == 2 || row.isReserve === 1) &&
                   hasAuth('specialSettlement'.toUpperCase())

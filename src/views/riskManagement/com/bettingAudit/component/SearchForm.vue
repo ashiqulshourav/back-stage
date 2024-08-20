@@ -11,7 +11,7 @@
         <el-form-item prop="tenantIds" :label="`${t('商户名')}:`">
           <el-tree-select
             v-model="props.form.tenantIds"
-            :placeholder="t('请选择商户ID，多选项')"
+            :placeholder="t('请选择商户，多选项')"
             :data="
               tenantList.map(item => ({
                 value: item.id,
