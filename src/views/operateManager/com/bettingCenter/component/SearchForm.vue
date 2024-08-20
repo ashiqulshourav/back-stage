@@ -211,7 +211,7 @@
             v-model="form.seriesDetailsDuplex"
             :placeholder="t('请选择串关类型')"
             :data="
-              Object.keys(seriesTypesDuplex).map((key: string) => ({
+               Object.keys(seriesTypesDuplex).map((key: string) => ({
                 value: seriesTypesDuplex[key].value,
                 label: seriesTypesDuplex[key].name
               }))
@@ -229,19 +229,49 @@
           >
             <template #header>
               <el-checkbox
-                v-model="checkAllSeriesTypesDuplex"
-                @change="handleCheckAllSeriesTypesDuplex"
+                v-model="checkAllSeriesDetailsDuplex"
+                @change="handleCheckAllSeriesDetailsDuplex"
               >
                 {{ t('全选') }}
               </el-checkbox>
               <el-checkbox
-                v-model="revertAllSeriesTypesDuplex"
-                @change="handleCheckRevertSeriesTypesDuplex"
+                v-model="revertAllSeriesDetailsDuplex"
+                @change="handleRevertAllSeriesDetailsDuplex"
               >
                 {{ t('反选') }}
               </el-checkbox>
             </template>         
-          </el-tree-select>
+        </el-tree-select>
+          <!-- <el-select
+            :placeholder="t('请选择串关类型')"
+            class="!w-[180px]"
+            multiple
+            v-model="form.seriesDetailsDuplex"
+            :placeholder="t('请选择串关类型')"
+            :data="
+              Object.keys(seriesTypesDuplex).map((key: string) => ({
+                value: seriesTypesDuplex[key].value,
+                label: seriesTypesDuplex[key].name
+              }))
+            "
+            @change="search"
+            filterable
+            clearable
+            multiple
+            collapse-tags
+            :render-after-expand="false"
+            show-checkbox
+            check-strictly
+            check-on-click-node
+            class="!w-[180px]"
+          >
+            <el-option
+              v-for="item in seriesTypesDuplex"
+              :label="item.name"
+              :value="item.value"
+              :key="item.value"
+            />
+          </el-select> -->
         </el-form-item>
         <el-form-item :label="`${t('投注阶段')}:`" prop="isInplay">
           <el-select
@@ -733,6 +763,65 @@ const checkRevertSeriesTypeLabel = ref(false);
 const checkAllClientTypeLabel = ref(false);
 const checkRevertCilentTypeLabel = ref(false);
 
+const checkAllSeriesTypesSingle = ref(false);
+const revertAllSeriesTypesSingle = ref(false);
+
+const checkAllSeriesDetailsDuplex = ref(false);
+const revertAllSeriesDetailsDuplex = ref(false);
+
+
+const handleCheckAllSeriesTypesSingle = (val: CheckboxValueType) => {
+  if (val) {
+    props.form.seriesDetailsSingle =  Object.keys(seriesTypesSingle).map((key: string) => ({
+                value: seriesTypesSingle[key].value,
+                label: seriesTypesSingle[key].name
+              })).map(_ => _.value);
+    revertAllSeriesTypesSingle.value = false;
+  } else {
+    props.form.seriesDetailsSingle = [];
+  }
+};
+
+const handleCheckRevertSeriesTypesSingle = () => {
+  if (true) {
+    const oldArray = [...props.form.seriesDetailsSingle];
+    props.form.seriesDetailsSingle = Object.keys(seriesTypesSingle).map((key: string) => ({
+                value: seriesTypesSingle[key].value,
+                label: seriesTypesSingle[key].name
+              }))
+      .filter(_ => !oldArray.includes(_.value))
+      .map(_ => _.value);
+      checkAllSeriesTypesSingle.value = false;
+  }
+};
+
+
+const handleCheckAllSeriesDetailsDuplex = (val: CheckboxValueType) => {
+  if (val) {
+    props.form.seriesDetailsDuplex =  Object.keys(seriesTypesDuplex).map((key: string) => ({
+                value: seriesTypesDuplex[key].value,
+                label: seriesTypesDuplex[key].name
+              })).map(_ => _.value);
+    revertAllSeriesDetailsDuplex.value = false;
+  } else {
+    props.form.seriesDetailsDuplex = [];
+  }
+};
+
+const handleRevertAllSeriesDetailsDuplex = () => {
+  if (true) {
+    const oldArray = [...props.form.seriesDetailsDuplex];
+    props.form.seriesDetailsDuplex = Object.keys(seriesTypesDuplex).map((key: string) => ({
+                value: seriesTypesDuplex[key].value,
+                label: seriesTypesDuplex[key].name
+              }))
+      .filter(_ => !oldArray.includes(_.value))
+      .map(_ => _.value);
+      checkAllSeriesDetailsDuplex.value = false;
+  }
+};
+
+
 const handleCheckAllRLabel = (val: CheckboxValueType) => {
   if (val) {
     props.form.riskControlLabelList = props.riskLabelList.map(_ => _.id);
@@ -834,6 +923,18 @@ watch(
 );
 
 watch(
+  () => props.form.seriesType,
+  () => {
+    props.form.seriesDetailsDuplex = [];
+    props.form.seriesDetailsSingle = [];
+    revertAllSeriesTypesSingle.value = false;
+    checkAllSeriesTypesSingle.value = false;
+    revertAllSeriesDetailsDuplex.value = false;
+    checkAllSeriesDetailsDuplex.value = false;
+  }
+)
+
+watch(
   () => props.form.sportId,
   val => {
     if (!val || val.length === 0 || val.length !== gameClassify.value.length) {
@@ -887,28 +988,6 @@ watch(
     }
   }
 );
-
-
-// multiple select for Series types single
-const checkAllSeriesTypesSingle = ref(false);
-const revertAllSeriesTypesSingle = ref(false);
-
-const handleCheckAllSeriesTypesSingle = (val: CheckboxValueType) => {
-  if(val){
-   props.form.seriesDetailsSingle = Object.keys(seriesTypesSingle).map(key => seriesTypesSingle[key].value);
-  } else {
-    props.form.seriesDetailsSingle = [];
-  }
-}
-
-const handleCheckRevertSeriesTypesSingle = () => {
-  if(true){
-    const oldArray = [...props.form.seriesDetailsSingle];
-    props.form.seriesDetailsSingle = Object.keys(seriesTypesSingle)
-    .filter(key => !oldArray.includes(seriesTypesSingle[key].value))
-    .map(key => seriesTypesSingle[key].value)
-  }
-}
 
 watch(
   () => props.form.seriesDetailsSingle,
