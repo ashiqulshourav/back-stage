@@ -20,12 +20,9 @@ export type searchFormType = {
 
 export enum riskStatus {
   rejectBetting = 2,
-  autoApprove = 103,
   approve = 104,
   reject = 204, //
   autoReject = 203, //
-  reject1 = 201, // 手动拒绝
-  autoReject1 = 202, //自动拒绝
   preReject = 206 //提前划单
 }
 export const riskStatusMap = {
