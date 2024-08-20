@@ -1,6 +1,6 @@
 import { t } from '@/plugins/i18n';
 import { handleTableWidth } from '@/utils/getTableWidth';
-import { addThousandSeparator } from '@/utils/formatNumber'
+import { addThousandSeparator } from '@/utils/formatNumber';
 
 export const columns: TableColumnList = [
   {
@@ -10,33 +10,33 @@ export const columns: TableColumnList = [
     minWidth: 50
   },
   {
-    label: t("用户信息"),
+    label: t('用户信息'),
     slot: 'userMessage',
     minWidth: 100,
-    align:'left',
+    align: 'left',
     className: 'getParent mw-230'
   },
   {
-    label: t("注单信息"),
+    label: t('注单信息'),
     slot: 'betMessage',
     minWidth: 100,
-    align:'left',
-    className: 'getParent mw-250',
+    align: 'left',
+    className: 'getParent mw-250'
   },
   {
-    label: t("赛事信息"),
+    label: t('赛事信息'),
     slot: 'matchMessage',
     minWidth: 200,
-    align:'left',
-    className: 'getParent',
+    align: 'left',
+    className: 'getParent'
   },
 
   {
-    label: t("投注项"),
+    label: t('投注项'),
     slot: 'betItem',
     minWidth: 200,
-    align:'left',
-    className: 'betItem getParent',
+    align: 'left',
+    className: 'betItem getParent'
   },
   {
     label: t('接拒状态'),
@@ -59,36 +59,40 @@ export const columns: TableColumnList = [
     headerRenderer: d => handleTableWidth(d, t('赔率'), 'auto')
   },
   {
-    label: t("投注额 RMB"),
-    prop: "orderAmountOfRmb",
+    label: t('投注额 RMB'),
+    prop: 'productAmountTotalOfRmb',
     minWidth: 100,
     align: 'center',
-    formatter: ({ orderAmountOfRmb }) => addThousandSeparator(orderAmountOfRmb.toFixed(2)),  // (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
+    formatter: ({ productAmountTotalOfRmb }) =>
+      addThousandSeparator(productAmountTotalOfRmb.toFixed(2)), // (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
     className: 'mw-100'
   },
   {
-    label: t("用户输赢 RMB"),
-    slot: "profitAmountOfRmb",
+    label: t('用户输赢 RMB'),
+    slot: 'profitAmountOfRmb',
     minWidth: 100,
     align: 'center',
-    formatter: ({ profitAmountOfRmb }) => addThousandSeparator(profitAmountOfRmb.toFixed(2)),
-    className: 'mw-100',
-  },
-   {
-    label: t("投注额"),
-    prop: "orderAmount",
-    minWidth: 100,
-    align: 'center',
-    formatter: ({ orderAmount,currency }) => addThousandSeparator(orderAmount.toFixed(2)) + " " + currency,  // (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
+    formatter: ({ profitAmountOfRmb }) =>
+      addThousandSeparator(profitAmountOfRmb.toFixed(2)),
     className: 'mw-100'
   },
   {
-    label: t("用户输赢"),
-    slot: "profitAmount",
+    label: t('投注额'),
+    prop: 'productAmountTotal',
     minWidth: 100,
     align: 'center',
-    formatter: ({ profitAmount, currency}) => addThousandSeparator(profitAmount.toFixed(2)) + " " + currency,
-    className: 'mw-100',
+    formatter: ({ productAmountTotal, currency }) =>
+      addThousandSeparator(productAmountTotal.toFixed(2)) + ' ' + currency, // (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
+    className: 'mw-100'
+  },
+  {
+    label: t('用户输赢'),
+    slot: 'profitAmount',
+    minWidth: 100,
+    align: 'center',
+    formatter: ({ profitAmount, currency }) =>
+      addThousandSeparator(profitAmount.toFixed(2)) + ' ' + currency,
+    className: 'mw-100'
   },
   {
     label: t('操作'),
