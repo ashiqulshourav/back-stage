@@ -26,6 +26,7 @@
           :size="size"
           class="table_container"
           adaptive
+          :row-key="row => row.id"
           :default-sort="{ prop: 'level', order: 'descending' }"
           :data="dataList"
           :columns="dynamicColumns"
@@ -514,7 +515,7 @@ import {
   displayHomeAwayScore,
   enterGoalMap,
   openIpDialog,
-  getIsInplay,
+  getIsInplay
 } from '@/utils/formatMatch';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
