@@ -242,7 +242,16 @@
               :key="item.betItemId"
             >
               <div class="item_line">
-                {{ `玩法：${item.betItemName}` }}
+                {{
+                  `玩法：${useSportFormatDetail(item)[4]} ${getIsInplay(
+                    item.isInplay
+                  )}`
+                }}
+                {{
+                  item.isInplay == 1
+                    ? displayHomeAwayScore(item.scoreBenchmark, item.sportId)
+                    : ''
+                }}
                 {{
                   item.isInplay == 1
                     ? displayHomeAwayScore(item.scoreBenchmark, item.sportId)
@@ -504,7 +513,8 @@ import {
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
   enterGoalMap,
-  openIpDialog
+  openIpDialog,
+  getIsInplay,
 } from '@/utils/formatMatch';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
