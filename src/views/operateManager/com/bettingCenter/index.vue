@@ -25,7 +25,6 @@
           :loading="loading"
           :size="size"
           class="table_container"
-          :row-key="row => row.id"
           adaptive
           :default-sort="{ prop: 'level', order: 'descending' }"
           :data="dataList"
@@ -243,11 +242,7 @@
               :key="item.betItemId"
             >
               <div class="item_line">
-                {{
-                  `玩法：${useSportFormatDetail(item)[4]} ${getIsInplay(
-                    item.isInplay
-                  )}`
-                }}
+                {{ `玩法：${item.betItemName}` }}
                 {{
                   item.isInplay == 1
                     ? displayHomeAwayScore(item.scoreBenchmark, item.sportId)
@@ -287,9 +282,9 @@
             <div class="flex gap-2 items-center">
               <el-tag
                 effect="dark"
-                :style="{ width: '100px', border: 'none' }"
+                style="width: 100px; border: none"
                 @click="() => handleSettleHistoryDialog(row)"
-                :color="tagColor[row.orderStatus]"
+                :color="tagColor[row.orderStatus as keyof typeof tagColor] || ''"
                 class="cursor-pointer"
               >
                 {{ row.orderStatusView }}
@@ -389,7 +384,7 @@
             <div>
               <el-button
                 class="mb-1 w-100"
-                @click="switchDialog(true, row)"
+                @click="row.isSpecialSettle !== 1 && switchDialog(true, row)"
                 v-if="
                   !(row.status == 2 || row.isReserve === 1) &&
                   hasAuth('specialSettlement'.toUpperCase())
@@ -509,8 +504,7 @@ import {
   calculateSeriesTypeTotalBets,
   displayHomeAwayScore,
   enterGoalMap,
-  openIpDialog,
-  getIsInplay
+  openIpDialog
 } from '@/utils/formatMatch';
 import { usePublicHooks } from '@/hooks';
 import { addThousandSeparator } from '@/utils/formatNumber';
