@@ -166,20 +166,41 @@
           v-if="form.seriesType === 2"
           prop="seriesDetails"
         >
-          <el-select
-            class="!w-[180px]"
-            :placeholder="t('请选择串关类型')"
-            multiple
+          <el-tree-select
             v-model="form.seriesDetailsSingle"
+            :placeholder="t('请选择串关类型')"
+            :data="
+              Object.keys(seriesTypesSingle).map((key: string) => ({
+                value: seriesTypesSingle[key].value,
+                label: seriesTypesSingle[key].name
+              }))
+            "
+            @change="search"
+            filterable
             clearable
+            multiple
+            collapse-tags
+            :render-after-expand="false"
+            show-checkbox
+            check-strictly
+            check-on-click-node
+            class="!w-[180px]"
           >
-            <el-option
-              v-for="item in seriesTypesSingle"
-              :label="item.name"
-              :value="item.value"
-              :key="item.value"
-            />
-          </el-select>
+            <template #header>
+              <el-checkbox
+                v-model="checkAllSeriesTypesSingle"
+                @change="handleCheckAllSeriesTypesSingle"
+              >
+                {{ t('全选') }}
+              </el-checkbox>
+              <el-checkbox
+                v-model="revertAllSeriesTypesSingle"
+                @change="handleCheckRevertSeriesTypesSingle"
+              >
+                {{ t('反选') }}
+              </el-checkbox>
+            </template>         
+        </el-tree-select>
         </el-form-item>
         <el-form-item
           :label="`${t('复式串关类型')}:`"
