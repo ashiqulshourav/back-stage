@@ -867,6 +867,38 @@ watch(
     }
   }
 );
+
+const checkAllSeriesTypesSingle = ref(false);
+const revertAllSeriesTypesSingle = ref(false);
+
+const handleCheckAllSeriesTypesSingle = (val: CheckboxValueType) => {
+  if(val){
+   props.form.seriesDetailsSingle = Object.keys(seriesTypesSingle).map(key => seriesTypesSingle[key].value);
+  } else {
+    props.form.seriesDetailsSingle = [];
+  }
+}
+
+const handleCheckRevertSeriesTypesSingle = () => {
+  if(true){
+    const oldArray = [...props.form.seriesDetailsSingle];
+    props.form.seriesDetailsSingle = Object.keys(seriesTypesSingle)
+    .filter(key => !oldArray.includes(seriesTypesSingle[key].value))
+    .map(key => seriesTypesSingle[key].value)
+  }
+}
+
+watch(
+  () => props.form.seriesDetailsSingle,
+  val => {
+    if(!val || val.length === 0 || val.length !== Object.keys(seriesTypesSingle).length){
+      checkAllSeriesTypesSingle.value = false;
+    } else if (val.length === Object.keys(seriesTypesSingle).length){
+      checkAllSeriesTypesSingle.value = true;
+      revertAllSeriesTypesSingle.value = false;
+    }
+  }
+)
 </script>
 
 <style scoped lang="scss">
