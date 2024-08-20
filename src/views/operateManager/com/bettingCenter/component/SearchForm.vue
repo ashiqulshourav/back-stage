@@ -207,21 +207,41 @@
           v-if="form.seriesType === 3"
           prop="seriesDetails"
         >
-          <el-select
-            :placeholder="t('请选择串关类型')"
-            class="!w-[180px]"
-            multiple
+          <el-tree-select
             v-model="form.seriesDetailsDuplex"
+            :placeholder="t('请选择串关类型')"
+            :data="
+              Object.keys(seriesTypesDuplex).map((key: string) => ({
+                value: seriesTypesDuplex[key].value,
+                label: seriesTypesDuplex[key].name
+              }))
+            "
             @change="search"
+            filterable
             clearable
+            multiple
+            collapse-tags
+            :render-after-expand="false"
+            show-checkbox
+            check-strictly
+            check-on-click-node
+            class="!w-[180px]"
           >
-            <el-option
-              v-for="item in seriesTypesDuplex"
-              :label="item.name"
-              :value="item.value"
-              :key="item.value"
-            />
-          </el-select>
+            <template #header>
+              <el-checkbox
+                v-model="checkAllSeriesTypesDuplex"
+                @change="handleCheckAllSeriesTypesDuplex"
+              >
+                {{ t('全选') }}
+              </el-checkbox>
+              <el-checkbox
+                v-model="revertAllSeriesTypesDuplex"
+                @change="handleCheckRevertSeriesTypesDuplex"
+              >
+                {{ t('反选') }}
+              </el-checkbox>
+            </template>         
+          </el-tree-select>
         </el-form-item>
         <el-form-item :label="`${t('投注阶段')}:`" prop="isInplay">
           <el-select
@@ -868,6 +888,8 @@ watch(
   }
 );
 
+
+// multiple select for Series types single
 const checkAllSeriesTypesSingle = ref(false);
 const revertAllSeriesTypesSingle = ref(false);
 
@@ -896,6 +918,39 @@ watch(
     } else if (val.length === Object.keys(seriesTypesSingle).length){
       checkAllSeriesTypesSingle.value = true;
       revertAllSeriesTypesSingle.value = false;
+    }
+  }
+)
+
+// multiple select for Series types Duplex
+const checkAllSeriesTypesDuplex = ref(false);
+const revertAllSeriesTypesDuplex = ref(false);
+
+const handleCheckAllSeriesTypesDuplex = (val: CheckboxValueType) => {
+  if(val){
+   props.form.seriesDetailsDuplex = Object.keys(seriesTypesDuplex).map(key => seriesTypesDuplex[key].value);
+  } else {
+    props.form.seriesDetailsDuplex = [];
+  }
+}
+
+const handleCheckRevertSeriesTypesDuplex = () => {
+  if(true){
+    const oldArray = [...props.form.seriesDetailsDuplex];
+    props.form.seriesDetailsDuplex = Object.keys(seriesTypesDuplex)
+    .filter(key => !oldArray.includes(seriesTypesDuplex[key].value))
+    .map(key => seriesTypesDuplex[key].value)
+  }
+}
+
+watch(
+  () => props.form.seriesDetailsDuplex,
+  val => {
+    if(!val || val.length === 0 || val.length !== Object.keys(seriesTypesDuplex).length){
+      checkAllSeriesTypesDuplex.value = false;
+    } else if (val.length === Object.keys(seriesTypesDuplex).length){
+      checkAllSeriesTypesDuplex.value = true;
+      revertAllSeriesTypesDuplex.value = false;
     }
   }
 )
