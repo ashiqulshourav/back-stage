@@ -28,6 +28,7 @@
           adaptive
           :default-sort="{ prop: 'level', order: 'descending' }"
           :data="dataList"
+          :row-key="row => row.id"
           :columns="dynamicColumns"
           :pagination="pagination"
           :paginationSmall="size === 'small' ? true : false"
