@@ -10,7 +10,7 @@
         <span class="mt-2 min-w-[140px] text-center"
           >{{ matchDetail.homeTeamNameCn }} ({{ t('主') }})</span
         >
-        <div class="flex items-center text-3xl flex-col">
+        <div class="flex items-center text-3xl flex-col mx-2">
           <span> {{ score[0] }} VS {{ score[1] }} </span>
           <div class="text-sm mb-1">
             {{ MATCH_STATUS[matchDetail.status as keyof typeof MATCH_STATUS] }}
