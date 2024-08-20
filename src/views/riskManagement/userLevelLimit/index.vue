@@ -11,7 +11,7 @@
           <span class="font-bold">{{ t('体育场馆') }}</span>
           <el-button
             v-if="!isEditSport"
-            @click="isEditSport = true"
+           @click="updateEidtStatus('isEditSport')"
             type="primary"
             >{{ t('编辑') }}</el-button
           >
@@ -118,7 +118,7 @@
           <span class="font-bold">{{ t('电竞场馆') }}</span>
           <el-button
             v-if="!isEditESport"
-            @click="isEditESport = true"
+           @click="updateEidtStatus('isEditESport')"
             type="primary"
             >{{ t('编辑') }}</el-button
           >
@@ -258,7 +258,8 @@ const {
   cancelSportEdit,
   cancelESportEdit,
   currency,
-  onSearch
+  onSearch,
+  updateEidtStatus
 } = useClassifySettingHook();
 </script>
 
