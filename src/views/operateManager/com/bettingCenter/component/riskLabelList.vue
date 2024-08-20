@@ -1,6 +1,6 @@
 <template>
-  <div v-if="list" class="items-center flex flex-wrap px-2 mt-1 gap-1 min-w-[120px]">
-    <div v-for="label in list.slice(0, showNumber).sort((a, b) => a.level - b.level)" :key="label.id">
+  <div v-if="list" class="items-center flex flex-nowrap px-2 mt-1 gap-1">
+    <div v-for="label in list.slice(0, showNumber).sort((a, b) => a.level - b.level)" :key="label.id" class="custom">
       <el-tag
         v-if="label.name.length <= 4"
         round

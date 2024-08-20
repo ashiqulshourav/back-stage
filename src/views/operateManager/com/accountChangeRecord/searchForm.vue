@@ -3,11 +3,11 @@
     ref="formRef"
     :inline="true"
     :model="form"
-    class="search-form bg-bg_color w-[99/100] px-8 pt-[12px]"
+    class="search-form bg-bg_color w-[99/100] px-8 pt-[12px] pb-[20px]"
   >
     <div class="mb-6 font-bold">{{ t('用户信息') }}</div>
     <div class="flex">
-      <div class="mb-10 w-2/3 grid grid-rows-3 grid-flow-col">
+      <div class="mb-2 w-2/3 grid grid-rows-3 grid-flow-col">
         <el-row
           class="mb-2.5"
           v-for="(item, index) in userInfo(userData)"
@@ -28,27 +28,10 @@
         {{ t('修改余额') }}
       </el-button>
     </div>
-    <!-- <el-form-item prop="accountChangeTypeCode">
-      <el-select
-        v-model="form.accountChangeTypeCode"
-        :placeholder="`${t('请选择账变类型')}`"
-        clearable
-        class="!w-[200px]"
-        multiple
-      >
-        <el-option :label="t('全部')" :value="' '" />
-        <el-option
-          :label="item.label"
-          :value="item.value"
-          v-for="item in accountChangeTypeCodeList"
-          :key="item.value"
-        />
-      </el-select>
-    </el-form-item> -->
     <el-form-item prop="accountChangeTypeCode">
       <el-tree-select
         v-model="form.accountChangeTypeCode"
-        :placeholder="t('请选择账变类型')"
+        :placeholder="t('请选择交易类型')"
         :data="
           accountChangeTypeCodeList.map(item => ({
             value: item.value,
@@ -73,17 +56,7 @@
           >
             {{ t('全选') }}
           </el-checkbox>
-          <el-checkbox 
-            v-model="removeAllAcc"
-            @change="handleRemoveAllAcc"
-            :disabled="form?.accountChangeTypeCode.length == 0"
-          >
-            {{ t('全不选') }}
-          </el-checkbox>
-          <el-checkbox
-            v-model="checkRevertAcc"
-            @change="handleCheckRevertAcc"
-          >
+          <el-checkbox v-model="checkRevertAcc" @change="handleCheckRevertAcc">
             {{ t('反选') }}
           </el-checkbox>
         </template>
@@ -91,13 +64,31 @@
     </el-form-item>
 
     <el-form-item :label="`${t('账变时间')}:`" prop="createTimeStart">
-      <el-date-picker
-        type="datetimerange"
-        format="YYYY-MM-DD HH:mm:ss"
-        v-model="selectDate"
-        :start-placeholder="dayjs().startOf('month').format('YYYY-MM-DD')"
-        :end-placeholder="dayjs().endOf('day').format('YYYY-MM-DD')"
-        @change="changeDate"
+      <CustomDate
+        v-model:val="selectDate"
+        @changeDate="changeDate"
+        :start-placeholder="
+          form.startCreatedAt
+            ? dayjs(form.startCreatedAt)?.format('YYYY-MM-DD HH:mm:ss')
+            : '选择开始时间'
+        "
+        :end-placeholder="
+          form.endCreatedAt
+            ? dayjs(form.endCreatedAt)?.format('YYYY-MM-DD HH:mm:ss')
+            : '选择结束时间'
+        "
+        :isDateTime="true"
+        :format="'YYYY-MM-DD HH:mm:ss'"
+      ></CustomDate>
+    </el-form-item>
+
+    <el-form-item prop="identifier" :label="t('注单号:')">
+      <el-input
+        v-model="form.identifier"
+        :placeholder="t('请输入注单号')"
+        v-enter="search"
+        clearable
+        class="!w-[200px]"
       />
     </el-form-item>
 
@@ -112,6 +103,15 @@
         @click="search"
       >
         {{ t('筛选') }}
+      </el-button>
+      <el-button
+        type="primary"
+        :icon="useRenderIcon(Download)"
+        :loading="downloading"
+        v-if="hasAuth('export'.toUpperCase())"
+        @click="exportFile()"
+      >
+        {{ t('导出') }}
       </el-button>
     </el-form-item>
   </el-form>
@@ -128,8 +128,11 @@ import { accountChangeRecordSearchFormType, userDataType } from './util/types';
 import { accountChangeTypeCodeList } from './columns';
 import { addThousandSeparator } from '@/utils/formatNumber';
 import { hasAuth } from '@/router/utils';
+import CustomDate from '@/components/Form/Custom_date.vue';
+import Download from '@iconify-icons/ep/download';
 
 const props = defineProps<{
+  downloading: downloading;
   loading: boolean;
   form: accountChangeRecordSearchFormType;
   userData: userDataType;
@@ -141,7 +144,6 @@ const formRef = ref();
 const selectDate = ref();
 
 const checkAllAcc = ref(false);
-const removeAllAcc = ref(false);
 const checkRevertAcc = ref(false);
 
 watch(
@@ -151,25 +153,19 @@ watch(
       checkAllAcc.value = false;
     } else if (val.length === accountChangeTypeCodeList.length) {
       checkAllAcc.value = true;
-      removeAllAcc.value = false;
     }
   }
 )
 
 const handleCheckAllAcc = (val: CheckboxValueType) => {
-  if(val){
-    props.form.accountChangeTypeCode = accountChangeTypeCodeList.map(_ => _.value);
-    removeAllAcc.value = false;
+  if (val) {
+    props.form.accountChangeTypeCode = accountChangeTypeCodeList.map(
+      _ => _.value
+    );
     checkRevertAcc.value = false;
   } else {
     props.form.accountChangeTypeCode = [];
   }
-}
-
-const handleRemoveAllAcc = () => {
-  props.form.accountChangeTypeCode = [];
-  removeAllAcc.value = false;
-  checkRevertAcc.value = false;
 }
 
 const handleCheckRevertAcc = () => {
@@ -206,6 +202,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
   selectDate.value = '';
   props.form.startCreatedAt = '';
   props.form.endCreatedAt = '';
+  props.form.identifier = '';
   // props.form.startCreatedAt = dayjs()
   //   .startOf('month')
   //   .format('YYYY-MM-DD HH:mm:ss');

@@ -274,15 +274,12 @@ const userIds = reactive<string[]>([]);
 const sportLimmitList = reactive<string[]>([]);
 
 const checkAllTIds = ref(false);
-const removeAllTIds = ref(false);
 const checkRevertTIds = ref(false);
 
 const checkAllTags = ref(false);
-const removeAllTags = ref(false);
 const checkRevertTags = ref(false);
 
 const checkAll = ref(false);
-const removeAll = ref(false);
 const checkRevert = ref(false);
 
 const props = defineProps<{
@@ -295,7 +292,7 @@ const props = defineProps<{
   uploading: boolean;
 }>();
 
-// watch, handleCheckAll, handleRemoveAll & handleCheckRevert for risk label
+// watch, handleCheckAll & handleCheckRevert for risk label
 watch(
   () => props.form.riskControlLabelList,
   val => {
@@ -303,7 +300,6 @@ watch(
       checkAll.value = false;
     } else if (val.length === props.labelList.risk.length) {
       checkAll.value = true;
-      removeAll.value = false;
     }
   }
 );
@@ -311,15 +307,9 @@ watch(
 const handleCheckAll = (val: CheckboxValueType) => {
   if (val) {
     props.form.riskControlLabelList = props.labelList.risk.map(_ => _.id);
-    removeAll.value = false;
   } else {
     props.form.riskControlLabelList = [];
   }
-};
-
-const handleRemoveAll = () => {
-  props.form.riskControlLabelList = [];
-  checkRevert.value = false;
 };
 
 const handleCheckRevert = () => {
@@ -331,7 +321,7 @@ const handleCheckRevert = () => {
   }
 };
 
-// watch, handleCheckAllTIds, handleRemoveAllTIds & handleCheckRevertTIds for risk Merchant
+// watch, handleCheckAllTIds & handleCheckRevertTIds for risk Merchant
 watch(
   () => props.form.tenantIds,
   val => {
@@ -339,7 +329,6 @@ watch(
       checkAllTIds.value = false;
     } else if ((val as number[])?.length === props.tenantList.length) {
       checkAllTIds.value = true;
-      removeAllTIds.value = false;
     }
   }
 );
@@ -347,15 +336,9 @@ watch(
 const handleCheckAllTIds = (val: CheckboxValueType) => {
   if (val) {
     props.form.tenantIds = props.tenantList.map(_ => _.id);
-    removeAllTIds.value = false;
   } else {
     props.form.tenantIds = [];
   }
-};
-
-const handleRemoveAllTIds = () => {
-  props.form.tenantIds = [];
-  checkRevertTIds.value = false;
 };
 
 const handleCheckRevertTIds = () => {
@@ -374,7 +357,6 @@ watch(
       checkAllTags.value = false;
     } else if (val.length === props.labelList.attr.length) {
       checkAllTags.value = true;
-      removeAllTags.value = false;
     }
   }
 );
@@ -382,15 +364,9 @@ watch(
 const handleCheckAllTags = (val: CheckboxValueType) => {
   if (val) {
     props.form.attributeLabelList = props.labelList.attr.map(_ => _.id);
-    removeAllTags.value = false;
   } else {
     props.form.attributeLabelList = [];
   }
-};
-
-const handleRemoveAllTags = () => {
-  props.form.attributeLabelList = [];
-  checkRevertTags.value = false;
 };
 
 const handleCheckRevertTags = () => {
@@ -411,7 +387,6 @@ const formatterUserNames = (v: string) => {
 };
 
 const selectDate = ref<string[]>(['', '']);
-
 const changeDate = (t: string[]) => {
   if (!t) {
     form.value.beginTime = '';

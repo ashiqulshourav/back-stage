@@ -6,11 +6,15 @@ import { addThousandSeparator } from '@/utils/formatNumber';
 const { exportDialog } = usePublicHooks();
 import {
   searchFormType,
-  seriesTypesSingle,
-  seriesTypesDuplex,
   riskStatusMap,
   riskStatus
 } from './types';
+import {
+  seriesTypesSingle,
+  seriesTypesDuplex
+} from '@/utils/maps/seriesTypes_map';
+
+
 
 import { addDialog, closeDialog } from '@/components/ReDialog/index';
 import { reactive, ref, onMounted, h } from 'vue';
@@ -65,7 +69,8 @@ export function useBettingAuditHook(venueType: number, category: number) {
     seriesDetailsDuplex: [],
     minBetAmount: '',
     maxBetAmount: '',
-    riskStatus: window?.location?.href?.indexOf('riskStatus=2') ? 2 : ''
+    riskStatus: window?.location?.href?.indexOf('riskStatus=2') ? 2 : '',
+    currency:' ',
   });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
@@ -453,6 +458,8 @@ export function useBettingAuditHook(venueType: number, category: number) {
       };
     } else if (rStatus === riskStatus.autoReject) {
       obj = { label: riskStatusMap[riskStatus.autoReject], bgColor: '#F88D48' };
+    } else if (rStatus === riskStatus.preReject) {
+      obj = { label: riskStatusMap[riskStatus.preReject], bgColor: '#F88D48' };
     }
     return obj;
   };

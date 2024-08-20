@@ -3,9 +3,9 @@ import type { PaginationProps } from '@pureadmin/table';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import {
   searchFormType,
-  seriesTypesSingle,
-  seriesTypesDuplex
 } from './types';
+
+import {seriesTypesSingle,seriesTypesDuplex} from '@/utils/maps/seriesTypes_map'
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
 import { usePublicHooks } from '@/hooks';
 const { exportDialog } = usePublicHooks();
@@ -52,7 +52,8 @@ export function useManualOrderRejectionHook() {
     category: '',
     timeType: 1,
     seriesDetailsSingle: [],
-    seriesDetailsDuplex: []
+    seriesDetailsDuplex: [],
+    currency:' '
   });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;

@@ -1,4 +1,5 @@
 import { t } from "@/plugins/i18n";
+import { addThousandSeparator } from '@/utils/formatNumber'
 
 export const columns: TableColumnList = [
   {
@@ -10,20 +11,33 @@ export const columns: TableColumnList = [
   {
     label: t("用户信息"),
     slot: 'userMessage',
+    minWidth: 100,
     align:'left',
+    className: 'mw-230'
+  },
+  {
+    label: t("注单信息"),
+    slot: 'betMessage',
+    minWidth: 100,
+    align:'left',
+    className: 'getParent',
   },
   {
     label: t("赛事信息"),
     slot: 'matchMessage',
+    minWidth: 200,
     align:'left',
     className: 'getParent',
   },
+
   {
-    label: t("注单详情"),
-    slot: 'betDetail',
+    label: t("投注项"),
+    slot: 'betItem',
+    minWidth: 200,
     align:'left',
-    className: 'getParent',
+    className: 'betItem getParent',
   },
+
   {
     label: t("赔率"),
     slot: "odd",
@@ -37,20 +51,37 @@ export const columns: TableColumnList = [
     align: 'center',
     className: 'getParent',
   },
-
   {
+    label: t("投注额 RMB"),
+    prop: "orderAmountOfRmb",
+    minWidth: 100,
+    align: 'center',
+    formatter: ({ orderAmountOfRmb }) => addThousandSeparator(orderAmountOfRmb.toFixed(2)),  // (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
+    className: 'mw-100'
+  },
+  {
+    label: t("用户输赢 RMB"),
+    slot: "profitAmountOfRmb",
+    minWidth: 100,
+    align: 'center',
+    formatter: ({ profitAmountOfRmb }) => addThousandSeparator(profitAmountOfRmb.toFixed(2)),
+    className: 'mw-100',
+  },
+   {
     label: t("投注额"),
-    prop: "productAmountTotal",
-    minWidth: 120,
-    align:'center',
-    className: 'mw-120',
-    formatter: ({ productAmountTotal }) => (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
+    prop: "orderAmount",
+    minWidth: 100,
+    align: 'center',
+    formatter: ({ orderAmount,currency }) => addThousandSeparator(orderAmount.toFixed(2)) + " " + currency,  // (productAmountTotal ? productAmountTotal.toFixed(2) : 0)
+    className: 'mw-100'
   },
   {
     label: t("用户输赢"),
     slot: "profitAmount",
-    minWidth: 120,
-    align:'center',
+    minWidth: 100,
+    align: 'center',
+    formatter: ({ profitAmount, currency}) => addThousandSeparator(profitAmount.toFixed(2)) + " " + currency,
+    className: 'mw-100',
   },
   {
     label: t('通过'),

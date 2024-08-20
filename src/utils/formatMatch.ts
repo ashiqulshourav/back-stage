@@ -5,6 +5,10 @@ import { EHandicapType, EOddType, ESportType, } from '@/core/constants/enum/spor
 import { TOrder } from '@/core/services/Table';
 import { useMatchStore } from "@/store/match";
 import { useI18n } from "vue-i18n";
+import {addDialog} from "@/components/ReDialog/index";
+import {t} from "@/plugins/i18n";
+import {h} from "vue";
+import IpDialog from "@/views/operateManager/com/bettingCenter/component/IpDialog.vue";
 
 //- 解析当前比分
 export const parseMatchScore = (s: string) => {
@@ -29,71 +33,83 @@ export const parseCountry = (countryId: number) => {
   return (locale.value === 'zh' ? country?.countryNameCn : country?.countryNameEn)
 }
 
-export const getPlayNameByKc = ({ code, name, ctid, sportId }: { code: string, name?: string, ctid?: number, sportId?: number }) => {
+export const getPlayNameByKc = ({code, name, ctid, sportId, period, reslutView}: {code: string, name?: string, ctid?: number, sportId?: number, period?: string, reslutView?: boolean;}) => {
   if (ctid !== undefined && name !== undefined && ctid !== 0) return name;
+  if (['OT', 'OT1', 'OT2', 'OHT', 'PT'].includes(period?.toUpperCase())) return name;
+  if (reslutView && code ==='FT_1X2') {
+    // 赛果获取类型,只是用来展示
+    return '全场独赢1X2';
+  }
   switch (code) {
-    case 'FT_OU':
-      switch (Number(sportId)) {
-        case 5:
-          return t('总局数');
-        default:
-          return ('全场大小');
-      };
-    case 'HT_OU':
-      return t('半场大小');
-    case 'FT_OE':
-      return t('全场单双');
-    case 'FT_HF':
-      return t('半场 / 全场');
-    case 'HT_OE':
-      return t('单双-上半场');
-    case 'FT_AH':
-      switch (Number(sportId)) {
-        case 3:
-        case 6:
-          return t('全场让盘');
-        case 5:
-        case 19:
-        case 23:
-          return t('全场让局');
-        default:
-          return t('全场让球');
-      };
-    case 'HT_AH':
-      return t('半场让球');
-    case 'FT_1X2':
-    case 'FT_ML':
-      return t('全场独赢');
-    case 'HT_1X2':
-    case 'HT_ML':
-      return t('半场独赢');
-    case 'FT_CS':
-      return t('全场波胆');
-    case 'HT_CS':
-      return t('波胆-上半场');
-    case 'BothTeamsToScore':
-      return t('双方进球');
-    case 'FTS_AH':
-      return t('全场让局');
-    case 'FTS_OU':
-      return t('总局数');
-    case 'FT_XX':
-      return t('全场总分');
-    case 'Winner_1X2':
-      return t('独赢1X2');
-    case 'Winner':
-      return t('全场独赢');
-    case 'PT_AH':
-      return t('让分');
-    case 'PT_OU':
-      switch (Number(sportId)) {
-        case 19:
-          return t('全场总分');
-        default:
-          return t('总分大小');
-      }
+  case 'FT_OU':
+    switch (Number(sportId)) {
+    case 5:
+      return '总局数';
+    case 10:
+      return '大 / 小';
+    case 18:
+      return '总得分';
     default:
-      return name;
+      return '全场大小';
+    };
+  case 'HT_OU':
+    return '半场大小';
+  case 'FT_OE':
+    return '全场单双';
+  case 'FT_HF':
+    return '半场 / 全场';
+  case 'HT_OE':
+    return '单双-上半场';
+  case 'FT_AH':
+    switch (Number(sportId)) {
+    case 6:
+    case 3:
+      return '全场让盘';
+    case 23:
+      return '让局';
+    case 5:
+    case 19:
+      return '全场让局';
+    default:
+      return '全场让球';
+    };
+  case 'HT_AH':
+    return '半场让球';
+  case 'FT_1X2':
+  case 'FT_ML':
+    return '全场独赢';
+  case 'HT_1X2':
+  case 'HT_ML':
+    return '半场独赢';
+  case 'FT_CS':
+    return '全场波胆';
+  case 'HT_CS':
+    return '波胆-上半场';
+  case 'BothTeamsToScore':
+    return '双方进球';
+  case 'FTS_AH':
+    return '全场让局';
+  case 'FTS_OU':
+    return '总局数';
+  case 'FT_XX':
+    return '全场总分';
+  case 'Winner_1X2':
+    return '独赢1X2';
+  case 'Winner':
+    return '全场独赢';
+  case 'PT_AH':
+    return '让分';
+  case 'P222':
+    return '战斗赛足回合';
+  case 'PT_OU':
+    switch (Number(sportId)) {
+    case 19:
+      return '全场总分';
+    default:
+      return '总分大小';
+    }
+  default:
+    return name;
   }
 };
 
@@ -117,18 +133,18 @@ export enum EBetResultType {
   MACHT_CANCLE = 7,
   MACHT_DELAY = 8,
   GAME_DELAY = 11,
-  GAME_INTERRUPTED = 12,
+  GAME_INTERRUPTED = 12, //比赛中断
   UNKNOWN = 13,
-  GAME_ABANDONED = 15,
-  ABNORMAL = 16,
+  GAME_ABANDONED = 15, //比赛放弃
+  ABNORMAL = 16, //盘口异常
   UNKNOWN_STATUS = 17,
-  GAME_CANCEL = 18,
-  GAME_POSTPONED = 19,
+  GAME_CANCEL = 18,//比赛取消
+  GAME_POSTPONED = 19,//  比赛延期
   ROLLBACK = 20,
   CANCELL = 21,
   AUTO_CANCEL = 22,
   HANDLE_CANCEL = 23,
-  HANDICAPS_CANCEL = 24,
+  HANDICAPS_CANCEL = 24, //盘口取消
   FLAT_MATCH_ROLLBACK = 51,
   RISK_REJECT = 61
 }
@@ -355,14 +371,14 @@ export const getOrderBetTypeAtBetting = (order: TOrder) => {
   return orderName;
 };
 
-//计算串关的总赔率，非复试
+//计算串关的总赔率，非复式
 export const calculateSeriesTypeTotal = (list: any) => {
   let oddTotal = 1
   list.forEach((item: { oddFinally: number, marketTypeFinally: EOddType, marketType: number }) => {
     //先转换为欧洲盘再计算
     oddTotal *= Number(getViewOddFn(item.oddFinally, item.marketTypeFinally, EOddType.EUROPE))
   })
-  return truncateDecimals(oddTotal, 2)
+  return '@' + truncateDecimals(oddTotal, 2)
 }
 
 
@@ -375,8 +391,9 @@ export const calculateSeriesTypeTotalBets = (seriesType: number) => {
 
 // 获取比分
 export const displayHomeAwayScore = (scoreString: string, sprotId?: ESportType, witchTeam?: TeamType) => {
-  if (sprotId > 33) return '';
-  if (sprotId === ESportType.TENNIS || sprotId === ESportType.VOLLEYBALL) return '';
+  const _sprotId = Number(sprotId)
+  if (_sprotId > 33) return '';
+  if (_sprotId === ESportType.TENNIS || _sprotId === ESportType.VOLLEYBALL) return '';
   const [home, away] = assertHomeAwayScore(scoreString);
   if (home === undefined || away === undefined) {
     return ''
@@ -394,3 +411,16 @@ export const displayHomeAwayScore = (scoreString: string, sprotId?: ESportType, 
 export const getIsInplay = (type: number) => {
   return type === 1 ? t('滚球') : t('早盘')
 }
+
+export const openIpDialog = (ip: string) => {
+  addDialog({
+    title: t(''),
+    alignCenter: true,
+    class: 'reset_dialog',
+    width: '75%',
+    center: true,
+    closeOnClickModal: false,
+    hideFooter: true,
+    contentRenderer: () => h(IpDialog, { ip })
+  });
+};
