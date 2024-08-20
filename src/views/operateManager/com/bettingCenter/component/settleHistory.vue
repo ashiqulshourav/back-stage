@@ -74,13 +74,7 @@
         </div>
         <div
           class="item_line cursor-pointer flex items-baseline gap-1"
-          @click="
-            copyTest(
-              item.matchId,
-              t('赛事ID：{value}', { value: item.matchId })
-            )
-          "
-          >
+        >
           {{ t('赛事ID:') }} {{ item.matchId }}
           <span class="inline-block">
             <IconifyIconOffline icon="copyIcon" />
@@ -199,8 +193,6 @@ import {
 } from '@/utils/formatMatch';
 import { riskStatus } from '@/views/riskManagement/com/bettingAudit/util/types';
 import { addThousandSeparator } from '@/utils/formatNumber'
-import { useClipboard } from '@vueuse/core';
-import { message } from '@/utils/message';
 
 const { tableHeaderStyle } = usePublicHooks();
 
@@ -229,16 +221,6 @@ const init = async () => {
 onMounted(() => {
   init();
 })
-
-  function copyTest(str: string, tip: string) {
-    if (!str) return;
-    const { copy } = useClipboard({ source: str.toString(), legacy: true });
-    copy(str.toString());
-    message(t('复制{value}成功!', { value: tip || str || '' }), {
-      type: 'success'
-    });
-  }
-
 
 const getOddStatus = (betResult: number, riskSt: number) => {
   if (riskSt === riskStatus.reject1 || riskSt === riskStatus.autoReject1) {

@@ -41,10 +41,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
   const totalInfo = ref<BetOrderAPI.otherDataType>(
     {} as BetOrderAPI.otherDataType
   );
-  interface tagColorP {
-    [propName: string]: any;
-  }
-  const tagColor = ref<tagColorP>({
+  const tagColor = ref<Object>({
     1: 'FFC53D', // 预约中
     2: 'FFC53D', // 确认中
     3: '#F57582', // 预约失败
@@ -386,7 +383,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
   };
 
   const handleSettleHistoryDialog = (row: any) => {
-    console.log('orderStatus',row.orderStatus)
     if (!row.settleTimes) {
       return
     }
