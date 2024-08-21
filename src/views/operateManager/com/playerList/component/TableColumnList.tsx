@@ -111,6 +111,8 @@ export const columns = (category: number): TableColumnList => {
     {
       label: t('投注延时'),
       prop: 'betDelay',
+      slot: 'betDelay',
+      hide: !hasAuth('viewBetDelay'.toUpperCase()),
       formatter({ betDelay, betDelayDj }) {
         let str = '';
         if (category === 0) {
@@ -133,7 +135,6 @@ export const columns = (category: number): TableColumnList => {
       },
       minWidth: 150
     },
-
     {
       label: t('操作'),
       fixed: 'right',
@@ -183,6 +184,69 @@ export const userColumns: TableColumnList = [
 
 export const specialLimitColumns: TableColumnList = [
   {
+    label: t('限额等级'),
+    prop: 'name'
+  },
+  {
+    label: t('单注投注限额'),
+    prop: 'productAmountTotalLimit',
+    formatter({ productAmountTotalLimit }) {
+      return productAmountTotalLimit ? productAmountTotalLimit : '-';
+    }
+  },
+  {
+    label: t('单注赔付限额'),
+    prop: 'maxWinAmountLimit',
+    formatter({ maxWinAmountLimit }) {
+      return maxWinAmountLimit ? maxWinAmountLimit : '-';
+    }
+  },
+  {
+    label: t('单场赛事限额'),
+    prop: 'singleEventLimit',
+    formatter({ singleEventLimit }) {
+      return singleEventLimit ? singleEventLimit : '-';
+    }
+  },
+  {
+    label: t('串关限额'),
+    prop: 'seriesSingleDayLimit',
+    formatter({ seriesSingleDayLimit }) {
+      return seriesSingleDayLimit ? seriesSingleDayLimit : '-';
+    }
+  },
+  // {
+  //   label: t('百分比限额'),
+  //   prop: 'percentageLimit',
+  //   formatter({ percentageLimit }) {
+  //     return percentageLimit !== '' ? percentageLimit + '%' : '-';
+  //   }
+  // },
+  {
+    label: t('动作'),
+    prop: 'updateType',
+    formatter({ updateType }) {
+      if (updateType == 1) return t('禁用');
+      else if (updateType == 2) return t('修改');
+      else if (updateType == 3) return t('启用');
+    }
+  },
+  {
+    label: t('操作人'),
+    prop: 'createdBy'
+  },
+  {
+    label: t('修改时间'),
+    prop: 'updatedAt',
+    minWidth: 180,
+    formatter({ updatedAt }: { updatedAt: string }) {
+      return dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss');
+    }
+  }
+];
+//- 特殊限额
+export const specialLimitColumns1: TableColumnList = [
+  {
     label: t('特殊限额'),
     prop: 'name'
   },
@@ -201,14 +265,14 @@ export const specialLimitColumns: TableColumnList = [
     }
   },
   {
-    label: t('单场赛事累计赔付限额(不分早盘滚球)'),
+    label: t('单场赛事限额'),
     prop: 'singleEventLimit',
     formatter({ singleEventLimit }) {
       return singleEventLimit ? singleEventLimit : '-';
     }
   },
   {
-    label: t('串关单日累计赔付限额(不分早盘滚球)'),
+    label: t('串关限额'),
     prop: 'seriesSingleDayLimit',
     formatter({ seriesSingleDayLimit }) {
       return seriesSingleDayLimit ? seriesSingleDayLimit : '-';
@@ -218,7 +282,7 @@ export const specialLimitColumns: TableColumnList = [
     label: t('百分比限额'),
     prop: 'percentageLimit',
     formatter({ percentageLimit }) {
-      return percentageLimit !== '' ? percentageLimit + '%' : '-';
+      return percentageLimit ? percentageLimit + '%' : '-';
     }
   },
   {
@@ -237,6 +301,7 @@ export const specialLimitColumns: TableColumnList = [
   {
     label: t('修改时间'),
     prop: 'updatedAt',
+    minWidth: 180,
     formatter({ updatedAt }: { updatedAt: string }) {
       return dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss');
     }

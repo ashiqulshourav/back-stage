@@ -1,9 +1,9 @@
 export type searchFormType = {
   ids?: string | number | string[];
   usernames?: string | number | string[];
-  riskControlLabelList?: string[] | number[];
-  attributeLabelList: string[] | number[];
-  tenantIds: number | string | string[] | number[];
+  riskControlLabelList?: string[];
+  attributeLabelList?: string[];
+  tenantIds?: number | string | string[] | number[];
   limitLevel?: number | string;
   tenantCode?: number | string;
   venueType?: number;
@@ -12,7 +12,7 @@ export type searchFormType = {
   timeType?: number | string;
   beginTime?: string | number;
   endTime?: string | number;
-  betDelayed: number | string;
+  betDelayed:string | number;
   currency?: number | string;
   specialLimited:number | string;
 };

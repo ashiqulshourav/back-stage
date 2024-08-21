@@ -186,7 +186,7 @@
         >
           <el-option :label="t('全部')" :value="' '" />
           <el-option :label="t('是')" :value="1" />
-          <el-option :label="t('不是')" :value="2" />
+          <el-option :label="t('否')" :value="2" />
         </el-select>
       </el-form-item>
       <el-form-item prop="currency" :label="t('结算币种:')">
@@ -228,13 +228,22 @@
         </el-button>
 
         <el-button
+          v-if="hasAuth('EXPORT TAG')"
+          type="primary"
+          :icon="useRenderIcon(Upload)"
+          :loading="uploading"
+          @click="importFile(t('数据导入'))"
+        >
+          {{ t('导入标签') }}
+        </el-button>
+        <el-button
           type="primary"
           :icon="useRenderIcon(Download)"
           :loading="downloading"
           v-if="hasAuth('EXPORT')"
           @click="exportFile()"
         >
-          {{ t('导出') }}
+          {{ t('导出列表') }}
         </el-button>
       </el-form-item>
     </el-form>

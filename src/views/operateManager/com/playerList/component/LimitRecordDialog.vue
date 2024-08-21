@@ -16,6 +16,7 @@
       :paginationSmall="true"
       @selection-change="handleSelectionChange"
       @page-size-change="handleSelectionChange"
+      @page-current-change="handleSelectionChange"
     >
     </pure-table>
   </div>
