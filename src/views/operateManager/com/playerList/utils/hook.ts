@@ -61,8 +61,8 @@ export function userPlayerListHook(venueType: number, category: number) {
   });
   const form = reactive<searchFormType>({
     betDelayed: ' ',
-    specialLimited:' ',
-    currency:' ',
+    specialLimited: ' ',
+    currency: ' ',
     timeType: "2",
   } as searchFormType);
   const recordForm = reactive<recordFormType>({} as recordFormType);
@@ -175,15 +175,23 @@ export function userPlayerListHook(venueType: number, category: number) {
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     try {
-      if (type !== 'export') {
-        loading.value = true;
-      }
-      const res = await API.operateUserList({
+      if (type !== 'export') { loading.value = true }
+
+      const d: { [key: string]: any } = {
         ...removeEmptyStringKeys(form),
         venueType: venueType,
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
-      });
+      }
+
+      if (form.tenantCode) {
+        const r = Object.values(tenantObj).find((item: any) => {
+          return item.name === form.tenantCode;
+        }) as { [key: string]: any };
+        if (r) d.tenantCode = r.tenantCode;
+      }
+
+      const res = await API.operateUserList(d);
       if (type === 'export') {
         return res?.data;
       } else {
