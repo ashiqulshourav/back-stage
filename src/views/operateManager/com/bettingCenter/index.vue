@@ -48,7 +48,7 @@
                   @click="
                     copyTest(
                       row.userName,
-                      t(`用户名：${row.userName}`, { value: row.userName })
+                      t(`用户名：{value}`, { value: row.userName })
                     )
                   "
                 >

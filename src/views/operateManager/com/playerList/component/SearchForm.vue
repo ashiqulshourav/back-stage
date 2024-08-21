@@ -162,18 +162,22 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item  :label="t('特殊限额:')"   v-if="hasAuth('viewSpecialLimit'.toUpperCase())"  prop="specialLimited">
-        <el-select
-            v-model="form.specialLimited"
-            clearable
-            class="!w-[150px]"
-        >
+      <el-form-item
+        :label="t('特殊限额:')"
+        v-if="hasAuth('viewSpecialLimit'.toUpperCase())"
+        prop="specialLimited"
+      >
+        <el-select v-model="form.specialLimited" clearable class="!w-[150px]">
           <el-option label="全部" value=" "></el-option>
           <el-option label="是" :value="1"></el-option>
           <el-option label="否" :value="2"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item :label="t('投注延时:')" v-if="hasAuth('viewBetDelay'.toUpperCase())"  prop="betDelayed" >
+      <el-form-item
+        :label="t('投注延时:')"
+        v-if="hasAuth('viewBetDelay'.toUpperCase())"
+        prop="betDelayed"
+      >
         <el-select
           v-model="form.betDelayed"
           :placeholder="t('投注延时')"
@@ -233,11 +237,11 @@
           {{ t('导入标签') }}
         </el-button>
         <el-button
-            type="primary"
-            :icon="useRenderIcon(Download)"
-            :loading="downloading"
-            v-if="hasAuth('EXPORT')"
-            @click="exportFile()"
+          type="primary"
+          :icon="useRenderIcon(Download)"
+          :loading="downloading"
+          v-if="hasAuth('EXPORT')"
+          @click="exportFile()"
         >
           {{ t('导出列表') }}
         </el-button>
@@ -413,6 +417,7 @@ const search = () => {
   props.form.usernames = userIds
     .filter(item => item !== '')
     .map(item => item.trim());
+
   emits('onSearch', 'reload');
 };
 
