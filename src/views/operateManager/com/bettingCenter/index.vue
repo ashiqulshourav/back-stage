@@ -26,6 +26,7 @@
           :size="size"
           class="table_container"
           adaptive
+          :row-key="row => row.id"
           :default-sort="{ prop: 'level', order: 'descending' }"
           :data="dataList"
           :columns="dynamicColumns"
@@ -47,7 +48,7 @@
                   @click="
                     copyTest(
                       row.userName,
-                      t(`用户名：${value}`, { value: row.userName })
+                      t(`用户名：${row.userName}`, { value: row.userName })
                     )
                   "
                 >
