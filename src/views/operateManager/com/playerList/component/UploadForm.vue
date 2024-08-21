@@ -199,7 +199,6 @@ const next = async () => {
       } else {
 
         const sentences = res.data.errorMsg.split('\n');
-
         errorMsg.value = [...sentences];
         successNum.value = res.data.successNum;
         errorNum.value = res.data.errorNum;

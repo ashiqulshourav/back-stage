@@ -38,13 +38,13 @@
               />
             </template>
             <div>
-              <p
+              <div
                 @click="emits('onOpenRecord', form.id, 2)"
                 v-if="hasAuth('GETLABELLIST')"
-                class="text-primary text-right cursor-pointer"
+                class="text-primary float-right w-fit mb-2 cursor-pointer"
               >
                 {{ t('修改记录') }}>>
-              </p>
+              </div>
               <el-row :gutter="20" class="mt-2 w-full !ml-2">
                 <LabelListCom
                   @onClose="handleDeleteLabel"
@@ -109,13 +109,13 @@
             </template>
 
             <div>
-              <p
+              <div
                 @click="emits('onOpenRecord', form.id, 1)"
                 v-if="hasAuth('GETLABELLIST')"
-                class="text-primary text-right cursor-pointer"
+                class="text-primary float-right w-fit mb-2 cursor-pointer"
               >
-                {{ t('风控标签修改记录') }}>>
-              </p>
+                {{ t('修改记录') }}>>
+              </div>
             </div>
 
             <el-row :gutter="20" class="mt-2 w-full !ml-2">
@@ -132,6 +132,7 @@
                   v-if="hasAuth('addRiskLabel'.toUpperCase())"
                   :icon="Plus"
                   type="primary"
+                  size="small"
                   @click="isRiskLabelAdd = true"
                   class="text-primary"
                   >{{ t('添加标签') }}</el-button
@@ -177,14 +178,14 @@
             <template #title>
               {{ t('投注延时') }}
             </template>
-            <div>
-              <p
+            <div
                 @click="openDelayDialog"
                 v-if="hasAuth('GETLABELLIST')"
-                class="text-primary text-right cursor-pointer"
+                class="text-primary float-right w-fit mb-2 cursor-pointer"
               >
-                {{ t('修改记录') }}>>
-              </p>
+              {{ t('修改记录') }}>>
+            </div>
+            <el-row  :gutter="20" class="mt-2 w-full !ml-2">
               <ModifyContent
                 v-model:betDelay="form.betDelay"
                 v-model:betDelayDj="form.betDelayDj"
@@ -192,7 +193,7 @@
                 v-model:sportIdsDj="form.sportIdsDj"
                 :category="category"
               />
-            </div>
+            </el-row>
           </el-collapse-item>
 
           <el-collapse-item
@@ -672,20 +673,15 @@ const handleUpdate = () => {
     if (isSpecial.value == 1) {
       form.percentageLimit = undefined;
     }
-    if (
-      isSpecial.value == 3 &&
-      (form.percentageLimit == '' ||
-        form.percentageLimit == null ||
-        form.percentageLimit == undefined)
-    ) {
-      form.percentageLimit = '100';
+    if (isSpecial.value == 3 && (form.percentageLimit == '' || form.percentageLimit == null || form.percentageLimit == undefined)) {
+      form.percentageLimit = "100";
     }
     if (
       isSpecial.value == 3 &&
       form.percentageLimit &&
       Number(form.percentageLimit) > 100
     ) {
-      form.percentageLimit = '100';
+      form.percentageLimit = "100";
     }
     if (
       isSpecial.value == 3 &&
@@ -807,9 +803,10 @@ onUpdated(() => {
       seriesSingleDayCumulativeCompensationLimit;
     form.specialLimit.singleEventAccumulatedCompensationLimit =
       singleEventAccumulatedCompensationLimit;
-  } else if (percentageLimit === null) {
+  }else if(percentageLimit === null) {
     isSpecial.value = 1;
-  } else {
+  }
+  else {
     isSpecial.value = 3;
   }
   updatedLabels.risk.length = 0;
@@ -832,4 +829,5 @@ watch(
     isEditUser.value = newValue;
   }
 );
+
 </script>

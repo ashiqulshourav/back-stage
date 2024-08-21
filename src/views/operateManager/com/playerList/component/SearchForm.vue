@@ -186,7 +186,7 @@
         >
           <el-option :label="t('全部')" :value="' '" />
           <el-option :label="t('是')" :value="1" />
-          <el-option :label="t('不是')" :value="2" />
+          <el-option :label="t('否')" :value="2" />
         </el-select>
       </el-form-item>
       <el-form-item prop="currency" :label="t('结算币种:')">
@@ -417,6 +417,7 @@ const search = () => {
   props.form.usernames = userIds
     .filter(item => item !== '')
     .map(item => item.trim());
+
   emits('onSearch', 'reload');
 };
 

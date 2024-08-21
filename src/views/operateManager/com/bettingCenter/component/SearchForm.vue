@@ -166,27 +166,83 @@
           v-if="form.seriesType === 2"
           prop="seriesDetails"
         >
-          <el-select
-            class="!w-[180px]"
-            :placeholder="t('请选择串关类型')"
-            multiple
+          <el-tree-select
             v-model="form.seriesDetailsSingle"
+            :placeholder="t('请选择串关类型')"
+            :data="
+              Object.keys(seriesTypesSingle).map((key: string) => ({
+                value: seriesTypesSingle[key].value,
+                label: seriesTypesSingle[key].name
+              }))
+            "
+            @change="search"
+            filterable
             clearable
+            multiple
+            collapse-tags
+            :render-after-expand="false"
+            show-checkbox
+            check-strictly
+            check-on-click-node
+            class="!w-[180px]"
           >
-            <el-option
-              v-for="item in seriesTypesSingle"
-              :label="item.name"
-              :value="item.value"
-              :key="item.value"
-            />
-          </el-select>
+            <template #header>
+              <el-checkbox
+                v-model="checkAllSeriesTypesSingle"
+                @change="handleCheckAllSeriesTypesSingle"
+              >
+                {{ t('全选') }}
+              </el-checkbox>
+              <el-checkbox
+                v-model="revertAllSeriesTypesSingle"
+                @change="handleCheckRevertSeriesTypesSingle"
+              >
+                {{ t('反选') }}
+              </el-checkbox>
+            </template>         
+        </el-tree-select>
         </el-form-item>
         <el-form-item
           :label="`${t('复式串关类型')}:`"
           v-if="form.seriesType === 3"
           prop="seriesDetails"
         >
-          <el-select
+          <el-tree-select
+            v-model="form.seriesDetailsDuplex"
+            :placeholder="t('请选择串关类型')"
+            :data="
+               Object.keys(seriesTypesDuplex).map((key: string) => ({
+                value: seriesTypesDuplex[key].value,
+                label: seriesTypesDuplex[key].name
+              }))
+            "
+            @change="search"
+            filterable
+            clearable
+            multiple
+            collapse-tags
+            :render-after-expand="false"
+            show-checkbox
+            check-strictly
+            check-on-click-node
+            class="!w-[180px]"
+          >
+            <template #header>
+              <el-checkbox
+                v-model="checkAllSeriesDetailsDuplex"
+                @change="handleCheckAllSeriesDetailsDuplex"
+              >
+                {{ t('全选') }}
+              </el-checkbox>
+              <el-checkbox
+                v-model="revertAllSeriesDetailsDuplex"
+                @change="handleRevertAllSeriesDetailsDuplex"
+              >
+                {{ t('反选') }}
+              </el-checkbox>
+            </template>         
+        </el-tree-select>
+          <!-- <el-select
             :placeholder="t('请选择串关类型')"
             class="!w-[180px]"
             multiple
@@ -200,7 +256,7 @@
               :value="item.value"
               :key="item.value"
             />
-          </el-select>
+          </el-select> -->
         </el-form-item>
         <el-form-item :label="`${t('投注阶段')}:`" prop="isInplay">
           <el-select
@@ -692,6 +748,65 @@ const checkRevertSeriesTypeLabel = ref(false);
 const checkAllClientTypeLabel = ref(false);
 const checkRevertCilentTypeLabel = ref(false);
 
+const checkAllSeriesTypesSingle = ref(false);
+const revertAllSeriesTypesSingle = ref(false);
+
+const checkAllSeriesDetailsDuplex = ref(false);
+const revertAllSeriesDetailsDuplex = ref(false);
+
+
+const handleCheckAllSeriesTypesSingle = (val: CheckboxValueType) => {
+  if (val) {
+    props.form.seriesDetailsSingle =  Object.keys(seriesTypesSingle).map((key: string) => ({
+                value: seriesTypesSingle[key].value,
+                label: seriesTypesSingle[key].name
+              })).map(_ => _.value);
+    revertAllSeriesTypesSingle.value = false;
+  } else {
+    props.form.seriesDetailsSingle = [];
+  }
+};
+
+const handleCheckRevertSeriesTypesSingle = () => {
+  if (true) {
+    const oldArray = [...props.form.seriesDetailsSingle];
+    props.form.seriesDetailsSingle = Object.keys(seriesTypesSingle).map((key: string) => ({
+                value: seriesTypesSingle[key].value,
+                label: seriesTypesSingle[key].name
+              }))
+      .filter(_ => !oldArray.includes(_.value))
+      .map(_ => _.value);
+      checkAllSeriesTypesSingle.value = false;
+  }
+};
+
+
+const handleCheckAllSeriesDetailsDuplex = (val: CheckboxValueType) => {
+  if (val) {
+    props.form.seriesDetailsDuplex =  Object.keys(seriesTypesDuplex).map((key: string) => ({
+                value: seriesTypesDuplex[key].value,
+                label: seriesTypesDuplex[key].name
+              })).map(_ => _.value);
+    revertAllSeriesDetailsDuplex.value = false;
+  } else {
+    props.form.seriesDetailsDuplex = [];
+  }
+};
+
+const handleRevertAllSeriesDetailsDuplex = () => {
+  if (true) {
+    const oldArray = [...props.form.seriesDetailsDuplex];
+    props.form.seriesDetailsDuplex = Object.keys(seriesTypesDuplex).map((key: string) => ({
+                value: seriesTypesDuplex[key].value,
+                label: seriesTypesDuplex[key].name
+              }))
+      .filter(_ => !oldArray.includes(_.value))
+      .map(_ => _.value);
+      checkAllSeriesDetailsDuplex.value = false;
+  }
+};
+
+
 const handleCheckAllRLabel = (val: CheckboxValueType) => {
   if (val) {
     props.form.riskControlLabelList = props.riskLabelList.map(_ => _.id);
@@ -791,6 +906,18 @@ watch(
     }
   }
 );
+
+watch(
+  () => props.form.seriesType,
+  () => {
+    props.form.seriesDetailsDuplex = [];
+    props.form.seriesDetailsSingle = [];
+    revertAllSeriesTypesSingle.value = false;
+    checkAllSeriesTypesSingle.value = false;
+    revertAllSeriesDetailsDuplex.value = false;
+    checkAllSeriesDetailsDuplex.value = false;
+  }
+)
 
 watch(
   () => props.form.sportId,

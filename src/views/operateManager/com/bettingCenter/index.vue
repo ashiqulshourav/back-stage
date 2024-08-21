@@ -48,7 +48,7 @@
                   @click="
                     copyTest(
                       row.userName,
-                      t(`用户名：${value}`, { value: row.userName })
+                      t(`用户名：${row.userName}`, { value: row.userName })
                     )
                   "
                 >
@@ -218,7 +218,7 @@
                 </span>
               </div>
               <div class="item_line" v-if="row.combineOrderDetails.length > 1">
-                总共：{{ row.betCount }}注
+                总共： {{ calculateSeriesTypeTotalBets(row?.seriesType) }}注
               </div>
               <div class="item_line" v-if="row.combineOrderDetails.length > 1">
                 每注：{{ row.orderAmount }} {{ row.currency }}

@@ -16,7 +16,7 @@ import { addDialog, closeDialog } from '@/components/ReDialog';
 import { pageSizeArr } from '@/utils/math';
 import UploadForm from '../component/UploadForm.vue';
 import { usePasswordInputHook } from '@/hooks/passwordInputHook';
-
+import dayJs from "dayjs";
 export function userPlayerListHook(venueType: number, category: number) {
   const { openPasswordInput } = usePasswordInputHook();
   const { exportDialog } = usePublicHooks();
@@ -61,14 +61,15 @@ export function userPlayerListHook(venueType: number, category: number) {
   });
   const form = reactive<searchFormType>({
     betDelayed: ' ',
-    specialLimited:' ',
-    currency:' ',
+    specialLimited: ' ',
+    currency: ' ',
     timeType: "2",
+    betDelayed:' '
   } as searchFormType);
   const recordForm = reactive<recordFormType>({} as recordFormType);
   const goChangeAccountPage = (row: UserAPI.operateUserList) => {
     settingStore.save_player_info({
-      page: pagination.currentPage,
+      page: pagination.currentPage
     });
     const params = JSON.parse(JSON.stringify(row));
     router.push({
@@ -77,7 +78,7 @@ export function userPlayerListHook(venueType: number, category: number) {
           ? 'OPERATEMANAGER_SPORTCHANGEACCOUNTRECORD'
           : 'OPERATEMANAGER_ESPORTCHANGEACCOUNTRECORD',
       query: {
-        userId: row.id,
+        userId: row.id
       },
       state: { params }
     });
@@ -108,6 +109,7 @@ export function userPlayerListHook(venueType: number, category: number) {
     selectedDataList.push(...val);
   }
 
+  //- 修改用户
   const handleUpdateUser = (row: UserAPI.operateUserList) => {
     Object.assign(userData, row);
     isEditUser.value = true;
@@ -175,15 +177,23 @@ export function userPlayerListHook(venueType: number, category: number) {
   async function onSearch(type?: string) {
     if (type === 'reload') pagination.currentPage = 1;
     try {
-      if (type !== 'export') {
-        loading.value = true;
-      }
-      const res = await API.operateUserList({
+      if (type !== 'export') { loading.value = true }
+
+      const d: { [key: string]: any } = {
         ...removeEmptyStringKeys(form),
         venueType: venueType,
         pageSize: pagination.pageSize,
         pageNum: pagination.currentPage
-      });
+      }
+
+      if (form.tenantCode) {
+        const r = Object.values(tenantObj).find((item: any) => {
+          return item.name === form.tenantCode;
+        }) as { [key: string]: any };
+        if (r) d.tenantCode = r.tenantCode;
+      }
+
+      const res = await API.operateUserList(d);
       if (type === 'export') {
         return res?.data;
       } else {
@@ -305,6 +315,7 @@ export function userPlayerListHook(venueType: number, category: number) {
     }
   };
 
+  //- 修改用户记录
   const dispatchUpdateUser = async (form: updateUserFormType) => {
     try {
       loading.value = true;
