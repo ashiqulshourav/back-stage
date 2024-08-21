@@ -3,8 +3,14 @@
     <div class="mb-5">
       <span class="font-bold">{{ t('单关限额列表') }}</span>
       <div class="mt-4">
-        <el-radio-group v-model="currency"  @change="onCurrencyChange">
-          <el-radio-button v-for="item in CURRENCY_LIST_MAP" :value="item.value" :key="item.value" :label="item.label">{{ item.label }}</el-radio-button>
+        <el-radio-group v-model="currency" @change="onCurrencyChange">
+          <el-radio-button
+            v-for="item in CURRENCY_LIST_MAP"
+            :value="item.value"
+            :key="item.value"
+            :label="item.label"
+            >{{ item.label }}</el-radio-button
+          >
         </el-radio-group>
       </div>
       <div class="flex justify-between item-center mb-4 mt-4">
@@ -18,16 +24,18 @@
             @click="changeType(item.value)"
           />
         </div>
-        <el-button v-if="!isEditSport" @click="toggle(true)" type="primary">{{
-          t('编辑')
-        }}</el-button>
-        <div class="flex items-center" v-else>
-          <el-button @click="cancelSportEdit" type="info">{{
-            t('取消')
+        <div v-if="hasAuth('UPDATE')">
+          <el-button v-if="!isEditSport" @click="toggle(true)" type="primary">{{
+            t('编辑')
           }}</el-button>
-          <el-button @click="confirmSportClick" type="primary">{{
-            t('确认')
-          }}</el-button>
+          <div class="flex items-center" v-else>
+            <el-button @click="cancelSportEdit" type="info">{{
+              t('取消')
+            }}</el-button>
+            <el-button @click="confirmSportClick" type="primary">{{
+              t('确认')
+            }}</el-button>
+          </div>
         </div>
       </div>
       <pure-table
@@ -349,7 +357,11 @@
 
 <script setup lang="ts">
 import { useOrderLimitHook } from './utils/hook';
-import { SPORT_LIST_MAP, SPORT_NAME_TYPE,CURRENCY_LIST_MAP } from './utils/map';
+import {
+  SPORT_LIST_MAP,
+  SPORT_NAME_TYPE,
+  CURRENCY_LIST_MAP
+} from './utils/map';
 import CustomButton from '@/components/Form/CustomButton.vue';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
@@ -357,13 +369,14 @@ import {
   addThousandSeparator,
   formatNumberAndFillNull
 } from '@/utils/formatNumber';
+import { hasAuth } from '@/router/utils';
 
 defineOptions({ name: 'RISKMANAGEMENT_SINGLEORDERLIMIT' });
 const { tableHeaderStyleBlue } = usePublicHooks();
 
 const onCurrencyChange = (currency: number) => {
   onSearch();
-}
+};
 
 const {
   loading,
