@@ -409,7 +409,7 @@ export const displayHomeAwayScore = (scoreString: string, sprotId?: ESportType, 
 };
 
 export const getIsInplay = (type: number) => {
-  return type === 1 ? t('滚球') : t('早盘')
+  return type === 1 ? t('滚球') : type === 2 ? t('冠军盘') : t('早盘')
 }
 
 export const openIpDialog = (ip: string) => {
