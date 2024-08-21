@@ -19,19 +19,21 @@
       <div class="mb-5">
         <div class="flex justify-between item-center mb-4">
           <span class="font-bold">{{ t('体育场馆') }}</span>
-          <el-button
-            v-if="!isEditSport"
-            @click="updateEidtStatus('isEditSport')"
-            type="primary"
-            >{{ t('编辑') }}</el-button
-          >
-          <div class="flex items-center" v-else>
-            <el-button @click="cancelSportEdit" type="info">{{
-              t('取消')
-            }}</el-button>
-            <el-button @click="confirmSportClick" type="primary">{{
-              t('确认')
-            }}</el-button>
+          <div v-if="hasAuth('SPORTEDIT')">
+            <el-button
+              v-if="!isEditSport && hasAuth('SPORTEDIT')"
+              @click="updateEidtStatus('isEditSport')"
+              type="primary"
+              >{{ t('编辑') }}</el-button
+            >
+            <div class="flex items-center" v-else>
+              <el-button @click="cancelSportEdit" type="info">{{
+                t('取消')
+              }}</el-button>
+              <el-button @click="confirmSportClick" type="primary">{{
+                t('确认')
+              }}</el-button>
+            </div>
           </div>
         </div>
         <pure-table
@@ -126,19 +128,21 @@
       <div>
         <div class="flex justify-between item-center mb-4">
           <span class="font-bold">{{ t('电竞场馆') }}</span>
-          <el-button
-            v-if="!isEditESport"
-            @click="updateEidtStatus('isEditESport')"
-            type="primary"
-            >{{ t('编辑') }}</el-button
-          >
-          <div class="flex items-center" v-else>
-            <el-button @click="cancelESportEdit" type="info">{{
-              t('取消')
-            }}</el-button>
-            <el-button @click="confirmESportClick" type="primary">{{
-              t('确认')
-            }}</el-button>
+          <div v-if="hasAuth('ESPORTEDIT')">
+            <el-button
+              v-if="!isEditESport"
+              @click="updateEidtStatus('isEditESport')"
+              type="primary"
+              >{{ t('编辑') }}</el-button
+            >
+            <div class="flex items-center" v-else>
+              <el-button @click="cancelESportEdit" type="info">{{
+                t('取消')
+              }}</el-button>
+              <el-button @click="confirmESportClick" type="primary">{{
+                t('确认')
+              }}</el-button>
+            </div>
           </div>
         </div>
         <pure-table
@@ -246,6 +250,7 @@ import {
   addThousandSeparator,
   formatNumberAndFillZero
 } from '@/utils/formatNumber';
+import { hasAuth } from '@/router/utils';
 
 defineOptions({ name: 'RISKMANAGEMENT_USERLEVELLIMIT' });
 const { tableHeaderStyleBlue } = usePublicHooks();
