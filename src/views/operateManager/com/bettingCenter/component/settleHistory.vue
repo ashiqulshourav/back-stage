@@ -11,7 +11,7 @@
       </p>
       <p class="flex-1 flex gap-2">
         <span>{{ t('投注金额') }}:</span>
-        <span>{{ bettingHistory.orderAmount }}</span>
+        <span v-if="data.productAmountTotal">{{ addThousandSeparator(data.productAmountTotal.toFixed(2)) + ' ' + data.currency }}</span>
       </p>
     </div>
     <div class="flex mb-6">
@@ -25,7 +25,7 @@
       </p>
       <p class="flex-1 flex gap-2">
         <span>{{ t('投注时间') }}:</span>
-        <span>{{ dayjs(bettingHistory.createTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
+        <span v-if="bettingHistory.createTime">{{ dayjs(bettingHistory.createTime).format("YYYY-MM-DD HH:mm:ss") }}</span>
       </p>
     </div>
   </div>
@@ -77,7 +77,7 @@
         >
           {{ t('赛事ID:') }} {{ item.matchId }}
           <span class="inline-block">
-            <IconifyIconOffline icon="copyIcon" />
+            <!-- <IconifyIconOffline icon="copyIcon" /> -->
           </span>
         </div>
         <div class="item_line">
@@ -167,9 +167,9 @@
     </template>
     <template #profitAmount="{ row }">
       <div v-if="row.profitAmount">
-        <span v-if="row.profitAmount > 0" class="text-[#dd5454]">{{ "+" + addThousandSeparator(row.profitAmount.toFixed(2)) }}</span>
-        <span v-else-if="row.profitAmount < 0" class="text-[green]">{{ addThousandSeparator(row.profitAmount.toFixed(2)) }}</span>
-        <span v-else >{{ addThousandSeparator(row.profitAmount.toFixed(2)) }}</span>
+        <span v-if="row.profitAmount > 0" class="text-[#dd5454]">{{ "+" + addThousandSeparator(row.profitAmount.toFixed(2)) + ' ' + data.currency }}</span>
+        <span v-else-if="row.profitAmount < 0" class="text-[green]">{{ addThousandSeparator(row.profitAmount.toFixed(2)) + ' ' + data.currency }}</span>
+        <span v-else >{{ addThousandSeparator(row.profitAmount.toFixed(2))  + ' ' + data.currency}}</span>
       </div>
     </template>
   </pure-table>
