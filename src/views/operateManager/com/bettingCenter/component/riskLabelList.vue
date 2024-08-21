@@ -96,7 +96,6 @@ const { list, showNumber } = defineProps<{
 
 
 const getLabelColor = (level: number, labelColor?: string) => {
-  console.log(labelColor)
   if(labelColor) return labelColor    
   switch(level) {
     case 1: 
@@ -115,7 +114,7 @@ const getLabelColor = (level: number, labelColor?: string) => {
 }
 .custom {
   .el-tag__content {
-    color: white;
+    color: inherit;
   }
 }
 </style>
