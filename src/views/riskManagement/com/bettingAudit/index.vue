@@ -397,7 +397,7 @@
               v-for="(item, idx) in row.combineOrderDetails"
               :key="idx"
             >
-              <div class="" v-if="item.riskStatus === riskStatus.approve || item.riskStatus === riskStatus.reject||item.riskStatus === riskStatus.autoReject|| item.riskStatus === riskStatus.preReject">
+              <div class="" v-if="item.riskStatus === riskStatus.rejectBetting || item.riskStatus === riskStatus.reject||item.riskStatus === riskStatus.autoReject|| item.riskStatus === riskStatus.preReject">
                 原因:{{ item.riskType }}
               </div>
               <div
