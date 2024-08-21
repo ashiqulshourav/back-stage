@@ -242,7 +242,7 @@
               v-for="item in row.combineOrderDetails"
               :key="item.betItemId"
             >
-              <div class="item_line"> 
+              <div class="item_line">
                 {{
                   `玩法：${useSportFormatDetail(item)[4]} ${getIsInplay(
                     item.isInplay
