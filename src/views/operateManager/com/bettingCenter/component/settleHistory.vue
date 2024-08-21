@@ -167,9 +167,9 @@
     </template>
     <template #profitAmount="{ row }">
       <div v-if="row.profitAmount">
-        <span v-if="row.profitAmount > 0" class="text-[#dd5454]">{{ "+" + addThousandSeparator(row.profitAmount.toFixed(2)) }}</span>
-        <span v-else-if="row.profitAmount < 0" class="text-[green]">{{ addThousandSeparator(row.profitAmount.toFixed(2)) }}</span>
-        <span v-else >{{ addThousandSeparator(row.profitAmount.toFixed(2)) }}</span>
+        <span v-if="row.profitAmount > 0" class="text-[#dd5454]">{{ "+" + addThousandSeparator(row.profitAmount.toFixed(2)) + ' ' + data.currency }}</span>
+        <span v-else-if="row.profitAmount < 0" class="text-[green]">{{ addThousandSeparator(row.profitAmount.toFixed(2)) + ' ' + data.currency }}</span>
+        <span v-else >{{ addThousandSeparator(row.profitAmount.toFixed(2))  + ' ' + data.currency}}</span>
       </div>
     </template>
   </pure-table>

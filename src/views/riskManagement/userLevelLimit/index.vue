@@ -263,7 +263,6 @@ const {
   sportList,
   eSportList,
   isEditSport,
-  updateEidtStatus,
   isEditESport,
   addSportItem,
   confirmSportClick,
@@ -274,7 +273,8 @@ const {
   cancelSportEdit,
   cancelESportEdit,
   currency,
-  onSearch
+  onSearch,
+  updateEidtStatus
 } = useClassifySettingHook();
 </script>
 

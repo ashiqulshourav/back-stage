@@ -70,7 +70,7 @@
       </ul>
     </div>
     <div class="mt-5">
-      <el-text type="primary">{{ t('是否特殊结算') }}</el-text>
+      <el-text type="primary">{{ t('是否最终结算') }}</el-text>
       <ul class="mt-2">
         <li
           :class="`result_item ${

@@ -179,13 +179,13 @@
               {{ t('投注延时') }}
             </template>
             <div
-                @click="openDelayDialog"
-                v-if="hasAuth('GETLABELLIST')"
-                class="text-primary float-right w-fit mb-2 cursor-pointer"
-              >
+              @click="openDelayDialog"
+              v-if="hasAuth('GETLABELLIST')"
+              class="text-primary float-right w-fit mb-2 cursor-pointer"
+            >
               {{ t('修改记录') }}>>
             </div>
-            <el-row  :gutter="20" class="mt-2 w-full !ml-2">
+            <el-row :gutter="20" class="mt-2 w-full !ml-2">
               <ModifyContent
                 v-model:betDelay="form.betDelay"
                 v-model:betDelayDj="form.betDelayDj"
@@ -497,7 +497,10 @@ const tableData = computed(() => {
 
 const initLimitList = async () => {
   try {
-    const res = await API.getUserLevelLimitList({ type: props.category, currency: props.userData.currency });
+    const res = await API.getUserLevelLimitList({
+      type: props.category,
+      currency: props.userData.currency
+    });
     limitList.length = 0;
     limitList.push(...res.data);
   } catch (error) {
@@ -673,15 +676,20 @@ const handleUpdate = () => {
     if (isSpecial.value == 1) {
       form.percentageLimit = undefined;
     }
-    if (isSpecial.value == 3 && (form.percentageLimit == '' || form.percentageLimit == null || form.percentageLimit == undefined)) {
-      form.percentageLimit = "100";
+    if (
+      isSpecial.value == 3 &&
+      (form.percentageLimit == '' ||
+        form.percentageLimit == null ||
+        form.percentageLimit == undefined)
+    ) {
+      form.percentageLimit = '100';
     }
     if (
       isSpecial.value == 3 &&
       form.percentageLimit &&
       Number(form.percentageLimit) > 100
     ) {
-      form.percentageLimit = "100";
+      form.percentageLimit = '100';
     }
     if (isSpecial.value === 2) {
       form.specialLimit.productAmountTotalLimit = parseInt(
@@ -697,9 +705,13 @@ const handleUpdate = () => {
         form.specialLimit.seriesSingleDayCumulativeCompensationLimit
       );
       form.percentageLimit = undefined;
-      emits('onUpdateUser', {...form, currency: props.userData.currency});
+      emits('onUpdateUser', { ...form, currency: props.userData.currency });
     } else {
-      emits('onUpdateUser', { ...form, specialLimit: null, currency: props.userData.currency });
+      emits('onUpdateUser', {
+        ...form,
+        specialLimit: null,
+        currency: props.userData.currency
+      });
     }
   });
 };
@@ -796,10 +808,9 @@ onUpdated(() => {
       seriesSingleDayCumulativeCompensationLimit;
     form.specialLimit.singleEventAccumulatedCompensationLimit =
       singleEventAccumulatedCompensationLimit;
-  }else if(percentageLimit === null) {
+  } else if (percentageLimit === null) {
     isSpecial.value = 1;
-  }
-  else {
+  } else {
     isSpecial.value = 3;
   }
   updatedLabels.risk.length = 0;
@@ -822,5 +833,4 @@ watch(
     isEditUser.value = newValue;
   }
 );
-
 </script>
