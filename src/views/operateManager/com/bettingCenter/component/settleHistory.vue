@@ -150,17 +150,18 @@
         <div>
           {{ markeTypeMap[item.marketType as keyof typeof markeTypeMap] }}
         </div>
-        <div v-if="getOddStatus(item?.betResult, item.riskStatus)">
+        <div>
                 <span
-                    :class="
-                    [EBetResultType.WIN, EBetResultType.WIN_HALF].includes(
-                      item?.betResult
-                    )
-                      ? 'win'
-                      : 'lose'
-                  "
+                  :class="{
+                    win:
+                      item.betItemResultStatus === 4 ||
+                      item.betItemResultStatus === 5,
+                    lose:
+                      item.betItemResultStatus === 3 ||
+                      item.betItemResultStatus === 6
+                  }"
                 >
-                  {{ getOddStatus(item?.betResult, item.riskStatus) }}
+                  {{ item.betItemResultDesc }}
                 </span>
         </div>
       </div>
@@ -251,9 +252,21 @@ const getOddStatus = (betResult: number, riskSt: number) => {
   }
 };
 
-
 </script>
 
 <style lang="scss">
-
+.win {
+  padding: 2px 4px;
+  font-style: normal;
+  font-weight: 400;
+  border-radius: 4px;
+  color: #dd5454;
+}
+.lose {
+  padding: 2px 4px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  color: green;
+}
 </style>

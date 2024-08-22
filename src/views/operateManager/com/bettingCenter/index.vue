@@ -613,7 +613,6 @@ onUpdated(() => {
   font-style: normal;
   font-weight: 400;
   line-height: 16px;
-
   color: green;
 }
 .color_blue {
