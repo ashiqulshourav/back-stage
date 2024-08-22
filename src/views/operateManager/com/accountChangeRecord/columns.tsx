@@ -13,7 +13,7 @@ export const accountChangeTypeCodeList = [
   { label: t('钱包上分'),label2:'转入', value: 11, icon: 'transfer' },
   { label: t('钱包下分'),label2:'转出', value: 10, icon: 'transfer' }
 ];
-
+ 
 export const columns: TableColumnList = [
   {
     label: t('序号'),

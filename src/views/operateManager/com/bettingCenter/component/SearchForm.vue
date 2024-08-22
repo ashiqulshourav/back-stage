@@ -199,7 +199,7 @@
               >
                 {{ t('反选') }}
               </el-checkbox>
-            </template>         
+            </template>
         </el-tree-select>
         </el-form-item>
         <el-form-item
@@ -240,7 +240,7 @@
               >
                 {{ t('反选') }}
               </el-checkbox>
-            </template>         
+            </template>
         </el-tree-select>
           <!-- <el-select
             :placeholder="t('请选择串关类型')"
@@ -612,7 +612,7 @@ const emits = defineEmits(['onSearch', 'exportFile']);
 const resetForm = (formEl: FormInstance | undefined) => {
   formEl?.resetFields();
   selectDate.value = '';
-  gameClassify.value = props.form.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
+  gameClassify.value = props.category === 1 ? ESPORT_ID_MAP : SPORT_ID_MAP;
   props.form.timeStart = dayjs().subtract(30, 'day').startOf('day').valueOf();
   props.form.timeEnd = dayjs().endOf('day').valueOf();
   props.form.betItemId = '';
