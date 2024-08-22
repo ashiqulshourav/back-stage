@@ -105,7 +105,7 @@
         <div class="item_line">
           {{
             `玩法：${useSportFormatDetail(item)[4]} ${getIsInplay(
-              item.marketType
+              item.isInplay
             )}`
           }}
           {{
