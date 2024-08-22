@@ -99,7 +99,7 @@
         <div class="item_line">
           {{
             `玩法：${useSportFormatDetail(item)[4]} ${getIsInplay(
-              item.marketType
+              item.isInplay
             )}`
           }}
           {{
@@ -123,12 +123,6 @@
               item.marketType
             )
           }}
-        </div>
-        <div  class="item_line" >
-                <span v-if="item.kindsCode !== 'TeamToKickOff' && displayHomeAwayScore(item.settleScore, item.sportId)">
-                  {{ t('结算比分：')
-                  }}{{ displayHomeAwayScore(item.settleScore, item.sportId) }}
-                </span>
         </div>
       </div>
     </template>
