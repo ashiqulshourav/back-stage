@@ -226,10 +226,10 @@
               <div class="item_line">
                 {{ t('投注IP:') }}
                 <span
-                  v-if="row.combineOrderDetails[0].ip"
-                  @click="openIpDialog(row.combineOrderDetails[0].ip)"
+                  v-if="row.ip"
+                  @click="openIpDialog(row.ip)"
                   class="text-[#409EFF] cursor-pointer"
-                  >{{ row.combineOrderDetails[0].ip }} ({{ row.ipArea }})</span
+                  >{{ row.ip }} ({{ row.ipArea }})</span
                 >
                 <span v-else>-</span>
               </div>
