@@ -249,9 +249,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
             pagination.total = res.data?.count;
             pagination.pageSize = res.data?.pageSize;
             pagination.currentPage = res.data?.pageNum;
-            if (pagination.currentPage === 1) {
-              totalInfo.value = res.data?.otherData;
-            }
           } else {
             reject();
             dataList.length = 0;
@@ -260,6 +257,11 @@ export function useBettingCenterHook(category: number, venueType: number) {
             ?.querySelector('.table_container .el-scrollbar__wrap')
             ?.scroll(0, 0);
         });
+        if (pagination.currentPage === 1) {
+          API.bettingCenterSummarize(params).then(res => {
+            totalInfo.value = res.data?.data;
+          });
+        }
       } catch (error) {
         loading.value = false;
         reject();
@@ -384,7 +386,7 @@ export function useBettingCenterHook(category: number, venueType: number) {
 
   const handleSettleHistoryDialog = (row: any) => {
     if (!row.settleTimes) {
-      return
+      return;
     }
     addDialog({
       title: t(''),
