@@ -274,6 +274,8 @@
                 <span
                   v-if="
                     item.settleScore &&
+                    item.isInplay !== 2 &&
+                    item.kindsCode !== 'TeamToKickOff' &&
                     displayHomeAwayScore(item.settleScore, item.sportId)
                   "
                 >
