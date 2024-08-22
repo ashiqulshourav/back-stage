@@ -1,8 +1,10 @@
 import { http } from "@/utils/http";
 import { searchFormType } from '@/views/operateManager/com/bettingCenter/util/types'
 export const bettingCenter = {
-  //-结算中心列表
+  //-赛程中心列表
   bettingCenterList: (data: searchFormType) => http.request<any>("post", "/bet-center/list", { data }),
+  // 赛程总结
+  bettingCenterSummarize: (data: searchFormType) => http.request<any>("post", "/bet-center/betCenterStatisticV2", { data }),
   bettingCenterExport: (data: searchFormType) => http.request<any>("post", "/bet-center/listExport", { data }),
   betcenterRisk: (data: searchFormType) => http.request<any>("post", "/bet-center/risk", { data }),
   riskExport: (data: searchFormType) => http.request<any>("post", "/bet-center/riskExport", { data }),
@@ -44,4 +46,7 @@ export const bettingCenter = {
   getUserByIp: (data: { ip: string, pageSize: number; pageNum: number }) => http.request<BetOrderAPI.getUserByIpResType>("post", "/bet-center/getUserByIp", { data }),
 
   getSettleHistory: (data: any) => http.request<any>("post", `/bet-order/record/settle/history/record/${data}`)
+
+
+
 };
