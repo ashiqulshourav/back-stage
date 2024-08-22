@@ -139,10 +139,6 @@ export function useBettingCenterHook(category: number, venueType: number) {
       realSeriesTypes = [...new Set(realSeriesTypes)];
     }
 
-    if (newForm.orderId || newForm.matchId) {
-      newForm.timeStart = '';
-      newForm.timeEnd = '';
-    }
     if (newForm.timeStart) {
       newForm.timeStart = dayjs(newForm.timeStart).format(
         'YYYY-MM-DD HH:mm:ss'
