@@ -291,7 +291,7 @@
                 class="absolute top-0 right-[5px]"
                 color="#66cf66"
               >
-                {{ t('预约') }}
+                {{ '预约' }}
               </el-tag>
             <div class="flex gap-2 items-center">
               <el-tag
