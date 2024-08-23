@@ -309,18 +309,28 @@
             </el-row>
           </el-collapse-item>
           <el-collapse-item :title="t('赔率分组')">
-            <el-select
-              v-model="form.userOddGroupLevel"
-              clearable
-              class="!w-[150px]"
-            >
-              <el-option
-                :label="item.level"
-                :value="item.level"
-                v-for="item in props.oddsData"
-                :key="item.level"
-              />
-            </el-select>
+            <div class="flex items-center justify-between mb-2">
+              <el-select
+                v-model="form.userOddGroupLevel"
+                clearable
+                class="!w-[150px]"
+              >
+                <el-option
+                  :label="item.level"
+                  :value="item.level"
+                  v-for="item in props.oddsData"
+                  :key="item.level"
+                />
+              </el-select>
+              <p
+                @click="openOddsLimitDialog"
+                class="text-primary text-right cursor-pointer"
+                style="line-height: 18px"
+              >
+                {{ t('修改记录') }}>>
+              </p>
+            </div>
+
             <pure-table
               maxHeight="500"
               align-whole="center"
@@ -728,6 +738,21 @@ const openSpecialLimitDialog = () => {
       h(SpecialLimitDialog, {
         id: form.id,
         recordType: 2
+      })
+  });
+};
+const openOddsLimitDialog = () => {
+  addDialog({
+    title: t('赔率分组'),
+    class: 'reset_dialog',
+    width: '50%',
+    alignCenter: true,
+    closeOnClickModal: false,
+    hideFooter: true,
+    contentRenderer: () =>
+      h(LimitRecordDialog, {
+        id: form.id,
+        recordType: 3
       })
   });
 };

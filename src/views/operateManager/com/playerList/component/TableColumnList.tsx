@@ -247,3 +247,20 @@ export const specialLimitColumns: TableColumnList = [
     }
   }
 ];
+export const oddsGroupColumns: TableColumnList = [
+  {
+    label: t('等级'),
+    prop: 'userOddGroupLevel',
+  },
+  {
+    label: t('操作人'),
+    prop: 'createdBy'
+  },
+  {
+    label: t('修改时间'),
+    prop: 'updatedAt',
+    formatter({ updatedAt }: { updatedAt: string }) {
+      return dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss');
+    }
+  }
+];

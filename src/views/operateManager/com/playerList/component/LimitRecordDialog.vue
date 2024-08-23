@@ -12,7 +12,7 @@
       :data="dataList"
       :header-cell-style="tableHeaderStyle"
       :pagination="{ ...pagination, pageSizes: pageSizeArr }"
-      :columns="specialLimitColumns"
+      :columns="recordType === 3 ? oddsGroupColumns : specialLimitColumns"
       :paginationSmall="true"
       @selection-change="handleSelectionChange"
       @page-size-change="handleSelectionChange"
@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 // import { columns } from '../utils/DelayTimeTableList';
-import { specialLimitColumns } from './TableColumnList';
+import { specialLimitColumns, oddsGroupColumns } from './TableColumnList';
 import { PaginationProps } from '@pureadmin/table';
 import { pageSizeArr } from '@/utils/math';
 import { usePublicHooks } from '@/hooks';
