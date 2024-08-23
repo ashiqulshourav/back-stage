@@ -208,9 +208,9 @@
         >
           <el-option
             :label="item.level"
-            :value="item.id"
+            :value="item.level"
             v-for="item in props.oddsData"
-            :key="item.id"
+            :key="item.level"
           />
         </el-select>
       </el-form-item>
