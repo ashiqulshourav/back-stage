@@ -112,3 +112,35 @@ export const autoFreezeColumns: TableColumnList = [
     slot: 'betAmountRange'
   }
 ];
+
+export const dangerousUserWarningColumns: TableColumnList = [
+  {
+    label: t('告警条件'),
+    slot: 'warningCondition'
+  },
+  {
+    label: t('单日注单数'),
+    slot: 'dailyProfitAmount'
+  },
+  {
+    label: t('单日拒单数'),
+    slot: 'dailyRefuse'
+  },
+  {
+    label: t('危险事件前3秒单日注单数'),
+    slot: 'beforeThreeSecCount'
+  },
+  {
+    label: t('单日投注额'),
+    slot: 'dailyBetAmount'
+  },
+  {
+    label: t('单日盈利额'),
+    slot: 'dailyBetCount'
+  },
+  {
+    label: t('单日盈利率'),
+    slot: 'dailyProfitRate'
+  }
+];
+

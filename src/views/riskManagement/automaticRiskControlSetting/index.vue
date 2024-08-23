@@ -28,6 +28,12 @@
             :btnText="t('足球自动冻结')"
             @click="changeType(2)"
           />
+          <CustomButton
+            class="mb-2 !ml-0 mr-2"
+            :type="3 == currentRiskControlLabelId ? 'primary' : ''"
+            :btnText="t('危险用户告警')"
+            @click="changeType(3)"
+          />
         </div>
       </div>
 
@@ -62,9 +68,9 @@
             >
           </span>
         </span>
-        <!-- <span v-if="currentRiskControlLabelId == 3">{{
-          t('自动标签、限额等级设置')
-        }}</span> -->
+        <span v-if="currentRiskControlLabelId == 3">{{
+          t('危险用户告警设置')
+        }}</span>
 
         <div
           v-if="currentRiskControlLabelId == 0 && hasAuth('AUTOREJECTLIST') && hasAuth('UPDATEAUTOREJECT')"
@@ -95,7 +101,7 @@
             :confirmRiskControlsClick="confirmRiskControlsClick"
           />
         </div>
-        <!-- <div v-if="currentRiskControlLabelId == 3 && hasAuth('UPDATEFREEZE')">
+        <div v-if="currentRiskControlLabelId == 3">
           <EditAutoLabelButton
             :currentRiskControlLabelId="currentRiskControlLabelId"
             :isEditRiskControls="isEditRiskControls"
@@ -103,7 +109,7 @@
             :cancelRiskControlsEdit="cancelRiskControlsEdit"
             :confirmRiskControlsClick="confirmRiskControlsClick"
           />
-        </div> -->
+        </div>
       </div>
 
       <!-- Tables -->
@@ -150,8 +156,8 @@
           />
         </div>
         <!-- Auto Label Limit -->
-        <!-- <div v-if="currentRiskControlLabelId == 3">
-          <AutoLabelLimit
+        <div v-if="currentRiskControlLabelId == 3">
+          <!-- <AutoLabelLimit
             :isEditRiskControls="isEditRiskControls"
             :loading="loading"
             :columns="autoLabelColumns"
@@ -160,8 +166,17 @@
             :deleteControlLabel="deleteControlLabel"
             :labelList="labelList"
             :isFormClick="isFormClick"
+          /> -->
+          <DangerousUserWarning
+            :isEditRiskControls="isEditRiskControls"
+            :loading="loading"
+            :columns="dangerousUserWarningColumns"
+            :addControlLabel="addControlLabel"
+            :deleteControlLabel="deleteControlLabel"
+            :isFormClick="isFormClick"
+            :userConfigList="userConfigList"
           />
-        </div> -->
+        </div>
       </div>
     </div>
   </div>
@@ -185,6 +200,8 @@ import AutomaticReject from './component/AutomaticReject.vue';
 import AutomaticOrderPlacement from './component/AutomaticOrderPlacement.vue';
 import AutomaticFreeze from './component/AutomaticFreeze.vue';
 import { InfoFilled } from '@element-plus/icons-vue';
+import DangerousUserWarning from './component/DangerousUserWarning.vue';
+import { dangerousUserWarningColumns } from './component/TableColumnList';
 
 const showMessage = ref(false);
 
@@ -209,7 +226,8 @@ const {
   pandaMatchList,
   autoFreezeColumns,
   orderAutoFreezeList,
-  isFormClick
+  isFormClick,
+  userConfigList
 } = useRiskControlHook({ venueType: 1, category: 1 });
 </script>
 
