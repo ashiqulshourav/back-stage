@@ -58,6 +58,11 @@ export function useRiskControlHook({
     []
   );
 
+  // user config list
+  const userConfigList = reactive<RiskManagementDataAPI.dangerousUserWarning[]>([])
+  const sourceUserConfigList = reactive<RiskManagementDataAPI.dangerousUserWarning[]>([])
+  const delUserConfigList = reactive<RiskManagementDataAPI.dangerousUserWarning[]>([])
+
   // auto label limit
   const labelList = reactive<labelListType>({
     risk: [],
@@ -208,6 +213,22 @@ export function useRiskControlHook({
     }
   }
 
+   // user risk config list
+  async function onSearchUserConfigList() {
+    try {
+      loading.value = true;
+      const res = await API.getUserConfigList();
+
+      loading.value = false;
+      userConfigList.length = 0;
+      sourceUserConfigList.length = 0;
+      userConfigList.push(...res.data);
+      sourceUserConfigList.push(...res.data);
+    } catch (error) {
+      loading.value = true;
+    }
+  }
+
   const cancelRiskControlsEdit = () => {
     isEditRiskControls.value = false;
     isFormClick.value = false;
@@ -229,7 +250,8 @@ export function useRiskControlHook({
         break;
       case 3:
         {
-          onSearchAutoLabelLimit();
+          // onSearchAutoLabelLimit();
+          onSearchUserConfigList();
         }
         break;
     }
@@ -531,6 +553,64 @@ export function useRiskControlHook({
     }
   };
 
+  const confirmUserConfig = async () => {
+    // validation
+    isFormClick.value = true;
+    let isValid = true;
+
+    console.log({userConfigList})
+
+    userConfigList.forEach(item => {
+      if(
+        !item.warningCondition || item.warningCondition == null ||
+        !item.dailyProfitAmount || item.dailyProfitAmount == null ||
+        !item.dailyRefuse || item.dailyRefuse == null ||
+        !item.beforeThreeSecCount || item.beforeThreeSecCount == null
+      ) {
+        isValid = false;
+      }
+    })
+
+    if (isValid) {
+      const r = await openPasswordInput();
+      if (!r) return;
+
+      loading.value = true;
+
+      const transformPayload = (data: RiskManagementDataAPI.dangerousUserWarning[]) => {
+        return data.map(item => ({
+          id: item?.id,
+          warningCondition: item.warningCondition,
+          dailyProfitAmount: Number(item.dailyProfitAmount),
+          dailyRefuse: Number(item.dailyRefuse),
+          beforeThreeSecCount: Number(item.beforeThreeSecCount),
+          dailyBetAmount: Number(item.dailyBetAmount),
+          dailyBetCount: Number(item.dailyBetCount),
+          dailyProfitRate: Number(item.dailyProfitRate),
+          deleteFlag: item.deleteFlag,
+        }));
+      };
+
+      const res = await API.updateUserConfigList([
+        ...transformPayload(userConfigList),
+        ...transformPayload(delUserConfigList)
+      ]);
+      loading.value = false;
+      if (res.code) {
+        message(res.msg, { type: 'error' });
+        return;
+      } else {
+        isFormClick.value = false;
+        message(res.msg, { type: res.code ? 'error' : 'success' });
+        isEditRiskControls.value = false;
+        userConfigList.length = 0;
+        delUserConfigList.length = 0;
+        onSearchUserConfigList();
+      }
+
+    }
+  }
+
   const confirmRiskControlsClick = () => {
     switch (currentRiskControlLabelId.value) {
       case 0:
@@ -550,13 +630,15 @@ export function useRiskControlHook({
         break;
       case 3:
         {
-          confirmAutoLabel();
+          // confirmAutoLabel();
+          confirmUserConfig();
         }
         break;
     }
   };
 
   const addControlLabel = () => {
+    console.log('plus', currentRiskControlLabelId.value);
     switch (currentRiskControlLabelId.value) {
       case 0:
         {
@@ -608,15 +690,15 @@ export function useRiskControlHook({
         break;
       case 3:
         {
-          riskControlList.push({
-            name: undefined,
-            days: undefined,
-            betcount: undefined,
-            profiteAmout: undefined,
-            profiteRate: undefined,
-            level: undefined,
-            labelId: undefined,
-            lableName: undefined
+          userConfigList.push({
+            warningCondition: undefined,
+            dailyProfitAmount: undefined,
+            dailyRefuse: undefined,
+            beforeThreeSecCount: undefined,
+            dailyBetAmount: undefined,
+            dailyBetCount: undefined,
+            dailyProfitRate: undefined,
+            deleteFlag : undefined,
           });
         }
         break;
@@ -657,9 +739,13 @@ export function useRiskControlHook({
         break;
       case 3:
         {
-          const item = riskControlList.pop();
+          // const item = riskControlList.pop();
+          // if (item?.id) {
+          //   delRiskControlList.push({ ...item, delFlag: 1 });
+          // }
+          const item = userConfigList.pop();
           if (item?.id) {
-            delRiskControlList.push({ ...item, delFlag: 1 });
+            delUserConfigList.push({ ...item, deleteFlag: 1 });
           }
         }
         break;
@@ -684,7 +770,8 @@ export function useRiskControlHook({
           break;
         case 3:
           {
-            await dispatchGetLabelList();
+            // await dispatchGetLabelList();
+            // onSearchUserConfigList();
           }
           break;
       }
@@ -710,6 +797,10 @@ export function useRiskControlHook({
           onSearchFreezeOrder();
         }
         break;
+      case 3: 
+      {
+          onSearchUserConfigList();
+      }
     }
   });
 
@@ -733,6 +824,7 @@ export function useRiskControlHook({
     pandaMatchList,
     autoFreezeColumns,
     orderAutoFreezeList,
+    userConfigList,
     isFormClick
   };
 }
