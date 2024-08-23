@@ -250,7 +250,7 @@ export const specialLimitColumns: TableColumnList = [
 export const oddsGroupColumns: TableColumnList = [
   {
     label: t('等级'),
-    prop: 'userOddGroupLevel',
+    prop: 'name',
   },
   {
     label: t('操作人'),
