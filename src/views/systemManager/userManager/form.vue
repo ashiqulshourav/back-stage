@@ -72,6 +72,23 @@
       </el-tree-select>
     </el-form-item>
 
+    <el-form-item
+      :label="`${t('*IP查看权限')}:`"
+      prop="ipAuth"
+    >
+      <el-select
+        v-model="newFormInline.ipAuth"
+        :placeholder="t('请选择')"
+      >
+        <el-option
+          :label="item.label"
+          :value="item.value"
+          v-for="item in IP_AUTH"
+          :key="item.value"
+        />
+      </el-select>
+    </el-form-item>
+
     <el-form-item :label="t('U盾序列号')" prop="ukeyCode">
       <el-input
         v-model.trim="newFormInline.ukeyCode"
@@ -123,6 +140,7 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import RefreshIcon from '@iconify-icons/ep/refresh';
 import { getMD5 } from '@/utils/caypto';
 import { useUserStore } from '@/store/user';
+import { IP_AUTH } from './utils/map';
 
 const { switchStyle } = usePublicHooks();
 const { getNewPassword, copyPassword } = useResetPasswordHook();

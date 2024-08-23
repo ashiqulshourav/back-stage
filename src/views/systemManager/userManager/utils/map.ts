@@ -6,3 +6,9 @@ export const depList = [
   { key: 5, val: t('技术部') },
   { key: 6, val: t('产品部') }
 ];
+
+export const IP_AUTH = [
+  { label: t('脱敏'), value: 1 },
+  { label: t('半脱敏'), value: 2 },
+  { label: t('不可查看'), value: 3 },
+];
