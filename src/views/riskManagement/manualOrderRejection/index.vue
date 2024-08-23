@@ -300,6 +300,15 @@
             </div>
           </template>
           <template #orderAcceptanceStatus="{ row }">
+            <el-tag
+                v-if="row.isReserveOrder == 1"
+                effect="dark"
+                :style="{ width: '40px', border: 'none' }"
+                class="absolute top-0 right-[5px]"
+                color="#66cf66"
+              >
+                {{ '预约' }}
+            </el-tag>
             <div class="h-full">
               <div
                 class="match_item eq-height"
