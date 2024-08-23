@@ -94,6 +94,20 @@ declare namespace RiskManagementDataAPI {
     updateAt?: string;
     idx?: number;
   };
+  type dangerousUserWarning = {
+    id?: number;
+    warningCondition?: string | number;
+    dailyProfitAmount?: string | number;
+    dailyRefuse?: string | number;
+    beforeThreeSecCount?: string | number;
+    dailyBetAmount?: string | number;
+    dailyBetCount?: string | number;
+    dailyProfitRate?: string | number;
+    createAt?: string | number;
+    updateAt?: string | number;
+    idx?: number;
+    deleteFlag ?: null | number;
+  };
   type LimitListType = {
     leagueLevel: number;
     sportId?: null | number;
@@ -160,6 +174,7 @@ declare namespace RiskManagementDataAPI {
 
   type OrderRejectTypesRes = COMMON.BASE_RES_TYPE<OrderRejectTypes[]>;
   type AutoFreezeRes = COMMON.BASE_RES_TYPE<AutoFreeze[]>;
+  type UserConfigListRes = COMMON.BASE_RES_TYPE<dangerousUserWarning[]>;
   type OrderPlacementTypesRes = COMMON.BASE_RES_TYPE<OrderPlacementTypes[]>;
   type RiskControlTypesRes = COMMON.BASE_RES_TYPE<RiskControlTypes[]>;
   type RiskNoticeRes = COMMON.BASE_RES_TYPE<RiskNotice>;

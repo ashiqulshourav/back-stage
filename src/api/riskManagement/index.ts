@@ -112,6 +112,16 @@ export const riskManagementData = {
       { data }
     ),
 
+  getUserConfigList: () => 
+    http.request<RiskManagementDataAPI.UserConfigListRes>('post', '/risk/user/config/list'),
+
+  updateUserConfigList: (data: RiskManagementDataAPI.dangerousUserWarning[]) => 
+    http.request<RiskManagementDataAPI.AutoFreezeRes>(
+      'post',
+      '/risk/user/config/edit',
+      { data }
+    ),
+
   getRiskNoticeAggregate: (data: { createTimeStart: number, createTimeEnd: number }) => http.request<RiskManagementDataAPI.RiskNoticeRes>('post', '/risk/notice/aggregate', { data }, { noNprogress: true }),
 
   getRiskNotification: () => http.request<RiskManagementDataAPI.RiskNoticeRes>('post', '/kmg/matchUser/getRiskNotification', {}, { noNprogress: true }),
