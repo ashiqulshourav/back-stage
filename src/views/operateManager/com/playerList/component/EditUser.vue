@@ -326,6 +326,7 @@
                 v-model="form.userOddGroupLevel"
                 clearable
                 class="!w-[150px]"
+                @change="handleOddsChange"
               >
                 <el-option
                   :label="item.level"
@@ -348,7 +349,7 @@
               align-whole="center"
               size="small"
               border
-              :data="props.oddsData"
+              :data="oddsGroupData"
               :columns="oddsColumns"
             ></pure-table
           ></el-collapse-item>
@@ -423,10 +424,6 @@ const emits = defineEmits([
 const limitList = reactive<UserAPI.UserLevelLimitListRes[]>([]);
 
 const oddsColumns: TableColumnList = [
-  {
-    label: t('赔率分组等级'),
-    prop: 'level'
-  },
   {
     label: t('选项一'),
     prop: 'optionAssignmentOne'
@@ -525,6 +522,7 @@ const isEditUser = ref(props.isEditUser);
 const isRiskLabelAdd = ref(false);
 const isAttrLabelAdd = ref(false);
 const isSpecial = ref(1);
+const oddsGroupData = ref<any[]>([]);
 const form = reactive<updateUserFormType>({} as updateUserFormType);
 const updatedLabels = reactive<labelListType>({
   attr: [],
@@ -858,6 +856,9 @@ onUpdated(() => {
   form.betDelayDj = betDelayDj;
   form.percentageLimit = percentageLimit;
   form.userOddGroupLevel = userOddGroupLevel;
+  oddsGroupData.value = props.oddsData.filter(
+    i => i.level === userOddGroupLevel
+  );
   if (
     maxWinAmountLimit ||
     productAmountTotalLimit ||
@@ -889,6 +890,10 @@ onUpdated(() => {
   isAttrLabelAdd.value = false;
   labelForm.attr.length = 0;
 });
+
+const handleOddsChange = (v: any) => {
+  oddsGroupData.value = props.oddsData.filter(i => i.level === v);
+};
 
 watch(
   () => props.isEditUser,
