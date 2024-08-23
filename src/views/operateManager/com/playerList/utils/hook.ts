@@ -24,6 +24,7 @@ export function userPlayerListHook(venueType: number, category: number) {
   const router = useRouter();
   const settingStore = useSettingStoreHook();
   const dataList = reactive<UserAPI.operateUserList[]>([]);
+  const oddsData = ref<any[]>([])
   const selectedDataList = reactive<UserAPI.operateUserList[]>([]);
   const labelList = reactive<labelListType>({
     risk: [],
@@ -325,6 +326,10 @@ export function userPlayerListHook(venueType: number, category: number) {
     }
   };
 
+  const getOddsGroup = async () => {
+    const res = await API.getOddsGroupApi({});
+    oddsData.value = res.data;
+  };
   onMounted(() => {
     if (route.query.tagId) {
       let labelType: string | number = route.query.labelType as string;
@@ -335,6 +340,7 @@ export function userPlayerListHook(venueType: number, category: number) {
         ? (form.riskControlLabelList as (string | number)[])?.push(tagId)
         : (form.attributeLabelList as (string | number)[]).push(tagId);
     }
+    getOddsGroup()
     dispatchGetLabelList();
     dispatchGetTenantList();
     onSearch();
@@ -377,6 +383,7 @@ export function userPlayerListHook(venueType: number, category: number) {
     downloading,
     exportFile,
     uploading,
-    importFile
+    importFile,
+    oddsData
   };
 }

@@ -32,7 +32,7 @@ export const columns = (category: number): TableColumnList => {
       prop: 'currency',
       minWidth: 150,
       formatter({ currency }) {
-        return  CURRENCY_TYPE[currency as keyof typeof CURRENCY_TYPE]
+        return CURRENCY_TYPE[currency as keyof typeof CURRENCY_TYPE]
       }
     },
     {
@@ -45,6 +45,11 @@ export const columns = (category: number): TableColumnList => {
       label: t('属性标签'),
       hide: !hasAuth('viewAttributeLabel'.toUpperCase()),
       slot: 'attributeLabel',
+      width: 150
+    },
+    {
+      label: t('赔率分组'),
+      prop: 'userOddGroupLevel',
       width: 150
     },
     {

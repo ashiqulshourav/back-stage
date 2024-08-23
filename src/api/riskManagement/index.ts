@@ -117,4 +117,12 @@ export const riskManagementData = {
   getRiskNotification: () => http.request<RiskManagementDataAPI.RiskNoticeRes>('post', '/kmg/matchUser/getRiskNotification', {}, { noNprogress: true }),
 
   setRiskNotification: (data: RiskManagementDataAPI.RiskNotice) => http.request('post', '/kmg/matchUser/setRiskNotification', { data }, { noNprogress: true }),
+  
+  getOddsGroupApi: (data: any) =>
+    http.request<RiskManagementDataAPI.RiskOddsGroupRes>(
+      'post',
+      '/matchOddsGrouping/list ',
+      { data }
+    ),
+  EditOddsGroupApi: (data: RiskManagementDataAPI.RiskOddsGroupData[]) => http.request('post', 'matchOddsGrouping/update', { data }, { noNprogress: true }),
 };

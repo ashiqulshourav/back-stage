@@ -308,6 +308,28 @@
               </el-col>
             </el-row>
           </el-collapse-item>
+          <el-collapse-item :title="t('赔率分组')">
+            <el-select
+              v-model="form.userOddGroupLevel"
+              clearable
+              class="!w-[150px]"
+            >
+              <el-option
+                :label="item.level"
+                :value="item.level"
+                v-for="item in props.oddsData"
+                :key="item.level"
+              />
+            </el-select>
+            <pure-table
+              maxHeight="500"
+              align-whole="center"
+              size="small"
+              border
+              :data="props.oddsData"
+              :columns="oddsColumns"
+            ></pure-table
+          ></el-collapse-item>
           <el-collapse-item :title="t('备注')">
             <el-input
               :placeholder="t('只能输入255个字符的内容')"
@@ -364,11 +386,11 @@ const props = defineProps<{
   labelList: labelListType;
   userData: UserAPI.operateUserList;
   category: number;
+  oddsData: any[];
 }>();
-
+console.log('props', props);
 const activeNames = ref(['1']);
 const { tableHeaderStyleBlue } = usePublicHooks();
-
 const emits = defineEmits([
   'onClose',
   'onOpenRecord',
@@ -377,6 +399,21 @@ const emits = defineEmits([
   'onUpdateUser'
 ]);
 const limitList = reactive<UserAPI.UserLevelLimitListRes[]>([]);
+
+const oddsColumns: TableColumnList = [
+  {
+    label: t('赔率分组等级'),
+    prop: 'level'
+  },
+  {
+    label: t('选项一'),
+    prop: 'optionAssignmentOne'
+  },
+  {
+    label: t('选项二'),
+    prop: 'optionAssignmentTwo'
+  }
+];
 
 const limitColumns: TableColumnList = [
   {
@@ -427,7 +464,10 @@ const tableData = computed(() => {
 
 const initLimitList = async () => {
   try {
-    const res = await API.getUserLevelLimitList({ type: props.category, currency: props.userData.currency });
+    const res = await API.getUserLevelLimitList({
+      type: props.category,
+      currency: props.userData.currency
+    });
     limitList.length = 0;
     limitList.push(...res.data);
   } catch (error) {
@@ -632,9 +672,13 @@ const handleUpdate = () => {
         form.specialLimit.seriesSingleDayCumulativeCompensationLimit
       );
       form.percentageLimit = undefined;
-      emits('onUpdateUser', {...form, currency: props.userData.currency});
+      emits('onUpdateUser', { ...form, currency: props.userData.currency });
     } else {
-      emits('onUpdateUser', { ...form, specialLimit: null, currency: props.userData.currency });
+      emits('onUpdateUser', {
+        ...form,
+        specialLimit: null,
+        currency: props.userData.currency
+      });
     }
   });
 };
@@ -705,7 +749,8 @@ onUpdated(() => {
     singleEventAccumulatedCompensationLimit,
     riskControlLabelList,
     attributeLabelList,
-    percentageLimit
+    percentageLimit,
+    userOddGroupLevel
   } = props.userData;
 
   console.log({ percentageLimit });
@@ -720,6 +765,7 @@ onUpdated(() => {
   form.betDelay = betDelay;
   form.betDelayDj = betDelayDj;
   form.percentageLimit = percentageLimit;
+  form.userOddGroupLevel = userOddGroupLevel;
   if (
     maxWinAmountLimit ||
     productAmountTotalLimit ||

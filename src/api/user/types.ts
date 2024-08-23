@@ -136,6 +136,7 @@ declare namespace UserAPI {
     balance: number;
     beforeLimit: number | null;
     currency: number;
+    userOddGroupLevel: number | null
   };
 
 

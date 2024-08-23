@@ -145,6 +145,14 @@ declare namespace RiskManagementDataAPI {
     createTimeEnd?: number;
     isLoop: boolean;
   }
+  type RiskOddsGroupData = {
+    id?: string | number;
+    level: string | number;
+    optionAssignmentOne: string | number;
+    optionAssignmentTwo: string | number;
+   [propName: string]: any;
+  }
+
   type RiskTagListRes = COMMON.BASE_RES_TYPE<RiskTagListType>;
   type RiskTagRes = COMMON.BASE_RES_TYPE<RiskTagType>;
   type LimitRes = COMMON.BASE_RES_TYPE<LimitListType[]>;
@@ -155,4 +163,5 @@ declare namespace RiskManagementDataAPI {
   type OrderPlacementTypesRes = COMMON.BASE_RES_TYPE<OrderPlacementTypes[]>;
   type RiskControlTypesRes = COMMON.BASE_RES_TYPE<RiskControlTypes[]>;
   type RiskNoticeRes = COMMON.BASE_RES_TYPE<RiskNotice>;
+  type RiskOddsGroupRes = COMMON.BASE_RES_TYPE<RiskOddsGroupData[]>
 }
