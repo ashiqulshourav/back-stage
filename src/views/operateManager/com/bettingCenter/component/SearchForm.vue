@@ -959,9 +959,9 @@ watch(
 );
 
 watch(
-  () => props.form.userIdOrName,
+  () => [props.form.userIdOrName, props.form.orderId, props.form.matchId],
   () => {
-    if (props.form.userIdOrName) {
+    if (props.form.userIdOrName || props.form.orderId || props.form.matchId) {
       props.form.timeStart = '';
       props.form.timeEnd = '';
     } else {
