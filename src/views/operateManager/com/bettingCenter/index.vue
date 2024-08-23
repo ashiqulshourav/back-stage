@@ -285,7 +285,7 @@
           </template>
           <template #orderStatusView="{ row }">
             <el-tag
-                v-if="row.isReserve == 2"
+                v-if="row.isReserveOrder == 1"
                 effect="dark"
                 :style="{ width: '40px', border: 'none' }"
                 class="absolute top-0 right-[5px]"
