@@ -8,11 +8,7 @@
     >
       <template #title>
         <p class="pl-5 font-medium">
-          {{
-            recordForm.labelType === 1
-              ? t('用户风控标签修改记录')
-              : t('属性标签修改记录')
-          }}
+          {{ title }}
         </p>
       </template>
       <PureTableBar
@@ -81,6 +77,18 @@ const emits = defineEmits([
   'pageSizeChange',
   'pageCurrentChange'
 ]);
+
+const title = computed(() => {
+  let str: string = '';
+  if (props.recordForm.labelType === 1) {
+    str = t('用户风控标签修改记录');
+  } else if (props.recordForm.labelType === 2) {
+    str = t('属性标签修改记录');
+  } else {
+    str = t('赔率分组修改记录');
+  }
+  return str;
+});
 
 function handleRecordTableWidthChange(val: number) {
   emits('pageSizeChange', val);

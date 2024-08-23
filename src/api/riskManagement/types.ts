@@ -145,6 +145,14 @@ declare namespace RiskManagementDataAPI {
     createTimeEnd?: number;
     isLoop: boolean;
   }
+  type RiskOddsGroupData = {
+    id?: string | number;
+    level: string | number;
+    optionAssignmentOne: string | number;
+    optionAssignmentTwo: string | number;
+   [propName: string]: any;
+  }
+
   type RiskTagListRes = COMMON.BASE_RES_TYPE<RiskTagListType>;
   type RiskTagRes = COMMON.BASE_RES_TYPE<RiskTagType>;
   type LimitRes = COMMON.BASE_RES_TYPE<LimitListType[]>;
@@ -190,4 +198,5 @@ declare namespace RiskManagementDataAPI {
   }
   type getLeagueConfigListRes = COMMON.BASE_RES_TYPE<getLeagueConfigListData>
   type updateLeagueConfigRes = COMMON.BASE_RES_TYPE<null>
+  type RiskOddsGroupRes = COMMON.BASE_RES_TYPE<RiskOddsGroupData[]>
 }

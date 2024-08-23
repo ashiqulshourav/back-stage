@@ -14,7 +14,8 @@ export type searchFormType = {
   endTime?: string | number;
   betDelayed:string | number;
   currency?: number | string;
-  specialLimited:number | string;
+  specialLimited: number | string;
+  userOddGroupLevel: number | string;
 };
 export type specialLimitType = {
   productAmountTotalLimit: number;

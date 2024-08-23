@@ -200,6 +200,20 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item prop="userOddGroupLevel" :label="t('赔率分组:')">
+        <el-select
+          v-model="form.userOddGroupLevel"
+          clearable
+          class="!w-[150px]"
+        >
+          <el-option
+            :label="item.level"
+            :value="item.level"
+            v-for="item in props.oddsData"
+            :key="item.level"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item prop="timeType">
         <el-select v-model="form.timeType" class="!w-[140px]" @change="search">
           <el-option :label="t('用户注册时间')" value="1" />
@@ -290,6 +304,7 @@ const props = defineProps<{
   tenantList: { name: string; id: number; tenantName: string }[];
   downloading: boolean;
   uploading: boolean;
+  oddsData: any[];
 }>();
 
 // watch, handleCheckAll & handleCheckRevert for risk label

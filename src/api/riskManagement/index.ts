@@ -123,4 +123,12 @@ export const riskManagementData = {
 
   //- 修改联赛预约开关
   updateLeagueConfig: (data: { id: string; reservationSwitch: number; updatedBy: string }) => http.request<RiskManagementDataAPI.updateLeagueConfigRes>('post', '/leagueConfig/v1/updateLeagueConfig', { data }),
+  
+  getOddsGroupApi: (data: any) =>
+    http.request<RiskManagementDataAPI.RiskOddsGroupRes>(
+      'post',
+      '/matchOddsGrouping/list ',
+      { data }
+    ),
+  EditOddsGroupApi: (data: RiskManagementDataAPI.RiskOddsGroupData[]) => http.request('post', 'matchOddsGrouping/update', { data }, { noNprogress: true }),
 };

@@ -11,6 +11,7 @@
       @on-search="onSearch"
       :downloading="downloading"
       :uploading="uploading"
+      :oddsData="oddsData"
     />
     <PureTableBar :columns="columns(category)" @refresh="onSearch('reload')">
       <template #title>
@@ -126,6 +127,7 @@
       :labelList="labelList"
       :userData="userData"
       :category="props.category"
+      :oddsData="oddsData"
       @on-close="handleCloseEditUser"
       @on-open-record="openRecordList"
       @on-del="dispatchLabelsDel"
@@ -216,7 +218,8 @@ const {
   downloading,
   exportFile,
   uploading,
-  importFile
+  importFile,
+  oddsData
 } = userPlayerListHook(props.category, props.venueType);
 </script>
 

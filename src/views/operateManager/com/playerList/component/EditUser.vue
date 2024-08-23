@@ -320,7 +320,38 @@
               </el-col>
             </el-row>
           </el-collapse-item>
+          <el-collapse-item :title="t('赔率分组')">
+            <div class="flex items-center justify-between mb-2">
+              <el-select
+                v-model="form.userOddGroupLevel"
+                clearable
+                class="!w-[150px]"
+              >
+                <el-option
+                  :label="item.level"
+                  :value="item.level"
+                  v-for="item in props.oddsData"
+                  :key="item.level"
+                />
+              </el-select>
+              <p
+                @click="openOddsLimitDialog"
+                class="text-primary text-right cursor-pointer"
+                style="line-height: 18px"
+              >
+                {{ t('修改记录') }}>>
+              </p>
+            </div>
 
+            <pure-table
+              maxHeight="500"
+              align-whole="center"
+              size="small"
+              border
+              :data="props.oddsData"
+              :columns="oddsColumns"
+            ></pure-table
+          ></el-collapse-item>
           <el-collapse-item :title="t('备注')">
             <el-input
               :placeholder="t('只能输入255个字符的内容')"
@@ -377,11 +408,11 @@ const props = defineProps<{
   labelList: labelListType;
   userData: UserAPI.operateUserList;
   category: number;
+  oddsData: any[];
 }>();
-
+console.log('props', props);
 const activeNames = ref(['1']);
 const { tableHeaderStyleBlue } = usePublicHooks();
-
 const emits = defineEmits([
   'onClose',
   'onOpenRecord',
@@ -390,6 +421,21 @@ const emits = defineEmits([
   'onUpdateUser'
 ]);
 const limitList = reactive<UserAPI.UserLevelLimitListRes[]>([]);
+
+const oddsColumns: TableColumnList = [
+  {
+    label: t('赔率分组等级'),
+    prop: 'level'
+  },
+  {
+    label: t('选项一'),
+    prop: 'optionAssignmentOne'
+  },
+  {
+    label: t('选项二'),
+    prop: 'optionAssignmentTwo'
+  }
+];
 
 const limitColumns: TableColumnList = [
   {
@@ -764,6 +810,21 @@ const openSpecialLimitDialog = () => {
       })
   });
 };
+const openOddsLimitDialog = () => {
+  addDialog({
+    title: t('赔率分组'),
+    class: 'reset_dialog',
+    width: '50%',
+    alignCenter: true,
+    closeOnClickModal: false,
+    hideFooter: true,
+    contentRenderer: () =>
+      h(LimitRecordDialog, {
+        id: form.id,
+        recordType: 3
+      })
+  });
+};
 
 onUpdated(() => {
   initLimitList();
@@ -782,7 +843,8 @@ onUpdated(() => {
     singleEventAccumulatedCompensationLimit,
     riskControlLabelList,
     attributeLabelList,
-    percentageLimit
+    percentageLimit,
+    userOddGroupLevel
   } = props.userData;
 
   form.id = id;
@@ -795,6 +857,7 @@ onUpdated(() => {
   form.betDelay = betDelay;
   form.betDelayDj = betDelayDj;
   form.percentageLimit = percentageLimit;
+  form.userOddGroupLevel = userOddGroupLevel;
   if (
     maxWinAmountLimit ||
     productAmountTotalLimit ||

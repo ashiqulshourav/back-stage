@@ -32,7 +32,7 @@ export const columns = (category: number): TableColumnList => {
       prop: 'currency',
       minWidth: 150,
       formatter({ currency }) {
-        return  CURRENCY_TYPE[currency as keyof typeof CURRENCY_TYPE]
+        return CURRENCY_TYPE[currency as keyof typeof CURRENCY_TYPE]
       }
     },
     {
@@ -45,6 +45,11 @@ export const columns = (category: number): TableColumnList => {
       label: t('属性标签'),
       hide: !hasAuth('viewAttributeLabel'.toUpperCase()),
       slot: 'attributeLabel',
+      width: 150
+    },
+    {
+      label: t('赔率分组'),
+      prop: 'userOddGroupLevel',
       width: 150
     },
     {
@@ -302,6 +307,23 @@ export const specialLimitColumns1: TableColumnList = [
     label: t('修改时间'),
     prop: 'updatedAt',
     minWidth: 180,
+    formatter({ updatedAt }: { updatedAt: string }) {
+      return dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss');
+    }
+  }
+];
+export const oddsGroupColumns: TableColumnList = [
+  {
+    label: t('等级'),
+    prop: 'name',
+  },
+  {
+    label: t('操作人'),
+    prop: 'createdBy'
+  },
+  {
+    label: t('修改时间'),
+    prop: 'updatedAt',
     formatter({ updatedAt }: { updatedAt: string }) {
       return dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss');
     }
