@@ -88,25 +88,29 @@ export const columns: TableColumnList = [
     className: 'mw-100'
   },
   {
-    label: t('通过'),
-    slot: 'approve',
-    align: 'center',
-    className: 'getParent'
-    // fixed:"right"
+    label: t('通知时间'),
+    slot: 'noticeTime',
+    minWidth: 100,
+    align: 'center'
   },
   {
-    label: t('划单'),
-    slot: 'cancel',
-    align: 'center',
-    className: 'getParent'
-    // fixed:"right"
+    label: t('操作时间'),
+    slot: 'updateTime',
+    minWidth: 100,
+    align: 'center'
   },
   {
-    label: t('备注'),
+    label: t('操作&操作人'),
     slot: 'operation',
     align: 'center',
     minWidth: 100,
     className: 'getParent'
-    // fixed:"right"
+  },
+  {
+    label: t('备注'),
+    slot: 'remark',
+    align: 'center',
+    minWidth: 100,
+    className: 'getParent'
   }
 ];

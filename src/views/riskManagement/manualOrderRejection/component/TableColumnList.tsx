@@ -95,11 +95,23 @@ export const columns: TableColumnList = [
     className: 'mw-100'
   },
   {
-    label: t('操作'),
+    label: t('通知时间'),
+    slot: 'noticeTime',
+    minWidth: 100,
+    align: 'center'
+  },
+  {
+    label: t('操作时间'),
+    slot: 'updateTime',
+    minWidth: 100,
+    align: 'center'
+  },
+  {
+    label: t('操作&操作人'),
     slot: 'operation',
     className: 'position getParent',
     minWidth: 150,
-    headerRenderer: d => handleTableWidth(d, t('操作'), 'auto'),
+    headerRenderer: d => handleTableWidth(d, t('操作&操作人'), 'auto'),
     align: 'center'
   }
 ];
