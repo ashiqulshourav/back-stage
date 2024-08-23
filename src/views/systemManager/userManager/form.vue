@@ -73,8 +73,9 @@
     </el-form-item>
 
     <el-form-item
-      :label="`${t('*IP查看权限')}:`"
+      :label="`${t('IP查看权限')}:`"
       prop="ipAuth"
+      required
     >
       <el-select
         v-model="newFormInline.ipAuth"
