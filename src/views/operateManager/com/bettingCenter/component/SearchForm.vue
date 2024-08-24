@@ -421,7 +421,7 @@
             </template>
           </el-tree-select>
         </el-form-item>
-        <el-form-item :label="`${t('投注IP')}:`" prop="ip">
+        <el-form-item v-if="userState.userInfo.ipAuth != 3" :label="`${t('投注IP')}:`" prop="ip">
           <el-input
             v-model="form.ip"
             :placeholder="t('请输入')"
@@ -581,6 +581,7 @@ import { searchFormType, seriesTypeList } from '../util/types';
 import Download from '@iconify-icons/ep/download';
 import { useBetStore } from '@/store/bet';
 const matchStore = useMatchStore();
+const userState = useUserStore();
 
 const props = defineProps<{
   loading: boolean;
@@ -607,6 +608,7 @@ import {
 import { hasAuth } from '@/router/utils';
 import CustomDate from '@/components/Form/Custom_date.vue';
 import { clientTypes_map } from '@/utils/maps/clientType_map';
+import { useUserStore } from '@/store/user';
 
 const emits = defineEmits(['onSearch', 'exportFile']);
 const resetForm = (formEl: FormInstance | undefined) => {
