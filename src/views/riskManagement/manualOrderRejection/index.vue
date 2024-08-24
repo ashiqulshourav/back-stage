@@ -226,7 +226,7 @@
               <div class="item_line" v-if="row.combineOrderDetails.length > 1">
                 每注：{{row.orderAmount}} {{row.currency}}
               </div>
-              <div class="item_line">
+              <div class="item_line" v-if="userState.userInfo.ipAuth != 3">
                 {{ t('投注IP:') }}
                 <span
                   v-if="row.combineOrderDetails[0].ip"
@@ -487,9 +487,11 @@ import {
 import { usePublicHooks } from '@/hooks';
 import {addThousandSeparator} from "@/utils/formatNumber";
 import { currency_map } from '@/utils/maps/currency_map';
+import { useUserStore } from '@/store/user';
 
 defineOptions({ name: 'RISKMANAGEMENT_MANUALORDERREJECTION' });
 const { tableHeaderStyle } = usePublicHooks();
+const userState = useUserStore();
 
 onMounted(() => {
   adjustContentWithRowHeight();
