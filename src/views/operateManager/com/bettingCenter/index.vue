@@ -223,7 +223,7 @@
               <div class="item_line" v-if="row.combineOrderDetails.length > 1">
                 每注：{{ row.orderAmount }} {{ row.currency }}
               </div>
-              <div class="item_line">
+              <div class="item_line" v-if="userState.userInfo.ipAuth != 3">
                 {{ t('投注IP:') }}
                 <span
                   v-if="row.ip"
@@ -529,6 +529,8 @@ import { useRenderIcon } from '@/components/ReIcon/src/hooks';
 import EditPen from '@iconify-icons/ep/edit-pen';
 import { currency_map } from '../../../../utils/maps/currency_map';
 import { Unlock, Lock } from '@element-plus/icons-vue';
+import { useUserStore } from '@/store/user';
+const userState = useUserStore();
 
 const props = defineProps<{
   category: number;

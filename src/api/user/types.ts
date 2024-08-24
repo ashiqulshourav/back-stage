@@ -7,6 +7,7 @@ declare namespace UserAPI {
     status: number;
     isAdmin: number;
     flag: number;
+    ipAuth?: number | string;
   };
 
   type Login = COMMON.BASE_RES_TYPE<LoginData>;
