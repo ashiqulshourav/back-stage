@@ -435,7 +435,35 @@
               </div>
             </div>
           </template>
-          <template #cancel="{ row }">
+          <template #operation="{ row }">
+            <div
+              class="match_item eq-height approve_detail approve flex justify-between items-center text-center"
+              v-for="(item, index) in row.combineOrderDetails"
+              :key="item.betItemId"
+            >
+              <div class="flex items-center gap-3">
+                <el-checkbox
+                  :checked="item.approveSelected"
+                  v-if="
+                    item.riskStatus === riskStatus.rejectBetting &&
+                    hasAuth('APPROVE')
+                  "
+                  @change="data => selectApprove(data, row.index - 1, index)"
+                />
+                <el-button
+                  @change="data => selectApprove(data, row.index - 1, index)"
+                  v-if="
+                    item.riskStatus === riskStatus.rejectBetting &&
+                    hasAuth('APPROVE')
+                  "
+                  size="small"
+                  type="primary"
+                  @click="handleApprove(row, index)"
+                >
+                  {{ t('审核通过') }}
+                </el-button>
+              </div>
+            </div>
             <div
               class="match_item eq-height cancel flex justify-between items-center text-center"
               v-for="(item, index) in row.combineOrderDetails"
@@ -465,37 +493,7 @@
               </div>
             </div>
           </template>
-          <template #approve="{ row }">
-            <div
-              class="match_item eq-height approve_detail approve flex justify-between items-center text-center"
-              v-for="(item, index) in row.combineOrderDetails"
-              :key="item.betItemId"
-            >
-              <div class="flex items-center gap-3">
-                <el-checkbox
-                  :checked="item.approveSelected"
-                  v-if="
-                    item.riskStatus === riskStatus.rejectBetting &&
-                    hasAuth('APPROVE')
-                  "
-                  @change="data => selectApprove(data, row.index - 1, index)"
-                />
-                <el-button
-                  @change="data => selectApprove(data, row.index - 1, index)"
-                  v-if="
-                    item.riskStatus === riskStatus.rejectBetting &&
-                    hasAuth('APPROVE')
-                  "
-                  size="small"
-                  type="primary"
-                  @click="handleApprove(row, index)"
-                >
-                  {{ t('审核通过') }}
-                </el-button>
-              </div>
-            </div>
-          </template>
-          <template #operation="{ row }">
+          <template #remark="{ row }">
             <div
               class="match_item eq-height approve flex justify-center items-center text-center width-auto"
               v-for="item in row.combineOrderDetails"
