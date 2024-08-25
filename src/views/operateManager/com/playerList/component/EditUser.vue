@@ -320,7 +320,7 @@
               </el-col>
             </el-row>
           </el-collapse-item>
-          <el-collapse-item :title="t('赔率分组')">
+          <el-collapse-item :title="t('赔率分组')" v-if="hasAuth('settingOdds'.toUpperCase())">
             <div class="flex items-center justify-between mb-2">
               <el-select
                 v-model="form.userOddGroupLevel"
