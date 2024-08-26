@@ -219,7 +219,7 @@ export const columns2: TableColumnList = [
 export const recordColumns: TableColumnList = [
   {
     label: t('用户限额等级'),
-    prop: 'name'
+    prop: 'levelLimit'
   },
   {
     label: t('单注投注限额'),
@@ -237,52 +237,52 @@ export const recordColumns: TableColumnList = [
   },
   {
     label: t('赛事限额'),
-    prop: 'singleEventLimit',
-    formatter({ singleEventLimit }) {
-      return singleEventLimit ? singleEventLimit : '-';
+    prop: 'userSingleGamePay',
+    formatter({ userSingleGamePay }) {
+      return userSingleGamePay ? userSingleGamePay : '-';
     }
   },
   {
     label: t('单关限额'),
-    prop: 'seriesSingleDayLimit',
-    formatter({ seriesSingleDayLimit }) {
-      return seriesSingleDayLimit ? seriesSingleDayLimit : '-';
+    prop: 'singleMatchPay',
+    formatter({ singleMatchPay }) {
+      return singleMatchPay ? singleMatchPay : '-';
     }
   },
   {
     label: t('串关限额'),
-    prop: 'seriesSingleDayLimit',
-    formatter({ seriesSingleDayLimit }) {
-      return seriesSingleDayLimit ? seriesSingleDayLimit : '-';
+    prop: 'bunchMatchPay',
+    formatter({ bunchMatchPay }) {
+      return bunchMatchPay ? bunchMatchPay : '-';
     }
   },
   {
     label: t('冠军限额'),
-    prop: 'seriesSingleDayLimit',
-    formatter({ seriesSingleDayLimit }) {
-      return seriesSingleDayLimit ? seriesSingleDayLimit : '-';
+    prop: 'championDailyPay',
+    formatter({ championDailyPay }) {
+      return championDailyPay ? championDailyPay : '-';
     }
   },
 
   {
     label: t('动作'),
-    prop: 'updateType',
-    formatter({ updateType }) {
-      if (updateType == 1) return t('禁用');
-      else if (updateType == 2) return t('修改');
-      else if (updateType == 3) return t('启用');
+    prop: 'operationType',
+    formatter({ operationType }) {
+      if (operationType == 1) return t('增加');
+      else if (operationType == 2) return t('修改');
+      else if (operationType == 3) return t('删除');
     }
   },
   {
     label: t('操作人'),
-    prop: 'createdBy'
+    prop: 'operator'
   },
   {
     label: t('时间'),
-    prop: 'updatedAt',
+    prop: 'createdAt',
     minWidth: 180,
-    formatter({ updatedAt }: { updatedAt: string }) {
-      return dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss');
+    formatter({ createdAt }: { createdAt: string }) {
+      return dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss');
     }
   }
 ];

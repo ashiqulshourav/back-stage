@@ -65,6 +65,24 @@ const handleSelectionChange = (n: number) => {
   pagination.currentPage = n;
   fetch();
 };
-const fetch = () => {};
+const fetch = async () => {
+  loading.value = true;
+  const params = {
+    description: 1,
+    pageSize: pagination.pageSize,
+    pageNum: pagination.currentPage
+  };
+  try {
+    const res = await API.getUserLevelLimitLogList(params);
+    recordList.value = res.data.list;
+    pagination.total = res.data.total;
+    loading.value = false;
+  } catch (err) {
+    loading.value = false;
+  }
+};
 const emits = defineEmits(['onClose', 'update:visible']);
+onMounted(() => {
+  fetch();
+});
 </script>

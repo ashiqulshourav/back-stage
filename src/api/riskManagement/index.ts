@@ -117,4 +117,12 @@ export const riskManagementData = {
   getRiskNotification: () => http.request<RiskManagementDataAPI.RiskNoticeRes>('post', '/kmg/matchUser/getRiskNotification', {}, { noNprogress: true }),
 
   setRiskNotification: (data: RiskManagementDataAPI.RiskNotice) => http.request('post', '/kmg/matchUser/setRiskNotification', { data }, { noNprogress: true }),
+ 
+  getUserLevelLimitLogList: (data: RiskManagementDataAPI.UserLevelLimitLogList) =>
+    http.request<RiskManagementDataAPI.UserLevelLimitLogListRes>(
+      'post',
+      '/userLevelLimit/log/getUserLevelLimitLogList ',
+      { data }
+    ),
+
 };

@@ -145,6 +145,10 @@ declare namespace RiskManagementDataAPI {
     createTimeEnd?: number;
     isLoop: boolean;
   }
+  type UserLevelLimitLogList = {
+    description: number,
+    [key: string]:any
+  }
   type RiskTagListRes = COMMON.BASE_RES_TYPE<RiskTagListType>;
   type RiskTagRes = COMMON.BASE_RES_TYPE<RiskTagType>;
   type LimitRes = COMMON.BASE_RES_TYPE<LimitListType[]>;
@@ -155,4 +159,5 @@ declare namespace RiskManagementDataAPI {
   type OrderPlacementTypesRes = COMMON.BASE_RES_TYPE<OrderPlacementTypes[]>;
   type RiskControlTypesRes = COMMON.BASE_RES_TYPE<RiskControlTypes[]>;
   type RiskNoticeRes = COMMON.BASE_RES_TYPE<RiskNotice>;
+  type UserLevelLimitLogListRes =  COMMON.BASE_RES_TYPE<any[]>
 }
