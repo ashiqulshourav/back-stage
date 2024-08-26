@@ -558,8 +558,6 @@ export function useRiskControlHook({
     isFormClick.value = true;
     let isValid = true;
 
-    console.log({userConfigList})
-
      userConfigList.forEach(item => {
       if(
         !item.warningCondition || item.warningCondition == null ||
