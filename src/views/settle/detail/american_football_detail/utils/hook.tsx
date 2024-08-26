@@ -41,7 +41,7 @@ export function useAmericanFootballHook() {
         isSave: false,
         periodType: renderObj.periodType,
         matchPeriodId:
-          NEW_ROW_TYPE[renderObj.periodType][eventList.length.toString()]
+           NEW_ROW_TYPE[renderObj.periodType] && NEW_ROW_TYPE[renderObj.periodType][eventList.length.toString()]
       };
       eventList.push(
         tempList as unknown as SattleDataAPI.newBasketballEventsList
