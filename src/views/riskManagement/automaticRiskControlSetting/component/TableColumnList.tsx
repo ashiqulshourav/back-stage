@@ -113,6 +113,7 @@ export const autoFreezeColumns: TableColumnList = [
   }
 ];
 
+
 export const dangerousUserWarningColumns: TableColumnList = [
   {
     label: t('告警条件'),
@@ -120,7 +121,7 @@ export const dangerousUserWarningColumns: TableColumnList = [
   },
   {
     label: t('单日注单数'),
-    slot: 'dailyProfitAmount'
+    slot: 'dailyBetCount'
   },
   {
     label: t('单日拒单数'),
@@ -136,11 +137,10 @@ export const dangerousUserWarningColumns: TableColumnList = [
   },
   {
     label: t('单日盈利额'),
-    slot: 'dailyBetCount'
+    slot: 'dailyProfitAmount'
   },
   {
     label: t('单日盈利率'),
     slot: 'dailyProfitRate'
   }
 ];
-
