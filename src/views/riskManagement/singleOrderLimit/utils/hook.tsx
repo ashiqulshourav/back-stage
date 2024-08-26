@@ -44,7 +44,10 @@ export function useOrderLimitHook() {
   const loading = ref(true);
   const currency = ref(1);
   const { openPasswordInput } = usePasswordInputHook();
-
+  const recordVisible = ref(false)
+  const openRecord = () => {
+    recordVisible.value = true
+  }
   // 初始化
   async function onSearch() {
     loading.value = true;
@@ -136,7 +139,7 @@ export function useOrderLimitHook() {
           const leagueLevel: number = sport.leagueLevel;
           if (existKey[leagueLevel]) return;
           if (item[key] !== sport[key]) {
-            list.push({...sport, currency: currency.value});
+            list.push({ ...sport, currency: currency.value });
             existKey[leagueLevel] = true;
             return;
           }
@@ -190,5 +193,7 @@ export function useOrderLimitHook() {
     toggle,
     changeType,
     currency,
+    openRecord,
+    recordVisible
   };
 }
