@@ -19,14 +19,17 @@
       <div class="mb-5">
         <div class="flex justify-between item-center mb-4">
           <span class="font-bold">{{ t('体育场馆') }}</span>
-          <div v-if="hasAuth('SPORTEDIT')">
+          <div class="flex item-center">
             <el-button
               v-if="!isEditSport && hasAuth('SPORTEDIT')"
               @click="updateEidtStatus('isEditSport')"
               type="primary"
               >{{ t('编辑') }}</el-button
             >
-            <div class="flex items-center" v-else>
+            <div
+              class="flex items-center mr-2"
+              v-if="isEditSport && hasAuth('SPORTEDIT')"
+            >
               <el-button @click="cancelSportEdit" type="info">{{
                 t('取消')
               }}</el-button>
@@ -34,6 +37,9 @@
                 t('确认')
               }}</el-button>
             </div>
+            <el-button @click="openRecord(0)" type="primary">{{
+              t('修改记录')
+            }}</el-button>
           </div>
         </div>
         <pure-table
@@ -128,14 +134,17 @@
       <div>
         <div class="flex justify-between item-center mb-4">
           <span class="font-bold">{{ t('电竞场馆') }}</span>
-          <div v-if="hasAuth('ESPORTEDIT')">
+          <div class="flex item-center">
             <el-button
-              v-if="!isEditESport"
+              v-if="!isEditESport && hasAuth('ESPORTEDIT')"
               @click="updateEidtStatus('isEditESport')"
               type="primary"
               >{{ t('编辑') }}</el-button
             >
-            <div class="flex items-center" v-else>
+            <div
+              class="flex items-center mr-2"
+              v-if="isEditESport && hasAuth('ESPORTEDIT')"
+            >
               <el-button @click="cancelESportEdit" type="info">{{
                 t('取消')
               }}</el-button>
@@ -143,6 +152,9 @@
                 t('确认')
               }}</el-button>
             </div>
+            <el-button @click="openRecord(1)" type="primary">{{
+              t('修改记录')
+            }}</el-button>
           </div>
         </div>
         <pure-table
@@ -238,6 +250,12 @@
         </div>
       </div>
     </div>
+    <Record
+      v-if="recordVisible"
+      v-model="recordVisible"
+      :description="currency"
+      :type="type"
+    />
   </div>
 </template>
 
@@ -246,6 +264,7 @@ import { useClassifySettingHook } from './utils/hook';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 import { CURRENCY_LIST_MAP } from './utils/map';
+import Record from './component/Record.vue';
 import {
   addThousandSeparator,
   formatNumberAndFillZero
@@ -274,7 +293,10 @@ const {
   cancelESportEdit,
   currency,
   onSearch,
-  updateEidtStatus
+  updateEidtStatus,
+  openRecord,
+  recordVisible,
+  type
 } = useClassifySettingHook();
 </script>
 

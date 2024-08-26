@@ -36,9 +36,6 @@
               t('确认')
             }}</el-button>
           </div>
-          <el-button @click="openRecord(true)" type="primary">{{
-            t('修改记录')
-          }}</el-button>
         </div>
       </div>
       <pure-table
@@ -355,7 +352,6 @@
         </template>
       </pure-table>
     </div>
-    <Record v-model:visible="recordVisible" />
   </div>
 </template>
 
@@ -374,7 +370,6 @@ import {
   formatNumberAndFillNull
 } from '@/utils/formatNumber';
 import { hasAuth } from '@/router/utils';
-import Record from './component/Record.vue';
 
 defineOptions({ name: 'RISKMANAGEMENT_SINGLEORDERLIMIT' });
 const { tableHeaderStyleBlue } = usePublicHooks();
@@ -395,9 +390,7 @@ const {
   changeType,
   toggle,
   onSearch,
-  currency,
-  openRecord,
-  recordVisible
+  currency
 } = useOrderLimitHook();
 </script>
 

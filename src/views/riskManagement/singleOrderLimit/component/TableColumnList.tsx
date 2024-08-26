@@ -1,5 +1,4 @@
 import { t } from '@/plugins/i18n';
-import dayjs from 'dayjs'
 // 足球 篮球,其他赛种
 export const columns: TableColumnList = [
   {
@@ -216,74 +215,5 @@ export const columns2: TableColumnList = [
   },
 ];
 
-export const recordColumns: TableColumnList = [
-  {
-    label: t('用户限额等级'),
-    prop: 'levelLimit'
-  },
-  {
-    label: t('单注投注限额'),
-    prop: 'productAmountTotalLimit',
-    formatter({ productAmountTotalLimit }) {
-      return productAmountTotalLimit ? productAmountTotalLimit : '-';
-    }
-  },
-  {
-    label: t('单注赔付限额'),
-    prop: 'maxWinAmountLimit',
-    formatter({ maxWinAmountLimit }) {
-      return maxWinAmountLimit ? maxWinAmountLimit : '-';
-    }
-  },
-  {
-    label: t('赛事限额'),
-    prop: 'userSingleGamePay',
-    formatter({ userSingleGamePay }) {
-      return userSingleGamePay ? userSingleGamePay : '-';
-    }
-  },
-  {
-    label: t('单关限额'),
-    prop: 'singleMatchPay',
-    formatter({ singleMatchPay }) {
-      return singleMatchPay ? singleMatchPay : '-';
-    }
-  },
-  {
-    label: t('串关限额'),
-    prop: 'bunchMatchPay',
-    formatter({ bunchMatchPay }) {
-      return bunchMatchPay ? bunchMatchPay : '-';
-    }
-  },
-  {
-    label: t('冠军限额'),
-    prop: 'championDailyPay',
-    formatter({ championDailyPay }) {
-      return championDailyPay ? championDailyPay : '-';
-    }
-  },
 
-  {
-    label: t('动作'),
-    prop: 'operationType',
-    formatter({ operationType }) {
-      if (operationType == 1) return t('增加');
-      else if (operationType == 2) return t('修改');
-      else if (operationType == 3) return t('删除');
-    }
-  },
-  {
-    label: t('操作人'),
-    prop: 'operator'
-  },
-  {
-    label: t('时间'),
-    prop: 'createdAt',
-    minWidth: 180,
-    formatter({ createdAt }: { createdAt: string }) {
-      return dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss');
-    }
-  }
-];
 
