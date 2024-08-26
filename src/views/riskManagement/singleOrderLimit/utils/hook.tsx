@@ -44,10 +44,6 @@ export function useOrderLimitHook() {
   const loading = ref(true);
   const currency = ref(1);
   const { openPasswordInput } = usePasswordInputHook();
-  const recordVisible = ref(false)
-  const openRecord = () => {
-    recordVisible.value = true
-  }
   // 初始化
   async function onSearch() {
     loading.value = true;
@@ -193,7 +189,5 @@ export function useOrderLimitHook() {
     toggle,
     changeType,
     currency,
-    openRecord,
-    recordVisible
   };
 }
