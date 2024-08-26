@@ -17,13 +17,13 @@ export function useOddsGroupHook() {
         prop: 'level'
       },
       {
-        label: t('选项一'),
+        label: t('选项1减值'),
         prop: 'optionAssignmentOne',
         cellRenderer: ({ row }) => (
           <el-input-number
             controls={false}
             v-model={row.optionAssignmentOne}
-            placeholder={t('请输入')}
+            placeholder={t('请输入-0.99 ~ 0.00')}
             min={-0.99}
             max={0}
             precision={2}
@@ -32,7 +32,7 @@ export function useOddsGroupHook() {
         )
       },
       {
-        label: t('选项二'),
+        label: t('选项2减值'),
         prop: 'optionAssignmentTwo',
         cellRenderer: ({ row }) => (
           <el-input-number
