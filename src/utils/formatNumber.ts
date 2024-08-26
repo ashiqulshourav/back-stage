@@ -104,7 +104,7 @@ export const formatNumberAndFillZero = (val: string, len?: number) => {
 };
 
 export const formatNumberAndFillNull = (val: string, len?: number) => {
-  if (val === '0') return val;
+  if (val === '0') return null;
   if (val === '') return null;
   return val
     .replace(/\D/g, '')

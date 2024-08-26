@@ -560,10 +560,10 @@ export function useRiskControlHook({
 
     console.log({userConfigList})
 
-    userConfigList.forEach(item => {
+     userConfigList.forEach(item => {
       if(
         !item.warningCondition || item.warningCondition == null ||
-        !item.dailyProfitAmount || item.dailyProfitAmount == null ||
+        !item.dailyBetCount || item.dailyBetCount == null ||
         !item.dailyRefuse || item.dailyRefuse == null ||
         !item.beforeThreeSecCount || item.beforeThreeSecCount == null
       ) {
