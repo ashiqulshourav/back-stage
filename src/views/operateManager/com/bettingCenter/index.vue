@@ -90,12 +90,19 @@
                 }}]
               </div>
               <div
-                class="item_line cursor-pointer"
-                @click="copyTest(row.tenantId, t(`商户id：${row.tenantId}`))"
-              >
-                <span>{{ t('商户id：') }}</span
-                >{{ row.tenantId }}
-              </div>
+                  class="item_line cursor-pointer"
+                  @click="
+                    copyTest(
+                      row.tenantId,
+                      t('商户id：{value}', {
+                        value: tenantObj[row.tenantId]?.name
+                      })
+                    )
+                  "
+                >
+                  <span>{{ t('商户id：') }}</span
+                  >{{ tenantObj[row.tenantId]?.name }}
+                </div>
             </div>
           </template>
           <template #matchMessage="{ row }">

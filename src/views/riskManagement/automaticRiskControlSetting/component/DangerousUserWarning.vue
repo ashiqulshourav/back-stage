@@ -22,18 +22,17 @@
           {{ t('不能为空') }}
         </div>
       </template>
-      <template #dailyProfitAmount="{ row }">
+      <template #dailyBetCount="{ row }">
         <div v-if="isEditRiskControls" class="flex items-center gap-2">
           <el-input
             type="number"
             :formatter="v => formatNumberAndFillNull(v, 13)"
-            v-model="row.dailyProfitAmount"
+            v-model="row.dailyBetCount"
           />
         </div>
-
-        <span v-else> {{ row.dailyProfitAmount }} </span>
+        <span v-else>{{ row.dailyBetCount }}</span>
          <div
-          v-if="!row.dailyProfitAmount && isFormClick"
+          v-if="!row.dailyBetCount && isFormClick"
           class="text-red-500 text-xs text-start"
         >
           {{ t('不能为空') }}
@@ -82,15 +81,16 @@
           {{ row.dailyBetAmount }}
         </span>
       </template>
-      <template #dailyBetCount="{ row }">
+      <template #dailyProfitAmount="{ row }">
         <div v-if="isEditRiskControls" class="flex items-center gap-2">
           <el-input
             type="number"
             :formatter="v => formatNumberAndFillNull(v, 13)"
-            v-model="row.dailyBetCount"
+            v-model="row.dailyProfitAmount"
           />
         </div>
-        <span v-else>{{ row.dailyBetCount }}</span>
+
+        <span v-else> {{ row.dailyProfitAmount }} </span>
       </template>
       <template #dailyProfitRate="{ row }">
         <div v-if="isEditRiskControls" class="flex items-center gap-2">
