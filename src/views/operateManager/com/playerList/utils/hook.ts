@@ -65,7 +65,6 @@ export function userPlayerListHook(venueType: number, category: number) {
     specialLimited: ' ',
     currency: ' ',
     timeType: "2",
-    betDelayed:' '
   } as searchFormType);
   const recordForm = reactive<recordFormType>({} as recordFormType);
   const goChangeAccountPage = (row: UserAPI.operateUserList) => {
