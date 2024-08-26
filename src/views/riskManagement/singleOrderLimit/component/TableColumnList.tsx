@@ -1,5 +1,4 @@
 import { t } from '@/plugins/i18n';
-
 // 足球 篮球,其他赛种
 export const columns: TableColumnList = [
   {
@@ -215,4 +214,6 @@ export const columns2: TableColumnList = [
     ]
   },
 ];
+
+
 

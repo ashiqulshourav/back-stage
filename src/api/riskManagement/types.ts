@@ -167,6 +167,10 @@ declare namespace RiskManagementDataAPI {
    [propName: string]: any;
   }
 
+  type UserLevelLimitLogList = {
+    description: number,
+    [key: string]:any
+  }
   type RiskTagListRes = COMMON.BASE_RES_TYPE<RiskTagListType>;
   type RiskTagRes = COMMON.BASE_RES_TYPE<RiskTagType>;
   type LimitRes = COMMON.BASE_RES_TYPE<LimitListType[]>;
@@ -214,4 +218,5 @@ declare namespace RiskManagementDataAPI {
   type getLeagueConfigListRes = COMMON.BASE_RES_TYPE<getLeagueConfigListData>
   type updateLeagueConfigRes = COMMON.BASE_RES_TYPE<null>
   type RiskOddsGroupRes = COMMON.BASE_RES_TYPE<RiskOddsGroupData[]>
+  type UserLevelLimitLogListRes =  COMMON.BASE_RES_TYPE<any[]>
 }

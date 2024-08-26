@@ -13,7 +13,14 @@ export function useClassifySettingHook() {
   const isEditESport = ref(false);
   const currency = ref(1);
   const loading = ref(true);
-
+  const recordVisible = ref(false)
+  const type = ref<number>() // 0 体育 1 电竞
+  const openRecord = (v: number) => {
+    type.value = v
+    console.log(type.value)
+    recordVisible.value = true
+    console.log(recordVisible.value)
+  }
   //- 初始化
   async function onSearch() {
     loading.value = true;
@@ -156,6 +163,9 @@ export function useClassifySettingHook() {
     delESportItem,
     cancelSportEdit,
     cancelESportEdit,
-    currency
+    currency,
+    recordVisible,
+    openRecord,
+    type
   };
 }

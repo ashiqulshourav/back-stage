@@ -141,4 +141,12 @@ export const riskManagementData = {
       { data }
     ),
   EditOddsGroupApi: (data: RiskManagementDataAPI.RiskOddsGroupData[]) => http.request('post', 'matchOddsGrouping/update', { data }, { noNprogress: true }),
+ 
+  getUserLevelLimitLogList: (data: RiskManagementDataAPI.UserLevelLimitLogList) =>
+    http.request<RiskManagementDataAPI.UserLevelLimitLogListRes>(
+      'post',
+      '/userLevelLimit/log/getUserLevelLimitLogList ',
+      { data }
+    ),
+
 };

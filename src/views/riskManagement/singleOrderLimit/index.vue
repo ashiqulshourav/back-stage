@@ -24,7 +24,7 @@
             @click="changeType(item.value)"
           />
         </div>
-        <div v-if="hasAuth('UPDATE')">
+        <div v-if="hasAuth('UPDATE')" class="flex items-center">
           <el-button v-if="!isEditSport" @click="toggle(true)" type="primary">{{
             t('编辑')
           }}</el-button>
