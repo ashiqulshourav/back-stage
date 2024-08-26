@@ -199,6 +199,7 @@ export const getViewOddFn = (
   type: EOddType,
   currentOddType: number
 ) => {
+  if(!od) return 0;
   if (type === EOddType.ML) {
     od = Number(truncateDecimals(-(1 / od), 2));
   }
