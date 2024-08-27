@@ -53,7 +53,8 @@ export function useManualOrderRejectionHook() {
     timeType: 1,
     seriesDetailsSingle: [],
     seriesDetailsDuplex: [],
-    currency:' '
+    currency:' ',
+    operator: '',
   });
   function handleTableWidthChange(val: number) {
     pagination.pageSize = val;
