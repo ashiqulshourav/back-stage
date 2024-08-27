@@ -38,7 +38,7 @@ import { recordColumns } from './TableColumnList';
 
 const pagination = reactive<PaginationProps>({
   total: 0,
-  pageSize: 12,
+  pageSize: 10,
   currentPage: 1,
   background: true
 });
