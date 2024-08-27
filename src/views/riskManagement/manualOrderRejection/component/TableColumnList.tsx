@@ -97,7 +97,7 @@ export const columns: TableColumnList = [
   },
   {
     label: t('通知时间'),
-    slot: 'riskTime',
+    prop: 'riskTime',
     minWidth: 70,
     align: 'center',
     formatter: ({ riskTime }) =>
@@ -105,9 +105,11 @@ export const columns: TableColumnList = [
   },
   {
     label: t('操作时间'),
-    slot: 'updateTime',
+    prop: 'updateTime',
     minWidth: 100,
-    align: 'center'
+    align: 'center',
+    formatter: ({ updateTime }) =>
+      updateTime && dayjs(updateTime).format('YYYY-MM-DD HH:mm:ss')
   },
   {
     label: t('操作&操作人'),
