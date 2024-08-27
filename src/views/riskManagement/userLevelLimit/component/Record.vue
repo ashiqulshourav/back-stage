@@ -21,11 +21,10 @@
       :columns="recordColumns"
       :paginationSmall="true"
       @selection-change="handleSelectionChange"
-      @page-size-change="handleSelectionChange"
+      @page-size-change="handleTableWidthChange"
       @page-current-change="handleSelectionChange"
     >
-    </pure-table
-    >>
+    </pure-table>
   </el-dialog>
 </template>
 
@@ -65,7 +64,12 @@ const props = defineProps({
 const recordList = ref<any[]>([]);
 
 const handleSelectionChange = (n: number) => {
+  console.log(n);
   pagination.currentPage = n;
+  fetch();
+};
+const handleTableWidthChange = (val: number) => {
+  pagination.pageSize = val;
   fetch();
 };
 const fetch = async () => {
