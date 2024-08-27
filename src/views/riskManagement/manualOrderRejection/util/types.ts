@@ -21,6 +21,7 @@ export type searchFormType = {
   tenantIds: any;
   queryType: number | string;
   currency: number | string;
+  operator: string | number;
 }
 
 export enum betStatus {

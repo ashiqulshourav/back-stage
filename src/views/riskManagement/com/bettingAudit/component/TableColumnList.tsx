@@ -1,5 +1,6 @@
 import { t } from '@/plugins/i18n';
 import { addThousandSeparator } from '@/utils/formatNumber';
+import dayjs from 'dayjs';
 
 export const columns: TableColumnList = [
   {
@@ -89,9 +90,11 @@ export const columns: TableColumnList = [
   },
   {
     label: t('通知时间'),
-    slot: 'noticeTime',
-    minWidth: 100,
-    align: 'center'
+    slot: 'riskTime',
+    minWidth: 70,
+    align: 'center',
+    formatter: ({ riskTime }) =>
+      riskTime && dayjs(riskTime).format('YYYY-MM-DD HH:mm:ss')
   },
   {
     label: t('操作时间'),

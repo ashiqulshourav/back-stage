@@ -257,7 +257,16 @@
             v-enter="search"
           />
         </el-form-item>
-        <el-form-item :label="`${t('注单时间')}:`">
+        <el-form-item >
+          <el-select
+            v-model="form.timeType"
+            class="!w-[100px]"
+            @change="search"
+          >
+            <el-option :label="t('投注时间')" :value="1" />
+            <el-option :label="t('操作时间')" :value="2" />
+            <el-option :label="t('通知时间')" :value="3" />
+          </el-select>
           <CustomDate
             v-model:val="selectDate"
             :start-placeholder="
@@ -284,6 +293,15 @@
               :key="item.value2"
             />
           </el-select>
+        </el-form-item>
+        <el-form-item :label="`${t('操作人')}:`" prop="operator">
+          <el-input
+            v-model="form.operator"
+            :placeholder="t('操作人')"
+            clearable
+            v-enter="search"
+            class="!w-[200px]"
+          />
         </el-form-item>
         <el-form-item>
           <el-button
