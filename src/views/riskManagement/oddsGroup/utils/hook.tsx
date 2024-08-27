@@ -38,7 +38,7 @@ export function useOddsGroupHook() {
           <el-input-number
             controls={false}
             v-model={row.optionAssignmentTwo}
-            placeholder={t('请输入')}
+            placeholder={t('请输入-0.99 ~ 0.00')}
             min={-0.99}
             max={0}
             precision={2}
