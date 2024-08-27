@@ -253,7 +253,7 @@
     <Record
       v-if="recordVisible"
       v-model="recordVisible"
-      :description="currency"
+      :currency="currency"
       :type="type"
     />
   </div>
