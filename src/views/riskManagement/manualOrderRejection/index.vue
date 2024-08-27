@@ -232,7 +232,7 @@
                   v-if="row.combineOrderDetails[0].ip"
                   @click="openIpDialog(row.combineOrderDetails[0].ip)"
                   class="text-[#409EFF] cursor-pointer"
-                >({{ row.combineOrderDetails[0].ip }} ({{row.ipArea}})</span
+                >{{ row.combineOrderDetails[0].ip }} ({{row.ipArea}})</span
                 >
                 <span v-else>-</span>
               </div>
