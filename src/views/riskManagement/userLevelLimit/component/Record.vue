@@ -52,7 +52,7 @@ const props = defineProps({
     type: Number,
     default: () => 0
   },
-  description: {
+  currency: {
     type: Number,
     default: 1
   },
@@ -71,7 +71,7 @@ const handleSelectionChange = (n: number) => {
 const fetch = async () => {
   loading.value = true;
   const params = {
-    description: props.description,
+    currency: props.currency,
     pageSize: pagination.pageSize,
     pageNum: pagination.currentPage,
     type: props.type
