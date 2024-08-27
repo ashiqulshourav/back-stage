@@ -14,14 +14,17 @@ export const columns: TableColumnList = [
   },
   {
     label: t('188数据源联赛ID'),
-    prop: 'leagueId188Bet'
+    prop: 'leagueId188Bet',
+    minWidth: 200
   },
   {
     label: t('联赛LOGO'),
-    slot: 'leagueLogo'
+    slot: 'leagueLogo',
+    minWidth: 200
   },
   {
     label: t('游戏分类'),
+    minWidth: 140,
     formatter: ({ sportId }) =>
       ESPORT_ID_MAP.find(item => item.value === sportId)?.label ?? '-'
   },
@@ -48,6 +51,11 @@ export const columns: TableColumnList = [
     formatter: ({ riskLevel }): string => {
       return riskLevel < 0 ? t('未评级') : riskLevel;
     }
+  },
+  {
+    label: t('预约'),
+    slot: 'reservationSwitch',
+    minWidth: 150
   },
   {
     label: t('操作'),

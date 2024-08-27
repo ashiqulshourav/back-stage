@@ -6,6 +6,11 @@ export const metaData = {
   getLeagueList: (data: MetadataAPI.LeagueListParams) => http.request<MetadataAPI.LeagueListRes>("post", '/league/v1/getLeagueList', { data }),
   // export data
   getLeagueExport: (data: MetadataAPI.LeagueListParams) => http.request<MetadataAPI.LeagueListRes>("post", '/league/v1/getLeagueListExport', { data }),
+  //- 修改联赛预约状态
+  updateReservationSwitch: (data: {
+    leagueId: string;
+    reservationSwitch: number;
+  }) => http.request<MetadataAPI.LeagueListRes>("post", '/league/v1/updateReservationSwitch', { data }),
   //- 联赛管理-修改
   updateLeague: (data: MetadataAPI.updateLeagueParamsType) => http.request<MetadataAPI.updateLeagueResType>("post", "/league/v1/updateLeague", { data }),
   //- 普通体育文件上传
@@ -64,7 +69,7 @@ export const metaData = {
     matchId188bet: number;
     pairingUser: string
   }) => http.request<MatchCombineAPI.matchSourceData>("post", "/pairing/v1/cancelPairing", { data }),
-  
+
   pairingRuleSetting: (data: pairingRuleSettingType) => http.request<MatchCombineAPI.matchSourceData>("post", "/pairing/v1/pairingRuleSetting", { data }),
 
   updateOdds: (data: udpateOddsType) => http.request<MatchCombineAPI.matchSourceData>("post", "/pairing/v1/updateOdds", { data }),

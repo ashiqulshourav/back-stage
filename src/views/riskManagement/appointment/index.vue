@@ -1,6 +1,11 @@
 <template>
   <div class="main">
-    <SearchForm :form="form" :loading="loading" @on-search="onSearch" />
+    <SearchForm
+      :loading="loading"
+      @changeNavType="changeNavType"
+      :currentSportId="currentSportId"
+    />
+
     <pure-table
       class="table_container"
       align-whole="center"
@@ -16,8 +21,15 @@
         color: 'var(--el-text-color-primary)'
       }"
     >
-      <template #userCount="{ row }">
-        <el-link @click="goToUserList(row)">{{ row.count }}</el-link>
+      <template #reservationSwitch="{ row }">
+        <el-switch
+          v-model="row.reservationSwitch"
+          :active-value="1"
+          :inactive-value="0"
+          :disabled="!hasAuth('SWITCH')"
+          inline-prompt
+          @change="upateLeagueStatus(row)"
+        />
       </template>
     </pure-table>
   </div>
@@ -27,16 +39,10 @@
 import { useAppointmentHook } from './utils/hook';
 import SearchForm from './component/SearchForm.vue';
 import { columns } from './component/TableColumnList';
+import { hasAuth } from '@/router/utils';
 
 defineOptions({ name: 'RISKMANAGEMENT_APPOINTMENT' });
 
-const { loading, dataList, onSearch, form, goToUserList } =
+const { loading, dataList, changeNavType, upateLeagueStatus, currentSportId } =
   useAppointmentHook();
 </script>
-
-<style>
-.el-message-box .el-message-box__btns {
-  display: flex;
-  flex-direction: row;
-}
-</style>

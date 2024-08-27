@@ -34,7 +34,9 @@ import { SPORT_LIST_MAP } from '@/views/settle/main/utils/map';
 import { sport_list_map_type } from '@/views/settle/main/utils/type';
 import { ESPORT_ID_MAP } from '@/utils/maps/sports_map';
 
-const currentSportId = ref(1);
+const props = defineProps<{
+  currentSportId: number;
+}>();
 
 const emits = defineEmits(['changeNavType']);
 const renderList = computed(() => {
@@ -42,7 +44,7 @@ const renderList = computed(() => {
 });
 
 const changeType = (_: sport_list_map_type | (typeof ESPORT_ID_MAP)[0]) => {
-  if (_.value === currentSportId.value) return;
+  if (_.value === props.currentSportId) return;
   emits('changeNavType', _.value);
 };
 </script>

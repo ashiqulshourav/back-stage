@@ -48,6 +48,16 @@
               </template>
             </el-image>
           </template>
+          <template #reservationSwitch="{ row }">
+            <el-switch
+              v-model="row.reservationSwitch"
+              :active-value="1"
+              :inactive-value="0"
+              :disabled="!hasAuth('SWITCH')"
+              inline-prompt
+              @change="changeReservationSwitchStatus(row)"
+            />
+          </template>
           <template #operation="{ row }">
             <el-button
               v-auth="['UPDATE']"
@@ -77,6 +87,7 @@ import SearchForm from './component/SearchForm.vue';
 import { t } from '@/plugins/i18n';
 import { usePublicHooks } from '@/hooks';
 import { pageSizeArr } from '@/utils/math';
+import { hasAuth } from '@/router/utils';
 
 const { tableHeaderStyle } = usePublicHooks();
 defineOptions({ name: 'ESPORTS_MATCH' });
@@ -91,9 +102,10 @@ const {
   handleCurrentChange,
   form,
   openDialog,
-  levelList, 
-  exportFile, 
-  downloading
+  levelList,
+  exportFile,
+  downloading,
+  changeReservationSwitchStatus
 } = useLeague();
 </script>
 

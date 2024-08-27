@@ -6,7 +6,7 @@ import { reactive, ref, onMounted, h } from 'vue';
 import { removeEmptyStringKeys } from '@/utils/utilFn';
 import { addThousandSeparator } from '@/utils/formatNumber';
 import { usePublicHooks } from '@/hooks';
-const  { exportDialog } = usePublicHooks();
+const { exportDialog } = usePublicHooks();
 import { searchFormType } from './types';
 
 export function useLeague() {
@@ -67,7 +67,7 @@ export function useLeague() {
         pageNum: pagination.currentPage
       });
       if (type === 'export') {
-        return res?.data
+        return res?.data;
       } else {
         loading.value = false;
         if (res.code) return message(res.msg, { type: 'error' });
@@ -82,9 +82,14 @@ export function useLeague() {
 
   const exportFile = async () => {
     onSearch('export').then((expRes: any) => {
-      if(expRes?.total>500000){
-        message(`当前条件下数据量为${addThousandSeparator(expRes?.total)}，大于50万条，不支持导出!`, { type: 'error' });
-      } else if(expRes?.total<1 || expRes === null){
+      if (expRes?.total > 500000) {
+        message(
+          `当前条件下数据量为${addThousandSeparator(
+            expRes?.total
+          )}，大于50万条，不支持导出!`,
+          { type: 'error' }
+        );
+      } else if (expRes?.total < 1 || expRes === null) {
         message('数据量为零，无法导出', { type: 'error' });
       } else {
         exportDialog({
@@ -96,14 +101,14 @@ export function useLeague() {
               ...removeEmptyStringKeys(form),
               pageSize: pagination.pageSize,
               pageNum: pagination.currentPage
-            })
+            });
             message(res.msg, { type: res.code ? 'error' : 'success' });
             downloading.value = false;
           }
-        })
+        });
       }
-    })
-  }
+    });
+  };
 
   async function openDialog(title: string, row?: MetadataAPI.LeagueList) {
     addDialog({
@@ -137,6 +142,16 @@ export function useLeague() {
     });
   }
 
+  //- 修改联赛预约状态开关
+  const changeReservationSwitchStatus = async (row: MetadataAPI.LeagueList) => {
+    const res = await API.updateReservationSwitch({
+      leagueId: row.leagueId as string,
+      reservationSwitch: row.reservationSwitch as number
+    });
+    message(res.msg, { type: res.code ? 'error' : 'success' });
+    if (res.code) row.reservationSwitch = row.reservationSwitch === 0 ? 1 : 0;
+  };
+
   onMounted(() => {
     onSearch();
     initLevelList();
@@ -154,6 +169,7 @@ export function useLeague() {
     handleSelectionChange,
     form,
     downloading,
-    exportFile
+    exportFile,
+    changeReservationSwitchStatus
   };
 }
