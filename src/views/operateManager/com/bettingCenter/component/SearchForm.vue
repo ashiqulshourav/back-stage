@@ -421,7 +421,7 @@
             </template>
           </el-tree-select>
         </el-form-item>
-        <el-form-item :label="`${t('投注IP')}:`" prop="ip" v-if="userState.userInfo.ipAuth != 3">
+        <el-form-item v-if="userState.userInfo.ipAuth != 3 && userState.userInfo.ipAuth != 2" :label="`${t('投注IP')}:`" prop="ip">
           <el-input
             v-model="form.ip"
             :placeholder="t('请输入')"
