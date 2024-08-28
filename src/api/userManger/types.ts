@@ -57,7 +57,7 @@ declare namespace UserMangerAPI {
     lastLoginIp?: any;
     disabled: boolean;
     flag: number;
-    ipAuth: number;
+    ipAuth: string | number;
   }
 
   type querySysAccountListInfo = {
