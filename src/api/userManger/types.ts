@@ -13,7 +13,7 @@ declare namespace UserMangerAPI {
     avatar: string;
     tenantId?: number;
     flag: number;
-    ipAuth: number;
+    ipAuth: number | string;
   };
 
   type addDepartmentReqType = {
