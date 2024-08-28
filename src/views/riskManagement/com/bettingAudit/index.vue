@@ -269,9 +269,13 @@
               <div class="item_line" v-if="userState.userInfo.ipAuth != 3">
                 {{ t('投注IP:') }}
                 <span
-                  v-if="row.combineOrderDetails[0].ip"
+                  v-if="row.combineOrderDetails[0].ip && userState.userInfo.ipAuth === 1"
                   @click="openIpDialog(row.combineOrderDetails[0].ip)"
                   class="text-[#409EFF] cursor-pointer"
+                >{{ row.combineOrderDetails[0].ip }} ({{row.ipArea}})</span
+                >
+                <span
+                  v-else-if="row.combineOrderDetails[0].ip && userState.userInfo.ipAuth != 1"
                 >{{ row.combineOrderDetails[0].ip }} ({{row.ipArea}})</span
                 >
                 <span v-else>-</span>
