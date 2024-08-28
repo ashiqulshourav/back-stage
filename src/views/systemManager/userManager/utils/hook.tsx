@@ -105,7 +105,7 @@ export function useUserManager() {
             id: row?.id ?? '',
             ukeyCode: row?.ukeyCode ?? '',
             flag: row?.id ? row?.flag : 1,
-            ipAuth: row?.ipAuth ?? 3,
+            ipAuth: row?.ipAuth ?? '',
           },
           onCloseDialog: (
             closeType?: string,

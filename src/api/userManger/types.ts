@@ -13,7 +13,7 @@ declare namespace UserMangerAPI {
     avatar: string;
     tenantId?: number;
     flag: number;
-    ipAuth: number;
+    ipAuth: number | string;
   };
 
   type addDepartmentReqType = {
@@ -57,7 +57,7 @@ declare namespace UserMangerAPI {
     lastLoginIp?: any;
     disabled: boolean;
     flag: number;
-    ipAuth: number;
+    ipAuth: string | number;
   }
 
   type querySysAccountListInfo = {
