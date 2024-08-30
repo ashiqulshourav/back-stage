@@ -225,10 +225,10 @@
                 </span>
               </div>
               <div class="item_line" v-if="row.combineOrderDetails.length > 1">
-                总共： {{ calculateSeriesTypeTotalBets(row?.seriesType) }}注
+                {{ t('总共:') }} {{ calculateSeriesTypeTotalBets(row?.seriesType) }}注
               </div>
               <div class="item_line" v-if="row.combineOrderDetails.length > 1">
-                每注：{{ row.orderAmount }} {{ row.currency }}
+                {{ t('每注:') }}{{ row.orderAmount }} {{ row.currency }}
               </div>
               <div class="item_line" v-if="userState.userInfo.ipAuth != 3">
                 {{ t('投注IP:') }}
@@ -255,7 +255,7 @@
             >
               <div class="item_line">
                 {{
-                  `玩法：${useSportFormatDetail(item)[4]} ${getIsInplay(
+                  `${t('玩法:')} ${useSportFormatDetail(item)[4]} ${getIsInplay(
                     item.isInplay
                   )}`
                 }}
