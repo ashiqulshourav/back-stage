@@ -323,7 +323,7 @@
                   v-if="row.combineOrderDetails.length < 2"
                   class="status_btn"
                   :style="{
-                    background: getBackgroundColor(row.statusCode).bgColor
+                    background: getBackgroundColor(row.billStatus).bgColor
                   }"
                 >
                   {{
@@ -338,7 +338,7 @@
                 <span
                   v-else
                   :style="{
-                    background: getBackgroundColor(row.statusCode).bgColor
+                    background: getBackgroundColor(row.billStatus).bgColor
                   }"
                   class="status_btn"
                 >

@@ -244,15 +244,15 @@ export function useManualOrderRejectionHook() {
         .catch(reject);
     });
   };
-  const getBackgroundColor = (statusCode: number) => {
+  const getBackgroundColor = (billStatus: number) => {
     const obj = { bgColor: '' };
 
-    if (statusCode === 0) {
+    if (billStatus === 0) {
       obj.bgColor = '#FFC53D';
-    } else if (statusCode === 1) {
+    } else if (billStatus === 1) {
       obj.bgColor = '#E54752';
     } else {
-      obj.bgColor = '#409eff';
+      obj.bgColor = '';
     }
     return obj;
   };
